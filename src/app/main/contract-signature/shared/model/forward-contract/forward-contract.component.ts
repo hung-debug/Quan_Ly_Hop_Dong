@@ -97,21 +97,11 @@ export class ForwardContractComponent implements OnInit {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
     // this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
     // console.log("this.emailRecipientssssssssss",this.emailRecipients);
-    const ArrRecipients = this.datas.dataContract.is_data_contract.participants[0].recipients;
-    const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email);
-    console.log("ArrRecipientsNew", ArrRecipientsNew);
+    // const ArrRecipients = this.datas.dataContract.is_data_contract.participants[0].recipients;
+    // const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email);
+    // console.log("ArrRecipientsNew", ArrRecipientsNew);
 
-    if (ArrRecipientsNew.includes(this.currentUser.email)) {
-      this.dialog.closeAll()
-      this.toastService.showErrorHTMLWithTimeout(
-        'Bạn không có quyền xử lý hợp đồng này!',
-        '',
-        3000
-      );
-      this.router.navigate(['/main/dashboard']);
-      
-       return
-    } else {
+   
       if (!String(this.myForm.value.name)) {
         // this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền'
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập tên người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
@@ -171,13 +161,16 @@ export class ForwardContractComponent implements OnInit {
       //   this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập mã số thuế/CMT/CCCD ngoài luồng hợp đồng', '', 3000);
       //   return;
       // }
+
+      console.log("cu ", this.currentUser);
+
       if (this.currentUser) {
         this.spinner.show();
         let coutError = 0;
         let id_recipient_signature = null;
         for (const d of this.datas.dataContract.is_data_contract.participants) {
           for (const q of d.recipients) {
-            if (q.email == this.currentUser.customer.info.email && q.status == 1) {
+            if (q.email == this.currentUser.email && q.status == 1) {
               id_recipient_signature = q.id;
               break
             }
@@ -240,7 +233,6 @@ export class ForwardContractComponent implements OnInit {
           )
         }
       }
-    }
   }
 
   getCurrentUser(): any {
