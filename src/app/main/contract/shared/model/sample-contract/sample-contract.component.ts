@@ -1337,6 +1337,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
 
           if (data_name) {
+
+            console.log("data_ name ", data_name);
+
             isObjSign.name = data_name.name;
             signElement.setAttribute("name", isObjSign.name);
 
@@ -1357,7 +1360,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
           }
 
-          if(data_name.role == 4 && this.isChangeText) {
+          let idTypeSign = data_name.sign_type[0].id;
+
+          if((data_name.role == 4 || (idTypeSign == 2 || idTypeSign == 4)) && this.isChangeText) {
+            // console.log("1 ", 1);
+
             this.soHopDong = data_name;
 
             //Gán lại tất cả số hợp đồng cho một người ký

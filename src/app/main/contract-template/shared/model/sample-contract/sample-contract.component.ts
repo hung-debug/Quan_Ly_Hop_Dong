@@ -1381,7 +1381,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             isObjSign.email = data_name.email;
             signElement.setAttribute("email", isObjSign.email);
 
-            if(data_name.role == 4 && this.isChangeText) {
+            let idTypeSign = data_name.sign_type[0].id;
+
+            if((data_name.role == 4 || ((idTypeSign == 2 || idTypeSign == 4))) && this.isChangeText) {
               this.soHopDong = data_name;
   
               //Gán lại tất cả số hợp đồng cho một người ký
