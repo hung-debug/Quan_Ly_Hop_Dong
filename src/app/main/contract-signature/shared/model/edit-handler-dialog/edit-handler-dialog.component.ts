@@ -13,6 +13,7 @@ import { ToastService } from "../../../../../service/toast.service";
 import { environment } from 'src/environments/environment';
 import { parttern, parttern_input } from "../../../../../config/parttern";
 import * as moment from 'moment';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-edit-handler-dialog',
   templateUrl: './edit-handler-dialog.component.html',
@@ -51,6 +52,11 @@ export class EditHandlerComponent implements OnInit {
   role: any;
   contractId: any;
 
+  errorName: any = '';
+  errorPhone: any = '';
+  errorCardid: any = '';
+  errorEmail: any = '';
+
   //dropdown
   signTypeList: Array<any> = type_signature;
   checkCount = 1;
@@ -61,7 +67,8 @@ export class EditHandlerComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<EditHandlerComponent>,
-    private contractService: ContractService
+    private contractService: ContractService,
+    public translate: TranslateService,
   ) {
   }
 
@@ -156,8 +163,9 @@ export class EditHandlerComponent implements OnInit {
     }
   }
   UpdateHandler() {
+
     this.spinner.show();
-    const dataUpdate = {
+    let dataUpdate = {
       ...this.data,
       name: this.name,
       email: this.email,
@@ -218,25 +226,98 @@ export class EditHandlerComponent implements OnInit {
     //     break;
     //   }
     // }
+    // this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
+    //   (res: any) => {
+    //     if(res.email)
+    //   }
+    // )
 
-    if (this.email !== "") {
+    if (!this.validData()) {
+      console.log("dataUpdate", this.validData());
+      return;
+    }
+    else {
+      if (this.email !== "") {
 
-      console.log("dataUpdate",this.email);
-      console.log("this.data.id",this.data);
-      console.log("this.data.contract_id",this.data.contract_id);
-      this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
-        (res: any) => {
-          if (!res.success) {
-            this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
-          } else {
-            this.toastService.showSuccessHTMLWithTimeout('Cập nhật người xử lý thành công', "", 3000);
-            this.dialogRef.close(dataUpdate);
-            // this.router.navigate(['/main/form-contract/detail/' + this.id]);
+        console.log("dataUpdate 1", this.email);
+        console.log("this.data.id", this.data);
+        console.log("this.data.contract_id", this.data.contract_id);
+        console.log("this.phone", this.phone);
+        console.log("tthis.name", this.name);
+        console.log("this.card_id", this.card_id);
+        this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
+          (res: any) => {
+            if (!res.success) {
+              this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
+            } else {
+              this.toastService.showSuccessHTMLWithTimeout('Cập nhật người xử lý thành công', "", 3000);
+              dataUpdate = { ...dataUpdate, "change_num": this.data.change_num + 1 }
+              this.dialogRef.close(dataUpdate);
+              // this.router.navigate(['/main/form-contract/detail/' + this.id]);
+            }
           }
-        }
-      )
-    } else {
-      this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
+        )
+      } else {
+        this.toastService.showWarningHTMLWithTimeout("Email người xử lý không được bỏ trống", "", 3000);
+      }
+
+    }
+  }
+  validData() {
+    this.clearError();
+    this.nameRequired();
+    this.phoneRequired();
+    this.cardRequired();
+    this.emailRequired();
+    if (!this.nameRequired() || !this.phoneRequired() || !this.cardRequired() || !this.emailRequired()) {
+      // this.spinner.hide();
+      return false;
+    }
+    return true
+  }
+  nameRequired() {
+    this.errorName = "";
+    if (this.name == "") {
+      this.errorName = "error.name.required";
+      return false;
+    }
+    return true;
+  }
+  phoneRequired() {
+    this.errorPhone = "";
+    if (this.phone == "" && !this.isCheckRadio) {
+      this.errorPhone = "error.phone.required";
+      return false;
+    }
+    return true;
+  }
+  cardRequired() {
+    this.errorCardid = "";
+    if (!this.pattern.card_idHSM9.test(this.card_id) && this.id_sign_type === 4) {
+      this.errorCardid = "taxcode.format";
+      return false;
+    }
+
+    return true;
+
+  }
+  emailRequired() {
+    this.errorEmail = "";
+    if (this.email == "") {
+      this.errorEmail = "error.email.required";
+      return false;
+    }
+    return true;
+  }
+  clearError() {
+    if (this.name) {
+      this.errorName = '';
+    }
+    if (this.phone) {
+      this.errorPhone = '';
+    }
+    if (this.card_id) {
+      this.errorCardid = '';
     }
   }
 

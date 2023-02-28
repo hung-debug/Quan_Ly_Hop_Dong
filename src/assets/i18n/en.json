@@ -248,6 +248,10 @@
   "error.confirm-password-new.required": "Confirm password new is required",
   "error.confirm-password-new.incorrect": "Confirm password new is incorrect",
   "error.contract.name.required": "Contract name is required",
+  "error.name.required":"Name is required",
+  "error.phone.required":"Phone is required",
+  "error.cardid.required":"MST/CMT/CCCD should enter 9 or 12 characters",
+  "error.email.required":"Email is required",
   "error.ceca.required":"Do not leave the contract file push to the Ministry of Industry and Trade empty",
   "error.contract.file.required": "Contract file is required",
   "error.user.name.required": "Name is required",
@@ -516,5 +520,9 @@
   "file.import.valid":"File import isn't in the correct format",
   "file.import.valid.result":"File import isn't in the correct format, please see the error message in the downloaded file",
   "taxcode.out":"Please enter tax code/cardId outside the contract flow",
-  "end":"End"
+  "end":"End",
+  "email.exist": "Email already exist",
+  "phone.exist": "Phone already exist",
+  "taxcode.exist": "MST/CMT/CCCD already exist",
+  "recipients.not.found": "Recipientid not found"
 }

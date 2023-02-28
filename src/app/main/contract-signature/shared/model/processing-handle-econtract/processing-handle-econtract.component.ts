@@ -88,6 +88,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         this.isHiddenButton = false;
       }
 
+
       response.recipients.forEach((element: any) => {
         let data = {
           id: element.id,
@@ -99,14 +100,25 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           process_at: element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null,
           reasonReject: element.reasonReject,
           type: element.participantType,
-          statusNumber: element.status
+          statusNumber: element.status,
         }
+
         this.is_list_name.push(data);
       })
 
+      this.is_list_name.map((x: any) => {
+        this.data.is_data_contract.participants.map((item: any) => {
+          item.recipients.map((y: any) => {
+            if (x.id === y.id) {
+              x["change_num"] = y.change_num
+            }
+          })
+        })
+      })
+
+      console.log("is_list_name", this.is_list_name);
 
       this.listCheckSmsEmail = true
-
       if (response.contractStatus === 31 || response.contractStatus === 34 || response.contractStatus === 0) {
         this.listCheckSmsEmail = false
       }
@@ -235,20 +247,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
     this.contractService.getInforPersonProcess(recipient).subscribe((response) => {
 
-      // let recipientsData = {
-      //   contractId: this.data.is_data_contract.id,
-      //   name: response.name,
-      //   login_by: response.login_by,
-      //   email : response.email,
-      //   phone : response.phone,
-      //   sign_type : response.sign_type[0]?.name,
-      //   id_sign_type: response.sign_type[0]?.id,
-      //   card_id : response.card_id,
-      //   id : response.id,
-      //   role : response.role
-      // }
-      // contractId = response
-
       let data: any;
       data = response;
       data["contract_id"] = this.data.is_data_contract.id
@@ -259,16 +257,17 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         data,
       })
 
+      console.log("list name", this.is_list_name);
 
       dialogRef.afterClosed().subscribe((result: any) => {
         console.log('the close dialog', result);
-        console.log('the close dialog 1', this.is_list_name );
 
         this.is_list_name = this.is_list_name.map((x: any) => {
           if (x.id === result.id) {
             return {
               ...x, name: result.name,
               emailRecipients: result.email,
+              change_num: result.change_num
             }
           }
           return x
