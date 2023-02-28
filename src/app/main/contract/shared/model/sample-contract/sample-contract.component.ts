@@ -1338,8 +1338,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
           if (data_name) {
 
-            console.log("data_ name ", data_name);
-
             isObjSign.name = data_name.name;
             signElement.setAttribute("name", isObjSign.name);
 

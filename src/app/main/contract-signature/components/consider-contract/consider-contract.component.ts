@@ -1666,14 +1666,13 @@ export class ConsiderContractComponent
                 return false;
               }
             } else if (this.usbTokenVersion == 1) {
-              console.log("sign digital ", signDigital);
-              console.log("sign i ", signI);
               const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital,signI);
 
               if (!dataSignMobi.data.FileDataSigned) {
                 this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token','',3000);
                 return false;
               }
+
               const sign = await this.contractService.updateDigitalSignatured(signUpdate.id,dataSignMobi.data.FileDataSigned);
               if (!sign.recipient_id) {
                 this.toastService.showErrorHTMLWithTimeout('Lỗi đẩy file sau khi ký usb token','',3000);
@@ -1896,11 +1895,7 @@ export class ConsiderContractComponent
     let eKYC = 0;
     let otpOrEkyc = false;
     for (const signUpdate of this.isDataObjectSignature) {
-      if (
-        signUpdate &&
-        signUpdate.type == 2 &&
-        [3, 4].includes(this.datas.roleContractReceived) &&
-        signUpdate?.recipient?.email === this.currentUser.email &&
+      if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived) && signUpdate?.recipient?.email === this.currentUser.email &&
         signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
         otpOrEkyc = true;
@@ -2457,9 +2452,7 @@ export class ConsiderContractComponent
               await this.signDigitalDocument();
             }
 
-            this.router
-              .navigateByUrl('/', { skipLocationChange: true })
-              .then(() => {
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
                 this.router.navigate(
                   ['/main/form-contract/detail/' + this.idContract],
                   {
@@ -2504,9 +2497,7 @@ export class ConsiderContractComponent
         );
     } else {
       if (this.eKYC == false) {
-        this.contractService
-          .updateInfoContractConsiderImg(signUpdateTempN, this.recipientId)
-          .subscribe(
+        this.contractService.updateInfoContractConsiderImg(signUpdateTempN, this.recipientId).subscribe(
             async (result) => {
               if (result?.success == false) {
                 if (result.message == 'Wrong otp') {
@@ -2686,10 +2677,7 @@ export class ConsiderContractComponent
           organizationId: organization_id,
         };
 
-        this.contractService
-          .uploadFileImageBase64Signature(formData)
-          .subscribe((responseBase64) => {
-            console.log('response base 64 ', responseBase64);
+        this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseBase64) => {
 
             const filePath = responseBase64.file_object.file_path;
 
@@ -2898,29 +2886,16 @@ export class ConsiderContractComponent
   cardId: any;
   eKYCSignOpen() {
     // //Còn số lượng eKYC thì cho ký eKYC
-    this.unitService
-      .getNumberContractUseOriganzation(this.orgId)
-      .toPromise()
-      .then(
+    this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise().then(
         (data) => {
           this.eKYCContractUse = data.ekyc;
 
           //lay so luong hop dong da mua
-          this.unitService
-            .getNumberContractBuyOriganzation(this.orgId)
-            .toPromise()
-            .then(
+          this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise().then(
               (data) => {
                 this.eKYCContractBuy = data.ekyc;
-                if (
-                  Number(this.eKYCContractUse) + Number(1) >
-                  Number(this.eKYCContractBuy)
-                ) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ',
-                    '',
-                    3000
-                  );
+                if (Number(this.eKYCContractUse) + Number(1) > Number(this.eKYCContractBuy)) {
+                  this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ','',3000);
                 } else {
                   this.eKYC = true;
                   this.eKYCStart();
