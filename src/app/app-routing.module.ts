@@ -143,6 +143,9 @@ const routes: Routes = [
         component: DetailContractComponent,
       },
       {
+        path: 'form-contract/multi-sign-list', 
+        component: DetailContractComponent},
+      {
         path: 'form-contract/:action',
         component: AddContractComponent,
       },
