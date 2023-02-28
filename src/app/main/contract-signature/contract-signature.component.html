@@ -1,4 +1,5 @@
 <div class="container-fluid">
+
     <div style="margin-top: 60px;" class="header">
         <div class="col-md-12" style="padding-top: 10px" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
             <div class="input-line search">
@@ -8,13 +9,18 @@
             </div>
         </div>
 
+        <!--Header danh sách ký 1-->
         <div *ngIf="filter_status == 1">
             <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
                 <button (click)="signMany()" class="btn btn-lg btn-block btn_submit">{{'sign.multi'| translate}}</button>
+                <!-- <button (click)="watchMany()" class="btn btn-lg btn-block btn_submit">{{'sign.multi'| translate}}</button> -->
             </div>
 
             <div *ngIf="this.typeDisplay === 'signMany'" style="padding-top: 10px;">
-                <button class="btn_submit" (click)="signManyContract()">{{'contract.sign'| translate}}</button>
+                <!-- <button class="btn_submit" (click)="signManyContract()">{{'contract.sign'| translate}}</button> -->
+
+                <button class="btn_submit" (click)="watchManyContract()">{{'watch.contract'| translate}}</button>
+
                 <button class="btn_submit" (click)="cancelSignMany()">{{'cancel'| translate}}</button>
             </div>
         </div>
