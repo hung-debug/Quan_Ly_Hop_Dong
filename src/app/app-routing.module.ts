@@ -31,6 +31,7 @@ import { AdminUnitComponent } from './admin/admin-main/admin-unit/admin-unit.com
 import { AdminUserComponent } from './admin/admin-main/admin-user/admin-user.component';
 import { AdminPackComponent } from './admin/admin-main/admin-pack/admin-pack.component';
 import { AdminInfoUserComponent } from './admin/admin-main/admin-user/admin-info-user/admin-info-user.component';
+import { MultiSignListComponent } from './main/contract-signature/components/multi-sign-list/multi-sign-list.component';
 
 const contract_signatures = "c";
 const signatures = "s9";
@@ -131,6 +132,10 @@ const routes: Routes = [
         component: DetailContractComponent,
       },
       {
+        path:'form-contract/multi-sign-list',
+        component: MultiSignListComponent
+      },
+      {
         path: 'form-contract/detail/forward/:id',
         component: DetailContractComponent,
       },
@@ -142,9 +147,6 @@ const routes: Routes = [
         path: 'form-contract/detail/verify/:id',
         component: DetailContractComponent,
       },
-      {
-        path: 'form-contract/multi-sign-list', 
-        component: DetailContractComponent},
       {
         path: 'form-contract/:action',
         component: AddContractComponent,
