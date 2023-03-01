@@ -83,17 +83,9 @@ export class AdminUnitComponent implements OnInit {
     this.editUnitRole = this.checkRole(this.editUnitRole, 'QLTC_02');
     this.deleteUnitRole = this.checkRole(this.deleteUnitRole, 'QLTC_07');
 
-    console.log('add unit role');
-    console.log(this.addUnitRole);
-
     this.route.queryParams.subscribe((params) => {
-      console.log('param filter re');
-      console.log(params.filter_address);
-
-      if (
-        typeof params.filter_representative != 'undefined' &&
-        params.filter_representative
-      ) {
+      if (typeof params.filter_representative != 'undefined' && params.filter_representative) 
+      {
         this.filter_representative = params.filter_representative;
       } else {
         this.filter_representative = '';

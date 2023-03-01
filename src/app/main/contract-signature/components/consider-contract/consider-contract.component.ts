@@ -219,8 +219,6 @@ export class ConsiderContractComponent
     } else {
       this.router.navigate(['/page-not-found']);
     }
-
-    console.log("datass ", this.datas);
   }
 
   firstPageMobile() {
@@ -279,12 +277,8 @@ export class ConsiderContractComponent
           if (!data.locked) {
             this.getDataContractSignature();
           } else {
-            this.toastService.showErrorHTMLWithTimeout(
-              'Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' +
-                this.datepipe.transform(data.nextAttempt, 'dd/MM/yyyy HH:mm'),
-              '',
-              3000
-            );
+            this.toastService.showErrorHTMLWithTimeout('Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' +
+            this.datepipe.transform(data.nextAttempt, 'dd/MM/yyyy HH:mm'),'',3000);
             this.router.navigate([
               '/main/form-contract/detail/' + this.idContract,
             ]);
@@ -2799,10 +2793,6 @@ export class ConsiderContractComponent
     );
 
     return validSign.length == 0;
-  }
-
-  t() {
-    console.log(this);
   }
 
   downloadContract(id: any) {
