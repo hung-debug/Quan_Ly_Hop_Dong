@@ -1771,6 +1771,7 @@ export class ConsiderContractComponent
             coordinate_y: signUpdate.signDigitalY,
             width: signUpdate.width,
             height: signUpdate.height,
+            page: signUpdate.page
           }
           if (signUpdate.type == 1 || signUpdate.type == 4) {
             this.textSign = signUpdate.valueSign;
