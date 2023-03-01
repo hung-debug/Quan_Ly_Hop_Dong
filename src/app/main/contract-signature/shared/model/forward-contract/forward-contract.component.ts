@@ -107,12 +107,10 @@ export class ForwardContractComponent implements OnInit {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập tên người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
         return;
       }
-      if (!String(this.myForm.value.email)) {
+      if (this.login == 'email' && !String(this.myForm.value.email)) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
         return;
-      } else if (!String(this.myForm.value.email)
-        .toLowerCase()
-        .match(
+      } else if (this.login == 'email' && !String(this.myForm.value.email).toLowerCase().match(
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         )) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng email', '', 3000);
@@ -202,6 +200,10 @@ export class ForwardContractComponent implements OnInit {
             is_replace: false,
             login_by: this.login
           };
+
+          if(this.login == 'phone') {
+            dataAuthorize.email = dataAuthorize.phone
+          }
 
           await this.contractService.processAuthorizeContract(dataAuthorize).toPromise().then(
             data => {

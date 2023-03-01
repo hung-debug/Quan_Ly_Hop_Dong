@@ -169,35 +169,6 @@ export class ContractSignatureComponent implements OnInit {
 
   watchManyContract() {
     this.router.navigate(['main/form-contract/multi-sign-list']);
-
-    // let contractsSignManyChecked = this.contractsSignMany.filter(
-    //   (opt) => opt.checked
-    // );
-    // if(contractsSignManyChecked.length == 0) {
-    //   this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn hợp đồng cần ký","",3000);
-    //   return;
-    // }
-    // console.log(contractsSignManyChecked);
-    // console.log(contractsSignManyChecked[0]);
-    // let idContractsSignManyChecked = [];
-    // for( let i =0;i< contractsSignManyChecked.length;i++) {
-    //   idContractsSignManyChecked.push(contractsSignManyChecked[i].contractId);
-    // }
-    // sessionStorage.setItem('idContracts', JSON.stringify(idContractsSignManyChecked));
-    // sessionStorage.setItem('contractsSignManyChecked', JSON.stringify(contractsSignManyChecked));
-    // console.log(sessionStorage);
-    // let newArr = JSON.parse(sessionStorage.getItem('idContractsSignManyChecked')!);
-
-    // for (let i = 0; i < contractsSignManyChecked.length; i++) {
-    //   for (let j = i + 1; j < contractsSignManyChecked.length; j++) {
-    //     if (contractsSignManyChecked[i].sign_type[0].id != contractsSignManyChecked[j].sign_type[0].id) {
-    //       this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn những hợp đồng cùng loại ký','',3000);
-    //       return;
-    //     }
-    //   }
-    // }
-    // sessionStorage.setItem('isMultiSign', 'true');
-    // this.router.navigate(['main/form-contract/multi-sign-list']);
   }
 
   async getDateTime() {
