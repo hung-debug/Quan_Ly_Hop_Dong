@@ -750,15 +750,9 @@ export class ConsiderContractComponent
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
-        if (
-          (this.typeSignDigital == 2 && this.usbTokenVersion == 1) ||
-          !this.usbTokenVersion
-        ) {
+        if ((this.typeSignDigital == 2 && this.usbTokenVersion == 1) || !this.usbTokenVersion) {
           this.prepareInfoSignUsbTokenV1(pageNumber, canvas.height);
-        } else if (
-          (this.typeSignDigital == 2 && this.usbTokenVersion == 2) ||
-          this.typeSignDigital == 4
-        ) {
+        } else if ((this.typeSignDigital == 2 && this.usbTokenVersion == 2) || this.typeSignDigital == 4) {
           this.prepareInfoSignUsbTokenV2(pageNumber, canvas.height);
         }
 
@@ -1766,19 +1760,30 @@ export class ConsiderContractComponent
           }
 
           let signI = null;
+
+          console.log("sig ", signUpdate);
           let fieldHsm = {
             coordinate_x: signUpdate.signDigitalX,
             coordinate_y: signUpdate.signDigitalY,
-            width: signUpdate.width,
-            height: signUpdate.height,
+            width: signUpdate.signDigitalWidth,
+            height: signUpdate.signDigitalHeight,
             page: signUpdate.page
           }
+
+          // let fieldHsm = {
+          //   coordinate_x: 0,
+          //   coordinate_y: 0,
+          //   width: 50,
+          //   height: 50,
+          //   page: 1
+          // }
+
           if (signUpdate.type == 1 || signUpdate.type == 4) {
             this.textSign = signUpdate.valueSign;
             this.widthText = signUpdate.width;
 
             this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
-            signUpdate.signDigitalWidth = signUpdate.signDigitalX + this.widthText + 10;
+            fieldHsm.width = this.widthText + 10;
 
             await of(null).pipe(delay(120)).toPromise();
             const imageRender = <HTMLElement>(document.getElementById('text-sign'));
@@ -1787,6 +1792,8 @@ export class ConsiderContractComponent
               const textSignB = await domtoimage.toPng(imageRender);
               signI = this.textSignBase64Gen = textSignB.split(',')[1];
             }
+
+
           } else if (signUpdate.type == 3) {
             await of(null).pipe(delay(150)).toPromise();
 
@@ -3247,18 +3254,13 @@ export class ConsiderContractComponent
         sign?.page == page
       ) {
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
-        sign.signDigitalY =
-          heightPage -
-          (sign.coordinate_y - this.currentHeight) -
-          sign.height /* * this.ratioPDF*/;
+        sign.signDigitalY = heightPage - (sign.coordinate_y - this.currentHeight) - sign.height /* * this.ratioPDF*/;
 
         sign.signDigitalWidth = sign.width /* * this.ratioPDF*/;
         sign.signDigitalHeight = sign.height;
 
         //Lấy thông tin mã số thuế của đối tác ký
-        this.contractService
-          .getDetermineCoordination(sign.recipient_id)
-          .subscribe((response) => {
+        this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
             const lengthRes = response.recipients.length;
             for (let i = 0; i < lengthRes; i++) {
               const id = response.recipients[i].id;
