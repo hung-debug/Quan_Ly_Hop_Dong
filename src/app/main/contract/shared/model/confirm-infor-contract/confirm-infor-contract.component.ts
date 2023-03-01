@@ -211,7 +211,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   }
 
   async SaveContract(action: string) {
-    console.log("async save contract ", this.datas);
     if (
       this.datas.is_action_contract_created &&
       this.router.url.includes('edit')

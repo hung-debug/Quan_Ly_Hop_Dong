@@ -19,7 +19,10 @@
 </div>
 
 <div class="text-sign" *ngIf="sign.sign_unit == 'text'">
-  <div class="skeleton-sign" (click)="doEditText()" *ngIf="!checkShowEdit">
+  <div class="skeleton-sign" (click)="doEditText()" *ngIf="!checkShowEdit && !sign.valueSign">
+    <span id="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
+  </div>
+  <div class="skeleton-sign-value" (click)="doEditText()" *ngIf="!checkShowEdit && sign.valueSign">
     <span id="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
   </div>
   <div class="skeleton-sign" *ngIf="checkShowEdit">
@@ -29,20 +32,11 @@
 
 <div class="text-sign" *ngIf="sign.sign_unit == 'so_tai_lieu'">
   <div class="skeleton-sign" (click)="doEditContractNo()" *ngIf="!contractNoValue && count == 0">
-    <span id="input-text"   [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
-    <!-- <input id="input" type="text" class="input-edit-text" [(ngModel)]="contractNoValueSign" (blur)="doneEditContractNoSign(sign)" #inputEditContractNo> -->
-  </div>
-  <div class="skeleton-sign" *ngIf="contractNoValue || count > 0">
-    <input style="text-align: center;" id="input" type="text" class="input-edit-text" [(ngModel)]="contractNoValueSign" (blur)="doneEditContractNoSign(sign)" #inputEditContractNo>
-  </div>
-</div> 
-
-<!-- <div class="text-sign" *ngIf="sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu'">
-  <div class="skeleton-sign" (click)="doEditText()" *ngIf="!checkShowEdit">
     <span id="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
   </div>
-  <div class="skeleton-sign" *ngIf="checkShowEdit">
-    <input type="text" class="input-edit-text" [(ngModel)]="sign.valueSign" (blur)="doneEditTextSign()" #inputEditText>
+
+  <div class="skeleton-sign" *ngIf="contractNoValue || count > 0">
+    <input type="text" class="input-edit-text" [(ngModel)]="contractNoValueSign" (blur)="doneEditContractNoSign(sign)" #inputEditContractNo>
   </div>
-</div> -->
+</div> 
 

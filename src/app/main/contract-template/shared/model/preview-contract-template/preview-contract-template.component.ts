@@ -79,31 +79,47 @@ export class PreviewContractTemplateComponent implements OnInit {
   }
 
   changePosition(d?: any, e?: any, sizeChange?: any) {
+
+    console.log("ddd ", d);
+
     let style: any = {
 
     };
 
     if(d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu') {
+      // console.log("xx ");
       style = {
         "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
         "position": "absolute",
         "backgroundColor": '#EBF8FF'
       }
     } else {
-      style = {
-        "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
-        "position": "absolute",
-      }
+      const font_size = d.font_size ? d.font_size : 13;
+      
+      if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
+        style = {
+          "transform": 'translate(' + d['coordinate_x'] + 'px, ' + Number(d['coordinate_y']+Number(d['height'])-Number(font_size)*1.3) + 'px)',
+          "position": "absolute",
+        }
+      } 
+      
+      // else if(d.sign_unit == 'so_tai_lieu') {
+      //   style = {
+      //     "transform": 'translate(' + d['coordinate_x'] + 'px, ' + Number(Number(d['coordinate_y']) + 5) + 'px)',
+      //     "position": "absolute",
+      //   }
+      // }
+       
     }
   
-    if (d['width']) {
+    if (d['width'] && (d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu')) {
       style.width = parseInt(d['width']) + "px";
     }
-    if (d['height']) {
+    if (d['height'] && (d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu')) {
       style.height = parseInt(d['height']) + "px";
     }
     if (this.datas.contract_no && d.sign_unit == 'so_tai_lieu') {
-      style.padding = '6px';
+      // style.padding = '6px';
     }
     return style;
   }

@@ -121,8 +121,6 @@ export class MainComponent implements OnInit {
   }
 
   getStyleWithSideBar() {
-    let urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
-
     if (this.urlLoginType || this.mobile === true) {
       return {
         'padding-left': '0px'
@@ -135,8 +133,6 @@ export class MainComponent implements OnInit {
 
   //get style header
   getStyleSideBar() {
-    let urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
-
     if (this.urlLoginType || this.mobile === true) {
       return {
         "width": "100%",

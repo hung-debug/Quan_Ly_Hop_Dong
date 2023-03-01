@@ -88,17 +88,14 @@ export class AddUserComponent implements OnInit {
     
     if(this.isQLND_01 || this.isQLND_02){
       //lay danh sach to chuc
-      this.unitService.getUnitList('', '').subscribe(data => {
-        
+      this.unitService.getUnitList('', '').subscribe(data => {  
         this.orgList = data.entities;
-        // if(this.action == 'add'){
-        //   this.orgList = data.entities.filter((p: any) => p.id == orgId);
-        // }else{
-        //   this.orgList = data.entities;
-        // }
-        
       });
       this.networkList = networkList;
+    }
+
+    if(this.isQLND_02) {
+      this.isEditRole = true
     }
 
     this.sub = this.route.params.subscribe(params => {
@@ -139,6 +136,10 @@ export class AddUserComponent implements OnInit {
         this.id = params['id'];
         this.appService.setTitle('user.update');
 
+        this.roleService.getRoleList('', '').subscribe(data => {
+          this.roleList = data.entities;
+        });
+
         if(this.isQLND_02){
           this.userService.getUserById(this.id).subscribe(
             data => {
@@ -146,7 +147,6 @@ export class AddUserComponent implements OnInit {
                 //lay vai tro cua user
                 this.roleService.getRoleById(data?.role_id).subscribe(dataRoleUser => {
                   this.roleName = dataRoleUser.name;
-                  console.log(data);
                   this.orgIdOld = data.organization_id;
                   this.addForm = this.fbd.group({
                     name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
@@ -172,7 +172,6 @@ export class AddUserComponent implements OnInit {
                   this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
                   this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
                   this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
-                  console.log(this.addForm);
 
                   //set name
                   if(data.organization_id != null){
@@ -230,6 +229,7 @@ export class AddUserComponent implements OnInit {
     
     this.userService.getUserById(userId).subscribe(
       data => {
+
         //lay id role
         this.roleService.getRoleById(data?.role_id).subscribe(
           data => {
@@ -237,6 +237,7 @@ export class AddUserComponent implements OnInit {
             let listRole: any[];
             this.userRoleCode = data.code;
             listRole = data.permissions;
+
             this.isQLND_01 = listRole.some(element => element.code == 'QLND_01');
             this.isQLND_02 = listRole.some(element => element.code == 'QLND_02');
 
@@ -290,12 +291,10 @@ export class AddUserComponent implements OnInit {
 
     if(data.fileImage != null){
       this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
-        console.log(JSON.stringify(dataFile));
         const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
         const sign_image:never[]=[];
         (sign_image as string[]).push(sign_image_content);
         data.sign_image = sign_image;
-        console.log(data);
 
         this.userService.updateUser(data).subscribe(
           data => {

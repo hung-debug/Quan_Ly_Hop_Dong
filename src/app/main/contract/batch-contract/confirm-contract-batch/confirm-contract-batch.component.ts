@@ -120,16 +120,11 @@ export class ConfirmContractBatchComponent
   top: any[]= [];
 
   constructor(
-    private userService: UserService,
-    private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
-    private modalService: NgbModal,
-    private dialog: MatDialog,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
     private contractTemplateService: ContractTemplateService,
     private router: Router,
-    private unitService: UnitService
   ) {
     this.step = variable.stepSampleContractBatch.step2;
   }
@@ -137,13 +132,7 @@ export class ConfirmContractBatchComponent
   ngOnInit() {
     // console.log(this.datasBatch);
     this.spinner.show();
-    this.contractService
-      .getContractBatchList(
-        this.datasBatch.contractFile,
-        this.datasBatch.idContractTemplate,
-        this.datasBatch.ceca_push
-      )
-      .subscribe((response: any) => {
+    this.contractService.getContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,this.datasBatch.ceca_push).subscribe((response: any) => {
         this.contractList = response;
 
         this.pageNumberTotal = this.contractList.length;
@@ -172,7 +161,6 @@ export class ConfirmContractBatchComponent
 
   data: any;
   getDataContractSignature(page: any) {
-    console.log(page);
     this.spinner.show();
 
     this.checkDisableIcon();
@@ -188,19 +176,7 @@ export class ConfirmContractBatchComponent
           element.fields.length > 0
         ) {
           element.fields.forEach((res: any) => {
-            // res['coordinate_x'] = res.coordinate_x;
-            // res['coordinate_y'] = res.coordinate_y;
-            // res['font'] = res.font;
-            // res['font_size'] = res.font_size;
-            // res['height'] = res.height;
             res['name'] = element.name;
-            // res['page'] = res.page;
-            // res['recipient_id'] = res.recipient_id;
-            // res['required'] = res.required;
-            // res['status'] = res.status;
-            // res['type'] = res.type;
-            // res['value'] = res.value;
-            // res['width'] = res.width;
 
             res['id'] = i++;
             if (res.type == 1) {
@@ -637,6 +613,7 @@ export class ConfirmContractBatchComponent
       this.datasBatch.is_data_object_signature &&
       this.datasBatch.is_data_object_signature.length
     ) {
+      console.log("aaa ", this.datasBatch.is_data_object_signature)
       return this.datasBatch.is_data_object_signature;
     } else {
       return [];
@@ -706,8 +683,6 @@ export class ConfirmContractBatchComponent
             );
           }
         }
-        // console.log(this.signCurent)
-        // console.log(this.objSignInfo)
       }
     }
   }
@@ -806,7 +781,10 @@ export class ConfirmContractBatchComponent
   user: any;
   submit() {
 
-    this.next(0);
+    if(!this.datasBatch.ceca_push) 
+      this.datasBatch.ceca_push = 0;
+
+    this.next(this.datasBatch.ceca_push);
     // const data = {
     //   title: 'YÊU CẦU XÁC NHẬN',
     // };

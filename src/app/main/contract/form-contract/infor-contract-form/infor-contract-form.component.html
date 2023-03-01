@@ -52,7 +52,7 @@
     <div *ngIf="this.ceca" class="form-group">
       <div class="label_item">{{'contract-type.ceca' | translate}}<span class="require_star">*</span></div>
         <p-dropdown panelStyleClass="font" [options]="optionsCeCa" [(ngModel)]="optionsCeCaValue" optionLabel="name"
-          optionValue="id" placeholder="{{'choose' | translate}}" [showClear]="true">
+          optionValue="id" [showClear]="true">
         </p-dropdown>
     </div>
   </div>
@@ -71,7 +71,7 @@
     <div class="form-group">
       <div class="label_item">{{'contract.type' | translate}}</div>
       <div>
-        <p-dropdown (onChange)="changeTypeContract()" panelStyleClass="font" [options]="typeList" [(ngModel)]="datasForm.type_id" optionLabel="name"
+        <p-dropdown (onChange)="changeTypeContract($event)" panelStyleClass="font" [options]="typeList" [(ngModel)]="datasForm.type_id" optionLabel="name"
           optionValue="id" placeholder="{{'choose.contract.type' | translate}}" [filter]="true" filterBy="name" [showClear]="true"
           ></p-dropdown>
       </div>

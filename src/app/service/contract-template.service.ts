@@ -304,6 +304,15 @@ export class ContractTemplateService {
     return forkJoin(arrApi);
   }
 
+  getInfoContractTemplate(idContract: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    
+    return this.http.get<any>(this.getDataContractV2 + idContract, { headers });
+  }
+
   shareContract(email: any, id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()

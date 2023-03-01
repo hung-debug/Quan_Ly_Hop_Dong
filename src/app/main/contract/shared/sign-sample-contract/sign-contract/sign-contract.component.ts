@@ -13,6 +13,8 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   @Output() onChangeValueText = new EventEmitter<any>();
   isContent: any;
 
+  @Input() contractNo: any;
+
   constructor(
     public translate: TranslateService,
   ) {
@@ -38,6 +40,13 @@ export class SignContractComponent implements OnInit, AfterViewInit {
 
   }
 
+  getStyleText(sign: any) {
+    return {
+      'font-size': sign.font_size+'px',
+      'font':sign.font
+    };
+  }
+
   ngAfterViewInit() {
     if (this.sign.sign_unit == 'so_tai_lieu' || this.sign.sign_unit == 'text') {
       setTimeout(() => {
@@ -49,9 +58,9 @@ export class SignContractComponent implements OnInit, AfterViewInit {
     }
   }
 
-  doTheSearch($event: Event): void {
+  doTheSearch($event: Event, key: string): void {
     const stringEmitted = ($event.target as HTMLInputElement).value;
-    this.isContent = stringEmitted;
+    this.isContent = stringEmitted; 
     this.onChangeValueText.emit(stringEmitted);
   }
 

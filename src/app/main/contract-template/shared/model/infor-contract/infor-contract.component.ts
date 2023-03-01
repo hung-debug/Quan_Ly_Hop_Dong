@@ -126,10 +126,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   actionSuccess() {
-
-      console.log("add ", this.datas.start_time);
-      console.log("add1 ", this.datas.end_time);
-
        //check mẫu đã được sử dụng hay chưa
        this.checkTemplateIsUse();
 
@@ -138,13 +134,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
        this.type_id = this.datas.type_id ? this.datas.type_id : null;
        this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
 
-       console.log("st ", this.datas.start_time);
-       console.log("mm ", new Date(this.datas.start_time));
+      this.start_time = this.datas.start_time ? moment(this.datas.start_time).toDate() : '';
 
-        this.start_time = this.datas.start_time ? moment(this.datas.start_time).toDate() : '';
-
-        console.log("st ", this.start_time);
-        this.end_time = this.datas.end_time ? moment(this.datas.end_time).toDate() : '';
+      this.end_time = this.datas.end_time ? moment(this.datas.end_time).toDate() : '';
        
        this.notes = this.datas.notes ? this.datas.notes : null;
        if (this.datas.file_name_attach) {
@@ -246,7 +238,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   fileChangedAttach(e: any) {
-    console.log(e.target.files)
     let files = e.target.files;
     for (let i = 0; i < files.length; i++) {
 
@@ -255,14 +246,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         // giới hạn file upload lên là 5mb
         if (file.size <= 5000000) {
           const file_name = file.name;
-          console.log(this.attachFileNameArr);
           if (this.attachFileNameArr.filter((p: any) => p.filename == file_name).length == 0) {
             const extension = file.name.split('.').pop();
             //this.datas.file_name_attach = file_name;
             //this.datas.file_name_attach = this.datas.file_name_attach + "," + file_name;
             this.attachFileArr.push(file);
             this.datas.attachFileArr = this.attachFileArr;
-            console.log(this.datas.attachFileArr);
             this.attachFileNameArr.push({ filename: file.name });
             if (!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length && this.datas.attachFileNameArr.length == 0) {
               this.datas.attachFileNameArr = [];
@@ -337,7 +326,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       })
 
       if (countSuccess == 0 && this.uploadFileContractAgain) {
-        // console.log(this.datas.contractFile);
         await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data: any) => {
           this.datas.filePath = data.file_object.file_path;
           this.datas.fileName = data.file_object.filename;

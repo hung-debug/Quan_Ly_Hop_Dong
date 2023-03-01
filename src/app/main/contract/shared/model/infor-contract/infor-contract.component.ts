@@ -142,8 +142,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   actionSuccess() {
     this.optionsCeCa = optionsCeCa;
 
-    console.log("b1 ", this.datas.ceca_push);
-
     if(this.datas.ceca_push != 0  && this.datas.ceca_push != 1)
       this.datas.ceca_push = this.optionsCeCaValue;
     else
@@ -210,6 +208,18 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
         if (extension && extension.toLowerCase() == 'pdf') {
+
+          // this.spinner.hide();
+          // const fileInput: any = document.getElementById('file-input');
+          //     fileInput.value = '';
+          //     this.datas.file_name = file_name;
+          //     this.datas.contractFile = file;
+          //     this.contractFileRequired();
+          //     if (this.datas.is_action_contract_created) {
+          //       this.uploadFileContractAgain = true;
+          //     }
+
+          //Check file hợp đồng đã có chữ ký số hay chưa
           this.checkSignDigitalService.getList(file).subscribe((response) => {
             this.spinner.hide();
             if(response.length == 0) {
@@ -349,7 +359,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.optionsCeCa = optionsCeCa;
       this.optionsCeCaValue = 1;
       this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
-    } else if(informationContractType.ceca_push == 0) {
+    } else if(!informationContractType.ceca_push) {
       this.optionsCeCa = optionsCeCa;
       this.optionsCeCaValue = 0;
       this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
@@ -986,7 +996,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   contractCeCaValid() {
-    if(this.optionsCeCaValue == null) {
+    if(this.ceca && this.optionsCeCaValue == null) {
       this.errorCeCa = "error.ceca.required";
       return false;
     }

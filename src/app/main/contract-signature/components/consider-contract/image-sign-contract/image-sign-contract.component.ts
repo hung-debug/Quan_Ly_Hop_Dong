@@ -1,11 +1,10 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, QueryList, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {ConfirmSignOtpComponent} from "../confirm-sign-otp/confirm-sign-otp.component";
 
 import {ImageDialogSignComponent} from "../image-dialog-sign/image-dialog-sign.component";
 import {PkiDialogSignComponent} from "../pki-dialog-sign/pki-dialog-sign.component";
 import {HsmDialogSignComponent} from "../hsm-dialog-sign/hsm-dialog-sign.component";
-import {UserService} from "../../../../../service/user.service";
 import { ToastService } from 'src/app/service/toast.service';
 import { Output, EventEmitter } from '@angular/core';
 
@@ -164,6 +163,9 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doneEditContractNoSign(sign: any) {
+    // this.checkShowEdit = false;
+
+
     this.contractNoValue = false;
     this.count++;
     sign.valueSign = this.contractNoValueSign;
@@ -187,15 +189,6 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     })
   }
 
-  onKey(event: any) {
-    // this.checkShowEdit = true;
-
-    // this.inputEditText.nativeElement.value = event.target.value;
-    // this.contractNo = event.target.value;
-
-    // console.log("this ", this.inputEditText.nativeElement.value);
-  }
-
   doEditText() {
     if ([2,3,4].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
       this.checkShowEdit = !this.checkShowEdit;
@@ -209,6 +202,11 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   doEditContractNo() {
     this.contractNoValue = !this.contractNoValue;
+
+    setTimeout(()=>{
+      this.inputEditContractNo.nativeElement.focus();
+    },100);
+
   }
 
   count: number = 0;
@@ -220,14 +218,15 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       }
       return 'Text';
     } else {
-      if (this.datas.is_data_contract.code) {
-        return this.datas.is_data_contract.code;
-      } else if (sign.value) {
+      // if (this.datas.is_data_contract.code) {
+      //   console.log("1")
+      //   return this.datas.is_data_contract.code;
+      // } else 
+      if (sign.value) {
         return sign.value;
       } else if(sign.valueSign) {
         return sign.valueSign;
       } else if(this.contractNoValueSign) {
-        console.log("1 ",sign);
         this.count++;
         sign.valueSign = this.contractNoValueSign;
         return sign.valueSign;

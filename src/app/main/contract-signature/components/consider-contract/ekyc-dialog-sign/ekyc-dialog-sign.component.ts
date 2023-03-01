@@ -115,7 +115,9 @@ export class EkycDialogSignComponent implements OnInit {
                 this.flagSuccess == false;
                 this.webcamImage = this.initWebcamImage;
                 alert("Mã CMT/CCCD không trùng khớp");
-              } else if(this.name.toUpperCase().split(" ").join("") != response.name.toUpperCase().split(" ").join("")){
+
+                // string.replace(/  +/g, ' ');
+              } else if(this.name.toUpperCase().split(" ").join("") != response.name.toUpperCase().split(" ").join("")) {
                 this.flagSuccess == false;
                 this.webcamImage = this.initWebcamImage;
                 alert("Họ tên trên CMT/CCCD không trùng khớp với tên người ký");

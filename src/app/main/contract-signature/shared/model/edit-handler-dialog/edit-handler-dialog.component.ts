@@ -73,6 +73,7 @@ export class EditHandlerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     if (environment.flag == 'NB') {
       this.site = 'NB';
     } else if (environment.flag == 'KD') {

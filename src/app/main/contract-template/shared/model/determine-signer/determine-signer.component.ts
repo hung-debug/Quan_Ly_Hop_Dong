@@ -229,7 +229,15 @@ export class DetermineSignerComponent implements OnInit {
           }
         })
 
-        await this.contractTemplateService.editContractDetermine(this.datas.is_determine_clone[i], this.datas.is_determine_clone[i].id).toPromise().then((res: any) => {
+      //Bỏ ô text/số hợp đồng khi loại ký không phải usb token
+      for(let j = 0; j < this.datas.is_determine_clone[i].recipients.length; j++) {
+          const recipient =  this.datas.is_determine_clone[i].recipients[j];
+          const fields = recipient.fields;
+
+          this.datas.is_determine_clone[i].recipients[j].fields = fields.filter((field: any) => field.type == 2 || field.type == 3);
+      }
+
+      await this.contractTemplateService.editContractDetermine(this.datas.is_determine_clone[i], this.datas.is_determine_clone[i].id).toPromise().then((res: any) => {
           isBody.push(res);
         }, (res: any) => {
           is_error = res.error;
@@ -1115,9 +1123,7 @@ export class DetermineSignerComponent implements OnInit {
 
     let number = 0;
     this.datas.is_determine_clone.forEach((res: any, index: number) => {
-
-
-      if (res.type != 1) {
+      if(res.type != 1){
         number++;
         res.name = "Đối tác " + number;
       }

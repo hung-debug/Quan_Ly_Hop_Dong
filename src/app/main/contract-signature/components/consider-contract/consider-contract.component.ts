@@ -45,7 +45,6 @@ import { EkycDialogSignComponent } from './ekyc-dialog-sign/ekyc-dialog-sign.com
 import { UnitService } from 'src/app/service/unit.service';
 import { Helper } from 'src/app/core/Helper';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
-import { event } from 'jquery';
 
 @Component({
   selector: 'app-consider-contract',
@@ -53,7 +52,8 @@ import { event } from 'jquery';
   styleUrls: ['./consider-contract.component.scss'],
 })
 export class ConsiderContractComponent
-  implements OnInit, OnDestroy, AfterViewInit {
+  implements OnInit, OnDestroy, AfterViewInit
+{
   datas: any;
   data_contract: any;
   data_coordinates: any;
@@ -154,7 +154,7 @@ export class ConsiderContractComponent
   textSignBase64Gen: any;
   signInfoPKIU: any = {};
   // heightText: any = 200;
-  widthText: any = 200;
+  widthText: any = "";
   loadingText: string = 'Đang xử lý...';
   phoneOtp: any;
   isDateTime: any;
@@ -201,7 +201,6 @@ export class ConsiderContractComponent
     this.loginType = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.type;
-
   }
 
   pdfSrcMobile: any;
@@ -213,14 +212,16 @@ export class ConsiderContractComponent
 
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
-    const checkViewContract = await this.checkViewContractService.callAPIcheckViewContract(this.idContract, false);
+    const checkViewContract =
+      await this.checkViewContractService.callAPIcheckViewContract(
+        this.idContract,
+        false
+      );
 
     if (checkViewContract) {
       this.actionRoleContract();
     } else {
-      // this.router.navigate(['/page-not-found']);
-      setTimeout(() => this.router.navigate(['/login']));
-      this.toastService.showErrorHTMLWithTimeout('Bạn không có quyền xử lý hợp đồng này!', "", 3000);
+      this.router.navigate(['/page-not-found']);
     }
   }
 
@@ -256,7 +257,7 @@ export class ConsiderContractComponent
     } else if (event.pageNumber == 1) {
       this.page1 = false;
       this.pageLast = true;
-    } else if (event.pageNumber = this.pageNumber) {
+    } else if ((event.pageNumber = this.pageNumber)) {
       this.page1 = true;
       this.pageLast = false;
     }
@@ -265,7 +266,6 @@ export class ConsiderContractComponent
   afterLoadComplete(event: any) {
     this.pageNumber = event._pdfInfo.numPages;
   }
-
 
   pageBefore: number;
   status: any;
@@ -283,7 +283,7 @@ export class ConsiderContractComponent
           } else {
             this.toastService.showErrorHTMLWithTimeout(
               'Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' +
-              this.datepipe.transform(data.nextAttempt, 'dd/MM/yyyy HH:mm'),
+                this.datepipe.transform(data.nextAttempt, 'dd/MM/yyyy HH:mm'),
               '',
               3000
             );
@@ -314,13 +314,21 @@ export class ConsiderContractComponent
     //đổi màu cho nút next page
     let canvasLast: any = document.getElementById('canvas-step3-' + this.pageNumber);
     let step3: any = document.getElementById('pdf-viewer-step-3');
-    if (event.srcElement.scrollTop < Number(canvasLast.getBoundingClientRect().top - step3.getBoundingClientRect().top)) {
+    if (
+      event.srcElement.scrollTop <
+      Number(
+        canvasLast.getBoundingClientRect().top -
+          step3.getBoundingClientRect().top
+      )
+    ) {
       this.pageLast = true;
     } else {
       this.pageLast = false;
     }
 
-    this.pageNum = Number(Math.floor(event.srcElement.scrollTop / canvas1.height) + 1);
+    this.pageNum = Number(
+      Math.floor(event.srcElement.scrollTop / canvas1.height) + 1
+    );
 
     let scrollTop = Number(event.srcElement.scrollTop);
 
@@ -347,9 +355,7 @@ export class ConsiderContractComponent
   }
 
   async getVersionUsbToken(orgId: any) {
-    const dataOrg = await this.contractService
-      .getDataNotifyOriganzationOrgId(orgId)
-      .toPromise();
+    const dataOrg = await this.contractService.getDataNotifyOriganzationOrgId(orgId).toPromise();
 
     if (dataOrg.usb_token_version == 1) {
       this.usbTokenVersion = 1;
@@ -358,14 +364,22 @@ export class ConsiderContractComponent
     }
   }
 
-
   timerId: any;
+  typeSignDigital: any;
+  isTimestamp: string = "false";
   getDataContractSignature() {
     this.contractService.getDetailContract(this.idContract).subscribe(
       async (rs) => {
         this.isDataContract = rs[0];
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
+
+        if(this.isDataContract.ceca_push = 1) {
+          this.isTimestamp = "true"
+        } else {
+          this.isTimestamp = "false";
+        }
+
         if (rs[0] && rs[1] && rs[1].length && rs[2] && rs[2].length) {
           this.valid = true;
         }
@@ -381,9 +395,7 @@ export class ConsiderContractComponent
 
         this.datas = this.data_contract;
         if (this.datas?.is_data_contract?.type_id) {
-          this.contractService
-            .getContractTypes(this.datas?.is_data_contract?.type_id)
-            .subscribe((data) => {
+          this.contractService.getContractTypes(this.datas?.is_data_contract?.type_id).subscribe((data) => {
               if (this.datas?.is_data_contract) {
                 this.datas.is_data_contract.type_name = data;
               }
@@ -394,9 +406,7 @@ export class ConsiderContractComponent
           this.data_contract?.is_data_contract?.status == 31 ||
           this.data_contract?.is_data_contract?.status == 30
         ) {
-          this.router.navigate([
-            '/main/form-contract/detail/' + this.idContract,
-          ]);
+          this.router.navigate(['/main/form-contract/detail/' + this.idContract,]);
         }
         this.allFileAttachment = this.datas.i_data_file_contract.filter(
           (f: any) => f.type == 3
@@ -489,6 +499,27 @@ export class ConsiderContractComponent
         this.datas.action_title = 'Xác nhận';
         this.datas.roleContractReceived = this.recipient.role;
 
+        for (const signUpdate of this.isDataObjectSignature) {
+          if (
+            signUpdate &&
+            (signUpdate.type == 3 || signUpdate.type == 2) &&
+            [3, 4].includes(this.datas.roleContractReceived) &&
+            signUpdate?.recipient?.email === this.currentUser.email &&
+            signUpdate?.recipient?.role === this.datas?.roleContractReceived
+          ) {
+            if (signUpdate.recipient?.sign_type) {
+              const typeSD = signUpdate.recipient?.sign_type.find(
+                (t: any) => t.id != 1
+              );
+              if (typeSD) {
+                this.typeSignDigital = typeSD.id;
+              }
+            }
+
+            break;
+          }
+        }
+
         this.scale = 1.0;
 
         if (!this.signCurent) {
@@ -548,11 +579,7 @@ export class ConsiderContractComponent
               }
           }
 
-          if (
-            this.mobile &&
-            this.recipient.status != 2 &&
-            this.recipient.status != 3
-          ) {
+          if (this.mobile && this.recipient.status != 2 && this.recipient.status != 3) {
             if (image_base64)
               this.contractService
                 .getFilePdfForMobile(this.recipientId, image_base64)
@@ -563,15 +590,11 @@ export class ConsiderContractComponent
           } else {
             if (this.recipient.status >= 3) {
               setTimeout(() => {
-                this.router.navigate([
-                  '/main/form-contract/detail/' + this.idContract,
-                ]);
+                this.router.navigate(['/main/form-contract/detail/' + this.idContract,]);
               }, 1000);
             } else if (this.recipient.status >= 3) {
               setTimeout(() => {
-                this.router.navigate([
-                  '/main/form-contract/detail/' + this.idContract,
-                ]);
+                this.router.navigate(['/main/form-contract/detail/' + this.idContract,]);
               }, 1000);
             }
           }
@@ -624,9 +647,8 @@ export class ConsiderContractComponent
     // @ts-ignore
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-    pdfjs
-      .getDocument(this.pdfSrc)
-      .promise.then((pdf: any) => {
+    
+    pdfjs.getDocument(this.pdfSrc).promise.then((pdf: any) => {
         this.thePDF = pdf;
         this.pageNumber = pdf.numPages || pdf.pdfInfo.numPages;
         this.removePage();
@@ -655,15 +677,13 @@ export class ConsiderContractComponent
           for (let i = 0; i <= this.pageNumber; i++) {
             this.top[i] = 0;
 
-            if (i < this.pageNumber)
-              this.sum[i] = 0;
+            if (i < this.pageNumber) this.sum[i] = 0;
           }
 
           for (let i = 1; i <= this.pageNumber; i++) {
             let canvas: any = document.getElementById('canvas-step3-' + i);
             this.top[i] = canvas.height;
           }
-
 
           for (let i = 0; i < this.pageNumber; i++) {
             this.top[i + 1] += this.top[i];
@@ -673,18 +693,14 @@ export class ConsiderContractComponent
       });
   }
 
-  eventMouseover() { }
+  eventMouseover() {}
 
   ngAfterViewInit() {
     setTimeout(() => {
       // @ts-ignore
       // document.getElementById('input-location-x').focus();
       let width_drag_element = document.getElementById('width-element-info');
-      this.widthDrag = width_drag_element
-        ? width_drag_element.getBoundingClientRect().right -
-        width_drag_element.getBoundingClientRect().left -
-        15
-        : '';
+      this.widthDrag = width_drag_element ? width_drag_element.getBoundingClientRect().right - width_drag_element.getBoundingClientRect().left - 15 : '';
 
       const imageRender = <HTMLElement>document.getElementById('export-html');
       if (imageRender) {
@@ -703,7 +719,6 @@ export class ConsiderContractComponent
       this.convertToSignConfig().forEach((element: any) => {
         let a = document.getElementById(element.id);
         if (a) {
-          // if (element['position']) { // @ts-ignore
           if (element['coordinate_x'] && element['coordinate_y']) {
             // @ts-ignore
             a.style['z-index'] = '1';
@@ -729,7 +744,6 @@ export class ConsiderContractComponent
   pageNumPending: any = null;
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
-    console.log("usb token version ", this.usbTokenVersion);
     setTimeout(() => {
       //@ts-ignore
       this.thePDF.getPage(pageNumber).then((page) => {
@@ -740,16 +754,16 @@ export class ConsiderContractComponent
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
-        if (this.usbTokenVersion == 1 || !this.usbTokenVersion) {
-          this.prepareInfoSignUsbTokenV1(
-            pageNumber,
-            canvas.height,
-          );
-        } else if (this.usbTokenVersion == 2) {
-          this.prepareInfoSignUsbTokenV2(
-            pageNumber,
-            canvas.height,
-          );
+        if (
+          (this.typeSignDigital == 2 && this.usbTokenVersion == 1) ||
+          !this.usbTokenVersion
+        ) {
+          this.prepareInfoSignUsbTokenV1(pageNumber, canvas.height);
+        } else if (
+          (this.typeSignDigital == 2 && this.usbTokenVersion == 2) ||
+          this.typeSignDigital == 4
+        ) {
+          this.prepareInfoSignUsbTokenV2(pageNumber, canvas.height);
         }
 
         let _objPage = this.objPdfProperties.pages.filter(
@@ -788,9 +802,7 @@ export class ConsiderContractComponent
   }
 
   activeScroll() {
-    document
-      .getElementsByClassName('viewer-pdf')[0]
-      .addEventListener('scroll', () => {
+    document.getElementsByClassName('viewer-pdf')[0].addEventListener('scroll', () => {
         const Imgs = [].slice.call(document.querySelectorAll('.dropzone'));
         Imgs.forEach((item: any) => {
           if (
@@ -821,7 +833,7 @@ export class ConsiderContractComponent
     style.backgroundColor = d.valueSign ? '' : backgroundColor;
     style.display =
       (this.confirmConsider && this.confirmConsider == 1) ||
-        (this.confirmSignature && this.confirmSignature == 1)
+      (this.confirmSignature && this.confirmSignature == 1)
         ? ''
         : 'none';
     if (d['width']) {
@@ -913,11 +925,7 @@ export class ConsiderContractComponent
 
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
-    if (
-      this.datas &&
-      this.isDataObjectSignature &&
-      this.isDataObjectSignature.length
-    ) {
+    if (this.datas && this.isDataObjectSignature && this.isDataObjectSignature.length) {
       return this.datas.is_data_object_signature.filter(
         (item: any) =>
           item?.recipient?.email === this.currentUser.email &&
@@ -966,20 +974,21 @@ export class ConsiderContractComponent
     interact.removeDocument(document);
   }
 
-
   resizableListener = (event: any) => {
-    var target = event.target
+    var target = event.target;
 
     // update the element's style
-    target.style.width = event.rect.width + 'px'
-    target.style.height = event.rect.height + 'px'
-  }
+    target.style.width = event.rect.width + 'px';
+    target.style.height = event.rect.height + 'px';
+  };
 
   resizeSignature = (event: any) => {
-    let x = (parseFloat(event.target.getAttribute('data-x')) || 0)
-    let y = (parseFloat(event.target.getAttribute('data-y')) || 0)
+    let x = parseFloat(event.target.getAttribute('data-x')) || 0;
+    let y = parseFloat(event.target.getAttribute('data-y')) || 0;
     // translate when resizing from top or left edges
-    this.signCurent = this.convertToSignConfig().filter((p: any) => p.id == event.target.id)[0];
+    this.signCurent = this.convertToSignConfig().filter(
+      (p: any) => p.id == event.target.id
+    )[0];
     if (this.signCurent) {
       if (event.rect.width <= 280) {
         this.signCurent.coordinate_x = x;
@@ -993,25 +1002,25 @@ export class ConsiderContractComponent
         this.signCurent.width = event.rect.width;
         this.signCurent.height = event.rect.height;
         let _array = Object.values(this.obj_toa_do);
-        this.signCurent.position = _array.join(",");
+        this.signCurent.position = _array.join(',');
       }
     }
-  }
+  };
 
   dragMoveListener = (event: any) => {
     this.objSignInfo.id = event.currentTarget.id;
-    var target = event.target
+    var target = event.target;
     this.isMove = true;
     // // keep the dragged position in the data-x/data-y attributes
-    var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-    var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+    var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+    var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
     // // translate the element
-    target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
+    target.style.webkitTransform = target.style.transform =
+      'translate(' + x + 'px, ' + y + 'px)';
     // // update the posiion attributes
-    target.setAttribute('data-x', x)
+    target.setAttribute('data-x', x);
     target.setAttribute('data-y', y);
-
-  }
+  };
 
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
   showEventInfo = (event: any) => {
@@ -1019,17 +1028,19 @@ export class ConsiderContractComponent
     if (event.relatedTarget && event.relatedTarget.id) {
       canvasElement = document.getElementById(event.relatedTarget.id);
       let canvasInfo = canvasElement ? canvasElement.getBoundingClientRect() : '';
+
       this.coordinates_signature = event.rect;
       let id = event.target.id;
 
-      console.log("id ", id);
       let signElement = <HTMLElement>document.getElementById(id);
       let rect_location = signElement.getBoundingClientRect();
-      if (id.includes('chua-keo')) {  //Khi kéo vào trong hợp đồng thì sẽ thêm 1 object vào trong mảng sign_config
-        event.target.style.webkitTransform = event.target.style.transform = 'none';// Đẩy chữ ký về vị trí cũ
+      if (id.includes('chua-keo')) {
+        //Khi kéo vào trong hợp đồng thì sẽ thêm 1 object vào trong mảng sign_config
+        event.target.style.webkitTransform = event.target.style.transform =
+          'none'; // Đẩy chữ ký về vị trí cũ
         event.target.setAttribute('data-x', 0);
         event.target.setAttribute('data-y', 0);
-        id = event.target.id.replace("chua-keo-", "");
+        id = event.target.id.replace('chua-keo-', '');
         // this.datas.documents.document_user_sign_clone.forEach((element, index) => {
         this.datas.contract_user_sign.forEach((element: any, index: any) => {
           if (element.id == id) {
@@ -1037,21 +1048,25 @@ export class ConsiderContractComponent
               sign_unit: element.sign_unit,
               name: element.name,
               text_attribute_name: element.text_attribute_name,
-              required: 1
-            }
+              required: 1,
+            };
             if (element.sign_config.length == 0) {
               _obj['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
             } else {
-              _obj['id'] = 'signer-' + index + '-index-' + (element.sign_config.length) + '_' + element.id;
+              _obj['id'] = 'signer-' + index + '-index-' + element.sign_config.length + '_' + element.id;
             }
             element['sign_config'].push(_obj);
           }
-        })
+        });
         // lay doi tuong vua duoc keo moi vao hop dong
-        this.signCurent = this.convertToSignConfig().filter((p: any) => !p.position && !p.coordinate_x && !p.coordinate_y)[0];
+        this.signCurent = this.convertToSignConfig().filter(
+          (p: any) => !p.position && !p.coordinate_x && !p.coordinate_y
+        )[0];
       } else {
         // doi tuong da duoc keo tha vao hop dong
-        this.signCurent = this.convertToSignConfig().filter((p: any) => p.id == id)[0];
+        this.signCurent = this.convertToSignConfig().filter(
+          (p: any) => p.id == id
+        )[0];
       }
 
       if (this.signCurent) {
@@ -1061,18 +1076,21 @@ export class ConsiderContractComponent
         // this.isMove = false;
         let layerX;
         // @ts-ignore
-        if ("left" in canvasInfo) {
+        if ('left' in canvasInfo) {
           // layerX = event.rect.left - canvasInfo.left;
           layerX = rect_location.left - canvasInfo.left;
         }
 
         let layerY = 0;
         //@ts-ignore
-        if ("top" in canvasInfo) {
+        if ('top' in canvasInfo) {
           // layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);
-          layerY = canvasInfo.top <= 0 ? rect_location.top + Math.abs(canvasInfo.top) : rect_location.top - Math.abs(canvasInfo.top);
+          layerY =
+            canvasInfo.top <= 0
+              ? rect_location.top + Math.abs(canvasInfo.top)
+              : rect_location.top - Math.abs(canvasInfo.top);
         }
-        let pages = event.relatedTarget.id.split("-");
+        let pages = event.relatedTarget.id.split('-');
         let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
 
         /* test set location signature
@@ -1081,48 +1099,58 @@ export class ConsiderContractComponent
         if (page > 1) {
           let countPage = 0;
           for (let i = 1; i < page; i++) {
-            let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
+            let canvasElement = document.getElementById(
+              'canvas-step3-' + i
+            ) as HTMLElement;
             let canvasInfo = canvasElement.getBoundingClientRect();
             countPage += canvasInfo.height;
           }
-          let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
+          let canvasElement = document.getElementById(
+            'canvas-step3-' + page
+          ) as HTMLElement;
           let canvasInfo = canvasElement.getBoundingClientRect();
           // @ts-ignore
-          layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5 * (page - 1);
+          layerY =
+            countPage +
+            canvasInfo.height -
+            (canvasInfo.height - layerY) +
+            5 * (page - 1);
         }
         //END
 
         let _array = Object.values(this.obj_toa_do);
         let _sign = <HTMLElement>document.getElementById(this.signCurent['id']);
         if (_sign) {
-          _sign.style.transform = "translate(" + layerX + "px," + layerY + "px)";
+          _sign.style.transform =
+            'translate(' + layerX + 'px,' + layerY + 'px)';
           this.signCurent['coordinate_x'] = layerX;
           this.signCurent['coordinate_y'] = layerY;
-          _sign.setAttribute("data-x", layerX + "px");
-          _sign.setAttribute("data-y", layerY + "px");
+          _sign.setAttribute('data-x', layerX + 'px');
+          _sign.setAttribute('data-y', layerY + 'px');
           this.objSignInfo.traf_x = layerX;
           this.objSignInfo.traf_y = layerY;
           //
           this.objSignInfo['id'] = this.signCurent['id'];
           //
-          this.signCurent.position = _array.join(",");
+          this.signCurent.position = _array.join(',');
           _sign.style.display = '';
           // @ts-ignore
-          _sign.style["z-index"] = '1';
+          _sign.style['z-index'] = '1';
           this.isEnableSelect = false;
         }
 
         this.objSignInfo.traf_x = Math.round(this.signCurent['coordinate_x']);
         this.objSignInfo.traf_y = Math.round(this.signCurent['coordinate_y']);
 
-        this.signCurent['position'] = _array.join(",");
+        this.signCurent['position'] = _array.join(',');
         this.signCurent['left'] = this.obj_toa_do.x1;
         //@ts-ignore
-        if ("top" in canvasInfo) {
-          this.signCurent['top'] = (rect_location.top - canvasInfo.top).toFixed();
+        if ('top' in canvasInfo) {
+          this.signCurent['top'] = (
+            rect_location.top - canvasInfo.top
+          ).toFixed();
         }
         let name_accept_signature = '';
-        let field_data = [];
 
         // lay lai danh sach signer sau khi keo vao hop dong
         this.datas.contract_user_sign.forEach((res: any) => {
@@ -1130,7 +1158,7 @@ export class ConsiderContractComponent
             let arrSignConfigItem = res.sign_config;
             arrSignConfigItem.forEach((element: any) => {
               if (element.id == this.signCurent['id']) {
-                let _arrPage = event.relatedTarget.id.split("-");
+                let _arrPage = event.relatedTarget.id.split('-');
                 // gán hình thức kéo thả => disable element trong list sign
                 name_accept_signature = res.sign_unit;
                 // hiển thị ô nhập tên trường khi kéo thả đối tượng Text
@@ -1139,7 +1167,7 @@ export class ConsiderContractComponent
                   setTimeout(() => {
                     //@ts-ignore
                     document.getElementById('text-input-element').focus();
-                  }, 10)
+                  }, 10);
                 } else this.isEnableText = false;
 
                 if (res.sign_unit == 'so_tai_lieu') {
@@ -1155,8 +1183,14 @@ export class ConsiderContractComponent
                 element['coordinate_y'] = this.signCurent['coordinate_y'];
                 if (!this.objDrag[this.signCurent['id']].count) {
                   // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
-                  if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
-                    if (res.sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
+                  if (
+                    res.sign_unit == 'text' ||
+                    res.sign_unit == 'so_tai_lieu'
+                  ) {
+                    if (
+                      res.sign_unit == 'so_tai_lieu' &&
+                      this.datas.contract_no
+                    ) {
                       element['width'] = rect_location.width;
                       element['height'] = rect_location.height;
                     } else {
@@ -1173,7 +1207,7 @@ export class ConsiderContractComponent
                   this.objSignInfo.text_attribute_name = '';
                   this.list_sign_name.forEach((item: any) => {
                     item['selected'] = false;
-                  })
+                  });
                   // document.getElementById('select-dropdown'). = 0;
                   // @ts-ignore
                   // document.getElementById('select-dropdown').value = "";
@@ -1183,31 +1217,38 @@ export class ConsiderContractComponent
                   element['height'] = event.target.offsetHeight;
                 }
               }
-            })
+            });
           }
         });
       }
     } else {
       if (event.type == 'dragend') {
-        if (!event.dragenter && event.target.id.includes("chua-keo")) {
-          event.target.style.webkitTransform = event.target.style.transform = 'none';
+        if (!event.dragenter && event.target.id.includes('chua-keo')) {
+          event.target.style.webkitTransform = event.target.style.transform =
+            'none';
           event.target.setAttribute('data-x', 0);
           event.target.setAttribute('data-y', 0);
-
-        } else if (!event.dragenter && !event.target.id.includes("chua-keo")) {
+        } else if (!event.dragenter && !event.target.id.includes('chua-keo')) {
           let id = event.target.id;
-          let signCurent = this.convertToSignConfig().filter((p: any) => p.id == id)[0];
+          let signCurent = this.convertToSignConfig().filter(
+            (p: any) => p.id == id
+          )[0];
           // translate the element
           if (signCurent) {
-            event.target.style.webkitTransform = event.target.style.transform = 'translate(' + signCurent['coordinate_x'] + 'px, ' + signCurent['coordinate_y'] + 'px)'
+            event.target.style.webkitTransform = event.target.style.transform =
+              'translate(' +
+              signCurent['coordinate_x'] +
+              'px, ' +
+              signCurent['coordinate_y'] +
+              'px)';
             // update the posiion attributes
-            event.target.setAttribute('data-x', signCurent['coordinate_x'])
-            event.target.setAttribute('data-y', signCurent['coordinate_y'])
+            event.target.setAttribute('data-x', signCurent['coordinate_x']);
+            event.target.setAttribute('data-y', signCurent['coordinate_y']);
           }
         }
       }
     }
-  }
+  };
 
   getTrafX() {
     if (Math.round(this.objSignInfo.traf_x) <= 0) {
@@ -1538,20 +1579,12 @@ export class ConsiderContractComponent
   }
 
   getNameCoordination() {
-    let nameFile = [];
-    for (
-      let i = 0;
-      i < this.datas.contract_information.file_related_contract;
-      i++
-    ) { }
+   
   }
 
   dataURIToBlob(dataURI: string) {
     const splitDataURI = dataURI.split(',');
-    const byteString =
-      splitDataURI[0].indexOf('base64') >= 0
-        ? atob(splitDataURI[1])
-        : decodeURI(splitDataURI[1]);
+    const byteString = splitDataURI[0].indexOf('base64') >= 0 ? atob(splitDataURI[1]) : decodeURI(splitDataURI[1]);
     const mimeString = splitDataURI[0].split(':')[1].split(';')[0];
 
     const ia = new Uint8Array(byteString.length);
@@ -1561,49 +1594,24 @@ export class ConsiderContractComponent
     return new Blob([ia], { type: mimeString });
   }
 
+  width: any;
   //Ký số + ký eKYC
   async signDigitalDocument() {
-    let typeSignDigital = 0;
-
-    for (const signUpdate of this.isDataObjectSignature) {
-      if (
-        signUpdate &&
-        (signUpdate.type == 3 || signUpdate.type == 2) &&
-        [3, 4].includes(this.datas.roleContractReceived) &&
-        signUpdate?.recipient?.email === this.currentUser.email &&
-        signUpdate?.recipient?.role === this.datas?.roleContractReceived
-      ) {
-        if (signUpdate.recipient?.sign_type) {
-          const typeSD = signUpdate.recipient?.sign_type.find(
-            (t: any) => t.id != 1
-          );
-          if (typeSD) {
-            typeSignDigital = typeSD.id;
-          }
-        }
-
-        break;
-      }
-    }
+    let typeSignDigital = this.typeSignDigital;
 
     //= 2 => Ky usb token
     if (typeSignDigital == 2) {
       if (this.signCertDigital) {
         for (const signUpdate of this.isDataObjectSignature) {
-          if (
-            signUpdate &&
-            (signUpdate.type == 1 ||
-              signUpdate.type == 3 ||
-              signUpdate.type == 4) &&
+          if (signUpdate && (signUpdate.type == 1 || signUpdate.type == 3 || signUpdate.type == 4) &&
             [3, 4].includes(this.datas.roleContractReceived) &&
             signUpdate?.recipient?.email === this.currentUser.email &&
             signUpdate?.recipient?.role === this.datas?.roleContractReceived
           ) {
-            let fileC = await this.contractService.getFileContractPromise(
-              this.idContract
-            );
+            let fileC = await this.contractService.getFileContractPromise(this.idContract);
             const pdfC2 = fileC.find((p: any) => p.type == 2);
             const pdfC1 = fileC.find((p: any) => p.type == 1);
+
             if (pdfC2) {
               fileC = pdfC2.path;
             } else if (pdfC1) {
@@ -1614,18 +1622,30 @@ export class ConsiderContractComponent
             let signI = null;
             if (signUpdate.type == 1 || signUpdate.type == 4) {
               this.textSign = signUpdate.valueSign;
+              this.width = signUpdate.width;
 
-              this.widthText = signUpdate.width;
+              this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
+
+              console.log("text ", this.widthText);
 
               await of(null).pipe(delay(120)).toPromise();
-              const imageRender = <HTMLElement>(
-                document.getElementById('text-sign')
-              );
-
+              const imageRender = <HTMLElement>(document.getElementById('text-sign'));
+              
               if (imageRender) {
                 const textSignB = await domtoimage.toPng(imageRender);
                 signI = this.textSignBase64Gen = textSignB.split(',')[1];
               }
+
+              // console.log("width text ", this.widthText);
+
+              // let x = signUpdate.signDigitalX;
+              // // // let y = signUpdate.signDigitalY;
+
+              // signUpdate.signDigitalX = signUpdate.signDigitalX - 0.5*signUpdate.width + 1.5*this.widthText;
+              signUpdate.signDigitalWidth = signUpdate.signDigitalX + this.widthText + 10;
+
+              // signUpdate.signDigitalY = y - 0.01*signUpdate.height;
+
             } else if (signUpdate.type == 3) {
               await of(null).pipe(delay(150)).toPromise();
 
@@ -1633,18 +1653,14 @@ export class ConsiderContractComponent
               let imageRender: any = '';
 
               if (this.usbTokenVersion == 1) {
-                imageRender = <HTMLElement>(
-                  document.getElementById('export-html')
-                );
+                imageRender = <HTMLElement>(document.getElementById('export-html'));
 
                 if (imageRender) {
                   const textSignB = await domtoimage.toPng(imageRender);
                   signI = textSignB.split(',')[1];
                 }
               } else if (this.usbTokenVersion == 2) {
-                imageRender = <HTMLElement>(
-                  document.getElementById('export-html2')
-                );
+                imageRender = <HTMLElement>(document.getElementById('export-html2'));
 
                 if (imageRender) {
                   const textSignB = await domtoimage.toJpeg(imageRender);
@@ -1656,55 +1672,33 @@ export class ConsiderContractComponent
             const signDigital = JSON.parse(JSON.stringify(signUpdate));
             signDigital.Serial = this.signCertDigital.Serial;
 
-            const base64String =
-              await this.contractService.getDataFileUrlPromise(fileC);
+            const base64String = await this.contractService.getDataFileUrlPromise(fileC);
             signDigital.valueSignBase64 = encode(base64String);
 
             if (this.usbTokenVersion == 2) {
               try {
                 await this.createEmptySignature(signUpdate, signDigital, signI);
               } catch (err) {
-                this.toastService.showErrorHTMLWithTimeout('Lỗi ký usb token ' + err, '', 3000);
+                this.toastService.showErrorHTMLWithTimeout('Lỗi ký usb token ' + err,'',3000);
                 return false;
               }
 
-              const sign = await this.contractService.updateDigitalSignatured(
-                signUpdate.id,
-                this.base64Data
-              );
+              const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, this.base64Data);
               if (!sign.recipient_id) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Lỗi ký USB Token',
-                  '',
-                  3000
-                );
+                this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token','',3000);
                 return false;
               }
             } else if (this.usbTokenVersion == 1) {
-              const dataSignMobi: any =
-                await this.contractService.postSignDigitalMobi(
-                  signDigital,
-                  signI
-                );
+              const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital,signI);
 
               if (!dataSignMobi.data.FileDataSigned) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Lỗi ký USB Token',
-                  '',
-                  3000
-                );
+                this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token','',3000);
                 return false;
               }
-              const sign = await this.contractService.updateDigitalSignatured(
-                signUpdate.id,
-                dataSignMobi.data.FileDataSigned
-              );
+
+              const sign = await this.contractService.updateDigitalSignatured(signUpdate.id,dataSignMobi.data.FileDataSigned);
               if (!sign.recipient_id) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Lỗi ký USB Token',
-                  '',
-                  3000
-                );
+                this.toastService.showErrorHTMLWithTimeout('Lỗi đẩy file sau khi ký usb token','',3000);
                 return false;
               }
             }
@@ -1745,9 +1739,7 @@ export class ConsiderContractComponent
       this.nameCompany = this.recipient.name;
 
       await of(null).pipe(delay(120)).toPromise();
-      const imageRender = <HTMLElement>(
-        document.getElementById('export-html-pki')
-      );
+      const imageRender = <HTMLElement>(document.getElementById('export-html-pki'));
       let image_base64 = '';
       if (imageRender) {
         const textSignB = await domtoimage.toJpeg(imageRender);
@@ -1760,16 +1752,13 @@ export class ConsiderContractComponent
           this.dataNetworkPKI.networkCode.toLowerCase(),
           this.recipientId,
           this.datas.is_data_contract.name,
-          image_base64
+          image_base64,
+          this.isTimestamp
+          // "false"
         );
-        console.log("checkSign", checkSign);
         // await this.signContractSimKPI();
         if (!checkSign || (checkSign && !checkSign.success)) {
-          this.toastService.showErrorHTMLWithTimeout(
-            'Ký số không thành công!',
-            '',
-            3000
-          );
+          this.toastService.showErrorHTMLWithTimeout('Ký số không thành công!','',3000);
           return false;
         } else {
           return true;
@@ -1777,63 +1766,87 @@ export class ConsiderContractComponent
       }
     } else if (typeSignDigital == 4) {
       //Ký hsm
-      const objSign = this.isDataObjectSignature.filter(
-        (signUpdate: any) =>
-          signUpdate &&
-          signUpdate.type == 3 &&
-          [3, 4].includes(this.datas.roleContractReceived) &&
+
+      for (const signUpdate of this.isDataObjectSignature) {
+        if (signUpdate && (signUpdate.type == 1 || signUpdate.type == 3 ||signUpdate.type == 4) && [3, 4].includes(this.datas.roleContractReceived) &&
           signUpdate?.recipient?.email === this.currentUser.email &&
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
-      );
+        ) {
+          const objSign = this.isDataObjectSignature.filter((signUpdate: any) => signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived) &&
+              signUpdate?.recipient?.email === this.currentUser.email &&
+              signUpdate?.recipient?.role === this.datas?.roleContractReceived
+          );
 
-      let fileC = await this.contractService.getFileContractPromise(
-        this.idContract
-      );
-      const pdfC2 = fileC.find((p: any) => p.type == 2);
-      const pdfC1 = fileC.find((p: any) => p.type == 1);
-      if (pdfC2) {
-        fileC = pdfC2.path;
-      } else if (pdfC1) {
-        fileC = pdfC1.path;
-      } else {
-        return;
-      }
+          let fileC = await this.contractService.getFileContractPromise(this.idContract);
 
-      if (fileC && objSign.length) {
-        const checkSign = await this.contractService.signHsm(
-          this.dataHsm,
-          this.recipientId
-        );
-
-        if (!checkSign || (checkSign && !checkSign.success)) {
-          if (!checkSign.message) {
-            this.toastService.showErrorHTMLWithTimeout(
-              'Đăng nhập không thành công',
-              '',
-              3000
-            );
-          } else if (checkSign.message) {
-            this.toastService.showErrorHTMLWithTimeout(
-              checkSign.message,
-              '',
-              3000
-            );
+          const pdfC2 = fileC.find((p: any) => p.type == 2);
+          const pdfC1 = fileC.find((p: any) => p.type == 1);
+          if (pdfC2) {
+            fileC = pdfC2.path;
+          } else if (pdfC1) {
+            fileC = pdfC1.path;
+          } else {
+            return;
           }
 
-          return false;
-        } else {
-          if (checkSign.success === true) {
-            if (pdfC2) {
-              fileC = pdfC2.path;
-            } else if (pdfC1) {
-              fileC = pdfC1.path;
-            } else {
-              return;
+          let signI = null;
+          if (signUpdate.type == 1 || signUpdate.type == 4) {
+            this.textSign = signUpdate.valueSign;
+
+            this.widthText = signUpdate.width;
+
+            await of(null).pipe(delay(120)).toPromise();
+            const imageRender = <HTMLElement>(document.getElementById('text-sign'));
+
+            if (imageRender) {
+              const textSignB = await domtoimage.toPng(imageRender);
+              signI = this.textSignBase64Gen = textSignB.split(',')[1];
             }
-            return true;
+          } else if (signUpdate.type == 3) {
+            await of(null).pipe(delay(150)).toPromise();
+
+            const imageRender = <HTMLElement>(
+              document.getElementById('export-html-hsm1')
+            );
+            if (imageRender) {
+              const textSignB = await domtoimage.toPng(imageRender);
+              signI = textSignB.split(',')[1];
+            }
+          }
+
+          this.dataHsm = {
+            fieldId: signUpdate.id,
+            ma_dvcs: this.dataHsm.ma_dvcs,
+            username: this.dataHsm.username,
+            password: this.dataHsm.password,
+            password2: this.dataHsm.password2,
+            imageBase64: signI,
+          };
+
+          if (fileC && objSign.length) {
+            const checkSign = await this.contractService.signHsm(this.dataHsm,this.recipientId, this.isTimestamp);
+
+            if (!checkSign || (checkSign && !checkSign.success)) {
+              if (!checkSign.message) {
+                this.toastService.showErrorHTMLWithTimeout('Đăng nhập không thành công','',3000);
+              } else if (checkSign.message) {
+                this.toastService.showErrorHTMLWithTimeout(checkSign.message,'',3000);
+              }
+
+              return false;
+            } else {
+              if (checkSign.success === true) {
+                if (pdfC2) {
+                  fileC = pdfC2.path;
+                } else if (pdfC1) {
+                  fileC = pdfC1.path;
+                } 
+              }
+            }
           }
         }
       }
+      return true;
     } else if (typeSignDigital == 5) {
       const objSign = this.isDataObjectSignature.filter(
         (signUpdate: any) =>
@@ -1861,6 +1874,19 @@ export class ConsiderContractComponent
     }
   }
 
+  calculatorWidthText(text: any, font: any) {
+    console.log("font ", font);
+
+    const canvas: any = document.createElement("canvas");
+
+    const context = canvas.getContext("2d");
+    context.font = font;
+
+    const metrics = context.measureText(text);
+
+    return metrics.width;
+  }
+
   async signUsb(signUpdate: any, response: any) {
     try {
       var json_res = JSON.parse(response);
@@ -1868,16 +1894,9 @@ export class ConsiderContractComponent
       if (json_res.ResponseCode == 0) {
         alert(json_res.Base64Result);
 
-        const sign = await this.contractService.updateDigitalSignatured(
-          signUpdate.id,
-          json_res.Base64Result
-        );
+        const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, json_res.Base64Result);
         if (!sign.recipient_id) {
-          this.toastService.showErrorHTMLWithTimeout(
-            'Lỗi ký USB Token',
-            '',
-            3000
-          );
+          this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token','',3000);
           return false;
         }
       } else {
@@ -1899,11 +1918,7 @@ export class ConsiderContractComponent
     let eKYC = 0;
     let otpOrEkyc = false;
     for (const signUpdate of this.isDataObjectSignature) {
-      if (
-        signUpdate &&
-        signUpdate.type == 2 &&
-        [3, 4].includes(this.datas.roleContractReceived) &&
-        signUpdate?.recipient?.email === this.currentUser.email &&
+      if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived) && signUpdate?.recipient?.email === this.currentUser.email &&
         signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
         otpOrEkyc = true;
@@ -2079,11 +2094,7 @@ export class ConsiderContractComponent
         this.signTokenVersion1(signUpdatePayload, notContainSignImage);
       } else if (this.usbTokenVersion == 2) {
         //version 2
-        this.getSessionId(
-          this.taxCodePartnerStep2,
-          signUpdatePayload,
-          notContainSignImage
-        );
+        this.getSessionId(this.taxCodePartnerStep2,signUpdatePayload,notContainSignImage);
       }
     } else {
       await this.signImageC(signUpdatePayload, notContainSignImage);
@@ -2114,9 +2125,7 @@ export class ConsiderContractComponent
       this.signCertDigital = dataDigital.data;
       this.nameCompany = dataDigital.data.CN;
 
-      const checkTaxCodeBase64 = await this.contractService
-        .checkTaxCodeExist(this.taxCodePartnerStep2, dataDigital.data.Base64)
-        .toPromise();
+      const checkTaxCodeBase64 = await this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, dataDigital.data.Base64).toPromise();
 
       if (checkTaxCodeBase64.success) {
         await this.signImageC(signUpdatePayload, notContainSignImage);
@@ -2130,6 +2139,7 @@ export class ConsiderContractComponent
           confirmButtonText: 'Xác nhận',
         });
       }
+
     } else {
       this.spinner.hide();
       Swal.fire({
@@ -2143,10 +2153,7 @@ export class ConsiderContractComponent
   }
 
   //get sessionid for usb token
-  async getSessionId(
-    taxCode: any,
-    signUpdatePayload: any,
-    notContainSignImage: any
+  async getSessionId(taxCode: any,signUpdatePayload: any,notContainSignImage: any
   ) {
     var LibList_MACOS = ['nca_v6.dylib'];
     var LibList_WIN = [
@@ -2194,9 +2201,7 @@ export class ConsiderContractComponent
 
     //Lay sessionId cua usb token
     try {
-      apiSessionId = await this.contractService.signUsbToken(
-        'request=' + json_req
-      );
+      apiSessionId = await this.contractService.signUsbToken('request=' + json_req);
     } catch (error) {
       this.spinner.hide();
       Swal.fire({
@@ -2226,12 +2231,7 @@ export class ConsiderContractComponent
       });
       return;
     } else {
-      this.getCertificate(
-        sessionId,
-        taxCode,
-        signUpdatePayload,
-        notContainSignImage
-      );
+      this.getCertificate(sessionId,taxCode,signUpdatePayload,notContainSignImage);
     }
   }
 
@@ -2248,12 +2248,7 @@ export class ConsiderContractComponent
   }
 
   certInfoBase64: any;
-  async getCertificate(
-    hSession: any,
-    taxCode: any,
-    signUpdatePayload: any,
-    notContainSignImage: any
-  ) {
+  async getCertificate(hSession: any,taxCode: any,signUpdatePayload: any,notContainSignImage: any) {
     var json_req = JSON.stringify({
       OperationId: 2,
       SessionId: hSession,
@@ -2278,7 +2273,6 @@ export class ConsiderContractComponent
         this.nameCompany = cert.certInfo.CommonName;
       }
 
-
       this.certInfoBase64 = cert.certInfo.Base64Encode;
     } else {
       this.toastService.showErrorHTMLWithTimeout(
@@ -2289,9 +2283,7 @@ export class ConsiderContractComponent
       return;
     }
 
-    const checkTaxCode = await this.contractService
-      .checkTaxCodeExist(taxCode, this.certInfoBase64)
-      .toPromise();
+    const checkTaxCode = await this.contractService.checkTaxCodeExist(taxCode, this.certInfoBase64).toPromise();
 
     if (checkTaxCode.success == true) {
       this.signImageC(signUpdatePayload, notContainSignImage);
@@ -2309,41 +2301,68 @@ export class ConsiderContractComponent
   }
 
   async createEmptySignature(signUpdate: any, signDigital: any, image: any) {
-    const emptySignature = await this.contractService.createEmptySignature(this.recipientId, signUpdate, signDigital, image, this.certInfoBase64).toPromise();
+    const emptySignature = await this.contractService
+      .createEmptySignature(
+        this.recipientId,
+        signUpdate,
+        signDigital,
+        image,
+        this.certInfoBase64
+      )
+      .toPromise();
 
     const base64TempData = emptySignature.base64TempData;
     const hexDigestTempFile = emptySignature.hexDigestTempFile;
-    const fieldName = emptySignature.fieldName
+    const fieldName = emptySignature.fieldName;
 
     await this.callDCSigner(base64TempData, hexDigestTempFile, fieldName);
   }
 
-  async callDCSigner(base64TempData: any, hexDigestTempFile: any, fieldName: any) {
+  async callDCSigner(
+    base64TempData: any,
+    hexDigestTempFile: any,
+    fieldName: any
+  ) {
     var json_req = JSON.stringify({
       OperationId: 5,
       SessionId: this.sessionIdUsbToken,
       DataToBeSign: base64TempData,
+      checkOCSP: 0,
+      reqDigest: 0,
+      algDigest: "SHA_256"
     });
 
     json_req = window.btoa(json_req);
 
     try {
-      const callServiceDCSigner = await this.contractService.signUsbToken('request=' + json_req);
+      const callServiceDCSigner = await this.contractService.signUsbToken(
+        'request=' + json_req
+      );
 
-      const dataSignatureToken = JSON.parse(window.atob(callServiceDCSigner.data));
+      const dataSignatureToken = JSON.parse(
+        window.atob(callServiceDCSigner.data)
+      );
 
       const signatureToken = dataSignatureToken.Signature;
 
-      await this.callMergeTimeStamp(signatureToken, fieldName, hexDigestTempFile);
+      await this.callMergeTimeStamp(
+        signatureToken,
+        fieldName,
+        hexDigestTempFile
+      );
     } catch (err) {
-      this.toastService.showErrorHTMLWithTimeout('Lỗi ký usb token ' + err, '', 3000);
+      this.toastService.showErrorHTMLWithTimeout(
+        'Lỗi ký usb token ' + err,
+        '',
+        3000
+      );
       return;
     }
   }
 
   base64Data: any;
-  async callMergeTimeStamp(signatureToken: any, fieldName: any, hexDigestTempFile: any) {
-    const mergeTimeStamp = await this.contractService.meregeTimeStamp(this.recipientId, this.idContract, signatureToken, fieldName, this.certInfoBase64, hexDigestTempFile).toPromise();
+  async callMergeTimeStamp(signatureToken: any,fieldName: any,hexDigestTempFile: any) {
+    const mergeTimeStamp = await this.contractService.meregeTimeStamp(this.recipientId,this.idContract,signatureToken,fieldName,this.certInfoBase64,hexDigestTempFile,this.isTimestamp).toPromise();
     this.base64Data = mergeTimeStamp.base64Data;
   }
 
@@ -2358,12 +2377,7 @@ export class ConsiderContractComponent
         signDigitalStatus = await this.signDigitalDocument();
 
         if (this.eKYC == false) {
-          signUpdateTempN = signUpdateTempN
-            .filter(
-              (item: any) =>
-                item?.recipient?.email === this.currentUser.email &&
-                item?.recipient?.role === this.datas?.roleContractReceived
-            )
+          signUpdateTempN = signUpdateTempN.filter((item: any) =>item?.recipient?.email === this.currentUser.email &&item?.recipient?.role === this.datas?.roleContractReceived)
             .map((item: any) => {
               return {
                 id: item.id,
@@ -2389,29 +2403,24 @@ export class ConsiderContractComponent
               this.data_contract?.is_data_contract?.organization_id,
           };
 
-          this.contractService
-            .uploadFileImageBase64Signature(formData)
-            .subscribe((responseBase64) => {
+          this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseBase64) => {
               // signUpdateTempN.value = responseBase64.file_object.file_path;
               signUpdateTempN[0].value = responseBase64.file_object.file_path;
 
-              this.contractService
-                .updateInfoContractConsider(signUpdateTempN, this.recipientId)
-                .subscribe(
+              this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
                   async (result) => {
                     if (!notContainSignImage) {
                       await this.signDigitalDocument();
                     }
 
-                    this.router
-                      .navigateByUrl('/', { skipLocationChange: true })
-                      .then(() => {
+                    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
                         this.router.navigate(
                           ['/main/form-contract/detail/' + this.idContract],
                           {
                             queryParams: {
                               recipientId: this.recipientId,
                               consider: true,
+                              action: "sign"
                             },
                             skipLocationChange: true,
                           }
@@ -2454,33 +2463,26 @@ export class ConsiderContractComponent
       }
     }
 
-    if (
-      notContainSignImage &&
-      !signDigitalStatus &&
-      this.datas.roleContractReceived != 2
-    ) {
+    if (notContainSignImage && !signDigitalStatus &&this.datas.roleContractReceived != 2) {
       this.spinner.hide();
       return;
     }
 
     if (notContainSignImage && this.eKYC == false) {
-      this.contractService
-        .updateInfoContractConsider(signUpdateTempN, this.recipientId)
-        .subscribe(
+      this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
           async (result) => {
             if (!notContainSignImage) {
               await this.signDigitalDocument();
             }
 
-            this.router
-              .navigateByUrl('/', { skipLocationChange: true })
-              .then(() => {
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
                 this.router.navigate(
                   ['/main/form-contract/detail/' + this.idContract],
                   {
                     queryParams: {
                       recipientId: this.recipientId,
                       consider: true,
+                      action:"sign"
                     },
                     skipLocationChange: true,
                   }
@@ -2518,9 +2520,7 @@ export class ConsiderContractComponent
         );
     } else {
       if (this.eKYC == false) {
-        this.contractService
-          .updateInfoContractConsiderImg(signUpdateTempN, this.recipientId)
-          .subscribe(
+        this.contractService.updateInfoContractConsiderImg(signUpdateTempN, this.recipientId).subscribe(
             async (result) => {
               if (result?.success == false) {
                 if (result.message == 'Wrong otp') {
@@ -2559,6 +2559,7 @@ export class ConsiderContractComponent
                         queryParams: {
                           recipientId: this.recipientId,
                           consider: true,
+                          action:"sign"
                         },
                         skipLocationChange: true,
                       }
@@ -2699,10 +2700,7 @@ export class ConsiderContractComponent
           organizationId: organization_id,
         };
 
-        this.contractService
-          .uploadFileImageBase64Signature(formData)
-          .subscribe((responseBase64) => {
-            console.log('response base 64 ', responseBase64);
+        this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseBase64) => {
 
             const filePath = responseBase64.file_object.file_path;
 
@@ -2721,7 +2719,7 @@ export class ConsiderContractComponent
               .subscribe((responseEnd) => {
                 this.contractService
                   .getDetailContract(this.idContract)
-                  .subscribe((responseLink) => { });
+                  .subscribe((responseLink) => {});
               });
           });
       });
@@ -2763,73 +2761,43 @@ export class ConsiderContractComponent
     );
   }
 
-  async rejectContractLang(
-    rejectQuestion: string,
-    confirm: string,
-    cancel: string,
-    cancelSuccess: string,
-    error1: string,
-    rejectReason: string
-  ) {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    // this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
-    // console.log("this.emailRecipientssssssssss",this.emailRecipients);
-    const ArrRecipients = this.datas.is_data_contract.participants[0].recipients;
-    const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email);
-    console.log("ArrRecipientsNew", ArrRecipientsNew);
+  async rejectContractLang(rejectQuestion: string, confirm: string, cancel: string, cancelSuccess: string, error1: string, rejectReason: string) {
+    let inputValue = '';
+    const { value: textRefuse } = await Swal.fire({
+      title: rejectQuestion,
+      input: 'textarea',
+      inputValue: inputValue,
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#b0bec5',
+      confirmButtonText: confirm,
+      cancelButtonText: cancel,
+      inputValidator: (value) => {
+        if (!value) {
+          return rejectReason;
+        } else {
+          return null;
+        }
+      },
+    });
 
-    if (!ArrRecipientsNew.includes(this.currentUser.email)) {
-      this.spinner.hide();
-      this.toastService.showErrorHTMLWithTimeout(
-        'Bạn không có quyền xử lý hợp đồng này!',
-        '',
-        3000
-      );
-      this.router.navigate(['/main/dashboard']);
-      // return
-    } else {
-      let inputValue = '';
-      const { value: textRefuse } = await Swal.fire({
-        title: rejectQuestion,
-        input: 'textarea',
-        inputValue: inputValue,
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#b0bec5',
-        confirmButtonText: confirm,
-        cancelButtonText: cancel,
-        inputValidator: (value) => {
-          if (!value) {
-            return rejectReason;
-          } else {
-            return null;
+    if (textRefuse) {
+      this.contractService.considerRejectContract(this.recipientId, textRefuse).subscribe(
+          (result) => {
+            this.toastService.showSuccessHTMLWithTimeout(
+              cancelSuccess,
+              '',
+              3000
+            );
+            this.spinner.hide();
+            this.router.navigate(['/main/form-contract/detail/reject/' + this.idContract]);
+          },
+          (error) => {
+            this.spinner.hide();
+            this.toastService.showErrorHTMLWithTimeout(error1, '', 3000);
           }
-        },
-      });
-
-      if (textRefuse) {
-        this.contractService
-          .considerRejectContract(this.recipientId, textRefuse)
-          .subscribe(
-            (result) => {
-              this.toastService.showSuccessHTMLWithTimeout(
-                cancelSuccess,
-                '',
-                3000
-              );
-              this.spinner.hide();
-              this.router.navigate([
-                '/main/form-contract/detail/' + this.idContract,
-              ]);
-            },
-            (error) => {
-              this.spinner.hide();
-              this.toastService.showErrorHTMLWithTimeout(error1, '', 3000);
-            }
-          );
-      }
+        );
     }
-    console.log("this.currentUser.email", this.currentUser.email);
   }
 
   validateSignature() {
@@ -2941,29 +2909,16 @@ export class ConsiderContractComponent
   cardId: any;
   eKYCSignOpen() {
     // //Còn số lượng eKYC thì cho ký eKYC
-    this.unitService
-      .getNumberContractUseOriganzation(this.orgId)
-      .toPromise()
-      .then(
+    this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise().then(
         (data) => {
           this.eKYCContractUse = data.ekyc;
 
           //lay so luong hop dong da mua
-          this.unitService
-            .getNumberContractBuyOriganzation(this.orgId)
-            .toPromise()
-            .then(
+          this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise().then(
               (data) => {
                 this.eKYCContractBuy = data.ekyc;
-                if (
-                  Number(this.eKYCContractUse) + Number(1) >
-                  Number(this.eKYCContractBuy)
-                ) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ',
-                    '',
-                    3000
-                  );
+                if (Number(this.eKYCContractUse) + Number(1) > Number(this.eKYCContractBuy)) {
+                  this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ','',3000);
                 } else {
                   this.eKYC = true;
                   this.eKYCStart();
@@ -3013,7 +2968,6 @@ export class ConsiderContractComponent
 
         this.nameCompany = response.name;
         this.cardId = response.id;
-
       });
 
       if (result) this.eKYCSignOpenAfter();
@@ -3030,7 +2984,7 @@ export class ConsiderContractComponent
     const dialogRef = this.dialog.open(EkycDialogSignComponent, {
       data: data,
       disableClose: true,
-      panelClass: 'custom-dialog-container'
+      panelClass: 'custom-dialog-container',
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -3073,13 +3027,11 @@ export class ConsiderContractComponent
     const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(async (result: any) => {
-
       let signI = null;
 
       //lấy ảnh chữ ký usb token
       this.cardId = result.ma_dvcs.trim();
 
-      await of(null).pipe(delay(100)).toPromise();
       const imageRender = <HTMLElement>(
         document.getElementById('export-html-hsm1')
       );
@@ -3089,13 +3041,10 @@ export class ConsiderContractComponent
       }
 
       if (result) {
-        this.dataHsm = {
-          ma_dvcs: result.ma_dvcs,
-          username: result.username,
-          password: result.password,
-          password2: result.password2,
-          imageBase64: signI,
-        };
+        this.dataHsm.ma_dvcs = result.ma_dvcs;
+        this.dataHsm.username = result.username;
+        this.dataHsm.password = result.password;
+        this.dataHsm.password2 = result.password2;
 
         await this.signContractSubmit();
       }
@@ -3279,21 +3228,13 @@ export class ConsiderContractComponent
         sign?.page == page
       ) {
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
-        sign.signDigitalY =
-          heightPage -
-          (sign.coordinate_y - this.currentHeight) -
-          sign.height /* * this.ratioPDF*/;
+        sign.signDigitalY = heightPage - (sign.coordinate_y - this.currentHeight) - sign.height /* * this.ratioPDF*/;
 
-        sign.signDigitalWidth =
-          sign.coordinate_x + sign.width /* * this.ratioPDF*/;
-        sign.signDigitalHeight =
-          heightPage -
-          (sign.coordinate_y - this.currentHeight) /* * this.ratioPDF*/;
+        sign.signDigitalHeight = heightPage - (sign.coordinate_y - this.currentHeight) /* * this.ratioPDF*/;
+        sign.signDigitalWidth = sign.coordinate_x + sign.width
 
         //Lấy thông tin mã số thuế của đối tác ký
-        this.contractService
-          .getDetermineCoordination(sign.recipient_id)
-          .subscribe((response) => {
+        this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
             const lengthRes = response.recipients.length;
             for (let i = 0; i < lengthRes; i++) {
               const id = response.recipients[i].id;
@@ -3317,10 +3258,7 @@ export class ConsiderContractComponent
 
   prepareInfoSignUsbTokenV2(page: any, heightPage: any) {
     this.isDataObjectSignature.map((sign: any) => {
-      if (
-        (sign.type == 3 || sign.type == 1 || sign.type == 4) &&
-        sign?.recipient?.email === this.currentUser.email &&
-        sign?.recipient?.role === this.datas?.roleContractReceived &&
+      if ((sign.type == 3 || sign.type == 1 || sign.type == 4) && sign?.recipient?.email === this.currentUser.email && sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
@@ -3355,7 +3293,6 @@ export class ConsiderContractComponent
     });
 
     this.currentHeight += heightPage;
-
   }
 
   mobile: boolean = false;

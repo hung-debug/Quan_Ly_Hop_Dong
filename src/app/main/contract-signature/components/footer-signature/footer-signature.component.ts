@@ -292,8 +292,6 @@ export class FooterSignatureComponent implements OnInit {
 
           this.contractId = response.contract_id;
 
-          console.log("contract id ", this.contractId);
-
           this.contractService.getDataCoordination(this.contractId).subscribe((response => {
             this.orgId = response.organization_id;
             this.unitService.getUnitById(this.orgId).toPromise().then(

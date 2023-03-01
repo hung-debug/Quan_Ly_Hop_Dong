@@ -214,15 +214,7 @@ export class ContractService {
       .pipe();
   }
 
-  public getContractList(
-    isOrg: any,
-    organization_id: any,
-    filter_name: any,
-    filter_type: any,
-    filter_contract_no: any,
-    filter_from_date: any,
-    filter_to_date: any,
-    filter_status: any,
+  public getContractList(isOrg: any,organization_id: any,filter_name: any,filter_type: any,filter_contract_no: any,filter_from_date: any,filter_to_date: any,filter_status: any,
     page: any,
     size: any
   ): Observable<any> {
@@ -594,7 +586,7 @@ export class ContractService {
       });
   }
 
-  meregeTimeStamp(recipientId: number, contractId: number, signature: any, fieldName: any, cert: any, hexDigestTempFile: any) {
+  meregeTimeStamp(recipientId: number, contractId: number, signature: any, fieldName: any, cert: any, hexDigestTempFile: any, isTimestamp: string) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -605,7 +597,7 @@ export class ContractService {
         signature: signature,
         filedName: fieldName,
         cert: cert,
-        isTimestamp: true,
+        isTimestamp: isTimestamp,
         hexDigestTempFile: hexDigestTempFile
       })
     
@@ -954,7 +946,7 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({ type: id });
     let listContractUrl = this.addConfirmContractUrl + id;
-    return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
+    return this.http.get<any>(listContractUrl, { headers }).pipe();
   }
 
   addDocument(datas: any, is_type?: number, is_status?: number) {
@@ -1040,13 +1032,7 @@ export class ContractService {
     });
   }
 
-  signPkiDigital(
-    phone: any,
-    networkCode: any,
-    recipientId: any,
-    nameContract: any,
-    image_base64: any
-  ) {
+  signPkiDigital(phone: any,networkCode: any,recipientId: any,nameContract: any,image_base64: any, isTimestamp: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -1058,13 +1044,14 @@ export class ContractService {
       prompt: `Bạn có yêu cầu ký số hợp đồng ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
       reason: 'reason',
       image_base64: image_base64,
+      isTimestamp: isTimestamp
     };
     return this.http
       .post<any>(this.signFilePKI + recipientId, body, { headers: headers })
       .toPromise();
   }
 
-  signHsm(datas: any, recipientId: number) {
+  signHsm(datas: any, recipientId: number, isTimestamp: any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -1077,6 +1064,8 @@ export class ContractService {
       password: datas.password,
       password2: datas.password2,
       image_base64: datas.imageBase64,
+      // isTimestamp: isTimestamp
+      fieldId: datas.fieldId
     });
 
     return this.http
@@ -1129,7 +1118,6 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = '';
-    console.log(headers);
     return this.http.put<Contract>(
       this.addConfirmContractUrl + datas.id + '/start-bpm',
       body,
@@ -1535,6 +1523,7 @@ export class ContractService {
       { headers: headers }
     );
   }
+
 
   confirmContractBatchList(file: any, idContractTemplate: any, isCeCA: any) {
     this.getCurrentUser();

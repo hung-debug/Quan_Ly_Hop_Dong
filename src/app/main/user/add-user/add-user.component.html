@@ -3,6 +3,8 @@
     <form [formGroup]="addForm" class="content">
         <div class="content-body">
             <div class="row">
+
+                <!--Họ tên-->
                 <div class="col-md-4">
                     <div class="label text-color">{{'user.name' | translate}} <span class="required-title">*</span></div>
                     <div class="input-data">
@@ -13,6 +15,7 @@
                         <div *ngIf="f.name.errors.pattern">{{'Họ tên không được chứa ký tự đặc biệt' | translate}}</div>
                     </div>
                 </div>
+
                 <div class="col-md-4">
                     <div class="label text-color">{{'user.email' | translate}} <span class="required-title">*</span></div>
                     <div *ngIf="id == null" class="input-data">
@@ -26,6 +29,7 @@
                         <div *ngIf="f.email.errors.email">{{'error.user.email.format' | translate}}</div>
                     </div>
                 </div>
+
                 <div class="col-md-4">
                     <div class="label text-color">{{'user.birthday' | translate}}</div>
                     <div>
@@ -59,8 +63,8 @@
                     </div>
                 </div>
 
+                <!--Vai trò-->
                 <div class="col-md-4">
-
                     <div class="label text-color">{{'menu.role.list' | translate}} <span class="required-title">*</span></div>
                     <div *ngIf="isEditRole">
                         <p-dropdown panelStyleClass="font" [options]="roleList" formControlName="role" optionLabel="name" optionValue="id" placeholder="{{'choose.role' | translate}}" [filter]="true" filterBy="name" [showClear]="true" optionDisabled="inactive"></p-dropdown>
@@ -73,6 +77,7 @@
                         <div *ngIf="f.role.errors.required">{{'error.role.name.required' | translate}}</div>
                     </div>
                 </div>
+
             </div>
             <div class="row" style="justify-content: center;padding-top: 10px;">
                 <div class="col-md-2" style="text-align: center;">
