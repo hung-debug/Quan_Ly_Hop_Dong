@@ -7,18 +7,16 @@
       </div>
       <div style="line-height: 25px">
         <div *ngIf="isMultiSign" style="line-height: 25px; text-align: center">
-          <img *ngIf="!isDisablePrevious" src="/assets/img/icon_previous.svg" style="padding-right: 10px; cursor: pointer"(click)="previousPage()"/>
+          <img *ngIf="!isDisablePrevious" src="/assets/img/icon_previous.svg" style="padding-right: 10px; cursor: pointer"(click)="previousContract()"/>
           <img *ngIf="isDisablePrevious" src="/assets/img/icon_previous_hidden.svg" style="padding-right: 10px; cursor: pointer"/>
+
           <input type="text" [(ngModel)]="pageNumberCurrent" style="width: 30px;text-align: center;border-radius: 3px;border: 1px solid #106db6;"
-            (keypress)="numberOnly($event)" (change)="typingPage($event)"
+                  (keypress)="numberOnly($event)" (change)="typingPage($event)"
           />
+          
           / {{ pageNumberTotal }}
-          <img *ngIf="!isDisableNext" src="/assets/img/icon_next.svg" style="padding-left: 10px; cursor: pointer" (click)="nextPage()"/>
-          <img
-            *ngIf="isDisableNext"
-            src="/assets/img/icon_next_hidden.svg"
-            style="padding-left: 10px; cursor: pointer"
-          />
+          <img *ngIf="!isDisableNext" src="/assets/img/icon_next.svg" style="padding-left: 10px; cursor: pointer" (click)="nextContract()"/>
+          <img *ngIf="isDisableNext" src="/assets/img/icon_next_hidden.svg" style="padding-left: 10px; cursor: pointer"/>
         </div>
         <hr style="margin: 10px" />
         <div>

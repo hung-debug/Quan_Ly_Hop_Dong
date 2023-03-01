@@ -498,8 +498,14 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     }
   }
 
-  nextPage() {
+  nextContract() {
     this.pageNumberCurrent++;
+    this.pageNumberOld = this.pageNumberCurrent;
+    this.getDataContractSignature(this.pageNumberCurrent - 1);
+  }
+
+  previousContract() {
+    this.pageNumberCurrent--;
     this.pageNumberOld = this.pageNumberCurrent;
     this.getDataContractSignature(this.pageNumberCurrent - 1);
   }
