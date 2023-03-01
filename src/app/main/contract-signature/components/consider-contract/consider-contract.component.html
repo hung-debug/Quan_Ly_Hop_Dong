@@ -34,7 +34,7 @@
           </span>
           <span *ngFor="let d of datas?.is_data_contract?.refs;let i = index">
             <span *ngIf="i != 0">, </span>
-            <a style="color: #106DB6;" rel="stylesheet" [href]="'/main/form-contract/detail/' + d.ref_id" target="_blank">{{d.ref_name}}</a>
+            <a style="color: #106DB6;" rel="stylesheet" [href]="d.path" target="_blank">{{d.ref_name}}</a>
           </span>
         </div>
 

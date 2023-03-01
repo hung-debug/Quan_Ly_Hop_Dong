@@ -219,6 +219,8 @@ export class ConsiderContractComponent
     } else {
       this.router.navigate(['/page-not-found']);
     }
+
+    console.log("datass ", this.datas);
   }
 
   firstPageMobile() {
@@ -390,6 +392,8 @@ export class ConsiderContractComponent
         await this.getVersionUsbToken(this.orgId);
 
         this.datas = this.data_contract;
+
+        console.log("datas ", this.datas);
         if (this.datas?.is_data_contract?.type_id) {
           this.contractService.getContractTypes(this.datas?.is_data_contract?.type_id).subscribe((data) => {
               if (this.datas?.is_data_contract) {
@@ -1769,14 +1773,6 @@ export class ConsiderContractComponent
             height: signUpdate.signDigitalHeight,
             page: signUpdate.page
           }
-
-          // let fieldHsm = {
-          //   coordinate_x: 0,
-          //   coordinate_y: 0,
-          //   width: 50,
-          //   height: 50,
-          //   page: 1
-          // }
 
           if (signUpdate.type == 1 || signUpdate.type == 4) {
             this.textSign = signUpdate.valueSign;
