@@ -7,13 +7,13 @@ import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UploadService } from 'src/app/service/upload.service';
 import interact from "interactjs";
-import {variable} from "../../../config/variable";
+import { variable } from "../../../config/variable";
 import Swal from 'sweetalert2';
 import * as $ from "jquery";
-import {ProcessingHandleEcontractComponent} from "../../contract-signature/shared/model/processing-handle-econtract/processing-handle-econtract.component"
+import { ProcessingHandleEcontractComponent } from "../../contract-signature/shared/model/processing-handle-econtract/processing-handle-econtract.component"
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { DomSanitizer } from '@angular/platform-browser';
-import {TranslateService} from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 
 import { Location } from '@angular/common';
@@ -90,16 +90,16 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   loaded: boolean = false;
 
   isPartySignature: any = [
-    {id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam'},
-    {id: 2, name: 'Công ty newEZ Việt Nam'},
-    {id: 3, name: 'Tập đoàn Bảo Việt'}
+    { id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam' },
+    { id: 2, name: 'Công ty newEZ Việt Nam' },
+    { id: 3, name: 'Tập đoàn Bảo Việt' }
   ];
 
   optionsSign: any = [
-    {item_id: 1, item_text: this.translate.instant('sign_by_eKYC')},
-    {item_id: 2, item_text: this.translate.instant('sign_by_token')},
-    {item_id: 3, item_text: this.translate.instant('sign_by_pki')},
-    {item_id: 4, item_text: this.translate.instant('sign_by_hsm')}
+    { item_id: 1, item_text: this.translate.instant('sign_by_eKYC') },
+    { item_id: 2, item_text: this.translate.instant('sign_by_token') },
+    { item_id: 3, item_text: this.translate.instant('sign_by_pki') },
+    { item_id: 4, item_text: this.translate.instant('sign_by_hsm') }
   ];
   typeSign: any = 0;
   isOtp: boolean = false;
@@ -111,15 +111,15 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   isDataObjectSignature: any;
   valid: boolean = false;
   allFileAttachment: any[];
-  role:any;
-  status:any;
+  role: any;
+  status: any;
   pdfSrcMobile: string;
   trustedUrl: any;
 
   consider: boolean = false;
 
   sum: number[] = [];
-  top: any[]= [];
+  top: any[] = [];
 
   pageBefore: number;
 
@@ -140,8 +140,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     private activeRoute: ActivatedRoute,
     private router: Router,
     private appService: AppService,
-    private toastService : ToastService,
-    private uploadService : UploadService,
+    private toastService: ToastService,
+    private uploadService: UploadService,
     private dialog: MatDialog,
     private deviceService: DeviceDetectorService,
     private sanitizer: DomSanitizer,
@@ -163,47 +163,47 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           this.signBefore = true;
         }
 
-        if (typeof params.filter_name != 'undefined' && params.filter_name) {
-          this.filter_name = params.filter_name;
-        } else {
-          this.filter_name = "";
-        }
-        if (typeof params.filter_type != 'undefined' && params.filter_type) {
-          this.filter_type = params.filter_type;
-        } else {
-          this.filter_type = "";
-        }
-        if (typeof params.filter_contract_no != 'undefined' && params.filter_contract_no) {
-          this.filter_contract_no = params.filter_contract_no;
-        } else {
-          this.filter_contract_no = "";
-        }
-        if (typeof params.filter_from_date != 'undefined' && params.filter_from_date) {
-          this.filter_from_date = params.filter_from_date;
-        } else {
-          this.filter_from_date = "";
-        }
-        if (typeof params.filter_to_date != 'undefined' && params.filter_to_date) {
-          this.filter_to_date = params.filter_to_date;
-        } else {
-          this.filter_to_date = "";
-        }
-        if (typeof params.isOrg != 'undefined' && params.isOrg) {
-          this.isOrg = params.isOrg;
-        } else {
-          this.isOrg = "";
-        }
-        if (typeof params.organization_id != 'undefined' && params.organization_id) {
-          this.organization_id = params.organization_id;
-        } else {
-          this.organization_id = "";
-        }
+      if (typeof params.filter_name != 'undefined' && params.filter_name) {
+        this.filter_name = params.filter_name;
+      } else {
+        this.filter_name = "";
+      }
+      if (typeof params.filter_type != 'undefined' && params.filter_type) {
+        this.filter_type = params.filter_type;
+      } else {
+        this.filter_type = "";
+      }
+      if (typeof params.filter_contract_no != 'undefined' && params.filter_contract_no) {
+        this.filter_contract_no = params.filter_contract_no;
+      } else {
+        this.filter_contract_no = "";
+      }
+      if (typeof params.filter_from_date != 'undefined' && params.filter_from_date) {
+        this.filter_from_date = params.filter_from_date;
+      } else {
+        this.filter_from_date = "";
+      }
+      if (typeof params.filter_to_date != 'undefined' && params.filter_to_date) {
+        this.filter_to_date = params.filter_to_date;
+      } else {
+        this.filter_to_date = "";
+      }
+      if (typeof params.isOrg != 'undefined' && params.isOrg) {
+        this.isOrg = params.isOrg;
+      } else {
+        this.isOrg = "";
+      }
+      if (typeof params.organization_id != 'undefined' && params.organization_id) {
+        this.organization_id = params.organization_id;
+      } else {
+        this.organization_id = "";
+      }
 
-        if (typeof params.status != 'undefined' && params.status) {
-          this.statusLink = params.status;
-        } else {
-          this.statusLink = "";
-        }
+      if (typeof params.status != 'undefined' && params.status) {
+        this.statusLink = params.status;
+      } else {
+        this.statusLink = "";
+      }
     });
 
     this.appService.setTitle(this.translate.instant('contract.detail'));
@@ -211,19 +211,19 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     //Lấy thông tin id hợp đồng
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
-    if(await this.checkViewContractService.callAPIcheckViewContract(this.idContract, false)) {
+    if (await this.checkViewContractService.callAPIcheckViewContract(this.idContract, false)) {
       this.getDataContractSignature();
     } else {
       this.router.navigate(['/page-not-found']);
     }
   }
 
-  
+
   @HostListener('window:popstate', ['$event'])
   onPopState(event: any) {
     this.actionBack();
   }
-  
+
   firstPageMobile() {
     this.pageMobile = 1;
     this.page1 = false;
@@ -231,13 +231,13 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   previousPageMobile() {
-    if(this.pageMobile > 1) {
+    if (this.pageMobile > 1) {
       this.pageMobile--;
     }
   }
 
   onNextPageMobile() {
-    if(this.pageMobile < this.pageNumber) {
+    if (this.pageMobile < this.pageNumber) {
       this.pageMobile++;
       this.page1 = true;
     }
@@ -250,13 +250,13 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   pagechanging(event: any) {
-    if(event.pageNumber > 1 && event.pageNumber < this.pageNumber) {
+    if (event.pageNumber > 1 && event.pageNumber < this.pageNumber) {
       this.page1 = true;
       this.pageLast = true;
-    } else if(event.pageNumber == 1) {
+    } else if (event.pageNumber == 1) {
       this.page1 = false;
       this.pageLast = true;
-    } else if(event.pageNumber = this.pageNumber) {
+    } else if (event.pageNumber = this.pageNumber) {
       this.page1 = true;
       this.pageLast = false;
     }
@@ -273,9 +273,9 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       this.recipientId = params.recipientId;
       this.consider = params.consider;
     });
- 
+
     this.contractService.getDetailContract(this.idContract).subscribe(rs => {
-      console.log("rs ",rs);
+      console.log("rs ", rs);
       this.isDataContract = rs[0];
       this.isDataFileContract = rs[1];
       this.isDataObjectSignature = rs[2];
@@ -331,7 +331,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           // Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
         }
       })
-      if(this.datas?.is_data_contract?.type_id){
+      if (this.datas?.is_data_contract?.type_id) {
         this.contractService.getContractTypes(this.datas?.is_data_contract?.type_id).subscribe(data => {
           if (this.datas?.is_data_contract) {
             this.datas.is_data_contract.type_name = data;
@@ -346,12 +346,12 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
       this.datas.action_title = 'Xác nhận';
       //neu nguoi truy cap khong o trong luong ky
-      if(!this.recipient?.role){
+      if (!this.recipient?.role) {
         this.role = '';
         this.status = this.datas.is_data_contract.status;
 
-      //neu nguoi truy cap o trong luong ky
-      }else{
+        //neu nguoi truy cap o trong luong ky
+      } else {
         this.role = this.recipient.role;
         this.status = this.recipient.status;
         this.datas.roleContractReceived = this.recipient.role;
@@ -382,20 +382,29 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           this.toastService.showErrorHTMLWithTimeout("Thiếu dữ liệu file hợp đồng!", "", 3000);
         } else {
           this.pdfSrc = fileC;
-          this.pdfSrcMobile = "https://docs.google.com/viewerng/viewer?url="+this.pdfSrc+"&embedded=true";
+          this.pdfSrcMobile = "https://docs.google.com/viewerng/viewer?url=" + this.pdfSrc + "&embedded=true";
           this.trustedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfSrcMobile);
         }
-      
+
       }
       // render pdf to canvas
 
-      if(!this.mobile) {
+      if (!this.mobile) {
         this.getPage();
       }
 
       this.loaded = true;
 
-      
+
+    }, (res: any) => {
+      // @ts-ignore
+      this.handleError();
+    })
+  }
+
+  reLoadData(){
+    this.contractService.getDetailContract(this.idContract).subscribe(rs => {
+      this.datas["is_data_contract"] = rs[0];
     }, (res: any) => {
       // @ts-ignore
       this.handleError();
@@ -447,7 +456,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       this.arrPage = [];
       for (let page = 1; page <= this.pageNumber; page++) {
         let canvas = document.createElement("canvas");
-        this.arrPage.push({page: page});
+        this.arrPage.push({ page: page });
         canvas.className = 'dropzone';
         canvas.id = "canvas-step3-" + page;
         // canvas.style.paddingLeft = '15px';
@@ -465,22 +474,22 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         this.setPosition();
         this.eventMouseover();
 
-        for(let i = 0; i <= this.pageNumber;i++) {
+        for (let i = 0; i <= this.pageNumber; i++) {
           this.top[i] = 0;
 
-          if(i < this.pageNumber)
+          if (i < this.pageNumber)
             this.sum[i] = 0;
         }
 
-        for(let i = 1; i <= this.pageNumber; i++) {
-          let canvas: any = document.getElementById('canvas-step3-'+i);
+        for (let i = 1; i <= this.pageNumber; i++) {
+          let canvas: any = document.getElementById('canvas-step3-' + i);
           this.top[i] = canvas.height;
         }
-        
 
-        for(let i = 0; i < this.pageNumber; i++) {
-          this.top[i+1] += this.top[i];
-          this.sum[i] = this.top[i+1];
+
+        for (let i = 0; i < this.pageNumber; i++) {
+          this.top[i + 1] += this.top[i];
+          this.sum[i] = this.top[i + 1];
         }
       }, 100)
     })
@@ -535,7 +544,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
       // let viewport = page.getViewport(this.scale);
-      let viewport = page.getViewport({scale: this.scale});
+      let viewport = page.getViewport({ scale: this.scale });
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;
@@ -557,11 +566,11 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
       var interval = setInterval(() => {
         page.render(renderContext);
-      },1000)
+      }, 1000)
 
       setTimeout(() => {
         clearInterval(interval)
-      },2000);
+      }, 2000);
 
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
@@ -573,24 +582,24 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   activeScroll() {
-    if(document.getElementsByClassName('viewer-pdf')[0]){
-    document.getElementsByClassName('viewer-pdf')[0].addEventListener('scroll', () => {
-      const Imgs = [].slice.call(document.querySelectorAll('.dropzone'));
-      Imgs.forEach((item: any) => {
-        if (item.getBoundingClientRect().top <= (window.innerHeight / 2) &&
-          (item.getBoundingClientRect().bottom >= 0) &&
-          (item.getBoundingClientRect().top >= 0) ||
-          (item.getBoundingClientRect().bottom >= (window.innerHeight / 2)) &&
-          (item.getBoundingClientRect().bottom <= window.innerHeight) &&
-          (item.getBoundingClientRect().top <= 0)) {
-          let page = item.id.split("-")[2];
-          $('.page-canvas').css('border', 'none');
-          let selector = '.page-canvas.page' + page;
-          $(selector).css('border', '2px solid #ADCFF7');
-        }
+    if (document.getElementsByClassName('viewer-pdf')[0]) {
+      document.getElementsByClassName('viewer-pdf')[0].addEventListener('scroll', () => {
+        const Imgs = [].slice.call(document.querySelectorAll('.dropzone'));
+        Imgs.forEach((item: any) => {
+          if (item.getBoundingClientRect().top <= (window.innerHeight / 2) &&
+            (item.getBoundingClientRect().bottom >= 0) &&
+            (item.getBoundingClientRect().top >= 0) ||
+            (item.getBoundingClientRect().bottom >= (window.innerHeight / 2)) &&
+            (item.getBoundingClientRect().bottom <= window.innerHeight) &&
+            (item.getBoundingClientRect().top <= 0)) {
+            let page = item.id.split("-")[2];
+            $('.page-canvas').css('border', 'none');
+            let selector = '.page-canvas.page' + page;
+            $(selector).css('border', '2px solid #ADCFF7');
+          }
+        });
       });
-    });
-  }
+    }
   }
 
 
@@ -623,7 +632,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     } else return {}
   }
 
-// hàm stype đối tượng boder kéo thả
+  // hàm stype đối tượng boder kéo thả
   changeColorDrag(role: any, valueSign: any, isDaKeo?: any) {
     if (isDaKeo && !valueSign.value) {
       return 'ck-da-keo';
@@ -703,6 +712,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   processHandleContract() {
     // alert('Luồng xử lý hợp đồng!');
     const data = this.datas;
+    console.log('the close dialog', data);
     // @ts-ignore
     const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
       width: '1000px',
@@ -712,6 +722,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     })
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
+      this.reLoadData()
       let is_data = result
     })
 
@@ -830,7 +841,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         }
       });
     } else if (e && e == 1 && ((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
-      ([3,4].includes(this.datas.roleContractReceived) && this.confirmSignature == 2))) {
+      ([3, 4].includes(this.datas.roleContractReceived) && this.confirmSignature == 2))) {
       this.rejectContract();
     }
     if (e && e == 2) {
@@ -846,36 +857,36 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     if(this.pageBefore && this.isOrg) {
       this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate(['/main/contract/create/' + this.statusLink],
-        {
-          queryParams: {
-            'page': this.pageBefore,
-            'filter_type': this.filter_type, 
-            'filter_contract_no': this.filter_contract_no,
-            'filter_from_date': this.filter_from_date,
-            'filter_to_date': this.filter_to_date,
-            'isOrg': this.isOrg,
-            'organization_id': this.organization_id,
-            'status': this.statusLink
-          },
-          skipLocationChange: true
-        });
+          {
+            queryParams: {
+              'page': this.pageBefore,
+              'filter_type': this.filter_type,
+              'filter_contract_no': this.filter_contract_no,
+              'filter_from_date': this.filter_from_date,
+              'filter_to_date': this.filter_to_date,
+              'isOrg': this.isOrg,
+              'organization_id': this.organization_id,
+              'status': this.statusLink
+            },
+            skipLocationChange: true
+          });
       });
-    } else if(this.pageBefore) {
-      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+    } else if (this.pageBefore) {
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         this.router.navigate(['/main/c/receive/' + this.statusLink],
-        {
-          queryParams: {
-            'page': this.pageBefore,
-            'filter_type': this.filter_type, 
-            'filter_contract_no': this.filter_contract_no,
-            'filter_from_date': this.filter_from_date,
-            'filter_to_date': this.filter_to_date,
-            'isOrg': this.isOrg,
-            'organization_id': this.organization_id,
-            'status': this.statusLink
-          },
-          skipLocationChange: true
-        });
+          {
+            queryParams: {
+              'page': this.pageBefore,
+              'filter_type': this.filter_type,
+              'filter_contract_no': this.filter_contract_no,
+              'filter_from_date': this.filter_from_date,
+              'filter_to_date': this.filter_to_date,
+              'isOrg': this.isOrg,
+              'organization_id': this.organization_id,
+              'status': this.statusLink
+            },
+            skipLocationChange: true
+          });
       });
     } else if(this.router.url.includes("forward") || this.signBefore) {
       this.router.navigate(['/main/c/receive/wait-processing']);
@@ -1002,7 +1013,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   signContractSubmit() {
 
-    for(const signUpdate of this.isDataObjectSignature) {
+    for (const signUpdate of this.isDataObjectSignature) {
       if (signUpdate && signUpdate.type == 2 && this.datas.roleContractReceived == 3
         && signUpdate?.recipient?.email === this.currentUser.email
         && signUpdate?.recipient?.role === this.datas?.roleContractReceived
@@ -1025,21 +1036,22 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     }
     setTimeout(() => {
       this.signContract();
-    },2000);
+    }, 2000);
 
   }
 
   signContract() {
     const signUpdate = this.isDataObjectSignature.filter(
       (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
-      .map((item: any) =>  {
-      return {
-        id: item.id,
-        name: item.name,
-        value: item.value,
-        font: item.font,
-        font_size: item.font_size
-      }});
+      .map((item: any) => {
+        return {
+          id: item.id,
+          name: item.name,
+          value: item.value,
+          font: item.font,
+          font_size: item.font_size
+        }
+      });
     this.contractService.updateInfoContractConsider(signUpdate, this.recipientId).subscribe(
       (result) => {
         this.toastService.showSuccessHTMLWithTimeout(
@@ -1098,26 +1110,26 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     console.log(this);
   }
 
-  downloadContract(id:any){
+  downloadContract(id: any) {
     if (this.isDataContract.status == 30) {
       this.contractService.getFileZipContract(id).subscribe((data) => {
-          console.log(data)
-          this.uploadService.downloadFile(data.path).subscribe((response: any) => {
-            //console.log(response);
+        console.log(data)
+        this.uploadService.downloadFile(data.path).subscribe((response: any) => {
+          //console.log(response);
 
-            let url = window.URL.createObjectURL(response);
-            let a = document.createElement('a');
-            document.body.appendChild(a);
-            a.setAttribute('style', 'display: none');
-            a.href = url;
-            a.download = data.filename;
-            a.click();
-            window.URL.revokeObjectURL(url);
-            a.remove();
+          let url = window.URL.createObjectURL(response);
+          let a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          a.download = data.filename;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
 
-            this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
-          }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
-        },
+          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+        }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
+      },
         error => {
           this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);
         }
@@ -1127,7 +1139,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   checkIsViewContract() {
-    if(this.consider) {
+    if (this.consider) {
       if (this.datas?.is_data_contract?.participants?.length) {
         for (const participant of this.datas.is_data_contract.participants) {
           for (const recipient of participant.recipients) {
@@ -1150,7 +1162,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         }
       }
 
-      if(recipients.length == 2) {
+      if (recipients.length == 2) {
         for (const participant of this.datas.is_data_contract.participants) {
           for (const recipient of participant.recipients) {
             if (this.currentUser.email == recipient.email && recipient.role != 1) {
@@ -1159,7 +1171,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
             }
           }
         }
-      } else if(recipients.length == 1) {
+      } else if (recipients.length == 1) {
         for (const participant of this.datas.is_data_contract.participants) {
           for (const recipient of participant.recipients) {
             if (this.currentUser.email == recipient.email) {
@@ -1170,23 +1182,23 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         }
       }
     }
- 
+
   }
 
   checkStatusUser(status: any, role: any) {
     if (this.isDataContract.status == 30) {
       return this.translate.instant('download');
-    }else if (this.isDataContract.status == 32) {
+    } else if (this.isDataContract.status == 32) {
       return this.translate.instant('canceled');
-    }else if (this.isDataContract.status == 31) {
+    } else if (this.isDataContract.status == 31) {
       return this.translate.instant('refused');
-    }else if (this.isDataContract.release_state == 'HET_HIEU_LUC') {
+    } else if (this.isDataContract.release_state == 'HET_HIEU_LUC') {
       return this.translate.instant('overdued');
     }
 
     if (status == 3) {
       return 'Đã từ chối';
-    } else if(status == 4) {
+    } else if (status == 4) {
       return 'Đã uỷ quyền/chuyển tiếp';
     }
 
@@ -1199,13 +1211,13 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       res += 'Đã ';
     }
     if (role == 1) {
-      res +=  'điều phối';
+      res += 'điều phối';
     } else if (role == 2) {
-      res +=  'xem xét';
+      res += 'xem xét';
     } else if (role == 3) {
-      res +=  'ký';
+      res += 'ký';
     } else if (role == 4) {
-      res =  res + ' đóng dấu';
+      res = res + ' đóng dấu';
     }
     return res;
   }
@@ -1213,8 +1225,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   pageNum: number = 1;
   page1: boolean = false;
   pageLast: boolean = true;
-  
-  pageRendering:any;
+
+  pageRendering: any;
   pageNumPending: any = null;
   firstPage() {
     let pdffull: any = document.getElementById('pdf-full');
@@ -1225,7 +1237,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   lastPage() {
-    let canvas: any = document.getElementById('canvas-step3-'+this.pageNumber);
+    let canvas: any = document.getElementById('canvas-step3-' + this.pageNumber);
 
     let canvas1: any = document.getElementById('pdf-viewer-step-3');
 
@@ -1256,7 +1268,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     if (this.pageRendering) {
       this.pageNumPending = num;
     } else {
-      let canvas: any = document.getElementById('canvas-step3-'+num);
+      let canvas: any = document.getElementById('canvas-step3-' + num);
 
       let canvas1: any = document.getElementById('pdf-viewer-step-3');
 
@@ -1267,7 +1279,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   onEnter(event: any) {
-    let canvas: any = document.getElementById('canvas-step3-'+event.target.value);
+    let canvas: any = document.getElementById('canvas-step3-' + event.target.value);
 
     let canvas1: any = document.getElementById('pdf-viewer-step-3');
 
@@ -1280,28 +1292,28 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     //đổi màu cho nút back page
     let canvas1: any = document.getElementById('canvas-step3-1');
 
-    if(event.srcElement.scrollTop < canvas1.height/2) {
+    if (event.srcElement.scrollTop < canvas1.height / 2) {
       this.page1 = false;
     } else {
       this.page1 = true;
     }
 
     //đổi màu cho nút next page
-    let canvasLast: any = document.getElementById('canvas-step3-'+this.pageNumber);
+    let canvasLast: any = document.getElementById('canvas-step3-' + this.pageNumber);
     let step3: any = document.getElementById('pdf-viewer-step-3');
-    if(event.srcElement.scrollTop < Number(canvasLast.getBoundingClientRect().top - step3.getBoundingClientRect().top)) {
+    if (event.srcElement.scrollTop < Number(canvasLast.getBoundingClientRect().top - step3.getBoundingClientRect().top)) {
       this.pageLast = true;
     } else {
       this.pageLast = false;
     }
 
-    this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
+    this.pageNum = Number(Math.floor(event.srcElement.scrollTop / canvas1.height) + 1);
 
     let scrollTop = Number(event.srcElement.scrollTop);
 
-    for(let i = 0; i < this.sum.length;i++) {
-      if(this.sum[i] < scrollTop && scrollTop < this.sum[i+1]) {
-        this.pageNum = Number(i+2);
+    for (let i = 0; i < this.sum.length; i++) {
+      if (this.sum[i] < scrollTop && scrollTop < this.sum[i + 1]) {
+        this.pageNum = Number(i + 2);
       }
     }
   }

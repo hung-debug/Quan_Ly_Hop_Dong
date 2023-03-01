@@ -23,7 +23,7 @@ import { ConfirmSignOtpComponent } from './confirm-sign-otp/confirm-sign-otp.com
 import { ImageDialogSignComponent } from './image-dialog-sign/image-dialog-sign.component';
 import { PkiDialogSignComponent } from './pki-dialog-sign/pki-dialog-sign.component';
 import { HsmDialogSignComponent } from './hsm-dialog-sign/hsm-dialog-sign.component';
-import { forkJoin, from, throwError, timer } from 'rxjs';
+import { async, forkJoin, from, throwError, timer } from 'rxjs';
 import { ToastService } from '../../../../service/toast.service';
 import { UploadService } from '../../../../service/upload.service';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -1284,6 +1284,8 @@ export class ConsiderContractComponent
   smsContractUse: any;
   eKYCContractBuy: any;
   smsContractBuy: any;
+  ArrRecipientsNew: any;
+
   async submitEvents(e: any) {
     let haveSignPKI = false;
     let haveSignImage = false;
@@ -1293,24 +1295,29 @@ export class ConsiderContractComponent
       (p: any) => p.id == 5
     ).length;
 
-    // // console.log("emailRecipients", this.datas.is_data_contract.participants[0].recipients[0].email);
-    // this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
 
-    // this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
+    this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
+      this.ArrRecipientsNew = response.recipients[0].email
 
-    //     // response[0].participants[0].recipients[0].email
-    //     if (this.emailRecipients !== this.currentUser.email) {
+      if (!response.recipients[0].email.includes(this.currentUser.email)) {
 
-    //       this.toastService.showErrorHTMLWithTimeout(
-    //         'Bạn không có quyền xử lý hợp đồng này!',
-    //         '',
-    //         3000
-    //       );
-    //       this.router.navigate(['/main/dashboard']);
-    //       return
-    //     };
-
-    // console.log("this.currentUser.email", this.currentUser.email);
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        this.router.navigate(['/main/dashboard']);
+        return
+      };
+      console.log("this.currentUser.email", this.currentUser.email);
+      // this.datas.is_data_contract.participants[0]["recipients"] = response.is_data_contract.participants[0].recipients
+      // this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
+      // console.log("this.emailRecipientssssssssss",this.emailRecipients);
+      // const ArrRecipients = this.datas.is_data_contract.participants[0].recipients;
+      // const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email);
+      console.log("ArrRecipientsNew111", this.datas);
+      console.log("ArrRecipientsNew", this.ArrRecipientsNew);
 
     if (counteKYC > 0) {
       if (this.mobile) {
@@ -1392,27 +1399,27 @@ export class ConsiderContractComponent
         }
       }
 
-      if (typeSignDigital && typeSignDigital == 3) {
-        haveSignPKI = true;
-        this.dataNetworkPKI = {
-          networkCode: this.signInfoPKIU.networkCode,
-          phone: this.signInfoPKIU.phone,
-        };
-      } else if (typeSignDigital && typeSignDigital == 4) {
-        haveSignHsm = true;
+        if (typeSignDigital && typeSignDigital == 3) {
+          haveSignPKI = true;
+          this.dataNetworkPKI = {
+            networkCode: this.signInfoPKIU.networkCode,
+            phone: this.signInfoPKIU.phone,
+          };
+        } else if (typeSignDigital && typeSignDigital == 4) {
+          haveSignHsm = true;
 
-        this.dataHsm = {
-          ma_dvcs: '',
-          username: '',
-          password: '',
-          password2: '',
-          imageBase64: '',
-        };
-      }
+          this.dataHsm = {
+            ma_dvcs: '',
+            username: '',
+            password: '',
+            password2: '',
+            imageBase64: '',
+          };
+        }
 
-      if (typeSignImage && typeSignImage == 1) {
-        haveSignImage = true;
-      }
+        if (typeSignImage && typeSignImage == 1) {
+          haveSignImage = true;
+        }
 
       if (typeSignImage && typeSignImage == 4) {
         haveSignImage = true;

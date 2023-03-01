@@ -250,6 +250,10 @@
   "error.confirm-password-new.required": "Xác nhận mật khẩu mới không được để trống",
   "error.confirm-password-new.incorrect": "Xác nhận mật khẩu mới không khớp",
   "error.contract.name.required": "Tên hợp đồng không được để trống",
+  "error.name.required":"Họ và tên không được để trống",
+  "error.phone.required":"Số điện thoại không được để trống",
+  "error.cardid.required":"MST/CMT/CCCD phải nhập 9 hoặc 12 ký tự",
+  "error.email.required":"Email không được để trống",
   "error.ceca.required":"Đẩy file hợp đồng lên Bộ Công thương không được để trống",
   "error.contract.file.required": "File hợp đồng không được để trống",
   "error.user.name.required": "Họ tên không được để trống",
@@ -518,5 +522,9 @@
   "file.import.valid":"File import không đúng định dạng",
   "file.import.valid.result":"Dữ liệu import không hợp lệ, vui lòng xem thông báo lỗi tại file hệ thống trả về",
   "taxcode.out":"Vui lòng nhập mã số thuế/CMT/CCCD ngoài luồng hợp đồng",
-  "end":"Kết thúc"
+  "end":"Kết thúc",
+  "email.exist": "Email đã tồn tại",
+  "phone.exist": "Số điện thoại đã tồn tại",
+  "taxcode.exist": "MST/CMT/CCCD đã tồn tại",
+  "recipients.not.found": "người nhận không tìm thấy"
 }

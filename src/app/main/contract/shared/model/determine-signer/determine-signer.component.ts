@@ -595,7 +595,8 @@ export class DetermineSignerComponent implements OnInit {
     let count = 0;
     let dataArr = [];
     dataArr = (this.data_organization.recipients).sort((beforeItemRole: any, afterItemRole: any) => beforeItemRole.role - afterItemRole.role);
-
+    console.log("dataArrrayyy",this.data_organization.recipients);
+    
     for (let i = 0; i < dataArr.length; i++) {
 
       if (!dataArr[i].name) {
