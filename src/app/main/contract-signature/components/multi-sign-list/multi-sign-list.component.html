@@ -1,97 +1,101 @@
-
-<meta name='viewport' content='width=device-width' />
+<meta name="viewport" content="width=device-width" />
 
 <div class="sample-contract row">
-
-   <!--Form thông tin chi tiết hợp đồng-->
-  <div class="col-md-3 sample-contract__information" style="background-color: white;">
-    <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
-      <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label">{{'contract.detail' | translate}}</div>
+  <!--Form thông tin chi tiết hợp đồng-->
+  <div class="col-md-3 sample-contract__information" style="background-color: white">
+    <div
+      class="sample-contract__information--drag"
+      id="width-element-info"
+      style="margin-top: 15px"
+    >
+      <div
+        style="padding-bottom: 10px; text-align: center; font-weight: bold"
+        class="label"
+      >
+        {{ "contract.detail" | translate }}
+      </div>
       <div style="line-height: 25px">
-
         <!--Mã hợp đồng-->
         <div>
-          <span class="title-contract">{{'contract.uid' | translate}}:</span>
-          <span>{{datas?.is_data_contract?.contract_uid}}</span>
+          <span class="title-contract">{{ "contract.uid" | translate }}:</span>
+          <span>{{ datas?.is_data_contract?.contract_uid }}</span>
         </div>
 
         <!--Loại hợp đồng-->
         <div>
-          <span class="title-contract">{{'menu.contract.type.list' | translate}}:</span>
-          <span>{{datas?.is_data_contract?.type_name}}</span>
+          <span class="title-contract">{{ "menu.contract.type.list" | translate }}:</span>
+          <span>{{ datas?.is_data_contract?.type_name }}</span>
         </div>
 
         <!--Tên hợp đồng-->
         <div>
-          <span class="title-contract">{{'contract.name' | translate}}:</span>
-          <span>{{datas?.is_data_contract.name}}</span>
+          <span class="title-contract">{{ "contract.name" | translate }}:</span>
+          <span>{{ datas?.is_data_contract.name }}</span>
         </div>
 
         <!-- Số hợp đồng -->
         <div>
-          <span class="title-contract">{{'contract.number' | translate}}:</span>
-          <span>{{datas?.is_data_contract.contract_no}}</span>
+          <span class="title-contract">{{ "contract.number" | translate }}:</span>
+          <span>{{ datas?.is_data_contract.contract_no }}</span>
         </div>
 
         <!--File đính kèm-->
         <div>
-          <span class="title-contract">{{'file.attach' | translate}}:</span>
-          <span *ngFor="let d of allFileAttachment;let i = index">
+          <span class="title-contract">{{ "file.attach" | translate }}:</span>
+          <span *ngFor="let d of allFileAttachment; let i = index">
             <span *ngIf="i != 0">, </span>
-            <a style="color: #106DB6" rel="stylesheet" [href]="d.path" target="_blank">{{d.filename}}</a>
+            <a style="color: #106db6" rel="stylesheet" [href]="d.path" target="_blank">{{ d.filename }}</a>
           </span>
         </div>
         <div>
-          <span class="title-contract">{{'contract.connect' | translate}}:
+          <span class="title-contract"
+            >{{ "contract.connect" | translate }}:
           </span>
-          <span *ngFor="let d of datas?.is_data_contract?.refs;let i = index">
+          <span *ngFor="let d of datas?.is_data_contract?.refs; let i = index">
             <span *ngIf="i != 0">, </span>
-            <a style="color: #106DB6;" rel="stylesheet" [href]="d.path" target="_blank">{{d.ref_name}}</a>
+            <a
+              style="color: #106db6"
+              rel="stylesheet"
+              [href]="d.path"
+              target="_blank"
+              >{{ d.ref_name }}</a
+            >
           </span>
         </div>
-
       </div>
     </div>
-    <hr>
+    <hr />
+
+    <!--Các bên liên quan-->
+    <div class="location-change">
+      <div class="sample-contract__information--user-sign" style="line-height: 25px">
+        <div style="text-align: center; font-weight: bold" class="label">
+          {{ "relate.party" | translate }}
+        </div>
+
+        <div *ngFor="let d of this.datas?.is_data_contract?.participants">
+          <div *ngIf="d.type != 3">{{ d.name }}</div>
+          <div *ngIf="d.type == 3">{{ d.recipients[0].name }}</div>
+        </div>
+      </div>
+      <div>
+        <u style="color: #106db6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">{{ "contract_processing_flow" | translate }}</u>
+      </div>
+      <hr />
+    </div>
   </div>
 
   <!--Form view hợp đồng-->
-  <div (scroll)="scroll($event)" id="pdf-full" class="col-md-9 sample-contract__file viewer-pdf isDrag"
-       style="background-color: #F2F2F2; position: relative">
+  <div (scroll)="scroll($event)" id="pdf-full" class="col-md-9 sample-contract__file viewer-pdf isDrag" style="background-color: #f2f2f2; position: relative">
     <div id="pdf-viewer-step-3">
-      <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-        <div class="resize-drag not-out-drop" *ngIf="![2,3].includes(recipient.status)"
-             [id]="d.id"
-             style="z-index: -1;"
-             #itemElement
-             (click)="getSignSelect(d)"
-             [ngClass]="changeColorDrag(null, d, true)"
-             [ngStyle]="changePosition(d,null,null,'#EBF8FF')">
-          <app-image-sign-contract  id="image-sign-contract" 
-            *ngIf="![2,3].includes(recipient.status)" 
-            [datas]="datas" [view]="[2,3].includes(recipient.status)" 
-            [sign]="d">
-          </app-image-sign-contract>
-          <div *ngIf="d.sign_unit == 'text'" class="name-sig-img-daky">{{(d.name && !d.valueSign) ? d.name : ''}}</div>
-          <div *ngIf="d.sign_unit != 'text'" class="name-sig-img-daky">{{(d.name && !d.valueSign) ? d.name : ''}}</div>
-        </div>
+      <div class="show-list-name-drag" [style.width]="this.canvasWidth">
       </div>
-      <div class="skeleton-sign position-absolute opacity-0">
-        <app-display-digital-signature></app-display-digital-signature>
-      </div>
-      <!-- <div class="skeleton-sign position-absolute opacity-0">
-        <app-text-signature-image></app-text-signature-image>
-      </div> -->
     </div>
   </div>
 </div>
 
-
-<ngx-spinner
-  bdColor="rgba(51,51,51,0.8)"
-  size="medium"
-  color="#fff"
-  type="ball-spin-clockwise"
->
-  <p style="font-size: 18px; color: white; text-align: center;white-space: pre-line;">{{loadingText}}</p>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+  <p style="font-size: 18px;color: white;text-align: center;white-space: pre-line;">
+    {{ loadingText }}
+  </p>
 </ngx-spinner>

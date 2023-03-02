@@ -387,7 +387,6 @@ export class ConsiderContractComponent
 
         this.datas = this.data_contract;
 
-        console.log("datas ", this.datas);
         if (this.datas?.is_data_contract?.type_id) {
           this.contractService.getContractTypes(this.datas?.is_data_contract?.type_id).subscribe((data) => {
               if (this.datas?.is_data_contract) {
@@ -396,18 +395,15 @@ export class ConsiderContractComponent
             });
         }
 
-        if (
-          this.data_contract?.is_data_contract?.status == 31 ||
-          this.data_contract?.is_data_contract?.status == 30
-        ) {
+        if (this.data_contract?.is_data_contract?.status == 31 || this.data_contract?.is_data_contract?.status == 30) {
           this.router.navigate(['/main/form-contract/detail/' + this.idContract,]);
         }
+
         this.allFileAttachment = this.datas.i_data_file_contract.filter(
           (f: any) => f.type == 3
         );
         this.allRelateToContract = this.datas.is_data_contract.refs;
-        from(this.datas.is_data_contract.refs)
-          .pipe(
+        from(this.datas.is_data_contract.refs).pipe(
             concatMap((rcE: any) => {
               return this.contractService.getFileContract(rcE.ref_id);
             }),
@@ -443,7 +439,6 @@ export class ConsiderContractComponent
           }
 
           if (element.recipient) {
-            // set name (nguoi dc uy quyen hoac chuyen tiep)
             element.name = element.name;
           }
         });
@@ -457,13 +452,11 @@ export class ConsiderContractComponent
         let data_sign_config_text = this.datas.is_data_object_signature.filter(
           (p: any) => p.sign_unit == 'text'
         );
-        let data_sign_config_so_tai_lieu =
-          this.datas.is_data_object_signature.filter(
+        let data_sign_config_so_tai_lieu = this.datas.is_data_object_signature.filter(
             (p: any) => p.sign_unit == 'so_tai_lieu'
           );
 
-        this.datas.contract_user_sign =
-          this.contractService.getDataFormatContractUserSign();
+        this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
 
         this.datas.contract_user_sign.forEach((element: any) => {
           // console.log(element.sign_unit, element.sign_config);
@@ -494,10 +487,7 @@ export class ConsiderContractComponent
         this.datas.roleContractReceived = this.recipient.role;
 
         for (const signUpdate of this.isDataObjectSignature) {
-          if (
-            signUpdate &&
-            (signUpdate.type == 3 || signUpdate.type == 2) &&
-            [3, 4].includes(this.datas.roleContractReceived) &&
+          if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 2) && [3, 4].includes(this.datas.roleContractReceived) &&
             signUpdate?.recipient?.email === this.currentUser.email &&
             signUpdate?.recipient?.role === this.datas?.roleContractReceived
           ) {
@@ -524,9 +514,7 @@ export class ConsiderContractComponent
         }
         this.fetchDataUserSimPki();
 
-        this.userService
-          .getSignatureUserById(this.currentUser.id)
-          .subscribe((res) => {
+        this.userService.getSignatureUserById(this.currentUser.id).subscribe((res) => {
             if (res) {
               this.datas.imgSignAcc = res;
             }
@@ -575,9 +563,7 @@ export class ConsiderContractComponent
 
           if (this.mobile && this.recipient.status != 2 && this.recipient.status != 3) {
             if (image_base64)
-              this.contractService
-                .getFilePdfForMobile(this.recipientId, image_base64)
-                .subscribe((response) => {
+              this.contractService.getFilePdfForMobile(this.recipientId, image_base64).subscribe((response) => {
                   this.pdfSrcMobile = response.filePath;
                 });
             else this.pdfSrcMobile = this.pdfSrc;
@@ -665,7 +651,6 @@ export class ConsiderContractComponent
       .then(() => {
         setTimeout(() => {
           this.setPosition();
-          this.eventMouseover();
           this.loadedPdfView = true;
 
           for (let i = 0; i <= this.pageNumber; i++) {
@@ -687,7 +672,6 @@ export class ConsiderContractComponent
       });
   }
 
-  eventMouseover() {}
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -704,7 +688,6 @@ export class ConsiderContractComponent
       }
     }, 100);
     this.setPosition();
-    this.eventMouseover();
   }
 
   // set lại vị trí đối tượng kéo thả đã lưu trước đó
