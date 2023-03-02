@@ -233,7 +233,8 @@ export class DetermineSignerComponent implements OnInit {
       for(let j = 0; j < this.datas.is_determine_clone[i].recipients.length; j++) {
           const recipient =  this.datas.is_determine_clone[i].recipients[j];
           const fields = recipient.fields;
-          this.datas.is_determine_clone[i].recipients[j].fields = fields.filter((field: any) => field.type == 2 || field.type == 3);
+          if(fields)
+            this.datas.is_determine_clone[i].recipients[j].fields = fields.filter((field: any) => field.type == 2 || field.type == 3);
       }
 
       await this.contractTemplateService.editContractDetermine(this.datas.is_determine_clone[i], this.datas.is_determine_clone[i].id).toPromise().then((res: any) => {
@@ -1143,6 +1144,14 @@ export class DetermineSignerComponent implements OnInit {
 
           //Khi xoá đối tác thì số lượng participant thay đổi
           this.datas.is_determine_clone = this.datas.is_determine_clone.filter((element: any) => element.id != item.id);
+          this.datas.is_determine_clone.splice(index + 1, 1);
+          this.datas.is_determine_clone.forEach((res: any, index: number) => {
+            res.ordering = index + 1;
+            if (res.type != 1) {
+              res.name = "Đối tác " + index;
+            }
+          })
+
           this.toastService.showSuccessHTMLWithTimeout(`Xóa đối tác thành công!`, "", "3000");
         } else {
           this.toastService.showErrorHTMLWithTimeout(`Xóa đối tác thất bại!`, "", "3000");
@@ -1152,13 +1161,13 @@ export class DetermineSignerComponent implements OnInit {
       })
     }
 
-    this.datas.is_determine_clone.splice(index + 1, 1);
-    this.datas.is_determine_clone.forEach((res: any, index: number) => {
-      res.ordering = index + 1;
-      if (res.type != 1) {
-        res.name = "Đối tác " + index;
-      }
-    })
+    // this.datas.is_determine_clone.splice(index + 1, 1);
+    // this.datas.is_determine_clone.forEach((res: any, index: number) => {
+    //   res.ordering = index + 1;
+    //   if (res.type != 1) {
+    //     res.name = "Đối tác " + index;
+    //   }
+    // })
   }
 
   changeData(item: any, index: any) {
