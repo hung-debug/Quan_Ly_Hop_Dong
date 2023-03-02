@@ -871,6 +871,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // @ts-ignore
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+
     pdfjs.getDocument(this.pdfSrc).promise.then((pdf: any) => {
       this.thePDF = pdf;
       this.pageNumber = (pdf.numPages || pdf.pdfInfo.numPages)

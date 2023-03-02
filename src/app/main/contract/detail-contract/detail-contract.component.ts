@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, QueryList, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { from, throwError } from 'rxjs';
+import { from, Observable, throwError } from 'rxjs';
 import { AppService } from 'src/app/service/app.service';
 import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
@@ -17,7 +17,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 
 import { Location } from '@angular/common';
-import { concatMap, tap } from 'rxjs/operators';
+import { concatMap, map, tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Helper } from 'src/app/core/Helper';
+import { encode } from 'base64-arraybuffer';
 
 
 @Component({
@@ -148,7 +151,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
     public translate: TranslateService,
-    private _location: Location
+    private _location: Location,
+    private httpClient: HttpClient
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
@@ -423,6 +427,11 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     })
   }
 
+  downloadPDF(url: string): Observable<Blob> {
+    const options = { responseType: 'blob' as 'json' };
+    return this.httpClient.get<Blob>(url, options).pipe(map(res => new Blob([res], { type: 'application/pdf' })));
+ }
+
   reLoadData(){
     this.contractService.getDetailContract(this.idContract).subscribe(rs => {
       this.datas["is_data_contract"] = rs[0];
@@ -430,6 +439,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       // @ts-ignore
       this.handleError();
     })
+  }
+
+  openPdf(path: any, event: any) {
+    this.contractService.openPdf(path, event);
   }
 
   // Error handling

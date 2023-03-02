@@ -74,7 +74,9 @@ export class PreviewContractTemplateComponent implements OnInit {
     } else {
       return 'employer-ck';
     }
+  }
 
+  preventPdf(event: any) {
 
   }
 

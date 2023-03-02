@@ -8,6 +8,7 @@ import { DatePipe } from '@angular/common';
 import { forkJoin, BehaviorSubject, Subject } from 'rxjs';
 import axios from 'axios';
 import { User } from './user.service';
+import { encode } from 'base64-arraybuffer';
 
 export interface Contract {
   id: number;
@@ -765,6 +766,26 @@ export class ContractService {
       .toPromise();
   }
 
+  async openPdf(path: any, event: any) {
+    event.preventDefault();
+
+    let base64StringPdf: any = await this.getDataFileUrlPromise(path);
+    base64StringPdf = encode(base64StringPdf);
+
+    const byteCharacters = atob(base64StringPdf);
+
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+
+    var blob = new Blob([byteArray], {type: 'application/pdf'});
+    var blobURL = URL.createObjectURL(blob);
+    window.open(blobURL);
+  }
+
   getDataBinaryFileUrlPromise(url: any) {
     const headers = new HttpHeaders().append(
       'Content-Type',
@@ -1123,6 +1144,13 @@ export class ContractService {
       body,
       { headers: headers }
     );
+  }
+
+  downloadPDF(url: any) {
+    const options = { responseType: 'blob' as 'json' };
+    return this.http
+   .get<Blob>(url, options)
+   .pipe(map(res => new Blob([res], { type: 'application/pdf' })));
   }
 
   getFileContract(idContract: any): Observable<any> {

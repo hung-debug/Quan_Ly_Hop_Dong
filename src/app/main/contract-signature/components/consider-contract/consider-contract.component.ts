@@ -416,8 +416,7 @@ export class ConsiderContractComponent
                 }
               }
             })
-          )
-          .subscribe();
+          ).subscribe();
         this.checkIsViewContract();
 
         this.datas.is_data_object_signature.forEach((element: any) => {
@@ -1486,15 +1485,9 @@ export class ConsiderContractComponent
     }
   }
 
-
-
-  // openPopupSignContract(typeSign: any) {
-  //   if (typeSign == 1) {
-  //   } else if (typeSign == 3) {
-  //   } else if (typeSign == 4) {
-  //     this.hsmDialogSignOpen(this.recipientId);
-  //   }
-  // }
+  openPdf(path: any, event: any) {
+    this.contractService.openPdf(path, event);
+  }
 
   getTextAlertConfirm() {
     if (this.datas.roleContractReceived == 2) {
