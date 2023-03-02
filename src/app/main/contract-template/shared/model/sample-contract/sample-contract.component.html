@@ -37,6 +37,8 @@
                     <label class="label-require">{{'attribute.name' | translate}}: *</label>
                     <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name" (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
                 </div>
+
+                <!--Người ký/người nhập-->
                 <div class="sign-unit-select">
                     <label class="label-require">{{isEnableText || isChangeText ? ('user.import' | translate) : ('user.sign' | translate)+': *'}}</label>
                     <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">

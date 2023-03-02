@@ -356,7 +356,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let dataContractUserSign: any[] = [];
     this.datas.contract_user_sign.forEach((res: any, index: number) => {
       if(res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
-        console.log("res ", res);
         res.sign_config = res.sign_config.filter((element: any) =>  element.recipient ? element.recipient.sign_type[0].id == 2 : !element.recipient)
       }
 
@@ -390,10 +389,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     // xoa nhung du lieu doi tuong bi thay doi
-    console.log("after ",dataContractUserSign);
-    console.log(dataDetermine);
-    console.log(dataDiffirent);
-    console.log(this.datas.contract_user_sign);
     if (dataDiffirent.length > 0) {
       this.datas.contract_user_sign.forEach((res: any) => {
         if (res.sign_config.length > 0) {
@@ -405,7 +400,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (!element.email || (element.id_have_data && dataDiffirent.some((p: any) => p.id_have_data == element.id_have_data))) {
 
             } else {
-              console.log(element.id_have_data);
               if (element.id_have_data) {
                 this.removeDataSignChange(element.id_have_data);
               }
@@ -437,8 +431,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     //lay danh sach username co ten thay doi
     let dataChangeName: any[] = [];
     dataChangeName = dataContractUserSign.filter(val => dataDetermine.some((data: any) => ((val.recipient_id as any) == (data.id as any) && (val.name as any) != (data.name as any))));
-    console.log("change");
-    console.log(dataChangeName);
+
     if(dataChangeName.length > 0){
       this.datas.contract_user_sign.forEach((res: any) => {
         res.sign_config.forEach((element: any) => {
@@ -768,6 +761,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getCheckSignature(isSignType: any, listSelect?: string, recipient_id?:any) {
+    console.log("vao day ");
     this.list_sign_name.forEach((element: any) => {
       console.log(element);
       if (isSignType != 'text' && (element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
@@ -785,17 +779,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           } else {
             element.is_disable = true
           }
-
-          console.log("is ", isSignType);
-          // console.log("vao day  ");
         } else {
           if (isSignType == 'chu_ky_anh') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
           } else if (isSignType == 'chu_ky_so') {
+            console.log("vao day ");
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
           } else if (isSignType == 'text') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
-          } else element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4);
+          } else 
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4);
         }
       }
       
@@ -886,9 +879,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.arrPage.push({ page: page });
         canvas.className = 'dropzone';
         canvas.id = "canvas-step3-" + page;
-        // canvas.style.paddingLeft = '15px';
-        // canvas.style.border = '9px solid transparent';
-        // canvas.style.borderImage = 'url(assets/img/shadow.png) 9 9 repeat';
+
         let idPdf = 'pdf-viewer-step-3'
         let viewer = document.getElementById(idPdf);
         if (viewer) {
@@ -957,12 +948,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }, 100)
     this.setPosition();
     this.eventMouseover();
-  }
-
-  getRemoveCopyRight() {
-    // let is_var_copyRight = sessionStorage.getItem('copy_right_show');
-    // if (is_var_copyRight)
-    //   sessionStorage.removeItem('copy_right_show')
   }
 
   // set lại vị trí đối tượng kéo thả đã lưu trước đó
@@ -1326,7 +1311,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           isObjSign.text_attribute_name = e;
           signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
         } else if (property == 'font') {
-          console.log("e ", e.target.value);
           isObjSign.font = e.target.value;
           signElement.setAttribute("font", isObjSign.font);
 
@@ -1668,10 +1652,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               count++;
               break
             } else if (element.sign_unit == 'so_tai_lieu') {
-              // count_number++;
-              // if(count_number > 1){
-              //   break
-              // }
+             
             } else if (element.sign_unit == 'text' && !element.text_attribute_name) {
               count_text++;
               break
@@ -1764,10 +1745,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.toastService.showErrorHTMLWithTimeout("select.signer.obj", "", 3000);
         return false;
       }  else if (count_number > 1) {
-        console.log("vao day ");
-        // this.spinner.hide();
-        // this.toastService.showErrorHTMLWithTimeout("Chỉ được kéo một ô số hợp đồng!", "", 3000);
-        // return false;
+   
       } else if (count_text > 0) {
         console.log("cc ", count_text);
 
@@ -1862,6 +1840,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getName(data: any) {
+    console.log("vao day get name ", data);
     if (data.type_unit == 'organization') {
       return 'Tổ chức của tôi - ' + data.name;
     } else if (data.type_unit == 'partner') {

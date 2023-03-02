@@ -364,16 +364,16 @@ export class FooterSignatureComponent implements OnInit {
       const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email);
       console.log("ArrRecipientsNew", ArrRecipientsNew);
 
-      if (!ArrRecipientsNew.includes(this.currentUser.email)) {
+      // if (!ArrRecipientsNew.includes(this.currentUser.email)) {
 
-        this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
-          '',
-          3000
-        );
-        this.router.navigate(['/main/dashboard']);
-        return
-      };
+      //   this.toastService.showErrorHTMLWithTimeout(
+      //     'Bạn không có quyền xử lý hợp đồng này!',
+      //     '',
+      //     3000
+      //   );
+      //   this.router.navigate(['/main/dashboard']);
+      //   return
+      // };
       console.log("this.currentUser.email", this.currentUser.email);
       console.log("ArrRecipientsNew", ArrRecipientsNew);
 

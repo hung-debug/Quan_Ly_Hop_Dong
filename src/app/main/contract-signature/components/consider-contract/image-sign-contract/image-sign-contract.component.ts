@@ -223,10 +223,13 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       //   return this.datas.is_data_contract.code;
       // } else 
       if (sign.value) {
+        console.log("vao day ");
         return sign.value;
       } else if(sign.valueSign) {
+        console.log("vao day ");
         return sign.valueSign;
       } else if(this.contractNoValueSign) {
+        console.log("vao day ");
         this.count++;
         sign.valueSign = this.contractNoValueSign;
         return sign.valueSign;

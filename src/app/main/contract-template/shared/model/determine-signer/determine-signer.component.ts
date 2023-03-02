@@ -233,7 +233,6 @@ export class DetermineSignerComponent implements OnInit {
       for(let j = 0; j < this.datas.is_determine_clone[i].recipients.length; j++) {
           const recipient =  this.datas.is_determine_clone[i].recipients[j];
           const fields = recipient.fields;
-
           this.datas.is_determine_clone[i].recipients[j].fields = fields.filter((field: any) => field.type == 2 || field.type == 3);
       }
 
