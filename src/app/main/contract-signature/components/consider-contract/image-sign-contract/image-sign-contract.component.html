@@ -35,8 +35,8 @@
     <span id="input-text" *ngIf="!sign.valueSign">{{getText(sign)}}</span>
   </div>
 
-  <div class="skeleton-sign-value1" (click)="doEditContractNo()" *ngIf="!contractNoValue && count == 0 && (sign.valueSign || sign.value || contractNoValueSign)">
-    <span class="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
+  <div class="skeleton-sign-value" (click)="doEditContractNo()" *ngIf="!contractNoValue && count == 0 && (this.contractNoValueSign || sign.value || sign.valueSign)">
+    <span class="input-text">{{getText(sign)}}</span>
   </div>
 
   <div class="skeleton-sign" *ngIf="contractNoValue || count > 0">

@@ -383,6 +383,8 @@ export class ConsiderContractComponent
 
         this.datas = this.data_contract;
 
+        console.log("this datas ", this.datas.is_data_contract)
+
         if (this.datas?.is_data_contract?.type_id) {
           this.contractService.getContractTypes(this.datas?.is_data_contract?.type_id).subscribe((data) => {
               if (this.datas?.is_data_contract) {
@@ -1299,11 +1301,7 @@ export class ConsiderContractComponent
       }
     }
     if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
-      this.toastService.showErrorHTMLWithTimeout(
-        'Vui lòng chọn đồng ý hoặc từ chối hợp đồng',
-        '',
-        3000
-      );
+      this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn đồng ý hoặc từ chối hợp đồng','',3000);
       return;
     }
     if (

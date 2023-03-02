@@ -445,6 +445,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
     }
 
+    console.log("datass ", this.datas.contract_user_sign);
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {

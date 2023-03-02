@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, QueryList, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { throwError } from 'rxjs';
+import { from, throwError } from 'rxjs';
 import { AppService } from 'src/app/service/app.service';
 import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
@@ -17,6 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 
 import { Location } from '@angular/common';
+import { concatMap, tap } from 'rxjs/operators';
 
 
 @Component({
@@ -293,6 +294,26 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         this.datas = Object.assign(this.datas, this.data_contract);
       }*/
       this.datas = this.data_contract;
+
+      from(this.datas.is_data_contract.refs).pipe(
+        concatMap((rcE: any) => {
+          return this.contractService.getFileContract(rcE.ref_id);
+        }),
+        tap((res) => {
+          for (const eR of res) {
+            if (eR.type == 2) {
+              for (const re of this.datas.is_data_contract.refs) {
+                if (re.ref_id == eR.contract_id) {
+                  re.path = eR.path;
+                }
+              }
+            }
+          }
+        })
+      ).subscribe();
+
+      console.log("this datas ", this.datas.is_data_contract)
+
       this.allFileAttachment = this.datas.i_data_file_contract.filter((f: any) => f.type == 3);
       this.checkIsViewContract();
       this.datas.is_data_object_signature.forEach((element: any) => {
