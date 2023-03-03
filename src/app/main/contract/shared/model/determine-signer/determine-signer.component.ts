@@ -499,14 +499,20 @@ export class DetermineSignerComponent implements OnInit {
 
   }
 
-  changeTypeSign(d: any) {
+  arrIndex: any[] = [];
+  changeTypeSign(d: any,index: any,role?: any) {
+    this.arrIndex.push(index);
     if (d.login_by == 'phone' || d.login_by == 'email') {
       d.email = '';
       d.phone = '';
     }
 
+    // this.isListSignNotPerson[0] = this.signTypeList.filter((p) => ![1,5].includes(p.id));
+
     if (d.login_by == 'phone') {
       this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 2, 5].includes(p.id));
+    } else {
+      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1,5].includes(p.id));
     }
   }
 

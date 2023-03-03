@@ -1159,6 +1159,16 @@ export class DetermineSignerComponent implements OnInit {
       }, (error: HttpErrorResponse) => {
         this.toastService.showErrorHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
       })
+    } else {
+      this.datas.is_determine_clone.splice(index + 1, 1);
+      this.datas.is_determine_clone.forEach((res: any, index: number) => {
+        res.ordering = index + 1;
+        if (res.type != 1) {
+          res.name = "Đối tác " + index;
+        }
+      })
+
+      this.toastService.showSuccessHTMLWithTimeout(`Xóa đối tác thành công!`, "", "3000");
     }
 
     // this.datas.is_determine_clone.splice(index + 1, 1);
