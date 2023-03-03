@@ -1,4 +1,3 @@
-import { data } from 'jquery';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";

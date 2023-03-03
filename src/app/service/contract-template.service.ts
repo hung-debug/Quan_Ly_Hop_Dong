@@ -505,7 +505,8 @@ export class ContractTemplateService {
             // "username": "",
             // "password": "",
             "is_otp": 0,
-            "sign_type": []
+            "sign_type": [],
+            "locale":"vi",
           }
         ],
         // "contract_id": 1

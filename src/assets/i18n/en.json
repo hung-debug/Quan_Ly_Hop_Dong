@@ -513,7 +513,7 @@
   "please.choose.contract.template": "Please choose a contract template!",
   "please.choose.contract.name": "Please choose a contract name!",
   "Sign.expiration.date.compare": "Signing expiration date should not be less than current date!",
-  "update.person-process": "Update handler",
+  "update.person-process": "UPDATE HANDLER",
   "contract-type.ceca":"Push contract file to CeCa",
   "yes":"Yes",
   "no":"No",

@@ -254,7 +254,7 @@ export class FooterSignatureComponent implements OnInit {
 
       this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
       const ArrRecipients = this.datas.is_data_contract.participants[0].recipients;
-      const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email);
+      const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email); 
       console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
       if (!ArrRecipientsNew.includes(this.currentUser.email)) {
