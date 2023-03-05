@@ -155,12 +155,7 @@ export class ForwardContractComponent implements OnInit {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập số điện thoại ngoài luồng hợp đồng', '', 3000);
         return;
       }
-      // if (this.myForm.value.card_id && !this.checkCanSwitchContractCardId()) {
-      //   this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập mã số thuế/CMT/CCCD ngoài luồng hợp đồng', '', 3000);
-      //   return;
-      // }
-
-      console.log("cu ", this.currentUser);
+   
 
       if (this.currentUser) {
         this.spinner.show();
@@ -209,6 +204,7 @@ export class ForwardContractComponent implements OnInit {
             data => {
               if (!data.success) {
                 if (data.message == 'Tax code has existed') {
+                  this.spinner.hide();
                   this.toastService.showWarningHTMLWithTimeout('taxcode.out', '', 3000);
                 }
               } else {
