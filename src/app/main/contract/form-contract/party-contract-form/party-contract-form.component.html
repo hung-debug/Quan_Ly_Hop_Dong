@@ -254,7 +254,7 @@
                 <div class="participants__name">
                   <div class="label_detail text-color">
                     <div>
-                      <input (change)="changeTypeSign(d)" [(ngModel)]="d.login_by" type="radio"
+                      <input (change)="changeTypeSign(d, index,null,'signer')" [(ngModel)]="d.login_by" type="radio"
                         name="checkPhoneMailOrgSign_{{index}}" [value]="email" />
                     </div>&nbsp;
                     <div>
@@ -265,7 +265,7 @@
                 <div class="participants__name">
                   <div class="label_detail text-color">
                     <div>
-                      <input (change)="changeTypeSign(d)" [(ngModel)]="d.login_by" type="radio"
+                      <input (change)="changeTypeSign(d, index,null,'signer')" [(ngModel)]="d.login_by" type="radio"
                         name="checkPhoneMailOrgSign_{{index}}" [value]="phone" />
                     </div>&nbsp;
                     <div>
@@ -310,7 +310,7 @@
 
                   <!--Tổ chức của tôi chọn loại ký-->
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                    [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson" (onSelect)="onItemSelect($event)"
+                    [settings]="dropdownSignTypeSettings" [data]="d.isListSignNotPerson ? d.isListSignNotPerson : this.getListSignType('org')" (onSelect)="onItemSelect($event)"
                     (onDeSelect)="deSelectOrg($event)" (ngModelChange)="selectWithOtp($event, d)">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -1049,7 +1049,7 @@
                     <div class="label_detail text-color">
 
                       <div>
-                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailPartSign_{{index}}_{{id}}"
+                        <input (change)="changeTypeSign(d, index,id, 'sign_partner')" type="radio" name="checkPhoneMailPartSign_{{index}}_{{id}}"
                           [value]="email" [(ngModel)]="email" />
                       </div>&nbsp;
                       <div>
@@ -1060,7 +1060,7 @@
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div>
-                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailPartSign_{{index}}_{{id}}"
+                        <input (change)="changeTypeSign(d, index,id, 'sign_partner')" type="radio" name="checkPhoneMailPartSign_{{index}}_{{id}}"
                           [(ngModel)]="d.login_by" [value]="phone" />
                       </div>&nbsp;
                       <div>
@@ -1088,7 +1088,7 @@
                     </div>
 
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{ 'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson"
+                      [settings]="dropdownSignTypeSettings" [data]="d.isListSignNotPersonPartner ? d.isListSignNotPersonPartner : this.getListSignType('partner')"
                       (onSelect)="onItemSelect($event)" (ngModelChange)="selectWithOtp($event, d)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
@@ -1512,7 +1512,7 @@
                     <div class="label_detail text-color">
 
                       <div>
-                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailPerson_{{index}}_{{id}}"
+                        <input (change)="changeTypeSign(d, index,null,'personal')" type="radio" name="checkPhoneMailPerson_{{index}}_{{id}}"
                           [value]="email" [(ngModel)]="d.login_by" />
                       </div>&nbsp;
                       <div>
@@ -1523,7 +1523,7 @@
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div>
-                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailPerson_{{index}}_{{id}}"
+                        <input (change)="changeTypeSign(d, index,null,'personal')" type="radio" name="checkPhoneMailPerson_{{index}}_{{id}}"
                           [(ngModel)]="d.login_by" [value]="phone" />
                       </div>&nbsp;
                       <div>
@@ -1553,7 +1553,7 @@
 
                     <!--Đối tác là cá nhân chọn loại ký-->
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{ 'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings" [data]="signTypeList"
+                      [settings]="dropdownSignTypeSettings" [data]="d.isListSignPersonal ? d.isListSignPersonal : this.getListSignType('personal')"
                       (onSelect)="selectPartnerSign($event, id)" (onDeSelect)="deSelectPartnerSign($event, id)"
                       (ngModelChange)="selectWithOtp($event, d)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"

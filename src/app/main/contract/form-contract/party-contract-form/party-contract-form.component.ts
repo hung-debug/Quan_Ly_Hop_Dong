@@ -106,14 +106,15 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-
-    console.log("clone ", this.datasForm.is_determine_clone);
-
     if(environment.flag == 'NB') {
       this.site = 'NB';
     } else if(environment.flag == 'KD') {
       this.site = 'KD';
     }
+
+    if(this.datasForm.flagDigitalSign) {
+      this.signTypeList = this.signTypeList.filter((p: any) => ![1,5].includes(p.id));
+     }
 
     this.flagUsbToken[0] = true;
     for(let i = 1; i < this.dataParnterOrganization().length; i++) {
@@ -159,16 +160,43 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     })
   }
 
-  changeTypeSign(d: any) {
-    if(d.login_by == 'phone' || d.typeSign == 1 || d.login_by == 'email' || d.typeSign == 0) {
+  changeTypeSign(d: any,index?: any,id?: any,role?: any) {
+    if (d.login_by == 'phone' || d.login_by == 'email') {
       d.email = '';
       d.phone = '';
-    } 
+    }
 
     if(d.login_by == 'phone') {
-      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 2,5].includes(p.id));
+      d.sign_type = d.sign_type.filter((p: any) => ![2].includes(p.id));
+    }
+
+    if(role == 'sign_partner') {
+        if (d.login_by == 'phone') {
+          d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,2,5].includes(p.id));
+        } else {
+          console.log("email ");
+          d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,5].includes(p.id));
+        }
+    } else if(role == 'signer') {
+      if (d.login_by == 'phone') {
+        d.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 2, 5].includes(p.id));
+      } else {
+        d.isListSignNotPerson = this.signTypeList.filter((p) => ![1,5].includes(p.id));
+      }
+    } else if(role == 'personal') {
+      if (d.login_by == 'phone') {
+        d.isListSignPersonal = this.signTypeList.filter((p) => ![2].includes(p.id));
+      } else {
+        d.isListSignPersonal = this.signTypeList;
+      }
+    }
+  }
+
+  getListSignType(role?: any) {
+    if(role == 'partner' || role == 'org') {
+      return this.signTypeList.filter((p: any) => ![1,5].includes(p.id));
     } else {
-      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1,5].includes(p.id));
+      return this.signTypeList;
     }
   }
 
@@ -745,18 +773,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               count++;
               break;
             }
-
-            // if(!isParterSort[k].card_id.trim() && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
-            //   this.getNotificationValid("Vui lòng nhập mã số thuế của"+this.getNameObject(isParterSort[k].role)+"tổ chức của đối tác");
-            //   count++;
-            //   break;
-            // }
-
-            // if(isParterSort[k].card_id.trim() && !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
-            //   this.getNotificationValid("Mã số thuế của" + this.getNameObject(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
-            //   count++;
-            //   break;
-            // }
           }
           //Cá nhân
           else if (dataArrPartner[j].type == 3) {
@@ -1563,9 +1579,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         this.onItemSelect(null);
       })
     }
-    // this.datasForm.is_determine_clone.forEach((res: any, index: number) => {
-    //   res.ordering = index + 1;
-    // })
   }
 
   changeData(item: any, index: any) {
@@ -1596,6 +1609,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
           element.status = 0;
           element.is_otp = 0;
           element.sign_type = [];
+          element.login_by = 'email';
           if (element.id) delete element.id;
         }
       })

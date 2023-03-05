@@ -306,7 +306,7 @@
                       class="required-title">*</span>
                   </div>
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                    [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson">
+                    [settings]="dropdownSignTypeSettings" [data]="d.isListSignNotPerson ? d.isListSignNotPerson : this.getListSignType('org')">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
                         <label style="color: #333; font-weight: normal;"
@@ -835,7 +835,7 @@
                     <div class="label_detail text-color">
 
                       <div>
-                        <input (change)="changeTypeSign(d)" type="radio"
+                        <input (change)="changeTypeSign(d, index,id, 'sign_partner')" type="radio"
                           name="checkPhoneMailParticipantSigner_{{index}}_{{id}}" [value]="email"
                           [(ngModel)]="d.login_by" />
                       </div>&nbsp;
@@ -847,7 +847,7 @@
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div>
-                        <input (change)="changeTypeSign(d)" type="radio"
+                        <input (change)="changeTypeSign(d, index,id, 'sign_partner')" type="radio"
                           name="checkPhoneMailParticipantSigner_{{index}}_{{id}}" [(ngModel)]="d.login_by"
                           [value]="phone" />
                       </div>&nbsp;
@@ -875,7 +875,7 @@
                       <span class="required-title">*</span>
                     </div>
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson"
+                      [settings]="dropdownSignTypeSettings" [data]="d.isListSignNotPersonPartner ? d.isListSignNotPersonPartner : this.getListSignType('partner')"
                       (ngModelChange)="selectWithOtp($event, d)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
@@ -1030,13 +1030,13 @@
               <div class="col-md-10 participants__content--input"
                 style="display: flex; flex-direction: column;margin-bottom: 14px">
 
-                <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
+                <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi ky ca nhan-->
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label_detail text-color">
 
                       <div>
-                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}_{{id}}"
+                        <input (change)="changeTypeSign(d, index,null,'personal')" type="radio" name="checkPhoneMailOrgViewer_{{index}}_{{id}}"
                           [value]="email" [(ngModel)]="d.login_by" />
                       </div>&nbsp;
                       <div>
@@ -1047,7 +1047,7 @@
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div>
-                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}_{{id}}"
+                        <input (change)="changeTypeSign(d, index,null,'personal')" type="radio" name="checkPhoneMailOrgViewer_{{index}}_{{id}}"
                           [(ngModel)]="d.login_by" [value]="phone" />
                       </div>&nbsp;
                       <div>
@@ -1072,7 +1072,7 @@
                     <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span
                         class="required-title">*</span></div>
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings" [data]="isListSignPerson"
+                      [settings]="dropdownSignTypeSettings" [data]="d.isListSignPersonal ? d.isListSignPersonal : this.getListSignType('personal')"
                       (ngModelChange)="selectWithOtp($event, d)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">

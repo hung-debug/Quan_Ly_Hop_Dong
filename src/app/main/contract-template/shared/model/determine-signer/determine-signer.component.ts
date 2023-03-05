@@ -96,13 +96,9 @@ export class DetermineSignerComponent implements OnInit {
       this.site = 'KD';
     }
 
-    if (!this.datas.flagDigitalSign) {
-      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
-      this.isListSignPerson = this.signTypeList.filter((p) => ![4].includes(p.id));
-    } else {
-      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
-      this.isListSignPerson = this.signTypeList.filter((p) => ![1, 4, 5].includes(p.id));
-    }
+   if(this.datas.flagDigitalSign) {
+    this.signTypeList = this.signTypeList.filter((p: any) => ![1,5].includes(p.id));
+   }
 
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
       this.datas.is_determine_clone = [...this.contractTemplateService.getDataDetermineInitialization()];
@@ -138,22 +134,52 @@ export class DetermineSignerComponent implements OnInit {
     if (this.datas.is_determine_clone.some((p: any) => p.type == 3)) this.is_change_party = true;
   }
 
-  changeTypeSign(d: any) {
-    if (d.login_by == 'phone' || d.login_by == 'email' || d.typeSign == 1 || d.typeSign == 0) {
+  changeTypeSign(d: any,index?: any,id?: any,role?: any) {
+    if (d.login_by == 'phone' || d.login_by == 'email') {
       d.email = '';
       d.phone = '';
     }
 
-    if (d.login_by == 'phone') {
-      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 2, 5].includes(p.id));
-    } else {
-      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id));
+    if(d.login_by == 'phone') {
+      d.sign_type = d.sign_type.filter((p: any) => ![2].includes(p.id));
+    }
+
+    if(role == 'sign_partner') {
+        if (d.login_by == 'phone') {
+          console.log("phone");
+          d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,2,5].includes(p.id));
+
+          console.log("d ", d.isListSignNotPersonPartner);
+        } else {
+          console.log("email ");
+          d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,5].includes(p.id));
+        }
+    } else if(role == 'signer') {
+      if (d.login_by == 'phone') {
+        d.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 2, 5].includes(p.id));
+      } else {
+        d.isListSignNotPerson = this.signTypeList.filter((p) => ![1,5].includes(p.id));
+      }
+    } else if(role == 'personal') {
+      if (d.login_by == 'phone') {
+        d.isListSignPersonal = this.signTypeList.filter((p) => ![2].includes(p.id));
+      } else {
+        d.isListSignPersonal = this.signTypeList;
+      }
     }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.step == 'determine-contract') {
       this.next('save-draft');
+    }
+  }
+
+  getListSignType(role?: any) {
+    if(role == 'partner' || role == 'org') {
+      return this.signTypeList.filter((p: any) => ![1,5].includes(p.id));
+    } else {
+      return this.signTypeList;
     }
   }
 
@@ -1208,6 +1234,7 @@ export class DetermineSignerComponent implements OnInit {
           item.status = 0;
           item.is_otp = 0;
           item.sign_type = [];
+          item.login_by == 'email';
           if (item.id) delete item.id;
         }
       })

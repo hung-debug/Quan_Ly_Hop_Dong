@@ -1778,6 +1778,31 @@ export class ContractService {
             is_otp: 0, // select otp
             sign_type: [
               // hình thức ký
+              // {
+              //   id: 1,
+              //   name: 'Ký ảnh và OTP',
+              //   is_otp: false,
+              // },
+              // {
+              //   id: 5,
+              //   name: "Ký eKYC",
+              //   is_otp: false
+              // },
+              // {
+              //   id: 4,
+              //   name: 'Ký số bằng HSM',
+              //   is_otp: false
+              // },
+              // {
+              //   id: 2,
+              //   name: 'Ký số bằng USB token',
+              //   is_otp: false,
+              // },
+              // {
+              //   id: 3,
+              //   name: 'Ký số bằng sim PKI',
+              //   is_otp: false,
+              // },
             ],
             locale:'vi',
           },
@@ -1794,6 +1819,7 @@ export class ContractService {
             is_otp: 0, // select otp
             sign_type: [
               // hình thức ký
+            
             ],
             locale:'vi',
           },
