@@ -6,6 +6,21 @@
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
       <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label">{{ "contract.detail" | translate }}</div>
       <div style="line-height: 25px">
+
+        <!--Chuyen hop dong-->
+        <div style="line-height: 25px; text-align: center;">
+          <img *ngIf="isDisablePrevious" src="/assets/img/icon_previous.svg" style="padding-right: 10px; cursor: pointer;" (click)="previousContract()"/>
+          <img *ngIf="!isDisablePrevious" src="/assets/img/icon_previous_hidden.svg" style="padding-right: 10px; cursor: pointer;"/>
+
+          <input type="text" [(ngModel)]="numberContract" style="width: 30px;text-align: center;border-radius: 3px;border: 1px solid #106DB6;"
+          (keypress)="numberOnly($event)" (change)="typingPage($event)"
+          /> / {{totalContact}}  
+
+          <img *ngIf="isDisableNext" src="/assets/img/icon_next.svg" style="padding-left: 10px; cursor: pointer;" (click)="nextContract()"/>
+          <img *ngIf="!isDisableNext" src="/assets/img/icon_next_hidden.svg" style="padding-left: 10px; cursor: pointer;"/>
+
+        </div>
+
         <!--Mã hợp đồng-->
         <div>
           <span class="title-contract">{{ "contract.uid" | translate }}:</span>

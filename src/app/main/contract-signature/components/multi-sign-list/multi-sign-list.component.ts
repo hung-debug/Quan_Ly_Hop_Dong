@@ -34,6 +34,11 @@ export class MultiSignListComponent implements OnInit {
     pages: [],
   };
 
+  numberContract: number = 1;
+  totalContact: number = 1;
+  isDisablePrevious: boolean = false;
+  isDisableNext: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private contractService: ContractService
@@ -43,16 +48,53 @@ export class MultiSignListComponent implements OnInit {
     //lấy id contract đã tick
     this.route.queryParams.subscribe((params: any) => {
       this.idContract = params.idContract;
+      this.totalContact = this.idContract.length;
       this.idRecipient = params.idRecipient;
     })
 
-    this.getDataContractSignature();
+    this.getDataContractSignature(this.idContract[0]);
+    this.checkDisableIcon();
   }
 
+  checkDisableIcon() {
+    if(this.idContract.length == 1) {
+      this.isDisablePrevious = false;
+      this.isDisableNext = false;
+    } else if(this.idContract.length >= 2) {
+      this.isDisableNext = true;
+    }
+  }
+
+  previousContract() {
+    this.numberContract--;
+    if(this.numberContract == 1) {
+      this.isDisablePrevious = false;
+      this.isDisableNext = true;
+    }
+
+    this.getDataContractSignature(this.idContract[this.numberContract - 1]);
+  }
+
+  nextContract() {
+    this.numberContract++;
+    if(this.numberContract == this.totalContact) {
+      this.isDisableNext = false;
+      this.isDisablePrevious = true;
+    }
+
+    this.getDataContractSignature(this.idContract[this.numberContract - 1]);
+  }
+
+  numberOnly(event: any) {
+
+  }
+  
+  typingPage(event: any) {
+
+  }
+  
+
   async getPage() {
-
-    console.log("pdf src ", this.pdfSrc);
-
     // @ts-ignore
     const pdfjs = await import('pdfjs-dist/build/pdf');
     // @ts-ignore
@@ -153,8 +195,8 @@ export class MultiSignListComponent implements OnInit {
       });
   }
 
-  getDataContractSignature() {
-    this.contractService.getDetailContract(this.idContract[0]).subscribe(
+  getDataContractSignature(idContact: any) {
+    this.contractService.getDetailContract(idContact).subscribe(
       async (rs) => {
 
         console.log("rs ", rs);
