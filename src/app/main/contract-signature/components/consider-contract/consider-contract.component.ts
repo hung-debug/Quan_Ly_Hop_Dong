@@ -1294,7 +1294,7 @@ export class ConsiderContractComponent
       (p: any) => p.id == 5
     ).length;
 
-    console.log("suuuu", this.confirmConsider);
+    // console.log("suuuu", this.confirmConsider);
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
 
     this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
@@ -1303,7 +1303,7 @@ export class ConsiderContractComponent
       this.ArrRecipientsNew = response.recipients.filter((x: any) => x.email === this.currentUser.email)
 
 
-      if (!this.ArrRecipientsNew) {
+      if (this.ArrRecipientsNew.length === 0) {
 
         this.toastService.showErrorHTMLWithTimeout(
           'Bạn không có quyền xử lý hợp đồng này!',
@@ -1323,7 +1323,6 @@ export class ConsiderContractComponent
       console.log("ArrRecipientsNew", this.ArrRecipientsNew);
 
       if (counteKYC > 0) {
-        console.log("ArrRecipientsNew su");
         if (this.mobile) {
           if (this.confirmSignature == 1) {
             this.eKYC = true;
@@ -1334,7 +1333,6 @@ export class ConsiderContractComponent
             return;
           }
         } else {
-          console.log("ArrRecipientsNew su 1");
           if (this.confirmSignature == 1) {
             this.toastService.showErrorHTMLWithTimeout(
               'Vui lòng ký eKYC trên ứng dụng điện thoại',
@@ -1349,7 +1347,6 @@ export class ConsiderContractComponent
         }
       }
       if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
-        console.log("ArrRecipientsNew su 2");
         this.toastService.showErrorHTMLWithTimeout(
           'Vui lòng chọn đồng ý hoặc từ chối hợp đồng',
           '',
@@ -1363,9 +1360,7 @@ export class ConsiderContractComponent
           (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
         )
       ) {
-        console.log("ArrRecipientsNew su 3");
         if (!this.mobile) {
-          console.log("ArrRecipientsNew su 4");
           this.toastService.showErrorHTMLWithTimeout(
             'Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc',
             '',
@@ -1373,9 +1368,7 @@ export class ConsiderContractComponent
           );
           return;
         } else {
-          console.log("ArrRecipientsNew su 5");
           if (this.confirmSignature == 2) {
-            console.log("ArrRecipientsNew su 6");
             this.toastService.showErrorHTMLWithTimeout(
               'Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc',
               '',
@@ -1396,17 +1389,9 @@ export class ConsiderContractComponent
           (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
         )
       ) {
-        console.log("this.datas.roleContractReceived", this.datas.roleContractReceived);
-        console.log("this.confirmConsider", this.confirmConsider);
-        console.log("this.confirmSignature", this.confirmSignature);
-
-
-
-
         let typeSignDigital = null;
         let typeSignImage = null;
         if (this.recipient?.sign_type) {
-          console.log("ArrRecipientsNew su 7");
           const typeSD = this.recipient?.sign_type.find((t: any) => t.id != 1);
           const typeSImage = this.recipient?.sign_type.find(
             (t: any) => t.id == 1
@@ -1453,9 +1438,8 @@ export class ConsiderContractComponent
           (this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
           (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) ||
           (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
-        ) && this.ArrRecipientsNew
+        ) && this.ArrRecipientsNew.length > 0
       ) {
-        console.log("ArrRecipientsNew su 8");
         Swal.fire({
           title: this.getTextAlertConfirm(),
           icon: 'warning',
@@ -1466,7 +1450,6 @@ export class ConsiderContractComponent
           cancelButtonText: 'Hủy bỏ',
         }).then(async (result) => {
           if (result.isConfirmed) {
-            console.log("ArrRecipientsNew su 9");
             // Kiểm tra ô ký đã ký chưa (status = 2)
             this.spinner.show();
             let id_recipient_signature: any = null;
@@ -1562,16 +1545,11 @@ export class ConsiderContractComponent
           (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) ||
           (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))
       ) {
-        console.log("ArrRecipientsNew su 9");
         await this.rejectContract();
       }
       if (e && e == 2) {
-        console.log("ArrRecipientsNew su 10");
         this.downloadContract(this.idContract);
       }
-      console.log("ArrRecipientsNew su 11", e);
-      console.log("ArrRecipientsNew su 11.1", this.datas);
-      console.log("ArrRecipientsNew su 11.2", this.confirmConsider);
     })
   }
 
