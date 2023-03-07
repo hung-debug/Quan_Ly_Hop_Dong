@@ -1,4 +1,4 @@
-<!--begin template-->
+begin template
 <div class="container-fluid">
   <div class="contract-determine">
     <div style="margin-right: 50px">
@@ -381,9 +381,11 @@
               </div>
 
 
-              <!--NB email-->
+              <!--NB đăng nhập bằng email/người ký-->
               <div *ngIf="this.site == 'NB' && d.login_by === 'email'" class="participants--input"
                 style="display: flex">
+
+                <!--Email-->
                 <div class="participants__name" style="margin-left: 4%;">
                   <div class="label_detail text-color">Email&nbsp;
                     <span class="required-title">*</span>
@@ -394,12 +396,13 @@
                   </div>
                 </div>
 
+                <!--Số điện thoại-->
                 <div class="participants__name" style="width: 34%; margin-left: 8%;">
                   <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<div style="color: #ffc107;">
                       ({{'receive.contract.process' | translate}})</div>
                   </div>
                   <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
+                    <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
                     <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                   </div>
                 </div>
@@ -443,7 +446,7 @@
                     <span class="required-title">*</span>
                   </div>
                   <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
+                    <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
                     <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
                   </div>
                 </div>
@@ -1160,7 +1163,7 @@
                         ({{'receive.contract.process' | translate}})</div>
                     </div>
                     <div class="input-data">
-                      <img src="assets/img/login_email.svg" class="input-img">
+                      <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
                       <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                     </div>
                   </div>
@@ -1192,7 +1195,6 @@
                       </div>
                     </div>
                   </div>
-
                 </div>
 
                 <!--NB phone-->
@@ -1202,7 +1204,7 @@
                     <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span
                         class="required-title">*</span></div>
                     <div class="input-data">
-                      <img src="assets/img/login_email.svg" class="input-img">
+                      <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
                       <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
                     </div>
                   </div>
@@ -1576,7 +1578,7 @@
                       <div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div>
                     </div>
                     <div class="input-data">
-                      <img src="assets/img/login_email.svg" class="input-img">
+                      <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
                       <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                     </div>
                   </div>
@@ -1618,7 +1620,7 @@
                     <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span
                         class="required-title">*</span></div>
                     <div class="input-data">
-                      <img src="assets/img/login_email.svg" class="input-img">
+                      <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
                       <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
                     </div>
                   </div>
