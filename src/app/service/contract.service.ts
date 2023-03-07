@@ -139,6 +139,8 @@ export class ContractService {
 
   getAllInfoUserUrl: any = `${environment.apiUrl}/api/v1/customers/suggested-list`;
 
+  deleteTokenUrl: any = `${environment.apiUrl}/api/v1/auth/logout`
+
   token: any;
   customer_id: any;
   organization_id: any;
@@ -1232,6 +1234,15 @@ export class ContractService {
       body,
       { headers: headers }
     );
+  }
+
+  deleteToken() {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.post<any>(this.deleteTokenUrl, {},{headers: headers});
   }
 
   considerRejectContract(id: any, reason: string) {
