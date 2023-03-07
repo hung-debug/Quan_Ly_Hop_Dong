@@ -385,6 +385,10 @@ export class FooterSignatureComponent implements OnInit {
     this.submitChanges.emit(2);
   }
 
+  endContract() {
+    this.router.navigate(['/main/c/receive/wait-processing']);
+  }
+
 
   getCoordination() {
     if (this.datas.action_title == 'dieu_phoi') {
