@@ -22,6 +22,7 @@ import { ContractTemplateService } from 'src/app/service/contract-template.servi
 import { TranslateService } from '@ngx-translate/core';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
+import { parttern, parttern_input } from 'src/app/config/parttern';
 
 export class ContractConnectArr {
   ref_id: number;
@@ -479,41 +480,30 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   validDataForm() {
     if (!this.datasForm.template_contract_id) {
       this.toastService.showWarningHTMLWithTimeout(
-        this.translate.instant('please.choose.contract.template'),
-        '',
-        '3000'
-      );
+        this.translate.instant('please.choose.contract.template'),'',3000);
       return false;
     }
+
     if (!this.datasForm.name) {
-      this.toastService.showWarningHTMLWithTimeout(
-        this.translate.instant('please.choose.contract.name'),
-        '',
-        '3000'
-      );
+      this.toastService.showWarningHTMLWithTimeout(this.translate.instant('please.choose.contract.name'),'',3000);
+      return false;
+    }
+
+    if(!parttern_input.input_form.test(this.datasForm.name)) {
+      this.toastService.showWarningHTMLWithTimeout(this.translate.instant('error.contract.name.valid'),'',3000);
       return false;
     }
 
     if (this.ceca && this.datasForm.ceca_push == null) {
-      this.toastService.showWarningHTMLWithTimeout(
-        this.translate.instant('error.ceca.required'),
-        '',
-        '3000'
-      );
+      this.toastService.showWarningHTMLWithTimeout(this.translate.instant('error.ceca.required'),'',3000);
       return false;
     }
 
-    let isDateSign = new Date(
-      moment(this.datasForm.sign_time).format('YYYY-MM-DD')
-    );
+    let isDateSign = new Date(moment(this.datasForm.sign_time).format('YYYY-MM-DD'));
     let isDateNow = new Date(moment().format('YYYY-MM-DD'));
 
     if (Number(isDateSign) < Number(isDateNow)) {
-      this.toastService.showWarningHTMLWithTimeout(
-        'Ngày hết hạn ký không được nhỏ hơn ngày hiện tại!',
-        '',
-        3000
-      );
+      this.toastService.showWarningHTMLWithTimeout('Ngày hết hạn ký không được nhỏ hơn ngày hiện tại!','',3000);
       return false;
     }
 

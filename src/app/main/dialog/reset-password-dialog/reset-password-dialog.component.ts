@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { parttern_input } from 'src/app/config/parttern';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -34,16 +35,16 @@ export class ResetPasswordDialogComponent implements OnInit {
     ) { 
       this.addForm = this.fbd.group({
         passwordOld: ["", [Validators.required]],
-        passwordNew: ["", Validators.required],
-        confirmPasswordNew: ["", Validators.required]
+        passwordNew: ["", [Validators.required,Validators.pattern(parttern_input.weak_pass)]],
+        confirmPasswordNew: ["", [Validators.required,Validators.pattern(parttern_input.weak_pass)]]
       });
     }
 
   ngOnInit(): void {
     this.addForm = this.fbd.group({
       passwordOld: ["", [Validators.required]],
-      passwordNew: ["", Validators.required],
-      confirmPasswordNew: ["", Validators.required]
+      passwordNew: ["", [Validators.required,Validators.pattern(parttern_input.weak_pass)]],
+      confirmPasswordNew: ["", [Validators.required,Validators.pattern(parttern_input.weak_pass)]]
     });
     console.log(this.addForm);
   }
@@ -52,6 +53,9 @@ export class ResetPasswordDialogComponent implements OnInit {
     this.submitted = true;
     // stop here if form is invalid
     if (this.addForm.invalid) {
+      if(!parttern_input.weak_pass.test(this.addForm.value.passwordNew)) {
+        this.errorDetail = 'error.password.valid';
+      }
       return;
     }
     const data = {

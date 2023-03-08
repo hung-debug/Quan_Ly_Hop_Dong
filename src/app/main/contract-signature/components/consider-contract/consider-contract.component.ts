@@ -1592,6 +1592,9 @@ export class ConsiderContractComponent
               this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
               signUpdate.signDigitalWidth = signUpdate.signDigitalX + this.widthText + 10;
 
+              signUpdate.signDigitalY = signUpdate.signDigitalY - 0.5*(signUpdate.height - signUpdate.font_size);
+              signUpdate.signDigitalHeight = signUpdate.signDigitalY + signUpdate.height;
+
               await of(null).pipe(delay(120)).toPromise();
               const imageRender = <HTMLElement>(document.getElementById('text-sign'));
 

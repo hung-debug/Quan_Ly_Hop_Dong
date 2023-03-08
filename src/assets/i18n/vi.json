@@ -250,6 +250,9 @@
   "error.confirm-password-new.required": "Xác nhận mật khẩu mới không được để trống",
   "error.confirm-password-new.incorrect": "Xác nhận mật khẩu mới không khớp",
   "error.contract.name.required": "Tên hợp đồng không được để trống",
+
+  "error.contract.name.valid": "Tên hợp đồng không được chứa ký tự đặc biệt",
+
   "error.name.required":"Họ và tên không được để trống",
   "error.phone.required":"Số điện thoại không được để trống",
   "error.cardid.required":"MST/CMT/CCCD phải nhập 9 hoặc 12 ký tự",
