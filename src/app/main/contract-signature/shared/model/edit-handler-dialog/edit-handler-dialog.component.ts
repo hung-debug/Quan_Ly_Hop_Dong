@@ -240,12 +240,6 @@ export class EditHandlerComponent implements OnInit {
     else {
       if (this.email !== "") {
 
-        console.log("dataUpdate 1", this.email);
-        console.log("this.data.id", this.data);
-        console.log("this.data.contract_id", this.data.contract_id);
-        console.log("this.phone", this.phone);
-        console.log("tthis.name", this.name);
-        console.log("this.card_id", this.card_id);
         this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
           (res: any) => {
             if (!res.success) {
@@ -294,7 +288,7 @@ export class EditHandlerComponent implements OnInit {
   }
   cardRequired() {
     this.errorCardid = "";
-    if (!this.pattern.card_idHSM9.test(this.card_id) && this.id_sign_type === 4) {
+    if (!this.pattern.cardid.test(this.card_id) && this.id_sign_type === 4) {
       this.errorCardid = "taxcode.format";
       return false;
     }

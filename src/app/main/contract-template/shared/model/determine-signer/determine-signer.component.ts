@@ -133,6 +133,9 @@ export class DetermineSignerComponent implements OnInit {
 
     if (this.datas.is_determine_clone.some((p: any) => p.type == 3)) this.is_change_party = true;
   }
+  // onChange(event: any) {
+  //   console.log(event.target.value);
+  // }
 
   changeTypeSign(d: any,index?: any,id?: any,role?: any) {
     if (d.login_by == 'phone' || d.login_by == 'email') {

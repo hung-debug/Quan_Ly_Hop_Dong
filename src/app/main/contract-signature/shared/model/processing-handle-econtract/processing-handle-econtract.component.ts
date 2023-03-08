@@ -1,4 +1,3 @@
-import { data } from 'jquery';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
@@ -126,6 +125,15 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       console.log("is_list_name", this.is_list_name);
 
       this.listCheckSmsEmail = true
+      // this.is_list_name.map((item: any) => {
+      //   if (item.statusNumber === 3 || item.statusNumber === 34) {
+      //     console.log(" item.statusNumber", item.statusNumber);
+
+      //     this.listCheckSmsEmail = false
+      //   }
+      // });
+
+
       if (response.contractStatus === 31 || response.contractStatus === 34 || response.contractStatus === 0) {
         this.listCheckSmsEmail = false
       }
