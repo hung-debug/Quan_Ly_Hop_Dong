@@ -131,6 +131,9 @@ h3{
   font-size: inherit;
   right: 0px;
   left: unset !important;
+
+  z-index: -99;
+  position: fixed;
 }
 .drop{
   padding: 10px;
