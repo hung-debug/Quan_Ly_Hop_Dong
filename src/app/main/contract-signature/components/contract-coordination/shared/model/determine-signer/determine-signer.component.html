@@ -165,12 +165,7 @@
                       <span class="required-title">*</span>
                     </div>
 
-                    <ng-multiselect-dropdown
-                      [(ngModel)]="d.sign_type"
-                      placeholder="{{ 'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings"
-                      [data]="signTypeList"
-                    >
+                    <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{ 'choose' | translate }}" [settings]="dropdownSignTypeSettings" [data]="signTypeList">
                       <ng-template
                         #optionsTemplate
                         let-item
@@ -236,7 +231,7 @@
                 >
                   <div class="participants__name" style="width: 90%">
                     <div class="label_detail text-color">
-                      Mã số thuế&nbsp;<span class="required-title">*</span>
+                      Mã số thuế/CMT/CCCD&nbsp;<span class="required-title">*</span>
                     </div>
                     <div class="input-data">
                       <input
