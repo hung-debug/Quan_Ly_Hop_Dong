@@ -382,8 +382,6 @@ export class ConsiderContractComponent
 
         this.datas = this.data_contract;
 
-        console.log("this datas ", this.datas.is_data_contract)
-
         if (this.datas?.is_data_contract?.type_id) {
           this.contractService.getContractTypes(this.datas?.is_data_contract?.type_id).subscribe((data) => {
             if (this.datas?.is_data_contract) {
@@ -1299,11 +1297,7 @@ export class ConsiderContractComponent
           }
         } else {
           if (this.confirmSignature == 1) {
-            this.toastService.showErrorHTMLWithTimeout(
-              'Vui lòng ký eKYC trên ứng dụng điện thoại',
-              '',
-              3000
-            );
+            this.toastService.showErrorHTMLWithTimeout('Vui lòng ký eKYC trên ứng dụng điện thoại','',3000);
             return;
           } else if (this.confirmSignature == 2) {
             this.rejectContract();
@@ -1434,10 +1428,7 @@ export class ConsiderContractComponent
 
             //neu co id nguoi xu ly thi moi kiem tra
             if (id_recipient_signature) {
-              this.contractService
-                .getCheckSignatured(id_recipient_signature)
-                .subscribe(
-                  (res: any) => {
+              this.contractService.getCheckSignatured(id_recipient_signature).subscribe((res: any) => {
                     if (res && res.status == 2) {
                       this.spinner.hide();
                       this.toastService.showErrorHTMLWithTimeout(
@@ -1592,8 +1583,8 @@ export class ConsiderContractComponent
               this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
               signUpdate.signDigitalWidth = signUpdate.signDigitalX + this.widthText + 10;
 
-              signUpdate.signDigitalY = signUpdate.signDigitalY - 0.5*(signUpdate.height - signUpdate.font_size);
-              signUpdate.signDigitalHeight = signUpdate.signDigitalY + signUpdate.height;
+              // signUpdate.signDigitalY = signUpdate.signDigitalY - 0.5*(signUpdate.height - signUpdate.font_size);
+              // signUpdate.signDigitalHeight = signUpdate.signDigitalY - signUpdate.height;
 
               await of(null).pipe(delay(120)).toPromise();
               const imageRender = <HTMLElement>(document.getElementById('text-sign'));
@@ -1662,11 +1653,7 @@ export class ConsiderContractComponent
         }
         return true;
       } else {
-        this.toastService.showErrorHTMLWithTimeout(
-          'Lỗi ký USB Token',
-          '',
-          3000
-        );
+        this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token','',3000);
         return false;
       }
     } else if (typeSignDigital == 3) {

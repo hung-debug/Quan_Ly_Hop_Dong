@@ -252,6 +252,7 @@
   "error.contract.name.required": "Tên hợp đồng không được để trống",
 
   "error.contract.name.valid": "Tên hợp đồng không được chứa ký tự đặc biệt",
+  "error.password.valid":"Mật khẩu phải có ít nhất 1 chữ hoa, chữ thường, ký tự đặc biệt và độ dài từ đủ 8 ký tự trở lên",
 
   "error.name.required":"Họ và tên không được để trống",
   "error.phone.required":"Số điện thoại không được để trống",

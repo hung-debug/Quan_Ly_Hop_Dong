@@ -562,6 +562,13 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         count++;
         break;
       }
+
+      if(!parttern_input.input_form.test(dataArr[i].name)) {
+        this.getNotificationValid("Họ tên " + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không được chứa ký tự đặc biệt");
+        count++;
+        break;
+      }
+
       if (!dataArr[i].email) {
         this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
         count++;
@@ -639,6 +646,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         count++;
         break;
       }
+
+
     }
 
     if (count == 0) {
@@ -681,6 +690,13 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               count++;
               break;
             }
+
+            if(!parttern_input.input_form.test(isParterSort[k].name)) {
+              this.getNotificationValid("Họ tên " + this.getNameObject(isParterSort[k].role) + "tổ chức của tôi không được chứa ký tự đặc biệt");
+              count++;
+              break;
+            }
+
             if (!isParterSort[k].email) {
               this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(isParterSort[k].role) + " của đối tác!")
               count++;
@@ -781,6 +797,13 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               count++;
               break;
             }
+
+            if (!parttern_input.input_form.test(isParterSort[k].name) && isParterSort[k].role == 3) {
+              this.getNotificationValid("Họ tên" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân không hợp lệ!")
+              count++;
+              break;
+            }
+
             if (!isParterSort[k].email && isParterSort[k].role == 3) {
               if(isParterSort[k].login_by == 'email') {
                 this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân!")

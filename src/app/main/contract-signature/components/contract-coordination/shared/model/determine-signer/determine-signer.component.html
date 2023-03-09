@@ -213,18 +213,13 @@
                   *ngIf="getDataSignUSBToken(d).length > 0"
                 >
                   <div class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">
-                      Mã số thuế/CMT/CCCD&nbsp;<span class="required-title"
-                        >*</span
-                      >
+                    <div class="label_detail text-color">Mã số thuế/CMT/CCCD&nbsp;<span class="required-title">*</span>
                       <div style="color: #ffc107">
                         ({{ "Thông tin trong USB token" | translate }})
                       </div>
                     </div>
                     <div class="input-data">
-                      <input
-                        type="text"
-                        placeholder="{{
+                      <input type="text" placeholder="{{
                           'Nhập mã số thuế/CMT/CCCD' | translate
                         }}"
                         [(ngModel)]="d.card_id"

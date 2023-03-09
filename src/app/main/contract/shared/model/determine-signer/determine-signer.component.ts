@@ -621,12 +621,17 @@ export class DetermineSignerComponent implements OnInit {
     let count = 0;
     let dataArr = [];
     dataArr = (this.data_organization.recipients).sort((beforeItemRole: any, afterItemRole: any) => beforeItemRole.role - afterItemRole.role);
-    console.log("dataArrrayyy",this.data_organization.recipients);
     
     for (let i = 0; i < dataArr.length; i++) {
 
       if (!dataArr[i].name) {
         this.getNotificationValid("Vui lòng nhập tên" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!");
+        count++;
+        break;
+      }
+
+      if(!parttern_input.input_form.test(dataArr[i].name)) {
+        this.getNotificationValid("Họ tên " + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không được chứa ký tự đặc biệt");
         count++;
         break;
       }
@@ -758,14 +763,21 @@ export class DetermineSignerComponent implements OnInit {
               break;
             }
 
+           
             if (!isParterSort[k].name) {
-              this.getNotificationValid("Vui lòng nhập tên" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác!")
+              this.getNotificationValid("Vui lòng nhập tên " + this.getNameObjectValid(isParterSort[k].role) + " của đối tác!")
+              count++;
+              break;
+            }
+
+            if(!parttern_input.input_form.test(isParterSort[k].name)) {
+              this.getNotificationValid("Họ tên " + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của tôi không được chứa ký tự đặc biệt");
               count++;
               break;
             }
 
             if (isParterSort[k].sign_type.length == 0 && [3, 4].includes(isParterSort[k].role)) {
-              this.getNotificationValid("Vui lòng chọn loại ký" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác!")
+              this.getNotificationValid("Vui lòng chọn loại ký " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác!")
               count++;
               break;
             } else if (isParterSort[k].sign_type.length > 0 && [3, 4].includes(isParterSort[k].role)) {
@@ -773,7 +785,7 @@ export class DetermineSignerComponent implements OnInit {
               //check chu ky so
               isPartnerOriganzationDuplicate = isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
               if (isPartnerOriganzationDuplicate.length > 1) {
-                this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác!")
+                this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác!")
                 count++;
                 break;
               }
@@ -781,7 +793,7 @@ export class DetermineSignerComponent implements OnInit {
               //check chu ky anh
               isPartnerOriganzationDuplicate = isParterSort[k].sign_type.filter((p: any) => p.id == 1 || p.id == 5);
               if (isPartnerOriganzationDuplicate.length > 1) {
-                this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký ảnh hoặc eKYC" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác!")
+                this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký ảnh hoặc eKYC " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác!")
                 count++;
                 break;
               }
@@ -789,26 +801,26 @@ export class DetermineSignerComponent implements OnInit {
             }
 
             if (!isParterSort[k].phone && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
-              this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác!")
+              this.getNotificationValid("Vui lòng nhập số điện thoại của " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác!")
               count++;
               break;
             }
 
             if (!isParterSort[k].card_id.trim() && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
-              this.getNotificationValid("Vui lòng CMT/CCCD của" + this.getNameObjectValid(3) + "tổ chức của đối tác!")
+              this.getNotificationValid("Vui lòng CMT/CCCD của " + this.getNameObjectValid(3) + "tổ chức của đối tác!")
               count++;
               break;
             }
 
             if (isParterSort.login_by == 'email') {
               if (isParterSort[k].email.trim() && !this.pattern.email.test(isParterSort[k].email.trim())) {
-                this.getNotificationValid("Email của" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác không hợp lệ!")
+                this.getNotificationValid("Email của " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác không hợp lệ!")
                 count++;
                 break;
               }
             } else if (isParterSort.login_by == 'phone') {
               if (isParterSort[k].email && !this.pattern.phone.test(isParterSort[k].email.trim())) {
-                this.getNotificationValid("Email của" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác không hợp lệ!")
+                this.getNotificationValid("Email của " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác không hợp lệ!")
                 count++;
                 break;
               }
@@ -817,7 +829,7 @@ export class DetermineSignerComponent implements OnInit {
 
             // valid phone number
             if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone.trim())) {
-              this.getNotificationValid("Số điện thoại" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác không hợp lệ!")
+              this.getNotificationValid("Số điện thoại " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác không hợp lệ!")
               count++;
               break;
             }
@@ -826,7 +838,7 @@ export class DetermineSignerComponent implements OnInit {
             if (isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
               !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
               isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
-              this.getNotificationValid("CMT/CCCD" + this.getNameObjectValid(3) + "của đối tác không hợp lệ!")
+              this.getNotificationValid("CMT/CCCD " + this.getNameObjectValid(3) + "của đối tác không hợp lệ!")
               count++;
               break;
             }
@@ -859,11 +871,19 @@ export class DetermineSignerComponent implements OnInit {
           }
           //Cá nhân
           else if (dataArrPartner[j].type == 3) {
+
             if (!isParterSort[k].name && isParterSort[k].role == 3) {
               this.getNotificationValid("Vui lòng nhập tên" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác cá nhân!")
               count++;
               break;
             }
+
+            if (!parttern_input.input_form.test(isParterSort[k].name) && isParterSort[k].role == 3) {
+              this.getNotificationValid("Họ tên" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác cá nhân không hợp lệ!")
+              count++;
+              break;
+            }
+
             if (!isParterSort[k].email && isParterSort[k].role == 3) {
               this.getNotificationValid("Vui lòng nhập email" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác cá nhân!")
               count++;

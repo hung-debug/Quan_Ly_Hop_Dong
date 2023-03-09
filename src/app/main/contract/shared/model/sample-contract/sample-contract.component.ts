@@ -774,8 +774,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (isSignType != 'text') {
           if(isSignType == 'so_tai_lieu') {
             // element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4));
-
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
+            if(this.datas.contract_no) {
+              element.is_disable = true;
+            } else {
+              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
+            }
           } else {
             element.is_disable = true
           }
@@ -787,9 +790,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
         } else if (isSignType == 'text') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
-        } else 
+        } else {
+          if(this.datas.contract_no) {
+            element.is_disable = true;
+          } else {
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4 )
+          }
+        }
           // element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4)); 
-          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
       }
       // }
 

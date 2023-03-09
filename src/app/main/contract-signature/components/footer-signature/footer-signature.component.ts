@@ -250,24 +250,24 @@ export class FooterSignatureComponent implements OnInit {
 
   action() {
     if (this.datas.action_title == 'dieu_phoi') {
-      console.log("datas", this.datas);
+      // console.log("datas", this.datas);
 
-      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-      const ArrRecipients = this.datas.is_data_contract.participants[0].recipients;
-      const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email); 
-      console.log("ArrRecipientsNew111", ArrRecipientsNew);
+      // this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+      // const ArrRecipients = this.datas.is_data_contract.participants[0].recipients;
+      // const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email); 
+      // console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
-      if (!ArrRecipientsNew.includes(this.currentUser.email)) {
+      // if (!ArrRecipientsNew.includes(this.currentUser.email)) {
 
-        this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
-          '',
-          3000
-        );
-        this.router.navigate(['/main/dashboard']);
-        return
-      };
-      console.log("this.currentUser.email", this.currentUser);
+      //   this.toastService.showErrorHTMLWithTimeout(
+      //     'Bạn không có quyền xử lý hợp đồng này!',
+      //     '',
+      //     3000
+      //   );
+      //   this.router.navigate(['/main/dashboard']);
+      //   return
+      // };
+      // console.log("this.currentUser.email", this.currentUser);
 
       if (this.is_data_coordination) { // chỉ lấy dữ liệu của người điều phối
         if (this.is_data_coordination['recipients']) {
