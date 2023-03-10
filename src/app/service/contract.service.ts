@@ -675,6 +675,12 @@ export class ContractService {
       fileData: signCertDigital.valueSignBase64,
       imageData: imgSignGen ? imgSignGen : this.imageMobiBase64,
       page: signCertDigital.page.toString(),
+
+      // ph: signCertDigital.signDigitalHeight.toString(),
+      // pw: signCertDigital.signDigitalWidth.toString(),
+      // px: signCertDigital.signDigitalX.toString(),
+      // py: signCertDigital.signDigitalY.toString(), 
+
       ph: Math.floor(
         signCertDigital.signDigitalHeight
           ? signCertDigital.signDigitalHeight

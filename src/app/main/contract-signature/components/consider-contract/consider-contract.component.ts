@@ -173,6 +173,7 @@ export class ConsiderContractComponent
 
   sum: number[] = [];
   top: any[] = [];
+  number: any;
 
   constructor(
     private contractService: ContractService,
@@ -3180,6 +3181,10 @@ export class ConsiderContractComponent
         sign?.page == page
       ) {
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
+
+        console.log("height page ", heightPage);
+        console.log("current height ", this.currentHeight);
+
         sign.signDigitalY = heightPage - (sign.coordinate_y - this.currentHeight) - sign.height /* * this.ratioPDF*/;
 
         sign.signDigitalHeight = heightPage - (sign.coordinate_y - this.currentHeight) /* * this.ratioPDF*/;
@@ -3204,17 +3209,28 @@ export class ConsiderContractComponent
         return sign;
       }
     });
-
+    this.count++;
     this.currentHeight += heightPage;
   }
 
+  count: number = 0;
   prepareInfoSignUsbTokenV2(page: any, heightPage: any) {
     this.isDataObjectSignature.map((sign: any) => {
       if ((sign.type == 3 || sign.type == 1 || sign.type == 4) && sign?.recipient?.email === this.currentUser.email && sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
+
+        console.log("height page ", heightPage);
+        console.log("current height ", this.currentHeight);
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
-        sign.signDigitalY = heightPage - (sign.coordinate_y - this.currentHeight) - sign.height /* * this.ratioPDF*/;
+
+        let saiSo = this.currentHeight/sign.page - heightPage;
+
+        // if(this.currentHeight <= heightPage) {
+        //   saiSo = 0;
+        // }
+
+        sign.signDigitalY = heightPage - (Math.floor(sign.coordinate_y) - this.currentHeight) -sign.height/sign.page; /* * this.ratioPDF*/;
 
         sign.signDigitalWidth = sign.width /* * this.ratioPDF*/;
         sign.signDigitalHeight = sign.height;
@@ -3239,7 +3255,14 @@ export class ConsiderContractComponent
       }
     });
 
+    // this.count++;
+    // console.log("vao day ",this.count);
+    // console.log("this ", this.currentHeight);
+   
     this.currentHeight += heightPage;
+
+    // console.log("height 1 ",heightPage);
+    // console.log("cu ", this.currentHeight);
   }
 
   mobile: boolean = false;
