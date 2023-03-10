@@ -355,6 +355,7 @@ export class ConsiderContractComponent
   timerId: any;
   typeSignDigital: any;
   isTimestamp: string = "false";
+  multiSignInPdf : boolean = false;
   getDataContractSignature() {
     this.contractService.getDetailContract(this.idContract).subscribe(
       async (rs) => {
@@ -561,6 +562,7 @@ export class ConsiderContractComponent
               if(recipient.recipients[0].fields.length == 1) {
                 const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, image_base64).toPromise();
                 this.pdfSrcMobile = pdfMobile.filePath;
+                this.multiSignInPdf = true;
               } else {
                 alert('Hợp đồng này có ô text và số hợp đồng; vui lòng ký trên web');
               }
