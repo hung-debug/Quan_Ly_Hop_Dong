@@ -8,10 +8,10 @@
     <!--Đăng nhập bằng email/sđt-->
     <div *ngIf="!isReqCardIdToken" class="row">
       <div class="col">
-        <input type="radio" (change)="changeTypeSign($event)" value="email" name="login" [checked]="true"/>{{'typeOfSignEmail' | translate}}
+        <input type="radio" (change)="changeTypeSign($event)" value="email" name="login" [checked]="true"/>{{' '}}{{'typeOfSignEmail' | translate}}
       </div>
       <div class="col">
-        <input type="radio" (change)="changeTypeSign($event)" value="phone" name="login"/>{{'typeOfSignPhone' | translate}}
+        <input type="radio" (change)="changeTypeSign($event)" value="phone" name="login"/>{{' '}}{{'typeOfSignPhone' | translate}}
       </div>
     </div>
 

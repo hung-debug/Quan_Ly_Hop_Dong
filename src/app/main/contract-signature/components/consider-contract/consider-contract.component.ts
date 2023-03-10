@@ -3224,13 +3224,15 @@ export class ConsiderContractComponent
         console.log("current height ", this.currentHeight);
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
 
-        let saiSo = this.currentHeight/sign.page - heightPage;
+        // let saiSo = this.currentHeight/sign.page - heightPage;
 
-        // if(this.currentHeight <= heightPage) {
-        //   saiSo = 0;
-        // }
+        // // if(this.currentHeight <= heightPage) {
+        // //   saiSo = 0;
+        // // }
 
-        sign.signDigitalY = heightPage - (Math.floor(sign.coordinate_y) - this.currentHeight) -sign.height/sign.page; /* * this.ratioPDF*/;
+        // console.log("sign height ",sign.width);
+
+        sign.signDigitalY = heightPage - (sign.coordinate_y - this.currentHeight); /* * this.ratioPDF*/;
 
         sign.signDigitalWidth = sign.width /* * this.ratioPDF*/;
         sign.signDigitalHeight = sign.height;
