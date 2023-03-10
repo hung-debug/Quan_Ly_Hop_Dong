@@ -153,6 +153,8 @@ export class ContractSignatureComponent implements OnInit {
       this.getContractList();
     });
 
+    this.spinner.hide();
+
   }
 
   async getDateTime() {

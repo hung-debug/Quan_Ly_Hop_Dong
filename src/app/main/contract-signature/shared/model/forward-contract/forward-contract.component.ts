@@ -208,7 +208,7 @@ export class ForwardContractComponent implements OnInit {
                   this.toastService.showWarningHTMLWithTimeout('taxcode.out', '', 3000);
                 }
               } else {
-                this.toastService.showSuccessHTMLWithTimeout((this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp7' : 'Ủy quyền') + ' thành công!'
+                this.toastService.showSuccessHTMLWithTimeout((this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền') + ' thành công!'
                   , "", 3000);
                 this.dialogRef.close();
                 this.spinner.hide();

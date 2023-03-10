@@ -102,6 +102,7 @@ export class ContractService {
   checkTaxCodeExistUrl: any = `${environment.apiUrl}/api/v1/contracts/check-mst-exist`;
 
   signHsmUrl: any = `${environment.apiUrl}/api/v1/sign/hsm/`;
+  signHsmOldUrl: any = `${environment.apiUrl}/api/v1/sign/old-hsm/`
 
   getFilePdfForMobileUrl: any = `${environment.apiUrl}/api/v1/contracts/review/`;
 
@@ -1099,6 +1100,26 @@ export class ContractService {
 
     return this.http
       .post<any>(this.signHsmUrl + recipientId, body, { headers: headers })
+      .toPromise();
+  }
+
+  signHsmOld(datas: any, recipientId: number) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    const body = JSON.stringify({
+      ma_dvcs: datas.ma_dvcs,
+      username: datas.username,
+      password: datas.password,
+      password2: datas.password2,
+      image_base64: datas.imageBase64,
+    });
+
+    return this.http
+      .post<any>(this.signHsmOldUrl + recipientId, body, { headers: headers })
       .toPromise();
   }
 

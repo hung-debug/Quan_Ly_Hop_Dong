@@ -572,7 +572,9 @@ export class ConsiderContractComponent
           }
         }
         // render pdf to canvas
-        if (!this.mobile) this.getPage();
+        if (!this.mobile)  this.getPage();
+        // this.getPage();
+
         this.loaded = true;
       },
       (res: any) => {
@@ -1556,6 +1558,8 @@ export class ConsiderContractComponent
   async signDigitalDocument() {
     let typeSignDigital = this.typeSignDigital;
 
+    console.log("this ", this.isDataObjectSignature);
+
     //= 2 => Ky usb token
     if (typeSignDigital == 2) {
       if (this.signCertDigital) {
@@ -1744,6 +1748,8 @@ export class ConsiderContractComponent
             page: signUpdate.page
           }
 
+          console.log("field hsm ",fieldHsm );
+
           if (signUpdate.type == 1 || signUpdate.type == 4) {
             this.textSign = signUpdate.valueSign;
             this.widthText = signUpdate.width;
@@ -1773,35 +1779,70 @@ export class ConsiderContractComponent
             }
           }
 
-          this.dataHsm = {
-            field: fieldHsm,
-            ma_dvcs: this.dataHsm.ma_dvcs,
-            username: this.dataHsm.username,
-            password: this.dataHsm.password,
-            password2: this.dataHsm.password2,
-            imageBase64: signI,
-          };
+          if(!this.mobile) {
+            this.dataHsm = {
+              field: fieldHsm,
+              ma_dvcs: this.dataHsm.ma_dvcs,
+              username: this.dataHsm.username,
+              password: this.dataHsm.password,
+              password2: this.dataHsm.password2,
+              imageBase64: signI,
+            };
+          } else {
+            this.dataHsm = {
+              ma_dvcs: this.dataHsm.ma_dvcs,
+              username: this.dataHsm.username,
+              password: this.dataHsm.password,
+              password2: this.dataHsm.password2,
+              imageBase64: signI,
+            };
+          }
+        
 
           if (fileC && objSign.length) {
-            const checkSign = await this.contractService.signHsm(this.dataHsm, this.recipientId, this.isTimestamp);
 
-            if (!checkSign || (checkSign && !checkSign.success)) {
-              if (!checkSign.message) {
-                this.toastService.showErrorHTMLWithTimeout('Đăng nhập không thành công', '', 3000);
-              } else if (checkSign.message) {
-                this.toastService.showErrorHTMLWithTimeout(checkSign.message, '', 3000);
+            if(!this.mobile) {
+              const checkSign = await this.contractService.signHsm(this.dataHsm, this.recipientId, this.isTimestamp);
+
+              if (!checkSign || (checkSign && !checkSign.success)) {
+                if (!checkSign.message) {
+                  this.toastService.showErrorHTMLWithTimeout('Đăng nhập không thành công', '', 3000);
+                } else if (checkSign.message) {
+                  this.toastService.showErrorHTMLWithTimeout(checkSign.message, '', 3000);
+                }
+  
+                return false;
+              } else {
+                if (checkSign.success === true) {
+                  if (pdfC2) {
+                    fileC = pdfC2.path;
+                  } else if (pdfC1) {
+                    fileC = pdfC1.path;
+                  }
+                }
               }
-
-              return false;
             } else {
-              if (checkSign.success === true) {
-                if (pdfC2) {
-                  fileC = pdfC2.path;
-                } else if (pdfC1) {
-                  fileC = pdfC1.path;
+              const checkSign = await this.contractService.signHsmOld(this.dataHsm, this.recipientId);
+
+              if (!checkSign || (checkSign && !checkSign.success)) {
+                if (!checkSign.message) {
+                  this.toastService.showErrorHTMLWithTimeout('Đăng nhập không thành công', '', 3000);
+                } else if (checkSign.message) {
+                  this.toastService.showErrorHTMLWithTimeout(checkSign.message, '', 3000);
+                }
+  
+                return false;
+              } else {
+                if (checkSign.success === true) {
+                  if (pdfC2) {
+                    fileC = pdfC2.path;
+                  } else if (pdfC1) {
+                    fileC = pdfC1.path;
+                  }
                 }
               }
             }
+           
           }
         }
       }
@@ -3232,7 +3273,7 @@ export class ConsiderContractComponent
 
         // console.log("sign height ",sign.width);
 
-        sign.signDigitalY = heightPage - (sign.coordinate_y - this.currentHeight); /* * this.ratioPDF*/;
+        sign.signDigitalY = heightPage - (sign.coordinate_y - this.currentHeight) - sign.height; /* * this.ratioPDF*/;
 
         sign.signDigitalWidth = sign.width /* * this.ratioPDF*/;
         sign.signDigitalHeight = sign.height;
