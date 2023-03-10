@@ -554,11 +554,19 @@ export class ConsiderContractComponent
           }
 
           if (this.mobile && this.recipient.status != 2 && this.recipient.status != 3) {
-            if (image_base64)
-              this.contractService.getFilePdfForMobile(this.recipientId, image_base64).subscribe((response) => {
-                  this.pdfSrcMobile = response.filePath;
-                });
-            else this.pdfSrcMobile = this.pdfSrc;
+            if (image_base64) {
+              const recipient = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
+              // console.log("recipientId ", recipient.recipients[0].fields.length);
+
+              if(recipient.recipients[0].fields.length == 1) {
+                const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, image_base64).toPromise();
+                this.pdfSrcMobile = pdfMobile.filePath;
+              } else {
+                alert('Hợp đồng này có ô text và số hợp đồng; vui lòng ký trên web');
+              }
+            } else {
+              this.pdfSrcMobile = this.pdfSrc;
+            }
           } else {
             if (this.recipient.status >= 3) {
               setTimeout(() => {

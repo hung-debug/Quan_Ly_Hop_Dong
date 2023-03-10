@@ -489,10 +489,10 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       return false;
     }
 
-    if(!parttern_input.input_form.test(this.datasForm.name)) {
-      this.toastService.showWarningHTMLWithTimeout(this.translate.instant('error.contract.name.valid'),'',3000);
-      return false;
-    }
+    // if(!parttern_input.input_form.test(this.datasForm.name)) {
+    //   this.toastService.showWarningHTMLWithTimeout(this.translate.instant('error.contract.name.valid'),'',3000);
+    //   return false;
+    // }
 
     if (this.ceca && this.datasForm.ceca_push == null) {
       this.toastService.showWarningHTMLWithTimeout(this.translate.instant('error.ceca.required'),'',3000);
