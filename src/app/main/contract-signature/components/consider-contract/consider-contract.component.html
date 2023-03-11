@@ -204,7 +204,7 @@
 </div>
 </div>
 
-<app-footer-signature *ngIf="loaded  && !(this.mobile && !this.multiSignInPdf)" 
+<app-footer-signature *ngIf="loaded  && (!this.mobile || (this.mobile && !this.multiSignInPdf))" 
   [pageNum]="pageNum" 
   [pageLast]="pageLast" 
   [page1]="page1" 
