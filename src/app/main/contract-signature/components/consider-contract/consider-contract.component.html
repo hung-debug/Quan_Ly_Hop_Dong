@@ -124,7 +124,7 @@
   </div>
 </div>
 
-<div *ngIf="this.mobile === true && !this.multiSignInPdf">
+<div *ngIf="this.mobile && !this.multiSignInPdf">
 
   <div class="skeleton-sign position-absolute opacity-0">
     <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId" [phonePKI]="phonePKI"></app-display-digital-signature>
@@ -204,7 +204,7 @@
 </div>
 </div>
 
-<app-footer-signature *ngIf="loaded" 
+<app-footer-signature *ngIf="loaded  && !(this.mobile && !this.multiSignInPdf)" 
   [pageNum]="pageNum" 
   [pageLast]="pageLast" 
   [page1]="page1" 
