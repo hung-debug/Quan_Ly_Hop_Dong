@@ -1849,10 +1849,7 @@ export class ConsiderContractComponent
                     fileC = pdfC2.path;
                   } else if (pdfC1) {
                     fileC = pdfC1.path;
-                  } else {
-                    return;
-                  }
-                  return true;
+                  } 
                 }
               }
             } else {
@@ -1872,17 +1869,14 @@ export class ConsiderContractComponent
                     fileC = pdfC2.path;
                   } else if (pdfC1) {
                     fileC = pdfC1.path;
-                  } else {
-                    return;
-                  }
-                  return true;
+                  } 
                 }
               }
             }
           
           }
         }
-        // return true;
+        return true;
       }
     } else if (typeSignDigital == 5) {
       const objSign = this.isDataObjectSignature.filter(
@@ -3304,11 +3298,15 @@ export class ConsiderContractComponent
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
+
+        console.log("sign height ", sign.height);
+        console.log("sign width ", sign.width);
+
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
-        sign.signDigitalY = heightPage - (sign.coordinate_y - this.currentHeight) - sign.height /* * this.ratioPDF*/;
+        sign.signDigitalY = heightPage - (sign.coordinate_y - this.currentHeight) - sign.width /* * this.ratioPDF*/;
 
         sign.signDigitalHeight = heightPage - (sign.coordinate_y - this.currentHeight) /* * this.ratioPDF*/;
-        sign.signDigitalWidth = sign.coordinate_x + sign.width
+        sign.signDigitalWidth = sign.coordinate_x + sign.height
 
         //Lấy thông tin mã số thuế của đối tác ký
         this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
@@ -3338,11 +3336,10 @@ export class ConsiderContractComponent
       if ((sign.type == 3 || sign.type == 1 || sign.type == 4) && sign?.recipient?.email === this.currentUser.email && sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
+        console.log("sign ", sign.height);
+        console.log("sign ", sign.width);
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
-        sign.signDigitalY =
-          heightPage -
-          (sign.coordinate_y - this.currentHeight) -
-          sign.height /* * this.ratioPDF*/;
+        sign.signDigitalY = heightPage - (sign.coordinate_y - this.currentHeight) - sign.height + sign.page*6 /* * this.ratioPDF*/;
 
         sign.signDigitalWidth = sign.width /* * this.ratioPDF*/;
         sign.signDigitalHeight = sign.height;

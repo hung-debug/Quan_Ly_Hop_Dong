@@ -484,31 +484,37 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   resizeSignature = (event: any) => {
+    console.log("vao day ", event.rect);
     let x = (parseFloat(event.target.getAttribute('data-x')) || 0)
     let y = (parseFloat(event.target.getAttribute('data-y')) || 0)
     // translate when resizing from top or left edges
     this.signCurent = this.convertToSignConfig().filter((p: any) => p.id == event.target.id)[0];
     if (this.signCurent) {
-      if (event.rect.width <= 280) {
+      // if (event.rect.width <= 280) {
         this.signCurent.coordinate_x = x;
         this.signCurent.coordinate_y = y;
         this.objSignInfo.id = event.target.id;
         this.objSignInfo.traf_x = x;
         this.objSignInfo.traf_y = y;
-        this.objSignInfo.width = event.rect.width;
-        this.objSignInfo.height = event.rect.height;
+
+        // this.objSignInfo.width = event.rect.width;
+        // this.objSignInfo.height = event.rect.height;
 
         this.signCurent.width = event.rect.width;
         this.signCurent.height = event.rect.height;
         this.tinhToaDoSign("canvas-step3-" + this.signCurent.page, this.signCurent.width, this.signCurent.height, this.objSignInfo);
         let _array = Object.values(this.obj_toa_do);
         this.signCurent.position = _array.join(",");
-      }
+      // }
     }
   }
 
   resizableListener = (event: any) => {
     var target = event.target
+
+    console.log("event ", event.rect);
+
+    console.log("ta")
 
     // update the element's style
     target.style.width = event.rect.width + 'px'
@@ -725,8 +731,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     element['height'] = '85';
                   }
 
-                  this.objSignInfo.width = element['width'];
-                  this.objSignInfo.height = element['height'];
+                  this.objSignInfo.width = element['height'];
+                  this.objSignInfo.height = element['width'];
                   this.objSignInfo.text_attribute_name = '';
                   this.list_sign_name.forEach((item: any) => {
                     item['selected'] = false;
@@ -1140,8 +1146,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.objSignInfo.traf_x = d.coordinate_x;
         this.objSignInfo.traf_y = d.coordinate_y;
 
-        this.objSignInfo.width = parseInt(d.width);
-        this.objSignInfo.height = parseInt(d.height);
+        this.objSignInfo.width = parseInt(d.height);
+        this.objSignInfo.height = parseInt(d.width);
 
         if(isObjSign.font) {
           this.objSignInfo.font = isObjSign.font;
