@@ -1876,8 +1876,8 @@ export class ConsiderContractComponent
           
           }
         }
-        return true;
       }
+      return true;
     } else if (typeSignDigital == 5) {
       const objSign = this.isDataObjectSignature.filter(
         (signUpdate: any) =>
