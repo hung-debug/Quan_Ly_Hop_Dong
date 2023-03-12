@@ -1610,8 +1610,10 @@ export class ConsiderContractComponent
               this.width = signUpdate.width;
 
               this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
+              signUpdate.signDigitalWidth = signUpdate.signDigitalX + this.widthText + 10;
 
-              console.log("text ", this.widthText);
+              signUpdate.signDigitalY = signUpdate.signDigitalY - 0.5*(signUpdate.height - signUpdate.font_size) - 5;
+              signUpdate.signDigitalHeight = signUpdate.signDigitalY + signUpdate.height;
 
               await of(null).pipe(delay(120)).toPromise();
               const imageRender = <HTMLElement>(document.getElementById('text-sign'));
@@ -1620,18 +1622,6 @@ export class ConsiderContractComponent
                 const textSignB = await domtoimage.toPng(imageRender);
                 signI = this.textSignBase64Gen = textSignB.split(',')[1];
               }
-
-              // console.log("width text ", this.widthText);
-
-              let x = signUpdate.signDigitalX;
-              // // // let y = signUpdate.signDigitalY;
-
-              signUpdate.signDigitalX = 0.5*(2*x - signUpdate.width + this.widthText) + 7;
-              signUpdate.signDigitalWidth = signUpdate.signDigitalX + signUpdate.width;
-
-              // signUpdate.signDigitalY = y - 0.01*signUpdate.height;
-              // signUpdate.signDigitalHeight = signUpdate.signDigitalHeight - 0.05*signUpdate.height;
-
             } else if (signUpdate.type == 3) {
               await of(null).pipe(delay(150)).toPromise();
 
@@ -1786,11 +1776,9 @@ export class ConsiderContractComponent
           if (signUpdate.type == 1 || signUpdate.type == 4) {
             this.textSign = signUpdate.valueSign;
 
-            this.widthText = signUpdate.width;
-
             this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
             fieldHsm.width = this.widthText + 10;
-            fieldHsm.coordinate_y = signUpdate.signDigitalY - 0.5*(signUpdate.height - signUpdate.font_size);
+            fieldHsm.coordinate_y = signUpdate.signDigitalY - 0.5*(signUpdate.height - signUpdate.font_size) - 5;
 
             await of(null).pipe(delay(120)).toPromise();
             const imageRender = <HTMLElement>(document.getElementById('text-sign'));
@@ -3292,21 +3280,16 @@ export class ConsiderContractComponent
 
   prepareInfoSignUsbTokenV1(page: any, heightPage: any) {
     this.isDataObjectSignature.map((sign: any) => {
-      if (
-        (sign.type == 3 || sign.type == 1 || sign.type == 4) &&
+      if ((sign.type == 3 || sign.type == 1 || sign.type == 4) &&
         sign?.recipient?.email === this.currentUser.email &&
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
-
-        console.log("sign height ", sign.height);
-        console.log("sign width ", sign.width);
-
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
-        sign.signDigitalY = heightPage - (sign.coordinate_y - this.currentHeight) - sign.width /* * this.ratioPDF*/;
+        sign.signDigitalY = heightPage - (sign.coordinate_y - this.currentHeight) - sign.height + sign.page*6 /* * this.ratioPDF*/;
 
         sign.signDigitalHeight = heightPage - (sign.coordinate_y - this.currentHeight) /* * this.ratioPDF*/;
-        sign.signDigitalWidth = sign.coordinate_x + sign.height
+        sign.signDigitalWidth = sign.coordinate_x + sign.width
 
         //Lấy thông tin mã số thuế của đối tác ký
         this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
@@ -3336,8 +3319,6 @@ export class ConsiderContractComponent
       if ((sign.type == 3 || sign.type == 1 || sign.type == 4) && sign?.recipient?.email === this.currentUser.email && sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
-        console.log("sign ", sign.height);
-        console.log("sign ", sign.width);
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
         sign.signDigitalY = heightPage - (sign.coordinate_y - this.currentHeight) - sign.height + sign.page*6 /* * this.ratioPDF*/;
 
@@ -3345,9 +3326,7 @@ export class ConsiderContractComponent
         sign.signDigitalHeight = sign.height;
 
         //Lấy thông tin mã số thuế của đối tác ký
-        this.contractService
-          .getDetermineCoordination(sign.recipient_id)
-          .subscribe((response) => {
+        this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
             const lengthRes = response.recipients.length;
             for (let i = 0; i < lengthRes; i++) {
               const id = response.recipients[i].id;
