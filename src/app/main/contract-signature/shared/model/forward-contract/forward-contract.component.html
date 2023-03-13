@@ -6,7 +6,7 @@
 
 
     <!--Đăng nhập bằng email/sđt-->
-    <div *ngIf="!isReqCardIdToken" class="row">
+    <div *ngIf="!isReqCardIdToken && datas.role_coordination != 1" class="row">
       <div class="col">
         <input type="radio" (change)="changeTypeSign($event)" value="email" name="login" [checked]="true"/>{{' '}}{{'typeOfSignEmail' | translate}}
       </div>

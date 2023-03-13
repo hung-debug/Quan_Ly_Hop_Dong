@@ -42,6 +42,9 @@ export class ForwardContractComponent implements OnInit {
     this.datas = this.data;
     this.login = "email";
 
+    console.log("datasssssssssss",this.datas);
+
+
     this.getCurrentUser();
     this.myForm = this.fbd.group({
       name: this.fbd.control("", [Validators.required]),
