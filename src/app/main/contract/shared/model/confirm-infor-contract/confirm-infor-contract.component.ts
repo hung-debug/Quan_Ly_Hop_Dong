@@ -371,11 +371,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
 
-        dataSignId[i].font_size = this.datas.size;
-        await this.contractService
-          .getContractSampleEdit(dataSignId[i], id)
-          .toPromise()
-          .then(
+        // dataSignId[i].font_size = this.datas.size;
+        await this.contractService.getContractSampleEdit(dataSignId[i], id).toPromise().then(
             (data: any) => {
               dataSample_contract.push(data);
             },

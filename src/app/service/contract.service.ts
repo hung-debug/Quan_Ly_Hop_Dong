@@ -649,9 +649,7 @@ export class ContractService {
       image_base64: image_base64,
     };
 
-    return this.http.post<any>(
-      this.getFilePdfForMobileUrl + recipientId,
-      body,
+    return this.http.post<any>(this.getFilePdfForMobileUrl + recipientId,body,
       {
         headers: headers,
       }

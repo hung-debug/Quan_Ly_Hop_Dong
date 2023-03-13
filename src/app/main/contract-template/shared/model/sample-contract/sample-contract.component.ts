@@ -1843,7 +1843,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getName(data: any) {
-    console.log("vao day get name ", data);
     if (data.type_unit == 'organization') {
       return 'Tổ chức của tôi - ' + data.name;
     } else if (data.type_unit == 'partner') {

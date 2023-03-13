@@ -69,6 +69,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
 
     this.data_parnter_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+
+    console.log("datas ", this.datas);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -220,8 +222,10 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       for (let i = 0; i < dataSignId.length; i++) {
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
-        dataSignId[i].font = this.datas.font;
-        dataSignId[i].font_size = this.datas.size ? this.datas.size : 13;
+        // dataSignId[i].font = this.datas.font;
+        // dataSignId[i].font_size = this.datas.size ? this.datas.size : 13;
+
+        console.log("dataSignId ", dataSignId);
 
         if(!dataSignId[i].type) 
           dataSignId[i].type = 4
