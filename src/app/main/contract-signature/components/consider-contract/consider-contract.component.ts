@@ -592,7 +592,7 @@ export class ConsiderContractComponent
                 this.pdfSrcMobile = pdfMobile.filePath;
               } else {
                 this.multiSignInPdf = true;
-                alert('Hợp đồng này có ô text và số hợp đồng; vui lòng ký trên web');
+                alert('Hợp đồng có chứa ô text/ ô số hợp đồng. Vui lòng thực hiện xử lý trên web hoặc ứng dụng di động!');
               }
             } else {
               this.pdfSrcMobile = this.pdfSrc;
