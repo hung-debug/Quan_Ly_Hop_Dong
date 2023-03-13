@@ -213,11 +213,7 @@ export class ConsiderContractComponent
 
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
-    const checkViewContract =
-      await this.checkViewContractService.callAPIcheckViewContract(
-        this.idContract,
-        false
-      );
+    const checkViewContract = await this.checkViewContractService.callAPIcheckViewContract(this.idContract,false);
 
     if (checkViewContract) {
       this.actionRoleContract();
@@ -531,9 +527,7 @@ export class ConsiderContractComponent
         }
         this.fetchDataUserSimPki();
 
-        this.userService
-          .getSignatureUserById(this.currentUser.id)
-          .subscribe((res) => {
+        this.userService.getSignatureUserById(this.currentUser.id).subscribe((res) => {
             if (res) {
               this.datas.imgSignAcc = res;
             }
@@ -583,9 +577,17 @@ export class ConsiderContractComponent
           if (this.mobile && this.recipient.status != 2 && this.recipient.status != 3) {
             if (image_base64) {
               const recipient = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
-              // console.log("recipientId ", recipient.recipients[0].fields.length);
 
-              if(recipient.recipients[0].fields.length == 1) {
+              let fieldRecipientId: any = null;
+              recipient.recipients.forEach((ele: any) => {
+                if(ele.id == this.recipientId) {
+                  fieldRecipientId = ele.fields;
+                }
+              })
+
+              if(fieldRecipientId.length == 1) {
+                console.log("vao day ");
+
                 const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, image_base64).toPromise();
                 this.pdfSrcMobile = pdfMobile.filePath;
               } else {
