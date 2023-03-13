@@ -156,6 +156,8 @@ export class ForwardContractComponent implements OnInit {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập số điện thoại ngoài luồng hợp đồng', '', 3000);
         return;
       }
+
+      // this.checkCanSwitchContractPhone();
    
 
       if (this.currentUser) {
@@ -255,7 +257,9 @@ export class ForwardContractComponent implements OnInit {
     if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
       for (const participant of this.datas.dataContract.is_data_contract.participants) {
         for (const recipient of participant.recipients) {
-          if (this.myForm.value.email == recipient.phone) {
+          // console.log("rec ",recipient);
+          // console.log("this ", this.myForm.value);
+          if (this.myForm.value.email == recipient.email) {
             return false;
           }
         }
