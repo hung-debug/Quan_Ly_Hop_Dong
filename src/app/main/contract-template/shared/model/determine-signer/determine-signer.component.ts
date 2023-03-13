@@ -72,6 +72,7 @@ export class DetermineSignerComponent implements OnInit {
   phone: string = "phone";
 
   site: string;
+  checkSms = true;
 
   get determineContract() {
     return this.determineDetails.controls;
@@ -283,9 +284,9 @@ export class DetermineSignerComponent implements OnInit {
 
   dropdownButtonText = '';
 
-  changeButtonText(text: string) {
-    this.dropdownButtonText = text;
-  }
+  // changeButtonText(text: string) {
+  //   this.dropdownButtonText = text;
+  // }
   switchLang(locale: string, d: any) {
     // this.data_organization.recipients.filter((p: any) => p.role == 2);
     // console.log("SU", this.data_organization)
@@ -333,12 +334,15 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeIsCoordination(e: any, item: any, id: any) {
+
     if (e.target.checked) {
       //goi ham them
       this.addPartnerCoordination(item, id);
+      this.checkSms = true;
     } else {
       //goi ham xoa
       this.deletePartnerCoordination(0, item, id);
+      this.checkSms = false;
       //kiem tra neu chua co nguoi ky thi them 1 nguoi ky
       if (this.getPartnerSignature(item).length == 0) {
         this.addPartnerSignature(item, id);
@@ -830,6 +834,7 @@ export class DetermineSignerComponent implements OnInit {
 
   // tạo mảng người xem xét đối tác
   getPartnerReviewer(item: any) {
+    // console.log('###############',item)
     // return item.recipients.filter((p: any) => p.role == 2)
     return item.recipients.filter((p: any) => p.role == 2).map((x: any) => {
       if (!x.locale) {
@@ -1211,10 +1216,13 @@ export class DetermineSignerComponent implements OnInit {
 
   changeIsSmsReviewer(e: any, item: any, index: any) {
     let data = item.recipients.filter((p: any) => p.role == 2)[index];
+    console.log("data ", data.locale);
     if (e.target.checked) {
       data.is_otp = 1;
+      this.checkSms = true;
     } else {
       data.is_otp = 0;
+      this.checkSms = false;
     }
   }
 
@@ -1222,8 +1230,10 @@ export class DetermineSignerComponent implements OnInit {
     let data = item.recipients.filter((p: any) => p.role == 3)[index];
     if (e.target.checked) {
       data.is_otp = 1;
+      this.checkSms = true;
     } else {
       data.is_otp = 0;
+      this.checkSms = false;
     }
   }
 
@@ -1231,8 +1241,10 @@ export class DetermineSignerComponent implements OnInit {
     let data = item.recipients.filter((p: any) => p.role == 4)[index];
     if (e.target.checked) {
       data.is_otp = 1;
+      this.checkSms = true;
     } else {
       data.is_otp = 0;
+      this.checkSms = false;
     }
   }
 

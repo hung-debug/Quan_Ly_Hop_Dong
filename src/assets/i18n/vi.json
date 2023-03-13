@@ -516,6 +516,7 @@
   "Sign.expiration.date.compare":"Ngày hết hạn ký không được nhỏ hơn ngày hiện tại!",
   "verified.cardid":"Đã xác thực qua chứng minh thư/căn cước công dân",
   "update.person-process": "CẬP NHẬT NGƯỜI XỬ LÝ",
+  "update_person_process": "Cập nhật người xử lý",
   "contract-type.ceca":"Đẩy file hợp đồng lên Bộ Công thương",
   "yes":"Có",
   "no":"Không",

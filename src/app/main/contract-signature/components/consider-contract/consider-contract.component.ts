@@ -1296,7 +1296,7 @@ export class ConsiderContractComponent
 
     // console.log("suuuu", this.confirmConsider);
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-
+    console.log("this.recipientId submitEvents",this.recipientId);
     this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
       //  = response.recipients[0].email
       console.log("ArrRecipientsNew123444444", response.recipients);

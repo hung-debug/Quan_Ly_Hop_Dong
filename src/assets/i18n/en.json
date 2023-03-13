@@ -514,6 +514,7 @@
   "please.choose.contract.name": "Please choose a contract name!",
   "Sign.expiration.date.compare": "Signing expiration date should not be less than current date!",
   "update.person-process": "UPDATE HANDLER",
+  "update_person_process": "Update handler",
   "contract-type.ceca":"Push contract file to CeCa",
   "yes":"Yes",
   "no":"No",

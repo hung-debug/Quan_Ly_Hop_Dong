@@ -9,7 +9,6 @@ import { DeviceDetectorService } from "ngx-device-detector";
 import { UnitService } from 'src/app/service/unit.service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-
 @Component({
   selector: 'app-footer-signature',
   templateUrl: './footer-signature.component.html',
@@ -67,6 +66,8 @@ export class FooterSignatureComponent implements OnInit {
 
   lang: string;
   ngOnInit(): void {
+    console.log("ngOnInit: ",this.datas)
+    console.log("ngOnInit keys: ",Object.keys(this.datas))
     this.getDeviceApp();
 
     if (sessionStorage.getItem('lang') == 'en') {
@@ -247,27 +248,43 @@ export class FooterSignatureComponent implements OnInit {
 
     pdffull.scrollTo(0, canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top);
   }
-
+  ArrRecipientsNew: boolean;
   action() {
+    console.log("##############datas", this.datas);
     if (this.datas.action_title == 'dieu_phoi') {
       console.log("datas", this.datas);
+      console.log(Object.keys(this.datas))
 
       this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-      const ArrRecipients = this.datas.is_data_contract.participants[0].recipients;
-      const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email); 
-      console.log("ArrRecipientsNew111", ArrRecipientsNew);
+      console.log('recipient_id_coordition',this.datas.recipient_id_coordition)
+      this.contractService.getDetermineCoordination(this.datas.recipient_id_coordition).subscribe(async (response) => {
+        const ArrRecipients = response.is_data_contract.participants.map((ele: any) => ele.recipients);
+        let ArrRecipientsNew = false
+        ArrRecipients.map((item: any) => item.map((x: any) => {
+          console.log("currentUser", x);
+          if (x.email === this.currentUser.email) {
+            ArrRecipientsNew = true
+            return
+          }
+        }));
+        console.log("ArrRecipientsNew111", ArrRecipientsNew);
+        console.log("ArrRecipientssss", response);
+        console.log("ArrRecipientssss 0", this.datas.is_data_contract.participants);
+        console.log("currentUserssss", this.currentUser.email);
 
-      if (!ArrRecipientsNew.includes(this.currentUser.email)) {
+        if (!ArrRecipientsNew) {
 
-        this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
-          '',
-          3000
-        );
-        this.router.navigate(['/main/dashboard']);
-        return
-      };
-      console.log("this.currentUser.email", this.currentUser);
+          this.toastService.showErrorHTMLWithTimeout(
+            'Bạn không có quyền xử lý hợp đồng này!',
+            '',
+            3000
+          );
+          this.router.navigate(['/main/dashboard']);
+          return
+        };
+        console.log("this.currentUser.email", this.currentUser);
+      })
+
 
       if (this.is_data_coordination) { // chỉ lấy dữ liệu của người điều phối
         if (this.is_data_coordination['recipients']) {

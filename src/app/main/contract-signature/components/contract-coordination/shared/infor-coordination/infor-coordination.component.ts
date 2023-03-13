@@ -123,6 +123,8 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   async ngOnInit() {
+    console.log("info coordination ngOnInIt", this.datas)
+    console.log("info coordination ngOnInIt", Object.keys(this.datas))
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
     // console.log(this.datas);
 
