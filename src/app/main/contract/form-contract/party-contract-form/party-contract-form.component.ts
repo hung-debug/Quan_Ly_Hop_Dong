@@ -1601,6 +1601,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         this.spinner.hide();
         this.onItemSelect(null);
       })
+    } else {
+      this.datasForm.is_determine_clone = this.datasForm.is_determine_clone.filter((p: any) => p.id != item.id);
     }
   }
 

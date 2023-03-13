@@ -711,7 +711,7 @@
             (item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate
           }}" [(ngModel)]="item.name" [disabled]="item.type == 3" />
       </div>
-      <div *ngIf="this.dataParnterOrganization().length > 1" style="display: flex; justify-content: flex-end">
+      <div *ngIf="this.dataParnterOrganization().length >= 1" style="display: flex; justify-content: flex-end">
         <u class="label text-color" (click)="deletePartner(id, item)"
           style="background-color: #ffffff; cursor: pointer">{{
           (item.type == 2 ? "xoa_doi_tac_to_chuc" : "xoa_doi_tac_ca_nhan")
