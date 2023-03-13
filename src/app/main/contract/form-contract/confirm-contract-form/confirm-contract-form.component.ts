@@ -359,11 +359,7 @@ export class ConfirmContractFormComponent implements OnInit {
     }
   }
 
-  async getDefinddatasFormignEdit(
-    datasFormignId: any,
-    datasFormignNotId: any,
-    action: any
-  ) {
+  async getDefinddatasFormignEdit(datasFormignId: any,datasFormignNotId: any,action: any) {
     let datasFormample_contract: any[] = [];
     if (datasFormignId.length > 0) {
       console.log("dsid ", datasFormignId);
@@ -384,11 +380,7 @@ export class ConfirmContractFormComponent implements OnInit {
 
         // datasFormignId[i].font_size = this.datasForm.size;
         // datasFormignId[i].font = this.datasForm.font;
-        await this.contractService
-          .getContractSampleEdit(datasFormignId[i], id)
-          .toPromise()
-          .then(
-            (data: any) => {
+        await this.contractService.getContractSampleEdit(datasFormignId[i], id).toPromise().then((data: any) => {
               datasFormample_contract.push(data);
             },
             (error) => {

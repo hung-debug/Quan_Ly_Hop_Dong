@@ -361,7 +361,6 @@
   margin-left: 5px
 }
 
-
 .input-mobile {
   box-sizing: border-box;
   width: 50px;
@@ -375,6 +374,17 @@
   font-weight: 400;
   line-height: 22px;
   font-family: 'Lexend Deca'
+}
+
+
+.input-mobile {
+  box-sizing: border-box; 
+  text-align: center; 
+
+  background: #FFFFFF;
+  border: 1px solid #87CAFF;
+  border-radius: 5px; 
+  font-size: 15px;
 }
 
 
