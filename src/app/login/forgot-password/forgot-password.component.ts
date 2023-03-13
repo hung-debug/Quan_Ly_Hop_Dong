@@ -19,8 +19,7 @@ export class ForgotPasswordComponent implements OnInit {
   error:boolean = false;
   errorDetail:string = '';
   constructor(private fb: FormBuilder,
-              private router: Router,
-              private modalService: NgbModal,
+              private translateService: TranslateService,
               private userService: UserService,
               public translate: TranslateService,
               private dialog: MatDialog,) {
@@ -61,13 +60,14 @@ export class ForgotPasswordComponent implements OnInit {
           if(data.status == 0){
             this.sendPassword('Chúng tôi đã gửi thông tin về địa chỉ email '+ email +'<br>Vui lòng truy cập email để tiếp tục!');
           }else{
-            if(data.code == '01'){
-              this.sendPassword('Địa chỉ email '+ email +' không tồn tại trên hệ thống!');
-            }else if(data.code == '02'){
-              this.sendPassword('Địa chỉ email '+ email +' có tài khoản không hoạt động!');
-            }else if(data.code == '03'){
-              this.sendPassword('Địa chỉ email '+ email +' có tổ chức không hoạt động!');
-            }
+            // if(data.code == '01'){
+            //   this.sendPassword('Địa chỉ email '+ email +' không tồn tại trên hệ thống!');
+            // }else if(data.code == '02'){
+            //   this.sendPassword('Địa chỉ email '+ email +' có tài khoản không hoạt động!');
+            // }else if(data.code == '03'){
+            //   this.sendPassword('Địa chỉ email '+ email +' có tổ chức không hoạt động!');
+            // }
+            this.sendPassword(this.translateService.instant('email.valid'));
           }
           
         },

@@ -527,5 +527,6 @@
   "recipients.not.found": "Recipientid not found",
   "error.contract.name.valid": "Contract name must not contain special characters",
   "error.contract.template.name.valid": "Contract template name must not contain special characters",
-  "error.password.valid":"Password must have at least 1 uppercase, lowercase, special characters and the length of 8 characters or more"
+  "error.password.valid":"Password must have at least 1 uppercase, lowercase, special characters and the length of 8 characters or more",
+  "email.valid":"Email address is not valid"
 }
