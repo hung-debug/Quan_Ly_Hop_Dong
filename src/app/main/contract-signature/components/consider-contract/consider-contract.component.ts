@@ -399,9 +399,7 @@ export class ConsiderContractComponent
             });
         }
 
-        if (
-          this.data_contract?.is_data_contract?.status == 31 ||
-          this.data_contract?.is_data_contract?.status == 30
+        if (this.data_contract?.is_data_contract?.status == 31 || this.data_contract?.is_data_contract?.status == 30
         ) {
           this.router.navigate(['/main/form-contract/detail/' + this.idContract,]);
         }
@@ -409,8 +407,7 @@ export class ConsiderContractComponent
           (f: any) => f.type == 3
         );
         this.allRelateToContract = this.datas.is_data_contract.refs;
-        from(this.datas.is_data_contract.refs)
-          .pipe(
+        from(this.datas.is_data_contract.refs).pipe(
             concatMap((rcE: any) => {
               return this.contractService.getFileContract(rcE.ref_id);
             }),
@@ -497,9 +494,7 @@ export class ConsiderContractComponent
         this.datas.roleContractReceived = this.recipient.role;
 
         for (const signUpdate of this.isDataObjectSignature) {
-          if (
-            signUpdate &&
-            (signUpdate.type == 3 || signUpdate.type == 2) &&
+          if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 2) &&
             [3, 4].includes(this.datas.roleContractReceived) &&
             signUpdate?.recipient?.email === this.currentUser.email &&
             signUpdate?.recipient?.role === this.datas?.roleContractReceived
@@ -564,10 +559,7 @@ export class ConsiderContractComponent
 
           if (this.mobile) {
             if (arr[0])
-              if (
-                arr[0].recipient.sign_type[0].id == 5 ||
-                arr[0].recipient.sign_type[0].id == 1
-              ) {
+              if (arr[0].recipient.sign_type[0].id == 5 || arr[0].recipient.sign_type[0].id == 1) {
                 image_base64 = chu_ky_anh;
               } else {
                 image_base64 = chu_ky_so;
@@ -575,6 +567,7 @@ export class ConsiderContractComponent
           }
 
           if (this.mobile && this.recipient.status != 2 && this.recipient.status != 3) {
+
             if (image_base64) {
               const recipient = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
 
@@ -586,7 +579,6 @@ export class ConsiderContractComponent
               })
 
               if(fieldRecipientId.length == 1) {
-                console.log("vao day ");
 
                 const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, image_base64).toPromise();
                 this.pdfSrcMobile = pdfMobile.filePath;
@@ -598,15 +590,13 @@ export class ConsiderContractComponent
               this.pdfSrcMobile = this.pdfSrc;
             }
           } else {
-            if (this.recipient.status >= 3) {
+            console.log("vao day ",this.recipient);
+
+            if (this.recipient.status >= 2) {
               setTimeout(() => {
                 this.router.navigate(['/main/form-contract/detail/' + this.idContract,]);
               }, 1000);
-            } else if (this.recipient.status >= 3) {
-              setTimeout(() => {
-                this.router.navigate(['/main/form-contract/detail/' + this.idContract,]);
-              }, 1000);
-            }
+            } 
           }
         }
         // render pdf to canvas
