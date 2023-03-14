@@ -292,6 +292,15 @@ export class DetermineSignerComponent implements OnInit {
     // console.log("SU", this.data_organization)
   }
 
+  toggleDown: boolean = false;
+  toggleDropDown() {
+    this.toggleDown = true;
+  }
+
+  setLocale(d: any, lang: string) {
+    d.locale = lang;
+  }
+
   getDataApiDetermine(res: any, is_save?: boolean) {
     // this.datas.id = data?.id;
     if (!is_save) {
@@ -1219,6 +1228,7 @@ export class DetermineSignerComponent implements OnInit {
     console.log("data ", data.locale);
     if (e.target.checked) {
       data.is_otp = 1;
+      data.locale = 'vi';
       this.checkSms = true;
     } else {
       data.is_otp = 0;
@@ -1230,6 +1240,7 @@ export class DetermineSignerComponent implements OnInit {
     let data = item.recipients.filter((p: any) => p.role == 3)[index];
     if (e.target.checked) {
       data.is_otp = 1;
+      console.log("data ", data.locale);
       this.checkSms = true;
     } else {
       data.is_otp = 0;
