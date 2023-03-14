@@ -475,6 +475,21 @@ export class SidebarService {
         title: 'report.processing.status.contract',
         active: false,
         // href: '/main/'+this.contract_signatures+'/receive/share',
+      },
+      //Số lượng hợp đồng theo trạng thái
+      {
+        title: 'report.number.contracts.status',
+        active: false,
+      },
+      //Số lượng hợp đồng theo loại hợp đồng
+      {
+        title: 'report.number.contracts.contract-type',
+        active: false,
+      },
+      //Số lượng HĐ theo hình thức ký
+      {
+        title: 'report.number.contracts.type.sign',
+        active: false,
       }
     );
     this.menus.push({
