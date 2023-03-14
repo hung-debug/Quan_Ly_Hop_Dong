@@ -16,7 +16,32 @@
         <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
           <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}}-->
-          <div class="participants--input" style="display: flex">
+          <div class="participants--input" style="display: flex" *ngIf="login_by==='phone'">
+            <div class="participants__name">
+              <div class="label_detail text-color" *ngIf="changeTypeSign">
+                <div>
+                  <input type="radio" (change)="changeTypeSign(0)" name="checkPhoneMailOrgSigner_"
+                    value="{{this.login_by}}" />
+                </div>&nbsp;
+                <div>
+                  {{'typeOfSignEmail' | translate}}
+                </div>
+              </div>
+            </div>
+            <div class="participants__name">
+              <div class="label_detail text-color">
+                <div>
+                  <input type="radio" (change)="changeTypeSign(1)" name="checkPhoneMailOrgSigner_"
+                    value="{{this.login_by}}" checked />
+                </div>&nbsp;
+                <div>
+                  {{'typeOfSignPhone' | translate}}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="participants--input" style="display: flex" *ngIf="login_by==='email'">
             <div class="participants__name">
               <div class="label_detail text-color" *ngIf="changeTypeSign">
                 <div>
@@ -41,7 +66,8 @@
             </div>
           </div>
 
-          <div class="participants--input" [ngStyle]="{'display':'flex', 'justify-content': (role === 2) ? 'left' : 'space-around' }">
+          <div class="participants--input"
+            [ngStyle]="{'display':'flex', 'justify-content': (role === 2) ? 'left' : 'space-around' }">
             <div class="participants__name" [ngStyle]="{'margin-left': (role === 2) ? '4%' : null }">
               <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span
                   class="required-title">*</span></div>
