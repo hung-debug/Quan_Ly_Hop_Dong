@@ -343,9 +343,11 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   selectWithOtp(e: any, data: any) {
-    this.changeOtp(data);
-    if (data.typeSign == 1 && this.getDataSignCka(data).length > 0) {
-      data.phone = data.email;
+    if(data.type == 3) {
+      this.changeOtp(data);
+      if (data.typeSign == 1 && this.getDataSignCka(data).length > 0) {
+        data.phone = data.email;
+      }
     }
   }
 
