@@ -38,7 +38,7 @@ export class EditHandlerComponent implements OnInit {
   email: string;
   phone: string;
   login_by: any;
-  isCheckRadio = true;
+  isCheckRadio = this.data.login_by === "phone" ? false : true;
   is_handler: any;
   name: any;
   recipient_id: any;

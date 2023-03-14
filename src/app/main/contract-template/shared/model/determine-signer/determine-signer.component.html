@@ -684,8 +684,11 @@
                   </div> -->
 
                   <div class="participants--content" *ngFor="let d of getPartnerCoordination(item); let index = index">
-                  <div class="input-data" style="width: 13%; margin-top: 8px;" *ngIf="checkSms">
-                    <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                    <div class="label_detail text-color" style="margin-right: 5px; margin-top: -10px;">{{'sms.locale' | translate}}&nbsp;
+                      <span class="required-title">*</span>
+                    </div>
+                  <div class="input-data" style="width: 13%; margin-top: -5px;" *ngIf="checkSms">
+                    <div ngbDropdown class="d-inline-block" style="margin-left: 6px;">
                       <div *ngIf="d.locale =='vi'">
                         <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
                           id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
@@ -785,7 +788,7 @@
                       <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
 
                       <div class="input-data" style="width: 13%; margin-top: 8px;" *ngIf="d.is_otp == 1">
-                        <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                        <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" >
                           <div *ngIf="d.locale =='vi'">
                             <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
                               id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
@@ -1000,7 +1003,7 @@
                       <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
 
                       <div class="input-data" style="width: 6%; margin-top: 8px;" *ngIf="d.is_otp == 1">
-                        <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                        <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" >
                           <div *ngIf="d.locale =='vi'">
                             <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
                               id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
@@ -1095,7 +1098,7 @@
                       <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
 
                       <div class="input-data" style="width: 6%; margin-top: 8px;" *ngIf="d.is_otp == 1">
-                        <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                        <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" >
                           <div *ngIf="d.locale =='vi'">
                             <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
                               id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
@@ -1284,7 +1287,7 @@
                       <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
 
                       <div class="input-data" style="width: 6%; margin-top: 8px;" *ngIf="d.is_otp == 1">
-                        <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                        <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" >
                           <div *ngIf="d.locale =='vi'">
                             <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
                               id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
