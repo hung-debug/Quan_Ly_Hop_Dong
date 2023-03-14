@@ -32,6 +32,7 @@ import { AdminUserComponent } from './admin/admin-main/admin-user/admin-user.com
 import { AdminPackComponent } from './admin/admin-main/admin-pack/admin-pack.component';
 import { AdminInfoUserComponent } from './admin/admin-main/admin-user/admin-info-user/admin-info-user.component';
 import { MultiSignListComponent } from './main/contract-signature/components/multi-sign-list/multi-sign-list.component';
+import { ReportComponent } from './main/report/report.component';
 
 const contract_signatures = "c";
 const signatures = "s9";
@@ -191,6 +192,10 @@ const routes: Routes = [
         path: 'notification',
         component: NotificationComponent,
       },
+      {
+        path:'report',
+        component: ReportComponent
+      }
     ],
   },
   {

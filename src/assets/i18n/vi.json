@@ -531,5 +531,9 @@
   "email.exist": "Email đã tồn tại",
   "phone.exist": "Số điện thoại đã tồn tại",
   "taxcode.exist": "MST/CMT/CCCD đã tồn tại",
-  "recipients.not.found": "người nhận không tìm thấy"
+  "recipients.not.found": "người nhận không tìm thấy",
+  "report":"Báo cáo",
+  "report.detail.contract":"Chi tiết hợp đồng",
+  "report.expires-soon.contract":"HĐ sắp hết hạn",
+  "report.processing.status.contract":"Trạng thái xử lý HĐ"
 }

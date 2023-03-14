@@ -98,6 +98,7 @@ import { AdminInfoUserComponent } from './admin/admin-main/admin-user/admin-info
 
 import {WebcamModule} from 'ngx-webcam';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { ReportComponent } from './main/report/report.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -163,6 +164,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdminDeleteUnitComponent,
     AdminDeletePackUnitComponent,
     AdminInfoUserComponent,
+    ReportComponent,
 
   ],
   imports: [
