@@ -107,6 +107,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           reasonReject: element.reasonReject,
           type: element.participantType,
           statusNumber: element.status,
+          phone: element.phone
         }
 
         this.is_list_name.push(data);
@@ -287,6 +288,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
             return {
               ...x, name: result.name,
               emailRecipients: result.email,
+              phone: result.phone,
               change_num: result.change_num
             }
           }

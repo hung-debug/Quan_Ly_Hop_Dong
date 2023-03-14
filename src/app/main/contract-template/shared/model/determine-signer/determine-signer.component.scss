@@ -413,6 +413,20 @@ input[type="checkbox"] {
         margin-bottom: 10px;
       }
     }
+    .participants-border2 {
+      border-radius: 11px 11px 11px 11px;
+      border: 1px solid #ddd;
+
+      .participants--add {
+        display: inline-block;
+        color: #106DB6;
+        cursor: pointer;
+      }
+
+      &:not(:last-child) {
+        margin-bottom: 10px;
+      }
+    }
 
     ::ng-deep .multiselect-dropdown .dropdown-btn {
       border: 1px solid #106DB6 !important;

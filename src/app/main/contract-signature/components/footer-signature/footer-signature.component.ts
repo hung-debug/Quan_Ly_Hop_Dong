@@ -9,7 +9,6 @@ import { DeviceDetectorService } from "ngx-device-detector";
 import { UnitService } from 'src/app/service/unit.service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-
 @Component({
   selector: 'app-footer-signature',
   templateUrl: './footer-signature.component.html',
@@ -67,6 +66,8 @@ export class FooterSignatureComponent implements OnInit {
 
   lang: string;
   ngOnInit(): void {
+    console.log("ngOnInit: ",this.datas)
+    console.log("ngOnInit keys: ",Object.keys(this.datas))
     this.getDeviceApp();
 
     if (sessionStorage.getItem('lang') == 'en') {
@@ -247,8 +248,9 @@ export class FooterSignatureComponent implements OnInit {
 
     pdffull.scrollTo(0, canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top);
   }
-
+  ArrRecipientsNew: boolean;
   action() {
+    console.log("##############datas", this.datas);
     if (this.datas.action_title == 'dieu_phoi') {
       // console.log("datas", this.datas);
 
