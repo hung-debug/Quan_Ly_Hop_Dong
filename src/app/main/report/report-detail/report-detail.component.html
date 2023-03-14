@@ -1,1 +1,40 @@
-<p>report-detail works!</p>
+<div>
+    <div class="row">
+        <!--Tổ chức-->
+        <div class="col-md-2">
+            <div>{{'organization' | translate}}</div>
+            <div class="input-line">
+                <input type="text" class="input_text"/>
+            </div>
+        </div>
+
+        <!--Ngày tạo hợp đồng-->
+        <div class="col-md-2">
+            <div>{{ 'create-date' | translate}}</div>
+            <div class="input-line">
+                <input type="text" class="input_text"/>
+            </div>
+        </div>
+
+        <!--Ngày tạo hợp đồng-->
+        <div class="col-md-2">
+            <div>{{'contract.status' | translate}}</div>
+            <div class="input-line">
+                <input type="text" class="input_text"/>
+            </div>
+        </div>
+
+        <!--Button-->
+        <div class="col-md-6 btn_search">
+            <button class="btn btn-lg btn-block btn_submit">{{'btn.search' | translate }}</button>
+            <button class="btn btn-lg btn-block btn_submit">{{'btn.add' | translate }}</button>
+        </div>
+    </div>
+    <div class="row" style="padding-top: 10px;">
+        <div class="col-md-6">
+            <input type="radio">&nbsp;
+            <span>Bao gồm cả tổ chức con (Tổ chức con chỉ bao gồm tổ chức con cấp một)</span>
+        </div>
+ 
+    </div>
+</div>
