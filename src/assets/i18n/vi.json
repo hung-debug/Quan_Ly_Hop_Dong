@@ -532,8 +532,12 @@
   "phone.exist": "Số điện thoại đã tồn tại",
   "taxcode.exist": "MST/CMT/CCCD đã tồn tại",
   "recipients.not.found": "người nhận không tìm thấy",
-  "report":"Báo cáo",
-  "report.detail.contract":"Chi tiết hợp đồng",
-  "report.expires-soon.contract":"HĐ sắp hết hạn",
-  "report.processing.status.contract":"Trạng thái xử lý HĐ"
+  "report":"Báo cáo hợp đồng",
+  "report.detail.contract":"Chi tiết",
+  "report.expires-soon.contract":"Sắp hết hạn",
+  "report.processing.status.contract":"Trạng thái xử lý",
+  "report.number.contracts.status":"SL theo trạng thái",
+  "report.number.contracts.contract-type":"SL theo loại HĐ",
+  "report.number.contracts.type.sign":"SL theo hình thức ký"
+
 }

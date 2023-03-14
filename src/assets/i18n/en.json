@@ -532,5 +532,8 @@
   "report":"Report",
   "report.detail.contract":"Contract detail",
   "report.expires-soon.contract":"The contract is about to expire",
-  "report.processing.status.contract":"Contract processing status"
+  "report.processing.status.contract":"Contract processing status",
+  "report.number.contracts.status":"Report number of contracts by status",
+  "report.number.contracts.contract-type":"Report number of contracts by contract type",
+  "report.number.contracts.type.sign":"Report the number of contracts in the type of sign"
 }

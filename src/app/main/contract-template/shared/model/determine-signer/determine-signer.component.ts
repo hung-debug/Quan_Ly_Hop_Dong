@@ -343,10 +343,13 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   selectWithOtp(e: any, data: any) {
-    this.changeOtp(data);
+    if(data.type == 3) {
+      this.changeOtp(data);
     if (data.typeSign == 1 && this.getDataSignCka(data).length > 0) {
       data.phone = data.email;
     }
+    }
+    
   }
 
   changeOtp(data: any) {
@@ -1263,12 +1266,17 @@ export class DetermineSignerComponent implements OnInit {
     }
   }
 
-  changeIsSmsSignature(e: any, item: any, index: any) {
+  changeIsSmsSignature(e: any, item: any, index: any,d?: any) {
     let data = item.recipients.filter((p: any) => p.role == 3)[index];
     if (e.target.checked) {
+      console.log("d ",d.is_otp);
       data.is_otp = 1;
+      d.is_otp = 1;
+      console.log("d ",d.is_otp);
+
     } else {
       data.is_otp = 0;
+      d.is_otp = 0;
     }
   }
 
