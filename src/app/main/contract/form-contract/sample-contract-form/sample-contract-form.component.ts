@@ -453,16 +453,19 @@ export class SampleContractFormComponent implements OnInit {
             item['type_unit'] = 'organization';
             item['selected'] = false;
             item['is_disable'] = false;
+            // item['id'] = item.id;
             this.list_sign_name.push(item);
           }
         })
       } else if (element.type == 2 || element.type == 3) {
         element.recipients.forEach((item: any) => {
+          console.log("item ", item);
           if (item.role == 3 || item.role == 4 || item.role == 2) {
             item['type_unit'] = 'partner'
             item['selected'] = false;
             item['is_disable'] = false;
             item['type'] = element.type;
+            // item['id'] = item.id;
             this.list_sign_name.push(item);
           }
         })

@@ -369,6 +369,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     console.log("next ", this.datasForm.is_determine_clone);
 
     this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
+      this.datasForm.is_determine_clone = res;
         this.getDataApiDetermine(res, is_save)
       }, (error: HttpErrorResponse) => {
         if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
