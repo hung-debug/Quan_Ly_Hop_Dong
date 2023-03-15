@@ -1105,6 +1105,7 @@ export class SampleContractFormComponent implements OnInit {
 
   // get select người ký
   getSignSelect(d: any) {
+    console.log("d ",d);
     if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
       this.textSign = true;
       this.list_font = ["Arial","Calibri","Times New Roman"];
@@ -1126,6 +1127,7 @@ export class SampleContractFormComponent implements OnInit {
     } else
       signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
+      console.log("d ", d);
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
 
@@ -1163,6 +1165,8 @@ export class SampleContractFormComponent implements OnInit {
           this.isEnableSelect = true;
         }
 
+        console.log("d ",d);
+
         if (!d.name && !d.recipient.name) {
           //@ts-ignore
           document.getElementById('select-dropdown').value = "";
@@ -1177,6 +1181,8 @@ export class SampleContractFormComponent implements OnInit {
         }
       }
     }
+
+    console.log("d ",d);
   }
 
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
@@ -1295,8 +1301,17 @@ export class SampleContractFormComponent implements OnInit {
   soHopDong: any;
   changePositionSign(e: any, locationChange: any, property: any) {
     let signElement = document.getElementById(this.objSignInfo.id);
+
+    console.log("si ", signElement);
+
+    console.log("e ", e);
+
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+
+      console.log("si ", isObjSign);
+
+
       if (isObjSign) {
         if (property == 'location') {
           if (locationChange == 'x') {
@@ -1353,9 +1368,17 @@ export class SampleContractFormComponent implements OnInit {
             }
           });
         } else {
+          console.log("e ",e.target.value);
+
+          console.log("list ", this.list_sign_name);
+
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
-          // if (data_name && !isObjSign.name) {
+          
+          console.log("data ", data_name);
+
           if (data_name) {
+            
+
             isObjSign.name = data_name.name;
             signElement.setAttribute("name", isObjSign.name);
 
