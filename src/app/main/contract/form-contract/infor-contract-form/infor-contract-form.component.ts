@@ -95,6 +95,8 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+
+    console.log("vao day ");
     this.spinner.hide();
 
     let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));

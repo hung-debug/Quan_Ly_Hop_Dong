@@ -453,16 +453,19 @@ export class SampleContractFormComponent implements OnInit {
             item['type_unit'] = 'organization';
             item['selected'] = false;
             item['is_disable'] = false;
+            // item['id'] = item.id;
             this.list_sign_name.push(item);
           }
         })
       } else if (element.type == 2 || element.type == 3) {
         element.recipients.forEach((item: any) => {
+          console.log("item ", item);
           if (item.role == 3 || item.role == 4 || item.role == 2) {
             item['type_unit'] = 'partner'
             item['selected'] = false;
             item['is_disable'] = false;
             item['type'] = element.type;
+            // item['id'] = item.id;
             this.list_sign_name.push(item);
           }
         })
@@ -1105,6 +1108,7 @@ export class SampleContractFormComponent implements OnInit {
 
   // get select người ký
   getSignSelect(d: any) {
+    console.log("d ",d);
     if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
       this.textSign = true;
       this.list_font = ["Arial","Calibri","Times New Roman"];
@@ -1126,6 +1130,7 @@ export class SampleContractFormComponent implements OnInit {
     } else
       signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
+      console.log("d ", d);
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
 
@@ -1163,6 +1168,8 @@ export class SampleContractFormComponent implements OnInit {
           this.isEnableSelect = true;
         }
 
+        console.log("d ",d);
+
         if (!d.name && !d.recipient.name) {
           //@ts-ignore
           document.getElementById('select-dropdown').value = "";
@@ -1177,6 +1184,8 @@ export class SampleContractFormComponent implements OnInit {
         }
       }
     }
+
+    console.log("d ",d);
   }
 
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
@@ -1295,8 +1304,17 @@ export class SampleContractFormComponent implements OnInit {
   soHopDong: any;
   changePositionSign(e: any, locationChange: any, property: any) {
     let signElement = document.getElementById(this.objSignInfo.id);
+
+    console.log("si ", signElement);
+
+    console.log("e ", e);
+
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+
+      console.log("si ", isObjSign);
+
+
       if (isObjSign) {
         if (property == 'location') {
           if (locationChange == 'x') {
@@ -1353,9 +1371,17 @@ export class SampleContractFormComponent implements OnInit {
             }
           });
         } else {
+          console.log("e ",e.target.value);
+
+          console.log("list ", this.list_sign_name);
+
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
-          // if (data_name && !isObjSign.name) {
+          
+          console.log("data ", data_name);
+
           if (data_name) {
+            
+
             isObjSign.name = data_name.name;
             signElement.setAttribute("name", isObjSign.name);
 
@@ -1439,8 +1465,8 @@ export class SampleContractFormComponent implements OnInit {
   }
 
   async next(action: string) {
-    this.datasForm.font = this.selectedFont;
-    this.datasForm.size = this.size;
+    // this.datasForm.font = this.selectedFont;
+    // this.datasForm.size = this.size;
     if (action == 'next_step' && !this.validData()) {
 
       if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {

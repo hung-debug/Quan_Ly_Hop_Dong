@@ -259,9 +259,7 @@ export class ConfirmContractFormComponent implements OnInit {
       let isUserSign_clone = _.cloneDeep(this.datasForm.contract_user_sign);
 
       isUserSign_clone.forEach((res: any) => {
-        console.log("res ", res);
         res.sign_config.forEach((element: any) => {
-          console.log("el ", element);
           if (element.id_have_data) {
             isHaveFieldId.push(element);
           } else isNotFieldId.push(element);
@@ -276,8 +274,8 @@ export class ConfirmContractFormComponent implements OnInit {
       isContractUserSign_clone.forEach((element: any) => {
         if (element.sign_config.length > 0) {
           element.sign_config.forEach((item: any) => {
-            item['font'] = this.datasForm.font;
-            item['font_size'] = this.datasForm.size;
+            item['font'] = this.datasForm.font ? this.datasForm.font : 'Times New Roman';
+            item['font_size'] = this.datasForm.size ? this.datasForm.size : 13;
             item['contract_id'] = this.datasForm.contract_id;
             item['document_id'] = this.datasForm.document_id;
             if (item.text_attribute_name) {
@@ -313,9 +311,7 @@ export class ConfirmContractFormComponent implements OnInit {
       });
 
       this.spinner.show();
-      this.contractService
-        .getContractSample(this.data_sample_contract)
-        .subscribe(
+      this.contractService.getContractSample(this.data_sample_contract).subscribe(
           (data) => {
             if (action == 'finish_contract') {
               this.callAPIFinish();
@@ -380,6 +376,11 @@ export class ConfirmContractFormComponent implements OnInit {
 
         // datasFormignId[i].font_size = this.datasForm.size;
         // datasFormignId[i].font = this.datasForm.font;
+        
+        // datasFormignId[i].font = datasFormignId[i].font ? datasFormignId[i].font : 'Times New Roman';
+        // datasFormignId[i].font_size = datasFormignId[i].size ? datasFormignId[i].size : 13;
+
+        // console.log("vao day ");
         await this.contractService.getContractSampleEdit(datasFormignId[i], id).toPromise().then((data: any) => {
               datasFormample_contract.push(data);
             },
@@ -403,8 +404,8 @@ export class ConfirmContractFormComponent implements OnInit {
     let isErrorNotId = false;
     if (datasFormignNotId.length > 0) {
       datasFormignNotId.forEach((item: any) => {
-        item['font'] = this.datasForm.font;
-        item['font_size'] = this.datasForm.size;
+        item['font'] = item.font ? item.font : 'Times New Roman';
+        item['font_size'] = item.size ? item.size : 13;
         item['contract_id'] = this.datasForm.contract_id;
         item['document_id'] = this.datasForm.document_id;
         if (item.text_attribute_name) {
@@ -432,10 +433,7 @@ export class ConfirmContractFormComponent implements OnInit {
         });
       });
       // Array.prototype.push.apply(this.data_sample_contract, datasFormignNotId);
-      await this.contractService
-        .getContractSample(datasFormignNotId)
-        .toPromise()
-        .then(
+      await this.contractService.getContractSample(datasFormignNotId).toPromise().then(
           (data) => {
             this.spinner.hide();
           },
