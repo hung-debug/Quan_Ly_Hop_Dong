@@ -529,5 +529,12 @@
   "error.contract.name.valid": "Contract name must not contain special characters",
   "error.contract.template.name.valid": "Contract template name must not contain special characters",
   "error.password.valid":"Password must have at least 1 uppercase, lowercase, special characters and the length of 8 characters or more",
-  "email.valid":"Email address is not valid"
+  "email.valid":"Email address is not valid",
+  "report":"Report",
+  "report.detail.contract":"Contract detail",
+  "report.expires-soon.contract":"The contract is about to expire",
+  "report.processing.status.contract":"Contract processing status",
+  "report.number.contracts.status":"Report number of contracts by status",
+  "report.number.contracts.contract-type":"Report number of contracts by contract type",
+  "report.number.contracts.type.sign":"Report the number of contracts in the type of sign"
 }

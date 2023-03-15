@@ -674,19 +674,19 @@
                     (change)="changeIsCoordination($event, item, id)">
                   <div style="padding: 0 20px 0 5px">Có người điều phối</div>
 
-                  <!-- <div *ngIf="getPartnerCoordination(item).length > 0 " style="display: flex">
+                  <div *ngIf="getPartnerCoordination(item).length > 0 " style="display: flex">
                     <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="getPartnerCoordination(item)[0].is_otp != 1" 
                     (change)="changeIsSmsCoordination($event, item, 0)">
                     <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="getPartnerCoordination(item)[0].is_otp == 1" checked 
                     (change)="changeIsSmsCoordination($event, item, 0)">
                     <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
-                  </div> -->
+                  </div>
 
                   <div class="participants--content" *ngFor="let d of getPartnerCoordination(item); let index = index">
-                    <div class="label_detail text-color" style="margin-right: 5px; margin-top: -10px;">{{'sms.locale' | translate}}&nbsp;
+                    <!-- <div class="label_detail text-color" style="margin-right: 5px; margin-top: -10px;">{{'sms.locale' | translate}}&nbsp;
                       <span class="required-title">*</span>
-                    </div>
-                  <div class="input-data" style="width: 13%; margin-top: -5px;" *ngIf="checkSms">
+                    </div> -->
+                  <div class="input-data" style="width: 13%; margin-top: -5px;" *ngIf="getPartnerCoordination(item)[0].is_otp == 1">
                     <div ngbDropdown class="d-inline-block" style="margin-left: 6px;">
                       <div>
                         <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
@@ -711,15 +711,7 @@
                     </div>
                   </div>
                 </div>
-<!--   
-                  <div *ngIf="getPartnerCoordination(item).length > 0 " style="display: flex">
-                    <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="getPartnerCoordination(item)[0].is_otp != 1" (change)="changeIsSmsCoordination($event, item, 0)">
-                    <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="getPartnerCoordination(item)[0].is_otp == 1" checked (change)="changeIsSmsCoordination($event, item, 0)">
-                    <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
-                  </div> -->
 
-                  
-                  
                 </div>
             </div>
           </div>
@@ -811,11 +803,8 @@
                                 </button>
                               </div>
                             </div>
-                          <!-- </div> -->
-                          
+                          <!-- </div> -->                         
                         </div>
-
-                        
                       </div>
 
                     </div>
@@ -1005,9 +994,9 @@
                   <div class="participants__name" style="width: 90%">
                     <div style="height: 40px; display: flex; align-items: center;">
                       <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp != 1"
-                        (change)="changeIsSmsSignature($event, item, index)">
-                      <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" checked
-                        [disabled]="getDataSignCka(d).length > 0" (change)="changeIsSmsSignature($event, item, index)">
+                        (change)="changeIsSmsSignature($event, item, index,d)">
+                      <input *ngIf="d.is_otp == 1" type="checkbox" style="width: 17px; height: 17px;" checked
+                        [disabled]="getDataSignCka(d).length > 0" (change)="changeIsSmsSignature($event, item, index,d)">
                       <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
 
                       <!--Lựa chọn tiếng anh tiếng việt cho người ký đối tác trường hợp đăng nhập bằng email nội bộ-->
@@ -1306,7 +1295,7 @@
                       <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
 
                       <div class="input-data" style="width: 6%; margin-top: 8px;" *ngIf="d.is_otp == 1">
-                        <div ngbDropdown class="d-inline-block" style="margin-left: 6px;">
+                        <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" >
                           <div>
                             <button *ngIf="d.locale == 'vi'" class="btn btn-outline-primary db_icon_vietnam"
                               id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>

@@ -601,14 +601,6 @@ export class ContractSignatureComponent implements OnInit {
               this.toastService.showErrorHTMLWithTimeout('Lỗi lấy file cần ký','',3000);
               return false;
             }
-     
-            // this.contractServiceV1.getFileContract(idContract[i]).subscribe((response) => {
-            //     fileC.push(response[0].path);
-
-            //     if (fileC.length == idContract.length) {
-            //       this.signUsbTokenMany(fileC,idContract,recipientId,documentId,taxCode,idSignMany);
-            //     }
-            //   });
           }
 
           console.log("file c ", fileC);

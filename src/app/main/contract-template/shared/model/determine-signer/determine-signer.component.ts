@@ -355,10 +355,11 @@ export class DetermineSignerComponent implements OnInit {
   selectWithOtp(e: any, data: any) {
     if(data.type == 3) {
       this.changeOtp(data);
-      if (data.typeSign == 1 && this.getDataSignCka(data).length > 0) {
-        data.phone = data.email;
-      }
+    if (data.typeSign == 1 && this.getDataSignCka(data).length > 0) {
+      data.phone = data.email;
     }
+    }
+    
   }
 
   changeOtp(data: any) {
@@ -1276,22 +1277,26 @@ export class DetermineSignerComponent implements OnInit {
     if (e.target.checked) {
       data.is_otp = 1;
       data.locale = 'vi';
-      this.checkSms = true;
+      // this.checkSms = true;
     } else {
       data.is_otp = 0;
-      this.checkSms = false;
+      // this.checkSms = false;
     }
   }
 
-  changeIsSmsSignature(e: any, item: any, index: any) {
+  changeIsSmsSignature(e: any, item: any, index: any,d?: any) {
+    console.log("item",item);
+    
     let data = item.recipients.filter((p: any) => p.role == 3)[index];
     if (e.target.checked) {
+      // console.log("d ",d.is_otp);
       data.is_otp = 1;
-      console.log("data ", data.locale);
-      this.checkSms = true;
+      d.is_otp = 1;
+      console.log("dddddđ ",data);
+
     } else {
       data.is_otp = 0;
-      this.checkSms = false;
+      d.is_otp = 0;
     }
   }
 
@@ -1299,10 +1304,10 @@ export class DetermineSignerComponent implements OnInit {
     let data = item.recipients.filter((p: any) => p.role == 4)[index];
     if (e.target.checked) {
       data.is_otp = 1;
-      this.checkSms = true;
+      // this.checkSms = true;
     } else {
       data.is_otp = 0;
-      this.checkSms = false;
+      // this.checkSms = false;
     }
   }
 

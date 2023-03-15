@@ -456,6 +456,61 @@ export class SidebarService {
       id: 9,
     });
 
+    let submenusReport: any[] = [];
+    submenusReport.push(
+      //Chi tiết hợp đồng
+      {
+        title: 'report.detail.contract',
+        active: false,
+        // href: '/main/'+this.contract_signatures+'/receive/wait-processing',
+      },
+      //HĐ sắp hết hiệu lực
+      {
+        title: 'report.expires-soon.contract',
+        active: false,
+        // href: '/main/'+this.contract_signatures+'/receive/processed',
+      },
+      //Trạng thái xử lý hợp đồng
+      {
+        title: 'report.processing.status.contract',
+        active: false,
+        // href: '/main/'+this.contract_signatures+'/receive/share',
+      },
+      //Số lượng hợp đồng theo trạng thái
+      {
+        title: 'report.number.contracts.status',
+        active: false,
+      },
+      //Số lượng hợp đồng theo loại hợp đồng
+      {
+        title: 'report.number.contracts.contract-type',
+        active: false,
+      },
+      //Số lượng HĐ theo hình thức ký
+      {
+        title: 'report.number.contracts.type.sign',
+        active: false,
+      }
+    );
+    this.menus.push({
+      // title: 'report',
+      // icon: '/assets/img/analytics1.svg',
+      // active: false,
+      // type: 'simple',
+      // href: '#',
+      // submenus: submenusReceive,
+      // id: 10,
+
+      title: 'report',
+      icon: '/assets/img/analytics1.svg',
+      active: false,
+      activeDrop: false,
+      type: 'dropdown',
+      href: '#',
+      submenus: submenusReport,
+      id: 10,
+    })
+
     //xu ly highlight
     this.menus.forEach((element: any) => {
       element.active = false;

@@ -141,7 +141,7 @@
   "user.doc": "Văn thư",
   "user.lead": "Người điều phối",
   "user.name": "Họ tên",
-  "sms.locale": "Ngôn ngữ sms",
+  "sms.locale": "Ngôn ngữ SMS",
   "user.email": "Email",
   "user.sign-type": "Loại ký",
   "user.otp": "OTP",
@@ -532,5 +532,13 @@
   "email.exist": "Email đã tồn tại",
   "phone.exist": "Số điện thoại đã tồn tại",
   "taxcode.exist": "MST/CMT/CCCD đã tồn tại",
-  "recipients.not.found": "người nhận không tìm thấy"
+  "recipients.not.found": "người nhận không tìm thấy",
+  "report":"Báo cáo hợp đồng",
+  "report.detail.contract":"Chi tiết",
+  "report.expires-soon.contract":"Sắp hết hạn",
+  "report.processing.status.contract":"Trạng thái xử lý",
+  "report.number.contracts.status":"SL theo trạng thái",
+  "report.number.contracts.contract-type":"SL theo loại HĐ",
+  "report.number.contracts.type.sign":"SL theo hình thức ký"
+
 }
