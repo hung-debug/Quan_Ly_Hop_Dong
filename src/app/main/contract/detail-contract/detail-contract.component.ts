@@ -888,6 +888,9 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   actionBack() {
+    console.log("vao day ");
+
+    // console.log("is ", this.isOrg);
     if(this.pageBefore && this.isOrg) {
       this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate(['/main/contract/create/' + this.statusLink],
@@ -928,7 +931,16 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       if(this.router.url.includes("reject")) {
         this.router.navigate(['/main/c/receive/wait-processing']);
       } else {
-        this._location.back();
+        if(this.isOrg) {
+          this._location.back();
+        } else {
+          // console.log("vao day ");
+          this.router.navigate(['/login']);
+
+          this.contractService.deleteToken().subscribe((response: any) => {
+            
+          });
+        }
       }
     }
   }
