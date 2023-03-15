@@ -359,9 +359,10 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         }
       })
 
-      if (items.type == 3)
+      if (items.type == 3) {
         this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
-        this.datasForm.is_determine_clone[index].id = null;
+      }
+        // this.datasForm.is_determine_clone[index].id = null;
     })
     this.spinner.show();
 
