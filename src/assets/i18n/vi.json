@@ -545,5 +545,7 @@
   "report.processing.status.contract.full":"Báo cáo trạng thái xử lý hợp đồng",
   "report.number.contracts.status.full":"Báo cáo số lượng hợp đồng theo trạng thái",
   "report.number.contracts.contract-type.full":"Báo cáo số lượng hợp đồng theo loại hợp đồng",
-  "report.number.contracts.type.sign.full":"Báo cáo số lượng hợp đồng theo hình thức ký"
+  "report.number.contracts.type.sign.full":"Báo cáo số lượng hợp đồng theo hình thức ký",
+  "include.org1":"Bao gồm cả tổ chức con (Tổ chức con chỉ bao gồm tổ chức con cấp một)",
+  "contract.time.create": "Thời gian tạo"
 }
