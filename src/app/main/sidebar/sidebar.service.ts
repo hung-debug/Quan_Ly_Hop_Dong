@@ -492,24 +492,16 @@ export class SidebarService {
         active: false,
       }
     );
-    this.menus.push({
-      // title: 'report',
-      // icon: '/assets/img/analytics1.svg',
-      // active: false,
-      // type: 'simple',
-      // href: '#',
-      // submenus: submenusReceive,
-      // id: 10,
-
-      title: 'report',
-      icon: '/assets/img/analytics1.svg',
-      active: false,
-      activeDrop: false,
-      type: 'dropdown',
-      href: '#',
-      submenus: submenusReport,
-      id: 10,
-    })
+    // this.menus.push({
+    //   title: 'report',
+    //   icon: '/assets/img/analytics1.svg',
+    //   active: false,
+    //   activeDrop: false,
+    //   type: 'dropdown',
+    //   href: '#',
+    //   submenus: submenusReport,
+    //   id: 10,
+    // })
 
     //xu ly highlight
     this.menus.forEach((element: any) => {

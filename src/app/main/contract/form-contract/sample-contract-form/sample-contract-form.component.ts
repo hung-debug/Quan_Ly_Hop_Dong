@@ -1462,8 +1462,8 @@ export class SampleContractFormComponent implements OnInit {
   }
 
   async next(action: string) {
-    this.datasForm.font = this.selectedFont;
-    this.datasForm.size = this.size;
+    // this.datasForm.font = this.selectedFont;
+    // this.datasForm.size = this.size;
     if (action == 'next_step' && !this.validData()) {
 
       if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
