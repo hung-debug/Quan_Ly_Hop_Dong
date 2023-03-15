@@ -1277,20 +1277,22 @@ export class DetermineSignerComponent implements OnInit {
     if (e.target.checked) {
       data.is_otp = 1;
       data.locale = 'vi';
-      this.checkSms = true;
+      // this.checkSms = true;
     } else {
       data.is_otp = 0;
-      this.checkSms = false;
+      // this.checkSms = false;
     }
   }
 
   changeIsSmsSignature(e: any, item: any, index: any,d?: any) {
+    console.log("item",item);
+    
     let data = item.recipients.filter((p: any) => p.role == 3)[index];
     if (e.target.checked) {
-      console.log("d ",d.is_otp);
+      // console.log("d ",d.is_otp);
       data.is_otp = 1;
       d.is_otp = 1;
-      console.log("d ",d.is_otp);
+      console.log("dddddđ ",data);
 
     } else {
       data.is_otp = 0;
@@ -1302,10 +1304,10 @@ export class DetermineSignerComponent implements OnInit {
     let data = item.recipients.filter((p: any) => p.role == 4)[index];
     if (e.target.checked) {
       data.is_otp = 1;
-      this.checkSms = true;
+      // this.checkSms = true;
     } else {
       data.is_otp = 0;
-      this.checkSms = false;
+      // this.checkSms = false;
     }
   }
 
