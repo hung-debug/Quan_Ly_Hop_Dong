@@ -1250,6 +1250,7 @@
                   </div>
                 </div>
 
+            
                 <div *ngIf="d.login_by == 'email' && getDataSignCka(d).length > 0" class="participants--input" style="display: flex;">
                   <div class="participants__name" style="margin-right: 50%; display: flex;">
                     <div class="label_detail text-color" style="margin-right: 5px; margin-top: 8px;">{{'sms.locale' |
@@ -1283,18 +1284,18 @@
                   </div>
                 </div>
 
-                <div *ngIf="this.site === 'NB' && d.login_by === 'email'" class="participants--input"
+                <div *ngIf="this.site === 'NB' && d.login_by === 'email'" class="participants--input"  
                   style="display: flex">
                   <div class="participants__name" style="width: 90%">
                     <div style="height: 40px; display: flex; align-items: center;">
                       <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp != 1"
                         (change)="changeIsSmsSignature($event, item, index)">
                       <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" checked
-                        [disabled]="getDataSignCka(d).length > 0" checked
+
                         (change)="changeIsSmsSignature($event, item, index)">
                       <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
 
-                      <div class="input-data" style="width: 6%; margin-top: 8px;" *ngIf="d.is_otp == 1">
+                      <div class="input-data" style="width: 6%; margin-top: 8px;" *ngIf="d.is_otp == 1 && getDataSignCka(d).length === 0">
                         <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" >
                           <div>
                             <button *ngIf="d.locale == 'vi'" class="btn btn-outline-primary db_icon_vietnam"
@@ -1326,6 +1327,7 @@
                     </div>
                   </div>
                 </div>
+              
 
               </div>
               <div *ngIf="getPartnerSignature(item).length > 1" class="col-md-1 delete-element" (click)="deletePartnerSignature(index, item)">
