@@ -189,7 +189,7 @@ export class ForwardContractComponent implements OnInit {
         if (coutError == 0) {
           //is_replace: false = giữ lại uỷ quyền
           const dataAuthorize = {
-            email: this.myForm.value.email,
+            email: this.myForm.value.email.toLowerCase(),
             full_name: this.myForm.value.name,
             phone: this.myForm.value.phone,
             card_id: this.myForm.value.card_id,
