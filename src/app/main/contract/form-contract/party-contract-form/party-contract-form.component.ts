@@ -1586,7 +1586,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   // xóa đối tham gia bên đối tác
   deletePartner(index: any, item: any) {
     //xoa doi tuong tham gia
-    if (item.id) {
+    if (item.id && this.router.url.includes('edit')) {
       this.spinner.show();
       this.contractService.deleteParticipantContract(item.id).subscribe((res: any) => {
         if (res.success == true) {
