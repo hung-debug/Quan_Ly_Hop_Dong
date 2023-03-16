@@ -23,7 +23,6 @@
                     <!--Tên người trong luồng hợp đồng-->
                     <span>{{d.name}}</span>&nbsp;
                     <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span>
-                    <span style="color: #8B8B8B" *ngIf="d.login_by">({{d.login_by}})</span>
                     </div>
                     <span style="color: #8B8B8B" *ngIf="d.type != 3 && d.name_company">{{d.name_company}}</span>
                     <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'vi' || !this.lang">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name : ''}}</span>

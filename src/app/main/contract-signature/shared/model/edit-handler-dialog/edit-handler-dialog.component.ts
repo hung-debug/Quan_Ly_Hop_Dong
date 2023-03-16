@@ -157,9 +157,9 @@ export class EditHandlerComponent implements OnInit {
     let dataUpdate = {
       ...this.data,
       name: this.name,
-      email: this.email,
+      email: this.isCheckRadio ? this.email : this.phone,
       phone: this.phone,
-      login_by: this.login_by,
+      login_by: this.isCheckRadio ? "email" : "phone",
       card_id: this.card_id,
     };
 
@@ -170,7 +170,7 @@ export class EditHandlerComponent implements OnInit {
     }
     else {
       if (this.email !== "") {
-
+        console.log("dataUpdate sU", this.validData());
         this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
           (res: any) => {
             if (!res.success) {
