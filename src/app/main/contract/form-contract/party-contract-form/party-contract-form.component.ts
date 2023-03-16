@@ -359,15 +359,17 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         }
       })
 
-      if (items.type == 3)
+      if (items.type == 3) {
         this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
-        this.datasForm.is_determine_clone[index].id = null;
+      }
+        // this.datasForm.is_determine_clone[index].id = null;
     })
     this.spinner.show();
 
     console.log("next ", this.datasForm.is_determine_clone);
 
     this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
+      this.datasForm.is_determine_clone = res;  
         this.getDataApiDetermine(res, is_save)
       }, (error: HttpErrorResponse) => {
         if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {

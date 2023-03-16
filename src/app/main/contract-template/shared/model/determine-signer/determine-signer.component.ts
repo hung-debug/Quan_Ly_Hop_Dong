@@ -353,8 +353,14 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   selectWithOtp(e: any, data: any) {
-    if(data.type == 3) {
-      this.changeOtp(data);
+    console.log("data ", data);
+    if(e.length > 0) {
+      console.log("e ",e);
+      console.log("e ", e.target.value);
+    }
+    if(data.type == 3 && data.sign_type.length > 0) {
+      if(data.sign_type[0].id == 1)
+        this.changeOtp(data);
     if (data.typeSign == 1 && this.getDataSignCka(data).length > 0) {
       data.phone = data.email;
     }

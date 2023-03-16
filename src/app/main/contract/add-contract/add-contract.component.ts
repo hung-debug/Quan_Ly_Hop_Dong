@@ -152,6 +152,7 @@ export class AddContractComponent implements OnInit {
   isQLHD_11: boolean = true;
 
   ngOnInit() {
+    console.log("this ");
     this.userService.checkServiceStatus().subscribe((response) => {
 
       if (response.status == 'Using' || environment.flag == 'NB') {
@@ -169,36 +170,32 @@ export class AddContractComponent implements OnInit {
                   console.log(data);
                   let listRole: any[];
                   listRole = data.permissions;
-                  this.isQLHD_01 = listRole.some(
-                    (element) => element.code == 'QLHD_01'
-                  );
-                  this.isQLHD_14 = listRole.some(
-                    (element) => element.code == 'QLHD_14'
-                  );
-                  this.isQLHD_15 = listRole.some(
-                    (element) => element.code == 'QLHD_15'
-                  );
+                  this.isQLHD_01 = listRole.some((element) => element.code == 'QLHD_01');
+                  console.log("ql ", this.isQLHD_01);
+
+                  this.isQLHD_14 = listRole.some((element) => element.code == 'QLHD_14');
+                  console.log("ql ", this.isQLHD_14);
+
+                  this.isQLHD_15 = listRole.some((element) => element.code == 'QLHD_15');
+                  console.log("ql ", this.isQLHD_15);
+
                   // this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
                   // this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
-                  this.isQLHD_11 = listRole.some(
-                    (element) => element.code == 'QLHD_11'
-                  );
+                  this.isQLHD_11 = listRole.some((element) => element.code == 'QLHD_11');
 
-                  if (
-                    (this.action == 'add' || this.action == 'add-batch') &&
-                    this.isQLHD_15
-                  ) {
-                    this.type = 3;
-                  }
-                  if (
-                    (this.action == 'add' || this.action == 'add-form') &&
-                    this.isQLHD_14
-                  ) {
-                    this.type = 2;
-                  }
                   if (this.action == 'add' && this.isQLHD_01) {
                     this.type = 1;
+                  } else if ((this.action == 'add' || this.action == 'add-form') && this.isQLHD_14) {
+                    this.type = 2;
+                    this.stepForm = variable.stepSampleContractForm.step1;
+                  } else if ((this.action == 'add' || this.action == 'add-batch') && this.isQLHD_15) {
+                    this.type = 3;
+                    this.stepBatch = variable.stepSampleContractBatch.step1;
+
+                    console.log("step ", this.stepBatch);
                   }
+
+                  console.log("type ", this.type);
                 },
                 (error) => {
                   setTimeout(() => this.router.navigate(['/login']));
@@ -281,6 +278,8 @@ export class AddContractComponent implements OnInit {
               this.step = variable.stepSampleContract.step1;
             } else if (this.type == 2) {
               this.stepForm = variable.stepSampleContractForm.step1;
+
+              console.log("stepForm ", this.stepForm);
             } else if (this.type == 3) {
               this.stepBatch = variable.stepSampleContractBatch.step1;
             }
@@ -454,18 +453,13 @@ export class AddContractComponent implements OnInit {
   }
 
   getStep(e: any) {
-    // if (e.isBackStep_4 && e.step) {
-    //   this.datas['back_step_4'] = e.isBackStep_4;
-    //   this.step = e.step;
-    // } else if (e.isBackStep_2 && e.step) {
-    //   this.datas['back_step_2'] = e.isBackStep_2;
-    //   this.step = e.step;
-    // } else
     if (this.type == 1) {
+      console.log("vao day ");
       this.step = e;
     } else if (this.type == 2) {
       this.stepForm = e;
     } else if (this.type == 3) {
+      console.log("vao day ");
       this.stepBatch = e;
     }
     this.is_disable =
