@@ -495,16 +495,16 @@ export class SidebarService {
         href: '/main/report/contract-number-follow-sign',
       }
     );
-    this.menus.push({
-      title: 'report',
-      icon: '/assets/img/analytics1.svg',
-      active: false,
-      activeDrop: false,
-      type: 'dropdown',
-      href: '#',
-      submenus: submenusReport,
-      id: 10,
-    })
+    // this.menus.push({
+    //   title: 'report',
+    //   icon: '/assets/img/analytics1.svg',
+    //   active: false,
+    //   activeDrop: false,
+    //   type: 'dropdown',
+    //   href: '#',
+    //   submenus: submenusReport,
+    //   id: 10,
+    // })
 
     //xu ly highlight
     this.menus.forEach((element: any) => {
