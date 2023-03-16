@@ -1250,14 +1250,14 @@
                   </div>
                 </div>
 
-            
-                <div *ngIf="d.login_by == 'email' && getDataSignCka(d).length > 0" class="participants--input" style="display: flex;">
-                  <div class="participants__name" style="margin-right: 50%; display: flex;">
-                    <div class="label_detail text-color" style="margin-right: 5px; margin-top: 8px;">{{'sms.locale' |
+              <div class="sms_language" style="display: flex; align-items: center;">
+                <div *ngIf="d.login_by == 'email' && getDataSignCka(d).length > 0" class="participants--input" style="width: 17%;">
+                  <div class="participants__name" style="width: 100%; display: flex;justify-content: flex-end;">
+                    <div class="label_detail text-color" style=" margin-right: 5px; margin-top: 8px;">{{'sms.locale' |
                       translate}}&nbsp;
                       <span class="required-title">*</span>
                     </div>
-                    <div class="input-data" style="width: 15%; margin-top: 8px;">
+                    <div class="input-data" style="width: 26%; margin-top: 8px;">
                       <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
                         <div *ngIf="d.locale =='vi'">
                           <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
@@ -1285,17 +1285,17 @@
                 </div>
 
                 <div *ngIf="this.site === 'NB' && d.login_by === 'email'" class="participants--input"  
-                  style="display: flex">
-                  <div class="participants__name" style="width: 90%">
-                    <div style="height: 40px; display: flex; align-items: center;">
+                  style="display: flex;margin-left: 5%;">
+                  <div class="participants__name" style="width: 100%">
+                    <div style="height: 40px; display: flex; align-items: center; margin-top: 8px;">
                       <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp != 1"
                         (change)="changeIsSmsSignature($event, item, index)">
                       <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" checked
 
                         (change)="changeIsSmsSignature($event, item, index)">
-                      <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
+                      <div style="padding: 0 20px 0 5px; width: 315px;">Nhận SMS thông báo khi xử lý hợp đồng</div>
 
-                      <div class="input-data" style="width: 6%; margin-top: 8px;" *ngIf="d.is_otp == 1 && getDataSignCka(d).length === 0">
+                      <div class="input-data" style="width: 20%; margin-top: 8px;" *ngIf="d.is_otp == 1 && getDataSignCka(d).length === 0">
                         <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" >
                           <div>
                             <button *ngIf="d.locale == 'vi'" class="btn btn-outline-primary db_icon_vietnam"
@@ -1327,7 +1327,7 @@
                     </div>
                   </div>
                 </div>
-              
+              </div>
 
               </div>
               <div *ngIf="getPartnerSignature(item).length > 1" class="col-md-1 delete-element" (click)="deletePartnerSignature(index, item)">

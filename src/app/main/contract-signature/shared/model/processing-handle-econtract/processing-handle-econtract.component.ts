@@ -96,6 +96,8 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
 
       response.recipients.forEach((element: any) => {
+        console.log("su element",element);
+        
         let data = {
           id: element.id,
           name: element.name,

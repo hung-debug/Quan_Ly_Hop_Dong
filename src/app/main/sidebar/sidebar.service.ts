@@ -462,46 +462,49 @@ export class SidebarService {
       {
         title: 'report.detail.contract',
         active: false,
-        // href: '/main/'+this.contract_signatures+'/receive/wait-processing',
+        href: '/main/report/detail',
       },
-      //HĐ sắp hết hiệu lực
+      //HĐ sắp hết hạn
       {
         title: 'report.expires-soon.contract',
         active: false,
-        // href: '/main/'+this.contract_signatures+'/receive/processed',
+        href: '/main/report/soon-expire',
       },
       //Trạng thái xử lý hợp đồng
       {
         title: 'report.processing.status.contract',
         active: false,
-        // href: '/main/'+this.contract_signatures+'/receive/share',
+        href: '/main/report/status-contract',
       },
       //Số lượng hợp đồng theo trạng thái
       {
         title: 'report.number.contracts.status',
         active: false,
+        href: '/main/report/contract-number-follow-status',
       },
       //Số lượng hợp đồng theo loại hợp đồng
       {
         title: 'report.number.contracts.contract-type',
         active: false,
+        href: '/main/report/contract-number-follow-type',
       },
       //Số lượng HĐ theo hình thức ký
       {
         title: 'report.number.contracts.type.sign',
         active: false,
+        href: '/main/report/contract-number-follow-sign',
       }
     );
-    // this.menus.push({
-    //   title: 'report',
-    //   icon: '/assets/img/analytics1.svg',
-    //   active: false,
-    //   activeDrop: false,
-    //   type: 'dropdown',
-    //   href: '#',
-    //   submenus: submenusReport,
-    //   id: 10,
-    // })
+    this.menus.push({
+      title: 'report',
+      icon: '/assets/img/analytics1.svg',
+      active: false,
+      activeDrop: false,
+      type: 'dropdown',
+      href: '#',
+      submenus: submenusReport,
+      id: 10,
+    })
 
     //xu ly highlight
     this.menus.forEach((element: any) => {
