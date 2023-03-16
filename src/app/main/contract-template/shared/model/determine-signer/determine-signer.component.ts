@@ -1292,6 +1292,8 @@ export class DetermineSignerComponent implements OnInit {
 
   changeIsSmsSignature(e: any, item: any, index: any,d?: any) {
     console.log("item",item);
+    console.log("index",index);
+    
     
     let data = item.recipients.filter((p: any) => p.role == 3)[index];
     if (e.target.checked) {
