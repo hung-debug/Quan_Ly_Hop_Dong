@@ -552,5 +552,6 @@
   "date.completed":"Ngày hoàn thành/từ chối/huỷ",
   "suggest":"Bên đề nghị",
   "sign.object":"Đối tượng ký",
-  "name.unit":"Tên đơn vị"
+  "name.unit":"Tên đơn vị",
+  "btn.report":"Báo cáo"
 }

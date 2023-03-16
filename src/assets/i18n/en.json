@@ -549,5 +549,6 @@
   "date.completed":"Completion date/rejection/cancellation",
   "suggest":"Suggest",
   "sign.object":"Sign object",
-  "name.unit":"Organization name"
+  "name.unit":"Organization name",
+  "btn.report":"Report"
 }

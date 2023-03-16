@@ -186,6 +186,10 @@ export class ForwardContractComponent implements OnInit {
           this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
         })
 
+        console.log("role ", this.data.role_coordination);
+
+        console.log("role 1 ", this.datas.dataContract.roleContractReceived)
+
         if (coutError == 0) {
           //is_replace: false = giữ lại uỷ quyền
           const dataAuthorize = {

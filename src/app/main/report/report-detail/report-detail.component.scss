@@ -70,5 +70,36 @@
   border-bottom-right-radius: 10px;
 }
 
+:host ::ng-deep {
+  .p-calendar {
+    font-size: 13px !important;
+    font-family: 'font_lexend_deca';
+    width: 100%;
+  }
+  .p-datepicker table td {
+    padding: 0;
+  }
+  .p-calendar-w-btn, .p-calendar-w-btn .p-inputtext {
+    height: 33px;
+  }
+  .p-calendar-w-btn .p-inputtext{
+    //border: 1px solid #106DB6 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+  }
+  .p-calendar-w-btn .p-datepicker-trigger {
+    border: 1px solid #ced4da;
+  }
+  .p-selectbutton .p-button {
+    outline: 0 !important;
+    box-shadow: none !important;
+    height: 33px;
+    width: 50%;
+  }
+}
+
+.subheader-row {
+  background-color:#EEF7FF !important;
+}
 
   

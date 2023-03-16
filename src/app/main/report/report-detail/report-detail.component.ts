@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { AppService } from 'src/app/service/app.service';
 import { ReportService } from 'src/app/service/report.service';
 import { UnitService } from 'src/app/service/unit.service';
@@ -12,7 +14,7 @@ import { UserService } from 'src/app/service/user.service';
 export class ReportDetailComponent implements OnInit {
 
   //Biến lưu dữ liệu trong bảng
-  list: any[] = [];
+  list: any[];
 
   //col header
   cols: any[];
@@ -27,30 +29,68 @@ export class ReportDetailComponent implements OnInit {
   orgList: any[] = [];
   organization_id_user_login: any;
 
+  //Biến lấy số lượng tổ chức lớn nhất trong các hợp đồng
   maxOrg: number;
+
+  //Biến để gộp các cột
+  mergeCol: any[] = [];
+
   params: any;
+  date: any;
+  optionsStatus: any;
+
+  formGroup: any;
+
 
   constructor(
     private appService: AppService,
     private unitService: UnitService,
     private userService: UserService,
-    private reportService: ReportService
-  ) { }
+    private translate: TranslateService,
+    private fbd: FormBuilder,
+  ) {
+
+    this.formGroup = this.fbd.group({
+      name: this.fbd.control(''),
+      date:this.fbd.control(''),
+      contractStatus: this.fbd.control(''),  
+    });
+
+   }
 
   ngOnInit(): void {
     this.appService.setTitle('report.detail.contract.full');
 
+    this.list = [
+      {product: 'Công ty cổ phần phần mềm công nghệ cao Việt Nam', lastYearSale: 51, thisYearSale: 40, lastYearProfit: 54406, thisYearProfit: 43342},
+  ];
+
+    this.formGroup = this.fbd.group({
+      name: this.fbd.control(''),
+      date:this.fbd.control(''),
+      contractStatus: this.fbd.control(''),  
+    });
+
+    this.optionsStatus = [
+      { "id": 0, "name": this.translate.instant('all') },
+      { "id": 20, "name": this.translate.instant('sys.processing')},
+      { "id": 2, "name": this.translate.instant('contract.status.overdue') },
+      { "id": 31, "name": this.translate.instant('contract.status.fail') },
+      { "id": 32, "name": this.translate.instant('contract.status.cancel') },
+      { "id": 30, "name": this.translate.instant('contract.status.complete') },
+    ];
+
     this.cols = [
-      {header: 'contract.name', style:'text-align: left;',colspan: 1,rowspan:'2' },
-      {header: 'contract.type', style:'text-align: left;',colspan: 1,rowspan:'2' },
-      {header: 'contract.number', style:'text-align: left;',colspan: 1,rowspan:'2'},
-      {header: 'contract.uid', style:'text-align: left;',colspan: 1,rowspan:'2' },
-      {header: 'contract.connect', style: 'text-align: left',colspan: 1,rowspan:'2'},
-      {header: 'contract.time.create', style:'text-align: left',colspan: 1,rowspan:'2'},
-      {header: 'signing.expiration.date',style:'text-align: left',colspan: 1,rowspan:'2'},
-      {header: 'contract.status.v2',style:'text-align:left',colspan: 1,rowspan:'2'},
-      {header: 'date.completed', style: 'text-align: left',colspan: 1,rowspan:'2'},
-      {header: 'suggest', style: 'text-align: center',colspan:'5',rowspan: 1}
+      {id: 1,header: 'contract.name', style:'text-align: left;',colspan: 1,rowspan:'2' },
+      {id: 2,header: 'contract.type', style:'text-align: left;',colspan: 1,rowspan:'2' },
+      {id: 3,header: 'contract.number', style:'text-align: left;',colspan: 1,rowspan:'2'},
+      {id: 4,header: 'contract.uid', style:'text-align: left;',colspan: 1,rowspan:'2' },
+      {id: 5,header: 'contract.connect', style: 'text-align: left',colspan: 1,rowspan:'2'},
+      {id: 6,header: 'contract.time.create', style:'text-align: left',colspan: 1,rowspan:'2'},
+      {id: 7,header: 'signing.expiration.date',style:'text-align: left',colspan: 1,rowspan:'2'},
+      {id: 8,header: 'contract.status.v2',style:'text-align:left',colspan: 1,rowspan:'2'},
+      {id: 9,header: 'date.completed', style: 'text-align: left',colspan: 1,rowspan:'2'},
+      {id: 10,header: 'suggest', style: 'text-align: center',colspan:'5',rowspan: 1},
     ];
 
     this.colsSuggest = [
@@ -61,6 +101,8 @@ export class ReportDetailComponent implements OnInit {
       {header: 'user.doc',style:'text-align: left'},
     ]
 
+    this.getMergeCol();
+  
     //call api danh sách chi tiết hợp đồng
     this.getDetailContractsList();
 
@@ -105,12 +147,22 @@ export class ReportDetailComponent implements OnInit {
 
   }
 
-  getDetailContractsList() {
-    this.reportService.getDetailContractListReport(this.params).subscribe((response) => {
+  //merge các cột nhỏ của bảng
+  getMergeCol() {
+    this.mergeCol = this.cols.concat(this.colsSuggest);
+  }
 
-      //lấy số lượng tổ chức lớn nhất tham gia trong danh sách hợp đồng
-      this.maxOrg = response.maxOrg;
-    })
+
+  getMaxCol() {
+    return 14;
+  }
+
+  getDetailContractsList() {
+    // this.reportService.getDetailContractListReport(this.params).subscribe((response) => {
+
+    //   //lấy số lượng tổ chức lớn nhất tham gia trong danh sách hợp đồng
+    //   this.maxOrg = response.maxOrg;
+    // })
   }
 
   array_empty: any = [];
