@@ -37,7 +37,10 @@ export class ReportDetailComponent implements OnInit {
       {header: 'contract.number', style:'text-align: left;' },
       {header: 'contract.uid', style:'text-align: left;' },
       {header: 'contract.connect', style: 'text-align: left'},
-      {header: 'contract.time.create', style:'text-align: left'}
+      {header: 'contract.time.create', style:'text-align: left'},
+      {header: 'signing.expiration.date',style:'text-align: left'},
+      {header: 'contract.status.v2',style:'text-align:left'},
+      {header: 'date.completed', style: 'text-align: left'}
     ];
 
     if(sessionStorage.getItem('lang') == 'vi') {

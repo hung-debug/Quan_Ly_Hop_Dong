@@ -544,5 +544,7 @@
   "report.number.contracts.contract-type.full":"Report number of contracts by contract type",
   "report.number.contracts.type.sign.full":"Report the number of contracts in the type of sign",
   "include.org1":"Including sub-organizations (Sub-organizations include only tier-one sub-organizations)",
-  "contract.time.create": "Time create"
+  "contract.time.create": "Time create",
+  "signing.expiration.date":"Sign expiration time",
+  "date.completed":"Completion date/rejection/cancellation"
 }
