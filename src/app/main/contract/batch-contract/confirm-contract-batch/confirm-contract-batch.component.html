@@ -52,7 +52,7 @@
           <div *ngFor="let record of this.data_parnter_organization; let i=index">
             <div style="background: #C7D0E9;
             padding: 8px;margin-top: 15px;">
-              {{record.name}}
+              {{record.type != 3 ? record.name : record.recipients[0].name}}
             </div>
 
             <div *ngIf="this.getPartnerCoordinationer(record).length > 0">
