@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/service/app.service';
+import { ReportService } from 'src/app/service/report.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -12,7 +13,11 @@ export class ReportDetailComponent implements OnInit {
 
   //Biến lưu dữ liệu trong bảng
   list: any[] = [];
+
+  //col header
   cols: any[];
+
+  colsSuggest: any[];
 
   selectedNodeOrganization:any;
   listOrgCombobox: any[];
@@ -22,26 +27,42 @@ export class ReportDetailComponent implements OnInit {
   orgList: any[] = [];
   organization_id_user_login: any;
 
+  maxOrg: number;
+  params: any;
+
   constructor(
     private appService: AppService,
     private unitService: UnitService,
-    private userService: UserService
+    private userService: UserService,
+    private reportService: ReportService
   ) { }
 
   ngOnInit(): void {
     this.appService.setTitle('report.detail.contract.full');
 
     this.cols = [
-      {header: 'contract.name', style:'text-align: left;' },
-      {header: 'contract.type', style:'text-align: left;' },
-      {header: 'contract.number', style:'text-align: left;' },
-      {header: 'contract.uid', style:'text-align: left;' },
-      {header: 'contract.connect', style: 'text-align: left'},
-      {header: 'contract.time.create', style:'text-align: left'},
-      {header: 'signing.expiration.date',style:'text-align: left'},
-      {header: 'contract.status.v2',style:'text-align:left'},
-      {header: 'date.completed', style: 'text-align: left'}
+      {header: 'contract.name', style:'text-align: left;',colspan: 1,rowspan:'2' },
+      {header: 'contract.type', style:'text-align: left;',colspan: 1,rowspan:'2' },
+      {header: 'contract.number', style:'text-align: left;',colspan: 1,rowspan:'2'},
+      {header: 'contract.uid', style:'text-align: left;',colspan: 1,rowspan:'2' },
+      {header: 'contract.connect', style: 'text-align: left',colspan: 1,rowspan:'2'},
+      {header: 'contract.time.create', style:'text-align: left',colspan: 1,rowspan:'2'},
+      {header: 'signing.expiration.date',style:'text-align: left',colspan: 1,rowspan:'2'},
+      {header: 'contract.status.v2',style:'text-align:left',colspan: 1,rowspan:'2'},
+      {header: 'date.completed', style: 'text-align: left',colspan: 1,rowspan:'2'},
+      {header: 'suggest', style: 'text-align: center',colspan:'5',rowspan: 1}
     ];
+
+    this.colsSuggest = [
+      {header: 'sign.object',style:'text-align: left'},
+      {header: 'name.unit',style:'text-align: left'},
+      {header: 'user.view',style:'text-align: left'},
+      {header: 'user.sign',style:'text-align: left'},
+      {header: 'user.doc',style:'text-align: left'},
+    ]
+
+    //call api danh sách chi tiết hợp đồng
+    this.getDetailContractsList();
 
     if(sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
@@ -82,6 +103,14 @@ export class ReportDetailComponent implements OnInit {
 
     // this.selectedNodeOrganization = this.listOrgCombobox.filter((p: any) => p.data == this.organization_id);
 
+  }
+
+  getDetailContractsList() {
+    this.reportService.getDetailContractListReport(this.params).subscribe((response) => {
+
+      //lấy số lượng tổ chức lớn nhất tham gia trong danh sách hợp đồng
+      this.maxOrg = response.maxOrg;
+    })
   }
 
   array_empty: any = [];

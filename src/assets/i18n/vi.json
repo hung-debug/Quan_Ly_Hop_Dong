@@ -549,5 +549,8 @@
   "include.org1":"Bao gồm cả tổ chức con (Tổ chức con chỉ bao gồm tổ chức con cấp một)",
   "contract.time.create": "Thời gian tạo",
   "signing.expiration.date":"Ngày hết hạn ký",
-  "date.completed":"Ngày hoàn thành/từ chối/huỷ"
+  "date.completed":"Ngày hoàn thành/từ chối/huỷ",
+  "suggest":"Bên đề nghị",
+  "sign.object":"Đối tượng ký",
+  "name.unit":"Tên đơn vị"
 }

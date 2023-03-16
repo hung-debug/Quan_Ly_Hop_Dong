@@ -546,5 +546,8 @@
   "include.org1":"Including sub-organizations (Sub-organizations include only tier-one sub-organizations)",
   "contract.time.create": "Time create",
   "signing.expiration.date":"Sign expiration time",
-  "date.completed":"Completion date/rejection/cancellation"
+  "date.completed":"Completion date/rejection/cancellation",
+  "suggest":"Suggest",
+  "sign.object":"Sign object",
+  "name.unit":"Organization name"
 }
