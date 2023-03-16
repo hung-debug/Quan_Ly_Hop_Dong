@@ -43,7 +43,7 @@
       <div class="sample-contract__information&#45;&#45;user-sign" style="line-height: 25px">
         <div style="text-align: center; font-weight: bold" class="label">{{'relate.party' | translate}}</div>
         <div *ngFor="let d of this.datas?.is_data_contract?.participants">
-          <p>{{d.name}}</p>
+          <p>{{d.type != 3 ? d.name : d.recipients[0].name}}</p>
         </div>
 
       </div>
