@@ -81,8 +81,8 @@ export class MainComponent implements OnInit {
   //click logout
   logout() {
      //call api delete token
-     this.contractService.deleteToken().subscribe((res:any) => { 
-    })
+    //  this.contractService.deleteToken().subscribe((res:any) => { 
+    // })
 
     sessionStorage.clear();
     localStorage.removeItem('currentUser');
