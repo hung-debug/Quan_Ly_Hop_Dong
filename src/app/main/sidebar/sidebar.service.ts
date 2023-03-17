@@ -488,12 +488,12 @@ export class SidebarService {
         active: false,
         href: '/main/report/contract-number-follow-type',
       },
-      //Số lượng HĐ theo hình thức ký
-      {
-        title: 'report.number.contracts.type.sign',
-        active: false,
-        href: '/main/report/contract-number-follow-sign',
-      }
+      // //Số lượng HĐ theo hình thức ký
+      // {
+      //   title: 'report.number.contracts.type.sign',
+      //   active: false,
+      //   href: '/main/report/contract-number-follow-sign',
+      // }
     );
     this.menus.push({
       title: 'report',
