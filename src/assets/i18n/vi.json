@@ -547,5 +547,9 @@
   "report.number.contracts.contract-type.full":"Báo cáo số lượng hợp đồng theo loại hợp đồng",
   "report.number.contracts.type.sign.full":"Báo cáo số lượng hợp đồng theo hình thức ký",
   "include.org1":"Bao gồm cả tổ chức con (Tổ chức con chỉ bao gồm tổ chức con cấp một)",
-  "contract.time.create": "Thời gian tạo"
+  "contract.time.create": "Thời gian tạo",
+  "email.already.exist": "Email đã có trong luồng xử lý",
+  "phone.already.exist": "Số điện thoại đã có trong luồng xử lý",
+  "cardid.already.exist": "MST/CMT/CCCD đã có trong luồng xử lý",
+  "update.success": "Cập nhật người xử lý thành công"
 }
