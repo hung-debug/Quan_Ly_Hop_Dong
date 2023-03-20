@@ -238,8 +238,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.datas.size = 13;
       this.size = this.datas.size;
     } 
-   
 
+    console.log("datass ", this.datas.contract_user_sign);
   }
 
   changeFont($event: any) {
@@ -355,8 +355,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // lay du lieu vi tri va toa do ky cua buoc 3 da thao tac
     let dataContractUserSign: any[] = [];
     this.datas.contract_user_sign.forEach((res: any, index: number) => {
+
       if(res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
-        res.sign_config = res.sign_config.filter((element: any) =>  element.recipient ? element.recipient.sign_type[0].id == 2 : !element.recipient)
+        res.sign_config = res.sign_config.filter((element: any) =>  element.recipient ? (element.recipient.sign_type[0].id == 2 || element.recipient.sign_type[0].id == 4) : !element.recipient)
       }
 
       if (res.sign_config.length !== 0) {
@@ -1259,6 +1260,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let arrSignConfig: any = [];
     let cloneUserSign = [...this.datas.contract_user_sign];
     cloneUserSign.forEach(element => {
+      console.log("el ", element);
       if (this.datas.is_action_contract_created) {
         if ((element.recipient && ![2, 3].includes(element.recipient.status)) || (!element.recipient && ![2, 3].includes(element.status))) {
           arrSignConfig = arrSignConfig.concat(element.sign_config);
@@ -1267,6 +1269,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         arrSignConfig = arrSignConfig.concat(element.sign_config);
       } 
     })
+
+    console.log("arr ", arrSignConfig);
 
     return arrSignConfig;
   }

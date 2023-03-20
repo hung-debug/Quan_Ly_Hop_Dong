@@ -219,6 +219,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     if (await this.checkViewContractService.callAPIcheckViewContract(this.idContract, false)) {
       this.getDataContractSignature();
     } else {
+      // this.getDataContractSignature();
+
+      // let customer = localStorage.getItem('customer');
+
       this.router.navigate(['/page-not-found']);
     }
   }

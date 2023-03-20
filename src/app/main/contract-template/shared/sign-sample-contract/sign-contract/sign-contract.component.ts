@@ -13,11 +13,13 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    console.log("datas ", this.sign);
   }
 
   getText(sign: any) {
     // ? 'Text' : 'Số hợp đồng'
     if (sign.sign_unit == 'text') {
+      console.log("text ");
       return 'Text';
     } else {
       return 'Số hợp đồng';
