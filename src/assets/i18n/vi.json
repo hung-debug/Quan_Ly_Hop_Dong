@@ -553,5 +553,8 @@
   "suggest":"Bên đề nghị",
   "sign.object":"Đối tượng ký",
   "name.unit":"Tên đơn vị",
-  "btn.report":"Báo cáo"
+  "btn.report":"Báo cáo",
+  "user.ed":"Người đã xử lý",
+  "user.ing":"Người đang xử lý",
+  "user.not.process":"Chưa đến lượt xử lý"
 }

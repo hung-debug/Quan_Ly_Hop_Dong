@@ -550,5 +550,8 @@
   "suggest":"Suggest",
   "sign.object":"Sign object",
   "name.unit":"Organization name",
-  "btn.report":"Report"
+  "btn.report":"Report",
+  "user.ed":"User processed",
+  "user.ing":"User processing",
+  "user.not.process":"User not process"
 }

@@ -1,1 +1,94 @@
-<p>report-status-contract works!</p>
+<div>
+    <div class="row">
+        <!--Tổ chức-->
+        <div class="col-md-2">
+            <div>{{'organization' | translate}}</div>
+            <div class="input-line">
+            <p-treeSelect 
+                [(ngModel)]="selectedNodeOrganization" 
+                placeholder="{{'all' | translate}}" 
+                [filter]="true" 
+                filterBy="name"  
+                [droppable]="true" 
+                [options]="listOrgCombobox"
+            >
+          </p-treeSelect>
+            </div>
+        </div>
+
+        <!--Ngày tạo hợp đồng-->
+        <div class="col-md-2">
+            <div>{{ 'create-date' | translate}}</div>
+            <div class="input-line">
+                <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"
+                          
+                ></p-calendar>
+            </div>
+        </div>
+
+        <!--Trạng thái-->
+        <div class="col-md-2">
+            <div>{{'contract.status' | translate}}</div>
+            <div class="input-line">
+                <p-dropdown 
+                    panelStyleClass="font"
+                    appendTo="body"
+                    optionLabel="name"
+                    optionValue="id" 
+                    placeholder="{{'contract.status.v2' | translate}}" 
+                    [showClear]="true"  
+                    [options]="optionsStatus"
+                ></p-dropdown>
+            </div>
+        </div>
+
+        <!--Button-->
+        <div class="col-md-6 btn_search">
+            <button class="btn btn-lg btn-block btn_submit">{{'btn.report' | translate }}</button>
+            <button class="btn btn-lg btn-block btn_submit">Export</button>
+        </div>
+    </div>
+
+    <!--Nút tick bao gồm tổ chức-->
+    <div class="row" style="padding-top: 10px;">
+        <div class="col-md-6">
+            <input type="radio">&nbsp;
+            <span>{{'include.org1' | translate}}</span>
+        </div>
+    </div>
+
+
+
+    <!--Bảng dữ liệu-->
+    <div class="row" style="padding-top: 20px;">
+        <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
+
+            <!--header-->
+            <ng-template pTemplate="header">
+                <!--header 1-->
+                <tr>
+                    <th *ngFor="let col of cols" [style]='col.style' [colSpan]="col.colspan" [rowSpan]="col.rowspan">
+                      {{col.header | translate}}
+                    </th>
+                </tr>
+
+                <!--header 2 bên đề nghị-->
+                <tr>
+                    <th *ngFor="let col of colsSuggest" [style]='col.style' [colSpan]="col.colspan" [rowSpan]="col.rowspan">
+                        {{col.header | translate}}
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-list>
+                <tr class="subheader-row">
+                    <!-- <td>{{list.product}}</td> -->
+                    <td *ngFor="let col of mergeCol; let colIndex = index">
+                        <span *ngIf="col.id == 1">{{list.product}}</span>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    
+</div>
