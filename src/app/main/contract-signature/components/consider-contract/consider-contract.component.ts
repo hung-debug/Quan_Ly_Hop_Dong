@@ -218,7 +218,11 @@ export class ConsiderContractComponent
     if (checkViewContract) {
       this.actionRoleContract();
     } else {
-      this.router.navigate(['/page-not-found']);
+      // if(JSON.parse(localStorage.getItem('customer') || '')?.type == 1) {
+      //   this.router.navigate(['/login']);
+      //  } else {
+        this.router.navigate(['/page-not-found']);
+      //  }
     }
   }
 
@@ -367,6 +371,8 @@ export class ConsiderContractComponent
   getDataContractSignature() {
     this.contractService.getDetailContract(this.idContract).subscribe(
       async (rs) => {
+
+        console.log("rs ", rs);
         this.isDataContract = rs[0];
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];

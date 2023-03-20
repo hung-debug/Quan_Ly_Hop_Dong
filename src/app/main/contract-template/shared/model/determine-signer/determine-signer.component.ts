@@ -202,6 +202,9 @@ export class DetermineSignerComponent implements OnInit {
 
   // next step event
   next(action: string) {
+    console.log("datass ", this.datas.contract_user_sign);
+
+
     this.datas.is_determine_clone.forEach((items: any, index: number) => {
       if (items.type == 3)
         this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
