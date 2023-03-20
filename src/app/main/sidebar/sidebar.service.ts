@@ -464,7 +464,7 @@ export class SidebarService {
         active: false,
         href: '/main/report/detail',
       },
-      //HĐ sắp hết hạn
+      //HĐ sắp hết hiệu lực
       {
         title: 'report.expires-soon.contract',
         active: false,
