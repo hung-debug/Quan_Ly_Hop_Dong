@@ -48,6 +48,12 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     // this.fetchDataUserSimPki();
   }
 
+  getStyle(sign: any) {
+    return {
+      font: sign.font
+    }
+  }
+
   ngAfterViewInit() {
     if (this.sign.sign_unit == 'so_tai_lieu' || this.sign.sign_unit == 'text') {
       setTimeout(() => {

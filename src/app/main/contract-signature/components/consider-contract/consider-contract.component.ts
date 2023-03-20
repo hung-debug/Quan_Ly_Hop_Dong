@@ -1578,7 +1578,8 @@ export class ConsiderContractComponent
   }
 
   width: any;
-  //Ký số + ký eKYC
+  font: any;
+  font_size: any;
   async signDigitalDocument() {
     let typeSignDigital = this.typeSignDigital;
 
@@ -1606,6 +1607,9 @@ export class ConsiderContractComponent
             if (signUpdate.type == 1 || signUpdate.type == 4) {
               this.textSign = signUpdate.valueSign;
               this.width = signUpdate.width;
+
+              this.font = signUpdate.font;
+              this.font_size = signUpdate.font_size;
 
               this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
               signUpdate.signDigitalWidth = signUpdate.signDigitalX + this.widthText + 10;
@@ -1773,6 +1777,11 @@ export class ConsiderContractComponent
           }
           if (signUpdate.type == 1 || signUpdate.type == 4) {
             this.textSign = signUpdate.valueSign;
+
+            this.font = signUpdate.font;
+            this.font_size = signUpdate.font_size;
+
+            console.log("size  ", this.font_size);
 
             this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
             fieldHsm.width = this.widthText + 10;
