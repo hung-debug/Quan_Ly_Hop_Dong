@@ -1432,7 +1432,7 @@ export class ConsiderContractComponent
     if (e && e == 1 && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
         (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) ||
         (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
-      )
+      ) && this.ArrRecipientsNew.length > 0
     ) {
       Swal.fire({
         title: this.getTextAlertConfirm(),
