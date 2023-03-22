@@ -135,8 +135,8 @@
         </a>
 
           <a *ngIf="role || this.status == 30" style="position: absolute; right: 5px;">
-            <button  type="button" name="next" class="next action-button" *ngIf="view && loaded && status != 4 && !this.forward" (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>
-            <button  type="button" name="next" class="next action-button1" *ngIf="view && loaded && status == 4 && !this.forward" (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button> 
+            <button  type="button" name="next" class="next action-button" *ngIf="view && loaded && status != 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>
+            <button  type="button" name="next" class="next action-button1" *ngIf="view && loaded && status == 4 " (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button> 
             <button  type="button" name="next" class="next action-button" (click)="endContract()">{{'end' | translate}}</button>     
           </a>
 

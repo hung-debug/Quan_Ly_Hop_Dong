@@ -1405,7 +1405,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   checkStatusUser(status: any, role: any) {
-    if (this.isDataContract.status == 30) {
+    if (this.isDataContract.status == 30 && status != 4) {
       return this.translate.instant('download');
     } else if (this.isDataContract.status == 32) {
       return this.translate.instant('canceled');
