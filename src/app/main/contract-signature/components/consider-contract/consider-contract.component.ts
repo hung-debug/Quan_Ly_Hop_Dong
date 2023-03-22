@@ -2795,14 +2795,7 @@ export class ConsiderContractComponent
       rejectReason = 'You need to enter the reason for refusing the contract';
     }
 
-    this.rejectContractLang(
-      rejectQuestion,
-      confirm,
-      cancel,
-      cancelSuccess,
-      error,
-      rejectReason
-    );
+    this.rejectContractLang(rejectQuestion,confirm,cancel,cancelSuccess,error,rejectReason);
   }
 
   async rejectContractLang(
@@ -2835,14 +2828,10 @@ export class ConsiderContractComponent
     if (textRefuse) {
       this.contractService.considerRejectContract(this.recipientId, textRefuse).subscribe(
           (result) => {
-            this.toastService.showSuccessHTMLWithTimeout(
-              cancelSuccess,
-              '',
-              3000
-            );
+            this.toastService.showSuccessHTMLWithTimeout(cancelSuccess,'',3000);
             this.spinner.hide();
             this.router.navigate([
-              '/main/form-contract/detail/' + this.idContract,
+              '/main/form-contract/detail/reject/' + this.idContract,
             ]);
           },
           (error) => {
