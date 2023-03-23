@@ -948,7 +948,8 @@ export class ContractSignatureComponent implements OnInit {
       //Lấy trạng thái ceca của từng hợp đồng
       const cecaContract = await this.contractServiceV1.getListDataCoordination(idContract[i]).toPromise();
 
-      if(cecaContract[i].ceca_push == 1) {
+
+      if(cecaContract.ceca_push == 1) {
         ceca_push.push(true)
       } else {
         ceca_push.push(false);

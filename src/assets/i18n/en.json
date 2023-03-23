@@ -553,5 +553,8 @@
   "btn.report":"Report",
   "user.ed":"User processed",
   "user.ing":"User processing",
-  "user.not.process":"User not process"
+  "user.not.process":"User not process",
+  "contract.status.canceled":"Cancel",
+  "prepare_expires":"Prepare expire",
+  "total":"Total"
 }

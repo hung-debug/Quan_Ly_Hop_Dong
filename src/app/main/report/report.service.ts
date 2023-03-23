@@ -31,23 +31,29 @@ export class ReportService {
 
   export(code: string, orgId: number, params: any, excel: boolean) {
     this.getCurrentUser();
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/x-binary')
-      .append('Authorization', 'Bearer ' + this.token);
+    let prefix = this.reportUrl+code + '/' + orgId;
 
-    let prefix = this.reportUrl+code + '/' + orgId
+    let headers = null;
 
     if(excel) {
-      prefix = prefix + '/export'
+      prefix = prefix + '/export';
+      headers = new HttpHeaders()
+      .append('Content-Type', 'application/x-binary')
+      .append('Authorization', 'Bearer ' + this.token);
+    } else {
+      headers = new HttpHeaders().append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
     }
 
     let url = prefix+params;
 
-    return this.http.get<any>(url, { 
-     headers: headers,
-     responseType: 'blob' as 'json'
-    },)
-    .pipe();
+    if(excel) {
+      console.log("this ", url);
+      return this.http.get<any>(url, { headers: headers,responseType: 'blob' as 'json'}).pipe();
+    } else {
+      return this.http.get<any>(url,{headers: headers}).pipe();
+    }
   }
+
 
 }

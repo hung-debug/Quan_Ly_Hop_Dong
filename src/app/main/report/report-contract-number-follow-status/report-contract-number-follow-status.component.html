@@ -44,8 +44,8 @@
 
         <!--Button-->
         <div class="col-md-6 btn_search">
-            <button class="btn btn-lg btn-block btn_submit">{{'btn.report' | translate }}</button>
-            <button class="btn btn-lg btn-block btn_submit" (click)="export()">Export</button>
+            <button class="btn btn-lg btn-block btn_submit" (click)="export(false)">{{'btn.report' | translate }}</button>
+            <button class="btn btn-lg btn-block btn_submit" (click)="export(true)">Export</button>
         </div>
     </div>
 
@@ -62,7 +62,7 @@
 
     <!--Bảng dữ liệu-->
     <div class="row" style="padding-top: 20px;">
-        <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
+        <p-table [value]="list" id="table" [autoLayout]="true">
 
             <!--header-->
             <ng-template pTemplate="header">
@@ -72,21 +72,25 @@
                       {{col.header | translate}}
                     </th>
                 </tr>
+            </ng-template>
 
-                <!--header 2 bên đề nghị-->
-                <tr>
-                    <th *ngFor="let col of colsSuggest" [style]='col.style' [colSpan]="col.colspan" [rowSpan]="col.rowspan">
-                        {{col.header | translate}}
-                    </th>
+            <ng-template let-i="rowIndex" pTemplate="body" let-list>
+                <tr *ngIf="i == 0" class="subheader-row">
+                    <td *ngFor="let col of cols; let colIndex = index">
+                        <span *ngIf="col.id == 8">{{this.org}}</span>
+                    </td>
+                </tr>
+
+                <tr *ngIf="i != 0 && list.name != 'waiting' && list.name != 'total'">
+                    <td>{{this.convert(list.name)}}</td>
+                    <td>{{list.value}}</td>
                 </tr>
             </ng-template>
 
-            <ng-template pTemplate="body" let-list>
-                <tr class="subheader-row">
-                    <!-- <td>{{list.product}}</td> -->
-                    <td *ngFor="let col of mergeCol; let colIndex = index">
-                        <span *ngIf="col.id == 1">{{list.product}}</span>
-                    </td>
+            <ng-template pTemplate="footer">
+                <tr *ngIf="this.clickReport">
+                    <td>{{'total' | translate}}</td>
+                    <td>{{this.total}}</td>
                 </tr>
             </ng-template>
         </p-table>

@@ -556,5 +556,8 @@
   "btn.report":"Báo cáo",
   "user.ed":"Người đã xử lý",
   "user.ing":"Người đang xử lý",
-  "user.not.process":"Chưa đến lượt xử lý"
+  "user.not.process":"Chưa đến lượt xử lý",
+  "contract.status.canceled":"Huỷ bỏ",
+  "prepare_expires":"Sắp quá hạn",
+  "total":"Tổng số"
 }
