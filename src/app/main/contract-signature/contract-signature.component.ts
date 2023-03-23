@@ -948,7 +948,6 @@ export class ContractSignatureComponent implements OnInit {
       const cecaContract = await this.contractServiceV1.getListDataCoordination(idContract[i]).toPromise();
 
       if(cecaContract.ceca_push == 1) {
-      if(cecaContract.ceca_push == 1) {
         ceca_push.push(true)
       } else {
         ceca_push.push(false);
@@ -1064,7 +1063,6 @@ export class ContractSignatureComponent implements OnInit {
       }
 
       for (let i = 0; i < fileC.length; i++) {
-
         y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
 
         signUpdate.id = idSignMany[i];
