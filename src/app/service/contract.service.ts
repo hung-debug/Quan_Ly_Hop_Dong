@@ -512,8 +512,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_sample_contract);
-    return this.http
-      .put<Contract>(this.addSampleCntractUrl + `/${id}`, body, {
+    return this.http.put<Contract>(this.addSampleCntractUrl + `/${id}`, body, {
         headers: headers,
       })
       .pipe(

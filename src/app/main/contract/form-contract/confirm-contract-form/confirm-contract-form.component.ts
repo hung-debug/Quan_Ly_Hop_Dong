@@ -260,6 +260,18 @@ export class ConfirmContractFormComponent implements OnInit {
 
       isUserSign_clone.forEach((res: any) => {
         res.sign_config.forEach((element: any) => {
+          if(!element.type) {
+            if(element.sign_unit == 'chu_ky_anh') {
+              element.type = 2;
+            } else if(element.sign_unit == 'chu_ky_so') {
+              element.type = 3;
+            } else if(element.sign_unit == 'so_tai_lieu') {
+              element.type = 4;
+            } else {
+              element.type = 1;
+            }
+          }
+
           if (element.id_have_data) {
             isHaveFieldId.push(element);
           } else isNotFieldId.push(element);
