@@ -1064,6 +1064,8 @@ export class ContractSignatureComponent implements OnInit {
       }
 
       for (let i = 0; i < fileC.length; i++) {
+        y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
+
         signUpdate.id = idSignMany[i];
         signDigital.signDigitalX = x[i];
         signDigital.signDigitalY = y[i];
