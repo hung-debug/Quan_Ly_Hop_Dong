@@ -791,7 +791,6 @@ export class ContractSignatureComponent implements OnInit {
 
                   h[i] = y[i] + h[i];
 
-              
                   let dataSignMobi: any = null;
                   try {
                     dataSignMobi = await this.contractServiceV1.postSignDigitalMobiMulti(this.signCertDigital.Serial,base64String[i],signI,page[i],h[i],w[i],x[i],y[i]);
@@ -948,7 +947,6 @@ export class ContractSignatureComponent implements OnInit {
       //Lấy trạng thái ceca của từng hợp đồng
       const cecaContract = await this.contractServiceV1.getListDataCoordination(idContract[i]).toPromise();
 
-
       if(cecaContract.ceca_push == 1) {
         ceca_push.push(true)
       } else {
@@ -1065,6 +1063,9 @@ export class ContractSignatureComponent implements OnInit {
       }
 
       for (let i = 0; i < fileC.length; i++) {
+
+        y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
+
         signUpdate.id = idSignMany[i];
         signDigital.signDigitalX = x[i];
         signDigital.signDigitalY = y[i];
@@ -1101,10 +1102,9 @@ export class ContractSignatureComponent implements OnInit {
           const mergeTimeStamp = await this.contractServiceV1.meregeTimeStamp(recipientId[i],idContract[i],signatureToken,fieldName,certInfoBase64,hexDigestTempFile, ceca_push[i]).toPromise();
           const filePdfSigned = mergeTimeStamp.base64Data;
 
-          const sign = await this.contractServiceV1.updateDigitalSignatured(
-            idSignMany[i],
-            filePdfSigned
-          );
+          console.log("pdf ", filePdfSigned);
+
+          const sign = await this.contractServiceV1.updateDigitalSignatured(idSignMany[i],filePdfSigned);
 
           if (!sign.recipient_id) {
             this.toastService.showErrorHTMLWithTimeout(
