@@ -999,7 +999,7 @@ export class DetermineSignerComponent implements OnInit {
       const allCheckEmail = 'allCheckEmail';
 
       if (this.getCheckDuplicateEmail(onlyPartner, dataArrPartner)) {
-        this.getNotificationValid("Tên đăng nhập của đối tác không được trùng nhau!");
+        this.getNotificationValid('valid.login.user');
         return false
       }
 

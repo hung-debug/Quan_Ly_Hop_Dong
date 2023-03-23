@@ -559,5 +559,6 @@
   "user.not.process":"Chưa đến lượt xử lý",
   "contract.status.canceled":"Huỷ bỏ",
   "prepare_expires":"Sắp quá hạn",
-  "total":"Tổng số"
+  "total":"Tổng số",
+  "valid.login.user":"Người tham gia trong luồng xử lý hợp đồng của đối tác không được trùng nhau"
 }
