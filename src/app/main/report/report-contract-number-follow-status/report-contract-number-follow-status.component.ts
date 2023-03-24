@@ -180,12 +180,11 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
   clickReport: boolean = false;
   total: number;
   export(flag: boolean) {
-    this.spinner.show();
     if(!this.validData()) {
       return;
     }
 
-    console.log("abc ", this.clickReport);
+    this.spinner.show();
 
     let idOrg = this.organization_id;
     if(this.selectedNodeOrganization.data) {

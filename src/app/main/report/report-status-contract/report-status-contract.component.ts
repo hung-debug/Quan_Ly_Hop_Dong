@@ -192,10 +192,11 @@ export class ReportStatusContractComponent implements OnInit {
 
   //Export ra file excel
   export(flag: boolean) {
-    this.spinner.show();
     if(!this.validData()) {
       return;
     }
+
+    this.spinner.show();
 
     let idOrg = this.organization_id;
     if(this.selectedNodeOrganization.data) {

@@ -132,10 +132,11 @@ export class ReportSoonExpireComponent implements OnInit {
 
 
   export() {
-    this.spinner.show();
     if(!this.validData()) {
       return;
     }
+
+    this.spinner.show();
 
     let idOrg = this.organization_id;
     if(this.selectedNodeOrganization.data) {

@@ -225,10 +225,11 @@ export class ContractNumberFollowTypeComponent implements OnInit {
   clickReport: boolean = false;
   org: any;
   export(flag: boolean) {
-    this.spinner.show();
     if(!this.validData()) {
       return;
     }
+
+    this.spinner.show();
 
     let idOrg = this.organization_id;
     if(this.selectedNodeOrganization.data) {
@@ -250,7 +251,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChilData='+this.fetchChildData;
     this.reportService.export('rp-by-type',idOrg,params, flag).subscribe((response: any) => {
 
-      this.spinner.hide();
+        this.spinner.hide();
         
         if(flag) {
           this.spinner.hide();
