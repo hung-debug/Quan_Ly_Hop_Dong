@@ -62,6 +62,15 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
   ngOnInit(): void {
     this.appService.setTitle('report.number.contracts.status.full');
 
+    this.optionsStatus = [
+      { id: -1, name: this.translate.instant('all') },
+      { id: 20, name: this.translate.instant('sys.processing') },
+      { id: 2, name: this.translate.instant('contract.status.overdue') },
+      { id: 31, name: this.translate.instant('contract.status.fail') },
+      { id: 32, name: this.translate.instant('contract.status.cancel') },
+      { id: 30, name: this.translate.instant('contract.status.complete') },
+    ];
+
     //lay id user
     this.organization_id_user_login =this.userService.getAuthCurrentUser().organizationId;
 

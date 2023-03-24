@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
 import { InputTreeService } from 'src/app/service/input-tree.service';
@@ -53,11 +54,22 @@ export class ReportStatusContractComponent implements OnInit {
     private datepipe: DatePipe,
     private reportService: ReportService,
     private toastService: ToastService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private translate: TranslateService 
+
   ) {}
 
   ngOnInit(): void {
     this.appService.setTitle('report.processing.status.contract.full');
+
+    this.optionsStatus = [
+      { id: -1, name: this.translate.instant('all') },
+      { id: 20, name: this.translate.instant('sys.processing') },
+      { id: 2, name: this.translate.instant('contract.status.overdue') },
+      { id: 31, name: this.translate.instant('contract.status.fail') },
+      { id: 32, name: this.translate.instant('contract.status.cancel') },
+      { id: 30, name: this.translate.instant('contract.status.complete') },
+    ];
 
     //lay id user
     this.organization_id_user_login = this.userService.getAuthCurrentUser().organizationId;

@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
 import { InputTreeService } from 'src/app/service/input-tree.service';
@@ -42,10 +43,22 @@ export class ReportSoonExpireComponent implements OnInit {
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
     private datepipe: DatePipe,
+
+    private translate: TranslateService 
+
   ) {}
 
   async ngOnInit(): Promise<void> {
     this.appService.setTitle('report.expires-soon.contract.full');
+
+    this.optionsStatus = [
+      { id: -1, name: this.translate.instant('all') },
+      { id: 20, name: this.translate.instant('sys.processing') },
+      { id: 2, name: this.translate.instant('contract.status.overdue') },
+      { id: 31, name: this.translate.instant('contract.status.fail') },
+      { id: 32, name: this.translate.instant('contract.status.cancel') },
+      { id: 30, name: this.translate.instant('contract.status.complete') },
+    ];
 
     this.cols = [
       {

@@ -44,8 +44,8 @@
 
         <!--Button-->
         <div class="col-md-6 btn_search">
-            <button class="btn btn-lg btn-block btn_submit">{{'btn.report' | translate }}</button>
-            <button (click)="export()" class="btn btn-lg btn-block btn_submit">Export</button>
+            <button (click)="export(false)" class="btn btn-lg btn-block btn_submit">{{'btn.report' | translate }}</button>
+            <button (click)="export(true)" class="btn btn-lg btn-block btn_submit">Export</button>
         </div>
     </div>
 
@@ -73,24 +73,42 @@
                       {{col.header | translate}}
                     </th>
                 </tr>
+            </ng-template>
 
-                <!--header 2 bên đề nghị-->
-                <tr>
-                    <th *ngFor="let col of colsSuggest" [style]='col.style' [colSpan]="col.colspan" [rowSpan]="col.rowspan">
-                        {{col.header | translate}}
-                    </th>
+            <ng-template pTemplate="body" let-list let-i="rowIndex">
+                <tr *ngIf="i == 0" class="subheader-row">
+                    <td *ngFor="let col of cols; let colIndex = index">
+                        <span *ngIf="col.id == 2">{{this.org}}</span>
+                    </td>
+                </tr>
+
+                <tr *ngIf="i != 0">
+                    <td>{{list.name}}</td>
+                    <td>{{list.value.total}}</td>
+                    <td>{{list.value.processed}}</td>
+                    <td>{{list.value.processing}}</td>
+                    <td>{{list.value.canceled}}</td>
+                    <td>{{list.value.prepare_expires}}</td>
+                    <td>{{list.value.expired}}</td>
                 </tr>
             </ng-template>
 
-            <ng-template pTemplate="body" let-list>
-                <tr class="subheader-row">
-                    <!-- <td>{{list.product}}</td> -->
-                    <td *ngFor="let col of mergeCol; let colIndex = index">
-                        <span *ngIf="col.id == 1">{{list.product}}</span>
-                    </td>
+            <ng-template pTemplate="footer">
+                <tr *ngIf="this.clickReport">
+                    <td>{{'total' | translate}}</td>
+                    <td>{{this.total.total}}</td>
+                    <td>{{this.total.processed}}</td>
+                    <td>{{this.total.processing}}</td>
+                    <td>{{this.total.canceled}}</td>
+                    <td>{{this.total.prepare_expires}}</td>
+                    <td>{{this.total.expired}}</td>
                 </tr>
             </ng-template>
         </p-table>
     </div>
     
 </div>
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+    <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+</ngx-spinner>

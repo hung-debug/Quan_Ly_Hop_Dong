@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
 import { InputTreeService } from 'src/app/service/input-tree.service';
@@ -15,7 +16,7 @@ import { ReportService } from '../report.service';
 export class ContractNumberFollowTypeComponent implements OnInit {
 
    //Biến lưu dữ liệu trong bảng
-   list: any[];
+   list: any[] = [];
 
    //col header
    cols: any[];
@@ -46,6 +47,15 @@ export class ContractNumberFollowTypeComponent implements OnInit {
 
    fetchChildData: boolean = false;
 
+  total: any = {
+    total: 0,
+    processed: 0,
+    processing: 0,
+    canceled: 0,
+    prepare_expires: 0,
+    expired: 0
+  };
+
   constructor(
     private appService: AppService,
     private userService: UserService,
@@ -54,12 +64,22 @@ export class ContractNumberFollowTypeComponent implements OnInit {
     private datepipe: DatePipe,
     private reportService: ReportService,
     private toastService: ToastService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private translate: TranslateService 
 
   ) { }
 
   ngOnInit(): void {
     this.appService.setTitle('report.number.contracts.contract-type.full');
+
+    this.optionsStatus = [
+      { id: -1, name: this.translate.instant('all') },
+      { id: 20, name: this.translate.instant('sys.processing') },
+      { id: 2, name: this.translate.instant('contract.status.overdue') },
+      { id: 31, name: this.translate.instant('contract.status.fail') },
+      { id: 32, name: this.translate.instant('contract.status.cancel') },
+      { id: 30, name: this.translate.instant('contract.status.complete') },
+    ];
 
     //lay id user
     this.organization_id_user_login =
@@ -202,7 +222,9 @@ export class ContractNumberFollowTypeComponent implements OnInit {
   }
 
   //Export ra file excel
-  export() {
+  clickReport: boolean = false;
+  org: any;
+  export(flag: boolean) {
     this.spinner.show();
     if(!this.validData()) {
       return;
@@ -226,19 +248,64 @@ export class ContractNumberFollowTypeComponent implements OnInit {
       contractStatus = -1;
 
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChilData='+this.fetchChildData;
-    this.reportService.export('rp-by-type',idOrg,params, true).subscribe((response: any) => {
-      this.spinner.hide();
-        let url = window.URL.createObjectURL(response);
-        let a = document.createElement('a');
-        document.body.appendChild(a);
-        a.setAttribute('style', 'display: none');
-        a.href = url;
-        a.download = `report-detail_${new Date().getTime()}.xlsx`;
-        a.click();
-        window.URL.revokeObjectURL(url);
-        a.remove();
+    this.reportService.export('rp-by-type',idOrg,params, flag).subscribe((response: any) => {
 
-        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+      this.spinner.hide();
+        
+        if(flag) {
+          this.spinner.hide();
+          let url = window.URL.createObjectURL(response);
+          let a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          a.download = `report-detail_${new Date().getTime()}.xlsx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+  
+          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+        } else {
+
+          this.clickReport = true;
+
+          let array: any = [];
+
+          Object.keys(response).forEach((key, index) => {
+            this.org = key;
+
+            array[0] = response[key];
+          });
+
+          let reportList =array[0];
+
+          let name: any[] = [];
+          let value: any[] = [];
+
+          Object.keys(reportList).forEach((key: any, index: any) => {
+            name.push(key);
+            console.log("re ", reportList[key]);
+            value.push(reportList[key]);
+          });
+          
+          for(let i = 0; i < name.length; i++) {
+            this.list[i + 1] = {
+              name: name[i],
+              value: value[i]
+            }
+          }
+
+          this.list.forEach((item: any) => {
+            console.log("item ", item.value);
+              this.total.total += item.value.total;
+              this.total.processed += item.value.processed;
+              this.total.processing += item.value.processing;
+              this.total.canceled += item.value.canceled;
+              this.total.prepare_expires += item.value.prepare_expires;
+              this.total.expired += item.value.expired;
+          })
+        }
+       
     })
  
   }
