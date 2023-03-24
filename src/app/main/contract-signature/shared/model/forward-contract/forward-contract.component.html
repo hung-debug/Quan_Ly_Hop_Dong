@@ -5,14 +5,15 @@
   <form (ngSubmit)="onSubmit()" [formGroup]="myForm" class="content">
 
 
-    <!-- <div *ngIf="!isReqCardIdToken" class="row">
+    <!--Đăng nhập bằng email/sđt-->
+    <div *ngIf="!isReqCardIdToken && datas.role_coordination != 1" class="row">
       <div class="col">
-        <input type="radio" (change)="changeTypeSign($event)" value="email" name="login" [checked]="true"/>{{'typeOfSignEmail' | translate}}
+        <input type="radio" (change)="changeTypeSign($event)" value="email" name="login" [checked]="true"/>{{' '}}{{'typeOfSignEmail' | translate}}
       </div>
       <div class="col">
-        <input type="radio" (change)="changeTypeSign($event)" value="phone" name="login"/>{{'typeOfSignPhone' | translate}}
+        <input type="radio" (change)="changeTypeSign($event)" value="phone" name="login"/>{{' '}}{{'typeOfSignPhone' | translate}}
       </div>
-    </div> -->
+    </div>
 
     <div class="name-item">
       <div class="label_item">{{'user.name' | translate}} <span class="require_star">*</span></div>

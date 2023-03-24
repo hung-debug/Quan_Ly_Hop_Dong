@@ -6,6 +6,7 @@
   line-height: 24px;
 }
 
+
 .item_contract:hover{
   background-color: rgb(255, 254, 254);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -26,10 +27,18 @@
   color: #027e21;
 }
 
+.header {
+  position: fixed;
+  top: 0;
+  width: calc(100% - 290px);
+  background: #fff;
+  height: 100px;
+}
+
 .list_header{
   color:#898989;
   text-align: center;
-  padding: 12px 12px 0;
+  padding: 60px 12px 12px 0;
   font-weight: 500;
 }
 

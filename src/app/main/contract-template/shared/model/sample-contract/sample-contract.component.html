@@ -37,6 +37,8 @@
                     <label class="label-require">{{'attribute.name' | translate}}: *</label>
                     <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name" (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
                 </div>
+
+                <!--Người ký/người nhập-->
                 <div class="sign-unit-select">
                     <label class="label-require">{{isEnableText || isChangeText ? ('user.import' | translate) : ('user.sign' | translate)+': *'}}</label>
                     <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
@@ -82,11 +84,11 @@
                 <div class="location">
                     <div class="location-drag">
                         <div class="label">{{'height' | translate}}</div>
-                        <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')" [ngModel]="objSignInfo.width" [readOnly]="false">
+                        <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')" [ngModel]="objSignInfo.height" [readOnly]="false">
                     </div>
                     <div class="location-drag">
                         <div class="label">{{'width' | translate}}</div>
-                        <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')" [ngModel]="objSignInfo.height" [readOnly]="false">
+                        <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')" [ngModel]="objSignInfo.width" [readOnly]="false">
                     </div>
                 </div>
             </div>

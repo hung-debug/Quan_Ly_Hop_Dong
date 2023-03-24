@@ -31,6 +31,13 @@ import { AdminUnitComponent } from './admin/admin-main/admin-unit/admin-unit.com
 import { AdminUserComponent } from './admin/admin-main/admin-user/admin-user.component';
 import { AdminPackComponent } from './admin/admin-main/admin-pack/admin-pack.component';
 import { AdminInfoUserComponent } from './admin/admin-main/admin-user/admin-info-user/admin-info-user.component';
+import { MultiSignListComponent } from './main/contract-signature/components/multi-sign-list/multi-sign-list.component';
+import { ReportDetailComponent } from './main/report/report-detail/report-detail.component';
+import { ReportStatusContractComponent } from './main/report/report-status-contract/report-status-contract.component';
+import { ReportSoonExpireComponent } from './main/report/report-soon-expire/report-soon-expire.component';
+import { ReportContractNumberFollowStatusComponent } from './main/report/report-contract-number-follow-status/report-contract-number-follow-status.component';
+import { ContractNumberFollowTypeComponent } from './main/report/contract-number-follow-type/contract-number-follow-type.component';
+import { ContractNumberFollowSignComponent } from './main/report/contract-number-follow-sign/contract-number-follow-sign.component';
 
 const contract_signatures = "c";
 const signatures = "s9";
@@ -127,11 +134,54 @@ const routes: Routes = [
         loadChildren: () => import('./main/contract-signature/contract-signature.module').then(m => m.ContractSignatureModule)
       },
       {
+        path: 'report',
+        children: [
+          //Báo cáo chi tiết hợp đồng
+          {
+            path:'detail',
+            component: ReportDetailComponent
+          },
+          //Báo cáo hợp đồng sắp hết hạn
+          {
+            path:'soon-expire',
+            component: ReportSoonExpireComponent
+          },
+          //Báo cáo trạng thái xử lý hợp đồng
+          {
+            path: 'status-contract',
+            component: ReportStatusContractComponent
+          },
+          //Báo cáo số lượng hợp đồng theo trạng thái
+          {
+            path: 'contract-number-follow-status',
+            component: ReportContractNumberFollowStatusComponent
+          },
+          //Báo cáo số lượng hợp đồng theo loại hợp đồng
+          {
+            path: 'contract-number-follow-type',
+            component: ContractNumberFollowTypeComponent
+          },
+          //Báo cáo số lượng hợp đồng theo hình thức ký
+          {
+            path: 'contract-number-follow-sign',
+            component: ContractNumberFollowSignComponent
+          }
+        ]
+      },
+      {
         path: 'form-contract/detail/:id',
         component: DetailContractComponent,
       },
       {
+        path:'form-contract/multi-sign-list',
+        component: MultiSignListComponent
+      },
+      {
         path: 'form-contract/detail/forward/:id',
+        component: DetailContractComponent,
+      },
+      {
+        path: 'form-contract/detail/reject/:id',
         component: DetailContractComponent,
       },
       {
@@ -182,6 +232,7 @@ const routes: Routes = [
         path: 'notification',
         component: NotificationComponent,
       },
+      
     ],
   },
   {

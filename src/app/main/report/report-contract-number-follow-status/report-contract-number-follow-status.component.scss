@@ -1,0 +1,138 @@
+.input_text {
+    padding-left: 10px;
+    outline: none;
+    height: 33px;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #106DB6;
+  }
+
+.btn_search{
+   align-self: flex-end;
+}
+
+.btn_submit{
+    border: 0px;
+    border-radius: 5px;
+    height: 33px;
+    box-sizing: border-box;
+    color: white;
+    background-color: #106DB6;
+    font-size: 13px;
+    margin: 0 10px;
+}
+
+:host ::ng-deep {
+  .p-treeselect, .p-dropdown {
+      border: 1px solid #106DB6;
+      border-radius: 5px;
+      height: 33px;
+      width: 100%;
+      outline: 0;
+      color: black !important;
+  }
+  .p-treeselect-label, .p-dropdown-label {
+      padding: 5px 5px 5px 15px;
+  }
+}
+
+#table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+  font-family: font_lexend_deca;
+}
+#table td, #table th {
+  //border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#table tr:nth-child(even){background-color: #f2f2f2;}
+
+#table tr:hover {background-color: #ddd;}
+
+#table th {
+  //text-align: center;
+  background-color: #E2ECF6;
+  color: #106DB6;
+}
+
+#table tr:last-child th:first-child {
+  border-top-left-radius: 10px;
+}
+#table tr:last-child th:last-child {
+  border-top-right-radius: 10px;
+}
+#table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+#table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+:host ::ng-deep {
+  .p-calendar {
+    font-size: 13px !important;
+    font-family: 'font_lexend_deca';
+    width: 100%;
+  }
+  .p-datepicker table td {
+    padding: 0;
+  }
+  .p-calendar-w-btn, .p-calendar-w-btn .p-inputtext {
+    height: 33px;
+  }
+  .p-calendar-w-btn .p-inputtext{
+    //border: 1px solid #106DB6 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+  }
+  .p-calendar-w-btn .p-datepicker-trigger {
+    border: 1px solid #ced4da;
+  }
+  .p-selectbutton .p-button {
+    outline: 0 !important;
+    box-shadow: none !important;
+    height: 33px;
+    width: 50%;
+  }
+}
+
+.subheader-row {
+  background-color:#EEF7FF !important;
+}
+
+input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+}
+
+label {
+  position: relative;
+  padding-left: 25px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+label:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #555;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+input[type="checkbox"]:checked + label:before {
+  content: "\2713";
+  color: #fff;
+  background-color: #555;
+  text-align: center;
+  line-height: 15px;
+  font-size: 12px;
+}
+
+  

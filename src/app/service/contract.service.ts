@@ -8,6 +8,7 @@ import { DatePipe } from '@angular/common';
 import { forkJoin, BehaviorSubject, Subject } from 'rxjs';
 import axios from 'axios';
 import { User } from './user.service';
+import { encode } from 'base64-arraybuffer';
 
 export interface Contract {
   id: number;
@@ -101,6 +102,7 @@ export class ContractService {
   checkTaxCodeExistUrl: any = `${environment.apiUrl}/api/v1/contracts/check-mst-exist`;
 
   signHsmUrl: any = `${environment.apiUrl}/api/v1/sign/hsm/`;
+  signHsmOldUrl: any = `${environment.apiUrl}/api/v1/sign/old-hsm/`
 
   getFilePdfForMobileUrl: any = `${environment.apiUrl}/api/v1/contracts/review/`;
 
@@ -137,6 +139,8 @@ export class ContractService {
   updateInforPersonProcessUrl: any = `${environment.apiUrl}/api/v1/recipients/`;
 
   getAllInfoUserUrl: any = `${environment.apiUrl}/api/v1/customers/suggested-list`;
+
+  deleteTokenUrl: any = `${environment.apiUrl}/api/v1/auth/logout`
 
   token: any;
   customer_id: any;
@@ -508,8 +512,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_sample_contract);
-    return this.http
-      .put<Contract>(this.addSampleCntractUrl + `/${id}`, body, {
+    return this.http.put<Contract>(this.addSampleCntractUrl + `/${id}`, body, {
         headers: headers,
       })
       .pipe(
@@ -586,7 +589,7 @@ export class ContractService {
       });
   }
 
-  meregeTimeStamp(recipientId: number, contractId: number, signature: any, fieldName: any, cert: any, hexDigestTempFile: any, isTimestamp: any) {
+  meregeTimeStamp(recipientId: number, contractId: number, signature: any, fieldName: any, cert: any, hexDigestTempFile: any, isTimestamp: string) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -645,9 +648,7 @@ export class ContractService {
       image_base64: image_base64,
     };
 
-    return this.http.post<any>(
-      this.getFilePdfForMobileUrl + recipientId,
-      body,
+    return this.http.post<any>(this.getFilePdfForMobileUrl + recipientId,body,
       {
         headers: headers,
       }
@@ -672,6 +673,12 @@ export class ContractService {
       fileData: signCertDigital.valueSignBase64,
       imageData: imgSignGen ? imgSignGen : this.imageMobiBase64,
       page: signCertDigital.page.toString(),
+
+      // ph: signCertDigital.signDigitalHeight.toString(),
+      // pw: signCertDigital.signDigitalWidth.toString(),
+      // px: signCertDigital.signDigitalX.toString(),
+      // py: signCertDigital.signDigitalY.toString(), 
+
       ph: Math.floor(
         signCertDigital.signDigitalHeight
           ? signCertDigital.signDigitalHeight
@@ -763,6 +770,26 @@ export class ContractService {
     return this.http
       .get(url, { responseType: 'arraybuffer', headers })
       .toPromise();
+  }
+
+  async openPdf(path: any, event: any) {
+    event.preventDefault();
+
+    let base64StringPdf: any = await this.getDataFileUrlPromise(path);
+    base64StringPdf = encode(base64StringPdf);
+
+    const byteCharacters = atob(base64StringPdf);
+
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+
+    var blob = new Blob([byteArray], {type: 'application/pdf'});
+    var blobURL = URL.createObjectURL(blob);
+    window.open(blobURL);
   }
 
   getDataBinaryFileUrlPromise(url: any) {
@@ -1051,7 +1078,7 @@ export class ContractService {
       .toPromise();
   }
 
-  signHsm(datas: any, idContract: number, isTimestamp: any) {
+  signHsm(datas: any, recipientId: number, isTimestamp: any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -1065,11 +1092,31 @@ export class ContractService {
       password2: datas.password2,
       image_base64: datas.imageBase64,
       // isTimestamp: isTimestamp
-      // fieldId: datas.fieldId
+      field: datas.field
     });
 
     return this.http
-      .post<any>(this.signHsmUrl + idContract, body, { headers: headers })
+      .post<any>(this.signHsmUrl + recipientId, body, { headers: headers })
+      .toPromise();
+  }
+
+  signHsmOld(datas: any, recipientId: number) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    const body = JSON.stringify({
+      ma_dvcs: datas.ma_dvcs,
+      username: datas.username,
+      password: datas.password,
+      password2: datas.password2,
+      image_base64: datas.imageBase64,
+    });
+
+    return this.http
+      .post<any>(this.signHsmOldUrl + recipientId, body, { headers: headers })
       .toPromise();
   }
 
@@ -1123,6 +1170,13 @@ export class ContractService {
       body,
       { headers: headers }
     );
+  }
+
+  downloadPDF(url: any) {
+    const options = { responseType: 'blob' as 'json' };
+    return this.http
+   .get<Blob>(url, options)
+   .pipe(map(res => new Blob([res], { type: 'application/pdf' })));
   }
 
   getFileContract(idContract: any): Observable<any> {
@@ -1204,6 +1258,15 @@ export class ContractService {
       body,
       { headers: headers }
     );
+  }
+
+  deleteToken() {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.post<any>(this.deleteTokenUrl, {},{headers: headers});
   }
 
   considerRejectContract(id: any, reason: string) {
@@ -1360,15 +1423,15 @@ export class ContractService {
     
   }
  
-  updateInfoPersonProcess(datas: any, recipient: any) {
+  updateInfoPersonProcess(datas: any, recipient: any, idContract: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-      
+      console.log("contractid",idContract);
     return this.http.put<any>(
-      this.updateInforPersonProcessUrl + recipient,
+      this.updateInforPersonProcessUrl + idContract + '/' + recipient,
       datas,
       { headers: headers }
     );
@@ -1735,6 +1798,7 @@ export class ContractService {
             sign_type: [
               // hình thức ký
             ],
+            locale:'vi',
           },
           // Dữ liệu người ký
           {
@@ -1749,7 +1813,33 @@ export class ContractService {
             is_otp: 0, // select otp
             sign_type: [
               // hình thức ký
+              // {
+              //   id: 1,
+              //   name: 'Ký ảnh và OTP',
+              //   is_otp: false,
+              // },
+              // {
+              //   id: 5,
+              //   name: "Ký eKYC",
+              //   is_otp: false
+              // },
+              // {
+              //   id: 4,
+              //   name: 'Ký số bằng HSM',
+              //   is_otp: false
+              // },
+              // {
+              //   id: 2,
+              //   name: 'Ký số bằng USB token',
+              //   is_otp: false,
+              // },
+              // {
+              //   id: 3,
+              //   name: 'Ký số bằng sim PKI',
+              //   is_otp: false,
+              // },
             ],
+            locale:'vi',
           },
           // dữ liệu văn thư
           {
@@ -1764,7 +1854,9 @@ export class ContractService {
             is_otp: 0, // select otp
             sign_type: [
               // hình thức ký
+            
             ],
+            locale:'vi',
           },
         ],
       },
@@ -1787,6 +1879,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
+            locale:'vi',
           },
           // người xem xét
           {
@@ -1800,6 +1893,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
+            locale:'vi',
           },
           // người ký
           {
@@ -1813,6 +1907,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
+            locale:'vi',
           },
           // văn thư
           {
@@ -1826,6 +1921,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
+            locale:'vi',
           },
         ],
       },
@@ -1851,6 +1947,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
+            locale:'vi',
           },
         ],
       },
@@ -1896,6 +1993,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
+            locale:'vi',
           },
         ],
       },
@@ -1916,6 +2014,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
+            locale:'vi',
           },
         ],
       },

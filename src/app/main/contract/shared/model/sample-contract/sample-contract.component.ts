@@ -484,31 +484,37 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   resizeSignature = (event: any) => {
+    console.log("vao day ", event.rect);
     let x = (parseFloat(event.target.getAttribute('data-x')) || 0)
     let y = (parseFloat(event.target.getAttribute('data-y')) || 0)
     // translate when resizing from top or left edges
     this.signCurent = this.convertToSignConfig().filter((p: any) => p.id == event.target.id)[0];
     if (this.signCurent) {
-      if (event.rect.width <= 280) {
+      // if (event.rect.width <= 280) {
         this.signCurent.coordinate_x = x;
         this.signCurent.coordinate_y = y;
         this.objSignInfo.id = event.target.id;
         this.objSignInfo.traf_x = x;
         this.objSignInfo.traf_y = y;
-        this.objSignInfo.width = event.rect.width;
-        this.objSignInfo.height = event.rect.height;
+
+        // this.objSignInfo.width = event.rect.width;
+        // this.objSignInfo.height = event.rect.height;
 
         this.signCurent.width = event.rect.width;
         this.signCurent.height = event.rect.height;
         this.tinhToaDoSign("canvas-step3-" + this.signCurent.page, this.signCurent.width, this.signCurent.height, this.objSignInfo);
         let _array = Object.values(this.obj_toa_do);
         this.signCurent.position = _array.join(",");
-      }
+      // }
     }
   }
 
   resizableListener = (event: any) => {
     var target = event.target
+
+    console.log("event ", event.rect);
+
+    console.log("ta")
 
     // update the element's style
     target.style.width = event.rect.width + 'px'
@@ -725,8 +731,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     element['height'] = '85';
                   }
 
-                  this.objSignInfo.width = element['width'];
-                  this.objSignInfo.height = element['height'];
+                  this.objSignInfo.width = element['height'];
+                  this.objSignInfo.height = element['width'];
                   this.objSignInfo.text_attribute_name = '';
                   this.list_sign_name.forEach((item: any) => {
                     item['selected'] = false;
@@ -773,7 +779,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       if (this.convertToSignConfig().some((p: any) => ((p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && (p.recipient ? p.recipient.email : p.email) && p.sign_unit == 'so_tai_lieu'))) {
         if (isSignType != 'text') {
           if(isSignType == 'so_tai_lieu') {
-            element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4));
+            // element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4));
+            if(this.datas.contract_no) {
+              element.is_disable = true;
+            } else {
+              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
+            }
           } else {
             element.is_disable = true
           }
@@ -784,9 +795,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         } else if (isSignType == 'chu_ky_so') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
         } else if (isSignType == 'text') {
-          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4); // ô text chỉ có ký usb token mới được chỉ định hoặc là văn thư
-        } else 
-        element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4)); // đã có số tài liệu thì ko được chỉ định người ký vào ô số tài liệu
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
+        } else {
+          if(this.datas.contract_no) {
+            element.is_disable = true;
+          } else {
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4 )
+          }
+        }
+          // element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4)); 
       }
       // }
 
@@ -1129,8 +1146,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.objSignInfo.traf_x = d.coordinate_x;
         this.objSignInfo.traf_y = d.coordinate_y;
 
-        this.objSignInfo.width = parseInt(d.width);
-        this.objSignInfo.height = parseInt(d.height);
+        this.objSignInfo.width = parseInt(d.height);
+        this.objSignInfo.height = parseInt(d.width);
 
         if(isObjSign.font) {
           this.objSignInfo.font = isObjSign.font;
@@ -1334,6 +1351,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
 
           if (data_name) {
+
             isObjSign.name = data_name.name;
             signElement.setAttribute("name", isObjSign.name);
 
@@ -1354,7 +1372,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
           }
 
-          if(data_name.role == 4 && this.isChangeText) {
+          let idTypeSign = data_name.sign_type[0].id;
+
+          if((data_name.role == 4 || (idTypeSign == 2 || idTypeSign == 4)) && this.isChangeText) {
+            // console.log("1 ", 1);
+
             this.soHopDong = data_name;
 
             //Gán lại tất cả số hợp đồng cho một người ký

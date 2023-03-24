@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DashboardService } from '../service/dashboard.service';
 import { UserService } from '../service/user.service';
 import {DeviceDetectorService} from "ngx-device-detector";
+import { ContractService } from '../service/contract.service';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -40,6 +41,7 @@ export class MainComponent implements OnInit {
               private dialog: MatDialog,
               private userService: UserService,
               private deviceService: DeviceDetectorService,
+              private contractService: ContractService
               ) {
     this.title = 'err';
     translate.addLangs(['en', 'vi']);
@@ -78,11 +80,15 @@ export class MainComponent implements OnInit {
 
   //click logout
   logout() {
-    // localStorage.clear();
+     //call api delete token
+    //  this.contractService.deleteToken().subscribe((res:any) => { 
+    // })
+
     sessionStorage.clear();
     localStorage.removeItem('currentUser');
     localStorage.removeItem('myTaxCode');
     localStorage.removeItem('url');
+  
     this.router.navigate(['/login']);
   }
 
@@ -121,8 +127,6 @@ export class MainComponent implements OnInit {
   }
 
   getStyleWithSideBar() {
-    let urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
-
     if (this.urlLoginType || this.mobile === true) {
       return {
         'padding-left': '0px'
@@ -135,8 +139,6 @@ export class MainComponent implements OnInit {
 
   //get style header
   getStyleSideBar() {
-    let urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
-
     if (this.urlLoginType || this.mobile === true) {
       return {
         "width": "100%",

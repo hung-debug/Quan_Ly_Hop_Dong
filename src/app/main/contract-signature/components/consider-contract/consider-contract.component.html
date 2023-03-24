@@ -4,7 +4,7 @@
 <div class="sample-contract row" *ngIf="loaded && valid && this.mobile === false">
   <div class="col-md-3 sample-contract__information" style="background-color: white;">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
-      <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">{{'contract.detail' | translate}}</div>
+      <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label">{{'contract.detail' | translate}}</div>
       <div style="line-height: 25px">
         <div>
           <span class="title-contract">{{'contract.uid' | translate}}:</span>
@@ -26,7 +26,7 @@
           <span class="title-contract">{{'file.attach' | translate}}:</span>
           <span *ngFor="let d of allFileAttachment;let i = index">
             <span *ngIf="i != 0">, </span>
-            <a style="color: #106DB6" rel="stylesheet" [href]="d.path" target="_blank">{{d.filename}}</a>
+            <a rel="noopener noreferrer" style="color: #106DB6" rel="stylesheet" [href]="d.path" target="_blank">{{d.filename}}</a>
           </span>
         </div>
         <div>
@@ -34,7 +34,7 @@
           </span>
           <span *ngFor="let d of datas?.is_data_contract?.refs;let i = index">
             <span *ngIf="i != 0">, </span>
-            <a style="color: #106DB6;" rel="stylesheet" [href]="'/main/form-contract/detail/' + d.ref_id" target="_blank">{{d.ref_name}}</a>
+            <a style="color: #106DB6;"  [href]="d.path" target="_blank" (click)="openPdf(d.path, $event)">{{d.ref_name}}</a>
           </span>
         </div>
 
@@ -118,13 +118,13 @@
         <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId" [phonePKI]="phonePKI"></app-display-digital-signature>
       </div>
       <div class="skeleton-sign position-absolute opacity-0">
-        <app-text-signature-image [datas]="datas" [textSign]="textSign" [width]="width"></app-text-signature-image>
+        <app-text-signature-image [font]="font" [font_size]="font_size" [datas]="datas" [textSign]="textSign" [width]="width"></app-text-signature-image>
       </div>
     </div>
   </div>
 </div>
 
-<div *ngIf="this.mobile === true">
+<div *ngIf="this.mobile && !this.multiSignInPdf">
 
   <div class="skeleton-sign position-absolute opacity-0">
     <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId" [phonePKI]="phonePKI"></app-display-digital-signature>
@@ -204,7 +204,7 @@
 </div>
 </div>
 
-<app-footer-signature *ngIf="loaded" 
+<app-footer-signature *ngIf="loaded  && (!this.mobile || (this.mobile && !this.multiSignInPdf))" 
   [pageNum]="pageNum" 
   [pageLast]="pageLast" 
   [page1]="page1" 

@@ -1,25 +1,17 @@
-<!--begin template-->
 <div class="container-fluid">
   <div class="contract-determine">
     <div style="margin-right: 50px">
       <input id="order-organization" class="contract-total" style="width: 25px; height: 25px" type="number"
-        [(ngModel)]="data_organization.ordering"
-        (focusout)="onChangeValue($event,'order-organization')"
+        [(ngModel)]="data_organization.ordering" (focusout)="onChangeValue($event,'order-organization')"
         oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
     </div>
     <div class="contract--content">
 
       <div class="contract__content--title-doi-tac">
         <div style="width: 85px">
-          {{ "organization.me" | translate | uppercase }}&nbsp;<span style="color: red"
-            >*</span
-          >
+          {{ "organization.me" | translate | uppercase }}&nbsp;<span style="color: red">*</span>
         </div>
-        <input
-          class="input1"
-          type="text"
-          [(ngModel)]="data_organization.name"  
-        />
+        <input class="input1" type="text" [(ngModel)]="data_organization.name" />
       </div>
 
       <div class="contract__content--participants">
@@ -28,81 +20,117 @@
         <div class="participants-border">
           <div class="label">{{'user.view' | translate}}</div>
           <div class="participants--content" *ngFor="let d of getOriganzationReviewer(); let index = index">
-            <input [id]="'ordering-organzation-view-' + index" class="col-md-1 contract-total" (focusout)="onChangeValue($event,'ordering-organzation-view-' + index)" style="width: 25px; height: 25px" type="number"
-                   [(ngModel)]="d.ordering"
-                   oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" [disabled]="getOriganzationReviewer().length == 1">
+            <input [id]="'ordering-organzation-view-' + index" class="col-md-1 contract-total"
+              (focusout)="onChangeValue($event,'ordering-organzation-view-' + index)" style="width: 25px; height: 25px"
+              type="number" [(ngModel)]="d.ordering"
+              oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
+              [disabled]="getOriganzationReviewer().length == 1">
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-                 <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                 <div class="participants--input" style="display: flex">
-                  <div class="participants__name">
-                    <div class="label_detail text-color">
-  
-                      <div>
-                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [value]="email" [(ngModel)]="d.login_by"/>
-                      </div>&nbsp;
-                      <div>
-                        {{'typeOfSignEmail' | translate}}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="participants__name">
-                    <div class="label_detail text-color">
-                      <div>
-                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [(ngModel)]="d.login_by" [value]="phone"/>
-                      </div>&nbsp;
-                      <div>
-                        {{'typeOfSignPhone' | translate}}
-                      </div>
+              <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
+              <div class="participants--input" style="display: flex">
+                <div class="participants__name">
+                  <div class="label_detail text-color">
+
+                    <div>
+                      <input (change)="changeTypeSign(d, index)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [value]="email" [(ngModel)]="d.login_by" />
+                    </div>&nbsp;
+                    <div>
+                      {{'typeOfSignEmail' | translate}}
                     </div>
                   </div>
                 </div>
+                <div class="participants__name">
+                  <div class="label_detail text-color">
+                    <div>
+                      <input (change)="changeTypeSign(d, index)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [(ngModel)]="d.login_by" [value]="phone" />
+                    </div>&nbsp;
+                    <div>
+                      {{'typeOfSignPhone' | translate}}
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
-                  <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span class="required-title">*</span></div>
+                  <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span
+                      class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
-          
+
                     <input *ngIf="d.login_by === 'email'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
-                          (focusin)="onFocusIn($event, index, 'view')"
-                          (ngxInputSearch)="doTheSearch($event, index, 'view')" [(ngModel)]="d.name"
-                          (focusout)="onFocusOut($event, d)">
+                      (focusin)="onFocusIn($event, index, 'view')" (ngxInputSearch)="doTheSearch($event, index, 'view')"
+                      [(ngModel)]="d.name" (focusout)="onFocusOut($event, d)">
 
                     <input *ngIf="d.login_by === 'phone'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
-                          (focusin)="onFocusIn($event, index, 'view')"
-                          [(ngModel)]="d.name"
-                          (focusout)="onFocusOut($event, d)">
+                      (focusin)="onFocusIn($event, index, 'view')" [(ngModel)]="d.name"
+                      (focusout)="onFocusOut($event, d)">
                   </div>
                   <div class="search-name"
-                      *ngIf="this.arrSearch[index] && this.arrSearchNameView && arrSearchNameView.length > 0">
+                    *ngIf="this.arrSearch[index] && this.arrSearchNameView && arrSearchNameView.length > 0">
                     <button class="search-name-items" *ngFor="let t of this.arrSearchNameView"
-                            (click)="onSelectName(t, d)">{{t.name}} ({{t.email}})
+                      (click)="onSelectName(t, d)">{{t.name}} ({{t.email}})
                     </button>
                   </div>
                 </div>
-           
-                  <!--NB-->
-                  <div class="participants__name" *ngIf="d.login_by == 'email' && this.site == 'NB'">
-                    <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
-                    <div class="input-data">
-                      <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
-                    </div>
+
+                <!--NB-->
+                <div class="participants__name" *ngIf="d.login_by == 'email' && this.site == 'NB'">
+                  <div class="label_detail text-color">Email&nbsp;
+                    <span class="required-title">*</span>
                   </div>
-  
-                  <div class="participants__name" *ngIf="d.login_by == 'phone' && this.site == 'NB'">
-                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
-                    <div class="input-data">
+                  <div class="input-data">
+                    <img src="assets/img/login_email.svg" class="input-img">
+                    <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                  </div>
+                </div>
+
+                <div class="participants__name" *ngIf="d.login_by == 'phone' && this.site == 'NB'">
+                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                  </div>
+                  <div style="display: flex;">
+                    <div class="input-data" style="width: 91%;margin-right: -3%;">
                       <img class="input-img">
                       <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
                     </div>
-                  </div>
 
-                  
-               <!--KD-->
+                    <div class="participants__name" style="width: 17%;margin-left: 5%;">
+                      <div class="input-data">
+                        <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                          <div *ngIf="d.locale =='vi'">
+                            <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                              id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                          </div>
+                          <div *ngIf="d.locale =='en'">
+                            <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                              id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                          </div>
+                          <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                            <div class="switch-language">
+                              <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                                <div class="language">{{ "vie" | translate }}</div>
+                              </button>
+                            </div>
+                            <div class="switch-language">
+                              <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                                <div class="language">{{ "eng" | translate }}</div>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <!--KD-->
                 <div *ngIf="d.login_by === 'email' && this.site == 'KD'" class="participants__name">
-                  <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+                  <div class="label_detail text-color">Email&nbsp;
+                    <span class="required-title">*</span>
+                  </div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
                     <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
@@ -110,25 +138,97 @@
                 </div>
 
                 <div *ngIf="d.login_by === 'phone' && this.site == 'KD'" class="participants__name">
-                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
-                  <div class="input-data">
-                    <img class="input-img">
-                    <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                  <div style="display: flex;">
+                    <div class="participants__name" style="width: 91%;">
+                      <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                        <span class="required-title">*</span>
+                      </div>
+                      <div class="input-data">
+                        <img class="input-img">
+                        <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                      </div>
+                    </div>
+
+                    <div class="participants__name" style="width: 16%; margin-left: 2%;">
+                      <div class="label_detail text-color">
+                        <span class="required-title"></span>
+                      </div>
+                      <div class="input-data">
+
+                        <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                          <div *ngIf="d.locale =='vi'">
+                            <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                              id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                          </div>
+                          <div *ngIf="d.locale =='en'">
+                            <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                              id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                          </div>
+                          <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                            <div class="switch-language">
+                              <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                                <div class="language">{{ "vie" | translate }}</div>
+                              </button>
+                            </div>
+                            <div class="switch-language">
+                              <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                                <div class="language">{{ "eng" | translate }}</div>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
+
+
               </div>
 
-               <!--NB email-->
-               <div *ngIf="this.site == 'NB' && d.login_by === 'email'" class="participants--input" style="display: flex">
-                <div class="participants__name" style="width: 90%">
-                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div></div>
+              <!--NB email-->
+              <div *ngIf="this.site == 'NB' && d.login_by === 'email'" class="participants--input"
+                style="display: flex">
+                <div class="participants__name" style="width:80%; margin-right: -4%;">
+                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                    <div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div>
+                  </div>
                   <div class="input-data">
                     <img class="input-img">
                     <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                   </div>
                 </div>
+
+                <div class="participants__name" style="width: 6%">
+                  <div class="label_detail text-color">
+                    <span class="required-title"></span>
+                  </div>
+                  <div class="input-data">
+                    <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                      <div *ngIf="d.locale =='vi'">
+                        <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                          id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                      </div>
+                      <div *ngIf="d.locale =='en'">
+                        <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                          id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                      </div>
+                      <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                        <div class="switch-language">
+                          <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                            <div class="language">{{ "vie" | translate }}</div>
+                          </button>
+                        </div>
+                        <div class="switch-language">
+                          <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                            <div class="language">{{ "eng" | translate }}</div>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-             
+
             </div>
             <div class="col-md-1 delete-element" (click)="deleteOriganzationReviewer(index)">
               <img src="assets/img/border_close.svg" alt="close.vn">
@@ -141,7 +241,7 @@
         </div>
 
 
-<!--        to chuc cua toi - nguoi ky-->
+        <!-- to chuc cua toi - nguoi ky-->
         <div class="participants-border">
           <div class="label">{{'user.sign' | translate}}</div>
           <div class="participants--content" *ngFor="let d of getOriganzationSignature(); let index = index">
@@ -151,7 +251,7 @@
               type="number" [(ngModel)]="d.ordering"
               oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
               [disabled]="getOriganzationSignature().length == 1">
-              
+
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
               <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}}-->
@@ -160,7 +260,8 @@
                   <div class="label_detail text-color">
 
                     <div>
-                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgSigner_{{index}}" [value]="email" [(ngModel)]="d.login_by"/>
+                      <input (change)="changeTypeSign(d, index,null,'signer')" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
+                        [value]="email" [(ngModel)]="d.login_by" />
                     </div>&nbsp;
                     <div>
                       {{'typeOfSignEmail' | translate}}
@@ -170,7 +271,8 @@
                 <div class="participants__name">
                   <div class="label_detail text-color">
                     <div>
-                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgSigner_{{index}}" [(ngModel)]="d.login_by" [value]="phone"/>
+                      <input (change)="changeTypeSign(d, index,null,'signer')" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
+                        [(ngModel)]="d.login_by" [value]="phone" />
                     </div>&nbsp;
                     <div>
                       {{'typeOfSignPhone' | translate}}
@@ -181,7 +283,8 @@
 
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
-                  <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span class="required-title">*</span></div>
+                  <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span
+                      class="required-title">*</span></div>
                   <!--Trường nhập họ và tên cho người ký tổ chức của tôi-->
                   <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
@@ -192,11 +295,10 @@
                       (ngxInputSearch)="doTheSearch($event, index, 'signature')" [(ngModel)]="d.name"
                       (focusout)="onFocusOut($event, d)">
 
-                      <!--Trường hợp typeOfSignPhone-->
+                    <!--Trường hợp typeOfSignPhone-->
                     <input *ngIf="d.login_by === 'phone'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
-                    (focusin)="onFocusIn($event, index, 'signature')"
-                    [(ngModel)]="d.name"
-                    (focusout)="onFocusOut($event, d)">
+                      (focusin)="onFocusIn($event, index, 'signature')" [(ngModel)]="d.name"
+                      (focusout)="onFocusOut($event, d)">
                   </div>
 
                   <div class="search-name"
@@ -208,19 +310,15 @@
                 </div>
 
                 <div class="participants__name">
-                  <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span class="required-title">*</span>
+                  <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span
+                      class="required-title">*</span>
                   </div>
 
                   <!--Tổ chức của tôi chọn loại ký-->
-                  <ng-multiselect-dropdown 
-                    [(ngModel)]="d.sign_type" 
-                    placeholder="{{'choose' | translate }}"
-                    [settings]="dropdownSignTypeSettings" 
-                    [data]="isListSignNotPerson" 
-                    (onSelect)="onItemSelect($event, data_organization.name)"
-                    (onDeSelect)="deSelectOrg($event)"
-                    (ngModelChange)="selectWithOtp($event, d, 'organization')"
-                  >
+                  <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
+                    [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson[index]"
+                    (onSelect)="onItemSelect($event, data_organization.name)" (onDeSelect)="deSelectOrg($event)"
+                    (ngModelChange)="selectWithOtp($event, d, 'organization')">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
                         <label style="color: #333; font-weight: normal;"
@@ -235,7 +333,7 @@
 
               <!--KD-->
               <div *ngIf="this.site == 'KD'" class="participants--input" style="display: flex">
-                <div *ngIf="d.login_by === 'email'" class="participants__name" style="width: 90%">
+                <div *ngIf="d.login_by === 'email'" class="participants__name" style="width: 91%">
                   <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
@@ -243,61 +341,170 @@
                   </div>
                 </div>
 
-                <div *ngIf="d.login_by === 'phone'" class="participants__name" style="width: 90%">
-                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
-                  <div class="input-data">
-                    <img class="input-img">
-                    <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                <div *ngIf="d.login_by === 'phone'" class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                  </div>
+                  <div style="display: flex;">
+                    <div class="input-data" style="width: 85%;">
+                      <img class="input-img">
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                    </div>
+
+                    <div class="input-data" style="width: 7%;margin-left: 8%;">
+                      <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                        <div *ngIf="d.locale =='vi'">
+                          <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                            id="dropdownMenu2" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div *ngIf="d.locale =='en'">
+                          <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                            id="dropdownMenu2" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div ngbDropdownMenu aria-labelledby="dropdownMenu2" style="min-width: 6rem;">
+                          <div class="switch-language">
+                            <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                              <div class="language">{{ "vie" | translate }}</div>
+                            </button>
+                          </div>
+                          <div class="switch-language">
+                            <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                              <div class="language">{{ "eng" | translate }}</div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <!--NB email-->
-              <div *ngIf="this.site == 'NB' && d.login_by === 'email'" class="participants--input" style="display: flex">
-                <div class="participants__name">
-                  <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+
+              <!--NB đăng nhập bằng email/người ký-->
+              <div *ngIf="this.site == 'NB' && d.login_by === 'email'" class="participants--input"
+                style="display: flex">
+
+                <!--Email-->
+                <div class="participants__name" style="margin-left: 4%;">
+                  <div class="label_detail text-color">Email&nbsp;
+                    <span class="required-title">*</span>
+                  </div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
                     <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
                   </div>
                 </div>
 
-                <div class="participants__name">
-                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div></div>
+                <!--Số điện thoại-->
+                <div class="participants__name" style="width: 34%; margin-left: 8%;">
+                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<div style="color: #ffc107;">
+                      ({{'receive.contract.process' | translate}})</div>
+                  </div>
                   <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
+                    <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
                     <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                  </div>
+                </div>
+
+                <div class="participants__name" style="width: 6%; margin-right: 4%;">
+                  <div class="label_detail text-color">
+                    <span class="required-title"></span>
+                  </div>
+                  <div class="input-data">
+                    <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                      <div *ngIf="d.locale =='vi'">
+                        <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                          id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                      </div>
+                      <div *ngIf="d.locale =='en'">
+                        <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                          id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                      </div>
+                      <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                        <div class="switch-language">
+                          <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                            <div class="language">{{ "vie" | translate }}</div>
+                          </button>
+                        </div>
+                        <div class="switch-language">
+                          <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                            <div class="language">{{ "eng" | translate }}</div>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <!--NB phone-->
-              <div *ngIf="this.site == 'NB' && d.login_by === 'phone'" class="participants--input" style="display: flex">
-                <div class="participants__name" style="width:90%">
-                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
+              <div *ngIf="this.site == 'NB' && d.login_by === 'phone'" class="participants--input"
+                style="display: flex">
+                <div class="participants__name" style="width:80%; margin-right: -4%;">
+                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                  </div>
                   <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
+                    <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
                     <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                  </div>
+                </div>
+
+                <div class="participants__name" style="width: 6%">
+                  <div class="label_detail text-color">
+                    <span class="required-title"></span>
+                  </div>
+                  <div class="input-data">
+                    <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                      <div *ngIf="d.locale =='vi'">
+                        <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                          id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                      </div>
+                      <div *ngIf="d.locale =='en'">
+                        <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                          id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                      </div>
+                      <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                        <div class="switch-language">
+                          <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                            <div class="language">{{ "vie" | translate }}</div>
+                          </button>
+                        </div>
+                        <div class="switch-language">
+                          <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                            <div class="language">{{ "eng" | translate }}</div>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là usbtoken-->
               <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
-                <div class="participants__name" style="width: 90%">
-                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'info.token' | translate}})</div></div>
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'info.token' | translate}})</div>
+                  </div>
                   <div class="input-data">
-                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
               </div>
 
               <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là hsm-->
               <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
-                <div class="participants__name" style="width: 90%">
-                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'info.hsm' | translate}})</div></div>
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'info.hsm' | translate}})</div>
+                  </div>
                   <div class="input-data">
-                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
               </div>
@@ -309,13 +516,19 @@
               <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
             </div>
             <div *ngIf="getOriganzationSignature().length == 1" class="col-md-1 delete-element"></div>
+            <div>
+            <!-- <div class="participants--add">
+              <u class="label text-color" style="color: #106DB6"
+                (click)="addOriganzationSignature()">{{'btn.add.user.sign' | translate}}</u>
+            </div> -->
+            </div>
           </div>
           <div class="participants--add">
             <u class="label text-color" style="color: #106DB6"
               (click)="addOriganzationSignature()">{{'btn.add.user.sign' | translate}}</u>
           </div>
         </div>
-        
+
         <!-- to chuc cua toi - nguoi van thu -->
         <div class="participants-border">
           <div class="label">{{'user.doc' | translate}}</div>
@@ -327,7 +540,8 @@
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
-                  <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span class="required-title">*</span></div>
+                  <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span
+                      class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
                     <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
@@ -343,18 +557,15 @@
                 </div>
 
                 <div class="participants__name">
-                  <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span class="required-title">*</span>
+                  <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span
+                      class="required-title">*</span>
                     <!-- &nbsp;-&nbsp;<div style="color: #ffc107;">({{'Chỉ được chọn 1 kiểu ký số' | translate}})</div> -->
                   </div>
 
                   <!--Văn thư tổ chức của tôi chọn loại ký-->
-                  <ng-multiselect-dropdown 
-                    [(ngModel)]="d.sign_type" 
-                    placeholder="{{'choose' | translate }}"
-                    [settings]="dropdownSignTypeSettings" 
-                    [data]="signType_doc"
-                    (ngModelChange)="selectWithOtp($event, d, 'organization')"
-                    >
+                  <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
+                    [settings]="dropdownSignTypeSettings" [data]="signType_doc"
+                    (ngModelChange)="selectWithOtp($event, d, 'organization')">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
                         <label style="color: #333; font-weight: normal;"
@@ -368,26 +579,62 @@
               </div>
 
               <!--NB-->
-              <div  class="participants--input" style="display: flex" *ngIf="this.site == 'NB'">
-                <div class="participants__name">
-                  <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+              <div class="participants--input" style="display: flex" *ngIf="this.site == 'NB'">
+                <div class="participants__name" style="margin-left: 4%;">
+                  <div class="label_detail text-color">Email&nbsp;
+                    <span class="required-title">*</span>
+                  </div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
                     <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
                   </div>
                 </div>
 
-                <div class="participants__name">
-                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div></div>
+                <div class="participants__name" style="width: 34%; margin-left: 8%;">
+                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                    <div style="color: #ffc107;">
+                      ({{'receive.contract.process' | translate}})
+                    </div>
+                  </div>
                   <div class="input-data">
                     <img class="input-img">
                     <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                   </div>
                 </div>
+
+                <div class="participants__name" style="width: 6%; margin-right: 4%;">
+                  <div class="label_detail text-color">
+                    <span class="required-title"></span>
+                  </div>
+                  <div class="input-data">
+                    <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                      <div *ngIf="d.locale =='vi'">
+                        <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                          id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                      </div>
+                      <div *ngIf="d.locale =='en'">
+                        <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                          id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                      </div>
+                      <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                        <div class="switch-language">
+                          <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                            <div class="language">{{ "vie" | translate }}</div>
+                          </button>
+                        </div>
+                        <div class="switch-language">
+                          <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                            <div class="language">{{ "eng" | translate }}</div>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <!--KD-->
-              <div  class="participants--input" style="display: flex" *ngIf="this.site == 'KD'">
+              <div class="participants--input" style="display: flex" *ngIf="this.site == 'KD'">
                 <div class="participants__name" style="width: 90%">
                   <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
@@ -399,9 +646,11 @@
 
               <div class="participants--input" style="display: flex" *ngIf="getDataSignEkyc(d).length > 0">
                 <div class="participants__name" style="width: 90%">
-                  <div class="label_detail text-color">{{'cardId' | translate}}&nbsp;<span class="required-title">*</span></div>
+                  <div class="label_detail text-color">{{'cardId' | translate}}&nbsp;<span
+                      class="required-title">*</span></div>
                   <div class="input-data">
-                    <input type="text" placeholder="{{'enter.cardId' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    <input type="text" placeholder="{{'enter.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
               </div>
@@ -409,18 +658,24 @@
               <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là usb token-->
               <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
                 <div class="participants__name" style="width: 90%">
-                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'info.token' | translate}})</div></div>
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span
+                      class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'info.token' | translate}})</div>
+                  </div>
                   <div class="input-data">
-                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
               </div>
 
               <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
                 <div class="participants__name" style="width: 90%">
-                  <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;<span class="required-title">*</span></div>
+                  <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;<span
+                      class="required-title">*</span></div>
                   <div class="input-data">
-                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
               </div>
@@ -451,20 +706,12 @@
     <div class="contract--content">
       <div class="contract__content--title-doi-tac">
         <div style="width: 85px">
-          {{ "doi_tac" | translate | uppercase }}&nbsp;<span style="color: red"
-            >*</span
-          >
+          {{ "doi_tac" | translate | uppercase }}&nbsp;<span style="color: red">*</span>
           -
         </div>
-        <input
-          class="input1"
-          type="text"
-          placeholder="{{
+        <input class="input1" type="text" placeholder="{{
             (item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate
-          }}"
-          [(ngModel)]="item.name"
-          [disabled]="item.type == 3"
-        />
+          }}" [(ngModel)]="item.name" [disabled]="item.type == 3" />
       </div>
 
       <div *ngIf="this.dataParnterOrganization().length >= 1" style="display: flex; justify-content: flex-end">
@@ -491,14 +738,16 @@
           <!-- doi tac - nguoi dieu phoi -->
           <div class="participants-border">
             <div class="label">{{'user.lead' | translate}}</div>
-            <div class="participants--content"
-              *ngFor="let d of getPartnerCoordination(item); let index = index">
-              <input [id]="'ordering-lead-' + index" class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number" [ngModel]="1" disabled>
+            <div class="participants--content" *ngFor="let d of getPartnerCoordination(item); let index = index">
+              <input [id]="'ordering-lead-' + index" class="col-md-1 contract-total" style="width: 25px; height: 25px"
+                type="number" [ngModel]="1" disabled>
 
-              <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column; margin-bottom: 14px">
+              <div class="col-md-10 participants__content--input"
+                style="display: flex; flex-direction: column; margin-bottom: 14px">
                 <div class="participants--input">
                   <div class="participants__name">
-                    <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span class="required-title">*</span></div>
+                    <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span
+                        class="required-title">*</span></div>
                     <div class="input-data">
                       <img src="assets/img/icon_name.svg" class="input-img">
                       <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name">
@@ -506,7 +755,9 @@
                   </div>
 
                   <div class="participants__name">
-                    <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span>&nbsp;-&nbsp;<div style="color: #ffc107;">({{'Chỉ được trùng với email trong cùng tổ chức' | translate}})</div></div>
+                    <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span>&nbsp;-&nbsp;
+                      <div style="color: #ffc107;">({{'Chỉ được trùng với email trong cùng tổ chức' | translate}})</div>
+                    </div>
                     <div class="input-data">
                       <img src="assets/img/login_email.svg" class="input-img">
                       <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
@@ -515,10 +766,41 @@
                 </div>
 
                 <div *ngIf="this.site == 'NB'" class="participants--input" style="display: flex">
-                  <div class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;-&nbsp;<div style="color: #ffc107;">({{'Nhận thông báo khi xử lý hợp đồng' | translate}})</div></div>
+                  <div class="participants__name" style="width:80%; margin-right: -4%;">
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;-&nbsp;<div
+                        style="color: #ffc107;">({{'Nhận thông báo khi xử lý hợp đồng' | translate}})</div>
+                    </div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      <input type="text" placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                  </div>
+
+                  <div class="participants__name" style="width: 6%">
+                    <div class="label_detail text-color"><span class="required-title"></span></div>
+                    <div class="input-data">
+                      <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                        <div *ngIf="d.locale =='vi'">
+                          <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                            id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div *ngIf="d.locale =='en'">
+                          <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                            id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                          <div class="switch-language">
+                            <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                              <div class="language">{{ "vie" | translate }}</div>
+                            </button>
+                          </div>
+                          <div class="switch-language">
+                            <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                              <div class="language">{{ "eng" | translate }}</div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -543,35 +825,39 @@
                 (focusout)="onChangeValue($event,'ordering-view-' + index)" style="width: 25px; height: 25px"
                 type="number" [(ngModel)]="d.ordering" [disabled]="getPartnerReviewer(item).length == 1"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
-              <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column; margin-bottom: 14px">
+              <div class="col-md-10 participants__content--input"
+                style="display: flex; flex-direction: column; margin-bottom: 14px">
 
-                   <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}} cho nguoi xem xet doi tac-->
-                   <div class="participants--input" style="display: flex">
-                    <div class="participants__name">
-                      <div class="label_detail text-color">
-                        <div>
-                          <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailParticipantViewer_{{index}}" [value]="email" [(ngModel)]="d.login_by"/>
-                        </div>&nbsp;
-                        <div>
-                          {{'typeOfSignEmail' | translate}}
-                        </div>
-                      </div>
-                    </div>
-                    <div class="participants__name">
-                      <div class="label_detail text-color">
-                        <div>
-                          <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailParticipantViewer_{{index}}" [(ngModel)]="d.login_by" [value]="phone"/>
-                        </div>&nbsp;
-                        <div>
-                          {{'typeOfSignPhone' | translate}}
-                        </div>
+                <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}} cho nguoi xem xet doi tac-->
+                <div class="participants--input" style="display: flex">
+                  <div class="participants__name">
+                    <div class="label_detail text-color">
+                      <div>
+                        <input (change)="changeTypeSign(d, index)" type="radio"
+                          name="checkPhoneMailParticipantViewer_{{index}}" [value]="email" [(ngModel)]="d.login_by" />
+                      </div>&nbsp;
+                      <div>
+                        {{'typeOfSignEmail' | translate}}
                       </div>
                     </div>
                   </div>
+                  <div class="participants__name">
+                    <div class="label_detail text-color">
+                      <div>
+                        <input (change)="changeTypeSign(d, index)" type="radio"
+                          name="checkPhoneMailParticipantViewer_{{index}}" [(ngModel)]="d.login_by" [value]="phone" />
+                      </div>&nbsp;
+                      <div>
+                        {{'typeOfSignPhone' | translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 <div class="participants--input">
                   <div class="participants__name">
-                    <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span class="required-title">*</span></div>
+                    <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span
+                        class="required-title">*</span></div>
                     <div class="input-data">
                       <img src="assets/img/icon_name.svg" class="input-img">
                       <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name">
@@ -580,7 +866,9 @@
 
                   <!--NB-->
                   <div class="participants__name" *ngIf="d.login_by == 'email' && this.site == 'NB'">
-                    <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+                    <div class="label_detail text-color">Email&nbsp;
+                      <span class="required-title">*</span>
+                    </div>
                     <div class="input-data">
                       <img src="assets/img/login_email.svg" class="input-img">
                       <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
@@ -588,16 +876,49 @@
                   </div>
 
                   <div class="participants__name" *ngIf="d.login_by == 'phone' && this.site == 'NB'">
-                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
-                    <div class="input-data">
-                      <img class="input-img">
-                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                      <span class="required-title">*</span>
+                    </div>
+                    <div style="display: flex;">
+                      <div class="input-data" style="width: 91%;margin-right: -3%;">
+                        <img class="input-img">
+                        <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                      </div>
+
+                      <div class="participants__name" style="width: 17%;margin-left: 5%;">
+                        <div class="input-data">
+                          <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                            <div *ngIf="d.locale =='vi'">
+                              <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                                id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                            </div>
+                            <div *ngIf="d.locale =='en'">
+                              <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                                id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                            </div>
+                            <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                              <div class="switch-language">
+                                <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                                  <div class="language">{{ "vie" | translate }}</div>
+                                </button>
+                              </div>
+                              <div class="switch-language">
+                                <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                                  <div class="language">{{ "eng" | translate }}</div>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
                   <!--KD-->
                   <div class="participants__name" *ngIf="d.login_by == 'email' && this.site == 'KD'">
-                    <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+                    <div class="label_detail text-color">Email&nbsp;
+                      <span class="required-title">*</span>
+                    </div>
                     <div class="input-data">
                       <img src="assets/img/login_email.svg" class="input-img">
                       <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
@@ -605,21 +926,86 @@
                   </div>
 
                   <div class="participants__name" *ngIf="d.login_by == 'phone' && this.site == 'KD'">
-                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
-                    <div class="input-data">
-                      <img class="input-img">
-                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                    <div style="display: flex;">
+                      <div class="participants__name" style="width: 91%;">
+                        <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                          <span class="required-title">*</span>
+                        </div>
+                        <div class="input-data">
+                          <img class="input-img">
+                          <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                        </div>
+                      </div>
+
+                      <div class="participants__name" style="width: 16%; margin-left: 2%;">
+                        <div class="label_detail text-color"><span class="required-title"></span></div>
+                        <div class="input-data">
+                          <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                            <div *ngIf="d.locale =='vi'">
+                              <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                                id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                            </div>
+                            <div *ngIf="d.locale =='en'">
+                              <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                                id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                            </div>
+                            <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                              <div class="switch-language">
+                                <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                                  <div class="language">{{ "vie" | translate }}</div>
+                                </button>
+                              </div>
+                              <div class="switch-language">
+                                <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                                  <div class="language">{{ "eng" | translate }}</div>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                   <!--NB email-->
-                <div *ngIf="this.site == 'NB' && d.login_by === 'email'" class="participants--input" style="display: flex">
-                  <div class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div></div>
+                <!--NB email-->
+                <div *ngIf="this.site == 'NB' && d.login_by === 'email'" class="participants--input"
+                  style="display: flex">
+                  <div class="participants__name" style="width:80%; margin-right: -4%;">
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                      <div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div>
+                    </div>
                     <div class="input-data">
                       <img class="input-img">
                       <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                    </div>
+                  </div>
+
+                  <div class="participants__name" style="width: 6%">
+                    <div class="label_detail text-color"><span class="required-title"></span></div>
+                    <div class="input-data">
+                      <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                        <div *ngIf="d.locale =='vi'">
+                          <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                            id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div *ngIf="d.locale =='en'">
+                          <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                            id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                          <div class="switch-language">
+                            <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                              <div class="language">{{ "vie" | translate }}</div>
+                            </button>
+                          </div>
+                          <div class="switch-language">
+                            <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                              <div class="language">{{ "eng" | translate }}</div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -646,33 +1032,36 @@
                 [disabled]="getPartnerSignature(item).length == 1 ">
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-                  <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}}-->
-                  <div class="participants--input" style="display: flex">
-                    <div class="participants__name">
-                      <div class="label_detail text-color">
-                        <div>
-                          <input (change)="changeTypeSign(d)" name="checkPhoneMailParticipantSigner_{{index}}_{{id}}" type="radio" [value]="email" [(ngModel)]="d.login_by"/>
-                        </div>&nbsp;
-                        <div>
-                          {{'typeOfSignEmail' | translate}}
-                        </div>
-                      </div>
-                    </div>
-                    <div class="participants__name">
-                      <div class="label_detail text-color">
-                        <div>
-                          <input (change)="changeTypeSign(d)" name="checkPhoneMailParticipantSigner_{{index}}_{{id}}" type="radio" [value]="phone" [(ngModel)]="d.login_by"/>
-                        </div>&nbsp;
-                        <div>
-                          {{'typeOfSignPhone' | translate}}
-                        </div>
+                <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}}-->
+                <div class="participants--input" style="display: flex">
+                  <div class="participants__name">
+                    <div class="label_detail text-color">
+                      <div>
+                        <input (change)="changeTypeSign(d, index,id, 'sign_partner')" name="checkPhoneMailParticipantSigner_{{index}}_{{id}}"
+                          type="radio" [value]="email" [(ngModel)]="d.login_by" />
+                      </div>&nbsp;
+                      <div>
+                        {{'typeOfSignEmail' | translate}}
                       </div>
                     </div>
                   </div>
+                  <div class="participants__name">
+                    <div class="label_detail text-color">
+                      <div>
+                        <input (change)="changeTypeSign(d, index,id,'sign_partner')" name="checkPhoneMailParticipantSigner_{{index}}_{{id}}"
+                          type="radio" [value]="phone" [(ngModel)]="d.login_by" />
+                      </div>&nbsp;
+                      <div>
+                        {{'typeOfSignPhone' | translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
-                    <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span class="required-title">*</span>
+                    <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span
+                        class="required-title">*</span>
                     </div>
                     <div class="input-data">
                       <img src="assets/img/icon_name.svg" class="input-img">
@@ -682,19 +1071,15 @@
                   </div>
 
                   <div class="participants__name">
-                    <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span class="required-title">*</span>
+                    <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span
+                        class="required-title">*</span>
                     </div>
 
                     <!--Người ký đối tác tổ chức chọn loại ký-->
-                    <ng-multiselect-dropdown 
-                      [(ngModel)]="d.sign_type" 
-                      placeholder="{{'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings" 
-                      [data]="isListSignNotPerson" 
-                      (onSelect)="onItemSelect($event,item.type)"
-                      (onDeSelect)="deSelectPartnerSign($event, item)"
-                      (ngModelChange)="selectWithOtp($event, d, item.type)"
-                    >
+                    <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
+                      [settings]="dropdownSignTypeSettings" [data]="d.isListSignNotPersonPartner ? d.isListSignNotPersonPartner : this.getListSignType('partner')"
+                      (onSelect)="onItemSelect($event,item.type)" (onDeSelect)="deSelectPartnerSign($event, item)"
+                      (ngModelChange)="selectWithOtp($event, d, item.type)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
                         <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -710,60 +1095,161 @@
 
 
                 <!--KD-->
-              <div *ngIf="this.site == 'KD'" class="participants--input" style="display: flex">
-                <div *ngIf="d.login_by === 'email'" class="participants__name" style="width: 90%">
-                  <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
-                  <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                <div *ngIf="this.site == 'KD'" class="participants--input" style="display: flex">
+                  <div *ngIf="d.login_by === 'email'" class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+                    <div class="input-data">
+                      <img src="assets/img/login_email.svg" class="input-img">
+                      <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                    </div>
+                  </div>
+
+                  <div *ngIf="d.login_by === 'phone'" class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                      <span class="required-title">*</span>
+                    </div>
+                    <div style="display: flex;">
+                      <div class="input-data" style="width: 85%;">
+                        <img class="input-img">
+                        <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                      </div>
+
+                      <div class="input-data" style="width: 7%;margin-left: 8%;">
+                        <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                          <div *ngIf="d.locale =='vi'">
+                            <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                              id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                          </div>
+                          <div *ngIf="d.locale =='en'">
+                            <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                              id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                          </div>
+                          <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                            <div class="switch-language">
+                              <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                                <div class="language">{{ "vie" | translate }}</div>
+                              </button>
+                            </div>
+                            <div class="switch-language">
+                              <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                                <div class="language">{{ "eng" | translate }}</div>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+
+                <!--NB email-->
+                <div *ngIf="this.site == 'NB' && d.login_by === 'email'" class="participants--input"
+                  style="display: flex">
+                  <div class="participants__name" style="margin-left: 4%;">
+                    <div class="label_detail text-color">Email&nbsp;
+                      <span class="required-title">*</span>
+                    </div>
+                    <div class="input-data">
+                      <img src="assets/img/login_email.svg" class="input-img">
+                      <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                    </div>
+                  </div>
+
+                  <div class="participants__name" style="width: 34%; margin-left: 8%;">
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<div style="color: #ffc107;">
+                        ({{'receive.contract.process' | translate}})</div>
+                    </div>
+                    <div class="input-data">
+                      <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                    </div>
+                  </div>
+
+                  <div class="participants__name" style="width: 6%; margin-right: 4%;">
+                    <div class="label_detail text-color"><span class="required-title"></span></div>
+                    <div class="input-data">
+                      <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                        <div *ngIf="d.locale =='vi'">
+                          <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                            id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div *ngIf="d.locale =='en'">
+                          <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                            id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                          <div class="switch-language">
+                            <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                              <div class="language">{{ "vie" | translate }}</div>
+                            </button>
+                          </div>
+                          <div class="switch-language">
+                            <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                              <div class="language">{{ "eng" | translate }}</div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div *ngIf="d.login_by === 'phone'" class="participants__name" style="width: 90%">
-                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
-                  <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                <!--NB phone-->
+                <div *ngIf="this.site == 'NB' && d.login_by === 'phone'" class="participants--input"
+                  style="display: flex">
+                  <div class="participants__name" style="width:80%; margin-right: -4%;">
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span
+                        class="required-title">*</span></div>
+                    <div class="input-data">
+                      <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                    </div>
                   </div>
-                </div>
-              </div>
 
-              <!--NB email-->
-              <div *ngIf="this.site == 'NB' && d.login_by === 'email'" class="participants--input" style="display: flex">
-                <div class="participants__name">
-                  <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
-                  <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                  <div class="participants__name" style="width: 6%">
+                    <div class="label_detail text-color">
+                      <span class="required-title"></span>
+                    </div>
+                    <div class="input-data">
+                      <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                        <div *ngIf="d.locale =='vi'">
+                          <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                            id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div *ngIf="d.locale =='en'">
+                          <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                            id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                          <div class="switch-language">
+                            <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                              <div class="language">{{ "vie" | translate }}</div>
+                            </button>
+                          </div>
+                          <div class="switch-language">
+                            <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                              <div class="language">{{ "eng" | translate }}</div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                <div class="participants__name">
-                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div></div>
-                  <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
-                  </div>
                 </div>
-              </div>
-
-              <!--NB phone-->
-              <div *ngIf="this.site == 'NB' && d.login_by === 'phone'" class="participants--input" style="display: flex">
-                <div class="participants__name" style="width:90%">
-                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
-                  <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
-                  </div>
-                </div>
-              </div>
 
                 <!--Check ký usb token cho đối tác, nếu có thì render trường {{'tax_code' | translate}}/cccd-->
                 <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
                   <div class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'info.token' | translate}})</div></div>
+                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span
+                        class="required-title">*</span>
+                      <div style="color: #ffc107;">({{'info.token' | translate}})</div>
+                    </div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
@@ -771,9 +1257,13 @@
                 <!--trường hiển thị khi người ký của đối tác chọn loại ký là hsm-->
                 <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
                   <div class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'info.hsm' | translate}})</div></div>
+                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span
+                        class="required-title">*</span>
+                      <div style="color: #ffc107;">({{'info.hsm' | translate}})</div>
+                    </div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
@@ -806,30 +1296,27 @@
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
-                    <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span class="required-title">*</span>
+                    <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span
+                        class="required-title">*</span>
                     </div>
                     <div class="input-data">
                       <img src="assets/img/icon_name.svg" class="input-img">
                       <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name">
                     </div>
                   </div>
-                  
+
                   <!--Văn thư-->
                   <div class="participants__name">
-                    <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span class="required-title">*</span>
+                    <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span
+                        class="required-title">*</span>
                       <!-- &nbsp;-&nbsp;<div style="color: #ffc107;">({{'Chỉ được chọn 1 kiểu ký số' | translate}})</div> -->
                     </div>
 
                     <!--Đối tác là văn thư chọn loại ký-->
-                    <ng-multiselect-dropdown 
-                      [(ngModel)]="d.sign_type" 
-                      placeholder="{{'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings" 
-                      [data]="signType_doc"
-                      (ngModelChange)="selectWithOtp($event, d, item.type)"
-                      (onSelect)="selectPartnerDocument($event)"
-                      (onDeSelect)="deSelectPartnerDocument($event, item)"
-                    >
+                    <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
+                      [settings]="dropdownSignTypeSettings" [data]="signType_doc"
+                      (ngModelChange)="selectWithOtp($event, d, item.type)" (onSelect)="selectPartnerDocument($event)"
+                      (onDeSelect)="deSelectPartnerDocument($event, item)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
                         <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -844,61 +1331,101 @@
 
                 </div>
 
-                  <!--NB-->
-              <div  class="participants--input" style="display: flex" *ngIf="this.site == 'NB'">
-                <div class="participants__name">
-                  <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
-                  <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                <!--NB-->
+                <div class="participants--input" style="display: flex" *ngIf="this.site == 'NB'">
+                  <div class="participants__name" style="margin-left: 4%;">
+                    <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+                    <div class="input-data">
+                      <img src="assets/img/login_email.svg" class="input-img">
+                      <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                    </div>
+                  </div>
+
+                  <div class="participants__name" style="width: 34%; margin-left:8%;">
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<div style="color: #ffc107;">
+                        ({{'receive.contract.process' | translate}})</div>
+                    </div>
+                    <div class="input-data">
+                      <img class="input-img">
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                    </div>
+                  </div>
+
+                  <div class="participants__name" style="width: 6%; margin-right: 4%;">
+                    <div class="label_detail text-color">
+                      <span class="required-title"></span>
+                    </div>
+                    <div class="input-data">
+                      <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                        <div *ngIf="d.locale =='vi'">
+                          <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                            id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div *ngIf="d.locale =='en'">
+                          <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                            id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                          <div class="switch-language">
+                            <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                              <div class="language">{{ "vie" | translate }}</div>
+                            </button>
+                          </div>
+                          <div class="switch-language">
+                            <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                              <div class="language">{{ "eng" | translate }}</div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div class="participants__name">
-                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div></div>
-                  <div class="input-data">
-                    <img class="input-img">
-                    <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                <!--KD-->
+                <div class="participants--input" style="display: flex" *ngIf="this.site == 'KD'">
+                  <div class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+                    <div class="input-data">
+                      <img src="assets/img/login_email.svg" class="input-img">
+                      <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              <!--KD-->
-              <div  class="participants--input" style="display: flex" *ngIf="this.site == 'KD'">
-                <div class="participants__name" style="width: 90%">
-                  <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
-                  <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
-                  </div>
-                </div>
-              </div>
 
                 <div class="participants--input" style="display: flex" *ngIf="getDataSignEkyc(d).length > 0">
-                  <div class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">{{'cardId' | translate}}&nbsp;<span class="required-title">*</span></div>
+                  <div class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'cardId' | translate}}&nbsp;<span
+                        class="required-title">*</span></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'enter.cardId' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      <input type="text" placeholder="{{'enter.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
 
                 <!--trường hiển thị khi văn thư đối tác của tổ chức chọn loại ký là usb token-->
                 <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
-                  <div class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'info.token' | translate}})</div></div>
+                  <div class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span
+                        class="required-title">*</span>
+                      <div style="color: #ffc107;">({{'info.token' | translate}})</div>
+                    </div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
 
                 <!--trường hiển thị khi văn thư đối tác của tổ chức chọn loại ký là hsm-->
                 <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
-                  <div class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;<span class="required-title">*</span></div>
+                  <div class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;<span
+                        class="required-title">*</span></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'enter.tax.code' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      <input type="text" placeholder="{{'enter.tax.code' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
@@ -926,35 +1453,39 @@
                 style="width: 25px; height: 25px" type="number"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
                 [(ngModel)]="d.ordering" [disabled]="getPartnerSignature(item).length == 1">
-              <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column;margin-bottom: 14px">
+              <div class="col-md-10 participants__content--input"
+                style="display: flex; flex-direction: column;margin-bottom: 14px">
 
-                  <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}} đối với người ký là cá nhân-->
-                  <div class="participants--input" style="display: flex">
-                    <div class="participants__name">
-                      <div class="label_detail text-color">
-                        <div>
-                          <input (change)="changeTypeSign(d)" name="checkPhoneMailPerson_{{index}}_{{id}}" type="radio" [value]="email" [(ngModel)]="d.login_by"/>
-                        </div>&nbsp;
-                        <div>
-                          {{'typeOfSignEmail' | translate}}
-                        </div>
-                      </div>
-                    </div>
-                    <div class="participants__name">
-                      <div class="label_detail text-color">
-                        <div>
-                          <input (change)="changeTypeSign(d)" name="checkPhoneMailPerson_{{index}}_{{id}}" type="radio" [value]="phone" [(ngModel)]="d.login_by" />
-                        </div>&nbsp;
-                        <div>
-                          {{'typeOfSignPhone' | translate}}
-                        </div>
+                <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}} đối với người ký là cá nhân-->
+                <div class="participants--input" style="display: flex">
+                  <div class="participants__name">
+                    <div class="label_detail text-color">
+                      <div>
+                        <input (change)="changeTypeSign(d, index,null,'personal')" name="checkPhoneMailPerson_{{index}}_{{id}}" type="radio"
+                          [value]="email" [(ngModel)]="d.login_by" />
+                      </div>&nbsp;
+                      <div>
+                        {{'typeOfSignEmail' | translate}}
                       </div>
                     </div>
                   </div>
+                  <div class="participants__name">
+                    <div class="label_detail text-color">
+                      <div>
+                        <input (change)="changeTypeSign(d, index,null,'personal')" name="checkPhoneMailPerson_{{index}}_{{id}}" type="radio"
+                          [value]="phone" [(ngModel)]="d.login_by" />
+                      </div>&nbsp;
+                      <div>
+                        {{'typeOfSignPhone' | translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
-                    <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span class="required-title">*</span>
+                    <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span
+                        class="required-title">*</span>
                     </div>
                     <div class="input-data">
                       <img src="assets/img/icon_name.svg" class="input-img">
@@ -967,18 +1498,13 @@
                   <div class="participants__name">
                     <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span
                         class="required-title">*</span>
-                      </div>
+                    </div>
 
                     <!--Đối tác là cá nhân ký-->
-                    <ng-multiselect-dropdown 
-                      [(ngModel)]="d.sign_type" 
-                      placeholder="{{'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings" 
-                      [data]="isListSignPerson" 
-                      (onSelect)="onItemSelect($event,item.type)"
-                      (onDeSelect)="deSelectPartnerSign($event, item)"
-                      (ngModelChange)="selectWithOtp($event, d, item.type)"
-                    >
+                    <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
+                      [settings]="dropdownSignTypeSettings" [data]="d.isListSignPersonal ? d.isListSignPersonal : this.getListSignType('personal')"
+                      (onSelect)="onItemSelect($event,item.type)" (onDeSelect)="deSelectPartnerSign($event, item)"
+                      (ngModelChange)="selectWithOtp($event, d, item.type)">
                       <ng-template #data let-item>
                         <span>{{item.id | translate}}</span>
                       </ng-template>
@@ -988,15 +1514,44 @@
 
                 <div *ngIf="this.site == 'KD'" class="participants--input" style="display: flex">
 
-                  <div *ngIf="d.login_by === 'phone'" class="participants__name" style="width:90%">
-                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
-                    <div class="input-data">
-                      <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                  <div *ngIf="d.login_by === 'phone'" class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                      <span class="required-title">*</span>
+                    </div>
+                    <div style="display: flex;">
+                      <div class="input-data" style="width: 85%;">
+                        <img class="input-img">
+                        <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                      </div>
+
+                      <div class="input-data" style="width: 7%;margin-left: 8%;">
+                        <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                          <div *ngIf="d.locale =='vi'">
+                            <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                              id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                          </div>
+                          <div *ngIf="d.locale =='en'">
+                            <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                              id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                          </div>
+                          <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                            <div class="switch-language">
+                              <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                                <div class="language">{{ "vie" | translate }}</div>
+                              </button>
+                            </div>
+                            <div class="switch-language">
+                              <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                                <div class="language">{{ "eng" | translate }}</div>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  
-                   <div *ngIf="d.login_by === 'email'" class="participants__name" style="width: 90%">
+
+                  <div *ngIf="d.login_by === 'email'" class="participants__name" style="width: 91%">
                     <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
                       <img src="assets/img/login_email.svg" class="input-img">
@@ -1005,64 +1560,169 @@
                   </div>
                 </div>
 
-                   <!--NB email-->
-              <div *ngIf="this.site == 'NB' && d.login_by === 'email'" class="participants--input" style="display: flex">
-                <div class="participants__name">
-                  <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
-                  <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                <!--NB email-->
+                <div *ngIf="this.site == 'NB' && d.login_by === 'email'" class="participants--input"
+                  style="display: flex">
+                  <div class="participants__name" style="margin-left: 4%;">
+                    <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+                    <div class="input-data">
+                      <img src="assets/img/login_email.svg" class="input-img">
+                      <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                    </div>
                   </div>
+
+                  <div class="participants__name" style="width: 34%; margin-left: 8%;">
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span
+                        *ngIf="getDataSignCka(d).length > 0" class="required-title">*</span>
+                      <div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div>
+                    </div>
+                    <div class="input-data">
+                      <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                    </div>
+                  </div>
+
+                  <div class="participants__name" style="width: 6%; margin-right: 4%;">
+                    <div class="label_detail text-color"><span class="required-title"></span></div>
+                    <div class="input-data">
+                      <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                        <div *ngIf="d.locale =='vi'">
+                          <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                            id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div *ngIf="d.locale =='en'">
+                          <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                            id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                          <div class="switch-language">
+                            <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                              <div class="language">{{ "vie" | translate }}</div>
+                            </button>
+                          </div>
+                          <div class="switch-language">
+                            <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                              <div class="language">{{ "eng" | translate }}</div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
 
-                <div class="participants__name">
-                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span *ngIf="getDataSignCka(d).length > 0" class="required-title">*</span><div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div></div>
-                  <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                <!--NB phone-->
+                <div *ngIf="this.site == 'NB' && d.login_by === 'phone'" class="participants--input"
+                  style="display: flex">
+                  <div class="participants__name" style="width:80%; margin-right: -4%;">
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span
+                        class="required-title">*</span></div>
+                    <div class="input-data">
+                      <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                    </div>
                   </div>
-                </div>
-              </div>
 
-               <!--NB phone-->
-               <div *ngIf="this.site == 'NB' && d.login_by === 'phone'" class="participants--input" style="display: flex">
-                <div class="participants__name" style="width:90%">
-                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
-                  <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                  <div class="participants__name" style="width: 6%">
+                    <div class="label_detail text-color"><span class="required-title"></span></div>
+                    <div class="input-data">
+                      <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                        <div *ngIf="d.locale =='vi'">
+                          <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                            id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div *ngIf="d.locale =='en'">
+                          <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                            id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                          <div class="switch-language">
+                            <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                              <div class="language">{{ "vie" | translate }}</div>
+                            </button>
+                          </div>
+                          <div class="switch-language">
+                            <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                              <div class="language">{{ "eng" | translate }}</div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
+
                 </div>
-              </div>
 
                 <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là eKYC-->
                 <div class="participants--input" style="display: flex" *ngIf="getDataSignEkyc(d).length > 0">
-                  <div class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">{{'cardId' | translate}}&nbsp;<span class="required-title">*</span></div>
+                  <div class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'cardId' | translate}}&nbsp;<span
+                        class="required-title">*</span></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'enter.cardId' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      <input type="text" placeholder="{{'enter.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
 
                 <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là usb token-->
                 <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
-                  <div class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'info.token' | translate}})</div></div>
+                  <div class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span
+                        class="required-title">*</span>
+                      <div style="color: #ffc107;">({{'info.token' | translate}})</div>
+                    </div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
 
                 <!--KD-->
-                <div class="participants--input" style="display: flex" *ngIf="this.site === 'KD' && getDataSignCka(d).length > 0 && d.login_by == 'email'">
-                  <div class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
-                    <div class="input-data">
-                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                <div class="participants--input" style="display: flex"
+                  *ngIf="this.site === 'KD' && getDataSignCka(d).length > 0 && d.login_by == 'email'">
+
+                  <div class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                      <span class="required-title">*</span>
+                    </div>
+                    <div class="input-data" style="width: 85%;">
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
+
+
+                  <div class="participants__name" style="width: 6%; margin-left: -15%;">
+                    <div class="label_detail text-color"><span class="required-title"></span></div>
+                    <div class="input-data">
+                      <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                        <div *ngIf="d.locale =='vi'">
+                          <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                            id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div *ngIf="d.locale =='en'">
+                          <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                            id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                        </div>
+                        <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                          <div class="switch-language">
+                            <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                              <div class="language">{{ "vie" | translate }}</div>
+                            </button>
+                          </div>
+                          <div class="switch-language">
+                            <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                              <div class="language">{{ "eng" | translate }}</div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
 
               </div>

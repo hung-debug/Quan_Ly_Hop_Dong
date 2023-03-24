@@ -16,8 +16,8 @@ export class ForwardContractComponent implements OnInit {
   myForm: FormGroup;
   datas: any;
   currentUser: any;
-  isReqPhone:boolean = false;
-  isReqCardId:boolean = false;
+  isReqPhone: boolean = false;
+  isReqCardId: boolean = false;
 
   isReqCardIdToken: boolean = false;
   isReqCardIdHsm: boolean = false;
@@ -42,6 +42,7 @@ export class ForwardContractComponent implements OnInit {
     this.datas = this.data;
     this.login = "email";
 
+
     this.getCurrentUser();
     this.myForm = this.fbd.group({
       name: this.fbd.control("", [Validators.required]),
@@ -50,7 +51,7 @@ export class ForwardContractComponent implements OnInit {
       card_id: "",
     });
 
-  
+
     for (const d of this.datas.dataContract.is_data_contract.participants) {
       for (const q of d.recipients) {
         if (q.email == this.currentUser.customer.info.email && q.status == 1) {
@@ -65,18 +66,18 @@ export class ForwardContractComponent implements OnInit {
           //Chữ ký usb token
           let data_sign_cardIdToken = q.sign_type.filter((p: any) => p.id == 2)[0];
 
-          if(data_sign_cka){
+          if (data_sign_cka) {
             this.isReqPhone = true;
           }
-          if(data_sign_ekyc){
+          if (data_sign_ekyc) {
             this.isReqCardId = true;
           }
 
-          if(data_sign_cardIdHsm) {
+          if (data_sign_cardIdHsm) {
             this.isReqCardIdHsm = true;
           }
 
-          if(data_sign_cardIdToken) {
+          if (data_sign_cardIdToken) {
             this.isReqCardIdToken = true;
           }
 
@@ -92,118 +93,135 @@ export class ForwardContractComponent implements OnInit {
   }
 
   async onSubmit() {
-    if (!String(this.myForm.value.name)) {
-      // this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền'
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập tên người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
-      return;
-    }
-    if (!String(this.myForm.value.email)) {
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
-      return;
-    } else if (!String(this.myForm.value.email)
-      .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      )) {
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng email', '', 3000);
-      return;
-    }
-    if (this.isReqPhone && !String(this.myForm.value.phone)) {
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập số điện thoại người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
-      return;
-    } else if (this.myForm.value.phone && !String(this.myForm.value.phone).toLowerCase().match(parttern.phone)) {
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng số điện thoại', '', 3000);
-      return;
-    }
-    if (this.isReqCardId && !String(this.myForm.value.card_id)) {
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập CMT/CCCD người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
-      return;
-    } else if (this.isReqCardId && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id9) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id12)) {
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng CMT/CCCD', '', 3000);
-      return;
-    }
-    //Mã số thuế hsm
-     else if(this.isReqCardIdHsm && !String(this.myForm.value.card_id)) {
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập mã số thuế người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
-      return;
-    } else if(this.isReqCardIdHsm && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.cardid)) {
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng mã số thuế', '', 3000);
-      return;
-    }
-    //Thông tin trong usb token
-    else if(this.isReqCardIdToken && !String(this.myForm.value.card_id)) {
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập thông tin trong usb token của người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
-      return;
-    } else if(this.isReqCardIdToken && this.myForm.value.card_id && (!String(this.myForm.value.card_id).toLowerCase().match(parttern_input.taxCode_form) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id9)) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id12)) {
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng mã số thuế/CMT/CCCD', '', 3000);
-      return;
-    }
+    console.log("datasssssssssss",this.datas);
+    
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    // this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
+    // console.log("this.emailRecipientssssssssss",this.emailRecipients);
+    // const ArrRecipients = this.datas.dataContract.is_data_contract.participants[0].recipients;
+    // const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email);
+    // console.log("ArrRecipientsNew", ArrRecipientsNew);
 
-    if (!this.checkCanSwitchContract()) {
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email ngoài luồng hợp đồng', '', 3000);
-      return;
-    }
-    if (this.myForm.value.phone && !this.checkCanSwitchContractPhone()) {
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập số điện thoại ngoài luồng hợp đồng', '', 3000);
-      return;
-    }
-    // if (this.myForm.value.card_id && !this.checkCanSwitchContractCardId()) {
-    //   this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập mã số thuế/CMT/CCCD ngoài luồng hợp đồng', '', 3000);
-    //   return;
-    // }
-    if (this.currentUser) {
-      this.spinner.show();
-      let coutError = 0;
-      let id_recipient_signature = null;
-      for (const d of this.datas.dataContract.is_data_contract.participants) {
-        for (const q of d.recipients) {
-          if (q.email == this.currentUser.customer.info.email && q.status == 1) {
-            id_recipient_signature = q.id;
-            break
-          }
-        }
-        if (id_recipient_signature) break;
+   
+      if (!String(this.myForm.value.name)) {
+        // this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền'
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập tên người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+        return;
+      }
+      if (this.login == 'email' && !String(this.myForm.value.email)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+        return;
+      } else if (this.login == 'email' && !String(this.myForm.value.email).toLowerCase().match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng email', '', 3000);
+        return;
+      }
+      if (this.isReqPhone && !String(this.myForm.value.phone)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập số điện thoại người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+        return;
+      } else if (this.myForm.value.phone && !String(this.myForm.value.phone).toLowerCase().match(parttern.phone)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng số điện thoại', '', 3000);
+        return;
+      }
+      if (this.isReqCardId && !String(this.myForm.value.card_id)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập CMT/CCCD người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+        return;
+      } else if (this.isReqCardId && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id9) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id12)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng CMT/CCCD', '', 3000);
+        return;
+      }
+      //Mã số thuế hsm
+      else if (this.isReqCardIdHsm && !String(this.myForm.value.card_id)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập mã số thuế người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+        return;
+      } else if (this.isReqCardIdHsm && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.cardid)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng mã số thuế', '', 3000);
+        return;
+      }
+      //Thông tin trong usb token
+      else if (this.isReqCardIdToken && !String(this.myForm.value.card_id)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập thông tin trong usb token của người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+        return;
+      } else if (this.isReqCardIdToken && this.myForm.value.card_id && (!String(this.myForm.value.card_id).toLowerCase().match(parttern_input.taxCode_form) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id9)) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id12)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng mã số thuế/CMT/CCCD', '', 3000);
+        return;
       }
 
-      await this.contractService.getCheckSignatured(id_recipient_signature).toPromise().then((res: any) => {
-        if (res && res.status == 2) {
-          this.toastService.showErrorHTMLWithTimeout('contract_signature_success', "", 3000);
+      if (!this.checkCanSwitchContract()) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email ngoài luồng hợp đồng', '', 3000);
+        return;
+      }
+      if (this.myForm.value.phone && !this.checkCanSwitchContractPhone()) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập số điện thoại ngoài luồng hợp đồng', '', 3000);
+        return;
+      }
+
+      // this.checkCanSwitchContractPhone();
+   
+
+      if (this.currentUser) {
+        this.spinner.show();
+        let coutError = 0;
+        let id_recipient_signature = null;
+        for (const d of this.datas.dataContract.is_data_contract.participants) {
+          for (const q of d.recipients) {
+            if (q.email == this.currentUser.email && q.status == 1) {
+              id_recipient_signature = q.id;
+              break
+            }
+          }
+          if (id_recipient_signature) break;
+        }
+
+        await this.contractService.getCheckSignatured(id_recipient_signature).toPromise().then((res: any) => {
+          if (res && res.status == 2) {
+            this.toastService.showErrorHTMLWithTimeout('contract_signature_success', "", 3000);
+            coutError++;
+            this.spinner.hide();
+          }
+        }, (error) => {
           coutError++;
           this.spinner.hide();
-        }
-      }, (error) => {
-        coutError++;
-        this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
-      })
+          this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
+        })
 
-      if (coutError == 0) {
-        //is_replace: false = giữ lại uỷ quyền
-        const dataAuthorize = {
-          email: this.myForm.value.email,
-          full_name: this.myForm.value.name,
-          phone: this.myForm.value.phone,
-          card_id: this.myForm.value.card_id,
-          role: this.data.role_coordination ? this.data.role_coordination : this.datas.dataContract.roleContractReceived,
-          recipient_id: this.datas.recipientId,
-          is_replace: false,
-          login_by: this.login
-        };
+        console.log("role ", this.data.role_coordination);
 
-        await this.contractService.processAuthorizeContract(dataAuthorize).toPromise().then(
-          data => {
-            if(!data.success) {
-              if(data.message == 'Tax code has existed') {
-                this.toastService.showWarningHTMLWithTimeout('taxcode.out', '', 3000);
-              }
-            } else {
-              this.toastService.showSuccessHTMLWithTimeout((this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền') + ' thành công!'
-              , "", 3000);
-              this.dialogRef.close();
-              this.spinner.hide();
-              this.router.navigate(['/main/form-contract/detail/forward/' + this.datas?.dataContract?.is_data_contract?.id]);
+        console.log("role 1 ", this.datas.dataContract.roleContractReceived)
 
-              // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        if (coutError == 0) {
+          //is_replace: false = giữ lại uỷ quyền
+          const dataAuthorize = {
+            email: this.myForm.value.email.toLowerCase(),
+            full_name: this.myForm.value.name,
+            phone: this.myForm.value.phone,
+            card_id: this.myForm.value.card_id,
+            role: this.data.role_coordination ? this.data.role_coordination : this.datas.dataContract.roleContractReceived,
+            recipient_id: this.datas.recipientId,
+            is_replace: false,
+            login_by: this.login
+          };
+
+          if(this.login == 'phone') {
+            dataAuthorize.email = dataAuthorize.phone
+          }
+
+          await this.contractService.processAuthorizeContract(dataAuthorize).toPromise().then(
+            data => {
+              if (!data.success) {
+                if (data.message == 'Tax code has existed') {
+                  this.spinner.hide();
+                  this.toastService.showWarningHTMLWithTimeout('taxcode.out', '', 3000);
+                }
+              } else {
+                this.toastService.showSuccessHTMLWithTimeout((this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền') + ' thành công!'
+                  , "", 3000);
+                this.dialogRef.close();
+                this.spinner.hide();
+                this.router.navigate(['/main/form-contract/detail/forward/' + this.datas?.dataContract?.is_data_contract?.id]);
+
+                // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
                 // this.router.navigate(['/main/form-contract/detail/' + this.datas?.dataContract?.is_data_contract?.id],
                 // {
                 //   queryParams: {
@@ -211,15 +229,15 @@ export class ForwardContractComponent implements OnInit {
                 //   },
                 //   skipLocationChange: true
                 // });
-              // });
+                // });
+              }
+            }, error => {
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
             }
-          }, error => {
-            this.spinner.hide();
-            this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-          }
-        )
+          )
+        }
       }
-    }
   }
 
   getCurrentUser(): any {
@@ -243,7 +261,9 @@ export class ForwardContractComponent implements OnInit {
     if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
       for (const participant of this.datas.dataContract.is_data_contract.participants) {
         for (const recipient of participant.recipients) {
-          if (this.myForm.value.phone == recipient.phone) {
+          // console.log("rec ",recipient);
+          // console.log("this ", this.myForm.value);
+          if (this.myForm.value.email == recipient.email) {
             return false;
           }
         }
@@ -256,12 +276,12 @@ export class ForwardContractComponent implements OnInit {
     if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
       for (const participant of this.datas.dataContract.is_data_contract.participants) {
         for (const recipient of participant.recipients) {
-          if(!this.isReqCardId) {
-            if(this.datas.recipientId != recipient.id && this.myForm.value.card_id == recipient.card_id) {
+          if (!this.isReqCardId) {
+            if (this.datas.recipientId != recipient.id && this.myForm.value.card_id == recipient.card_id) {
               return false;
             }
           } else {
-            if(this.myForm.value.card_id == recipient.card_id) {
+            if (this.myForm.value.card_id == recipient.card_id) {
               return false;
             }
           }

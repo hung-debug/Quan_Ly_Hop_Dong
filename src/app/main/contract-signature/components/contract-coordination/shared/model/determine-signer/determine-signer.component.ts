@@ -13,6 +13,7 @@ import { ToastService } from "../../../../../../../service/toast.service";
 import { Router } from "@angular/router";
 import { parttern, parttern_input } from "../../../../../../../config/parttern";
 import { HttpErrorResponse } from '@angular/common/http';
+import { data } from 'jquery';
 
 @Component({
   selector: 'app-determine-signer',
@@ -72,32 +73,18 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.getChangeStatus(5);
     if (this.datas.determine_contract)
       this.is_determine_clone = [...this.datas.determine_contract];
     else
       this.is_determine_clone = [...this.contractService.getDataDetermine()];
-    // data Tổ chức của tôi
-    // if (this.is_determine_clone && this.is_determine_clone.type == 1) {
-    //   this.data_organization = this.is_determine_clone.filter((p: any) => p.type == 1)[0];
-    //   this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
-    //   this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
-    //   this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
-    // }
-
-    // data đối tác
-    // if (this.is_determine_clone.type == 3) {
+  
     this.data_parnter_organization = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
-    // }
-
-    // this.data_parnter_individual = this.is_determine_clone.filter((p: any) => p.type == 3);
 
     this.dropdownSignTypeSettings = {
       singleSelection: false,
       idField: "id",
       textField: "name",
-      // selectAllText: "Chọn tất cả",
-      // unSelectAllText: "Bỏ chọn tất cả",
+      
       enableCheckAll: false,
       allowSearchFilter: true,
       itemsShowLimit: 1,
@@ -107,27 +94,6 @@ export class DetermineSignerComponent implements OnInit {
     this.emailUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email;
     if (this.is_determine_clone.some((p: any) => p.type == 3)) this.is_change_party = true;
   }
-
-  // check nguoi xu ly thao tac tren 2 tab de dieu phoi;
-  // getChangeStatus(new_status: number) {
-  //   let emailUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email;
-  //   let idAssignHandle = null;
-  //   for (const d of this.datas.determine_contract) {
-  //     for (const f of d.recipients) {
-  //       if (f.status == 1 && f.email == emailUser) {
-  //         idAssignHandle = f.id;
-  //         break;
-  //       }
-  //     }
-  //     if (idAssignHandle) break;
-  //   }
-  //   if (idAssignHandle) {
-  //     this.contractService.getChangeNewStatus(idAssignHandle, new_status).subscribe((res) => {
-  //       console.log('change status successfully!');
-  //     }, (error: HttpErrorResponse) => {
-  //       this.toastService.showErrorHTMLWithTimeout('Lỗi thay đổi trạng thái thao tác hợp đồng!', "", 3000);
-  //     })
-  //   }
 
   //dropdown contract type
   get getSignTypeItems() {
@@ -195,6 +161,16 @@ export class DetermineSignerComponent implements OnInit {
     let dataArrPartner = [];
     dataArrPartner = this.is_determine_clone.filter((p: any) => (p.type == 2 || p.type == 3) && p.recipients.some((q: any) => q.email == this.emailUser && q.status == 1));
 
+    dataArrPartner.forEach((element: any) => {
+      element.recipients.forEach((eleRecipient: any) => {
+        if(eleRecipient.sign_type.length > 0) {
+          if(eleRecipient.sign_type[0].id != 4 && eleRecipient.sign_type[0].id != 2) {
+            eleRecipient.card_id = '';
+          }
+        }
+      })
+    })
+
     for (let i = 0; i < dataArrPartner.length; i++) {
       if (!dataArrPartner[i].recipients.some((p: any) => p.role == 3)) {
         this.getNotificationValid("Vui lòng chọn người ký của đối tác!");
@@ -260,7 +236,7 @@ export class DetermineSignerComponent implements OnInit {
 
           if(dataArrPartner[j].recipients[k].card_id && !this.pattern.card_id9.test(dataArrPartner[j].recipients[k].card_id) && 
             !this.pattern.card_id12.test(dataArrPartner[j].recipients[k].card_id) &&
-            !this.parttern_input.taxCode_form.test(dataArrPartner[j].recipients[k].card_id) && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+            !this.parttern_input.taxCode_form.test(dataArrPartner[j].recipients[k].card_id) && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2 || p.id == 4).length > 0) {
             this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(3) + "của đối tác không hợp lệ");
             count++;
             break;
@@ -272,11 +248,11 @@ export class DetermineSignerComponent implements OnInit {
             break;
           }
 
-          if(dataArrPartner[j].recipients[k].card_id && !this.parttern_input.taxCode_form.test(dataArrPartner[j].recipients[k].card_id) && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
-            this.getNotificationValid("Mã số thuế" + this.getNameObject(3) + "của đối tác không hợp lệ");
-            count++;
-            break;
-          }
+          // if(dataArrPartner[j].recipients[k].card_id && !this.parttern_input.taxCode_form.test(dataArrPartner[j].recipients[k].card_id) && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
+          //   this.getNotificationValid("Mã số thuế" + this.getNameObject(3) + "của đối tác không hợp lệ");
+          //   count++;
+          //   break;
+          // }
 
         } else if (dataArrPartner[j].type == 3) {
           if (!dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3) {
@@ -305,29 +281,13 @@ export class DetermineSignerComponent implements OnInit {
             isPartnerCaNhanDuplicate = [];
           }
 
-          // if (!dataArrPartner[j].recipients[k].phone &&
-          //   dataArrPartner[j].recipients[k].role == 3 &&
-          //   (dataArrPartner[j].recipients[k].is_otp || dataArrPartner[j].recipients[k].is_otp == 1)) {
-          //   this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(3) + "của đối tác!")
-          //   count++;
-          //   break;
-          // }
-
-          // if (dataArrPartner[j].recipients[k].name && !this.pattern.name.test(dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3)) {
-          //   this.getNotificationValid("Tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " đối tác cá nhân không hợp lệ!");
-          //   count++;
-          //   break;
-          // }
+       
           if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email) && dataArrPartner[j].recipients[k].role == 3) {
             this.getNotificationValid("Email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân không hợp lệ!")
             count++;
             break;
           }
-          // if (dataArrPartner[j].recipients[k].phone && !this.pattern.phone.test(dataArrPartner[j].recipients[k].phone)) {
-          //   this.getNotificationValid("Số điện thoại" + this.getNameObject(3) + "của đối tác không hợp lệ!")
-          //   count++;
-          //   break;
-          // }
+        
         }
       }
     }
@@ -377,6 +337,11 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   getCheckDuplicateCardId(isParty: string, dataValid?: any) {
+
+    console.log("all check email ", isParty);
+
+    console.log("data valid ", dataValid);
+
     let arrCheckCardId = [];
     // valid card_id đối tác và các bên tham gia
     if (isParty != 'only_party_origanzation') {
@@ -404,6 +369,7 @@ export class DetermineSignerComponent implements OnInit {
           let countCheck_duplicate = true;
           for (const d of arrCardId) {
             if (duplicateCardId.length > 0 && duplicateCardId.some((p: any) => p.card_id == d.card_id && (p.type != d.type || p.ordering != d.ordering))) { // check duplicate card_id coordination with between party
+              console.log("vao day ");
               return true;
             }
             duplicateCardId.push(d);
@@ -429,6 +395,7 @@ export class DetermineSignerComponent implements OnInit {
     for (var k = 0; k < arrCheckCardId.length; ++k) {
       var value: any = arrCheckCardId[k];
       if (value in valueSoFar) {
+        console.log("vao day ");
         return true;
       }
       valueSoFar[value] = true;

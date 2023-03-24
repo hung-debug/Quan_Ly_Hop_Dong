@@ -74,7 +74,9 @@ export class PreviewContractTemplateComponent implements OnInit {
     } else {
       return 'employer-ck';
     }
+  }
 
+  preventPdf(event: any) {
 
   }
 
@@ -98,8 +100,10 @@ export class PreviewContractTemplateComponent implements OnInit {
       
       if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
         style = {
-          "transform": 'translate(' + d['coordinate_x'] + 'px, ' + Number(d['coordinate_y']+Number(d['height'])-Number(font_size)*1.3) + 'px)',
+          "transform": 'translate(' + d['coordinate_x'] + 'px, ' + Number(d['coordinate_y']+Number(d['height'])-Number(font_size)*1.3 - 1) + 'px)',
           "position": "absolute",
+          // "left":"0px",
+          // "bottom":"0px"
         }
       } 
       

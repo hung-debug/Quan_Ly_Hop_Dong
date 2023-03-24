@@ -106,14 +106,15 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-
-    console.log("clone ", this.datasForm.is_determine_clone);
-
     if(environment.flag == 'NB') {
       this.site = 'NB';
     } else if(environment.flag == 'KD') {
       this.site = 'KD';
     }
+
+    if(this.datasForm.flagDigitalSign) {
+      this.signTypeList = this.signTypeList.filter((p: any) => ![1,5].includes(p.id));
+     }
 
     this.flagUsbToken[0] = true;
     for(let i = 1; i < this.dataParnterOrganization().length; i++) {
@@ -159,16 +160,43 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     })
   }
 
-  changeTypeSign(d: any) {
-    if(d.login_by == 'phone' || d.typeSign == 1 || d.login_by == 'email' || d.typeSign == 0) {
+  changeTypeSign(d: any,index?: any,id?: any,role?: any) {
+    if (d.login_by == 'phone' || d.login_by == 'email') {
       d.email = '';
       d.phone = '';
-    } 
+    }
 
     if(d.login_by == 'phone') {
-      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 2,5].includes(p.id));
+      d.sign_type = d.sign_type.filter((p: any) => ![2].includes(p.id));
+    }
+
+    if(role == 'sign_partner') {
+        if (d.login_by == 'phone') {
+          d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,2,5].includes(p.id));
+        } else {
+          console.log("email ");
+          d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,5].includes(p.id));
+        }
+    } else if(role == 'signer') {
+      if (d.login_by == 'phone') {
+        d.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 2, 5].includes(p.id));
+      } else {
+        d.isListSignNotPerson = this.signTypeList.filter((p) => ![1,5].includes(p.id));
+      }
+    } else if(role == 'personal') {
+      if (d.login_by == 'phone') {
+        d.isListSignPersonal = this.signTypeList.filter((p) => ![2].includes(p.id));
+      } else {
+        d.isListSignPersonal = this.signTypeList;
+      }
+    }
+  }
+
+  getListSignType(role?: any) {
+    if(role == 'partner' || role == 'org') {
+      return this.signTypeList.filter((p: any) => ![1,5].includes(p.id));
     } else {
-      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1,5].includes(p.id));
+      return this.signTypeList;
     }
   }
 
@@ -201,6 +229,12 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       this.flagUsbToken[id] = false;
     }
   }
+  
+  dropdownButtonText = '';
+
+  changeButtonText(text: string) {
+    this.dropdownButtonText = text;
+  }
 
   back(e: any, step?: any) {
     this.nextOrPreviousStep(step);
@@ -213,9 +247,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       if (items.type == 3)
         this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
         for(let i = 0; i < this.datasForm.is_determine_clone[index].recipients.length; i++) {
-          this.datasForm.is_determine_clone[index].recipients[i].email = this.datasForm.is_determine_clone[index].recipients[i].email.trim();
+          this.datasForm.is_determine_clone[index].recipients[i].email = this.datasForm.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
           if(this.datasForm.is_determine_clone[index].recipients[i].login_by == "phone") {
-            this.datasForm.is_determine_clone[index].recipients[i].phone = this.datasForm.is_determine_clone[index].recipients[i].email.trim();
+            this.datasForm.is_determine_clone[index].recipients[i].phone = this.datasForm.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
           }
         }
     })
@@ -325,15 +359,17 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         }
       })
 
-      if (items.type == 3)
+      if (items.type == 3) {
         this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
-        this.datasForm.is_determine_clone[index].id = null;
+      }
+        // this.datasForm.is_determine_clone[index].id = null;
     })
     this.spinner.show();
 
     console.log("next ", this.datasForm.is_determine_clone);
 
     this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
+      this.datasForm.is_determine_clone = res;  
         this.getDataApiDetermine(res, is_save)
       }, (error: HttpErrorResponse) => {
         if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
@@ -528,6 +564,13 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         count++;
         break;
       }
+
+      if(!parttern_input.input_form.test(dataArr[i].name)) {
+        this.getNotificationValid("Họ tên " + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không được chứa ký tự đặc biệt");
+        count++;
+        break;
+      }
+
       if (!dataArr[i].email) {
         this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
         count++;
@@ -605,6 +648,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         count++;
         break;
       }
+
+
     }
 
     if (count == 0) {
@@ -647,6 +692,13 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               count++;
               break;
             }
+
+            if(!parttern_input.input_form.test(isParterSort[k].name)) {
+              this.getNotificationValid("Họ tên " + this.getNameObject(isParterSort[k].role) + "tổ chức của tôi không được chứa ký tự đặc biệt");
+              count++;
+              break;
+            }
+
             if (!isParterSort[k].email) {
               this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(isParterSort[k].role) + " của đối tác!")
               count++;
@@ -739,18 +791,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               count++;
               break;
             }
-
-            // if(!isParterSort[k].card_id.trim() && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
-            //   this.getNotificationValid("Vui lòng nhập mã số thuế của"+this.getNameObject(isParterSort[k].role)+"tổ chức của đối tác");
-            //   count++;
-            //   break;
-            // }
-
-            // if(isParterSort[k].card_id.trim() && !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
-            //   this.getNotificationValid("Mã số thuế của" + this.getNameObject(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
-            //   count++;
-            //   break;
-            // }
           }
           //Cá nhân
           else if (dataArrPartner[j].type == 3) {
@@ -759,6 +799,13 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               count++;
               break;
             }
+
+            if (!parttern_input.input_form.test(isParterSort[k].name) && isParterSort[k].role == 3) {
+              this.getNotificationValid("Họ tên" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân không hợp lệ!")
+              count++;
+              break;
+            }
+
             if (!isParterSort[k].email && isParterSort[k].role == 3) {
               if(isParterSort[k].login_by == 'email') {
                 this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân!")
@@ -886,7 +933,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       const allCheckEmail = 'allCheckEmail';
 
       if (this.getCheckDuplicateEmail(onlyPartner, dataArrPartner)) {
-        this.getNotificationValid("Tên đăng nhập của đối tác không được trùng nhau!");
+        this.getNotificationValid('valid.login.user');
         return false
       }
 
@@ -1189,12 +1236,23 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   getOriganzationDocument() {
-    return this.data_organization.recipients.filter((p: any) => p.role == 4)
+    return this.data_organization.recipients.filter((p: any) => p.role == 4).map((x: any) => {
+      if (!x.locale) {
+        x.locale = "vi"
+      }
+      return x
+    });
   }
 
   // tạo đối tượng người điều phối đối tác
   getPartnerCoordination(item: any) {
-    return item.recipients.filter((p: any) => p.role == 1)
+    // return item.recipients.filter((p: any) => p.role == 1)
+    return item.recipients.filter((p: any) => p.role == 1).map((x: any) => {
+      if (!x.locale) {
+        x.locale = "vi"
+      }
+      return x
+    });
   }
 
   // tạo đối tượng đ
@@ -1204,7 +1262,13 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // tạo mảng người xem xét đối tác
   getPartnerReviewer(item: any) {
-    return item.recipients.filter((p: any) => p.role == 2)
+    // return item.recipients.filter((p: any) => p.role == 2)
+    return item.recipients.filter((p: any) => p.role == 2).map((x: any) => {
+      if (!x.locale) {
+        x.locale = "vi"
+      }
+      return x
+    });
   }
 
   getName(e: any, item: any) {
@@ -1216,12 +1280,24 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   // tạo mảng người ký đối tác tổ chức
   getPartnerSignature(item: any) {
     
-    return item.recipients.filter((p: any) => p.role == 3)
+    // return item.recipients.filter((p: any) => p.role == 3)
+    return item.recipients.filter((p: any) => p.role == 3).map((x: any) => {
+      if (!x.locale) {
+        x.locale = "vi"
+      }
+      return x
+    });
   }
 
   // tạo mảng đối tượng văn thư tổ chức của tôi
   getPartnerDocument(item: any) {
-    return item.recipients.filter((p: any) => p.role == 4);
+    // return item.recipients.filter((p: any) => p.role == 4);
+    return item.recipients.filter((p: any) => p.role == 4).map((x: any) => {
+      if (!x.locale) {
+        x.locale = "vi"
+      }
+      return x
+    });
   }
 
   // thêm đối tượng người xem xét tổ chức của tôi
@@ -1311,7 +1387,12 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // tạo mảng đối tượng người xem xét tổ chức của tôi
   getOriganzationReviewer() {
-    return this.data_organization.recipients.filter((p: any) => p.role == 2);
+    return this.data_organization.recipients.filter((p: any) => p.role == 2).map((x: any) => {
+      if (!x.locale) {
+        x.locale = "vi"
+      }
+      return x
+    });
   }
 
   // xóa đối tượng người xem xét tổ chức của tôi (done)
@@ -1337,7 +1418,14 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // tạo mảng các đối tượng người ký tổ chức của tôi
   getOriganzationSignature() {
-    return this.data_organization.recipients.filter((p: any) => p.role == 3);
+    // console.log("this.data_organization.recipients SUUUUUUUUUUUU", this.data_organization.recipients);
+
+    return this.data_organization.recipients.filter((p: any) => p.role == 3).map((x: any) => {
+      if (!x.locale) {
+        x.locale = "vi"
+      }
+      return x
+    });
   }
 
   // xóa đối tượng người ký tổ chức của tôi (done)
@@ -1497,8 +1585,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // xóa đối tham gia bên đối tác
   deletePartner(index: any, item: any) {
+    console.log("item ", item);
     //xoa doi tuong tham gia
-    if (item.id) {
+    if (item.id && this.router.url.includes('edit')) {
       this.spinner.show();
       this.contractService.deleteParticipantContract(item.id).subscribe((res: any) => {
         if (res.success == true) {
@@ -1516,12 +1605,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         this.onItemSelect(null);
       })
     } else {
-      this.datasForm.is_determine_clone = this.datasForm.is_determine_clone.filter((p: any) => p.ordering != item.ordering);
-      this.onItemSelect(null);
+      this.datasForm.is_determine_clone = this.datasForm.is_determine_clone.filter((p: any) => p.id != item.id);
     }
-    // this.datasForm.is_determine_clone.forEach((res: any, index: number) => {
-    //   res.ordering = index + 1;
-    // })
   }
 
   changeData(item: any, index: any) {
@@ -1552,6 +1637,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
           element.status = 0;
           element.is_otp = 0;
           element.sign_type = [];
+          element.login_by = 'email';
           if (element.id) delete element.id;
         }
       })

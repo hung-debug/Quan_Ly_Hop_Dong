@@ -55,7 +55,8 @@ import { WebcamModule } from 'ngx-webcam';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { DialogReasonRejectedComponent } from './shared/model/dialog-reason-rejected/dialog-reason-rejected.component';
 import { DialogReasonCancelComponent } from './shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
-import { EditHandlerComponent } from './shared/model/edit-handler-dialog/edit-handler-dialog.component'
+import { EditHandlerComponent } from './shared/model/edit-handler-dialog/edit-handler-dialog.component';
+import { MultiSignListComponent } from './components/multi-sign-list/multi-sign-list.component'
 
 const signatures = "s9";
 const consider = "c9";
@@ -68,7 +69,7 @@ export const contractSignatureRoutes: Routes = [
   // { path: 'receive/wait-processing/coordinates-contract/:id', component: CoordinatesContractComponent },
   { path: coordinates+'/:id', component: IndexComponent },
   { path: secretary+'/:id', component: ConsiderContractComponent },
-  { path: 'receive/:status', component: ContractSignatureComponent }
+  { path: 'receive/:status', component: ContractSignatureComponent },
 ];
 
 export const contractSignatureRoutes1: Routes = [
@@ -115,7 +116,8 @@ export const contractSignatureRoutes1: Routes = [
     EkycDialogSignComponent,
     DialogReasonRejectedComponent,
     DialogReasonCancelComponent,
-    EditHandlerComponent
+    EditHandlerComponent,
+    MultiSignListComponent
     // AddContractComponent
   ],
   imports: [

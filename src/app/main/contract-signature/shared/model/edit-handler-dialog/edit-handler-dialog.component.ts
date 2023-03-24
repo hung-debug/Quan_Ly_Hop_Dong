@@ -11,8 +11,9 @@ import {
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastService } from "../../../../../service/toast.service";
 import { environment } from 'src/environments/environment';
-import {parttern} from "../../../../../config/parttern";
-
+import { parttern, parttern_input } from "../../../../../config/parttern";
+import * as moment from 'moment';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-edit-handler-dialog',
   templateUrl: './edit-handler-dialog.component.html',
@@ -37,7 +38,7 @@ export class EditHandlerComponent implements OnInit {
   email: string;
   phone: string;
   login_by: any;
-  isCheckRadio = true;
+  isCheckRadio = this.data.login_by === "phone" ? false : true;
   is_handler: any;
   name: any;
   recipient_id: any;
@@ -47,6 +48,14 @@ export class EditHandlerComponent implements OnInit {
   card_id: any;
   key: any;
   pattern = parttern;
+  pattern_input = parttern_input;
+  role: any;
+  contractId: any;
+
+  errorName: any = '';
+  errorPhone: any = '';
+  errorCardid: any = '';
+  errorEmail: any = '';
 
   //dropdown
   signTypeList: Array<any> = type_signature;
@@ -58,11 +67,13 @@ export class EditHandlerComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<EditHandlerComponent>,
-    private contractService: ContractService
+    private contractService: ContractService,
+    public translate: TranslateService,
   ) {
   }
 
   ngOnInit(): void {
+
     if (environment.flag == 'NB') {
       this.site = 'NB';
     } else if (environment.flag == 'KD') {
@@ -82,6 +93,7 @@ export class EditHandlerComponent implements OnInit {
 
 
     console.log("this.data.update process person", this.data);
+
     this.name = this.data.name;
     this.login_by = this.data.login_by;
     this.email = this.data.email;
@@ -90,18 +102,9 @@ export class EditHandlerComponent implements OnInit {
     this.id_sign_type = this.data.sign_type[0]?.id
     this.card_id = this.data.card_id;
     this.id = this.data.id;
+    this.role = this.data.role;
+    // this.contractid = this.data.is_data_contract.id;
 
-
-
-    // data Tổ chức của tôi
-    // this.data_organization = this.datas.is_handler.filter((p: any) => p.type == 1)[0];
-
-
-    // this.data_organization.name = this.datas.is_handler.filter((p: any) => p.type == 1)[0].name ? this.datas.is_handler.filter((p: any) => p.type == 1)[0].name : this.datas.name_origanzation;
-
-    // this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
-    // this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
-    // this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
     this.dropdownSignTypeSettings = {
       singleSelection: false,
       idField: "id",
@@ -124,83 +127,128 @@ export class EditHandlerComponent implements OnInit {
   handleCancel() {
     this.dialogRef.close();
   }
-keyDownHandler(event: any) {
+  keyDownHandler(event: any) {
     if (event.keyCode === 32)
-        event.preventDefault();
-}
+      event.preventDefault();
+  }
+
+  getNameObjectValid(role_numer: number) {
+    switch (role_numer) {
+      case 1:
+        return ' người điều phối ';
+        break;
+      case 2:
+        return ' người xem xét ';
+        break;
+      case 3:
+        return ' người ký ';
+        break;
+      case 4:
+        return ' văn thư ';
+        break;
+      default:
+        return '';
+        break;
+    }
+  }
   UpdateHandler() {
+
     this.spinner.show();
-    const dataUpdate = {
+    let dataUpdate = {
       ...this.data,
       name: this.name,
-      email: this.email,
+      email: this.isCheckRadio ? this.email : this.phone,
       phone: this.phone,
-      login_by: this.login_by,
+      login_by: this.isCheckRadio ? "email" : "phone",
       card_id: this.card_id,
     };
-    // let dataArr = [];
-    // dataArr.push(this.phone);
-    // console.log("dataarray",dataArr);
-    
-    // let count = 0;
-    // for (let i = 0; i < dataArr.length; i++) {  
-    //   if (!this.pattern.phone.test(dataArr[i].email)) {
-    //     this.getNotificationValid("SĐT của bạn không hợp lệ!")
-    //     count++;
-    //     break;
-    //   }
-    // }
 
-    if (this.email !== null) {
-      this.contractService.updateInfoPersonProcess(dataUpdate, this.id).subscribe(
-        (res: any) => {
-          if (res.email == null) {
-            this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
-          } else {
-            this.toastService.showSuccessHTMLWithTimeout('Cập nhật người xử lý thành công', "", 3000);
-            this.dialogRef.close(res);
-            // this.router.navigate(['/main/form-contract/detail/' + this.id]);
+
+    if (!this.validData()) {
+      console.log("dataUpdate", this.validData());
+      return;
+    }
+    else {
+      if (this.email !== "") {
+        console.log("dataUpdate sU", this.validData());
+        this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
+          (res: any) => {
+            if (!res.success) {
+              this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
+            } else {
+              this.toastService.showSuccessHTMLWithTimeout('Cập nhật người xử lý thành công', "", 3000);
+              dataUpdate = { ...dataUpdate, "change_num": this.data.change_num + 1 }
+              this.dialogRef.close(dataUpdate);
+              // this.router.navigate(['/main/form-contract/detail/' + this.id]);
+            }
           }
-        }
-      )
-    } else {
-      this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
+        )
+      } else {
+        this.toastService.showWarningHTMLWithTimeout("Email người xử lý không được bỏ trống", "", 3000);
+      }
+
+    }
+  }
+  validData() {
+    this.clearError();
+    this.nameRequired();
+    this.phoneRequired();
+    this.cardRequired();
+    this.emailRequired();
+    if (!this.nameRequired() || !this.phoneRequired() || !this.cardRequired() || !this.emailRequired()) {
+      // this.spinner.hide();
+      return false;
+    }
+    return true
+  }
+  nameRequired() {
+    this.errorName = "";
+    if (this.name == "") {
+      this.errorName = "error.name.required";
+      return false;
+    }
+    return true;
+  }
+  phoneRequired() {
+    this.errorPhone = "";
+    if (this.phone == "" && !this.isCheckRadio) {
+      this.errorPhone = "error.phone.required";
+      return false;
+    }
+    return true;
+  }
+  cardRequired() {
+    this.errorCardid = "";
+    if (!this.pattern.cardid.test(this.card_id) && this.id_sign_type === 4) {
+      this.errorCardid = "taxcode.format";
+      return false;
     }
 
-  
+    return true;
+
+  }
+  emailRequired() {
+    this.errorEmail = "";
+    if (this.email == "") {
+      this.errorEmail = "error.email.required";
+      return false;
+    }
+    return true;
+  }
+  clearError() {
+    if (this.name) {
+      this.errorName = '';
+    }
+    if (this.phone) {
+      this.errorPhone = '';
+    }
+    if (this.card_id) {
+      this.errorCardid = '';
+    }
   }
 
   onItemSelect(e: any, data: any) {
-    // var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
-    // var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
-    // // <==========>
-    // if (isParnter.length > 0) {
-    //   for (let i = 0; i < 2; i++) {
-    //     this.getSetOrderingPersonal(isParnter, i);
-    //   }
-    // }
-    // for loop check change ordering with parnter origanization
-    // this.getSetOrderingParnterOrganization(isOrganization);
-    // set again ordering data not option eKYC/img/otp => order
-    // var setOrderingOrganization =
-    // var setOrdering = this.dataParnterOrganization().filter((p: any) => p.type == 2 || p.type == 3 && (p.recipients[0].sign_type.some(({ id }: any) => id == 2 || id == 3) || p.recipients[0].sign_type.length == 0));
-    // var setOrderingParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3 && p.recipients[0].sign_type.some(({ id }: any) => id == 1 || id == 5));
-    // if (setOrderingParnter.length > 0) {
-    // if (setOrderingParnter.length == 0) {
-    //   this.data_organization.ordering = 1;
-    //   setOrdering.forEach((val: any, index: number) => {
-    //     val.ordering = index + 2; // + 2 (1: index & 1 index tổ chức của tôi) vì sẽ luôn luôn order sau tổ chức của tôi nếu trong các bên ko có dữ liệu ký eKYC/Image/OTP.
-    //   })
-    // } else {
-    //   this.data_organization.ordering = setOrderingParnter.length + 1;
-    //   setOrdering.forEach((val: any, index: number) => {
-    //     // val.ordering = setOrderingParnter.length > 0 ? (setOrderingParnter.length + index + 1) : (index + 1);
-    //     // val.ordering = setOrderingParnter.length > 0 ? (this.data_organization.ordering + index + 1) : (index + 1);
-    //     val.ordering = this.data_organization.ordering + index + 1; // tăng lên 1 ordering sau tổ chức của tôi
-    //   })
-    // }
 
-    // }
     // console.log(setOrdering, setOrderingParnter.length)
     this.checkCount = 1; // gan lai de lan sau ko bi tang index
   }

@@ -69,6 +69,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
 
     this.data_parnter_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+
+    console.log("datas ", this.datas);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -138,8 +140,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       isContractUserSign_clone.forEach((element: any) => {
         if (element.sign_config.length > 0) {
           element.sign_config.forEach((item: any) => {
-            item['font'] = this.datas.font;
-            item['font_size'] = this.datas.size ? this.datas.size : 13;
+            item['font'] = item.font ? item.font : 'Times New Roman';
+            item['font_size'] = item.font_size ? item.font_size : 13;
             item['contract_id'] = this.datas.contract_id;
             item['document_id'] = this.datas.document_id;
             if (item.text_attribute_name) {
@@ -220,8 +222,10 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       for (let i = 0; i < dataSignId.length; i++) {
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
-        dataSignId[i].font = this.datas.font;
-        dataSignId[i].font_size = this.datas.size ? this.datas.size : 13;
+        // dataSignId[i].font = this.datas.font;
+        // dataSignId[i].font_size = this.datas.size ? this.datas.size : 13;
+
+        console.log("dataSignId ", dataSignId);
 
         if(!dataSignId[i].type) 
           dataSignId[i].type = 4
@@ -243,8 +247,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     if (dataSignNotId.length > 0) {
       let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', 'value'];
       dataSignNotId.forEach((item: any) => {
-        item['font'] = this.datas.font;
-        item['font_size'] = this.datas.size ? this.datas.size : 13;
+        item['font'] = item.font ? item.font : 'Times New Roman';
+        item['font_size'] = item.font_size ? item.font_size : 13;
         item['contract_id'] = this.datas.contract_id;
         item['document_id'] = this.datas.document_id;
         if (item.text_attribute_name) {

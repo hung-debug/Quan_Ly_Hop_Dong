@@ -98,6 +98,13 @@ import { AdminInfoUserComponent } from './admin/admin-main/admin-user/admin-info
 
 import {WebcamModule} from 'ngx-webcam';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { ReportDetailComponent } from './main/report/report-detail/report-detail.component';
+import { ReportStatusContractComponent } from './main/report/report-status-contract/report-status-contract.component';
+import { ReportSoonExpireComponent } from './main/report/report-soon-expire/report-soon-expire.component';
+import { ReportContractNumberFollowStatusComponent } from './main/report/report-contract-number-follow-status/report-contract-number-follow-status.component';
+import { ContractNumberFollowSignComponent } from './main/report/contract-number-follow-sign/contract-number-follow-sign.component';
+
+import { ContractNumberFollowTypeComponent } from './main/report/contract-number-follow-type/contract-number-follow-type.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -164,6 +171,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdminDeletePackUnitComponent,
     AdminInfoUserComponent,
 
+    ReportDetailComponent,
+    ReportStatusContractComponent,
+    ReportSoonExpireComponent,
+    ReportContractNumberFollowStatusComponent,
+    ContractNumberFollowSignComponent,
+    ContractNumberFollowTypeComponent,
+
+    ContractComponent
   ],
   imports: [
     TranslateModule,

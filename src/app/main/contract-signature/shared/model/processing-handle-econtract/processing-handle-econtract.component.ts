@@ -7,6 +7,7 @@ import { ContractService } from 'src/app/service/contract.service';
 import { DialogReasonRejectedComponent } from '../dialog-reason-rejected/dialog-reason-rejected.component';
 import { EditHandlerComponent } from '../edit-handler-dialog/edit-handler-dialog.component';
 import { ToastService } from 'src/app/service/toast.service';
+import { log } from 'console';
 @Component({
   selector: 'app-processing-handle-econtract',
   templateUrl: './processing-handle-econtract.component.html',
@@ -64,6 +65,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     } else if (sessionStorage.getItem('lang') == 'en') {
       this.lang = 'en';
     }
+    console.log("data", this.data)
     this.contractService.getDetailContract(this.data.is_data_contract.id).subscribe(response => {
       this.endDate = moment(response[0].sign_time, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss")
       let timeNow = moment(new Date(), "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss")
@@ -91,16 +93,11 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       } else {
         this.isHiddenButton = false;
       }
-      console.log("this.currentUser.email", this.currentUser.email);
-      console.log("emailCreate", this.emailCreate);
-      console.log("this.contractStatus", this.contractStatus);
-      console.log("this.cancelDate", this.cancelDate);
 
-
-
-      console.log("ishidden", this.isHiddenButton);
 
       response.recipients.forEach((element: any) => {
+        console.log("su element",element);
+        
         let data = {
           id: element.id,
           name: element.name,
@@ -111,13 +108,24 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           process_at: element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null,
           reasonReject: element.reasonReject,
           type: element.participantType,
-          statusNumber: element.status
+          statusNumber: element.status,
+          phone: element.phone
         }
+
         this.is_list_name.push(data);
       })
-      console.log("dataaaaaa", this.is_list_name);
 
+      this.is_list_name.map((x: any) => {
+        this.data.is_data_contract.participants.map((item: any) => {
+          item.recipients.map((y: any) => {
+            if (x.id === y.id) {
+              x["change_num"] = y.change_num
+            }
+          })
+        })
+      })
 
+      console.log("is_list_name", this.is_list_name);
 
       this.listCheckSmsEmail = true
       // this.is_list_name.map((item: any) => {
@@ -170,15 +178,15 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       }
 
       // if (!this.reasonCancel) {
-        if (role == 1) {
-          res += 'điều phối';
-        } else if (role == 2) {
-          res += 'xem xét';
-        } else if (role == 3) {
-          res += 'ký';
-        } else if (role == 4) {
-          res = res + ' đóng dấu';
-      } else 
+      if (role == 1) {
+        res += 'điều phối';
+      } else if (role == 2) {
+        res += 'xem xét';
+      } else if (role == 3) {
+        res += 'ký';
+      } else if (role == 4) {
+        res = res + ' đóng dấu';
+      } else
         if (!res.includes('Đã'))
           res = 'Đã huỷ'
       // }
@@ -258,22 +266,37 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
   }
 
-  openEdit(RecipientsId: any) {
-    let data: any;
+  openEdit(recipient: any) {
 
-    // for(let i=0; i < this.is_list_name.length ; i++){
+    this.contractService.getInforPersonProcess(recipient).subscribe((response) => {
 
-    //   if(RecipientsId === this.is_list_name[i].id){
-    //       // data = {reasonReject: this.is_list_name[i].reasonReject}
-    //    }
-    // }
+      let data: any;
+      data = response;
+      data["contract_id"] = this.data.is_data_contract.id
+      console.log("data luongxly hodng", data);
+      console.log("contractid", this.data.is_data_contract.id);
+      const dialogRef = this.dialog.open(EditHandlerComponent, {
+        width: '1000px',
+        data,
+      })
 
-    const dialogRef = this.dialog.open(EditHandlerComponent, {
-      width: '900px',
-      data
-    })
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      console.log("list name", this.is_list_name);
+
+      dialogRef.afterClosed().subscribe((result: any) => {
+        console.log('the close dialog', result);
+
+        this.is_list_name = this.is_list_name.map((x: any) => {
+          if (x.id === result.id) {
+            return {
+              ...x, name: result.name,
+              emailRecipients: result.email,
+              phone: result.phone,
+              change_num: result.change_num
+            }
+          }
+          return x
+        })
+      })
     })
   }
 

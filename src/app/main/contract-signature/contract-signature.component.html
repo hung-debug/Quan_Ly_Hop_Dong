@@ -1,30 +1,39 @@
 <div class="container-fluid">
-    <div class="col-md-12" style="padding-top: 10px;" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
-        <div class="input-line search">
-            <img src="../../assets/img/icon_search.svg" class="input-img" />
-            <input type="text" id="search"  class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
-            <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
+
+    <div style="margin-top: 60px;" class="header">
+        <div class="col-md-12" style="padding-top: 10px" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
+            <div class="input-line search">
+                <img src="../../assets/img/icon_search.svg" class="input-img" />
+                <input type="text" id="search"  class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
+            </div>
+        </div>
+
+        <!--Header danh sách ký 1-->
+        <div *ngIf="filter_status == 1">
+            <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
+                <button (click)="signMany()" class="btn btn-lg btn-block btn_submit">{{'sign.multi'| translate}}</button>
+                <!-- <button (click)="watchMany()" class="btn btn-lg btn-block btn_submit">{{'sign.multi'| translate}}</button> -->
+            </div>
+
+            <div *ngIf="this.typeDisplay === 'signMany'" style="padding-top: 10px;">
+                <button class="btn_submit" (click)="signManyContract()">{{'contract.sign'| translate}}</button>
+
+                <!-- <button class="btn_submit" (click)="watchManyContract()">{{'watch.contract'| translate}}</button> -->
+
+                <button class="btn_submit" (click)="cancelSignMany()">{{'cancel'| translate}}</button>
+            </div>
         </div>
     </div>
 
-    <div *ngIf="filter_status == 1">
-        <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
-            <button (click)="signMany()" class="btn btn-lg btn-block btn_submit">{{'sign.multi'| translate}}</button>
-        </div>
-
-        <div *ngIf="this.typeDisplay === 'signMany'" style="padding-top: 10px;">
-            <button class="btn_submit" (click)="signManyContract()">{{'contract.sign'| translate}}</button>
-            <button class="btn_submit" (click)="cancelSignMany()">{{'cancel'| translate}}</button>
-        </div>
-    </div>
-
-    <div class="row list_header" *ngIf="pageTotal > 0;">
+    <div style="margin-top: 18px;" class="row list_header" *ngIf="pageTotal > 0;">
 
         <div class="col-md-5"></div>
         <div class="col-md-2">{{'create-date' | translate}}</div>
         <div class="col-md-2">{{'expiration-date' | translate}}</div>
         <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-3">{{'action' | translate}}</div>
 
+        <!--Nút tick all-->
         <div *ngIf="this.typeDisplay === 'signMany'" class="col-md-3">
             <input id="all" name="all" type="checkbox" (click)="toggle()" />
         </div>
@@ -255,7 +264,7 @@
                             <div class="div_icon" *ngIf="item.status == 1 && (item.role == 3 || item.role == 4) && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                                 <div class="col-md-1 calendar_create">
                                     <div>
-                                        <input name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" />
+                                        <input name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" (change)="toggleOne(item, index1)" />
                                     </div>
                                 </div>
                             </div>

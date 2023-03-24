@@ -1,15 +1,14 @@
-import {Component, OnInit, Input, Output, EventEmitter, HostListener} from '@angular/core';
-import {variable} from "../../../../config/variable";
-import {MatDialog} from "@angular/material/dialog";
-import {ForwardContractComponent} from "../../shared/model/forward-contract/forward-contract.component";
-import {ContractService} from "../../../../service/contract.service";
-import {DisplayDigitalSignatureComponent} from "../../display-digital-signature/display-digital-signature.component";
+import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
+import { variable } from "../../../../config/variable";
+import { MatDialog } from "@angular/material/dialog";
+import { ForwardContractComponent } from "../../shared/model/forward-contract/forward-contract.component";
+import { ContractService } from "../../../../service/contract.service";
+import { DisplayDigitalSignatureComponent } from "../../display-digital-signature/display-digital-signature.component";
 import { ToastService } from 'src/app/service/toast.service';
-import {DeviceDetectorService} from "ngx-device-detector";
+import { DeviceDetectorService } from "ngx-device-detector";
 import { UnitService } from 'src/app/service/unit.service';
-import {  Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-
 @Component({
   selector: 'app-footer-signature',
   templateUrl: './footer-signature.component.html',
@@ -46,13 +45,13 @@ export class FooterSignatureComponent implements OnInit {
   contractId: any;
 
   currentUser: any;
-  emailRecipients:any;
+  emailRecipients: any;
 
-  pageRendering:any;
+  pageRendering: any;
   pageNumPending: any = null;
 
-  email: string="email";
-  phone: string="phone";
+  email: string = "email";
+  phone: string = "phone";
 
   constructor(
     private dialog: MatDialog,
@@ -67,14 +66,16 @@ export class FooterSignatureComponent implements OnInit {
 
   lang: string;
   ngOnInit(): void {
+    console.log("ngOnInit: ",this.datas)
+    console.log("ngOnInit keys: ",Object.keys(this.datas))
     this.getDeviceApp();
 
-    if(sessionStorage.getItem('lang') == 'en') {
+    if (sessionStorage.getItem('lang') == 'en') {
       this.lang = 'en';
-    } else if(sessionStorage.getItem('lang') == 'vi') {
+    } else if (sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     }
-  
+
     let data_coordination = this.datas.is_data_contract.participants;
     let emailCurrent = this.contractService.getAuthCurrentUser().email;
     let isBreak = false;
@@ -90,12 +91,12 @@ export class FooterSignatureComponent implements OnInit {
     }
 
     if (this.is_data_coordination) {
-      
+
       // @ts-ignore
       for (let i = 0; i < this.is_data_coordination.recipients.length; i++) {
         //@ts-ignore
         let element = this.is_data_coordination.recipients[i];
-        if(!this.recipientId) {
+        if (!this.recipientId) {
           if (element.role == 1 && element.email == emailCurrent) {
             if (element.status != 1) {
               this.is_show_coordination = true;
@@ -118,7 +119,7 @@ export class FooterSignatureComponent implements OnInit {
             }
           }
         }
-       
+
       }
     }
   }
@@ -133,7 +134,7 @@ export class FooterSignatureComponent implements OnInit {
   }
 
   getStyleButton() {
-    if(window.innerWidth >= 396) {
+    if (window.innerWidth >= 396) {
       return {
         "position": 'absolute',
         "right": 0
@@ -143,7 +144,7 @@ export class FooterSignatureComponent implements OnInit {
 
       }
     }
-    
+
   }
 
   switchesValueChange($event: any) {
@@ -153,12 +154,12 @@ export class FooterSignatureComponent implements OnInit {
 
   indexY: number = 0;
   autoScroll() {
-    
-    this.coordinateY = this.coordinateY.sort(function(a: number, b: number) {
+
+    this.coordinateY = this.coordinateY.sort(function (a: number, b: number) {
       return a - b;
     });
 
-    this.idElement =  this.idElement.sort(function(a: number, b: number) {
+    this.idElement = this.idElement.sort(function (a: number, b: number) {
       return a - b;
     });
 
@@ -169,12 +170,12 @@ export class FooterSignatureComponent implements OnInit {
 
       let id: any = document.getElementById(this.idElement[this.indexY]);
 
-      if(id) {
+      if (id) {
         id.style.backgroundColor = 'yellow';
-      } 
-      for(let i = 0; i < this.idElement.length; i++) {
-        if(this.idElement[i] != this.idElement[this.indexY]) {
-          let elemet: any =  document.getElementById(this.idElement[i]);
+      }
+      for (let i = 0; i < this.idElement.length; i++) {
+        if (this.idElement[i] != this.idElement[this.indexY]) {
+          let elemet: any = document.getElementById(this.idElement[i]);
           elemet.style.backgroundColor = '#EBF8FF';
         }
       }
@@ -197,7 +198,7 @@ export class FooterSignatureComponent implements OnInit {
   }
 
   lastPage() {
-    let canvas: any = document.getElementById('canvas-step3-'+this.pageNumber);
+    let canvas: any = document.getElementById('canvas-step3-' + this.pageNumber);
 
     let canvas1: any = document.getElementById('pdf-viewer-step-3');
 
@@ -228,7 +229,7 @@ export class FooterSignatureComponent implements OnInit {
     if (this.pageRendering) {
       this.pageNumPending = num;
     } else {
-      let canvas: any = document.getElementById('canvas-step3-'+num);
+      let canvas: any = document.getElementById('canvas-step3-' + num);
 
       let canvas1: any = document.getElementById('pdf-viewer-step-3');
 
@@ -239,7 +240,7 @@ export class FooterSignatureComponent implements OnInit {
   }
 
   onEnter(event: any) {
-    let canvas: any = document.getElementById('canvas-step3-'+event.target.value);
+    let canvas: any = document.getElementById('canvas-step3-' + event.target.value);
 
     let canvas1: any = document.getElementById('pdf-viewer-step-3');
 
@@ -247,26 +248,29 @@ export class FooterSignatureComponent implements OnInit {
 
     pdffull.scrollTo(0, canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top);
   }
-
+  ArrRecipientsNew: boolean;
   action() {
+    console.log("##############datas", this.datas);
     if (this.datas.action_title == 'dieu_phoi') {
-      // console.log("datas",this.datas);
-      
+      // console.log("datas", this.datas);
+
       // this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-      // this.emailRecipients =  this.datas.is_data_contract.participants[1].recipients[0].email;
-  
-      //     // response[0].participants[0].recipients[0].email
-      //     if (this.emailRecipients !== this.currentUser.email) {
-            
-      //       this.toastService.showErrorHTMLWithTimeout(
-      //         'Bạn không có quyền xử lý hợp đồng này!',
-      //         '',
-      //         3000
-      //       );
-      //       this.router.navigate(['/main/dashboard']);
-      //       return
-      //     };
-       
+      // const ArrRecipients = this.datas.is_data_contract.participants[0].recipients;
+      // const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email); 
+      // console.log("ArrRecipientsNew111", ArrRecipientsNew);
+
+      // if (!ArrRecipientsNew.includes(this.currentUser.email)) {
+
+      //   this.toastService.showErrorHTMLWithTimeout(
+      //     'Bạn không có quyền xử lý hợp đồng này!',
+      //     '',
+      //     3000
+      //   );
+      //   this.router.navigate(['/main/dashboard']);
+      //   return
+      // };
+      // console.log("this.currentUser.email", this.currentUser);
+
       if (this.is_data_coordination) { // chỉ lấy dữ liệu của người điều phối
         if (this.is_data_coordination['recipients']) {
           let dataCoordination = this.is_data_coordination['recipients'].filter((p: any) => p.role == 1)[0]; // get dữ liệu người điều phối
@@ -278,7 +282,7 @@ export class FooterSignatureComponent implements OnInit {
             }
           }
         }
-        
+
         // this.datas.determine_contract = this.is_data_coordination; // data determine contract
         this.datas.determine_contract = this.datas.is_data_contract.participants; // data determine contract
         this.datas.step = variable.stepSampleContract.step_confirm_coordination; // set step 2
@@ -286,7 +290,7 @@ export class FooterSignatureComponent implements OnInit {
     } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
 
       this.contractService.getDetermineCoordination(this.recipientId).subscribe((response) => {
-        if(response.recipients[0].sign_type.length > 0 && response.recipients[0].sign_type[0].id == 5) {
+        if (response.recipients[0].sign_type.length > 0 && response.recipients[0].sign_type[0].id == 5) {
 
           this.contractId = response.contract_id;
 
@@ -294,43 +298,43 @@ export class FooterSignatureComponent implements OnInit {
             this.orgId = response.organization_id;
             this.unitService.getUnitById(this.orgId).toPromise().then(
               data => {
-                
+
                 //chi lay so luong hop dong khi chon to chuc cha to nhat
-                  //lay so luong hop dong da dung
-                  this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise().then(
-                    data => {
-      
-                      this.numContractUse = data.contract;
-                      this.eKYCContractUse = data.ekyc;
-                      this.smsContractUse = data.sms;
-      
-                              //lay so luong hop dong da mua
-                  this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise().then(
-                    data => {
-                      this.numContractBuy = data.contract;
-                      this.eKYCContractBuy = data.ekyc;
-                      this.smsContractBuy = data.sms;
-      
-                        if(Number(this.eKYCContractUse) + Number(1) > Number(this.eKYCContractBuy)) {
+                //lay so luong hop dong da dung
+                this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise().then(
+                  data => {
+
+                    this.numContractUse = data.contract;
+                    this.eKYCContractUse = data.ekyc;
+                    this.smsContractUse = data.sms;
+
+                    //lay so luong hop dong da mua
+                    this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise().then(
+                      data => {
+                        this.numContractBuy = data.contract;
+                        this.eKYCContractBuy = data.ekyc;
+                        this.smsContractBuy = data.sms;
+
+                        if (Number(this.eKYCContractUse) + Number(1) > Number(this.eKYCContractBuy)) {
                           this.toastService.showErrorHTMLWithTimeout('Số lượng ekyc sử dụng vượt quá số lượng ekyc đã mua', "", 3000);
                         } else {
                           this.submitChanges.emit(1);
                         }
-                    }, error => {
-                      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
-                    }
-                  )          
-                    }, error => {
-                      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
-                    }
-                  )
+                      }, error => {
+                        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+                      }
+                    )
+                  }, error => {
+                    this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
+                  }
+                )
               }, error => {
                 this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
               }
             )
           }))
 
-         
+
         } else {
           this.submitChanges.emit(1);
         }
@@ -357,12 +361,36 @@ export class FooterSignatureComponent implements OnInit {
 
   refuseContract() {
     if (this.datas.action_title == 'dieu_phoi') {
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+      // this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
+      // console.log("this.emailRecipientssssssssss",this.emailRecipients);
+      const ArrRecipients = this.datas.is_data_contract.participants[1].recipients;
+      const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email);
+      console.log("ArrRecipientsNew", ArrRecipientsNew);
+
+      // if (!ArrRecipientsNew.includes(this.currentUser.email)) {
+
+      //   this.toastService.showErrorHTMLWithTimeout(
+      //     'Bạn không có quyền xử lý hợp đồng này!',
+      //     '',
+      //     3000
+      //   );
+      //   this.router.navigate(['/main/dashboard']);
+      //   return
+      // };
+      console.log("this.currentUser.email", this.currentUser.email);
+      console.log("ArrRecipientsNew", ArrRecipientsNew);
+
       this.submitChanges.emit(1);
     }
   }
 
   downloadFilePDF() {
     this.submitChanges.emit(2);
+  }
+
+  endContract() {
+    this.router.navigate(['/main/c/receive/wait-processing']);
   }
 
 

@@ -25,6 +25,8 @@ import { CheckSignDigitalService } from 'src/app/service/check-sign-digital.serv
 import Swal from 'sweetalert2';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
+import { Validators } from '@angular/forms';
+import { parttern_input } from 'src/app/config/parttern';
 
 
 export class ContractConnectArr {
@@ -208,6 +210,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
         if (extension && extension.toLowerCase() == 'pdf') {
+
+          //Check file hợp đồng đã có chữ ký số hay chưa
           this.checkSignDigitalService.getList(file).subscribe((response) => {
             this.spinner.hide();
             if(response.length == 0) {
@@ -542,7 +546,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         // let id_type_1 = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 1)[0].id;
         await this.contractService.updateFileAttach(this.datas.document_id_1.id, data, 1).toPromise().then((res: any) => {
           this.datas.document_id_1.id = res?.id;
-          console.log("datas document ", this.datas.document_id_1);
         }, (error: HttpErrorResponse) => {
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000)
@@ -998,6 +1001,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.errorContractName = "error.contract.name.required";
       return false;
     }
+
+    // if(!parttern_input.input_form.test(this.name)) {
+    //   this.errorContractName = "error.contract.name.valid";
+    //   return false;
+    // }
+
     return true;
   }
 

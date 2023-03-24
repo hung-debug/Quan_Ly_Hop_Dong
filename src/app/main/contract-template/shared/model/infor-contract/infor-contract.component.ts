@@ -13,7 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
-import { parttern } from 'src/app/config/parttern';
+import { parttern, parttern_input } from 'src/app/config/parttern';
 import { CheckSignDigitalService } from 'src/app/service/check-sign-digital.service';
 import Swal from 'sweetalert2';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
@@ -638,7 +638,13 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     if(!this.name){
       this.errorContractName = "error.contract-template.name.required";
       return false;
-    }
+    } 
+
+    // if(!parttern_input.input_form.test(this.name)) {
+    //   this.errorContractName = "error.contract.template.name.valid";
+    //   return false;
+    // }
+
     return true;
   }
 

@@ -34,9 +34,9 @@
     <div>
       <button *ngIf="!this.is_show_coordination && ![2,3,4].includes(this.datas.roleContractReceived) && !view" type="button" name="next" class="next action-button" (click)="refuseContract()" style="background-color: #8B8B8B">{{'contract.status.fail' | translate}}</button>
       <button class="next action-button" (click)="autoScroll()">{{'auto.scroll' | translate}}</button>
+      <button *ngIf="this.is_show_coordination"  type="button" name="next" class="next action-button" (click)="endContract()">{{'end' | translate}}</button>
       <button *ngIf="((!this.is_show_coordination && !view) || this.datas.roleContractReceived) && this.lang == 'vi'  || !this.lang" (click)="action()" type="button" name="next" class="next action-button">{{this.datas.action_title == 'dieu_phoi' ? 'Điều phối' : 'Xác nhận'}}</button>
       <button *ngIf="((!this.is_show_coordination && !view) || this.datas.roleContractReceived) && this.lang == 'en'" (click)="action()" type="button" name="next" class="next action-button">{{this.datas.action_title == 'dieu_phoi' ? 'Coordinator' : 'Confirm'}}</button>
-      <!-- <button  type="button" name="next" class="next action-button" (click)="endContract()">{{'end' | translate}}</button> -->
     </div>
   </div>
 </div>

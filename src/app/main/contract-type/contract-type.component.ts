@@ -48,7 +48,7 @@ export class ContractTypeComponent implements OnInit {
       {header: 'contract-type.name', style:'text-align: left;' },
       {header: 'contract-type.code', style:'text-align: left;' },
       {header: 'contract-type.manage', style:'text-align: center;' },
-      ];
+    ];
 
     //lay id user
     let userId = this.userService.getAuthCurrentUser().id;

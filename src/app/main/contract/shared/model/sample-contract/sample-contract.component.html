@@ -91,18 +91,19 @@
                 </div>
             </div>
             <hr>
+            
             <div class="flex-column">
                 <label class="label-require">{{'size' | translate}}</label>
                 <div class="location">
                     <div class="location-drag">
                         <div class="label" style="font-size: 12px">{{'height' | translate}}</div>
                         <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')"
-                            [ngModel]="objSignInfo.width" [readOnly]="false">
+                            [(ngModel)]="objSignInfo.height" [readOnly]="false">
                     </div>
                     <div class="location-drag">
                         <div class="label" style="font-size: 12px">{{'width' | translate}}</div>
                         <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')"
-                            [ngModel]="objSignInfo.height" [readOnly]="false">
+                            [(ngModel)]="objSignInfo.width" [readOnly]="false">
                     </div>
                 </div>
             </div>

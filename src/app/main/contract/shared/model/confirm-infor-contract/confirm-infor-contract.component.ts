@@ -211,20 +211,31 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   }
 
   async SaveContract(action: string) {
-    if (
-      this.datas.is_action_contract_created &&
-      this.router.url.includes('edit')
-    ) {
+    if (this.datas.is_action_contract_created && this.router.url.includes('edit')) {
       let isHaveFieldId: any[] = [];
       let isNotFieldId: any[] = [];
       let isUserSign_clone = _.cloneDeep(this.datas.contract_user_sign);
       isUserSign_clone.forEach((res: any) => {
+        console.log("res ", res);
         res.sign_config.forEach((element: any) => {
+          if(!element.type) {
+            if(element.sign_unit == 'chu_ky_anh') {
+              element.type = 2;
+            } else if(element.sign_unit == 'chu_ky_so') {
+              element.type = 3;
+            } else if(element.sign_unit == 'so_tai_lieu') {
+              element.type = 4;
+            } else {
+              element.type = 1;
+            }
+          }
+
           if (element.id_have_data) {
             isHaveFieldId.push(element);
           } else isNotFieldId.push(element);
         });
       });
+
       this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId, action);
     } else {
       this.data_sample_contract = [];
@@ -250,8 +261,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       isContractUserSign_clone.forEach((element: any) => {
         if (element.sign_config.length > 0) {
           element.sign_config.forEach((item: any) => {
-            item['font'] = this.datas.font;
-            item['font_size'] = this.datas.size;
+            item['font'] = item.font ? item.font : 'Times New Roman';
+            item['font_size'] =  item.size ? item.size : 13;
             item['contract_id'] = this.datas.contract_id;
             item['document_id'] = this.datas.document_id;
             if (item.text_attribute_name) {
@@ -334,11 +345,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     }
   }
 
-  async getDefindDataSignEdit(
-    dataSignId: any,
-    dataSignNotId: any,
-    action: any
-  ) {
+  async getDefindDataSignEdit(dataSignId: any,dataSignNotId: any,action: any) {
     console.log("get defind data sign edit ");
     let dataSample_contract: any[] = [];
     if (dataSignId.length > 0) {
@@ -368,14 +375,14 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       let countIsSignId = 0;
       this.spinner.show();
       for (let i = 0; i < dataSignId.length; i++) {
+
+        console.log("da ", dataSignId);
+
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
 
-        dataSignId[i].font_size = this.datas.size;
-        await this.contractService
-          .getContractSampleEdit(dataSignId[i], id)
-          .toPromise()
-          .then(
+        // dataSignId[i].font_size = this.datas.size;
+        await this.contractService.getContractSampleEdit(dataSignId[i], id).toPromise().then(
             (data: any) => {
               dataSample_contract.push(data);
             },
@@ -417,8 +424,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         'value',
       ];
       dataSignNotId.forEach((item: any) => {
-        item['font'] = this.datas.font;
-        item['font_size'] = this.datas.size;
+        item['font'] = item.font ? item.font : 'Times New Roman';
+        item['font_size'] = item.size ? item.size : 13;
         item['contract_id'] = this.datas.contract_id;
         item['document_id'] = this.datas.document_id;
         if (item.text_attribute_name) {

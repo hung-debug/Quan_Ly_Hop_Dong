@@ -27,7 +27,10 @@
   align-items: center;
   padding-left: 16px;
 }
-
+.sms_languge{
+  display: flex;
+  align-items: center;
+}
 .label_detail {
   font-weight: 500;
   color: #0160AE;
@@ -294,9 +297,10 @@ input[type="checkbox"] {
       .participants--input {
         display: flex;
         justify-content: space-around;
+        
 
         .participants__name {
-          width: 40%;
+          width: 41%;
 
           .input-data {
             border: 1px solid #106DB6;
@@ -413,6 +417,20 @@ input[type="checkbox"] {
         margin-bottom: 10px;
       }
     }
+    .participants-border2 {
+      border-radius: 11px 11px 11px 11px;
+      border: 1px solid #ddd;
+
+      .participants--add {
+        display: inline-block;
+        color: #106DB6;
+        cursor: pointer;
+      }
+
+      &:not(:last-child) {
+        margin-bottom: 10px;
+      }
+    }
 
     ::ng-deep .multiselect-dropdown .dropdown-btn {
       border: 1px solid #106DB6 !important;
@@ -450,3 +468,41 @@ input[type="checkbox"] {
 //::ng-deep .mat-form-field-flex {
 //  background-color: white;
 //}
+.db_icon_english {
+  height: 20px;
+  width: 30px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url(../../../../../../assets/img/icon_english.svg);
+}
+.db_icon_vietnam {
+  height: 20px;
+  width: 30px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url(../../../../../../assets/img/icon_vietnam.svg);
+}
+.drop_menu{
+  border-color: #C2E4FF;
+  padding: 0;
+  font-size: inherit;
+  right: 10px;
+  left: unset !important;
+}
+.language{
+  margin-left: 20px;
+}
+.switch-language{
+  padding: 5px;
+}
+//::ng-deep .mat-form-field-flex {
+//  background-color: white;
+//}
+.dropdown-toggle:empty::after {
+  margin-left: 22px;
+  margin-bottom: 8px;
+  width: 9px;
+}
+.btn-outline-primary:hover{
+  color: grey;
+}
