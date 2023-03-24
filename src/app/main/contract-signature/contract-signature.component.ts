@@ -581,9 +581,6 @@ export class ContractSignatureComponent implements OnInit {
             try {
               let fileContract = await this.contractServiceV1.getFileContract(idContract[i]).toPromise();
 
-
-              console.log("file ", fileContract);
-
               const pdfC2 = fileContract.find((p: any) => p.type == 2);
               const pdfC1 = fileContract.find((p: any) => p.type == 1);
   
