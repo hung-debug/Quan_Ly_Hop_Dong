@@ -18,7 +18,7 @@
 
         <!--Ngày tạo hợp đồng-->
         <div class="col-md-2">
-            <div>{{ 'create-date' | translate}}</div>
+            <div>{{ 'create-date' | translate}} *</div>
             <div class="input-line">
                 <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"
                           
@@ -38,6 +38,7 @@
                     placeholder="{{'contract.status.v2' | translate}}" 
                     [showClear]="true"  
                     [options]="optionsStatus"
+                    [(ngModel)]="contractStatus"
                 ></p-dropdown>
             </div>
         </div>
