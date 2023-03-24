@@ -191,45 +191,50 @@ export class ReportStatusContractComponent implements OnInit {
   }
 
   //Export ra file excel
-  export() {
-    // this.spinner.show();
-    // if(!this.validData()) {
-    //   return;
-    // }
+  export(flag: boolean) {
+    this.spinner.show();
+    if(!this.validData()) {
+      return;
+    }
 
-    // let idOrg = this.organization_id;
-    // if(this.selectedNodeOrganization.data) {
-    //   idOrg = this.selectedNodeOrganization.data;
-    // }
+    let idOrg = this.organization_id;
+    if(this.selectedNodeOrganization.data) {
+      idOrg = this.selectedNodeOrganization.data;
+    }
 
-    // let from_date: any = '';
-    // let to_date: any = '';
-    // if(this.date && this.date.length > 0) {
-    //   from_date = this.datepipe.transform(this.date[0],'yyyy-MM-dd');
-    //   to_date = this.datepipe.transform(this.date[1],'yyyy-MM-dd');
-    // }
+    let from_date: any = '';
+    let to_date: any = '';
+    if(this.date && this.date.length > 0) {
+      from_date = this.datepipe.transform(this.date[0],'yyyy-MM-dd');
+      to_date = this.datepipe.transform(this.date[1],'yyyy-MM-dd');
+    }
 
-    // let contractStatus = this.contractStatus;
+    let contractStatus = this.contractStatus;
 
-    // if(!contractStatus) 
-    //   contractStatus = -1;
+    if(!contractStatus) 
+      contractStatus = -1;
 
-    // let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChilData='+this.fetchChildData;
-    // this.reportService.export('rp-detail',idOrg,params, true).subscribe((response: any) => {
-    //   this.spinner.hide();
-    //     let url = window.URL.createObjectURL(response);
-    //     let a = document.createElement('a');
-    //     document.body.appendChild(a);
-    //     a.setAttribute('style', 'display: none');
-    //     a.href = url;
-    //     a.download = `report-detail_${new Date().getTime()}.xlsx`;
-    //     a.click();
-    //     window.URL.revokeObjectURL(url);
-    //     a.remove();
+    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChilData='+this.fetchChildData;
+    this.reportService.export('rp-by-status-process',idOrg,params, true).subscribe((response: any) => {
 
-    //     this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
-    // })
- 
+      this.spinner.hide();
+
+      if(flag) {
+        let url = window.URL.createObjectURL(response);
+        let a = document.createElement('a');
+        document.body.appendChild(a);
+        a.setAttribute('style', 'display: none');
+        a.href = url;
+        a.download = `report-by-status-process_${new Date().getTime()}.xlsx`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+
+        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+      }
+      
+    })
+
   }
 
   changeCheckBox(event: any) {

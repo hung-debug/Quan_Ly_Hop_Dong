@@ -215,7 +215,7 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
           document.body.appendChild(a);
           a.setAttribute('style', 'display: none');
           a.href = url;
-          a.download = `report-detail_${new Date().getTime()}.xlsx`;
+          a.download = `report-by-status_${new Date().getTime()}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
           a.remove();

@@ -245,8 +245,7 @@ export class ContractSignatureComponent implements OnInit {
         });
     } else if (this.filter_status == 1 || this.filter_status == 4) {
       if (this.typeDisplay == 'signOne')
-        this.contractService
-          .getContractMyProcessList(
+        this.contractService.getContractMyProcessList(
             this.filter_name,
             this.filter_type,
             this.filter_contract_no,
@@ -289,9 +288,7 @@ export class ContractSignatureComponent implements OnInit {
             this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);        
           });
       else {
-        this.contractService
-          .getContractMyProcessListSignMany()
-          .subscribe((data) => {
+        this.contractService.getContractMyProcessListSignMany().subscribe((data) => {
             this.contractsSignMany = data;
             if (this.pageTotal == 0) {
               this.p = 0;
@@ -301,24 +298,15 @@ export class ContractSignatureComponent implements OnInit {
               this.setPage();
             }
             this.contractsSignMany.forEach((key: any, v: any) => {
-              this.contractsSignMany[v].contractId =
-                key.participant.contract.id;
-              this.contractsSignMany[v].contractName =
-                key.participant.contract.name;
-              this.contractsSignMany[v].contractNumber =
-                key.participant.contract.code;
-              this.contractsSignMany[v].contractSignTime =
-                key.participant.contract.sign_time;
-              this.contractsSignMany[v].contractCreateTime =
-                key.participant.contract.created_time;
-              this.contractsSignMany[v].contractStatus =
-                key.participant.contract.status;
-              this.contractsSignMany[v].contractCecaPush =
-                key.participant.contract.ceca_push;
-              this.contractsSignMany[v].contractCecaStatus =
-                key.participant.contract.ceca_status;
-              this.contractsSignMany[v].contractReleaseState =
-                key.participant.contract.release_state;
+              this.contractsSignMany[v].contractId = key.participant.contract.id;
+              this.contractsSignMany[v].contractName = key.participant.contract.name;
+              this.contractsSignMany[v].contractNumber = key.participant.contract.code;
+              this.contractsSignMany[v].contractSignTime = key.participant.contract.sign_time;
+              this.contractsSignMany[v].contractCreateTime = key.participant.contract.created_time;
+              this.contractsSignMany[v].contractStatus = key.participant.contract.status;
+              this.contractsSignMany[v].contractCecaPush = key.participant.contract.ceca_push;
+              this.contractsSignMany[v].contractCecaStatus = key.participant.contract.ceca_status;
+              this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
               this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
               this.contractsSignMany[v].checked = false;
             });
@@ -458,8 +446,6 @@ export class ContractSignatureComponent implements OnInit {
     let idRecipient: any = [];
     let idContract: any = [];
 
-    console.log("co ", contractsSignManyChecked);
-
     //id recipient
     //id contract
     contractsSignManyChecked.forEach((ele: any) => {
@@ -589,14 +575,28 @@ export class ContractSignatureComponent implements OnInit {
               this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người tham gia hợp đồng','',3000);
               return false;
             }
-        
-
           }
 
           for (let i = 0; i < idContract.length; i++) {
             try {
-              const fileContract = await this.contractServiceV1.getFileContract(idContract[i]).toPromise();
-              fileC.push(fileContract[0].path)
+              let fileContract = await this.contractServiceV1.getFileContract(idContract[i]).toPromise();
+
+
+              console.log("file ", fileContract);
+
+              const pdfC2 = fileContract.find((p: any) => p.type == 2);
+              const pdfC1 = fileContract.find((p: any) => p.type == 1);
+  
+              if (pdfC2) {
+                fileContract = pdfC2.path;
+              } else if (pdfC1) {
+                fileContract = pdfC1.path;
+              } else {
+                return;
+              }
+              // console.log("file c ", fileContract);
+
+              fileC.push(fileContract)
             } catch(err) {
               this.toastService.showErrorHTMLWithTimeout('Lỗi lấy file cần ký','',3000);
               return false;
@@ -730,20 +730,22 @@ export class ContractSignatureComponent implements OnInit {
 
       base64String.push(encode(base64StringPdf));
 
-        //Lấy toạ độ ô ký của từng hợp đồng
-        const dataObjectSignature = await this.contractServiceV1.getDataObjectSignatureLoadChange(idContract[i]).toPromise();
+      console.log("base ", base64StringPdf);
 
-        for(let j = 0; j < dataObjectSignature.length; j++) {
-           if(dataObjectSignature[j].recipient) {
-            if(recipientId[i] == dataObjectSignature[j].recipient.id) {
-                  x.push(dataObjectSignature[j].coordinate_x);
-                  y.push(dataObjectSignature[j].coordinate_y);
-                  h.push(dataObjectSignature[j].height);
-                  w.push(dataObjectSignature[j].width);
-  
-                  //Lấy ra trang ký của từng file hợp đồng
-                  page.push(dataObjectSignature[j].page);
-            }
+      //Lấy toạ độ ô ký của từng hợp đồng
+      const dataObjectSignature = await this.contractServiceV1.getDataObjectSignatureLoadChange(idContract[i]).toPromise();
+
+      for(let j = 0; j < dataObjectSignature.length; j++) {
+          if(dataObjectSignature[j].recipient) {
+              if(recipientId[i] == dataObjectSignature[j].recipient.id) {
+                    x.push(dataObjectSignature[j].coordinate_x);
+                    y.push(dataObjectSignature[j].coordinate_y);
+                    h.push(dataObjectSignature[j].height);
+                    w.push(dataObjectSignature[j].width);
+    
+                    //Lấy ra trang ký của từng file hợp đồng
+                    page.push(dataObjectSignature[j].page);
+              }
            }
         }
   
