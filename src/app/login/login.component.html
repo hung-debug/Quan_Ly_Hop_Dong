@@ -1,6 +1,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <div *ngIf="this.mobile == false" class="all">
+
   <div class="full-height d-flex flex-row">
     <div class="left-background"></div>
     <div class="right-panel">
@@ -29,7 +30,7 @@
           </button>
         </div>
       </div>
-      <div>
+      <div class="login-form">
         <div class="small-logo d-flex flex-column justify-content-center">
           <div>
             <img
@@ -90,14 +91,20 @@
             </div>
 
             <div class="form-group">
-              <p
-                class="alert alert-danger"
-                role="alert"
-                *ngIf="error"
-                style="text-align: center"
-              >
+              <p class="alert alert-danger" role="alert" *ngIf="error" style="text-align: center">
                 <strong>{{ errorDetail | translate }}</strong>
               </p>
+            </div>
+
+            <div class="form-group" *ngIf="captcha">
+              <label>Enter captcha</label>
+              <div id="preview" class="preview" #previewCaptcha></div>
+              <div class="input-line"> 
+                <input formControlName="captchaName" class="input-captcha" type="text" placeholder="Enter captcha text"/>
+                <button>
+                  <i class="fa fa-refresh"></i>
+                </button>
+              </div> 
             </div>
 
             <div class="form-group sub-login">
@@ -213,12 +220,7 @@
             </div>
 
             <div class="form-group">
-              <p
-                class="alert alert-danger"
-                role="alert"
-                *ngIf="error"
-                style="text-align: center"
-              >
+              <p class="alert alert-danger" role="alert" *ngIf="error" style="text-align: center">
                 <strong>{{ errorDetail | translate }}</strong>
               </p>
             </div>

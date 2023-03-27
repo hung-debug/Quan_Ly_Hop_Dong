@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit {
 
   mobile: boolean = true;
   error: Boolean = false;
@@ -28,13 +28,16 @@ export class LoginComponent implements OnInit {
   secretary: any = "s8";
   coordinates: any = "c8";
 
+  @ViewChild('previewCaptcha') previewCaptcha: ElementRef;
+
   constructor(
     private authService: AuthenticationService,
     private router: Router,
     private deviceService: DeviceDetectorService,
     public translate: TranslateService,
     private route: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private changeDetector : ChangeDetectorRef
   ) {
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang('vi');
@@ -44,11 +47,13 @@ export class LoginComponent implements OnInit {
   loginForm = new FormGroup({
     tax_code: new FormControl(''),
     username: new FormControl(''),
-    password: new FormControl('')
+    password: new FormControl(''),
+    captchaName: new FormControl('')
   })
 
   kyTuCach: any = "&";
-
+  captcha: boolean = false;
+  countLoginFail: number = 0;
   loginUser() {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('myTaxCode');
@@ -88,10 +93,100 @@ export class LoginComponent implements OnInit {
           }
         }
 
-        if(this.type == 0) {
+        if(this.captcha) {
+          if(this.loginForm.value.captchaName == this.previewCaptcha.nativeElement.innerText.replaceAll(" ","")) {
+            this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type).subscribe((data) => {
+              if(data?.code == '00'){
+                if (this.authService.isLoggedInSuccess() == true) {
+                  this.countLoginFail = 0;
+                  this.captcha = false;
+                  if (sessionStorage.getItem("url")) {
+                    if (urlLink) {
+                      if (urlLink.includes(this.coordinates)) {
+                        this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.coordinates+'/' + isContractId]);
+                      } else if (urlLink.includes(this.consider)) {
+                        this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.consider+'/' + isContractId],
+                          {
+                            queryParams: {'recipientId': isRecipientId}
+                          });
+                      } else if (urlLink.includes(this.secretary)) {
+                        this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.secretary+'/' + isContractId],
+                          {
+                            queryParams: {'recipientId': isRecipientId}
+                          });
+                      } else if (urlLink.includes(this.signatures)) {
+                        this.router.navigate(['/main/'+this.contract_signatures+'/'+this.signatures+'/' + isContractId],
+                          {
+                            queryParams: {'recipientId': isRecipientId}
+                          });
+                      } else if (urlLink.includes('contract-template')) {
+                        this.router.navigate(['/main/contract-template/form/detail/' + isContractId]);
+                      } else if (urlLink.includes('form-contract')) {
+                        this.router.navigate(['/main/form-contract/detail/' + isContractId]);
+                      }
+                    } else {
+                      this.error = false;
+                      if (this.type == 0) {
+                        this.router.navigate(['/main/dashboard']);
+                        // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                        //   this.router.navigate(['/main/dashboard']);
+                        // });
+                      } else {
+                        this.router.navigate([localStorage.getItem('url')]);
+                      }
+                    }
+                  } else {
+                    this.error = false;
+                    if (this.type == 0) {
+                      this.router.navigate(['/main/dashboard']);
+                      // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                      //   this.router.navigate(['/main/dashboard']);
+                      // });
+                    } else {
+                      this.router.navigate([localStorage.getItem('url')]);
+                    }
+                  }
+                } else {
+                  this.countLoginFail++;
+                  this.error = true;
+                  this.errorDetail = "error.username.password";
+                }
+              }else if(data?.code == '01'){
+                this.countLoginFail++;
+                this.error = true;
+                this.errorDetail = "Tài khoản không hoạt động";
+              }else if(data?.code == '02'){
+                this.countLoginFail++;
+                this.error = true;
+                this.errorDetail = "Tổ chức không hoạt động";
+              }else {
+                this.countLoginFail++;
+                this.error = true;
+                this.errorDetail = "error.username.password";
+              }
+      
+              },
+              error => {
+                this.countLoginFail++;
+                console.log(localStorage.getItem('checkUser'));
+                if(localStorage.getItem('checkUser') == 'error'){
+                  this.error = true;
+                  this.errorDetail = "error.username.password";
+                }else{
+                  this.error = true;
+                  this.errorDetail = "error.server";
+                }
+              }
+            );
+          } else {
+            return false;
+          }
+        } else {
           this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type).subscribe((data) => {
             if(data?.code == '00'){
               if (this.authService.isLoggedInSuccess() == true) {
+                this.captcha = false;
+                this.countLoginFail = 0;
                 if (sessionStorage.getItem("url")) {
                   if (urlLink) {
                     if (urlLink.includes(this.coordinates)) {
@@ -139,22 +234,27 @@ export class LoginComponent implements OnInit {
                   }
                 }
               } else {
+                this.countLoginFail++;
                 this.error = true;
                 this.errorDetail = "error.username.password";
               }
             }else if(data?.code == '01'){
+              this.countLoginFail++;
               this.error = true;
               this.errorDetail = "Tài khoản không hoạt động";
             }else if(data?.code == '02'){
+              this.countLoginFail++;
               this.error = true;
               this.errorDetail = "Tổ chức không hoạt động";
             }else {
+              this.countLoginFail++;
               this.error = true;
               this.errorDetail = "error.username.password";
             }
     
             },
             error => {
+              this.countLoginFail++;
               console.log(localStorage.getItem('checkUser'));
               if(localStorage.getItem('checkUser') == 'error'){
                 this.error = true;
@@ -165,89 +265,152 @@ export class LoginComponent implements OnInit {
               }
             }
           );
-        } else if(this.type == 1) {
-          this.authService.loginAuthencationUserOut(this.loginForm.value.username, this.loginForm.value.password, this.type, isContractId).subscribe((data) => {
-            if(data?.code == '00'){
-              if (this.authService.isLoggedInSuccess() == true) {
-                if (sessionStorage.getItem("url")) {
-                  if (urlLink) {
-                    if (urlLink.includes(this.coordinates)) {
-                      this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.coordinates+'/' + isContractId]);
-                    } else if (urlLink.includes(this.consider)) {
-                      this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.consider+'/' + isContractId],
-                        {
-                          queryParams: {'recipientId': isRecipientId}
-                        });
-                    } else if (urlLink.includes(this.secretary)) {
-                      this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.secretary+'/' + isContractId],
-                        {
-                          queryParams: {'recipientId': isRecipientId}
-                        });
-                    } else if (urlLink.includes(this.signatures)) {
-                      this.router.navigate(['/main/'+this.contract_signatures+'/'+this.signatures+'/' + isContractId],
-                        {
-                          queryParams: {'recipientId': isRecipientId}
-                        });
-                    } else if (urlLink.includes('contract-template')) {
-                      this.router.navigate(['/main/contract-template/form/detail/' + isContractId]);
-                    } else if (urlLink.includes('form-contract')) {
-                      this.router.navigate(['/main/form-contract/detail/' + isContractId]);
-                    }
-                  } else {
-                    this.error = false;
-                    if (this.type == 0) {
-                      this.router.navigate(['/main/dashboard']);
-                      // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                      //   this.router.navigate(['/main/dashboard']);
-                      // });
-                    } else {
-                      this.router.navigate([localStorage.getItem('url')]);
-                    }
-                  }
-                } else {
-                  this.error = false;
-                  if (this.type == 0) {
-                    this.router.navigate(['/main/dashboard']);
-                    // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                    //   this.router.navigate(['/main/dashboard']);
-                    // });
-                  } else {
-                    this.router.navigate([localStorage.getItem('url')]);
-                  }
-                }
-              } else {
-                this.error = true;
-                this.errorDetail = "error.username.password";
-              }
-            }else if(data?.code == '01'){
-              this.error = true;
-              this.errorDetail = "Tài khoản không hoạt động";
-            }else if(data?.code == '02'){
-              this.error = true;
-              this.errorDetail = "Tổ chức không hoạt động";
-            }else {
-              this.error = true;
-              this.errorDetail = "error.username.password";
-            }
-    
-            },
-            error => {
-              console.log(localStorage.getItem('checkUser'));
-              if(localStorage.getItem('checkUser') == 'error'){
-                this.error = true;
-                this.errorDetail = "error.username.password";
-              }else{
-                this.error = true;
-                this.errorDetail = "error.server";
-              }
-            }
-          );
+          
+          if(this.countLoginFail >= 3) {
+            console.log("vao day ");
+            this.captcha = true;
+            this.generateCaptcha();
+          }
         }
+
+        // if(this.type == 0) {
+  
+
+        // } else if(this.type == 1) {
+        //   this.authService.loginAuthencationUserOut(this.loginForm.value.username, this.loginForm.value.password, this.type, isContractId).subscribe((data) => {
+        //     if(data?.code == '00'){
+        //       if (this.authService.isLoggedInSuccess() == true) {
+        //         if (sessionStorage.getItem("url")) {
+        //           if (urlLink) {
+        //             if (urlLink.includes(this.coordinates)) {
+        //               this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.coordinates+'/' + isContractId]);
+        //             } else if (urlLink.includes(this.consider)) {
+        //               this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.consider+'/' + isContractId],
+        //                 {
+        //                   queryParams: {'recipientId': isRecipientId}
+        //                 });
+        //             } else if (urlLink.includes(this.secretary)) {
+        //               this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.secretary+'/' + isContractId],
+        //                 {
+        //                   queryParams: {'recipientId': isRecipientId}
+        //                 });
+        //             } else if (urlLink.includes(this.signatures)) {
+        //               this.router.navigate(['/main/'+this.contract_signatures+'/'+this.signatures+'/' + isContractId],
+        //                 {
+        //                   queryParams: {'recipientId': isRecipientId}
+        //                 });
+        //             } else if (urlLink.includes('contract-template')) {
+        //               this.router.navigate(['/main/contract-template/form/detail/' + isContractId]);
+        //             } else if (urlLink.includes('form-contract')) {
+        //               this.router.navigate(['/main/form-contract/detail/' + isContractId]);
+        //             }
+        //           } else {
+        //             this.error = false;
+        //             if (this.type == 0) {
+        //               this.router.navigate(['/main/dashboard']);
+        //               // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        //               //   this.router.navigate(['/main/dashboard']);
+        //               // });
+        //             } else {
+        //               this.router.navigate([localStorage.getItem('url')]);
+        //             }
+        //           }
+        //         } else {
+        //           this.error = false;
+        //           if (this.type == 0) {
+        //             this.router.navigate(['/main/dashboard']);
+        //             // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        //             //   this.router.navigate(['/main/dashboard']);
+        //             // });
+        //           } else {
+        //             this.router.navigate([localStorage.getItem('url')]);
+        //           }
+        //         }
+        //       } else {
+        //         this.error = true;
+        //         this.errorDetail = "error.username.password";
+        //       }
+        //     }else if(data?.code == '01'){
+        //       this.error = true;
+        //       this.errorDetail = "Tài khoản không hoạt động";
+        //     }else if(data?.code == '02'){
+        //       this.error = true;
+        //       this.errorDetail = "Tổ chức không hoạt động";
+        //     }else {
+        //       this.error = true;
+        //       this.errorDetail = "error.username.password";
+        //     }
+    
+        //     },
+        //     error => {
+        //       console.log(localStorage.getItem('checkUser'));
+        //       if(localStorage.getItem('checkUser') == 'error'){
+        //         this.error = true;
+        //         this.errorDetail = "error.username.password";
+        //       }else{
+        //         this.error = true;
+        //         this.errorDetail = "error.server";
+        //       }
+    //         }
+    //       );
+    //     }
 
 
       
     }
 
+  }
+
+  captchaValue: any;
+  generateCaptcha() {
+    let code = (Math.random() * 1000000000).toString();
+    let value = window.btoa(code);
+
+    let captchaValue = value.substring(0,5+Math.random()*5);
+
+    this.captchaValue = captchaValue;
+
+    this.setCaptcha();
+
+  }
+
+  ngAfterViewInit() {
+    // if(this.captcha)
+      this.previewCaptcha.nativeElement.innerHTML = this.html;
+
+    // console.log("this pre ",this.previewCaptcha.nativeElement.innerText.replaceAll(" ",""))
+  }
+
+  html: any;
+  setCaptcha() {
+    const fonts = ["cursive","sans-serif","serif","monospace"];
+    let html = this.captchaValue.split("").map((char: any) => {
+      const rotate = -20 + Math.trunc(Math.random() * 30);
+
+      const font = Math.trunc(Math.random() * fonts.length);
+
+      return `<span
+      style="
+        transform:rotate(${rotate}deg);
+        font-family:${fonts[font]}
+      "
+    >${char}
+    </span>`
+    }).join("");
+
+    this.html = html;   
+
+
+    // console.log("ca ", this.captcha)
+
+    // if(!this.captcha)
+
+    this.changeDetector.detectChanges();
+
+        this.previewCaptcha.nativeElement.innerHTML = this.html;
+
+
+    console.log("html ", this.html);
   }
 
   toggleFieldTextType() {
@@ -256,9 +419,7 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
-
-    console.log("ratio ", window.devicePixelRatio);
-
+    // this.generateCaptcha();
     if (sessionStorage.getItem('type')) {
       this.type = 1;
     } else this.type = 0;
