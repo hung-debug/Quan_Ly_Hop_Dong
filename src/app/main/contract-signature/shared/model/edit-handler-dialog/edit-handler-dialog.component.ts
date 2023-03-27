@@ -174,7 +174,23 @@ export class EditHandlerComponent implements OnInit {
         this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
           (res: any) => {
             if (!res.success) {
-              this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
+              // this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
+              // this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
+              console.log("res SU", res);
+              switch (res.message) {
+                case "E01": {
+                  this.toastService.showErrorHTMLWithTimeout("email.already.exist", "", 3000);
+                  break
+                }
+                case "E02": {
+                  this.toastService.showErrorHTMLWithTimeout("phone.already.exist", "", 3000);
+                  break
+                }
+                case "E03": {
+                  this.toastService.showErrorHTMLWithTimeout("cardid.already.exist", "", 3000);
+                  break
+                } default: this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
+              }
             } else {
               this.toastService.showSuccessHTMLWithTimeout('Cập nhật người xử lý thành công', "", 3000);
               dataUpdate = { ...dataUpdate, "change_num": this.data.change_num + 1 }
