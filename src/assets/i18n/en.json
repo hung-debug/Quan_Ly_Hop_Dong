@@ -557,5 +557,6 @@
   "contract.status.canceled":"Cancel",
   "prepare_expires":"Prepare expire",
   "total":"Total",
-  "valid.login.user":"Participants in the partner's contract processing flow must not overlap"
+  "valid.login.user":"Participants in the partner's contract processing flow must not overlap",
+  "captcha.wrong":"Wrong captcha"
 }

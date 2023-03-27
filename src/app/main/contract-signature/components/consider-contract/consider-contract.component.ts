@@ -1661,6 +1661,10 @@ export class ConsiderContractComponent
                 return false;
               }
 
+              if(this.failUsbToken) {
+                return false;
+              }
+
               const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, this.base64Data);
               if (!sign.recipient_id) {
                 this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token','',3000);
@@ -1683,6 +1687,8 @@ export class ConsiderContractComponent
             }
           }
         }
+
+        console.log("abc ");
         return true;
       } else {
         this.toastService.showErrorHTMLWithTimeout(
@@ -2252,8 +2258,11 @@ export class ConsiderContractComponent
       });
       return;
     }
+
     const sessionId = JSON.parse(window.atob(apiSessionId.data)).SessionId;
     this.sessionIdUsbToken = sessionId;
+
+    console.log("sess ", this.sessionIdUsbToken);
 
     if (!sessionId) {
       this.spinner.hide();
@@ -2298,6 +2307,8 @@ export class ConsiderContractComponent
       'request=' + json_req
     );
     const cert = JSON.parse(window.atob(apiCert.data));
+
+    console.log("cert ", cert);
 
     if (cert.certInfo) {
       this.signCertDigital = cert.certInfo.SerialNumber;
@@ -2352,9 +2363,12 @@ export class ConsiderContractComponent
     const hexDigestTempFile = emptySignature.hexDigestTempFile;
     const fieldName = emptySignature.fieldName;
 
+    console.log("ba ", emptySignature);
+
     await this.callDCSigner(base64TempData, hexDigestTempFile, fieldName);
   }
 
+  failUsbToken: boolean = false;
   async callDCSigner(
     base64TempData: any,
     hexDigestTempFile: any,
@@ -2380,19 +2394,22 @@ export class ConsiderContractComponent
         window.atob(callServiceDCSigner.data)
       );
 
+      if(dataSignatureToken.ResponseCode != 0) {
+        console.log("da ", dataSignatureToken);
+        this.toastService.showErrorHTMLWithTimeout(
+          'Lỗi ký usb token ' + dataSignatureToken.ResponseMsg,
+          '',
+          3000
+        );
+        this.failUsbToken = true;
+        return;
+      }
+
       const signatureToken = dataSignatureToken.Signature;
 
-      await this.callMergeTimeStamp(
-        signatureToken,
-        fieldName,
-        hexDigestTempFile
-      );
+      await this.callMergeTimeStamp(signatureToken,fieldName,hexDigestTempFile);
     } catch (err) {
-      this.toastService.showErrorHTMLWithTimeout(
-        'Lỗi ký usb token ' + err,
-        '',
-        3000
-      );
+      this.toastService.showErrorHTMLWithTimeout('Lỗi ký usb token ' + err,'',3000);
       return;
     }
   }
