@@ -50,6 +50,8 @@ export class ReportStatusContractComponent implements OnInit {
 
   orgName: any;
 
+  Arr = Array;
+
   constructor(
     private appService: AppService,
     private userService: UserService,
@@ -111,6 +113,12 @@ export class ReportStatusContractComponent implements OnInit {
       );
     });
 
+    this.setColForTable();
+
+
+  }
+
+  setColForTable() {
     this.cols = [
       {
         id: 1,
@@ -141,21 +149,21 @@ export class ReportStatusContractComponent implements OnInit {
         rowspan: 1,
       },
       {
-        id: 11,
+        id: 1000,
         header: 'user.ed',
         style: 'text-align: left',
         colspan: 1,
         rowspan: 1,
       },
       {
-        id: 11,
+        id: 1001,
         header: 'user.ing',
         style: 'text-align: left',
         colspan: 1,
         rowspan: 1,
       },
       {
-        id: 11,
+        id: 1002,
         header: 'user.not.process',
         style: 'text-align: left',
         colspan: 1,
@@ -174,6 +182,7 @@ export class ReportStatusContractComponent implements OnInit {
   }
 
   //Export ra file excel
+  maxParticipants: number = 0;
   export(flag: boolean) {
     if(!this.validData()) {
       return;
@@ -216,17 +225,21 @@ export class ReportStatusContractComponent implements OnInit {
 
         this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
       } else {
-        // this.list[0] = "AAA";
+        this.setColForTable();
+        for(let i = 0; i < response.maxParticipant; i++) {
+          this.cols.push({
+            id: 10+i,
+            header: 'Bên được yêu cầu ký '+(i+1),
+            style: 'text-align: left;',
+            colspan: 1,
+            rowspan: 1,
+          })
+        }
 
-        // // console.log("response ", response);
+        this.maxParticipants = response.maxParticipant;
+        this.cols.sort((a,b) => a.id - b.id )
 
-        // for(let i = 0; i < response.length; i++) {
-        //   this.list[i+1] = response[i];
-        // }
-
-        // this.list = response;
-
-        this.list = response;
+        this.list = response.contracts;
       }
       
     })

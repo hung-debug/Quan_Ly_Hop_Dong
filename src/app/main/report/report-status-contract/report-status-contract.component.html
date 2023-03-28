@@ -64,16 +64,22 @@
                 </tr>
             </ng-template>
 
-            <ng-template pTemplate="body" let-list let-i="rowIndex">
+            <ng-template pTemplate="body" let-list let-row="rowIndex">
                 <tr>
-                    <td *ngIf="i == 0">{{this.orgName}}</td>
-                    <td *ngIf="i > 0">{{list.name}}</td>
-                    <td  *ngIf="i > 0">{{list.typeName}}</td>
-                    <td  *ngIf="i > 0">{{this.convert(list.status)}}</td>
-                    <td  *ngIf="i > 0">{{list.participants[0].name}}</td>
-                    <td  *ngIf="i > 0">{{list.processedUser}}</td>
-                    <td  *ngIf="i > 0">{{list.processingUser}}</td>
-                    <td  *ngIf="i > 0">{{list.notProcessedYet}}</td>
+                    <td *ngIf="row == 0">{{this.orgName}}</td>
+                    <td *ngIf="row > 0">{{list.name}}</td>
+                    <td  *ngIf="row > 0">{{list.typeName}}</td>
+                    <td  *ngIf="row > 0">{{this.convert(list.status)}}</td>
+                    <td  *ngIf="row > 0">{{list.organization.name}}</td>
+                    <td *ngFor="let i of Arr(maxParticipants).fill(1)">
+                        <span *ngIf="list.participants[i]">
+                            {{ list.participants[i].name }}
+                        </span>
+                    </td>
+
+                    <td  *ngIf="row > 0">{{list.processedUser}}</td>
+                    <td  *ngIf="row > 0">{{list.processingUser}}</td>
+                    <td  *ngIf="row > 0">{{list.notProcessedYet}}</td>
                 </tr>
             </ng-template>
 
