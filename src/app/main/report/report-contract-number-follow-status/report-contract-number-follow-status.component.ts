@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
+import { ConvertStatusService } from 'src/app/service/convert-status.service';
 import { InputTreeService } from 'src/app/service/input-tree.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
@@ -56,7 +57,8 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
     private reportService: ReportService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private translate: TranslateService 
+    private translate: TranslateService,
+    private convertStatusService: ConvertStatusService 
   ) { }
 
   ngOnInit(): void {
@@ -277,20 +279,7 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
   }
 
   convert(code: string) {
-    if(code == 'processed') {
-      return this.translate.instant('contract.status.complete');
-    } else if(code == 'processing') {
-      return this.translate.instant('contract.status.processing');
-    } else if(code == 'canceled') {
-      return this.translate.instant('contract.status.cancel');
-    } else if(code == 'rejected') {
-      return this.translate.instant('contract.status.fail');
-    } else if(code == 'expired') {
-      return this.translate.instant('contract.status.overdue');
-    } else if(code == 'prepare_expires') {
-      return this.translate.instant('prepare_expires');
-    }
-    return code;
+    return this.convertStatusService.convert(code);
   }
 
   changeCheckBox(event: any) {

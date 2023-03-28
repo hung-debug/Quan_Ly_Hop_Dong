@@ -31,9 +31,13 @@ export class AuthenticationService {
   constructor(private http: HttpClient) { }
 
 
-  loginAuthencation(username: string, password: string, type: number) {
+  loginAuthencation(username: string, password: string, type: number, isContractId: number | null) {
     const headers = new HttpHeaders().append('Content-Type', 'application/json');
-    const body = JSON.stringify({email: username.trim().toLowerCase(), password: password, type: type});
+    let body = JSON.stringify({email: username.trim().toLowerCase(), password: password, type: type});
+
+    if(isContractId) {
+      body = JSON.stringify({email: username.trim().toLowerCase(), password: password, type, contractId: isContractId});
+    }
 
     return this.http.post<User>(this.loginUrl, body, {'headers':headers})
       .pipe(

@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
+import { ContractService } from 'src/app/service/contract.service';
+import { ConvertStatusService } from 'src/app/service/convert-status.service';
 import { InputTreeService } from 'src/app/service/input-tree.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
@@ -15,7 +17,7 @@ import { ReportService } from '../report.service';
 })
 export class ReportStatusContractComponent implements OnInit {
   //Biến lưu dữ liệu trong bảng
-  list: any[];
+  list: any[] = [];
 
   //col header
   cols: any[];
@@ -46,6 +48,8 @@ export class ReportStatusContractComponent implements OnInit {
 
   fetchChildData: boolean = false;
 
+  orgName: any;
+
   constructor(
     private appService: AppService,
     private userService: UserService,
@@ -55,12 +59,18 @@ export class ReportStatusContractComponent implements OnInit {
     private reportService: ReportService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private translate: TranslateService 
+    private translate: TranslateService,
+    private contractService: ContractService,
+    private convertStatusService: ConvertStatusService
 
   ) {}
 
   ngOnInit(): void {
     this.appService.setTitle('report.processing.status.contract.full');
+
+    this.contractService.getDataNotifyOriganzation().subscribe((res: any) => {
+      this.orgName = res.name;
+    })
 
     this.optionsStatus = [
       { id: -1, name: 'Tất cả' },
@@ -107,90 +117,48 @@ export class ReportStatusContractComponent implements OnInit {
         header: 'contract.name',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
+        rowspan: 1,
       },
       {
         id: 2,
         header: 'contract.type',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
+        rowspan: 1,
       },
-      // {
-      //   id: 3,
-      //   header: 'contract.number',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 4,
-      //   header: 'contract.uid',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 5,
-      //   header: 'contract.connect',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 6,
-      //   header: 'contract.time.create',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 7,
-      //   header: 'signing.expiration.date',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
       {
         id: 8,
         header: 'contract.status.v2',
         style: 'text-align:left',
         colspan: 1,
-        rowspan: '2',
+        rowspan: 1,
       },
-      // {
-      //   id: 9,
-      //   header: 'date.completed',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
       {
         id: 10,
         header: 'suggest',
-        style: 'text-align: center',
-        colspan: '5',
+        style: 'text-align: left',
+        colspan: 1,
         rowspan: 1,
       },
       {
         id: 11,
         header: 'user.ed',
-        style: 'text-align: center',
-        colspan: '5',
+        style: 'text-align: left',
+        colspan: 1,
         rowspan: 1,
       },
       {
         id: 11,
         header: 'user.ing',
-        style: 'text-align: center',
-        colspan: '5',
+        style: 'text-align: left',
+        colspan: 1,
         rowspan: 1,
       },
       {
         id: 11,
         header: 'user.not.process',
-        style: 'text-align: center',
-        colspan: '5',
+        style: 'text-align: left',
+        colspan: 1,
         rowspan: 1,
       },
     ];
@@ -231,7 +199,7 @@ export class ReportStatusContractComponent implements OnInit {
       contractStatus = -1;
 
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChilData='+this.fetchChildData;
-    this.reportService.export('rp-by-status-process',idOrg,params, true).subscribe((response: any) => {
+    this.reportService.export('rp-by-status-process',idOrg,params, flag).subscribe((response: any) => {
 
       this.spinner.hide();
 
@@ -247,10 +215,26 @@ export class ReportStatusContractComponent implements OnInit {
         a.remove();
 
         this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+      } else {
+        // this.list[0] = "AAA";
+
+        // // console.log("response ", response);
+
+        // for(let i = 0; i < response.length; i++) {
+        //   this.list[i+1] = response[i];
+        // }
+
+        // this.list = response;
+
+        this.list = response;
       }
       
     })
 
+  }
+
+  convert(code: string) {
+    return this.convertStatusService.convert(code.toLowerCase());
   }
 
   changeCheckBox(event: any) {

@@ -111,12 +111,12 @@ export class LoginComponent implements OnInit {
 
   weakPass: boolean = false;
   login(urlLink: any, isContractId: any, isRecipientId: any) {
-    this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type).subscribe((data) => {
+    this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type, isContractId).subscribe((data) => {
       if(data?.code == '00'){
         if (this.authService.isLoggedInSuccess() == true) {
 
           //Mật khẩu yếu => Đổi mật khẩu
-          if(!parttern_input.weak_pass.test(this.loginForm.value.password)) {
+          if(!parttern_input.weak_pass.test(this.loginForm.value.password) && this.type != 1) {
             const data = {
               title: 'ĐỔI MẬT KHẨU',
               weakPass: false

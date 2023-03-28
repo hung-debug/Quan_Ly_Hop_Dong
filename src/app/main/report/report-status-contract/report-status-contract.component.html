@@ -50,16 +50,6 @@
         </div>
     </div>
 
-    <!--Nút tick bao gồm tổ chức-->
-    <!-- <div class="row" style="padding-top: 10px;">
-        <div class="col-md-6">
-            <input type="radio">&nbsp;
-            <span>{{'include.org1' | translate}}</span>
-        </div>
-    </div> -->
-
-
-
     <!--Bảng dữ liệu-->
     <div class="row" style="padding-top: 20px;">
         <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
@@ -72,24 +62,31 @@
                       {{col.header | translate}}
                     </th>
                 </tr>
+            </ng-template>
 
-                <!--header 2 bên đề nghị-->
+            <ng-template pTemplate="body" let-list let-i="rowIndex">
                 <tr>
-                    <th *ngFor="let col of colsSuggest" [style]='col.style' [colSpan]="col.colspan" [rowSpan]="col.rowspan">
-                        {{col.header | translate}}
-                    </th>
+                    <td *ngIf="i == 0">{{this.orgName}}</td>
+                    <td *ngIf="i > 0">{{list.name}}</td>
+                    <td  *ngIf="i > 0">{{list.typeName}}</td>
+                    <td  *ngIf="i > 0">{{this.convert(list.status)}}</td>
+                    <td  *ngIf="i > 0">{{list.participants[0].name}}</td>
+                    <td  *ngIf="i > 0">{{list.processedUser}}</td>
+                    <td  *ngIf="i > 0">{{list.processingUser}}</td>
+                    <td  *ngIf="i > 0">{{list.notProcessedYet}}</td>
                 </tr>
             </ng-template>
 
-            <ng-template pTemplate="body" let-list>
-                <tr class="subheader-row">
-                    <!-- <td>{{list.product}}</td> -->
-                    <td *ngFor="let col of mergeCol; let colIndex = index">
-                        <span *ngIf="col.id == 1">{{list.product}}</span>
-                    </td>
-                </tr>
-            </ng-template>
+            <ng-template pTemplate="paginatorleft" let-state>
+                <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+              </ng-template>
+              <ng-template pTemplate="paginatorright" let-state>
+                <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+              </ng-template>
         </p-table>
     </div>
-    
 </div>
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+    <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+</ngx-spinner>
