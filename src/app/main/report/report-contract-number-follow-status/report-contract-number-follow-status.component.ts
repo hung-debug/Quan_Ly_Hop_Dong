@@ -45,7 +45,7 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
 
    contractStatus: number = -1;
 
-   fetchChildData: boolean = false;
+   fetchChildData: boolean = true;
 
   constructor(
     private appService: AppService,

@@ -45,7 +45,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
 
    contractStatus: number = -1;
 
-   fetchChildData: boolean = false;
+   fetchChildData: boolean = true;
 
   total: any = {
     total: 0,
