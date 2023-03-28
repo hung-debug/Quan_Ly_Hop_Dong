@@ -5,7 +5,9 @@ import {TranslateService} from '@ngx-translate/core';
 import {AuthenticationService} from '../service/authentication.service';
 import {DeviceDetectorService} from "ngx-device-detector";
 import {ActionDeviceComponent} from "../action-device/action-device.component";
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { parttern_input } from '../config/parttern';
+import { ResetPasswordDialogComponent } from '../main/dialog/reset-password-dialog/reset-password-dialog.component';
 
 @Component({
   selector: 'app-login',
@@ -37,7 +39,7 @@ export class LoginComponent implements OnInit {
     public translate: TranslateService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private changeDetector : ChangeDetectorRef
+    private changeDetector : ChangeDetectorRef,
   ) {
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang('vi');
@@ -107,10 +109,35 @@ export class LoginComponent implements OnInit {
 
   }
 
+  weakPass: boolean = false;
   login(urlLink: any, isContractId: any, isRecipientId: any) {
     this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type).subscribe((data) => {
       if(data?.code == '00'){
         if (this.authService.isLoggedInSuccess() == true) {
+
+          //Mật khẩu yếu => Đổi mật khẩu
+          if(!parttern_input.weak_pass.test(this.loginForm.value.password)) {
+            const data = {
+              title: 'ĐỔI MẬT KHẨU',
+              weakPass: false
+            };
+        
+            // @ts-ignore
+            const dialogRef = this.dialog.open(ResetPasswordDialogComponent, {
+              width: '420px',
+              backdrop: 'static',
+              keyboard: false,
+              disableClose: true,
+              data
+            })
+        
+            dialogRef.afterClosed().subscribe((result: any) => {
+              console.log('the close dialog');
+              let is_data = result
+            })
+            return;
+          }
+
           this.countLoginFail = 0;
           this.captcha = false;
           if (sessionStorage.getItem("url")) {
