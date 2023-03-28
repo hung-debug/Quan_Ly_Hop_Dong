@@ -25,6 +25,7 @@ import { environment } from "src/environments/environment";
 import { ContractTemplateService } from "src/app/service/contract-template.service";
 import * as _ from 'lodash';
 import { TranslateModule, TranslateService } from "@ngx-translate/core";
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-sample-contract-form',
@@ -49,6 +50,7 @@ export class SampleContractFormComponent implements OnInit {
   objPdfProperties: any = {
     pages: [],
   };
+  orgId: any;
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
@@ -115,7 +117,8 @@ export class SampleContractFormComponent implements OnInit {
     private toastService: ToastService,
     private router: Router,
     private contractTemplateService: ContractTemplateService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private userService: UserService,
   ) {
     this.stepForm = variable.stepSampleContractForm.step3
   }
@@ -1583,9 +1586,11 @@ export class SampleContractFormComponent implements OnInit {
             }
           })
         })
-          this.stepForm = variable.stepSampleContractForm.step4;
-          this.datasForm.stepLast = this.stepForm
-          this.nextOrPreviousStep(this.stepForm);
+          // this.stepForm = variable.stepSampleContractForm.step4;
+          // this.datasForm.stepLast = this.stepForm
+          // this.nextOrPreviousStep(this.stepForm);
+          this.checkNumber(this.datasForm.ceca_push, this.convertToSignConfig().length)
+          this.spinner.hide();
       }
     }
   }
@@ -1711,7 +1716,27 @@ export class SampleContractFormComponent implements OnInit {
     this.datasForm.stepLast = step;
     this.stepChangeSampleContractForm.emit(step);
   }
+  async checkNumber(countCeCa: number, countTimestamp: number) {
 
+    this.orgId = this.userService.getInforUser().organization_id;
+    let getNumberContractCreateOrg;
+    try {
+      getNumberContractCreateOrg = await this.contractService.getDataNotifyOriganzation().toPromise();
+    } catch (err) {
+      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng' + err, '', 3000);
+    }
+    if (countCeCa > 0 && (Number(getNumberContractCreateOrg.numberOfCeca) - this.datasForm.ceca_push) < 0) {
+      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lần gửi xác nhận BCT. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+      return false;
+    } else if (countTimestamp > 0 && (Number(getNumberContractCreateOrg.numberOfTimestamp) - this.convertToSignConfig().length) < 0) {
+      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng timestamp đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+      return false;
+    } else {      
+        this.stepForm = variable.stepSampleContractForm.step4;
+        this.datasForm.stepLast = this.stepForm
+        this.nextOrPreviousStep(this.stepForm);
+    }
+  }
  
   validData() {
     let data_not_drag = this.datasForm.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];

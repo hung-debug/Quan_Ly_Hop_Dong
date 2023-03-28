@@ -33,6 +33,12 @@ export class DetailUnitComponent implements OnInit {
   smsContractUse: number = 0;
   smsContractBuy: number = 0;
 
+  numTimeStampUse: number = 0;
+  numTimeStampBuy: number = 0;
+
+  numCecaUse: number = 0;
+  numCecaBuy: number = 0;
+
   taxCode: any = "";
   cEcAPushMode: any = "";
   site: string;
@@ -91,6 +97,8 @@ export class DetailUnitComponent implements OnInit {
               this.numContractUse = data.contract;
               this.eKYCContractUse = data.ekyc;
               this.smsContractUse = data.sms;
+              this.numTimeStampUse = data.timestamp;
+              this.numCecaUse = data.ceca;
             }, error => {
               this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
             }
@@ -102,6 +110,8 @@ export class DetailUnitComponent implements OnInit {
               this.numContractBuy = data.contract;
               this.eKYCContractBuy = data.ekyc;
               this.smsContractBuy = data.sms;
+              this.numTimeStampBuy = data.timestamp;
+              this.numCecaBuy = data.ceca;
             }, error => {
               this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
             }
