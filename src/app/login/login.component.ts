@@ -14,7 +14,7 @@ import { ResetPasswordDialogComponent } from '../main/dialog/reset-password-dial
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit {
 
   mobile: boolean = true;
   error: Boolean = false;
@@ -44,6 +44,9 @@ export class LoginComponent implements OnInit {
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang('vi');
     localStorage.setItem('lang', 'vi');
+  }
+  ngAfterViewInit(): void {
+    this.previewCaptcha.nativeElement.innerHTML = this.html;
   }
 
   loginForm = new FormGroup({
@@ -100,7 +103,10 @@ export class LoginComponent implements OnInit {
             this.login(urlLink, isContractId, isRecipientId);
           } else {
             //Nhập sai captcha
+
+            console.log("vao day ");
             this.errorDetail = "Nhập sai captcha";
+            this.error = true;
           }
         } else {
           this.login(urlLink, isContractId, isRecipientId);
@@ -200,7 +206,7 @@ export class LoginComponent implements OnInit {
         this.error = true;
         this.errorDetail = "error.username.password";
       }
-
+      localStorage.setItem("fail", this.countLoginFail.toString());
       },
       error => {
         this.countLoginFail++;
@@ -212,6 +218,8 @@ export class LoginComponent implements OnInit {
           this.error = true;
           this.errorDetail = "error.server";
         }
+
+        localStorage.setItem("fail", this.countLoginFail.toString());
       }
     );
 
@@ -236,6 +244,7 @@ export class LoginComponent implements OnInit {
 
   }
 
+  html: any;
   setCaptcha() {
     const fonts = ["cursive","sans-serif","serif","monospace"];
     let html = this.captchaValue.split("").map((char: any) => {
@@ -254,6 +263,7 @@ export class LoginComponent implements OnInit {
 
     this.changeDetector.detectChanges();
 
+    this.html = html;
     this.previewCaptcha.nativeElement.innerHTML = html;
   }
 
@@ -263,6 +273,11 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
+    if(Number(localStorage.getItem('fail')) >= 3) {
+      this.captcha = true;
+      this.generateCaptcha();
+    }    
+
     // this.generateCaptcha();
     if (sessionStorage.getItem('type')) {
       this.type = 1;
