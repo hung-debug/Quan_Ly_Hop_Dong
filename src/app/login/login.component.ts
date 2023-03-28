@@ -209,7 +209,6 @@ export class LoginComponent implements OnInit {
 
   }
 
-  html: any;
   setCaptcha() {
     const fonts = ["cursive","sans-serif","serif","monospace"];
     let html = this.captchaValue.split("").map((char: any) => {
@@ -226,19 +225,9 @@ export class LoginComponent implements OnInit {
     </span>`
     }).join("");
 
-    this.html = html;   
-
-
-    // console.log("ca ", this.captcha)
-
-    // if(!this.captcha)
-
     this.changeDetector.detectChanges();
 
-        this.previewCaptcha.nativeElement.innerHTML = this.html;
-
-
-    console.log("html ", this.html);
+    this.previewCaptcha.nativeElement.innerHTML = html;
   }
 
   toggleFieldTextType() {
