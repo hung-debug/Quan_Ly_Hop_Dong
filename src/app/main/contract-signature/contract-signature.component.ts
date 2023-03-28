@@ -342,7 +342,10 @@ export class ContractSignatureComponent implements OnInit {
     return list;
   }
 
-  getNameOrganization(item: any, index: any) {
+  getNameOrganization(item: any, index: any, item1?: any) {
+    if(item.type == 3)
+      console.log("side ",item1)
+
     return sideList[index].name + ' : ' + item.name;
   }
 

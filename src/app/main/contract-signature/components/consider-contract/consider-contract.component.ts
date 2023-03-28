@@ -2329,9 +2329,7 @@ export class ConsiderContractComponent
     );
     const cert = JSON.parse(window.atob(apiCert.data));
 
-    console.log("cert ", cert);
-
-    if (cert.certInfo) {
+    if (cert.certInfo && cert.ResponseCode == 0) {
       this.signCertDigital = cert.certInfo.SerialNumber;
 
       const utf8 = require('utf8');
@@ -2345,10 +2343,11 @@ export class ConsiderContractComponent
       this.certInfoBase64 = cert.certInfo.Base64Encode;
     } else {
       this.toastService.showErrorHTMLWithTimeout(
-        'Lỗi không lấy được thông tin usb token',
+        'Lỗi không lấy được thông tin usb token '+cert.ResponseMsg,
         '',
         3000
       );
+      this.spinner.hide();
       return;
     }
 

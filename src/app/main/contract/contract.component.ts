@@ -257,11 +257,9 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   getNameOrganization(item: any, index: any) {
-    console.log("item ", item);
     if(item.type == 3 && item.recipients.length > 0)
       return sideList[index].name + " : " + item.recipients[0].name;
     return sideList[index].name + " : " + item.name;
-    // return item.name;
   }
 
   changeTab() {
