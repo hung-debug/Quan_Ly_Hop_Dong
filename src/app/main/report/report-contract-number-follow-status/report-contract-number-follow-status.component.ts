@@ -48,6 +48,8 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
 
    fetchChildData: boolean = true;
 
+   Arr = Array;
+
   constructor(
     private appService: AppService,
     private userService: UserService,
@@ -62,6 +64,8 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.spinner.hide();
+
     this.appService.setTitle('report.number.contracts.status.full');
 
     this.optionsStatus = [
@@ -220,7 +224,7 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
     if(!contractStatus) 
       contractStatus = -1;
 
-    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChilData='+this.fetchChildData;
+    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
 
     this.reportService.export('rp-by-status',idOrg,params, flag).subscribe((response: any) => {
         this.spinner.hide();
@@ -239,40 +243,25 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
           this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
         } else {
 
+          this.list = [];
+
+          this.spinner.hide();
           this.clickReport = true;
 
-          let array: any = [];
-
-          Object.keys(response).forEach((key, index) => {
-            this.org = key;
-
-            array[0] = response[key]
+          Object.keys(response).forEach((key: any, index) => {
+            this.list.push({
+              'orgName': key,
+              'value': response[key]            
+            })
           });
 
-          let reportList =array[0];
+          console.log("list ", this.list);
 
-          let name: any[] = [];
-          let value: any[] = [];
-
-          Object.keys(reportList).forEach((key: any, index: any) => {
-            name.push(key);
-            value.push(reportList[key]);
-          });
-          
-          for(let i = 0; i < name.length; i++) {
-            this.list[i + 1] = {
-              name: name[i],
-              value: value[i]
-            }
+          for(let i = 0; i < this.list.length; i++) {
+           
           }
 
-          this.list.forEach((item: any) => {
-            if(item.name == 'total') {
-              this.total = item.value;
-            }
-            return;
-          })
-
+         
         }
       
     })

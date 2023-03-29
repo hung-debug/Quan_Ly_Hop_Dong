@@ -63,7 +63,7 @@
 
     <!--Bảng dữ liệu-->
     <div class="row" style="padding-top: 20px;">
-        <p-table [value]="list" id="table" [autoLayout]="true">
+        <p-table [value]="list" id="table" [paginator]="true" [rows]="2">
 
             <!--header-->
             <ng-template pTemplate="header">
@@ -75,24 +75,57 @@
                 </tr>
             </ng-template>
 
-            <ng-template let-i="rowIndex" pTemplate="body" let-list>
-                <tr *ngIf="i == 0" class="subheader-row">
-                    <td *ngFor="let col of cols; let colIndex = index">
-                        <span *ngIf="col.id == 8">{{this.org}}</span>
+            <ng-template pTemplate="groupheader" let-list>
+                <tr pRowGroupHeader>
+                    <td>
+                        <span class="font-bold ml-2">{{"abc"}}</span>
                     </td>
-                </tr>
-
-                <tr *ngIf="i != 0 && list.name != 'waiting' && list.name != 'total'">
-                    <td>{{this.convert(list.name)}}</td>
-                    <td>{{list.value}}</td>
                 </tr>
             </ng-template>
 
-            <ng-template pTemplate="footer">
-                <tr *ngIf="this.clickReport">
-                    <td>{{'total' | translate}}</td>
-                    <td>{{this.total}}</td>
+            <ng-template let-i="rowIndex" pTemplate="body" let-list>
+
+                <tr style="background-color: #EEF7FF;">
+                    <td style="font-style: normal;font-weight: 800;font-size: 13px;">{{list.orgName}}</td>
+                    <td></td>
                 </tr>
+
+                <tr>
+                    <td>Tu choi</td>
+                    <td>{{list.value.rejected}}</td>
+                </tr>
+
+                <tr>
+                    <td>Huy bo</td>
+                    <td>{{list.value.canceled}}</td>
+                </tr>
+
+                <tr>
+                    <td>Qua han</td>
+                    <td>{{list.value.expired}}</td>
+                </tr>
+
+                <tr>
+                    <td>Sap qua han</td>
+                    <td>{{list.value.prepare_expires}}</td>
+                </tr>
+
+                <tr>
+                    <td>Hoan thanh</td>
+                    <td>{{list.value.processed}}</td>
+                </tr>
+
+                <tr>
+                    <td>Dang xu ly</td>
+                    <td>{{list.value.processing}}</td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="paginatorleft" let-state>
+                <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+              </ng-template>
+            <ng-template pTemplate="paginatorright" let-state>
+                <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
             </ng-template>
         </p-table>
     </div>

@@ -66,29 +66,34 @@
 
             <ng-template pTemplate="body" let-list let-row="rowIndex">
                 <tr>
-                    <td *ngIf="row == 0">{{this.orgName}}</td>
-                    <td *ngIf="row > 0">{{list.name}}</td>
-                    <td  *ngIf="row > 0">{{list.typeName}}</td>
-                    <td  *ngIf="row > 0">{{this.convert(list.status)}}</td>
-                    <td  *ngIf="row > 0">{{list.organization.name}}</td>
-                    <td *ngFor="let i of Arr(maxParticipants).fill(1)">
-                        <span *ngIf="list.participants[i]">
-                            {{ list.participants[i].name }}
-                        </span>
-                    </td>
+                    <ng-container *ngIf="row == 0">
+                        <td *ngIf="row == 0" style="font-style: normal;font-weight: 800;font-size: 13px;">{{this.orgName}}</td>
+                        <td *ngFor="let i of Arr(cols.length - 1).fill(1)"></td>
+                    </ng-container>
 
-                    <td  *ngIf="row > 0">{{list.processedUser}}</td>
-                    <td  *ngIf="row > 0">{{list.processingUser}}</td>
-                    <td  *ngIf="row > 0">{{list.notProcessedYet}}</td>
+                    <ng-container *ngIf="row > 0">
+                        <td>{{list.name}}</td>
+                        <td>{{list.typeName}}</td>
+                        <td>{{this.convert(list.status)}}</td>
+                        <td>{{list.organization.name}}</td>
+                        <td *ngFor="let i of Arr(maxParticipants).fill(1)">
+                            <span *ngIf="list.participants[i]">
+                                {{ list.participants[i].name }}
+                            </span>
+                        </td>
+                        <td>{{list.processedUser}}</td>
+                        <td>{{list.processingUser}}</td>
+                        <td>{{list.notProcessedYet}}</td>
+                    </ng-container>
                 </tr>
             </ng-template>
 
             <ng-template pTemplate="paginatorleft" let-state>
                 <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
               </ng-template>
-              <ng-template pTemplate="paginatorright" let-state>
+            <ng-template pTemplate="paginatorright" let-state>
                 <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-              </ng-template>
+            </ng-template>
         </p-table>
     </div>
 </div>

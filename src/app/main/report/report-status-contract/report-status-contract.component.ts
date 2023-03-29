@@ -207,7 +207,7 @@ export class ReportStatusContractComponent implements OnInit {
     if(!contractStatus) 
       contractStatus = -1;
 
-    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChilData='+this.fetchChildData;
+    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
     this.reportService.export('rp-by-status-process',idOrg,params, flag).subscribe((response: any) => {
 
       this.spinner.hide();

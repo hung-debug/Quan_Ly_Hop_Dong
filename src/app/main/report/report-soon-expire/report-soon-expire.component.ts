@@ -171,7 +171,7 @@ export class ReportSoonExpireComponent implements OnInit {
     if(!contractStatus) 
       contractStatus = -1;
 
-    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChilData='+this.fetchChildData;
+    let params = '?from_date='+from_date+'&to_date='+to_date+'&type=';
     this.reportService.export('rp-by-effective-date',idOrg,params, flag).subscribe((response: any) => {
 
         if(flag) {
