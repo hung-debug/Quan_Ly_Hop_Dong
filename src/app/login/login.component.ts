@@ -225,7 +225,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       }
     );
 
-    if(this.countLoginFail >= 3) {
+    if(this.countLoginFail >= 2) {
       console.log("vao day ");
       this.captcha = true;
       this.generateCaptcha();
@@ -279,7 +279,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    if(Number(localStorage.getItem('fail')) >= 3) {
+    if(Number(localStorage.getItem('fail')) >= 2) {
       this.captcha = true;
       this.generateCaptcha();
     }    
