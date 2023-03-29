@@ -22,8 +22,8 @@ export class InputTreeService {
 
     const unitList = await this.unitService.getUnitList('', '').toPromise();
 
-    if (this.lang == 'vi') orgListTmp.push({ name: 'Tất cả', id: '' });
-    else if (this.lang == 'en') orgListTmp.push({ name: 'All', id: '' });
+    // if (this.lang == 'vi') orgListTmp.push({ name: 'Tất cả', id: '' });
+    // else if (this.lang == 'en') orgListTmp.push({ name: 'All', id: '' });
 
     let dataUnit = unitList.entities.sort((a: any, b: any) =>
       a.path.toString().localeCompare(b.path.toString())

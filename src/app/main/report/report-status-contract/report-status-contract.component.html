@@ -4,13 +4,13 @@
         <div class="col-md-2">
             <div>{{'organization' | translate}}</div>
             <div class="input-line">
-            <p-treeSelect 
+            <p-treeSelect #nameContract
                 [(ngModel)]="selectedNodeOrganization" 
-                placeholder="{{'all' | translate}}" 
                 [filter]="true" 
                 filterBy="name"  
                 [droppable]="true" 
                 [options]="listOrgCombobox"
+                (onNodeSelect)="changeOrg()"
             >
           </p-treeSelect>
             </div>
@@ -43,8 +43,17 @@
             </div>
         </div>
 
+        <!--Loại hợp đồng-->
+        <div class="col-md-2">
+            <div>{{'contract.type' | translate}}</div>
+            <div class="input-line">
+              <p-dropdown #typeContract optionValue="name" [(ngModel)]="type_id" placeholder="{{'choose.contract.type' | translate}}" [showClear]="true" [filter]="true" filterBy="name" [options]="typeList" optionLabel="name" >
+            </p-dropdown>
+            </div>
+        </div>
+
         <!--Button-->
-        <div class="col-md-6 btn_search">
+        <div class="col-md-4 btn_search">
             <button class="btn btn-lg btn-block btn_submit" (click)="export(false)">{{'btn.report' | translate }}</button>
             <button class="btn btn-lg btn-block btn_submit" (click)="export(true)">Export</button>
         </div>
@@ -66,7 +75,7 @@
 
             <ng-template pTemplate="body" let-list let-row="rowIndex">
                 <tr>
-                    <ng-container *ngIf="row == 0">
+                    <ng-container style="background-color: #EEF7FF;" *ngIf="row == 0">
                         <td *ngIf="row == 0" style="font-style: normal;font-weight: 800;font-size: 13px;">{{this.orgName}}</td>
                         <td *ngFor="let i of Arr(cols.length - 1).fill(1)"></td>
                     </ng-container>

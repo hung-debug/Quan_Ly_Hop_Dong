@@ -1,8 +1,9 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
+import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { ContractService } from 'src/app/service/contract.service';
 import { ConvertStatusService } from 'src/app/service/convert-status.service';
 import { InputTreeService } from 'src/app/service/input-tree.service';
@@ -15,7 +16,7 @@ import { ReportService } from '../report.service';
   templateUrl: './report-status-contract.component.html',
   styleUrls: ['./report-status-contract.component.scss'],
 })
-export class ReportStatusContractComponent implements OnInit {
+export class ReportStatusContractComponent implements OnInit,AfterViewInit {
   //Biến lưu dữ liệu trong bảng
   list: any[] = [];
 
@@ -51,7 +52,11 @@ export class ReportStatusContractComponent implements OnInit {
   orgName: any;
 
   Arr = Array;
+  type_id: any;
 
+  typeList: Array<any> = [];
+
+  @ViewChild('typeContract') typeContract: any;
   constructor(
     private appService: AppService,
     private userService: UserService,
@@ -63,7 +68,9 @@ export class ReportStatusContractComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private translate: TranslateService,
     private contractService: ContractService,
-    private convertStatusService: ConvertStatusService
+    private convertStatusService: ConvertStatusService,
+    private contractTypeService: ContractTypeService,
+    private changeDetectorRef: ChangeDetectorRef,
 
   ) {}
 
@@ -73,6 +80,8 @@ export class ReportStatusContractComponent implements OnInit {
     this.contractService.getDataNotifyOriganzation().subscribe((res: any) => {
       this.orgName = res.name;
     })
+
+    this.getTypeListContract();
 
     this.optionsStatus = [
       { id: -1, name: 'Tất cả' },
@@ -106,6 +115,7 @@ export class ReportStatusContractComponent implements OnInit {
 
     //lấy danh sách tổ chức
     this.inputTreeService.getData().then((res: any) => {
+
       this.listOrgCombobox = res;
 
       this.selectedNodeOrganization = this.listOrgCombobox.filter(
@@ -114,9 +124,21 @@ export class ReportStatusContractComponent implements OnInit {
     });
 
     this.setColForTable();
-
-
   }
+
+  changeOrg() {
+    this.getTypeListContract(this.selectedNodeOrganization.data);
+  }
+
+  async getTypeListContract(typeId?: number) {
+    const inforType = await this.contractTypeService.getContractTypeList('', '',typeId).toPromise();
+    this.typeList = inforType;
+  }
+
+  ngAfterViewInit() {
+    this.typeContract.autoDisplayFirst = false;
+  }
+
 
   setColForTable() {
     this.cols = [
@@ -181,6 +203,8 @@ export class ReportStatusContractComponent implements OnInit {
     return true;
   }
 
+  
+
   //Export ra file excel
   maxParticipants: number = 0;
   export(flag: boolean) {
@@ -190,10 +214,9 @@ export class ReportStatusContractComponent implements OnInit {
 
     this.spinner.show();
 
-    let idOrg = this.organization_id;
-    if(this.selectedNodeOrganization.data) {
-      idOrg = this.selectedNodeOrganization.data;
-    }
+    this.selectedNodeOrganization = !this.selectedNodeOrganization.length ? this.selectedNodeOrganization : this.selectedNodeOrganization[0]
+
+    let idOrg = this.selectedNodeOrganization.data;
 
     let from_date: any = '';
     let to_date: any = '';
@@ -207,7 +230,8 @@ export class ReportStatusContractComponent implements OnInit {
     if(!contractStatus) 
       contractStatus = -1;
 
-    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
+    console.log("id ", this.type_id);
+    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData+'&type='+this.type_id;
     this.reportService.export('rp-by-status-process',idOrg,params, flag).subscribe((response: any) => {
 
       this.spinner.hide();

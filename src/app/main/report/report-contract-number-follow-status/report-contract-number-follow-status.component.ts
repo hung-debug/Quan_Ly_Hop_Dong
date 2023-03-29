@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import axios from 'axios';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
 import { ConvertStatusService } from 'src/app/service/convert-status.service';
@@ -200,17 +201,18 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
   org: any;
   clickReport: boolean = false;
   total: number;
-  export(flag: boolean) {
+  async export(flag: boolean) {
     if(!this.validData()) {
       return;
     }
 
     this.spinner.show();
 
-    let idOrg = this.organization_id;
-    if(this.selectedNodeOrganization.data) {
-      idOrg = this.selectedNodeOrganization.data;
-    }
+    this.selectedNodeOrganization = !this.selectedNodeOrganization.length ? this.selectedNodeOrganization : this.selectedNodeOrganization[0]
+
+    let idOrg = this.selectedNodeOrganization.data;
+
+    console.log("se ", this.selectedNodeOrganization);
 
     let from_date: any = '';
     let to_date: any = '';
@@ -226,45 +228,62 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
 
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
 
-    this.reportService.export('rp-by-status',idOrg,params, flag).subscribe((response: any) => {
-        this.spinner.hide();
-        
-        if(flag) {
-          let url = window.URL.createObjectURL(response);
-          let a = document.createElement('a');
-          document.body.appendChild(a);
-          a.setAttribute('style', 'display: none');
-          a.href = url;
-          a.download = `report-by-status_${new Date().getTime()}.xlsx`;
-          a.click();
-          window.URL.revokeObjectURL(url);
-          a.remove();
-  
-          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
-        } else {
+    const response = await this.reportService.export('rp-by-status',idOrg,params, flag).toPromise();
 
-          this.list = [];
+    this.spinner.hide();
+    if(flag) {
+      let url = window.URL.createObjectURL(response);
+      let a = document.createElement('a');
+      document.body.appendChild(a);
+      a.setAttribute('style', 'display: none');
+      a.href = url;
+      a.download = `report-by-status_${new Date().getTime()}.xlsx`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
 
-          this.spinner.hide();
-          this.clickReport = true;
+      this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+    } else {
 
-          Object.keys(response).forEach((key: any, index) => {
-            this.list.push({
-              'orgName': key,
-              'value': response[key]            
-            })
-          });
+      this.list = [];
 
-          console.log("list ", this.list);
+      this.spinner.hide();
+      this.clickReport = true;
 
-          for(let i = 0; i < this.list.length; i++) {
-           
-          }
+      Object.keys(response).forEach((key: any, index) => {
+        this.list.push({
+          'orgName': key,
+          'value': response[key]            
+        })
+      });
 
-         
+      //sort cha len dau
+      for(let i = 0; i < this.list.length; i++) {
+        if(this.list[i].orgName == this.selectedNodeOrganization.label) {
+          const temp = this.list[i];
+          this.list[i] = this.list[0];
+          this.list[0] = temp;
+
+          break;
         }
-      
-    })
+      }
+
+      //sort abc
+      let temp: any[] = [];
+      for(let i = 0; i < this.list.length - 1; i++) {
+        temp[i] = this.list[i+1]
+      }
+
+      console.log("temp ", temp);
+
+      temp = temp.sort((a,b) => a.orgName !== b.orgName ? a.orgName < b.orgName ? -1 : 1 : 0);
+
+      console.log("temp ", temp);
+
+      for(let i = 0; i < this.list.length - 1; i++) {
+        this.list[i+1] = temp[i];
+      }
+    }
   }
 
   convert(code: string) {

@@ -27,7 +27,7 @@
         </div>
 
         <!--Trạng thái-->
-        <div class="col-md-2">
+        <!-- <div class="col-md-2">
             <div>{{'contract.status' | translate}}</div>
             <div class="input-line">
                 <p-dropdown 
@@ -41,7 +41,7 @@
                     [(ngModel)]="contractStatus"
                 ></p-dropdown>
             </div>
-        </div>
+        </div> -->
 
         <!--Button-->
         <div class="col-md-6 btn_search">
@@ -91,32 +91,32 @@
                 </tr>
 
                 <tr>
-                    <td>Tu choi</td>
+                    <td>{{this.convert('rejected')}}</td>
                     <td>{{list.value.rejected}}</td>
                 </tr>
 
                 <tr>
-                    <td>Huy bo</td>
+                    <td>{{this.convert('cancel')}}</td>
                     <td>{{list.value.canceled}}</td>
                 </tr>
 
                 <tr>
-                    <td>Qua han</td>
+                    <td>{{this.convert('expired')}}</td>
                     <td>{{list.value.expired}}</td>
                 </tr>
 
                 <tr>
-                    <td>Sap qua han</td>
+                    <td>{{this.convert('prepare_expires')}}</td>
                     <td>{{list.value.prepare_expires}}</td>
                 </tr>
 
                 <tr>
-                    <td>Hoan thanh</td>
+                    <td>{{this.convert('processed')}}</td>
                     <td>{{list.value.processed}}</td>
                 </tr>
 
                 <tr>
-                    <td>Dang xu ly</td>
+                    <td>{{this.convert('processing')}}</td>
                     <td>{{list.value.processing}}</td>
                 </tr>
             </ng-template>
