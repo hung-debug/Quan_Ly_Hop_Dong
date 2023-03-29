@@ -147,7 +147,7 @@ export class ReportSoonExpireComponent implements OnInit {
   }
 
 
-  export() {
+  export(flag: boolean) {
     if(!this.validData()) {
       return;
     }
@@ -172,19 +172,25 @@ export class ReportSoonExpireComponent implements OnInit {
       contractStatus = -1;
 
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChilData='+this.fetchChildData;
-    this.reportService.export('rp-by-effective-date',idOrg,params, true).subscribe((response: any) => {
-        this.spinner.hide();
-        let url = window.URL.createObjectURL(response);
-        let a = document.createElement('a');
-        document.body.appendChild(a);
-        a.setAttribute('style', 'display: none');
-        a.href = url;
-        a.download = `report-effective-date_${new Date().getTime()}.xlsx`;
-        a.click();
-        window.URL.revokeObjectURL(url);
-        a.remove();
+    this.reportService.export('rp-by-effective-date',idOrg,params, flag).subscribe((response: any) => {
 
-        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+        if(flag) {
+          this.spinner.hide();
+          let url = window.URL.createObjectURL(response);
+          let a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          a.download = `report-effective-date_${new Date().getTime()}.xlsx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+  
+          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+        } else {
+          console.log("response");
+        }
+      
     })
  
   }

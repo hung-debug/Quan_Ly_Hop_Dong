@@ -46,7 +46,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     localStorage.setItem('lang', 'vi');
   }
   ngAfterViewInit(): void {
-    this.previewCaptcha.nativeElement.innerHTML = this.html;
+    if(this.previewCaptcha)
+      this.previewCaptcha.nativeElement.innerHTML = this.html;
   }
 
   loginForm = new FormGroup({
@@ -146,6 +147,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
           this.countLoginFail = 0;
           this.captcha = false;
+          localStorage.setItem('fail',this.countLoginFail.toString())
           if (sessionStorage.getItem("url")) {
             if (urlLink) {
               if (urlLink.includes(this.coordinates)) {
@@ -233,6 +235,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   captchaValue: any;
   generateCaptcha() {
+    console.log("capt cha ");
+
     let code = (Math.random() * 1000000000).toString();
     let value = window.btoa(code);
 
@@ -264,7 +268,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.changeDetector.detectChanges();
 
     this.html = html;
-    this.previewCaptcha.nativeElement.innerHTML = html;
+
+    if(this.previewCaptcha)
+      this.previewCaptcha.nativeElement.innerHTML = html;
   }
 
   toggleFieldTextType() {

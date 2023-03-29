@@ -89,7 +89,7 @@
               <div id="preview" class="preview" #previewCaptcha></div>
               <div class="input-line"> 
                 <input formControlName="captchaName" class="input-captcha" type="text" placeholder="Enter captcha text"/>
-                <button>
+                <button (click)="generateCaptcha()">
                   <i class="fa fa-refresh"></i>
                 </button>
               </div> 
@@ -210,21 +210,21 @@
               </div>
             </div>
 
-            <div class="form-group" *ngIf="captcha">
+            <!-- <div class="form-group" *ngIf="captcha">
               <label>Enter captcha</label>
               <div id="preview" class="preview" #previewCaptcha></div>
               <div class="input-line"> 
                 <input formControlName="captchaName" class="input-captcha" type="text" placeholder="Enter captcha text"/>
-                <button>
+                <button (click)="generateCaptcha()">
                   <i class="fa fa-refresh"></i>
                 </button>
               </div> 
-            </div>
+            </div> -->
 
             <div class="form-group forgot-password">
               <a href="/forgot-password"
-                >{{ "login.forgot_password" | translate }}?</a
-              >
+                >{{ "login.forgot_password" | translate }}?
+              </a>
             </div>
 
             <div class="form-group">
