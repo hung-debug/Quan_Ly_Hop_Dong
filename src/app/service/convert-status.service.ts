@@ -24,6 +24,8 @@ export class ConvertStatusService {
       return this.translate.instant('prepare_expires');
     } else if(code == 'signed') {
       return this.translate.instant('contract.signed');
+    } else if(code == 'total') {
+      return this.translate.instant('total');
     }
     return code;
   }

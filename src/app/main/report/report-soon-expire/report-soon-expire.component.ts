@@ -3,6 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
+import { ContractService } from 'src/app/service/contract.service';
 import { InputTreeService } from 'src/app/service/input-tree.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
@@ -19,8 +20,8 @@ export class ReportSoonExpireComponent implements OnInit {
   listOrgCombobox: any;
   date: any;
   optionsStatus: any;
-  list: any;
-  cols: any;
+  list: any[] = [];
+  cols: any[];
   colsSuggest: any;
   mergeCol: any;
   organization_id_user_login: any;
@@ -35,6 +36,8 @@ export class ReportSoonExpireComponent implements OnInit {
 
   Arr = Array;
 
+  orgName: any;
+
   constructor(
     private appService: AppService,
     private inputTreeService: InputTreeService,
@@ -45,7 +48,8 @@ export class ReportSoonExpireComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private datepipe: DatePipe,
 
-    private translate: TranslateService 
+    private translate: TranslateService ,
+    private contractService: ContractService
 
   ) {}
 
@@ -54,6 +58,9 @@ export class ReportSoonExpireComponent implements OnInit {
 
     this.appService.setTitle('report.expires-soon.contract.full');
 
+    this.contractService.getDataNotifyOriganzation().subscribe((res: any) => {
+      this.orgName = res.name;
+    })
     
     this.optionsStatus = [
       { id: -1, name: 'Tất cả' },
@@ -79,49 +86,6 @@ export class ReportSoonExpireComponent implements OnInit {
       ];
     }
 
-    this.cols = [
-      {
-        id: 1,
-        header: 'contract.name',
-        style: 'text-align: left;',
-        colspan: 1,
-        rowspan: '2',
-      },
-      {
-        id: 2,
-        header: 'contract.type',
-        style: 'text-align: left;',
-        colspan: 1,
-        rowspan: '2',
-      },
-      {
-        id: 3,
-        header: 'contract.number',
-        style: 'text-align: left;',
-        colspan: 1,
-        rowspan: '2',
-      },
-      // {id: 4,header: 'contract.uid', style:'text-align: left;',colspan: 1,rowspan:'2' },
-      // {id: 5,header: 'contract.connect', style: 'text-align: left',colspan: 1,rowspan:'2'},
-      // {id: 6,header: 'contract.time.create', style:'text-align: left',colspan: 1,rowspan:'2'},
-      {
-        id: 7,
-        header: 'signing.expiration.date',
-        style: 'text-align: left',
-        colspan: 1,
-        rowspan: '2',
-      },
-      // {id: 8,header: 'contract.status.v2',style:'text-align:left',colspan: 1,rowspan:'2'},
-      // {id: 9,header: 'date.completed', style: 'text-align: left',colspan: 1,rowspan:'2'},
-      {
-        id: 10,
-        header: 'suggest',
-        style: 'text-align: center',
-        colspan: '5',
-        rowspan: 1,
-      },
-    ];
-
     //lay id user
     this.organization_id_user_login =
       this.userService.getAuthCurrentUser().organizationId;
@@ -135,6 +99,8 @@ export class ReportSoonExpireComponent implements OnInit {
 
       this.selectedNodeOrganization = this.listOrgCombobox.filter((p: any) => p.data == this.organization_id);
     });
+
+    this.setColForTable();
   }
 
   changeCheckBox(event: any) {
@@ -149,7 +115,47 @@ export class ReportSoonExpireComponent implements OnInit {
     return true;
   }
 
+  setColForTable() {
+    this.cols = [
+      {
+        id: 1,
+        header: 'contract.name',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        id: 2,
+        header: 'contract.type',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        id: 3,
+        header: 'contract.number',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        id: 7,
+        header: 'signing.expiration.date',
+        style: 'text-align: left',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        id: 10,
+        header: 'suggest',
+        style: 'text-align: left',
+        colspan: 1,
+        rowspan: 1,
+      },
+    ];
+  }
 
+  maxParticipants: number = 0;
   export(flag: boolean) {
     if(!this.validData()) {
       return;
@@ -191,7 +197,25 @@ export class ReportSoonExpireComponent implements OnInit {
   
           this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
         } else {
-          console.log("response");
+          this.setColForTable();
+          for(let i = 0; i < response.maxParticipant - 1; i++) {
+            this.cols.push({
+              id: 10+i,
+              header: 'Bên được yêu cầu ký '+(i+1),
+              style: 'text-align: left;',
+              colspan: 1,
+              rowspan: 1,
+            })
+          }
+
+          this.maxParticipants = response.maxParticipant;
+
+          let listFirst = [this.orgName];
+          let letSecond = response.contracts;
+
+          console.log("re ", response.contracts)
+  
+          this.list = listFirst.concat(letSecond);
         }
       
     })

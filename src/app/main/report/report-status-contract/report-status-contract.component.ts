@@ -79,10 +79,6 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
 
     this.appService.setTitle('report.processing.status.contract.full');
 
-    this.contractService.getDataNotifyOriganzation().subscribe((res: any) => {
-      this.orgName = res.name;
-    })
-
     this.getTypeListContract();
 
     this.optionsStatus = [
@@ -218,6 +214,7 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length ? this.selectedNodeOrganization : this.selectedNodeOrganization[0]
 
+    this.orgName = this.selectedNodeOrganization.label;
     let idOrg = this.selectedNodeOrganization.data;
 
     let from_date: any = '';
@@ -258,7 +255,7 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
         this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
       } else {
         this.setColForTable();
-        for(let i = 0; i < response.maxParticipant; i++) {
+        for(let i = 0; i < response.maxParticipant - 1; i++) {
           this.cols.push({
             id: 10+i,
             header: 'Bên được yêu cầu ký '+(i+1),
@@ -271,11 +268,12 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
         this.maxParticipants = response.maxParticipant;
         this.cols.sort((a,b) => a.id - b.id )
 
-        this.list = response.contracts;
-      }
-      
-    })
+        let listFirst = [this.orgName];
+        let letSecond = response.contracts;
 
+        this.list = listFirst.concat(letSecond);
+      }    
+    })
   }
 
   convert(code: string) {

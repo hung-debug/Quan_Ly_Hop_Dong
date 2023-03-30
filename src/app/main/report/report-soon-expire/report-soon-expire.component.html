@@ -65,28 +65,37 @@
             </ng-template>
 
             <ng-template pTemplate="body" let-list let-row="rowIndex">
-                <tr class="subheader-row">
-                    <!-- <ng-container style="background-color: #EEF7FF;" *ngIf="row == 0">
-                        <td *ngIf="row == 0" style="font-style: normal;font-weight: 800;font-size: 13px;">{{this.orgName}}</td>
+                <tr>
+                    <ng-container style="background-color: #EEF7FF;" *ngIf="row == 0">
+                        <td style="font-style: normal;font-weight: 800;font-size: 13px;">{{this.orgName}}</td>
                         <td *ngFor="let i of Arr(cols.length - 1).fill(1)"></td>
-                    </ng-container> -->
+                    </ng-container>
 
-                    <!-- <ng-container *ngIf="row > 0">
+                    <ng-container *ngIf="row > 0">
                         <td>{{list.name}}</td>
                         <td>{{list.typeName}}</td>
-                        <td>{{this.convert(list.status)}}</td>
-                        <td>{{list.organization.name}}</td>
-                        <td *ngFor="let i of Arr(maxParticipants).fill(1)">
+                        <td>{{list.contractNo}}</td>
+                        <td>{{list.contractExpireTime}}</td>
+                        <td>{{list.participants[0].name}}</td>
+                        <td *ngFor="let i of Arr(maxParticipants - 1).fill(1)">
                             <span *ngIf="list.participants[i]">
                                 {{ list.participants[i].name }}
                             </span>
                         </td>
-                        <td>{{list.processedUser}}</td>
-                        <td>{{list.processingUser}}</td>
-                        <td>{{list.notProcessedYet}}</td>
-                    </ng-container> -->
+                    </ng-container>
                 </tr>
+            </ng-template>
+
+            <ng-template pTemplate="paginatorleft" let-state>
+                <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? (state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
+              </ng-template>
+            <ng-template pTemplate="paginatorright" let-state>
+                <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ?(state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
             </ng-template>
         </p-table>
     </div>
 </div>
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+    <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+</ngx-spinner>

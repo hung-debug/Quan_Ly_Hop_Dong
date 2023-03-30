@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Toast } from 'ngx-toastr';
 import { AppService } from 'src/app/service/app.service';
+import { ContractService } from 'src/app/service/contract.service';
 import { InputTreeService } from 'src/app/service/input-tree.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
@@ -46,6 +47,9 @@ export class ReportDetailComponent implements OnInit {
   contractStatus: number = -1;
 
   fetchChildData: boolean = false;
+  Arr = Array;
+
+  orgName: any;
 
   constructor(
     private appService: AppService,
@@ -56,7 +60,8 @@ export class ReportDetailComponent implements OnInit {
     private datepipe: DatePipe,
     private reportService: ReportService,
     private toastService: ToastService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private contractService: ContractService
 
   ) {
     this.formGroup = this.fbd.group({
@@ -70,6 +75,10 @@ export class ReportDetailComponent implements OnInit {
     this.spinner.hide();
 
     this.appService.setTitle('report.detail.contract.full');
+
+    this.contractService.getDataNotifyOriganzation().subscribe((res: any) => {
+      this.orgName = res.name;
+    })
 
     this.list = [
       {
@@ -96,86 +105,15 @@ export class ReportDetailComponent implements OnInit {
       { id: 30, name: 'Hoàn thành' },
     ];
 
-    this.cols = [
-      {
-        id: 1,
-        header: 'contract.name',
-        style: 'text-align: left;',
-        colspan: 1,
-        rowspan: '2',
-      },
-      {
-        id: 2,
-        header: 'contract.type',
-        style: 'text-align: left;',
-        colspan: 1,
-        rowspan: '2',
-      },
-      {
-        id: 3,
-        header: 'contract.number',
-        style: 'text-align: left;',
-        colspan: 1,
-        rowspan: '2',
-      },
-      {
-        id: 4,
-        header: 'contract.uid',
-        style: 'text-align: left;',
-        colspan: 1,
-        rowspan: '2',
-      },
-      {
-        id: 5,
-        header: 'contract.connect',
-        style: 'text-align: left',
-        colspan: 1,
-        rowspan: '2',
-      },
-      {
-        id: 6,
-        header: 'contract.time.create',
-        style: 'text-align: left',
-        colspan: 1,
-        rowspan: '2',
-      },
-      {
-        id: 7,
-        header: 'signing.expiration.date',
-        style: 'text-align: left',
-        colspan: 1,
-        rowspan: '2',
-      },
-      {
-        id: 8,
-        header: 'contract.status.v2',
-        style: 'text-align:left',
-        colspan: 1,
-        rowspan: '2',
-      },
-      {
-        id: 9,
-        header: 'date.completed',
-        style: 'text-align: left',
-        colspan: 1,
-        rowspan: '2',
-      },
-      {
-        id: 10,
-        header: 'suggest',
-        style: 'text-align: center',
-        colspan: '5',
-        rowspan: 1,
-      },
+    this.colsSuggest = [
+      { header: 'sign.object', style: 'text-align: left, min-width:300px, width: 300px'},
+      { header: 'name.unit', style: 'text-align: left, min-width:300px, width: 300px' },
+      { header: 'user.view', style: 'text-align: left, min-width:300px, width: 300px' },
+      { header: 'user.sign', style: 'text-align: left, min-width:300px, width: 300px' },
+      { header: 'user.doc', style: 'text-align: left, min-width:300px, width: 300px'},
     ];
 
-    this.colsSuggest = [
-      { header: 'sign.object', style: 'text-align: left' },
-      { header: 'name.unit', style: 'text-align: left' },
-      { header: 'user.view', style: 'text-align: left' },
-      { header: 'user.sign', style: 'text-align: left' },
-      { header: 'user.doc', style: 'text-align: left' },
-    ];
+    this.setColForTable();
 
     this.getMergeCol();
 
@@ -236,18 +174,108 @@ export class ReportDetailComponent implements OnInit {
     return true;
   }
 
+  setColForTable() {
+    this.cols = [
+      {
+        id: 1,
+        header: 'contract.name',
+        style: 'text-align: left; width: 300px',
+        colspan: 1,
+        rowspan: 2,
+      },
+      {
+        id: 2,
+        header: 'contract.type',
+        style: 'text-align: left; width: 300px',
+        colspan: 1,
+        rowspan: 2,
+      },
+      {
+        id: 3,
+        header: 'contract.number',
+        style: 'text-align: left; width: 300px',
+        colspan: 1,
+        rowspan: 2,
+      },
+      {
+        id: 4,
+        header: 'contract.uid',
+        style: 'text-align: left; width: 300px',
+        colspan: 1,
+        rowspan: 2,
+      },
+      {
+        id: 5,
+        header: 'contract.connect',
+        style: 'text-align: left; width: 300px',
+        colspan: 1,
+        rowspan: 2,
+      },
+      {
+        id: 6,
+        header: 'contract.time.create',
+        style: 'text-align: left; width: 300px',
+        colspan: 1,
+        rowspan: 2,
+      },
+      {
+        id: 7,
+        header: 'signing.expiration.date',
+        style: 'text-align: left; width: 300px',
+        colspan: 1,
+        rowspan: 2,
+      },
+      {
+        id: 8,
+        header: 'contract.status.v2',
+        style: 'text-align: left; width: 300px',
+        colspan: 1,
+        rowspan: 2,
+      },
+      {
+        id: 9,
+        header: 'date.completed',
+        style: 'text-align: left; width: 300px',
+        colspan: 1,
+        rowspan: 2,
+      },
+      {
+        id: 10,
+        header:'created.unit',
+        style: 'text-align: left; width: 300px',
+        colspan: 1,
+        rowspan: 2,
+      },
+      {
+        id: 11,
+        header:'created.user',
+        style: 'text-align: left; width: 300px',
+        colspan: 1,
+        rowspan: 2,
+      },
+      {
+        id: 1000,
+        header: 'suggest',
+        style: 'text-align: left; width: 1500px',
+        colspan: 5,
+        rowspan: 1,
+      },
+    ];
+  }
+
   //Export ra file excel
-  export() {
+  maxParticipants: number = 0;
+  export(flag: boolean) {
     if(!this.validData()) {
       return;
     }
 
     this.spinner.show();
 
-    let idOrg = this.organization_id;
-    if(this.selectedNodeOrganization.data) {
-      idOrg = this.selectedNodeOrganization.data;
-    }
+    this.selectedNodeOrganization = !this.selectedNodeOrganization.length ? this.selectedNodeOrganization : this.selectedNodeOrganization[0]
+
+    this.orgName = this.selectedNodeOrganization.label;
+    let idOrg = this.selectedNodeOrganization.data;
 
     let from_date: any = '';
     let to_date: any = '';
@@ -262,21 +290,69 @@ export class ReportDetailComponent implements OnInit {
       contractStatus = -1;
 
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
-    this.reportService.export('rp-detail',idOrg,params, true).subscribe((response: any) => {
+    this.reportService.export('rp-detail',idOrg,params, flag).subscribe((response: any) => {
         this.spinner.hide();
-        let url = window.URL.createObjectURL(response);
-        let a = document.createElement('a');
-        document.body.appendChild(a);
-        a.setAttribute('style', 'display: none');
-        a.href = url;
-        a.download = `report-detail_${new Date().getTime()}.xlsx`;
-        a.click();
-        window.URL.revokeObjectURL(url);
-        a.remove();
+        if(flag) {
+          this.spinner.hide();
+          let url = window.URL.createObjectURL(response);
+          let a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          a.download = `report-detail_${new Date().getTime()}.xlsx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+  
+          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+        } else {
 
-        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+          this.setColForTable();
+      
+
+          for(let i = 0; i < response.maxParticipant - 1; i++) {
+            this.cols.push({
+              id: 1000+i,
+              header: 'Bên được yêu cầu ký '+(i+1),
+              style: 'text-align: left; width: 1500px',
+              colspan: 5,
+              rowspan: 1,
+            })
+
+            this.colsSuggest.push(
+              { header: 'sign.object', style: 'text-align: left, width: 300px' },
+              { header: 'name.unit', style: 'text-align: left, width: 300px' },
+              { header: 'user.view', style: 'text-align: left, width: 300px' },
+              { header: 'user.sign', style: 'text-align: left, width: 300px' },
+              { header: 'user.doc', style: 'text-align: left, width: 300px' },
+            );
+          }
+
+          console.log("response ", response);
+
+          this.maxParticipants = response.maxParticipant;
+
+          console.log("m ", this.maxParticipants);
+
+          let listFirst = [this.orgName];
+          let letSecond = response.contracts;
+
+          this.list = listFirst.concat(letSecond);
+        }
+      
     })
  
+  }
+
+  getValue(list: any,index: number,code: string) {
+    if(list.participants[index]) {
+      if(code == 'type')
+        return list.participants[index].type
+      if(code == 'name')
+      return list.participants[index].name
+    }
+
+    return null;
   }
 
   changeCheckBox(event: any) {

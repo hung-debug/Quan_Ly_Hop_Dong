@@ -565,5 +565,7 @@
   "valid.login.user":"Participants in the partner's contract processing flow must not overlap",
   "captcha.wrong":"Wrong captcha",
   "weak.pass":"Your password is not strong enough. Please change your password to protect your account",
-  "error.update.handler": "Error update handler"
+  "error.update.handler": "Error update handler",
+  "created.unit":"Created unit",
+  "created.user":"Created user"
 }

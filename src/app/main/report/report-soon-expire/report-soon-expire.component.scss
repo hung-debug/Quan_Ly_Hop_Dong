@@ -135,4 +135,70 @@ input[type="checkbox"]:checked + label:before {
   font-size: 12px;
 }
 
+:host ::ng-deep {
+  .p-calendar {
+    font-size: 13px !important;
+    font-family: 'font_lexend_deca';
+    width: 100%;
+  }
+  .p-datepicker table td {
+    padding: 0;
+  }
+  .p-calendar-w-btn, .p-calendar-w-btn .p-inputtext {
+    height: 33px;
+  }
+  .p-calendar-w-btn .p-inputtext{
+    //border: 1px solid #106DB6 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+  }
+  .p-calendar-w-btn .p-datepicker-trigger {
+    border: 1px solid #ced4da;
+  }
+  .p-selectbutton .p-button {
+    outline: 0 !important;
+    box-shadow: none !important;
+    height: 33px;
+    width: 50%;
+  }
+
+  .pi-fw {
+    color:  #106DB6;
+    margin-right: 5px;
+    font-size: 10px;
+  }
+
+  .p-paginator .p-paginator-pages .p-paginator-page{
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+    margin: 4px;
+    height: 26px !important;
+    width: 50px;
+    border-radius: 5px;
+    background-color: #e6e6e6;
+  }
+
+  .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    background-color: #2199e8;
+    color: white;
+    border: 1px solid #2199e8;
+  }
+
+  .p-paginator-bottom .p-ripple{
+    padding: 10px;
+    border-width: 0 !important;
+    height: 26px !important;
+    width: 50px !important;
+  }
+
+  .p-datatable-table, .p-datatable-table .ng-star-inserted, .p-paginator-pages .ng-star-inserted{
+    font-size: 13px;
+    font-family: font_lexend_deca;
+  }
+}
+
   
