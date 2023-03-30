@@ -232,8 +232,14 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
     if(!contractStatus) 
       contractStatus = -1;
 
-    console.log("id ", this.type_id);
+    this.type_id = this.type_id ? this.type_id : "";
+
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData+'&type='+this.type_id;
+
+    if(!this.type_id) {
+      params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus;
+    }
+
     this.reportService.export('rp-by-status-process',idOrg,params, flag).subscribe((response: any) => {
 
       this.spinner.hide();

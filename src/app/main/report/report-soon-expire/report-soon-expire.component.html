@@ -62,21 +62,29 @@
                       {{col.header | translate}}
                     </th>
                 </tr>
-
-                <!--header 2 bên đề nghị-->
-                <tr>
-                    <th *ngFor="let col of colsSuggest" [style]='col.style' [colSpan]="col.colspan" [rowSpan]="col.rowspan">
-                        {{col.header | translate}}
-                    </th>
-                </tr>
             </ng-template>
 
-            <ng-template pTemplate="body" let-list>
+            <ng-template pTemplate="body" let-list let-row="rowIndex">
                 <tr class="subheader-row">
-                    <!-- <td>{{list.product}}</td> -->
-                    <td *ngFor="let col of mergeCol; let colIndex = index">
-                        <span *ngIf="col.id == 1">{{list.product}}</span>
-                    </td>
+                    <!-- <ng-container style="background-color: #EEF7FF;" *ngIf="row == 0">
+                        <td *ngIf="row == 0" style="font-style: normal;font-weight: 800;font-size: 13px;">{{this.orgName}}</td>
+                        <td *ngFor="let i of Arr(cols.length - 1).fill(1)"></td>
+                    </ng-container> -->
+
+                    <!-- <ng-container *ngIf="row > 0">
+                        <td>{{list.name}}</td>
+                        <td>{{list.typeName}}</td>
+                        <td>{{this.convert(list.status)}}</td>
+                        <td>{{list.organization.name}}</td>
+                        <td *ngFor="let i of Arr(maxParticipants).fill(1)">
+                            <span *ngIf="list.participants[i]">
+                                {{ list.participants[i].name }}
+                            </span>
+                        </td>
+                        <td>{{list.processedUser}}</td>
+                        <td>{{list.processingUser}}</td>
+                        <td>{{list.notProcessedYet}}</td>
+                    </ng-container> -->
                 </tr>
             </ng-template>
         </p-table>

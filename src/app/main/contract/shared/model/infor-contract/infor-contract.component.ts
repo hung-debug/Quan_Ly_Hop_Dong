@@ -1002,10 +1002,10 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       return false;
     }
 
-    if(!parttern_input.contract_name_valid.test(this.name)) {
-      this.errorContractName = "error.contract.name.valid";
-      return false;
-    }
+    // if(!parttern_input.contract_name_valid.test(this.name)) {
+    //   this.errorContractName = "error.contract.name.valid";
+    //   return false;
+    // }
 
     return true;
   }

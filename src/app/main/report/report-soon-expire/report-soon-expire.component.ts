@@ -33,6 +33,7 @@ export class ReportSoonExpireComponent implements OnInit {
   fetchChildData: boolean = false;
   contractStatus: number = -1;
 
+  Arr = Array;
 
   constructor(
     private appService: AppService,
