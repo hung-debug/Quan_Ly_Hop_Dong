@@ -251,6 +251,7 @@
   "error.name.required":"Name is required",
   "error.phone.required":"Phone is required",
   "error.cardid.required":"MST/CMT/CCCD should enter 9 or 12 characters",
+  "error.card.required":"MST/CMT/CCCD is required",
   "error.email.required":"Email is required",
   "error.ceca.required":"Do not leave the contract file push to the Ministry of Industry and Trade empty",
   "error.contract.file.required": "Contract file is required",
@@ -452,11 +453,11 @@
   "contract.purchased": "Number of contracts purchased:",
   "ekyc.purchased": "Number of eKYC purchased:",
   "sms.purchased": "Number of SMS purchased:",
-  "sms.used": "Number of SMS used",
-  "timestamp.used": "Number of timestamp used",
-  "timestamp.purchased":"Number of timestamp purchased",
-  "ceca.used":"Number of Ceca used",
-  "ceca.purchased": "Number of Ceca purchased",
+  "sms.used": "Number of SMS used:",
+  "timestamp.used": "Number of timestamp used:",
+  "timestamp.purchased":"Number of timestamp purchased:",
+  "ceca.used":"Number of Ceca used:",
+  "ceca.purchased": "Number of Ceca purchased:",
   "information.signatures": "INFORMATION OF THE SIGNATURES",
   "contract.number.lot": "CONTRACT NUMBER BY LOT",
   "ok.sign": "Ok and sign",
@@ -563,5 +564,6 @@
   "total":"Total",
   "valid.login.user":"Participants in the partner's contract processing flow must not overlap",
   "captcha.wrong":"Wrong captcha",
-  "weak.pass":"Your password is not strong enough. Please change your password to protect your account"
+  "weak.pass":"Your password is not strong enough. Please change your password to protect your account",
+  "error.update.handler": "Error update handler"
 }
