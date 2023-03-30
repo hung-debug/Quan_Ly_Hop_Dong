@@ -565,5 +565,6 @@
   "prepare_expires":"Sắp quá hạn",
   "total":"Tổng số",
   "valid.login.user":"Người tham gia trong luồng xử lý hợp đồng của đối tác không được trùng nhau",
-  "captcha.wrong":"Nhập sai captcha"
+  "captcha.wrong":"Nhập sai captcha",
+  "weak.pass":"Mật khẩu của bạn chưa đủ mạnh. Hãy đổi mật khẩu để bảo vệ tài khoản"
 }

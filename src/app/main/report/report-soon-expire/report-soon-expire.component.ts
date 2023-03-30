@@ -49,6 +49,8 @@ export class ReportSoonExpireComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    this.spinner.hide();
+
     this.appService.setTitle('report.expires-soon.contract.full');
 
     

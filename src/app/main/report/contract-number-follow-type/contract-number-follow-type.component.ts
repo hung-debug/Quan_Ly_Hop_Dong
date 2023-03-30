@@ -56,6 +56,8 @@ export class ContractNumberFollowTypeComponent implements OnInit {
     expired: 0
   };
 
+  Arr = Array;
+
   constructor(
     private appService: AppService,
     private userService: UserService,
@@ -70,6 +72,8 @@ export class ContractNumberFollowTypeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    this.spinner.hide();
     this.appService.setTitle('report.number.contracts.contract-type.full');
 
     this.optionsStatus = [
@@ -263,7 +267,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
     if(!contractStatus) 
       contractStatus = -1;
 
-    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChilData='+this.fetchChildData;
+    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
     this.reportService.export('rp-by-type',idOrg,params, flag).subscribe((response: any) => {
 
         this.spinner.hide();

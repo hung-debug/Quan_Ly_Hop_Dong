@@ -562,5 +562,6 @@
   "prepare_expires":"Prepare expire",
   "total":"Total",
   "valid.login.user":"Participants in the partner's contract processing flow must not overlap",
-  "captcha.wrong":"Wrong captcha"
+  "captcha.wrong":"Wrong captcha",
+  "weak.pass":"Your password is not strong enough. Please change your password to protect your account"
 }

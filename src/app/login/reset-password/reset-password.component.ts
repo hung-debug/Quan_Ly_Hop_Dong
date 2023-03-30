@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { parttern_input } from 'src/app/config/parttern';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -101,6 +102,12 @@ export class ResetPasswordComponent implements OnInit {
         this.error = true;
         this.errorDetail = 'error.confirm-password-new.incorrect';
       }else{
+
+        if(!parttern_input.weak_pass.test(password)) {
+          this.error = true;
+          this.errorDetail = 'error.password.valid';
+          return false;
+        }
 
         let token = this.token;
         this.userService.sendResetPassword(token, password).subscribe((data) => {

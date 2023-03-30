@@ -67,6 +67,8 @@ export class ReportDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.spinner.hide();
+
     this.appService.setTitle('report.detail.contract.full');
 
     this.list = [
@@ -259,7 +261,7 @@ export class ReportDetailComponent implements OnInit {
     if(!contractStatus) 
       contractStatus = -1;
 
-    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChilData='+this.fetchChildData;
+    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
     this.reportService.export('rp-detail',idOrg,params, true).subscribe((response: any) => {
         this.spinner.hide();
         let url = window.URL.createObjectURL(response);

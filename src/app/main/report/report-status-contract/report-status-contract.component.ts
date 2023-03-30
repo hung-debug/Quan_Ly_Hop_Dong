@@ -75,6 +75,8 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    this.spinner.hide();
+
     this.appService.setTitle('report.processing.status.contract.full');
 
     this.contractService.getDataNotifyOriganzation().subscribe((res: any) => {
