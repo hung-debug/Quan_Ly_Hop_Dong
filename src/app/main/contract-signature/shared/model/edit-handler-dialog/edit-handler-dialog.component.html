@@ -16,7 +16,7 @@
         <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
           <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}}-->
-          <div class="participants--input" style="display: flex" *ngIf="login_by==='phone'">
+          <div class="participants--input" style="display: flex" *ngIf="login_by==='phone' && this.id_sign_type !== '2'">
             <div class="participants__name">
               <div class="label_detail text-color" *ngIf="changeTypeSign">
                 <div>

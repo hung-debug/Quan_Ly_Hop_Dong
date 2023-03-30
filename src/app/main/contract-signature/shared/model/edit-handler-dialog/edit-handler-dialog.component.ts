@@ -128,8 +128,9 @@ export class EditHandlerComponent implements OnInit {
     this.dialogRef.close();
   }
   keyDownHandler(event: any) {
-    if (event.keyCode === 32)
+    if (event.keyCode === 32) {
       event.preventDefault();
+    }
   }
 
   getNameObjectValid(role_numer: number) {
@@ -157,7 +158,7 @@ export class EditHandlerComponent implements OnInit {
     let dataUpdate = {
       ...this.data,
       name: this.name,
-      email: this.isCheckRadio ? this.email : this.phone,
+      email: this.isCheckRadio ? this.email.toLowerCase() : this.phone,
       phone: this.phone,
       login_by: this.isCheckRadio ? "email" : "phone",
       card_id: this.card_id,
@@ -179,20 +180,20 @@ export class EditHandlerComponent implements OnInit {
               console.log("res SU", res);
               switch (res.message) {
                 case "E01": {
-                  this.toastService.showErrorHTMLWithTimeout("email.already.exist", "", 3000);
+                  this.toastService.showErrorHTMLWithTimeout(this.translate.instant('email.already.exist'), "", 3000);
                   break
                 }
                 case "E02": {
-                  this.toastService.showErrorHTMLWithTimeout("phone.already.exist", "", 3000);
+                  this.toastService.showErrorHTMLWithTimeout(this.translate.instant('phone.already.exist'), "", 3000);
                   break
                 }
                 case "E03": {
-                  this.toastService.showErrorHTMLWithTimeout("cardid.already.exist", "", 3000);
+                  this.toastService.showErrorHTMLWithTimeout(this.translate.instant('cardid.already.exist'), "", 3000);
                   break
-                } default: this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
+                } default: this.toastService.showErrorHTMLWithTimeout(this.translate.instant('error.update.handler'), "", 3000);
               }
             } else {
-              this.toastService.showSuccessHTMLWithTimeout('Cập nhật người xử lý thành công', "", 3000);
+              this.toastService.showSuccessHTMLWithTimeout(this.translate.instant('update.success'), "", 3000);
               dataUpdate = { ...dataUpdate, "change_num": this.data.change_num + 1 }
               this.dialogRef.close(dataUpdate);
               // this.router.navigate(['/main/form-contract/detail/' + this.id]);
@@ -207,10 +208,15 @@ export class EditHandlerComponent implements OnInit {
   }
   validData() {
     this.clearError();
-    this.nameRequired();
-    this.phoneRequired();
-    this.cardRequired();
-    this.emailRequired();
+    // this.nameRequired();
+    // this.phoneRequired();
+    // this.cardRequired();
+    // this.emailRequired();
+    console.log('this.nameRequired()', this.nameRequired());
+    console.log('this.phoneRequired()', this.phoneRequired());
+    console.log('this.cardRequired()', this.cardRequired());
+    console.log('this.emailRequired()', this.emailRequired());
+
     if (!this.nameRequired() || !this.phoneRequired() || !this.cardRequired() || !this.emailRequired()) {
       // this.spinner.hide();
       return false;
@@ -227,7 +233,11 @@ export class EditHandlerComponent implements OnInit {
   }
   phoneRequired() {
     this.errorPhone = "";
-    if (this.phone == "" && !this.isCheckRadio) {
+    if(this.phone && !this.pattern.phone.test(this.phone)){
+      this.errorPhone = "error.user.phone.format";
+      return false;
+    }
+    else if (!this.phone && !this.isCheckRadio) {
       this.errorPhone = "error.phone.required";
       return false;
     }
@@ -235,17 +245,23 @@ export class EditHandlerComponent implements OnInit {
   }
   cardRequired() {
     this.errorCardid = "";
-    if (!this.pattern.cardid.test(this.card_id) && this.id_sign_type === 4) {
-      this.errorCardid = "taxcode.format";
+    if(this.card_id == ""){
+      this.errorCardid = "error.card.required";
       return false;
     }
-
+    if ((this.id_sign_type === 4 || this.id_sign_type === 2) && !this.pattern.cardid.test(this.card_id)) {
+      this.errorCardid = "taxcode.format";
+      return false;
+    } 
     return true;
 
   }
   emailRequired() {
     this.errorEmail = "";
-    if (this.email == "") {
+    if (!this.pattern.email.test(this.email)) {
+      this.errorEmail = "error.user.email.format";
+      return false;
+    } else if (this.email == ""){
       this.errorEmail = "error.email.required";
       return false;
     }

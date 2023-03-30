@@ -167,7 +167,7 @@ export class UnitComponent implements OnInit {
     let dataChildren:any[]=[];
     let arrCon = this.listData.filter((p: any) => p.parent_id == element.id);
 
-    console.log("arrCon ", arrCon);
+    // console.log("arrCon ", arrCon);
     
     arrCon.forEach((elementCon: any, indexCOn: number) => {
 

@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { data } from 'jquery';
 
 export interface Unit {
+  totalCecaPurchased: number;
   tax_code: any;
   id: number,
   name: string,
@@ -205,4 +206,12 @@ export class UnitService {
     }
     return throwError(this.errorData);
   };
+  getDataNotifyOriganzation1(organization_id:any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let listUrl = this.getNotifyOriganzation + organization_id;
+    return this.http.get<any[]>(listUrl, {headers}).pipe();
+  }
 }
