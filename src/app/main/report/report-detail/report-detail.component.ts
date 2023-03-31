@@ -11,6 +11,9 @@ import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
 
+import * as moment from 'moment';
+import { ConvertStatusService } from 'src/app/service/convert-status.service';
+
 @Component({
   selector: 'app-report-detail',
   templateUrl: './report-detail.component.html',
@@ -61,8 +64,8 @@ export class ReportDetailComponent implements OnInit {
     private reportService: ReportService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private contractService: ContractService
-
+    private contractService: ContractService,
+    private convertStatusService: ConvertStatusService,
   ) {
     this.formGroup = this.fbd.group({
       name: this.fbd.control(''),
@@ -75,10 +78,6 @@ export class ReportDetailComponent implements OnInit {
     this.spinner.hide();
 
     this.appService.setTitle('report.detail.contract.full');
-
-    this.contractService.getDataNotifyOriganzation().subscribe((res: any) => {
-      this.orgName = res.name;
-    })
 
     this.list = [
       {
@@ -117,9 +116,6 @@ export class ReportDetailComponent implements OnInit {
 
     this.getMergeCol();
 
-    //call api danh sách chi tiết hợp đồng
-    this.getDetailContractsList();
-
     if (sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     } else if (sessionStorage.getItem('lang') == 'en') {
@@ -150,20 +146,17 @@ export class ReportDetailComponent implements OnInit {
     });
   }
 
+  convertTime(time: any,code?: any) {
+    return moment(time, "YYYY/MM/DD HH:mm:ss") ? moment(time, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : "" ;
+  }
+
+  convertStatus(status: string) {
+    return this.convertStatusService.convert(status);
+  }
+
   //merge các cột nhỏ của bảng
   getMergeCol() {
     this.mergeCol = this.cols.concat(this.colsSuggest);
-  }
-
-  getMaxCol() {
-    return 14;
-  }
-
-  getDetailContractsList() {
-    // this.reportService.getDetailContractListReport(this.params).subscribe((response) => {
-    //   //lấy số lượng tổ chức lớn nhất tham gia trong danh sách hợp đồng
-    //   this.maxOrg = response.maxOrg;
-    // })
   }
 
   validData() {
@@ -265,6 +258,7 @@ export class ReportDetailComponent implements OnInit {
 
   //Export ra file excel
   maxParticipants: number = 0;
+  clickTable: boolean = false;
   export(flag: boolean) {
     if(!this.validData()) {
       return;
@@ -289,6 +283,8 @@ export class ReportDetailComponent implements OnInit {
     if(!contractStatus) 
       contractStatus = -1;
 
+      this.clickTable = true;
+
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
     this.reportService.export('rp-detail',idOrg,params, flag).subscribe((response: any) => {
         this.spinner.hide();
@@ -306,33 +302,28 @@ export class ReportDetailComponent implements OnInit {
   
           this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
         } else {
-
           this.setColForTable();
       
-
           for(let i = 0; i < response.maxParticipant - 1; i++) {
             this.cols.push({
               id: 1000+i,
               header: 'Bên được yêu cầu ký '+(i+1),
-              style: 'text-align: left; width: 1500px',
-              colspan: 5,
+              style: 'text-align: left; width: 1800px',
+              colspan: 6,
               rowspan: 1,
             })
 
             this.colsSuggest.push(
               { header: 'sign.object', style: 'text-align: left, width: 300px' },
               { header: 'name.unit', style: 'text-align: left, width: 300px' },
+              { header: 'contract.lead', style: 'text-align: left, width: 300px' },
               { header: 'user.view', style: 'text-align: left, width: 300px' },
               { header: 'user.sign', style: 'text-align: left, width: 300px' },
               { header: 'user.doc', style: 'text-align: left, width: 300px' },
             );
           }
 
-          console.log("response ", response);
-
           this.maxParticipants = response.maxParticipant;
-
-          console.log("m ", this.maxParticipants);
 
           let listFirst = [this.orgName];
           let letSecond = response.contracts;
@@ -347,12 +338,42 @@ export class ReportDetailComponent implements OnInit {
   getValue(list: any,index: number,code: string) {
     if(list.participants[index]) {
       if(code == 'type')
-        return list.participants[index].type
+        return list.participants[index].type == 3 ? this.translate.instant('personal') : this.translate.instant('organization')
       if(code == 'name')
-      return list.participants[index].name
+        return list.participants[index].name
     }
 
     return null;
+  }
+
+  getName(list: any,index: number,code: string) {
+    let result: any[] = [];
+    if(list.participants[index]) {
+      list.participants[index].recipients.forEach((ele: any) => {
+        // participant.recipients.forEach((ele: any) => {
+          if(code == 'view') {
+            if(ele.role == 2) {
+              result.push(ele.email)
+            }
+          } else if(code == 'sign') {
+            if(ele.role == 3) {
+              result.push(ele.email)
+            }
+          } else if(code == 'doc') {
+            if(ele.role == 4) {
+              result.push(ele.email);
+            }
+          } else if(code == 'coor') {
+            if(ele.role == 1) {
+              result.push(ele.email);
+            }
+          }
+        
+        // })
+      })
+    }
+    
+    return result;
   }
 
   changeCheckBox(event: any) {

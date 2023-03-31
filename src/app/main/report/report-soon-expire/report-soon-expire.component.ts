@@ -163,10 +163,11 @@ export class ReportSoonExpireComponent implements OnInit {
 
     this.spinner.show();
 
-    let idOrg = this.organization_id;
-    if(this.selectedNodeOrganization.data) {
-      idOrg = this.selectedNodeOrganization.data;
-    }
+    this.selectedNodeOrganization = !this.selectedNodeOrganization.length ? this.selectedNodeOrganization : this.selectedNodeOrganization[0]
+
+    this.orgName = this.selectedNodeOrganization.label;
+    let idOrg = this.selectedNodeOrganization.data;
+
 
     let from_date: any = '';
     let to_date: any = '';
@@ -183,8 +184,9 @@ export class ReportSoonExpireComponent implements OnInit {
     let params = '?from_date='+from_date+'&to_date='+to_date+'&type=';
     this.reportService.export('rp-by-effective-date',idOrg,params, flag).subscribe((response: any) => {
 
+        this.spinner.hide();
+
         if(flag) {
-          this.spinner.hide();
           let url = window.URL.createObjectURL(response);
           let a = document.createElement('a');
           document.body.appendChild(a);

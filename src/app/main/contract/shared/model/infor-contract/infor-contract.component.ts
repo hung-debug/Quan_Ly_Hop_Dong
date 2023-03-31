@@ -269,20 +269,32 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       if (file) {
         if (file.size <= 10000000) {
           const file_name = file.name;
+          const extension = file.name.split('.').pop();
+
+          console.log("ex ", extension);
+
+         
+
           if (this.attachFileNameArr.filter((p: any) => p.filename == file_name).length == 0) {
             const extension = file.name.split('.').pop();
-            //this.datas.file_name_attach = file_name;
-            //this.datas.file_name_attach = this.datas.file_name_attach + "," + file_name;
-            this.attachFileArr.push(file);
-            this.datas.attachFileArr = this.attachFileArr;
-            // console.log(this.datas.attachFileArr);
-            this.attachFileNameArr.push({filename: file.name});
-            if (!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length && this.datas.attachFileNameArr.length == 0) {
-              this.datas.attachFileNameArr = [];
-            }
-            this.datas.attachFileNameArr.push({filename: file.name})
-            if (this.datas.is_action_contract_created) {
-              this.uploadFileAttachAgain = true;
+
+            if (extension && extension.toLowerCase() == 'pdf' || extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx' || extension.toLowerCase() == 'png'
+              || extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'jpeg' || extension.toLowerCase() == 'zip' || extension.toLowerCase() == 'rar'
+              || extension.toLowerCase() == 'txt'
+            ) {
+              this.attachFileArr.push(file);
+              this.datas.attachFileArr = this.attachFileArr;
+              // console.log(this.datas.attachFileArr);
+              this.attachFileNameArr.push({filename: file.name});
+              if (!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length && this.datas.attachFileNameArr.length == 0) {
+                this.datas.attachFileNameArr = [];
+              }
+              this.datas.attachFileNameArr.push({filename: file.name})
+              if (this.datas.is_action_contract_created) {
+                this.uploadFileAttachAgain = true;
+              }
+            } else {
+              this.toastService.showWarningHTMLWithTimeout("attach.file.valid", "", 3000);
             }
           } else {
             this.toastService.showWarningHTMLWithTimeout("Trùng file đính kèm", "", 3000);

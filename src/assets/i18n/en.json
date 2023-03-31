@@ -567,5 +567,6 @@
   "weak.pass":"Your password is not strong enough. Please change your password to protect your account",
   "error.update.handler": "Error update handler",
   "created.unit":"Created unit",
-  "created.user":"Created user"
+  "created.user":"Created user",
+  "attach.file.valid":"Contract file requires pdf, doc, docx, png, jpg, jpeg, zip, rar, txt format"
 }

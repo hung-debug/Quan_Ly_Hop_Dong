@@ -50,7 +50,7 @@ export class AddUnitComponent implements OnInit {
         code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
         email: this.fbd.control("", [Validators.email]),
         phone: this.fbd.control("", [Validators.pattern("[0-9 ]{10}")]),
-        fax: this.fbd.control(""),
+        fax: this.fbd.control("",[Validators.pattern(parttern_input.input_form)]),
         status: 1,
         parent_id: this.fbd.control("", [Validators.required]),
         taxCode: this.fbd.control("",Validators.pattern(parttern_input.taxCode_form)),
@@ -79,7 +79,7 @@ export class AddUnitComponent implements OnInit {
             code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
             email: this.fbd.control(data.email, [Validators.email]),
             phone: this.fbd.control(data.phone, [Validators.pattern("[0-9 ]{10}")]),
-            fax: this.fbd.control(data.fax),
+            fax: this.fbd.control(data.fax,[Validators.pattern(parttern_input.input_form)]),
             status: this.fbd.control(data.status),
             parent_id: this.fbd.control(data.parent_id),
             path: this.fbd.control(data.path),
@@ -118,7 +118,7 @@ export class AddUnitComponent implements OnInit {
         code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
         email: this.fbd.control("", [Validators.email]),
         phone: this.fbd.control("", [Validators.pattern("[0-9 ]{10}")]),
-        fax: this.fbd.control(""),
+        fax: this.fbd.control("",[Validators.pattern(parttern_input.input_form)]),
         status: 1,
         parent_id: this.fbd.control(orgId, [Validators.required]),
         taxCode: this.fbd.control("",[Validators.pattern(parttern_input.taxCode_form)]),
@@ -385,40 +385,7 @@ export class AddUnitComponent implements OnInit {
                                           code: 'ADMIN',
                                           selectedRole: roleArrConvert,
                                           organization_id: dataUnit.id
-                                        }
-                                        console.log(dataRoleIn);
-                                        
-                                        this.roleService.addRoleByOrg(dataRoleIn).subscribe(
-                                          dataRole => {
-                                            //them nguoi dung
-                                            const dataUserIn = {
-                                              name: "Admin",
-                                              email: data.email,
-                                              phone: data.phone,
-                                              organizationId: dataUnit.id,
-                                              role: dataRole.id,
-                                              status: 1,
-                                              sign_image: []
-                                            }
-                                            this.userService.addUser(dataUserIn).subscribe(
-                                              dataUser => {
-                                                //this.toastService.showSuccessHTMLWithTimeout('Thêm mới người dùng admin thành công!', "", 3000);
-                                                this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
-                                                this.dialogRef.close();
-                                                this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                                                  this.router.navigate(['/main/unit']);
-                                                });
-                                                this.spinner.hide();
-                                              }, error => {
-                                                this.toastService.showErrorHTMLWithTimeout('Thêm mới người dùng admin thất bại', "", 3000);
-                                                this.spinner.hide();
-                                              }
-                                            )
-                                          }, error => {
-                                            this.toastService.showErrorHTMLWithTimeout('Thêm mới vai trò cho tổ chức thất bại', "", 3000);
-                                            this.spinner.hide();
-                                          }
-                                        )
+                                        }                                      
                                       }, error => {
                                         this.toastService.showErrorHTMLWithTimeout('Thêm mới tổ chức thất bại', "", 3000);
                                         this.spinner.hide();
@@ -451,29 +418,7 @@ export class AddUnitComponent implements OnInit {
                                       selectedRole: roleArrConvert,
                                       organization_id: dataUnit.id
                                     }                                    
-                                    this.roleService.addRoleByOrg(dataRoleIn).subscribe(
-                                      dataRole => {
-                                        this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
-
-                                        this.dialogRef.close();
-                                        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                                          this.router.navigate(['/main/unit']);
-                                        });
-                                        //them nguoi dung
-                                        const dataUserIn = {
-                                          name: "Admin",
-                                          email: data.email,
-                                          phone: data.phone,
-                                          organizationId: dataUnit.id,
-                                          role: dataRole.id,
-                                          status: 1,
-                                          sign_image: []
-                                        }
-                                      }, error => {
-                                        this.toastService.showErrorHTMLWithTimeout('Thêm mới vai trò cho tổ chức thất bại', "", 3000);
-                                        this.spinner.hide();
-                                      }
-                                    )
+                                   
                                   }, error => {
                                     this.toastService.showErrorHTMLWithTimeout('Thêm mới tổ chức thất bại', "", 3000);
                                     this.spinner.hide();
@@ -510,19 +455,8 @@ export class AddUnitComponent implements OnInit {
                             }
                             
                             if(dataUnit1.id) {
-                              this.roleService.addRoleByOrg(dataRoleIn).subscribe(
-                                dataRole => {
-                                  this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
-                                  this.spinner.hide();
-                                  this.dialogRef.close();
-                                  this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                                    this.router.navigate(['/main/unit']);
-                                  });
-                                }, error => {
-                                  this.toastService.showErrorHTMLWithTimeout('Thêm mới vai trò cho tổ chức thất bại', "", 3000);
-                                  this.spinner.hide();
-                                }
-                              )
+                              this.spinner.hide();
+                              this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
                             } else {
                               if(dataUnit1.errors[0].code == 1006) {
                                 this.toastService.showErrorHTMLWithTimeout('Mã số thuế đã tồn tại', "", 3000);

@@ -570,5 +570,6 @@
   "weak.pass":"Mật khẩu đang sử dụng không an toàn. Vui lòng đổi mật khẩu để bảo vệ tài khoản của bạn!",
   "error.update.handler": "Có lỗi cập nhật người xử lý",
   "created.unit":"Đơn vị tạo HĐ",
-  "created.user":"Người tạo"
+  "created.user":"Người tạo",
+  "attach.file.valid":"File hợp đồng yêu cầu định dạng pdf, doc, docx, png, jpg, jpeg, zip, rar, txt"
 }

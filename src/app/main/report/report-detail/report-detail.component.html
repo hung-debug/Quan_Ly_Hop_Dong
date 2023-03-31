@@ -86,29 +86,37 @@
                         <td>{{list.contractNo}}</td>
                         <td>{{list.code}}</td>
                         <td>{{list.refId}}</td>
-                        <td>{{list.createdAt}}</td>
-                        <td>{{list.signTime}}</td>
-                        <td>{{list.status}}</td>
-                        <td>{{list.cancelDate}}</td>
+                        <td>{{this.convertTime(list.createdAt)}}</td>
+                        <td>{{this.convertTime(list.signTime)}}</td>
+                        <td>{{this.convertStatus(list.status.toLowerCase())}}</td>
+                        <td>{{this.convertTime(list.cancelDate)}}</td>
                         <td>{{list.customer.organization.name}}</td>
                         <td>{{list.customer.name}}</td>
                         
-                        <td>{{list.participants[0].type}}</td>
-                        <td>{{list.participants[0].name}}</td>
-                        <td>{{'Người xem xét'}}</td>
-                        <td>{{'Người ký'}}</td>
-                        <td>{{'Văn thư'}}</td>
-
+                        <td>{{this.getValue(list,0,'type')}}</td>
+                        <td>{{this.getValue(list,0,'name')}}</td>
+                        <td>{{this.getName(list,0,'view')}}</td>
+                        <td>{{this.getName(list,0,'sign')}}</td>
+                        <td>{{this.getName(list,0,'doc')}}</td>
 
                         <ng-container *ngFor="let i of Arr(maxParticipants - 1).fill(1)">
                             <td>{{this.getValue(list,i,'type')}}</td>
                             <td>{{this.getValue(list,i,'name')}}</td>
-                            <td>{{'Người xem xét'}}</td>
-                            <td>{{'Người ký'}}</td>
-                            <td>{{'Văn thư'}}</td> 
+                            <td>{{this.getName(list,i,'view')}}</td>
+                            <td>{{this.getName(list,i,'sign')}}</td>
+                            <td>{{this.getName(list,i,'doc')}}</td> 
+                            <td>{{this.getName(list,i,'coor')}}</td> 
                         </ng-container>
                     </ng-container>
                 </tr>
+            </ng-template>
+
+            
+            <ng-template  pTemplate="paginatorleft" let-state>
+                <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 1 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? (state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
+              </ng-template>
+            <ng-template pTemplate="paginatorright" let-state>
+                <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 1  ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ?(state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
             </ng-template>
         </p-table>
     </div>
