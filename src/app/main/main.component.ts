@@ -94,7 +94,8 @@ export class MainComponent implements OnInit {
 
   resetPassword(){
     const data = {
-      title: 'ĐỔI MẬT KHẨU'
+      title: 'ĐỔI MẬT KHẨU',
+      weakPass: false
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(ResetPasswordDialogComponent, {

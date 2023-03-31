@@ -8,6 +8,7 @@ import {ActionDeviceComponent} from "../action-device/action-device.component";
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { parttern_input } from '../config/parttern';
 import { ResetPasswordDialogComponent } from '../main/dialog/reset-password-dialog/reset-password-dialog.component';
+import { ToastService } from '../service/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -40,6 +41,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private changeDetector : ChangeDetectorRef,
+    private toastService: ToastService
   ) {
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang('vi');
@@ -124,6 +126,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
           //Mật khẩu yếu => Đổi mật khẩu
           if(!parttern_input.weak_pass.test(this.loginForm.value.password) && this.type != 1) {
+
+            this.toastService.showErrorHTMLWithTimeout('weak.pass','',3000);
+
             const data = {
               title: 'ĐỔI MẬT KHẨU',
               weakPass: false

@@ -22,6 +22,7 @@ export class ResetPasswordDialogComponent implements OnInit {
   repeatFieldTextTypeNew: boolean = false;
 
   submitted = false;
+
   get f() { return this.addForm.controls; }
 
   constructor(
@@ -46,10 +47,11 @@ export class ResetPasswordDialogComponent implements OnInit {
       passwordNew: ["", [Validators.required,Validators.pattern(parttern_input.weak_pass)]],
       confirmPasswordNew: ["", [Validators.required,Validators.pattern(parttern_input.weak_pass)]]
     });
-    console.log(this.addForm);
+
   }
 
   onSubmit() {
+    console.log("a ", this.data.weakPass)
     this.submitted = true;
     // stop here if form is invalid
     if (this.addForm.invalid) {
