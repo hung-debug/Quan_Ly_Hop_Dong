@@ -57,6 +57,11 @@ export class SidebarService {
   isQLLHD_04: boolean = true; //tim kiem loai hop dong
   isQLLHD_05: boolean = true; //xem thong tin chi tiet loai hop dong
 
+  isBaoCaoChiTiet: boolean = true;
+  isBaoCaoSapHetHieuLuc: boolean = true;
+  isBaoCaoTrangThaiXuLy: boolean = true;
+  isBaoCaoSoLuongTrangThai: boolean = true;
+
   toggled = false;
   _hasBackgroundImage = true;
 
@@ -232,6 +237,22 @@ export class SidebarService {
             this.isQLLHD_05 = listRole.some(
               (element) => element.code == 'QLLHD_05'
             );
+
+            this.isBaoCaoChiTiet = listRole.some(
+              (element) => element.code == 'BAOCAO_CHITIET'
+            )
+
+            this.isBaoCaoSapHetHieuLuc = listRole.some(
+              (element) => element.code == 'BAOCAO_SAPHETHIEULUC'
+            )
+
+            this.isBaoCaoTrangThaiXuLy = listRole.some(
+              (element) => element.code == 'BAOCAO_TRANGTHAIXULY'
+            )
+
+            this.isBaoCaoSoLuongTrangThai = listRole.some(
+              (element) => element.code == 'BAOCAO_SOLUONG_TRANGTHAI'
+            )
 
             this.buildMenu(currentUserC);
           },
@@ -457,54 +478,93 @@ export class SidebarService {
     });
 
     let submenusReport: any[] = [];
-    submenusReport.push(
-      //Chi tiết hợp đồng
-      {
+
+    if(this.isBaoCaoChiTiet) {
+      console.log("vao day ");
+      submenusReport.push({
         title: 'report.detail.contract',
         active: false,
         href: '/main/report/detail',
-      },
-      //HĐ sắp hết hiệu lực
-      {
+      })
+    } 
+    if(this.isBaoCaoSapHetHieuLuc) {
+      submenusReport.push({
         title: 'report.expires-soon.contract',
         active: false,
         href: '/main/report/soon-expire',
-      },
-      //Trạng thái xử lý hợp đồng
-      {
+      })
+    }
+
+    if(this.isBaoCaoTrangThaiXuLy) {
+      submenusReport.push( {
         title: 'report.processing.status.contract',
         active: false,
         href: '/main/report/status-contract',
-      },
-      //Số lượng hợp đồng theo trạng thái
-      {
-        title: 'report.number.contracts.status',
-        active: false,
-        href: '/main/report/contract-number-follow-status',
-      },
+      })
+    }
+
+    if(this.isBaoCaoSoLuongTrangThai) {
+      submenusReport.push(
+        {
+          title: 'report.number.contracts.status',
+          active: false,
+          href: '/main/report/contract-number-follow-status',
+        }
+      )
+    }
+
+    // submenusReport.push(
+      // //Chi tiết hợp đồng
+      // {
+      //   title: 'report.detail.contract',
+      //   active: false,
+      //   href: '/main/report/detail',
+      // },
+      // //HĐ sắp hết hiệu lực
+      // {
+      //   title: 'report.expires-soon.contract',
+      //   active: false,
+      //   href: '/main/report/soon-expire',
+      // },
+      // //Trạng thái xử lý hợp đồng
+      // {
+      //   title: 'report.processing.status.contract',
+      //   active: false,
+      //   href: '/main/report/status-contract',
+      // },
+      // //Số lượng hợp đồng theo trạng thái
+      // {
+      //   title: 'report.number.contracts.status',
+      //   active: false,
+      //   href: '/main/report/contract-number-follow-status',
+      // },
       //Số lượng hợp đồng theo loại hợp đồng
-      {
-        title: 'report.number.contracts.contract-type',
-        active: false,
-        href: '/main/report/contract-number-follow-type',
-      },
+      // {
+      //   title: 'report.number.contracts.contract-type',
+      //   active: false,
+      //   href: '/main/report/contract-number-follow-type',
+      // },
       // //Số lượng HĐ theo hình thức ký
       // {
       //   title: 'report.number.contracts.type.sign',
       //   active: false,
       //   href: '/main/report/contract-number-follow-sign',
       // }
-    );
-    this.menus.push({
-      title: 'report',
-      icon: '/assets/img/analytics1.svg',
-      active: false,
-      activeDrop: false,
-      type: 'dropdown',
-      href: '#',
-      submenus: submenusReport,
-      id: 10,
-    })
+    // );
+
+    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiXuLy) {
+      this.menus.push({
+        title: 'report',
+        icon: '/assets/img/analytics1.svg',
+        active: false,
+        activeDrop: false,
+        type: 'dropdown',
+        href: '#',
+        submenus: submenusReport,
+        id: 10,
+      })
+    }
+   
 
     //xu ly highlight
     this.menus.forEach((element: any) => {
@@ -528,6 +588,8 @@ export class SidebarService {
         });
       }
     });
+
+    this.menus = [];
 
   }
 
