@@ -5,6 +5,7 @@ import { ImportService } from 'src/app/service/import.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { ToastService } from 'src/app/service/toast.service';
+import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -18,6 +19,7 @@ export class UserComponent implements OnInit {
     private router : Router,
     private importService: ImportService,
     private toastService: ToastService,
+    private spinner: NgxSpinnerService
     ) { }
 
   organization_id_user_login:any;
@@ -144,7 +146,10 @@ export class UserComponent implements OnInit {
 
   searchUser(){
     this.first = 0;
-    this.userService.getUserList(this.organization_id==null?"":this.organization_id, this.email).subscribe(response => {
+
+    this.spinner.show();
+    this.userService.getUserList(!this.organization_id? this.organization_id_user_login :this.organization_id, this.email).subscribe(response => {
+      this.spinner.hide();
       this.list = response.entities;
     });
   }
