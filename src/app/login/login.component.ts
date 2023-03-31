@@ -9,6 +9,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { parttern_input } from '../config/parttern';
 import { ResetPasswordDialogComponent } from '../main/dialog/reset-password-dialog/reset-password-dialog.component';
 import { ToastService } from '../service/toast.service';
+import domtoimage from 'dom-to-image';
+import { delay } from 'rxjs/operators';
+import { of } from 'rxjs/internal/observable/of';
 
 @Component({
   selector: 'app-login',
@@ -254,7 +257,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   html: any;
-  setCaptcha() {
+  async setCaptcha() {
     const fonts = ["cursive","sans-serif","serif","monospace"];
     let html = this.captchaValue.split("").map((char: any) => {
       const rotate = -20 + Math.trunc(Math.random() * 30);
@@ -264,7 +267,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
       return `<span
       style="
         transform:rotate(${rotate}deg);
-        font-family:${fonts[font]}
+        font-family:${fonts[font]};
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -o-user-select: none;
+        user-select: none;
       "
     >${char}
     </span>`
@@ -273,6 +282,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.changeDetector.detectChanges();
 
     this.html = html;
+
+    console.log("html ", html);
 
     if(this.previewCaptcha)
       this.previewCaptcha.nativeElement.innerHTML = html;
