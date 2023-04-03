@@ -656,11 +656,6 @@ export class ContractService {
       imageData: imgSignGen ? imgSignGen : this.imageMobiBase64,
       page: signCertDigital.page.toString(),
 
-      // ph: signCertDigital.signDigitalHeight.toString(),
-      // pw: signCertDigital.signDigitalWidth.toString(),
-      // px: signCertDigital.signDigitalX.toString(),
-      // py: signCertDigital.signDigitalY.toString(), 
-
       ph: Math.floor(
         signCertDigital.signDigitalHeight
           ? signCertDigital.signDigitalHeight
@@ -685,6 +680,8 @@ export class ContractService {
       signDate: '11-05-2019 09:55:55',
       typeSign: '4',
     };
+
+    console.log("data ", dataPost);
 
     return axios.post(this.postSignDigital, dataPost, config);
   }

@@ -3321,8 +3321,8 @@ export class ConsiderContractComponent
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
         sign.signDigitalY = heightPage - (sign.coordinate_y - this.currentHeight) - sign.height + sign.page*6 /* * this.ratioPDF*/;
 
-        sign.signDigitalHeight = heightPage - (sign.coordinate_y - this.currentHeight) /* * this.ratioPDF*/;
-        sign.signDigitalWidth = sign.coordinate_x + sign.width
+        sign.signDigitalHeight = sign.signDigitalY + sign.height /* * this.ratioPDF*/;
+        sign.signDigitalWidth = sign.signDigitalX + sign.width;
 
         //Lấy thông tin mã số thuế của đối tác ký
         this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
