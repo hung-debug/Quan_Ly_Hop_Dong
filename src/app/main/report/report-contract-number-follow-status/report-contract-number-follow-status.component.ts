@@ -109,82 +109,19 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
     });
 
     this.cols = [
-      // {
-      //   id: 1,
-      //   header: 'contract.name',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 2,
-      //   header: 'contract.type',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 3,
-      //   header: 'contract.number',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 4,
-      //   header: 'contract.uid',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 5,
-      //   header: 'contract.connect',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 6,
-      //   header: 'contract.time.create',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 7,
-      //   header: 'signing.expiration.date',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
       {
         id: 8,
         header: 'contract.status.v2',
         style: 'text-align:left',
         colspan: 1,
-        rowspan: '2',
+        rowspan: 1,
       },
-      // {
-      //   id: 9,
-      //   header: 'date.completed',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 10,
-      //   header: 'suggest',
-      //   style: 'text-align: center',
-      //   colspan: '5',
-      //   rowspan: 1,
-      // },
       {
         id: 13,
         header: 'chart.number',
         style: 'text-align:left',
         colspan: 1,
-        rowspan: '2',
+        rowspan: 1,
       }
     ];
   }

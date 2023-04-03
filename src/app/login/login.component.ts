@@ -127,6 +127,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
       if(data?.code == '00'){
         if (this.authService.isLoggedInSuccess() == true) {
 
+          this.error = false;
+
           //Mật khẩu yếu => Đổi mật khẩu
           if(!parttern_input.weak_pass.test(this.loginForm.value.password) && this.type != 1) {
 
