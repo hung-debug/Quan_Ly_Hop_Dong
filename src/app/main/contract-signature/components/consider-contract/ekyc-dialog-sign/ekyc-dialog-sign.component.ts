@@ -102,7 +102,7 @@ export class EkycDialogSignComponent implements OnInit {
   
         this.upFileImageToDb(formData);
   
-        this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl).subscribe((response) => {
+        this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl, this.data.contractId, this.data.recipientId).subscribe((response) => {
           console.log("ma" + this.webcamImage.imageAsDataUrl);
           this.spinner.hide();
           if(response.result_code == 200 && response.action == 'pass') {

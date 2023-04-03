@@ -425,7 +425,7 @@ export class ContractService {
   }
 
   api_key: any = '9b84cd8c-f042-11ec-aae7-0c4de99e932e';
-  detectCCCD(image: any) {
+  detectCCCD(image: any, contractId: number, recipientId:number) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -434,6 +434,7 @@ export class ContractService {
 
     const body = {
       image: image,
+      request_id: contractId+"_"+recipientId
     };
 
     if (environment.apiUrl == 'https://econtract.mobifone.vn/service') {

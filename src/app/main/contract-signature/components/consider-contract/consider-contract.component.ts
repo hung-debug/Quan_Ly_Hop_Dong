@@ -3055,7 +3055,7 @@ export class ConsiderContractComponent
     dialogRef.afterClosed().subscribe((result) => {
       this.cccdFront = result;
 
-      this.contractService.detectCCCD(this.cccdFront).subscribe((response) => {
+      this.contractService.detectCCCD(this.cccdFront, data.contractId, data.recipientId).subscribe((response) => {
         console.log('response ', response);
 
         this.nameCompany = response.name;
