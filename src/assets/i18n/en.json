@@ -568,5 +568,6 @@
   "error.update.handler": "Error update handler",
   "created.unit":"Created unit",
   "created.user":"Created user",
-  "attach.file.valid":"Contract file requires pdf, doc, docx, png, jpg, jpeg, zip, rar, txt format"
+  "attach.file.valid":"Contract file requires pdf, doc, docx, png, jpg, jpeg, zip, rar, txt format",
+  "update.success":"Update success"
 }

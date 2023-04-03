@@ -571,5 +571,6 @@
   "error.update.handler": "Có lỗi cập nhật người xử lý",
   "created.unit":"Đơn vị tạo HĐ",
   "created.user":"Người tạo",
-  "attach.file.valid":"File hợp đồng yêu cầu định dạng pdf, doc, docx, png, jpg, jpeg, zip, rar, txt"
+  "attach.file.valid":"File hợp đồng yêu cầu định dạng pdf, doc, docx, png, jpg, jpeg, zip, rar, txt",
+  "update.success":"Cập nhật thành công"
 }
