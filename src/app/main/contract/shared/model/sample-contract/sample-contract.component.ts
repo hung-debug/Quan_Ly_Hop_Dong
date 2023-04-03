@@ -254,6 +254,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   getDataSignUpdateAction() {
     let dataPosition: any[] = [];
     let dataNotPosition: any[] = [];
+
     this.datas.is_determine_clone.forEach((element: any) => {
       element.recipients.forEach((item: any) => {
         let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient_id == item.id)[0];
@@ -321,6 +322,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
       }
     })
+
+    console.log("a ", this.datas.contract_user_sign);
   }
 
   defindDataContract() {
@@ -489,7 +492,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   resizeSignature = (event: any) => {
-    console.log("vao day ", event.rect);
     let x = (parseFloat(event.target.getAttribute('data-x')) || 0)
     let y = (parseFloat(event.target.getAttribute('data-y')) || 0)
     // translate when resizing from top or left edges
@@ -516,10 +518,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   resizableListener = (event: any) => {
     var target = event.target
-
-    console.log("event ", event.rect);
-
-    console.log("ta")
 
     // update the element's style
     target.style.width = event.rect.width + 'px'
@@ -718,6 +716,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
                 // element['number'] = _arrPage[_arrPage.length - 1];
                 element['page'] = _arrPage[_arrPage.length - 1];
+
+                console.log("page ", element['page']);
                 element['position'] = this.signCurent['position'];
                 element['coordinate_x'] = this.signCurent['coordinate_x'];
                 element['coordinate_y'] = this.signCurent['coordinate_y'];
@@ -1271,6 +1271,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       } else arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
+
+    // console.log("arr ", arrSignConfig);
     return arrSignConfig;
   }
 
@@ -1296,14 +1298,33 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   soHopDong: any;
   changePositionSign(e: any, locationChange: any, property: any) {
     let signElement = document.getElementById(this.objSignInfo.id);
+
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+  
       if (isObjSign) {
         if (property == 'location') {
           if (locationChange == 'x') {
             isObjSign.coordinate_x = parseInt(e);
             signElement.setAttribute("data-x", isObjSign.coordinate_x);
           } else {
+
+            //set lại page
+            // let page = 0;
+            let sum = 0;
+            let count = 0;
+            for(let i = 1; i < this.pageNumber;i++) {
+              let canvas: any = document.getElementById('canvas-step3-' + i);
+              sum += canvas.height;
+              count++;
+        
+              if(sum >= e) {
+                console.log("count ", count);
+                signElement?.setAttribute("page",count.toString());
+                break;
+              }
+            }
+
             isObjSign.coordinate_y = parseInt(e);
             signElement.setAttribute("data-y", isObjSign.coordinate_y);
           }
@@ -1354,6 +1375,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           });
         } else {
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
+
+          console.log("da ", data_name);
 
           if (data_name) {
 
@@ -1430,7 +1453,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   async next(action: string) {
     if (action == 'next_step' && !this.validData()) {
-
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
 
         this.save_draft_infor.close_header = false;
@@ -1458,6 +1480,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
           let isContractUserSign_clone = _.cloneDeep(this.datas.contract_user_sign)
           isContractUserSign_clone.forEach((element: any) => {
+            console.log("ele ", element);
             if (element.sign_config.length > 0) {
               element.sign_config.forEach((item: any) => {
                 item['font'] = this.datas.font;

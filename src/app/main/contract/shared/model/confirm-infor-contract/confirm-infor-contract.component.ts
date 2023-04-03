@@ -70,7 +70,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   xSoTaiLieu: any;
   ngOnInit(): void {
     this.temp = this.datas;
-    console.log("inti ",this.datas);
     this.data_organization = this.datas.is_determine_clone.filter(
       (p: any) => p.type == 1
     )[0];
@@ -87,8 +86,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     this.data_parnter_organization = this.datas.is_determine_clone.filter(
       (p: any) => p.type == 2 || p.type == 3
     );
-
-    console.log("final intit ", this.datas)
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -137,7 +134,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   // }
 
   callAPIFinish() {
-    console.log("call api finish ");
     //call API step confirm
     //this.contractService.addConfirmContract(this.datas).subscribe((data) => {
     this.spinner.show();
@@ -216,7 +212,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       let isNotFieldId: any[] = [];
       let isUserSign_clone = _.cloneDeep(this.datas.contract_user_sign);
       isUserSign_clone.forEach((res: any) => {
-        console.log("res ", res);
         res.sign_config.forEach((element: any) => {
           if(!element.type) {
             if(element.sign_unit == 'chu_ky_anh') {
@@ -299,9 +294,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
       this.spinner.show();
 
-      this.contractService
-        .getContractSample(this.data_sample_contract)
-        .subscribe(
+      console.log("data ", this.data_sample_contract);
+      this.contractService.getContractSample(this.data_sample_contract).subscribe(
           (data) => {
             if (action == 'finish_contract') {
               this.callAPIFinish();
@@ -346,7 +340,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   }
 
   async getDefindDataSignEdit(dataSignId: any,dataSignNotId: any,action: any) {
-    console.log("get defind data sign edit ");
     let dataSample_contract: any[] = [];
     if (dataSignId.length > 0) {
       let data_remove_arr_signId = [
@@ -375,9 +368,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       let countIsSignId = 0;
       this.spinner.show();
       for (let i = 0; i < dataSignId.length; i++) {
-
-        console.log("da ", dataSignId);
-
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
 
