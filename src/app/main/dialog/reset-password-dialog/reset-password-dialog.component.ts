@@ -72,12 +72,16 @@ export class ResetPasswordDialogComponent implements OnInit {
       if(data.passwordOld == data.confirmPasswordNew){
         this.errorDetail = 'Mậu khẩu mới không được trùng với mật khẩu cũ!';
       }else{
-        this.userService.sendResetPasswordToken(data.passwordOld, data.passwordNew).subscribe((data) => {
+        this.userService.sendResetPasswordToken(data.passwordOld, data.passwordNew).subscribe((data:any) => {
           if (data != null) {
+            console.log("data ", data);
             this.dialogRef.close();
             this.toastService.showSuccessHTMLWithTimeout("Đổi mật khẩu mới thành công.<br>Vui lòng đăng nhập để tiếp tục!", "", 3000);
             this.logout();
+          } else if(data == 1) {
+
           } else {
+            console.log("data ", data);
             this.toastService.showErrorHTMLWithTimeout("Đổi mật khẩu mới thất bại!", "", 3000);
           }
         },
