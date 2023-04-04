@@ -267,13 +267,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     for (let i = 0; i < files.length; i++) {
       const file = e.target.files[i];
       if (file) {
-        if (file.size <= 10000000) {
+        if (file.size <= 5000000) {
           const file_name = file.name;
           const extension = file.name.split('.').pop();
-
-          console.log("ex ", extension);
-
-         
 
           if (this.attachFileNameArr.filter((p: any) => p.filename == file_name).length == 0) {
             const extension = file.name.split('.').pop();

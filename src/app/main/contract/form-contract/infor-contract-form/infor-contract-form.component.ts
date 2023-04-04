@@ -405,31 +405,31 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     }
     for (let i = 0; i < files.length; i++) {
       const file = e.target.files[i];
-      if (file) {
-        if (file.size <= 10000000) {
-          const file_name = file.name;
-          if (
-            this.listFileAttach.filter((p: any) => p.filename == file_name)
-              .length == 0
-          ) {
-            this.listFileAttach.push(file);
-          }
 
-          if (
-            !this.datasForm.fileAttachForm.some(
-              (p: any) => file.name == p.filename || file.name == p.name
-            )
-          ) {
-            this.datasForm.fileAttachForm.push(file);
+      const extension = file.name.split('.').pop();
+
+      if (file) {
+        if (file.size <= 5000000) {
+
+          if (extension && extension.toLowerCase() == 'pdf' || extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx' || extension.toLowerCase() == 'png'
+          || extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'jpeg' || extension.toLowerCase() == 'zip' || extension.toLowerCase() == 'rar'
+          || extension.toLowerCase() == 'txt') {
+            const file_name = file.name;
+            if (this.listFileAttach.filter((p: any) => p.filename == file_name).length == 0) {
+              this.listFileAttach.push(file);
+            }
+    
+            if (!this.datasForm.fileAttachForm.some((p: any) => file.name == p.filename || file.name == p.name)) {
+              this.datasForm.fileAttachForm.push(file);
+            }
+          } else {
+            this.toastService.showWarningHTMLWithTimeout("attach.file.valid", "", 3000);
           }
+        
         } else {
           this.datasForm.file_name_attach = '';
           this.datasForm.attachFile = '';
-          this.toastService.showWarningHTMLWithTimeout(
-            'File đính kèm yêu cầu có dung lượng nhỏ hơn 5MB',
-            '',
-            3000
-          );
+          this.toastService.showWarningHTMLWithTimeout('File đính kèm yêu cầu có dung lượng nhỏ hơn 5MB','',3000);
           break;
         }
       }

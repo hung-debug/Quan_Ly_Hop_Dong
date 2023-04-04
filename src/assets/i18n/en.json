@@ -569,5 +569,6 @@
   "created.unit":"Created unit",
   "created.user":"Created user",
   "attach.file.valid":"Contract file requires pdf, doc, docx, png, jpg, jpeg, zip, rar, txt format",
-  "update.success":"Update success"
+  "update.success":"Update success",
+  "enter.captcha":"Enter captcha"
 }

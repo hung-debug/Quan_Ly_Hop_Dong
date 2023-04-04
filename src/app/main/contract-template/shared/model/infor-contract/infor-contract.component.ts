@@ -106,7 +106,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     private checkSignDigitalService: CheckSignDigitalService,
     private checkViewContractService: CheckViewContractService,
     private activeRoute: ActivatedRoute,
-
   ) {
     this.step = variable.stepSampleContract.step1;
   }
@@ -248,19 +247,25 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           const file_name = file.name;
           if (this.attachFileNameArr.filter((p: any) => p.filename == file_name).length == 0) {
             const extension = file.name.split('.').pop();
-            //this.datas.file_name_attach = file_name;
-            //this.datas.file_name_attach = this.datas.file_name_attach + "," + file_name;
+            
+            if (extension && extension.toLowerCase() == 'pdf' || extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx' || extension.toLowerCase() == 'png'
+            || extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'jpeg' || extension.toLowerCase() == 'zip' || extension.toLowerCase() == 'rar'
+            || extension.toLowerCase() == 'txt'
+          ) {
             this.attachFileArr.push(file);
             this.datas.attachFileArr = this.attachFileArr;
-            this.attachFileNameArr.push({ filename: file.name });
+            // console.log(this.datas.attachFileArr);
+            this.attachFileNameArr.push({filename: file.name});
             if (!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length && this.datas.attachFileNameArr.length == 0) {
               this.datas.attachFileNameArr = [];
             }
-            this.datas.attachFileNameArr.push({ filename: file.name })
-
+            this.datas.attachFileNameArr.push({filename: file.name})
             if (this.datas.is_action_contract_created) {
               this.uploadFileAttachAgain = true;
             }
+          } else {
+            this.toastService.showWarningHTMLWithTimeout("attach.file.valid", "", 3000);
+          }
           }
         } else {
           this.datas.file_name_attach = '';
@@ -634,12 +639,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   contractNameRequired(){
     this.errorContractName = "";
     if(!this.name){
-      this.errorContractName = "error.contract-template.name.required";
+      this.errorContractName = 'error.contract-template.name.required';
       return false;
     } 
 
-    if(!parttern_input.input_form.test(this.name)) {
-      this.errorContractName = "error.contract.template.name.valid";
+    if(!parttern_input.contract_name_valid.test(this.name)) {
+      this.errorContractName = 'error.contract.template.name.valid';
       return false;
     }
 
