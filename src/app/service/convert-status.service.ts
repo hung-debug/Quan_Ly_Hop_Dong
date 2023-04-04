@@ -10,6 +10,9 @@ export class ConvertStatusService {
   ) {}
 
   convert(code: string) {
+
+    
+
     if (code == 'processed') {
       return this.translate.instant('contract.status.complete');
     } else if (code == 'processing') {
@@ -23,9 +26,13 @@ export class ConvertStatusService {
     } else if (code == 'prepare_expires') {
       return this.translate.instant('prepare_expires');
     } else if(code == 'signed') {
-      return this.translate.instant('contract.signed');
+      return this.translate.instant('contract.status.complete');
     } else if(code == 'total') {
       return this.translate.instant('total');
+    } else if(code == 'draff') {
+      return this.translate.instant('contract.status.draft');
+    } else if(code == 'created') {
+      return this.translate.instant('dashboard.contract.created');
     }
     return code;
   }

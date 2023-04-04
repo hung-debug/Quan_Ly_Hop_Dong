@@ -257,12 +257,10 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               this.datas.attachFileNameArr = [];
             }
             this.datas.attachFileNameArr.push({ filename: file.name })
-            // Array.prototype.push.apply(this.datas.attachFileNameArr, this.attachFileNameArr);
 
             if (this.datas.is_action_contract_created) {
               this.uploadFileAttachAgain = true;
             }
-            //this.datas.attachFile = e.target.files;
           }
         } else {
           this.datas.file_name_attach = '';

@@ -105,7 +105,6 @@ import { ReportContractNumberFollowStatusComponent } from './main/report/report-
 import { ContractNumberFollowSignComponent } from './main/report/contract-number-follow-sign/contract-number-follow-sign.component';
 
 import { ContractNumberFollowTypeComponent } from './main/report/contract-number-follow-type/contract-number-follow-type.component';
-import { NgxCaptchaModule } from 'ngx-captcha';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -183,6 +182,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   ],
   imports: [
     TranslateModule,
+
     BrowserModule,
     AppRoutingModule,
     NgxChartsModule,
@@ -235,7 +235,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     WebcamModule,
     PdfViewerModule,
 
-    NgxCaptchaModule,
   ],
   providers: [ AppService, DatePipe,CurrencyPipe,
     {

@@ -147,7 +147,7 @@ export class ReportDetailComponent implements OnInit {
   }
 
   convertTime(time: any,code?: any) {
-    return moment(time, "YYYY/MM/DD HH:mm:ss") ? moment(time, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : "" ;
+    return moment(time, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") != 'Invalid date' ? moment(time, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : "" ;
   }
 
   convertStatus(status: string) {
