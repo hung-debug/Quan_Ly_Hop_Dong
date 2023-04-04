@@ -81,31 +81,31 @@
                     </ng-container>
 
                     <ng-container *ngIf="row > 0">
-                        <td style="width: 300px">{{list.name}}</td>
-                        <td style="width: 300px">{{list.typeName}}</td>
-                        <td style="width: 300px">{{list.contractNo}}</td>
-                        <td style="width: 300px">{{list.code}}</td>
-                        <td style="width: 300px">{{list.refId}}</td>
-                        <td style="width: 300px">{{this.convertTime(list.createdAt)}}</td>
-                        <td style="width: 300px">{{this.convertTime(list.signTime)}}</td>
-                        <td style="width: 300px">{{this.convertStatus(list.status.toLowerCase())}}</td>
-                        <td style="width: 300px">{{this.convertTime(list.cancelDate)}}</td>
-                        <td style="width: 300px">{{list.customer.organization.name}}</td>
-                        <td style="width: 300px">{{list.customer.name}}</td>
+                        <td class="row-word">{{list.name}}</td>
+                        <td class="row-word">{{list.typeName}}</td>
+                        <td class="row-word">{{list.contractNo}}</td>
+                        <td class="row-word">{{list.code}}</td>
+                        <td class="row-word">{{list.refId}}</td>
+                        <td class="row-word">{{this.convertTime(list.createdAt)}}</td>
+                        <td class="row-word">{{this.convertTime(list.signTime)}}</td>
+                        <td class="row-word">{{this.convertStatus(list.status.toLowerCase())}}</td>
+                        <td class="row-word">{{this.convertTime(list.cancelDate)}}</td>
+                        <td class="row-word">{{list.customer.organization.name}}</td>
+                        <td class="row-word">{{list.customer.name}}</td>
                         
-                        <td style="width: 300px">{{this.getValue(list,0,'type')}}</td>
-                        <td style="width: 300px">{{this.getValue(list,0,'name')}}</td>
-                        <td style="width: 300px; word-break:break-word">{{this.getName(list,0,'view')}}</td>
-                        <td style="width: 300px">{{this.getName(list,0,'sign')}}</td>
-                        <td style="width: 300px">{{this.getName(list,0,'doc')}}</td>
+                        <td class="row-word">{{this.getValue(list,0,'type')}}</td>
+                        <td class="row-word">{{this.getValue(list,0,'name')}}</td>
+                        <td class="row-word">{{this.getName(list,0,'view')}}</td>
+                        <td class="row-word">{{this.getName(list,0,'sign')}}</td>
+                        <td class="row-word">{{this.getName(list,0,'doc')}}</td>
 
                         <ng-container *ngFor="let i of Arr(maxParticipants - 1).fill(1)">
-                            <td style="width: 300px">{{this.getValue(list,i,'type')}}</td>
-                            <td style="width: 300px">{{this.getValue(list,i,'name')}}</td>
-                            <td style="width: 300px; min-width: 300px;">{{this.getName(list,i,'view')}}</td>
-                            <td style="width: 300px">{{this.getName(list,i,'sign')}}</td>
-                            <td style="width: 300px">{{this.getName(list,i,'doc')}}</td> 
-                            <td style="width: 300px">{{this.getName(list,i,'coor')}}</td> 
+                            <td class="row-word">{{this.getValue(list,i,'type')}}</td>
+                            <td class="row-word">{{this.getValue(list,i,'name')}}</td>
+                            <td class="row-word">{{this.getName(list,i,'view')}}</td>
+                            <td class="row-word">{{this.getName(list,i,'sign')}}</td>
+                            <td class="row-word">{{this.getName(list,i,'doc')}}</td> 
+                            <td class="row-word">{{this.getName(list,i,'coor')}}</td> 
                         </ng-container>
                     </ng-container>
                 </tr>

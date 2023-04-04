@@ -200,3 +200,8 @@ input[type="checkbox"]:checked + label:before {
     font-family: font_lexend_deca;
   }
 }
+
+.row-word {
+  width: 300px;
+  word-break:break-word
+}
