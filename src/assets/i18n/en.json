@@ -554,5 +554,7 @@
   "phone.already.exist": "Phone already exist",
   "cardid.already.exist": "MST/CMT/CCCD already exist",
   "update.success": "Update handler success",
-  "error.update.handler": "Error update handler"
+  "error.update.handler": "Error update handler",
+  "download.multi": "Download multi",
+  "contract.down": "Download"
 }

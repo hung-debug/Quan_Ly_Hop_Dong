@@ -462,7 +462,7 @@
   "sms.used":"Số lượng SMS đã sử dụng:",
   "timestamp.used": "Số lượng timestamp đã sử dụng:",
   "timestamp.purchased":"Số lượng timestamp đã mua:",
-  "ceca.used":"Số lần xác nhận BCT đã dùng:",
+  "ceca.used":"Số lần xác nhận BCT đã sử dụng:",
   "ceca.purchased": "Số lần xác nhận BCT đã mua:",
   "information.signatures":"THÔNG TIN CÁC BÊN KÝ",
   "contract.number.lot":"SỐ HỢP ĐỒNG THEO LÔ",
@@ -557,5 +557,7 @@
   "phone.already.exist": "Số điện thoại đã có trong luồng xử lý",
   "cardid.already.exist": "MST/CMT/CCCD đã có trong luồng xử lý",
   "update.success": "Cập nhật người xử lý thành công",
-  "error.update.handler": "Có lỗi cập nhật người xử lý"
+  "error.update.handler": "Có lỗi cập nhật người xử lý",
+  "download.multi": "Tải nhiều",
+  "contract.down": "Tải"
 }

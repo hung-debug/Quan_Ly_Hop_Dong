@@ -81,6 +81,7 @@ export class ConsiderContractComponent
   pageNum: number = 1;
 
   dataVersion2: any;
+  type: any = 0;
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
@@ -220,6 +221,11 @@ export class ConsiderContractComponent
     } else {
       this.router.navigate(['/page-not-found']);
     }
+
+    if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
+      this.type = 1;
+    } else
+      this.type = 0;
   }
 
   firstPageMobile() {
@@ -1311,17 +1317,15 @@ export class ConsiderContractComponent
           '',
           3000
         );
-        this.router.navigate(['/main/dashboard']);
-        return
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          return
+        }
       };
       console.log("this.currentUser.email", this.currentUser.email);
-      // this.datas.is_data_contract.participants[0]["recipients"] = response.is_data_contract.participants[0].recipients
-      // this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
-      // console.log("this.emailRecipientssssssssss",this.emailRecipients);
-      // const ArrRecipients = this.datas.is_data_contract.participants[0].recipients;
-      // const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email);
-      console.log("ArrRecipientsNew111", this.datas);
-      console.log("ArrRecipientsNew", this.ArrRecipientsNew);
 
     if (counteKYC > 0) {
       if (this.mobile) {

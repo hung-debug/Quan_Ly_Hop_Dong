@@ -67,6 +67,7 @@ export class ContractSignatureComponent implements OnInit {
   contractStatus: any = '';
 
   typeDisplay: string = 'signOne';
+  typeDownload: string = 'downloadOne';
 
   contract_signatures: any = 'c';
   signatures: any = 's9';
@@ -220,6 +221,10 @@ export class ContractSignatureComponent implements OnInit {
   cancelSignMany() {
     this.typeDisplay = 'signOne';
   }
+
+  // cancelDownloadMany(){
+  //   this.typeDownload = 'downloadOne';
+  // }
 
   getContractList() {
     if (this.filter_status % 10 == 1) {
