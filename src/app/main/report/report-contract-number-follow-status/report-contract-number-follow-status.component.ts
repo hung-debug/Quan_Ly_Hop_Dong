@@ -187,39 +187,7 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
       this.spinner.hide();
       this.clickReport = true;
 
-      Object.keys(response).forEach((key: any, index) => {
-        this.list.push({
-          'orgName': key,
-          'value': response[key]            
-        })
-      });
-
-      //sort cha len dau
-      for(let i = 0; i < this.list.length; i++) {
-        if(this.list[i].orgName == this.selectedNodeOrganization.label) {
-          const temp = this.list[i];
-          this.list[i] = this.list[0];
-          this.list[0] = temp;
-
-          break;
-        }
-      }
-
-      //sort abc
-      let temp: any[] = [];
-      for(let i = 0; i < this.list.length - 1; i++) {
-        temp[i] = this.list[i+1]
-      }
-
-      console.log("temp ", temp);
-
-      temp = temp.sort((a,b) => a.orgName !== b.orgName ? a.orgName < b.orgName ? -1 : 1 : 0);
-
-      console.log("temp ", temp);
-
-      for(let i = 0; i < this.list.length - 1; i++) {
-        this.list[i+1] = temp[i];
-      }
+      this.list = response;
     }
   }
 
