@@ -571,5 +571,7 @@
   "attach.file.valid":"Contract file requires pdf, doc, docx, png, jpg, jpeg, zip, rar, txt format",
   "update.success":"Update success",
   "enter.captcha":"Enter captcha",
-  "date.full.valid":"Please enter the full creation date"
+  "date.full.valid":"Please enter the full creation date",
+  "download.multi": "Download multi",
+  "contract.down": "Download"
 }

@@ -9,6 +9,8 @@ import { DeviceDetectorService } from "ngx-device-detector";
 import { UnitService } from 'src/app/service/unit.service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { type } from 'os';
 @Component({
   selector: 'app-footer-signature',
   templateUrl: './footer-signature.component.html',
@@ -53,6 +55,8 @@ export class FooterSignatureComponent implements OnInit {
   email: string = "email";
   phone: string = "phone";
 
+  type: any = 0;
+
   constructor(
     private dialog: MatDialog,
     private contractService: ContractService,
@@ -60,14 +64,15 @@ export class FooterSignatureComponent implements OnInit {
     private deviceService: DeviceDetectorService,
     private unitService: UnitService,
     private router: Router,
-    private _location: Location
+    private _location: Location,
+    private spinner: NgxSpinnerService
   ) {
   }
 
   lang: string;
   ngOnInit(): void {
-    console.log("ngOnInit: ",this.datas)
-    console.log("ngOnInit keys: ",Object.keys(this.datas))
+    console.log("ngOnInit: ", this.datas)
+    console.log("ngOnInit keys: ", Object.keys(this.datas))
     this.getDeviceApp();
 
     if (sessionStorage.getItem('lang') == 'en') {
@@ -75,6 +80,11 @@ export class FooterSignatureComponent implements OnInit {
     } else if (sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     }
+
+    if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
+      this.type = 1;
+    } else
+      this.type = 0;
 
     let data_coordination = this.datas.is_data_contract.participants;
     let emailCurrent = this.contractService.getAuthCurrentUser().email;
@@ -252,25 +262,37 @@ export class FooterSignatureComponent implements OnInit {
   action() {
     console.log("##############datas", this.datas);
     if (this.datas.action_title == 'dieu_phoi') {
-      console.log("datas", this.datas);
-      console.log(Object.keys(this.datas))
-
       this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-      console.log('recipient_id_coordition',this.datas.recipient_id_coordition)
-      this.contractService.getDetermineCoordination(this.datas.recipient_id_coordition).subscribe(async (response) => {
-        const ArrRecipients = response.is_data_contract.participants.map((ele: any) => ele.recipients);
+      let id_recipient_signature = null;
+
+      for (const d of this.datas.is_data_contract.participants) {
+        for (const q of d.recipients) {
+          if (q.email) {
+            if (q.email == this.currentUser.email && q.status == 1) {
+              id_recipient_signature = q.id;
+              break
+            }
+          }
+        }
+        if (id_recipient_signature) break;
+      }
+      console.log("id_recipient_signature", id_recipient_signature);
+
+      this.contractService.getDetermineCoordination(id_recipient_signature).subscribe(async (response) => {
+        console.log("response", response);
+
+        // const ArrRecipients = response.is_data_contract.participants.map((ele: any) => ele.recipients);
+        const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+        console.log("ArrRecipients", ArrRecipients);
+
         let ArrRecipientsNew = false
-        ArrRecipients.map((item: any) => item.map((x: any) => {
-          console.log("currentUser", x);
-          if (x.email === this.currentUser.email) {
+        ArrRecipients.map((item: any) => {
+          if (item.email === this.currentUser.email) {
             ArrRecipientsNew = true
             return
           }
-        }));
+        });
         console.log("ArrRecipientsNew111", ArrRecipientsNew);
-        console.log("ArrRecipientssss", response);
-        console.log("ArrRecipientssss 0", this.datas.is_data_contract.participants);
-        console.log("currentUserssss", this.currentUser.email);
 
         if (!ArrRecipientsNew) {
 
@@ -279,8 +301,13 @@ export class FooterSignatureComponent implements OnInit {
             '',
             3000
           );
-          this.router.navigate(['/main/dashboard']);
-          return
+          if (this.type == 1) {
+            this.router.navigate(['/login']);
+            return
+          } else {
+            this.router.navigate(['/main/dashboard']);
+            return
+          }
         };
         console.log("this.currentUser.email", this.currentUser);
       })
@@ -377,26 +404,50 @@ export class FooterSignatureComponent implements OnInit {
   refuseContract() {
     if (this.datas.action_title == 'dieu_phoi') {
       this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-      // this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
-      // console.log("this.emailRecipientssssssssss",this.emailRecipients);
-      const ArrRecipients = this.datas.is_data_contract.participants[1].recipients;
-      const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email);
-      console.log("ArrRecipientsNew", ArrRecipientsNew);
+      let id_recipient_signature = null;
 
-      // if (!ArrRecipientsNew.includes(this.currentUser.email)) {
+      for (const d of this.datas.is_data_contract.participants) {
+        for (const q of d.recipients) {
+          if (q.email) {
+            if (q.email == this.currentUser.email && q.status == 1) {
+              id_recipient_signature = q.id;
+              break
+            }
+          }
+        }
+        if (id_recipient_signature) break;
+      }
+      this.contractService.getDetermineCoordination(id_recipient_signature).subscribe(async (response) => {
+        console.log("response", response);
+        const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+        console.log("ArrRecipients", ArrRecipients);
 
-      //   this.toastService.showErrorHTMLWithTimeout(
-      //     'Bạn không có quyền xử lý hợp đồng này!',
-      //     '',
-      //     3000
-      //   );
-      //   this.router.navigate(['/main/dashboard']);
-      //   return
-      // };
-      console.log("this.currentUser.email", this.currentUser.email);
-      console.log("ArrRecipientsNew", ArrRecipientsNew);
+        let ArrRecipientsNew = false
+        ArrRecipients.map((item: any) => {
+          if (item.email === this.currentUser.email) {
+            ArrRecipientsNew = true
+            return
+          }
+        });
+        console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
-      this.submitChanges.emit(1);
+        if (!ArrRecipientsNew) {
+
+          this.toastService.showErrorHTMLWithTimeout(
+            'Bạn không có quyền xử lý hợp đồng này!',
+            '',
+            3000
+          );
+          if (this.type == 1) {
+            this.router.navigate(['/login']);
+            return
+          } else {
+            this.router.navigate(['/main/dashboard']);
+            return
+          }
+        } else this.submitChanges.emit(1);
+        console.log("this.currentUser.email", this.currentUser);
+      })
     }
   }
 
@@ -442,21 +493,56 @@ export class FooterSignatureComponent implements OnInit {
       dataContract: this.datas,
       recipientId: this.recipientId
     };
-    if (this.datas.action_title == 'dieu_phoi') {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+
+    this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
+      const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+      console.log("ArrRecipients", ArrRecipients);
+
+      let ArrRecipientsNew = false
+      ArrRecipients.map((item: any) => {
+        if (item.email === this.currentUser.email) {
+          ArrRecipientsNew = true
+          return
+        }
+      });
+      console.log("ArrRecipientsNew111", ArrRecipientsNew);
+
+      if (!ArrRecipientsNew) {
+
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          return
+        }
+      };
+
+      if (this.datas.action_title == 'dieu_phoi') {
+
+        // @ts-ignore
+        data['role_coordination'] = 1;
+      }
+
       // @ts-ignore
-      data['role_coordination'] = 1;
+      const dialogRef = this.dialog.open(ForwardContractComponent, {
+        width: '500px',
+        backdrop: 'static',
+        keyboard: true,
+        data
+      })
+      dialogRef.afterClosed().subscribe((result: any) => {
+        console.log('the close dialog');
+        let is_data = result
+      })
     }
-    // @ts-ignore
-    const dialogRef = this.dialog.open(ForwardContractComponent, {
-      width: '500px',
-      backdrop: 'static',
-      keyboard: true,
-      data
-    })
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      let is_data = result
-    })
+    )
   }
 
   forWardContract() {
@@ -467,21 +553,52 @@ export class FooterSignatureComponent implements OnInit {
       dataContract: this.datas,
       recipientId: this.recipientId
     };
-    if (this.datas.action_title == 'dieu_phoi') {
-      // @ts-ignore
-      data['role_coordination'] = 1;
-    }
-    // @ts-ignore
-    const dialogRef = this.dialog.open(ForwardContractComponent, {
-      width: '500px',
-      backdrop: 'static',
-      keyboard: true,
-      data
-    })
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      let is_data = result
-    })
-  }
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    // console.log("localStorage.type",sessionStorage.getItem('type'))
+    this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
+      const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+      console.log("ArrRecipients", ArrRecipients);
 
+      let ArrRecipientsNew = false
+      ArrRecipients.map((item: any) => {
+        if (item.email === this.currentUser.email) {
+          ArrRecipientsNew = true
+          return
+        }
+      });
+      console.log("ArrRecipientsNew111", ArrRecipientsNew);
+
+      if (!ArrRecipientsNew) {
+
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          return
+        }
+      };
+      if (this.datas.action_title == 'dieu_phoi') {
+        // @ts-ignore
+        data['role_coordination'] = 1;
+      }
+      // @ts-ignore
+      const dialogRef = this.dialog.open(ForwardContractComponent, {
+        width: '500px',
+        backdrop: 'static',
+        keyboard: true,
+        data
+      })
+      dialogRef.afterClosed().subscribe((result: any) => {
+        console.log('the close dialog');
+        let is_data = result
+      })
+    }
+    )
+  }
 }

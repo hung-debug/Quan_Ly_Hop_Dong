@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit, Inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, Inject, SimpleChanges } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { ContractService } from 'src/app/service/contract.service';
@@ -38,6 +38,7 @@ export class EditHandlerComponent implements OnInit {
   email: string;
   phone: string;
   login_by: any;
+  status: any;
   isCheckRadio = this.data.login_by === "phone" ? false : true;
   is_handler: any;
   name: any;
@@ -72,6 +73,11 @@ export class EditHandlerComponent implements OnInit {
   ) {
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('currentValue',changes.login_by.currentValue);
+    console.log('previousValue',changes.login_by.previousValue);
+  }
+
   ngOnInit(): void {
 
     if (environment.flag == 'NB') {
@@ -96,13 +102,15 @@ export class EditHandlerComponent implements OnInit {
 
     this.name = this.data.name;
     this.login_by = this.data.login_by;
-    this.email = this.data.email;
+    // voi case email duoc luu theo so phone thi khoi tao se clear rong
+    this.email = this.data.email !== this.data.phone ? this.data.email : "";
     this.phone = this.data.phone;
     this.sign_type = this.data.sign_type[0]?.name
     this.id_sign_type = this.data.sign_type[0]?.id
     this.card_id = this.data.card_id;
     this.id = this.data.id;
     this.role = this.data.role;
+    this.status = this.data.status;
     // this.contractid = this.data.is_data_contract.id;
 
     this.dropdownSignTypeSettings = {
@@ -170,7 +178,11 @@ export class EditHandlerComponent implements OnInit {
       return;
     }
     else {
-      if (this.email !== "") {
+      if (this.name !== "") {
+        if (JSON.stringify(this.data) === JSON.stringify(dataUpdate)) {
+          return;
+        }
+
         console.log("dataUpdate sU", this.validData());
         this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
           (res: any) => {
@@ -208,60 +220,56 @@ export class EditHandlerComponent implements OnInit {
   }
   validData() {
     this.clearError();
-    // this.nameRequired();
-    // this.phoneRequired();
-    // this.cardRequired();
-    // this.emailRequired();
-    console.log('this.nameRequired()', this.nameRequired());
-    console.log('this.phoneRequired()', this.phoneRequired());
-    console.log('this.cardRequired()', this.cardRequired());
-    console.log('this.emailRequired()', this.emailRequired());
-
-    if (!this.nameRequired() || !this.phoneRequired() || !this.cardRequired() || !this.emailRequired()) {
+    if (!!this.isCheckRadio && (!this.validateName(this.name) || !this.validateEmail(this.email))) {
       // this.spinner.hide();
       return false;
+    } else if (!this.isCheckRadio && (!this.validateName(this.name) || !this.validatePhoneNumber(this.phone))) {
+      return false;
+    }
+    if ((this.id_sign_type === 4 || this.id_sign_type === 2)) {
+      return this.validateCardId(this.card_id);
     }
     return true
   }
-  nameRequired() {
+  validateName(testInput: string) {
     this.errorName = "";
-    if (this.name == "") {
+    if (testInput == "") {
       this.errorName = "error.name.required";
       return false;
     }
     return true;
   }
-  phoneRequired() {
+  validatePhoneNumber(testInput: string) {
     this.errorPhone = "";
-    if(this.phone && !this.pattern.phone.test(this.phone)){
+    if (testInput && !this.pattern.phone.test(testInput)) {
       this.errorPhone = "error.user.phone.format";
       return false;
     }
-    else if (!this.phone && !this.isCheckRadio) {
+    else if (!testInput && !this.isCheckRadio) {
       this.errorPhone = "error.phone.required";
       return false;
     }
     return true;
   }
-  cardRequired() {
+  validateCardId(testInput: string) {
     this.errorCardid = "";
-    if(this.card_id == ""){
+    if (testInput == "") {
       this.errorCardid = "error.card.required";
       return false;
     }
-    if ((this.id_sign_type === 4 || this.id_sign_type === 2) && !this.pattern.cardid.test(this.card_id)) {
+    if (!this.pattern.cardid.test(testInput)) {
       this.errorCardid = "taxcode.format";
       return false;
-    } 
+    }
     return true;
 
   }
-  emailRequired() {
+  validateEmail(testInput: string) {
     this.errorEmail = "";
-    if (!this.pattern.email.test(this.email)) {
+    if (!this.pattern.email.test(testInput)) {
       this.errorEmail = "error.user.email.format";
       return false;
-    } else if (this.email == ""){
+    } else if (testInput == "") {
       this.errorEmail = "error.email.required";
       return false;
     }

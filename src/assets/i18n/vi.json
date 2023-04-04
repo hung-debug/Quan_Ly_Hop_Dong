@@ -462,7 +462,7 @@
   "sms.used":"Số lượng SMS đã sử dụng:",
   "timestamp.used": "Số lượng timestamp đã sử dụng:",
   "timestamp.purchased":"Số lượng timestamp đã mua:",
-  "ceca.used":"Số lần xác nhận BCT đã dùng:",
+  "ceca.used":"Số lần xác nhận BCT đã sử dụng:",
   "ceca.purchased": "Số lần xác nhận BCT đã mua:",
   "information.signatures":"THÔNG TIN CÁC BÊN KÝ",
   "contract.number.lot":"SỐ HỢP ĐỒNG THEO LÔ",
@@ -575,5 +575,7 @@
   "update.success":"Cập nhật thành công",
   "error.contract.template.name.valid":"Tên mẫu hợp đồng không được chứa ký tự đặc biệt",
   "enter.captcha":"Nhập captcha",
-  "date.full.valid":"Vui lòng nhập đủ ngày tạo"
+  "date.full.valid":"Vui lòng nhập đủ ngày tạo",
+  "download.multi": "Tải nhiều",
+  "contract.down": "Tải"
 }
