@@ -234,7 +234,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
   
   validData() {
     if(!this.date || (this.date && this.date.length < 2)) {
-      this.toastService.showErrorHTMLWithTimeout('Vui lòng nhập đủ ngày ngày tạo','',3000);
+      this.toastService.showErrorHTMLWithTimeout('date.full.valid','',3000);
       return false;
     }
     return true;
