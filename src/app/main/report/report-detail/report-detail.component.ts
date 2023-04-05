@@ -302,6 +302,15 @@ export class ReportDetailComponent implements OnInit {
   
           this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
         } else {
+          this.list = [];
+          this.colsSuggest = [
+            { header: 'sign.object', style: 'text-align: left, min-width:300px, width: 300px'},
+            { header: 'name.unit', style: 'text-align: left, min-width:300px, width: 300px' },
+            { header: 'user.view', style: 'text-align: left, min-width:300px, width: 300px' },
+            { header: 'user.sign', style: 'text-align: left, min-width:300px, width: 300px' },
+            { header: 'user.doc', style: 'text-align: left, min-width:300px, width: 300px'},
+          ];
+
           this.setColForTable();
       
           for(let i = 0; i < response.maxParticipant - 1; i++) {

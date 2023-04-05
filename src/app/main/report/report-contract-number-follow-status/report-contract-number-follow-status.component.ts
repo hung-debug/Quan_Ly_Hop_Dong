@@ -174,7 +174,7 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
       document.body.appendChild(a);
       a.setAttribute('style', 'display: none');
       a.href = url;
-      a.download = `report-by-status_${new Date().getTime()}.xlsx`;
+      a.download = `BaoCaoSLTheoTrangThai_${new Date().getDate}_${new Date().getMonth}_${new Date().getFullYear()}.xlsx`;
       a.click();
       window.URL.revokeObjectURL(url);
       a.remove();
