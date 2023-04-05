@@ -18,7 +18,7 @@ export class ContractSignatureService {
 
   listContractMyProcessUrl: any = `${environment.apiUrl}/api/v1/contracts/my-process`;
   listContractMyProcessUrlSignMany: any = `${environment.apiUrl}/api/v1/contracts/my-contract/can-sign-multi?`;
-  // listContractMyProcessUrlDownloadMany: any = `${environment.apiUrl}/api/v1/file/download-multi?`;
+  listContractMyProcessUrlDownloadMany: any = `${environment.apiUrl}/api/v1/file/download-multi?`;
 
   token: any;
   addContractUrl:any = `${environment.apiUrl}/api/v1/auth/login`;
@@ -65,15 +65,15 @@ export class ContractSignatureService {
     return this.http.get<any[]>(this.listContractMyProcessUrlSignMany+'orgId='+orgId+'&platform=web',{headers}).pipe();
   }
 
-  // public getContractMyProcessListDownloadMany() {
-  //   this.getCurrentUser();
+  public getContractMyProcessListDownloadMany() {
+    this.getCurrentUser();
 
-  //   const headers = {'Authorization': 'Bearer ' + this.token};
-  //   // const ids = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.ids;
-  //   const ids = this.listContractMyProcessUrl.participant.contract.id
+    const headers = {'Authorization': 'Bearer ' + this.token};
+    // const ids = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.ids;
+    // const ids = this.listContractMyProcessUrl.participant.contract.id
 
-  //   return this.http.get<any[]>(this.listContractMyProcessUrlDownloadMany+'ids'+ids,{headers}).pipe();
-  // }
+    // return this.http.get<any[]>(this.listContractMyProcessUrlDownloadMany+'ids'+ids,{headers}).pipe();
+  }
   
 
   public getSignatureListUser(): Observable<any> {
