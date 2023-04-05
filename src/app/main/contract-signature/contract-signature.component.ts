@@ -221,7 +221,6 @@ export class ContractSignatureComponent implements OnInit {
   cancelSignMany() {
     this.typeDisplay = 'signOne';
   }
-
   // cancelDownloadMany(){
   //   this.typeDownload = 'downloadOne';
   // }
