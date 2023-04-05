@@ -573,5 +573,6 @@
   "enter.captcha":"Enter captcha",
   "date.full.valid":"Please enter the full creation date",
   "download.multi": "Download multi",
-  "contract.down": "Download"
+  "contract.down": "Download",
+  "add.unit.success":"Add organization success!"
 }

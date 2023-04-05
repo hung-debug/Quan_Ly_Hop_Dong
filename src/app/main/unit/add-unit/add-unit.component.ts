@@ -380,12 +380,8 @@ export class AddUnitComponent implements OnInit {
                                             roleArrConvert.push(jsonData);
                                           });
                                         });
-                                        const dataRoleIn = {
-                                          name: 'Admin',
-                                          code: 'ADMIN',
-                                          selectedRole: roleArrConvert,
-                                          organization_id: dataUnit.id
-                                        }                                      
+                                        
+                                        this.dialogRef.close();
                                       }, error => {
                                         this.toastService.showErrorHTMLWithTimeout('Thêm mới tổ chức thất bại', "", 3000);
                                         this.spinner.hide();
@@ -411,13 +407,9 @@ export class AddUnitComponent implements OnInit {
                                         let jsonData = {code: keyItem.value, status: 1};
                                         roleArrConvert.push(jsonData);
                                       });
-                                    });
-                                    const dataRoleIn = {
-                                      name: 'Admin',
-                                      code: 'ADMIN',
-                                      selectedRole: roleArrConvert,
-                                      organization_id: dataUnit.id
-                                    }                                    
+                                    });    
+                                    
+                                    this.dialogRef.close();
                                    
                                   }, error => {
                                     this.toastService.showErrorHTMLWithTimeout('Thêm mới tổ chức thất bại', "", 3000);
@@ -447,16 +439,12 @@ export class AddUnitComponent implements OnInit {
                                 roleArrConvert.push(jsonData);
                               });
                             });
-                            const dataRoleIn = {
-                              name: 'Admin',
-                              code: 'ADMIN',
-                              selectedRole: roleArrConvert,
-                              organization_id: dataUnit1.id
-                            }
+
+                            this.dialogRef.close();
                             
                             if(dataUnit1.id) {
                               this.spinner.hide();
-                              this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
+                              this.toastService.showSuccessHTMLWithTimeout('add.unit.success', "", 3000);
                             } else {
                               if(dataUnit1.errors[0].code == 1006) {
                                 this.toastService.showErrorHTMLWithTimeout('Mã số thuế đã tồn tại', "", 3000);

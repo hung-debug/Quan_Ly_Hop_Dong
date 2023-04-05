@@ -577,5 +577,6 @@
   "enter.captcha":"Nhập captcha",
   "date.full.valid":"Vui lòng nhập đủ ngày tạo",
   "download.multi": "Tải nhiều",
-  "contract.down": "Tải"
+  "contract.down": "Tải",
+  "add.unit.success":"Thêm mới tổ chức thành công!"
 }
