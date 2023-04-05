@@ -1,6 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Sanitizer } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
@@ -26,13 +27,14 @@ export class DetailContractTypeComponent implements OnInit {
     public dialogRef: MatDialogRef<DetailContractTypeComponent>,
     public router: Router,
     public dialog: MatDialog,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private sanitizer: DomSanitizer
     ) { }
 
   ngOnInit(): void {
     this.contractTypeService.getContractTypeById(this.data.id).subscribe(
       data => {
-        this.name = data.name,
+        this.name = data.name
         this.code = data.code,
         this.ceca_push = this.convertCeCa(data.ceca_push)
       }, error => {
@@ -49,3 +51,5 @@ export class DetailContractTypeComponent implements OnInit {
     }
   }
 }
+
+
