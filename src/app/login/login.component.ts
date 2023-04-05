@@ -130,7 +130,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
           this.error = false;
 
           //Mật khẩu yếu => Đổi mật khẩu
-          if(!parttern_input.weak_pass.test(this.loginForm.value.password) && this.type != 1) {
+          if(!parttern_input.weak_pass.test(this.loginForm.value.password) && this.type != 1 && !this.loginForm.value.username.includes('@mobifone.vn')) {
 
             this.toastService.showErrorHTMLWithTimeout('weak.pass','',3000);
 
@@ -236,7 +236,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
     );
 
     if(this.countLoginFail >= 4) {
-      console.log("vao day ");
       this.captcha = true;
       this.generateCaptcha();
     }
@@ -245,8 +244,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   captchaValue: any;
   generateCaptcha() {
-    console.log("capt cha ");
-
     let code = (Math.random() * 1000000000).toString();
     let value = window.btoa(code);
 
@@ -284,8 +281,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.changeDetector.detectChanges();
 
     this.html = html;
-
-    console.log("html ", html);
 
     if(this.previewCaptcha)
       this.previewCaptcha.nativeElement.innerHTML = html;
