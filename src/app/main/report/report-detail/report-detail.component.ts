@@ -295,7 +295,7 @@ export class ReportDetailComponent implements OnInit {
           document.body.appendChild(a);
           a.setAttribute('style', 'display: none');
           a.href = url;
-          a.download = `report-detail_${new Date().getTime()}.xlsx`;
+          a.download = `BaoCaoChiTiet_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
           a.remove();

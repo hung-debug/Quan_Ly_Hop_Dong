@@ -192,7 +192,7 @@ export class ReportSoonExpireComponent implements OnInit {
           document.body.appendChild(a);
           a.setAttribute('style', 'display: none');
           a.href = url;
-          a.download = `report-effective-date_${new Date().getTime()}.xlsx`;
+          a.download = `BaoCaoSapHetHan_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
           a.remove();
