@@ -219,11 +219,7 @@ export class ConsiderContractComponent
     if (checkViewContract) {
       this.actionRoleContract();
     } else {
-      // if(JSON.parse(localStorage.getItem('customer') || '')?.type == 1) {
-      //   this.router.navigate(['/login']);
-      //  } else {
         this.router.navigate(['/page-not-found']);
-      //  }
     }
 
     if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
@@ -321,12 +317,7 @@ export class ConsiderContractComponent
     //đổi màu cho nút next page
     let canvasLast: any = document.getElementById('canvas-step3-' + this.pageNumber);
     let step3: any = document.getElementById('pdf-viewer-step-3');
-    if (
-      event.srcElement.scrollTop <
-      Number(
-        canvasLast.getBoundingClientRect().top -
-          step3.getBoundingClientRect().top
-      )
+    if (event.srcElement.scrollTop < Number(canvasLast.getBoundingClientRect().top - step3.getBoundingClientRect().top)
     ) {
       this.pageLast = true;
     } else {
@@ -377,13 +368,11 @@ export class ConsiderContractComponent
   getDataContractSignature() {
     this.contractService.getDetailContract(this.idContract).subscribe(
       async (rs) => {
-
-        console.log("rs ", rs);
         this.isDataContract = rs[0];
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
 
-        if(this.isDataContract.ceca_push = 1) {
+        if(this.isDataContract.ceca_push == 1) {
           this.isTimestamp = "true"
         } else {
           this.isTimestamp = "false";
@@ -474,8 +463,7 @@ export class ConsiderContractComponent
             (p: any) => p.sign_unit == 'so_tai_lieu'
           );
 
-        this.datas.contract_user_sign =
-          this.contractService.getDataFormatContractUserSign();
+        this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
 
         this.datas.contract_user_sign.forEach((element: any) => {
           // console.log(element.sign_unit, element.sign_config);
@@ -766,21 +754,13 @@ export class ConsiderContractComponent
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
-        if (
-          (this.typeSignDigital == 2 && this.usbTokenVersion == 1) ||
-          !this.usbTokenVersion
-        ) {
+        if ((this.typeSignDigital == 2 && this.usbTokenVersion == 1) || !this.usbTokenVersion) {
           this.prepareInfoSignUsbTokenV1(pageNumber, canvas.height);
-        } else if (
-          (this.typeSignDigital == 2 && this.usbTokenVersion == 2) ||
-          this.typeSignDigital == 4
-        ) {
+        } else if ((this.typeSignDigital == 2 && this.usbTokenVersion == 2) || this.typeSignDigital == 4) {
           this.prepareInfoSignUsbTokenV2(pageNumber, canvas.height);
         }
 
-        let _objPage = this.objPdfProperties.pages.filter(
-          (p: any) => p.page_number == pageNumber
-        )[0];
+        let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
         if (!_objPage) {
           this.objPdfProperties.pages.push({
             page_number: pageNumber,
@@ -895,9 +875,7 @@ export class ConsiderContractComponent
       signElement = document.getElementById(this.objSignInfo.id);
     } else signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
-      let isObjSign = this.convertToSignConfig().filter(
-        (p: any) => p.id == this.objSignInfo.id
-      )[0];
+      let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       if (isObjSign) {
         this.objSignInfo.traf_x = d.coordinate_x;
         this.objSignInfo.traf_y = d.coordinate_y;
@@ -1242,9 +1220,7 @@ export class ConsiderContractComponent
           event.target.setAttribute('data-y', 0);
         } else if (!event.dragenter && !event.target.id.includes('chua-keo')) {
           let id = event.target.id;
-          let signCurent = this.convertToSignConfig().filter(
-            (p: any) => p.id == id
-          )[0];
+          let signCurent = this.convertToSignConfig().filter((p: any) => p.id == id)[0];
           // translate the element
           if (signCurent) {
             event.target.style.webkitTransform = event.target.style.transform =
@@ -1311,13 +1287,9 @@ export class ConsiderContractComponent
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
 
     this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
-      //  = response.recipients[0].email
-      console.log("ArrRecipientsNew123444444", response.recipients);
       this.ArrRecipientsNew = response.recipients.filter((x: any) => x.email === this.currentUser.email)
 
-
       if (this.ArrRecipientsNew.length === 0) {
-
         this.toastService.showErrorHTMLWithTimeout(
           'Bạn không có quyền xử lý hợp đồng này!',
           '',
@@ -1365,15 +1337,10 @@ export class ConsiderContractComponent
       );
       return;
     }
-    if (
-      e &&
-      e == 1 &&
-      !this.validateSignature() &&
-      !(
+    if (e && e == 1 && !this.validateSignature() && !(
         (this.datas.roleContractReceived == 2 && this.confirmConsider == 2 && counteKYC <= 0) ||
         (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) ||
-        (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
-      )
+        (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))
     ) {
       if (!this.mobile) {
         this.toastService.showErrorHTMLWithTimeout(
@@ -1639,8 +1606,11 @@ export class ConsiderContractComponent
               this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
               signUpdate.signDigitalWidth = signUpdate.signDigitalX + this.widthText + 10;
 
-              signUpdate.signDigitalY = signUpdate.signDigitalY - 0.5*(signUpdate.height - signUpdate.font_size) - 5;
-              signUpdate.signDigitalHeight = signUpdate.signDigitalY + signUpdate.height;
+              if(this.usbTokenVersion == 1) {
+                signUpdate.signDigitalY = signUpdate.signDigitalY - 0.5*(signUpdate.height - signUpdate.font_size) - 5;
+                signUpdate.signDigitalHeight = signUpdate.signDigitalY + signUpdate.height;
+              }
+            
 
               await of(null).pipe(delay(120)).toPromise();
               const imageRender = <HTMLElement>(document.getElementById('text-sign'));
