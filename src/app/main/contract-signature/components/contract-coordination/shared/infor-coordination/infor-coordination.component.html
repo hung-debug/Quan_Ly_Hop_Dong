@@ -6,16 +6,20 @@
       </div>
       <div style="line-height: 25px">
         <div>
-          <span class="title-contract">{{'contract.type' | translate}}:</span>
-          <span>{{datas.is_data_contract.type_id}}</span>
+          <span class="title-contract">{{'contract.uid' | translate}}:</span>
+          <span>{{datas?.is_data_contract?.contract_uid}}</span>
+        </div>
+        <div>
+          <span class="title-contract">{{'menu.contract.type.list' | translate}}:</span>
+          <span>{{datas?.is_data_contract?.type_name}}</span>
         </div>
         <div>
           <span class="title-contract">{{'contract.name' | translate}}:</span>
-          <span>{{datas.is_data_contract.name}}</span>
+          <span>{{datas?.is_data_contract.name}}</span>
         </div>
         <div>
           <span class="title-contract">{{'contract.number' | translate}}:</span>
-          <span>{{datas.is_data_contract.code}}</span>
+          <span>{{datas?.is_data_contract.code}}</span>
         </div>
         <div>
           <span class="title-contract">{{'file.attach' | translate}}:</span>

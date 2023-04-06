@@ -123,8 +123,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   async ngOnInit() {
-    console.log("info coordination ngOnInIt", this.datas)
-    console.log("info coordination ngOnInIt", Object.keys(this.datas))
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
     // console.log(this.datas);
 
@@ -134,6 +132,8 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
 
     if(!this.idContract || this.checkView) {
       this.getDataContractSignature();
+
+      console.log("datas ", this.datas)
     } else {
       this.router.navigate(['/page-not-found']);
     }
@@ -187,6 +187,16 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   pageBefore: number;
   status: any;
   getDataContractSignature() {
+
+    if (this.datas?.is_data_contract?.type_id) {
+      this.contractService
+        .getContractTypes(this.datas?.is_data_contract?.type_id)
+        .subscribe((data) => {
+          if (this.datas?.is_data_contract) {
+            this.datas.is_data_contract.type_name = data;
+          }
+        });
+    }
 
     let arr = this.convertToSignConfig();
 

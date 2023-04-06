@@ -840,7 +840,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     });
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
-      this.reLoadData();
+      // this.reLoadData();
       let is_data = result;
     });
   }

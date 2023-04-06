@@ -58,8 +58,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   lang: string;
   ngOnInit(): void {
 
-    console.log("aaa ", sessionStorage.getItem('lang'));
-
     if(sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     } else if (sessionStorage.getItem('lang') == 'en') {
@@ -69,10 +67,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     this.contractService.getDetailContract(this.data.is_data_contract.id).subscribe(response => {
       this.endDate = moment(response[0].sign_time, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss")
       let timeNow = moment(new Date(), "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss")
-
-      // console.log("SUABc 1", moment(timeNow, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss"))
-      // console.log("SUABc 2", moment(this.endDate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss"))
-      // console.log("SUABc 3", moment(this.endDate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") >= moment(timeNow, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss"))
 
       this.isEndDate = this.endDate >= timeNow ? true : false
     })
@@ -94,10 +88,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         this.isHiddenButton = false;
       }
 
-
-      response.recipients.forEach((element: any) => {
-        console.log("su element",element);
-        
+      response.recipients.forEach((element: any) => {        
         let data = {
           id: element.id,
           name: element.name,
@@ -125,17 +116,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         })
       })
 
-      console.log("is_list_name", this.is_list_name);
-
       this.listCheckSmsEmail = true
-      // this.is_list_name.map((item: any) => {
-      //   if (item.statusNumber === 3 || item.statusNumber === 34) {
-      //     console.log(" item.statusNumber", item.statusNumber);
-
-      //     this.listCheckSmsEmail = false
-      //   }
-      // });
-
 
       if (response.contractStatus === 31 || response.contractStatus === 34 || response.contractStatus === 0) {
         this.listCheckSmsEmail = false
@@ -155,10 +136,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
   checkStatusUser(status: any, role: any) {
     let res = '';
-
-    console.log("status ", status);
-
-    console.log("role ", role);
 
     if(this.lang == 'vi' || !this.lang) {
       if (status == 3) {
@@ -252,10 +229,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   resendSmsEmail(id: any) {
-    let responseSmsEmail: any;
     this.contractService.resendSmsEmail(id).subscribe((responseSmsEmail) => {
-      console.log("data success", responseSmsEmail);
-
       if (responseSmsEmail.success == true) {
         this.toastService.showSuccessHTMLWithTimeout((this.translate.instant('send.sms.email')), "", 3000);
       } else {
@@ -280,10 +254,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         data,
       })
 
-      console.log("list name", this.is_list_name);
-
       dialogRef.afterClosed().subscribe((result: any) => {
-        console.log('the close dialog', result);
 
         this.is_list_name = this.is_list_name.map((x: any) => {
           if (x.id === result.id) {
