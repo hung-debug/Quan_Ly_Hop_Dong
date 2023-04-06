@@ -704,7 +704,7 @@ export class ConsiderContractComponent
 
       const imageRender = <HTMLElement>document.getElementById('export-html');
       if (imageRender) {
-        domtoimage.toPng(imageRender).then((res: any) => {
+        domtoimage.toPng(imageRender, this.getOptions(imageRender)).then((res: any) => {
           this.base64GenCompany = res.split(',')[1];
         });
       }
@@ -1616,7 +1616,7 @@ export class ConsiderContractComponent
               const imageRender = <HTMLElement>(document.getElementById('text-sign'));
               
               if (imageRender) {
-                const textSignB = await domtoimage.toPng(imageRender);
+                const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
                 signI = this.textSignBase64Gen = textSignB.split(',')[1];
               }
             } else if (signUpdate.type == 3) {
@@ -1629,14 +1629,15 @@ export class ConsiderContractComponent
                 imageRender = <HTMLElement>(document.getElementById('export-html'));
 
                 if (imageRender) {
-                  const textSignB = await domtoimage.toPng(imageRender);
+                  const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
                   signI = textSignB.split(',')[1];
                 }
               } else if (this.usbTokenVersion == 2) {
                 imageRender = <HTMLElement>(document.getElementById('export-html2'));
+                
 
                 if (imageRender) {
-                  const textSignB = await domtoimage.toJpeg(imageRender);
+                  const textSignB = await domtoimage.toJpeg(imageRender, this.getOptions(imageRender));
                   signI = textSignB.split(',')[1];
                 }
               }
@@ -1682,8 +1683,6 @@ export class ConsiderContractComponent
             }
           }
         }
-
-        console.log("abc ");
         return true;
       } else {
         this.toastService.showErrorHTMLWithTimeout(
@@ -1792,7 +1791,7 @@ export class ConsiderContractComponent
             const imageRender = <HTMLElement>(document.getElementById('text-sign'));
 
             if (imageRender) {
-              const textSignB = await domtoimage.toPng(imageRender);
+              const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
               signI = this.textSignBase64Gen = textSignB.split(',')[1];
             }
           } else if (signUpdate.type == 3) {
@@ -1802,7 +1801,7 @@ export class ConsiderContractComponent
               document.getElementById('export-html-hsm1')
             );
             if (imageRender) {
-              const textSignB = await domtoimage.toPng(imageRender);
+              const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
               signI = textSignB.split(',')[1];
             }
           }
@@ -1901,9 +1900,18 @@ export class ConsiderContractComponent
     }
   }
 
-  calculatorWidthText(text: any, font: any) {
-    console.log("font ", font);
+  getOptions(imageRender: any) {
+    const scale = 21;
+    const options = {
+      quality: 0.99,
+      width: imageRender.clientWidth * scale,
+      height: imageRender.clientHeight * scale,
+      style: { transform: 'scale('+scale+')', transformOrigin: 'top left'}
+    };
+    return options;
+  }
 
+  calculatorWidthText(text: any, font: any) {
     const canvas: any = document.createElement("canvas");
 
     const context = canvas.getContext("2d");
@@ -1975,7 +1983,7 @@ export class ConsiderContractComponent
             document.getElementById('export-html-ekyc')
           );
 
-          const textSignB = domtoimage.toPng(imageRender);
+          const textSignB = domtoimage.toPng(imageRender, this.getOptions(imageRender));
 
           const valueBase64 = (await textSignB).split(',')[1];
 
@@ -2060,7 +2068,7 @@ export class ConsiderContractComponent
 
       let signI: any;
       if (imageRender) {
-        const textSignB = await domtoimage.toPng(imageRender);
+        const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
         signI = textSignB.split(',')[1];
       }
 
@@ -2440,7 +2448,7 @@ export class ConsiderContractComponent
           const imageRender = <HTMLElement>(
             document.getElementById('export-html-ekyc')
           );
-          const textSignB = domtoimage.toPng(imageRender);
+          const textSignB = domtoimage.toPng(imageRender, this.getOptions(imageRender));
 
           const valueBase64 = (await textSignB).split(',')[1];
 
@@ -2742,7 +2750,7 @@ export class ConsiderContractComponent
           document.getElementById('image_keo_tha')
         );
 
-        const textSignB = domtoimage.toPng(imageRender);
+        const textSignB = domtoimage.toPng(imageRender, this.getOptions(imageRender));
 
         const valueBase64 = (await textSignB).split(',')[1];
 
@@ -3102,7 +3110,7 @@ export class ConsiderContractComponent
         document.getElementById('export-html-hsm1')
       );
       if (imageRender) {
-        const textSignB = await domtoimage.toPng(imageRender);
+        const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
         signI = textSignB.split(',')[1];
       }
 

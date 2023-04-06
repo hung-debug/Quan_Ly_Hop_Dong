@@ -640,7 +640,7 @@ export class ContractSignatureComponent implements OnInit {
               let signI = '';
 
               if (imageRender) {
-                const textSignB = await domtoimage.toPng(imageRender);
+                const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
                 signI = textSignB.split(',')[1];
               }
 
@@ -783,7 +783,7 @@ export class ContractSignatureComponent implements OnInit {
                   document.getElementById('export-html')
                 );
                 if (imageRender) {
-                  const textSignB = await domtoimage.toPng(imageRender);
+                  const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
                   signI = textSignB.split(',')[1];
                 }
 
@@ -882,6 +882,17 @@ export class ContractSignatureComponent implements OnInit {
         });
       }
     );
+  }
+
+  getOptions(imageRender: any) {
+    const scale = 21;
+    const options = {
+      quality: 0.99,
+      width: imageRender.clientWidth * scale,
+      height: imageRender.clientHeight * scale,
+      style: { transform: 'scale('+scale+')', transformOrigin: 'top left'}
+    };
+    return options;
   }
 
   async signTokenVersion2(fileC: any,idContract: any,recipientId: any,documentId: any,taxCode: any,idSignMany: any) {
@@ -1064,7 +1075,7 @@ export class ContractSignatureComponent implements OnInit {
       await of(null).pipe(delay(100)).toPromise();
       const imageRender = <HTMLElement>document.getElementById('export-html');
       if (imageRender) {
-        const textSignB = await domtoimage.toPng(imageRender);
+        const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
         signI = textSignB.split(',')[1];
       }
 
