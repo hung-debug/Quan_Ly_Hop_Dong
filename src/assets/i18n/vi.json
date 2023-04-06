@@ -578,5 +578,6 @@
   "date.full.valid":"Vui lòng nhập đủ ngày tạo",
   "download.multi": "Tải nhiều",
   "contract.down": "Tải",
-  "add.unit.success":"Thêm mới tổ chức thành công!"
+  "add.unit.success":"Thêm mới tổ chức thành công!",
+  "link.valid":"Link truy cập đã hết hạn"
 }

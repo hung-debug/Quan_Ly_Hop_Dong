@@ -48,13 +48,33 @@ export class ResetPasswordComponent implements OnInit {
     });
   }
 
+  validToken: boolean = false;
   ngOnInit(): void {
-    this.sub = this.route.params.subscribe(params => {
+    this.sub = this.route.params.subscribe(async params => {
       this.token = params['token'];
-    });
-    console.log(this.token);
-    this.initResetPasswordgForm();
+      
+      let checkTokenDate = null;
+      try{
+        checkTokenDate = await this.userService.checkTokenDate(this.token).toPromise();
 
+        if(checkTokenDate.status == 0) {
+          this.validToken = true;
+        } else {
+          this.validTokenFalse();
+        }
+
+      } catch(err) {
+        this.validTokenFalse();
+      }
+    });
+
+    this.initResetPasswordgForm();
+  }
+
+  validTokenFalse() {
+    this.validToken = false;
+    this.router.navigate(['/page-not-found']);
+    this.toastService.showErrorHTMLWithTimeout("link.valid",'',3000);
   }
 
   ngOnDestroy() {
@@ -128,7 +148,12 @@ export class ResetPasswordComponent implements OnInit {
         },
         (error:any) => {
           this.error = true;
-          this.errorDetail = 'error.server';
+
+          if(error.includes("Error Code: 400")) {
+            this.errorDetail = 'link.valid';
+          } else {
+            this.errorDetail = 'error.server';
+          }
         }
         );
       }
