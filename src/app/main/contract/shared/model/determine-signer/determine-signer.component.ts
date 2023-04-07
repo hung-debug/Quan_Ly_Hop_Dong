@@ -141,11 +141,13 @@ export class DetermineSignerComponent implements OnInit {
     this.user = this.userService.getInforUser();
 
 
-    if (!this.datas.flagDigitalSign) {
-      this.isListSignNotPerson[0] = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
-    } else {
-      this.isListSignNotPerson[0] = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
-    }
+    // if (!this.datas.flagDigitalSign) {
+    //   this.isListSignNotPerson[0] = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
+    // } else {
+      
+    // }
+
+    this.isListSignNotPerson[0] = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
 
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
       this.datas.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
@@ -181,6 +183,12 @@ export class DetermineSignerComponent implements OnInit {
 
   changeButtonText(text: string) {
     this.dropdownButtonText = text;
+  }
+
+  getSignTypeList() {
+    // console.log("vao day ", this.signTypeList.filter((p) => ![1, 5].includes(p.id)));
+
+    return this.signTypeList.filter((p) => ![1, 5].includes(p.id))
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -1761,6 +1769,8 @@ export class DetermineSignerComponent implements OnInit {
   getListSignType(role?: any) {
     if(role == 'partner') {
       return this.signTypeList.filter((p: any) => ![1,5].includes(p.id));
+    } if(role == 'org') {
+      return this.signTypeList.filter((p: any) => [1,5].includes(p.id));
     } else {
       return this.signTypeList;
     }

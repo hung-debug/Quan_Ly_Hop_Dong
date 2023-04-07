@@ -316,7 +316,7 @@
 
                   <!--Tổ chức của tôi chọn loại ký-->
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                    [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson[index]"
+                    [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson[index] ? isListSignNotPerson[index] : this.getListSignType('org')"
                     (onSelect)="onItemSelect($event, data_organization.name)" (onDeSelect)="deSelectOrg($event)"
                     (ngModelChange)="selectWithOtp($event, d, 'organization')">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
