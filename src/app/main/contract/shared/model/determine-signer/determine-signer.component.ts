@@ -1767,10 +1767,8 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   getListSignType(role?: any) {
-    if(role == 'partner') {
+    if(role == 'partner' || role == 'org') {
       return this.signTypeList.filter((p: any) => ![1,5].includes(p.id));
-    } if(role == 'org') {
-      return this.signTypeList.filter((p: any) => [1,5].includes(p.id));
     } else {
       return this.signTypeList;
     }
