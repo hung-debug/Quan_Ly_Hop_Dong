@@ -885,7 +885,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   getOptions(imageRender: any) {
-    const scale = 21;
+    const scale = 10;
     const options = {
       quality: 0.99,
       width: imageRender.clientWidth * scale,
