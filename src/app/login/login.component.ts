@@ -330,7 +330,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.translate.currentLang = lang;
 
     console.log("lang ", lang);
-    // localStorage.setItem('lang', lang);
+    localStorage.setItem('lang', lang);
     sessionStorage.setItem('lang', lang);
   }
 
