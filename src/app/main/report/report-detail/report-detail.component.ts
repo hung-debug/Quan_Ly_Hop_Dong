@@ -338,6 +338,8 @@ export class ReportDetailComponent implements OnInit {
           let letSecond = response.contracts;
 
           this.list = listFirst.concat(letSecond);
+
+          console.log("list ", this.list);
         }
       
     })
@@ -365,7 +367,7 @@ export class ReportDetailComponent implements OnInit {
               result.push(ele.email)
             }
           } else if(code == 'sign') {
-            if(ele.role == 3) {
+            if(ele.role == 3 && ele.status != 4) {
               result.push(ele.email)
             }
           } else if(code == 'doc') {
