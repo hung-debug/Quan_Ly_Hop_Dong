@@ -575,5 +575,6 @@
   "download.multi": "Download multi",
   "contract.down": "Download",
   "add.unit.success":"Add organization success!",
-  "link.valid":"The access link has expired"
+  "link.valid":"The access link has expired",
+  "change.pass.first":"First time login, please change password"
 }

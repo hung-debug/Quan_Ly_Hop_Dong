@@ -8,14 +8,17 @@ export interface User {
   type: string,
   access_token: string,
   code: string,
-  customer:{
-    id:number,
-    name:string,
-    email:string,
-    phone:string,
-    status:string,
-    organization_id:string,
-    role_id:string,
+  customer: {
+    info: {
+      id:number,
+      name:string,
+      email:string,
+      phone:string,
+      status:string,
+      organization_id:string,
+      role_id:string,
+      passwordChange: number
+    }
   }
 }
 
@@ -46,7 +49,6 @@ export class AuthenticationService {
             localStorage.setItem('currentUser', JSON.stringify(user));
             return user;
           }else{
-            console.log(JSON.stringify(user));
             return null;
           }
         }),

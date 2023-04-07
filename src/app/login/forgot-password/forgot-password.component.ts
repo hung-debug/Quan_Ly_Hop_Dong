@@ -24,7 +24,7 @@ export class ForgotPasswordComponent implements OnInit {
               public translate: TranslateService,
               private dialog: MatDialog,) {
     translate.addLangs(['en', 'vi']);
-    translate.setDefaultLang('vi');
+    translate.setDefaultLang(sessionStorage.getItem('lang') || 'vi');
     //localStorage.setItem('lang', 'vi');
   }
 

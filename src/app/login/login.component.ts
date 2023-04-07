@@ -124,81 +124,28 @@ export class LoginComponent implements OnInit, AfterViewInit {
   weakPass: boolean = false;
   login(urlLink: any, isContractId: any, isRecipientId: any) {
     this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type, isContractId).subscribe((data) => {
+
+      console.log("data ", data);
+
+      // if(data?.customer?.info?.passwordChange == 0) {
+      //   //doi mat khau
+      //   this.toastService.showErrorHTMLWithTimeout('change.pass.first','',3000);
+      //   this.changePassword();
+      //   return;
+      // }
+
       if(data?.code == '00'){
         if (this.authService.isLoggedInSuccess() == true) {
-
           this.error = false;
 
           //Mật khẩu yếu => Đổi mật khẩu
           if(!parttern_input.weak_pass.test(this.loginForm.value.password) && this.type != 1 && !this.loginForm.value.username.includes('@mobifone.vn')) {
-
             this.toastService.showErrorHTMLWithTimeout('weak.pass','',3000);
-
-            const data = {
-              title: 'ĐỔI MẬT KHẨU',
-              weakPass: false
-            };
-        
-            // @ts-ignore
-            const dialogRef = this.dialog.open(ResetPasswordDialogComponent, {
-              width: '420px',
-              backdrop: 'static',
-              keyboard: false,
-              disableClose: true,
-              data
-            })
-        
-            dialogRef.afterClosed().subscribe((result: any) => {
-              console.log('the close dialog');
-              let is_data = result
-            })
+            this.changePassword();
             return;
-          }
-
-          this.countLoginFail = 0;
-          this.captcha = false;
-          localStorage.setItem('fail',this.countLoginFail.toString())
-          if (sessionStorage.getItem("url")) {
-            if (urlLink) {
-              if (urlLink.includes(this.coordinates)) {
-                this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.coordinates+'/' + isContractId]);
-              } else if (urlLink.includes(this.consider)) {
-                this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.consider+'/' + isContractId],
-                  {
-                    queryParams: {'recipientId': isRecipientId}
-                  });
-              } else if (urlLink.includes(this.secretary)) {
-                this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.secretary+'/' + isContractId],
-                  {
-                    queryParams: {'recipientId': isRecipientId}
-                  });
-              } else if (urlLink.includes(this.signatures)) {
-                this.router.navigate(['/main/'+this.contract_signatures+'/'+this.signatures+'/' + isContractId],
-                  {
-                    queryParams: {'recipientId': isRecipientId}
-                  });
-              } else if (urlLink.includes('contract-template')) {
-                this.router.navigate(['/main/contract-template/form/detail/' + isContractId]);
-              } else if (urlLink.includes('form-contract')) {
-                this.router.navigate(['/main/form-contract/detail/' + isContractId]);
-              }
-            } else {
-              this.error = false;
-              if (this.type == 0) {
-                this.router.navigate(['/main/dashboard']);
-               
-              } else {
-                this.router.navigate([localStorage.getItem('url')]);
-              }
-            }
           } else {
-            this.error = false;
-            if (this.type == 0) {
-              this.router.navigate(['/main/dashboard']);
-             
-            } else {
-              this.router.navigate([localStorage.getItem('url')]);
-            }
+
+            this.action(urlLink, isContractId, isRecipientId);
           }
         } else {
           this.countLoginFail++;
@@ -240,6 +187,73 @@ export class LoginComponent implements OnInit, AfterViewInit {
       this.generateCaptcha();
     }
 
+  }
+
+  action(urlLink: any, isContractId: any, isRecipientId: any) {
+    this.countLoginFail = 0;
+    this.captcha = false;
+    localStorage.setItem('fail',this.countLoginFail.toString())
+    if (sessionStorage.getItem("url")) {
+      if (urlLink) {
+        if (urlLink.includes(this.coordinates)) {
+          this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.coordinates+'/' + isContractId]);
+        } else if (urlLink.includes(this.consider)) {
+          this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.consider+'/' + isContractId],
+            {
+              queryParams: {'recipientId': isRecipientId}
+            });
+        } else if (urlLink.includes(this.secretary)) {
+          this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.secretary+'/' + isContractId],
+            {
+              queryParams: {'recipientId': isRecipientId}
+            });
+        } else if (urlLink.includes(this.signatures)) {
+          this.router.navigate(['/main/'+this.contract_signatures+'/'+this.signatures+'/' + isContractId],
+            {
+              queryParams: {'recipientId': isRecipientId}
+            });
+        } else if (urlLink.includes('contract-template')) {
+          this.router.navigate(['/main/contract-template/form/detail/' + isContractId]);
+        } else if (urlLink.includes('form-contract')) {
+          this.router.navigate(['/main/form-contract/detail/' + isContractId]);
+        }
+      } else {
+        this.error = false;
+        if (this.type == 0) {
+          this.router.navigate(['/main/dashboard']);
+         
+        } else {
+          this.router.navigate([localStorage.getItem('url')]);
+        }
+      }
+    } else {
+      this.error = false;
+      if (this.type == 0) {
+        this.router.navigate(['/main/dashboard']);
+       
+      } else {
+        this.router.navigate([localStorage.getItem('url')]);
+      }
+    }
+  }
+
+  changePassword() {
+    const data = {
+      title: 'ĐỔI MẬT KHẨU',
+      weakPass: false
+    };
+
+    // @ts-ignore
+    const dialogRef = this.dialog.open(ResetPasswordDialogComponent, {
+      width: '420px',
+      backdrop: 'static',
+      keyboard: false,
+      disableClose: true,
+      data
+    })
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+    })
   }
 
   captchaValue: any;
@@ -316,7 +330,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.translate.currentLang = lang;
 
     console.log("lang ", lang);
-    localStorage.setItem('lang', lang);
+    // localStorage.setItem('lang', lang);
     sessionStorage.setItem('lang', lang);
   }
 

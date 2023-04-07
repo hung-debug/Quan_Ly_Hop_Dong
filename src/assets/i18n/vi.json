@@ -252,7 +252,7 @@
   "error.contract.name.required": "Tên hợp đồng không được để trống",
 
   "error.contract.name.valid": "Tên hợp đồng không được chứa ký tự đặc biệt",
-  "error.password.valid":"Mật khẩu phải có ít nhất 1 chữ hoa, chữ thường, ký tự đặc biệt và độ dài từ đủ 8 ký tự trở lên",
+  "error.password.valid":"Mật khẩu phải có ít nhất 1 chữ hoa, chữ thường, chữ số, ký tự đặc biệt và độ dài từ đủ 8 ký tự trở lên",
 
   "error.name.required":"Họ và tên không được để trống",
   "error.phone.required":"Số điện thoại không được để trống",
@@ -328,7 +328,7 @@
   "no.contract.download.file.success": "Tải file hợp đồng thành công",
   "no.contract.download.file.error": "Tải file hợp đồng thất bại",
   "no.contract.get.file.error": "Lấy file hợp đồng thất bại",
-  "no.reset.password.error": "Đổi mật khẩu mới thất bại",
+  "no.reset.password.error": "Đổi mật khẩu không thành công. Vui lòng kiểm tra lại mật khẩu đã nhập",
   "no.push.information.contract.error": "Đẩy thông tin hợp đồng thất bại",
   "no.push.file.contract.error": "Đẩy file thất bại",
   "no.push.file.connect.contract.error": "Liên kết file hợp đồng thất bại",
@@ -579,5 +579,6 @@
   "download.multi": "Tải nhiều",
   "contract.down": "Tải",
   "add.unit.success":"Thêm mới tổ chức thành công!",
-  "link.valid":"Link truy cập đã hết hạn"
+  "link.valid":"Link truy cập đã hết hạn",
+  "change.pass.first":"Tài khoản đăng nhập lần đầu, vui lòng đổi mật khẩu"
 }

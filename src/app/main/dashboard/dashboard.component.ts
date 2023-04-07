@@ -308,8 +308,6 @@ export class DashboardComponent implements OnInit {
       this.numberWaitComplete = data.waiting;
     });
 
-    console.log("menu dashboard ");
-
     this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
       this.listNotification = data.entities;
       console.log(this.listNotification);

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { parttern_input } from 'src/app/config/parttern';
+import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -33,6 +34,7 @@ export class ResetPasswordDialogComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog,
     private userService : UserService,
+    private contractService: ContractService
     ) { 
       this.addForm = this.fbd.group({
         passwordOld: ["", [Validators.required]],
@@ -51,7 +53,6 @@ export class ResetPasswordDialogComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log("a ", this.data.weakPass)
     this.submitted = true;
     // stop here if form is invalid
     if (this.addForm.invalid) {
@@ -74,14 +75,14 @@ export class ResetPasswordDialogComponent implements OnInit {
       }else{
         this.userService.sendResetPasswordToken(data.passwordOld, data.passwordNew).subscribe((data:any) => {
           if (data != null) {
-            console.log("data ", data);
             this.dialogRef.close();
             this.toastService.showSuccessHTMLWithTimeout("Đổi mật khẩu mới thành công.<br>Vui lòng đăng nhập để tiếp tục!", "", 3000);
             this.logout();
+
+            window.location.reload();
           } else if(data == 1) {
 
           } else {
-            console.log("data ", data);
             this.toastService.showErrorHTMLWithTimeout("Đổi mật khẩu mới thất bại!", "", 3000);
           }
         },
@@ -94,6 +95,9 @@ export class ResetPasswordDialogComponent implements OnInit {
 
   //click logout
   logout() {
+    this.contractService.deleteToken().subscribe((res:any) => { 
+    })
+
     localStorage.clear();
     sessionStorage.clear();
     localStorage.removeItem('currentUser');
