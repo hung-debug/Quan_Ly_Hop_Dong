@@ -1901,7 +1901,7 @@ export class ConsiderContractComponent
   }
 
   getOptions(imageRender: any) {
-    const scale = 21;
+    const scale = 1;
     const options = {
       quality: 0.99,
       width: imageRender.clientWidth * scale,
