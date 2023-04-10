@@ -142,8 +142,14 @@
             </div>
         </div>
 
+        <div *ngIf="this.filter_status == 30">
+            <div class="col-md-1 btn_search" style="padding-top: 10px;">
+                <button (click)="downloadManyContract()" class="btn btn-lg btn-block btn_submit">{{'contract.down'| translate}}</button>
+            </div>
+        </div>
+
         <div class="row list_header" *ngIf="pageTotal > 0;">
-            <div class="col-md-5"></div>
+            <div class="col-md-4"></div>
             <div class="col-md-2">{{'create-date' | translate}}</div>
             <div class="col-md-2">{{'expiration-date' | translate}}</div>
             <div class="col-md-3">{{'action' | translate}}</div>
@@ -152,7 +158,7 @@
         <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
                 <div class="row">
                     <!--Cột 1-->
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div class="row">
                             <div class="col-md-11">
                                 <div class="item_contract_name" (click)="isQLHD_07?openDetail(item.id):null">{{item.name}}</div>
@@ -214,6 +220,22 @@
                                 <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" />
                             </div>
                         </div>
+
+                        <!--Cột 5: Input checkbox-->
+                        <div class="col-md-1 item_icon" *ngIf="this.filter_status == 30">
+                            <div style="display: flex; justify-content: center;">
+                                <div class="div_icon">
+                                    <div class="col-md-1 calendar_create">
+                                        <div>
+                                            <input name="item" type="checkbox"  (click)="toggleOneDownload(item)"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="div_icon" *ngIf="this.typeDisplay == 'downloadMany'">
+                            <input id="all" name="all" type="checkbox" (click)="toggleOneDownload(item, index1)" />
+                        </div> -->
                     </div>
                 <!-- </div> -->
         </div>

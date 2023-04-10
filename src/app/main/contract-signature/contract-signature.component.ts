@@ -81,6 +81,7 @@ export class ContractSignatureComponent implements OnInit {
   isDateTime: any = new Date();
 
   organization_id: any = "";
+  public contractDownloadList : any[] = [];
 
   constructor(
     private appService: AppService,
@@ -239,7 +240,7 @@ export class ContractSignatureComponent implements OnInit {
     .subscribe((data) => {
       console.log("dataaaaaaaaaa",data);
       
-      this.contracts = data.entities;
+      this.contractDownloadList = data.entities;
       this.pageTotal = data.total_elements;
       if (this.pageTotal == 0) {
         this.p = 0;
@@ -248,24 +249,21 @@ export class ContractSignatureComponent implements OnInit {
       } else {
         this.setPage();
       }
-      this.contracts.forEach((key: any, v: any) => {
-        console.log("contractName",key.participant.contract.name);
-        console.log("ìd",key.participant.contract.id);
-        
-        this.contracts[v].contractId = key.participant.contract.id;
-        this.contracts[v].contractName = key.participant.contract.name;
-        this.contracts[v].contractNumber = key.participant.contract.code;
-        this.contracts[v].contractSignTime =
+      this.contractDownloadList.forEach((key: any, v: any) => {        
+        this.contractDownloadList[v].contractId = key.participant.contract.id;
+        this.contractDownloadList[v].contractName = key.participant.contract.name;
+        this.contractDownloadList[v].contractNumber = key.participant.contract.code;
+        this.contractDownloadList[v].contractSignTime =
           key.participant.contract.sign_time;
-        this.contracts[v].contractCreateTime =
+        this.contractDownloadList[v].contractCreateTime =
           key.participant.contract.created_time;
-        this.contracts[v].contractStatus =
+        this.contractDownloadList[v].contractStatus =
           key.participant.contract.status;
-        this.contracts[v].contractCecaPush =
+        this.contractDownloadList[v].contractCecaPush =
           key.participant.contract.ceca_push;
-        this.contracts[v].contractCecaStatus =
+        this.contractDownloadList[v].contractCecaStatus =
           key.participant.contract.ceca_status;
-        this.contracts[v].contractReleaseState =
+        this.contractDownloadList[v].contractReleaseState =
           key.participant.contract.release_state;
       });
       this.spinner.hide();
@@ -280,7 +278,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   cancelDownloadMany() {
-    this.typeDisplay = 'downloadOne';
+    this.typeDisplay = 'signOne';
   }
 
   getContractList() {
@@ -307,7 +305,6 @@ export class ContractSignatureComponent implements OnInit {
         });
     } else if (this.filter_status == 1 || this.filter_status == 4) {
       if (this.typeDisplay == 'signOne'|| this.typeDisplay === 'downloadMany'){
-        console.log("aaaaaaaaaa");
         if(this.typeDisplay === 'downloadMany'){
           this.contractStatus = 30
         }
@@ -331,8 +328,6 @@ export class ContractSignatureComponent implements OnInit {
               this.pageStart = 0;
               this.pageEnd = 0;
             } else {
-              console.log("p",this.p);
-              
               this.setPage();
             }
             this.contracts.forEach((key: any, v: any) => {
@@ -412,9 +407,6 @@ export class ContractSignatureComponent implements OnInit {
         this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
       });
     }
-    console.log("thíp",this.p);
-    console.log("total",this.pageTotal);
-    
   }
 
   sortParticipant(list: any) {
@@ -494,6 +486,39 @@ export class ContractSignatureComponent implements OnInit {
       }
     }
   }
+  downloadManyContract() {
+    const ids = this.dataChecked.map(el => el.id).toString();
+    this.contractService.getContractMyProcessListDownloadMany(ids).subscribe(
+      (data) => {
+        const file = new Blob([data], {type: 'application/zip'});
+        let fileUrl = window.URL.createObjectURL(file);
+        let a = document.createElement('a');
+        document.body.appendChild(a);
+        a.setAttribute('style', 'display: none');
+        a.href = fileUrl;
+        a.download = 'Contracts'+ "_".concat(new Date().toLocaleDateString());
+        a.click();
+        window.URL.revokeObjectURL(fileUrl);
+        a.remove()
+      },
+      (error) => {
+        this.toastService.showErrorHTMLWithTimeout('no.contract.download.file.error', '', 3000);
+      }
+    );
+  }
+
+  toggleOneDownload(item: any, index1: any){
+    let data = {
+      id: item.participant?.contract?.id, 
+    }
+    if(this.dataChecked.some(el => el.id === data.id)){
+      this.dataChecked = this.dataChecked.filter((item) => {
+        return item.id != data.id
+      })
+    } else {
+      this.dataChecked.push(data);
+    }
+  }
 
   private convertStatusStr() {
     if (this.status == 'wait-processing') {
@@ -551,9 +576,7 @@ export class ContractSignatureComponent implements OnInit {
     });
   }
 
-  downloadManyContract(){
 
-  }
 
   signManyContract() {
     //Nếu chọn hợp đồng khác loại ký thì ko cho ký

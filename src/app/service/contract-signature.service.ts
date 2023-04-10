@@ -65,14 +65,10 @@ export class ContractSignatureService {
     return this.http.get<any[]>(this.listContractMyProcessUrlSignMany+'orgId='+orgId+'&platform=web',{headers}).pipe();
   }
 
-  public getContractMyProcessListDownloadMany() {
+  public getContractMyProcessListDownloadMany(ids: any): Observable<any> {
     this.getCurrentUser();
-
-    const headers = {'Authorization': 'Bearer ' + this.token};
-    // const ids = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.ids;
-    // const ids = this.listContractMyProcessUrl.participant.contract.id
-
-    // return this.http.get<any[]>(this.listContractMyProcessUrlDownloadMany+'ids'+ids,{headers}).pipe();
+    const headers = new HttpHeaders().append('Authorization', 'Bearer ' + this.token)
+    return this.http.get(this.listContractMyProcessUrlDownloadMany+'ids='+ids,{headers, responseType: 'blob'}).pipe();
   }
   
 

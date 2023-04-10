@@ -1448,6 +1448,34 @@ export class ConsiderContractComponent
         cancelButtonText: 'Hủy bỏ',
       }).then(async (result) => {
         if (result.isConfirmed) {
+
+          this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+
+          this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
+            //  = response.recipients[0].email
+            console.log("ArrRecipientsNew123444444", response.recipients);
+            this.ArrRecipientsNew = response.recipients.filter((x: any) => x.email === this.currentUser.email)
+      
+      
+            if (this.ArrRecipientsNew.length === 0) {
+      
+              this.toastService.showErrorHTMLWithTimeout(
+                'Bạn không có quyền xử lý hợp đồng này!',
+                '',
+                3000
+              );
+              if (this.type == 1) {
+                this.router.navigate(['/login']);
+                this.dialog.closeAll()
+                return
+              } else {
+                this.router.navigate(['/main/dashboard']);
+                this.dialog.closeAll()
+                return
+              }
+            };
+          })
+
           // Kiểm tra ô ký đã ký chưa (status = 2)
           this.spinner.show();
           let id_recipient_signature: any = null;
@@ -2786,6 +2814,9 @@ export class ConsiderContractComponent
     let cancelSuccess = '';
     let error = '';
     let rejectReason = '';
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+
+
 
     if (localStorage.getItem('lang') == 'vi') {
       rejectQuestion =
@@ -2843,8 +2874,34 @@ export class ConsiderContractComponent
     });
 
     if (textRefuse) {
+      this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
+        //  = response.recipients[0].email
+        console.log("ArrRecipientsNew123444444", response.recipients);
+        this.ArrRecipientsNew = response.recipients.filter((x: any) => x.email === this.currentUser.email)
+  
+  
+        if (this.ArrRecipientsNew.length === 0) {
+  
+          this.toastService.showErrorHTMLWithTimeout(
+            'Bạn không có quyền xử lý hợp đồng này!',
+            '',
+            3000
+          );
+          if (this.type == 1) {
+            this.router.navigate(['/login']);
+            this.dialog.closeAll()
+            return
+          } else {
+            this.router.navigate(['/main/dashboard']);
+            this.dialog.closeAll()
+            return
+          }
+        };
+      
       this.contractService.considerRejectContract(this.recipientId, textRefuse).subscribe(
-          (result) => {
+           (result) => {
+            console.log("aaaaaaaaaaaaaaaaaaaaaaaaa");
+            
             this.toastService.showSuccessHTMLWithTimeout(
               cancelSuccess,
               '',
@@ -2859,7 +2916,8 @@ export class ConsiderContractComponent
             this.spinner.hide();
             this.toastService.showErrorHTMLWithTimeout(error1, '', 3000);
           }
-        );
+        )
+      });
     }
   }
 
