@@ -26,9 +26,10 @@ export const parttern = {
 };
 
 export const parttern_input = {
-  input_form: /^[^!“#$%&‘()*;<=>?@[\]^_`{|}~\\]*$/,
+  // input_form: /^[^!“#$%&‘()*;<=>?@[\]^_`{|}~\\]*$/,
 
   contract_name_valid: /^[^!@#$%^&*+~<?'';{}\[\]]*$/,
+  input_form: /^[^!@#$%^&*+~<?'';{}\[\]]*$/,
 
   number_form: /^([0-9]+)|([0-9.])$/,
 
