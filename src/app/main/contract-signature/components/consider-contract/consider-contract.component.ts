@@ -1604,7 +1604,9 @@ export class ConsiderContractComponent
               this.font_size = signUpdate.font_size;
 
               this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
-              signUpdate.signDigitalWidth = signUpdate.signDigitalX + this.widthText + 10;
+
+              if(Number(signUpdate.signDigitalX + this.widthText + 10) < 790)
+                signUpdate.signDigitalWidth = signUpdate.signDigitalX + this.widthText + 10;
 
               if(this.usbTokenVersion == 1) {
                 signUpdate.signDigitalY = signUpdate.signDigitalY - 0.5*(signUpdate.height - signUpdate.font_size) - 5;
