@@ -1901,14 +1901,16 @@ export class ConsiderContractComponent
   }
 
   getOptions(imageRender: any) {
-    const scale = 15;
-    const options = {
-      quality: 0.99,
-      width: imageRender.clientWidth * scale,
-      height: imageRender.clientHeight * scale,
-      style: { transform: 'scale('+scale+')', transformOrigin: 'top left'}
-    };
-    return options;
+    // const scale = 15;
+    // const options = {
+    //   quality: 0.99,
+    //   width: imageRender.clientWidth * scale,
+    //   height: imageRender.clientHeight * scale,
+    //   style: { transform: 'scale('+scale+')', transformOrigin: 'top left'}
+    // };
+    // return options;
+
+    return undefined;
   }
 
   calculatorWidthText(text: any, font: any) {
