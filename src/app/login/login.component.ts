@@ -127,7 +127,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
       console.log("data ", data);
 
-      if(data?.customer?.info?.passwordChange == 0) {
+      if(data?.customer?.info?.passwordChange == 0 && this.type == 0) {
         //doi mat khau
         this.toastService.showErrorHTMLWithTimeout('change.pass.first','',3000);
         this.changePassword();
