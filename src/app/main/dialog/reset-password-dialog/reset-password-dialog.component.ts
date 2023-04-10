@@ -83,7 +83,7 @@ export class ResetPasswordDialogComponent implements OnInit {
           } else if(data == 1) {
 
           } else {
-            this.toastService.showErrorHTMLWithTimeout("Đổi mật khẩu mới thất bại!", "", 3000);
+            this.toastService.showErrorHTMLWithTimeout("no.reset.password.error", "", 3000);
           }
         },
         (error: any) => {
