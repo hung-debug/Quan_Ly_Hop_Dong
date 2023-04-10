@@ -487,6 +487,9 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
   downloadManyContract() {
+    const myDate = new Date();
+    // Replace 'yyyy-MM-dd' with your desired date format
+    const formattedDate = this.datepipe.transform(myDate, 'ddMMyyyy'); 
     const ids = this.dataChecked.map(el => el.id).toString();
     this.contractService.getContractMyProcessListDownloadMany(ids).subscribe(
       (data) => {
@@ -496,7 +499,7 @@ export class ContractSignatureComponent implements OnInit {
         document.body.appendChild(a);
         a.setAttribute('style', 'display: none');
         a.href = fileUrl;
-        a.download = 'Contracts'+ "_".concat(new Date().toLocaleDateString());
+        a.download = 'Contracts'+ '_' + formattedDate;
         a.click();
         window.URL.revokeObjectURL(fileUrl);
         a.remove()
