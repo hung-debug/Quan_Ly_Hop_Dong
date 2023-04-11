@@ -580,5 +580,7 @@
   "contract.down": "Tải",
   "add.unit.success":"Thêm mới tổ chức thành công!",
   "link.valid":"Link truy cập đã hết hạn",
-  "change.pass.first":"Tài khoản đăng nhập lần đầu, vui lòng đổi mật khẩu"
+  "change.pass.first":"Tài khoản đăng nhập lần đầu, vui lòng đổi mật khẩu",
+  "captcha.fail":"Nhập sai captcha",
+  "captcha.not.blank":"Bạn chưa nhập captcha"
 }

@@ -12,6 +12,7 @@ import { ToastService } from '../service/toast.service';
 import domtoimage from 'dom-to-image';
 import { delay } from 'rxjs/operators';
 import { of } from 'rxjs/internal/observable/of';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-login',
@@ -110,8 +111,18 @@ export class LoginComponent implements OnInit, AfterViewInit {
           } else {
             //Nhập sai captcha
 
-            console.log("vao day ");
-            this.errorDetail = "Nhập sai captcha";
+            // const map = new Map();
+
+            if(!this.loginForm.value.captchaName) {
+              this.errorDetail = "captcha.not.blank";
+            } else {
+              this.errorDetail = "captcha.fail";
+            }
+
+            this.authService.loginAuthencation(this.loginForm.value.username,"~", this.type, isContractId).subscribe();
+
+         
+
             this.error = true;
           }
         } else {
@@ -125,7 +136,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
   login(urlLink: any, isContractId: any, isRecipientId: any) {
     this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type, isContractId).subscribe((data) => {
 
-      console.log("data ", data);
+      if(data?.login_fail_num == 5) {
+        this.generateCaptcha();
+        return;
+      }
 
       if(data?.customer?.info?.passwordChange == 0 && this.type == 0) {
         //doi mat khau
@@ -155,7 +169,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
       }else if(data?.code == '01'){
         this.countLoginFail++;
         this.error = true;
-        this.errorDetail = "Tài khoản không hoạt động";
+
+        const date = moment(data.active_at).add(6, 'hours');
+
+        this.errorDetail = "Tài khoản bị khoá đến "+moment(date).format('YYYY/MM/DD HH:mm:ss');
       }else if(data?.code == '02'){
         this.countLoginFail++;
         this.error = true;
@@ -163,6 +180,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
       }else {
         this.countLoginFail++;
         this.error = true;
+
+        console.log("mm ", moment(data?.active_at).toDate());
+
         this.errorDetail = "error.username.password";
       }
       localStorage.setItem("fail", this.countLoginFail.toString());
