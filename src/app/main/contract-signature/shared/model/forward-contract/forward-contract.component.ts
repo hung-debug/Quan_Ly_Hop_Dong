@@ -23,6 +23,7 @@ export class ForwardContractComponent implements OnInit {
   isReqCardIdHsm: boolean = false;
 
   login: string;
+  type: any = 0;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -42,6 +43,10 @@ export class ForwardContractComponent implements OnInit {
     this.datas = this.data;
     this.login = "email";
 
+    if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
+      this.type = 1;
+    } else
+      this.type = 0;
 
     this.getCurrentUser();
     this.myForm = this.fbd.group({
@@ -96,13 +101,40 @@ export class ForwardContractComponent implements OnInit {
     console.log("datasssssssssss",this.datas);
     
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    // this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
-    // console.log("this.emailRecipientssssssssss",this.emailRecipients);
-    // const ArrRecipients = this.datas.dataContract.is_data_contract.participants[0].recipients;
-    // const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email);
-    // console.log("ArrRecipientsNew", ArrRecipientsNew);
+      this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
+        console.log("response", response);
+        const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+        console.log("ArrRecipients", ArrRecipients);
 
-   
+        let ArrRecipientsNew = false
+        ArrRecipients.map((item: any) => {
+          if (item.email === this.currentUser.email) {
+            ArrRecipientsNew = true
+            return
+          }
+        });
+        console.log("ArrRecipientsNew111", ArrRecipientsNew);
+
+        if (!ArrRecipientsNew) {
+
+          this.toastService.showErrorHTMLWithTimeout(
+            'Bạn không có quyền xử lý hợp đồng này!',
+            '',
+            3000
+          );
+          if (this.type == 1) {
+            this.router.navigate(['/login']);
+            this.dialogRef.close();
+            this.spinner.hide();
+            return
+          } else {
+            this.router.navigate(['/main/dashboard']);
+            this.dialogRef.close();
+            this.spinner.hide();
+            return
+          }        
+        };
+        console.log("this.currentUser.email", this.currentUser);
       if (!String(this.myForm.value.name)) {
         // this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền'
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập tên người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
@@ -236,8 +268,11 @@ export class ForwardContractComponent implements OnInit {
               this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
             }
           )
+          
         }
+        
       }
+    })
   }
 
   getCurrentUser(): any {

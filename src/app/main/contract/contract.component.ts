@@ -19,6 +19,8 @@ import { UserService } from 'src/app/service/user.service';
 import { RoleService } from 'src/app/service/role.service';
 import { sideList } from 'src/app/config/variable';
 import { DialogReasonCancelComponent } from '../contract-signature/shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
+import { ContractSignatureService } from '../../service/contract-signature.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-contract',
@@ -82,6 +84,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   constructor(private appService: AppService,
     private contractService: ContractService,
+    private ContractSignatureService: ContractSignatureService,
     private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService,
@@ -90,6 +93,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     private spinner: NgxSpinnerService,
     private userService: UserService,
     private roleService: RoleService,
+    private datePipe: DatePipe
   ) {
 
     this.stateOptions = [
@@ -215,6 +219,48 @@ export class ContractComponent implements OnInit, AfterViewInit {
     }
 
     this.cancelContract(idMany);
+  }
+
+  dataChecked: any[] = [];
+  toggleOneDownload(item: any){
+    console.log("item",item);
+    
+    let data = {
+      id: item.participants[0]?.contract_id,
+    }
+    if(this.dataChecked.some(el => el.id === data.id)){
+      this.dataChecked = this.dataChecked.filter((item) => {
+        return item.id != data.id
+      })
+    } else {
+      this.dataChecked.push(data);
+    }
+  }
+
+
+
+  downloadManyContract() {
+    const myDate = new Date();
+    // Replace 'yyyy-MM-dd' with your desired date format
+    const formattedDate = this.datePipe.transform(myDate, 'ddMMyyyy'); 
+    const ids = this.dataChecked.map(el => el.id).toString();
+    this.ContractSignatureService.getContractMyProcessListDownloadMany(ids).subscribe(
+      (data) => {
+        const file = new Blob([data], {type: 'application/zip'});
+        let fileUrl = window.URL.createObjectURL(file);
+        let a = document.createElement('a');
+        document.body.appendChild(a);
+        a.setAttribute('style', 'display: none');
+        a.href = fileUrl;
+        a.download = 'Contracts'+ '_' + formattedDate;
+        a.click();
+        window.URL.revokeObjectURL(fileUrl);
+        a.remove()
+      },
+      (error) => {
+        this.toastService.showErrorHTMLWithTimeout('no.contract.download.file.error', '', 3000);
+      }
+    );
   }
 
   ngAfterViewInit(): void {
