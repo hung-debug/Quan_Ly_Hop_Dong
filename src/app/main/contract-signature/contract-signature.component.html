@@ -24,9 +24,9 @@
         </div>
 
         <div *ngIf="filter_status == 4">
-            <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
+            <!-- <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
                 <button (click)="downloadMany()" class="btn btn-lg btn-block btn_submit">{{'download.multi'| translate}}</button>
-            </div>
+            </div> -->
 
             <div *ngIf="this.typeDisplay === 'downloadMany'" style="padding-top: 10px;">
                 <button class="btn_submit" (click)="downloadManyContract()">{{'contract.down'| translate}}</button>
