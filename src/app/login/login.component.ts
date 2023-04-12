@@ -109,19 +109,18 @@ export class LoginComponent implements OnInit, AfterViewInit {
           if(this.loginForm.value.captchaName == this.previewCaptcha.nativeElement.innerText.replaceAll(" ","")) {
             this.login(urlLink, isContractId, isRecipientId);
           } else {
-            //Nhập sai captcha
-
-            // const map = new Map();
 
             if(!this.loginForm.value.captchaName) {
               this.errorDetail = "captcha.not.blank";
             } else {
               this.errorDetail = "captcha.fail";
+
+              this.authService.loginAuthencation(this.loginForm.value.username,"~", this.type, isContractId).subscribe((response: any) => {
+                if(response.login_fail_num >= 8) {
+                  this.toastService.showErrorHTMLWithTimeout("Bạn đã bị khoá tài khoản đến "+moment(response.active_at).format("YYYY/MM/DD HH:mm:ss"),'',3000);
+                }
+              });
             }
-
-            this.authService.loginAuthencation(this.loginForm.value.username,"~", this.type, isContractId).subscribe();
-
-         
 
             this.error = true;
           }
@@ -170,7 +169,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.countLoginFail++;
         this.error = true;
 
-        const date = moment(data.active_at).add(6, 'hours');
+        const date = moment(data.active_at);
 
         this.errorDetail = "Tài khoản bị khoá đến "+moment(date).format('YYYY/MM/DD HH:mm:ss');
       }else if(data?.code == '02'){
