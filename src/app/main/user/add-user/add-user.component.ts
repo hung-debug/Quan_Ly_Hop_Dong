@@ -515,8 +515,7 @@ export class AddUserComponent implements OnInit {
     }
   }
 
-  fileChangedAttach(e: any) {
-    console.log(e.target.files)
+  fileChangedAttach(e: any, code: string) {
     let files = e.target.files;
     for(let i = 0; i < files.length; i++){
 
@@ -526,10 +525,9 @@ export class AddUserComponent implements OnInit {
         if (e.target.files[0].size <= 50000000) {
           const file_name = file.name;
           const extension = file.name.split('.').pop();
-          if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'jpge') {
-            this.handleUpload(e);
+          if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'jpeg') {
+            this.handleUpload(e, code);
             this.attachFile = file;
-            console.log(this.attachFile);
           }else{
             this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng JPG, PNG, JPGE", "", 3000);
           }
@@ -543,18 +541,26 @@ export class AddUserComponent implements OnInit {
     }
   }
   imgSignPCSelect: string;
-  handleUpload(event: any) {
+  imgSignPCSelectMark: string;
+  handleUpload(event: any, code: string) {
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      //console.log(reader.result);
-      this.imgSignPCSelect = reader.result? reader.result.toString() : '';
+      if(code == 'sign')
+        this.imgSignPCSelect = reader.result? reader.result.toString() : '';
+      else if(code == 'mark')
+        this.imgSignPCSelectMark = reader.result? reader.result.toString() : '';
     };
   }
 
-  addFileAttach() {
-    // @ts-ignore
-    document.getElementById('attachFileSignature').click();
+  addFileAttach(code: string) {
+
+    if(code == 'sign')
+      // @ts-ignore
+      document.getElementById('attachFileSignature').click();
+    else if(code == 'mark')
+      // @ts-ignore
+      document.getElementById('attachFileMark').click();
   }
 }

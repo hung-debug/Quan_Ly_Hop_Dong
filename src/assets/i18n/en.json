@@ -588,5 +588,6 @@
   "invalid.inform":"Invalid information",
   "card.id.fail":"Citizen ID identification error",
   "fae.recog":"Face recognition",
-  "push.image.fail":"Image file push failed"
+  "push.image.fail":"Image file push failed",
+  "sign.file-image.mark":"Mark image"
 }

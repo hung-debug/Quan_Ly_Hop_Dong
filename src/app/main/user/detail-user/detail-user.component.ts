@@ -29,6 +29,7 @@ export class DetailUserComponent implements OnInit {
   password1Hsm:any="";
 
   imgSignPCSelect:any
+  imgSignPCSelectMark: any
 
   action: string;
   private sub: any;
