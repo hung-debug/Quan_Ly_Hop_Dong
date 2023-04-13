@@ -19,7 +19,6 @@ export class ForgotPasswordComponent implements OnInit {
   error:boolean = false;
   errorDetail:string = '';
   constructor(private fb: FormBuilder,
-              private translateService: TranslateService,
               private userService: UserService,
               public translate: TranslateService,
               private dialog: MatDialog,) {
@@ -67,7 +66,7 @@ export class ForgotPasswordComponent implements OnInit {
             // }else if(data.code == '03'){
             //   this.sendPassword('Địa chỉ email '+ email +' có tổ chức không hoạt động!');
             // }
-            this.sendPassword(this.translateService.instant('email.valid'));
+            this.sendPassword(this.translate.instant('email.valid'));
           }
           
         },

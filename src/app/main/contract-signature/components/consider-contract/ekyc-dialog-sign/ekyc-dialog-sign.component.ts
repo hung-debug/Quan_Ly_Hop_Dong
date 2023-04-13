@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { result } from 'lodash';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
@@ -23,7 +24,7 @@ export class EkycDialogSignComponent implements OnInit {
     public dialogRef: MatDialogRef<EkycDialogSignComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private toastService: ToastService,
-    private activeRoute: ActivatedRoute,
+    private translate: TranslateService
   ) {
 
   }
@@ -66,7 +67,7 @@ export class EkycDialogSignComponent implements OnInit {
       this.title = 0;
     } else {
       this.title = 1;
-      this.data.title = 'Nhận dạng khuôn mặt';
+      this.data.title = 'face.recog';
     }
 
     WebcamUtil.getAvailableVideoInputs()
@@ -103,41 +104,45 @@ export class EkycDialogSignComponent implements OnInit {
         this.upFileImageToDb(formData);
   
         this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl, this.data.contractId, this.data.recipientId).subscribe((response) => {
-          console.log("ma" + this.webcamImage.imageAsDataUrl);
           this.spinner.hide();
           if(response.result_code == 200 && response.action == 'pass') {
             if(this.cardId) {
               if(this.cardId == response.id && this.name.toUpperCase().split(" ").join("") == response.name.toUpperCase().split(" ").join("")) {
                 this.flagSuccess == true;
-                alert("Xác thực thành công");
+                alert(this.translate.instant('confirm.success'));
                 this.dialogRef.close(this.webcamImage.imageAsDataUrl);
               } else if(this.cardId != response.id){
                 this.flagSuccess == false;
                 this.webcamImage = this.initWebcamImage;
-                alert("Mã CMT/CCCD không trùng khớp");
-
+                alert(this.translate.instant('card.id.not.match'));
                 // string.replace(/  +/g, ' ');
               } else if(this.name.toUpperCase().split(" ").join("") != response.name.toUpperCase().split(" ").join("")) {
                 this.flagSuccess == false;
                 this.webcamImage = this.initWebcamImage;
-                alert("Họ tên trên CMT/CCCD không trùng khớp với tên người ký");
+                alert(this.translate.instant('name.not.match'));
               }else{
                 this.flagSuccess == false;
-                alert("Thông tin không hợp lệ");
+                alert(this.translate.instant('invalid.infor'));
               }
             } else {
-              alert("Xác thực thành công");
+              alert(this.translate.instant('confirm.success'));
               this.dialogRef.close(this.webcamImage.imageAsDataUrl);
             }
              
           } else {
             this.flagSuccess = false;
-            this.webcamImage = this.initWebcamImage; 
-            alert("Xác thực thất bại "+ response.warning_msg[0]);
+            this.webcamImage = this.initWebcamImage;
+            
+            if(response.warning_msg?.length > 0)
+              alert(this.translate.instant('confirm.fail')+ response.warning_msg[0]);
+            else if(response.reason_for_action?.length > 0)
+              alert(this.translate.instant('image.not.clear'));
+            else
+              alert(this.translate.instant('confirm.fail'));
           }
          
         }, (error: any) => {
-          alert("Nhận dạng căn cước công dân mặt sau lỗi");
+          alert(this.translate.instant('card.id.fail'));
         })
       } else {
   
@@ -152,23 +157,23 @@ export class EkycDialogSignComponent implements OnInit {
   
         this.contractService.detectFace(this.data.cccdFront, this.webcamImage.imageAsDataUrl).subscribe((response) => {
           this.spinner.hide();
-          if(response.verify_result == 2) {
-            alert("Nhận dạng thành công");
+          if(response.verify_result == 2 && response.face_anti_spoof_status == 'REAL') {
+            alert(this.translate.instant('confirm.success'));
             this.dialogRef.close(response.verify_result);
           } else {
-            if(response.message.error_message && response.message.error_message != 'undefined') {
+            if(response.face_anti_spoof_status == 'FAKE') {
+              alert(this.translate.instant('face.fail'));
+            } else if(response.message.error_message && response.message.error_message != 'undefined') {
               alert(response.message.error_message);
-              this.flagSuccess == false;
-              this.webcamImage = this.initWebcamImage;
             } else {
-              alert("Nhận dạng thất bại")
+              alert(this.translate.instant('confirm.fail'))
             }
 
             this.flagSuccess = false;
             this.webcamImage = this.initWebcamImage; 
           }
         }, (error: any) => {
-          alert("Nhận dạng căn cước công dân mặt sau lỗi");
+          alert(this.translate.instant('confirm.fail'))
         })
       }
   
@@ -193,13 +198,13 @@ export class EkycDialogSignComponent implements OnInit {
 
         this.contractService.addDocumentEkyc(body).subscribe((response) => {
           if(!response.id) {
-            this.toastService.showErrorHTMLWithTimeout("Đẩy file ảnh không thành công","",3000);
+            this.toastService.showErrorHTMLWithTimeout('push.image.fail','',3000);
             return;
           }
         })
 
       } else {
-        this.toastService.showErrorHTMLWithTimeout("Đẩy file ảnh không thành công","",3000);
+        this.toastService.showErrorHTMLWithTimeout('push.image.fail',"",3000);
         return;
       }
     })

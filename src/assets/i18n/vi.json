@@ -580,5 +580,15 @@
   "contract.down": "Tải",
   "add.unit.success":"Thêm mới tổ chức thành công!",
   "link.valid":"Link truy cập đã hết hạn",
-  "change.pass.first":"Tài khoản đăng nhập lần đầu, vui lòng đổi mật khẩu"
+  "change.pass.first":"Tài khoản đăng nhập lần đầu, vui lòng đổi mật khẩu",
+  "confirm.fail":"Xác thực thất bại",
+  "image.not.clear":"Ảnh chụp không rõ thông tin. Vui lòng chụp lại để xác thực!",
+  "confirm.success":"Nhận dạng thành công",
+  "face.fail":"Hình ảnh khuôn mặt được chụp từ màn hình/hình ảnh/...",
+  "card.id.not.match":"Mã CMT/CCCD không trùng khớp",
+  "name.not.match":"Họ tên trên CMT/CCCD không trùng khớp với tên người ký",
+  "invalid.inform":"Thông tin không hợp lệ",
+  "card.id.fail":"Nhận dạng căn cước công dân lỗi",
+  "fae.recog":"Nhận dạng khuôn mặt",
+  "push.image.fail":"Đẩy file ảnh không thành công"
 }

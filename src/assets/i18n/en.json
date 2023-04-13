@@ -576,5 +576,15 @@
   "contract.down": "Download",
   "add.unit.success":"Add organization success!",
   "link.valid":"The access link has expired",
-  "change.pass.first":"First time login, please change password"
+  "change.pass.first":"First time login, please change password",
+  "confirm.fail":"Authentication failed",
+  "image.not.clear":"The photo was taken with unclear information. Please take a photo to verify!",
+  "confirm.success":"Authentication successfully",
+  "face.fail":"The face image captured from screen/image/...",
+  "card.id.not.match":"ID card code does not match",
+  "name.not.match":"The name on the ID card does not match the signer's name",
+  "invalid.inform":"Invalid information",
+  "card.id.fail":"Citizen ID identification error",
+  "fae.recog":"Face recognition",
+  "push.image.fail":"Image file push failed"
 }
