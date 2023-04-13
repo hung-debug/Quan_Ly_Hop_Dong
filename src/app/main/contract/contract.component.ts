@@ -20,6 +20,7 @@ import { RoleService } from 'src/app/service/role.service';
 import { sideList } from 'src/app/config/variable';
 import { DialogReasonCancelComponent } from '../contract-signature/shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
 import { ContractSignatureService } from '../../service/contract-signature.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-contract',
@@ -92,6 +93,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     private spinner: NgxSpinnerService,
     private userService: UserService,
     private roleService: RoleService,
+    private datePipe: DatePipe
   ) {
 
     this.stateOptions = [
@@ -238,6 +240,9 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
 
   downloadManyContract() {
+    const myDate = new Date();
+    // Replace 'yyyy-MM-dd' with your desired date format
+    const formattedDate = this.datePipe.transform(myDate, 'ddMMyyyy'); 
     const ids = this.dataChecked.map(el => el.id).toString();
     this.ContractSignatureService.getContractMyProcessListDownloadMany(ids).subscribe(
       (data) => {
@@ -247,7 +252,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         document.body.appendChild(a);
         a.setAttribute('style', 'display: none');
         a.href = fileUrl;
-        a.download = 'Contracts'+ '_'.concat(new Date().toLocaleDateString());
+        a.download = 'Contracts'+ '_' + formattedDate;
         a.click();
         window.URL.revokeObjectURL(fileUrl);
         a.remove()

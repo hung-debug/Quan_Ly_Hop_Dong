@@ -358,8 +358,7 @@ export class DetermineSignerComponent implements OnInit {
   selectWithOtp(e: any, data: any) {
     console.log("data ", data);
     if(e.length > 0) {
-      console.log("e ",e);
-      console.log("e ", e.target.value);
+
     }
     if(data.type == 3 && data.sign_type.length > 0) {
       if(data.sign_type[0].id == 1)

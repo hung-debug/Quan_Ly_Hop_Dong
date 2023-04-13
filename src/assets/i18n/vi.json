@@ -581,6 +581,8 @@
   "add.unit.success":"Thêm mới tổ chức thành công!",
   "link.valid":"Link truy cập đã hết hạn",
   "change.pass.first":"Tài khoản đăng nhập lần đầu, vui lòng đổi mật khẩu",
+  "captcha.fail":"Nhập sai captcha",
+  "captcha.not.blank":"Bạn chưa nhập captcha",
   "confirm.fail":"Xác thực thất bại",
   "image.not.clear":"Ảnh chụp không rõ thông tin. Vui lòng chụp lại để xác thực!",
   "confirm.success":"Nhận dạng thành công",

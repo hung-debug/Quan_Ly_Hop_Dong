@@ -19,7 +19,9 @@ export interface User {
       role_id:string,
       passwordChange: number
     }
-  }
+  },
+  login_fail_num: number;
+  active_at: string;
 }
 
 @Injectable({

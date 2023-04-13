@@ -238,8 +238,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.datas.size = 13;
       this.size = this.datas.size;
     } 
-
-    console.log("datass ", this.datas.contract_user_sign);
   }
 
   changeFont($event: any) {
@@ -445,9 +443,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       })
     }
-
-    console.log("datass ", this.datas.contract_user_sign);
-
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -764,9 +759,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getCheckSignature(isSignType: any, listSelect?: string, recipient_id?:any) {
-    console.log("vao day ");
     this.list_sign_name.forEach((element: any) => {
-      console.log(element);
       if (isSignType != 'text' && (element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
         let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
         
@@ -786,7 +779,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           if (isSignType == 'chu_ky_anh') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
           } else if (isSignType == 'chu_ky_so') {
-            console.log("vao day ");
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
           } else if (isSignType == 'text') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
@@ -794,8 +786,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4);
         }
       }
-      
-      console.log(isSignType);
+    
       if (recipient_id || listSelect) {
         // element.is_disable = false;
         element.selected = (recipient_id ? element.id==recipient_id: element.name == listSelect);
@@ -1260,7 +1251,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let arrSignConfig: any = [];
     let cloneUserSign = [...this.datas.contract_user_sign];
     cloneUserSign.forEach(element => {
-      console.log("el ", element);
       if (this.datas.is_action_contract_created) {
         if ((element.recipient && ![2, 3].includes(element.recipient.status)) || (!element.recipient && ![2, 3].includes(element.status))) {
           arrSignConfig = arrSignConfig.concat(element.sign_config);
@@ -1269,8 +1259,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         arrSignConfig = arrSignConfig.concat(element.sign_config);
       } 
     })
-
-    console.log("arr ", arrSignConfig);
 
     return arrSignConfig;
   }

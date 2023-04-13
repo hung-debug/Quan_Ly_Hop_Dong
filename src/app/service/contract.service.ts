@@ -434,7 +434,7 @@ export class ContractService {
 
     const body = {
       image: image,
-      request_id: contractId+"_"+recipientId
+      request_id: contractId+"_"+recipientId+"-web"
     };
 
     if (environment.apiUrl == 'https://econtract.mobifone.vn/service') {

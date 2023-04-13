@@ -513,57 +513,57 @@ export class SidebarService {
       )
     }
 
-    // submenusReport.push(
-      // //Chi tiết hợp đồng
-      // {
-      //   title: 'report.detail.contract',
-      //   active: false,
-      //   href: '/main/report/detail',
-      // },
-      // //HĐ sắp hết hiệu lực
-      // {
-      //   title: 'report.expires-soon.contract',
-      //   active: false,
-      //   href: '/main/report/soon-expire',
-      // },
-      // //Trạng thái xử lý hợp đồng
-      // {
-      //   title: 'report.processing.status.contract',
-      //   active: false,
-      //   href: '/main/report/status-contract',
-      // },
-      // //Số lượng hợp đồng theo trạng thái
-      // {
-      //   title: 'report.number.contracts.status',
-      //   active: false,
-      //   href: '/main/report/contract-number-follow-status',
-      // },
+    submenusReport.push(
+      //Chi tiết hợp đồng
+      {
+        title: 'report.detail.contract',
+        active: false,
+        href: '/main/report/detail',
+      },
+      //HĐ sắp hết hiệu lực
+      {
+        title: 'report.expires-soon.contract',
+        active: false,
+        href: '/main/report/soon-expire',
+      },
+      //Trạng thái xử lý hợp đồng
+      {
+        title: 'report.processing.status.contract',
+        active: false,
+        href: '/main/report/status-contract',
+      },
+      //Số lượng hợp đồng theo trạng thái
+      {
+        title: 'report.number.contracts.status',
+        active: false,
+        href: '/main/report/contract-number-follow-status',
+      },
       //Số lượng hợp đồng theo loại hợp đồng
-      // {
-      //   title: 'report.number.contracts.contract-type',
-      //   active: false,
-      //   href: '/main/report/contract-number-follow-type',
-      // },
-      // //Số lượng HĐ theo hình thức ký
-      // {
-      //   title: 'report.number.contracts.type.sign',
-      //   active: false,
-      //   href: '/main/report/contract-number-follow-sign',
-      // }
-    // );
+      {
+        title: 'report.number.contracts.contract-type',
+        active: false,
+        href: '/main/report/contract-number-follow-type',
+      },
+      //Số lượng HĐ theo hình thức ký
+      {
+        title: 'report.number.contracts.type.sign',
+        active: false,
+        href: '/main/report/contract-number-follow-sign',
+      }
+    );
 
-    // if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiXuLy) {
-    //   this.menus.push({
-    //     title: 'report',
-    //     icon: '/assets/img/analytics1.svg',
-    //     active: false,
-    //     activeDrop: false,
-    //     type: 'dropdown',
-    //     href: '#',
-    //     submenus: submenusReport,
-    //     id: 10,
-    //   })
-    // }
+    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiXuLy) {
+      this.menus.push({
+        title: 'report',
+        icon: '/assets/img/analytics1.svg',
+        active: false,
+        activeDrop: false,
+        type: 'dropdown',
+        href: '#',
+        submenus: submenusReport,
+        id: 10,
+      })
+    }
    
 
     //xu ly highlight

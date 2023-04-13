@@ -577,6 +577,8 @@
   "add.unit.success":"Add organization success!",
   "link.valid":"The access link has expired",
   "change.pass.first":"First time login, please change password",
+  "captcha.fail":"Wrong captcha",
+  "captcha.not.blank":"You have not entered the captcha",
   "confirm.fail":"Authentication failed",
   "image.not.clear":"The photo was taken with unclear information. Please take a photo to verify!",
   "confirm.success":"Authentication successfully",

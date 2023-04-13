@@ -1173,7 +1173,7 @@ export class SampleContractFormComponent implements OnInit {
 
         console.log("d ",d);
 
-        if (!d.name && !d.recipient.name) {
+        if (!d.name && !d.recipient?.name) {
           //@ts-ignore
           document.getElementById('select-dropdown').value = "";
         } else {
