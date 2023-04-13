@@ -24,9 +24,9 @@
         </div>
 
         <div *ngIf="filter_status == 4">
-            <!-- <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
+            <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
                 <button (click)="downloadMany()" class="btn btn-lg btn-block btn_submit">{{'download.multi'| translate}}</button>
-            </div> -->
+            </div>
 
             <div *ngIf="this.typeDisplay === 'downloadMany'" style="padding-top: 10px;">
                 <button class="btn_submit" (click)="downloadManyContract()">{{'contract.down'| translate}}</button>
@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <div style="margin-top: 18px;" class="row list_header" *ngIf="pageTotal > 0;">
+    <div class="row list_header" *ngIf="pageTotal > 0;">
 
         <div class="col-md-5"></div>
         <div class="col-md-2">{{'create-date' | translate}}</div>
@@ -66,7 +66,7 @@
 
                                 <!--Cac ben ky-->
                                 <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
-                                    <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index, item)}}</div>
+                                    <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
                                 </div>
 
                                 <!--Trang thai hop dong-->
@@ -438,7 +438,7 @@
         </div>
     </div>
 
-    <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 90px">
+    <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
         <div style="display: table-cell;vertical-align: middle;">
             <img src="../../../assets/img/empty_data.svg" />
             <div style="color: #94A7C6">{{'no.data' | translate}}</div>
@@ -483,6 +483,3 @@
     </div>
   </div>
   
-
-
-
