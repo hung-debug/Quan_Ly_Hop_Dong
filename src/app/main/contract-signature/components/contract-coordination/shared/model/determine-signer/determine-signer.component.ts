@@ -150,6 +150,10 @@ export class DetermineSignerComponent implements OnInit {
     this.datas.stepLast = step;
     this.stepChangeDetermineSigner.emit(step);
   }
+  setLocale(d: any, lang: string) {
+    d.locale = lang;
+  }
+  dropdownButtonText = '';
 
   getData(item: any) {
     // console.log(item)

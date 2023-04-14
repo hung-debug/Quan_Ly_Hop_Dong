@@ -24,6 +24,7 @@ export class ForwardContractComponent implements OnInit {
 
   login: string;
   type: any = 0;
+  locale : string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -97,6 +98,10 @@ export class ForwardContractComponent implements OnInit {
     this.login = e.target.value;
   }
 
+  setLocale(lang: string) {
+    this.locale = lang;
+  }
+  dropdownButtonText = '';
   async onSubmit() {
     console.log("datasssssssssss",this.datas);
     
