@@ -122,7 +122,7 @@
   "file.document": "File tài liệu",
   "choose": "Chọn",
   "choose.contract.file": "Chọn file hợp đồng (PDF)",
-  "choose.contract.file.attach": "Chọn file đính kèm (PDF, DOC, DOCX, PNG, JPG, JPEG, ZIP, RAR, TXT)",
+  "choose.contract.file.attach": "Chọn file đính kèm (PDF, DOC, DOCX, PNG, JPG, JPEG, ZIP, RAR, TXT, XLS, XLSX)",
   "choose.document.file.excel": "Chọn file tài liệu (XLS, XLSX)",
   "choose.sign.file.image": "Chọn file ảnh chữ ký từ máy tính của bạn",
   "support.format.PNG.JPG.JPGE": "Hỗ trợ định dạng PNG, JPG, JPGE",
