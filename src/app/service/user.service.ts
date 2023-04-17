@@ -256,6 +256,7 @@ export class UserService {
       role_id: datas.role,
 
       sign_image: datas.sign_image,
+      stampImage: datas.stampImage,
 
       phone_sign: datas.phoneKpi,
       phone_tel: datas.networkKpi ==='bcy' ? 3 : datas.networkKpi,

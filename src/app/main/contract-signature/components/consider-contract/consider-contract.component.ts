@@ -1874,7 +1874,7 @@ export class ConsiderContractComponent
             const imageRender = <HTMLElement>(document.getElementById('text-sign'));
 
             if (imageRender) {
-              const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
+              const textSignB = await domtoimage.toPng(imageRender);
               signI = this.textSignBase64Gen = textSignB.split(',')[1];
             }
           } else if (signUpdate.type == 3) {

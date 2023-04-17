@@ -11,6 +11,7 @@ import { networkList } from "../../../config/variable";
 import {parttern_input, parttern} from "../../../config/parttern"
 import * as moment from "moment";
 import { NgxSpinnerService } from 'ngx-spinner';
+import { error } from 'console';
 @Component({
   selector: 'app-infor-user',
   templateUrl: './infor-user.component.html',
@@ -46,6 +47,10 @@ export class InforUserComponent implements OnInit {
   attachFile:any;
   imgSignBucket:any;
   imgSignPath:any;
+
+  imgSignBucketMark: any;
+  imgSignPathMark: any;
+
   phoneOld:any;
 
   organizationName:any;
@@ -150,9 +155,14 @@ export class InforUserComponent implements OnInit {
             ),
           password1Hsm: this.fbd.control(data.hsm_pass)
         });
+
         this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
         this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
         this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
+
+        this.imgSignPCSelectMark = data.stampImage != null && data.stampImage.length>0?data.stampImage[0].presigned_url:null;
+        this.imgSignBucketMark = data.stampImage != null && data.stampImage.length>0?data.stampImage[0].bucket:null;
+        this.imgSignPathMark = data.stampImage != null && data.stampImage.length>0?data.stampImage[0].path:null;
 
         this.addInforFormOld = this.fbd.group({
           name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
@@ -194,6 +204,14 @@ export class InforUserComponent implements OnInit {
       (sign_image as string[]).push(sign_image_content);
       data.sign_image = sign_image;
     }
+
+    if(this.imgSignBucketMark != null && this.imgSignPathMark != null){
+      const sign_image_content:any = {bucket: this.imgSignBucketMark, path: this.imgSignPathMark};
+      const sign_image:never[]=[];
+      (sign_image as string[]).push(sign_image_content);
+      data.stamImage = sign_image;
+    }
+
     this.userService.updateUser(data).subscribe(
       data => {
         this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
@@ -208,33 +226,47 @@ export class InforUserComponent implements OnInit {
     )
   }
 
-  updateSign(data:any){
+  async updateSign(data:any){
     //neu co up anh moi => day lai anh, update lai thong tin
-    if(data.fileImage != null){
-      this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
-        const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
-        const sign_image:never[]=[];
-        (sign_image as string[]).push(sign_image_content);
-        data.sign_image = sign_image;
+    if(data.fileImage || data.fileImageMark){
+      if(data.fileImage) {
+        try {
+          const fileImage = await this.uploadService.uploadFile(data.fileImage).toPromise();
+          const sign_image_content:any = {bucket: fileImage.file_object.bucket, path: fileImage.file_object.file_path};
+          const sign_image:never[]=[];
+          (sign_image as string[]).push(sign_image_content);
+          data.sign_image = sign_image;
+        } catch(err) {
+          console.log("errr ", err);
+        }
+       
+      }
 
-        this.userService.updateUser(data).subscribe(
-          data => {
-            this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
-            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-              this.router.navigate(['/main/user-infor']);
-            });
-            this.spinner.hide();
-          }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
-            this.spinner.hide();
-          }
-        )
-      },
-      error => {
-        this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
-        this.spinner.hide();
-        return false;
-      });
+      if(data.fileImageMark) {
+        try {
+          const fileImageMark = await this.uploadService.uploadFile(data.fileImageMark).toPromise();
+          const sign_image_content:any = {bucket: fileImageMark.file_object.bucket, path: fileImageMark.file_object.file_path};
+          const sign_image:never[]=[];
+          (sign_image as string[]).push(sign_image_content);
+          data.stampImage = sign_image;
+        } catch(err) {
+          console.log("errr ", err);
+        }
+        
+      }
+
+      this.userService.updateUser(data).subscribe(
+        data => {
+          this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+            this.router.navigate(['/main/user-infor']);
+          });
+          this.spinner.hide();
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
+          this.spinner.hide();
+        }
+      )   
     }else{
       //lay lai thong tin anh cu truoc do => day lai
       if(this.imgSignBucket != null && this.imgSignPath != null){
@@ -242,6 +274,13 @@ export class InforUserComponent implements OnInit {
         const sign_image:never[]=[];
         (sign_image as string[]).push(sign_image_content);
         data.sign_image = sign_image;
+      }
+
+      if(this.imgSignBucketMark != null && this.imgSignPathMark != null){
+        const sign_image_content:any = {bucket: this.imgSignBucketMark, path: this.imgSignPathMark};
+        const sign_image:never[]=[];
+        (sign_image as string[]).push(sign_image_content);
+        data.stampImage = sign_image;
       }
       this.userService.updateUser(data).subscribe(
         data => {
@@ -363,6 +402,9 @@ export class InforUserComponent implements OnInit {
       fileImage: this.attachFile,
       sign_image: [],
 
+      fileImageMark: this.attachFileMark,
+      stampImage: [],
+
       phoneKpi: this.addKpiForm.value.phoneKpi,
       networkKpi: this.addKpiForm.value.networkKpi == 'bcy' ? 3: this.addKpiForm.value.networkKpi,
 
@@ -376,6 +418,7 @@ export class InforUserComponent implements OnInit {
     this.updateSign(data);
   }
 
+  attachFileMark: any = null;
   fileChangedAttach(e: any, code: string) {
     let files = e.target.files;
     for(let i = 0; i < files.length; i++){
@@ -388,13 +431,18 @@ export class InforUserComponent implements OnInit {
           const extension = file.name.split('.').pop();
           if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'jpge') {
             this.handleUpload(e, code);
-            this.attachFile = file;
+            if(code == 'sign') {
+              this.attachFile = file;
+            } else if(code == 'mark') {
+              this.attachFileMark = file;
+            }
           }else{
             this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng JPG, PNG, JPGE", "", 3000);
           }
 
         } else {
           this.attachFile = null;
+          this.attachFileMark = null;
           this.toastService.showErrorHTMLWithTimeout("Yêu cầu file nhỏ hơn 50MB", "", 3000);
           break;
         }
