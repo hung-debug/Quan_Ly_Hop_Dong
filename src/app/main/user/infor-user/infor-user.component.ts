@@ -209,7 +209,7 @@ export class InforUserComponent implements OnInit {
       const sign_image_content:any = {bucket: this.imgSignBucketMark, path: this.imgSignPathMark};
       const sign_image:never[]=[];
       (sign_image as string[]).push(sign_image_content);
-      data.stamImage = sign_image;
+      data.stampImage = sign_image;
     }
 
     this.userService.updateUser(data).subscribe(
@@ -227,9 +227,12 @@ export class InforUserComponent implements OnInit {
   }
 
   async updateSign(data:any){
-    //neu co up anh moi => day lai anh, update lai thong tin
-    if(data.fileImage || data.fileImageMark){
-      if(data.fileImage) {
+      if(this.imgSignBucket != null && this.imgSignPath != null){
+        const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
+        const sign_image:never[]=[];
+        (sign_image as string[]).push(sign_image_content);
+        data.sign_image = sign_image;
+      } else if(data.fileImage) {
         try {
           const fileImage = await this.uploadService.uploadFile(data.fileImage).toPromise();
           const sign_image_content:any = {bucket: fileImage.file_object.bucket, path: fileImage.file_object.file_path};
@@ -239,10 +242,14 @@ export class InforUserComponent implements OnInit {
         } catch(err) {
           console.log("errr ", err);
         }
-       
       }
 
-      if(data.fileImageMark) {
+      if(this.imgSignBucketMark != null && this.imgSignPathMark != null){
+        const sign_image_content:any = {bucket: this.imgSignBucketMark, path: this.imgSignPathMark};
+        const sign_image:never[]=[];
+        (sign_image as string[]).push(sign_image_content);
+        data.stampImage = sign_image;
+      } else if(data.fileImageMark) {
         try {
           const fileImageMark = await this.uploadService.uploadFile(data.fileImageMark).toPromise();
           const sign_image_content:any = {bucket: fileImageMark.file_object.bucket, path: fileImageMark.file_object.file_path};
@@ -251,37 +258,9 @@ export class InforUserComponent implements OnInit {
           data.stampImage = sign_image;
         } catch(err) {
           console.log("errr ", err);
-        }
-        
+        }  
       }
 
-      this.userService.updateUser(data).subscribe(
-        data => {
-          this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
-          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-            this.router.navigate(['/main/user-infor']);
-          });
-          this.spinner.hide();
-        }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
-          this.spinner.hide();
-        }
-      )   
-    }else{
-      //lay lai thong tin anh cu truoc do => day lai
-      if(this.imgSignBucket != null && this.imgSignPath != null){
-        const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
-        const sign_image:never[]=[];
-        (sign_image as string[]).push(sign_image_content);
-        data.sign_image = sign_image;
-      }
-
-      if(this.imgSignBucketMark != null && this.imgSignPathMark != null){
-        const sign_image_content:any = {bucket: this.imgSignBucketMark, path: this.imgSignPathMark};
-        const sign_image:never[]=[];
-        (sign_image as string[]).push(sign_image_content);
-        data.stampImage = sign_image;
-      }
       this.userService.updateUser(data).subscribe(
         data => {
           this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
@@ -294,7 +273,6 @@ export class InforUserComponent implements OnInit {
           this.spinner.hide();
         }
       )
-    }
   }
 
   updateUser(){
@@ -315,6 +293,7 @@ export class InforUserComponent implements OnInit {
       status: this.addInforForm.value.status,
 
       fileImage: this.attachFile,
+      fileImageMark: this.attachFileMark,
       sign_image: [],
 
       phoneKpi: this.addKpiFormOld.value.phoneKpi,
@@ -414,6 +393,7 @@ export class InforUserComponent implements OnInit {
 
     }
 
+    console.log("data ", data);
     //ham update
     this.updateSign(data);
   }

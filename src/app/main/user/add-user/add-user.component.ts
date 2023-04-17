@@ -169,9 +169,14 @@ export class AddUserComponent implements OnInit {
                     organization_change: data.organization_change
                   }); 
                   this.phoneOld = data.phone;
+
                   this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
                   this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
                   this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
+
+                  this.imgSignPCSelectMark = data.stampImage != null && data.stampImage.length>0?data.stampImage[0].presigned_url:null;
+                  this.imgSignBucketMark = data.stampImage != null && data.stampImage.length>0?data.stampImage[0].bucket:null;
+                  this.imgSignPathMark = data.stampImage != null && data.stampImage.length>0?data.stampImage[0].path:null;
 
                   //set name
                   if(data.organization_id != null){
@@ -286,41 +291,46 @@ export class AddUserComponent implements OnInit {
     }
   }
 
-  update(data:any){
+  imgSignBucketMark: any;
+  imgSignPathMark: any
+  async update(data:any){
     data.id = this.id;
 
-    if(data.fileImage != null){
-      this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
-        const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
-        const sign_image:never[]=[];
-        (sign_image as string[]).push(sign_image_content);
-        data.sign_image = sign_image;
-
-        this.userService.updateUser(data).subscribe(
-          data => {
-            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công!', "", 3000);
-            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-              this.router.navigate(['/main/user']);
-            });
-            this.spinner.hide();
-          }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại', "", 3000);
-            this.spinner.hide();
-          }
-        )
-      },
-      error => {
-        this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
-        this.spinner.hide();
-        return false;
-      });
-    }else{
       if(this.imgSignBucket != null && this.imgSignPath != null){
         const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
         const sign_image:never[]=[];
         (sign_image as string[]).push(sign_image_content);
         data.sign_image = sign_image;
+      } else if(data.fileImage) {
+        try {
+          const fileImage = await this.uploadService.uploadFile(data.fileImage).toPromise();
+          const sign_image_content:any = {bucket: fileImage.file_object.bucket, path: fileImage.file_object.file_path};
+          const sign_image:never[]=[];
+          (sign_image as string[]).push(sign_image_content);
+          data.sign_image = sign_image;
+        } catch(err) {
+          console.log("errr ", err);
+        }
       }
+
+      if(this.imgSignBucketMark != null && this.imgSignPathMark != null){
+        const sign_image_content:any = {bucket: this.imgSignBucketMark, path: this.imgSignPathMark};
+        const sign_image:never[]=[];
+        (sign_image as string[]).push(sign_image_content);
+        data.stampImage = sign_image;
+      } else if(data.fileImageMark) {
+        try {
+          const fileImageMark = await this.uploadService.uploadFile(data.fileImageMark).toPromise();
+          const sign_image_content:any = {bucket: fileImageMark.file_object.bucket, path: fileImageMark.file_object.file_path};
+          const sign_image:never[]=[];
+          (sign_image as string[]).push(sign_image_content);
+          data.stampImage = sign_image;
+        } catch(err) {
+          console.log("errr ", err);
+        }  
+      }
+
+      console.log("data ", data);
       this.userService.updateUser(data).subscribe(
         dataOut => {
           
@@ -345,7 +355,6 @@ export class AddUserComponent implements OnInit {
           this.spinner.hide();
         }
       )
-    }
   }
 
   getRoleByOrg(orgId:any){
@@ -379,7 +388,9 @@ export class AddUserComponent implements OnInit {
       taxCodeHsm: this.addForm.value.taxCodeHsm,
       password1Hsm: this.addForm.value.password1Hsm,
       fileImage: this.attachFile,
+      fileImageMark: this.attachFileMark,
       sign_image: [],
+      stampImage: [],
       organization_change: this.addForm.value.organizationId!= this.orgIdOld?1:this.addForm.value.organization_change
     }
     
@@ -515,6 +526,7 @@ export class AddUserComponent implements OnInit {
     }
   }
 
+  attachFileMark: any;
   fileChangedAttach(e: any, code: string) {
     let files = e.target.files;
     for(let i = 0; i < files.length; i++){
@@ -525,15 +537,20 @@ export class AddUserComponent implements OnInit {
         if (e.target.files[0].size <= 50000000) {
           const file_name = file.name;
           const extension = file.name.split('.').pop();
-          if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'jpeg') {
+          if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'jpge') {
             this.handleUpload(e, code);
-            this.attachFile = file;
+
+            if(code == 'sign')
+              this.attachFile = file;
+            else if(code == 'mark')
+              this.attachFileMark = file;
           }else{
             this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng JPG, PNG, JPGE", "", 3000);
           }
 
         } else {
           this.attachFile = null;
+          this.attachFileMark = null;
           this.toastService.showErrorHTMLWithTimeout("Yêu cầu file nhỏ hơn 50MB", "", 3000);
           break;
         }
