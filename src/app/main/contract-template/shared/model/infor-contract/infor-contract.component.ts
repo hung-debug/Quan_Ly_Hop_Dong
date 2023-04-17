@@ -250,7 +250,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             
             if (extension && extension.toLowerCase() == 'pdf' || extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx' || extension.toLowerCase() == 'png'
             || extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'jpeg' || extension.toLowerCase() == 'zip' || extension.toLowerCase() == 'rar'
-            || extension.toLowerCase() == 'txt'
+            || extension.toLowerCase() == 'txt' || extension.toLowerCase() == 'xls' || extension.toLowerCase() == 'xlsx'
           ) {
             this.attachFileArr.push(file);
             this.datas.attachFileArr = this.attachFileArr;
