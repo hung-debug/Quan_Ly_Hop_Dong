@@ -171,6 +171,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
         const date = moment(data.active_at);
 
+        console.log("date ", date);
+
         this.errorDetail = "Tài khoản bị khoá đến "+moment(date).format('YYYY/MM/DD HH:mm:ss');
       }else if(data?.code == '02'){
         this.countLoginFail++;
