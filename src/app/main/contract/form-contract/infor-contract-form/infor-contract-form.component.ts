@@ -413,7 +413,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
           if (extension && extension.toLowerCase() == 'pdf' || extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx' || extension.toLowerCase() == 'png'
           || extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'jpeg' || extension.toLowerCase() == 'zip' || extension.toLowerCase() == 'rar'
-          || extension.toLowerCase() == 'txt') {
+          || extension.toLowerCase() == 'txt' || extension.toLowerCase() == 'xls' || extension.toLowerCase() == 'xlsx') {
             const file_name = file.name;
             if (this.listFileAttach.filter((p: any) => p.filename == file_name).length == 0) {
               this.listFileAttach.push(file);
