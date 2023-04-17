@@ -594,5 +594,6 @@
   "card.id.fail":"Nhận dạng căn cước công dân lỗi",
   "fae.recog":"Nhận dạng khuôn mặt",
   "push.image.fail":"Đẩy file ảnh không thành công",
-  "sign.file-image.mark":"Ảnh con dấu"
+  "sign.file-image.mark":"Ảnh con dấu",
+  "stamp.contract.questions":"Bạn có muốn gán thêm ảnh con dấu cho hợp đồng này không?"
 }

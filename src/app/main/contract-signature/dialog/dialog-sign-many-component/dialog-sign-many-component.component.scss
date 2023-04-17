@@ -1,9 +1,19 @@
-//@font-face {
-//  font-family:font_lexend_deca;
-//  src:url('assets/scss/font/LexendDeca-VariableFont_wght.ttf') format('ttf');
-//  font-weight:normal;
-//  font-style:normal;
-//}
+:host ::ng-deep {
+  .p-dropdown, .p-multiselect {
+      border: 1px solid #106DB6;
+      border-radius: 5px;
+      height: 38px;
+      width: 100%;
+      outline: 0;
+      color: black !important;
+  }
+  .p-dropdown-label, .p-multiselect-label {
+      padding: 7px 7px 5px 10px;
+  }
+  .p-multiselect .p-multiselect-label.p-placeholder, .p-dropdown .p-dropdown-label.p-placeholder {
+    color: #6c757d !important;
+  }
+}
 
 .content {
     .name-item {

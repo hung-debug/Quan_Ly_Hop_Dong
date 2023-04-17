@@ -1427,7 +1427,7 @@ export class ConsiderContractComponent
           no: this.translate.instant('no'),
           yes: this.translate.instant('yes'),
         },
-        inputLabel: 'Bạn có muốn đóng dấu hợp đồng này không?',
+        inputLabel: this.translate.instant('stamp.contract.questions'),
       }).then(async (result) => {
         console.log("result ", result);
         if (result.isConfirmed) {
@@ -1670,18 +1670,12 @@ export class ConsiderContractComponent
 
               this.font = signUpdate.font;
               this.font_size = signUpdate.font_size;
-              
-              console.log("width ", this.canvasWidth);
-
             
               this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
 
               if(Number(signUpdate.signDigitalX + this.widthText + 10) < 790)
                 signUpdate.signDigitalWidth = signUpdate.signDigitalX + this.widthText + 10;
               
-
-              console.log("width 2 ", signUpdate.signDigitalWidth);
-
               if(this.usbTokenVersion == 1) {
                 signUpdate.signDigitalY = signUpdate.signDigitalY - 0.5*(signUpdate.height - signUpdate.font_size) - 5;
                 signUpdate.signDigitalHeight = signUpdate.signDigitalY + signUpdate.height;
@@ -1702,16 +1696,23 @@ export class ConsiderContractComponent
               let imageRender: any = '';
 
               if (this.usbTokenVersion == 1) {
-                imageRender = <HTMLElement>(document.getElementById('export-html'));
+                if(this.markImage) {
+                  imageRender = <HTMLElement>(document.getElementById('export-html-image'));
+                } else {
+                  imageRender = <HTMLElement>(document.getElementById('export-html'));
+                }
 
                 if (imageRender) {
                   const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
                   signI = textSignB.split(',')[1];
                 }
               } else if (this.usbTokenVersion == 2) {
-                imageRender = <HTMLElement>(document.getElementById('export-html2'));
+                if(this.markImage) {
+                  imageRender = <HTMLElement>(document.getElementById('export-html2-image'));
+                } else {
+                  imageRender = <HTMLElement>(document.getElementById('export-html2'));
+                }
                 
-
                 if (imageRender) {
                   const textSignB = await domtoimage.toJpeg(imageRender, this.getOptions(imageRender));
                   signI = textSignB.split(',')[1];
@@ -1743,8 +1744,6 @@ export class ConsiderContractComponent
                 return false;
               }
             } else if (this.usbTokenVersion == 1) {
-              console.log("sign digital ", signDigital);
-              console.log("sign i ", signI);
               const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital,signI);
 
               if (!dataSignMobi.data.FileDataSigned) {
@@ -1794,7 +1793,15 @@ export class ConsiderContractComponent
       this.nameCompany = this.recipient.name;
 
       await of(null).pipe(delay(120)).toPromise();
-      const imageRender = <HTMLElement>(document.getElementById('export-html-pki'));
+
+      let imageRender = null;
+
+      if(this.markImage) {
+        imageRender = <HTMLElement>(document.getElementById('export-html-pki-image'));
+      } else {
+        imageRender = <HTMLElement>(document.getElementById('export-html-pki'));
+      }
+
       let image_base64 = '';
       if (imageRender) {
         const textSignB = await domtoimage.toJpeg(imageRender);
@@ -1876,13 +1883,9 @@ export class ConsiderContractComponent
             let imageRender = null;
 
             if(this.markImage) {
-              imageRender = <HTMLElement>(
-                document.getElementById('export-html-hsm1-image')
-              );
+              imageRender = <HTMLElement>(document.getElementById('export-html-hsm1-image'));
             } else {
-              imageRender = <HTMLElement>(
-                document.getElementById('export-html-hsm1')
-              );
+              imageRender = <HTMLElement>(document.getElementById('export-html-hsm1'));
             }
            
             if (imageRender) {

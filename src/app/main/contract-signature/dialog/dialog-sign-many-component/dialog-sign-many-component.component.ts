@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { optionsCeCa } from 'src/app/config/variable';
 
 @Component({
   selector: 'app-dialog-sign-many-component',
@@ -8,16 +9,23 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 })
 export class DialogSignManyComponentComponent implements OnInit {
 
+  options: any;
+
   constructor(
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<DialogSignManyComponentComponent>,
   ) { }
 
   ngOnInit(): void {
+    this.options = optionsCeCa;
   }
 
   onSubmit() {
-    this.dialogRef.close(1);
+    const data = {
+      mark: 1,
+      agree: 1 
+    }
+    this.dialogRef.close(data);
   }
 
 }
