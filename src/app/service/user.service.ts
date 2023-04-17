@@ -338,12 +338,43 @@ export class UserService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http
-      .get<any>(this.getUserByIdUrl + id, { headers: headers })
+    return this.http.get<any>(this.getUserByIdUrl + id, { headers: headers })
       .pipe(
         map((res) => {
           if (res?.sign_image?.length) {
             return res?.sign_image[0].presigned_url;
+          }
+        }),
+        concatMap((res: any) => {
+          if (res) {
+            const headers = new HttpHeaders().append(
+              'Content-Type',
+              'application/arraybuffer'
+            );
+            return this.http
+              .get(res, { responseType: 'arraybuffer', headers })
+              .pipe(
+                map((res) => {
+                  return encode(res);
+                })
+              );
+          } else {
+            return of(null);
+          }
+        })
+      );
+  }
+
+  getMarkUserById(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.getUserByIdUrl + id, { headers: headers })
+      .pipe(
+        map((res) => {
+          if (res?.stampImage?.length) {
+            return res?.stampImage[0].presigned_url;
           }
         }),
         concatMap((res: any) => {

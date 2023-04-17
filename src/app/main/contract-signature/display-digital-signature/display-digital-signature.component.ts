@@ -15,8 +15,10 @@ export class DisplayDigitalSignatureComponent implements OnInit {
   @Input() nameCompany: any | undefined | null;
   @Input() cardId: any | undefined | null;
   @Input() phonePKI: any | undefined | null;
+  @Input() srcMark: any | undefined | null;
 
   constructor() {
+    console.log("s ", this.srcMark)
    }
 
   async ngOnInit(): Promise<void> {

@@ -37,6 +37,19 @@
 </div>
 
 
+<div id="export-html-hsm1-image" style="position: relative;">
+    <img [src]="srcMark" style="position: absolute; top: 0; left: 0; width: 30px;">
+    <div style="min-height: 80px; display: flex; font-size: 9px; margin-left: 30px;">
+        <img style="width: 30px" src="assets/img/tick_signature.svg" alt="duongdt.vn">
+        <div style="color: #4FC123; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
+            <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'user.sign-type' | translate}}: {{'sign_by_hsm' | translate}}</span>
+            <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'tax_code' | translate}}: {{cardId}}</span>
+            <span style="text-align: left;white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'sign.day' | translate}}: {{isDateTime | date: 'dd/MM/YYYY HH:mm'}}</span>
+        </div>
+    </div>
+</div>
+
+
 <div class="signature-container" id="export-html-pki" style="min-height: 80px; display: flex; font-size: 9px; background-color: white;">
     <img style="width: 30px" src="assets/img/tick_signature.svg" alt="duongdt.vn">
     <div class="signature-content" style="color: #4FC123; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">

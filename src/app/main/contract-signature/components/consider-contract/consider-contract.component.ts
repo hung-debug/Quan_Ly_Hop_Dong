@@ -45,6 +45,7 @@ import { EkycDialogSignComponent } from './ekyc-dialog-sign/ekyc-dialog-sign.com
 import { UnitService } from 'src/app/service/unit.service';
 import { Helper } from 'src/app/core/Helper';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-consider-contract',
@@ -194,7 +195,8 @@ export class ConsiderContractComponent
     public datepipe: DatePipe,
     private deviceService: DeviceDetectorService,
     private unitService: UnitService,
-    private checkViewContractService: CheckViewContractService
+    private checkViewContractService: CheckViewContractService,
+    private translate: TranslateService
   ) {
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
@@ -522,11 +524,11 @@ export class ConsiderContractComponent
         }
         this.fetchDataUserSimPki();
 
-        this.userService.getSignatureUserById(this.currentUser.id).subscribe((res) => {
-            if (res) {
-              this.datas.imgSignAcc = res;
-            }
-          });
+        const imgSignAcc = await this.userService.getSignatureUserById(this.currentUser.id).toPromise();
+        this.datas.imgSignAcc = imgSignAcc;
+        
+        const markSignAcc = await this.userService.getMarkUserById(this.currentUser.id).toPromise();
+        this.datas.markSignAcc = markSignAcc;
 
         // convert base64 file pdf to url
         if (this.datas?.i_data_file_contract) {
@@ -1273,7 +1275,8 @@ export class ConsiderContractComponent
   eKYCContractBuy: any;
   smsContractBuy: any;
   ArrRecipientsNew: any;
-
+  markImage: boolean = false;
+  srcMark: any;
   async submitEvents(e: any) {
     let haveSignPKI = false;
     let haveSignImage = false;
@@ -1417,10 +1420,23 @@ export class ConsiderContractComponent
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#b0bec5',
-        confirmButtonText: 'Xác nhận',
-        cancelButtonText: 'Hủy bỏ',
+        confirmButtonText: this.translate.instant('confirm'),
+        cancelButtonText: this.translate.instant('contract.status.canceled'),
+        input: 'select',
+        inputOptions: {
+          no: this.translate.instant('no'),
+          yes: this.translate.instant('yes'),
+        },
+        inputLabel: 'Bạn có muốn đóng dấu hợp đồng này không?',
       }).then(async (result) => {
+        console.log("result ", result);
         if (result.isConfirmed) {
+
+          if(result.value == 'yes') {
+            this.markImage = true;
+          } else {
+            this.markImage = false;
+          }
 
           this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
 
@@ -1428,7 +1444,6 @@ export class ConsiderContractComponent
             //  = response.recipients[0].email
             console.log("ArrRecipientsNew123444444", response.recipients);
             this.ArrRecipientsNew = response.recipients.filter((x: any) => x.email === this.currentUser.email)
-      
       
             if (this.ArrRecipientsNew.length === 0) {
       
@@ -1500,7 +1515,31 @@ export class ConsiderContractComponent
                         [2, 3, 4].includes(this.datas.roleContractReceived) &&
                         haveSignHsm
                       ) {
-                        this.hsmDialogSignOpen(this.recipientId);
+
+                        if(this.markImage) {
+                          const data = {
+                            title: 'ĐÓNG DẤU HỢP ĐỒNG ',
+                            is_content: 'forward_contract',
+                            markSignAcc: this.datas.markSignAcc,
+                            mark: true
+                          };
+                      
+                          const dialogConfig = new MatDialogConfig();
+                          dialogConfig.width = '1024px';
+                          dialogConfig.hasBackdrop = true;
+                          dialogConfig.data = data;
+  
+                          const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
+  
+                          dialogRef.afterClosed().subscribe((res: any) => {
+                            this.srcMark = res;
+                            this.hsmDialogSignOpen(this.recipientId);
+                            this.spinner.hide();
+                          })
+                        } else {
+                          this.hsmDialogSignOpen(this.recipientId);
+                          this.spinner.hide();
+                        }
                         this.spinner.hide();
                       } else if (
                         [2, 3, 4].includes(this.datas.roleContractReceived)
@@ -1529,8 +1568,9 @@ export class ConsiderContractComponent
                 [2, 3, 4].includes(this.datas.roleContractReceived) &&
                 haveSignHsm
               ) {
-                this.hsmDialogSignOpen(this.recipientId);
-                this.spinner.hide();
+               
+                // this.hsmDialogSignOpen(this.recipientId);
+                // this.spinner.hide();
               } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
                 this.signContractSubmit();
               }
@@ -1556,7 +1596,7 @@ export class ConsiderContractComponent
     if (typeSign == 1) {
     } else if (typeSign == 3) {
     } else if (typeSign == 4) {
-      this.hsmDialogSignOpen(this.recipientId);
+      // this.hsmDialogSignOpen(this.recipientId);
     }
   }
 
@@ -1833,9 +1873,18 @@ export class ConsiderContractComponent
           } else if (signUpdate.type == 3) {
             await of(null).pipe(delay(150)).toPromise();
 
-            const imageRender = <HTMLElement>(
-              document.getElementById('export-html-hsm1')
-            );
+            let imageRender = null;
+
+            if(this.markImage) {
+              imageRender = <HTMLElement>(
+                document.getElementById('export-html-hsm1-image')
+              );
+            } else {
+              imageRender = <HTMLElement>(
+                document.getElementById('export-html-hsm1')
+              );
+            }
+           
             if (imageRender) {
               const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
               signI = textSignB.split(',')[1];
@@ -1937,16 +1986,16 @@ export class ConsiderContractComponent
   }
 
   getOptions(imageRender: any) {
-    // const scale = 15;
-    // const options = {
-    //   quality: 0.99,
-    //   width: imageRender.clientWidth * scale,
-    //   height: imageRender.clientHeight * scale,
-    //   style: { transform: 'scale('+scale+')', transformOrigin: 'top left'}
-    // };
-    // return options;
+    const scale = 21;
+    const options = {
+      quality: 0.99,
+      width: imageRender.clientWidth * scale,
+      height: imageRender.clientHeight * scale,
+      style: { transform: 'scale('+scale+')', transformOrigin: 'top left'}
+    };
+    return options;
 
-    return undefined;
+    // return undefined;
   }
 
   calculatorWidthText(text: any, font: any) {
@@ -3168,13 +3217,16 @@ export class ConsiderContractComponent
 
     dialogRef.afterClosed().subscribe(async (result: any) => {
       let signI = null;
+      let imageRender = null;
 
-      //lấy ảnh chữ ký usb token
       this.cardId = result.ma_dvcs.trim();
 
-      const imageRender = <HTMLElement>(
-        document.getElementById('export-html-hsm1')
-      );
+      if(this.markImage) {
+        imageRender = <HTMLElement>(document.getElementById('export-html-hsm1-image'));
+      } else {
+        imageRender = <HTMLElement>(document.getElementById('export-html-hsm1'));
+      }
+
       if (imageRender) {
         const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
         signI = textSignB.split(',')[1];
@@ -3192,96 +3244,98 @@ export class ConsiderContractComponent
   }
 
   imageDialogSignOpen(e: any, haveSignImage: boolean) {
-    const data = {
-      title: 'KÝ HỢP ĐỒNG ',
-      is_content: 'forward_contract',
-      orgId: this.orgId,
-    };
+    // const data = {
+    //   title: 'KÝ HỢP ĐỒNG ',
+    //   is_content: 'forward_contract',
+    //   orgId: this.orgId,
+    // };
 
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.panelClass = 'custom-dialog-container';
-    dialogConfig.hasBackdrop = true;
-    dialogConfig.data = data;
-    const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(async (result: any) => {
-      console.log('the close dialog image ', result);
-      let is_data = result;
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.panelClass = 'custom-dialog-container';
+    // dialogConfig.hasBackdrop = true;
 
-      this.datas.is_data_object_signature.valueSign = result;
-      if (result) {
-        if (
-          e &&
-          e == 1 &&
-          !(
-            (this.datas.roleContractReceived == 2 &&
-              this.confirmConsider == 2) ||
-            (this.datas.roleContractReceived == 3 &&
-              this.confirmSignature == 2) ||
-            (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
-          )
-        ) {
-          let id_recipient_signature: any = null;
-          let phone_recipient_signature: any = null;
-          // console.log(this.datas);
-          for (const d of this.datas.is_data_contract.participants) {
-            for (const q of d.recipients) {
-              if (q.email == this.currentUser.email && q.status == 1) {
-                id_recipient_signature = q.id;
-                this.phoneOtp = phone_recipient_signature = q.phone;
-                this.userOtp = q.name;
-                break;
-              }
-            }
-            if (id_recipient_signature) break;
-          }
+    // console.log("data ", data);
+    // dialogConfig.data = data;
+    // const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
+    // dialogRef.afterClosed().subscribe(async (result: any) => {
+    //   console.log('the close dialog image ', result);
+    //   let is_data = result;
 
-          //neu co id nguoi xu ly thi moi kiem tra
-          if (id_recipient_signature) {
-            this.contractService
-              .getCheckSignatured(id_recipient_signature)
-              .subscribe(
-                (res: any) => {
-                  if (res && res.status == 2) {
-                    this.spinner.hide();
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'contract_signature_success',
-                      '',
-                      3000
-                    );
-                  } else {
-                    if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
-                      this.confirmOtpSignContract(
-                        id_recipient_signature,
-                        phone_recipient_signature
-                      );
-                      this.spinner.hide();
-                    }
-                  }
-                },
-                (error: HttpErrorResponse) => {
-                  this.spinner.hide();
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'error_check_signature',
-                    '',
-                    3000
-                  );
-                }
-              );
-          }
-        } else if (
-          e &&
-          e == 1 &&
-          ((this.datas.roleContractReceived == 2 &&
-            this.confirmConsider == 2) ||
-            (this.datas.roleContractReceived == 3 &&
-              this.confirmSignature == 2) ||
-            (this.datas.roleContractReceived == 4 &&
-              this.confirmSignature == 2))
-        ) {
-          await this.rejectContract();
-        }
-      }
-    });
+    //   this.datas.is_data_object_signature.valueSign = result;
+    //   if (result) {
+    //     if (
+    //       e &&
+    //       e == 1 &&
+    //       !(
+    //         (this.datas.roleContractReceived == 2 &&
+    //           this.confirmConsider == 2) ||
+    //         (this.datas.roleContractReceived == 3 &&
+    //           this.confirmSignature == 2) ||
+    //         (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
+    //       )
+    //     ) {
+    //       let id_recipient_signature: any = null;
+    //       let phone_recipient_signature: any = null;
+    //       // console.log(this.datas);
+    //       for (const d of this.datas.is_data_contract.participants) {
+    //         for (const q of d.recipients) {
+    //           if (q.email == this.currentUser.email && q.status == 1) {
+    //             id_recipient_signature = q.id;
+    //             this.phoneOtp = phone_recipient_signature = q.phone;
+    //             this.userOtp = q.name;
+    //             break;
+    //           }
+    //         }
+    //         if (id_recipient_signature) break;
+    //       }
+
+    //       //neu co id nguoi xu ly thi moi kiem tra
+    //       if (id_recipient_signature) {
+    //         this.contractService
+    //           .getCheckSignatured(id_recipient_signature)
+    //           .subscribe(
+    //             (res: any) => {
+    //               if (res && res.status == 2) {
+    //                 this.spinner.hide();
+    //                 this.toastService.showErrorHTMLWithTimeout(
+    //                   'contract_signature_success',
+    //                   '',
+    //                   3000
+    //                 );
+    //               } else {
+    //                 if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
+    //                   this.confirmOtpSignContract(
+    //                     id_recipient_signature,
+    //                     phone_recipient_signature
+    //                   );
+    //                   this.spinner.hide();
+    //                 }
+    //               }
+    //             },
+    //             (error: HttpErrorResponse) => {
+    //               this.spinner.hide();
+    //               this.toastService.showErrorHTMLWithTimeout(
+    //                 'error_check_signature',
+    //                 '',
+    //                 3000
+    //               );
+    //             }
+    //           );
+    //       }
+    //     } else if (
+    //       e &&
+    //       e == 1 &&
+    //       ((this.datas.roleContractReceived == 2 &&
+    //         this.confirmConsider == 2) ||
+    //         (this.datas.roleContractReceived == 3 &&
+    //           this.confirmSignature == 2) ||
+    //         (this.datas.roleContractReceived == 4 &&
+    //           this.confirmSignature == 2))
+    //     ) {
+    //       await this.rejectContract();
+    //     }
+    //   }
+    // });
   }
 
   pkiDialogSignOpen() {

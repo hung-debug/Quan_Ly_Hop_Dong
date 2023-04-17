@@ -20,6 +20,8 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   @ViewChild('signature')
   public signaturePad: SignaturePadComponent;
   imgSignAccountSelect: string;
+  markSignAccountSelect: string;
+
   imgSignPCSelect: string;
   imgSignDrawing: string;
   optionsFileSignAccount: any;
@@ -32,7 +34,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     canvasHeight: 300
   };
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: {},
+    @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
     private deviceService: DeviceDetectorService,
     public dialog: MatDialog,
@@ -45,20 +47,22 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-
+    
     this.getDeviceApp();
 
     this.typeImageSignatureRadio = 2;
     this.datas = this.data;
+
     this.initListSignatureAccountUser();
     this.imgSignAccountSelect = 'data:image/png;base64,' + this.datas.imgSignAcc;
+    this.markSignAccountSelect = 'data:image/png;base64,' + this.datas.markSignAcc;
+
+    console.log("mm ", this.markSignAccountSelect)
   }
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
-      console.log("la mobile ");
       this.mobile = true;
     } else {
-      console.log("la pc");
       this.mobile = false;
     }
   }
@@ -69,7 +73,6 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   }
 
   fileChangedAttach(e: any) {
-    console.log(e.target.files)
     let files = e.target.files;
     let valid = ["jpg", "jpeg", "png"];
     for(let i = 0; i < files.length; i++){
@@ -107,19 +110,15 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      console.log(reader.result);
       this.imgSignPCSelect = reader.result? reader.result.toString() : '';
     };
   }
 
   drawComplete(event: MouseEvent | Touch) {
     this.imgSignDrawing = this.signaturePad.toDataURL();
-
-    console.log("this img sign drawing ", this.imgSignDrawing);
   }
 
   drawStart(event: MouseEvent | Touch) {
-    console.log('Start drawing', event);
   }
 
   t(ev: number) {
@@ -145,8 +144,10 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
 
         this.signaturePad.clear();
       }, 200);
-    } else if (ev == 1 && !this.datas.imgSignAcc) {
+    } else if (ev == 1 && !this.datas.imgSignAcc && !this.data.mark) {
       this.toastService.showWarningHTMLWithTimeout('notify_have_not_sign_acc', "", 3000);
+    } else  if (ev == 1 && !this.datas.markSignAcc && this.data.mark) {
+      this.toastService.showWarningHTMLWithTimeout('notify_have_not_sign_mark_acc',"",3000);
     }
 
   }
