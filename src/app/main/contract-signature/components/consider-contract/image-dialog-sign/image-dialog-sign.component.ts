@@ -19,11 +19,11 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   typeImageSignatureRadio: any = 2;
   @ViewChild('signature')
   public signaturePad: SignaturePadComponent;
-  imgSignAccountSelect: string;
-  markSignAccountSelect: string;
+  imgSignAccountSelect: any;
+  markSignAccountSelect: any;
 
-  imgSignPCSelect: string;
-  imgSignDrawing: string;
+  imgSignPCSelect: any;
+  imgSignDrawing: any;
   optionsFileSignAccount: any;
   mobile: boolean = false;
 
@@ -56,9 +56,8 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     this.initListSignatureAccountUser();
     this.imgSignAccountSelect = 'data:image/png;base64,' + this.datas.imgSignAcc;
     this.markSignAccountSelect = 'data:image/png;base64,' + this.datas.markSignAcc;
-
-    console.log("mm ", this.markSignAccountSelect)
   }
+
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
       this.mobile = true;
@@ -149,7 +148,6 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     } else  if (ev == 1 && !this.datas.markSignAcc && this.data.mark) {
       this.toastService.showWarningHTMLWithTimeout('notify_have_not_sign_mark_acc',"",3000);
     }
-
   }
 
   iOS: boolean = false;
@@ -186,7 +184,6 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   }
 
   uploadImage() {
-
     if (this.typeImageSignatureRadio == 1) {
       // this.contractSignatureService.setImageObs(this.imgSignAccountSelect);
       this.dialogRef.close(this.imgSignAccountSelect);
@@ -197,5 +194,10 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
       // this.contractSignatureService.setImageObs(this.imgSignDrawing);
       this.dialogRef.close(this.imgSignDrawing);
     }
+  }
+
+  clearImage() {
+    this.signaturePad?.clear();
+    this.imgSignPCSelect = null;
   }
 }
