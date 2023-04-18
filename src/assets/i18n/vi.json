@@ -598,5 +598,6 @@
   "stamp.contract.questions":"Bạn có muốn gán thêm ảnh con dấu cho hợp đồng này không?",
   "email.already.exist": "Email đã có trong luồng xử lý",
   "phone.already.exist": "Số điện thoại đã có trong luồng xử lý",
-  "cardid.already.exist": "MST/CMT/CCCD đã có trong luồng xử lý"
+  "cardid.already.exist": "MST/CMT/CCCD đã có trong luồng xử lý",
+  "menu.config-sms-email": "Cấu hình gửi SMS/Email"
 }

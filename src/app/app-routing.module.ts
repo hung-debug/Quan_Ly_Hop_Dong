@@ -38,6 +38,7 @@ import { ReportSoonExpireComponent } from './main/report/report-soon-expire/repo
 import { ReportContractNumberFollowStatusComponent } from './main/report/report-contract-number-follow-status/report-contract-number-follow-status.component';
 import { ContractNumberFollowTypeComponent } from './main/report/contract-number-follow-type/contract-number-follow-type.component';
 import { ContractNumberFollowSignComponent } from './main/report/contract-number-follow-sign/contract-number-follow-sign.component';
+import { ConfigSmsEmailComponent } from './main/config-sms-email/config-sms-email.component';
 
 const contract_signatures = "c";
 const signatures = "s9";
@@ -232,6 +233,10 @@ const routes: Routes = [
         path: 'notification',
         component: NotificationComponent,
       },
+      {
+        path:'config-sms-email',
+        component: ConfigSmsEmailComponent
+      }
       
     ],
   },

@@ -513,6 +513,7 @@ export class SidebarService {
       )
     }
 
+   
     if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiXuLy) {
       this.menus.push({
         title: 'report',
@@ -525,6 +526,15 @@ export class SidebarService {
         id: 10,
       })
     }
+
+    this.menus.push({
+      title: 'menu.config-sms-email',
+      icon: '/assets/img/email-sms.svg',
+      active: false,
+      type: 'simple',
+      href: '/main/config-sms-email',
+      id: 9,
+    })
    
 
     //xu ly highlight

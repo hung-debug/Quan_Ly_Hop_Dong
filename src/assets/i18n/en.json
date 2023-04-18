@@ -594,5 +594,6 @@
   "stamp.contract.questions":"Would you like to add a stamp photo to this contract?",
   "email.already.exist": "Email already exist",
   "phone.already.exist": "Phone already exist",
-  "cardid.already.exist": "MST/CMT/CCCD already exist"
+  "cardid.already.exist": "MST/CMT/CCCD already exist",
+  "menu.config-sms-email": "Configure sending SMS/Email"
 }
