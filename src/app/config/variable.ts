@@ -351,20 +351,20 @@ export var roleList = [
   },
 
   //Nhóm chức năng báo cáo
-  // {
-  //   label: 'Nhóm chức năng báo cáo',
-  //   value: 'QLBC',
-  //   items: [
-  //     //Báo cáo chi tiết
-  //     {label: 'Báo cáo chi tiết',value:'BAOCAO_CHITIET'},
+  {
+    label: 'Nhóm chức năng báo cáo',
+    value: 'QLBC',
+    items: [
+      //Báo cáo chi tiết
+      {label: 'Báo cáo chi tiết',value:'BAOCAO_CHITIET'},
 
-  //     {label: 'Báo cáo sắp hết hiệu lực',value:'BAOCAO_SAPHETHIEULUC'},
-  //     {label: 'Báo cáo trạng thái xử lý',value:'BAOCAO_TRANGTHAIXULY'},
-  //     {label: 'Báo cáo số lượng theo trạng thái', value:'BAOCAO_SOLUONG_TRANGTHAI'},
-  //     // {label: 'Báo cáo số lượng theo loại hợp đồng',value:'BAOCAO_SOLUONG_LOAIHOPDONG'}
-  //   ]
+      {label: 'Báo cáo sắp hết hiệu lực',value:'BAOCAO_SAPHETHIEULUC'},
+      {label: 'Báo cáo trạng thái xử lý',value:'BAOCAO_TRANGTHAIXULY'},
+      {label: 'Báo cáo số lượng theo trạng thái', value:'BAOCAO_SOLUONG_TRANGTHAI'},
+      // {label: 'Báo cáo số lượng theo loại hợp đồng',value:'BAOCAO_SOLUONG_LOAIHOPDONG'}
+    ]
 
-  // }
+  }
 ];
 
 export var roleList_en = [
@@ -495,20 +495,20 @@ export var roleList_en = [
     ],
   },
    //Nhóm chức năng báo cáo
-  //  {
-  //   label: 'Reporting function group',
-  //   value: 'QLBC',
-  //   items: [
-  //     //Báo cáo chi tiết
-  //     {label: 'Detailed report',value:'BAOCAO_CHITIET'},
+   {
+    label: 'Reporting function group',
+    value: 'QLBC',
+    items: [
+      //Báo cáo chi tiết
+      {label: 'Detailed report',value:'BAOCAO_CHITIET'},
       
-  //     {label: 'The report is about to expire',value:'BAOCAO_SAPHETHIEULUC'},
-  //     {label: 'Processing status report',value:'BAOCAO_TRANGTHAIXULY'},
-  //     {label: 'Report quantity by status', value:'BAOCAO_SOLUONG_TRANGTHAI'},
-  //     // {label: 'Report quantity by contract type',value:'BAOCAO_SOLUONG_LOAIHOPDONG'}
-  //   ]
+      {label: 'The report is about to expire',value:'BAOCAO_SAPHETHIEULUC'},
+      {label: 'Processing status report',value:'BAOCAO_TRANGTHAIXULY'},
+      {label: 'Report quantity by status', value:'BAOCAO_SOLUONG_TRANGTHAI'},
+      // {label: 'Report quantity by contract type',value:'BAOCAO_SOLUONG_LOAIHOPDONG'}
+    ]
 
-  // }
+  }
 ]
 
 export var adminRoleList = [
