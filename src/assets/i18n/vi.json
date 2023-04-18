@@ -595,5 +595,8 @@
   "fae.recog":"Nhận dạng khuôn mặt",
   "push.image.fail":"Đẩy file ảnh không thành công",
   "sign.file-image.mark":"Ảnh con dấu",
-  "stamp.contract.questions":"Bạn có muốn gán thêm ảnh con dấu cho hợp đồng này không?"
+  "stamp.contract.questions":"Bạn có muốn gán thêm ảnh con dấu cho hợp đồng này không?",
+  "email.already.exist": "Email đã có trong luồng xử lý",
+  "phone.already.exist": "Số điện thoại đã có trong luồng xử lý",
+  "cardid.already.exist": "MST/CMT/CCCD đã có trong luồng xử lý"
 }

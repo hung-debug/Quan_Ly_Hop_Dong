@@ -591,5 +591,8 @@
   "fae.recog":"Face recognition",
   "push.image.fail":"Image file push failed",
   "sign.file-image.mark":"Mark image",
-  "stamp.contract.questions":"Would you like to add a stamp photo to this contract?"
+  "stamp.contract.questions":"Would you like to add a stamp photo to this contract?",
+  "email.already.exist": "Email đã có trong luồng xử lý",
+  "phone.already.exist": "Số điện thoại đã có trong luồng xử lý",
+  "cardid.already.exist": "MST/CMT/CCCD đã có trong luồng xử lý"
 }
