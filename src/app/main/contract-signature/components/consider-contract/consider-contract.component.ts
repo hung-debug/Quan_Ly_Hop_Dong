@@ -1507,9 +1507,31 @@ export class ConsiderContractComponent
                       } else if (
                         [2, 3, 4].includes(this.datas.roleContractReceived) &&
                         haveSignPKI
-                      ) {
-                        console.log('pki ');
-                        this.pkiDialogSignOpen();
+                      ) {          
+                        if(this.markImage) {
+                          const data = {
+                            title: 'ĐÓNG DẤU HỢP ĐỒNG ',
+                            is_content: 'forward_contract',
+                            markSignAcc: this.datas.markSignAcc,
+                            mark: true
+                          };
+                      
+                          const dialogConfig = new MatDialogConfig();
+                          dialogConfig.width = '1024px';
+                          dialogConfig.hasBackdrop = true;
+                          dialogConfig.data = data;
+  
+                          const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
+  
+                          dialogRef.afterClosed().subscribe((res: any) => {
+                            this.srcMark = res;
+                            this.pkiDialogSignOpen();
+                            this.spinner.hide();
+                          })
+                        } else {
+                          this.pkiDialogSignOpen();
+                          this.spinner.hide();
+                        }
                         this.spinner.hide();
                       } else if (
                         [2, 3, 4].includes(this.datas.roleContractReceived) &&
@@ -1863,8 +1885,6 @@ export class ConsiderContractComponent
 
             this.font = signUpdate.font;
             this.font_size = signUpdate.font_size;
-
-            console.log("size  ", this.font_size);
 
             this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
             fieldHsm.width = this.widthText + 10;
@@ -2227,10 +2247,60 @@ export class ConsiderContractComponent
     //Check ký usb token
     if (typeSignDigital && typeSignDigital == 2) {
       if (this.usbTokenVersion == 1) {
-        this.signTokenVersion1(signUpdatePayload, notContainSignImage);
+        
+        if(this.markImage) {
+          const data = {
+            title: 'ĐÓNG DẤU HỢP ĐỒNG ',
+            is_content: 'forward_contract',
+            markSignAcc: this.datas.markSignAcc,
+            mark: true
+          };
+      
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.width = '1024px';
+          dialogConfig.hasBackdrop = true;
+          dialogConfig.data = data;
+
+          const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
+
+          dialogRef.afterClosed().subscribe((res: any) => {
+            this.srcMark = res;
+            this.signTokenVersion1(signUpdatePayload, notContainSignImage);
+            this.spinner.hide();
+          })
+        } else {
+          this.signTokenVersion1(signUpdatePayload, notContainSignImage);
+          this.spinner.hide();
+        }
+
       } else if (this.usbTokenVersion == 2) {
+
+        if(this.markImage) {
+          const data = {
+            title: 'ĐÓNG DẤU HỢP ĐỒNG ',
+            is_content: 'forward_contract',
+            markSignAcc: this.datas.markSignAcc,
+            mark: true
+          };
+      
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.width = '1024px';
+          dialogConfig.hasBackdrop = true;
+          dialogConfig.data = data;
+
+          const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
+
+          dialogRef.afterClosed().subscribe((res: any) => {
+            this.srcMark = res;
+            this.getSessionId(this.taxCodePartnerStep2,signUpdatePayload,notContainSignImage);
+            this.spinner.hide();
+          })
+        } else {
+          this.getSessionId(this.taxCodePartnerStep2,signUpdatePayload,notContainSignImage);
+          this.spinner.hide();
+        }
+
         //version 2
-        this.getSessionId(this.taxCodePartnerStep2,signUpdatePayload,notContainSignImage);
       }
     } else {
       await this.signImageC(signUpdatePayload, notContainSignImage);

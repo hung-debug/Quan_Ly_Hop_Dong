@@ -42,7 +42,7 @@ export class DetailUserComponent implements OnInit {
 
   //phan quyen
   isQLND_04:boolean=true;  //xem thong tin chi tiet nguoi dung
-
+  
   constructor(private appService: AppService,
     private toastService : ToastService,
     private userService : UserService,

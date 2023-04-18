@@ -590,7 +590,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
           console.log("ev ", event);
 
-          layerX = rect_location.left - canvasInfo.left + 150.25;
+          layerX = rect_location.left - canvasInfo.left;
         }
 
         let layerY = 0;
