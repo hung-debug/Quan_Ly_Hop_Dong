@@ -803,15 +803,9 @@ export class ConsiderContractComponent
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
-        if (
-          (this.typeSignDigital == 2 && this.usbTokenVersion == 1) ||
-          !this.usbTokenVersion
-        ) {
+        if ((this.typeSignDigital == 2 && this.usbTokenVersion == 1) || !this.usbTokenVersion) {
           this.prepareInfoSignUsbTokenV1(pageNumber, canvas.height);
-        } else if (
-          (this.typeSignDigital == 2 && this.usbTokenVersion == 2) ||
-          this.typeSignDigital == 4
-        ) {
+        } else if ((this.typeSignDigital == 2 && this.usbTokenVersion == 2) || this.typeSignDigital == 4) {
           this.prepareInfoSignUsbTokenV2(pageNumber, canvas.height);
         }
 
@@ -1988,8 +1982,7 @@ export class ConsiderContractComponent
       let imageRender = null;
 
       if (this.markImage) {
-        imageRender = <HTMLElement>(
-          document.getElementById('export-html-pki-image')
+        imageRender = <HTMLElement>(document.getElementById('export-html-pki-image')
         );
       } else {
         imageRender = <HTMLElement>document.getElementById('export-html-pki');
@@ -2475,6 +2468,8 @@ export class ConsiderContractComponent
     //Check ký usb token
     if (typeSignDigital && typeSignDigital == 2) {
       if (this.usbTokenVersion == 1) {
+        this.spinner.hide();
+
         if (this.markImage) {
           const data = {
             title: 'ĐÓNG DẤU HỢP ĐỒNG ',
@@ -2503,6 +2498,8 @@ export class ConsiderContractComponent
           this.spinner.hide();
         }
       } else if (this.usbTokenVersion == 2) {
+        this.spinner.hide();
+
         if (this.markImage) {
           const data = {
             title: 'ĐÓNG DẤU HỢP ĐỒNG ',
@@ -2648,9 +2645,7 @@ export class ConsiderContractComponent
 
     //Lay sessionId cua usb token
     try {
-      apiSessionId = await this.contractService.signUsbToken(
-        'request=' + json_req
-      );
+      apiSessionId = await this.contractService.signUsbToken('request=' + json_req);
     } catch (error) {
       this.spinner.hide();
       Swal.fire({
@@ -2719,9 +2714,7 @@ export class ConsiderContractComponent
 
     json_req = window.btoa(json_req);
 
-    const apiCert = await this.contractService.signUsbToken(
-      'request=' + json_req
-    );
+    const apiCert = await this.contractService.signUsbToken('request=' + json_req);
     const cert = JSON.parse(window.atob(apiCert.data));
 
     if (cert.certInfo && cert.ResponseCode == 0) {
@@ -2803,9 +2796,7 @@ export class ConsiderContractComponent
     json_req = window.btoa(json_req);
 
     try {
-      const callServiceDCSigner = await this.contractService.signUsbToken(
-        'request=' + json_req
-      );
+      const callServiceDCSigner = await this.contractService.signUsbToken('request=' + json_req);
 
       const dataSignatureToken = JSON.parse(
         window.atob(callServiceDCSigner.data)
