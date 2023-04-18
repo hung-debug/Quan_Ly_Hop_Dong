@@ -37,6 +37,7 @@ export class UnitService {
   getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
   getNumberContractCreateOriganzationUrl: any = `${environment.apiUrl}/api/v1/contracts/total-contracts?orgId=`;
   getNumberContractBuyOriganzationUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
+  getTaxCodeOriganzationUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
 
   token:any;
   customer_id:any;
@@ -185,6 +186,15 @@ export class UnitService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     let listUrl = this.getNumberContractBuyOriganzationUrl + organization_id + '/service/total-used-items';
+    return this.http.get<any>(listUrl, {headers}).pipe();
+  }
+
+  getTaxCodeOriganzation(organization_id:any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let listUrl = this.getTaxCodeOriganzationUrl + organization_id;
     return this.http.get<any>(listUrl, {headers}).pipe();
   }
 
