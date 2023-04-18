@@ -472,13 +472,24 @@
       </div>
     </div>
 
-    <div id="export-html-image" style="position: relative;">
+    <!-- <div id="export-html-image" style="position: relative;">
         <img style="position: absolute; top: 0; left: 0;z-index: 1">
         <div style="min-height: 80px; display: flex; font-size: 9px; margin-left: 30px;z-index: 2;">
             <div style="color: #4FC123; background-size: 40px 40px">
                 <div style="z-index: 2;text-align: left;">{{'user.sign-type' | translate}}: {{ 'sign_by_token'| translate}}</div>
                 <div style="z-index: 2;text-align: left;">{{'sign.by' | translate}}: {{nameCompany}}</div>
                 <div style="z-index: 2;text-align: left;">{{'sign.day' | translate }}: {{isDateTime | date: 'dd/MM/YYYY HH:mm'}}</div>
+            </div>
+        </div>
+    </div> -->
+
+    <div id="export-html-image" style="position: relative">
+        <img style="position: absolute; top: -5px; left: 0; width: 50%; z-index: -10" [src]="srcMark" alt="logo">
+        <div style="min-height: 80px; display: flex; font-size: 9px; margin-left: 30px;z-index: 2;">
+            <div class="signature-content" style="color: #4FC123; background-size: 40px 40px">
+                <div style="text-align: left;">{{'user.sign-type' | translate}}: {{ 'sign_by_token'| translate}}</div>
+                <div style="text-align: left;">{{'sign.by' | translate}}: {{nameCompany}}</div>
+                <div style="text-align: left;">{{'sign.day' | translate }}: {{isDateTime | date: 'dd/MM/YYYY HH:mm'}}</div>
             </div>
         </div>
     </div>
@@ -493,10 +504,10 @@
       </div>
     </div>
 
-    <div id="export-html-hsm-image" style="position: relative;">
-        <img style="position: absolute; top: 0; left: 0;z-index: 1">
+    <div id="export-html-hsm-image" style="position: relative">
+        <img style="position: absolute; top: -5px; left: 0; width: 50%; z-index: -10" [src]="srcMark" alt="logo">
         <div style="min-height: 80px; display: flex; font-size: 9px; margin-left: 30px;z-index: 2;">
-            <div style="color: #4FC123; background-size: 40px 40px">
+            <div class="signature-content" style="color: #4FC123; background-size: 40px 40px">
                 <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'user.sign-type' | translate}}: {{'sign_by_hsm' | translate}}</span>
                 <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'tax_code' | translate}}: {{nameCompany}}</span>
                 <span style="text-align: left;white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'sign.day' | translate}}: {{isDateTime | date: 'dd/MM/YYYY HH:mm'}}</span>

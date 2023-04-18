@@ -365,13 +365,14 @@ export class ConsiderContractComponent
   }
 
   async getVersionUsbToken(orgId: any) {
-    const dataOrg = await this.contractService
-      .getDataNotifyOriganzationOrgId(orgId)
-      .toPromise();
+    console.log("o ", orgId);
+    const dataOrg = await this.contractService.getDataNotifyOriganzationOrgId(orgId).toPromise();
+    console.log("da ", dataOrg);
 
     if (dataOrg.usb_token_version == 1) {
       this.usbTokenVersion = 1;
     } else if (dataOrg.usb_token_version == 2) {
+      console.log("2 ", 2);
       this.usbTokenVersion = 2;
     }
   }
@@ -403,6 +404,7 @@ export class ConsiderContractComponent
 
         this.orgId = this.data_contract.is_data_contract.organization_id;
 
+        console.log("vao day ");
         await this.getVersionUsbToken(this.orgId);
 
         this.datas = this.data_contract;
@@ -751,9 +753,7 @@ export class ConsiderContractComponent
 
       const imageRender = <HTMLElement>document.getElementById('export-html');
       if (imageRender) {
-        domtoimage
-          .toPng(imageRender, this.getOptions(imageRender))
-          .then((res: any) => {
+        domtoimage.toPng(imageRender, this.getOptions(imageRender)).then((res: any) => {
             this.base64GenCompany = res.split(',')[1];
           });
       }
@@ -1548,10 +1548,7 @@ export class ConsiderContractComponent
 
               //neu co id nguoi xu ly thi moi kiem tra
               if (id_recipient_signature) {
-                this.contractService
-                  .getCheckSignatured(id_recipient_signature)
-                  .subscribe(
-                    (res: any) => {
+                this.contractService.getCheckSignatured(id_recipient_signature).subscribe((res: any) => {
                       if (res && res.status == 2) {
                         this.spinner.hide();
                         this.toastService.showErrorHTMLWithTimeout(
@@ -1775,19 +1772,13 @@ export class ConsiderContractComponent
     //= 2 => Ky usb token
     if (typeSignDigital == 2) {
       if (this.signCertDigital) {
+        console.log("vao day ");
         for (const signUpdate of this.isDataObjectSignature) {
-          if (
-            signUpdate &&
-            (signUpdate.type == 1 ||
-              signUpdate.type == 3 ||
-              signUpdate.type == 4) &&
-            [3, 4].includes(this.datas.roleContractReceived) &&
+          if (signUpdate && (signUpdate.type == 1 || signUpdate.type == 3 || signUpdate.type == 4) && [3, 4].includes(this.datas.roleContractReceived) &&
             signUpdate?.recipient?.email === this.currentUser.email &&
             signUpdate?.recipient?.role === this.datas?.roleContractReceived
           ) {
-            let fileC = await this.contractService.getFileContractPromise(
-              this.idContract
-            );
+            let fileC = await this.contractService.getFileContractPromise(this.idContract);
             const pdfC2 = fileC.find((p: any) => p.type == 2);
             const pdfC1 = fileC.find((p: any) => p.type == 1);
 
@@ -1834,45 +1825,45 @@ export class ConsiderContractComponent
                 signI = this.textSignBase64Gen = textSignB.split(',')[1];
               }
             } else if (signUpdate.type == 3) {
-              await of(null).pipe(delay(150)).toPromise();
 
               //lấy ảnh chữ ký usb token
               let imageRender: any = '';
 
               if (this.usbTokenVersion == 1) {
                 if (this.markImage) {
-                  imageRender = <HTMLElement>(
-                    document.getElementById('export-html-image')
-                  );
+                  await of(null).pipe(delay(150)).toPromise();
+                  imageRender = <HTMLElement>(document.getElementById('export-html-image'));
+
+                  console.log("im ", imageRender);
                 } else {
-                  imageRender = <HTMLElement>(
-                    document.getElementById('export-html')
-                  );
+                  await of(null).pipe(delay(150)).toPromise();
+                  imageRender = <HTMLElement>(document.getElementById('export-html'));
                 }
 
+                console.log("ima ", imageRender);
+
                 if (imageRender) {
-                  const textSignB = await domtoimage.toPng(
-                    imageRender,
-                    this.getOptions(imageRender)
-                  );
-                  signI = textSignB.split(',')[1];
+                  console.log("111")
+
+                  try { 
+                    const textSignB = await domtoimage.toPng(imageRender);
+
+                    console.log("te ", textSignB);
+                    signI = textSignB.split(',')[1];
+                  } catch(err) {
+                    console.log("err ", err);
+                  }
+              
                 }
               } else if (this.usbTokenVersion == 2) {
                 if (this.markImage) {
-                  imageRender = <HTMLElement>(
-                    document.getElementById('export-html2-image')
-                  );
+                  imageRender = <HTMLElement>(document.getElementById('export-html2-image'));
                 } else {
-                  imageRender = <HTMLElement>(
-                    document.getElementById('export-html2')
-                  );
+                  imageRender = <HTMLElement>(document.getElementById('export-html2'));
                 }
 
                 if (imageRender) {
-                  const textSignB = await domtoimage.toJpeg(
-                    imageRender,
-                    this.getOptions(imageRender)
-                  );
+                  const textSignB = await domtoimage.toJpeg(imageRender,this.getOptions(imageRender));
                   signI = textSignB.split(',')[1];
                 }
               }
@@ -1881,19 +1872,14 @@ export class ConsiderContractComponent
             const signDigital = JSON.parse(JSON.stringify(signUpdate));
             signDigital.Serial = this.signCertDigital.Serial;
 
-            const base64String =
-              await this.contractService.getDataFileUrlPromise(fileC);
+            const base64String = await this.contractService.getDataFileUrlPromise(fileC);
             signDigital.valueSignBase64 = encode(base64String);
 
             if (this.usbTokenVersion == 2) {
               try {
                 await this.createEmptySignature(signUpdate, signDigital, signI);
               } catch (err) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Lỗi ký usb token ' + err,
-                  '',
-                  3000
-                );
+                this.toastService.showErrorHTMLWithTimeout('Lỗi ký usb token ' + err,'',3000);
                 return false;
               }
 
@@ -1901,43 +1887,23 @@ export class ConsiderContractComponent
                 return false;
               }
 
-              const sign = await this.contractService.updateDigitalSignatured(
-                signUpdate.id,
-                this.base64Data
-              );
+              const sign = await this.contractService.updateDigitalSignatured(signUpdate.id,this.base64Data);
               if (!sign.recipient_id) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Lỗi ký USB Token',
-                  '',
-                  3000
-                );
+                this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token','',3000);
                 return false;
               }
             } else if (this.usbTokenVersion == 1) {
-              const dataSignMobi: any =
-                await this.contractService.postSignDigitalMobi(
-                  signDigital,
-                  signI
-                );
+              console.log("vao day ");
+              const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital,signI);
 
               if (!dataSignMobi.data.FileDataSigned) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Lỗi ký USB Token',
-                  '',
-                  3000
-                );
+                this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token','',3000);
                 return false;
               }
-              const sign = await this.contractService.updateDigitalSignatured(
-                signUpdate.id,
-                dataSignMobi.data.FileDataSigned
-              );
+              const sign = await this.contractService.updateDigitalSignatured(signUpdate.id,dataSignMobi.data.FileDataSigned);
+
               if (!sign.recipient_id) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Lỗi đẩy file sau khi ký usb token',
-                  '',
-                  3000
-                );
+                this.toastService.showErrorHTMLWithTimeout('Lỗi đẩy file sau khi ký usb token','',3000);
                 return false;
               }
             }
@@ -1945,11 +1911,7 @@ export class ConsiderContractComponent
         }
         return true;
       } else {
-        this.toastService.showErrorHTMLWithTimeout(
-          'Lỗi ký USB Token',
-          '',
-          3000
-        );
+        this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token','',3000);
         return false;
       }
     } else if (typeSignDigital == 3) {
@@ -2100,10 +2062,7 @@ export class ConsiderContractComponent
             }
 
             if (imageRender) {
-              const textSignB = await domtoimage.toPng(
-                imageRender,
-                this.getOptions(imageRender)
-              );
+              const textSignB = await domtoimage.toPng(imageRender,this.getOptions(imageRender));
               signI = textSignB.split(',')[1];
             }
           }
@@ -2308,10 +2267,7 @@ export class ConsiderContractComponent
             document.getElementById('export-html-ekyc')
           );
 
-          const textSignB = domtoimage.toPng(
-            imageRender,
-            this.getOptions(imageRender)
-          );
+          const textSignB = domtoimage.toPng(imageRender,this.getOptions(imageRender));
 
           const valueBase64 = (await textSignB).split(',')[1];
 
@@ -2396,10 +2352,7 @@ export class ConsiderContractComponent
 
       let signI: any;
       if (imageRender) {
-        const textSignB = await domtoimage.toPng(
-          imageRender,
-          this.getOptions(imageRender)
-        );
+        const textSignB = await domtoimage.toPng(imageRender,this.getOptions(imageRender));
         signI = textSignB.split(',')[1];
       }
 
@@ -2411,9 +2364,7 @@ export class ConsiderContractComponent
         signI = textSignB.split(',')[1];
       }
 
-      signUpdatePayload = signUpdateTemp
-        .filter(
-          (item: any) =>
+      signUpdatePayload = signUpdateTemp.filter((item: any) =>
             item?.recipient?.email === this.currentUser.email &&
             item?.recipient?.role === this.datas?.roleContractReceived
         )
@@ -2467,6 +2418,8 @@ export class ConsiderContractComponent
 
     //Check ký usb token
     if (typeSignDigital && typeSignDigital == 2) {
+
+      console.log("u ", this.usbTokenVersion);
       if (this.usbTokenVersion == 1) {
         this.spinner.hide();
 
@@ -2528,11 +2481,8 @@ export class ConsiderContractComponent
             this.spinner.hide();
           });
         } else {
-          this.getSessionId(
-            this.taxCodePartnerStep2,
-            signUpdatePayload,
-            notContainSignImage
-          );
+          console.log("vao day ");
+          this.getSessionId(this.taxCodePartnerStep2,signUpdatePayload,notContainSignImage);
           this.spinner.hide();
         }
       }
@@ -2542,6 +2492,9 @@ export class ConsiderContractComponent
   }
 
   async signTokenVersion1(signUpdatePayload: any, notContainSignImage: any) {
+
+    console.log("v1");
+
     let dataDigital: any = null;
 
     try {
@@ -2565,9 +2518,7 @@ export class ConsiderContractComponent
       this.signCertDigital = dataDigital.data;
       this.nameCompany = dataDigital.data.CN;
 
-      const checkTaxCodeBase64 = await this.contractService
-        .checkTaxCodeExist(this.taxCodePartnerStep2, dataDigital.data.Base64)
-        .toPromise();
+      const checkTaxCodeBase64 = await this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, dataDigital.data.Base64).toPromise();
 
       if (checkTaxCodeBase64.success) {
         await this.signImageC(signUpdatePayload, notContainSignImage);
@@ -2861,12 +2812,7 @@ export class ConsiderContractComponent
         signDigitalStatus = await this.signDigitalDocument();
 
         if (this.eKYC == false) {
-          signUpdateTempN = signUpdateTempN
-            .filter(
-              (item: any) =>
-                item?.recipient?.email === this.currentUser.email &&
-                item?.recipient?.role === this.datas?.roleContractReceived
-            )
+          signUpdateTempN = signUpdateTempN.filter((item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
             .map((item: any) => {
               return {
                 id: item.id,
@@ -2878,13 +2824,8 @@ export class ConsiderContractComponent
             });
         } else {
           //đẩy chữ ký vào file pdf
-          const imageRender = <HTMLElement>(
-            document.getElementById('export-html-ekyc')
-          );
-          const textSignB = domtoimage.toPng(
-            imageRender,
-            this.getOptions(imageRender)
-          );
+          const imageRender = <HTMLElement>(document.getElementById('export-html-ekyc'));
+          const textSignB = domtoimage.toPng(imageRender,this.getOptions(imageRender));
 
           const valueBase64 = (await textSignB).split(',')[1];
 
@@ -2895,15 +2836,11 @@ export class ConsiderContractComponent
               this.data_contract?.is_data_contract?.organization_id,
           };
 
-          this.contractService
-            .uploadFileImageBase64Signature(formData)
-            .subscribe((responseBase64) => {
+          this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseBase64) => {
               // signUpdateTempN.value = responseBase64.file_object.file_path;
               signUpdateTempN[0].value = responseBase64.file_object.file_path;
 
-              this.contractService
-                .updateInfoContractConsider(signUpdateTempN, this.recipientId)
-                .subscribe(
+              this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
                   async (result) => {
                     if (!notContainSignImage) {
                       await this.signDigitalDocument();
@@ -3198,10 +3135,7 @@ export class ConsiderContractComponent
           document.getElementById('image_keo_tha')
         );
 
-        const textSignB = domtoimage.toPng(
-          imageRender,
-          this.getOptions(imageRender)
-        );
+        const textSignB = domtoimage.toPng(imageRender,this.getOptions(imageRender));
 
         const valueBase64 = (await textSignB).split(',')[1];
 
@@ -3611,10 +3545,7 @@ export class ConsiderContractComponent
       }
 
       if (imageRender) {
-        const textSignB = await domtoimage.toPng(
-          imageRender,
-          this.getOptions(imageRender)
-        );
+        const textSignB = await domtoimage.toPng(imageRender,this.getOptions(imageRender));
         signI = textSignB.split(',')[1];
       }
 

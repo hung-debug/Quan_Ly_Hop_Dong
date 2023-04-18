@@ -23,6 +23,7 @@ import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { DialogReasonCancelComponent } from './shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
 import { environment } from 'src/environments/environment';
+import { ImageDialogSignComponent } from './components/consider-contract/image-dialog-sign/image-dialog-sign.component';
 
 @Component({
   selector: 'app-contract',
@@ -79,6 +80,7 @@ export class ContractSignatureComponent implements OnInit {
   nameCompany: any;
   dataHsm: any;
   isDateTime: any = new Date();
+  srcMark: any;
 
   organization_id: any = '';
   public contractDownloadList: any[] = [];
@@ -768,195 +770,216 @@ export class ContractSignatureComponent implements OnInit {
           }
         }
 
-        if (signId == 2) {
-          this.spinner.show();
-
-          let contractsSignManyChecked = this.contractsSignMany.filter(
-            (opt) => opt.checked
-          );
-
-          let idSignMany: any = [];
-          let idContract: any = [];
-          let fileC: any = [];
-          let documentId: any = [];
-
-          //lấy field id được tích vào
-          idSignMany = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.fields[0].id);
-
-          //lấy recipientId
-          recipientId = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.id);
-
-          //Lấy id hợp đồng được tích vào
-          idContract = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.participant.contract.id);
-
-          //Lấy id file được tích vào
-          documentId = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.fields[0].documentId);
-
-          //Lay ra mang chua tat ca ma so thue cua cac hop dong ky bang usb token
-          for (let i = 0; i < recipientId.length; i++) {
-            try {
-              const determineCoordination = await this.contractServiceV1
-                .getDetermineCoordination(recipientId[i])
-                .toPromise();
-              determineCoordination.recipients.forEach((item: any) => {
-                if (item.id == recipientId[i]) {
-                  taxCode.push(item.fields[0].recipient.cardId);
-                }
-              });
-            } catch (err) {
-              this.toastService.showErrorHTMLWithTimeout(
-                'Lỗi lấy thông tin người tham gia hợp đồng',
-                '',
-                3000
-              );
-              return false;
-            }
-          }
-
-          for (let i = 0; i < idContract.length; i++) {
-            try {
-              let fileContract = await this.contractServiceV1
-                .getFileContract(idContract[i])
-                .toPromise();
-
-              const pdfC2 = fileContract.find((p: any) => p.type == 2);
-              const pdfC1 = fileContract.find((p: any) => p.type == 1);
-
-              if (pdfC2) {
-                fileContract = pdfC2.path;
-              } else if (pdfC1) {
-                fileContract = pdfC1.path;
-              } else {
-                return;
-              }
-
-              fileC.push(fileContract);
-            } catch (err) {
-              this.toastService.showErrorHTMLWithTimeout(
-                'Lỗi lấy file cần ký',
-                '',
-                3000
-              );
-              return false;
-            }
-          }
-
-          this.signUsbTokenMany(fileC,idContract,recipientId,documentId,taxCode,idSignMany, result.mark);
-        } else if (signId == 4) {
-          //Ký nhiều hsm
-          //Mở popup ký hsm
+        if(result.mark) {
           const data = {
-            id: 1,
-            title: 'CHỮ KÝ HSM',
+            title: 'ĐÓNG DẤU HỢP ĐỒNG ',
             is_content: 'forward_contract',
+            markSignAcc: this.datas.markSignAcc,
+            mark: true,
           };
 
           const dialogConfig = new MatDialogConfig();
-          dialogConfig.width = '497px';
+          dialogConfig.width = '1024px';
           dialogConfig.hasBackdrop = true;
           dialogConfig.data = data;
 
           const dialogRef = this.dialog.open(
-            HsmDialogSignComponent,
+            ImageDialogSignComponent,
             dialogConfig
           );
 
-          dialogRef.afterClosed().subscribe(async (resultHsm: any) => {
-            if (resultHsm) {
-              this.nameCompany = resultHsm.ma_dvcs;
-              let imageRender = null;
-
-              await of(null).pipe(delay(100)).toPromise();
-
-              if(result.mark) {
-                imageRender = <HTMLElement>(document.getElementById('export-html-hsm-image'));
-              } else {
-                imageRender = <HTMLElement>(document.getElementById('export-html-hsm'));
-              } 
-
-              let signI = '';
-
-              if (imageRender) {
-                const textSignB = await domtoimage.toPng(imageRender,this.getOptions(imageRender));
-                signI = textSignB.split(',')[1];
-              }
-
-              this.dataHsm = {
-                ma_dvcs: resultHsm.ma_dvcs,
-                username: resultHsm.username,
-                password: resultHsm.password,
-                password2: resultHsm.password2,
-                image_base64: signI,
-              };
-
-              this.spinner.show();
-
-              //Call api ký nhiều hsm
-              const checkSign = await this.contractServiceV1.signHsmMulti(
-                this.dataHsm,
-                idSignMany
-              );
-
-              let countSuccess = 0;
-
-              for (let i = 0; i < checkSign.length; i++) {
-                if (checkSign[i].result.success == false) {
-                  this.spinner.hide();
-
-                  if (checkSign[i].result.message == 'Tax code do not match!') {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'taxcode.not.match',
-                      '',
-                      3000
-                    );
-                  } else if (
-                    checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
-                  ) {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Mật khẩu cấp 2 không đúng',
-                      '',
-                      3000
-                    );
-                  } else if (
-                    checkSign[i].result.message == 'License ky so HSM het han!'
-                  ) {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'License ký số HSM hết hạn!',
-                      '',
-                      3000
-                    );
-                  } else {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      checkSign[i].result.message,
-                      '',
-                      3000
-                    );
-                  }
-                  return;
-                } else {
-                  countSuccess++;
-                }
-              }
-
-              if (countSuccess == checkSign.length) {
-                this.spinner.hide();
-                this.toastService.showSuccessHTMLWithTimeout(
-                  'sign.success',
-                  '',
-                  3000
-                );
-
-                this.router
-                  .navigateByUrl('/', { skipLocationChange: true })
-                  .then(() => {
-                    this.router.navigate(['main/c/receive/processed']);
-                  });
-              }
-            }
+          dialogRef.afterClosed().subscribe((res: any) => {
+            this.srcMark = res;
+            this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
+            this.spinner.hide();
           });
+        } else {
+          this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
         }
       }
     });
+  }
+
+  async actionSignMulti(signId: any, recipientId: any, taxCode: any, result: any, idSignMany: any) {
+    if (signId == 2) {
+      this.spinner.show();
+
+      let contractsSignManyChecked = this.contractsSignMany.filter(
+        (opt) => opt.checked
+      );
+
+      let idSignMany: any = [];
+      let idContract: any = [];
+      let fileC: any = [];
+      let documentId: any = [];
+
+      //lấy field id được tích vào
+      idSignMany = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.fields[0].id);
+
+      //lấy recipientId
+      recipientId = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.id);
+
+      //Lấy id hợp đồng được tích vào
+      idContract = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.participant.contract.id);
+
+      //Lấy id file được tích vào
+      documentId = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.fields[0].documentId);
+
+      //Lay ra mang chua tat ca ma so thue cua cac hop dong ky bang usb token
+      for (let i = 0; i < recipientId.length; i++) {
+        try {
+          const determineCoordination = await this.contractServiceV1.getDetermineCoordination(recipientId[i]).toPromise();
+          determineCoordination.recipients.forEach((item: any) => {
+            if (item.id == recipientId[i]) {
+              taxCode.push(item.fields[0].recipient.cardId);
+            }
+          });
+        } catch (err) {
+          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người tham gia hợp đồng','',3000);
+          return false;
+        }
+      }
+
+      for (let i = 0; i < idContract.length; i++) {
+        try {
+          let fileContract = await this.contractServiceV1.getFileContract(idContract[i]).toPromise();
+
+          const pdfC2 = fileContract.find((p: any) => p.type == 2);
+          const pdfC1 = fileContract.find((p: any) => p.type == 1);
+
+          if (pdfC2) {
+            fileContract = pdfC2.path;
+          } else if (pdfC1) {
+            fileContract = pdfC1.path;
+          } else {
+            return;
+          }
+
+          fileC.push(fileContract);
+        } catch (err) {
+          this.toastService.showErrorHTMLWithTimeout(
+            'Lỗi lấy file cần ký',
+            '',
+            3000
+          );
+          return false;
+        }
+      }
+
+      this.signUsbTokenMany(fileC,idContract,recipientId,documentId,taxCode,idSignMany, result.mark);
+    } else if (signId == 4) {
+      //Ký nhiều hsm
+      //Mở popup ký hsm
+      const data = {
+        id: 1,
+        title: 'CHỮ KÝ HSM',
+        is_content: 'forward_contract',
+      };
+
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = '497px';
+      dialogConfig.hasBackdrop = true;
+      dialogConfig.data = data;
+
+      const dialogRef = this.dialog.open(
+        HsmDialogSignComponent,
+        dialogConfig
+      );
+
+      dialogRef.afterClosed().subscribe(async (resultHsm: any) => {
+        if (resultHsm) {
+          this.nameCompany = resultHsm.ma_dvcs;
+          let imageRender = null;
+
+          await of(null).pipe(delay(100)).toPromise();
+
+          if(result.mark) {
+            imageRender = <HTMLElement>(document.getElementById('export-html-hsm-image'));
+          } else {
+            imageRender = <HTMLElement>(document.getElementById('export-html-hsm'));
+          } 
+
+          let signI = '';
+
+          if (imageRender) {
+            const textSignB = await domtoimage.toPng(imageRender,this.getOptions(imageRender));
+            signI = textSignB.split(',')[1];
+          }
+
+          this.dataHsm = {
+            ma_dvcs: resultHsm.ma_dvcs,
+            username: resultHsm.username,
+            password: resultHsm.password,
+            password2: resultHsm.password2,
+            image_base64: signI,
+          };
+
+          this.spinner.show();
+
+          //Call api ký nhiều hsm
+          const checkSign = await this.contractServiceV1.signHsmMulti(
+            this.dataHsm,
+            idSignMany
+          );
+
+          let countSuccess = 0;
+
+          for (let i = 0; i < checkSign.length; i++) {
+            if (checkSign[i].result.success == false) {
+              this.spinner.hide();
+
+              if (checkSign[i].result.message == 'Tax code do not match!') {
+                this.toastService.showErrorHTMLWithTimeout(
+                  'taxcode.not.match',
+                  '',
+                  3000
+                );
+              } else if (
+                checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
+              ) {
+                this.toastService.showErrorHTMLWithTimeout(
+                  'Mật khẩu cấp 2 không đúng',
+                  '',
+                  3000
+                );
+              } else if (
+                checkSign[i].result.message == 'License ky so HSM het han!'
+              ) {
+                this.toastService.showErrorHTMLWithTimeout(
+                  'License ký số HSM hết hạn!',
+                  '',
+                  3000
+                );
+              } else {
+                this.toastService.showErrorHTMLWithTimeout(
+                  checkSign[i].result.message,
+                  '',
+                  3000
+                );
+              }
+              return;
+            } else {
+              countSuccess++;
+            }
+          }
+
+          if (countSuccess == checkSign.length) {
+            this.spinner.hide();
+            this.toastService.showSuccessHTMLWithTimeout(
+              'sign.success',
+              '',
+              3000
+            );
+
+            this.router
+              .navigateByUrl('/', { skipLocationChange: true })
+              .then(() => {
+                this.router.navigate(['main/c/receive/processed']);
+              });
+          }
+        }
+      });
+    }
   }
 
   //Ký usb token v1
