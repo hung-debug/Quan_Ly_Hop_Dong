@@ -537,6 +537,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let canvasElement: HTMLElement | null;
     if (event.relatedTarget && event.relatedTarget.id) {
       canvasElement = document.getElementById(event.relatedTarget.id);
+
+      console.log("eve ", document?.getElementById("pdf-viewer-step-3")?.clientLeft);
       let canvasInfo = canvasElement ? canvasElement.getBoundingClientRect() : '';
       this.coordinates_signature = event.rect;
       let id = event.target.id;
@@ -582,7 +584,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // @ts-ignore
         if ("left" in canvasInfo) {
           // layerX = event.rect.left - canvasInfo.left;
-          layerX = rect_location.left - canvasInfo.left;
+
+          console.log("rec ", rect_location);
+          console.log("can ", canvasInfo);
+
+          console.log("ev ", event);
+
+          layerX = rect_location.left - canvasInfo.left + 150.25;
         }
 
         let layerY = 0;
@@ -716,8 +724,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
                 // element['number'] = _arrPage[_arrPage.length - 1];
                 element['page'] = _arrPage[_arrPage.length - 1];
-
-                console.log("page ", element['page']);
                 element['position'] = this.signCurent['position'];
                 element['coordinate_x'] = this.signCurent['coordinate_x'];
                 element['coordinate_y'] = this.signCurent['coordinate_y'];
@@ -869,12 +875,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     var target = event.target
     this.isMove = true;
     // // keep the dragged position in the data-x/data-y attributes
-    var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-    var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+    var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+    var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
     // // translate the element
     target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
     // // update the posiion attributes
-    target.setAttribute('data-x', x)
+    target.setAttribute('data-x', x);
     target.setAttribute('data-y', y);
 
   }
