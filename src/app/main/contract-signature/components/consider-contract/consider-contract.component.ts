@@ -210,6 +210,7 @@ export class ConsiderContractComponent
   pdfSrcMobile: any;
 
   async ngOnInit(): Promise<void> {
+    console.log("test dong dau ")
     this.getDeviceApp();
 
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
@@ -1583,10 +1584,7 @@ export class ConsiderContractComponent
                             dialogConfig.hasBackdrop = true;
                             dialogConfig.data = data;
 
-                            const dialogRef = this.dialog.open(
-                              ImageDialogSignComponent,
-                              dialogConfig
-                            );
+                            const dialogRef = this.dialog.open(ImageDialogSignComponent,dialogConfig);
 
                             dialogRef.afterClosed().subscribe((res: any) => {
                               this.srcMark = res;
@@ -1846,7 +1844,7 @@ export class ConsiderContractComponent
                   console.log("111")
 
                   try { 
-                    const textSignB = await domtoimage.toPng(imageRender);
+                    const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
 
                     console.log("te ", textSignB);
                     signI = textSignB.split(',')[1];

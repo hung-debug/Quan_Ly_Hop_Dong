@@ -185,14 +185,24 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
 
   uploadImage() {
     if (this.typeImageSignatureRadio == 1) {
-      // this.contractSignatureService.setImageObs(this.imgSignAccountSelect);
-      this.dialogRef.close(this.imgSignAccountSelect);
+      if(!this.imgSignAccountSelect) {
+        this.toastService.showErrorHTMLWithTimeout('Bạn chưa chọn ảnh','',3000)
+      } else {
+        this.dialogRef.close(this.imgSignAccountSelect);
+      }
+
     } else if (this.typeImageSignatureRadio == 2) {
-      // this.contractSignatureService.setImageObs(this.imgSignPCSelect);
-      this.dialogRef.close(this.imgSignPCSelect);
+      if(!this.imgSignPCSelect) {
+        this.toastService.showErrorHTMLWithTimeout('not.photo','',3000)
+      } else {
+        this.dialogRef.close(this.imgSignPCSelect);
+      }
     } else if (this.typeImageSignatureRadio == 3) {
-      // this.contractSignatureService.setImageObs(this.imgSignDrawing);
-      this.dialogRef.close(this.imgSignDrawing);
+      if(!this.imgSignDrawing) {
+        this.toastService.showErrorHTMLWithTimeout('Bạn chưa chọn ảnh','',3000)
+      } else {
+        this.dialogRef.close(this.imgSignDrawing);
+      }
     }
   }
 

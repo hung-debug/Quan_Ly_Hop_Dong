@@ -267,6 +267,9 @@ export class ContractNumberFollowTypeComponent implements OnInit {
     if(!contractStatus) 
       contractStatus = -1;
 
+    if(!to_date)
+      from_date = to_date;
+
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
     this.reportService.export('rp-by-type',idOrg,params, flag).subscribe((response: any) => {
 
