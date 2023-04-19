@@ -178,6 +178,17 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     this.contractNoValueEvent.emit(this.contractNoValueSign);
   }
 
+  getValueText(e: any, d: any) {
+    console.log(e);
+    console.log(d);
+    const num = e.toString().replace(/\./g, '');
+    if (!isNaN(parseFloat(num)) && isFinite(num)) { // check if value is a number
+      d.value = parseFloat(num).toLocaleString('vi-VN'); // format value as currency
+    } else {
+      d.value = e; // value is not a number, set to original value
+    }
+  }
+
   forWardContract() {
     const data = {
       title: 'CHUYỂN TIẾP',
@@ -196,6 +207,14 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doEditText() {
+    
+    console.log(this.sign.valueSign);
+    if(this.sign.valueSign != undefined){
+    const num = this.sign.valueSign.toString().replace(/\./g, '');
+    if (!isNaN(parseFloat(num)) && isFinite(num)){
+      this.sign.valueSign = num;
+    }}
+
     if ([2,3,4].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
       this.checkShowEdit = !this.checkShowEdit;
 
@@ -220,6 +239,11 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     this.newItemEvent.emit("1");
     if (sign.sign_unit == 'text') {
       if(sign.valueSign) {
+
+        const num = sign.valueSign.toString().replace(/\./g, '');
+        if (!isNaN(parseFloat(num)) && isFinite(num)) { // check if value is a number
+          sign.valueSign = parseFloat(num).toLocaleString('vi-VN'); // format value as currency
+        }
         return sign.valueSign;
       }
       return 'Text';

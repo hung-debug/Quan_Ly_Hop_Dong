@@ -1261,7 +1261,7 @@ export class SampleContractFormComponent implements OnInit {
         }
       } else arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
-
+    console.log(arrSignConfig);
     return arrSignConfig;
   }
 
@@ -1444,7 +1444,13 @@ export class SampleContractFormComponent implements OnInit {
 
   contractNo: any;
   getValueText(e: any, d: any) {
-    d.value = e;
+    const num = e.toString().replace(/\./g, '');
+    if (!isNaN(parseFloat(num)) && isFinite(num)) { // check if value is a number
+      d.value = parseFloat(num).toLocaleString('vi-VN'); // format value as currency
+    } else {
+      d.value = e; // value is not a number, set to original value
+    }
+
     if (d.sign_unit == 'so_tai_lieu') {
       this.datasForm.contract_no = e;
       this.contractNo = e;
