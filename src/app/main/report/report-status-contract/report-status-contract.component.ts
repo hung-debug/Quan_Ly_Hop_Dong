@@ -231,6 +231,9 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
 
     this.type_id = this.type_id ? this.type_id : "";
 
+    if(!to_date)
+      to_date = from_date
+
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData+'&type='+this.type_id;
 
     if(!this.type_id) {

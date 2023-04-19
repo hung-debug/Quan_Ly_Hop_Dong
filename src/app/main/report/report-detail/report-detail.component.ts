@@ -283,7 +283,10 @@ export class ReportDetailComponent implements OnInit {
     if(!contractStatus) 
       contractStatus = -1;
 
-      this.clickTable = true;
+    this.clickTable = true;
+
+    if(!to_date)
+      to_date = from_date
 
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
     this.reportService.export('rp-detail',idOrg,params, flag).subscribe((response: any) => {

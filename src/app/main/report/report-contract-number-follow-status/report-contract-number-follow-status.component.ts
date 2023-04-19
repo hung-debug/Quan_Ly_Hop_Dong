@@ -149,8 +149,6 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
 
     let idOrg = this.selectedNodeOrganization.data;
 
-    console.log("se ", this.selectedNodeOrganization);
-
     let from_date: any = '';
     let to_date: any = '';
     if(this.date && this.date.length > 0) {
@@ -162,6 +160,9 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
 
     if(!contractStatus) 
       contractStatus = -1;
+
+    if(!to_date)
+      to_date = from_date
 
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
 
