@@ -126,10 +126,6 @@
 
 <div *ngIf="this.mobile && !this.multiSignInPdf">
 
-  <div class="skeleton-sign position-absolute opacity-0">
-    <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId" [phonePKI]="phonePKI"></app-display-digital-signature>
-  </div>
-
       <div style="margin:auto;padding: 10px">
         <pdf-viewer *ngIf="![2,3].includes(recipient.status)" [src]="pdfSrcMobile"
         [render-text]="true"
@@ -167,9 +163,13 @@
       </button>
     </div>
 
-      <div style="display: none;" *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-        <app-image-sign-contract id="image-sign-contract-mobile" *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
-      </div>
+    <div style="display: none;" *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+      <app-image-sign-contract id="image-sign-contract-mobile" *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
+    </div>
+
+    <div style="position: absolute;top: -1000px">
+      <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId" [phonePKI]="phonePKI"></app-display-digital-signature>
+    </div>
 
     <div class="flex-column" *ngIf="![2,3].includes(recipient.status)" style="margin-top: 5px">
       <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2">
@@ -200,8 +200,7 @@
           </div>
         </div>
       </div>
-    
-</div>
+    </div>
 </div>
 
 <app-footer-signature *ngIf="loaded  && (!this.mobile || (this.mobile && !this.multiSignInPdf))" 
@@ -228,3 +227,6 @@
 >
   <p style="font-size: 18px; color: white; text-align: center;white-space: pre-line;">{{loadingText}}</p>
 </ngx-spinner>
+
+
+ 

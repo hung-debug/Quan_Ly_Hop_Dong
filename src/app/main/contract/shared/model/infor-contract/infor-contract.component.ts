@@ -5,6 +5,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  HostListener,
   Input,
   OnChanges,
   OnInit,
@@ -27,6 +28,7 @@ import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 import { Validators } from '@angular/forms';
 import { parttern_input } from 'src/app/config/parttern';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 
 export class ContractConnectArr {
@@ -119,6 +121,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     private checkSignDigitalService: CheckSignDigitalService,
     private checkViewContractService: CheckViewContractService,
     private activeRoute: ActivatedRoute,
+    private deviceService: DeviceDetectorService,
   ) {
     this.step = variable.stepSampleContract.step1;
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
@@ -139,6 +142,22 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
     if(this.type_id)
       this.changeTypeContract();
+
+    // if(window.outerWidth  / window.innerWidth != 1) {
+    //     this.toastService.showErrorHTMLWithTimeout('Cảnh báo lệch toạ độ khi kéo ô ký/text/số hợp đồng khi phóng to, thu nhỏ','',3000);
+    // } else if(window.devicePixelRatio > 1.1 || window.devicePixelRatio < 0.9) {
+    //     this.toastService.showErrorHTMLWithTimeout('Cảnh báo lệch toạ độ khi kéo ô ký/text/số hợp đồng khi phóng to, thu nhỏ','',3000);
+    // }
+
+    this.onResize();
+  }
+
+  onResize() {
+    if(window.outerWidth  / window.innerWidth != 1) {
+      this.toastService.showErrorHTMLWithTimeout('Cảnh báo lệch toạ độ khi kéo ô ký/text/số hợp đồng khi phóng to, thu nhỏ','',3000);
+    } else if(window.devicePixelRatio > 1.1 || window.devicePixelRatio < 0.9) {
+        this.toastService.showErrorHTMLWithTimeout('Cảnh báo lệch toạ độ khi kéo ô ký/text/số hợp đồng khi phóng to, thu nhỏ','',3000);
+    }
   }
 
   actionSuccess() {

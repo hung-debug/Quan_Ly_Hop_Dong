@@ -2025,15 +2025,10 @@ export class ConsiderContractComponent
             this.font = signUpdate.font;
             this.font_size = signUpdate.font_size;
 
-            this.widthText = this.calculatorWidthText(
-              this.textSign,
-              signUpdate.font
-            );
+            this.widthText = this.calculatorWidthText(this.textSign,signUpdate.font);
             fieldHsm.width = this.widthText + 10;
-            fieldHsm.coordinate_y =
-              signUpdate.signDigitalY -
-              0.5 * (signUpdate.height - signUpdate.font_size) -
-              5;
+            
+            fieldHsm.coordinate_y = signUpdate.signDigitalY - 0.5 * (signUpdate.height - signUpdate.font_size) - 5;
 
             await of(null).pipe(delay(120)).toPromise();
             const imageRender = <HTMLElement>(
@@ -2060,9 +2055,15 @@ export class ConsiderContractComponent
             }
 
             if (imageRender) {
-              const textSignB = await domtoimage.toPng(imageRender,this.getOptions(imageRender));
+              console.log("ima ", imageRender);
+              await of(null).pipe(delay(150)).toPromise();
+              const textSignB = await domtoimage.toPng(imageRender);
+              console.log("te ", textSignB);
               signI = textSignB.split(',')[1];
             }
+
+            console.log("im ", signI);
+
           }
 
           if (!this.mobile) {
@@ -2118,10 +2119,7 @@ export class ConsiderContractComponent
                 }
               }
             } else {
-              const checkSign = await this.contractService.signHsmOld(
-                this.dataHsm,
-                this.recipientId
-              );
+              const checkSign = await this.contractService.signHsmOld(this.dataHsm,this.recipientId);
 
               if (!checkSign || (checkSign && !checkSign.success)) {
                 if (!checkSign.message) {
@@ -2181,16 +2179,15 @@ export class ConsiderContractComponent
   }
 
   getOptions(imageRender: any) {
-    const scale = 21;
+    const scale = 5;
     const options = {
       quality: 0.99,
       width: imageRender.clientWidth * scale,
       height: imageRender.clientHeight * scale,
       style: { transform: 'scale(' + scale + ')', transformOrigin: 'top left' },
     };
-    return options;
 
-    // return undefined;
+    return options
   }
 
   calculatorWidthText(text: any, font: any) {

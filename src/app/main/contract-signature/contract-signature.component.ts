@@ -248,22 +248,8 @@ export class ContractSignatureComponent implements OnInit {
     this.spinner.show();
     this.typeDisplay = 'downloadMany';
 
-    this.contractService
-      .getContractMyProcessList(
-        this.filter_name,
-        this.filter_type,
-        this.filter_contract_no,
-        this.filter_from_date,
-        this.filter_to_date,
-        this.filter_status,
-        this.p,
-        this.page,
-        30
-      )
-      .subscribe(
-        (data) => {
-          console.log('dataaaaaaaaaa', data);
-
+    this.contractService.getContractMyProcessList(this.filter_name,this.filter_type,this.filter_contract_no,this.filter_from_date,this.filter_to_date,this.filter_status,
+        this.p,this.page,30).subscribe((data) => {
           this.contractDownloadList = data.entities;
           this.pageTotal = data.total_elements;
           if (this.pageTotal == 0) {
@@ -580,13 +566,13 @@ export class ContractSignatureComponent implements OnInit {
       }
     }
   }
+
   downloadManyContract() {
     const myDate = new Date();
     // Replace 'yyyy-MM-dd' with your desired date format
     const formattedDate = this.datepipe.transform(myDate, 'ddMMyyyy');
     const ids = this.dataChecked.map((el) => el.id).toString();
-    this.contractService.getContractMyProcessListDownloadMany(ids).subscribe(
-      (data) => {
+    this.contractService.getContractMyProcessListDownloadMany(ids).subscribe((data) => {
         const file = new Blob([data], { type: 'application/zip' });
         let fileUrl = window.URL.createObjectURL(file);
         let a = document.createElement('a');
@@ -1213,7 +1199,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   getOptions(imageRender: any) {
-    const scale = 1;
+    const scale = 5;
     const options = {
       quality: 0.99,
       width: imageRender.clientWidth * scale,
