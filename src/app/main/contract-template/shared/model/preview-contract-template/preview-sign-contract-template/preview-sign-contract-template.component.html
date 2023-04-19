@@ -20,12 +20,9 @@
 </div>
 
 <!-- && !signTemplate -->
-<div
-  class="text-sign"
-  *ngIf="sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu'"
->
-  <span [ngStyle]="getStyleText(sign)" class="font-style" id="input-text">{{ getText(sign) }}</span>
-</div>
+  <div *ngIf="sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu'" class="text-sign">
+    <span [ngStyle]="getStyleText(sign)" class="font-style" id="input-text">{{ getText(sign) }}</span>
+  </div>
 
 <!-- <div>
   <span  *ngIf="sign.sign_unit == 'so_tai_lieu'" [ngStyle]="getStyleText()" class="font-style" id="input-text">{{ getText(sign) }}</span>
