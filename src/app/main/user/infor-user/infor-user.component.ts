@@ -227,6 +227,22 @@ export class InforUserComponent implements OnInit {
   }
 
   async updateSign(data:any){
+
+    console.log("this ", this.attachFile);
+
+      //upload file
+      if(this.attachFile) {
+        const dataFile = await this.uploadService.uploadFile(this.attachFile).toPromise();
+        this.imgSignPath = dataFile.file_object.file_path;
+        this.imgSignBucket = dataFile.file_object.bucket;
+      }
+     
+      if(this.attachFileMark) {
+        const dataFile = await this.uploadService.uploadFile(this.attachFileMark).toPromise();
+        this.imgSignPathMark = dataFile.file_object.file_path;
+        this.imgSignBucketMark = dataFile.file_object.bucket;
+      }
+
       if(this.imgSignBucket != null && this.imgSignPath != null){
         const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
         const sign_image:never[]=[];
@@ -393,7 +409,6 @@ export class InforUserComponent implements OnInit {
 
     }
 
-    console.log("data ", data);
     //ham update
     this.updateSign(data);
   }
