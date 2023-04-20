@@ -140,7 +140,9 @@ export class ContractService {
 
   getAllInfoUserUrl: any = `${environment.apiUrl}/api/v1/customers/suggested-list`;
 
-  deleteTokenUrl: any = `${environment.apiUrl}/api/v1/auth/logout`
+  deleteTokenUrl: any = `${environment.apiUrl}/api/v1/auth/logout`;
+
+  configSmsUrl: any = `${environment.apiUrl}/api/v1/notification/sms-types/`
 
   token: any;
   customer_id: any;
@@ -474,8 +476,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_sample_contract);
-    return this.http
-      .post<Contract>(this.addSampleCntractUrl, body, { headers: headers })
+    return this.http.post<Contract>(this.addSampleCntractUrl, body, { headers: headers })
       .pipe(
         map((contract) => {
           if (JSON.parse(JSON.stringify(contract)).id != 0) {
@@ -855,6 +856,32 @@ export class ContractService {
 
     let listContractUrl = this.getNotifyOriganzation + orgId;
     return this.http.get<any>(listContractUrl, { headers }).pipe();
+  }
+
+  getConfigSmsOrg() {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+    .append('Content-Type', 'application/json')
+    .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.get<any>(this.configSmsUrl + this.organization_id, { headers }).pipe();
+  }
+
+  updateConfigSmsOrg(smsTypeIdList: number[]) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+    .append('Content-Type', 'application/json')
+    .append('Authorization', 'Bearer ' + this.token);
+
+    const body = JSON.stringify({
+      orgId: this.organization_id,
+      smsTypeIdList: smsTypeIdList
+    })
+
+    return this.http.post<any>(this.configSmsUrl, body, {   
+      headers: headers,
+      observe: 'response',
+    }).pipe();
   }
 
   changeLink(code: any) {

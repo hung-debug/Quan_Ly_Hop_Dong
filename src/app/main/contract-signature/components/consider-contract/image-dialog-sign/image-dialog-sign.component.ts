@@ -72,6 +72,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   }
 
   fileChangedAttach(e: any) {
+    console.log("e ", e);
     let files = e.target.files;
     let valid = ["jpg", "jpeg", "png"];
     for(let i = 0; i < files.length; i++){
@@ -81,6 +82,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
         // giới hạn file upload lên là 5mb
         if (e.target.files[0].size <= 50000000 && valid.includes(file.name.split('.').pop().toLowerCase())) {
           this.handleUpload(e);
+          e.target.value = null;
         } else if (!valid.includes(file.name.split('.').pop().toLowerCase())) {
           Swal.fire({
             title: 'File upload là file ảnh!',
@@ -102,14 +104,18 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
         }
       }
     }
+
+
   }
 
   handleUpload(event: any) {
+    console.log("e ", event);
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
       this.imgSignPCSelect = reader.result? reader.result.toString() : '';
+      console.log("img ", this.imgSignPCSelect);
     };
   }
 
@@ -208,6 +214,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
 
   clearImage() {
     this.signaturePad?.clear();
+
     this.imgSignPCSelect = null;
   }
 }

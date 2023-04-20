@@ -151,7 +151,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         if (this.authService.isLoggedInSuccess() == true) {
           this.error = false;
 
-          //Mật khẩu yếu => Đổi mật khẩu
+          //Mật khẩu yếu + người thuộc tổ chức trong hệ thống + tài khoản không có '@mobifone.vn' => Đổi mật khẩu
           if(!parttern_input.weak_pass.test(this.loginForm.value.password) && this.type != 1 && !this.loginForm.value.username.includes('@mobifone.vn')) {
             this.toastService.showErrorHTMLWithTimeout('weak.pass','',3000);
             this.changePassword();
