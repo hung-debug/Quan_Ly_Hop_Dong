@@ -459,8 +459,56 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     this.checkCount = 1; // gan lai de lan sau ko bi tang index
   }
 
-  selectWithOtp(e: any, data: any) {
-    // this.changeOtp(data);
+  // selectWithOtp(e: any, data: any) {
+  //   this.changeOtp(data);
+  // }
+
+  selectWithOtp(e: any, data: any, type?: any) { // sort ordering
+    //clear lai gia tri card_id
+    //Check với tổ chức của tôi ký
+    if (type == 'organization') {
+      //Nếu là người ký
+      if (data.role == 3) {
+        if (this.getDataSignHsm(data).length == 0 && this.getDataSignUSBToken(data).length == 0) {
+          data.card_id = "";
+        }
+      }
+      //Nếu là văn thư
+      else if (data.role == 4) {
+        if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0) {
+          data.card_id = "";
+        }
+        else {
+          this.unitService.getTaxCodeOriganzation(this.userService.getInforUser().organization_id).subscribe((res: any) => {
+          data.card_id=res.tax_code;})
+        }
+      }
+    }
+    //Nếu là đối tác tổ chức
+    else if (type == 2) {
+      //Nếu là người ký
+      if (data.role == 3) {
+        if (this.getDataSignHsm(data).length == 0 && this.getDataSignUSBToken(data).length == 0) {
+          data.card_id = "";
+        }
+      }
+      //Nếu là văn thư
+      else if (data.role == 4) {
+        if (this.getDataSignUSBToken(data).length == 0) {
+          data.card_id = "";
+        }
+      }
+    } else if (type == 3) {
+      if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignEkyc(data).length == 0) {
+        data.card_id = "";
+      }
+
+      //Nếu cá nhân chọn loại ký là otp và ký bằng số điện thoại
+      if (data.typeSign == 1 && this.getDataSignCka(data).length > 0) {
+        data.phone = data.email;
+      }
+    }
+
   }
 
   flagUSBTokenMyOrg = false;

@@ -1261,12 +1261,53 @@ export class SampleContractFormComponent implements OnInit {
         }
       } else arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
-    console.log(arrSignConfig);
     return arrSignConfig;
   }
 
   showThumbnail() {
     this.objSignInfo.showObjSign = false;
+  }
+
+  removePeriodsFromCurrencyValue(value: string): string {
+    const regex = /(\d[\d.]*(?:\.\d+)?)\b/g;
+    let result = '';
+    let lastIndex = 0;
+    let match;
+  
+    while ((match = regex.exec(value)) !== null) {
+      const numericPart = match[1].replace(/\./g, '');
+      const prefix = value.slice(lastIndex, match.index);
+      result += prefix + numericPart;
+      lastIndex = match.index + match[0].length;
+    }
+  
+    const suffix = value.slice(lastIndex);
+    result += suffix;
+  
+    return result;
+  }
+
+  convertCurrency(value: any) {
+    const regex = /(\d[\d.]*(?:\.\d+)?)\b(?=\.{0,2}\d*$)/g;
+    const text = value.toString();
+    let formattedText = '';
+    let lastIndex = 0;
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      const numericPart = match[1].replace(/\./g, '');
+      const formattedNumericPart = parseFloat(numericPart).toLocaleString('vi-VN');
+      const prefix = text.slice(lastIndex, match.index);
+      formattedText += prefix + formattedNumericPart;
+      lastIndex = match.index + match[0].length;
+      if (text.charAt(lastIndex) === '.') {
+        formattedText += '.';
+        lastIndex++;
+      }
+    }
+    const suffix = text.slice(lastIndex);
+    formattedText += suffix;
+    value = formattedText;
+    return value;
   }
 
   // tạo id cho đối tượng chưa được kéo thả
@@ -1444,17 +1485,24 @@ export class SampleContractFormComponent implements OnInit {
 
   contractNo: any;
   getValueText(e: any, d: any) {
-    const num = e.toString().replace(/\./g, '');
-    if (!isNaN(parseFloat(num)) && isFinite(num)) { // check if value is a number
-      d.value = parseFloat(num).toLocaleString('vi-VN'); // format value as currency
-    } else {
-      d.value = e; // value is not a number, set to original value
-    }
+    // const num = e.toString().replace(/\./g, '');
+    // if (!isNaN(parseFloat(num)) && isFinite(num)) { // check if value is a number
+    //   d.value = parseFloat(num).toLocaleString('vi-VN'); // format value as currency
+    // } else {
+    //   d.value = e; // value is not a number, set to original value
+    // }
+    const num = this.convertCurrency(e);
+    d.value = num;
 
     if (d.sign_unit == 'so_tai_lieu') {
       this.datasForm.contract_no = e;
       this.contractNo = e;
     }
+  }
+  reverseInput(e: any, d: any){
+    console.log(e);
+    const num = this.removePeriodsFromCurrencyValue(e);
+    d.value = num;
   }
 
   getTrafX() {
