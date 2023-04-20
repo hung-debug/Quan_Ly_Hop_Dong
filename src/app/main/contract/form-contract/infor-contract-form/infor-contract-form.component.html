@@ -13,7 +13,7 @@
     <div class="form-group">
       <div class="label_item">{{'contract.number' | translate}}</div>
       <div class="input-group">
-        <input type="text" [(ngModel)]="this.datasForm.contract_no" maxlength="100" class="input_text" placeholder="{{'enter.contract.no' | translate}}" />
+        <input type="text" [(ngModel)]="this.datasForm.contract_no" (click)="reverseInput($event)" (ngxInputSearch)="changeInput($event)" (blur)="changeInput($event)" maxlength="100" class="input_text" placeholder="{{'enter.contract.no' | translate}}" />
       </div>
     </div>
 

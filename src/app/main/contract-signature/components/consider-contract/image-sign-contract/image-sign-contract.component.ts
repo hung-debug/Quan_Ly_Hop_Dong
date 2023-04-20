@@ -168,25 +168,14 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     this.checkShowEdit = false;
   }
 
-  doneEditContractNoSign(sign: any) {
+  doneEditContractNoSign(sign: any, e: any) {
     // this.checkShowEdit = false;
 
-
+    e.target.value = this.convertCurrency(e.target.value);
     this.contractNoValue = false;
     this.count++;
     sign.valueSign = this.contractNoValueSign;
     this.contractNoValueEvent.emit(this.contractNoValueSign);
-  }
-
-  getValueText(e: any, d: any) {
-    console.log(e);
-    console.log(d);
-    const num = e.toString().replace(/\./g, '');
-    if (!isNaN(parseFloat(num)) && isFinite(num)) { // check if value is a number
-      d.value = parseFloat(num).toLocaleString('vi-VN'); // format value as currency
-    } else {
-      d.value = e; // value is not a number, set to original value
-    }
   }
 
   forWardContract() {
@@ -208,13 +197,9 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   doEditText() {
     
-    console.log(this.sign.valueSign);
-    if(this.sign.valueSign != undefined){
-    const num = this.sign.valueSign.toString().replace(/\./g, '');
-    if (!isNaN(parseFloat(num)) && isFinite(num)){
-      this.sign.valueSign = num;
-    }}
 
+    if(this.sign.valueSign != undefined)
+    this.sign.valueSign = this.removePeriodsFromCurrencyValue(this.sign.valueSign);
     if ([2,3,4].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
       this.checkShowEdit = !this.checkShowEdit;
 
@@ -231,7 +216,48 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     setTimeout(()=>{
       this.inputEditContractNo.nativeElement.focus();
     },100);
+   
+  }
+  removePeriodsFromCurrencyValue(value: string): string {
+    const regex = /(\d[\d.]*(?:\.\d+)?)\b/g;
+    let result = '';
+    let lastIndex = 0;
+    let match;
+  
+    while ((match = regex.exec(value)) !== null) {
+      const numericPart = match[1].replace(/\./g, '');
+      const prefix = value.slice(lastIndex, match.index);
+      result += prefix + numericPart;
+      lastIndex = match.index + match[0].length;
+    }
+  
+    const suffix = value.slice(lastIndex);
+    result += suffix;
+  
+    return result;
+  }
 
+  convertCurrency(value: any) {
+    const regex = /(\d[\d.]*(?:\.\d+)?)\b(?=\.{0,2}\d*$)/g;
+    const text = value.toString();
+    let formattedText = '';
+    let lastIndex = 0;
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      const numericPart = match[1].replace(/\./g, '');
+      const formattedNumericPart = parseFloat(numericPart).toLocaleString('vi-VN');
+      const prefix = text.slice(lastIndex, match.index);
+      formattedText += prefix + formattedNumericPart;
+      lastIndex = match.index + match[0].length;
+      if (text.charAt(lastIndex) === '.') {
+        formattedText += '.';
+        lastIndex++;
+      }
+    }
+    const suffix = text.slice(lastIndex);
+    formattedText += suffix;
+    value = formattedText;
+    return value;
   }
 
   count: number = 0;
@@ -239,34 +265,32 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     this.newItemEvent.emit("1");
     if (sign.sign_unit == 'text') {
       if(sign.valueSign) {
-
-        const num = sign.valueSign.toString().replace(/\./g, '');
-        if (!isNaN(parseFloat(num)) && isFinite(num)) { // check if value is a number
-          sign.valueSign = parseFloat(num).toLocaleString('vi-VN'); // format value as currency
-        }
+        sign.valueSign = this.convertCurrency(sign.valueSign);
         return sign.valueSign;
       }
       return 'Text';
     } else {
-      // if (this.datas.is_data_contract.code) {
-      //   console.log("1")
-      //   return this.datas.is_data_contract.code;
-      // } else 
       if (sign.value) {
+        sign.value= this.convertCurrency(sign.value);
         console.log("vao day ");
         return sign.value;
       } else if(sign.valueSign) {
+        sign.valueSign= this.convertCurrency(sign.valueSign);
         console.log("vao day ");
         return sign.valueSign;
       } else if(this.contractNoValueSign) {
         console.log("vao day ");
+        sign.valueSign= this.convertCurrency(sign.valueSign);
         this.count++;
-        sign.valueSign = this.contractNoValueSign;
         return sign.valueSign;
 
       }
       return 'Số hợp đồng';
     }
+  }
+
+  reverseInput(e:any){
+    e.target.value = this.removePeriodsFromCurrencyValue(e.target.value);
   }
 
 }

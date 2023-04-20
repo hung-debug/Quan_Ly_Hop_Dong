@@ -42,7 +42,7 @@
   </div>
 
   <div class="skeleton-sign" *ngIf="contractNoValue || count > 0 && !view">
-    <input [ngStyle]="getStyle(sign)" type="text" class="input-edit-text" [(ngModel)]="contractNoValueSign" (blur)="doneEditContractNoSign(sign)" #inputEditContractNo>
+    <input (click)="reverseInput($event)" [ngStyle]="getStyle(sign)" type="text" class="input-edit-text" [(ngModel)]="contractNoValueSign" (blur)="doneEditContractNoSign(sign, $event)" #inputEditContractNo>
   </div>
 </div> 
 

@@ -27,6 +27,7 @@ import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 import { Validators } from '@angular/forms';
 import { parttern_input } from 'src/app/config/parttern';
+import { NgxInputSearchModule } from "ngx-input-search";
 
 
 export class ContractConnectArr {
@@ -47,10 +48,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   @Input() datas: any;
   @Input() step: any;
   @Input() save_draft_infor: any;
-
   @Output() stepChangeInfoContract = new EventEmitter<string>();
   @ViewChild('nameContract') nameContract: ElementRef;
-
 
   //upload file
   selectedFiles?: FileList;
@@ -1049,5 +1048,58 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       //this.attachFileNameArr = this.attachFileNameArr.filter((p: any) => p.filename !== item.filename);
     }
   }
+
+  changeInput(e: any): void {
+    e.target.value = this.convertCurrency(e.target.value);
+    this.contract_no = e.target.value;
+  }
+
+  reverseInput(e: any): void {
+    e.target.value = this.removePeriodsFromCurrencyValue(e.target.value);
+  }
+
+  convertCurrency(value: any) {
+    const regex = /(\d[\d.]*(?:\.\d+)?)\b(?=\.{0,2}\d*$)/g;
+    const text = value.toString();
+    let formattedText = '';
+    let lastIndex = 0;
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      const numericPart = match[1].replace(/\./g, '');
+      const formattedNumericPart = parseFloat(numericPart).toLocaleString('vi-VN');
+      const prefix = text.slice(lastIndex, match.index);
+      formattedText += prefix + formattedNumericPart;
+      lastIndex = match.index + match[0].length;
+      if (text.charAt(lastIndex) === '.') {
+        formattedText += '.';
+        lastIndex++;
+      }
+    }
+    const suffix = text.slice(lastIndex);
+    formattedText += suffix;
+    value = formattedText;
+    return value;
+  }
+
+  removePeriodsFromCurrencyValue(value: string): string {
+    const regex = /(\d[\d.]*(?:\.\d+)?)\b/g;
+    let result = '';
+    let lastIndex = 0;
+    let match;
+  
+    while ((match = regex.exec(value)) !== null) {
+      const numericPart = match[1].replace(/\./g, '');
+      const prefix = value.slice(lastIndex, match.index);
+      result += prefix + numericPart;
+      lastIndex = match.index + match[0].length;
+    }
+  
+    const suffix = value.slice(lastIndex);
+    result += suffix;
+  
+    return result;
+  }
+
+
 
 }
