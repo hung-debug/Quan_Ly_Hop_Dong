@@ -18,7 +18,7 @@
               <span *ngIf="menu.badge" class="badge badge-pill" [ngClass]="menu.badge.class">{{menu.badge.text}}</span>
             </a>
             <!-- Menu click link -->
-            <a *ngIf="menu.href !== '#' && menu.type != 'button'" (click)='clickLink(menu)'>
+            <a *ngIf="menu.href !== '#' && menu.type != 'button'" [routerLink]="menu.href" >
               <img src="{{menu.icon}}" />
               <span style="margin-left: 8px;">{{menu.title | translate}}</span>
               <span *ngIf="menu.badge" class="badge badge-pill" [ngClass]="menu.badge.class">{{menu.badge.text}}</span>
@@ -33,7 +33,7 @@
               <ul>
                 <li *ngFor="let submenu of menu.submenus" [ngClass]="{'active':submenu.active}">
 
-                  <a (click)="clickLinkSub(menu, submenu, 'contract-signature')">
+                  <a (click)="clickLinkSub(menu, submenu, 'contract-signature')" [routerLink]="submenu.href" >
                     <span class="sub_title">{{submenu.title | translate}}</span>
                     <span *ngIf="submenu.badge" class="badge badge-pill" [ngClass]="submenu.badge.class">{{submenu.badge.text}}</span>
                   </a>
