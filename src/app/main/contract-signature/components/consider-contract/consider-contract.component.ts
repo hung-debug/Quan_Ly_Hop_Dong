@@ -1790,20 +1790,10 @@ export class ConsiderContractComponent
     //= 2 => Ky usb token
     if (typeSignDigital == 2) {
       if (this.signCertDigital) {
-        console.log('vao day ');
         for (const signUpdate of this.isDataObjectSignature) {
-          if (
-            signUpdate &&
-            (signUpdate.type == 1 ||
-              signUpdate.type == 3 ||
-              signUpdate.type == 4) &&
-            [3, 4].includes(this.datas.roleContractReceived) &&
-            signUpdate?.recipient?.email === this.currentUser.email &&
-            signUpdate?.recipient?.role === this.datas?.roleContractReceived
-          ) {
-            let fileC = await this.contractService.getFileContractPromise(
-              this.idContract
-            );
+          if (signUpdate && (signUpdate.type == 1 || signUpdate.type == 3 || signUpdate.type == 4) &&[3, 4].includes(this.datas.roleContractReceived) &&
+            signUpdate?.recipient?.email === this.currentUser.email && signUpdate?.recipient?.role === this.datas?.roleContractReceived) {
+            let fileC = await this.contractService.getFileContractPromise(this.idContract);
             const pdfC2 = fileC.find((p: any) => p.type == 2);
             const pdfC1 = fileC.find((p: any) => p.type == 1);
 
@@ -1816,34 +1806,33 @@ export class ConsiderContractComponent
             }
             let signI = null;
             if (signUpdate.type == 1 || signUpdate.type == 4) {
+              const imageRender = <HTMLElement>(document.getElementById('text-sign'));
+
+              var rect = imageRender.getBoundingClientRect();
+              console.log("rect ",rect.top, rect.right, rect.bottom, rect.left);
+
               this.textSign = signUpdate.valueSign;
               this.width = signUpdate.width;
 
               this.font = signUpdate.font;
               this.font_size = signUpdate.font_size;
 
-              this.widthText = this.calculatorWidthText(
-                this.textSign,
-                signUpdate.font
-              );
+              this.widthText = this.calculatorWidthText(this.textSign,signUpdate.font);
 
               if (Number(signUpdate.signDigitalX + this.widthText + 10) < 790)
-                signUpdate.signDigitalWidth =
-                  signUpdate.signDigitalX + this.widthText + 10;
+                signUpdate.signDigitalWidth = signUpdate.signDigitalX + imageRender.offsetWidth;
 
               if (this.usbTokenVersion == 1) {
-                signUpdate.signDigitalY =
-                  signUpdate.signDigitalY -
-                  0.5 * (signUpdate.height - signUpdate.font_size) -
-                  5;
-                signUpdate.signDigitalHeight =
-                  signUpdate.signDigitalY + signUpdate.height;
+                console.log("off set ", imageRender.offsetTop);
+
+                console.log("yyy ", signUpdate.signDigitalY);
+
+                signUpdate.signDigitalY = signUpdate.signDigitalY;
+
+                signUpdate.signDigitalHeight = signUpdate.signDigitalY + imageRender.offsetHeight;
               }
 
               await of(null).pipe(delay(120)).toPromise();
-              const imageRender = <HTMLElement>(
-                document.getElementById('text-sign')
-              );
 
               if (imageRender) {
                 const textSignB = await domtoimage.toPng(imageRender);
@@ -2525,8 +2514,6 @@ export class ConsiderContractComponent
   }
 
   async signTokenVersion1(signUpdatePayload: any, notContainSignImage: any) {
-    console.log('v1');
-
     let dataDigital: any = null;
 
     try {
@@ -2550,9 +2537,7 @@ export class ConsiderContractComponent
       this.signCertDigital = dataDigital.data;
       this.nameCompany = dataDigital.data.CN;
 
-      const checkTaxCodeBase64 = await this.contractService
-        .checkTaxCodeExist(this.taxCodePartnerStep2, dataDigital.data.Base64)
-        .toPromise();
+      const checkTaxCodeBase64 = await this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, dataDigital.data.Base64).toPromise();
 
       if (checkTaxCodeBase64.success) {
         await this.signImageC(signUpdatePayload, notContainSignImage);

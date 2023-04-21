@@ -6,10 +6,12 @@
   flex-direction: column;
 }
 
+.text-sign {
+  color: black;
+}
+
 .skeleton-sign-value {
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
+  position: static;
 }
 
 .skeleton-sign-value1 {
@@ -24,4 +26,5 @@
   margin-left: -1px;
   border-radius: 3px;
   border: none;
+  color: black;
 }

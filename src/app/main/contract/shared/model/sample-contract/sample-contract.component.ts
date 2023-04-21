@@ -23,6 +23,7 @@ import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
+import { CheckZoomService } from 'src/app/service/check-zoom.service';
 
 @Component({
   selector: 'app-sample-contract',
@@ -110,7 +111,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     private toastService: ToastService,
     public translate: TranslateService,
     private router: Router,
-    private unitService: UnitService,
+    private checkZoomService: CheckZoomService,
     private userService: UserService,
   ) {
     this.step = variable.stepSampleContract.step3
@@ -119,6 +120,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   temp: any[];
 
   ngOnInit() {
+    this.onResize();
+
     this.spinner.hide();
 
     this.list_font = ["Arial", "Calibri", "Times New Roman"];
@@ -249,6 +252,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.datas.size = 13;
       this.size = this.datas.size;
     }
+  }
+
+  onResize(e?: any) {
+    this.checkZoomService.onResize();
   }
 
   getDataSignUpdateAction() {

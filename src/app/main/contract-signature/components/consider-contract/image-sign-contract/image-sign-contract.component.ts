@@ -196,10 +196,10 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doEditText() {
-    
-
     if(this.sign.valueSign != undefined)
     this.sign.valueSign = this.removePeriodsFromCurrencyValue(this.sign.valueSign);
+
+    console.log("sign ", this.sign.valueSign);
     if ([2,3,4].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
       this.checkShowEdit = !this.checkShowEdit;
 
@@ -218,6 +218,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     },100);
    
   }
+
   removePeriodsFromCurrencyValue(value: string): string {
     const regex = /(\d[\d.]*(?:\.\d+)?)\b/g;
     let result = '';
@@ -262,10 +263,16 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   count: number = 0;
   getText(sign: any) {
+
+    console.log("sign ", sign);
+
     this.newItemEvent.emit("1");
     if (sign.sign_unit == 'text') {
       if(sign.valueSign) {
         sign.valueSign = this.convertCurrency(sign.valueSign);
+
+        console.log("sign ", sign);
+
         return sign.valueSign;
       }
       return 'Text';
