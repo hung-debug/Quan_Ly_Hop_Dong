@@ -140,7 +140,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         return;
       }
 
-      if(data?.customer?.info?.passwordChange == 0 && this.type == 0) {
+      if(data?.customer?.info?.passwordChange == 0 && this.type == 0 && !this.loginForm.value.username.includes('@mobifone.vn')) {
         //doi mat khau
         this.toastService.showErrorHTMLWithTimeout('change.pass.first','',3000);
         this.changePassword();
@@ -157,7 +157,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
             this.changePassword();
             return;
           } else {
-
             this.action(urlLink, isContractId, isRecipientId);
           }
         } else {

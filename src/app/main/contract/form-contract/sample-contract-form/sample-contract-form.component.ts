@@ -26,6 +26,7 @@ import { ContractTemplateService } from "src/app/service/contract-template.servi
 import * as _ from 'lodash';
 import { TranslateModule, TranslateService } from "@ngx-translate/core";
 import { UserService } from 'src/app/service/user.service';
+import { CheckZoomService } from "src/app/service/check-zoom.service";
 
 @Component({
   selector: 'app-sample-contract-form',
@@ -119,11 +120,14 @@ export class SampleContractFormComponent implements OnInit {
     private contractTemplateService: ContractTemplateService,
     public translate: TranslateService,
     private userService: UserService,
+    private checkZoomService: CheckZoomService,
   ) {
     this.stepForm = variable.stepSampleContractForm.step3
   }
 
   ngOnInit() {
+    this.checkZoomService.onResize();
+
     if(this.datasForm.font) {
       this.selectedFont = this.datasForm.font;
     }

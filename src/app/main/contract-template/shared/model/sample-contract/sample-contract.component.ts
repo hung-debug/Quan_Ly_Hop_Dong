@@ -22,6 +22,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { count } from 'console';
 import { data } from 'jquery';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
+import { CheckZoomService } from 'src/app/service/check-zoom.service';
 
 @Component({
   selector: 'app-sample-contract',
@@ -109,11 +110,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
     private router: Router,
+    private checkZoomService: CheckZoomService
   ) {
     this.step = variable.stepSampleContract.step3
   }
 
   ngOnInit() {
+    this.checkZoomService.onResize();
+
     this.spinner.hide();
 
     if(this.datas.font) {

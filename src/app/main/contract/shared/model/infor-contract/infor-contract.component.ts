@@ -118,7 +118,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     private spinner: NgxSpinnerService,
     private checkSignDigitalService: CheckSignDigitalService,
     private checkViewContractService: CheckViewContractService,
-    private activeRoute: ActivatedRoute,
+    private activeRoute: ActivatedRoute
   ) {
     this.step = variable.stepSampleContract.step1;
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
@@ -139,37 +139,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
     if(this.type_id)
       this.changeTypeContract();
-
-    // if(window.outerWidth  / window.innerWidth != 1) {
-    //     this.toastService.showErrorHTMLWithTimeout('Cảnh báo lệch toạ độ khi kéo ô ký/text/số hợp đồng khi phóng to, thu nhỏ','',3000);
-    // } else if(window.devicePixelRatio > 1.1 || window.devicePixelRatio < 0.9) {
-    //     this.toastService.showErrorHTMLWithTimeout('Cảnh báo lệch toạ độ khi kéo ô ký/text/số hợp đồng khi phóng to, thu nhỏ','',3000);
-    // }
-
-    this.onResize();
-  }
-
-  onResize() {
-    console.log("outer width ", window.outerWidth);
-    console.log("inner width ", window.innerWidth);
-
-    console.log("device pixel ratio ", window.devicePixelRatio);
-
-    if (window.navigator.userAgent.indexOf('Windows') != -1) {
-      if(window.outerWidth  / window.innerWidth > 1.15 || window.outerWidth  / window.innerWidth < 0.95) {
-        this.toastService.showErrorHTMLWithTimeout('Cảnh báo lệch toạ độ khi kéo ô ký/text/số hợp đồng khi phóng to, thu nhỏ','',3000);
-      } else if(window.devicePixelRatio > 1.15 || window.devicePixelRatio < 0.95) {
-          this.toastService.showErrorHTMLWithTimeout('Cảnh báo lệch toạ độ khi kéo ô ký/text/số hợp đồng khi phóng to, thu nhỏ','',3000);
-      }
-    }
-
-    if (window.navigator.userAgent.indexOf('Mac') != -1) {
-      if(window.outerWidth  / window.innerWidth > 1.15 || window.outerWidth  / window.innerWidth < 0.95) {
-        this.toastService.showErrorHTMLWithTimeout('Cảnh báo lệch toạ độ khi kéo ô ký/text/số hợp đồng khi phóng to, thu nhỏ','',3000);
-      } else if(window.devicePixelRatio != 2) {
-          this.toastService.showErrorHTMLWithTimeout('Cảnh báo lệch toạ độ khi kéo ô ký/text/số hợp đồng khi phóng to, thu nhỏ','',3000);
-      }
-    }
   }
 
   actionSuccess() {
