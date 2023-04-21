@@ -76,4 +76,10 @@ export class ConfigSmsEmailComponent implements OnInit {
    })
   }
 
+  resetConfig() {
+    this.spinner.show();
+    this.infoConfigSms();
+    this.spinner.hide();
+  }
+
 }

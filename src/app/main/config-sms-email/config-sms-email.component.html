@@ -36,7 +36,7 @@
     </table>
 
     <div style="justify-content: center;padding-top: 20px;">
-        <!-- <button class="cancel-button" type="button">{{'contract.status.canceled' | translate}}</button> -->
+        <button class="cancel-button" (click)="resetConfig()" type="button">{{'contract.status.canceled' | translate}}</button>
         <button class="save-button" (click)="updateSms()">{{'btn.update' | translate}}</button>
     </div>
 </div>

@@ -4,7 +4,7 @@
       <div id="pdf-viewer-step-3">
           <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
             <div class="resize-drag not-out-drop" [id]="d.id" #itemElement [ngClass]="changeColorDrag(null, d)" [ngStyle]="changePosition(d)">
-              <div class="name-sig-img-daky">{{(d.name && !d.value && (d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu')) ? d.name : ''}}</div>
+              <div *ngIf="(d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu')" class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
               <app-preview-sign-contract-template  [datas]="datas" [sign]="d"></app-preview-sign-contract-template>
           </div>
           </div>
