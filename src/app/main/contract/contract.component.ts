@@ -360,6 +360,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.getContractList();
   }
 
+
   openDetail(id: number) {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['/main/form-contract/detail/' + id],

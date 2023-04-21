@@ -24,9 +24,9 @@
               <span *ngIf="menu.badge" class="badge badge-pill" [ngClass]="menu.badge.class">{{menu.badge.text}}</span>
             </a>
             <span *ngIf="menu.type === 'button'" (click)="clickLink(menu)" class="sub_title_add">
-              <button class="btn_add_contract">
+              <a class="btn_add_contract" style="color: white" [routerLink]="menu.href">
                 <span class="fa fa-plus icon_add"></span>{{menu.title | translate}}
-              </button>
+              </a>
             </span>
             <!-- Sub menu -->
             <div *ngIf="menu.type === 'dropdown'" class="sidebar-submenu" [@slide]="getState(menu)">
