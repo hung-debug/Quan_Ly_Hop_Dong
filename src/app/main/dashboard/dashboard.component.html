@@ -7,6 +7,7 @@
   <div class="row">
     <div class="col-md-3">
       <div class="header_card header_card_1" (click)="openLink('/main/c/receive/wait-processing-dashboard')">
+        <a [routerLink] = "['/main/c/receive/wait-processing-dashboard']" style="color: white; text-decoration: none;">
         <div class="row">
           <div class="col-md-7 text_header_card">
               <div>{{'contract.status.wait-processing' | translate}}</div>
@@ -16,10 +17,12 @@
             <img src="../../../assets/img/db_header_1.svg" width="60px"/>
           </div>
         </div>
+        </a>
       </div>
     </div>
     <div class="col-md-3">
-      <div class="header_card header_card_2" (click)="openLink('/main/c/receive/wait-processing-prepare-expires-dashboard')">
+      <div class="header_card header_card_2"  (click)="openLink('/main/c/receive/wait-processing-prepare-expires-dashboard')">
+        <a [routerLink]="['/main/c/receive/wait-processing-prepare-expires-dashboard']" style="color: white; text-decoration: none;">
         <div class="row">
           <div class="col-md-7 text_header_card">
               <div>{{'contract.status.expire' | translate}}</div>
@@ -29,10 +32,12 @@
             <img src="../../../assets/img/db_header_2.svg" width="60px" />
           </div>
         </div>
+      </a>
       </div>
     </div>
     <div class="col-md-3">
       <div class="header_card header_card_3" (click)="openLink('/main/c/receive/processed-waiting-dashboard')">
+        <a [routerLink]="['/main/c/receive/processed-waiting-dashboard']" style="color: white; text-decoration: none;">
         <div class="row">
           <div class="col-md-7 text_header_card">
               <div>{{'contract.status.wait-response' | translate}}</div>
@@ -42,10 +47,12 @@
             <img src="../../../assets/img/db_header_1.svg" width="60px" />
           </div>
         </div>
+        </a>
       </div>
     </div>
     <div class="col-md-3">
       <div class="header_card header_card_4" (click)="openLink('/main/c/receive/processed-complete-dashboard')">
+        <a [routerLink]="['/main/c/receive/processed-complete-dashboard']" style="color: white; text-decoration: none;">
         <div class="row">
           <div class="col-md-7 text_header_card">
               <div>{{'contract.status.complete' | translate}}</div>
@@ -55,6 +62,7 @@
             <img src="../../../assets/img/db_header_3.svg" width="60px" />
           </div>
         </div>
+        </a>
       </div>
     </div>
   </div>
@@ -123,6 +131,7 @@
       </div>
         <div *ngIf="listNotification.length > 0" [ngStyle]="{ 'min-height': isOrg=='on'? '494px':' 453px'}" style="min-height: 453px;">
           <div *ngFor="let item of listNotification; let i = index" [style.border-bottom]="i != listNotification.length-1 ? '1px solid #C7D0E9' : ''" style="padding: 4px;">
+            <a href="{{item.notice_url}}" style="text-decoration: none;">
             <div class="row">
               <div *ngIf="this.lang == 'vi'" class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name}}</div>
               <div *ngIf="this.lang == 'en'" class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name.replace("Ký HĐ","Sign contract").replace("Quá hạn","Overdue").replace("Hoàn thành","Completed")}}</div>
@@ -157,6 +166,7 @@
               </div>
 
             </div>
+            </a>
           </div>
         </div>
       </div>

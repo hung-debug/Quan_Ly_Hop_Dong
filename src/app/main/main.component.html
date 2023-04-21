@@ -20,6 +20,7 @@
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu" style="width: 500px;overflow: hidden auto;max-height: 315px;">
             <div class="title_notification">{{'no.list' | translate}}</div>
             <div class="drop_notification" *ngFor="let item of listNotification; let i = index" (click)="openLinkNotification(item.notice_url, item.id)" [style.background-color]="item.status==0 ? '#eaf4ff' : ''">
+              <a href="{{item.notice_url}}" style="text-decoration: none">
               <div class="row">
                   <div *ngIf="this.lang == 'vi'" class="col-md-12 item_contract_name">{{item.notice_name}}</div>
                   <div *ngIf="this.lang == 'en'" class="col-md-12 item_contract_name">{{item.notice_name.replace("Ký HĐ","Sign contract").replace("Quá hạn","Overdue").replace("Hoàn thành","Completed")}}</div>
@@ -49,6 +50,7 @@
                     <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire'">{{'contract.status.expire' | translate}}</span>
                 </div>
               </div>
+              </a>
             </div>
             <div class="view_all" (click)="viewAllNotification()">
                 {{'view.all' | translate}}
@@ -64,7 +66,7 @@
 
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
             <button ngbDropdownItem class="drop" (click)="viewLink()">
-              <a style="color: inherit; text-decoration: none;">
+              <a style="color: inherit; text-decoration: none;" href="https://drive.google.com/drive/folders/1NHaCYOMCMsLvrw1uPbX2ezsC-Uo9huW3">
               <div style="display: flex; align-items: center;">
                 <div class="db_user">
                   <div class="db_document_use"></div>
@@ -91,15 +93,15 @@
             <div class="label">{{nameCurrentUser}}</div>
           </div>
 
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
-            <button ngbDropdownItem class="drop" (click)="infoUserDetail()">
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu" style="cursor: pointer">
+            <a ngbDropdownItem class="drop" (click)="infoUserDetail()" [routerLink]="['/main/user-infor']">
               <div style="display: flex; align-items: center;">
                 <div class="db_user">
                   <div class="db_user_detail"></div>
                 </div>
                 <div>{{'user.information' | translate }}</div>
               </div>
-            </button>
+            </a>
           
             <button ngbDropdownItem class="drop" (click)="resetPassword()">
               <div style="display: flex; align-items: center;">

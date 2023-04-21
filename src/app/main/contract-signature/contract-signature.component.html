@@ -62,7 +62,21 @@
                     <div class="col-md-5">
                         <div class="row">
                             <div class="col-md-11">
-                                <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
+                                <div class="item_contract_name">
+                                    <a  class="item_contract_name" style="text-decoration: none;" 
+                                    (click)="openDetail(item.contractId)" 
+                                    [routerLink]="['/main/form-contract/detail', item.contractId]"
+                                    [queryParams]="{
+                                        page: this.p,
+                                        filter_type: this.filter_type,
+                                        filter_contract_no: this.filter_contract_no,
+                                        filter_from_date: this.filter_from_date,
+                                        filter_to_date: this.filter_to_date,
+                                        organization_id: this.organization_id,
+                                        status: this.status
+                                      }">
+                                    {{item.contractName}}
+                                    </a></div>
 
                                 <!--Cac ben ky-->
                                 <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
@@ -127,9 +141,11 @@
                             </div>
 
                             <!--Button ký-->
+                            <a [routerLink]="['/main',this.contract_signatures, this.signatures,item.contractId]" [queryParams]="{recipientId: item.id, page: this.p, status: this.status}">
                             <div class="div_icon" *ngIf="item.status == 1 && item.role == 3 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                                 <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSignatureContract(item)">{{'contract.sign' | translate}}</button>
                             </div>
+                            </a>
 
                             <div class="div_icon" *ngIf="item.status == 1 && item.role == 4 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                                 <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSecretaryContract(item)">{{'contract.document' | translate}}</button>
@@ -149,7 +165,22 @@
                 <div class="row">
                     <div class="col-md-5">
                         <div class="row">
-                            <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
+                            <div class="col-md-12 item_contract_name">
+                                <a  class="item_contract_name" style="text-decoration: none;" 
+                                (click)="openDetail(item.id)" 
+                                [routerLink]="['/main/form-contract/detail', item.id]"
+                                [queryParams]="{
+                                page: this.p,
+                                filter_type: this.filter_type,
+                                filter_contract_no: this.filter_contract_no,
+                                filter_from_date: this.filter_from_date,
+                                filter_to_date: this.filter_to_date,
+                                organization_id: this.organization_id,
+                                status: this.status
+                                }">
+                                    {{item.name}}
+                                </a>                                
+                            </div>
                         </div>
                         <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
                             <div class="col-md-12 item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
@@ -182,7 +213,22 @@
                 <div class="row">
                     <div class="col-md-5">
                         <div class="row">
-                            <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
+                            <div class="col-md-12 item_contract_name">
+                                <a  class="item_contract_name" style="text-decoration: none;" 
+                                (click)="openDetail(item.id)" 
+                                [routerLink]="['/main/form-contract/detail', item.id]"
+                                [queryParams]="{
+                                page: this.p,
+                                filter_type: this.filter_type,
+                                filter_contract_no: this.filter_contract_no,
+                                filter_from_date: this.filter_from_date,
+                                filter_to_date: this.filter_to_date,
+                                organization_id: this.organization_id,
+                                status: this.status
+                                }">
+                                    {{item.name}}
+                                </a>                                
+                            </div>
                         </div>
                         <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
                             <div class="col-md-12 item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
@@ -216,7 +262,22 @@
                     <div class="col-md-5">
                         <div class="row">
                             <div class="col-md-11">
-                                <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
+                                <div class="item_contract_name">
+                                    <a  class="item_contract_name" style="text-decoration: none;" 
+                                        (click)="openDetail(item.contractId)" 
+                                        [routerLink]="['/main/form-contract/detail', item.contractId]"
+                                        [queryParams]="{
+                                        page: this.p,
+                                        filter_type: this.filter_type,
+                                        filter_contract_no: this.filter_contract_no,
+                                        filter_from_date: this.filter_from_date,
+                                        filter_to_date: this.filter_to_date,
+                                        organization_id: this.organization_id,
+                                        status: this.status
+                                        }">
+                                            {{item.participant.contract.name}}
+                                    </a>                                    
+                                </div>
 
                                 <!--Cac ben ky-->
                                 <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
@@ -300,7 +361,22 @@
                     <div class="col-md-5">
                         <div class="row">
                             <div class="col-md-11">
-                                <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
+                                <div class="item_contract_name">
+                                    <a  class="item_contract_name" style="text-decoration: none;" 
+                                        (click)="openDetail(item.contractId)" 
+                                        [routerLink]="['/main/form-contract/detail', item.contractId]"
+                                        [queryParams]="{
+                                        page: this.p,
+                                        filter_type: this.filter_type,
+                                        filter_contract_no: this.filter_contract_no,
+                                        filter_from_date: this.filter_from_date,
+                                        filter_to_date: this.filter_to_date,
+                                        organization_id: this.organization_id,
+                                        status: this.status
+                                        }">
+                                            {{item.participant.contract.name}}
+                                    </a>
+                                </div>
 
                                 <!--Cac ben ky-->
                                 <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
@@ -378,7 +454,22 @@
                 <div class="row">
                     <div class="col-md-5">
                         <div class="row">
-                            <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
+                            <div class="col-md-12 item_contract_name">
+                                <a  class="item_contract_name" style="text-decoration: none;" 
+                                (click)="openDetail(item.id)" 
+                                [routerLink]="['/main/form-contract/detail', item.id]"
+                                [queryParams]="{
+                                    page: this.p,
+                                    filter_type: this.filter_type,
+                                    filter_contract_no: this.filter_contract_no,
+                                    filter_from_date: this.filter_from_date,
+                                    filter_to_date: this.filter_to_date,
+                                    organization_id: this.organization_id,
+                                    status: this.status
+                                  }">
+                                {{item.name}}
+                                </a>
+                            </div>
                         </div>
                         <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
                             <div class="col-md-12 item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
@@ -411,7 +502,21 @@
                 <div class="row">
                     <div class="col-md-5">
                         <div class="row">
-                            <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
+                            <div class="col-md-12 item_contract_name">
+                                <a  class="item_contract_name" style="text-decoration: none;" 
+                                (click)="openDetail(item.id)" 
+                                [routerLink]="['/main/form-contract/detail', item.id]"
+                                [queryParams]="{
+                                page: this.p,
+                                filter_type: this.filter_type,
+                                filter_contract_no: this.filter_contract_no,
+                                filter_from_date: this.filter_from_date,
+                                filter_to_date: this.filter_to_date,
+                                organization_id: this.organization_id,
+                                status: this.status}">
+                                {{item.name}}
+                             </a>
+                            </div>
                         </div>
                         <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
                             <div class="col-md-12 item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
