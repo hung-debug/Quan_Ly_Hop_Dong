@@ -1021,6 +1021,23 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           skipLocationChange: true,
         });
       });
+    } else if(this.pageBefore) {
+       //Ket thuc hop dong nhan
+       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate(['/main/c/receive/' + this.statusLink], {
+          queryParams: {
+            page: this.pageBefore,
+            filter_type: this.filter_type,
+            filter_contract_no: this.filter_contract_no,
+            filter_from_date: this.filter_from_date,
+            filter_to_date: this.filter_to_date,
+            isOrg: this.isOrg,
+            organization_id: this.organization_id,
+            status: this.statusLink,
+          },
+          skipLocationChange: true,
+        });
+      });
     } else if (this.router.url.includes('forward') || this.signBefore) {
       this.router.navigate(['/main/c/receive/wait-processing']);
     } else {
