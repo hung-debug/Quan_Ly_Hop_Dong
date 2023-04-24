@@ -136,6 +136,8 @@ export class SampleContractFormComponent implements OnInit {
     this.list_font = ["Arial","Calibri","Times New Roman"];
 
     this.isChangeNumberContract = this.datasForm.contract_no; // save contract number check with input contract number object signature when change
+
+    console.log("datas form ", this.datasForm.contract_user_sign);
     if (!this.datasForm.contract_user_sign) {
       if (this.datasForm.is_data_object_signature && this.datasForm.is_data_object_signature.length && this.datasForm.is_data_object_signature.length > 0) {
         this.datasForm.is_data_object_signature.forEach((res: any) => {
@@ -349,28 +351,28 @@ export class SampleContractFormComponent implements OnInit {
       })
     }
 
-    this.datasForm.contract_user_sign.forEach((resForm: any) => {
-      if (resForm.sign_config.length > 0) {
-        let arrConfig = [];
-        arrConfig = resForm.sign_config.filter((val: any) =>
-          !val.recipient_id || dataContractUserSign.some((data) => data.sign_unit == val.sign_unit &&
-            (val.recipient ? val.recipient.name : val.name) == (data.recipient ? data.recipient.name : data.name) &&
-            (val.recipient ? val.recipient.email : val.email) == (data.recipient ? data.recipient.email : data.email))
-        )
-        resForm.sign_config = arrConfig; // set data with object not change data
-        resForm.sign_config.forEach((items: any) => {
-          items.id = items.id + '1'; // tránh trùng với id cũ, gây ra lỗi
-          let data: any = {};
-          data = dataDetermine.filter((data: any) =>
-            items.recipient_id == data.template_recipient_id ||
-            data.email == (items.recipient ? items.recipient.email : items.email) &&
-            data.name == (items.recipient ? items.recipient.name : items.name))[0];
-          if (data) {
-            items.is_type_party = data.is_type_party;
-          }
-        })
-      }
-    })
+    // this.datasForm.contract_user_sign.forEach((resForm: any) => {
+    //   if (resForm.sign_config.length > 0) {
+    //     let arrConfig = [];
+    //     arrConfig = resForm.sign_config.filter((val: any) =>
+    //       !val.recipient_id || dataContractUserSign.some((data) => data.sign_unit == val.sign_unit &&
+    //         (val.recipient ? val.recipient.name : val.name) == (data.recipient ? data.recipient.name : data.name) &&
+    //         (val.recipient ? val.recipient.email : val.email) == (data.recipient ? data.recipient.email : data.email))
+    //     )
+    //     resForm.sign_config = arrConfig; // set data with object not change data
+    //     resForm.sign_config.forEach((items: any) => {
+    //       items.id = items.id + '1'; // tránh trùng với id cũ, gây ra lỗi
+    //       let data: any = {};
+    //       data = dataDetermine.filter((data: any) =>
+    //         items.recipient_id == data.template_recipient_id ||
+    //         data.email == (items.recipient ? items.recipient.email : items.email) &&
+    //         data.name == (items.recipient ? items.recipient.name : items.name))[0];
+    //       if (data) {
+    //         items.is_type_party = data.is_type_party;
+    //       }
+    //     })
+    //   }
+    // })
     //
     if (this.isNoEmailObj) {
       // lấy ra người ký từ mẫu chưa có email để gán lại
@@ -1257,6 +1259,9 @@ export class SampleContractFormComponent implements OnInit {
   convertToSignConfig() {
     let arrSignConfig: any = [];
     let cloneUserSign = [...this.datasForm.contract_user_sign];
+
+    console.log("clone ", cloneUserSign);
+
     cloneUserSign.forEach(element => {
       if (this.datasForm.is_action_contract_created) {
         if ((element.recipient && ![2, 3].includes(element.recipient.status)) || (!element.recipient && ![2, 3].includes(element.status))) {
@@ -1264,6 +1269,8 @@ export class SampleContractFormComponent implements OnInit {
         }
       } else arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
+
+    console.log("arr ", arrSignConfig);
     return arrSignConfig;
   }
 
