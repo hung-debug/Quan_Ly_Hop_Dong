@@ -55,8 +55,6 @@ export class UserComponent implements OnInit {
     this.searchUser();
 
     this.unitService.getUnitList('', '').subscribe(data => {
-      console.log(data.entities);
-
       if(this.lang == 'vi')
         this.orgListTmp.push({name: "Tất cả", id:""});
       else if(this.lang == 'en') 

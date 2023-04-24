@@ -52,9 +52,6 @@ export class ActionDeviceComponent implements OnInit {
         const urlRole = urlQ2[0];
         const matchesNum = urlQ.match(/\d+/g);
 
-
-        console.log("url role ", urlRole);
-
         if (urlRole.includes('coordinates')) {
           role = 1;
         } else if (urlRole.includes('consider')) {
@@ -74,19 +71,12 @@ export class ActionDeviceComponent implements OnInit {
             matchesNum[2] = "0";
 
             isLogin = 'login'
-
           }
           
-
           if (urlEmail) {
-
             window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${urlEmail}/${domain}`;
-
           } else
-          
             window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${domain}`;
-          // console.log(`econtract://app/login/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${urlEmail}`);
-          
         }
 
       } 

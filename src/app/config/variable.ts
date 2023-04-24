@@ -361,7 +361,7 @@ export var roleList = [
       {label: 'Báo cáo sắp hết hiệu lực',value:'BAOCAO_SAPHETHIEULUC'},
       {label: 'Báo cáo trạng thái xử lý',value:'BAOCAO_TRANGTHAIXULY'},
       {label: 'Báo cáo số lượng theo trạng thái', value:'BAOCAO_SOLUONG_TRANGTHAI'},
-      // {label: 'Báo cáo số lượng theo loại hợp đồng',value:'BAOCAO_SOLUONG_LOAIHOPDONG'}
+      {label: 'Báo cáo số lượng theo loại hợp đồng',value:'BAOCAO_SOLUONG_LOAIHOPDONG'}
     ]
 
   }
@@ -505,7 +505,7 @@ export var roleList_en = [
       {label: 'The report is about to expire',value:'BAOCAO_SAPHETHIEULUC'},
       {label: 'Processing status report',value:'BAOCAO_TRANGTHAIXULY'},
       {label: 'Report quantity by status', value:'BAOCAO_SOLUONG_TRANGTHAI'},
-      // {label: 'Report quantity by contract type',value:'BAOCAO_SOLUONG_LOAIHOPDONG'}
+      {label: 'Report quantity by contract type',value:'BAOCAO_SOLUONG_LOAIHOPDONG'}
     ]
 
   }

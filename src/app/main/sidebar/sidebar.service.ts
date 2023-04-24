@@ -56,11 +56,13 @@ export class SidebarService {
   isQLLHD_03: boolean = true; //xoa loai hop dong
   isQLLHD_04: boolean = true; //tim kiem loai hop dong
   isQLLHD_05: boolean = true; //xem thong tin chi tiet loai hop dong
+  
 
-  isBaoCaoChiTiet: boolean = true;
-  isBaoCaoSapHetHieuLuc: boolean = true;
-  isBaoCaoTrangThaiXuLy: boolean = true;
-  isBaoCaoSoLuongTrangThai: boolean = true;
+  isBaoCaoChiTiet: boolean = true; // báo cáo chi tiết hợp đồng
+  isBaoCaoSapHetHieuLuc: boolean = true; // báo cáo hợp đồng sắp hết hiệu lực
+  isBaoCaoTrangThaiXuLy: boolean = true; // báo cáo hợp đồng trạng thái xử lý
+  isBaoCaoSoLuongTrangThai: boolean = true; // báo cáo số lượng hợp đồng theo trạng thái
+  isBaoCaoSoLuongLoai: boolean = true; // báo cáo số lượng hợp đồng theo loại
 
   toggled = false;
   _hasBackgroundImage = true;
@@ -254,14 +256,12 @@ export class SidebarService {
               (element) => element.code == 'BAOCAO_SOLUONG_TRANGTHAI'
             )
 
+            this.isBaoCaoSoLuongLoai = listRole.some((element) => element.code == 'BAOCAO_SOLUONG_LOAIHOPDONG');
+
             this.buildMenu(currentUserC);
           },
           (error) => {
-            // this.toastService.showErrorHTMLWithTimeout(
-            //   'Lấy thông tin phân quyền',
-            //   '',
-            //   3000
-            // );
+            this.toastService.showErrorHTMLWithTimeout('Lấy thông tin phân quyền','',3000);
             this.router.navigate(['/login'])
           }
         );
@@ -480,7 +480,6 @@ export class SidebarService {
     let submenusReport: any[] = [];
 
     if(this.isBaoCaoChiTiet) {
-      console.log("vao day ");
       submenusReport.push({
         title: 'report.detail.contract',
         active: false,
@@ -513,8 +512,15 @@ export class SidebarService {
       )
     }
 
-   
-    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiXuLy) {
+    if(this.isBaoCaoSoLuongLoai) {
+      submenusReport.push({
+        title:'report.number.contracts.type',
+        active: false,
+        href: '/main/report/contract-number-follow-type'
+      })
+    }
+
+    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai) {
       this.menus.push({
         title: 'report',
         icon: '/assets/img/analytics1.svg',

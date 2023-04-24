@@ -50,18 +50,6 @@
         </div>
     </div>
 
-    <!--Nút tick bao gồm tổ chức-->
-    <div class="row" style="padding-top: 10px;">
-        <div class="col-md-6">
-                <input (change)="changeCheckBox($event)" [checked]="fetchChildData"  type="checkbox" class="custom-control-input" id="customCheck3">
-                <label class="custom-control-label" for="customCheck3">
-                    {{'include.org1' | translate}}
-                </label>
-        </div>
-    </div>
-
-
-
     <!--Bảng dữ liệu-->
     <div class="row" style="padding-top: 20px;">
         <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">

@@ -110,20 +110,21 @@ export class ForwardContractComponent implements OnInit {
     const updatedInfo = await this.contractService.getInforPersonProcess(this.datas.recipientId).toPromise()
     const isInRecipient = this.datas?.dataContract?.is_data_contract?.participants.some((el: any) => el.name === updatedInfo.name)
 
-    if (!isInRecipient) {
-      this.toastService.showErrorHTMLWithTimeout(
-        'Bạn không có quyền xử lý hợp đồng này!',
-        '',
-        3000
-      );
-      if (this.type == 1) {
-        this.router.navigate(['/login']);
-        return
-      } else {
-        this.router.navigate(['/main/dashboard']);
-        return
-      }
-    }
+    // if (!isInRecipient) {
+    //   console.log("vao day ");
+    //   this.toastService.showErrorHTMLWithTimeout(
+    //     'Bạn không có quyền xử lý hợp đồng này!',
+    //     '',
+    //     3000
+    //   );
+    //   if (this.type == 1) {
+    //     this.router.navigate(['/login']);
+    //     return
+    //   } else {
+    //     this.router.navigate(['/main/dashboard']);
+    //     return
+    //   }
+    // }
 
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
     this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
