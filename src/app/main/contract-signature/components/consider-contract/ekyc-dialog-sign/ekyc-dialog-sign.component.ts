@@ -25,7 +25,7 @@ export class EkycDialogSignComponent implements OnInit {
     public dialogRef: MatDialogRef<EkycDialogSignComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private toastService: ToastService,
-    private translate: TranslateService
+    private translate: TranslateService,
     private router: Router,
   ) {
 
