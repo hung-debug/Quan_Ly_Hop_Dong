@@ -95,6 +95,7 @@ import { AdminFilterUnitComponent } from './admin/admin-main/admin-unit/dialog/a
 import { AdminDeleteUnitComponent } from './admin/admin-main/admin-unit/admin-delete-unit/admin-delete-unit.component';
 import { AdminDeletePackUnitComponent } from './admin/admin-main/admin-unit/admin-delete-pack-unit/admin-delete-pack-unit.component';
 import { AdminInfoUserComponent } from './admin/admin-main/admin-user/admin-info-user/admin-info-user.component';
+import { CustomerComponent } from './main/customer/customer.component';
 
 import {WebcamModule} from 'ngx-webcam';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -105,6 +106,8 @@ import { ReportContractNumberFollowStatusComponent } from './main/report/report-
 import { ContractNumberFollowSignComponent } from './main/report/contract-number-follow-sign/contract-number-follow-sign.component';
 
 import { ContractNumberFollowTypeComponent } from './main/report/contract-number-follow-type/contract-number-follow-type.component';
+import { CustomerOrganizationAddComponent } from './main/customer/customer-organization-add/customer-organization-add.component';
+import { CustomerPersonalAddComponent } from './main/customer/customer-personal-add/customer-personal-add.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -170,6 +173,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdminDeleteUnitComponent,
     AdminDeletePackUnitComponent,
     AdminInfoUserComponent,
+    CustomerComponent,
 
     ReportDetailComponent,
     ReportStatusContractComponent,
@@ -178,7 +182,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ContractNumberFollowSignComponent,
     ContractNumberFollowTypeComponent,
 
-    ContractComponent
+    ContractComponent,
+      CustomerOrganizationAddComponent,
+      CustomerPersonalAddComponent
   ],
   imports: [
     TranslateModule,

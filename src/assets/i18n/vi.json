@@ -595,5 +595,12 @@
   "fae.recog":"Nhận dạng khuôn mặt",
   "push.image.fail":"Đẩy file ảnh không thành công",
   "sign.file-image.mark":"Ảnh con dấu",
-  "stamp.contract.questions":"Bạn có muốn gán thêm ảnh con dấu cho hợp đồng này không?"
+  "stamp.contract.questions":"Bạn có muốn gán thêm ảnh con dấu cho hợp đồng này không?",
+  "customer.list":"Danh mục khách hàng",
+  "organization.customer":"Khách hàng tổ chức",
+  "personal.customer":"Khách hàng cá nhân",
+  "organization.customer.name":"Tên tổ chức",
+  "personal.customer.name":"Tên cá nhân",
+  "tax.code":"Mã số thuế",
+  "phone_mail":"SĐT/Email"
 }

@@ -591,5 +591,6 @@
   "fae.recog":"Face recognition",
   "push.image.fail":"Image file push failed",
   "sign.file-image.mark":"Mark image",
-  "stamp.contract.questions":"Would you like to add a stamp photo to this contract?"
+  "stamp.contract.questions":"Would you like to add a stamp photo to this contract?",
+  "customer.list":"Customer list"
 }
