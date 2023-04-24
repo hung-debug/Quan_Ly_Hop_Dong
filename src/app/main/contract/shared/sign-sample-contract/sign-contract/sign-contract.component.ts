@@ -71,7 +71,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   }
 
   changeInput(e: any){
-    e.target.value = this.convertCurrency(e.target.value);
+    // e.target.value = this.convertCurrency(e.target.value);
   }
 
   reverseInput(e: any){

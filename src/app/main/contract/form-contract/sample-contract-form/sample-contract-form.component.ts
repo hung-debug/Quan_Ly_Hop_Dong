@@ -1495,7 +1495,9 @@ export class SampleContractFormComponent implements OnInit {
     // } else {
     //   d.value = e; // value is not a number, set to original value
     // }
-    const num = this.convertCurrency(e);
+
+    // const num = this.convertCurrency(e);
+    const num = e;
     d.value = num;
 
     if (d.sign_unit == 'so_tai_lieu') {

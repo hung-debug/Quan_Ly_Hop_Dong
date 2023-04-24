@@ -375,8 +375,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
     this.datas.ceca_push = this.optionsCeCaValue;
 
-    console.log("op ", this.optionsCeCaValue);
-
     //call API step 1
     let countSuccess = 0;
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
@@ -1051,8 +1049,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   changeInput(e: any): void {
-    e.target.value = this.convertCurrency(e.target.value);
-    this.contract_no = e.target.value;
+    // e.target.value = this.convertCurrency(e.target.value);
+    // this.contract_no = e.target.value;
   }
 
   reverseInput(e: any): void {

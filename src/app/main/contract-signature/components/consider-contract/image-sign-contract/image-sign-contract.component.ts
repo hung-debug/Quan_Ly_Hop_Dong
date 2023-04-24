@@ -171,7 +171,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   doneEditContractNoSign(sign: any, e: any) {
     // this.checkShowEdit = false;
 
-    e.target.value = this.convertCurrency(e.target.value);
+    // e.target.value = this.convertCurrency(e.target.value);
     this.contractNoValue = false;
     this.count++;
     sign.valueSign = this.contractNoValueSign;
@@ -269,7 +269,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     this.newItemEvent.emit("1");
     if (sign.sign_unit == 'text') {
       if(sign.valueSign) {
-        sign.valueSign = this.convertCurrency(sign.valueSign);
+        // sign.valueSign = this.convertCurrency(sign.valueSign);
 
         console.log("sign ", sign);
 
@@ -278,16 +278,16 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       return 'Text';
     } else {
       if (sign.value) {
-        sign.value= this.convertCurrency(sign.value);
+        // sign.value= this.convertCurrency(sign.value);
         console.log("vao day ");
         return sign.value;
       } else if(sign.valueSign) {
-        sign.valueSign= this.convertCurrency(sign.valueSign);
+        // sign.valueSign= this.convertCurrency(sign.valueSign);
         console.log("vao day ");
         return sign.valueSign;
       } else if(this.contractNoValueSign) {
         console.log("vao day ");
-        sign.valueSign= this.convertCurrency(sign.valueSign);
+        // sign.valueSign= this.convertCurrency(sign.valueSign);
         this.count++;
         return sign.valueSign;
 

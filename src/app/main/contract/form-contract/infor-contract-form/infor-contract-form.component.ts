@@ -846,8 +846,8 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   }
 
   changeInput(e: any): void {
-    e.target.value = this.convertCurrency(e.target.value);
-    this.datasForm.contract_no = e.target.value;
+    // e.target.value = this.convertCurrency(e.target.value);
+    // this.datasForm.contract_no = e.target.value;
   }
 
   reverseInput(e: any): void {
