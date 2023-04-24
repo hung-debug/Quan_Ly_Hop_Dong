@@ -25,7 +25,7 @@ export class ForwardContractComponent implements OnInit {
 
   login: string;
   type: any = 0;
-  locale : string;
+  locale: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -59,7 +59,7 @@ export class ForwardContractComponent implements OnInit {
     });
 
 
-    for (const d of this.datas.dataContract.is_data_contract.participants) { 
+    for (const d of this.datas.dataContract.is_data_contract.participants) {
       this.locale = this.datas?.dataContract?.is_data_contract?.participants[0]?.recipients[0]?.locale;
       for (const q of d.recipients) {
         if (q.email == this.currentUser.customer.info.email && q.status == 1) {
@@ -95,7 +95,7 @@ export class ForwardContractComponent implements OnInit {
       if (this.isReqPhone || this.isReqCardId) break;
     }
   }
-  
+
 
   changeTypeSign(e: any,) {
     this.login = e.target.value;
@@ -104,45 +104,62 @@ export class ForwardContractComponent implements OnInit {
   setLocale(lang: string) {
     this.locale = lang;
   }
+
   dropdownButtonText = '';
   async onSubmit() {
-    console.log("datasssssssssss",this.datas);
-    
+    const updatedInfo = await this.contractService.getInforPersonProcess(this.datas.recipientId).toPromise()
+    const isInRecipient = this.datas?.dataContract?.is_data_contract?.participants.some((el: any) => el.name === updatedInfo.name)
+
+    if (!isInRecipient) {
+      this.toastService.showErrorHTMLWithTimeout(
+        'Bạn không có quyền xử lý hợp đồng này!',
+        '',
+        3000
+      );
+      if (this.type == 1) {
+        this.router.navigate(['/login']);
+        return
+      } else {
+        this.router.navigate(['/main/dashboard']);
+        return
+      }
+    }
+
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-      this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
-        console.log("response", response);
-        const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-        console.log("ArrRecipients", ArrRecipients);
+    this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
+      console.log("response", response);
+      const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+      console.log("ArrRecipients", ArrRecipients);
 
-        let ArrRecipientsNew = false
-        ArrRecipients.map((item: any) => {
-          if (item.email === this.currentUser.email) {
-            ArrRecipientsNew = true
-            return
-          }
-        });
-        console.log("ArrRecipientsNew111", ArrRecipientsNew);
+      let ArrRecipientsNew = false
+      ArrRecipients.map((item: any) => {
+        if (item.email === this.currentUser.email) {
+          ArrRecipientsNew = true
+          return
+        }
+      });
+      console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
-        if (!ArrRecipientsNew) {
+      if (!ArrRecipientsNew) {
 
-          this.toastService.showErrorHTMLWithTimeout(
-            'Bạn không có quyền xử lý hợp đồng này!',
-            '',
-            3000
-          );
-          if (this.type == 1) {
-            this.router.navigate(['/login']);
-            this.dialogRef.close();
-            this.spinner.hide();
-            return
-          } else {
-            this.router.navigate(['/main/dashboard']);
-            this.dialogRef.close();
-            this.spinner.hide();
-            return
-          }        
-        };
-        console.log("this.currentUser.email", this.currentUser);
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        }
+      };
+      console.log("this.currentUser.email", this.currentUser);
       if (!String(this.myForm.value.name)) {
         // this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền'
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập tên người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
@@ -152,8 +169,8 @@ export class ForwardContractComponent implements OnInit {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
         return;
       } else if (this.login == 'email' && !String(this.myForm.value.email).toLowerCase().match(
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        )) {
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      )) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng email', '', 3000);
         return;
       }
@@ -198,7 +215,7 @@ export class ForwardContractComponent implements OnInit {
       }
 
       // this.checkCanSwitchContractPhone();
-   
+
 
       if (this.currentUser) {
         this.spinner.show();
@@ -237,10 +254,10 @@ export class ForwardContractComponent implements OnInit {
             recipient_id: this.datas.recipientId,
             is_replace: false,
             login_by: this.login,
-            locale : this.locale
+            locale: this.locale
           };
 
-          if(this.login == 'phone') {
+          if (this.login == 'phone') {
             dataAuthorize.email = dataAuthorize.phone
           }
 
@@ -273,9 +290,9 @@ export class ForwardContractComponent implements OnInit {
               this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
             }
           )
-          
+
         }
-        
+
       }
     })
   }
