@@ -592,10 +592,14 @@
   "push.image.fail":"Image file push failed",
   "sign.file-image.mark":"Mark image",
   "stamp.contract.questions":"Would you like to add a stamp photo to this contract?",
+<<<<<<< HEAD
   "email.already.exist": "Email already exist",
   "phone.already.exist": "Phone already exist",
   "cardid.already.exist": "MST/CMT/CCCD already exist",
   "menu.config-sms-email": "Configure sending SMS/Email",
   "not.photo":"You haven't selected a photo yet",
   "mark.contract":"Seal the contract contract"
+=======
+  "customer.list":"Customer list"
+>>>>>>> tanvuthanh
 }

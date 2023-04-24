@@ -39,6 +39,7 @@ import { ReportContractNumberFollowStatusComponent } from './main/report/report-
 import { ContractNumberFollowTypeComponent } from './main/report/contract-number-follow-type/contract-number-follow-type.component';
 import { ContractNumberFollowSignComponent } from './main/report/contract-number-follow-sign/contract-number-follow-sign.component';
 import { ConfigSmsEmailComponent } from './main/config-sms-email/config-sms-email.component';
+import { CustomerComponent } from './main/customer/customer.component';
 
 const contract_signatures = "c";
 const signatures = "s9";
@@ -121,6 +122,10 @@ const routes: Routes = [
       {
         path: 'user-infor',
         component: InforUserComponent,
+      },
+      {
+        path: 'customer',
+        component: CustomerComponent,
       },
       {
         path: 'contract/:action/:status',
