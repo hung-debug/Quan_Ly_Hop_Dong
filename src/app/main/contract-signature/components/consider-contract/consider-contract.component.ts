@@ -1846,12 +1846,6 @@ export class ConsiderContractComponent
                 signUpdate.signDigitalWidth = signUpdate.signDigitalX + imageRender.offsetWidth;
 
               if (this.usbTokenVersion == 1) {
-                console.log("off set ", imageRender.offsetTop);
-
-                console.log("yyy ", signUpdate.signDigitalY);
-
-                signUpdate.signDigitalY = signUpdate.signDigitalY;
-
                 signUpdate.signDigitalHeight = signUpdate.signDigitalY + imageRender.offsetHeight;
               }
 
@@ -1880,18 +1874,10 @@ export class ConsiderContractComponent
                   );
                 }
 
-                console.log('ima ', imageRender);
-
                 if (imageRender) {
-                  console.log('111');
-
                   try {
-                    const textSignB = await domtoimage.toPng(
-                      imageRender,
-                      this.getOptions(imageRender)
-                    );
+                    const textSignB = await domtoimage.toPng(imageRender,this.getOptions(imageRender));
 
-                    console.log('te ', textSignB);
                     signI = textSignB.split(',')[1];
                   } catch (err) {
                     console.log('err ', err);
@@ -1899,20 +1885,13 @@ export class ConsiderContractComponent
                 }
               } else if (this.usbTokenVersion == 2) {
                 if (this.markImage) {
-                  imageRender = <HTMLElement>(
-                    document.getElementById('export-html2-image')
-                  );
+                  imageRender = <HTMLElement>(document.getElementById('export-html2-image'));
                 } else {
-                  imageRender = <HTMLElement>(
-                    document.getElementById('export-html2')
-                  );
+                  imageRender = <HTMLElement>(document.getElementById('export-html2'));
                 }
 
                 if (imageRender) {
-                  const textSignB = await domtoimage.toJpeg(
-                    imageRender,
-                    this.getOptions(imageRender)
-                  );
+                  const textSignB = await domtoimage.toJpeg(imageRender,this.getOptions(imageRender));
                   signI = textSignB.split(',')[1];
                 }
               }
@@ -1921,8 +1900,7 @@ export class ConsiderContractComponent
             const signDigital = JSON.parse(JSON.stringify(signUpdate));
             signDigital.Serial = this.signCertDigital.Serial;
 
-            const base64String =
-              await this.contractService.getDataFileUrlPromise(fileC);
+            const base64String = await this.contractService.getDataFileUrlPromise(fileC);
             signDigital.valueSignBase64 = encode(base64String);
 
             if (this.usbTokenVersion == 2) {
@@ -2108,16 +2086,16 @@ export class ConsiderContractComponent
             this.font = signUpdate.font;
             this.font_size = signUpdate.font_size;
 
-            this.widthText = this.calculatorWidthText(
-              this.textSign,
-              signUpdate.font
-            );
-            fieldHsm.width = this.widthText + 10;
+            // this.widthText = this.calculatorWidthText(
+            //   this.textSign,
+            //   signUpdate.font
+            // );
+            // fieldHsm.width = this.widthText + 10;
 
-            fieldHsm.coordinate_y =
-              signUpdate.signDigitalY -
-              0.5 * (signUpdate.height - signUpdate.font_size) -
-              5;
+            // fieldHsm.coordinate_y =
+            //   signUpdate.signDigitalY -
+            //   0.5 * (signUpdate.height - signUpdate.font_size) -
+            //   5;
 
             await of(null).pipe(delay(120)).toPromise();
             const imageRender = <HTMLElement>(
@@ -2150,8 +2128,6 @@ export class ConsiderContractComponent
               console.log('te ', textSignB);
               signI = textSignB.split(',')[1];
             }
-
-            console.log('im ', signI);
           }
 
           if (!this.mobile) {
@@ -2756,21 +2732,11 @@ export class ConsiderContractComponent
   }
 
   async createEmptySignature(signUpdate: any, signDigital: any, image: any) {
-    const emptySignature = await this.contractService
-      .createEmptySignature(
-        this.recipientId,
-        signUpdate,
-        signDigital,
-        image,
-        this.certInfoBase64
-      )
-      .toPromise();
+    const emptySignature = await this.contractService.createEmptySignature(this.recipientId,signUpdate,signDigital,image,this.certInfoBase64).toPromise();
 
     const base64TempData = emptySignature.base64TempData;
     const hexDigestTempFile = emptySignature.hexDigestTempFile;
     const fieldName = emptySignature.fieldName;
-
-    console.log('ba ', emptySignature);
 
     await this.callDCSigner(base64TempData, hexDigestTempFile, fieldName);
   }
@@ -3713,11 +3679,6 @@ export class ConsiderContractComponent
       ) {
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
 
-        console.log('height page ', heightPage);
-        console.log('coordinate y ', sign.coordinate_y);
-        console.log('current height ', this.currentHeight);
-        console.log('sign height ', sign.height);
-        console.log('sign page ', sign.page);
         sign.signDigitalY =
           heightPage -
           (sign.coordinate_y - this.currentHeight) -
