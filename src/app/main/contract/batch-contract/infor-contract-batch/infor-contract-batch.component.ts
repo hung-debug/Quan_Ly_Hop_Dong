@@ -126,6 +126,24 @@ export class InforContractBatchComponent implements OnInit {
 
     const inforContractTemplate = await this.contractTemplateService.getInfoContractTemplate(this.idContractTemplate).toPromise();
 
+    let isCheckPerson = false;
+    inforContractTemplate.participants.forEach((ele: any) => {
+      if(ele.type == 3) {
+        this.optionsCeCaValue = 0;
+        isCheckPerson = true
+
+        ele.recipients.forEach((ele: any) => {
+          if(ele.sign_type.length > 0) {
+            if(ele.sign_type[0].id == 1 || ele.sign_type[0].id == 5) {
+              isCheckPerson = true;
+              this.toastService.showWarningHTMLWithTimeout('ceca.reason','',3000)
+              return;
+            }
+          }
+        })
+      }
+    });
+
     type_id = inforContractTemplate.type_id;
 
     if(type_id) {

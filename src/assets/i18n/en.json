@@ -599,5 +599,6 @@
   "not.photo":"You haven't selected a photo yet",
   "mark.contract":"Seal the contract contract",
   "customer.list":"Customer list",
-  "report.number.contracts.type":"Quantity by type of contract"
+  "report.number.contracts.type":"Quantity by type of contract",
+  "ceca.reason.one.person":"Contracts signed by one person are not pushed to the Ministry of Industry and Trade"
 }

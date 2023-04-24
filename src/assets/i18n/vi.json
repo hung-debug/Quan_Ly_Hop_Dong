@@ -609,5 +609,6 @@
   "personal.customer.name":"Tên cá nhân",
   "tax.code":"Mã số thuế",
   "phone_mail":"SĐT/Email",
-  "report.number.contracts.type":"SL theo loại HĐ"
+  "report.number.contracts.type":"SL theo loại HĐ",
+  "ceca.reason.one.person":"Hợp đồng một người ký sẽ không đẩy lên Bộ Công thương"
 }
