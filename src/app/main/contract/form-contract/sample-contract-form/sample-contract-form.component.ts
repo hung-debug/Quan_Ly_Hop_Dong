@@ -6,8 +6,7 @@ import {
   ViewChild,
   QueryList,
   ElementRef,
-  OnDestroy,
-  AfterViewInit, Output, EventEmitter, OnChanges, SimpleChanges
+   Output, EventEmitter, SimpleChanges
 } from "@angular/core";
 import { variable } from "src/app/config/variable";
 import { Helper } from "src/app/core/Helper";
@@ -19,12 +18,10 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { ToastService } from "src/app/service/toast.service";
 import { Router } from "@angular/router";
 import { HttpErrorResponse } from '@angular/common/http';
-import { count } from 'console';
-import { data } from 'jquery';
-import { environment } from "src/environments/environment";
+
 import { ContractTemplateService } from "src/app/service/contract-template.service";
 import * as _ from 'lodash';
-import { TranslateModule, TranslateService } from "@ngx-translate/core";
+import { TranslateService } from "@ngx-translate/core";
 import { UserService } from 'src/app/service/user.service';
 import { CheckZoomService } from "src/app/service/check-zoom.service";
 
@@ -126,7 +123,7 @@ export class SampleContractFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.checkZoomService.onResize();
+    this.onResize();
 
     if(this.datasForm.font) {
       this.selectedFont = this.datasForm.font;
@@ -245,8 +242,10 @@ export class SampleContractFormComponent implements OnInit {
         this.size = this.datasForm.size;
       }
     }
+  }
 
-    console.log("2 ", this.datasForm.is_determine_clone);
+  onResize(e?: any) {
+    this.checkZoomService.onResize();
   }
 
   changeFont($event: any) {

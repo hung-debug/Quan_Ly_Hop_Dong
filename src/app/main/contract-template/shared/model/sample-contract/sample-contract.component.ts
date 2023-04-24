@@ -116,7 +116,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
-    this.checkZoomService.onResize();
+    this.onResize();
 
     this.spinner.hide();
 
@@ -247,6 +247,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   changeFont($event: any) {
     this.selectedFont = $event;
     this.datas.font = $event;
+  }
+
+  onResize(e?: any) {
+    this.checkZoomService.onResize();
   }
 
   getDataSignUpdateAction() {
