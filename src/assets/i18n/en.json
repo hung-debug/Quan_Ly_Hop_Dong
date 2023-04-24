@@ -556,5 +556,5 @@
   "update.success": "Update handler success",
   "error.update.handler": "Error update handler",
   "download.multi": "Download multi",
-  "contract.down": "Download"
+  "contract.down": "Download contract"
 }

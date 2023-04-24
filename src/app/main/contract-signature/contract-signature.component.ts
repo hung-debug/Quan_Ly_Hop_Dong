@@ -23,6 +23,7 @@ import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { DialogReasonCancelComponent } from './shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
 import { environment } from 'src/environments/environment';
+import { log } from 'console';
 
 @Component({
   selector: 'app-contract',
@@ -266,6 +267,15 @@ export class ContractSignatureComponent implements OnInit {
         this.contractDownloadList[v].contractReleaseState =
           key.participant.contract.release_state;
       });
+      const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
+      for(let i = 0; i< this.contractDownloadList.length; i++){
+        let checkIf = checkedDownloadFiles.some(el => el === this.contractDownloadList[i].id)
+        if(checkIf){
+          this.contractDownloadList[i].checked = true;
+        } else {
+          this.contractDownloadList[i].checked = false;
+        }
+      }
       this.spinner.hide();
     }, error => {
       setTimeout(() => this.router.navigate(['/login']));
@@ -279,6 +289,15 @@ export class ContractSignatureComponent implements OnInit {
 
   cancelDownloadMany() {
     this.typeDisplay = 'signOne';
+  }
+
+  getPageData(){
+    if(this.typeDisplay == 'signOne'){
+      this.getContractList(); 
+    }
+    else if(this.typeDisplay == 'downloadMany'){
+      this.downloadMany();
+    }
   }
 
   getContractList() {
@@ -500,9 +519,11 @@ export class ContractSignatureComponent implements OnInit {
         a.setAttribute('style', 'display: none');
         a.href = fileUrl;
         a.download = 'Contracts'+ '_' + formattedDate;
+
         a.click();
         window.URL.revokeObjectURL(fileUrl);
         a.remove()
+        window.location.reload();
       },
       (error) => {
         this.toastService.showErrorHTMLWithTimeout('no.contract.download.file.error', '', 3000);
@@ -513,6 +534,22 @@ export class ContractSignatureComponent implements OnInit {
   toggleOneDownload(item: any, index1: any){
     let data = {
       id: item.participant?.contract?.id, 
+      selectedId: item.id
+    }
+    this.contractDownloadList[index1].checked = item.checked
+    if(this.dataChecked.some(el => el.id === data.id)){
+      this.dataChecked = this.dataChecked.filter((item) => {
+        return item.id != data.id
+      })
+    } else {
+      this.dataChecked.push(data);
+    }
+  }
+
+  toggleOneDownloadShare(item: any){
+    let data = {
+      id: item.participants[0]?.contract_id,
+      selectedId: item.id
     }
     if(this.dataChecked.some(el => el.id === data.id)){
       this.dataChecked = this.dataChecked.filter((item) => {

@@ -52,7 +52,7 @@ export class EditHandlerComponent implements OnInit {
   pattern_input = parttern_input;
   role: any;
   contractId: any;
-
+  currentUser: any;
   errorName: any = '';
   errorPhone: any = '';
   errorCardid: any = '';
@@ -99,6 +99,8 @@ export class EditHandlerComponent implements OnInit {
 
 
     console.log("this.data.update process person", this.data);
+    console.log("datas",this.datas);
+    
 
     this.name = this.data.name;
     this.login_by = this.data.login_by;
@@ -161,13 +163,17 @@ export class EditHandlerComponent implements OnInit {
     }
   }
   UpdateHandler() {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    console.log("datas",this.currentUser);
+    
+
 
     this.spinner.show();
     let dataUpdate = {
       ...this.data,
       name: this.name,
       email: this.isCheckRadio ? this.email.toLowerCase() : this.phone,
-      phone: this.phone,
+      phone: !this.isCheckRadio ? this.phone : "",
       login_by: this.isCheckRadio ? "email" : "phone",
       card_id: this.card_id,
     };
@@ -183,13 +189,10 @@ export class EditHandlerComponent implements OnInit {
           return;
         }
 
-        console.log("dataUpdate sU", this.validData());
+
         this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
           (res: any) => {
             if (!res.success) {
-              // this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
-              // this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
-              console.log("res SU", res);
               switch (res.message) {
                 case "E01": {
                   this.toastService.showErrorHTMLWithTimeout(this.translate.instant('email.already.exist'), "", 3000);
@@ -213,7 +216,7 @@ export class EditHandlerComponent implements OnInit {
           }
         )
       } else {
-        this.toastService.showWarningHTMLWithTimeout("Email người xử lý không được bỏ trống", "", 3000);
+        this.toastService.showWarningHTMLWithTimeout("Tên người xử lý không được bỏ trống", "", 3000);
       }
 
     }

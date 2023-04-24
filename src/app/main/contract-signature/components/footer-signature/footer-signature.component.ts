@@ -48,7 +48,7 @@ export class FooterSignatureComponent implements OnInit {
 
   currentUser: any;
   emailRecipients: any;
-
+  
   pageRendering: any;
   pageNumPending: any = null;
 
@@ -56,7 +56,6 @@ export class FooterSignatureComponent implements OnInit {
   phone: string = "phone";
 
   type: any = 0;
-
   constructor(
     private dialog: MatDialog,
     private contractService: ContractService,
@@ -280,8 +279,6 @@ export class FooterSignatureComponent implements OnInit {
 
       this.contractService.getDetermineCoordination(id_recipient_signature).subscribe(async (response) => {
         console.log("response", response);
-
-        // const ArrRecipients = response.is_data_contract.participants.map((ele: any) => ele.recipients);
         const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
         console.log("ArrRecipients", ArrRecipients);
 
@@ -485,8 +482,25 @@ export class FooterSignatureComponent implements OnInit {
   }
 
 
-  processingAuthorization() {
+  async processingAuthorization() {
     this.getCoordination();
+    const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
+    const isInRecipient = this.is_data_coordination.recipients.some( (el: any) => el.name === updatedInfo.name)
+
+    if(!isInRecipient){
+      this.toastService.showErrorHTMLWithTimeout(
+        'Bạn không có quyền xử lý hợp đồng này!',
+        '',
+        3000
+      );
+      if (this.type == 1) {
+        this.router.navigate(['/login']);
+        return
+      } else {
+        this.router.navigate(['/main/dashboard']);
+        return
+      }
+    }
     const data = {
       title: 'ỦY QUYỀN XỬ LÝ',
       is_content: 'processing_author',
@@ -545,8 +559,25 @@ export class FooterSignatureComponent implements OnInit {
     )
   }
 
-  forWardContract() {
+  async forWardContract() {
     this.getCoordination();
+    const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
+    const isInRecipient = this.is_data_coordination.recipients.some( (el: any) => el.name === updatedInfo.name)
+
+    if(!isInRecipient){
+      this.toastService.showErrorHTMLWithTimeout(
+        'Bạn không có quyền xử lý hợp đồng này!',
+        '',
+        3000
+      );
+      if (this.type == 1) {
+        this.router.navigate(['/login']);
+        return
+      } else {
+        this.router.navigate(['/main/dashboard']);
+        return
+      }
+    }
     const data = {
       title: 'CHUYỂN TIẾP',
       is_content: 'forward_contract',

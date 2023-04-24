@@ -1,3 +1,4 @@
+// import { locale } from 'date-fns/locale/en-US';
 import { Component, Inject, OnInit, ElementRef, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
@@ -58,7 +59,8 @@ export class ForwardContractComponent implements OnInit {
     });
 
 
-    for (const d of this.datas.dataContract.is_data_contract.participants) {
+    for (const d of this.datas.dataContract.is_data_contract.participants) { 
+      this.locale = this.datas?.dataContract?.is_data_contract?.participants[0]?.recipients[0]?.locale;
       for (const q of d.recipients) {
         if (q.email == this.currentUser.customer.info.email && q.status == 1) {
           let data_sign_cka = q.sign_type.filter((p: any) => p.id == 1)[0];
@@ -93,6 +95,7 @@ export class ForwardContractComponent implements OnInit {
       if (this.isReqPhone || this.isReqCardId) break;
     }
   }
+  
 
   changeTypeSign(e: any,) {
     this.login = e.target.value;
@@ -233,7 +236,8 @@ export class ForwardContractComponent implements OnInit {
             role: this.data.role_coordination ? this.data.role_coordination : this.datas.dataContract.roleContractReceived,
             recipient_id: this.datas.recipientId,
             is_replace: false,
-            login_by: this.login
+            login_by: this.login,
+            locale : this.locale
           };
 
           if(this.login == 'phone') {

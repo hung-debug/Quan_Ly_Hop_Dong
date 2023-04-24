@@ -559,5 +559,5 @@
   "update.success": "Cập nhật người xử lý thành công",
   "error.update.handler": "Có lỗi cập nhật người xử lý",
   "download.multi": "Tải nhiều",
-  "contract.down": "Tải"
+  "contract.down": "Tải hợp đồng"
 }
