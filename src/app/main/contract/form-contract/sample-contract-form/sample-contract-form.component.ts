@@ -1499,6 +1499,11 @@ export class SampleContractFormComponent implements OnInit {
       this.contractNo = e;
     }
   }
+
+  checkSignId(id: String){
+    return isNaN(Number(id));
+  }
+
   reverseInput(e: any, d: any){
     console.log(e);
     const num = this.removePeriodsFromCurrencyValue(e);
