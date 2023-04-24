@@ -1355,7 +1355,30 @@ export class ConsiderContractComponent
   ArrRecipientsNew: any;
   markImage: boolean = false;
   srcMark: any;
+
+  async checkDifferentName(){
+    const nameUpdate = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
+    console.log("this.recipient.name",this.recipient.name);
+  
+    return nameUpdate.name != this.recipient.name;
+  }
+
   async submitEvents(e: any) {
+    const isDifferentName = await this.checkDifferentName();
+    if(isDifferentName){
+      this.toastService.showErrorHTMLWithTimeout(
+        'Bạn không có quyền xử lý hợp đồng này!',
+        '',
+        3000
+      );
+      if (this.type == 1) {
+        this.router.navigate(['/login']);
+        return
+      } else {
+        this.router.navigate(['/main/dashboard']);
+        return
+      }
+    }
     let haveSignPKI = false;
     let haveSignImage = false;
     let haveSignHsm = false;
@@ -3500,7 +3523,7 @@ export class ConsiderContractComponent
     dialogConfig.panelClass = 'custom-dialog-container';
     dialogConfig.data = data;
     dialogConfig.disableClose = true;
-    // dialogConfig.width = '100000000000000000000000000000px';
+    // dialogConfig.width = '100000000000000000000000000000px';  
 
     const dialogRef = this.dialog.open(EkycDialogSignComponent, dialogConfig);
 

@@ -36,11 +36,13 @@ export class ConfirmSignOtpComponent implements OnInit {
   isSentOpt = false;
   submitted = false;
 
+  currentUser: any;
   phoneOtp:any;
   isDateTime:any;
   userOtp:any;
   smsContractUse: any;
   smsContractBuy: any;
+  type: any = 0;
   
   @Output() confirmOtpForm = new EventEmitter();
 
@@ -71,6 +73,10 @@ export class ConfirmSignOtpComponent implements OnInit {
       this.checkSMS(this.datasOtp.contract_id, this.datasOtp.recipient_id, this.datasOtp.phone);
 
       this.getDeviceApp();
+      if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
+        this.type = 1;
+      } else
+        this.type = 0;
   }
 
   async checkSMS(contractId: any, recipientId: any, phone: any) {
@@ -91,6 +97,57 @@ export class ConfirmSignOtpComponent implements OnInit {
   }
 
   async onSubmit() {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    let id_recipient_signature = null;
+
+    for (const d of this.datas.is_data_contract.participants) {
+      for (const q of d.recipients) {
+        if (q.email) {
+          if (q.email == this.currentUser.email && q.status == 1) {
+            id_recipient_signature = q.id;
+            break
+          }
+        }
+      }
+      if (id_recipient_signature) break;
+    }
+    this.contractService.getDetermineCoordination(id_recipient_signature).subscribe(async (response) => {
+      console.log("response", response);
+
+      // const ArrRecipients = response.is_data_contract.participants.map((ele: any) => ele.recipients);
+      const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+      console.log("ArrRecipients", ArrRecipients);
+
+      let ArrRecipientsNew = false
+      ArrRecipients.map((item: any) => {
+        if (item.phone === this.currentUser.phone) {
+          ArrRecipientsNew = true
+          return
+        }
+      });
+      console.log("ArrRecipientsNew111", ArrRecipientsNew);
+
+      if (!ArrRecipientsNew) {
+
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        }
+      };
+      console.log("this.currentUser.email", this.currentUser);
+    
     // @ts-ignore
     document.getElementById("otp").focus();
     this.submitted = true;
@@ -101,6 +158,7 @@ export class ConfirmSignOtpComponent implements OnInit {
     // console.log(this.addForm.value.otp);
     // this.confirmOtpForm.emit(this.addForm.value.otp);
     await this.signContractSubmit();
+  })
   }
 
   countTimeOtp() {

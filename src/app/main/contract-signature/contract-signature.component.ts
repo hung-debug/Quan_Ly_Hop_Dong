@@ -300,6 +300,15 @@ export class ContractSignatureComponent implements OnInit {
     this.typeDisplay = 'signOne';
   }
 
+  getPageData(){
+    if(this.typeDisplay == 'signOne'){
+      this.getContractList(); 
+    }
+    else if(this.typeDisplay == 'downloadMany'){
+      this.downloadMany();
+    }
+  }
+
   getContractList() {
     if (this.filter_status % 10 == 1) {
       this.filter_status = 1;
@@ -596,9 +605,25 @@ export class ContractSignatureComponent implements OnInit {
 
   toggleOneDownload(item: any, index1: any) {
     let data = {
-      id: item.participant?.contract?.id,
-    };
-    if (this.dataChecked.some((el) => el.id === data.id)) {
+      id: item.participant?.contract?.id, 
+      selectedId: item.id
+    }
+    this.contractDownloadList[index1].checked = item.checked
+    if(this.dataChecked.some(el => el.id === data.id)){
+      this.dataChecked = this.dataChecked.filter((item) => {
+        return item.id != data.id
+      })
+    } else {
+      this.dataChecked.push(data);
+    }
+  }
+
+  toggleOneDownloadShare(item: any){
+    let data = {
+      id: item.participants[0]?.contract_id,
+      selectedId: item.id
+    }
+    if(this.dataChecked.some(el => el.id === data.id)){
       this.dataChecked = this.dataChecked.filter((item) => {
         return item.id != data.id;
       });

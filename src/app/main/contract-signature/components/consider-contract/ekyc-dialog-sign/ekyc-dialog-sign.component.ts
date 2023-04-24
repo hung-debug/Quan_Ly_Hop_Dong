@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Input } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -8,6 +8,7 @@ import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
 import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ekyc-dialog-sign',
@@ -15,7 +16,7 @@ import { ToastService } from 'src/app/service/toast.service';
   styleUrls: ['./ekyc-dialog-sign.component.scss']
 })
 export class EkycDialogSignComponent implements OnInit {
-
+  @Input() datas: any;
   personEkyc: any;
 
   constructor(
@@ -25,6 +26,7 @@ export class EkycDialogSignComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private toastService: ToastService,
     private translate: TranslateService
+    private router: Router,
   ) {
 
   }
@@ -57,7 +59,12 @@ export class EkycDialogSignComponent implements OnInit {
   initWebcamImage: any;
   contractId: number;
   organizationId: any;
+  type: any = 0;
   public ngOnInit(): void {
+    if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
+      this.type = 1;
+    } else
+      this.type = 0;
 
     this.initWebcamImage = this.webcamImage;
 
@@ -78,6 +85,7 @@ export class EkycDialogSignComponent implements OnInit {
 
   cardId: any;
   name:any;
+  currentUser: any;
   public async triggerSnapshot(): Promise<void> {
     this.trigger.next();
 
@@ -85,9 +93,11 @@ export class EkycDialogSignComponent implements OnInit {
 
     if(this.data.recipientId) {
       const determineCoordination = await this.contractService.getDetermineCoordination(this.data.recipientId).toPromise();
-
       this.cardId = determineCoordination.recipients[0].card_id;
       this.name = determineCoordination.recipients[0].name;
+      console.log("determineCoordination",determineCoordination);
+      let ArrRecipientsNew = false
+
     }
  
 
@@ -145,7 +155,20 @@ export class EkycDialogSignComponent implements OnInit {
           alert(this.translate.instant('card.id.fail'));
         })
       } else {
-  
+        if(this.cardId != response.id){
+          this.toastService.showErrorHTMLWithTimeout('Bạn không có quyền xử lý hợp đồng này!','',3000);
+          if (this.type == 1) {
+            this.router.navigate(['/login']);
+            this.dialogRef.close();
+            this.spinner.hide();
+            return
+          } else {
+            this.router.navigate(['/main/dashboard']);
+            this.dialogRef.close();
+            this.spinner.hide();
+            return
+          }
+        }
         let formData = {
           "name": "image_ekyc_web_face" + new Date().getTime() + ".jpg",
           "content":this.webcamImage.imageAsDataUrl,
@@ -181,6 +204,7 @@ export class EkycDialogSignComponent implements OnInit {
   }
 
   upFileImageToDb(formData: any) {
+
      //up file anh len db
      this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseImage) => {
       if(responseImage.success == true) {
@@ -208,6 +232,7 @@ export class EkycDialogSignComponent implements OnInit {
         return;
       }
     })
+
   }
 
   public toggleWebcam(): void {

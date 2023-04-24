@@ -227,6 +227,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     
     let data = {
       id: item.participants[0]?.contract_id,
+      selectedId: item.id
     }
     if(this.dataChecked.some(el => el.id === data.id)){
       this.dataChecked = this.dataChecked.filter((item) => {
@@ -256,6 +257,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         a.click();
         window.URL.revokeObjectURL(fileUrl);
         a.remove()
+        window.location.reload();
       },
       (error) => {
         this.toastService.showErrorHTMLWithTimeout('no.contract.download.file.error', '', 3000);
@@ -293,6 +295,16 @@ export class ContractComponent implements OnInit, AfterViewInit {
           this.pageEnd = 0;
         } else {
           this.setPage();
+        }
+        const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
+        console.log('checkedDownloadFiles',checkedDownloadFiles);
+        for(let i = 0; i< this.contracts.length; i++){
+          let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
+          if(checkIf){
+            this.contracts[i].checked = true;
+          } else {
+            this.contracts[i].checked = false;
+          }
         }
       });
     }
