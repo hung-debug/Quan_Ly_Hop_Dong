@@ -1,0 +1,92 @@
+.contract-determine {
+    display: flex;
+    align-items: center;
+
+    &:not(:last-child) {
+        margin-bottom: 20px;
+    }
+
+    .contract--content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .contract__content--title {
+        // display: flex;
+        color: #106DB6;
+        align-items: center;
+        margin-bottom: 8px;
+
+        >div {
+            width: 158px;
+        }
+
+        >input {
+            padding-left: 10px;
+            outline: none;
+            height: 37px;
+            width: 45%;
+            border-radius: 7px;
+            border: 1px solid #106DB6;
+        }
+    }
+
+    .contract__content--title-doi-tac {
+        // display: flex;
+        color: #106DB6;
+        align-items: center;
+        margin-bottom: 8px;
+
+        >div {
+            width: 158px;
+        }
+
+        >input.input1 {
+            padding-left: 10px;
+            outline: none;
+            height: 37px;
+            width: 45%;
+            border-radius: 7px;
+            border: 1px solid #106DB6;
+        }
+
+        >input.input2 {
+            padding-left: 10px;
+            outline: none;
+            height: 37px;
+            width: 40%;
+            border-radius: 7px;
+            border: 1px solid #106DB6;
+        }
+    }
+
+    .contract__content--title-mst {
+        // display: flex;
+        color: #106DB6;
+        align-items: center;
+        margin-bottom: 8px;
+
+        >div {
+            width: 158px;
+        }
+
+        >input.input1 {
+            padding-left: 10px;
+            outline: none;
+            height: 37px;
+            width: 45%;
+            border-radius: 7px;
+            border: 1px solid #106DB6;
+        }
+
+        >input.input2 {
+            padding-left: 10px;
+            outline: none;
+            height: 37px;
+            width: 40%;
+            border-radius: 7px;
+            border: 1px solid #106DB6;
+        }
+    }
+}
