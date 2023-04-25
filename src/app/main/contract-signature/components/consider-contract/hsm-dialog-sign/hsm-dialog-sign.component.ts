@@ -90,7 +90,7 @@ export class HsmDialogSignComponent implements OnInit {
                 // Validators.pattern(parttern.card_id9) ||
                 // Validators.pattern(parttern.card_id12)
               ]),
-              username: this.fbd.control(taxCodePartnerStep2, [Validators.required]),
+              username: this.fbd.control("", [Validators.required]),
               pass1: this.fbd.control("", [Validators.required]),
               pass2: this.fbd.control("",[Validators.required])
             })
