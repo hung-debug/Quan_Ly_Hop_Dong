@@ -404,6 +404,14 @@ export class DetermineSignerComponent implements OnInit {
     return data.sign_type.filter((p: any) => p.id == 5);
   }
 
+  getDataSignUSBToken(data: any) {
+    return data.sign_type.filter((p: any) => p.id == 2);
+  }
+
+  getDataSignHsm(data: any) {
+    return data.sign_type.filter((p: any) => p.id == 4);
+  }
+
   // valid data step 2
   validData() {
     let count = 0;
