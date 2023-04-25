@@ -8,8 +8,9 @@
 
     .contract--content {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         width: 100%;
+        justify-content: space-around;
     }
 
     .contract__content--title {
@@ -37,6 +38,7 @@
         color: #106DB6;
         align-items: center;
         margin-bottom: 8px;
+        width: 45%;
 
         >div {
             width: 158px;
@@ -46,7 +48,7 @@
             padding-left: 10px;
             outline: none;
             height: 37px;
-            width: 45%;
+            width: 100%;
             border-radius: 7px;
             border: 1px solid #106DB6;
         }
@@ -66,6 +68,7 @@
         color: #106DB6;
         align-items: center;
         margin-bottom: 8px;
+        width: 45%;
 
         >div {
             width: 158px;
@@ -75,7 +78,7 @@
             padding-left: 10px;
             outline: none;
             height: 37px;
-            width: 45%;
+            width: 100%;
             border-radius: 7px;
             border: 1px solid #106DB6;
         }
@@ -87,6 +90,138 @@
             width: 40%;
             border-radius: 7px;
             border: 1px solid #106DB6;
+        }
+    }
+
+    .contract__content--participants{
+        border-radius: 10px;
+        border: 1px solid #87CAFF;
+        background-color: #F9FDFF;
+        padding: 19px 10px 13px 10px;
+
+        .participants--content{
+            display: flex;
+            background-color: #FFFFFF;
+            align-items: center;
+            justify-content: space-around;
+            border-radius: 0 0 11px 11px;
+      
+            ::ng-deep .mat-form-field {
+              width: 100%;
+              background-color: white !important;
+              &-flex {
+                border: 1px solid #106DB6;
+                border-radius: 5px;
+                background-color: white !important;
+              }
+              &-infix {
+                border-top: 0;
+              }
+            }
+            .participants__content--input .participants-information {
+                display: flex;
+                text-align: center;
+                justify-content: center;
+                margin-bottom: 14px;
+        
+                .participants-signature-type {
+                  width: 95%;
+                  text-align: center;
+                }
+            }
+            .participants--input {
+                display: flex;
+                justify-content: space-around;
+        
+                .participants__name {
+                  width: 41%;
+        
+                  .input-data {
+                    border: 1px solid #106DB6;
+                    border-radius: 5px;
+                    height: 38px;
+                    display: flex;
+                    align-items: center;
+        
+                    > img {
+                      padding-left: 14px;
+                    }
+        
+                    > input {
+                      border: none;
+                      outline: none;
+                      padding-left: 19px;
+                      width: 100%;
+                    }
+                  }
+                  .header_language {
+                    position: absolute;
+                    right: 0px;
+                    padding: 5px;
+                  }
+                  input {
+                    outline: none;
+                    padding-left: 19px;
+                    width: 100%;
+                  }
+                }
+            }
+
+            .delete-element {
+                position: relative;
+                cursor: pointer;
+        
+                .close-btn {
+                  position: absolute;
+                  top: 8px;
+                  left: 4.4px;
+                }
+            }
+
+            .select-text-input {
+                display: flex;
+
+                .participants__name:last-child {
+                  input {
+                    border: 1px solid #106DB6;
+                    border-radius: 5px;
+                    height: 38px;
+                    display: flex;
+                    align-items: center;
+                  }
+                }
+        
+                .participants-otp {
+                  position: relative;
+                  top: 40px;
+        
+                  input {
+                    top: 13px;
+                    position: absolute;
+                  }
+                }
+        
+            }
+        }
+
+        .participants-border {
+            border-radius: 11px 11px 11px 11px;
+            border: 1px solid #ddd;
+      
+            .participants--add {
+              display: inline-block;
+              color: #106DB6;
+              cursor: pointer;
+            }
+      
+            &:not(:last-child) {
+              margin-bottom: 10px;
+            }
+        }
+        ::ng-deep .multiselect-dropdown .dropdown-btn {
+            border: 1px solid #106DB6 !important;
+            min-height: 38px;
+            height: auto;
         }
     }
 }
