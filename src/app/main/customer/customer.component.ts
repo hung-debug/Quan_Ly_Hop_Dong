@@ -1,19 +1,12 @@
-import { UploadService } from 'src/app/service/upload.service';
+import { CustomerService } from './../../service/customer.service';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AppService } from 'src/app/service/app.service';
-import { ContractService } from 'src/app/service/contract.service';
-
-import { ToastService } from 'src/app/service/toast.service';
-import {  HttpErrorResponse } from '@angular/common/http';
+import { DeleteCustomerComponent } from './delete-customer/delete-customer.component';
 import { MatDialog } from '@angular/material/dialog';
-import { NgxSpinnerService } from "ngx-spinner";
+import { ToastService } from 'src/app/service/toast.service';
 import { Subscription } from "rxjs";
-import { UserService } from 'src/app/service/user.service';
-import { RoleService } from 'src/app/service/role.service';
-import { DialogReasonCancelComponent } from '../contract-signature/shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
-import { ContractSignatureService } from '../../service/contract-signature.service';
-import { DatePipe } from '@angular/common';
+
 
 @Component({
   selector: 'app-customer',
@@ -21,60 +14,39 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./customer.component.scss']
 })
 export class CustomerComponent implements OnInit {
-  action: string;
-  status: string;
-  type: string;
-  private sub: any;
-  public contracts: any[] = [];
-  p: number = 1;
-  page: number = 10;
-  pageStart: number = 0;
-  pageEnd: number = 0;
-  pageTotal: number = 0;
-  statusPopup: number = 1;
-  notificationPopup: string = '';
 
-  title: any = "";
-  id: any = "";
-  notification: any = "";
   isOrg: string = 'off';
   stateOptions: any[];
   organization_id: any = "";
+  isOrgCustomer: boolean = true;
 
   code:any = "";
   name:any = "";
   list: any[] = [];
   cols: any[];
 
-    //filter contract
+    //filter customer
     searchObj: any = {
       filter_name: "",
-      partner: ""
+      taxCode: "",
+      phone: "",
+      email: ""
     }
-    filter_name: any = "";
-    filter_type: any = "";
-    filter_status: any = "";
+    filter_name: string = "";
     message: any;
     subscription: Subscription;
     roleMess: any = "";
 
   constructor(private appService: AppService,
-    private contractService: ContractService,
-    private ContractSignatureService: ContractSignatureService,
-    private route: ActivatedRoute,
+    private customerService: CustomerService,
     private router: Router,
-    private toastService: ToastService,
-    private uploadService: UploadService,
     private dialog: MatDialog,
-    private spinner: NgxSpinnerService,
-    private userService: UserService,
-    private roleService: RoleService,
-    private datePipe: DatePipe
+    private toastService: ToastService
   ) {
 
     this.stateOptions = [
-      { label: 'personal.customer', value: 'off' },
-      { label: 'organization.customer', value: 'on' },
+      { label: 'organization.customer', value: 'off' },
+      { label: 'personal.customer', value: 'on' },
     ];
   }
 
@@ -86,24 +58,98 @@ export class CustomerComponent implements OnInit {
       {header: 'tax.code', style:'text-align: left;' },
       {header: '', style:'text-align: center;' },
     ];
+
+    this.customerService.getOrganizationCustomerList().subscribe((res: any) => {
+      this.list = res.filter((item: any) => {
+          return item.type === "ORGANIZATION"; 
+      });
+    });
   }
 
-  autoSearch(e: any){
-
+  autoSearch(event: any){
+    this.filter_name=event.target.value;
+    this.getCustomerList();
   }
 
   searchContract(){
 
   }
 
+  getCustomerList(){
+    if(this.isOrgCustomer){
+    this.customerService.getOrganizationCustomerList().subscribe((res: any) => {
+      this.list = res.filter((item: any) => {
+          return item.type === "ORGANIZATION" && item.name.toLowerCase().includes(this.filter_name.toLowerCase());
+      });
+    });
+    }else if(!this.isOrgCustomer){
+      this.customerService.getOrganizationCustomerList().subscribe((res: any) => {
+        this.list = res.filter((item: any) => {
+            return item.type === "PERSONAL" && item.name.toLowerCase().includes(this.filter_name.toLowerCase());
+        });
+      });
+    }
+  }
+
   changeTab(){
+    if(!this.isOrgCustomer){
     this.cols=[
       {header: 'personal.customer.name', style:'text-align: left;' },
       {header: 'phone_mail', style:'text-align: left;' },
-      {header: '                                           ', style:'text-align: center;' },
-    ]
+      {header: '', style:'text-align: center;' },
+    ]}
+    else if(this.isOrgCustomer){
+      this.cols = [
+        {header: 'organization.customer.name', style:'text-align: left;' },
+        {header: 'tax.code', style:'text-align: left;' },
+        {header: '', style:'text-align: center;' },
+      ];
+    }
+    console.log(this.isOrgCustomer);
   }
 
+  personalAdd(){
+    this.router.navigate(['/main/form-customer/customer-personal-add']);
+  }
+
+  organizationAdd(){
+    this.router.navigate(['/main/form-customer/customer-organization-add']);
+  }
+
+  onSelect(e: any) {
+    const selectedOption = e.value; // value of the selected option
+    const selectedLabel = this.stateOptions.find(option => option.value === selectedOption).label; // label of the selected option
+    if(selectedLabel=='organization.customer'){
+      this.isOrgCustomer = true;
+      this.changeTab();
+      this.getCustomerList();
+    }
+    else if(selectedLabel=='personal.customer'){
+      this.isOrgCustomer = false;
+      this.changeTab();
+      this.getCustomerList();
+      console.log(this.list);
+    }
+  }
+
+  deleteCustomer(id:any) {
+    const data = {
+      title: 'role.delete',
+      id: id,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(DeleteCustomerComponent, {
+      width: '450px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
 
 
 }

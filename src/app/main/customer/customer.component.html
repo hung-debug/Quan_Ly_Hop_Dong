@@ -1,18 +1,28 @@
-<p-selectButton *ngIf="filter_status!=40" [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()">
+<p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (onChange)="onSelect($event)">
   <ng-template #options let-item>
       <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
   </ng-template>
 </p-selectButton>
+
 <div class="container-fluid">
 
 <div class="col-md-12" style="padding-top: 20px;">
   <div class="input-line search">
       <img src="../../assets/img/icon_search.svg" class="input-img" />
-      <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+      <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'customer.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
       <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
   </div>
 </div>
-
+<div *ngIf="this.isOrgCustomer" class="row justify-content-end" style="margin-right: 120px">
+  <div class="col-md-1 btn_search" style="padding-top: 10px;">
+      <button (click)="organizationAdd()" class="btn btn-lg btn-block btn_submit">{{'organization.customer.add'| translate}}</button>
+  </div>
+</div>
+<div *ngIf="!this.isOrgCustomer" class="row justify-content-end" style="margin-right: 120px">
+  <div class="col-md-1 btn_search" style="padding-top: 10px;">
+      <button (click)="personalAdd()" class="btn btn-lg btn-block btn_submit">{{'personal.customer.add'| translate}}</button>
+  </div>
+</div>
 <div class="row" style="padding-top: 20px;">
   <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
     <ng-template pTemplate="header" let-columns>
@@ -24,11 +34,12 @@
     </ng-template>
     <ng-template pTemplate="body" let-list>
         <tr>
-            <td><a  style="color: #0160AE; cursor: pointer;">Abc</a></td>
-            <td>{{list.code}}</td>
+            <td><a  style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
+            <td *ngIf="isOrgCustomer">{{list.taxCode}}</td>
+            <td *ngIf="!isOrgCustomer">{{list.phone}}/{{list.email}}</td>
             <td style="text-align: center">
               <img src="../../../assets/img/icon_edit.svg" width="20px"  style="cursor: pointer;"/>&nbsp;&nbsp;
-              <img src="../../../assets/img/icon_delete.svg" width="16px" style="cursor: pointer;"/>
+              <img src="../../../assets/img/icon_delete.svg" width="16px" (click)="deleteCustomer(list.id)" style="cursor: pointer;"/>
             </td>
         </tr>
     </ng-template>

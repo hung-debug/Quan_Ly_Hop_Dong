@@ -1,3 +1,4 @@
+import {CustomerOrganizationAddComponent} from './main/customer/customer-organization-add/customer-organization-add.component';
 import {DetailContractComponent} from './main/contract/detail-contract/detail-contract.component';
 import {SignupComponent} from './login/signup/signup.component';
 import {ContractTemplateComponent} from './main/contract-template/contract-template.component';
@@ -39,6 +40,7 @@ import { ReportContractNumberFollowStatusComponent } from './main/report/report-
 import { ContractNumberFollowTypeComponent } from './main/report/contract-number-follow-type/contract-number-follow-type.component';
 import { ContractNumberFollowSignComponent } from './main/report/contract-number-follow-sign/contract-number-follow-sign.component';
 import { CustomerComponent } from './main/customer/customer.component';
+import { CustomerPersonalAddComponent } from './main/customer/customer-personal-add/customer-personal-add.component';
 
 const contract_signatures = "c";
 const signatures = "s9";
@@ -125,6 +127,14 @@ const routes: Routes = [
       {
         path: 'customer',
         component: CustomerComponent,
+      },
+      {
+        path: 'form-customer/customer-organization-add',
+        component: CustomerOrganizationAddComponent
+      },
+      {
+        path: 'form-customer/customer-personal-add',
+        component: CustomerPersonalAddComponent
       },
       {
         path: 'contract/:action/:status',

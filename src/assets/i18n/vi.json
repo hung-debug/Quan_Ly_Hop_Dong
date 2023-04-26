@@ -602,5 +602,8 @@
   "organization.customer.name":"Tên tổ chức",
   "personal.customer.name":"Tên cá nhân",
   "tax.code":"Mã số thuế",
-  "phone_mail":"SĐT/Email"
+  "phone_mail":"SĐT/Email",
+  "customer.search.name.placeholder":"Nhập từ tìm kiếm",
+  "organization.customer.add":"Thêm tổ chức",
+  "personal.customer.add":"Thêm cá nhân"
 }
