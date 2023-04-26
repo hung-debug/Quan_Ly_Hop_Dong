@@ -135,6 +135,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       } else {
         this.isOrg = "off";
       }
+      
       if (typeof params.status != 'undefined' && params.status) {
         this.status = params.status;
       } 
@@ -225,7 +226,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
     
     let data = {
       id: item.participants[0]?.contract_id,
-      selectedId: item.id
     }
     if(this.dataChecked.some(el => el.id === data.id)){
       this.dataChecked = this.dataChecked.filter((item) => {
@@ -255,7 +255,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
         a.click();
         window.URL.revokeObjectURL(fileUrl);
         a.remove()
-        window.location.reload();
       },
       (error) => {
         this.toastService.showErrorHTMLWithTimeout('no.contract.download.file.error', '', 3000);
@@ -293,16 +292,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
           this.pageEnd = 0;
         } else {
           this.setPage();
-        }
-        const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
-        console.log('checkedDownloadFiles',checkedDownloadFiles);
-        for(let i = 0; i< this.contracts.length; i++){
-          let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
-          if(checkIf){
-            this.contracts[i].checked = true;
-          } else {
-            this.contracts[i].checked = false;
-          }
         }
       });
     }
@@ -369,7 +358,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.filter_name = event.target.value;
     this.getContractList();
   }
-
 
   openDetail(id: number) {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {

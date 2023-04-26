@@ -214,7 +214,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
 
   clearImage() {
     this.signaturePad?.clear();
-
+    this.imgSignDrawing = null;
     this.imgSignPCSelect = null;
   }
 }

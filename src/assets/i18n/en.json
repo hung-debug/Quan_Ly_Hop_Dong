@@ -600,5 +600,6 @@
   "mark.contract":"Seal the contract contract",
   "customer.list":"Customer list",
   "report.number.contracts.type":"Quantity by type of contract",
-  "ceca.reason.one.person":"Contracts signed by one person are not pushed to the Ministry of Industry and Trade"
+  "ceca.reason.one.person":"Contracts signed by one person are not pushed to the Ministry of Industry and Trade",
+  "not.draw.sign":"You haven't drawn the signature image yet"
 }
