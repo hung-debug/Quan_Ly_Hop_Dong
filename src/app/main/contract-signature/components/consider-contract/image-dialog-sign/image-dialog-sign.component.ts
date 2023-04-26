@@ -205,7 +205,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
       }
     } else if (this.typeImageSignatureRadio == 3) {
       if(!this.imgSignDrawing) {
-        this.toastService.showErrorHTMLWithTimeout('Bạn chưa chọn ảnh','',3000)
+        this.toastService.showErrorHTMLWithTimeout('not.draw.sign','',3000)
       } else {
         this.dialogRef.close(this.imgSignDrawing);
       }
