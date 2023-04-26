@@ -280,7 +280,7 @@ export class ConsiderContractComponent
   status: any;
   actionRoleContract() {
     this.activeRoute.queryParams.subscribe((params) => {
-      this.recipientId = params.recipientId;
+      this.recipientId = params.recipientId ? params.recipientId : params.id;
       this.pageBefore = params.page;
       this.status = params.status;
 
