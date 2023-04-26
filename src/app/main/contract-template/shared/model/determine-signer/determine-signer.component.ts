@@ -592,7 +592,7 @@ export class DetermineSignerComponent implements OnInit {
       if (dataArr[i].card_id.trim() && !this.pattern.cardid.test(dataArr[i].card_id.trim()) &&
         !this.pattern.card_id12.test(dataArr[i].card_id.trim())
       ) {
-        this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
+        this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
         count++;
         break;
       }
