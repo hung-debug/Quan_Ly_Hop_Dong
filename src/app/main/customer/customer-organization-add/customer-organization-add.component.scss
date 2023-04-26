@@ -1,5 +1,5 @@
 .contract-determine {
-    display: flex;
+    // display: flex;
     align-items: center;
 
     &:not(:last-child) {
@@ -10,7 +10,8 @@
         display: flex;
         flex-direction: row;
         width: 100%;
-        justify-content: space-around;
+        justify-content: space-between;
+        margin-bottom: 10px;
     }
 
     .contract__content--title {
@@ -118,11 +119,13 @@
                 border-top: 0;
               }
             }
-            .participants__content--input .participants-information {
+            .participants__content--input {
                 display: flex;
                 text-align: center;
                 justify-content: center;
                 margin-bottom: 14px;
+                flex-direction: column;
+                margin-bottom: 15px;
         
                 .participants-signature-type {
                   width: 95%;
@@ -134,7 +137,7 @@
                 justify-content: space-around;
         
                 .participants__name {
-                  width: 41%;
+                  width: 38%;
         
                   .input-data {
                     border: 1px solid #106DB6;
@@ -224,4 +227,50 @@
             height: auto;
         }
     }
+    .text-color {
+      background-color: #FFFFFF;
+      border-radius: 0 0 11px 11px;
+      color: #666666;
+    }
+}
+.label {
+  font-weight: 500;
+  color: #0160AE;
+  background-color: #C7D0E9;
+  height: 40px;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+}
+
+.label_detail {
+  font-weight: 500;
+  color: #0160AE;
+  background-color: #C7D0E9;
+  height: 40px;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  align-items: center;
+}
+.footer-btn button {
+  width: 120px;
+  height: 40px;
+  background-color: #8b8b8b;
+  border-radius: 5px;
+  outline: none;
+  color: white;
+  border: 1px solid #8B8B8B;
+  margin: 0 10px 0;
+}
+.footer-btn{
+  display: flex;
+  justify-content: center;
+  text-align: center; 
+  margin: 25px;
+  margin-right: 10%;
+}
+.update-btn{
+  color: white;
+  background-color: #106DB6 !important; 
 }

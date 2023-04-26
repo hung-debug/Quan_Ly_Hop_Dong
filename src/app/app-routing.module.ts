@@ -41,6 +41,7 @@ import { ContractNumberFollowSignComponent } from './main/report/contract-number
 import { ConfigSmsEmailComponent } from './main/config-sms-email/config-sms-email.component';
 import { CustomerComponent } from './main/customer/customer.component';
 import {CustomerOrganizationAddComponent} from './main/customer/customer-organization-add/customer-organization-add.component';
+import {CustomerPersonalAddComponent} from './main/customer/customer-personal-add/customer-personal-add.component'
 
 const contract_signatures = "c";
 const signatures = "s9";
@@ -131,6 +132,10 @@ const routes: Routes = [
       {
         path: 'customer/CustomerOrganizationAdd',
         component: CustomerOrganizationAddComponent,
+      },
+      {
+        path: 'customer/CustomerPersonalAddComponent',
+        component: CustomerPersonalAddComponent,
       },
       {
         path: 'contract/:action/:status',
