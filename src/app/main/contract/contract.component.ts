@@ -137,9 +137,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       }
       if (typeof params.status != 'undefined' && params.status) {
         this.status = params.status;
-      } else {
-        this.status = "";
-      }
+      } 
 
       if (typeof params.page != 'undefined' && params.page) {
         this.p = params.page;

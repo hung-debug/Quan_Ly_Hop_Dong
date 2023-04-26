@@ -808,15 +808,9 @@ export class ConsiderContractComponent
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
-        if (
-          (this.typeSignDigital == 2 && this.usbTokenVersion == 1) ||
-          !this.usbTokenVersion
-        ) {
+        if ((this.typeSignDigital == 2 && this.usbTokenVersion == 1) || !this.usbTokenVersion) {
           this.prepareInfoSignUsbTokenV1(pageNumber, canvas.height);
-        } else if (
-          (this.typeSignDigital == 2 && this.usbTokenVersion == 2) ||
-          this.typeSignDigital == 4
-        ) {
+        } else if ((this.typeSignDigital == 2 && this.usbTokenVersion == 2) || this.typeSignDigital == 4) {
           this.prepareInfoSignUsbTokenV2(pageNumber, canvas.height);
         }
 
@@ -1710,20 +1704,22 @@ export class ConsiderContractComponent
     const dialogRef = this.dialog.open(ImageDialogSignComponent, {
       width: '1024px',
       backdrop: 'static',
-      // disableClose: true,
       data: data
     });
 
     dialogRef.afterClosed().subscribe((res: any) => {
       if(res) {
+        this.srcMark = res;
+
+        this.spinner.show();
+
         if (code == 'hsm') 
-        this.hsmDialogSignOpen(this.recipientId);
-      else if (code == 'usb1')
-        this.signTokenVersion1(signUpdatePayload, notContainSignImage);
-      else if (code == 'usb2')
-        this.getSessionId(this.taxCodePartnerStep2,signUpdatePayload,notContainSignImage);
+          this.hsmDialogSignOpen(this.recipientId);
+        else if (code == 'usb1')
+          this.signTokenVersion1(signUpdatePayload, notContainSignImage);
+        else if (code == 'usb2')
+          this.getSessionId(this.taxCodePartnerStep2,signUpdatePayload,notContainSignImage);
       }
-      this.spinner.hide();
     });
   }
 
@@ -1862,16 +1858,11 @@ export class ConsiderContractComponent
               if (this.usbTokenVersion == 1) {
                 if (this.markImage) {
                   await of(null).pipe(delay(150)).toPromise();
-                  imageRender = <HTMLElement>(
-                    document.getElementById('export-html-image')
-                  );
-
-                  console.log('im ', imageRender);
+                  imageRender = <HTMLElement>(document.getElementById('export-html-image'));
+                  signUpdate.signDigitalWidth = signUpdate.signDigitalX + imageRender.offsetWidth;
                 } else {
                   await of(null).pipe(delay(150)).toPromise();
-                  imageRender = <HTMLElement>(
-                    document.getElementById('export-html')
-                  );
+                  imageRender = <HTMLElement>(document.getElementById('export-html'));
                 }
 
                 if (imageRender) {
@@ -1885,7 +1876,9 @@ export class ConsiderContractComponent
                 }
               } else if (this.usbTokenVersion == 2) {
                 if (this.markImage) {
+                  await of(null).pipe(delay(150)).toPromise();
                   imageRender = <HTMLElement>(document.getElementById('export-html2-image'));
+                  signUpdate.signDigitalWidth = imageRender.offsetWidth;
                 } else {
                   imageRender = <HTMLElement>(document.getElementById('export-html2'));
                 }
@@ -2086,17 +2079,6 @@ export class ConsiderContractComponent
             this.font = signUpdate.font;
             this.font_size = signUpdate.font_size;
 
-            // this.widthText = this.calculatorWidthText(
-            //   this.textSign,
-            //   signUpdate.font
-            // );
-            // fieldHsm.width = this.widthText + 10;
-
-            // fieldHsm.coordinate_y =
-            //   signUpdate.signDigitalY -
-            //   0.5 * (signUpdate.height - signUpdate.font_size) -
-            //   5;
-
             await of(null).pipe(delay(120)).toPromise();
             const imageRender = <HTMLElement>(
               document.getElementById('text-sign')
@@ -2112,20 +2094,15 @@ export class ConsiderContractComponent
             let imageRender = null;
 
             if (this.markImage) {
-              imageRender = <HTMLElement>(
-                document.getElementById('export-html-hsm1-image')
-              );
+              imageRender = <HTMLElement>(document.getElementById('export-html-hsm1-image'));
+              signUpdate.signDigitalWidth = imageRender.offsetWidth;
             } else {
-              imageRender = <HTMLElement>(
-                document.getElementById('export-html-hsm1')
-              );
+              imageRender = <HTMLElement>(document.getElementById('export-html-hsm1'));
             }
 
             if (imageRender) {
-              console.log('ima ', imageRender);
               await of(null).pipe(delay(150)).toPromise();
-              const textSignB = await domtoimage.toPng(imageRender);
-              console.log('te ', textSignB);
+              const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
               signI = textSignB.split(',')[1];
             }
           }
@@ -2246,7 +2223,7 @@ export class ConsiderContractComponent
   }
 
   getOptions(imageRender: any) {
-    const scale = 5;
+    const scale = 15;
     const options = {
       quality: 0.99,
       width: imageRender.clientWidth * scale,
@@ -3547,6 +3524,7 @@ export class ConsiderContractComponent
   }
 
   hsmDialogSignOpen(recipientId: number) {
+    this.spinner.hide();
     const data = {
       title: 'CHỮ KÝ HSM',
       is_content: 'forward_contract',
@@ -3723,11 +3701,7 @@ export class ConsiderContractComponent
         sign?.page == page
       ) {
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
-        sign.signDigitalY =
-          heightPage -
-          (sign.coordinate_y - this.currentHeight) -
-          sign.height +
-          sign.page * 6 /* * this.ratioPDF*/;
+        sign.signDigitalY = heightPage - (sign.coordinate_y - this.currentHeight) - sign.height + sign.page * 6 /* * this.ratioPDF*/;
 
         sign.signDigitalWidth = sign.width /* * this.ratioPDF*/;
         sign.signDigitalHeight = sign.height;

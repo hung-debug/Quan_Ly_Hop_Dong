@@ -252,6 +252,7 @@ export class UnitComponent implements OnInit {
   }
 
   detailUnit(id:any) {
+    console.log("detatil unit ");
     const data = {
       title: 'unit.information',
       id: id,
