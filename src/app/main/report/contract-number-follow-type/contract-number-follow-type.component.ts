@@ -319,7 +319,8 @@ export class ContractNumberFollowTypeComponent implements OnInit {
           }
 
           this.list.forEach((item: any) => {
-            console.log("item ", item.value);
+              this.total.name = item.name;
+
               this.total.total += item.value.total;
               this.total.processed += item.value.processed;
               this.total.processing += item.value.processing;

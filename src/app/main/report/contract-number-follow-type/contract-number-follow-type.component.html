@@ -65,35 +65,16 @@
             </ng-template>
 
             <ng-template pTemplate="body" let-list let-row="rowIndex">
-                <!-- <tr *ngIf="i == 0" class="subheader-row">
-                    <td *ngFor="let col of cols; let colIndex = index">
-                        <span *ngIf="col.id == 2">{{this.org}}</span>
-                    </td>
-                </tr>
-
-                <tr *ngIf="i != 0">
-                    <td>{{list.name}}</td>
-                    <td>{{list.value.total}}</td>
-                    <td>{{list.value.processed}}</td>
-                    <td>{{list.value.processing}}</td>
-                    <td>{{list.value.canceled}}</td>
-                    <td>{{list.value.prepare_expires}}</td>
-                    <td>{{list.value.expired}}</td>
-                </tr> -->
-
                 <ng-container style="background-color: #EEF7FF;" *ngIf="row == 0">
-                    <!-- <td *ngIf="row == 0" style="font-style: normal;font-weight: 800;font-size: 13px;">{{this.orgName}}</td>
-                    <td *ngFor="let i of Arr(cols.length - 1).fill(1)"></td> -->
                 </ng-container>
 
                 <ng-container *ngIf="row > 0">
-                    
                 </ng-container>
             </ng-template>
 
             <ng-template pTemplate="footer">
                 <tr *ngIf="this.clickReport">
-                    <td>{{'total' | translate}}</td>
+                    <td>{{this.total.name}}</td>
                     <td>{{this.total.total}}</td>
                     <td>{{this.total.processed}}</td>
                     <td>{{this.total.processing}}</td>
