@@ -601,5 +601,6 @@
   "customer.list":"Customer list",
   "report.number.contracts.type":"Quantity by type of contract",
   "ceca.reason.one.person":"Contracts signed by one person are not pushed to the Ministry of Industry and Trade",
-  "not.draw.sign":"You haven't drawn the signature image yet"
+  "not.draw.sign":"You haven't drawn the signature image yet",
+  "mobifone.fail":"You cannot use this feature with Mobifone email"
 }

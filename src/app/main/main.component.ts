@@ -92,6 +92,16 @@ export class MainComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
+  email: string;
+  checkMailMbf() {
+    this.email = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email;
+
+    if(this.email.includes('@mobifone.vn'))
+      return true;
+
+    return false;
+  }
+
   resetPassword(){
     const data = {
       title: 'ĐỔI MẬT KHẨU',

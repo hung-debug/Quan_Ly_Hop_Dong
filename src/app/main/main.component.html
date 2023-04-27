@@ -103,7 +103,7 @@
               </div>
             </a>
           
-            <button ngbDropdownItem class="drop" (click)="resetPassword()">
+            <button *ngIf="!checkMailMbf()" ngbDropdownItem class="drop" (click)="resetPassword()">
               <div style="display: flex; align-items: center;">
                 <div class="db_user">
                   <div class="db_password"></div>
