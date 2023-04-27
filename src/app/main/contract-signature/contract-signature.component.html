@@ -41,7 +41,7 @@
         </div>
     </div>
 
-    <div class="row list_header" *ngIf="pageTotal > 0;">
+    <div style="margin-top: 15px;" class="row list_header" *ngIf="pageTotal > 0;">
 
         <div class="col-md-5"></div>
         <div class="col-md-2">{{'create-date' | translate}}</div>
@@ -52,11 +52,6 @@
         <div *ngIf="this.typeDisplay === 'signMany'" class="col-md-3">
             <input id="all" name="all" type="checkbox" (click)="toggle()" />
         </div>
-
-        <!-- <div *ngIf="this.typeDisplay === 'downloadMany'" class="col-md-3">
-            <input id="all" name="all" type="checkbox" (click)="toggle()" />
-        </div> -->
-
     </div>
 
     <!--Danh sách tất cả hợp đồng cần ký trường hợp ký một-->
@@ -559,7 +554,7 @@
         </div>
     </div>
 
-    <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+    <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 100px;">
         <div style="display: table-cell;vertical-align: middle;">
             <img src="../../../assets/img/empty_data.svg" />
             <div style="color: #94A7C6">{{'no.data' | translate}}</div>
