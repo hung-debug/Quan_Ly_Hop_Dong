@@ -541,12 +541,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
   showEventInfo = (event: any) => {
     let canvasElement: HTMLElement | null;
-
     if (event.relatedTarget && event.relatedTarget.id) {
       canvasElement = document.getElementById(event.relatedTarget.id);
       let canvasInfo = canvasElement ? canvasElement.getBoundingClientRect() : '';
       this.coordinates_signature = event.rect;
       let id = event.target.id;
+      let signElement = <HTMLElement>document.getElementById(id);
+      let rect_location = signElement.getBoundingClientRect();
       if (id.includes('chua-keo')) {  //Khi kéo vào trong hợp đồng thì sẽ thêm 1 object vào trong mảng sign_config
         event.target.style.webkitTransform = event.target.style.transform = 'none';// Đẩy chữ ký về vị trí cũ
         event.target.setAttribute('data-x', 0);
@@ -559,7 +560,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               sign_unit: element.sign_unit,
               name: element.name,
               text_attribute_name: element.text_attribute_name,
-              required: 1
+              required: 1,
+              font: element.font,
+              font_size: element.font_size
             }
             if (element.sign_config.length == 0) {
               _obj['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
@@ -584,29 +587,36 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         let layerX;
         // @ts-ignore
         if ("left" in canvasInfo) {
-          layerX = event.rect.left - canvasInfo.left;
+          // layerX = event.rect.left - canvasInfo.left;
+          layerX = rect_location.left - canvasInfo.left;
         }
 
         let layerY = 0;
         //@ts-ignore
         if ("top" in canvasInfo) {
-          layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);
+          // layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);
+          layerY = canvasInfo.top <= 0 ? rect_location.top + Math.abs(canvasInfo.top) : rect_location.top - Math.abs(canvasInfo.top);
         }
-
         let pages = event.relatedTarget.id.split("-");
-        let page = Helper._attemptConvertFloat(pages[pages.length - 1]);
-        // @ts-ignore
+        let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
+
+        /* test set location signature
+        Duongdt
+         */
         if (page > 1) {
-          // @ts-ignore
+          let countPage = 0;
           for (let i = 1; i < page; i++) {
-            let canvasElement = document.getElementById("canvas-step3-" + i);
-            // @ts-ignore
+            let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
             let canvasInfo = canvasElement.getBoundingClientRect();
-            layerY += canvasInfo.height + 2;
+            countPage += canvasInfo.height;
           }
+          let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
+          let canvasInfo = canvasElement.getBoundingClientRect();
           // @ts-ignore
-          layerY += page / 3;
+          layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5 * (page - 1);
         }
+        //END
+
         let _array = Object.values(this.obj_toa_do);
         this.cdRef.detectChanges(); // render lại view
         let _sign = <HTMLElement>document.getElementById(this.signCurent['id']);
@@ -627,17 +637,21 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           // @ts-ignore
           _sign.style["z-index"] = '1';
           this.isEnableSelect = false;
+
+          // show toa do keo tha chu ky (demo)
+          // this.location_sign_x = this.signCurent['coordinate_x'];
+          // this.location_sign_y  = this.signCurent['coordinate_y'];
         }
 
         this.objSignInfo.traf_x = Math.round(this.signCurent['coordinate_x']);
         this.objSignInfo.traf_y = Math.round(this.signCurent['coordinate_y']);
 
-        this.tinhToaDoSign(event.relatedTarget.id, event.rect.width, event.rect.height, this.objSignInfo);
+        this.tinhToaDoSign(event.relatedTarget.id, rect_location.width, rect_location.height, this.objSignInfo);
         this.signCurent['position'] = _array.join(",");
         this.signCurent['left'] = this.obj_toa_do.x1;
         //@ts-ignore
         if ("top" in canvasInfo) {
-          this.signCurent['top'] = (event.rect.top - canvasInfo.top).toFixed();
+          this.signCurent['top'] = (rect_location.top - canvasInfo.top).toFixed();
         }
         let name_accept_signature = '';
 
@@ -660,8 +674,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 } else this.isEnableText = false;
 
                 if (res.sign_unit == 'so_tai_lieu') {
-                  
-                  if(this.soHopDong && this.soHopDong.role == 4) {
+                  // let flag = false;
+
+                  if (this.soHopDong && this.soHopDong.role == 4) {
                     element.name = this.soHopDong.name;
 
                     element.signature_party = this.soHopDong.type_unit;
@@ -669,15 +684,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     element.status = this.soHopDong.status;
                     element.type = this.soHopDong.type;
                     element.email = this.soHopDong.email;
-                  } else if(res.sign_config.length > 0)  {
+                  } else if (res.sign_config.length > 0) {
                     this.soHopDong = {
-                      
+
                     };
 
-                    for(let i = 0; i < res.sign_config.length; i++) {
+                    for (let i = 0; i < res.sign_config.length; i++) {
                       let element1 = res.sign_config[i];
 
-                      if(element1.name) {
+                      if (element1.name) {
                         this.soHopDong.name = element1.name;
                         this.soHopDong.type_unit = element1.signature_party;
                         this.soHopDong.id = element1.recipient_id;
@@ -688,7 +703,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                       }
                     }
 
-                    if(this.soHopDong && this.soHopDong.name) {
+                    if (this.soHopDong && this.soHopDong.name) {
                       element.name = this.soHopDong.name;
 
                       element.signature_party = this.soHopDong.type_unit;
@@ -697,6 +712,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                       element.type = this.soHopDong.type;
                       element.email = this.soHopDong.email;
                     }
+
                   }
 
                   this.isChangeText = true;
@@ -706,6 +722,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
                 // element['number'] = _arrPage[_arrPage.length - 1];
                 element['page'] = _arrPage[_arrPage.length - 1];
+
+                console.log("page ", element['page']);
                 element['position'] = this.signCurent['position'];
                 element['coordinate_x'] = this.signCurent['coordinate_x'];
                 element['coordinate_y'] = this.signCurent['coordinate_y'];
@@ -713,14 +731,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                   if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
                     if (res.sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
-                      element['width'] = '135';
-                      element['height'] = '28';
+                      element['width'] = rect_location.width;
+                      element['height'] = rect_location.height;
                     } else {
                       element['width'] = '135';
                       element['height'] = '28';
                     }
                   } else {
-                    element['width'] = '135';
+                    element['width'] = '250';
                     element['height'] = '85';
                   }
 
@@ -730,7 +748,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   this.list_sign_name.forEach((item: any) => {
                     item['selected'] = false;
                   })
-                  // document.getElementById('select-dropdown'). = 0;
                   // @ts-ignore
                   document.getElementById('select-dropdown').value = "";
                   this.objDrag[this.signCurent['id']].count = 2;
