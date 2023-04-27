@@ -12,6 +12,7 @@ import { DashboardService } from '../service/dashboard.service';
 import { UserService } from '../service/user.service';
 import {DeviceDetectorService} from "ngx-device-detector";
 import { ContractService } from '../service/contract.service';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -96,7 +97,7 @@ export class MainComponent implements OnInit {
   checkMailMbf() {
     this.email = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email;
 
-    if(this.email.includes('@mobifone.vn'))
+    if(this.email.includes('@mobifone.vn') && environment.flag == 'NB')
       return true;
 
     return false;
