@@ -22,7 +22,7 @@ export class DialogSignManyComponentComponent implements OnInit {
 
   onSubmit() {
     const data = {
-      mark: 1,
+      // mark: 1,
       agree: 1 
     }
     this.dialogRef.close(data);
