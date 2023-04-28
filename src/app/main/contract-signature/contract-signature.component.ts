@@ -14,6 +14,7 @@ import * as moment from 'moment';
 import { sideList } from 'src/app/config/variable';
 import { DatePipe } from '@angular/common';
 import { DialogSignManyComponentComponent } from './dialog/dialog-sign-many-component/dialog-sign-many-component.component';
+import { DialogViewManyComponentComponent } from './dialog/dialog-view-many-component/dialog-view-many-component.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
 import { encode } from 'base64-arraybuffer';
@@ -24,6 +25,7 @@ import { delay } from 'rxjs/operators';
 import { DialogReasonCancelComponent } from './shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
 import { environment } from 'src/environments/environment';
 import { ImageDialogSignComponent } from './components/consider-contract/image-dialog-sign/image-dialog-sign.component';
+// import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
   selector: 'app-contract',
@@ -84,6 +86,7 @@ export class ContractSignatureComponent implements OnInit {
 
   organization_id: any = '';
   public contractDownloadList: any[] = [];
+  public contractViewList: any[] = [];
 
   constructor(
     private appService: AppService,
@@ -96,7 +99,8 @@ export class ContractSignatureComponent implements OnInit {
     private uploadService: UploadService,
     private toastService: ToastService,
     public datepipe: DatePipe,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    // private contractService1: ContractService1,
   ) {
     this.constantModel = contractModel;
   }
@@ -198,8 +202,60 @@ export class ContractSignatureComponent implements OnInit {
 
     this.contractService.getContractMyProcessListSignMany().subscribe((data) => {
 
-        this.spinner.hide();
-        this.contractsSignMany = data;
+      this.spinner.hide();
+      this.contractsSignMany = data;
+      if (this.pageTotal == 0) {
+        this.p = 0;
+        this.pageStart = 0;
+        this.pageEnd = 0;
+      } else {
+        this.setPage();
+      }
+      this.contractsSignMany.forEach((key: any, v: any) => {
+        this.contractsSignMany[v].contractId = key.participant.contract.id;
+
+        this.contractsSignMany[v].contractName =
+          key.participant.contract.name;
+
+        this.contractsSignMany[v].contractNumber =
+          key.participant.contract.code;
+
+        //Ngay het han hop dong
+        this.contractsSignMany[v].contractSignTime =
+          key.participant.contract.sign_time;
+
+        //Ngay tao hop dong
+        this.contractsSignMany[v].contractCreateTime =
+          key.participant.contract.created_time;
+
+        this.contractsSignMany[v].contractStatus =
+          key.participant.contract.status;
+
+        this.contractsSignMany[v].contractCecaPush =
+          key.participant.contract.ceca_push;
+
+        this.contractsSignMany[v].contractCecaStatus =
+          key.participant.contract.ceca_status;
+
+        this.contractsSignMany[v].contractReleaseState =
+          key.participant.contract.release_state;
+
+        this.contractsSignMany[v].checked = false;
+
+        //Gan document id
+        this.contractsSignMany[v].documentId = key.fields[0].documentId;
+      });
+    });
+  }
+  viewMany() {
+    this.spinner.show();
+    this.typeDisplay = 'viewMany';
+    console.log();
+
+    this.contractService.getViewContractMyProcessList().subscribe((data) => {
+        console.log("data", data);
+
+        this.contractViewList = data;
         if (this.pageTotal == 0) {
           this.p = 0;
           this.pageStart = 0;
@@ -207,80 +263,82 @@ export class ContractSignatureComponent implements OnInit {
         } else {
           this.setPage();
         }
-        this.contractsSignMany.forEach((key: any, v: any) => {
-          this.contractsSignMany[v].contractId = key.participant.contract.id;
+        console.log("contractViewList", this.contractViewList);
 
-          this.contractsSignMany[v].contractName =
+        this.contractViewList.forEach((key: any, v: any) => {
+          this.contractViewList[v].contractId =
+            key.participant.contract.id;
+          this.contractViewList[v].contractName =
             key.participant.contract.name;
-
-          this.contractsSignMany[v].contractNumber =
+          this.contractViewList[v].contractNumber =
             key.participant.contract.code;
-
-          //Ngay het han hop dong
-          this.contractsSignMany[v].contractSignTime =
+          this.contractViewList[v].contractSignTime =
             key.participant.contract.sign_time;
-
-          //Ngay tao hop dong
-          this.contractsSignMany[v].contractCreateTime =
+          this.contractViewList[v].contractCreateTime =
             key.participant.contract.created_time;
-
-          this.contractsSignMany[v].contractStatus =
+          this.contractViewList[v].contractStatus =
             key.participant.contract.status;
-
-          this.contractsSignMany[v].contractCecaPush =
+          this.contractViewList[v].contractCecaPush =
             key.participant.contract.ceca_push;
-
-          this.contractsSignMany[v].contractCecaStatus =
+          this.contractViewList[v].contractCecaStatus =
             key.participant.contract.ceca_status;
-
-          this.contractsSignMany[v].contractReleaseState =
+          this.contractViewList[v].contractReleaseState =
             key.participant.contract.release_state;
-
-          this.contractsSignMany[v].checked = false;
-
-          //Gan document id
-          this.contractsSignMany[v].documentId = key.fields[0].documentId;
         });
-      });
+        console.log('this.contractViewList', this.contractViewList);
+
+        this.spinner.hide();
+      },
+        (error) => {
+          setTimeout(() => this.router.navigate(['/login']));
+          this.toastService.showErrorHTMLWithTimeout(
+            'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+            '',
+            3000
+          );
+        }
+      );
   }
 
   downloadMany() {
     this.spinner.show();
     this.typeDisplay = 'downloadMany';
 
-    this.contractService.getContractMyProcessList(this.filter_name,this.filter_type,this.filter_contract_no,this.filter_from_date,this.filter_to_date,this.filter_status,
-        this.p,this.page,30).subscribe((data) => {
-          this.contractDownloadList = data.entities;
-          this.pageTotal = data.total_elements;
-          if (this.pageTotal == 0) {
-            this.p = 0;
-            this.pageStart = 0;
-            this.pageEnd = 0;
-          } else {
-            this.setPage();
-          }
-          this.contractDownloadList.forEach((key: any, v: any) => {
-            this.contractDownloadList[v].contractId =
-              key.participant.contract.id;
-            this.contractDownloadList[v].contractName =
-              key.participant.contract.name;
-            this.contractDownloadList[v].contractNumber =
-              key.participant.contract.code;
-            this.contractDownloadList[v].contractSignTime =
-              key.participant.contract.sign_time;
-            this.contractDownloadList[v].contractCreateTime =
-              key.participant.contract.created_time;
-            this.contractDownloadList[v].contractStatus =
-              key.participant.contract.status;
-            this.contractDownloadList[v].contractCecaPush =
-              key.participant.contract.ceca_push;
-            this.contractDownloadList[v].contractCecaStatus =
-              key.participant.contract.ceca_status;
-            this.contractDownloadList[v].contractReleaseState =
-              key.participant.contract.release_state;
-          });
-          this.spinner.hide();
-        },
+    this.contractService.getContractMyProcessList(this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status,
+      this.p, this.page, 30).subscribe((data) => {
+        console.log("data", data);
+
+        this.contractDownloadList = data.entities;
+        this.pageTotal = data.total_elements;
+        if (this.pageTotal == 0) {
+          this.p = 0;
+          this.pageStart = 0;
+          this.pageEnd = 0;
+        } else {
+          this.setPage();
+        }
+        this.contractDownloadList.forEach((key: any, v: any) => {
+          this.contractDownloadList[v].contractId =
+            key.participant.contract.id;
+          this.contractDownloadList[v].contractName =
+            key.participant.contract.name;
+          this.contractDownloadList[v].contractNumber =
+            key.participant.contract.code;
+          this.contractDownloadList[v].contractSignTime =
+            key.participant.contract.sign_time;
+          this.contractDownloadList[v].contractCreateTime =
+            key.participant.contract.created_time;
+          this.contractDownloadList[v].contractStatus =
+            key.participant.contract.status;
+          this.contractDownloadList[v].contractCecaPush =
+            key.participant.contract.ceca_push;
+          this.contractDownloadList[v].contractCecaStatus =
+            key.participant.contract.ceca_status;
+          this.contractDownloadList[v].contractReleaseState =
+            key.participant.contract.release_state;
+        });
+        this.spinner.hide();
+      },
         (error) => {
           setTimeout(() => this.router.navigate(['/login']));
           this.toastService.showErrorHTMLWithTimeout(
@@ -299,12 +357,15 @@ export class ContractSignatureComponent implements OnInit {
   cancelDownloadMany() {
     this.typeDisplay = 'signOne';
   }
+  cancelViewMany() {
+    this.typeDisplay = 'signOne';
+  }
 
-  getPageData(){
-    if(this.typeDisplay == 'signOne'){
-      this.getContractList(); 
+  getPageData() {
+    if (this.typeDisplay == 'signOne') {
+      this.getContractList();
     }
-    else if(this.typeDisplay == 'downloadMany'){
+    else if (this.typeDisplay == 'downloadMany') {
       this.downloadMany();
     }
   }
@@ -582,17 +643,17 @@ export class ContractSignatureComponent implements OnInit {
     const formattedDate = this.datepipe.transform(myDate, 'ddMMyyyy');
     const ids = this.dataChecked.map((el) => el.id).toString();
     this.contractService.getContractMyProcessListDownloadMany(ids).subscribe((data) => {
-        const file = new Blob([data], { type: 'application/zip' });
-        let fileUrl = window.URL.createObjectURL(file);
-        let a = document.createElement('a');
-        document.body.appendChild(a);
-        a.setAttribute('style', 'display: none');
-        a.href = fileUrl;
-        a.download = 'Contracts' + '_' + formattedDate;
-        a.click();
-        window.URL.revokeObjectURL(fileUrl);
-        a.remove();
-      },
+      const file = new Blob([data], { type: 'application/zip' });
+      let fileUrl = window.URL.createObjectURL(file);
+      let a = document.createElement('a');
+      document.body.appendChild(a);
+      a.setAttribute('style', 'display: none');
+      a.href = fileUrl;
+      a.download = 'Contracts' + '_' + formattedDate;
+      a.click();
+      window.URL.revokeObjectURL(fileUrl);
+      a.remove();
+    },
       (error) => {
         this.toastService.showErrorHTMLWithTimeout(
           'no.contract.download.file.error',
@@ -603,13 +664,15 @@ export class ContractSignatureComponent implements OnInit {
     );
   }
 
-  toggleOneDownload(item: any, index1: any) {
+  toggleOneView(item: any, index1: any) {
     let data = {
-      id: item.participant?.contract?.id, 
+      id: item.id,
       selectedId: item.id
     }
-    this.contractDownloadList[index1].checked = item.checked
-    if(this.dataChecked.some(el => el.id === data.id)){
+    console.log("dataaaa", data);
+
+    this.contractViewList[index1].checked = item.checked
+    if (this.dataChecked.some(el => el.id === data.id)) {
       this.dataChecked = this.dataChecked.filter((item) => {
         return item.id != data.id
       })
@@ -618,12 +681,27 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
-  toggleOneDownloadShare(item: any){
+  toggleOneDownload(item: any, index1: any) {
+    let data = {
+      id: item.participant?.contract?.id,
+      selectedId: item.id
+    }
+    this.contractDownloadList[index1].checked = item.checked
+    if (this.dataChecked.some(el => el.id === data.id)) {
+      this.dataChecked = this.dataChecked.filter((item) => {
+        return item.id != data.id
+      })
+    } else {
+      this.dataChecked.push(data);
+    }
+  }
+
+  toggleOneDownloadShare(item: any) {
     let data = {
       id: item.participants[0]?.contract_id,
       selectedId: item.id
     }
-    if(this.dataChecked.some(el => el.id === data.id)){
+    if (this.dataChecked.some(el => el.id === data.id)) {
       this.dataChecked = this.dataChecked.filter((item) => {
         return item.id != data.id;
       });
@@ -685,6 +763,42 @@ export class ContractSignatureComponent implements OnInit {
         skipLocationChange: true,
       });
     });
+  }
+
+  viewManyContract() {
+    this.dialogViewManyComponentComponent();
+  }
+  async dialogViewManyComponentComponent() {
+    const dialogRef = this.dialog.open(DialogViewManyComponentComponent, {
+      width: '580px',
+    });
+    dialogRef.afterClosed().subscribe(async (result: any) => {
+      console.log("dataChecked", this.dataChecked);
+      for (let index = 0; index < this.dataChecked.length; index++) {
+        this.contractServiceV1
+          .updateInfoContractConsider([], this.dataChecked[index].id)
+          .subscribe(
+            (result) => {
+              console.log("#######result", result);
+
+              this.toastService.showSuccessHTMLWithTimeout('Xem xét hợp đồng thành công',
+                '',
+                1000
+              );
+
+            },
+            (error) => {
+              this.toastService.showErrorHTMLWithTimeout(
+                'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
+                '',
+                3000
+              );
+            }
+          );
+      }
+      this.router.navigate(['/main/c/receive/processed']);
+      return;
+    })
   }
 
   signManyContract() {
@@ -763,7 +877,7 @@ export class ContractSignatureComponent implements OnInit {
     this.openDialogSignManyComponent(recipientId, taxCode, idSignMany, signId);
   }
 
-  async openDialogSignManyComponent(recipientId: any,taxCode: any,idSignMany: any,signId: any) {
+  async openDialogSignManyComponent(recipientId: any, taxCode: any, idSignMany: any, signId: any) {
     const dialogRef = this.dialog.open(DialogSignManyComponentComponent, {
       width: '580px',
     });
@@ -775,13 +889,13 @@ export class ContractSignatureComponent implements OnInit {
         for (let i = 0; i < taxCode.length; i++) {
           for (let j = i + 1; j < taxCode.length; j++) {
             if (taxCode[i] != taxCode[j]) {
-              this.toastService.showErrorHTMLWithTimeout('Mã số thuế tại các hợp đồng khác nhau','',3000);
+              this.toastService.showErrorHTMLWithTimeout('Mã số thuế tại các hợp đồng khác nhau', '', 3000);
               return;
             }
           }
         }
 
-        if(result.mark) {
+        if (result.mark) {
           const data = {
             title: 'ĐÓNG DẤU HỢP ĐỒNG ',
             is_content: 'forward_contract',
@@ -846,7 +960,7 @@ export class ContractSignatureComponent implements OnInit {
             }
           });
         } catch (err) {
-          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người tham gia hợp đồng','',3000);
+          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người tham gia hợp đồng', '', 3000);
           return false;
         }
       }
@@ -877,7 +991,7 @@ export class ContractSignatureComponent implements OnInit {
         }
       }
 
-      this.signUsbTokenMany(fileC,idContract,recipientId,documentId,taxCode,idSignMany, result.mark);
+      this.signUsbTokenMany(fileC, idContract, recipientId, documentId, taxCode, idSignMany, result.mark);
     } else if (signId == 4) {
       //Ký nhiều hsm
       //Mở popup ký hsm
@@ -904,16 +1018,16 @@ export class ContractSignatureComponent implements OnInit {
 
           await of(null).pipe(delay(100)).toPromise();
 
-          if(result.mark) {
+          if (result.mark) {
             imageRender = <HTMLElement>(document.getElementById('export-html-hsm-image'));
           } else {
             imageRender = <HTMLElement>(document.getElementById('export-html-hsm'));
-          } 
+          }
 
           let signI = '';
 
           if (imageRender) {
-            const textSignB = await domtoimage.toPng(imageRender,this.getOptions(imageRender));
+            const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
             signI = textSignB.split(',')[1];
           }
 
@@ -994,7 +1108,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   //Ký usb token v1
-  async signTokenVersion1(fileC: any,idContract: any,recipientId: any,documentId: any,taxCode: any,idSignMany: any, isMark: boolean) {
+  async signTokenVersion1(fileC: any, idContract: any, recipientId: any, documentId: any, taxCode: any, idSignMany: any, isMark: boolean) {
     //ky bang usb token
     let base64String: any = [];
 
@@ -1024,7 +1138,7 @@ export class ContractSignatureComponent implements OnInit {
     }
 
     for (let i = 0; i < fileC.length; i++) {
-      const base64StringPdf =await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
+      const base64StringPdf = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
 
       base64String.push(encode(base64StringPdf));
 
@@ -1078,14 +1192,14 @@ export class ContractSignatureComponent implements OnInit {
 
                 await of(null).pipe(delay(100)).toPromise();
 
-                if(isMark) {
+                if (isMark) {
                   imageRender = <HTMLElement>(document.getElementById('export-html-image'));
                 } else {
                   imageRender = <HTMLElement>(document.getElementById('export-html'));
                 }
 
                 if (imageRender) {
-                  const textSignB = await domtoimage.toPng(imageRender,this.getOptions(imageRender));
+                  const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
                   signI = textSignB.split(',')[1];
                 }
 
@@ -1102,7 +1216,7 @@ export class ContractSignatureComponent implements OnInit {
                   let dataSignMobi: any = null;
                   try {
                     dataSignMobi =
-                      await this.contractServiceV1.postSignDigitalMobiMulti(this.signCertDigital.Serial,base64String[i],signI,page[i],h[i],w[i],x[i],y[i]);
+                      await this.contractServiceV1.postSignDigitalMobiMulti(this.signCertDigital.Serial, base64String[i], signI, page[i], h[i], w[i], x[i], y[i]);
                   } catch (err) {
                     this.toastService.showErrorHTMLWithTimeout(
                       'Lỗi call api ký USB Token ',
@@ -1234,7 +1348,7 @@ export class ContractSignatureComponent implements OnInit {
     return options;
   }
 
-  async signTokenVersion2(fileC: any,idContract: any,recipientId: any,documentId: any,taxCode: any,idSignMany: any, isMark: boolean) {
+  async signTokenVersion2(fileC: any, idContract: any, recipientId: any, documentId: any, taxCode: any, idSignMany: any, isMark: boolean) {
     //ky bang usb token
     let base64String: any = [];
 
@@ -1426,7 +1540,7 @@ export class ContractSignatureComponent implements OnInit {
       await of(null).pipe(delay(100)).toPromise();
       let imageRender = null;
 
-      if(isMark) {
+      if (isMark) {
         imageRender = <HTMLElement>document.getElementById('export-html-image');
       } else {
         imageRender = <HTMLElement>document.getElementById('export-html');
@@ -1562,13 +1676,13 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
-  async signUsbTokenMany(fileC: any,idContract: any,recipientId: any,documentId: any,taxCode: any,idSignMany: any, isMark: boolean) {
+  async signUsbTokenMany(fileC: any, idContract: any, recipientId: any, documentId: any, taxCode: any, idSignMany: any, isMark: boolean) {
     const dataOrg = await this.contractServiceV1.getDataNotifyOriganzation().toPromise();
 
     if (dataOrg.usb_token_version == 1) {
-      this.signTokenVersion1(fileC,idContract,recipientId,documentId,taxCode,idSignMany, isMark);
+      this.signTokenVersion1(fileC, idContract, recipientId, documentId, taxCode, idSignMany, isMark);
     } else if (dataOrg.usb_token_version == 2) {
-      this.signTokenVersion2(fileC,idContract,recipientId,documentId,taxCode,idSignMany, isMark);
+      this.signTokenVersion2(fileC, idContract, recipientId, documentId, taxCode, idSignMany, isMark);
     }
   }
 
@@ -1718,11 +1832,11 @@ export class ContractSignatureComponent implements OnInit {
           this.router.navigate(
             [
               'main/' +
-                this.contract_signatures +
-                '/' +
-                this.signatures +
-                '/' +
-                item.contractId,
+              this.contract_signatures +
+              '/' +
+              this.signatures +
+              '/' +
+              item.contractId,
             ],
             {
               queryParams: {
@@ -1735,7 +1849,7 @@ export class ContractSignatureComponent implements OnInit {
         } else {
           this.toastService.showErrorHTMLWithTimeout(
             'Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' +
-              this.datepipe.transform(data.nextAttempt, 'dd/MM/yyyy HH:mm'),
+            this.datepipe.transform(data.nextAttempt, 'dd/MM/yyyy HH:mm'),
             '',
             3000
           );

@@ -50,6 +50,7 @@ import { ContractSignatureComponent } from './contract-signature.component';
 import { DisplaySignatureImageComponent } from './display-signature-image/display-signature-image.component';
 import { NotificationExpireComponent } from './components/contract-coordination/shared/model/dialog/notification-expire/notification-expire.component';
 import { DialogSignManyComponentComponent } from './dialog/dialog-sign-many-component/dialog-sign-many-component.component';
+import { DialogViewManyComponentComponent } from './dialog/dialog-view-many-component/dialog-view-many-component.component'
 import { EkycDialogSignComponent } from './components/consider-contract/ekyc-dialog-sign/ekyc-dialog-sign.component';
 import { WebcamModule } from 'ngx-webcam';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -113,6 +114,7 @@ export const contractSignatureRoutes1: Routes = [
     DisplaySignatureImageComponent,
     NotificationExpireComponent,
     DialogSignManyComponentComponent,
+    DialogViewManyComponentComponent,
     EkycDialogSignComponent,
     DialogReasonRejectedComponent,
     DialogReasonCancelComponent,

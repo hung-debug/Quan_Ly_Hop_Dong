@@ -598,5 +598,6 @@
   "menu.config-sms-email": "Configure sending SMS/Email",
   "not.photo":"You haven't selected a photo yet",
   "mark.contract":"Seal the contract contract",
-  "customer.list":"Customer list"
+  "customer.list":"Customer list",
+  "contract.views": "View more contracts"
 }
