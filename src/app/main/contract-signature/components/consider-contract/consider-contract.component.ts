@@ -1780,24 +1780,24 @@ export class ConsiderContractComponent
   }
 
   getSwalFire(code: string) {
-    if (code == 'digital') {
-      return Swal.fire({
-        title: this.getTextAlertConfirm(),
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#b0bec5',
-        confirmButtonText: this.translate.instant('confirm'),
-        cancelButtonText: this.translate.instant('contract.status.canceled'),
-        input: 'select',
-        inputOptions: {
-          no: this.translate.instant('no'),
-          yes: this.translate.instant('yes'),
-        },
+    // if (code == 'digital') {
+    //   return Swal.fire({
+    //     title: this.getTextAlertConfirm(),
+    //     icon: 'warning',
+    //     showCancelButton: true,
+    //     confirmButtonColor: '#3085d6',
+    //     cancelButtonColor: '#b0bec5',
+    //     confirmButtonText: this.translate.instant('confirm'),
+    //     cancelButtonText: this.translate.instant('contract.status.canceled'),
+    //     input: 'select',
+    //     inputOptions: {
+    //       no: this.translate.instant('no'),
+    //       yes: this.translate.instant('yes'),
+    //     },
 
-        inputLabel: this.translate.instant('stamp.contract.questions'),
-      });
-    } else {
+    //     inputLabel: this.translate.instant('stamp.contract.questions'),
+    //   });
+    // } else {
       return Swal.fire({
         title: this.getTextAlertConfirm(),
         icon: 'warning',
@@ -1807,7 +1807,7 @@ export class ConsiderContractComponent
         confirmButtonText: this.translate.instant('confirm'),
         cancelButtonText: this.translate.instant('contract.status.canceled'),
       });
-    }
+    
   }
 
   openPopupSignContract(typeSign: any) {
