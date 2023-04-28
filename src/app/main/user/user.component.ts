@@ -146,7 +146,7 @@ export class UserComponent implements OnInit {
     this.first = 0;
 
     this.spinner.show();
-    this.userService.getUserList(!this.organization_id? this.organization_id_user_login :this.organization_id, this.email).subscribe(response => {
+    this.userService.getUserList(this.organization_id? this.organization_id : '', this.email).subscribe(response => {
       this.spinner.hide();
       this.list = response.entities;
     });
