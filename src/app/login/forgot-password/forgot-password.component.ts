@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from 'src/app/service/user.service';
 import { SendPasswordDialogComponent } from '../dialog/send-password-dialog/send-password-dialog.component';
@@ -47,8 +45,8 @@ export class ForgotPasswordComponent implements OnInit {
   sendForgetPassword() {
     let email = this.forgotPasswordForm.value.email;
 
-    if(email.includes('@vinmec.com') || email.includes('@vingroup.net')) {
-      this.toastService.showErrorHTMLWithTimeout('vin.fail','',3000);
+    if(email.includes('@mobifone.vn')) {
+      this.toastService.showErrorHTMLWithTimeout('mobifone.fail','',3000);
       return;
     }
 

@@ -516,7 +516,6 @@ export class FooterSignatureComponent implements OnInit {
 
     this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
       const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-      console.log("ArrRecipients", ArrRecipients);
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
@@ -525,7 +524,6 @@ export class FooterSignatureComponent implements OnInit {
           return
         }
       });
-      console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
       if (!ArrRecipientsNew) {
 

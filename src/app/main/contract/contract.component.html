@@ -335,7 +335,7 @@
       </div>
     </div>
 
-    <div *ngIf="this.filter_status == 30">
+    <!-- <div *ngIf="this.filter_status == 30">
       <div class="col-md-1 btn_search" style="padding-top: 10px">
         <button
           (click)="downloadManyContract()"
@@ -344,7 +344,7 @@
           {{ "contract.down" | translate }}
         </button>
       </div>
-    </div>
+    </div> -->
 
     <div class="row list_header" *ngIf="pageTotal > 0">
       <div class="col-md-4"></div>
@@ -545,7 +545,7 @@
         </div>
 
         <!--Cột 5: Input checkbox-->
-        <div class="col-md-1 item_icon" *ngIf="this.filter_status == 30">
+        <!-- <div class="col-md-1 item_icon" *ngIf="this.filter_status == 30">
           <div style="display: flex; justify-content: center">
             <div class="div_icon">
               <div class="col-md-1 calendar_create">
@@ -560,10 +560,7 @@
               </div>
             </div>
           </div>
-        </div>
-        <!-- <div class="div_icon" *ngIf="this.typeDisplay == 'downloadMany'">
-                            <input id="all" name="all" type="checkbox" (click)="toggleOneDownload(item, index1)" />
-                        </div> -->
+        </div> -->
       </div>
       <!-- </div> -->
     </div>
