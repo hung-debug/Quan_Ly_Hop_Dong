@@ -137,7 +137,6 @@ export class SampleContractFormComponent implements OnInit {
 
     this.isChangeNumberContract = this.datasForm.contract_no; // save contract number check with input contract number object signature when change
 
-    console.log("datas form ", this.datasForm.contract_user_sign);
     if (!this.datasForm.contract_user_sign) {
       if (this.datasForm.is_data_object_signature && this.datasForm.is_data_object_signature.length && this.datasForm.is_data_object_signature.length > 0) {
         this.datasForm.is_data_object_signature.forEach((res: any) => {
