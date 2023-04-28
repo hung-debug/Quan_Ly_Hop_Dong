@@ -14,7 +14,7 @@ export class CheckZoomService {
     console.log("zoom level ", zoomLevel);
 
     if(zoomLevel != 100) {
-      this.toastService.showErrorHTMLWithTimeout('Cảnh báo lệch toạ độ khi kéo ô ký/text/số hợp đồng khi phóng to, thu nhỏ','',3000);
+      this.toastService.showWarningHTMLWithTimeout('zoom.warning','',3000);
     }
   }
 }

@@ -610,5 +610,7 @@
   "tax.code":"Mã số thuế",
   "phone_mail":"SĐT/Email",
   "report.number.contracts.type":"SL theo loại HĐ",
-  "ceca.reason.one.person":"Hợp đồng một người ký sẽ không đẩy lên Bộ Công thương"
+  "ceca.reason.one.person":"Hợp đồng một người ký sẽ không đẩy lên Bộ Công thương",
+  "ceca.reason":"Hợp đồng không được đẩy lên Bộ Công thương do có chữ ký không phải chữ ký số",
+  "zoom.warning":"Khi phóng to/ thu nhỏ, vị trí ô ký khi kéo sẽ không đúng. Vui lòng để màn hình ở chế độ 100% để trải nghiệm được tốt nhất!"
 }
