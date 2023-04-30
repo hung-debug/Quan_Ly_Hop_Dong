@@ -1666,7 +1666,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.step = variable.stepSampleContract.step4;
       this.datas.stepLast = this.step
       this.nextOrPreviousStep(this.step);
-    }
+    // }
   }
 
   validData() {
