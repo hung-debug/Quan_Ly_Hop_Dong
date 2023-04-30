@@ -834,27 +834,27 @@ export class ConfirmContractBatchComponent
 
   async checkNumber(countCeCa: number, countTimestamp: number) {
 
-    this.orgId = this.userService.getInforUser().organization_id;
-    let getNumberContractCreateOrg;
-    try {
-      getNumberContractCreateOrg = await this.contractService.getDataNotifyOriganzation().toPromise();
-    } catch (err) {
-      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng' + err, '', 3000);
-    }
+    // this.orgId = this.userService.getInforUser().organization_id;
+    // let getNumberContractCreateOrg;
+    // try {
+    //   getNumberContractCreateOrg = await this.contractService.getDataNotifyOriganzation().toPromise();
+    // } catch (err) {
+    //   this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng' + err, '', 3000);
+    // }
 
-    if ((countCeCa > 0 && (Number(getNumberContractCreateOrg.numberOfCeca) - this.datasBatch.ceca_push) < 0) &&
-      (countTimestamp > 0 && (Number(getNumberContractCreateOrg.numberOfTimestamp) - this.convertToSignConfig().length) < 0)) {
-      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng timestamp và số lần gửi xác nhận BCT đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-      return false;
-    }
-    else if (countTimestamp > 0 && (Number(getNumberContractCreateOrg.numberOfTimestamp) - this.convertToSignConfig().length) < 0) {
-      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng timestamp đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-      return false;
-    }
-    else if (countCeCa > 0 && (Number(getNumberContractCreateOrg.numberOfCeca) - this.datasBatch.ceca_push) < 0) {
-      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lần gửi xác nhận BCT. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-      return false;
-    }
+    // if ((countCeCa > 0 && (Number(getNumberContractCreateOrg.numberOfCeca) - this.datasBatch.ceca_push) < 0) &&
+    //   (countTimestamp > 0 && (Number(getNumberContractCreateOrg.numberOfTimestamp) - this.convertToSignConfig().length) < 0)) {
+    //   this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng timestamp và số lần gửi xác nhận BCT đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+    //   return false;
+    // }
+    // else if (countTimestamp > 0 && (Number(getNumberContractCreateOrg.numberOfTimestamp) - this.convertToSignConfig().length) < 0) {
+    //   this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng timestamp đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+    //   return false;
+    // }
+    // else if (countCeCa > 0 && (Number(getNumberContractCreateOrg.numberOfCeca) - this.datasBatch.ceca_push) < 0) {
+    //   this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lần gửi xác nhận BCT. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+    //   return false;
+    // }
     return true
   }
 
