@@ -192,7 +192,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
-      edges: { left: true, right: true, bottom: true, top: true },
+      edges: { right: true, bottom: true },
       listeners: {
         move: this.resizableListener, onend: this.resizeSignature
       },
@@ -738,7 +738,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                       element['height'] = '28';
                     }
                   } else {
-                    element['width'] = '250';
+                    element['width'] = '135';
                     element['height'] = '85';
                   }
 

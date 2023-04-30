@@ -86,29 +86,29 @@ export class AddRoleComponent implements OnInit {
   }
 
   onChange(event: any) {
-    if(event.value.includes('QLHD_02')) {
-      event.value.push('QLHD_07')
-    }
+    // if(event.value.includes('QLHD_02')) {
+    //   event.value.push('QLHD_07')
+    // }
 
-    if(event.value.includes('QLMHD_02')) {
-      event.value.push('QLMHD_08')
-    }
+    // if(event.value.includes('QLMHD_02')) {
+    //   event.value.push('QLMHD_08')
+    // }
 
-    if(event.value.includes('QLTC_02')) {
-      event.value.push('QLTC_04')
-    }
+    // if(event.value.includes('QLTC_02')) {
+    //   event.value.push('QLTC_04')
+    // }
 
-    if(event.value.includes('QLND_02')) {
-      event.value.push('QLND_04')
-    }
+    // if(event.value.includes('QLND_02')) {
+    //   event.value.push('QLND_04')
+    // }
 
-    if(event.value.includes('QLVT_02')) {
-      event.value.push('QLVT_05');
-    }
+    // if(event.value.includes('QLVT_02')) {
+    //   event.value.push('QLVT_05');
+    // }
 
-    if(event.value.includes('QLHD_02')) {
-      event.value.push('QLHD_05');
-    }
+    // if(event.value.includes('QLHD_02')) {
+    //   event.value.push('QLHD_05');
+    // }
   }
 
   onSubmit() {
