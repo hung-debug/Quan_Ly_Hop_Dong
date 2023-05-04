@@ -137,15 +137,34 @@ export class AddRoleComponent implements OnInit {
 
     console.log("data ", data.selectedRole);
 
+    let arr: any = [];
     data.selectedRole.forEach((key: any, v: any) => {
-      let jsonData = {id: key.id, code: key.code, status: 1};
-      this.selectedRoleConvert.push(jsonData);
+      // let jsonData = {code: key, status: 1};
+      // this.selectedRoleConvert.push(jsonData);
+      this.selectedRoleIdCode.forEach((selectedRoleIdCode: any) => {
+        if(key == selectedRoleIdCode.code) {
+           let jsonData = {id:selectedRoleIdCode.id, code: key, status: 1};
+           this.selectedRoleConvert.push(jsonData);
+           arr.push(key);
+        } else {
+          let jsonData = { code: key, status: 1};
+          this.selectedRoleConvert.push(jsonData);
+        }
+      })
     });
+
+    for(let i = 0; i < this.selectedRoleConvert.length; i++) {
+      for(let j = 0; j < arr.length;j++) {
+        if(this.selectedRoleConvert[i].code == arr[j] && this.selectedRoleConvert[i].id) {
+          this.selectedRoleConvert = this.selectedRoleConvert.splice(i,1);
+        }
+      }
+    }
+
     data.selectedRole = this.selectedRoleConvert;
 
     if(this.data.id != null){
 
-      data.selectedRole = this.selectedRoleIdCode,
       this.roleService.updateRole(data).subscribe(
         data => {
           this.toastService.showSuccessHTMLWithTimeout('Cập nhật vai trò thành công!', "", 3000);
