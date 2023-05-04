@@ -127,6 +127,9 @@ export class AddRoleComponent implements OnInit {
     }
     this.spinner.show();
     this.selectedRoleConvert = [];
+
+    console.log("data ", data.selectedRole);
+
     data.selectedRole.forEach((key: any, v: any) => {
       console.log(key);
       let jsonData = {code: key, status: 1};
