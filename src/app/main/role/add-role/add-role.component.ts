@@ -77,11 +77,18 @@ export class AddRoleComponent implements OnInit {
       this.groupedRole = roleList_en;
   }
 
+  selectedRoleIdCode: any = [];
   convertRoleArr(roleArr:[]){
     let roleArrConvert: any = [];
     roleArr.forEach((key: any, v: any) => {
       roleArrConvert.push(key.code);
+
+      this.selectedRoleIdCode.push({
+        id: key.id,
+        code: key.code
+      })
     });
+
     return roleArrConvert;
   }
 
@@ -131,13 +138,14 @@ export class AddRoleComponent implements OnInit {
     console.log("data ", data.selectedRole);
 
     data.selectedRole.forEach((key: any, v: any) => {
-      console.log(key);
-      let jsonData = {code: key, status: 1};
+      let jsonData = {id: key.id, code: key.code, status: 1};
       this.selectedRoleConvert.push(jsonData);
     });
     data.selectedRole = this.selectedRoleConvert;
 
     if(this.data.id != null){
+
+      data.selectedRole = this.selectedRoleIdCode,
       this.roleService.updateRole(data).subscribe(
         data => {
           this.toastService.showSuccessHTMLWithTimeout('Cập nhật vai trò thành công!', "", 3000);
@@ -146,11 +154,13 @@ export class AddRoleComponent implements OnInit {
             this.router.navigate(['/main/role']);
           });
           this.spinner.hide();
+          this.selectedRoleIdCode = [];
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
           this.spinner.hide();
         }
       )
+
     }else{
       //kiem tra ma vai tro ton tai chua
       this.roleService.checkCodeRole(data.code).subscribe(
