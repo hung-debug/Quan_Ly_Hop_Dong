@@ -98,6 +98,8 @@ export class ConfirmSignOtpComponent implements OnInit {
 
   async onSubmit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    console.log("currentUser",this.currentUser);
+    
     let id_recipient_signature = null;
 
     for (const d of this.datas.is_data_contract.participants) {
@@ -119,11 +121,22 @@ export class ConfirmSignOtpComponent implements OnInit {
       console.log("ArrRecipients", ArrRecipients);
 
       let ArrRecipientsNew = false
+      
       ArrRecipients.map((item: any) => {
+        console.log("item",item);
         if (item.phone === this.currentUser.phone) {
+          console.log("abc");
+          
+          ArrRecipientsNew = true
+          return
+        }else if(item.email === this.currentUser.email){ 
           ArrRecipientsNew = true
           return
         }
+        console.log("item.phone",item.phone);
+        console.log("this.currentUser.phone",this.currentUser.phone);
+        
+        
       });
       console.log("ArrRecipientsNew111", ArrRecipientsNew);
 

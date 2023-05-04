@@ -796,8 +796,13 @@ export class ContractSignatureComponent implements OnInit {
             }
           );
       }
-      this.router.navigate(['/main/c/receive/processed']);
-      return;
+      // this.router.navigate(['/main/c/receive/processed']);
+      this.router
+      .navigateByUrl('/', { skipLocationChange: true })
+      .then(() => {
+        this.router.navigate(['/main/c/receive/processed']);
+      });
+      console.log("da xu ly");
     })
   }
 
