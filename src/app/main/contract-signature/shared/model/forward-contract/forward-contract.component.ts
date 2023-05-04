@@ -121,25 +121,25 @@ export class ForwardContractComponent implements OnInit {
       });
       console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
-      if (!ArrRecipientsNew) {
+      // if (!ArrRecipientsNew) {
 
-        this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
-          '',
-          3000
-        );
-        if (this.type == 1) {
-          this.router.navigate(['/login']);
-          this.dialogRef.close();
-          this.spinner.hide();
-          return
-        } else {
-          this.router.navigate(['/main/dashboard']);
-          this.dialogRef.close();
-          this.spinner.hide();
-          return
-        }
-      };
+      //   this.toastService.showErrorHTMLWithTimeout(
+      //     'Bạn không có quyền xử lý hợp đồng này!',
+      //     '',
+      //     3000
+      //   );
+      //   if (this.type == 1) {
+      //     this.router.navigate(['/login']);
+      //     this.dialogRef.close();
+      //     this.spinner.hide();
+      //     return
+      //   } else {
+      //     this.router.navigate(['/main/dashboard']);
+      //     this.dialogRef.close();
+      //     this.spinner.hide();
+      //     return
+      //   }
+      // };
       console.log("this.currentUser.email", this.currentUser);
       if (!String(this.myForm.value.name)) {
         // this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền'

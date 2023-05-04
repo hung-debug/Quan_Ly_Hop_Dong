@@ -132,21 +132,21 @@ export class ConfirmInfoContractComponent implements OnInit {
       });
       console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
-      if (!ArrRecipientsNew) {
+      // if (!ArrRecipientsNew) {
 
-        this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
-          '',
-          3000
-        );
-        if (this.type == 1) {
-          this.router.navigate(['/login']);
-          return
-        } else {
-          this.router.navigate(['/main/dashboard']);
-          return
-        }
-      };
+      //   this.toastService.showErrorHTMLWithTimeout(
+      //     'Bạn không có quyền xử lý hợp đồng này!',
+      //     '',
+      //     3000
+      //   );
+      //   if (this.type == 1) {
+      //     this.router.navigate(['/login']);
+      //     return
+      //   } else {
+      //     this.router.navigate(['/main/dashboard']);
+      //     return
+      //   }
+      // };
       console.log("this.currentUser.email", this.currentUser);
 
 

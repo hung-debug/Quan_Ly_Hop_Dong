@@ -291,21 +291,21 @@ export class FooterSignatureComponent implements OnInit {
         });
         console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
-        if (!ArrRecipientsNew) {
+        // if (!ArrRecipientsNew) {
 
-          this.toastService.showErrorHTMLWithTimeout(
-            'Bạn không có quyền xử lý hợp đồng này!',
-            '',
-            3000
-          );
-          if (this.type == 1) {
-            this.router.navigate(['/login']);
-            return
-          } else {
-            this.router.navigate(['/main/dashboard']);
-            return
-          }
-        };
+        //   this.toastService.showErrorHTMLWithTimeout(
+        //     'Bạn không có quyền xử lý hợp đồng này!',
+        //     '',
+        //     3000
+        //   );
+        //   if (this.type == 1) {
+        //     this.router.navigate(['/login']);
+        //     return
+        //   } else {
+        //     this.router.navigate(['/main/dashboard']);
+        //     return
+        //   }
+        // };
         console.log("this.currentUser.email", this.currentUser);
       })
 
@@ -428,21 +428,22 @@ export class FooterSignatureComponent implements OnInit {
         });
         console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
-        if (!ArrRecipientsNew) {
+        // if (!ArrRecipientsNew) {
 
-          this.toastService.showErrorHTMLWithTimeout(
-            'Bạn không có quyền xử lý hợp đồng này!',
-            '',
-            3000
-          );
-          if (this.type == 1) {
-            this.router.navigate(['/login']);
-            return
-          } else {
-            this.router.navigate(['/main/dashboard']);
-            return
-          }
-        } else this.submitChanges.emit(1);
+        //   this.toastService.showErrorHTMLWithTimeout(
+        //     'Bạn không có quyền xử lý hợp đồng này!',
+        //     '',
+        //     3000
+        //   );
+        //   if (this.type == 1) {
+        //     this.router.navigate(['/login']);
+        //     return
+        //   } else {
+        //     this.router.navigate(['/main/dashboard']);
+        //     return
+        //   }
+        // } else 
+        this.submitChanges.emit(1);
         console.log("this.currentUser.email", this.currentUser);
       })
     }
@@ -492,20 +493,20 @@ export class FooterSignatureComponent implements OnInit {
     const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
     const isInRecipient = this.is_data_coordination.recipients.some( (el: any) => el.name === updatedInfo.name)
 
-    if(!isInRecipient){
-      this.toastService.showErrorHTMLWithTimeout(
-        'Bạn không có quyền xử lý hợp đồng này!',
-        '',
-        3000
-      );
-      if (this.type == 1) {
-        this.router.navigate(['/login']);
-        return
-      } else {
-        this.router.navigate(['/main/dashboard']);
-        return
-      }
-    }
+    // if(!isInRecipient){
+    //   this.toastService.showErrorHTMLWithTimeout(
+    //     'Bạn không có quyền xử lý hợp đồng này!',
+    //     '',
+    //     3000
+    //   );
+    //   if (this.type == 1) {
+    //     this.router.navigate(['/login']);
+    //     return
+    //   } else {
+    //     this.router.navigate(['/main/dashboard']);
+    //     return
+    //   }
+    // }
     const data = {
       title: 'ỦY QUYỀN XỬ LÝ',
       is_content: 'processing_author',
@@ -525,21 +526,21 @@ export class FooterSignatureComponent implements OnInit {
         }
       });
 
-      if (!ArrRecipientsNew) {
+      // if (!ArrRecipientsNew) {
 
-        this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
-          '',
-          3000
-        );
-        if (this.type == 1) {
-          this.router.navigate(['/login']);
-          return
-        } else {
-          this.router.navigate(['/main/dashboard']);
-          return
-        }
-      };
+      //   this.toastService.showErrorHTMLWithTimeout(
+      //     'Bạn không có quyền xử lý hợp đồng này!',
+      //     '',
+      //     3000
+      //   );
+      //   if (this.type == 1) {
+      //     this.router.navigate(['/login']);
+      //     return
+      //   } else {
+      //     this.router.navigate(['/main/dashboard']);
+      //     return
+      //   }
+      // };
 
       if (this.datas.action_title == 'dieu_phoi') {
 
@@ -567,20 +568,20 @@ export class FooterSignatureComponent implements OnInit {
     const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
     const isInRecipient = this.is_data_coordination.recipients.some( (el: any) => el.name === updatedInfo.name)
 
-    if(!isInRecipient){
-      this.toastService.showErrorHTMLWithTimeout(
-        'Bạn không có quyền xử lý hợp đồng này!',
-        '',
-        3000
-      );
-      if (this.type == 1) {
-        this.router.navigate(['/login']);
-        return
-      } else {
-        this.router.navigate(['/main/dashboard']);
-        return
-      }
-    }
+    // if(!isInRecipient){
+    //   this.toastService.showErrorHTMLWithTimeout(
+    //     'Bạn không có quyền xử lý hợp đồng này!',
+    //     '',
+    //     3000
+    //   );
+    //   if (this.type == 1) {
+    //     this.router.navigate(['/login']);
+    //     return
+    //   } else {
+    //     this.router.navigate(['/main/dashboard']);
+    //     return
+    //   }
+    // }
     const data = {
       title: 'CHUYỂN TIẾP',
       is_content: 'forward_contract',
@@ -602,21 +603,21 @@ export class FooterSignatureComponent implements OnInit {
       });
       console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
-      if (!ArrRecipientsNew) {
+      // if (!ArrRecipientsNew) {
 
-        this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
-          '',
-          3000
-        );
-        if (this.type == 1) {
-          this.router.navigate(['/login']);
-          return
-        } else {
-          this.router.navigate(['/main/dashboard']);
-          return
-        }
-      };
+      //   this.toastService.showErrorHTMLWithTimeout(
+      //     'Bạn không có quyền xử lý hợp đồng này!',
+      //     '',
+      //     3000
+      //   );
+      //   if (this.type == 1) {
+      //     this.router.navigate(['/login']);
+      //     return
+      //   } else {
+      //     this.router.navigate(['/main/dashboard']);
+      //     return
+      //   }
+      // };
       if (this.datas.action_title == 'dieu_phoi') {
         // @ts-ignore
         data['role_coordination'] = 1;
