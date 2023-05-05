@@ -59,7 +59,7 @@ export class CustomerComponent implements OnInit {
       {header: '', style:'text-align: center;' },
     ];
 
-    this.customerService.getOrganizationCustomerList().subscribe((res: any) => {
+    this.customerService.getCustomerList().subscribe((res: any) => {
       this.list = res.filter((item: any) => {
           return item.type === "ORGANIZATION"; 
       });
@@ -77,13 +77,13 @@ export class CustomerComponent implements OnInit {
 
   getCustomerList(){
     if(this.isOrgCustomer){
-    this.customerService.getOrganizationCustomerList().subscribe((res: any) => {
+    this.customerService.getCustomerList().subscribe((res: any) => {
       this.list = res.filter((item: any) => {
           return item.type === "ORGANIZATION" && item.name.toLowerCase().includes(this.filter_name.toLowerCase());
       });
     });
     }else if(!this.isOrgCustomer){
-      this.customerService.getOrganizationCustomerList().subscribe((res: any) => {
+      this.customerService.getCustomerList().subscribe((res: any) => {
         this.list = res.filter((item: any) => {
             return item.type === "PERSONAL" && item.name.toLowerCase().includes(this.filter_name.toLowerCase());
         });
@@ -149,6 +149,13 @@ export class CustomerComponent implements OnInit {
       console.log('the close dialog');
       let is_data = result
     })
+  }
+
+  openDetail(id: String, type: String){
+    if(type === "ORGANIZATION")
+    this.router.navigate(['/main/form-customer/customer-detail/organization', id]);
+    if(type === "PERSONAL")
+    this.router.navigate(['/main/form-customer/customer-detail/personal', id]);
   }
 
 

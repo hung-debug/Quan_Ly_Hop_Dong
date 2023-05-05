@@ -605,5 +605,8 @@
   "phone_mail":"SĐT/Email",
   "customer.search.name.placeholder":"Nhập từ tìm kiếm",
   "organization.customer.add":"Thêm tổ chức",
-  "personal.customer.add":"Thêm cá nhân"
+  "personal.customer.add":"Thêm cá nhân",
+  "organization.customer.detail":"Chi tiết tổ chức",
+  "personal.customer.detail":"Chi tiết cá nhân",
+  "confirm.customer.delete": "Bạn có chắc chắn muốn xóa khách hàng này không?"
 }

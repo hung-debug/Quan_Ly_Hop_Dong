@@ -1,0 +1,279 @@
+<div *ngIf="!isOrg" class="container-fluid">
+    <div class="contract-determine">
+
+        <div class="contract__content--participants">
+
+            <!--ngươi ky-->
+            <div class="participants-border">
+            <div class="dropdown-header">
+                <div class="label">{{'user.sign' | translate}}</div>
+            </div>
+                <div class="participants--content">
+                    <!-- <input [id]="'ordering-sign-'" class="col-md-1 contract-total" style="width: 25px; height: 25px"
+                        type="number" [disabled]="1"
+                        oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly> -->
+                    <div class="col-md-10 participants__content--input">
+                        <div class="participants--input" style="display: flex">
+                            <div class="participants__name">
+                                <div class="label_detail text-color">{{'user.name' | translate}}:&nbsp;
+                                </div>
+                                <div class="input-data">
+                                    <img src="assets/img/icon_name.svg" class="input-img">
+                                    <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="participants__name">
+                                <div class="label_detail text-color">Email:&nbsp;
+                                </div>
+                                <div class="input-data">
+                                    <img src="assets/img/login_email.svg" class="input-img">
+                                    <input type="text" placeholder="{{'nhap_email' | translate}}" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="participants--input">
+                            <div class="participants__name">
+                                <div class="label_detail text-color">{{'user.sign-type' | translate}}:&nbsp;
+                                </div>
+                                <div class="input-data">
+                                    <input type="text" readonly>
+                                </div>
+                            </div>
+                            <div class="participants__name">
+                                <div class="label_detail text-color">{{'user.phone' | translate}}:&nbsp;
+                                </div>
+                                <div class="input-data">
+                                    <img class="input-img">
+                                    <input type="text" placeholder="{{'nhap_sdt' | translate}}" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1 delete-element">
+                        <img src="assets/img/border_close.svg" alt="close.vn">
+                        <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
+                    </div>
+                </div>
+            </div>
+            <div class="footer-btn">
+                <button (click)="onCancel()" >{{"btn.close" | translate}}</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div *ngIf="isOrg" class="container-fluid">
+    <div class="contract-determine">
+        <div class="contract--content">
+            <div class="contract__content--title-doi-tac">
+                <div style="width: 100px">
+                    {{ "organization.partner.name" | translate | uppercase }}&nbsp;
+                </div>
+                <input class="input1" type="text" value="{{this.name}}" readonly/>
+            </div>
+
+            <div class="contract__content--title-mst"> 
+                <div style="width: 100px">
+                    {{ "tax.code" | translate | uppercase }}&nbsp;
+                </div>
+                <input class="input1" type="text" value="{{this.taxCode}}" readonly>
+            </div>
+        </div>
+
+
+        <div class="contract__content--participants">
+            <!--nguoi dieu phoi-->
+            <div class="participants-border">
+                <div class="label">{{'user.lead' | translate}}</div>
+                <div class="participants--content">
+                    <input [id]="'ordering-sign-'" class="col-md-1 contract-total" style="width: 25px; height: 25px"
+                    type="number" [disabled]="1"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
+                    <div class="col-md-10 participants__content--input">
+                        <div class="participants--input" style="display: flex">
+                            <div class="participants__name">
+                                <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span
+                                        class="required-title">:</span></div>
+                                <div class="input-data">
+                                    <img src="assets/img/icon_name.svg" class="input-img">
+                                    <input type="text" value="123" readonly>
+                                </div>
+                            </div>
+
+                            <div class="participants__name">
+                                <div class="label_detail text-color">Email&nbsp;
+                                    <span class="required-title">:</span>
+                                </div>
+                                <div class="input-data">
+                                    <img src="assets/img/login_email.svg" class="input-img">
+                                    <input type="text" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="participants--input">
+                            <div class="participants__name" style="width: 88%">
+                                <div class="label_detail text-color">{{'user.phone' | translate}}:&nbsp;
+                                </div>
+                                <div class="input-data">
+                                    <img class="input-img" style="padding: 0">
+                                    <input type="text" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--nguoi xem xet-->
+            <div class="participants-border">
+                <div class="label">{{'user.view' | translate}}</div>
+                <div class="participants--content">
+                    <input [id]="'ordering-sign-'" class="col-md-1 contract-total" style="width: 25px; height: 25px"
+                        type="number" [disabled]="1"
+                        oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
+                    <div class="col-md-10 participants__content--input">
+                        <div class="participants--input" style="display: flex">
+                            <div class="participants__name">
+                                <div class="label_detail text-color">{{'user.name' | translate}}:&nbsp;
+                                </div>
+                                <div class="input-data">
+                                    <img src="assets/img/icon_name.svg" class="input-img">
+                                    <input type="text" readonly>
+                                </div>
+                            </div>
+
+                            <div class="participants__name">
+                                <div class="label_detail text-color">Email:&nbsp;
+                                </div>
+                                <div class="input-data">
+                                    <img src="assets/img/login_email.svg" class="input-img">
+                                    <input type="text" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="participants--input">
+                            <div class="participants__name" style="width: 88%">
+                                <div class="label_detail text-color">{{'user.phone' | translate}}:&nbsp;
+                                </div>
+                                <div class="input-data">
+                                    <img class="input-img">
+                                    <input type="text" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--ngươi ky-->
+            <div class="participants-border">
+                <div class="label">{{'user.sign' | translate}}</div>
+                <div class="participants--content">
+                    <input [id]="'ordering-sign-'" class="col-md-1 contract-total" style="width: 25px; height: 25px"
+                        type="number" [disabled]="1"
+                        oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
+                    <div class="col-md-10 participants__content--input">
+                        <div class="participants--input" style="display: flex">
+                            <div class="participants__name">
+                                <div class="label_detail text-color">{{'user.name' | translate}}:&nbsp;
+                                </div>
+                                <div class="input-data">
+                                    <img src="assets/img/icon_name.svg" class="input-img">
+                                    <input type="text" readonly>
+                                </div>
+                            </div>
+
+                            <div class="participants__name">
+                                <div class="label_detail text-color">Email:&nbsp;
+                                </div>
+                                <div class="input-data">
+                                    <img src="assets/img/login_email.svg" class="input-img">
+                                    <input type="text" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="participants--input">
+                            <div class="participants__name">
+                                <div class="label_detail text-color">{{'user.sign-type' | translate}}:&nbsp;
+                                </div>
+                                <div class="input-data">
+                                    <input type="text" readonly>
+                                </div>
+                            </div>
+                            <div class="participants__name">
+                                <div class="label_detail text-color">{{'user.phone' | translate}}:&nbsp;
+                                </div>
+                                <div class="input-data">
+                                    <img class="input-img">
+                                    <input type="text" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--van thu-->
+            <div class="participants-border">
+                <div class="label">{{'user.doc' | translate}}</div>
+                <div class="participants--content">
+                    <input [id]="'ordering-sign-'" class="col-md-1 contract-total" style="width: 25px; height: 25px"
+                        type="number" [disabled]="1"
+                        oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    <div class="col-md-10 participants__content--input">
+                        <div class="participants--input" style="display: flex">
+                            <div class="participants__name">
+                                <div class="label_detail text-color">{{'user.name' | translate}}:&nbsp;
+                                </div>
+                                <div class="input-data">
+                                    <img src="assets/img/icon_name.svg" class="input-img">
+                                    <input type="text" readonly>
+                                </div>
+                            </div>
+
+                            <div class="participants__name">
+                                <div class="label_detail text-color">Email:&nbsp;
+                                </div>
+                                <div class="input-data">
+                                    <img src="assets/img/login_email.svg" class="input-img">
+                                    <input type="text" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="participants--input">
+                            <div class="participants__name">
+                                <div class="label_detail text-color">{{'user.sign-type' | translate}}:&nbsp;
+                                </div>
+                                <div class="input-data">
+                                    <input type="text" readonly>
+                                </div>
+                            </div>
+                            <div class="participants__name">
+                                <div class="label_detail text-color">{{'user.phone' | translate}}:&nbsp;
+                                </div>
+                                <div class="input-data">
+                                    <img class="input-img">
+                                    <input type="text" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-btn">
+                <button (click)="onCancel()" >{{"btn.close" | translate}}</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+

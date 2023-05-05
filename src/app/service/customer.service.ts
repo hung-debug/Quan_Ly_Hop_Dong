@@ -45,7 +45,7 @@ export class CustomerService {
 
   constructor(private http: HttpClient,) { }
 
-  public getOrganizationCustomerList(): Observable<any> {
+  public getCustomerList(): Observable<any> {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')

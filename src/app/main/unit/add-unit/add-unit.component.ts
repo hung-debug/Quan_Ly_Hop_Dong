@@ -382,6 +382,8 @@ export class AddUnitComponent implements OnInit {
                                         });
                                         
                                         this.dialogRef.close();
+                                        this.toastService.showSuccessHTMLWithTimeout('add.unit.success', "", 3000);
+                                        this.spinner.hide();
                                       }, error => {
                                         this.toastService.showErrorHTMLWithTimeout('Thêm mới tổ chức thất bại', "", 3000);
                                         this.spinner.hide();

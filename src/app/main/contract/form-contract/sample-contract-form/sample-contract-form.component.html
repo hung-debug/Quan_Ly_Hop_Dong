@@ -116,7 +116,8 @@
                     (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
                     <div *ngIf="d.name || d.recipient" class="name-sig-img-daky">{{d.name ? d.name : d.recipient.name}}</div>
                     <div *ngIf="(d.recipient!= null && d.sign_unit == 'text' ) || (d.recipient!= null && d.sign_unit == 'so_tai_lieu') ||
-                    (d.sign_unit == 'text' && d.value === undefined) || (d.sign_unit == 'so_tai_lieu' && d.value === undefined) || (d.sign_unit == 'chu_ky_so')"
+                    (d.sign_unit == 'text' && d.value === undefined) || (d.sign_unit == 'so_tai_lieu' && d.value === undefined) 
+                    || (d.sign_unit == 'chu_ky_so') || (d.sign_unit == 'chu_ky_anh')"
                     class="sig-img-daky" (click)="onCancel($event, d)">
                         <img src="assets/img/clear.svg" alt="">
                         <img src="assets/img/border-clear.svg" alt="">

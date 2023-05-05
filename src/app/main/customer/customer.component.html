@@ -34,7 +34,8 @@
     </ng-template>
     <ng-template pTemplate="body" let-list>
         <tr>
-            <td><a  style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
+            <td><a (click)="openDetail(list.id,list.type)" [routerLink]="['/main/form-customer/customer-detail/organization', list.id]"  
+              style="color: #0160AE; cursor: pointer; text-decoration: none;">{{list.name}}</a></td>
             <td *ngIf="isOrgCustomer">{{list.taxCode}}</td>
             <td *ngIf="!isOrgCustomer">{{list.phone}}/{{list.email}}</td>
             <td style="text-align: center">
@@ -43,12 +44,22 @@
             </td>
         </tr>
     </ng-template>
+
+    <!-- <div *ngIf="state.totalRecords>0"> -->
     <ng-template pTemplate="paginatorleft" let-state>
       <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
     </ng-template>
     <ng-template pTemplate="paginatorright" let-state>
       <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
     </ng-template> 
+  <!-- </div> -->
   </p-table>
+</div>
+<div *ngIf="list.length == 0" 
+style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+  <div style="display: table-cell;vertical-align: middle;">
+    <img src="../../../assets/img/empty_data.svg"/>
+    <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+  </div>
 </div>
 </div>

@@ -1,3 +1,4 @@
+import { CustomerDetailComponent } from './main/customer/customer-detail/customer-detail.component';
 import {CustomerOrganizationAddComponent} from './main/customer/customer-organization-add/customer-organization-add.component';
 import {DetailContractComponent} from './main/contract/detail-contract/detail-contract.component';
 import {SignupComponent} from './login/signup/signup.component';
@@ -135,6 +136,10 @@ const routes: Routes = [
       {
         path: 'form-customer/customer-personal-add',
         component: CustomerPersonalAddComponent
+      },
+      {
+        path: 'form-customer/customer-detail/:type/:id',
+        component: CustomerDetailComponent
       },
       {
         path: 'contract/:action/:status',

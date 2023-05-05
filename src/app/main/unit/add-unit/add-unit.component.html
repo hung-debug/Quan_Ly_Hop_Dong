@@ -38,7 +38,31 @@
             </div>
         </div>
 
-        <!--Hàng 2!-->
+        
+        <!--Hàng 2-->
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6">
+                <div class="label text-color">{{'unit.phone' | translate }}</div>
+                <div class="input-data">
+                    <input type="text" formControlName="phone">
+                </div>
+                <!-- <div *ngIf="submitted && f.fax.errors" class="invalid">
+                    <div *ngIf="f.fax.errors.pattern">{{'Fax không được chứa ký tự đặc biệt' | translate}}</div>
+                </div> -->
+            </div>
+
+            <div class="col-md-6">
+                <div class="label text-color">{{'unit.email' | translate }}</div>
+                <div class="input-data">
+                    <input type="text" formControlName="email">
+                </div>
+                <!-- <div *ngIf="submitted && f.fax.errors" class="invalid">
+                    <div *ngIf="f.fax.errors.pattern">{{'Fax không được chứa ký tự đặc biệt' | translate}}</div>
+                </div> -->
+            </div>
+        </div>
+
+        <!--Hàng 3!-->
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
                 <div class="label text-color">{{'unit.code' | translate }} <span class="required-title">*</span></div>
@@ -63,7 +87,7 @@
             </div>
         </div>
 
-        <!--Hàng 3-->
+        <!--Hàng 4-->
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
                 <div class="label text-color">{{'unit.parent' | translate }} <span class="required-title">*</span></div>
@@ -88,6 +112,7 @@
                 </div>
             </div>
         </div>
+
 
 
         <div class="row" style="padding-top: 10px;">
