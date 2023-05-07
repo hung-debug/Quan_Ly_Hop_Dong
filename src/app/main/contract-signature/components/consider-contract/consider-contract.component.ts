@@ -1882,12 +1882,8 @@ export class ConsiderContractComponent
             let signI = null;
             if (signUpdate.type == 1 || signUpdate.type == 4) {
               let imageRender = null;
-              if(signUpdate.type == 1)
-                imageRender = <HTMLElement>(document.getElementById('text-sign'));
-              else
-                imageRender = <HTMLElement>(document.getElementById('contract-no-sign'));
 
-              var rect = imageRender.getBoundingClientRect();
+              imageRender = <HTMLElement>(document.getElementById('text-sign'));
 
               this.textSign = signUpdate.valueSign;
               this.width = signUpdate.width;
@@ -2133,26 +2129,21 @@ export class ConsiderContractComponent
             page: signUpdate.page,
           };
           if (signUpdate.type == 1 || signUpdate.type == 4) {
-            await of(null).pipe(delay(150)).toPromise();
-
-            let imageRender = null;
-
             this.textSign = signUpdate.valueSign;
 
             this.font = signUpdate.font;
             this.font_size = signUpdate.font_size;
 
-            if(signUpdate.type == 1)
-              imageRender = <HTMLElement>(document.getElementById('text-sign'));
-            else
-              imageRender = <HTMLElement>(document.getElementById('contract-no-sign'));
+            this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
 
-            console.log("ima ", imageRender);
+            await of(null).pipe(delay(120)).toPromise();
+            const imageRender = <HTMLElement>(document.getElementById('text-sign'));
 
             if (imageRender) {
               const textSignB = await domtoimage.toPng(imageRender);
               signI = this.textSignBase64Gen = textSignB.split(',')[1];
             }
+
           } else if (signUpdate.type == 3) {
             await of(null).pipe(delay(150)).toPromise();
 
