@@ -74,48 +74,20 @@ export class AddRoleComponent implements OnInit {
     if(sessionStorage.getItem('lang') == 'vi')
       this.groupedRole = roleList;
     else if(sessionStorage.getItem('lang') == 'en')
-      this.groupedRole = roleList_en;
+    this.groupedRole = roleList_en;
   }
 
-  selectedRoleIdCode: any = [];
+  selectedRoleIdCode: any =  [];
   convertRoleArr(roleArr:[]){
     let roleArrConvert: any = [];
     roleArr.forEach((key: any, v: any) => {
       roleArrConvert.push(key.code);
-
       this.selectedRoleIdCode.push({
         id: key.id,
         code: key.code
       })
     });
-
     return roleArrConvert;
-  }
-
-  onChange(event: any) {
-    // if(event.value.includes('QLHD_02')) {
-    //   event.value.push('QLHD_07')
-    // }
-
-    // if(event.value.includes('QLMHD_02')) {
-    //   event.value.push('QLMHD_08')
-    // }
-
-    // if(event.value.includes('QLTC_02')) {
-    //   event.value.push('QLTC_04')
-    // }
-
-    // if(event.value.includes('QLND_02')) {
-    //   event.value.push('QLND_04')
-    // }
-
-    // if(event.value.includes('QLVT_02')) {
-    //   event.value.push('QLVT_05');
-    // }
-
-    // if(event.value.includes('QLHD_02')) {
-    //   event.value.push('QLHD_05');
-    // }
   }
 
   onSubmit() {
@@ -134,36 +106,42 @@ export class AddRoleComponent implements OnInit {
     }
     this.spinner.show();
     this.selectedRoleConvert = [];
-
-    console.log("data ", data.selectedRole);
-
-    let arr: any = [];
     data.selectedRole.forEach((key: any, v: any) => {
-      // let jsonData = {code: key, status: 1};
-      // this.selectedRoleConvert.push(jsonData);
-      this.selectedRoleIdCode.forEach((selectedRoleIdCode: any) => {
-        if(key == selectedRoleIdCode.code) {
-           let jsonData = {id:selectedRoleIdCode.id, code: key, status: 1};
-           this.selectedRoleConvert.push(jsonData);
-           arr.push(key);
-        } else {
-          let jsonData = { code: key, status: 1};
-          this.selectedRoleConvert.push(jsonData);
-        }
-      })
+      console.log(key);
+      let jsonData = {code: key, status: 1};
+      this.selectedRoleConvert.push(jsonData);
     });
-
-    for(let i = 0; i < this.selectedRoleConvert.length; i++) {
-      for(let j = 0; j < arr.length;j++) {
-        if(this.selectedRoleConvert[i].code == arr[j] && this.selectedRoleConvert[i].id) {
-          this.selectedRoleConvert = this.selectedRoleConvert.splice(i,1);
-        }
-      }
-    }
-
     data.selectedRole = this.selectedRoleConvert;
 
     if(this.data.id != null){
+      let selectedRole: any = [];
+
+      this.selectedRoleIdCode.forEach((selectedRoleIdCode: any) => {
+        this.selectedRoleConvert.forEach((selectedRoleConvert: any) => {
+          if(selectedRoleIdCode.code == selectedRoleConvert.code) {
+            selectedRole.push({
+              id: selectedRoleIdCode.id,
+              code: selectedRoleIdCode.code,
+              status: 1,
+            })
+          }
+        })
+      })
+
+      for(let i = 0; i < data.selectedRole.length; i++) {
+        selectedRole.push(data.selectedRole[i]);
+      }
+
+      //kiểm tra đối tượng A có thuộc tính id hay không
+      //nếu không có => kiểm tra xem đối tượng khác trong mảng có cùng thuộc tính code giống vậy và có cả thuộc tính id => loại đối tượng A khỏi mảng
+      const filteredData = selectedRole.filter((item: any, index: any, arr: any) => {
+        if (!item.id && arr.findIndex((x: any) => x.code === item.code && x.id !== undefined) !== -1) {
+          return false;
+        }
+        return true;
+      });      
+
+      data.selectedRole = filteredData;
 
       this.roleService.updateRole(data).subscribe(
         data => {
@@ -173,13 +151,11 @@ export class AddRoleComponent implements OnInit {
             this.router.navigate(['/main/role']);
           });
           this.spinner.hide();
-          this.selectedRoleIdCode = [];
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
           this.spinner.hide();
         }
       )
-
     }else{
       //kiem tra ma vai tro ton tai chua
       this.roleService.checkCodeRole(data.code).subscribe(
