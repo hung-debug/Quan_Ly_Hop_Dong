@@ -6,6 +6,7 @@ import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
+import { RoleService } from 'src/app/service/role.service';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -19,7 +20,8 @@ export class UserComponent implements OnInit {
     private router : Router,
     private importService: ImportService,
     private toastService: ToastService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private roleService: RoleService
     ) { }
 
   organization_id_user_login:any;
@@ -39,6 +41,33 @@ export class UserComponent implements OnInit {
 
   lang: any;
   async ngOnInit(): Promise<void> {
+    let userId = this.userService.getAuthCurrentUser().id;
+    
+    this.userService.getUserById(userId).subscribe(
+      data => {
+
+        //lay id role
+        this.roleService.getRoleById(data?.role_id).subscribe(
+          data => {
+            
+            let listRole: any[];
+            listRole = data.permissions;
+
+            this.isQLND_02 = listRole.some(element => element.code == 'QLND_02');
+            this.isQLND_04 = listRole.some(element => element.code == 'QLND_04');
+          }, error => {
+            this.spinner.hide();
+            // this.toastService.showErrorHTMLWithTimeout('Lấy thông tin phân quyền', "", 3000);
+            this.router.navigate(['/login'])
+          }
+        );
+      
+      }, error => {
+        this.spinner.hide();
+        // this.toastService.showErrorHTMLWithTimeout('Hết phiên đăng nhập, Vui lòng đăng nhập lại', "", 3000);
+        this.router.navigate(['/login'])
+      }
+    )
 
     if(sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
