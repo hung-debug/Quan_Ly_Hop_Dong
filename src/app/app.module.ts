@@ -191,7 +191,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CustomerOrganizationAddComponent,
     CustomerPersonalAddComponent,
       DeleteCustomerComponent,
-      CustomerDetailComponent
+      CustomerDetailComponent,
   ],
   imports: [
     TranslateModule,

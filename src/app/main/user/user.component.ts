@@ -5,7 +5,7 @@ import { ImportService } from 'src/app/service/import.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { ToastService } from 'src/app/service/toast.service';
-import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { RoleService } from 'src/app/service/role.service';
 @Component({
   selector: 'app-user',
