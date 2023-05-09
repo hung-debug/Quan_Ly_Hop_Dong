@@ -617,5 +617,8 @@
   "mobifone.fail":"You cannot use this feature with Mobifone email",
   "ceca.reason":"The contract was not pushed to the Ministry of Industry and Trade because it has a signature that is not a digital signature",
   "zoom.warning":"When zooming in/out, the box position when dragging will not be correct. Please set the screen to 100% for the best experience!",
-  "contract.download1":"Download"
+  "contract.download1":"Download",
+  "attribute.text.type": "Text type",
+  "choose.text.type": "Choose text type",
+  "tree.folder": "Tree folder"
 }
