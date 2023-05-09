@@ -64,9 +64,9 @@
             <input id="all" name="all" type="checkbox" (click)="toggle()" />
         </div>
 
-        <!-- <div *ngIf="this.typeDisplay === 'downloadMany'" class="col-md-3">
+        <div *ngIf="this.typeDisplay === 'downloadMany'" class="col-md-3">
             <input id="all" name="all" type="checkbox" (click)="toggle()" />
-        </div> -->
+        </div>
 
         <div *ngIf="this.typeDisplay === 'viewMany'" class="col-md-3">
             <input id="allView" name="allView" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleView(checkedAll)" />
