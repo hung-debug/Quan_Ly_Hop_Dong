@@ -69,6 +69,10 @@
             <input id="all" name="all" type="checkbox" (click)="toggle()" />
         </div> -->
 
+        <div *ngIf="this.typeDisplay === 'viewMany'" class="col-md-3">
+            <input id="allView" name="allView" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleView(checkedAll)" />
+        </div>
+
     </div>
 
     <!--Danh sách tất cả hợp đồng cần ký trường hợp ký một-->
@@ -464,7 +468,7 @@
                             </div>
 
                             <div class="div_icon" *ngIf="this.typeDisplay == 'viewMany'">
-                                <input id="all" name="all" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneView(item, index1)" />
+                                <input id="allView" name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneView(item, index1)" />
                             </div>
                         </div>
                     </div>
