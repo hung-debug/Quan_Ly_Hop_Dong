@@ -137,7 +137,6 @@ export class SampleContractFormComponent implements OnInit {
 
     this.isChangeNumberContract = this.datasForm.contract_no; // save contract number check with input contract number object signature when change
 
-    console.log("datas form ", this.datasForm.contract_user_sign);
     if (!this.datasForm.contract_user_sign) {
       if (this.datasForm.is_data_object_signature && this.datasForm.is_data_object_signature.length && this.datasForm.is_data_object_signature.length > 0) {
         this.datasForm.is_data_object_signature.forEach((res: any) => {
@@ -1797,17 +1796,17 @@ export class SampleContractFormComponent implements OnInit {
     } catch (err) {
       this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng' + err, '', 3000);
     }
-    if (countCeCa > 0 && (Number(getNumberContractCreateOrg.numberOfCeca) - this.datasForm.ceca_push) < 0) {
-      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lần gửi xác nhận BCT. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-      return false;
-    } else if (countTimestamp > 0 && (Number(getNumberContractCreateOrg.numberOfTimestamp) - this.convertToSignConfig().length) < 0) {
-      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng timestamp đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-      return false;
-    } else {      
+    // if (countCeCa > 0 && (Number(getNumberContractCreateOrg.numberOfCeca) - this.datasForm.ceca_push) < 0) {
+    //   this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lần gửi xác nhận BCT. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+    //   return false;
+    // } else if (countTimestamp > 0 && (Number(getNumberContractCreateOrg.numberOfTimestamp) - this.convertToSignConfig().length) < 0) {
+    //   this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng timestamp đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+    //   return false;
+    // } else {      
         this.stepForm = variable.stepSampleContractForm.step4;
         this.datasForm.stepLast = this.stepForm
         this.nextOrPreviousStep(this.stepForm);
-    }
+    // }
   }
  
   validData() {
@@ -1997,17 +1996,19 @@ export class SampleContractFormComponent implements OnInit {
             }
           }
         }
-        if (error_organization > 0) {
-          this.spinner.hide();
-          this.toastService.showWarningHTMLWithTimeout((this.translate.instant('miss.digital.sig'))+ " " + `${nameSign_organization.name}`+ " " + (this.translate.instant('off.org.please')), "", 3000);
-          return false;
-        }
+
+        // if (error_organization > 0) {
+        //   this.spinner.hide();
+        //   this.toastService.showWarningHTMLWithTimeout((this.translate.instant('miss.digital.sig'))+ " " + `${nameSign_organization.name}`+ " " + (this.translate.instant('off.org.please')), "", 3000);
+        //   return false;
+        // }
+
         // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
-        if (arrSign_organization.length < data_organization.length) {
-          this.spinner.hide();
-          this.toastService.showWarningHTMLWithTimeout("Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!", "", 3000);
-          return false;
-        }
+        // if (arrSign_organization.length < data_organization.length) {
+        //   this.spinner.hide();
+        //   this.toastService.showWarningHTMLWithTimeout("Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!", "", 3000);
+        //   return false;
+        // }
 
         // valid đối tượng ký của đối tác
         let data_partner = this.list_sign_name.filter((p: any) => p.type_unit == "partner" && p.role != 2);

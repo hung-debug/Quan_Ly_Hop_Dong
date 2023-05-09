@@ -520,18 +520,18 @@ export class SidebarService {
       })
     }
 
-    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai) {
-      this.menus.push({
-        title: 'report',
-        icon: '/assets/img/analytics1.svg',
-        active: false,
-        activeDrop: false,
-        type: 'dropdown',
-        href: '#',
-        submenus: submenusReport,
-        id: 10,
-      })
-    }
+    // if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai) {
+    //   this.menus.push({
+    //     title: 'report',
+    //     icon: '/assets/img/analytics1.svg',
+    //     active: false,
+    //     activeDrop: false,
+    //     type: 'dropdown',
+    //     href: '#',
+    //     submenus: submenusReport,
+    //     id: 10,
+    //   })
+    // }
 
     this.menus.push({
       title: 'customer.list',

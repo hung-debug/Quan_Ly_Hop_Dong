@@ -94,13 +94,13 @@
                 <div class="location">
                     <div class="location-drag">
                         <div class="label">{{'height' | translate}}</div>
-                        <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')"
-                            [ngModel]="objSignInfo.height" [readOnly]="false">
+                        <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')"
+                            [ngModel]="objSignInfo.width" [readOnly]="false">
                     </div>
                     <div class="location-drag">
                         <div class="label">{{'width' | translate}}</div>
-                        <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')"
-                            [ngModel]="objSignInfo.width" [readOnly]="false">
+                        <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')"
+                            [ngModel]="objSignInfo.height" [readOnly]="false">
                     </div>
                 </div>
             </div>
@@ -115,10 +115,8 @@
                 <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement
                     (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
                     <div *ngIf="d.name || d.recipient" class="name-sig-img-daky">{{d.name ? d.name : d.recipient.name}}</div>
-                    <div *ngIf="(d.recipient!= null && d.sign_unit == 'text' ) || (d.recipient!= null && d.sign_unit == 'so_tai_lieu') ||
-                    (d.sign_unit == 'text' && d.value === undefined) || (d.sign_unit == 'so_tai_lieu' && d.value === undefined) 
-                    || (d.sign_unit == 'chu_ky_so') || (d.sign_unit == 'chu_ky_anh')"
-                    class="sig-img-daky" (click)="onCancel($event, d)">
+                    <div *ngIf="(d.recipient!= null && d.sign_unit == 'text') || (d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu') || (d.sign_unit == 'text' && d.value === undefined)
+                    || (d.recipient!= null && d.sign_unit == 'so_tai_lieu') || (d.sign_unit == 'so_tai_lieu' && d.value === undefined)" class="sig-img-daky" (click)="onCancel($event, d)">    
                         <img src="assets/img/clear.svg" alt="">
                         <img src="assets/img/border-clear.svg" alt="">
                     </div>

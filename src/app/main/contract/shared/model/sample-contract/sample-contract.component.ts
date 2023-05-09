@@ -195,7 +195,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     // //phong to thu nho o ky
     interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
-      edges: { left: true, right: true, bottom: true, top: true },
+      edges: { right: true, bottom: true},
 
       listeners: {
         move: this.resizableListener, onend: this.resizeSignature
@@ -1656,21 +1656,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng' + err, '', 3000);
     }
 
-    if (countCeCa > 0 && (Number(getNumberContractCreateOrg.numberOfCeca) - this.datas.ceca_push) < 0) {
-      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lần gửi xác nhận BCT. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-      return false;
-    } else if (countTimestamp > 0 && (Number(getNumberContractCreateOrg.numberOfTimestamp) - this.convertToSignConfig().length) < 0) {
-      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng timestamp đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-      return false;
-
-      // this.step = variable.stepSampleContract.step4;
-      // this.datas.stepLast = this.step
-      // this.nextOrPreviousStep(this.step);
-    } else {
+    // if (countCeCa > 0 && (Number(getNumberContractCreateOrg.numberOfCeca) - this.datas.ceca_push) < 0) {
+    //   this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lần gửi xác nhận BCT. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+    //   return false;
+    // } else if (countTimestamp > 0 && (Number(getNumberContractCreateOrg.numberOfTimestamp) - this.convertToSignConfig().length) < 0) {
+    //   this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng timestamp đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+    //   return false;
+    // } else {
       this.step = variable.stepSampleContract.step4;
       this.datas.stepLast = this.step
       this.nextOrPreviousStep(this.step);
-    }
+    // }
   }
 
   validData() {

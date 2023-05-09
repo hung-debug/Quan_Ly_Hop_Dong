@@ -616,5 +616,7 @@
   "personal.customer.add":"Thêm cá nhân",
   "organization.customer.detail":"Chi tiết tổ chức",
   "personal.customer.detail":"Chi tiết cá nhân",
-  "confirm.customer.delete": "Bạn có chắc chắn muốn xóa khách hàng này không?"
+  "confirm.customer.delete": "Bạn có chắc chắn muốn xóa khách hàng này không?",
+  "ceca.reason":"Hợp đồng không được đẩy lên Bộ Công thương do có chữ ký không phải chữ ký số",
+  "zoom.warning":"Khi phóng to/ thu nhỏ, vị trí ô ký khi kéo sẽ không đúng. Vui lòng để màn hình ở chế độ 100% để trải nghiệm được tốt nhất!"
 }

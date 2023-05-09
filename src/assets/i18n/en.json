@@ -614,5 +614,8 @@
   "report.number.contracts.type":"Quantity by type of contract",
   "ceca.reason.one.person":"Contracts signed by one person are not pushed to the Ministry of Industry and Trade",
   "not.draw.sign":"You haven't drawn the signature image yet",
-  "mobifone.fail":"You cannot use this feature with Mobifone email"
+  "mobifone.fail":"You cannot use this feature with Mobifone email",
+  "ceca.reason":"The contract was not pushed to the Ministry of Industry and Trade because it has a signature that is not a digital signature",
+  "zoom.warning":"When zooming in/out, the box position when dragging will not be correct. Please set the screen to 100% for the best experience!",
+  "contract.download1":"Download"
 }

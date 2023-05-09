@@ -22,10 +22,10 @@
     <span [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
   </div>
 
-  <div id="text-sign" class="skeleton-sign-value" (click)="doEditText()" *ngIf="!checkShowEdit && sign.valueSign">
+  <div class="skeleton-sign-value" (click)="doEditText()" *ngIf="!checkShowEdit && sign.valueSign">
     <span id="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
   </div>
-  <div  class="skeleton-sign" *ngIf="checkShowEdit">
+  <div *ngIf="checkShowEdit">
     <input type="text" class="input-edit-text" [(ngModel)]="sign.valueSign" (blur)="doneEditTextSign()" #inputEditText>
   </div>
 </div>
@@ -40,7 +40,7 @@
     <span id="input-text" *ngIf="!sign.valueSign">{{getText(sign)}}</span>
   </div>
 
-  <div id="text-sign" class="skeleton-sign-value" (click)="doEditContractNo()" *ngIf="!contractNoValue && count == 0 && (this.contractNoValueSign || sign.value || sign.valueSign) && !view">
+  <div class="skeleton-sign-value" (click)="doEditContractNo()" *ngIf="!contractNoValue && count == 0 && (this.contractNoValueSign || sign.value || sign.valueSign) && !view">
     <span class="input-text">{{getText(sign)}}</span>
   </div>
 

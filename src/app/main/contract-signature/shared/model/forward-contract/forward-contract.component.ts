@@ -35,7 +35,6 @@ export class ForwardContractComponent implements OnInit {
     private contractService: ContractService,
     public dialogRef: MatDialogRef<ForwardContractComponent>,
     private toastService: ToastService,
-    private el: ElementRef,
     private spinner: NgxSpinnerService,
   ) {
   }
@@ -108,29 +107,10 @@ export class ForwardContractComponent implements OnInit {
   dropdownButtonText = '';
   async onSubmit() {
     const updatedInfo = await this.contractService.getInforPersonProcess(this.datas.recipientId).toPromise()
-    const isInRecipient = this.datas?.dataContract?.is_data_contract?.participants.some((el: any) => el.name === updatedInfo.name)
-
-    // if (!isInRecipient) {
-    //   console.log("vao day ");
-    //   this.toastService.showErrorHTMLWithTimeout(
-    //     'Bạn không có quyền xử lý hợp đồng này!',
-    //     '',
-    //     3000
-    //   );
-    //   if (this.type == 1) {
-    //     this.router.navigate(['/login']);
-    //     return
-    //   } else {
-    //     this.router.navigate(['/main/dashboard']);
-    //     return
-    //   }
-    // }
 
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
     this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
-      console.log("response", response);
       const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-      console.log("ArrRecipients", ArrRecipients);
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
@@ -141,25 +121,25 @@ export class ForwardContractComponent implements OnInit {
       });
       console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
-      if (!ArrRecipientsNew) {
+      // if (!ArrRecipientsNew) {
 
-        this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
-          '',
-          3000
-        );
-        if (this.type == 1) {
-          this.router.navigate(['/login']);
-          this.dialogRef.close();
-          this.spinner.hide();
-          return
-        } else {
-          this.router.navigate(['/main/dashboard']);
-          this.dialogRef.close();
-          this.spinner.hide();
-          return
-        }
-      };
+      //   this.toastService.showErrorHTMLWithTimeout(
+      //     'Bạn không có quyền xử lý hợp đồng này!',
+      //     '',
+      //     3000
+      //   );
+      //   if (this.type == 1) {
+      //     this.router.navigate(['/login']);
+      //     this.dialogRef.close();
+      //     this.spinner.hide();
+      //     return
+      //   } else {
+      //     this.router.navigate(['/main/dashboard']);
+      //     this.dialogRef.close();
+      //     this.spinner.hide();
+      //     return
+      //   }
+      // };
       console.log("this.currentUser.email", this.currentUser);
       if (!String(this.myForm.value.name)) {
         // this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền'

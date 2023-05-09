@@ -68,10 +68,10 @@ export class AddContractTemplateComponent implements OnInit {
   ) {
   }
 
-  isQLHD_01:boolean=true;
-  isQLHD_02:boolean=true;
-  isQLHD_08:boolean=true;
-  isQLHD_11:boolean=true;
+  isQLMHD_01:boolean=true;
+  isQLMHD_02:boolean=true;
+  isQLMHD_08:boolean=true;
+  isQLMHD_11:boolean=true;
 
   ngOnInit() {
     //title
@@ -88,10 +88,10 @@ export class AddContractTemplateComponent implements OnInit {
           data => {
             let listRole: any[];
             listRole = data.permissions;
-            this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
+            this.isQLMHD_01 = listRole.some(element => element.code == 'QLMHD_01');
             // this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
             // this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
-            this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
+            this.isQLMHD_11 = listRole.some(element => element.code == 'QLMHD_11');
           }, error => {
             setTimeout(() => this.router.navigate(['/login']));
             this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);

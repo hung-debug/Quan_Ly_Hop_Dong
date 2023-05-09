@@ -53,7 +53,7 @@ export class AddUnitComponent implements OnInit {
         fax: this.fbd.control("",[Validators.pattern(parttern_input.input_form)]),
         status: 1,
         parent_id: this.fbd.control("", [Validators.required]),
-        taxCode: this.fbd.control("",Validators.pattern(parttern_input.taxCode_form)),
+        taxCode: this.fbd.control("",Validators.pattern(parttern.cardid)),
         idOrg: this.fbd.control(""),
       });
     }
@@ -83,7 +83,7 @@ export class AddUnitComponent implements OnInit {
             status: this.fbd.control(data.status),
             parent_id: this.fbd.control(data.parent_id),
             path: this.fbd.control(data.path),
-            taxCode: this.fbd.control(data.tax_code,Validators.pattern(parttern_input.taxCode_form)),
+            taxCode: this.fbd.control(data.tax_code,Validators.pattern(parttern.cardid)),
             idOrg: this.fbd.control(data.id),
           });
           this.nameOld = data.name;
@@ -121,7 +121,7 @@ export class AddUnitComponent implements OnInit {
         fax: this.fbd.control("",[Validators.pattern(parttern_input.input_form)]),
         status: 1,
         parent_id: this.fbd.control(orgId, [Validators.required]),
-        taxCode: this.fbd.control("",[Validators.pattern(parttern_input.taxCode_form)]),
+        taxCode: this.fbd.control("",[Validators.pattern(parttern.cardid)]),
       });
     }
   }

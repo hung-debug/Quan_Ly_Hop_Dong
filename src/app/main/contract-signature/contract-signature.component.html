@@ -16,7 +16,7 @@
                 <!-- <button (click)="watchMany()" class="btn btn-lg btn-block btn_submit">{{'sign.multi'| translate}}</button> -->
             </div>
 
-            <div *ngIf="this.typeDisplay === 'signMany'" style="padding-top: 10px;">
+            <div *ngIf="this.typeDisplay === 'signMany'" style="padding-top: 15px;">
                 <button class="btn_submit" (click)="signManyContract()">{{'contract.sign'| translate}}</button>
 
                 <button class="btn_submit" (click)="cancelSignMany()">{{'cancel'| translate}}</button>
@@ -24,24 +24,23 @@
         </div>
 
         <div *ngIf="filter_status == 4">
-            <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
+            <!-- <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
                 <button (click)="downloadMany()" class="btn btn-lg btn-block btn_submit">{{'download.multi'| translate}}</button>
-            </div>
+            </div> -->
 
             <div *ngIf="this.typeDisplay === 'downloadMany'" style="padding-top: 10px;">
                 <button class="btn_submit" (click)="downloadManyContract()">{{'contract.down'| translate}}</button>
-
                 <button class="btn_submit" (click)="cancelDownloadMany()">{{'cancel'| translate}}</button>
             </div>
         </div>
         <div *ngIf="filter_status == -1">
-            <div class="col-md-1 btn_search" style="padding-top: 10px;">
+            <!-- <div class="col-md-1 btn_search" style="padding-top: 10px;">
                 <button (click)="downloadManyContract()" class="btn btn-lg btn-block btn_submit">{{'contract.down'| translate}}</button>
-            </div>
+            </div> -->
         </div>
     </div>
 
-    <div style="margin-top: 15px;" class="row list_header" *ngIf="pageTotal > 0;">
+    <div style="margin-top: 18px;" class="row list_header" *ngIf="pageTotal > 0;">
 
         <div class="col-md-5"></div>
         <div class="col-md-2">{{'create-date' | translate}}</div>

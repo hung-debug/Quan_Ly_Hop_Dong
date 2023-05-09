@@ -263,16 +263,10 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   count: number = 0;
   getText(sign: any) {
-
-    console.log("sign ", sign);
-
     this.newItemEvent.emit("1");
     if (sign.sign_unit == 'text') {
       if(sign.valueSign) {
         // sign.valueSign = this.convertCurrency(sign.valueSign);
-
-        console.log("sign ", sign);
-
         return sign.valueSign;
       }
       return 'Text';

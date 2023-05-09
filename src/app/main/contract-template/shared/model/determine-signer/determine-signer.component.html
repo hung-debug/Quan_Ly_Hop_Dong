@@ -33,7 +33,7 @@
                   <div class="label_detail text-color">
 
                     <div>
-                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}"
+                      <input (change)="changeTypeSign(d, index)" type="radio" name="checkPhoneMailOrgViewer_{{index}}"
                         [value]="email" [(ngModel)]="d.login_by" />
                     </div>&nbsp;
                     <div>
@@ -44,7 +44,7 @@
                 <div class="participants__name">
                   <div class="label_detail text-color">
                     <div>
-                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}"
+                      <input (change)="changeTypeSign(d, index)" type="radio" name="checkPhoneMailOrgViewer_{{index}}"
                         [(ngModel)]="d.login_by" [value]="phone" />
                     </div>&nbsp;
                     <div>
@@ -257,7 +257,7 @@
                   <div class="label_detail text-color">
 
                     <div>
-                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
+                      <input (change)="changeTypeSign(d, index,null,'signer')" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
                         [value]="email" [(ngModel)]="d.login_by" />
                     </div>&nbsp;
                     <div>
@@ -268,7 +268,7 @@
                 <div class="participants__name">
                   <div class="label_detail text-color">
                     <div>
-                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
+                      <input (change)="changeTypeSign(d,index, null, 'signer')" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
                         [(ngModel)]="d.login_by" [value]="phone" />
                     </div>&nbsp;
                     <div>
