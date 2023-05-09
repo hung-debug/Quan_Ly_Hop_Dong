@@ -620,8 +620,6 @@
   "contract.download1":"Download",
   "attribute.text.type": "Text type",
   "choose.text.type": "Choose text type",
-  "tree.folder": "Tree folder"
-  "mark.contract":"Seal the contract contract",
-  "customer.list":"Customer list",
+  "tree.folder": "Tree folder",
   "contract.views": "View more contracts"
 }
