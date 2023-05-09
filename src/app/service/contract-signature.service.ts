@@ -25,6 +25,7 @@ export class ContractSignatureService {
   shareContractUrl: any = `${environment.apiUrl}/api/v1/shares`;
   shareListContractUrl: any = `${environment.apiUrl}/api/v1/shares`;
   dashboardContractMyProcessUrl: any = `${environment.apiUrl}/api/v1/dashboard/my-process-by-status/`;
+  getViewContractList: any = `${environment.apiUrl}/api/v1/contracts/my-contract/can-review-multi?`;
 
   errorData:any = {};
   redirectUrl: string = '';
@@ -52,6 +53,33 @@ export class ContractSignatureService {
     console.log(listContractMyProcessUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Contract[]>(listContractMyProcessUrl, {headers}).pipe();
+  }
+
+  // public getViewContractMyProcessList(filter_name:any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any, page:any, size:any, role: any): Observable<any>{
+  //   this.getCurrentUser();
+  //   if (filter_from_date != "") {
+  //     filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
+  //   }
+  //   if (filter_to_date != "") {
+  //     filter_to_date = this.datepipe.transform(filter_to_date, 'yyyy-MM-dd');
+  //   }
+  //   if(page != ""){
+  //     page = page - 1;
+  //   }
+  //   let getViewContractList = this.getViewContractList + '?keyword=' + filter_name.trim() + '&type=' + filter_type + '&status=' + filter_status + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size + "&role=" + role;
+  //   const headers = {'Authorization': 'Bearer ' + this.token}
+  //   return this.http.get<Contract[]>(getViewContractList, {headers}).pipe();
+  // }
+
+  public getViewContractMyProcessList(){
+    this.getCurrentUser();
+
+    const headers = {'Authorization': 'Bearer ' + this.token};
+    const orgId = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.info.organizationId;
+
+    return this.http.get<any[]>(this.getViewContractList+'orgId='+orgId+'&platform=web',{headers}).pipe();
   }
 
   public getContractMyProcessListSignMany() {

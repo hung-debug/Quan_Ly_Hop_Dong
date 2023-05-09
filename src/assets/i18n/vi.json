@@ -578,7 +578,7 @@
   "enter.captcha":"Nhập captcha",
   "date.full.valid":"Vui lòng nhập đủ ngày tạo",
   "download.multi": "Tải nhiều",
-  "contract.down": "Tải hợp đồng",
+  "contract.down": "Tải hợp đồng hợp đồng",
   "add.unit.success":"Thêm mới tổ chức thành công!",
   "link.valid":"Link truy cập đã hết hạn",
   "change.pass.first":"Tài khoản đăng nhập lần đầu, vui lòng đổi mật khẩu",
@@ -621,5 +621,6 @@
   "zoom.warning":"Khi phóng to/ thu nhỏ, vị trí ô ký khi kéo sẽ không đúng. Vui lòng để màn hình ở chế độ 100% để trải nghiệm được tốt nhất!",
   "attribute.text.type": "Loại text",
   "choose.text.type": "Chọn loại text",
-  "tree.folder": "Cây thư mục"
+  "tree.folder": "Cây thư mục",
+  "contract.views": "Xem xét nhiều"
 }

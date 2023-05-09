@@ -574,7 +574,7 @@
   "enter.captcha":"Enter captcha",
   "date.full.valid":"Please enter the full creation date",
   "download.multi": "Download multi",
-  "contract.down": "Download contract",
+  "contract.down": "Download contract contract",
   "add.unit.success":"Add organization success!",
   "link.valid":"The access link has expired",
   "change.pass.first":"First time login, please change password",
@@ -621,4 +621,7 @@
   "attribute.text.type": "Text type",
   "choose.text.type": "Choose text type",
   "tree.folder": "Tree folder"
+  "mark.contract":"Seal the contract contract",
+  "customer.list":"Customer list",
+  "contract.views": "View more contracts"
 }
