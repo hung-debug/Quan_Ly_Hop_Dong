@@ -20,11 +20,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
     }
   
     onSubmit() {
-      const data = {
-        mark: 1,
-        agree: 1 
-      }
-      this.dialogRef.close(data);
+      this.dialogRef.close(true);
     }
   
   }

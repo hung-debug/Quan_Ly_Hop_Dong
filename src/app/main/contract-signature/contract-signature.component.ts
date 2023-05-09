@@ -83,6 +83,7 @@ export class ContractSignatureComponent implements OnInit {
   dataHsm: any;
   isDateTime: any = new Date();
   srcMark: any;
+  checkedAll: boolean = false;
 
   organization_id: any = '';
   public contractDownloadList: any[] = [];
@@ -253,51 +254,51 @@ export class ContractSignatureComponent implements OnInit {
     console.log();
 
     this.contractService.getViewContractMyProcessList().subscribe((data) => {
-        console.log("data", data);
+      console.log("data", data);
 
-        this.contractViewList = data;
-        if (this.pageTotal == 0) {
-          this.p = 0;
-          this.pageStart = 0;
-          this.pageEnd = 0;
-        } else {
-          this.setPage();
-        }
-        console.log("contractViewList", this.contractViewList);
+      this.contractViewList = data;
+      if (this.pageTotal == 0) {
+        this.p = 0;
+        this.pageStart = 0;
+        this.pageEnd = 0;
+      } else {
+        this.setPage();
+      }
+      console.log("contractViewList", this.contractViewList);
 
-        this.contractViewList.forEach((key: any, v: any) => {
-          this.contractViewList[v].contractId =
-            key.participant.contract.id;
-          this.contractViewList[v].contractName =
-            key.participant.contract.name;
-          this.contractViewList[v].contractNumber =
-            key.participant.contract.code;
-          this.contractViewList[v].contractSignTime =
-            key.participant.contract.sign_time;
-          this.contractViewList[v].contractCreateTime =
-            key.participant.contract.created_time;
-          this.contractViewList[v].contractStatus =
-            key.participant.contract.status;
-          this.contractViewList[v].contractCecaPush =
-            key.participant.contract.ceca_push;
-          this.contractViewList[v].contractCecaStatus =
-            key.participant.contract.ceca_status;
-          this.contractViewList[v].contractReleaseState =
-            key.participant.contract.release_state;
-        });
-        console.log('this.contractViewList', this.contractViewList);
+      this.contractViewList.forEach((key: any, v: any) => {
+        this.contractViewList[v].contractId =
+          key.participant.contract.id;
+        this.contractViewList[v].contractName =
+          key.participant.contract.name;
+        this.contractViewList[v].contractNumber =
+          key.participant.contract.code;
+        this.contractViewList[v].contractSignTime =
+          key.participant.contract.sign_time;
+        this.contractViewList[v].contractCreateTime =
+          key.participant.contract.created_time;
+        this.contractViewList[v].contractStatus =
+          key.participant.contract.status;
+        this.contractViewList[v].contractCecaPush =
+          key.participant.contract.ceca_push;
+        this.contractViewList[v].contractCecaStatus =
+          key.participant.contract.ceca_status;
+        this.contractViewList[v].contractReleaseState =
+          key.participant.contract.release_state;
+      });
+      console.log('this.contractViewList', this.contractViewList);
 
-        this.spinner.hide();
-      },
-        (error) => {
-          setTimeout(() => this.router.navigate(['/login']));
-          this.toastService.showErrorHTMLWithTimeout(
-            'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
-            '',
-            3000
-          );
-        }
-      );
+      this.spinner.hide();
+    },
+      (error) => {
+        setTimeout(() => this.router.navigate(['/login']));
+        this.toastService.showErrorHTMLWithTimeout(
+          'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+          '',
+          3000
+        );
+      }
+    );
   }
 
   downloadMany() {
@@ -337,6 +338,16 @@ export class ContractSignatureComponent implements OnInit {
           this.contractDownloadList[v].contractReleaseState =
             key.participant.contract.release_state;
         });
+        const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
+        for(let i = 0; i< this.contractDownloadList.length; i++){
+          let checkIf = checkedDownloadFiles.some(el => el === this.contractDownloadList[i].id)
+          if(checkIf){
+            this.contractDownloadList[i].checked = true;
+          } else {
+            this.contractDownloadList[i].checked = false;
+          }
+        }
+  
         this.spinner.hide();
       },
         (error) => {
@@ -653,6 +664,7 @@ export class ContractSignatureComponent implements OnInit {
       a.click();
       window.URL.revokeObjectURL(fileUrl);
       a.remove();
+      window.location.reload();
     },
       (error) => {
         this.toastService.showErrorHTMLWithTimeout(
@@ -765,39 +777,63 @@ export class ContractSignatureComponent implements OnInit {
     });
   }
 
+  toggleView(checkedAll: boolean) {
+    //han che cac checkbox true tick truoc dan den push trung value
+    this.dataChecked = [];
+    if(checkedAll){
+      for(let i = 0; i < this.contractViewList.length; i++){
+        this.contractViewList[i].checked = false;
+      }
+    } else {
+      for (let i = 0; i < this.contractViewList.length; i++){
+        this.contractViewList[i].checked = true;
+        this.dataChecked.push({
+          id: this.contractViewList[i].id,
+          selectedId : this.contractViewList[i].id
+        })
+      }
+    }
+  }
+
   viewManyContract() {
     this.dialogViewManyComponentComponent();
   }
   async dialogViewManyComponentComponent() {
+    if (this.dataChecked.length === 0) {
+      return
+    }
     const dialogRef = this.dialog.open(DialogViewManyComponentComponent, {
       width: '580px',
     });
-    dialogRef.afterClosed().subscribe(async (result: any) => {
+    dialogRef.afterClosed().subscribe(async (isSubmit: any) => {
       console.log("dataChecked", this.dataChecked);
-      for (let index = 0; index < this.dataChecked.length; index++) {
-        this.contractServiceV1
-          .updateInfoContractConsider([], this.dataChecked[index].id)
-          .subscribe(
-            (result) => {
-              console.log("#######result", result);
-
-              this.toastService.showSuccessHTMLWithTimeout('Xem xét hợp đồng thành công',
-                '',
-                1000
-              );
-
-            },
-            (error) => {
-              this.toastService.showErrorHTMLWithTimeout(
-                'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
-                '',
-                3000
-              );
-            }
-          );
+      if (isSubmit) {
+        for (let index = 0; index < this.dataChecked.length; index++) {
+          this.contractServiceV1
+            .updateInfoContractConsider([], this.dataChecked[index].id)
+            .subscribe(
+              (result) => {
+                console.log("#######result", result);
+                this.router
+                  .navigateByUrl('/', { skipLocationChange: true })
+                  .then(() => {
+                    this.router.navigate(['/main/c/receive/processed']);
+                  });
+              },
+              (error) => {
+                this.toastService.showErrorHTMLWithTimeout(
+                  'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
+                  '',
+                  3000
+                );
+              }
+            );
+        }
+        this.toastService.showSuccessHTMLWithTimeout('Xem xét hợp đồng thành công',
+          '',
+          1000
+        );
       }
-      this.router.navigate(['/main/c/receive/processed']);
-      return;
     })
   }
 
