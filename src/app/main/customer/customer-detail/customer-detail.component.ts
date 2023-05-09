@@ -22,6 +22,7 @@ export class CustomerDetailComponent implements OnInit {
   id: String;
   orgCustomer: any[] = [];
   type: String;
+  ordering: number = 0;
   
   private sub: any;
 
@@ -62,6 +63,11 @@ export class CustomerDetailComponent implements OnInit {
         if(this.orgCustomer[0].handlers != null){
           this.handlers = this.orgCustomer[0].handlers;
         }
+        if(this.orgCustomer[0].signType != null){
+          this.signType = this.orgCustomer[0].signType;
+        } else {
+          this.signType = null;
+        }
       });
 
   })
@@ -69,7 +75,7 @@ export class CustomerDetailComponent implements OnInit {
 
   getSignerHandler(){
     return this.handlers
-    .filter((item: any) => item.role === 'signer')
+    .filter((item: any) => item.role === 'SIGNER')
     .sort((a: any, b: any) => {
       if (a.ordering < b.ordering) {
         return -1;
@@ -79,7 +85,49 @@ export class CustomerDetailComponent implements OnInit {
       }
       return 0;
     });
+  }
 
+  getCoordinatorHandler(){
+    return this.handlers
+    .filter((item: any) => item.role === 'COORDINATOR')
+    .sort((a: any, b: any) => {
+      if (a.ordering < b.ordering) {
+        return -1;
+      }
+      if (a.ordering > b.ordering) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
+  getReviewerHandler(){
+    return this.handlers
+    .filter((item: any) => item.role === 'REVIEWER')
+    .sort((a: any, b: any) => {
+      if (a.ordering < b.ordering) {
+        return -1;
+      }
+      if (a.ordering > b.ordering) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
+  getArchiverHandler(){
+    return this.handlers
+    .filter((item: any) => item.role === 'ARCHIVER')
+    .sort((a: any, b: any) => {
+      if (a.ordering < b.ordering) {
+        return -1;
+      }
+      if (a.ordering > b.ordering) {
+        return 1;
+      }
+      return 0;
+    }
+    );
   }
 
   onCancel(){

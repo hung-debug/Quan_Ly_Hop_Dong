@@ -608,5 +608,8 @@
   "personal.customer.add":"Thêm cá nhân",
   "organization.customer.detail":"Chi tiết tổ chức",
   "personal.customer.detail":"Chi tiết cá nhân",
-  "confirm.customer.delete": "Bạn có chắc chắn muốn xóa khách hàng này không?"
+  "confirm.customer.delete": "Bạn có chắc chắn muốn xóa khách hàng này không?",
+  "attribute.text.type": "Loại text",
+  "choose.text.type": "Chọn loại text",
+  "tree.folder": "Cây thư mục"
 }
