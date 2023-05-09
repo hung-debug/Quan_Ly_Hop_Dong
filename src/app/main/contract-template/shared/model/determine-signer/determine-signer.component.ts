@@ -17,6 +17,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ContractService } from 'src/app/service/contract.service';
 import { log } from 'console';
+import { UnitService } from 'src/app/service/unit.service';
+import {UserService} from "../../../../../service/user.service";
 
 @Component({
   selector: 'app-determine-signer',
@@ -50,6 +52,7 @@ export class DetermineSignerComponent implements OnInit {
   is_determine_clone: any;
   toppings = new FormControl();
   arrSearch: any = [];
+  checkCount = 1;
 
   //dropdown
   signTypeList: Array<any> = type_signature;
@@ -84,6 +87,8 @@ export class DetermineSignerComponent implements OnInit {
     private toastService: ToastService,
     private router: Router,
     private contractService: ContractService,
+    private unitService: UnitService,
+    private userService: UserService
   ) {
     this.step = variable.stepSampleContract.step2
     //this.datas.determineDetails = this.determineDetails;
@@ -366,10 +371,58 @@ export class DetermineSignerComponent implements OnInit {
     this.stepChangeDetermineSigner.emit(step);
   }
 
-  selectWithOtp(e: any, data: any) {
+  onItemSelect(e: any) {
+    var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
+    var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
+    // <==========>
+    if (isParnter.length > 0) {
+      for (let i = 0; i < 2; i++) {
+        this.getSetOrderingPersonal(isParnter, i);
+      }
+    }
+    // for loop check change ordering with parnter origanization
+    this.getSetOrderingParnterOrganization(isOrganization);
+    // set again ordering data not option eKYC/img/otp => order
+    // var setOrderingOrganization =
+    var setOrdering = this.dataParnterOrganization().filter((p: any) => p.type == 2 || p.type == 3 && (p.recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3) || p.recipients[0].sign_type.length == 0));
+    var setOrderingParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3 && p.recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5));
+    // if (setOrderingParnter.length > 0) {
+    if (setOrderingParnter.length == 0) {
+      this.data_organization.ordering = 1;
+      setOrdering.forEach((val: any, index: number) => {
+        val.ordering = index + 2; // + 2 (1: index & 1 index tổ chức của tôi) vì sẽ luôn luôn order sau tổ chức của tôi nếu trong các bên ko có dữ liệu ký eKYC/Image/OTP.
+      })
+    } else {
+      this.data_organization.ordering = setOrderingParnter.length + 1;
+      setOrdering.forEach((val: any, index: number) => {
+        val.ordering = this.data_organization.ordering + index + 1; // tăng lên 1 ordering sau tổ chức của tôi
+      })
+    }
+
+    // }
+    // console.log(setOrdering, setOrderingParnter.length)
+    this.checkCount = 1; // gan lai de lan sau ko bi tang index
+  }
+
+  selectWithOtp(e: any, data: any, type?: any) {
     console.log("data ", data);
     if(e.length > 0) {
 
+    }
+    if (type == 'organization') {
+      //Nếu là người ký
+      if (data.role == 3) {
+        if (this.getDataSignHsm(data).length == 0 && this.getDataSignUSBToken(data).length == 0) {
+          data.card_id = "";
+        }
+      }
+      //Nếu là văn thư
+      else if (data.role == 4) {
+        if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0) {
+          this.unitService.getTaxCodeOriganzation(this.userService.getInforUser().organization_id).subscribe((res: any) => {
+            data.card_id=res.tax_code;})
+        }
+      }
     }
     if(data.type == 3 && data.sign_type.length > 0) {
       if(data.sign_type[0].id == 1)
@@ -380,6 +433,54 @@ export class DetermineSignerComponent implements OnInit {
     }
     
   }
+
+  getSetOrderingPersonal(isParnter: any, index: number): void {
+    // this.checkCount == 1 => default
+    for (let i = 0; i < isParnter.length; i++) {
+      if (index == 0) { // only check signature eKYC and image or OTP
+        if (isParnter[i].recipients[0].sign_type.length > 0) {
+          if (isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5)) {
+            isParnter[i].ordering = this.checkCount;
+            this.checkCount++
+            // comment
+            // you need save checkCount variable => when index data not pass condition
+            // cần lưu biến checkCount để khi dữ liệu có index không pass qua điều kiện, sẽ chạy tiếp từ biến cũ chứ ko chạy biến mới theo for loop
+          }
+        } else {
+          isParnter[i].ordering = this.checkCount; // Keep value checkCount variable (avoid case not pass index value);
+        }
+      }
+        // only check signature not eKYC/Image/OTP condition (condition exception)
+      // điều kiện chỉ check các dữ liệu không thuộc option đặc biệt
+      else {
+        if (isParnter[i].recipients[0].sign_type.length > 0) {
+          if (isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3)) {
+            //@ts-ignore
+            // let count_ordering: number = parseInt(this.getMaxNumberOrderingSign()); // set ordering follow data have max ordering
+            // isParnter[i].ordering = this.checkCount + 1;
+            // isParnter[i].ordering = count_ordering + 1;
+            isParnter[i].ordering = this.datasForm.is_determine_clone.length;
+          }
+        } else {
+          isParnter[i].ordering = this.checkCount;
+        }
+      }
+    }
+  }
+
+  getSetOrderingParnterOrganization(isOrganization: any) {
+    for (let i = 0; i < isOrganization.length; i++) {
+      // only check signature not eKYC/Image/OTP condition (condition exception)
+      if (isOrganization[i].recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3)) {
+        isOrganization[i].ordering = this.checkCount;
+        this.checkCount++;
+      } else {
+        isOrganization[i].ordering = this.checkCount;
+      }
+    }
+  }
+
+
 
   changeOtp(data: any) {
     let data_sign_cka = data.sign_type.filter((p: any) => p.id == 1)[0];
@@ -470,7 +571,7 @@ export class DetermineSignerComponent implements OnInit {
         break;
       }
       if (!dataArr[i].card_id && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 5).length > 0) {
-        this.getNotificationValid("Vui lòng nhập CMT/CCCD của" + this.getNameObject(3) + "tổ chức của tôi!")
+        this.getNotificationValid("Vui lòng nhập CMT/CCCD của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
         count++;
         break;
       }

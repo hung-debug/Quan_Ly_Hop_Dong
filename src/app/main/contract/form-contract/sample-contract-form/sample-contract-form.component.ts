@@ -1194,6 +1194,7 @@ export class SampleContractFormComponent implements OnInit {
     }
 
     console.log("d ",d);
+    console.log(d.value);
   }
 
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas

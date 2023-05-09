@@ -306,7 +306,8 @@
                       class="required-title">*</span>
                   </div>
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                    [settings]="dropdownSignTypeSettings" [data]="d.isListSignNotPerson ? d.isListSignNotPerson : this.getListSignType('org')">
+                    [settings]="dropdownSignTypeSettings" [data]="d.isListSignNotPerson ? d.isListSignNotPerson : this.getListSignType('org')"
+                    (onSelect)="onItemSelect($event)" (ngModelChange)="selectWithOtp($event, d, 'organization')">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
                         <label style="color: #333; font-weight: normal;"
@@ -542,12 +543,13 @@
                   </div>
                 </div>
                 <div class="participants__name">
-
                   <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span
                       class="required-title">*</span>
                   </div>
+
+                  <!--Văn thư tổ chức của tôi chọn loại ký-->                  
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                    [settings]="dropdownSignTypeSettings" [data]="signType_doc">
+                    [settings]="dropdownSignTypeSettings" [data]="signType_doc"  (ngModelChange)="selectWithOtp($event, d, 'organization')">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
                         <label style="color: #333; font-weight: normal;"
@@ -559,7 +561,6 @@
                   </ng-multiselect-dropdown>
                 </div>
               </div>
-
 
               <!--NB-->
               <div class="participants--input" style="display: flex" *ngIf="this.site == 'NB'">
@@ -630,6 +631,33 @@
                   <div class="label_detail text-color">CMT/CCCD&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
                     <input type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+              <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là usb token-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
+                <div class="participants__name" style="width: 90%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div>
+                  </div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+
+
+              <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là hsm-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
+                <div class="participants__name" style="width: 90%">
+                  <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                  </div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax.code' | translate}}" [(ngModel)]="d.card_id"
                       oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
