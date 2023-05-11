@@ -17,13 +17,6 @@
                 <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
             </div>
 
-            <div class="input-line search" *ngIf="this.typeDisplay == 'downloadMany'">
-                <img src="../../assets/img/icon_search.svg" class="input-img" />
-                <input type="text" id="filter_name" [value]="filter_name" class="input-text"
-                    placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
-                <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
-            </div>
-
         </div>
 
         <div>
