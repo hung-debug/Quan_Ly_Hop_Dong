@@ -23,6 +23,7 @@ import { ContractTemplateService } from "src/app/service/contract-template.servi
 import * as _ from 'lodash';
 import { TranslateService } from "@ngx-translate/core";
 import { UserService } from 'src/app/service/user.service';
+import { isPdfFile } from "pdfjs-dist";
 import { CheckZoomService } from "src/app/service/check-zoom.service";
 
 @Component({
@@ -81,6 +82,10 @@ export class SampleContractFormComponent implements OnInit {
     font_size: 13,
   }
 
+  list_text_type: any = [
+    { id: 1, name: 'Mặc định' },
+    { id: 2, name: 'Số tiền' },
+  ];
   list_sign_name: any = [];
   signCurent: any;
 
@@ -1387,8 +1392,15 @@ export class SampleContractFormComponent implements OnInit {
             signElement.setAttribute("height", isObjSign.height);
           }
         } else if (property == 'text') {
+          if(locationChange != 'text_type') {
           isObjSign.text_attribute_name = e;
           signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
+          } else if (locationChange == 'text_type') {
+            let type_name = this.list_text_type.filter((p: any) => p.id == e.target.value)[0].name;
+            console.log(type_name);
+            isObjSign.text_type = type_name;
+            signElement.setAttribute("text_type", isObjSign.text_type);
+          }
         } else if (property == 'font') {
           isObjSign.font = e.target.value;
           signElement.setAttribute("font", isObjSign.font);
@@ -1590,7 +1602,7 @@ export class SampleContractFormComponent implements OnInit {
           this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId, action);
         } else {
           this.data_sample_contract = [];
-          let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text", "id_have_data"];
+          let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text", "id_have_data", "text_type"];
           let isContractUserSign_clone = _.cloneDeep(this.datasForm.contract_user_sign);
           isContractUserSign_clone.forEach((element: any) => {
             if (element.sign_config.length > 0) {
@@ -1673,7 +1685,7 @@ export class SampleContractFormComponent implements OnInit {
   async getDefindDataSignEdit(dataSignId: any, dataSignNotId: any, action: any) {
     let dataSample_contract: any[] = [];
     if (dataSignId.length > 0) {
-      let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text"];
+      let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text", "text_type"];
       dataSignId.forEach((res: any) => {
         if(res.type == 1) {
           res.name = res.text_attribute_name;
@@ -1704,7 +1716,7 @@ export class SampleContractFormComponent implements OnInit {
 
     let isErrorNotId = false;
     if (dataSignNotId.length > 0) {
-      let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text", "id_have_data"];
+      let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text", "id_have_data", "text_type"];
       dataSignNotId.forEach((item: any) => {
         item['font'] = this.datasForm.font;
         item['font_size'] = this.datasForm.size;
@@ -1819,6 +1831,7 @@ export class SampleContractFormComponent implements OnInit {
     } else {
       let count = 0;
       let count_text = 0;
+      let count_text_type = 0;
       let count_number = 0;
       let count_text_number = 0;
 
@@ -1852,6 +1865,9 @@ export class SampleContractFormComponent implements OnInit {
                 break
               } else if (element.is_have_text && !element.value) {
                 count_text_number++;
+                break;
+              } else if (!element.text_type){
+                count_text_type++;
                 break;
               }
             } else {
@@ -1969,9 +1985,13 @@ export class SampleContractFormComponent implements OnInit {
         this.toastService.showWarningHTMLWithTimeout("Hợp đồng chỉ được phép có 1 số hợp đồng!", "", 3000);
         return false;
       } else if (count_text > 0) {
-        this.spinner.hide();
-        this.toastService.showWarningHTMLWithTimeout("Bạn chưa nhập tên trường cho đối tượng Text!", "", 3000);
-        return false;
+        // this.spinner.hide();
+        // this.toastService.showWarningHTMLWithTimeout("Bạn chưa nhập tên trường cho đối tượng Text!", "", 3000);
+        // return false;
+      } else if (count_text_type > 0 ) {
+        // this.spinner.hide();
+        // this.toastService.showWarningHTMLWithTimeout("Bạn chưa chọn loại text cho đối tượng Text!", "", 3000);
+        // return false;
       } else if (count_text_number > 0) {
         this.spinner.hide();
         this.toastService.showWarningHTMLWithTimeout("please_input_text_number_contract", "", 3000);

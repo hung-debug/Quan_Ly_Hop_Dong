@@ -1,3 +1,4 @@
+import { ContractFolderComponent } from './main/contract-folder/contract-folder.component';
 import { CustomerDetailComponent } from './main/customer/customer-detail/customer-detail.component';
 import {CustomerOrganizationAddComponent} from './main/customer/customer-organization-add/customer-organization-add.component';
 import {DetailContractComponent} from './main/contract/detail-contract/detail-contract.component';
@@ -141,6 +142,13 @@ const routes: Routes = [
       {
         path: 'form-customer/customer-detail/:type/:id',
         component: CustomerDetailComponent
+      },{
+        path: 'contract-folder',
+        component: ContractFolderComponent
+      },
+      {
+        path: 'contract-folder/:id',
+        component: ContractFolderComponent
       },
       {
         path: 'customer/CustomerOrganizationAdd',

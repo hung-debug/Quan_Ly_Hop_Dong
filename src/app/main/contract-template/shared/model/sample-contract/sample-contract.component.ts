@@ -78,6 +78,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     font_size: 13,
   }
 
+  list_text_type: any = [
+    { id: 1, name: 'Mặc định' },
+    { id: 2, name: 'Số tiền' },
+  ];
   list_sign_name: any = [];
   signCurent: any;
 
@@ -1328,8 +1332,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             signElement.setAttribute("height", isObjSign.height);
           }
         } else if (property == 'text') {
-          isObjSign.text_attribute_name = e;
-          signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
+          if(locationChange != 'text_type'){
+            isObjSign.text_attribute_name = e;
+            signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
+          }
+          if(locationChange== 'text_type'){
+            let type_name = this.list_text_type.filter((p: any) => p.id == e.target.value)[0].name;
+            console.log(type_name);
+            isObjSign.text_type = type_name;
+            signElement.setAttribute("text_type", isObjSign.text_type);
+          }
         } else if (property == 'font') {
           isObjSign.font = e.target.value;
           signElement.setAttribute("font", isObjSign.font);
@@ -1460,7 +1472,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId, action);
         } else {
           this.data_sample_contract = [];
-          let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
+          let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value","text_type"];
           let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
           isContractUserSign_clone.forEach((element: any) => {
             if (element.sign_config.length > 0) {
@@ -1524,7 +1536,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     let dataSample_contract: any[] = [];
     if (dataSignId.length > 0) {
-      let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit'];
+      let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', 'text_type'];
       dataSignId.forEach((res: any) => {
         data_remove_arr_signId.forEach((itemRemove: any) => {
           delete res[itemRemove];
@@ -1551,7 +1563,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     let isErrorNotId = false;
     if (dataSignNotId.length > 0) {
-      let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', 'value'];
+      let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', 'value', 'text_type'];
       dataSignNotId.forEach((item: any) => {
         item['font'] = this.datas.font;
         item['font_size'] = this.datas.size;
@@ -1654,6 +1666,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     } else {
       let count = 0;
       let count_text = 0;
+      let count_text_type = 0;
       let count_number = 0;
 
       let arrSign_organization: any[] = [];
@@ -1675,6 +1688,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
              
             } else if (element.sign_unit == 'text' && !element.text_attribute_name) {
               count_text++;
+              break
+            } else if (element.sign_unit == 'text' && !element.text_type) {
+              count_text_type++;
               break
             } else {
               let data_sign = {
@@ -1772,6 +1788,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Thiếu tên trường cho đối tượng nhập Text!", "", 3000);
         return false;
+      } else if ( count_text_type > 0 ){
+        // this.spinner.hide();
+        // this.toastService.showErrorHTMLWithTimeout("Thiếu loại text cho đối tượng nhập Text!", "", 3000);
+        // return false;
       } else if (this.getCheckDuplicateNameText()) {
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Tên trường nhập text không được trùng nhau!", "", 3000);
