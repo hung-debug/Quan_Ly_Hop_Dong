@@ -112,6 +112,7 @@ import { CustomerOrganizationAddComponent } from './main/customer/customer-organ
 import { CustomerPersonalAddComponent } from './main/customer/customer-personal-add/customer-personal-add.component';
 import { DeleteCustomerComponent } from './main/customer/delete-customer/delete-customer.component';
 import { CustomerDetailComponent } from './main/customer/customer-detail/customer-detail.component';
+import { ReportContractReceiveComponent } from './main/report/report-contract-receive/report-contract-receive.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -192,6 +193,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CustomerPersonalAddComponent,
       DeleteCustomerComponent,
       CustomerDetailComponent,
+      ReportContractReceiveComponent,
   ],
   imports: [
     TranslateModule,

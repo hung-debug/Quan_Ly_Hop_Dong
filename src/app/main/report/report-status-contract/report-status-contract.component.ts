@@ -10,6 +10,7 @@ import { InputTreeService } from 'src/app/service/input-tree.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-report-status-contract',
@@ -17,6 +18,8 @@ import { ReportService } from '../report.service';
   styleUrls: ['./report-status-contract.component.scss'],
 })
 export class ReportStatusContractComponent implements OnInit,AfterViewInit {
+  @ViewChild('dt') table: Table;
+
   //Biến lưu dữ liệu trong bảng
   list: any[] = [];
 
@@ -257,6 +260,10 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
 
         this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
       } else {
+
+        this.list = [];
+
+        this.table.first = 0
         this.setColForTable();
         for(let i = 0; i < response.maxParticipant - 1; i++) {
           this.cols.push({

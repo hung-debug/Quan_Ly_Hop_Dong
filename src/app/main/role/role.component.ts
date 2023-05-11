@@ -47,7 +47,7 @@ export class RoleComponent implements OnInit {
       {header: 'role.name', style:'text-align: left;' },
       {header: 'role.code', style:'text-align: left;' },
       {header: 'role.manage', style:'text-align: center;' },
-      ];
+    ];
    
     //lay id user
     let userId = this.userService.getAuthCurrentUser().id;

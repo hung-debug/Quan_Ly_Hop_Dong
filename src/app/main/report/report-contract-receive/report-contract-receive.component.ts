@@ -2,27 +2,24 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Toast } from 'ngx-toastr';
+import * as moment from 'moment';
 import { AppService } from 'src/app/service/app.service';
-import { ContractService } from 'src/app/service/contract.service';
 import { InputTreeService } from 'src/app/service/input-tree.service';
-import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
-
-import * as moment from 'moment';
+import { ToastService } from 'src/app/service/toast.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ContractService } from 'src/app/service/contract.service';
 import { ConvertStatusService } from 'src/app/service/convert-status.service';
-
 import { Table } from 'primeng/table';
 
-
 @Component({
-  selector: 'app-report-detail',
-  templateUrl: './report-detail.component.html',
-  styleUrls: ['./report-detail.component.scss'],
+  selector: 'app-report-contract-receive',
+  templateUrl: './report-contract-receive.component.html',
+  styleUrls: ['./report-contract-receive.component.scss']
 })
-export class ReportDetailComponent implements OnInit {
+export class ReportContractReceiveComponent implements OnInit {
+
   @ViewChild('dt') table: Table;
 
   //Biến lưu dữ liệu trong bảng
@@ -69,7 +66,6 @@ export class ReportDetailComponent implements OnInit {
     private reportService: ReportService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private contractService: ContractService,
     private convertStatusService: ConvertStatusService,
   ) {
     this.formGroup = this.fbd.group({
@@ -82,17 +78,7 @@ export class ReportDetailComponent implements OnInit {
   ngOnInit(): void {
     this.spinner.hide();
 
-    this.appService.setTitle('report.detail.contract.full');
-
-    this.list = [
-      {
-        product: 'Công ty cổ phần phần mềm công nghệ cao Việt Nam',
-        lastYearSale: 51,
-        thisYearSale: 40,
-        lastYearProfit: 54406,
-        thisYearProfit: 43342,
-      },
-    ];
+    this.appService.setTitle('report.contract.receive.full');
 
     this.formGroup = this.fbd.group({
       name: this.fbd.control(''),
@@ -294,7 +280,7 @@ export class ReportDetailComponent implements OnInit {
       to_date = from_date
 
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
-    this.reportService.export('rp-detail',idOrg,params, flag).subscribe((response: any) => {
+    this.reportService.export('rp-my-process',idOrg,params, flag).subscribe((response: any) => {
         this.spinner.hide();
         if(flag) {
           this.spinner.hide();
@@ -397,4 +383,5 @@ export class ReportDetailComponent implements OnInit {
   changeCheckBox(event: any) {
     this.fetchChildData = event.target.checked;
   }
+ 
 }

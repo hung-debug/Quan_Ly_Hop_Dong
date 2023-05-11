@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { SelectItemGroup } from 'primeng/api';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
-import {roleList, roleList_en} from "../../../config/variable";
+import {roleList} from "../../../config/variable";
 import {parttern_input} from "../../../config/parttern"
 import { parttern } from '../../../config/parttern';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -71,10 +71,10 @@ export class AddRoleComponent implements OnInit {
       });
     }
 
-    if(sessionStorage.getItem('lang') == 'vi')
+    // if(sessionStorage.getItem('lang') == 'vi')
       this.groupedRole = roleList;
-    else if(sessionStorage.getItem('lang') == 'en')
-    this.groupedRole = roleList_en;
+    // else if(sessionStorage.getItem('lang') == 'en')
+    // this.groupedRole = roleList_en;
   }
 
   selectedRoleIdCode: any =  [];

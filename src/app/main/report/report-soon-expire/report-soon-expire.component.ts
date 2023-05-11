@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
@@ -9,6 +9,8 @@ import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
+import { Table } from 'primeng/table';
+import { ContractTypeService } from 'src/app/service/contract-type.service';
 
 @Component({
   selector: 'app-report-soon-expire',
@@ -16,6 +18,8 @@ import { ReportService } from '../report.service';
   styleUrls: ['./report-soon-expire.component.scss'],
 })
 export class ReportSoonExpireComponent implements OnInit {
+  @ViewChild('dt') table: Table;
+
   selectedNodeOrganization: any;
   listOrgCombobox: any;
   date: any;
@@ -37,6 +41,8 @@ export class ReportSoonExpireComponent implements OnInit {
   Arr = Array;
 
   orgName: any;
+  type_id: any;
+  typeList: Array<any> = [];
 
   constructor(
     private appService: AppService,
@@ -48,8 +54,8 @@ export class ReportSoonExpireComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private datepipe: DatePipe,
 
-    private translate: TranslateService ,
-    private contractService: ContractService
+    private contractService: ContractService,
+    private contractTypeService: ContractTypeService
 
   ) {}
 
@@ -103,6 +109,15 @@ export class ReportSoonExpireComponent implements OnInit {
     this.setColForTable();
   }
 
+  changeOrg() {
+    this.getTypeListContract(this.selectedNodeOrganization.data);
+  }
+
+  async getTypeListContract(typeId?: number) {
+    const inforType = await this.contractTypeService.getContractTypeList('', '',typeId).toPromise();
+    this.typeList = inforType;
+  }
+
   changeCheckBox(event: any) {
     this.fetchChildData = event.target.checked;
   }
@@ -126,28 +141,29 @@ export class ReportSoonExpireComponent implements OnInit {
       },
       {
         id: 2,
-        header: 'contract.type',
-        style: 'text-align: left;',
-        colspan: 1,
-        rowspan: 1,
-      },
-      {
-        id: 3,
         header: 'contract.number',
         style: 'text-align: left;',
         colspan: 1,
         rowspan: 1,
       },
       {
+        id: 3,
+        header: 'contract.type',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+        
+      },
+      {
         id: 7,
-        header: 'signing.expiration.date',
+        header: 'suggest',
         style: 'text-align: left',
         colspan: 1,
         rowspan: 1,
       },
       {
         id: 10,
-        header: 'suggest',
+        header: 'signing.expiration.date',
         style: 'text-align: left',
         colspan: 1,
         rowspan: 1,
@@ -202,6 +218,10 @@ export class ReportSoonExpireComponent implements OnInit {
   
           this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
         } else {
+          this.list = [];
+
+          this.table.first = 0
+
           this.setColForTable();
           for(let i = 0; i < response.maxParticipant - 1; i++) {
             this.cols.push({
@@ -217,8 +237,6 @@ export class ReportSoonExpireComponent implements OnInit {
 
           let listFirst = [this.orgName];
           let letSecond = response.contracts;
-
-          console.log("re ", response.contracts)
   
           this.list = listFirst.concat(letSecond);
         }
