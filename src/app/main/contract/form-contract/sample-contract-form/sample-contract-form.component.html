@@ -4,7 +4,6 @@
         <div class="sample-contract__information--drag" id="width-element-info" style="position: relative">
             <div style="padding-bottom: 10px" class="label">{{'components' | translate}} (<span style="color: red">{{'drag-drop' | translate}}</span>)
             </div>
-                 <!-- <div> -->
             <div *ngFor="let d of this.datasForm.contract_user_sign" class="show-list-name-class"
                 style="display: inline-block; margin-bottom: 15px">
                 <div *ngIf="!d.sign_config.position" [ngClass]="setClass(d)" (click)="showThumbnail()"
@@ -39,10 +38,20 @@
                 <label class="label">{{'attribute' | translate}}</label>
                 <div class="name-text" *ngIf="isEnableText">
                     <label class="label-require">{{'attribute.name' | translate}}: *</label>
-                    <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name"
+                    <input id="text-input-element" type="text" [(ngModel)]="this.objSignInfo.text_attribute_name"
                         (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
                 </div>
-<!-- 123 -->
+
+                <div class="sign-unit-select" *ngIf="isEnableText">
+                    <label class="label-require">{{'attribute.text.type' | translate}}: *</label>
+                    <select class="form-select" id="select-dropdown" aria-label="Default select example"
+                        (change)="changePositionSign($event, 'text_type', 'text')" [disabled]="isEnableSelect">
+                        <option value="" hidden>{{'choose.text.type'| translate}}
+                        </option>
+                        <option *ngFor="let d of this.list_text_type, let i = index" [selected]="d.selected"
+                            value="{{d.id}}" [disabled]="d.is_disable">{{d.name}}</option>
+                    </select>
+                </div>
 
                 <div class="sign-unit-select">
                     <label class="label-require">{{isEnableText || isChangeText ? ('user.import' | translate) : ('user.sign' | translate)}}: *</label>
@@ -115,10 +124,8 @@
                 <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement
                     (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
                     <div *ngIf="d.name || d.recipient" class="name-sig-img-daky">{{d.name ? d.name : d.recipient.name}}</div>
-                    <div *ngIf="(d.recipient!= null && d.sign_unit == 'text' ) || (d.recipient!= null && d.sign_unit == 'so_tai_lieu') ||
-                    (d.sign_unit == 'text' && d.value === undefined) || (d.sign_unit == 'so_tai_lieu' && d.value === undefined) 
-                    || (d.sign_unit == 'chu_ky_so') || (d.sign_unit == 'chu_ky_anh')"
-                    class="sig-img-daky" (click)="onCancel($event, d)">
+                    <div *ngIf="(d.recipient!= null && d.sign_unit == 'text') || (d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu') || (d.sign_unit == 'text' && d.value === undefined)
+                    || (d.recipient!= null && d.sign_unit == 'so_tai_lieu') || (d.sign_unit == 'so_tai_lieu' && d.value === undefined)" class="sig-img-daky" (click)="onCancel($event, d)">                    
                         <img src="assets/img/clear.svg" alt="">
                         <img src="assets/img/border-clear.svg" alt="">
                     </div>
@@ -173,3 +180,4 @@
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
     <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
 </ngx-spinner>
+

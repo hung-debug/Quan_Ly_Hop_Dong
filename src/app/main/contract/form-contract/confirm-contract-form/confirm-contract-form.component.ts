@@ -307,6 +307,8 @@ export class ConfirmContractFormComponent implements OnInit {
 
                 if (!item.status) item.status = 0;
               }
+            } else if(item.sign_unit == 'text' && item.text_type == 'Số tiền') {
+              item['type'] = 5;
             } else {
               item['type'] = 1;
             }
@@ -323,6 +325,7 @@ export class ConfirmContractFormComponent implements OnInit {
       });
 
       this.spinner.show();
+      console.log(this.data_sample_contract);
       this.contractService.getContractSample(this.data_sample_contract).subscribe(
           (data) => {
             if (action == 'finish_contract') {

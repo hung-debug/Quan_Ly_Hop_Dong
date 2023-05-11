@@ -54,9 +54,9 @@ export class CustomerComponent implements OnInit {
     this.appService.setTitle("customer.list");
 
     this.cols = [
-      {header: 'organization.customer.name', style:'text-align: left;' },
-      {header: 'tax.code', style:'text-align: left;' },
-      {header: '', style:'text-align: center;' },
+      {header: 'organization.customer.name', style:'text-align: left;', class:'col-md-5' },
+      {header: 'tax.code', style:'text-align: left;', class:'col-md-5' },
+      {header: '', style:'text-align: center;',class:'col-md-2' },
     ];
 
     this.customerService.getCustomerList().subscribe((res: any) => {
@@ -94,15 +94,15 @@ export class CustomerComponent implements OnInit {
   changeTab(){
     if(!this.isOrgCustomer){
     this.cols=[
-      {header: 'personal.customer.name', style:'text-align: left;' },
-      {header: 'phone_mail', style:'text-align: left;' },
-      {header: '', style:'text-align: center;' },
+      {header: 'personal.customer.name', style:'text-align: left;', class:'col-md-5' },
+      {header: 'phone_mail', style:'text-align: left;', class:'col-md-5' },
+      {header: '', style:'text-align: center;', class:'col-md-2' },
     ]}
     else if(this.isOrgCustomer){
       this.cols = [
-        {header: 'organization.customer.name', style:'text-align: left;' },
-        {header: 'tax.code', style:'text-align: left;' },
-        {header: '', style:'text-align: center;' },
+        {header: 'organization.customer.name', style:'text-align: left;', class:'col-md-5' },
+        {header: 'tax.code', style:'text-align: left;', class:'col-md-5' },
+        {header: '', style:'text-align: center;', class:'col-md-2' },
       ];
     }
     console.log(this.isOrgCustomer);
