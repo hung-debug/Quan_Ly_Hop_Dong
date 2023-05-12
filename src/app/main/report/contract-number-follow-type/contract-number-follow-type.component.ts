@@ -257,6 +257,9 @@ export class ContractNumberFollowTypeComponent implements OnInit {
 
     let from_date: any = '';
     let to_date: any = '';
+
+    console.log("date date ", this.date);
+
     if(this.date && this.date.length > 0) {
       from_date = this.datepipe.transform(this.date[0],'yyyy-MM-dd');
       to_date = this.datepipe.transform(this.date[1],'yyyy-MM-dd');
@@ -268,7 +271,9 @@ export class ContractNumberFollowTypeComponent implements OnInit {
       contractStatus = -1;
 
     if(!to_date)
-      from_date = to_date;
+      to_date = from_date;
+    
+    console.log("from date ", from_date);
 
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
     this.reportService.export('rp-by-type',idOrg,params, flag).subscribe((response: any) => {

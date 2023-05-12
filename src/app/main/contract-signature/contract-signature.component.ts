@@ -186,8 +186,6 @@ export class ContractSignatureComponent implements OnInit {
     });
 
     this.markSignAcc();
-
-    this.spinner.hide();
   }
 
   async markSignAcc() {
@@ -1023,9 +1021,12 @@ export class ContractSignatureComponent implements OnInit {
 
           dialogRef.afterClosed().subscribe((res: any) => {
             if(res) {
+
+              console.log("res ", res);
+
               this.srcMark = res;
               this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
-              this.spinner.hide();
+              // this.spinner.hide();
             }
 
           });

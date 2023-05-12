@@ -357,9 +357,9 @@ export class ReportDetailComponent implements OnInit {
     return null;
   }
 
-    getNumberArray(num: number): number[] {
+  getNumberArray(num: number): number[] {
       return Array(num).fill(0).map((x, i) => i + 1);
-    }
+  }
   
 
   getName(list: any,index: number,code: string) {
