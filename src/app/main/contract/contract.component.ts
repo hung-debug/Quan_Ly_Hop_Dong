@@ -311,6 +311,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, 20).subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = data.total_elements;
+      this.checkedAll = false;
+      this.dataChecked = [];
       if (this.pageTotal == 0) {
         this.p = 0;
         this.pageStart = 0;
