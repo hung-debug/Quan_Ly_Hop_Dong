@@ -243,7 +243,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
   //Export ra file excel
   clickReport: boolean = false;
   org: any;
-  export(flag: boolean) {
+  async export(flag: boolean) {
     if(!this.validData()) {
       return;
     }
@@ -333,7 +333,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
         }
        
     })
- 
+
   }
 
   changeCheckBox(event: any) {
