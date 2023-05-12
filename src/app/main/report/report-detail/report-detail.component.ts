@@ -208,7 +208,7 @@ export class ReportDetailComponent implements OnInit {
       },
       {
         id: 7,
-        header: 'signing.expiration.date',
+        header: 'expiration-date',
         style: 'text-align: left; width: 300px',
         colspan: 1,
         rowspan: 2,
@@ -333,6 +333,8 @@ export class ReportDetailComponent implements OnInit {
 
           this.maxParticipants = response.maxParticipant;
 
+          console.log("max ", this.maxParticipants);
+
           let listFirst = [this.orgName];
           let letSecond = response.contracts;
 
@@ -347,12 +349,18 @@ export class ReportDetailComponent implements OnInit {
     if(list.participants[index]) {
       if(code == 'type')
         return list.participants[index].type == 3 ? this.translate.instant('personal') : this.translate.instant('organization')
-      if(code == 'name')
+      if(code == 'name') {
         return list.participants[index].name
+      }
     }
 
     return null;
   }
+
+    getNumberArray(num: number): number[] {
+      return Array(num).fill(0).map((x, i) => i + 1);
+    }
+  
 
   getName(list: any,index: number,code: string) {
     let result: any[] = [];
