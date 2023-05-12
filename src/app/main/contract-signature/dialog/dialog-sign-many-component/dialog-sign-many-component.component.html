@@ -12,7 +12,7 @@
         <div style="font-size: 14px">{{'stamp.contract.questions' | translate}}
         </div>
         <div style="padding-top: 2px;">
-          <p-dropdown [(ngModel)]="id" optionLabel="name" optionValue="id" [options]="options"></p-dropdown>
+          <p-dropdown [(ngModel)]="id" optionLabel="name" optionValue="id" [options]="options" (onChange)="onChangeForm($event)"></p-dropdown>
         </div>
       </div>
   

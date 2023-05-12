@@ -312,11 +312,13 @@ export class ContractNumberFollowTypeComponent implements OnInit {
           });
           
           for(let i = 0; i < name.length; i++) {
-            this.list[i + 1] = {
+            this.list[i+1] = {
               name: name[i],
               value: value[i]
             }
           }
+
+          console.log("list ", this.list);
 
           this.list.forEach((item: any) => {
               this.total.name = item.name;

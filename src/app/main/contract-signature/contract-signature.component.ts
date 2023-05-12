@@ -25,6 +25,7 @@ import { delay } from 'rxjs/operators';
 import { DialogReasonCancelComponent } from './shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
 import { environment } from 'src/environments/environment';
 import { ImageDialogSignComponent } from './components/consider-contract/image-dialog-sign/image-dialog-sign.component';
+import { UserService } from 'src/app/service/user.service';
 // import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
@@ -88,6 +89,7 @@ export class ContractSignatureComponent implements OnInit {
   organization_id: any = '';
   public contractDownloadList: any[] = [];
   public contractViewList: any[] = [];
+  currentUser: any;
 
   constructor(
     private appService: AppService,
@@ -101,9 +103,13 @@ export class ContractSignatureComponent implements OnInit {
     private toastService: ToastService,
     public datepipe: DatePipe,
     private spinner: NgxSpinnerService,
-    // private contractService1: ContractService1,
+    private userService: UserService
   ) {
     this.constantModel = contractModel;
+
+    this.currentUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.info;
   }
 
   ngOnInit(): void {
@@ -177,7 +183,14 @@ export class ContractSignatureComponent implements OnInit {
       this.getContractList();
     });
 
+    this.markSignAcc();
+
     this.spinner.hide();
+  }
+
+  async markSignAcc() {
+    const markSignAcc = await this.userService.getMarkUserById(this.currentUser.id).toPromise();
+    this.datas.markSignAcc = markSignAcc;
   }
 
   async getDateTime() {
@@ -565,8 +578,6 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   getNameOrganization(item: any, index: any, item1?: any) {
-    if (item.type == 3) console.log('side ', item1);
-
     return sideList[index].name + ' : ' + item.name;
   }
 
