@@ -4,9 +4,8 @@
         <div class="col-md-2">
             <div>{{'organization' | translate}}</div>
             <div class="input-line">
-            <p-treeSelect 
+            <p-treeSelect #nameContract
                 [(ngModel)]="selectedNodeOrganization" 
-                placeholder="{{'all' | translate}}" 
                 [filter]="true" 
                 filterBy="name"  
                 [droppable]="true" 
@@ -19,7 +18,7 @@
 
         <!--Ngày tạo hợp đồng-->
         <div class="col-md-2">
-            <div>{{ 'create-date.soon' | translate}} <span style="color: red"> *</span></div>
+            <div>{{ 'create-date' | translate}} <span style="color: red"> *</span></div>
             <div class="input-line">
                 <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"
                           
@@ -44,6 +43,7 @@
             </div>
         </div>
 
+        <!--Loại hợp đồng-->
         <div class="col-md-2">
             <div>{{'contract.type' | translate}}</div>
             <div class="input-line">
@@ -53,7 +53,7 @@
         </div>
 
         <!--Button-->
-        <div class="col-md-6 btn_search">
+        <div class="col-md-4 btn_search">
             <button class="btn btn-lg btn-block btn_submit" (click)="export(false)">{{'btn.report' | translate }}</button>
             <button class="btn btn-lg btn-block btn_submit" (click)="export(true)">Export</button>
         </div>
