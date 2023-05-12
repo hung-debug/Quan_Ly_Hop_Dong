@@ -52,7 +52,7 @@
 
     <!--Bảng dữ liệu-->
     <div class="row" style="padding-top: 20px;">
-        <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
+        <p-table [value]="list" [paginator]="true" [rows]="15" id="table" >
 
             <!--header-->
             <ng-template pTemplate="header">
@@ -66,15 +66,26 @@
 
             <ng-template pTemplate="body" let-list let-row="rowIndex">
                 <ng-container style="background-color: #EEF7FF;" *ngIf="row == 0">
+                    <td style="font-style: normal;font-weight: 800;font-size: 13px;">{{this.org}}</td>
+                        <td *ngFor="let i of Arr(6).fill(1)"></td>
                 </ng-container>
 
                 <ng-container *ngIf="row > 0">
+                    <tr>
+                        <td>{{list.name}}</td>
+                        <td>{{list.value.total}}</td>
+                        <td>{{list.value.processed}}</td>
+                        <td>{{list.value.processing}}</td>
+                        <td>{{list.value.canceled}}</td>
+                        <td>{{list.value.prepare_expires}}</td>
+                        <td>{{list.value.expired}}</td>
+                    </tr>
                 </ng-container>
             </ng-template>
 
             <ng-template pTemplate="footer">
                 <tr *ngIf="this.clickReport">
-                    <td>{{this.total.name}}</td>
+                    <td></td>
                     <td>{{this.total.total}}</td>
                     <td>{{this.total.processed}}</td>
                     <td>{{this.total.processing}}</td>
@@ -82,6 +93,13 @@
                     <td>{{this.total.prepare_expires}}</td>
                     <td>{{this.total.expired}}</td>
                 </tr>
+            </ng-template>
+
+            <ng-template pTemplate="paginatorleft" let-state>
+                <span style="color: white !important;">{{'chart.number' | translate}}: {{(state.totalRecords <= 0 && state.fisrt <= 0) ? state.first : state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+              </ng-template>
+            <ng-template pTemplate="paginatorright" let-state>
+                <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{(state.totalRecords <= 0 && state.fisrt <= 0) ? state.first : state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
             </ng-template>
         </p-table>
     </div>
