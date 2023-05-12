@@ -1765,6 +1765,9 @@ export class ConsiderContractComponent
 
     dialogRef.afterClosed().subscribe((res: any) => {
       if(res) {
+
+        console.log("res ", res);
+
         this.srcMark = res;
 
         this.spinner.show();
