@@ -258,8 +258,6 @@ export class ContractNumberFollowTypeComponent implements OnInit {
     let from_date: any = '';
     let to_date: any = '';
 
-    console.log("date date ", this.date);
-
     if(this.date && this.date.length > 0) {
       from_date = this.datepipe.transform(this.date[0],'yyyy-MM-dd');
       to_date = this.datepipe.transform(this.date[1],'yyyy-MM-dd');
@@ -273,8 +271,6 @@ export class ContractNumberFollowTypeComponent implements OnInit {
     if(!to_date)
       to_date = from_date;
     
-    console.log("from date ", from_date);
-
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
     this.reportService.export('rp-by-type',idOrg,params, flag).subscribe((response: any) => {
 
@@ -312,20 +308,26 @@ export class ContractNumberFollowTypeComponent implements OnInit {
 
           Object.keys(reportList).forEach((key: any, index: any) => {
             name.push(key);
-            console.log("re ", reportList[key]);
             value.push(reportList[key]);
           });
           
           for(let i = 0; i < name.length; i++) {
-            this.list[i+1] = {
+            this.list[i] = {
               name: name[i],
               value: value[i]
             }
           }
 
-          console.log("list ", this.list);
+          console.log("length ", this.list.length);
 
-          this.list.forEach((item: any) => {
+          let listFirst = [this.org];
+          let letSecond = this.list;
+
+          this.list = listFirst.concat(letSecond);
+
+          const array2 = this.list.slice(1);
+
+          array2.forEach((item: any) => {
               this.total.name = item.name;
 
               this.total.total += item.value.total;
