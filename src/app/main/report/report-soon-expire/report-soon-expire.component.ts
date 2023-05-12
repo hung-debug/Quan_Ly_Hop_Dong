@@ -161,15 +161,13 @@ export class ReportSoonExpireComponent implements OnInit {
         colspan: 1,
         rowspan: 1,
       },
-      {
-        id: 10,
-        header: 'signing.expiration.date',
-        style: 'text-align: left',
-        colspan: 1,
-        rowspan: 1,
-      },
+     
     ];
   }
+
+  getNumberArray(num: number): number[] {
+    return Array(num).fill(0).map((x, i) => i + 1);
+}
 
   maxParticipants: number = 0;
   export(flag: boolean) {
@@ -225,13 +223,21 @@ export class ReportSoonExpireComponent implements OnInit {
           this.setColForTable();
           for(let i = 0; i < response.maxParticipant - 1; i++) {
             this.cols.push({
-              id: 10+i,
+              id: 7+i,
               header: 'Bên được yêu cầu ký '+(i+1),
               style: 'text-align: left;',
               colspan: 1,
               rowspan: 1,
             })
           }
+
+          this.cols.push({
+            id: 10,
+            header: 'signing.expiration.date',
+            style: 'text-align: left',
+            colspan: 1,
+            rowspan: 1,
+          })
 
           this.maxParticipants = response.maxParticipant;
 
