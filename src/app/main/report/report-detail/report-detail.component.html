@@ -96,7 +96,10 @@
                         <td class="row-word">{{this.convertTime(list.createdAt)}}</td>
                         <td class="row-word">{{this.convertTime(list.signTime)}}</td>
                         <td class="row-word">{{this.convertStatus(list.status.toLowerCase())}}</td>
-                        <td class="row-word">{{this.convertTime(list.cancelDate)}}</td>
+
+                        <td *ngIf="list.status == 'CANCEL'" class="row-word">{{this.convertTime(list.cancelDate)}}</td>
+                        <td *ngIf="list.status != 'CANCEL'" class="row-word">{{this.convertTime(list.updatedAt)}}</td>
+
                         <td class="row-word">{{list.customer.organization.name}}</td>
                         <td class="row-word">{{list.customer.name}}</td>
                         

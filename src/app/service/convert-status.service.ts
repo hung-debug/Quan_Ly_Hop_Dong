@@ -10,9 +10,6 @@ export class ConvertStatusService {
   ) {}
 
   convert(code: string) {
-
-    
-
     if (code == 'processed') {
       return this.translate.instant('contract.status.complete');
     } else if (code == 'processing') {
