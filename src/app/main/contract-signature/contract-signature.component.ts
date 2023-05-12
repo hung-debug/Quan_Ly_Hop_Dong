@@ -931,6 +931,8 @@ export class ContractSignatureComponent implements OnInit {
           }
         }
 
+        console.log("result ", result);
+
         if (result.mark) {
           const data = {
             title: 'ĐÓNG DẤU HỢP ĐỒNG ',
@@ -950,9 +952,12 @@ export class ContractSignatureComponent implements OnInit {
           );
 
           dialogRef.afterClosed().subscribe((res: any) => {
-            this.srcMark = res;
-            this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
-            this.spinner.hide();
+            if(res) {
+              this.srcMark = res;
+              this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
+              this.spinner.hide();
+            }
+
           });
         } else {
           this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);

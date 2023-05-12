@@ -10,6 +10,7 @@ import { optionsCeCa } from 'src/app/config/variable';
 export class DialogSignManyComponentComponent implements OnInit {
 
   options: any;
+  id: number = 0;
 
   constructor(
     public dialog: MatDialog,
@@ -20,9 +21,15 @@ export class DialogSignManyComponentComponent implements OnInit {
     this.options = optionsCeCa;
   }
 
+  onChangeForm(event: any) {
+    this.id = event.target.value;
+  }
+
   onSubmit() {
+    console.log("id ", this.id);
+
     const data = {
-      // mark: 1,
+      mark: this.id,
       agree: 1 
     }
     this.dialogRef.close(data);
