@@ -43,6 +43,7 @@ export class ReportSoonExpireComponent implements OnInit {
   orgName: any;
   type_id: any;
   typeList: Array<any> = [];
+  currentUser: any;
 
   constructor(
     private appService: AppService,
@@ -57,7 +58,9 @@ export class ReportSoonExpireComponent implements OnInit {
     private contractService: ContractService,
     private contractTypeService: ContractTypeService
 
-  ) {}
+  ) {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+  }
 
   async ngOnInit(): Promise<void> {
     this.spinner.hide();
@@ -107,6 +110,9 @@ export class ReportSoonExpireComponent implements OnInit {
     });
 
     this.setColForTable();
+
+    this.getTypeListContract(this.currentUser.organizationId);
+
   }
 
   changeOrg() {
