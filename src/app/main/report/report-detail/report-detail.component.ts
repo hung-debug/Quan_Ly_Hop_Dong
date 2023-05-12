@@ -84,16 +84,6 @@ export class ReportDetailComponent implements OnInit {
 
     this.appService.setTitle('report.detail.contract.full');
 
-    this.list = [
-      {
-        product: 'Công ty cổ phần phần mềm công nghệ cao Việt Nam',
-        lastYearSale: 51,
-        thisYearSale: 40,
-        lastYearProfit: 54406,
-        thisYearProfit: 43342,
-      },
-    ];
-
     this.formGroup = this.fbd.group({
       name: this.fbd.control(''),
       date: this.fbd.control(''),
