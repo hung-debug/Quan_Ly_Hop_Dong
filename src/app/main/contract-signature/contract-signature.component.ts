@@ -383,6 +383,7 @@ export class ContractSignatureComponent implements OnInit {
   }
   cancelViewMany() {
     this.typeDisplay = 'signOne';
+    this.dataChecked = [];
   }
 
   getPageData() {

@@ -85,7 +85,14 @@
                         <td class="row-word">{{list.typeName}}</td>
                         <td class="row-word">{{list.contractNo}}</td>
                         <td class="row-word">{{list.contractUid}}</td>
-                        <td class="row-word">{{list.refId}}</td>
+                        <td *ngIf="list.refs.length == 0" class="row-word">
+                            {{'no' | translate}}
+                        </td>
+
+                        <td *ngIf="list.refs.length != 0" class="row-word">
+                            {{'yes' | translate}}
+                        </td>
+
                         <td class="row-word">{{this.convertTime(list.createdAt)}}</td>
                         <td class="row-word">{{this.convertTime(list.signTime)}}</td>
                         <td class="row-word">{{this.convertStatus(list.status.toLowerCase())}}</td>
