@@ -53,9 +53,11 @@ export class ContractSignatureComponent implements OnInit {
 
   p: number = 1;
   page: number = 5;
+  pageDownload: number = 20;
   pageStart: number = 0;
   pageEnd: number = 0;
   pageTotal: number = 0;
+  totalPage: number = 0;
   statusPopup: number = 1;
   notificationPopup: string = '';
 
@@ -319,17 +321,22 @@ export class ContractSignatureComponent implements OnInit {
     this.typeDisplay = 'downloadMany';
 
     this.contractService.getContractMyProcessList(this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status,
-      this.p, this.page, 30).subscribe((data) => {
+      this.p, 20, 30).subscribe((data) => {
+        this.checkedAll = false;
+        this.dataChecked = [];
         console.log("data", data);
 
         this.contractDownloadList = data.entities;
         this.pageTotal = data.total_elements;
+        this.totalPage = data.total_pages;
+        // console.log("totalPage",this.totalPage);
+        
         if (this.pageTotal == 0) {
           this.p = 0;
           this.pageStart = 0;
           this.pageEnd = 0;
         } else {
-          this.setPage();
+          this.setPageDownload();
         }
         this.contractDownloadList.forEach((key: any, v: any) => {
           this.contractDownloadList[v].contractId =
@@ -380,6 +387,8 @@ export class ContractSignatureComponent implements OnInit {
 
   cancelDownloadMany() {
     this.typeDisplay = 'signOne';
+    this.spinner.show();
+    window.location.reload();
   }
   cancelViewMany() {
     this.typeDisplay = 'signOne';
@@ -660,7 +669,30 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
+  toggleDownload(checkedAll: boolean){
+    this.dataChecked = [];
+    console.log("contractDownloadList",this.contractDownloadList);
+    if(checkedAll){
+      
+      
+      for(let i = 0; i < this.contractDownloadList.length; i++){
+        this.contractDownloadList[i].checked = false;
+      }
+    } else {
+      for (let i = 0; i < this.contractDownloadList.length; i++){
+        this.contractDownloadList[i].checked = true;
+        this.dataChecked.push({
+          id: this.contractDownloadList[i].participant?.contract?.id,
+          selectedId : this.contractDownloadList[i].id
+        })
+      }
+    }
+  }
+
   downloadManyContract() {
+    if (this.dataChecked.length === 0) {
+      return
+    }
     const myDate = new Date();
     // Replace 'yyyy-MM-dd' with your desired date format
     const formattedDate = this.datepipe.transform(myDate, 'ddMMyyyy');
@@ -676,7 +708,7 @@ export class ContractSignatureComponent implements OnInit {
       a.click();
       window.URL.revokeObjectURL(fileUrl);
       a.remove();
-      window.location.reload();
+      // window.location.reload();
     },
       (error) => {
         this.toastService.showErrorHTMLWithTimeout(
@@ -734,6 +766,23 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
+  toggleDownloadShare(checkedAll: boolean){
+    this.dataChecked = [];
+    if(checkedAll){
+      for(let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = false;
+      }
+    } else {
+      for (let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = true;
+        this.dataChecked.push({
+          id: this.contracts[i].participants[0]?.contract_id,
+          selectedId : this.contracts[i].id
+        })
+      }
+    }
+  }
+
   private convertStatusStr() {
     if (this.status == 'wait-processing') {
       this.filter_status = 1;
@@ -758,6 +807,15 @@ export class ContractSignatureComponent implements OnInit {
   setPage() {
     this.pageStart = (this.p - 1) * this.page + 1;
     this.pageEnd = this.p * this.page;
+    if (this.pageTotal < this.pageEnd) {
+      this.pageEnd = this.pageTotal;
+    }
+  }
+
+  setPageDownload() {
+    this.pageStart = (this.p - 1) * 20 + 1;
+    this.pageEnd = this.p * 20;
+    console.log("pageTotal",this.pageTotal);
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
     }

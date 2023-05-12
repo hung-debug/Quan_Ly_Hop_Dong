@@ -53,11 +53,12 @@
     </div>
 
     <div style="margin-top: 18px;" class="row list_header" *ngIf="pageTotal > 0;">
+    <div style="margin-top: 18px;" class="row list_header" *ngIf="pageTotal > 0;">
 
         <div class="col-md-5"></div>
         <div class="col-md-2">{{'create-date' | translate}}</div>
         <div class="col-md-2">{{'expiration-date' | translate}}</div>
-        <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-3">{{'action' | translate}}</div>
+        <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-2">{{'action' | translate}}</div>
 
         <!--Nút tick all-->
         <div *ngIf="this.typeDisplay === 'signMany'" class="col-md-3">
@@ -65,13 +66,16 @@
         </div>
 
         <div *ngIf="this.typeDisplay === 'downloadMany'" class="col-md-3">
-            <input id="all" name="all" type="checkbox" (click)="toggle()" />
+            <input id="allDownload" name="allDownload" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDownload(checkedAll)" />
         </div>
 
         <div *ngIf="this.typeDisplay === 'viewMany'" class="col-md-3">
             <input id="allView" name="allView" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleView(checkedAll)" />
         </div>
 
+        <div *ngIf="filter_status == -1" class="col-md-1">
+            <input id="allDownload" name="allDownload" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDownloadShare(checkedAll)" />
+        </div>
     </div>
 
     <!--Danh sách tất cả hợp đồng cần ký trường hợp ký một-->
@@ -222,7 +226,7 @@
                     <div class="col-md-2 item_icon">
                         <div style="display: flex; justify-content: center;">
                             <div class="div_icon">
-                                <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download2' | translate}}" (click)="downloadContract(item.id);" />
+                                <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
                             </div>
                         </div>
                     </div>
@@ -287,7 +291,7 @@
     </div>
      <!--Danh sách tất cả hợp đồng có thể download.multi -->
     <div *ngIf="this.typeDisplay === 'downloadMany'">
-        <div class="item_contract" *ngFor="let item of contractDownloadList | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}; let index1 = index">
+        <div class="item_contract" *ngFor="let item of contractDownloadList | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}; let index1 = index">
             <div *ngIf="filter_status == 4">
                 <div class="row">
                     <div class="col-md-5">
@@ -375,7 +379,7 @@
                             </div>
 
                             <div class="div_icon" *ngIf="this.typeDisplay == 'downloadMany'">
-                                <input id="all" name="all" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneDownload(item, index1)" />
+                                <input id="allDownload" name="all" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneDownload(item, index1)" />
                             </div>
                         </div>
                     </div>
