@@ -554,6 +554,15 @@ export class SidebarService {
       href: '/main/customer',
       id: 11,
   })
+
+    this.menus.push({
+      title: 'contract.folder',
+      icon: '/assets/img/contract.svg',
+      active: false,
+      type: 'simple',
+      href: '/main/contract-folder',
+      id: 12,
+    })
    
 
     this.menus.push({
