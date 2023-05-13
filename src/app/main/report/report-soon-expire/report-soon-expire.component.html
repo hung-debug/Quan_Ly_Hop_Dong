@@ -90,7 +90,7 @@
                                 {{ list.participants[i].name }}
                             </span>
                         </td>
-                        <td>{{list.contractExpireTime}}</td>
+                        <td>{{this.convertTime(list.contractExpireTime)}}</td>
                     </ng-container>
                 </tr>
             </ng-template>

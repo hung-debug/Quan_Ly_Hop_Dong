@@ -11,6 +11,7 @@ import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
 import { Table } from 'primeng/table';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-report-soon-expire',
@@ -115,6 +116,10 @@ export class ReportSoonExpireComponent implements OnInit {
     this.setColForTable();
 
     this.getTypeListContract(this.currentUser.organizationId);
+  }
+
+  convertTime(time: any,code?: any) {
+    return moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") != 'Invalid date' ? moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") : "" ;
   }
 
   changeOrg() {
