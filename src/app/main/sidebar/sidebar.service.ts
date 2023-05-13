@@ -77,7 +77,6 @@ export class SidebarService {
     private roleService: RoleService,
     private toastService: ToastService,
     private router: Router,
-    private dashboardService: DashboardService
   ) {}
 
   toggle() {
@@ -259,7 +258,7 @@ export class SidebarService {
 
             this.isBaoCaoSoLuongLoai = listRole.some((element) => element.code == 'BAOCAO_SOLUONG_LOAIHOPDONG');
 
-            this.isBaoCaoHopDongNhan = listRole.some((element) => element.code == 'BAOCAO_HOPDONG_NHAN')
+            // this.isBaoCaoHopDongNhan = listRole.some((element) => element.code == 'BAOCAO_HOPDONG_NHAN')
 
             this.buildMenu(currentUserC);
           },
@@ -523,17 +522,15 @@ export class SidebarService {
       })
     }
 
-    if(this.isBaoCaoHopDongNhan) {
-      submenusReport.push({
-        title:'report.contract.receive',
-        active: false,
-        href: '/main/report/contract-receive'
-      })
-    }
+    // if(this.isBaoCaoHopDongNhan) {
+    //   submenusReport.push({
+    //     title:'report.contract.receive',
+    //     active: false,
+    //     href: '/main/report/contract-receive'
+    //   })
+    // }
 
-    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai
-        || this.isBaoCaoHopDongNhan
-      ) {
+    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai) {
       this.menus.push({
         title: 'report',
         icon: '/assets/img/analytics1.svg',

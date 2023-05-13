@@ -357,11 +357,20 @@ export var roleList = [
       //Báo cáo chi tiết
       {label: 'role.report.detail',value:'BAOCAO_CHITIET'},
 
+      //Báo cáo sắp hết hiệu lực
       {label: 'role.soon.expire.time',value:'BAOCAO_SAPHETHIEULUC'},
+
+      //Báo cáo trạng thái xử lý
       {label: 'role.processing.status.contract',value:'BAOCAO_TRANGTHAIXULY'},
+
+      //Báo cáo số lượng trạng thái      
       {label: 'role.number.status', value:'BAOCAO_SOLUONG_TRANGTHAI'},
+
+      //Báo cáo số lượng theo loại hợp đồng
       {label: 'role.contract.type.quantity',value:'BAOCAO_SOLUONG_LOAIHOPDONG'},
-      {label: 'role.contract.receive', value:'BAOCAO_HOPDONG_NHAN'}
+
+      //Báo cáo hợp đồng nhận
+      // {label: 'role.contract.receive', value:'BAOCAO_HOPDONG_NHAN'}
     ]
 
   }
