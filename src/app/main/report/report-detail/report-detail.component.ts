@@ -91,7 +91,6 @@ export class ReportDetailComponent implements OnInit {
     });
 
     this.optionsStatus = [
-      { id: -1, name: 'Tất cả' },
       { id: 20, name: 'Đang thực hiện' },
       { id: 2, name:'Quá hạn' },
       { id: 31, name: 'Từ chối' },
@@ -117,7 +116,6 @@ export class ReportDetailComponent implements OnInit {
       this.lang = 'en';
 
       this.optionsStatus = [
-        { id: -1, name: 'All' },
         { id: 20, name: 'Processing' },
         { id: 2, name:'Overdue' },
         { id: 31, name: 'Reject' },
