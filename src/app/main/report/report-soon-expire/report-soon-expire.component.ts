@@ -137,7 +137,7 @@ export class ReportSoonExpireComponent implements OnInit {
 
   validData() {
     if (!this.date || (this.date && this.date.length < 2)) {
-      this.toastService.showErrorHTMLWithTimeout('date.full.valid', '', 3000);
+      this.toastService.showErrorHTMLWithTimeout('date.full.valid.soon-expire', '', 3000);
       return false;
     }
     return true;
