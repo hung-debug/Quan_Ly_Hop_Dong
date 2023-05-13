@@ -144,49 +144,48 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
   setColForTable() {
     this.cols = [
       {
-        id: 1,
         header: 'contract.name',
         style: 'text-align: left;',
         colspan: 1,
         rowspan: 1,
       },
       {
-        id: 2,
+        header: 'contract.number',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
         header: 'contract.type',
         style: 'text-align: left;',
         colspan: 1,
         rowspan: 1,
       },
       {
-        id: 8,
         header: 'contract.status.v2',
         style: 'text-align:left',
         colspan: 1,
         rowspan: 1,
       },
       {
-        id: 10,
         header: 'suggest',
         style: 'text-align: left',
         colspan: 1,
         rowspan: 1,
       },
       {
-        id: 1000,
         header: 'user.ed',
         style: 'text-align: left',
         colspan: 1,
         rowspan: 1,
       },
       {
-        id: 1001,
         header: 'user.ing',
         style: 'text-align: left',
         colspan: 1,
         rowspan: 1,
       },
       {
-        id: 1002,
         header: 'user.not.process',
         style: 'text-align: left',
         colspan: 1,
@@ -204,7 +203,9 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
     return true;
   }
 
-  
+  getNumberArray(num: number): number[] {
+    return Array(num).fill(0).map((x, i) => i + 1);
+  }
 
   //Export ra file excel
   maxParticipants: number = 0;

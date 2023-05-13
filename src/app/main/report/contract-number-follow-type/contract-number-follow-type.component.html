@@ -52,7 +52,7 @@
 
     <!--Bảng dữ liệu-->
     <div class="row" style="padding-top: 20px;">
-        <p-table [value]="list" [paginator]="true" [rows]="15" id="table" >
+        <p-table #dt [value]="list" [paginator]="true" [rows]="15" id="table" >
 
             <!--header-->
             <ng-template pTemplate="header">

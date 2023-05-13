@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
@@ -7,6 +7,7 @@ import { InputTreeService } from 'src/app/service/input-tree.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-contract-number-follow-type',
@@ -14,6 +15,7 @@ import { ReportService } from '../report.service';
   styleUrls: ['./contract-number-follow-type.component.scss']
 })
 export class ContractNumberFollowTypeComponent implements OnInit {
+  @ViewChild('dt') table: Table;
 
    //Biến lưu dữ liệu trong bảng
    list: any[] = [];
@@ -116,13 +118,6 @@ export class ContractNumberFollowTypeComponent implements OnInit {
     });
 
     this.cols = [
-      // {
-      //   id: 1,
-      //   header: 'contract.name',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
       {
         id: 2,
         header: 'contract.type',
@@ -130,62 +125,6 @@ export class ContractNumberFollowTypeComponent implements OnInit {
         colspan: 1,
         rowspan: '2',
       },
-      // {
-      //   id: 3,
-      //   header: 'contract.number',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 4,
-      //   header: 'contract.uid',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 5,
-      //   header: 'contract.connect',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 6,
-      //   header: 'contract.time.create',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 7,
-      //   header: 'signing.expiration.date',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 8,
-      //   header: 'contract.status.v2',
-      //   style: 'text-align:left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 9,
-      //   header: 'date.completed',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 10,
-      //   header: 'suggest',
-      //   style: 'text-align: center',
-      //   colspan: '5',
-      //   rowspan: 1,
-      // },
       {
         id: 13,
         header: 'chart.number',
@@ -291,9 +230,21 @@ export class ContractNumberFollowTypeComponent implements OnInit {
           this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
         } else {
 
+          this.table.first = 0
+
           this.clickReport = true;
 
           let array: any = [];
+          this.list = [];
+
+          this.total = {
+            total: 0,
+            processed: 0,
+            processing: 0,
+            canceled: 0,
+            prepare_expires: 0,
+            expired: 0
+          };
 
           Object.keys(response).forEach((key, index) => {
             this.org = key;
@@ -318,16 +269,14 @@ export class ContractNumberFollowTypeComponent implements OnInit {
             }
           }
 
-          console.log("length ", this.list.length);
-
           let listFirst = [this.org];
           let letSecond = this.list;
 
           this.list = listFirst.concat(letSecond);
 
-          const array2 = this.list.slice(1);
+          const listData = this.list.slice(1);
 
-          array2.forEach((item: any) => {
+          listData.forEach((item: any) => {
               this.total.name = item.name;
 
               this.total.total += item.value.total;

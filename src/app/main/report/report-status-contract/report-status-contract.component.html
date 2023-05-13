@@ -47,7 +47,7 @@
         <div class="col-md-2">
             <div>{{'contract.type' | translate}}</div>
             <div class="input-line">
-              <p-dropdown #typeContract optionValue="name" [(ngModel)]="type_id" placeholder="{{'choose.contract.type' | translate}}" [showClear]="true" [filter]="true" filterBy="name" [options]="typeList" optionLabel="name" >
+              <p-dropdown #typeContract optionValue="name" [(ngModel)]="type_id" placeholder="{{'all' | translate}}" [showClear]="true" [filter]="true" filterBy="name" [options]="typeList" optionLabel="name" >
             </p-dropdown>
             </div>
         </div>
@@ -82,10 +82,11 @@
 
                     <ng-container *ngIf="row > 0">
                         <td>{{list.name}}</td>
+                        <td>{{list.contractNo}}</td>
                         <td>{{list.typeName}}</td>
                         <td>{{this.convert(list.status)}}</td>
                         <td>{{list.participants[0].name}}</td>
-                        <td *ngFor="let i of Arr(maxParticipants - 1).fill(1)">
+                        <td *ngFor="let i of getNumberArray(this.maxParticipants - 1)">
                             <span *ngIf="list.participants[i]">
                                 {{ list.participants[i].name }}
                             </span>
