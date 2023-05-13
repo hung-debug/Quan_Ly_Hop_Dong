@@ -212,7 +212,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
           document.body.appendChild(a);
           a.setAttribute('style', 'display: none');
           a.href = url;
-          a.download = `report-by-type_${new Date().getTime()}.xlsx`;
+          a.download = `BaoCaoSLTheoLoaiHopDong_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
           a.remove();
