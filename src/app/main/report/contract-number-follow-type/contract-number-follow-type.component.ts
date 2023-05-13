@@ -53,6 +53,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
     total: 0,
     processed: 0,
     processing: 0,
+    rejected: 0,
     canceled: 0,
     prepare_expires: 0,
     expired: 0
@@ -69,8 +70,6 @@ export class ContractNumberFollowTypeComponent implements OnInit {
     private reportService: ReportService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private translate: TranslateService 
-
   ) { }
 
   ngOnInit(): void {
@@ -119,53 +118,44 @@ export class ContractNumberFollowTypeComponent implements OnInit {
 
     this.cols = [
       {
-        id: 2,
         header: 'contract.type',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
       },
       {
-        id: 13,
         header: 'chart.number',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
       },
       {
-        id: 14,
         header: 'contract.status.complete',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
       },
       {
-        id: 15,
         header: 'sys.processing',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
       },
       {
-        id: 16,
+        header: 'contract.status.fail',
+        style: 'text-align: left;',
+        colspan: 1,
+      },
+      {
         header: 'contract.status.cancel',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
       },
       {
-        id: 17,
         header: 'contract.status.expire',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
       },
       {
-        id: 18,
         header: 'contract.status.overdue',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
       }
     ];
   }
@@ -241,6 +231,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
             total: 0,
             processed: 0,
             processing: 0,
+            rejected: 0,
             canceled: 0,
             prepare_expires: 0,
             expired: 0
@@ -282,6 +273,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
               this.total.total += item.value.total;
               this.total.processed += item.value.processed;
               this.total.processing += item.value.processing;
+              this.total.rejected += item.value.rejected;
               this.total.canceled += item.value.canceled;
               this.total.prepare_expires += item.value.prepare_expires;
               this.total.expired += item.value.expired;
