@@ -261,9 +261,11 @@ export class ContractNumberFollowTypeComponent implements OnInit {
           }
 
           let listFirst = [this.org];
-          let letSecond = this.list;
+          let listSecond = this.list;
 
-          this.list = listFirst.concat(letSecond);
+          listSecond.sort((a, b) => a.name.localeCompare(b.name));
+
+          this.list = listFirst.concat(listSecond);
 
           const listData = this.list.slice(1);
 
