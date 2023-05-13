@@ -31,6 +31,7 @@
             <div>{{'contract.status' | translate}}</div>
             <div class="input-line">
                 <p-dropdown 
+                    [(ngModel)] = "contractStatus"
                     panelStyleClass="font"
                     appendTo="body"
                     optionLabel="name"
@@ -38,7 +39,7 @@
                     placeholder="{{'all' | translate}}" 
                     [showClear]="true"  
                     [options]="optionsStatus"
-                    [(ngModel)] = "contractStatus"
+                    [autoDisplayFirst]="false"
                 ></p-dropdown>
             </div>
         </div>

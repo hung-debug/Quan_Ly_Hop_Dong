@@ -5,6 +5,7 @@ import {
   Component,
   ElementRef,
   OnChanges,
+  OnDestroy,
   OnInit,
   SimpleChanges,
   ViewChild,
@@ -53,11 +54,11 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
 
   params: any;
   date: any;
-  optionsStatus: any;
+  optionsStatus: any = [];
 
   formGroup: any;
 
-  contractStatus: number = -1;
+  contractStatus: any;
 
   fetchChildData: boolean = false;
 
@@ -80,7 +81,10 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
     private spinner: NgxSpinnerService,
     private convertStatusService: ConvertStatusService,
     private contractTypeService: ContractTypeService
-  ) {}
+  ) {
+ 
+  }
+
 
   ngOnInit(): void {
     this.spinner.hide();
@@ -90,7 +94,6 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
     this.getTypeListContract();
 
     this.optionsStatus = [
-      // { id: -1, name: 'Tất cả' },
       { id: 20, name: 'Đang thực hiện' },
       { id: 2, name: 'Quá hạn' },
       { id: 31, name: 'Từ chối' },
