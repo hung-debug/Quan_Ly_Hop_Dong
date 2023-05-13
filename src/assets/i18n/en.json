@@ -573,6 +573,7 @@
   "update.success":"Update success",
   "enter.captcha":"Enter captcha",
   "date.full.valid":"Please enter the full creation date",
+  "date.full.valid.soon-expire":"Please enter the expiration date",
   "download.multi": "Download multi",
   "contract.down": "Download contract contract",
   "add.unit.success":"Add organization success!",

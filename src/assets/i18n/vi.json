@@ -577,6 +577,8 @@
   "error.contract.template.name.valid":"Tên mẫu hợp đồng không được chứa ký tự đặc biệt",
   "enter.captcha":"Nhập captcha",
   "date.full.valid":"Vui lòng nhập đủ ngày tạo",
+  "date.full.valid.soon-expire":"Vui lòng nhập đủ ngày sắp hết hiệu lực",
+
   "download.multi": "Tải nhiều",
   "contract.down": "Tải hợp đồng",
   "add.unit.success":"Thêm mới tổ chức thành công!",

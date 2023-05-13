@@ -83,6 +83,7 @@
                     <ng-container *ngIf="row > 0">
                         <td>{{list.name}}</td>
                         <td>{{list.contractNo}}</td>
+                        <td>{{list.organization.name}}</td>
                         <td>{{list.typeName}}</td>
                         <td>{{list.participants[0].name}}</td>
                         <td *ngFor="let i of getNumberArray(this.maxParticipants - 1)">

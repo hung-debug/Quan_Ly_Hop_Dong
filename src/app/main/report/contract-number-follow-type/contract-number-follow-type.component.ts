@@ -79,7 +79,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
     this.appService.setTitle('report.number.contracts.contract-type.full');
 
     this.optionsStatus = [
-      { id: -1, name: 'Tất cả' },
+      // { id: -1, name: 'Tất cả' },
       { id: 20, name: 'Đang thực hiện' },
       { id: 2, name:'Quá hạn' },
       { id: 31, name: 'Từ chối' },

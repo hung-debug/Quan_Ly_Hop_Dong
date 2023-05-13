@@ -74,7 +74,6 @@ export class ReportSoonExpireComponent implements OnInit {
     });
 
     this.optionsStatus = [
-      { id: -1, name: 'Tất cả' },
       { id: 20, name: 'Đang thực hiện' },
       { id: 2, name: 'Quá hạn' },
       { id: 31, name: 'Từ chối' },
@@ -88,7 +87,6 @@ export class ReportSoonExpireComponent implements OnInit {
       this.lang = 'en';
 
       this.optionsStatus = [
-        { id: -1, name: 'All' },
         { id: 20, name: 'Processing' },
         { id: 2, name: 'Overdue' },
         { id: 31, name: 'Reject' },
@@ -148,28 +146,30 @@ export class ReportSoonExpireComponent implements OnInit {
   setColForTable() {
     this.cols = [
       {
-        id: 1,
         header: 'contract.name',
         style: 'text-align: left;',
         colspan: 1,
         rowspan: 1,
       },
       {
-        id: 2,
         header: 'contract.number',
         style: 'text-align: left;',
         colspan: 1,
         rowspan: 1,
       },
       {
-        id: 3,
+        header: 'created.unit',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
         header: 'contract.type',
         style: 'text-align: left;',
         colspan: 1,
         rowspan: 1,
       },
       {
-        id: 7,
         header: 'suggest',
         style: 'text-align: left',
         colspan: 1,
