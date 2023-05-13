@@ -57,9 +57,10 @@ export class ReportSoonExpireComponent implements OnInit {
 
     private contractService: ContractService,
     private contractTypeService: ContractTypeService
-
   ) {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    this.currentUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.info;
   }
 
   async ngOnInit(): Promise<void> {
@@ -69,17 +70,17 @@ export class ReportSoonExpireComponent implements OnInit {
 
     this.contractService.getDataNotifyOriganzation().subscribe((res: any) => {
       this.orgName = res.name;
-    })
-    
+    });
+
     this.optionsStatus = [
       { id: -1, name: 'Tất cả' },
       { id: 20, name: 'Đang thực hiện' },
-      { id: 2, name:'Quá hạn' },
+      { id: 2, name: 'Quá hạn' },
       { id: 31, name: 'Từ chối' },
       { id: 32, name: 'Huỷ bỏ' },
       { id: 30, name: 'Hoàn thành' },
     ];
-   
+
     if (sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     } else if (sessionStorage.getItem('lang') == 'en') {
@@ -88,7 +89,7 @@ export class ReportSoonExpireComponent implements OnInit {
       this.optionsStatus = [
         { id: -1, name: 'All' },
         { id: 20, name: 'Processing' },
-        { id: 2, name:'Overdue' },
+        { id: 2, name: 'Overdue' },
         { id: 31, name: 'Reject' },
         { id: 32, name: 'Cancel' },
         { id: 30, name: 'Complete' },
@@ -106,13 +107,14 @@ export class ReportSoonExpireComponent implements OnInit {
     this.inputTreeService.getData().then((res: any) => {
       this.listOrgCombobox = res;
 
-      this.selectedNodeOrganization = this.listOrgCombobox.filter((p: any) => p.data == this.organization_id);
+      this.selectedNodeOrganization = this.listOrgCombobox.filter(
+        (p: any) => p.data == this.organization_id
+      );
     });
 
     this.setColForTable();
 
     this.getTypeListContract(this.currentUser.organizationId);
-
   }
 
   changeOrg() {
@@ -120,7 +122,9 @@ export class ReportSoonExpireComponent implements OnInit {
   }
 
   async getTypeListContract(typeId?: number) {
-    const inforType = await this.contractTypeService.getContractTypeList('', '',typeId).toPromise();
+    const inforType = await this.contractTypeService
+      .getContractTypeList('', '', typeId)
+      .toPromise();
     this.typeList = inforType;
   }
 
@@ -129,8 +133,8 @@ export class ReportSoonExpireComponent implements OnInit {
   }
 
   validData() {
-    if(!this.date || (this.date && this.date.length < 2)) {
-      this.toastService.showErrorHTMLWithTimeout('date.full.valid','',3000);
+    if (!this.date || (this.date && this.date.length < 2)) {
+      this.toastService.showErrorHTMLWithTimeout('date.full.valid', '', 3000);
       return false;
     }
     return true;
@@ -158,7 +162,6 @@ export class ReportSoonExpireComponent implements OnInit {
         style: 'text-align: left;',
         colspan: 1,
         rowspan: 1,
-        
       },
       {
         id: 7,
@@ -167,76 +170,89 @@ export class ReportSoonExpireComponent implements OnInit {
         colspan: 1,
         rowspan: 1,
       },
-     
     ];
   }
 
   getNumberArray(num: number): number[] {
-    return Array(num).fill(0).map((x, i) => i + 1);
-}
+    return Array(num)
+      .fill(0)
+      .map((x, i) => i + 1);
+  }
 
   maxParticipants: number = 0;
   export(flag: boolean) {
-    if(!this.validData()) {
+    if (!this.validData()) {
       return;
     }
 
     this.spinner.show();
 
-    this.selectedNodeOrganization = !this.selectedNodeOrganization.length ? this.selectedNodeOrganization : this.selectedNodeOrganization[0]
+    this.selectedNodeOrganization = !this.selectedNodeOrganization.length
+      ? this.selectedNodeOrganization
+      : this.selectedNodeOrganization[0];
 
     this.orgName = this.selectedNodeOrganization.label;
     let idOrg = this.selectedNodeOrganization.data;
 
-
     let from_date: any = '';
     let to_date: any = '';
-    if(this.date && this.date.length > 0) {
-      from_date = this.datepipe.transform(this.date[0],'yyyy-MM-dd');
-      to_date = this.datepipe.transform(this.date[1],'yyyy-MM-dd');
+    if (this.date && this.date.length > 0) {
+      from_date = this.datepipe.transform(this.date[0], 'yyyy-MM-dd');
+      to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
     }
 
     let contractStatus = this.contractStatus;
 
-    this.type_id = this.type_id ? this.type_id : "";
+    this.type_id = this.type_id ? this.type_id : '';
 
-    if(!contractStatus) 
-      contractStatus = -1;
+    if (!contractStatus) contractStatus = -1;
 
-    if(!to_date)
-      to_date = from_date
+    if (!to_date) to_date = from_date;
 
-    let params = '?from_date='+from_date+'&to_date='+to_date+'&type='+this.type_id;
-    this.reportService.export('rp-by-effective-date',idOrg,params, flag).subscribe((response: any) => {
-
+    let params =
+      '?from_date=' +
+      from_date +
+      '&to_date=' +
+      to_date +
+      '&type=' +
+      this.type_id;
+    this.reportService
+      .export('rp-by-effective-date', idOrg, params, flag)
+      .subscribe((response: any) => {
         this.spinner.hide();
 
-        if(flag) {
+        if (flag) {
           let url = window.URL.createObjectURL(response);
           let a = document.createElement('a');
           document.body.appendChild(a);
           a.setAttribute('style', 'display: none');
           a.href = url;
-          a.download = `BaoCaoSapHetHan_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
+          a.download = `BaoCaoSapHetHan_${new Date().getDate()}-${
+            new Date().getMonth() + 1
+          }-${new Date().getFullYear()}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
           a.remove();
-  
-          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+
+          this.toastService.showSuccessHTMLWithTimeout(
+            'no.contract.download.file.success',
+            '',
+            3000
+          );
         } else {
           this.list = [];
 
-          this.table.first = 0
+          this.table.first = 0;
 
           this.setColForTable();
-          for(let i = 0; i < response.maxParticipant - 1; i++) {
+          for (let i = 0; i < response.maxParticipant - 1; i++) {
             this.cols.push({
-              id: 7+i,
-              header: 'Bên được yêu cầu ký '+(i+1),
+              id: 7 + i,
+              header: 'Bên được yêu cầu ký ' + (i + 1),
               style: 'text-align: left;',
               colspan: 1,
               rowspan: 1,
-            })
+            });
           }
 
           this.cols.push({
@@ -245,17 +261,36 @@ export class ReportSoonExpireComponent implements OnInit {
             style: 'text-align: left',
             colspan: 1,
             rowspan: 1,
-          })
+          });
 
           this.maxParticipants = response.maxParticipant;
 
           let listFirst = [this.orgName];
-          let letSecond = response.contracts;
-  
-          this.list = listFirst.concat(letSecond);
+          let listSecond = response.contracts;
+
+          listSecond.forEach((ele: any) => {
+            // Lọc lấy phần tử có thuộc tính type = 1
+            let type1 = ele.participants.filter(function (participant: any) {
+              return participant.type === 1;
+            });
+
+            // Sắp xếp mảng các phần tử không phải type 1 theo thứ tự tăng dần của thuộc tính 'ordering'
+            let others = ele.participants
+              .filter(function (participant: any) {
+                return participant.type !== 1;
+              })
+              .sort(function (a: any, b: any) {
+                return a.ordering - b.ordering;
+              });
+
+            // Kết hợp mảng type1 và others thành một mảng mới
+            let sortedParticipants = type1.concat(others);
+
+            ele.participants = sortedParticipants;
+          });
+
+          this.list = listFirst.concat(listSecond);
         }
-      
-    })
- 
+      });
   }
 }

@@ -333,8 +333,6 @@ export class ReportDetailComponent implements OnInit {
 
           this.maxParticipants = response.maxParticipant;
 
-          console.log("max ", this.maxParticipants);
-
           let listFirst = [this.orgName];
           let letSecond = response.contracts;
 

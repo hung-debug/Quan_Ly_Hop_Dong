@@ -69,12 +69,8 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
     private reportService: ReportService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private translate: TranslateService,
-    private contractService: ContractService,
     private convertStatusService: ConvertStatusService,
     private contractTypeService: ContractTypeService,
-    private changeDetectorRef: ChangeDetectorRef,
-
   ) {}
 
   ngOnInit(): void {
