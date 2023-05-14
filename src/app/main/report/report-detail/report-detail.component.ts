@@ -218,13 +218,13 @@ export class ReportDetailComponent implements OnInit {
         colspan: 1,
         rowspan: 2,
       },
-      {
-        id: 9,
-        header: 'date.completed',
-        style: 'text-align: left; width: 300px',
-        colspan: 1,
-        rowspan: 2,
-      },
+      // {
+      //   id: 9,
+      //   header: 'date.completed',
+      //   style: 'text-align: left; width: 300px',
+      //   colspan: 1,
+      //   rowspan: 2,
+      // },
       {
         id: 10,
         header:'created.unit',
