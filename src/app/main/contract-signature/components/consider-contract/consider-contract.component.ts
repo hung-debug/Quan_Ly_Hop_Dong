@@ -2193,6 +2193,8 @@ export class ConsiderContractComponent
                 this.isTimestamp
               );
 
+              this.spinner.hide();
+
               if (!checkSign || (checkSign && !checkSign.success)) {
                 if (!checkSign.message) {
                   this.toastService.showErrorHTMLWithTimeout(
@@ -2223,6 +2225,8 @@ export class ConsiderContractComponent
                 this.dataHsm,
                 this.recipientId
               );
+
+              this.spinner.hide();
 
               if (!checkSign || (checkSign && !checkSign.success)) {
                 if (!checkSign.message) {
@@ -3608,6 +3612,8 @@ export class ConsiderContractComponent
         this.dataHsm.username = result.username;
         this.dataHsm.password = result.password;
         this.dataHsm.password2 = result.password2;
+
+        this.spinner.show();
 
         await this.signContractSubmit();
       }
