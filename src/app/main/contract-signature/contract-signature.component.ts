@@ -691,6 +691,7 @@ export class ContractSignatureComponent implements OnInit {
     if (this.dataChecked.length === 0) {
       return
     }
+    this.spinner.show();
     const myDate = new Date();
     // Replace 'yyyy-MM-dd' with your desired date format
     const formattedDate = this.datepipe.transform(myDate, 'ddMMyyyy');
@@ -706,7 +707,7 @@ export class ContractSignatureComponent implements OnInit {
       a.click();
       window.URL.revokeObjectURL(fileUrl);
       a.remove();
-      // window.location.reload();
+      window.location.reload();
     },
       (error) => {
         this.toastService.showErrorHTMLWithTimeout(

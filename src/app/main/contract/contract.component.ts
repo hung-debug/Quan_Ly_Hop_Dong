@@ -266,6 +266,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     if (this.dataChecked.length === 0) {
       return
     }
+    this.spinner.show();
     const myDate = new Date();
     // Replace 'yyyy-MM-dd' with your desired date format
     const formattedDate = this.datePipe.transform(myDate, 'ddMMyyyy'); 
@@ -282,7 +283,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         a.click();
         window.URL.revokeObjectURL(fileUrl);
         a.remove()
-        // window.location.reload();
+        window.location.reload();
       },
       (error) => {
         this.toastService.showErrorHTMLWithTimeout('no.contract.download.file.error', '', 3000);
