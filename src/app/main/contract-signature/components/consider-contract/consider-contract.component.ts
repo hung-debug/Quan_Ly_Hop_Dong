@@ -1765,9 +1765,6 @@ export class ConsiderContractComponent
 
     dialogRef.afterClosed().subscribe((res: any) => {
       if(res) {
-
-        console.log("res ", res);
-
         this.srcMark = res;
 
         this.spinner.show();
@@ -2154,15 +2151,21 @@ export class ConsiderContractComponent
 
             if (this.markImage) {
               imageRender = <HTMLElement>(document.getElementById('export-html-hsm1-image'));
-              signUpdate.signDigitalWidth = imageRender.offsetWidth;
             } else {
               imageRender = <HTMLElement>(document.getElementById('export-html-hsm1'));
             }
 
+            console.log("vao day ");
+
             if (imageRender) {
-              await of(null).pipe(delay(150)).toPromise();
-              const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
-              signI = textSignB.split(',')[1];
+              try {
+                await of(null).pipe(delay(150)).toPromise();
+                const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
+                signI = textSignB.split(',')[1];
+              } catch(err) {
+                console.log("err ",err);
+              }
+              
             }
           }
 
@@ -2221,6 +2224,8 @@ export class ConsiderContractComponent
                 }
               }
             } else {
+              console.log("vao day ");
+
               const checkSign = await this.contractService.signHsmOld(
                 this.dataHsm,
                 this.recipientId
@@ -2286,7 +2291,7 @@ export class ConsiderContractComponent
   }
 
   getOptions(imageRender: any) {
-    const scale = 15;
+    const scale = 1;
     const options = {
       quality: 0.99,
       width: imageRender.clientWidth * scale,
@@ -2367,8 +2372,7 @@ export class ConsiderContractComponent
           eKYC = 1;
           const imageRender = <HTMLElement>(document.getElementById('export-html-ekyc'));
 
-          const textSignB = domtoimage.toPng(imageRender,this.getOptions(imageRender)
-);
+          const textSignB = domtoimage.toPng(imageRender,this.getOptions(imageRender));
 
           const valueBase64 = (await textSignB).split(',')[1];
 
@@ -3591,29 +3595,35 @@ export class ConsiderContractComponent
 
       this.cardId = result.ma_dvcs.trim();
 
-      if (this.markImage) {
-        imageRender = <HTMLElement>(
-          document.getElementById('export-html-hsm1-image')
-        );
-      } else {
-        imageRender = <HTMLElement>document.getElementById('export-html-hsm1');
-      }
+      console.log("src mark ", this.srcMark);
 
-      if (imageRender) {
-        const textSignB = await domtoimage.toPng(
-          imageRender,
-          this.getOptions(imageRender)
-        );
-        signI = textSignB.split(',')[1];
-      }
+      // if (this.markImage) {
+      //   imageRender = <HTMLElement>(document.getElementById('export-html-hsm1-image'));
+
+      //   console.log("image render", imageRender);
+      // } else {
+      //   imageRender = <HTMLElement>document.getElementById('export-html-hsm1');
+      // }
+
+      // if (imageRender) {
+
+      //   try {
+      //   const textSignB = await domtoimage.toPng(imageRender);
+
+      //   console.log("te ", textSignB);
+      //   signI = textSignB.split(',')[1];
+      //   } catch(err) {
+      //     console.log("err ",err);
+      //   }
+      // }
+
+      console.log("vao day ");
 
       if (result) {
         this.dataHsm.ma_dvcs = result.ma_dvcs;
         this.dataHsm.username = result.username;
         this.dataHsm.password = result.password;
         this.dataHsm.password2 = result.password2;
-
-        this.spinner.show();
 
         await this.signContractSubmit();
       }
