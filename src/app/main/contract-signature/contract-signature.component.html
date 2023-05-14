@@ -60,16 +60,21 @@
         <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-3">{{'action' | translate}}</div>
 
         <!--Nút tick all-->
+        <!--Nút tick all-->
         <div *ngIf="this.typeDisplay === 'signMany'" class="col-md-3">
             <input id="all" name="all" type="checkbox" (click)="toggle()" />
         </div>
 
         <div *ngIf="this.typeDisplay === 'downloadMany'" class="col-md-3">
-            <input id="all" name="all" type="checkbox" (click)="toggle()" />
+            <input id="allDownload" name="allDownload" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDownload(checkedAll)" />
         </div>
 
         <div *ngIf="this.typeDisplay === 'viewMany'" class="col-md-3">
             <input id="allView" name="allView" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleView(checkedAll)" />
+        </div>
+
+        <div *ngIf="filter_status == -1" class="col-md-1">
+            <input id="allDownload" name="allDownload" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDownloadShare(checkedAll)" />
         </div>
 
     </div>
