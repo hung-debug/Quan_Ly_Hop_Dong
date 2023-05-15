@@ -77,6 +77,7 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
       { id: 31, name: 'Từ chối' },
       { id: 32, name: 'Huỷ bỏ' },
       { id: 30, name: 'Hoàn thành' },
+      { id: 33, name: 'Sắp hết hạn'}
     ];
 
     if (sessionStorage.getItem('lang') == 'vi') {
@@ -91,6 +92,7 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
         { id: 31, name: 'Reject' },
         { id: 32, name: 'Cancel' },
         { id: 30, name: 'Complete' },
+        { id: 33, name: 'Expiration soon' }
       ];
     }
 

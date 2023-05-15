@@ -3,9 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Toast } from 'ngx-toastr';
 import { AppService } from 'src/app/service/app.service';
-import { ContractService } from 'src/app/service/contract.service';
 import { InputTreeService } from 'src/app/service/input-tree.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
@@ -69,7 +67,6 @@ export class ReportDetailComponent implements OnInit {
     private reportService: ReportService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private contractService: ContractService,
     private convertStatusService: ConvertStatusService,
   ) {
     this.formGroup = this.fbd.group({
@@ -96,6 +93,7 @@ export class ReportDetailComponent implements OnInit {
       { id: 31, name: 'Từ chối' },
       { id: 32, name: 'Huỷ bỏ' },
       { id: 30, name: 'Hoàn thành' },
+      { id: 33, name: 'Sắp hết hạn' }
     ];
 
     this.colsSuggest = [
@@ -121,6 +119,7 @@ export class ReportDetailComponent implements OnInit {
         { id: 31, name: 'Reject' },
         { id: 32, name: 'Cancel' },
         { id: 30, name: 'Complete' },
+        { id: 33, name: 'Expiration soon' }
       ];
     }
 
