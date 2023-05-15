@@ -388,6 +388,7 @@ export class ContractSignatureComponent implements OnInit {
     this.spinner.show();
     window.location.reload();
   }
+
   cancelViewMany() {
     this.typeDisplay = 'signOne';
     this.dataChecked = [];
@@ -784,6 +785,7 @@ export class ContractSignatureComponent implements OnInit {
 
   private convertStatusStr() {
     if (this.status == 'wait-processing') {
+      this.typeDisplay = 'signOne';
       this.filter_status = 1;
     } else if (this.status == 'processed') {
       this.filter_status = 4;
@@ -809,6 +811,18 @@ export class ContractSignatureComponent implements OnInit {
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
     }
+  }
+
+  getPageStartEnd() {
+    const temp: number = this.pageStart;
+    if(this.pageStart < 0) {
+      this.pageStart = 1;
+      this.pageEnd = Math.abs(temp) + 1;
+    }
+    if (this.pageTotal <= this.pageEnd && this.pageTotal > 0) {
+      this.pageEnd = this.pageTotal;
+    }
+    return this.pageStart + '-' + this.pageEnd;
   }
 
   setPageDownload() {

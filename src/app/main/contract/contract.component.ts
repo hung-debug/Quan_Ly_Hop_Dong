@@ -363,6 +363,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   getContractList() {
+    this.pageTotal = 0;
     this.roleMess = "";
     if (this.isOrg == 'off' && !this.isQLHD_05) {
       this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
@@ -446,6 +447,18 @@ export class ContractComponent implements OnInit, AfterViewInit {
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
     }
+  }
+
+  getPageStartEnd() {
+    const temp: number = this.pageStart;
+    if(this.pageStart < 0) {
+      this.pageStart = 1;
+      this.pageEnd = Math.abs(temp) + 1;
+    }
+    if (this.pageTotal <= this.pageEnd && this.pageTotal > 0) {
+      this.pageEnd = this.pageTotal;
+    }
+    return this.pageStart + '-' + this.pageEnd;
   }
 
   setPage() {
