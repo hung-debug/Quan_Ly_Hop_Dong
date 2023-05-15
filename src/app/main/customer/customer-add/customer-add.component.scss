@@ -1,3 +1,10 @@
+//change css dropdown multi
+:host ::ng-deep {
+    .selected-item {
+      max-width: 100% !important;
+    }
+  }
+
 .contract-determine {
     // display: flex;
     align-items: center;
@@ -274,3 +281,11 @@
   color: white;
   background-color: #106DB6 !important; 
 }
+
+.contract-total {
+    border: 1px solid #106DB6;
+    color: #106DB6;
+    text-align: center;
+    border-radius: 5px;
+    outline: none;
+  }

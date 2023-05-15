@@ -1,9 +1,10 @@
-import { Handler } from './../../../service/customer.service';
+import { Handler, SignType } from './../../../service/customer.service';
 import { ToastService } from './../../../service/toast.service';
 import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/service/app.service';
 import { CustomerService } from 'src/app/service/customer.service';
 import { ActivatedRoute, Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-customer-detail',
@@ -49,7 +50,6 @@ export class CustomerDetailComponent implements OnInit {
        this.orgCustomer = res.filter((item: any) => {
             return item.id.toString() === this.id;
         });
-        console.log(this.orgCustomer);
         this.name = this.orgCustomer[0].name;
         if(this.orgCustomer[0].taxCode != null){
           this.taxCode = this.orgCustomer[0].taxCode;

@@ -6,6 +6,7 @@ import { DeleteCustomerComponent } from './delete-customer/delete-customer.compo
 import { MatDialog } from '@angular/material/dialog';
 import { ToastService } from 'src/app/service/toast.service';
 import { Subscription } from "rxjs";
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -41,7 +42,8 @@ export class CustomerComponent implements OnInit {
     private customerService: CustomerService,
     private router: Router,
     private dialog: MatDialog,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private spinner: NgxSpinnerService,
   ) {
 
     this.stateOptions = [
@@ -63,6 +65,7 @@ export class CustomerComponent implements OnInit {
       this.list = res.filter((item: any) => {
           return item.type === "ORGANIZATION"; 
       });
+      this.spinner.hide();
     });
   }
 
@@ -109,11 +112,11 @@ export class CustomerComponent implements OnInit {
   }
 
   personalAdd(){
-    this.router.navigate(['/main/form-customer/customer-personal-add']);
+    this.router.navigate(['/main/form-customer/add/personal']);
   }
 
   organizationAdd(){
-    this.router.navigate(['/main/form-customer/customer-organization-add']);
+    this.router.navigate(['/main/form-customer/add/organization']);
   }
 
   onSelect(e: any) {
@@ -132,9 +135,17 @@ export class CustomerComponent implements OnInit {
     }
   }
 
+  editCustomer(id: any, isOrgCustomer: boolean){
+    if(isOrgCustomer){
+    this.router.navigate(['/main/form-customer/edit/organization', id])
+  }else {
+    this.router.navigate(['/main/form-customer/edit/personal', id])
+  }
+}
+
   deleteCustomer(id:any) {
     const data = {
-      title: 'role.delete',
+      title: 'customer.delete',
       id: id,
     };
     // @ts-ignore
@@ -153,9 +164,9 @@ export class CustomerComponent implements OnInit {
 
   openDetail(id: String, type: String){
     if(type === "ORGANIZATION")
-    this.router.navigate(['/main/form-customer/customer-detail/organization', id]);
+    this.router.navigate(['/main/info-customer/organization', id]);
     if(type === "PERSONAL")
-    this.router.navigate(['/main/form-customer/customer-detail/personal', id]);
+    this.router.navigate(['/main/info-customer/personal', id]);
   }
 
 

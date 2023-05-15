@@ -108,11 +108,10 @@ import { ContractNumberFollowSignComponent } from './main/report/contract-number
 import { ContractNumberFollowTypeComponent } from './main/report/contract-number-follow-type/contract-number-follow-type.component';
  
 import { ConfigSmsEmailComponent } from './main/config-sms-email/config-sms-email.component';
-import { CustomerOrganizationAddComponent } from './main/customer/customer-organization-add/customer-organization-add.component';
-import { CustomerPersonalAddComponent } from './main/customer/customer-personal-add/customer-personal-add.component';
 import { DeleteCustomerComponent } from './main/customer/delete-customer/delete-customer.component';
 import { CustomerDetailComponent } from './main/customer/customer-detail/customer-detail.component';
 import { ContractFolderComponent } from './main/contract-folder/contract-folder.component';
+import { CustomerAddComponent } from './main/customer/customer-add/customer-add.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -189,11 +188,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
     ContractComponent,
     ConfigSmsEmailComponent,
-    CustomerOrganizationAddComponent,
-    CustomerPersonalAddComponent,
       DeleteCustomerComponent,
       CustomerDetailComponent,
       ContractFolderComponent,
+      CustomerAddComponent,
   ],
   imports: [
     TranslateModule,

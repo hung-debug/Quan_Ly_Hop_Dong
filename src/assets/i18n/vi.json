@@ -622,5 +622,6 @@
   "attribute.text.type": "Loại text",
   "choose.text.type": "Chọn loại text",
   "contract.folder": "Quản lý thư mục",
-  "contract.views": "Xem xét nhiều"
+  "contract.views": "Xem xét nhiều",
+  "customer.delete": "Bạn có chắc chắn muốn xóa khách hàng này không?"
 }
