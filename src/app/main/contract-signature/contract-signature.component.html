@@ -61,15 +61,15 @@
         <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-2">{{'action' | translate}}</div>
 
         <!--Nút tick all-->
-        <div *ngIf="this.typeDisplay === 'signMany'" class="col-md-3">
+        <div *ngIf="this.typeDisplay === 'signMany'" class="col-md-2">
             <input id="all" name="all" type="checkbox" (click)="toggle()" />
         </div>
 
-        <div *ngIf="this.typeDisplay === 'downloadMany'" class="col-md-3">
+        <div *ngIf="this.typeDisplay === 'downloadMany'" class="col-md-2">
             <input id="allDownload" name="allDownload" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDownload(checkedAll)" />
         </div>
 
-        <div *ngIf="this.typeDisplay === 'viewMany'" class="col-md-3">
+        <div *ngIf="this.typeDisplay === 'viewMany'" class="col-md-2">
             <input id="allView" name="allView" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleView(checkedAll)" />
         </div>
 
@@ -155,7 +155,7 @@
                         <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractSignTime | date: 'dd/MM/yyyy'}}</span></div>
                     </div>
 
-                    <div class="col-md-3 item_icon">
+                    <div class="col-md-2 item_icon">
                         <div style="display: flex; justify-content: center;">
                             <div class="div_icon" *ngIf="item.status == 1 && item.role == 1 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                                 <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item)">{{'contract.lead' | translate}}</button>
@@ -282,7 +282,7 @@
                         <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy'}}</span></div>
                     </div>
 
-                    <div class="col-md-3 item_icon">
+                    <div class="col-md-2 item_icon">
 
                     </div>
                 </div>
@@ -362,7 +362,7 @@
                         <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractSignTime | date: 'dd/MM/yyyy'}}</span></div>
                     </div>
 
-                    <div class="col-md-3 item_icon">
+                    <div class="col-md-2 item_icon">
                         <div style="display: flex; justify-content: center;">
                             <div class="div_icon" *ngIf="item.status == 1 && item.role == 1 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                                 <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item)">{{'contract.lead' | translate}}</button>
@@ -454,7 +454,7 @@
                         <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractSignTime | date: 'dd/MM/yyyy'}}</span></div>
                     </div>
 
-                    <div class="col-md-3 item_icon">
+                    <div class="col-md-2 item_icon">
                         <div style="display: flex; justify-content: center;">
                             <div class="div_icon" *ngIf="item.status == 1 && item.role == 1 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                                 <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item)">{{'contract.lead' | translate}}</button>
@@ -553,7 +553,7 @@
                         <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractSignTime | date: 'dd/MM/yyyy'}}</span></div>
                     </div>
 
-                    <div class="col-md-3 item_icon">
+                    <div class="col-md-2 item_icon">
                         <div style="display: flex; justify-content: center;">
                             <div class="div_icon" *ngIf="item.status == 1 && item.role == 1 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                                 <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item)">{{'contract.lead' | translate}}</button>
@@ -615,7 +615,7 @@
                         <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy'}}</span></div>
                     </div>
 
-                    <div class="col-md-3 item_icon">
+                    <div class="col-md-2 item_icon">
                         <div style="display: flex; justify-content: center;">
                             <div class="div_icon">
                                 <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download4' | translate}}" (click)="downloadContract(item.id);" />
@@ -662,7 +662,7 @@
                         <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy'}}</span></div>
                     </div>
 
-                    <div class="col-md-3 item_icon">
+                    <div class="col-md-2 item_icon">
 
                     </div>
                 </div>
@@ -682,7 +682,7 @@
         <div class="footer_pagination">
             <pagination-controls *ngIf="pageTotal > 0" (pageChange)="p=$event; getPageData()" previousLabel="" nextLabel=""></pagination-controls>
         </div>
-        <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}</div>
+        <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
     </div>
 
 </div>
