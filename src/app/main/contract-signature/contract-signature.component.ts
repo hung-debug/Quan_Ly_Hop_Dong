@@ -776,6 +776,7 @@ export class ContractSignatureComponent implements OnInit {
   private convertStatusStr() {
     if (this.status == 'wait-processing') {
       this.filter_status = 1;
+      this.typeDisplay = 'signOne';
     } else if (this.status == 'processed') {
       this.filter_status = 4;
       this.typeDisplay = 'signOne';

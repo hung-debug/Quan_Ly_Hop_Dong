@@ -167,12 +167,12 @@ export class EditHandlerComponent implements OnInit {
     console.log("datas",this.currentUser);
 
     this.spinner.show();
-    if(this.id_sign_type === 1 && this.id_sign_type === 5){
+    if(this.id_sign_type !== 1 && this.id_sign_type !== 5){
       let dataUpdate = {
         ...this.data,
         name: this.name,
         email: this.isCheckRadio ? this.email.toLowerCase() : this.phone,
-        phone: this.isCheckRadio ? this.phone : "",
+        phone: !this.isCheckRadio ? this.phone : "",
         login_by: this.isCheckRadio ? "email" : "phone",
         card_id: this.card_id,
       };
@@ -226,7 +226,7 @@ export class EditHandlerComponent implements OnInit {
           ...this.data,
           name: this.name,
           email: this.isCheckRadio ? this.email.toLowerCase() : this.phone,
-          phone: !this.isCheckRadio ? this.phone : "",
+          phone: this.isCheckRadio ? this.phone : "",
           login_by: this.isCheckRadio ? "email" : "phone",
           card_id: this.card_id,
         };
