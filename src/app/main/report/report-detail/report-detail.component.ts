@@ -164,7 +164,7 @@ export class ReportDetailComponent implements OnInit {
       {
         id: 1,
         header: 'contract.name',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
@@ -234,7 +234,7 @@ export class ReportDetailComponent implements OnInit {
       {
         id: 1000,
         header: 'suggest',
-        style: 'text-align: left; width: 1500px',
+        style: 'text-align: left; width: 1250px',
         colspan: 5,
         rowspan: 1,
       },
@@ -293,11 +293,11 @@ export class ReportDetailComponent implements OnInit {
           this.table.first = 0
           this.list = [];
           this.colsSuggest = [
-            { header: 'sign.object', style: 'text-align: left, min-width:300px, width: 300px'},
-            { header: 'name.unit', style: 'text-align: left, min-width:300px, width: 300px' },
-            { header: 'user.view', style: 'text-align: left, min-width:300px, width: 300px' },
-            { header: 'user.sign', style: 'text-align: left, min-width:300px, width: 300px' },
-            { header: 'user.doc', style: 'text-align: left, min-width:300px, width: 300px'},
+            { header: 'sign.object', style: 'text-align: left, min-width:250px, width: 250px'},
+            { header: 'name.unit', style: 'text-align: left, min-width:250px, width: 250px' },
+            { header: 'user.view', style: 'text-align: left, min-width:250px, width: 250px' },
+            { header: 'user.sign', style: 'text-align: left, min-width:250px, width: 250px' },
+            { header: 'user.doc', style: 'text-align: left, min-width:250px, width: 250px'},
           ];
 
           this.setColForTable();
@@ -306,18 +306,18 @@ export class ReportDetailComponent implements OnInit {
             this.cols.push({
               id: 1000+i,
               header: 'Bên được yêu cầu ký '+(i+1),
-              style: 'text-align: left; width: 1800px',
+              style: 'text-align: left; width: 1500px',
               colspan: 6,
               rowspan: 1,
             })
 
             this.colsSuggest.push(
-              { header: 'sign.object', style: 'text-align: left, width: 300px' },
-              { header: 'name.unit', style: 'text-align: left, width: 300px' },
-              { header: 'contract.lead', style: 'text-align: left, width: 300px' },
-              { header: 'user.view', style: 'text-align: left, width: 300px' },
-              { header: 'user.sign', style: 'text-align: left, width: 300px' },
-              { header: 'user.doc', style: 'text-align: left, width: 300px' },
+              { header: 'sign.object', style: 'text-align: left, width: 250px' },
+              { header: 'name.unit', style: 'text-align: left, width: 250px' },
+              { header: 'contract.lead', style: 'text-align: left, width: 250px' },
+              { header: 'user.view', style: 'text-align: left, width: 250px' },
+              { header: 'user.sign', style: 'text-align: left, width: 250px' },
+              { header: 'user.doc', style: 'text-align: left, width: 250px' },
             );
           }
 

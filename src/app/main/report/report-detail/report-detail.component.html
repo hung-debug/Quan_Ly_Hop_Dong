@@ -102,7 +102,7 @@
                         <td *ngIf="list.status != 'CANCEL'" class="row-word">{{this.convertTime(list.updatedAt)}}</td> -->
 
                         <td class="row-word">{{list.customer.organization.name}}</td>
-                        <td class="row-word">{{list.customer.name}}</td>
+                        <td class="row-word">{{list.customer.email}}</td>
                         
                         <td class="row-word">{{this.getValue(list,0,'type')}}</td>
                         <td class="row-word">{{this.getValue(list,0,'name')}}</td>
