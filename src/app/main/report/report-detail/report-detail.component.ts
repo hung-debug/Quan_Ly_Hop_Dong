@@ -89,11 +89,11 @@ export class ReportDetailComponent implements OnInit {
 
     this.optionsStatus = [
       { id: 20, name: 'Đang thực hiện' },
+      { id: 33, name: 'Sắp hết hạn' },
       { id: 2, name:'Quá hạn' },
       { id: 31, name: 'Từ chối' },
       { id: 32, name: 'Huỷ bỏ' },
       { id: 30, name: 'Hoàn thành' },
-      { id: 33, name: 'Sắp hết hạn' }
     ];
 
     this.colsSuggest = [
@@ -115,11 +115,11 @@ export class ReportDetailComponent implements OnInit {
 
       this.optionsStatus = [
         { id: 20, name: 'Processing' },
+        { id: 33, name: 'Expiration soon' },
         { id: 2, name:'Overdue' },
         { id: 31, name: 'Reject' },
         { id: 32, name: 'Cancel' },
         { id: 30, name: 'Complete' },
-        { id: 33, name: 'Expiration soon' }
       ];
     }
 
@@ -171,70 +171,63 @@ export class ReportDetailComponent implements OnInit {
       {
         id: 2,
         header: 'contract.type',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
       {
         id: 3,
         header: 'contract.number',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
       {
         id: 4,
         header: 'contract.uid',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
       {
         id: 5,
         header: 'contract.connect',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
       {
         id: 6,
         header: 'contract.time.create',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
       {
         id: 7,
         header: 'expiration-date',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
       {
         id: 8,
         header: 'contract.status.v2',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
-      // {
-      //   id: 9,
-      //   header: 'date.completed',
-      //   style: 'text-align: left; width: 300px',
-      //   colspan: 1,
-      //   rowspan: 2,
-      // },
       {
         id: 10,
         header:'created.unit',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
       {
         id: 11,
         header:'created.user',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },

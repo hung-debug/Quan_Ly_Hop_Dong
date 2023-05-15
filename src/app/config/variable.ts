@@ -1,3 +1,7 @@
+import { TranslateService } from '@ngx-translate/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 export const variable = {
   stepSampleContract: {
     step_confirm_coordination: 'confirm-coordination',
@@ -47,7 +51,6 @@ export const type_signature = [
     name: 'Ký số bằng sim PKI',
     is_otp: false,
   },
-
 ];
 
 export const type_signature_en = [
