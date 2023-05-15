@@ -527,22 +527,22 @@ export class SidebarService {
       })
     }
 
-    this.menus.push({
-      title: 'menu.config-sms-email',
-      icon: '/assets/img/email-sms.svg',
-      active: false,
-      type: 'simple',
-      href: '/main/config-sms-email',
-      id: 9,
-    })
+    // this.menus.push({
+    //   title: 'menu.config-sms-email',
+    //   icon: '/assets/img/email-sms.svg',
+    //   active: false,
+    //   type: 'simple',
+    //   href: '/main/config-sms-email',
+    //   id: 9,
+    // })
 
-    this.menus.push({
-      title: 'customer.list',
-      icon: '/assets/img/email-sms.svg',
-      active: false,
-      type:'simple',
-      href: '/main/customer',
-    })
+    // this.menus.push({
+    //   title: 'customer.list',
+    //   icon: '/assets/img/email-sms.svg',
+    //   active: false,
+    //   type:'simple',
+    //   href: '/main/customer',
+    // })
    
 
     //xu ly highlight
