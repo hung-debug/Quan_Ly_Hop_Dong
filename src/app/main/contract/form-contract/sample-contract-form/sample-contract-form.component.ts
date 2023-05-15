@@ -6,7 +6,7 @@ import {
   ViewChild,
   QueryList,
   ElementRef,
-   Output, EventEmitter, SimpleChanges
+   Output, EventEmitter, SimpleChanges, AfterViewInit
 } from "@angular/core";
 import { variable } from "src/app/config/variable";
 import { Helper } from "src/app/core/Helper";
@@ -32,10 +32,11 @@ import { CheckZoomService } from "src/app/service/check-zoom.service";
   styleUrls: ['./sample-contract-form.component.scss']
 })
 
-export class SampleContractFormComponent implements OnInit {
+export class SampleContractFormComponent implements OnInit, AfterViewInit {
   @Input() datasForm: any;
   @Input() stepForm: any;
   @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined
+
   @Output() stepChangeSampleContractForm = new EventEmitter<string>();
   @Input() save_draft_infor_form: any;
 
@@ -112,6 +113,7 @@ export class SampleContractFormComponent implements OnInit {
   top: any[]= [];
 
   textSign: boolean = false;
+  isContractNoNameNull: boolean = false;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -161,6 +163,10 @@ export class SampleContractFormComponent implements OnInit {
           }
           if (res.type == 4) {
             res['sign_unit'] = 'so_tai_lieu'
+
+            if(!res.name) {
+              this.isContractNoNameNull = true;
+            }
           }
         })
       }
@@ -232,6 +238,7 @@ export class SampleContractFormComponent implements OnInit {
       autoScroll: true,
       modifiers: []
     })
+
     interact.addDocument(document);
 
     if(this.datasForm.is_data_object_signature.length > 0 && this.datasForm.is_data_object_signature[0].font) {
@@ -249,6 +256,7 @@ export class SampleContractFormComponent implements OnInit {
       }
     }
   }
+
 
   onResize(e?: any) {
     this.checkZoomService.onResize();
@@ -561,7 +569,11 @@ export class SampleContractFormComponent implements OnInit {
           }
         })
         // lay doi tuong vua duoc keo moi vao hop dong
-        this.signCurent = this.convertToSignConfig().filter((p: any) => !p.position && !p.coordinate_x && !p.coordinate_y)[0];
+
+        if(this.isContractNoNameNull)
+          this.signCurent = this.convertToSignConfig().filter((p: any) => (p.sign_unit != 'so_tai_lieu' && !p.name) && !p.position && !p.coordinate_x && !p.coordinate_y)[0];
+        else
+          this.signCurent = this.convertToSignConfig().filter((p: any) => !p.position && !p.coordinate_x && !p.coordinate_y)[0];
       } else {
         // doi tuong da duoc keo tha vao hop dong
         this.signCurent = this.convertToSignConfig().filter((p: any) => p.id == id)[0];
@@ -752,6 +764,7 @@ export class SampleContractFormComponent implements OnInit {
             })
           }
         });
+
         this.getCheckSignature(name_accept_signature);
       }
     } else {
