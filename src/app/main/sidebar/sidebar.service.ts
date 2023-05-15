@@ -504,15 +504,15 @@ export class SidebarService {
       })
     }
 
-    if(this.isBaoCaoSoLuongTrangThai) {
-      submenusReport.push(
-        {
-          title: 'report.number.contracts.status',
-          active: false,
-          href: '/main/report/contract-number-follow-status',
-        }
-      )
-    }
+    // if(this.isBaoCaoSoLuongTrangThai) {
+    //   submenusReport.push(
+    //     {
+    //       title: 'report.number.contracts.status',
+    //       active: false,
+    //       href: '/main/report/contract-number-follow-status',
+    //     }
+    //   )
+    // }
 
     if(this.isBaoCaoSoLuongLoai) {
       submenusReport.push({
@@ -530,7 +530,7 @@ export class SidebarService {
     //   })
     // }
 
-    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai) {
+    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai) {
       this.menus.push({
         title: 'report',
         icon: '/assets/img/analytics1.svg',
