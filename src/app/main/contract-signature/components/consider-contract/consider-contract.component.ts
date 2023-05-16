@@ -2151,6 +2151,9 @@ export class ConsiderContractComponent
 
             if (this.markImage) {
               imageRender = <HTMLElement>(document.getElementById('export-html-hsm1-image'));
+
+              alert("src "+this.srcMark);
+              alert("image render "+ imageRender);
             } else {
               imageRender = <HTMLElement>(document.getElementById('export-html-hsm1'));
             }
