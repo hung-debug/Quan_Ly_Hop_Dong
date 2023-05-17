@@ -287,17 +287,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (res.type == 4) {
               res['sign_unit'] = 'so_tai_lieu'
             }
-<<<<<<< HEAD
-            // if(res.type = 5) {
-            //   res['sign_unit'] = 'text'
-            //   res['text_type']='so_tien'
-            // }
-=======
             if(res.type == 5) {
               res['sign_unit'] = 'text'
               res['text_type']='currency'
             }
->>>>>>> tanthanhvu
             // res.name = res.recipient.name;
             res.recipient.email = data_duplicate ? data_duplicate.recipient.email : res.recipient.email;
             res.email = res.recipient.email;

@@ -189,11 +189,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
     ContractComponent,
     ConfigSmsEmailComponent,
-      DeleteCustomerComponent,
-      CustomerDetailComponent,
-      ReportContractReceiveComponent,
-      ContractFolderComponent,
-      CustomerAddComponent,
+    DeleteCustomerComponent,
+    CustomerDetailComponent,
+    ReportContractReceiveComponent,
+    ContractFolderComponent,
+    CustomerAddComponent,
   ],
   imports: [
     TranslateModule,
