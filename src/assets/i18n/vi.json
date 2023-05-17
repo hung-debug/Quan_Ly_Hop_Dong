@@ -641,5 +641,6 @@
   "role.processing.status.contract":"Báo cáo trạng thái xử lý",
   "role.number.status":"Báo cáo số lượng theo trạng thái",
   "role.contract.type.quantity":"Báo cáo số lượng theo loại hợp đồng",
-  "role.contract.receive":"Báo cáo hợp đồng nhận"
+  "role.contract.receive":"Báo cáo hợp đồng nhận",
+  "customer.delete": "Bạn có chắc chắn muốn xóa khách hàng này không?"
 }

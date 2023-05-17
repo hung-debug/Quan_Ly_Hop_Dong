@@ -163,6 +163,70 @@ export const type_signature_doc_template = [
   },
 ];
 
+export const clone_load_org_customer = {
+  name: '',
+  taxCode: '',
+  type: 'ORGANIZATION',
+  handlers: [
+  ],
+};
+
+export const clone_load_personal_customer = {
+  name: '',
+  email: '',
+  phone: '',
+  type: 'PERSONAL',
+  signType: null
+}
+
+export const org_customer_clone = {
+  name: '',
+  taxCode: '',
+  type: 'ORGANIZATION',
+  handlers: [
+    {
+      ordering: 1,
+      role: 'SIGNER',
+      name: '',
+      email: '',
+      phone: '',
+      signType: null,
+    },
+    {
+      ordering: 1,
+      role: 'ARCHIVER',
+      name: '',
+      email: '',
+      phone: '',
+      signType: null,
+    },
+    {
+      ordering: 1,
+      role: 'REVIEWER',
+      name: '',
+      email: '',
+      phone: '',
+      signType: null,
+    },
+    {
+      ordering: 1,
+      role: 'COORDINATOR',
+      name: '',
+      email: '',
+      phone: '',
+      signType: null
+    },
+  ],
+};
+
+export const personal_customer_clone ={
+  name: '',
+  email: '',
+  phone: '',
+  type: 'PERSONAL',
+  signType: null
+};
+
 export var networkList = [
   { id: 1, name: 'Mobifone' },
   { id: 2, name: 'Viettel' },

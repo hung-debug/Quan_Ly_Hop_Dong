@@ -4,14 +4,31 @@ import { Observable } from 'rxjs';
 import {environment} from '../../environments/environment';
 
 export interface Customer {
-  id: number,
+  id?: number,
+  name: string,
+  taxCode?: string,
+  type: string,
+  signType?: SignType,
+  phone?: string,
+  email?: string,
+  handlers?: Handler[],
+}
+
+export interface OrgCustomer {
+  id?: number,
   name: string,
   taxCode: string,
   type: string,
-  signType:string,
+  handlers: Handler[],
+}
+
+export interface PersonalCustomer {
+  id?: number,
+  name: string,
+  type: string,
   phone: string,
   email: string,
-  handlers: Handler[],
+  signType: SignType | null,
 }
 
 
@@ -21,7 +38,13 @@ export interface Handler{
   name: string,
   email: string,
   phone: string | null,
-  signType: string,
+  signType: SignType | null,
+}
+
+export interface SignType{
+  id: number,
+  name: string,
+  is_otp: boolean,
 }
 
 @Injectable({
@@ -30,6 +53,8 @@ export interface Handler{
 export class CustomerService {
   getCustomerUrl: any = `${environment.apiUrl}/api/v1/customers/my-partner`;
   deleteCustomerByIdUrl: any = `${environment.apiUrl}/api/v1/customers/my-partner/`;
+  addCustomerUrl: any = `${environment.apiUrl}/api/v1/customers/my-partner`;
+  editCustomerUrl: any = `${environment.apiUrl}/api/v1/customers/my-partner/`;
 
   token: any;
   customer_id:any;
@@ -59,6 +84,132 @@ export class CustomerService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.delete<any>(this.deleteCustomerByIdUrl + id, { headers });
+  }
+
+  getDataOrgCustomer(){
+    return {
+      name: '',
+      taxCode: '',
+      type: 'ORGANIZATION',
+      handlers: [
+        {
+          ordering: 1,
+          role: 'SIGNER',
+          name: '',
+          email: '',
+          phone: '',
+          signType: null,
+        },
+        {
+          ordering: 1,
+          role: 'ARCHIVER',
+          name: '',
+          email: '',
+          phone: '',
+          signType: null,
+        },
+        {
+          ordering: 1,
+          role: 'REVIEWER',
+          name: '',
+          email: '',
+          phone: '',
+          signType: null,
+        },
+        {
+          ordering: 1,
+          role: 'COORDINATOR',
+          name: '',
+          email: '',
+          phone: '',
+          signType: null
+        },
+      ],
+    };
+  }
+
+  addOrgCustomer(data: any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    console.log(data);
+    const handlers: Handler[] = [];
+    for(let i = 0; i < data.handlers.length; i++){
+      let handler: Handler = {
+        ordering: data.handlers[i].ordering,
+        role: data.handlers[i].role,
+        name: data.handlers[i].name,
+        email: data.handlers[i].email,
+        phone: data.handlers[i].phone,
+        signType: data.handlers[i].signType[0],
+      };
+      handlers.push(handler);
+    }
+    const body = JSON.stringify({
+      name: data.name,
+      taxCode: data.taxCode,
+      type: data.type,
+      handlers: handlers,
+    });
+    return this.http.post<any>(this.getCustomerUrl, body, { headers: headers });
+  }
+
+  addPersonalCustomer(data: any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: data.name,
+      type: data.type,
+      phone: data.phone,
+      email: data.email,
+      signType: data.signType[0],
+    });
+    console.log(body);
+    return this.http.post<any>(this.getCustomerUrl, body, { headers: headers });
+  }
+
+  editOrgCustomer(data: any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const handlers: Handler[] = [];
+    for(let i = 0; i < data.handlers.length; i++){
+      let handler: Handler = {
+        ordering: data.handlers[i].ordering,
+        role: data.handlers[i].role,
+        name: data.handlers[i].name,
+        email: data.handlers[i].email,
+        phone: data.handlers[i].phone,
+        signType: data.handlers[i].signType[0],
+      };
+      handlers.push(handler);
+    }
+    const body = JSON.stringify({
+      name: data.name,
+      taxCode: data.taxCode,
+      type: data.type,
+      handlers: handlers,
+    });
+    return this.http.put<any>(this.editCustomerUrl + data.id, body, { headers: headers });
+  }
+
+  editPersonalCustomer(data: any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: data.name,
+      type: data.type,
+      phone: data.phone,
+      email: data.email,
+      signType: data.signType[0],
+    });
+    return this.http.put<any>(this.editCustomerUrl + data.id, body, { headers: headers });
   }
 
 

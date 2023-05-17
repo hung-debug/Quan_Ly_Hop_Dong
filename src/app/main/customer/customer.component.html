@@ -39,7 +39,7 @@
             <td *ngIf="isOrgCustomer">{{list.taxCode}}</td>
             <td *ngIf="!isOrgCustomer">{{list.phone}}/{{list.email}}</td>
             <td style="text-align: center">
-              <img src="../../../assets/img/icon_edit.svg" width="20px"  style="cursor: pointer;"/>&nbsp;&nbsp;
+              <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editCustomer(list.id, this.isOrgCustomer)"  style="cursor: pointer;"/>&nbsp;&nbsp;
               <img src="../../../assets/img/icon_delete.svg" width="16px" (click)="deleteCustomer(list.id)" style="cursor: pointer;"/>
             </td>
         </tr>
@@ -63,3 +63,4 @@ style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: cente
   </div>
 </div>
 </div>
+<ngx-spinner></ngx-spinner>
