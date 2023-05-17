@@ -84,8 +84,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   }
 
   list_text_type: any = [
-    { id: 1, name: 'Mặc định' },
-    { id: 2, name: 'Số tiền' },
+    { id: 1, name: 'default' },
+    { id: 2, name: 'currency' },
   ];
   list_sign_name: any = [];
   signCurent: any;
@@ -94,6 +94,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   countAttachFile = 0;
   widthDrag: any;
 
+  selectedTextType = 1;
   isEnableSelect: boolean = true;
   isEnableText: boolean = false;
   isChangeText: boolean = false;
@@ -167,6 +168,10 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             if(!res.name) {
               this.isContractNoNameNull = true;
             }
+          }
+          if (res.type == 5){
+            res['sign_unit']=  'text',
+            res['text_type'] = 'currency'
           }
         })
       }
@@ -558,7 +563,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               sign_unit: element.sign_unit,
               name: element.name,
               text_attribute_name: element.text_attribute_name,
-              required: 1
+              required: 1,
+              text_type: 'default'
             }
             if (element.sign_config.length == 0) {
               _obj['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
@@ -644,7 +650,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           // @ts-ignore
           _sign.style["z-index"] = '1';
           this.isEnableSelect = false;
-
+          this.selectedTextType = 1;
           // show toa do keo tha chu ky (demo)
           // this.location_sign_x = this.signCurent['coordinate_x'];
           // this.location_sign_y  = this.signCurent['coordinate_y'];
@@ -1137,6 +1143,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
       this.textSign = true;
       this.list_font = ["Arial","Calibri","Times New Roman"];
+      this.selectedTextType = 1;
+      if(d.type == 5 || d.text_type == 'currency')
+        this.selectedTextType = 2;
     } else {
       this.textSign = false;
       this.objSignInfo.font_size = 13;
@@ -1296,47 +1305,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     this.objSignInfo.showObjSign = false;
   }
 
-  removePeriodsFromCurrencyValue(value: string): string {
-    const regex = /(\d[\d.]*(?:\.\d+)?)\b/g;
-    let result = '';
-    let lastIndex = 0;
-    let match;
-  
-    while ((match = regex.exec(value)) !== null) {
-      const numericPart = match[1].replace(/\./g, '');
-      const prefix = value.slice(lastIndex, match.index);
-      result += prefix + numericPart;
-      lastIndex = match.index + match[0].length;
-    }
-  
-    const suffix = value.slice(lastIndex);
-    result += suffix;
-  
-    return result;
-  }
-
-  convertCurrency(value: any) {
-    const regex = /(\d[\d.]*(?:\.\d+)?)\b(?=\.{0,2}\d*$)/g;
-    const text = value.toString();
-    let formattedText = '';
-    let lastIndex = 0;
-    let match;
-    while ((match = regex.exec(text)) !== null) {
-      const numericPart = match[1].replace(/\./g, '');
-      const formattedNumericPart = parseFloat(numericPart).toLocaleString('vi-VN');
-      const prefix = text.slice(lastIndex, match.index);
-      formattedText += prefix + formattedNumericPart;
-      lastIndex = match.index + match[0].length;
-      if (text.charAt(lastIndex) === '.') {
-        formattedText += '.';
-        lastIndex++;
-      }
-    }
-    const suffix = text.slice(lastIndex);
-    formattedText += suffix;
-    value = formattedText;
-    return value;
-  }
 
   // tạo id cho đối tượng chưa được kéo thả
   getIdSignChuaKeo(id: any) {
@@ -1528,6 +1496,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     // }
 
     // const num = this.convertCurrency(e);
+    console.log(e);
     const num = e;
     d.value = num;
 
@@ -1542,9 +1511,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   }
 
   reverseInput(e: any, d: any){
-    console.log(e);
-    const num = this.removePeriodsFromCurrencyValue(e);
-    d.value = num;
+    // console.log(e);
+    // const num = this.removePeriodsFromCurrencyValue(e);
+    // d.value = num;
   }
 
   getTrafX() {
@@ -1643,8 +1612,10 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                     if (!item.status)
                       item.status = 0;
                   }
-                } else {
-                  item['type'] = 1;
+                } else if(item.sign_unit == 'text'){
+                  if(item.text_type == 'currency'){
+                    item['type'] = 5; } else {
+                    item['type'] = 1;}
                 }
 
                 data_remove_arr_request.forEach((item_remove: any) => {
@@ -1656,6 +1627,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           })
 
           this.spinner.show();
+          console.log(this.data_sample_contract)
           this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
             this.router.navigate(['/main/contract/create/draft']);
             this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
@@ -1754,8 +1726,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             if (!item.status)
               item.status = 0;
           }
-        } else {
-          item['type'] = 1;
+        } else if (item.sign_unit == 'text'){
+          if(item.text_type == 'currency'){
+            item['type'] = 5; } 
+          else {
+            item['type'] = 1;
+          }
         }
 
         data_remove_arr_request.forEach((item_remove: any) => {

@@ -277,8 +277,10 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
                 if (!item.status) item.status = 0;
               }
-            } else {
-              item['type'] = 1;
+            } else if(item.sign_unit == 'text'){
+              if(item.text_type == "currency"){
+                item['type'] = 5;} else {
+              item['type'] = 1;}
             }
 
             data_remove_arr_request.forEach((item_remove: any) => {
@@ -427,8 +429,10 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           item['type'] = 3;
         } else if (item.sign_unit == 'so_tai_lieu') {
           item['type'] = 4;
-        } else {
-          item['type'] = 1;
+        } else if(item.sign_unit == 'text'){
+          if(item.text_type == "currency"){
+            item['type'] = 5;} else {
+          item['type'] = 1;}
         }
 
         data_remove_arr_request.forEach((item_remove: any) => {

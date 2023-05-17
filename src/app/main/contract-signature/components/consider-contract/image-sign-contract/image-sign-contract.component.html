@@ -26,7 +26,7 @@
     <span id="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
   </div>
   <div *ngIf="checkShowEdit">
-    <input type="text" class="input-edit-text" [(ngModel)]="sign.valueSign" (blur)="doneEditTextSign()" #inputEditText>
+    <input type="text" class="input-edit-text" [(ngModel)]="sign.valueSign" (blur)="doneEditTextSign($event)" #inputEditText>
   </div>
 </div>
 
@@ -45,7 +45,7 @@
   </div>
 
   <div class="skeleton-sign" *ngIf="contractNoValue || count > 0 && !view">
-    <input (click)="reverseInput($event)" [ngStyle]="getStyle(sign)" type="text" class="input-edit-text" [(ngModel)]="contractNoValueSign" (blur)="doneEditContractNoSign(sign, $event)" #inputEditContractNo>
+    <input [ngStyle]="getStyle(sign)" type="text" class="input-edit-text" [(ngModel)]="contractNoValueSign" (blur)="doneEditContractNoSign(sign, $event)" #inputEditContractNo>
   </div>
 </div> 
 

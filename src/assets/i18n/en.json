@@ -639,5 +639,7 @@
   "role.processing.status.contract":"Report processing status",
   "role.number.status":"Report quantity status",
   "role.contract.type.quantity":"Report quantity by contract type",
-  "role.contract.receive":"Report contract receive"
+  "role.contract.receive":"Report contract receive",
+  "currency": "Currency",
+  "default": "Default"
 }

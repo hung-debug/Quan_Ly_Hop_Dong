@@ -217,6 +217,7 @@ export class ConsiderContractComponent
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
     const checkViewContract = await this.checkViewContractService.callAPIcheckViewContract(this.idContract,false);
+    console.log(checkViewContract);
 
     if (checkViewContract) {
       this.actionRoleContract();
@@ -444,7 +445,7 @@ export class ConsiderContractComponent
           )
           .subscribe();
         this.checkIsViewContract();
-
+        console.log(this.datas.is_data_object_signature);
         this.datas.is_data_object_signature.forEach((element: any) => {
           // 1: van ban, 2: ky anh, 3: ky so
           // tam thoi de 1: ky anh, 2: ky so
@@ -459,6 +460,10 @@ export class ConsiderContractComponent
           }
           if (element.type == 4) {
             element['sign_unit'] = 'so_tai_lieu';
+          }
+          if (element.type == 5) {
+            element['sign_unit'] = 'text';
+            element['text_type']='currency';
           }
 
           if (element.recipient) {
@@ -568,7 +573,7 @@ export class ConsiderContractComponent
           let image_base64 = '';
 
           let arr = this.convertToSignConfig();
-
+          
           arr.forEach((items: any) => {
             this.coordinateY.push(items.coordinate_y);
             this.idElement.push(items.id);

@@ -79,8 +79,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   list_text_type: any = [
-    { id: 1, name: 'Mặc định' },
-    { id: 2, name: 'Số tiền' },
+    { id: 1, name: 'default' },
+    { id: 2, name: 'currency' },
   ];
   list_sign_name: any = [];
   signCurent: any;
@@ -89,6 +89,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   countAttachFile = 0;
   widthDrag: any;
 
+  selectedTextType = 1;
   isEnableSelect: boolean = true;
   isEnableText: boolean = false;
   isChangeText: boolean = false;
@@ -280,6 +281,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (res.type == 4) {
               res['sign_unit'] = 'so_tai_lieu'
             }
+            if (res.type == 5){
+              res['sign_unit']=  'text',
+              res['text_type'] = 'currency'
+            }
             // res.name = res.recipient.name;
             res.email = res.recipient.email;
             dataPosition.push(res);
@@ -311,6 +316,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
         if (res.type == 4) {
           res['sign_unit'] = 'so_tai_lieu'
+        }
+        if (res.type == 5){
+          res['sign_unit']=  'text',
+          res['text_type'] = 'currency'
         }
         res.name = res.name;
         res.email = res.email;
@@ -473,6 +482,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   getListNameSign(data_user_sign: any) {
     data_user_sign.forEach((element: any) => {
+      console.log(element);
       if (element.type == 1) {
         element.recipients.forEach((item: any) => {
           if (item.role == 3 || item.role == 4 || item.role == 2) {
@@ -566,7 +576,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               text_attribute_name: element.text_attribute_name,
               required: 1,
               font: element.font,
-              font_size: element.font_size
+              font_size: element.font_size,
+              text_type: 'default'
             }
             if (element.sign_config.length == 0) {
               _obj['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
@@ -641,6 +652,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           // @ts-ignore
           _sign.style["z-index"] = '1';
           this.isEnableSelect = false;
+          this.selectedTextType = 1;
 
           // show toa do keo tha chu ky (demo)
           // this.location_sign_x = this.signCurent['coordinate_x'];
@@ -1137,10 +1149,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // get select người ký
   getSignSelect(d: any) {
-
+    console.log(d);
     if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
       this.textSign = true;
       this.list_font = ["Arial","Calibri","Times New Roman"];
+      this.selectedTextType = 1;
+      if(d.type == 5 || d.text_type == 'currency')
+        this.selectedTextType = 2;
     } else {
       this.textSign = false;
       this.objSignInfo.font_size = 13;
@@ -1446,6 +1461,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   async next(action: string) {
+    console.log(this.list_sign_name);
     this.datas.font = this.selectedFont;
     this.datas.size = this.size;
     if (action == 'next_step' && !this.validData()) {
@@ -1490,8 +1506,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   item['type'] = 3;
                 } else if (item.sign_unit == 'so_tai_lieu') {
                   item['type'] = 4;
-                } else {
-                  item['type'] = 1;
+                } else if(item.sign_unit = 'text') {
+                  if(item.text_type == 'currency'){
+                  item['type'] = 5; } else {
+                  item['type'] = 1;}
                 }
 
                 data_remove_arr_request.forEach((item_remove: any) => {
@@ -1578,8 +1596,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           item['type'] = 3;
         } else if (item.sign_unit == 'so_tai_lieu') {
           item['type'] = 4;
-        } else {
-          item['type'] = 1;
+        } else if (item.sign_unit == 'text'){
+          if(item.text_type == 'currency'){
+            item['type'] = 5; } 
+          else {
+            item['type'] = 1;
+          }
+          
         }
 
         data_remove_arr_request.forEach((item_remove: any) => {

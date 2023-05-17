@@ -80,8 +80,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   list_text_type: any = [
-    { id: 1, name: 'Mặc định' },
-    { id: 2, name: 'Số tiền' },
+    { id: 1, name: 'default' },
+    { id: 2, name: 'currency' },
   ];
   list_sign_name: any = [];
   signCurent: any;
@@ -90,6 +90,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   countAttachFile = 0;
   widthDrag: any;
 
+  selectedTextType = 1;
   isEnableSelect: boolean = true;
   isEnableText: boolean = false;
   isChangeText: boolean = false;
@@ -286,10 +287,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (res.type == 4) {
               res['sign_unit'] = 'so_tai_lieu'
             }
+<<<<<<< HEAD
             // if(res.type = 5) {
             //   res['sign_unit'] = 'text'
             //   res['text_type']='so_tien'
             // }
+=======
+            if(res.type == 5) {
+              res['sign_unit'] = 'text'
+              res['text_type']='currency'
+            }
+>>>>>>> tanthanhvu
             // res.name = res.recipient.name;
             res.recipient.email = data_duplicate ? data_duplicate.recipient.email : res.recipient.email;
             res.email = res.recipient.email;
@@ -489,6 +497,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             item['selected'] = false;
             item['is_disable'] = false;
             item['type'] = element.type;
+            item['text_type']='default'
             this.list_sign_name.push(item);
           }
         })
@@ -654,7 +663,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           // @ts-ignore
           _sign.style["z-index"] = '1';
           this.isEnableSelect = false;
-
+          this.selectedTextType = 1;
           // show toa do keo tha chu ky (demo)
           // this.location_sign_x = this.signCurent['coordinate_x'];
           // this.location_sign_y  = this.signCurent['coordinate_y'];
@@ -1147,6 +1156,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
       this.textSign = true;
       this.list_font = ["Arial", "Calibri", "Times New Roman"];
+      this.selectedTextType = 1;
+      if(d.type == 5 || d.text_type == 'currency')
+        this.selectedTextType = 2;
     } else {
       this.textSign = false;
       this.objSignInfo.font_size = 13;
@@ -1530,9 +1542,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   item['type'] = 3;
                 } else if (item.sign_unit == 'so_tai_lieu') {
                   item['type'] = 4;
-                } else {
-                  item['type'] = 1;
-                }
+                } else if(item.sign_unit == 'text'){
+                  if(item.text_type == 'currency'){
+                    item['type'] = 5; } else {
+                    item['type'] = 1;}
+                  }
 
                 data_remove_arr_request.forEach((item_remove: any) => {
                   delete item[item_remove]
@@ -1611,8 +1625,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           item['type'] = 3;
         } else if (item.sign_unit == 'so_tai_lieu') {
           item['type'] = 4;
-        } else {
-          item['type'] = 1;
+        } else if(item.sign_unit == 'text'){
+          if(item.text_type == 'currency'){
+            item['type'] = 5; } else {
+            item['type'] = 1;}
         }
 
         data_remove_arr_request.forEach((item_remove: any) => {

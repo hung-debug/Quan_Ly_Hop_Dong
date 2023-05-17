@@ -1,3 +1,4 @@
+import { ContractService } from 'src/app/service/contract.service';
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {ConfirmSignOtpComponent} from "../confirm-sign-otp/confirm-sign-otp.component";
@@ -37,7 +38,8 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   constructor(
     private dialog: MatDialog,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private contractService: ContractService
   ) { }
 
   ngOnInit(): void {
@@ -164,8 +166,13 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     })
   }
 
-  doneEditTextSign() {
+  doneEditTextSign(e: any) {
     this.checkShowEdit = false;
+    console.log(e)
+    console.log(this.sign)
+    if(this.sign.text_type == 'currency'){
+        e.target.value = this.contractService.convertCurrency(e.target.value);
+      this.sign.valueSign = e.target.value;}
   }
 
   doneEditContractNoSign(sign: any, e: any) {
@@ -196,8 +203,9 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doEditText() {
+    console.log("sign", this.sign)
     if(this.sign.valueSign != undefined)
-    this.sign.valueSign = this.removePeriodsFromCurrencyValue(this.sign.valueSign);
+    this.sign.valueSign = this.contractService.removePeriodsFromCurrencyValue(this.sign.valueSign);
 
     console.log("sign ", this.sign.valueSign);
     if ([2,3,4].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
@@ -219,48 +227,6 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
    
   }
 
-  removePeriodsFromCurrencyValue(value: string): string {
-    const regex = /(\d[\d.]*(?:\.\d+)?)\b/g;
-    let result = '';
-    let lastIndex = 0;
-    let match;
-  
-    while ((match = regex.exec(value)) !== null) {
-      const numericPart = match[1].replace(/\./g, '');
-      const prefix = value.slice(lastIndex, match.index);
-      result += prefix + numericPart;
-      lastIndex = match.index + match[0].length;
-    }
-  
-    const suffix = value.slice(lastIndex);
-    result += suffix;
-  
-    return result;
-  }
-
-  convertCurrency(value: any) {
-    const regex = /(\d[\d.]*(?:\.\d+)?)\b(?=\.{0,2}\d*$)/g;
-    const text = value.toString();
-    let formattedText = '';
-    let lastIndex = 0;
-    let match;
-    while ((match = regex.exec(text)) !== null) {
-      const numericPart = match[1].replace(/\./g, '');
-      const formattedNumericPart = parseFloat(numericPart).toLocaleString('vi-VN');
-      const prefix = text.slice(lastIndex, match.index);
-      formattedText += prefix + formattedNumericPart;
-      lastIndex = match.index + match[0].length;
-      if (text.charAt(lastIndex) === '.') {
-        formattedText += '.';
-        lastIndex++;
-      }
-    }
-    const suffix = text.slice(lastIndex);
-    formattedText += suffix;
-    value = formattedText;
-    return value;
-  }
-
   count: number = 0;
   getText(sign: any) {
     this.newItemEvent.emit("1");
@@ -269,7 +235,10 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
         // sign.valueSign = this.convertCurrency(sign.valueSign);
         return sign.valueSign;
       }
-      return 'Text';
+      if(sign.text_type == 'currency'){
+        return 'Số tiền'
+      } else {
+      return 'Text';}
     } else {
       if (sign.value) {
         // sign.value= this.convertCurrency(sign.value);
@@ -291,7 +260,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   reverseInput(e:any){
-    e.target.value = this.removePeriodsFromCurrencyValue(e.target.value);
+    e.target.value = this.contractService.removePeriodsFromCurrencyValue(e.target.value);
   }
 
 }
