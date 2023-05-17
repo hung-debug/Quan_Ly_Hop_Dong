@@ -623,5 +623,7 @@
   "choose.text.type": "Chọn loại text",
   "contract.folder": "Quản lý thư mục",
   "contract.views": "Xem xét nhiều",
-  "customer.delete": "Bạn có chắc chắn muốn xóa khách hàng này không?"
+  "customer.delete": "Bạn có chắc chắn muốn xóa khách hàng này không?",
+  "currency": "Số tiền",
+  "default": "Mặc định"
 }

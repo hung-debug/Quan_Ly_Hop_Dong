@@ -19,7 +19,9 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   getText(sign: any) {
     // ? 'Text' : 'Số hợp đồng'
     if (sign.sign_unit == 'text') {
-      console.log("text ");
+      if(sign.text_type == "currency")
+        return 'Số tiền';
+      // console.log("text ");
       return 'Text';
     } else {
       return 'Số hợp đồng';

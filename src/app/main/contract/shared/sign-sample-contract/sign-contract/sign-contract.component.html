@@ -24,8 +24,10 @@
     [(ngModel)]="sign.value" type="text" (click)="reverseInput($event)" (blur)="changeInput($event)" (ngxInputSearch)="doTheSearch($event,'text')"> -->
 
     <div *ngIf="sign.sign_unit == 'text' && sign.is_have_text">
-      <textarea id="input-text-value" placeholder="Nhập nội dung Text.." [(ngModel)]="sign.value"
-        (click)="reverseInput($event)" (blur)="changeInput($event)" (ngxInputSearch)="doTheSearch($event,'text')"></textarea>
+      <textarea *ngIf="sign.text_type != 'currency'" id="input-text-value" placeholder="Nhập nội dung Text.." [(ngModel)]="sign.value"
+        (ngxInputSearch)="doTheSearch($event,'text')"></textarea>
+        <textarea *ngIf="sign.text_type == 'currency'" id="input-text-value" placeholder="Nhập số tiền.." [(ngModel)]="sign.value"
+        (click)="reverseInput($event)" (blur)="changeInput($event)" oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" (ngxInputSearch)="doTheSearch($event,'text')"></textarea>
     </div>
 
   <input *ngIf="getNotSpecifiedYetHandle() && this.contractNo" id="input-number-value"

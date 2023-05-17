@@ -1478,6 +1478,19 @@ export class ContractService {
     // addGetDataContract:any = `${environment.apiUrl}/api/v1/contracts/`;
   }
 
+  removePeriodsFromCurrencyValue(value: string): string {
+    const result = value.toString().replace(/\./g, '');
+  return result;
+  }
+
+  convertCurrency(value: any) {    
+    if (!isNaN(parseFloat(value)) && isFinite(value)) {
+    value = parseFloat(value).toLocaleString('vi-VN');
+    return value;
+  }
+    return value;
+  }
+
   getDetailInforContract(idContract: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()

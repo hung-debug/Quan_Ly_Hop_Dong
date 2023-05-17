@@ -44,12 +44,13 @@
 
                 <div class="sign-unit-select" *ngIf="isEnableText">
                     <label class="label-require">{{'attribute.text.type' | translate}}: *</label>
-                    <select class="form-select" id="select-dropdown" aria-label="Default select example"
-                        (change)="changePositionSign($event, 'text_type', 'text')" [disabled]="isEnableSelect">
+                    <select class="form-select" id="select-dropdown-text" aria-label="Default select example"
+                        (change)="changePositionSign($event, 'text_type', 'text')" [disabled]="isEnableSelect"
+                        [(ngModel)]="selectedTextType">
                         <option value="" hidden>{{'choose.text.type'| translate}}
                         </option>
                         <option *ngFor="let d of this.list_text_type, let i = index" [selected]="d.selected"
-                            value="{{d.id}}" [disabled]="d.is_disable">{{d.name}}</option>
+                            value="{{d.id}}" [disabled]="d.is_disable">{{d.name | translate}}</option>
                     </select>
                 </div>
 

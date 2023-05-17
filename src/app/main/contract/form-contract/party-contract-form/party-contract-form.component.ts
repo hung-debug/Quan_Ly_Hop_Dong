@@ -1674,6 +1674,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       })
     } else {
       this.datasForm.is_determine_clone = this.datasForm.is_determine_clone.filter((p: any) => p.id != item.id);
+      console.log("co chay cai nay k vay?");
     }
   }
 

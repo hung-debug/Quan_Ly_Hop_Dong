@@ -620,5 +620,7 @@
   "contract.download1":"Download",
   "attribute.text.type": "Text type",
   "choose.text.type": "Choose text type",
-  "contract.folder": "Folder management"
+  "contract.folder": "Folder management",
+  "currency": "Currency",
+  "default": "Default"
 }

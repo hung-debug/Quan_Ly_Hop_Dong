@@ -192,6 +192,10 @@ export class ConfirmContractBatchComponent
             if (res.type == 4) {
               res['sign_unit'] = 'so_tai_lieu';
             }
+            if(res.type == 5){
+              res['sign_unit'] = 'text';
+              res['text_type'] = 'currency';
+            }
             let obj = res;
             this.datasBatch.is_data_object_signature.push(obj);
           });
