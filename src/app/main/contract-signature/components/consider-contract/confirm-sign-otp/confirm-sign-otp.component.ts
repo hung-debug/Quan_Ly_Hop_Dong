@@ -125,11 +125,8 @@ export class ConfirmSignOtpComponent implements OnInit {
       ArrRecipients.map((item: any) => {
         console.log("item",item);
         if (item.phone === this.currentUser.phone) {
-          console.log("abc");
+          console.log("phone");
           
-          ArrRecipientsNew = true
-          return
-        }else if(item.email === this.currentUser.email){ 
           ArrRecipientsNew = true
           return
         }

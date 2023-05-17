@@ -258,7 +258,7 @@ export class SidebarService {
 
             this.isBaoCaoSoLuongLoai = listRole.some((element) => element.code == 'BAOCAO_SOLUONG_LOAIHOPDONG');
 
-            // this.isBaoCaoHopDongNhan = listRole.some((element) => element.code == 'BAOCAO_HOPDONG_NHAN')
+            this.isBaoCaoHopDongNhan = listRole.some((element) => element.code == 'BAOCAO_HOPDONG_NHAN')
 
             this.buildMenu(currentUserC);
           },
@@ -504,15 +504,15 @@ export class SidebarService {
       })
     }
 
-    // if(this.isBaoCaoSoLuongTrangThai) {
-    //   submenusReport.push(
-    //     {
-    //       title: 'report.number.contracts.status',
-    //       active: false,
-    //       href: '/main/report/contract-number-follow-status',
-    //     }
-    //   )
-    // }
+    if(this.isBaoCaoSoLuongTrangThai) {
+      submenusReport.push(
+        {
+          title: 'report.number.contracts.status',
+          active: false,
+          href: '/main/report/contract-number-follow-status',
+        }
+      )
+    }
 
     if(this.isBaoCaoSoLuongLoai) {
       submenusReport.push({
@@ -522,15 +522,15 @@ export class SidebarService {
       })
     }
 
-    // if(this.isBaoCaoHopDongNhan) {
-    //   submenusReport.push({
-    //     title:'report.contract.receive',
-    //     active: false,
-    //     href: '/main/report/contract-receive'
-    //   })
-    // }
+    if(this.isBaoCaoHopDongNhan) {
+      submenusReport.push({
+        title:'report.contract.receive',
+        active: false,
+        href: '/main/report/contract-receive'
+      })
+    }
 
-    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai) {
+    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai || this.isBaoCaoHopDongNhan || this.isBaoCaoSoLuongTrangThai) {
       this.menus.push({
         title: 'report',
         icon: '/assets/img/analytics1.svg',
@@ -543,33 +543,33 @@ export class SidebarService {
       })
     }
 
-  //   this.menus.push({
-  //     title: 'customer.list',
-  //     icon: '/assets/img/customer_list.svg',
-  //     active: false,
-  //     type: 'simple',
-  //     href: '/main/customer',
-  //     id: 11,
-  // })
+    this.menus.push({
+      title: 'customer.list',
+      icon: '/assets/img/customer_list.svg',
+      active: false,
+      type: 'simple',
+      href: '/main/customer',
+      id: 11,
+  })
 
-  //   this.menus.push({
-  //     title: 'contract.folder',
-  //     icon: '/assets/img/contract.svg',
-  //     active: false,
-  //     type: 'simple',
-  //     href: '/main/contract-folder',
-  //     id: 12,
-  //   })
+    this.menus.push({
+      title: 'contract.folder',
+      icon: '/assets/img/contract.svg',
+      active: false,
+      type: 'simple',
+      href: '/main/contract-folder',
+      id: 12,
+    })
    
 
-  //   this.menus.push({
-  //     title: 'menu.config-sms-email',
-  //     icon: '/assets/img/email-sms.svg',
-  //     active: false,
-  //     type: 'simple',
-  //     href: '/main/config-sms-email',
-  //     id: 9,
-  //   })
+    this.menus.push({
+      title: 'menu.config-sms-email',
+      icon: '/assets/img/email-sms.svg',
+      active: false,
+      type: 'simple',
+      href: '/main/config-sms-email',
+      id: 9,
+    })
 
     //xu ly highlight
     this.menus.forEach((element: any) => {
