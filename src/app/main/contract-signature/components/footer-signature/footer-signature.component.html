@@ -51,7 +51,7 @@
       <button *ngIf="!this.is_show_coordination && !view && !this.lang" type="button" name="next" class="next action-button" (click)="forWardContract()">{{'Chuyển tiếp' | translate}}</button>
       
       <button *ngIf="!this.is_show_coordination && ![2,3,4].includes(this.datas.roleContractReceived) && !view" type="button" name="next" class="next action-button" (click)="refuseContract()" [ngStyle]="getStyleButton()">{{'contract.status.fail' | translate}}</button>
-      <button *ngIf="!this.is_show_coordination && !view && this.lang == 'vi' || !this.lang" (click)="action()" type="button" name="next" class="next action-button" [ngStyle]="getStyleButton()">{{this.datas.action_title == 'dieu_phoi' ? 'Điều phối' : 'Xác nhận2'}}</button>
+      <button *ngIf="!this.is_show_coordination && !view && this.lang == 'vi' || !this.lang" (click)="action()" type="button" name="next" class="next action-button" [ngStyle]="getStyleButton()">{{this.datas.action_title == 'dieu_phoi' ? 'Điều phối' : 'Xác nhận'}}</button>
 
       <button *ngIf="!this.is_show_coordination && !view && this.lang == 'en'" (click)="action()" type="button" name="next" class="next action-button" [ngStyle]="getStyleButton()">{{this.datas.action_title == 'dieu_phoi' ? 'Coordinator' : 'Confirm'}}</button>
 

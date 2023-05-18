@@ -155,8 +155,8 @@ export class EkycDialogSignComponent implements OnInit {
           alert(this.translate.instant('card.id.fail'));
         })
       } else {
-        if(this.cardId != response.id){
-          this.toastService.showErrorHTMLWithTimeout('Bạn không có quyền xử lý hợp đồng này!','',3000);
+        if (this.cardId != response.participants[0].recipients[0].card_id) {
+          this.toastService.showErrorHTMLWithTimeout('Bạn không có quyền xử lý hợp đồng này!', '', 3000);
           if (this.type == 1) {
             this.router.navigate(['/login']);
             this.dialogRef.close();
@@ -180,7 +180,7 @@ export class EkycDialogSignComponent implements OnInit {
   
         this.contractService.detectFace(this.data.cccdFront, this.webcamImage.imageAsDataUrl).subscribe((response) => {
           this.spinner.hide();
-          if(response.verify_result == 2 && response.face_anti_spoof_status == 'REAL') {
+          if(response.verify_result == 2 && response.face_anti_spoof_status.status == 'REAL') {
             alert(this.translate.instant('confirm.success'));
             this.dialogRef.close(response.verify_result);
           } else {
