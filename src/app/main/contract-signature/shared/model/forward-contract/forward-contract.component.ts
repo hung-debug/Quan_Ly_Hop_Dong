@@ -57,10 +57,10 @@ export class ForwardContractComponent implements OnInit {
       phone: "",
       card_id: "",
     });
-
-
+    console.log("datas",this.datas);
+    
+    this.locale = this.datas?.dataContract?.is_data_contract?.participants[0]?.recipients[0]?.locale;
     for (const d of this.datas.dataContract.is_data_contract.participants) {
-      this.locale = this.datas?.dataContract?.is_data_contract?.participants[0]?.recipients[0]?.locale;
       for (const q of d.recipients) {
         if (q.email == this.currentUser.customer.info.email && q.status == 1) {
           let data_sign_cka = q.sign_type.filter((p: any) => p.id == 1)[0];
@@ -141,7 +141,7 @@ export class ForwardContractComponent implements OnInit {
       console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
       if (!ArrRecipientsNew) {
-
+        console.log("ArrRecipientsNew111", ArrRecipientsNew);
         this.toastService.showErrorHTMLWithTimeout(
           'Bạn không có quyền xử lý hợp đồng này!',
           '',
