@@ -8,9 +8,11 @@ export interface Customer {
   name: string,
   taxCode?: string,
   type: string,
-  signType?: SignType,
+  signType?: SignType[],
   phone?: string,
   email?: string,
+  login_by?: string,
+  locale?: string,
   handlers?: Handler[],
 }
 
@@ -28,8 +30,12 @@ export interface PersonalCustomer {
   type: string,
   phone: string,
   email: string,
-  signType: SignType | null,
+  signType: SignType[],
+  login_by: string,
+  locale: string,
+  card_id: string,
 }
+
 
 
 export interface Handler{
@@ -38,7 +44,9 @@ export interface Handler{
   name: string,
   email: string,
   phone: string | null,
-  signType: SignType | null,
+  signType: SignType[],
+  login_by?: string,
+  locale: string,
 }
 
 export interface SignType{
@@ -98,7 +106,9 @@ export class CustomerService {
           name: '',
           email: '',
           phone: '',
-          signType: null,
+          signType: [],
+          locale: 'vi',
+          login_by: 'email'
         },
         {
           ordering: 1,
@@ -106,7 +116,9 @@ export class CustomerService {
           name: '',
           email: '',
           phone: '',
-          signType: null,
+          signType: [],
+          locale: 'vi',
+          login_by: 'email'
         },
         {
           ordering: 1,
@@ -114,7 +126,9 @@ export class CustomerService {
           name: '',
           email: '',
           phone: '',
-          signType: null,
+          signType: [],
+          locale: 'vi',
+          login_by: 'email'
         },
         {
           ordering: 1,
@@ -122,9 +136,24 @@ export class CustomerService {
           name: '',
           email: '',
           phone: '',
-          signType: null
+          signType: [],
+          locale: 'vi',
+          login_by: 'email'
         },
       ],
+    };
+  }
+
+  getDataPersonalCustomer(){
+    return {
+      name: '',
+      type: 'PERSONAL',
+      phone: '',
+      email: '',
+      signType: [],
+      locale: 'vi',
+      login_by: 'email',
+      card_id: '',
     };
   }
 
@@ -143,6 +172,8 @@ export class CustomerService {
         email: data.handlers[i].email,
         phone: data.handlers[i].phone,
         signType: data.handlers[i].signType[0],
+        login_by: data.handlers[i].login_by,
+        locale: data.handlers[i].locale,
       };
       handlers.push(handler);
     }
@@ -185,6 +216,8 @@ export class CustomerService {
         email: data.handlers[i].email,
         phone: data.handlers[i].phone,
         signType: data.handlers[i].signType[0],
+        login_by: data.handlers[i].login_by,
+        locale: data.handlers[i].locale,
       };
       handlers.push(handler);
     }

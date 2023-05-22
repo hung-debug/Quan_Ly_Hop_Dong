@@ -165,6 +165,16 @@ export const clone_load_org_customer = {
   taxCode: '',
   type: 'ORGANIZATION',
   handlers: [
+    {
+      ordering: 1,
+      role: 'SIGNER',
+      name: '',
+      email: '',
+      phone: '',
+      signType: [],
+      locale : 'vi',
+      login_by: 'email'
+    }
   ],
 };
 
@@ -173,7 +183,10 @@ export const clone_load_personal_customer = {
   email: '',
   phone: '',
   type: 'PERSONAL',
-  signType: null
+  signType: [],
+  locale : 'vi',
+  login_by: 'email',
+  card_id: '',
 }
 
 export const org_customer_clone = {
@@ -187,32 +200,10 @@ export const org_customer_clone = {
       name: '',
       email: '',
       phone: '',
-      signType: null,
-    },
-    {
-      ordering: 1,
-      role: 'ARCHIVER',
-      name: '',
-      email: '',
-      phone: '',
-      signType: null,
-    },
-    {
-      ordering: 1,
-      role: 'REVIEWER',
-      name: '',
-      email: '',
-      phone: '',
-      signType: null,
-    },
-    {
-      ordering: 1,
-      role: 'COORDINATOR',
-      name: '',
-      email: '',
-      phone: '',
-      signType: null
-    },
+      signType: [],
+      locale : 'vi',
+      login_by: 'email'
+    }
   ],
 };
 
@@ -221,7 +212,9 @@ export const personal_customer_clone ={
   email: '',
   phone: '',
   type: 'PERSONAL',
-  signType: null
+  signType: [],
+  locale : 'vi',
+  login_by: 'email'
 };
 
 export var networkList = [
