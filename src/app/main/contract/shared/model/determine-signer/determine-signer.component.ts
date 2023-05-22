@@ -1,3 +1,5 @@
+import { SelectTypeAddPartnerDialogComponent } from './../../../dialog/select-type-add-partner-dialog/select-type-add-partner-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 // import { locale } from 'date-fns/locale/en-US';
 // import { map } from 'rxjs/operators';
 import { ContractService } from 'src/app/service/contract.service';
@@ -113,6 +115,7 @@ export class DetermineSignerComponent implements OnInit {
     private router: Router,
     public translate: TranslateService,
     private unitService: UnitService,
+    private dialog: MatDialog
   ) {
     this.step = variable.stepSampleContract.step2
   }
@@ -1779,6 +1782,16 @@ export class DetermineSignerComponent implements OnInit {
 
   // thêm đối tác
   addPartner() {
+
+    // const datas = 0;
+    // const dialogRef = this.dialog.open(SelectTypeAddPartnerDialogComponent, {
+    //   width: '500px',
+    // })
+    // dialogRef.afterClosed().subscribe((result: any) => {
+    //   console.log('the close dialog');
+    //   let is_data = result
+    // })
+
     let data_partner_add = {};
     let data: any = [...this.contractService.getDataDetermineInitializationPartner()];
     data_partner_add = data.filter((p: any) => (p.type == 2))[0];
@@ -1796,6 +1809,10 @@ export class DetermineSignerComponent implements OnInit {
     } else {
       return this.signTypeList;
     }
+  }
+
+  openAddPartnerDialog(){
+    
   }
 
   // xóa đối tham gia bên đối tác
