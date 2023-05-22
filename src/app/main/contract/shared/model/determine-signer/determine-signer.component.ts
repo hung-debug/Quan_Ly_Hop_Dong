@@ -1,4 +1,3 @@
-import { SelectTypeAddPartnerDialogComponent } from './../../../dialog/select-type-add-partner-dialog/select-type-add-partner-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 // import { locale } from 'date-fns/locale/en-US';
 // import { map } from 'rxjs/operators';
@@ -1780,18 +1779,12 @@ export class DetermineSignerComponent implements OnInit {
     return this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
+  findPartner(){
+    
+  }
+
   // thêm đối tác
   addPartner() {
-
-    // const datas = 0;
-    // const dialogRef = this.dialog.open(SelectTypeAddPartnerDialogComponent, {
-    //   width: '500px',
-    // })
-    // dialogRef.afterClosed().subscribe((result: any) => {
-    //   console.log('the close dialog');
-    //   let is_data = result
-    // })
-
     let data_partner_add = {};
     let data: any = [...this.contractService.getDataDetermineInitializationPartner()];
     data_partner_add = data.filter((p: any) => (p.type == 2))[0];

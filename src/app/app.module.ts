@@ -1,4 +1,3 @@
-import { SelectTypeAddPartnerDialogComponent } from './main/contract/dialog/select-type-add-partner-dialog/select-type-add-partner-dialog.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ChartModule } from 'angular-highcharts';
 import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
@@ -179,7 +178,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdminDeletePackUnitComponent,
     AdminInfoUserComponent,
     CustomerComponent,
-    SelectTypeAddPartnerDialogComponent,
 
     ReportDetailComponent,
     ReportStatusContractComponent,
