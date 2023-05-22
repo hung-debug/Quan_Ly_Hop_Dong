@@ -430,7 +430,7 @@ export var roleList = [
       {label: 'role.contract.type.quantity',value:'BAOCAO_SOLUONG_LOAIHOPDONG'},
 
       //Báo cáo hợp đồng nhận
-      // {label: 'role.contract.receive', value:'BAOCAO_HOPDONG_NHAN'}
+      {label: 'role.contract.receive', value:'BAOCAO_HOPDONG_NHAN'}
     ]
 
   }
