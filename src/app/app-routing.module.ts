@@ -43,6 +43,7 @@ import { ContractNumberFollowTypeComponent } from './main/report/contract-number
 import { ContractNumberFollowSignComponent } from './main/report/contract-number-follow-sign/contract-number-follow-sign.component';
 import { ConfigSmsEmailComponent } from './main/config-sms-email/config-sms-email.component';
 import { CustomerComponent } from './main/customer/customer.component';
+import { ReportContractReceiveComponent } from './main/report/report-contract-receive/report-contract-receive.component';
 
 const contract_signatures = "c";
 const signatures = "s9";
@@ -193,6 +194,11 @@ const routes: Routes = [
           {
             path: 'contract-number-follow-sign',
             component: ContractNumberFollowSignComponent
+          },
+          //Báo cáo số lượng hợp đồng nhận
+          { 
+            path: 'contract-receive',
+            component: ReportContractReceiveComponent
           }
         ]
       },

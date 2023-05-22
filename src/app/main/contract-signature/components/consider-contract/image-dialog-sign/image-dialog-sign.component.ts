@@ -151,7 +151,8 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
       }, 200);
     } else if (ev == 1 && !this.datas.imgSignAcc && !this.data.mark) {
       this.toastService.showWarningHTMLWithTimeout('notify_have_not_sign_acc', "", 3000);
-    } else  if (ev == 1 && !this.datas.markSignAcc && this.data.mark) {
+    } else  if (ev == 1 && !this.datas.markSignAcc && !this.data.mark) {
+      console.log("abc ", this.markSignAccountSelect)
       this.toastService.showWarningHTMLWithTimeout('notify_have_not_sign_mark_acc',"",3000);
     }
   }
@@ -194,7 +195,11 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
       if(!this.imgSignAccountSelect) {
         this.toastService.showErrorHTMLWithTimeout('Bạn chưa chọn ảnh','',3000)
       } else {
-        this.dialogRef.close(this.imgSignAccountSelect);
+        if(this.data.mark) {
+          this.dialogRef.close(this.markSignAccountSelect);
+        } else {
+          this.dialogRef.close(this.imgSignAccountSelect);
+        }
       }
 
     } else if (this.typeImageSignatureRadio == 2) {

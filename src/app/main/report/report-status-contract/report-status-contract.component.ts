@@ -1,5 +1,15 @@
 import { DatePipe } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
@@ -10,13 +20,16 @@ import { InputTreeService } from 'src/app/service/input-tree.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-report-status-contract',
   templateUrl: './report-status-contract.component.html',
   styleUrls: ['./report-status-contract.component.scss'],
 })
-export class ReportStatusContractComponent implements OnInit,AfterViewInit {
+export class ReportStatusContractComponent implements OnInit, AfterViewInit {
+  @ViewChild('dt') table: Table;
+
   //Biến lưu dữ liệu trong bảng
   list: any[] = [];
 
@@ -41,11 +54,11 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
 
   params: any;
   date: any;
-  optionsStatus: any;
+  optionsStatus: any = [];
 
   formGroup: any;
 
-  contractStatus: number = -1;
+  contractStatus: any;
 
   fetchChildData: boolean = false;
 
@@ -66,13 +79,12 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
     private reportService: ReportService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private translate: TranslateService,
-    private contractService: ContractService,
     private convertStatusService: ConvertStatusService,
-    private contractTypeService: ContractTypeService,
-    private changeDetectorRef: ChangeDetectorRef,
+    private contractTypeService: ContractTypeService
+  ) {
+ 
+  }
 
-  ) {}
 
   ngOnInit(): void {
     this.spinner.hide();
@@ -82,9 +94,9 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
     this.getTypeListContract();
 
     this.optionsStatus = [
-      { id: -1, name: 'Tất cả' },
       { id: 20, name: 'Đang thực hiện' },
-      { id: 2, name:'Quá hạn' },
+      { id: 33, name: 'Sắp hết hạn' },
+      { id: 2, name: 'Quá hạn' },
       { id: 31, name: 'Từ chối' },
       { id: 32, name: 'Huỷ bỏ' },
       { id: 30, name: 'Hoàn thành' },
@@ -96,9 +108,9 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
       this.lang = 'en';
 
       this.optionsStatus = [
-        { id: -1, name: 'All' },
         { id: 20, name: 'Processing' },
-        { id: 2, name:'Overdue' },
+        { id: 33, name: 'Expiration soon' },
+        { id: 2, name: 'Overdue' },
         { id: 31, name: 'Reject' },
         { id: 32, name: 'Cancel' },
         { id: 30, name: 'Complete' },
@@ -106,14 +118,14 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
     }
 
     //lay id user
-    this.organization_id_user_login = this.userService.getAuthCurrentUser().organizationId;
-    
+    this.organization_id_user_login =
+      this.userService.getAuthCurrentUser().organizationId;
+
     //mac dinh se search theo ma to chuc minh
     this.organization_id = this.organization_id_user_login;
 
     //lấy danh sách tổ chức
     this.inputTreeService.getData().then((res: any) => {
-
       this.listOrgCombobox = res;
 
       this.selectedNodeOrganization = this.listOrgCombobox.filter(
@@ -129,7 +141,9 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
   }
 
   async getTypeListContract(typeId?: number) {
-    const inforType = await this.contractTypeService.getContractTypeList('', '',typeId).toPromise();
+    const inforType = await this.contractTypeService
+      .getContractTypeList('', '', typeId)
+      .toPromise();
     this.typeList = inforType;
   }
 
@@ -137,54 +151,34 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
     this.typeContract.autoDisplayFirst = false;
   }
 
-
   setColForTable() {
     this.cols = [
       {
-        id: 1,
         header: 'contract.name',
         style: 'text-align: left;',
         colspan: 1,
         rowspan: 1,
       },
       {
-        id: 2,
+        header: 'contract.number',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
         header: 'contract.type',
         style: 'text-align: left;',
         colspan: 1,
         rowspan: 1,
       },
       {
-        id: 8,
-        header: 'contract.status.v2',
-        style: 'text-align:left',
+        header: 'created.unit',
+        style: 'text-align: left;',
         colspan: 1,
         rowspan: 1,
       },
       {
-        id: 10,
         header: 'suggest',
-        style: 'text-align: left',
-        colspan: 1,
-        rowspan: 1,
-      },
-      {
-        id: 1000,
-        header: 'user.ed',
-        style: 'text-align: left',
-        colspan: 1,
-        rowspan: 1,
-      },
-      {
-        id: 1001,
-        header: 'user.ing',
-        style: 'text-align: left',
-        colspan: 1,
-        rowspan: 1,
-      },
-      {
-        id: 1002,
-        header: 'user.not.process',
         style: 'text-align: left',
         colspan: 1,
         rowspan: 1,
@@ -192,91 +186,168 @@ export class ReportStatusContractComponent implements OnInit,AfterViewInit {
     ];
   }
 
-  
   validData() {
-    if(!this.date || (this.date && this.date.length < 2)) {
-      this.toastService.showErrorHTMLWithTimeout('date.full.valid','',3000);
+    if (!this.date || (this.date && this.date.length < 2)) {
+      this.toastService.showErrorHTMLWithTimeout('date.full.valid', '', 3000);
       return false;
     }
     return true;
   }
 
-  
+  getNumberArray(num: number): number[] {
+    return Array(num)
+      .fill(0)
+      .map((x, i) => i + 1);
+  }
 
   //Export ra file excel
   maxParticipants: number = 0;
   export(flag: boolean) {
-    if(!this.validData()) {
+    if (!this.validData()) {
       return;
     }
 
     this.spinner.show();
 
-    this.selectedNodeOrganization = !this.selectedNodeOrganization.length ? this.selectedNodeOrganization : this.selectedNodeOrganization[0]
+    this.selectedNodeOrganization = !this.selectedNodeOrganization.length
+      ? this.selectedNodeOrganization
+      : this.selectedNodeOrganization[0];
 
     this.orgName = this.selectedNodeOrganization.label;
     let idOrg = this.selectedNodeOrganization.data;
 
     let from_date: any = '';
     let to_date: any = '';
-    if(this.date && this.date.length > 0) {
-      from_date = this.datepipe.transform(this.date[0],'yyyy-MM-dd');
-      to_date = this.datepipe.transform(this.date[1],'yyyy-MM-dd');
+    if (this.date && this.date.length > 0) {
+      from_date = this.datepipe.transform(this.date[0], 'yyyy-MM-dd');
+      to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
     }
 
     let contractStatus = this.contractStatus;
 
-    if(!contractStatus) 
-      contractStatus = -1;
+    if (!contractStatus) contractStatus = -1;
 
-    this.type_id = this.type_id ? this.type_id : "";
+    this.type_id = this.type_id ? this.type_id : '';
 
-    if(!to_date)
-      to_date = from_date
+    if (!to_date) to_date = from_date;
 
-    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData+'&type='+this.type_id;
+    let params =
+      '?from_date=' +
+      from_date +
+      '&to_date=' +
+      to_date +
+      '&status=' +
+      contractStatus +
+      '&fetchChildData=' +
+      this.fetchChildData +
+      '&type=' +
+      this.type_id;
 
-    if(!this.type_id) {
-      params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus;
+    if (!this.type_id) {
+      params =
+        '?from_date=' +
+        from_date +
+        '&to_date=' +
+        to_date +
+        '&status=' +
+        contractStatus;
     }
 
-    this.reportService.export('rp-by-status-process',idOrg,params, flag).subscribe((response: any) => {
+    this.reportService
+      .export('rp-by-status-process', idOrg, params, flag)
+      .subscribe((response: any) => {
+        this.spinner.hide();
 
-      this.spinner.hide();
+        if (flag) {
+          let url = window.URL.createObjectURL(response);
+          let a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          a.download = `BaoCaoTrangThaiXuLy_${new Date().getDate()}-${
+            new Date().getMonth() + 1
+          }-${new Date().getFullYear()}.xlsx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
 
-      if(flag) {
-        let url = window.URL.createObjectURL(response);
-        let a = document.createElement('a');
-        document.body.appendChild(a);
-        a.setAttribute('style', 'display: none');
-        a.href = url;
-        a.download = `BaoCaoTrangThaiXuLy_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
-        a.click();
-        window.URL.revokeObjectURL(url);
-        a.remove();
+          this.toastService.showSuccessHTMLWithTimeout(
+            'no.contract.download.file.success',
+            '',
+            3000
+          );
+        } else {
+          this.list = [];
 
-        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
-      } else {
-        this.setColForTable();
-        for(let i = 0; i < response.maxParticipant - 1; i++) {
+          this.table.first = 0;
+          this.setColForTable();
+          for (let i = 0; i < response.maxParticipant - 1; i++) {
+            this.cols.push({
+              header: 'Bên được yêu cầu ký ' + (i + 1),
+              style: 'text-align: left;',
+              colspan: 1,
+              rowspan: 1,
+            });
+          }
+
           this.cols.push({
-            id: 10+i,
-            header: 'Bên được yêu cầu ký '+(i+1),
-            style: 'text-align: left;',
+            header: 'contract.status.v2',
+            style: 'text-align:left',
             colspan: 1,
             rowspan: 1,
-          })
+          });
+
+          this.cols.push({
+            header: 'user.ed',
+            style: 'text-align: left',
+            colspan: 1,
+            rowspan: 1,
+          });
+
+          this.cols.push({
+            header: 'user.ing',
+            style: 'text-align: left',
+            colspan: 1,
+            rowspan: 1,
+          });
+
+          this.cols.push({
+            header: 'user.not.process',
+            style: 'text-align: left',
+            colspan: 1,
+            rowspan: 1,
+          });
+
+          this.maxParticipants = response.maxParticipant;
+          this.cols.sort((a, b) => a.id - b.id);
+
+          let listFirst = [this.orgName];
+          let listSecond = response.contracts;
+
+          listSecond.forEach((ele: any) => {
+            // Lọc lấy phần tử có thuộc tính type = 1
+            let type1 = ele.participants.filter(function (participant: any) {
+              return participant.type === 1;
+            });
+
+            // Sắp xếp mảng các phần tử không phải type 1 theo thứ tự tăng dần của thuộc tính 'ordering'
+            let others = ele.participants
+              .filter(function (participant: any) {
+                return participant.type !== 1;
+              })
+              .sort(function (a: any, b: any) {
+                return a.ordering - b.ordering;
+              });
+
+            // Kết hợp mảng type1 và others thành một mảng mới
+            let sortedParticipants = type1.concat(others);
+
+            ele.participants = sortedParticipants;
+          });
+
+          this.list = listFirst.concat(listSecond);
         }
-
-        this.maxParticipants = response.maxParticipant;
-        this.cols.sort((a,b) => a.id - b.id )
-
-        let listFirst = [this.orgName];
-        let letSecond = response.contracts;
-
-        this.list = listFirst.concat(letSecond);
-      }    
-    })
+      });
   }
 
   convert(code: string) {

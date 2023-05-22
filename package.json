@@ -26,6 +26,7 @@
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fullcalendar/angular": "^5.10.1",
+    "@interactjs/interact": "^1.10.17",
     "@ng-bootstrap/ng-bootstrap": "^10.0.0",
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",

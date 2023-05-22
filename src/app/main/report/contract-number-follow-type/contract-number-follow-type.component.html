@@ -27,7 +27,7 @@
         </div>
 
         <!--Trạng thái-->
-        <div class="col-md-2">
+        <!-- <div class="col-md-2">
             <div>{{'contract.status' | translate}}</div>
             <div class="input-line">
                 <p-dropdown 
@@ -35,13 +35,13 @@
                     appendTo="body"
                     optionLabel="name"
                     optionValue="id" 
-                    placeholder="{{'contract.status.v2' | translate}}" 
+                    placeholder="{{'all' | translate}}" 
                     [showClear]="true"  
                     [options]="optionsStatus"
                     [(ngModel)] = "contractStatus"
                 ></p-dropdown>
             </div>
-        </div>
+        </div> -->
 
         <!--Button-->
         <div class="col-md-6 btn_search">
@@ -52,7 +52,7 @@
 
     <!--Bảng dữ liệu-->
     <div class="row" style="padding-top: 20px;">
-        <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
+        <p-table #dt [value]="list" [paginator]="true" [rows]="15" id="table" >
 
             <!--header-->
             <ng-template pTemplate="header">
@@ -65,23 +65,43 @@
             </ng-template>
 
             <ng-template pTemplate="body" let-list let-row="rowIndex">
-                <ng-container style="background-color: #EEF7FF;" *ngIf="row == 0">
-                </ng-container>
+                <tr>
+                    <ng-container style="background-color: #EEF7FF;" *ngIf="row == 0">
+                        <td style="font-style: normal;font-weight: 800;font-size: 13px;">{{this.org}}</td>
+                        <td *ngFor="let i of Arr(6).fill(1)"></td>
+                    </ng-container>
 
-                <ng-container *ngIf="row > 0">
-                </ng-container>
+                    <ng-container *ngIf="row > 0">
+                            <td>{{list.name}}</td>
+                            <td>{{list.value.total}}</td>
+                            <td>{{list.value.processed}}</td>
+                            <td>{{list.value.processing}}</td>
+                            <td>{{list.value.rejected}}</td>
+                            <td>{{list.value.canceled}}</td>
+                            <td>{{list.value.prepare_expires}}</td>
+                            <td>{{list.value.expired}}</td>
+                    </ng-container>
+                </tr>
             </ng-template>
 
             <ng-template pTemplate="footer">
                 <tr *ngIf="this.clickReport">
-                    <td>{{this.total.name}}</td>
+                    <td></td>
                     <td>{{this.total.total}}</td>
                     <td>{{this.total.processed}}</td>
                     <td>{{this.total.processing}}</td>
+                    <td>{{this.total.rejected}}</td>
                     <td>{{this.total.canceled}}</td>
                     <td>{{this.total.prepare_expires}}</td>
                     <td>{{this.total.expired}}</td>
                 </tr>
+            </ng-template>
+
+            <ng-template  pTemplate="paginatorleft" let-state>
+                <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ? (state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows - 1}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
+              </ng-template>
+            <ng-template pTemplate="paginatorright" let-state>
+                <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ?(state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows - 1}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
             </ng-template>
         </p-table>
     </div>

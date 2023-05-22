@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import axios from 'axios';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -9,6 +9,7 @@ import { InputTreeService } from 'src/app/service/input-tree.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-report-contract-number-follow-status',
@@ -16,6 +17,7 @@ import { ReportService } from '../report.service';
   styleUrls: ['./report-contract-number-follow-status.component.scss']
 })
 export class ReportContractNumberFollowStatusComponent implements OnInit {
+  @ViewChild('dt') table: Table;
 
    //Biến lưu dữ liệu trong bảng
    list: any[] = [];
@@ -60,7 +62,6 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
     private reportService: ReportService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private translate: TranslateService,
     private convertStatusService: ConvertStatusService 
   ) { }
 
@@ -76,6 +77,7 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
       { id: 31, name: 'Từ chối' },
       { id: 32, name: 'Huỷ bỏ' },
       { id: 30, name: 'Hoàn thành' },
+      { id: 33, name: 'Sắp hết hạn'}
     ];
 
     if (sessionStorage.getItem('lang') == 'vi') {
@@ -90,6 +92,7 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
         { id: 31, name: 'Reject' },
         { id: 32, name: 'Cancel' },
         { id: 30, name: 'Complete' },
+        { id: 33, name: 'Expiration soon' }
       ];
     }
 
@@ -184,6 +187,7 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
     } else {
 
       this.list = [];
+      this.table.first = 0
 
       this.spinner.hide();
       this.clickReport = true;

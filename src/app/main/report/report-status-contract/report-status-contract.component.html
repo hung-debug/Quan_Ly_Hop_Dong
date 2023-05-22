@@ -31,14 +31,15 @@
             <div>{{'contract.status' | translate}}</div>
             <div class="input-line">
                 <p-dropdown 
+                    [(ngModel)] = "contractStatus"
                     panelStyleClass="font"
                     appendTo="body"
                     optionLabel="name"
                     optionValue="id" 
-                    placeholder="{{'contract.status.v2' | translate}}" 
+                    placeholder="{{'all' | translate}}" 
                     [showClear]="true"  
                     [options]="optionsStatus"
-                    [(ngModel)] = "contractStatus"
+                    [autoDisplayFirst]="false"
                 ></p-dropdown>
             </div>
         </div>
@@ -47,7 +48,7 @@
         <div class="col-md-2">
             <div>{{'contract.type' | translate}}</div>
             <div class="input-line">
-              <p-dropdown #typeContract optionValue="name" [(ngModel)]="type_id" placeholder="{{'choose.contract.type' | translate}}" [showClear]="true" [filter]="true" filterBy="name" [options]="typeList" optionLabel="name" >
+              <p-dropdown #typeContract optionValue="name" [(ngModel)]="type_id" placeholder="{{'all' | translate}}" [showClear]="true" [filter]="true" filterBy="name" [options]="typeList" optionLabel="name" >
             </p-dropdown>
             </div>
         </div>
@@ -61,7 +62,7 @@
 
     <!--Bảng dữ liệu-->
     <div class="row" style="padding-top: 20px;">
-        <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
+        <p-table #dt [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
 
             <!--header-->
             <ng-template pTemplate="header">
@@ -82,14 +83,16 @@
 
                     <ng-container *ngIf="row > 0">
                         <td>{{list.name}}</td>
+                        <td>{{list.contractNo}}</td>
                         <td>{{list.typeName}}</td>
-                        <td>{{this.convert(list.status)}}</td>
+                        <td>{{list.organization?.name}}</td>
                         <td>{{list.participants[0].name}}</td>
-                        <td *ngFor="let i of Arr(maxParticipants - 1).fill(1)">
+                        <td *ngFor="let i of getNumberArray(this.maxParticipants - 1)">
                             <span *ngIf="list.participants[i]">
                                 {{ list.participants[i].name }}
                             </span>
                         </td>
+                        <td>{{this.convert(list.status)}}</td>
                         <td>{{list.processedUser}}</td>
                         <td>{{list.processingUser}}</td>
                         <td>{{list.notProcessedYet}}</td>
@@ -97,11 +100,11 @@
                 </tr>
             </ng-template>
 
-            <ng-template pTemplate="paginatorleft" let-state>
-                <span style="color: white !important;">{{'chart.number' | translate}}: {{(state.totalRecords > 0 && state.fisrt == 0) ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? (state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
+            <ng-template  pTemplate="paginatorleft" let-state>
+                <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ? (state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
               </ng-template>
             <ng-template pTemplate="paginatorright" let-state>
-                <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{(state.totalRecords > 0 && state.fisrt == 0) ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ?(state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
+                <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ?(state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
             </ng-template>
         </p-table>
     </div>

@@ -111,6 +111,7 @@ import { ConfigSmsEmailComponent } from './main/config-sms-email/config-sms-emai
 import { DeleteCustomerComponent } from './main/customer/delete-customer/delete-customer.component';
 import { CustomerDetailComponent } from './main/customer/customer-detail/customer-detail.component';
 import { ContractFolderComponent } from './main/contract-folder/contract-folder.component';
+import { ReportContractReceiveComponent } from './main/report/report-contract-receive/report-contract-receive.component';
 import { CustomerAddComponent } from './main/customer/customer-add/customer-add.component';
 
 
@@ -188,10 +189,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
     ContractComponent,
     ConfigSmsEmailComponent,
-      DeleteCustomerComponent,
-      CustomerDetailComponent,
-      ContractFolderComponent,
-      CustomerAddComponent,
+    DeleteCustomerComponent,
+    CustomerDetailComponent,
+    ReportContractReceiveComponent,
+    ContractFolderComponent,
+    CustomerAddComponent,
   ],
   imports: [
     TranslateModule,

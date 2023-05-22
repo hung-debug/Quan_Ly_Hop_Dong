@@ -19,7 +19,7 @@
 <!--usb token v1 có ảnh đóng dấu-->
 <div class="signature-container" id="export-html-image" style="width: 250px;min-height: 80px; display: flex; font-size: 9px;max-width: 300px">
     <div style="position: relative;">
-        <img [src]="this.srcMark" style="width: 70%; height: 100%;z-index: 1">
+        <img [src]="this.srcMark" style="width: 70%; height: 100%;z-index: 1;object-fit: contain;">
     </div>
     <div class="signature-content" style="color: #4FC123; background-size: 40px 40px; display: flex; justify-content: space-between;align-items: center; width: 100%;">
         <div style="width: 165px;">
@@ -33,9 +33,9 @@
 
 
 <!--usb token v2 có ảnh đóng dấu-->
-<div class="signature-container" id="export-html2-image" style="width: 250px;min-height: 80px; display: flex; font-size: 9px;max-width: 300px; background-color: white;">
+<div class="signature-container" id="export-html2-image" style="width: 250px;min-height: 80px; display: flex; font-size: 9px;max-width: 300px; background-color: white">
     <div style="position: relative;">
-        <img [src]="this.srcMark" style="width: 70%; height: 100%;z-index: 1">
+        <img [src]="this.srcMark" style="width: 70%; height: 100%;z-index: 1;object-fit: contain">
     </div>
     <div class="signature-content" style="color: #4FC123; background-size: 40px 40px; display: flex; justify-content: space-between;align-items: center; width: 100%;">
         <div style="width: 165px;">
@@ -71,7 +71,7 @@
 <!--Hsm có ảnh đóng dấu-->
 <div class="signature-container" id="export-html-hsm1-image" style="width: 250px;min-height: 80px; display: flex; font-size: 9px;max-width: 300px">
     <div style="position: relative;">
-        <img [src]="this.srcMark" style="width: 70%; height: 100%;z-index: 1">
+        <img [src]='this.srcMark' style="width: 70%; height: 100%;z-index: 1; object-fit: contain">
     </div>
     <div class="signature-content" style="color: #4FC123; background-size: 40px 40px; display: flex; justify-content: space-between;align-items: center; width: 100%;">
         <div style="width: 165px;">

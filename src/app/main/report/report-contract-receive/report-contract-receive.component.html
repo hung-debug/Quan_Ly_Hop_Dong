@@ -35,11 +35,10 @@
                     appendTo="body"
                     optionLabel="name"
                     optionValue="id" 
-                    placeholder="{{'all' | translate}}" 
+                    placeholder="{{'contract.status.v2' | translate}}" 
                     [showClear]="true"  
                     [options]="optionsStatus"
                     [(ngModel)]="contractStatus"
-                    [autoDisplayFirst]="false"
                 ></p-dropdown>
             </div>
         </div>
@@ -85,24 +84,14 @@
                         <td class="row-word">{{list.name}}</td>
                         <td class="row-word">{{list.typeName}}</td>
                         <td class="row-word">{{list.contractNo}}</td>
-                        <td class="row-word">{{list.contractUid}}</td>
-                        <td *ngIf="list.refs.length == 0" class="row-word">
-                            {{'no' | translate}}
-                        </td>
-
-                        <td *ngIf="list.refs.length != 0" class="row-word">
-                            {{'yes' | translate}}
-                        </td>
-
+                        <td class="row-word">{{list.code}}</td>
+                        <td class="row-word">{{list.refId}}</td>
                         <td class="row-word">{{this.convertTime(list.createdAt)}}</td>
                         <td class="row-word">{{this.convertTime(list.signTime)}}</td>
                         <td class="row-word">{{this.convertStatus(list.status.toLowerCase())}}</td>
-
-                        <!-- <td *ngIf="list.status == 'CANCEL'" class="row-word">{{this.convertTime(list.cancelDate)}}</td>
-                        <td *ngIf="list.status != 'CANCEL'" class="row-word">{{this.convertTime(list.updatedAt)}}</td> -->
-
+                        <td class="row-word">{{this.convertTime(list.cancelDate)}}</td>
                         <td class="row-word">{{list.customer.organization.name}}</td>
-                        <td class="row-word">{{list.customer.email}}</td>
+                        <td class="row-word">{{list.customer.name}}</td>
                         
                         <td class="row-word">{{this.getValue(list,0,'type')}}</td>
                         <td class="row-word">{{this.getValue(list,0,'name')}}</td>
@@ -110,7 +99,7 @@
                         <td class="row-word">{{this.getName(list,0,'sign')}}</td>
                         <td class="row-word">{{this.getName(list,0,'doc')}}</td>
 
-                        <ng-container *ngFor="let i of getNumberArray(this.maxParticipants - 1)">
+                        <ng-container *ngFor="let i of Arr(maxParticipants - 1).fill(1)">
                             <td class="row-word">{{this.getValue(list,i,'type')}}</td>
                             <td class="row-word">{{this.getValue(list,i,'name')}}</td>
                             <td class="row-word">{{this.getName(list,i,'coor')}}</td> 
@@ -124,10 +113,10 @@
 
             
             <ng-template  pTemplate="paginatorleft" let-state>
-                <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ? (state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
+                <span style="color: white !important;">{{'chart.number' | translate}}: {{(state.totalRecords > 1 && state.first == 0) ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? (state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
               </ng-template>
             <ng-template pTemplate="paginatorright" let-state>
-                <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ?(state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
+                <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{(state.totalRecords > 1 && state.first == 0)  ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ?(state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
             </ng-template>
         </p-table>
     </div>

@@ -1785,24 +1785,24 @@ export class ConsiderContractComponent
   }
 
   getSwalFire(code: string) {
-    // if (code == 'digital') {
-    //   return Swal.fire({
-    //     title: this.getTextAlertConfirm(),
-    //     icon: 'warning',
-    //     showCancelButton: true,
-    //     confirmButtonColor: '#3085d6',
-    //     cancelButtonColor: '#b0bec5',
-    //     confirmButtonText: this.translate.instant('confirm'),
-    //     cancelButtonText: this.translate.instant('contract.status.canceled'),
-    //     input: 'select',
-    //     inputOptions: {
-    //       no: this.translate.instant('no'),
-    //       yes: this.translate.instant('yes'),
-    //     },
+    if (code == 'digital') {
+      return Swal.fire({
+        title: this.getTextAlertConfirm(),
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#b0bec5',
+        confirmButtonText: this.translate.instant('confirm'),
+        cancelButtonText: this.translate.instant('contract.status.canceled'),
+        input: 'select',
+        inputOptions: {
+          no: this.translate.instant('no'),
+          yes: this.translate.instant('yes'),
+        },
 
-    //     inputLabel: this.translate.instant('stamp.contract.questions'),
-    //   });
-    // } else {
+        inputLabel: this.translate.instant('stamp.contract.questions'),
+      });
+    } else {
       return Swal.fire({
         title: this.getTextAlertConfirm(),
         icon: 'warning',
@@ -1812,7 +1812,7 @@ export class ConsiderContractComponent
         confirmButtonText: this.translate.instant('confirm'),
         cancelButtonText: this.translate.instant('contract.status.canceled'),
       });
-    
+    }
   }
 
   openPopupSignContract(typeSign: any) {
@@ -2156,15 +2156,24 @@ export class ConsiderContractComponent
 
             if (this.markImage) {
               imageRender = <HTMLElement>(document.getElementById('export-html-hsm1-image'));
-              signUpdate.signDigitalWidth = imageRender.offsetWidth;
+
+              alert("src "+this.srcMark);
+              alert("image render "+ imageRender);
             } else {
               imageRender = <HTMLElement>(document.getElementById('export-html-hsm1'));
             }
 
+            console.log("vao day ");
+
             if (imageRender) {
-              await of(null).pipe(delay(150)).toPromise();
-              const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
-              signI = textSignB.split(',')[1];
+              try {
+                await of(null).pipe(delay(150)).toPromise();
+                const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
+                signI = textSignB.split(',')[1];
+              } catch(err) {
+                console.log("err ",err);
+              }
+              
             }
           }
 
@@ -2195,6 +2204,8 @@ export class ConsiderContractComponent
                 this.isTimestamp
               );
 
+              this.spinner.hide();
+
               if (!checkSign || (checkSign && !checkSign.success)) {
                 if (!checkSign.message) {
                   this.toastService.showErrorHTMLWithTimeout(
@@ -2221,10 +2232,14 @@ export class ConsiderContractComponent
                 }
               }
             } else {
+              console.log("vao day ");
+
               const checkSign = await this.contractService.signHsmOld(
                 this.dataHsm,
                 this.recipientId
               );
+
+              this.spinner.hide();
 
               if (!checkSign || (checkSign && !checkSign.success)) {
                 if (!checkSign.message) {
@@ -2284,7 +2299,7 @@ export class ConsiderContractComponent
   }
 
   getOptions(imageRender: any) {
-    const scale = 15;
+    const scale = 1;
     const options = {
       quality: 0.99,
       width: imageRender.clientWidth * scale,
@@ -2365,8 +2380,7 @@ export class ConsiderContractComponent
           eKYC = 1;
           const imageRender = <HTMLElement>(document.getElementById('export-html-ekyc'));
 
-          const textSignB = domtoimage.toPng(imageRender,this.getOptions(imageRender)
-);
+          const textSignB = domtoimage.toPng(imageRender,this.getOptions(imageRender));
 
           const valueBase64 = (await textSignB).split(',')[1];
 
@@ -3589,21 +3603,29 @@ export class ConsiderContractComponent
 
       this.cardId = result.ma_dvcs.trim();
 
-      if (this.markImage) {
-        imageRender = <HTMLElement>(
-          document.getElementById('export-html-hsm1-image')
-        );
-      } else {
-        imageRender = <HTMLElement>document.getElementById('export-html-hsm1');
-      }
+      console.log("src mark ", this.srcMark);
 
-      if (imageRender) {
-        const textSignB = await domtoimage.toPng(
-          imageRender,
-          this.getOptions(imageRender)
-        );
-        signI = textSignB.split(',')[1];
-      }
+      // if (this.markImage) {
+      //   imageRender = <HTMLElement>(document.getElementById('export-html-hsm1-image'));
+
+      //   console.log("image render", imageRender);
+      // } else {
+      //   imageRender = <HTMLElement>document.getElementById('export-html-hsm1');
+      // }
+
+      // if (imageRender) {
+
+      //   try {
+      //   const textSignB = await domtoimage.toPng(imageRender);
+
+      //   console.log("te ", textSignB);
+      //   signI = textSignB.split(',')[1];
+      //   } catch(err) {
+      //     console.log("err ",err);
+      //   }
+      // }
+
+      console.log("vao day ");
 
       if (result) {
         this.dataHsm.ma_dvcs = result.ma_dvcs;

@@ -25,6 +25,7 @@ import { delay } from 'rxjs/operators';
 import { DialogReasonCancelComponent } from './shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
 import { environment } from 'src/environments/environment';
 import { ImageDialogSignComponent } from './components/consider-contract/image-dialog-sign/image-dialog-sign.component';
+import { UserService } from 'src/app/service/user.service';
 // import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
@@ -52,9 +53,11 @@ export class ContractSignatureComponent implements OnInit {
 
   p: number = 1;
   page: number = 5;
+  pageDownload: number = 20;
   pageStart: number = 0;
   pageEnd: number = 0;
   pageTotal: number = 0;
+  totalPage: number = 0;
   statusPopup: number = 1;
   notificationPopup: string = '';
 
@@ -88,6 +91,7 @@ export class ContractSignatureComponent implements OnInit {
   organization_id: any = '';
   public contractDownloadList: any[] = [];
   public contractViewList: any[] = [];
+  currentUser: any;
 
   constructor(
     private appService: AppService,
@@ -101,9 +105,13 @@ export class ContractSignatureComponent implements OnInit {
     private toastService: ToastService,
     public datepipe: DatePipe,
     private spinner: NgxSpinnerService,
-    // private contractService1: ContractService1,
+    private userService: UserService
   ) {
     this.constantModel = contractModel;
+
+    this.currentUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.info;
   }
 
   ngOnInit(): void {
@@ -177,7 +185,12 @@ export class ContractSignatureComponent implements OnInit {
       this.getContractList();
     });
 
-    this.spinner.hide();
+    this.markSignAcc();
+  }
+
+  async markSignAcc() {
+    const markSignAcc = await this.userService.getMarkUserById(this.currentUser.id).toPromise();
+    this.datas.markSignAcc = markSignAcc;
   }
 
   async getDateTime() {
@@ -306,17 +319,22 @@ export class ContractSignatureComponent implements OnInit {
     this.typeDisplay = 'downloadMany';
 
     this.contractService.getContractMyProcessList(this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status,
-      this.p, this.page, 30).subscribe((data) => {
+      this.p, 20, 30).subscribe((data) => {
+        this.checkedAll = false;
+        this.dataChecked = [];
         console.log("data", data);
 
         this.contractDownloadList = data.entities;
         this.pageTotal = data.total_elements;
+        this.totalPage = data.total_pages;
+        // console.log("totalPage",this.totalPage);
+        
         if (this.pageTotal == 0) {
           this.p = 0;
           this.pageStart = 0;
           this.pageEnd = 0;
         } else {
-          this.setPage();
+          this.setPageDownload();
         }
         this.contractDownloadList.forEach((key: any, v: any) => {
           this.contractDownloadList[v].contractId =
@@ -367,9 +385,13 @@ export class ContractSignatureComponent implements OnInit {
 
   cancelDownloadMany() {
     this.typeDisplay = 'signOne';
+    this.spinner.show();
+    window.location.reload();
   }
+
   cancelViewMany() {
     this.typeDisplay = 'signOne';
+    this.dataChecked = [];
   }
 
   getPageData() {
@@ -565,8 +587,6 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   getNameOrganization(item: any, index: any, item1?: any) {
-    if (item.type == 3) console.log('side ', item1);
-
     return sideList[index].name + ' : ' + item.name;
   }
 
@@ -648,7 +668,31 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
+  toggleDownload(checkedAll: boolean){
+    this.dataChecked = [];
+    console.log("contractDownloadList",this.contractDownloadList);
+    if(checkedAll){
+      
+      
+      for(let i = 0; i < this.contractDownloadList.length; i++){
+        this.contractDownloadList[i].checked = false;
+      }
+    } else {
+      for (let i = 0; i < this.contractDownloadList.length; i++){
+        this.contractDownloadList[i].checked = true;
+        this.dataChecked.push({
+          id: this.contractDownloadList[i].participant?.contract?.id,
+          selectedId : this.contractDownloadList[i].id
+        })
+      }
+    }
+  }
+
   downloadManyContract() {
+    if (this.dataChecked.length === 0) {
+      return
+    }
+    this.spinner.show();
     const myDate = new Date();
     // Replace 'yyyy-MM-dd' with your desired date format
     const formattedDate = this.datepipe.transform(myDate, 'ddMMyyyy');
@@ -722,9 +766,28 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
+  toggleDownloadShare(checkedAll: boolean){
+    this.dataChecked = [];
+    if(checkedAll){
+      for(let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = false;
+      }
+    } else {
+      for (let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = true;
+        this.dataChecked.push({
+          id: this.contracts[i].participants[0]?.contract_id,
+          selectedId : this.contracts[i].id
+        })
+      }
+    }
+  }
+
   private convertStatusStr() {
     if (this.status == 'wait-processing') {
+      this.typeDisplay = 'signOne';
       this.filter_status = 1;
+      this.typeDisplay = 'signOne';
     } else if (this.status == 'processed') {
       this.filter_status = 4;
       this.typeDisplay = 'signOne';
@@ -746,6 +809,27 @@ export class ContractSignatureComponent implements OnInit {
   setPage() {
     this.pageStart = (this.p - 1) * this.page + 1;
     this.pageEnd = this.p * this.page;
+    if (this.pageTotal < this.pageEnd) {
+      this.pageEnd = this.pageTotal;
+    }
+  }
+
+  getPageStartEnd() {
+    const temp: number = this.pageStart;
+    if(this.pageStart < 0) {
+      this.pageStart = 1;
+      this.pageEnd = Math.abs(temp) + 1;
+    }
+    if (this.pageTotal <= this.pageEnd && this.pageTotal > 0) {
+      this.pageEnd = this.pageTotal;
+    }
+    return this.pageStart + '-' + this.pageEnd;
+  }
+
+  setPageDownload() {
+    this.pageStart = (this.p - 1) * 20 + 1;
+    this.pageEnd = this.p * 20;
+    console.log("pageTotal",this.pageTotal);
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
     }
@@ -931,6 +1015,8 @@ export class ContractSignatureComponent implements OnInit {
           }
         }
 
+        console.log("result ", result);
+
         if (result.mark) {
           const data = {
             title: 'ĐÓNG DẤU HỢP ĐỒNG ',
@@ -950,9 +1036,12 @@ export class ContractSignatureComponent implements OnInit {
           );
 
           dialogRef.afterClosed().subscribe((res: any) => {
-            this.srcMark = res;
-            this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
-            this.spinner.hide();
+            if(res) {
+              this.srcMark = res;
+              this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
+              // this.spinner.hide();
+            }
+
           });
         } else {
           this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);

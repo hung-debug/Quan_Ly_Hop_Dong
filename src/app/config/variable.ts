@@ -1,3 +1,7 @@
+import { TranslateService } from '@ngx-translate/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 export const variable = {
   stepSampleContract: {
     step_confirm_coordination: 'confirm-coordination',
@@ -47,7 +51,6 @@ export const type_signature = [
     name: 'Ký số bằng sim PKI',
     is_otp: false,
   },
-
 ];
 
 export const type_signature_en = [
@@ -282,291 +285,156 @@ export var sideList = [
 export var roleList = [
   {
     //Nhóm chức năng quản lý hợp đồng
-    label: 'Nhóm chức năng quản lý hợp đồng',
+    label: 'role.contract.list',
     value: 'QLHD',
     items: [
       //Thêm mới hợp đồng đơn lẻ không theo mẫu
-      { label: 'Thêm mới hợp đồng đơn lẻ không theo mẫu', value: 'QLHD_01' },
+      { label: 'add.contract.one.not.template', value: 'QLHD_01' },
       //Thêm mới hợp đồng đơn lẻ theo mẫu
-      { label: 'Thêm mới hợp đồng đơn lẻ theo mẫu', value: 'QLHD_14' },
+      { label: 'add.contract.one.template', value: 'QLHD_14' },
       //Thêm mới hợp đồng theo lô
-      { label: 'Thêm mới hợp đồng theo lô', value: 'QLHD_15' },
+      { label: 'add.contract.batch', value: 'QLHD_15' },
       //Sửa hợp đồng
-      { label: 'Sửa hợp đồng', value: 'QLHD_02' },
+      { label: 'fix.contract', value: 'QLHD_02' },
       //Xem danh sách hợp đồng của tổ chức của tôi và tổ chức con
       {
-        label: 'Xem danh sách hợp đồng của tổ chức của tôi và tổ chức con',
+        label: 'view.list.contracts.me.and.child',
         value: 'QLHD_03',
       },
       //Xem danh sách hợp đồng của tổ chức của tôi
-      { label: 'Xem danh sách hợp đồng của tổ chức của tôi', value: 'QLHD_04' },
+      { label: 'view.list.contracts.me', value: 'QLHD_04' },
       //Xem danh sách hợp đồng của tôi
-      // { label: 'Xem danh sách hợp đồng của tôi', value: 'QLHD_05' },
       //Tìm kiếm hợp đồng
-      { label: 'Tìm kiếm hợp đồng', value: 'QLHD_06' },
+      { label: 'search.contract', value: 'QLHD_06' },
       //Xem thông tin chi tiết hợp đồng
-      { label: 'Xem thông tin chi tiết hợp đồng', value: 'QLHD_07' },
+      { label: 'role.contract.view.detail', value: 'QLHD_07' },
       //Sao chép hợp đồng
-      { label: 'Sao chép hợp đồng', value: 'QLHD_08' },
+      { label: 'contract.copy', value: 'QLHD_08' },
       //Hủy hợp đồng
-      { label: 'Hủy hợp đồng', value: 'QLHD_09' },
+      { label: 'contract.cancel', value: 'QLHD_09' },
       //Xem lịch sử hợp đồng
-      { label: 'Xem lịch sử hợp đồng', value: 'QLHD_10' },
+      { label: 'role.contract.view.history', value: 'QLHD_10' },
       //Tạo hợp đồng liên quan
-      { label: 'Tạo hợp đồng liên quan', value: 'QLHD_11' },
+      { label: 'role.contract.create.connect', value: 'QLHD_11' },
       //Xem hợp đồng liên quan
-      { label: 'Xem hợp đồng liên quan', value: 'QLHD_12' },
+      { label: 'contract.connect.view', value: 'QLHD_12' },
       //Chia sẻ hợp đồng
-      { label: 'Chia sẻ hợp đồng', value: 'QLHD_13' },
+      { label: 'contract.share', value: 'QLHD_13' },
     ],
   },
   {
     //Nhóm chức năng quản lý mẫu hợp đồng
-    label: "Nhóm chức năng quản lý mẫu hợp đồng", value: "QLMHD",
+    label: 'role.contract-template.list', value: "QLMHD",
     items: [
       //Thêm mới mẫu hợp đồng
-      { label: "Thêm mới mẫu hợp đồng", value: "QLMHD_01"},
+      { label: 'contract-template.add', value: "QLMHD_01"},
       //Sửa mẫu hợp đồng
-      { label: "Sửa mẫu hợp đồng", value: "QLMHD_02"},
+      { label: 'role.contract-template.edit', value: "QLMHD_02"},
       //Ngừng phát hành mẫu hợp đồng
-      { label: "Ngừng phát hành mẫu hợp đồng", value: "QLMHD_03"},
+      { label: 'role.contract-template.stop', value: "QLMHD_03"},
       //Phát hành mẫu hợp đồng
-      { label: "Phát hành mẫu hợp đồng", value: "QLMHD_04"},
+      { label: 'role.contract-template.start', value: "QLMHD_04"},
       //Chia sẻ mẫu hợp đồng
-      { label: "Chia sẻ mẫu hợp đồng", value: "QLMHD_05"},
+      { label: 'role.contract-template.share', value: "QLMHD_05"},
       //Tìm kiếm mẫu hợp đồng
-      { label: "Tìm kiếm mẫu hợp đồng", value: "QLMHD_06"},
+      { label: 'role.contract-template.filter', value: "QLMHD_06"},
       //Xóa mẫu hợp đồng
-      { label: "Xóa mẫu hợp đồng", value: "QLMHD_07"},
+      { label: 'role.contract-template.delete', value: "QLMHD_07"},
       //Xem thông tin chi tiết mẫu hợp đồng
-      { label: "Xem thông tin chi tiết mẫu hợp đồng", value: "QLMHD_08"},
+      { label: 'role.contract-template.view.detail', value: "QLMHD_08"},
     ]
   },
   {
     //Nhóm chức năng quản lý tổ chức
-    label: 'Nhóm chức năng quản lý tổ chức',
+    label: 'role.unit.list',
     value: 'QLTC',
     items: [
       //Thêm mới tổ chức
-      { label: 'Thêm mới tổ chức', value: 'QLTC_01' },
+      { label: 'unit.add', value: 'QLTC_01' },
       //Sửa tổ chức
-      { label: 'Sửa tổ chức', value: 'QLTC_02' },
+      { label: 'role.unit.edit', value: 'QLTC_02' },
       //Tìm kiếm tổ chức
-      { label: 'Tìm kiếm tổ chức', value: 'QLTC_03' },
+      { label: 'role.unit.filter', value: 'QLTC_03' },
       //Xem thông tin chi tiết tổ chức
-      { label: 'Xem thông tin chi tiết tổ chức', value: 'QLTC_04' },
+      { label: 'role.unit.view.detail', value: 'QLTC_04' },
     ],
   },
   {
     //Nhóm chức năng quản lý người dùng
-    label: 'Nhóm chức năng quản lý người dùng',
+    label: 'role.user.list',
     value: 'QLND',
     items: [
       //Thêm mới người dùng
-      { label: 'Thêm mới người dùng', value: 'QLND_01' },
+      { label: 'user.add', value: 'QLND_01' },
       //Sửa người dùng
-      { label: 'Sửa người dùng', value: 'QLND_02' },
+      { label: 'role.user.edit', value: 'QLND_02' },
       //Tìm kiếm người dùng
-      { label: 'Tìm kiếm người dùng', value: 'QLND_03' },
+      { label: 'role.user.filter', value: 'QLND_03' },
       //Xem thông tin chi tiết người dùng
-      { label: 'Xem thông tin chi tiết người dùng', value: 'QLND_04' },
+      { label: 'role.user.view.detail', value: 'QLND_04' },
     ],
   },
   {
     //Nhóm chức năng quản lý vai trò
-    label: 'Nhóm chức năng quản lý vai trò',
+    label: 'role.list.v2',
     value: 'QLVT',
     items: [
       //Thêm mới vai trò
-      { label: 'Thêm mới vai trò', value: 'QLVT_01' },
+      { label: 'role.add', value: 'QLVT_01' },
       //Sửa vai trò
-      { label: 'Sửa vai trò', value: 'QLVT_02' },
+      { label: 'role.edit', value: 'QLVT_02' },
       //Xóa vai trò
-      { label: 'Xóa vai trò', value: 'QLVT_03' },
+      { label: 'role.delete', value: 'QLVT_03' },
       //Tìm kiếm vai trò
-      { label: 'Tìm kiếm vai trò', value: 'QLVT_04' },
+      { label: 'role.filter', value: 'QLVT_04' },
       //Xem thông tin chi tiết vai trò
-      { label: 'Xem thông tin chi tiết vai trò', value: 'QLVT_05' },
+      { label: 'role.view.detail', value: 'QLVT_05' },
     ],
   },
   {
     //Nhóm chức năng quản lý loại hợp đồng
-    label: 'Nhóm chức năng quản lý loại hợp đồng',
+    label: 'role.contract-type.list',
     value: 'QLLHD',
     items: [
       //Thêm mới loại hợp đồng
-      { label: 'Thêm mới loại hợp đồng', value: 'QLLHD_01' },
+      { label: 'role.contract-type.add', value: 'QLLHD_01' },
       //Sửa loại hợp đồng
-      { label: 'Sửa loại hợp đồng', value: 'QLLHD_02' },
+      { label: 'role.contract-type.edit', value: 'QLLHD_02' },
       //Xóa loại hợp đồng
-      { label: 'Xóa loại hợp đồng', value: 'QLLHD_03' },
+      { label: 'role.contract-type.delete', value: 'QLLHD_03' },
       //Tìm kiếm loại hợp đồng
-      { label: 'Tìm kiếm loại hợp đồng', value: 'QLLHD_04' },
+      { label: 'role.contract-type.filter', value: 'QLLHD_04' },
       //Xem thông tin chi tiết loại hợp đồng
-      { label: 'Xem thông tin chi tiết loại hợp đồng', value: 'QLLHD_05' },
+      { label: 'role.contract-type.view.detail', value: 'QLLHD_05' },
     ],
   },
 
   //Nhóm chức năng báo cáo
   {
-    label: 'Nhóm chức năng báo cáo',
+    label: 'role.group.report',
     value: 'QLBC',
     items: [
       //Báo cáo chi tiết
-      {label: 'Báo cáo chi tiết',value:'BAOCAO_CHITIET'},
+      {label: 'role.report.detail',value:'BAOCAO_CHITIET'},
 
-      {label: 'Báo cáo sắp hết hiệu lực',value:'BAOCAO_SAPHETHIEULUC'},
-      {label: 'Báo cáo trạng thái xử lý',value:'BAOCAO_TRANGTHAIXULY'},
-      {label: 'Báo cáo số lượng theo trạng thái', value:'BAOCAO_SOLUONG_TRANGTHAI'},
-      {label: 'Báo cáo số lượng theo loại hợp đồng',value:'BAOCAO_SOLUONG_LOAIHOPDONG'}
+      //Báo cáo sắp hết hiệu lực
+      {label: 'role.soon.expire.time',value:'BAOCAO_SAPHETHIEULUC'},
+
+      //Báo cáo trạng thái xử lý
+      {label: 'role.processing.status.contract',value:'BAOCAO_TRANGTHAIXULY'},
+
+      //Báo cáo số lượng trạng thái      
+      {label: 'role.number.status', value:'BAOCAO_SOLUONG_TRANGTHAI'},
+
+      //Báo cáo số lượng theo loại hợp đồng
+      {label: 'role.contract.type.quantity',value:'BAOCAO_SOLUONG_LOAIHOPDONG'},
+
+      //Báo cáo hợp đồng nhận
+      // {label: 'role.contract.receive', value:'BAOCAO_HOPDONG_NHAN'}
     ]
 
   }
 ];
-
-export var roleList_en = [
-  {
-    //Nhóm chức năng quản lý hợp đồng
-    label: 'Contract management functional group',
-    value: 'QLHD',
-    items: [
-      //Thêm mới hợp đồng đơn lẻ không theo mẫu
-      { label: 'Create non-formal single contract', value: 'QLHD_01' },
-      //Thêm mới hợp đồng đơn lẻ theo mẫu
-      { label: 'Create single contract form', value: 'QLHD_14' },
-      //Thêm mới hợp đồng theo lô
-      { label: 'Create  batch contract', value: 'QLHD_15' },
-      //Sửa hợp đồng
-      { label: 'Edit contract', value: 'QLHD_02' },
-      //Xem danh sách hợp đồng của tổ chức của tôi và tổ chức con
-      {
-        label: 'View a list of contracts for my organization and its suborganization',
-        value: 'QLHD_03',
-      },
-      //Xem danh sách hợp đồng của tổ chức của tôi
-      { label: 'View a list of my organization contract', value: 'QLHD_04' },
-      //Xem danh sách hợp đồng của tôi
-      // { label: 'Xem danh sách hợp đồng của tôi', value: 'QLHD_05' },
-      //Tìm kiếm hợp đồng
-      { label: 'Contract search', value: 'QLHD_06' },
-      //Xem thông tin chi tiết hợp đồng
-      { label: 'View contract details', value: 'QLHD_07' },
-      //Sao chép hợp đồng
-      { label: 'Copy contract', value: 'QLHD_08' },
-      //Hủy hợp đồng
-      { label: 'Cancel contract', value: 'QLHD_09' },
-      //Xem lịch sử hợp đồng
-      { label: 'View contract history', value: 'QLHD_10' },
-      //Tạo hợp đồng liên quan
-      { label: 'Create related contract', value: 'QLHD_11' },
-      //Xem hợp đồng liên quan
-      { label: 'View related contract', value: 'QLHD_12' },
-      //Chia sẻ hợp đồng
-      { label: 'Share contract', value: 'QLHD_13' },
-    ],
-  },
-  {
-    //Nhóm chức năng quản lý mẫu hợp đồng
-    label: "Functional group to manage contract template", value: "QLMHD",
-    items: [
-      //Thêm mới mẫu hợp đồng
-      { label: "Create contract template", value: "QLMHD_01"},
-      //Sửa mẫu hợp đồng
-      { label: "Edit contract template", value: "QLMHD_02"},
-      //Ngừng phát hành mẫu hợp đồng
-      { label: "Stop releasing contract template", value: "QLMHD_03"},
-      //Phát hành mẫu hợp đồng
-      { label: "Release of contract template", value: "QLMHD_04"},
-      //Chia sẻ mẫu hợp đồng
-      { label: "Share contract template", value: "QLMHD_05"},
-      //Tìm kiếm mẫu hợp đồng
-      { label: "Search contract template", value: "QLMHD_06"},
-      //Xóa mẫu hợp đồng
-      { label: "Delete contract template", value: "QLMHD_07"},
-      //Xem thông tin chi tiết mẫu hợp đồng
-      { label: "View contract detail", value: "QLMHD_08"},
-    ]
-  },
-  {
-    //Nhóm chức năng quản lý tổ chức
-    label: 'Organizational management functional group',
-    value: 'QLTC',
-    items: [
-      //Thêm mới tổ chức
-      { label: 'Create organization', value: 'QLTC_01' },
-      //Sửa tổ chức
-      { label: 'Edit organization', value: 'QLTC_02' },
-      //Tìm kiếm tổ chức
-      { label: 'Search organization', value: 'QLTC_03' },
-      //Xem thông tin chi tiết tổ chức
-      { label: 'View organization detail', value: 'QLTC_04' },
-    ],
-  },
-  {
-    //Nhóm chức năng quản lý người dùng
-    label: 'User management function group',
-    value: 'QLND',
-    items: [
-      //Thêm mới người dùng
-      { label: 'Creat user', value: 'QLND_01' },
-      //Sửa người dùng
-      { label: 'Edit user', value: 'QLND_02' },
-      //Tìm kiếm người dùng
-      { label: 'Search user', value: 'QLND_03' },
-      //Xem thông tin chi tiết người dùng
-      { label: 'View user detail', value: 'QLND_04' },
-    ],
-  },
-  {
-    //Nhóm chức năng quản lý vai trò
-    label: 'Role management functional group',
-    value: 'QLVT',
-    items: [
-      //Thêm mới vai trò
-      { label: 'Create role', value: 'QLVT_01' },
-      //Sửa vai trò
-      { label: 'Edit role ', value: 'QLVT_02' },
-      //Xóa vai trò
-      { label: 'Delete role', value: 'QLVT_03' },
-      //Tìm kiếm vai trò
-      { label: 'Tìm kiếm vai trò', value: 'QLVT_04' },
-      //Xem thông tin chi tiết vai trò
-      { label: 'View role detail', value: 'QLVT_05' },
-    ],
-  },
-  {
-    //Nhóm chức năng quản lý loại hợp đồng
-    label: 'Functional group to manage contract type',
-    value: 'QLLHD',
-    items: [
-      //Thêm mới loại hợp đồng
-      { label: 'Create contract type', value: 'QLLHD_01' },
-      //Sửa loại hợp đồng
-      { label: 'Edit contract type', value: 'QLLHD_02' },
-      //Xóa loại hợp đồng
-      { label: 'Delete contract type', value: 'QLLHD_03' },
-      //Tìm kiếm loại hợp đồng
-      { label: 'Search contract type', value: 'QLLHD_04' },
-      //Xem thông tin chi tiết loại hợp đồng
-      { label: 'View contract type detail', value: 'QLLHD_05' },
-    ],
-  },
-   //Nhóm chức năng báo cáo
-  //  {
-  //   label: 'Reporting function group',
-  //   value: 'QLBC',
-  //   items: [
-  //     //Báo cáo chi tiết
-  //     {label: 'Detailed report',value:'BAOCAO_CHITIET'},
-      
-  //     {label: 'The report is about to expire',value:'BAOCAO_SAPHETHIEULUC'},
-  //     {label: 'Processing status report',value:'BAOCAO_TRANGTHAIXULY'},
-  //     {label: 'Report quantity by status', value:'BAOCAO_SOLUONG_TRANGTHAI'},
-  //     {label: 'Report quantity by contract type',value:'BAOCAO_SOLUONG_LOAIHOPDONG'}
-  //   ]
-
-  // }
-]
 
 export var adminRoleList = [
   {

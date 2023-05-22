@@ -46,11 +46,11 @@
                         (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
                 </div>
 
-                <!-- <div class="name-text" *ngIf="isEnableText">
+                <div class="name-text" *ngIf="isEnableText">
                     <label class="label-require">{{'attribute.text.type' | translate}}: *</label>
                     <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name"
                         (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
-                </div> -->
+                </div>
                 <div class="sign-unit-select" *ngIf="isEnableText">
                     <label class="label-require">{{'attribute.text.type' | translate}}: *</label>
                     <select class="form-select" id="select-dropdown-text" aria-label="Default select example"

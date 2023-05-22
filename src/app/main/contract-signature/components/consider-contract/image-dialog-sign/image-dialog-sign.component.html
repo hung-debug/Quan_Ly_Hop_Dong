@@ -83,9 +83,9 @@
     </div>
 
     <div class="select-option">
-      <button *ngIf="(typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc))|| (typeImageSignatureRadio != 1)" class="dx-button-form dx-button-close dx-button-90 mb-4" type="button" (click)="uploadImage()">OK
+      <button *ngIf="typeImageSignatureRadio != 1" class="dx-button-form dx-button-close dx-button-90 mb-4" type="button" (click)="clearImage()">Clear
       </button>
-      <button style="margin-left:50px" *ngIf="typeImageSignatureRadio != 1" class="dx-button-form dx-button-close dx-button-90 mb-4" type="button" (click)="clearImage()">Clear
+      <button style="margin-left:50px" *ngIf="(typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc))|| (typeImageSignatureRadio != 1)" class="dx-button-form dx-button-close dx-button-90 mb-4" type="button" (click)="uploadImage()">OK
       </button>
     </div>
   </div>

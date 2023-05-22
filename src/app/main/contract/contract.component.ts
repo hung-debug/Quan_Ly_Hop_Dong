@@ -33,8 +33,10 @@ export class ContractComponent implements OnInit, AfterViewInit {
   type: string;
   private sub: any;
   public contracts: any[] = [];
+  public contractsDownload: any[] = [];
   p: number = 1;
   page: number = 10;
+  pageDownload: number = 20;
   pageStart: number = 0;
   pageEnd: number = 0;
   pageTotal: number = 0;
@@ -66,6 +68,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
   message: any;
   subscription: Subscription;
   roleMess: any = "";
+  checkedAll: boolean = false;
+  typeDisplay: string = 'view';
 
   //phan quyen
   isQLHD_01: boolean = true;  //them moi hop dong
@@ -135,10 +139,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
       } else {
         this.isOrg = "off";
       }
-      
       if (typeof params.status != 'undefined' && params.status) {
         this.status = params.status;
-      } 
+      } else {
+        this.status = "";
+      }
 
       if (typeof params.page != 'undefined' && params.page) {
         this.p = params.page;
@@ -226,6 +231,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     
     let data = {
       id: item.participants[0]?.contract_id,
+      selectedId: item.id
     }
     if(this.dataChecked.some(el => el.id === data.id)){
       this.dataChecked = this.dataChecked.filter((item) => {
@@ -236,9 +242,31 @@ export class ContractComponent implements OnInit, AfterViewInit {
     }
   }
 
-
+  toggleDownload(checkedAll: boolean){
+    this.dataChecked = [];
+    console.log("contracts",this.contracts);
+    if(checkedAll){
+      
+      
+      for(let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = false;
+      }
+    } else {
+      for (let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = true;
+        this.dataChecked.push({
+          id: this.contracts[i].participants[0]?.contract_id,
+          selectedId : this.contracts[i].id
+        })
+      }
+    }
+  }
 
   downloadManyContract() {
+    if (this.dataChecked.length === 0) {
+      return
+    }
+    this.spinner.show();
     const myDate = new Date();
     // Replace 'yyyy-MM-dd' with your desired date format
     const formattedDate = this.datePipe.transform(myDate, 'ddMMyyyy'); 
@@ -255,6 +283,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         a.click();
         window.URL.revokeObjectURL(fileUrl);
         a.remove()
+        window.location.reload();
       },
       (error) => {
         this.toastService.showErrorHTMLWithTimeout('no.contract.download.file.error', '', 3000);
@@ -262,11 +291,79 @@ export class ContractComponent implements OnInit, AfterViewInit {
     );
   }
 
+  downloadMany() {
+    this.spinner.show();
+    this.typeDisplay = 'downloadMany';
+    this.roleMess = "";
+    if (this.isOrg == 'off' && !this.isQLHD_05) {
+      this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
+
+    } else if (this.isOrg == 'on' && !this.isQLHD_04) {
+      this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
+    }
+    if (!this.roleMess) {
+      
+      let isOrg = this.isOrg;
+
+      if(!this.isQLHD_03) {
+        isOrg ='off';
+      }
+
+    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, 20).subscribe(data => {
+      this.contracts = data.entities;
+      this.pageTotal = data.total_elements;
+      this.checkedAll = false;
+      this.dataChecked = [];
+      if (this.pageTotal == 0) {
+        this.p = 0;
+        this.pageStart = 0;
+        this.pageEnd = 0;
+      } else {
+        this.setPageDownload();
+      }
+      const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
+      console.log('checkedDownloadFiles',checkedDownloadFiles);
+      for(let i = 0; i< this.contracts.length; i++){
+        let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
+        if(checkIf){
+          this.contracts[i].checked = true;
+        } else {
+          this.contracts[i].checked = false;
+        }
+      }
+  
+        this.spinner.hide();
+      },
+        (error) => {
+          setTimeout(() => this.router.navigate(['/login']));
+          this.toastService.showErrorHTMLWithTimeout(
+            'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+            '',
+            3000
+          );
+        }
+      );
+    }
+  }
+
   ngAfterViewInit(): void {
     this.spinner.hide();
   }
 
+  getPageData() {
+     if (this.typeDisplay == 'downloadMany') {
+      this.downloadMany();
+    }
+  }
+
+  cancelDownloadMany() {
+    this.typeDisplay = 'signOne';
+    this.spinner.show();
+    window.location.reload();
+  }
+
   getContractList() {
+    this.pageTotal = 0;
     this.roleMess = "";
     if (this.isOrg == 'off' && !this.isQLHD_05) {
       this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
@@ -292,6 +389,16 @@ export class ContractComponent implements OnInit, AfterViewInit {
           this.pageEnd = 0;
         } else {
           this.setPage();
+        }
+        const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
+        console.log('checkedDownloadFiles',checkedDownloadFiles);
+        for(let i = 0; i< this.contracts.length; i++){
+          let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
+          if(checkIf){
+            this.contracts[i].checked = true;
+          } else {
+            this.contracts[i].checked = false;
+          }
         }
       });
     }
@@ -333,6 +440,27 @@ export class ContractComponent implements OnInit, AfterViewInit {
     }
   }
 
+  setPageDownload() {
+    this.pageStart = (this.p - 1) * 20 + 1;
+    this.pageEnd = this.p * 20;
+    console.log("pageTotal",this.pageTotal);
+    if (this.pageTotal < this.pageEnd) {
+      this.pageEnd = this.pageTotal;
+    }
+  }
+
+  getPageStartEnd() {
+    const temp: number = this.pageStart;
+    if(this.pageStart < 0) {
+      this.pageStart = 1;
+      this.pageEnd = Math.abs(temp) + 1;
+    }
+    if (this.pageTotal <= this.pageEnd && this.pageTotal > 0) {
+      this.pageEnd = this.pageTotal;
+    }
+    return this.pageStart + '-' + this.pageEnd;
+  }
+
   setPage() {
     this.pageStart = (this.p - 1) * this.page + 1;
     this.pageEnd = (this.p) * this.page;
@@ -358,6 +486,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.filter_name = event.target.value;
     this.getContractList();
   }
+
 
   openDetail(id: number) {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
