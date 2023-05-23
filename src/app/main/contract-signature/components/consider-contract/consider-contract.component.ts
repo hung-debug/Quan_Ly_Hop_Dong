@@ -3563,6 +3563,7 @@ export class ConsiderContractComponent
       const dataFace = {
         cccdFront: this.cccdFront,
         contractId: this.idContract,
+        recipientId: this.recipientId,
       };
 
       dialogConfig.data = dataFace;
