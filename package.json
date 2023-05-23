@@ -44,6 +44,7 @@
     "interactjs": "^1.10.11",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
+    "material-icons": "^1.13.6",
     "mdb-angular-ui-kit": "^1.4.0",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.34",

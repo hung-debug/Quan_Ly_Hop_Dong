@@ -16,7 +16,7 @@
 </div>
 
 <!-- ô text -->
-<div class="text-sign" *ngIf="sign.sign_unit == 'text'">
+<div class="text-sign" *ngIf="sign.sign_unit == 'text' && sign.text_type != 'currency'">
   
   <div class="skeleton-sign" (click)="doEditText()" *ngIf="!checkShowEdit && !sign.valueSign">
     <span [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
@@ -27,6 +27,21 @@
   </div>
   <div *ngIf="checkShowEdit">
     <input type="text" class="input-edit-text" [(ngModel)]="sign.valueSign" (blur)="doneEditTextSign($event)" #inputEditText>
+  </div>
+</div>
+
+<!-- Ô tiền -->
+<div class="text-sign" *ngIf="sign.sign_unit == 'text' && sign.text_type == 'currency'">
+  
+  <div class="skeleton-sign" (click)="doEditText()" *ngIf="!checkShowEdit && !sign.valueSign">
+    <span [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
+  </div>
+
+  <div class="skeleton-sign-value" (click)="doEditText()" *ngIf="!checkShowEdit && sign.valueSign">
+    <span id="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
+  </div>
+  <div *ngIf="checkShowEdit">
+    <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" class="input-edit-text" [(ngModel)]="sign.valueSign" (blur)="doneEditTextSign($event)" #inputEditText>
   </div>
 </div>
 

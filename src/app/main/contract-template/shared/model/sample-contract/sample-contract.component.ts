@@ -483,7 +483,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   getListNameSign(data_user_sign: any) {
     data_user_sign.forEach((element: any) => {
       console.log(element);
-      if (element.type == 1) {
+      if (element.type == 1 || element.type == 5) {
         element.recipients.forEach((item: any) => {
           if (item.role == 3 || item.role == 4 || item.role == 2) {
             item['type_unit'] = 'organization';

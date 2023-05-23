@@ -170,8 +170,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             }
           }
           if (res.type == 5){
-            res['sign_unit']=  'text',
-            res['text_type'] = 'currency'
+            res['sign_unit']=  'text';
+            res['text_type'] = 'currency';
           }
         })
       }
@@ -472,7 +472,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   getListNameSign(data_user_sign: any) {
     data_user_sign.forEach((element: any) => {
-      if (element.type == 1) {
+      if (element.type == 1 || element.type == 5) {
         element.recipients.forEach((item: any) => {
           if (item.role == 3 || item.role == 4 || item.role == 2) {
             item['type_unit'] = 'organization';
@@ -1287,7 +1287,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     let arrSignConfig: any = [];
     let cloneUserSign = [...this.datasForm.contract_user_sign];
 
-    console.log("clone ", cloneUserSign);
+    // console.log("clone ", cloneUserSign);
 
     cloneUserSign.forEach(element => {
       if (this.datasForm.is_action_contract_created) {
@@ -1297,7 +1297,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       } else arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
 
-    console.log("arr ", arrSignConfig);
+    // console.log("arr ", arrSignConfig);
     return arrSignConfig;
   }
 
