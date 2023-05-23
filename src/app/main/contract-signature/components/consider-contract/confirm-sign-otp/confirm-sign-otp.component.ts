@@ -129,28 +129,10 @@ export class ConfirmSignOtpComponent implements OnInit {
           ArrRecipientsNew = true
           return
         }
-        // else if(item.email === this.currentUser.email){
-        //   ArrRecipientsNew = true
-        //   console.log("email");
-        //   return
-        // }
-        else if(item.email !== this.currentUser.email && item.phone !== this.currentUser.phone){
-          this.toastService.showErrorHTMLWithTimeout(
-            'Bạn không có quyền xử lý hợp đồng này!',
-            '',
-            3000
-          );
-          if (this.type == 1) {
-            this.router.navigate(['/login']);
-            this.dialogRef.close();
-            this.spinner.hide();
-            return
-          } else {
-            this.router.navigate(['/main/dashboard']);
-            this.dialogRef.close();
-            this.spinner.hide();
-            return
-          }
+        else if(item.email === this.currentUser.email){
+          ArrRecipientsNew = true
+          console.log("email");
+          return
         }
         console.log("item.phone",item.phone);
         console.log("this.currentUser.phone",this.currentUser.phone);
