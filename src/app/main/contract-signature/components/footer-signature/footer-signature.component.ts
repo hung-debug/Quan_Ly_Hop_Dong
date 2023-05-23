@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { variable } from "../../../../config/variable";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog,MatDialogRef } from "@angular/material/dialog";
 import { ForwardContractComponent } from "../../shared/model/forward-contract/forward-contract.component";
 import { ContractService } from "../../../../service/contract.service";
 import { DisplayDigitalSignatureComponent } from "../../display-digital-signature/display-digital-signature.component";
@@ -64,7 +64,8 @@ export class FooterSignatureComponent implements OnInit {
     private unitService: UnitService,
     private router: Router,
     private _location: Location,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    public dialogRef: MatDialogRef<FooterSignatureComponent>
   ) {
   }
 
@@ -489,20 +490,36 @@ export class FooterSignatureComponent implements OnInit {
 
   async processingAuthorization() {
     this.getCoordination();
+    // const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
+    // const isInRecipient = this.is_data_coordination.recipients.some( (el: any) => el.name === updatedInfo.name)
     const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
-    const isInRecipient = this.is_data_coordination.recipients.some( (el: any) => el.name === updatedInfo.name)
+    let isInRecipient = false;
 
+    if (this.datas?.is_data_contract?.participants?.length) {
+      const participants = this.datas?.is_data_contract?.participants;
+      for (const participant of participants) {
+        for (const recipient of participant.recipients) {
+          if (updatedInfo.name == recipient.name) {
+            isInRecipient = true;
+          }
+        }
+      }
+    }
     if(!isInRecipient){
       this.toastService.showErrorHTMLWithTimeout(
-        'Bạn không có quyền xử lý hợp đồng này!',
+        'Bạn không có quyền xử lý hợp đồng này111!',
         '',
         3000
       );
       if (this.type == 1) {
         this.router.navigate(['/login']);
+        this.dialogRef.close();
+        this.spinner.hide();
         return
       } else {
         this.router.navigate(['/main/dashboard']);
+        this.dialogRef.close();
+        this.spinner.hide();
         return
       }
     }
@@ -566,20 +583,40 @@ export class FooterSignatureComponent implements OnInit {
 
   async forWardContract() {
     this.getCoordination();
+    console.log("datassssss ",this.datas);
+    
+    // const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
+    // const isInRecipient = this.is_data_coordination.recipients.some( (el: any) => el.name === updatedInfo.name)
     const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
-    const isInRecipient = this.is_data_coordination.recipients.some( (el: any) => el.name === updatedInfo.name)
+    let isInRecipient = false;
 
+    if (this.datas?.is_data_contract?.participants?.length) {
+      const participants = this.datas?.is_data_contract?.participants;
+      console.log("participants",participants);
+      
+      for (const participant of participants) {
+        for (const recipient of participant.recipients) {
+          if (updatedInfo.name == recipient.name) {
+            isInRecipient = true;
+          }
+        }
+      }
+    }
     if(!isInRecipient){
       this.toastService.showErrorHTMLWithTimeout(
-        'Bạn không có quyền xử lý hợp đồng này!',
+        'Bạn không có quyền xử lý hợp đồng này222!',
         '',
         3000
       );
       if (this.type == 1) {
         this.router.navigate(['/login']);
+        this.dialogRef.close();
+        this.spinner.hide();
         return
       } else {
         this.router.navigate(['/main/dashboard']);
+        this.dialogRef.close();
+        this.spinner.hide();
         return
       }
     }
