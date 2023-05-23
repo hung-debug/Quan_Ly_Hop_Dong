@@ -1,3 +1,4 @@
+import { AddPartnerDialogComponent } from './../../../dialog/add-partner-dialog/add-partner-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 // import { locale } from 'date-fns/locale/en-US';
 // import { map } from 'rxjs/operators';
@@ -1780,7 +1781,11 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   findPartner(){
-    
+    const data = {};
+    this.dialog.open(AddPartnerDialogComponent, {
+      width: '800px',
+      data,
+    })
   }
 
   // thêm đối tác

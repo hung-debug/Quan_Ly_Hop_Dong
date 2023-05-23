@@ -632,7 +632,6 @@
   "view.list.contracts.me.and.child":"View a list of contracts for my organization and its suborganization",
   "view.list.contracts.me":"View a list of my organization's contracts",
   "search.contract":"Search contract",
-  
   "role.group.report":"Reporting function group",
   "role.report.detail":"Report detail",
   "role.soon.expire.time":"Report is about to expire",
