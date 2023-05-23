@@ -604,7 +604,7 @@ export class FooterSignatureComponent implements OnInit {
     }
     if(!isInRecipient){
       this.toastService.showErrorHTMLWithTimeout(
-        'Bạn không có quyền xử lý hợp đồng này222!',
+        'Bạn không có quyền xử lý hợp đồng này!',
         '',
         3000
       );
