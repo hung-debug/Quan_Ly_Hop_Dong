@@ -292,21 +292,21 @@ export class FooterSignatureComponent implements OnInit {
         });
         console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
-        // if (!ArrRecipientsNew) {
+        if (!ArrRecipientsNew) {
 
-        //   this.toastService.showErrorHTMLWithTimeout(
-        //     'Bạn không có quyền xử lý hợp đồng này!',
-        //     '',
-        //     3000
-        //   );
-        //   if (this.type == 1) {
-        //     this.router.navigate(['/login']);
-        //     return
-        //   } else {
-        //     this.router.navigate(['/main/dashboard']);
-        //     return
-        //   }
-        // };
+          this.toastService.showErrorHTMLWithTimeout(
+            'Bạn không có quyền xử lý hợp đồng này!',
+            '',
+            3000
+          );
+          if (this.type == 1) {
+            this.router.navigate(['/login']);
+            return
+          } else {
+            this.router.navigate(['/main/dashboard']);
+            return
+          }
+        };
         console.log("this.currentUser.email", this.currentUser);
       })
 
@@ -429,21 +429,21 @@ export class FooterSignatureComponent implements OnInit {
         });
         console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
-        // if (!ArrRecipientsNew) {
+        if (!ArrRecipientsNew) {
 
-        //   this.toastService.showErrorHTMLWithTimeout(
-        //     'Bạn không có quyền xử lý hợp đồng này!',
-        //     '',
-        //     3000
-        //   );
-        //   if (this.type == 1) {
-        //     this.router.navigate(['/login']);
-        //     return
-        //   } else {
-        //     this.router.navigate(['/main/dashboard']);
-        //     return
-        //   }
-        // } else 
+          this.toastService.showErrorHTMLWithTimeout(
+            'Bạn không có quyền xử lý hợp đồng này!',
+            '',
+            3000
+          );
+          if (this.type == 1) {
+            this.router.navigate(['/login']);
+            return
+          } else {
+            this.router.navigate(['/main/dashboard']);
+            return
+          }
+        } else 
         this.submitChanges.emit(1);
         console.log("this.currentUser.email", this.currentUser);
       })
@@ -543,21 +543,21 @@ export class FooterSignatureComponent implements OnInit {
         }
       });
 
-      // if (!ArrRecipientsNew) {
+      if (!ArrRecipientsNew) {
 
-      //   this.toastService.showErrorHTMLWithTimeout(
-      //     'Bạn không có quyền xử lý hợp đồng này!',
-      //     '',
-      //     3000
-      //   );
-      //   if (this.type == 1) {
-      //     this.router.navigate(['/login']);
-      //     return
-      //   } else {
-      //     this.router.navigate(['/main/dashboard']);
-      //     return
-      //   }
-      // };
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          return
+        }
+      };
 
       if (this.datas.action_title == 'dieu_phoi') {
 
@@ -587,7 +587,20 @@ export class FooterSignatureComponent implements OnInit {
     // const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
     // const isInRecipient = this.is_data_coordination.recipients.some( (el: any) => el.name === updatedInfo.name)
     const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
-    const isInRecipient = this.is_data_coordination.recipients.some( (el: any) => el.name === updatedInfo.name)
+    let isInRecipient = false;
+
+    if (this.datas?.is_data_contract?.participants?.length) {
+      const participants = this.datas?.is_data_contract?.participants;
+      console.log("participants",participants);
+      
+      for (const participant of participants) {
+        for (const recipient of participant.recipients) {
+          if (updatedInfo.name == recipient.name) {
+            isInRecipient = true;
+          }
+        }
+      }
+    }
 
     if(!isInRecipient){
       this.toastService.showErrorHTMLWithTimeout(
@@ -624,21 +637,21 @@ export class FooterSignatureComponent implements OnInit {
       });
       console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
-      // if (!ArrRecipientsNew) {
+      if (!ArrRecipientsNew) {
 
-      //   this.toastService.showErrorHTMLWithTimeout(
-      //     'Bạn không có quyền xử lý hợp đồng này!',
-      //     '',
-      //     3000
-      //   );
-      //   if (this.type == 1) {
-      //     this.router.navigate(['/login']);
-      //     return
-      //   } else {
-      //     this.router.navigate(['/main/dashboard']);
-      //     return
-      //   }
-      // };
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          return
+        }
+      };
       if (this.datas.action_title == 'dieu_phoi') {
         // @ts-ignore
         data['role_coordination'] = 1;
