@@ -632,7 +632,6 @@
   "view.list.contracts.me.and.child":"View a list of contracts for my organization and its suborganization",
   "view.list.contracts.me":"View a list of my organization's contracts",
   "search.contract":"Search contract",
-
   "role.group.report":"Reporting function group",
   "role.report.detail":"Report detail",
   "role.soon.expire.time":"Report is about to expire",
@@ -641,5 +640,11 @@
   "role.contract.type.quantity":"Report quantity by contract type",
   "role.contract.receive":"Report contract receive",
   "currency": "Currency",
-  "default": "Default"
-}
+  "default": "Default",
+  "customer.delete": "Delete partner",
+  "find.partner": "Find partner",
+  "contract.views": "Contracts view",
+  "verified.cardid": "Verified by ID card",
+  "choose.font": "Choose font",
+  "reject.question": "Are you sure you want to reject this contract? Please enter the reason for rejection"
+  }

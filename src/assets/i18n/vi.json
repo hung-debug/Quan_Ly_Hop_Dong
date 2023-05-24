@@ -644,5 +644,6 @@
   "role.contract.receive":"Báo cáo hợp đồng nhận",
   "customer.delete": "Bạn có chắc chắn muốn xóa khách hàng này không?",
   "currency": "Số tiền",
-  "default": "Mặc định"
+  "default": "Mặc định",
+  "find.partner": "Tìm kiếm đối tác"
 }

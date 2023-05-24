@@ -126,8 +126,12 @@ export class ConfirmSignOtpComponent implements OnInit {
         console.log("item",item);
         if (item.phone === this.currentUser.phone) {
           console.log("phone");
-          
           ArrRecipientsNew = true
+          return
+        }
+        else if(item.email === this.currentUser.email){
+          ArrRecipientsNew = true
+          console.log("email");
           return
         }
         console.log("item.phone",item.phone);
@@ -136,25 +140,25 @@ export class ConfirmSignOtpComponent implements OnInit {
         
       });
 
-      // if (!ArrRecipientsNew) {
+      if (!ArrRecipientsNew) {
 
-      //   this.toastService.showErrorHTMLWithTimeout(
-      //     'Bạn không có quyền xử lý hợp đồng này!',
-      //     '',
-      //     3000
-      //   );
-      //   if (this.type == 1) {
-      //     this.router.navigate(['/login']);
-      //     this.dialogRef.close();
-      //     this.spinner.hide();
-      //     return
-      //   } else {
-      //     this.router.navigate(['/main/dashboard']);
-      //     this.dialogRef.close();
-      //     this.spinner.hide();
-      //     return
-      //   }
-      // };
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        }
+      };
       console.log("this.currentUser.email", this.currentUser);
     
     // @ts-ignore
@@ -437,9 +441,11 @@ export class ConfirmSignOtpComponent implements OnInit {
         async (result) => {
           if(result?.success == false){
             if(result.message == 'Wrong otp'){
+              console.log("message",result);
               this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng', '', 3000);
               this.spinner.hide();
             }else if(result.message == 'Otp code has been expired'){
+              console.log("message",result);
               this.toastService.showErrorHTMLWithTimeout('Mã OTP quá hạn', '', 3000);
               this.spinner.hide();
             }else if(result.message == 'You have entered wrong otp 5 times in a row'){
@@ -448,7 +454,14 @@ export class ConfirmSignOtpComponent implements OnInit {
               this.spinner.hide();
               this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
               
-            } else{
+            }else if(result.message == 'Wrong phone!'){
+              console.log("message",result);
+              this.toastService.showErrorHTMLWithTimeout('Mã OTP hết hiệu lực', '', 4000);
+              this.spinner.hide();
+              window.location.reload();
+            }
+            else{
+              console.log("message",result);
               this.toastService.showErrorHTMLWithTimeout('Ký hợp đồng không thành công', '', 3000);
               this.dialog.closeAll();
               this.spinner.hide();

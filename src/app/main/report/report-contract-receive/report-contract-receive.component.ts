@@ -19,7 +19,6 @@ import { Table } from 'primeng/table';
   styleUrls: ['./report-contract-receive.component.scss']
 })
 export class ReportContractReceiveComponent implements OnInit {
-
   @ViewChild('dt') table: Table;
 
   //Biến lưu dữ liệu trong bảng
@@ -87,8 +86,8 @@ export class ReportContractReceiveComponent implements OnInit {
     });
 
     this.optionsStatus = [
-      { id: -1, name: 'Tất cả' },
       { id: 20, name: 'Đang thực hiện' },
+      { id: 33, name: 'Sắp hết hạn' },
       { id: 2, name:'Quá hạn' },
       { id: 31, name: 'Từ chối' },
       { id: 32, name: 'Huỷ bỏ' },
@@ -113,8 +112,8 @@ export class ReportContractReceiveComponent implements OnInit {
       this.lang = 'en';
 
       this.optionsStatus = [
-        { id: -1, name: 'All' },
         { id: 20, name: 'Processing' },
+        { id: 33, name: 'Expiration soon' },
         { id: 2, name:'Overdue' },
         { id: 31, name: 'Reject' },
         { id: 32, name: 'Cancel' },
@@ -163,84 +162,77 @@ export class ReportContractReceiveComponent implements OnInit {
       {
         id: 1,
         header: 'contract.name',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
       {
         id: 2,
         header: 'contract.type',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
       {
         id: 3,
         header: 'contract.number',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
       {
         id: 4,
         header: 'contract.uid',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
       {
         id: 5,
         header: 'contract.connect',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
       {
         id: 6,
         header: 'contract.time.create',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
       {
         id: 7,
-        header: 'signing.expiration.date',
-        style: 'text-align: left; width: 300px',
+        header: 'expiration-date',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
       {
         id: 8,
         header: 'contract.status.v2',
-        style: 'text-align: left; width: 300px',
-        colspan: 1,
-        rowspan: 2,
-      },
-      {
-        id: 9,
-        header: 'date.completed',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
       {
         id: 10,
         header:'created.unit',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
       {
         id: 11,
         header:'created.user',
-        style: 'text-align: left; width: 300px',
+        style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
       },
       {
         id: 1000,
         header: 'suggest',
-        style: 'text-align: left; width: 1500px',
+        style: 'text-align: left; width: 1250px',
         colspan: 5,
         rowspan: 1,
       },
@@ -299,11 +291,11 @@ export class ReportContractReceiveComponent implements OnInit {
           this.table.first = 0
           this.list = [];
           this.colsSuggest = [
-            { header: 'sign.object', style: 'text-align: left, min-width:300px, width: 300px'},
-            { header: 'name.unit', style: 'text-align: left, min-width:300px, width: 300px' },
-            { header: 'user.view', style: 'text-align: left, min-width:300px, width: 300px' },
-            { header: 'user.sign', style: 'text-align: left, min-width:300px, width: 300px' },
-            { header: 'user.doc', style: 'text-align: left, min-width:300px, width: 300px'},
+            { header: 'sign.object', style: 'text-align: left, min-width:250px, width: 250px'},
+            { header: 'name.unit', style: 'text-align: left, min-width:250px, width: 250px' },
+            { header: 'user.view', style: 'text-align: left, min-width:250px, width: 250px' },
+            { header: 'user.sign', style: 'text-align: left, min-width:250px, width: 250px' },
+            { header: 'user.doc', style: 'text-align: left, min-width:250px, width: 250px'},
           ];
 
           this.setColForTable();
@@ -312,18 +304,18 @@ export class ReportContractReceiveComponent implements OnInit {
             this.cols.push({
               id: 1000+i,
               header: 'Bên được yêu cầu ký '+(i+1),
-              style: 'text-align: left; width: 1800px',
+              style: 'text-align: left; width: 1500px',
               colspan: 6,
               rowspan: 1,
             })
 
             this.colsSuggest.push(
-              { header: 'sign.object', style: 'text-align: left, width: 300px' },
-              { header: 'name.unit', style: 'text-align: left, width: 300px' },
-              { header: 'contract.lead', style: 'text-align: left, width: 300px' },
-              { header: 'user.view', style: 'text-align: left, width: 300px' },
-              { header: 'user.sign', style: 'text-align: left, width: 300px' },
-              { header: 'user.doc', style: 'text-align: left, width: 300px' },
+              { header: 'sign.object', style: 'text-align: left, width: 250px' },
+              { header: 'name.unit', style: 'text-align: left, width: 250px' },
+              { header: 'contract.lead', style: 'text-align: left, width: 250px' },
+              { header: 'user.view', style: 'text-align: left, width: 250px' },
+              { header: 'user.sign', style: 'text-align: left, width: 250px' },
+              { header: 'user.doc', style: 'text-align: left, width: 250px' },
             );
           }
 
@@ -343,12 +335,18 @@ export class ReportContractReceiveComponent implements OnInit {
     if(list.participants[index]) {
       if(code == 'type')
         return list.participants[index].type == 3 ? this.translate.instant('personal') : this.translate.instant('organization')
-      if(code == 'name')
+      if(code == 'name') {
         return list.participants[index].name
+      }
     }
 
     return null;
   }
+
+  getNumberArray(num: number): number[] {
+      return Array(num).fill(0).map((x, i) => i + 1);
+  }
+  
 
   getName(list: any,index: number,code: string) {
     let result: any[] = [];
@@ -383,5 +381,4 @@ export class ReportContractReceiveComponent implements OnInit {
   changeCheckBox(event: any) {
     this.fetchChildData = event.target.checked;
   }
- 
 }

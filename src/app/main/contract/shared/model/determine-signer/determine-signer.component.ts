@@ -1,3 +1,5 @@
+import { AddPartnerDialogComponent } from './../../../dialog/add-partner-dialog/add-partner-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 // import { locale } from 'date-fns/locale/en-US';
 // import { map } from 'rxjs/operators';
 import { ContractService } from 'src/app/service/contract.service';
@@ -113,6 +115,7 @@ export class DetermineSignerComponent implements OnInit {
     private router: Router,
     public translate: TranslateService,
     private unitService: UnitService,
+    private dialog: MatDialog
   ) {
     this.step = variable.stepSampleContract.step2
   }
@@ -1777,6 +1780,14 @@ export class DetermineSignerComponent implements OnInit {
     return this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
+  findPartner(){
+    const data = {};
+    this.dialog.open(AddPartnerDialogComponent, {
+      width: '800px',
+      data,
+    })
+  }
+
   // thêm đối tác
   addPartner() {
     let data_partner_add = {};
@@ -1796,6 +1807,10 @@ export class DetermineSignerComponent implements OnInit {
     } else {
       return this.signTypeList;
     }
+  }
+
+  openAddPartnerDialog(){
+    
   }
 
   // xóa đối tham gia bên đối tác
