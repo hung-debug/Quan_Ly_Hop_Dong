@@ -289,7 +289,7 @@ export class ForwardContractComponent implements OnInit {
             recipient_id: this.datas.recipientId,
             is_replace: false,
             login_by: this.login,
-            locale: this.myForm.value.locale
+            locale: this.locale
           };
           console.log("dataAuthorize",dataAuthorize);
           
