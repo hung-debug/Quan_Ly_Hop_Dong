@@ -20,6 +20,11 @@ export class ConfigSmsEmailComponent implements OnInit {
 
   numberExpirationDate: number;
 
+  soonExpireDay: number
+  isSoonExpireDay: boolean = false;
+  idExpireDay: number;
+
+
   constructor(
     private appService: AppService,
     private contractService: ContractService,
@@ -30,6 +35,8 @@ export class ConfigSmsEmailComponent implements OnInit {
   ngOnInit(): void {
     this.appService.setTitle("menu.config-sms-email");
 
+    this.spinner.show();
+
     //gọi api thông tin cấu hình sms của tổ chức
     this.infoConfigSms();
 
@@ -39,7 +46,15 @@ export class ConfigSmsEmailComponent implements OnInit {
 
   infoDayExpiration() {
     this.contractService.getConfigExpirationDate().subscribe((response: any) => {
-      console.log("response info ", response);
+      this.spinner.hide();
+      if(response.length > 0) {
+        this.soonExpireDay = response[0].value;
+        this.idExpireDay = response[0].id;
+        this.isSoonExpireDay = true;
+      } else {
+        this.soonExpireDay = 5;
+        this.isSoonExpireDay = false;
+      }
     })
   }
 
@@ -51,6 +66,34 @@ export class ConfigSmsEmailComponent implements OnInit {
       this.outOfDateContarct = response.some((element: any) => element.id == 4);
       this.completedContract = response.some((element: any) => element.id == 5);
     })
+  }
+
+  updateSoonExpireDay() {
+    this.spinner.show();
+    if(this.soonExpireDay) {
+      //call api put truyen id
+      const body = [{
+        id: this.idExpireDay,
+        params: 'TG_SAP_HET_HAN_KY',
+        value: this.soonExpireDay
+      }]
+
+      this.contractService.editConfigExpirationDate(body).subscribe((response: any) => {
+        this.spinner.hide();
+      })
+    } else {
+      //call api put khong truyen id
+      const body = [
+        {
+          params: 'TG_SAP_HET_HAN_KY',
+          value: this.soonExpireDay
+        }
+      ]
+
+      this.contractService.editConfigExpirationDate(body).subscribe((response: any) => {
+        this.spinner.hide();
+      })
+    }
   }
 
   updateSms() {
@@ -90,6 +133,12 @@ export class ConfigSmsEmailComponent implements OnInit {
   resetConfig() {
     this.spinner.show();
     this.infoConfigSms();
+    this.spinner.hide();
+  }
+
+  resetSoonExpireDay() {
+    this.spinner.show();
+    this.infoDayExpiration();
     this.spinner.hide();
   }
 

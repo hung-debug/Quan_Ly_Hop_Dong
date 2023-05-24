@@ -102,7 +102,7 @@ export class ContractService {
   checkTaxCodeExistUrl: any = `${environment.apiUrl}/api/v1/contracts/check-mst-exist`;
 
   signHsmUrl: any = `${environment.apiUrl}/api/v1/sign/hsm/`;
-  signHsmUrl2: any = `${environment.apiUrl}/api/v1/sign/hsm/`;
+  //signHsmUrl2: any = `${environment.apiUrl}/api/v1/sign/hsm-v2/`;
 
   signHsmOldUrl: any = `${environment.apiUrl}/api/v1/sign/old-hsm/`
 
@@ -894,7 +894,16 @@ export class ContractService {
     .append('Content-Type', 'application/json')
     .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.get<any>(this.configExpirationDateUrl + this.organization_id+"/config");
+    return this.http.get<any>(this.configExpirationDateUrl + this.organization_id+"/config",{headers}).pipe();
+  }
+
+  editConfigExpirationDate(body: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+    .append('Content-Type', 'application/json')
+    .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.put<any>(this.configExpirationDateUrl + this.organization_id+"/config",body,{headers}).pipe();
   }
 
   changeLink(code: any) {
@@ -1119,27 +1128,27 @@ export class ContractService {
       .toPromise();
   }
 
-  signHsm2(datas: any, recipientId: number, isTimestamp: any) {
-    this.getCurrentUser();
+  // signHsm2(datas: any, recipientId: number, isTimestamp: any) {
+  //   this.getCurrentUser();
 
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);
+  //   const headers = new HttpHeaders()
+  //     .append('Content-Type', 'application/json')
+  //     .append('Authorization', 'Bearer ' + this.token);
 
-    const body = JSON.stringify({
-      ma_dvcs: datas.ma_dvcs,
-      username: datas.username,
-      password: datas.password,
-      password2: datas.password2,
-      image_base64: datas.imageBase64,
-      // isTimestamp: isTimestamp
-      field: datas.field
-    });
+  //   const body = JSON.stringify({
+  //     ma_dvcs: datas.ma_dvcs,
+  //     username: datas.username,
+  //     password: datas.password,
+  //     password2: datas.password2,
+  //     image_base64: datas.imageBase64,
+  //     // isTimestamp: isTimestamp
+  //     field: datas.field
+  //   });
 
-    return this.http
-      .post<any>(this.signHsmUrl2 + recipientId, body, { headers: headers })
-      .toPromise();
-  }
+  //   return this.http
+  //     .post<any>(this.signHsmUrl2 + recipientId, body, { headers: headers })
+  //     .toPromise();
+  // }
 
   signHsmOld(datas: any, recipientId: number) {
     this.getCurrentUser();

@@ -2092,8 +2092,6 @@ export class ConsiderContractComponent
         }
       }
     } else if (typeSignDigital == 4) {
-      //Ký hsm
-
       for (const signUpdate of this.isDataObjectSignature) {
         if (
           signUpdate &&
@@ -2136,7 +2134,26 @@ export class ConsiderContractComponent
             page: signUpdate.page,
           };
           if (signUpdate.type == 1 || signUpdate.type == 4) {
+            this.textSign = signUpdate.valueSign;
 
+            this.font = signUpdate.font;
+            this.font_size = signUpdate.font_size;
+
+            this.width = signUpdate.width;
+
+            await of(null).pipe(delay(120)).toPromise();
+            const imageRender = <HTMLElement>(
+              document.getElementById('text-sign')
+            );
+
+            fieldHsm.width = imageRender.clientWidth;
+            fieldHsm.height = imageRender.clientHeight;
+
+            if (imageRender) {
+              const textSignB = await domtoimage.toPng(imageRender);
+              signI = this.textSignBase64Gen = textSignB.split(',')[1];
+            }
+          } else if (signUpdate.type == 3) {
             await of(null).pipe(delay(150)).toPromise();
 
             let imageRender: HTMLElement | null = null;
@@ -2144,11 +2161,11 @@ export class ConsiderContractComponent
             //render khi role là 4 (văn thư) hoặc role khác (người ký)
             if (this.datas.roleContractReceived == 4) {
               imageRender = <HTMLElement>(
-                document.getElementById('export-html-hsm1')
+                document.getElementById('export-html-hsm1-image')
               );
             } else {
               imageRender = <HTMLElement>(
-                document.getElementById('export-html-hsm1-signer')
+                document.getElementById('export-html-hsm1')
               );
             }
 
@@ -2186,13 +2203,11 @@ export class ConsiderContractComponent
 
           if (fileC && objSign.length) {
             if (!this.mobile) {
-              const checkSign = await this.contractService.signHsm2(
+              const checkSign = await this.contractService.signHsm(
                 this.dataHsm,
                 this.recipientId,
                 this.isTimestamp
               );
-
-              this.spinner.hide();
 
               if (!checkSign || (checkSign && !checkSign.success)) {
                 if (!checkSign.message) {
@@ -2220,14 +2235,10 @@ export class ConsiderContractComponent
                 }
               }
             } else {
-              console.log("vao day ");
-
               const checkSign = await this.contractService.signHsmOld(
                 this.dataHsm,
                 this.recipientId
               );
-
-              this.spinner.hide();
 
               if (!checkSign || (checkSign && !checkSign.success)) {
                 if (!checkSign.message) {

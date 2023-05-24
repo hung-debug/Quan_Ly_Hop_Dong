@@ -54,12 +54,12 @@
         <!-- Cấu hình ngày sắp hết hạn -->
         <div class="border-table-email" style="text-align: center;">
             <div style="justify-content: center;padding-top: 20px;">
-                <input type="number" class="input-expiration-date"/>
+                <input [(ngModel)]="this.soonExpireDay" type="number" class="input-expiration-date"/>
             </div>
 
             <div style="justify-content: center;padding-top: 20px;">
-                <button class="cancel-button" (click)="resetConfig()" type="button">{{'contract.status.canceled' | translate}}</button>
-                <button class="save-button" (click)="updateSms()">{{'btn.update' | translate}}</button>
+                <button class="cancel-button" (click)="resetSoonExpireDay()" type="button">{{'contract.status.canceled' | translate}}</button>
+                <button class="save-button" (click)="updateSoonExpireDay()">{{'btn.update' | translate}}</button>
             </div>
         </div>
     </div>
