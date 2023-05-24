@@ -2524,23 +2524,32 @@ export class ConsiderContractComponent
 
     //Check ký usb token
     if (typeSignDigital && typeSignDigital == 2) {
-      if (this.usbTokenVersion == 1) {
-        this.spinner.hide();
+      const determineCoordination = await this.contractService
+        .getDetermineCoordination(this.recipientId)
+        .toPromise();
+      const lengthRes = determineCoordination.recipients.length;
+      for (let i = 0; i < lengthRes; i++) {
+        const id = determineCoordination.recipients[i].id;
 
+        if (id == this.recipientId) {
+          this.taxCodePartnerStep2 =
+            determineCoordination.recipients[i].card_id;
+
+          break;
+        }
+      }
+
+      if (this.usbTokenVersion == 1) {
         if (this.markImage) {
           this.openMarkSign('usb1', signUpdatePayload, notContainSignImage);
         } else {
           this.signTokenVersion1(signUpdatePayload, notContainSignImage);
-          this.spinner.hide();
         }
       } else if (this.usbTokenVersion == 2) {
-        this.spinner.hide();
-
         if (this.markImage) {
           this.openMarkSign('usb2', signUpdatePayload, notContainSignImage);
         } else {
           this.getSessionId(this.taxCodePartnerStep2,signUpdatePayload,notContainSignImage);
-          this.spinner.hide();
         }
       }
     } else {
