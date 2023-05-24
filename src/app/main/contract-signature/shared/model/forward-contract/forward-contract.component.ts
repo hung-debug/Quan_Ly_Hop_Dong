@@ -113,11 +113,7 @@ export class ForwardContractComponent implements OnInit {
   }
 
   changeTypeSign(e: any,) {
-    
-    
     this.login = e.target.value;
-    // this.isVietnamese = !this.isVietnamese
-    console.log("target",this.login);
     
   }
 
@@ -127,7 +123,6 @@ export class ForwardContractComponent implements OnInit {
 
   dropdownButtonText = '';
   async onSubmit() {
-    console.log("sadsadsadsad : ",this.locale);
     const updatedInfo = await this.contractService.getInforPersonProcess(this.datas.recipientId).toPromise()
     let isInRecipient = false;
 
