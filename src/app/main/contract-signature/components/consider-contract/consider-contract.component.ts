@@ -774,7 +774,6 @@ export class ConsiderContractComponent
   pageNumPending: any = null;
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
-    setTimeout(() => {
       //@ts-ignore
       this.thePDF.getPage(pageNumber).then((page) => {
         let viewport = page.getViewport({ scale: this.scale });
@@ -783,12 +782,6 @@ export class ConsiderContractComponent
         this.canvasWidth = viewport.width;
         canvas.height = viewport.height;
         canvas.width = viewport.width;
-
-        if ((this.typeSignDigital == 2 && this.usbTokenVersion == 1) || !this.usbTokenVersion) {
-          this.prepareInfoSignUsbTokenV1(pageNumber, canvas.height);
-        } else if ((this.typeSignDigital == 2 && this.usbTokenVersion == 2) || this.typeSignDigital == 4) {
-          this.prepareInfoSignUsbTokenV2(pageNumber, canvas.height);
-        }
 
         let _objPage = this.objPdfProperties.pages.filter(
           (p: any) => p.page_number == pageNumber
@@ -822,7 +815,6 @@ export class ConsiderContractComponent
         }
         this.activeScroll();
       });
-    }, 100);
   }
 
   activeScroll() {
@@ -1889,6 +1881,12 @@ export class ConsiderContractComponent
               return;
             }
             let signI = null;
+
+            if (this.usbTokenVersion == 1)
+              this.prepareInfoSignUsbTokenV1(signUpdate.page);
+            else if (this.usbTokenVersion == 2)
+              this.prepareInfoSignUsbTokenV2(signUpdate.page);
+              
             if (signUpdate.type == 1 || signUpdate.type == 4) {
               let imageRender = null;
 
@@ -2131,8 +2129,8 @@ export class ConsiderContractComponent
 
           let signI = null;
           let fieldHsm = {
-            coordinate_x: signUpdate.signDigitalX,
-            coordinate_y: signUpdate.signDigitalY,
+            coordinate_x: signUpdate.coordinate_x,
+            coordinate_y: signUpdate.coordinate_y,
             width: signUpdate.signDigitalWidth,
             height: signUpdate.signDigitalHeight,
             page: signUpdate.page,
@@ -2202,7 +2200,7 @@ export class ConsiderContractComponent
 
           if (fileC && objSign.length) {
             if (!this.mobile) {
-              const checkSign = await this.contractService.signHsm(
+              const checkSign = await this.contractService.signHsm2(
                 this.dataHsm,
                 this.recipientId,
                 this.isTimestamp
@@ -3718,7 +3716,16 @@ export class ConsiderContractComponent
     this.signContractSubmit();
   }
 
-  prepareInfoSignUsbTokenV1(page: any, heightPage: any) {
+  prepareInfoSignUsbTokenV1(page: any) {
+    const canvasPageSign: any = document.getElementById('canvas-step3-' + page);
+    const heightPage = canvasPageSign.height;
+
+    let currentHeight: number = 0;
+    for (let i = 1; i < page; i++) {
+      const canvas: any = document.getElementById('canvas-step3-' + i);
+      currentHeight += canvas.height;
+    }
+
     this.isDataObjectSignature.map((sign: any) => {
       if (
         (sign.type == 3 || sign.type == 1 || sign.type == 4) &&
@@ -3727,10 +3734,9 @@ export class ConsiderContractComponent
         sign?.page == page
       ) {
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
-
         sign.signDigitalY =
           heightPage -
-          (sign.coordinate_y - this.currentHeight) -
+          (sign.coordinate_y - currentHeight) -
           sign.height +
           sign.page * 6 /* * this.ratioPDF*/;
 
@@ -3738,32 +3744,23 @@ export class ConsiderContractComponent
           sign.signDigitalY + sign.height /* * this.ratioPDF*/;
         sign.signDigitalWidth = sign.signDigitalX + sign.width;
 
-        //Lấy thông tin mã số thuế của đối tác ký
-        this.contractService
-          .getDetermineCoordination(sign.recipient_id)
-          .subscribe((response) => {
-            const lengthRes = response.recipients.length;
-            for (let i = 0; i < lengthRes; i++) {
-              const id = response.recipients[i].id;
-
-              if (id == sign.recipient_id) {
-                this.taxCodePartnerStep2 = response.recipients[i].card_id;
-
-                break;
-              }
-            }
-          });
-
         return sign;
       } else {
         return sign;
       }
     });
-
-    this.currentHeight += heightPage;
   }
 
-  prepareInfoSignUsbTokenV2(page: any, heightPage: any) {
+  prepareInfoSignUsbTokenV2(page: any) {
+    const canvasPageSign: any = document.getElementById('canvas-step3-' + page);
+    const heightPage = canvasPageSign.height;
+
+    let currentHeight: number = 0;
+    for (let i = 1; i < page; i++) {
+      const canvas: any = document.getElementById('canvas-step3-' + i);
+      currentHeight += canvas.height;
+    }
+
     this.isDataObjectSignature.map((sign: any) => {
       if (
         (sign.type == 3 || sign.type == 1 || sign.type == 4) &&
@@ -3772,36 +3769,22 @@ export class ConsiderContractComponent
         sign?.page == page
       ) {
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
-        sign.signDigitalY = heightPage - (sign.coordinate_y - this.currentHeight) - sign.height + sign.page * 6 /* * this.ratioPDF*/;
+        sign.signDigitalY =
+          heightPage -
+          (sign.coordinate_y - currentHeight) -
+          sign.height +
+          sign.page * 6 /* * this.ratioPDF*/;
 
         sign.signDigitalWidth = sign.width /* * this.ratioPDF*/;
         sign.signDigitalHeight = sign.height;
-
-        //Lấy thông tin mã số thuế của đối tác ký
-        this.contractService
-          .getDetermineCoordination(sign.recipient_id)
-          .subscribe((response) => {
-            const lengthRes = response.recipients.length;
-            for (let i = 0; i < lengthRes; i++) {
-              const id = response.recipients[i].id;
-
-              if (id == sign.recipient_id) {
-                this.taxCodePartnerStep2 = response.recipients[i].card_id;
-
-                break;
-              }
-            }
-          });
 
         return sign;
       } else {
         return sign;
       }
     });
-
-    this.currentHeight += heightPage;
   }
-
+ 
   mobile: boolean = false;
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
