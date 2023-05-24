@@ -52,10 +52,12 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   getStyle(sign: any) {
     return {
-      font: sign.font
-    }
+      'font': sign.font,
+      'font-size':sign.font_size+'px',
+    };
   }
 
+  
   ngAfterViewInit() {
     if (this.sign.sign_unit == 'so_tai_lieu' || this.sign.sign_unit == 'text') {
       setTimeout(() => {
@@ -166,7 +168,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     })
   }
 
-  doneEditTextSign(e: any) {
+  doneEditTextSign(e?: any) {
     this.checkShowEdit = false;
     console.log(e)
     console.log(this.sign)

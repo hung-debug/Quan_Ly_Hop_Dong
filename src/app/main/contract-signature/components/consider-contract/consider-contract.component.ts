@@ -2136,46 +2136,32 @@ export class ConsiderContractComponent
             page: signUpdate.page,
           };
           if (signUpdate.type == 1 || signUpdate.type == 4) {
-            this.textSign = signUpdate.valueSign;
 
-            this.font = signUpdate.font;
-            this.font_size = signUpdate.font_size;
-
-            this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
-
-            await of(null).pipe(delay(120)).toPromise();
-            const imageRender = <HTMLElement>(document.getElementById('text-sign'));
-
-            if (imageRender) {
-              const textSignB = await domtoimage.toPng(imageRender);
-              signI = this.textSignBase64Gen = textSignB.split(',')[1];
-            }
-
-          } else if (signUpdate.type == 3) {
             await of(null).pipe(delay(150)).toPromise();
 
-            let imageRender = null;
+            let imageRender: HTMLElement | null = null;
 
-            if (this.markImage) {
-              imageRender = <HTMLElement>(document.getElementById('export-html-hsm1-image'));
-
-              alert("src "+this.srcMark);
-              alert("image render "+ imageRender);
+            //render khi role là 4 (văn thư) hoặc role khác (người ký)
+            if (this.datas.roleContractReceived == 4) {
+              imageRender = <HTMLElement>(
+                document.getElementById('export-html-hsm1')
+              );
             } else {
-              imageRender = <HTMLElement>(document.getElementById('export-html-hsm1'));
+              imageRender = <HTMLElement>(
+                document.getElementById('export-html-hsm1-signer')
+              );
             }
 
-            console.log("vao day ");
+            // fieldHsm.coordinate_y = fieldHsm.coordinate_y - 8;
+            fieldHsm.height = imageRender.offsetHeight / 1.5;
+            fieldHsm.width = imageRender.offsetWidth / 1.5;
 
             if (imageRender) {
-              try {
-                await of(null).pipe(delay(150)).toPromise();
-                const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
-                signI = textSignB.split(',')[1];
-              } catch(err) {
-                console.log("err ",err);
-              }
-              
+              const textSignB = await domtoimage.toPng(
+                imageRender,
+                this.getOptions(imageRender)
+              );
+              signI = textSignB.split(',')[1];
             }
           }
 
