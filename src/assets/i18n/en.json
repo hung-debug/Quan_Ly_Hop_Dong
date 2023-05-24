@@ -646,5 +646,11 @@
   "contract.views": "Contracts view",
   "verified.cardid": "Verified by ID card",
   "choose.font": "Choose font",
-  "reject.question": "Are you sure you want to reject this contract? Please enter the reason for rejection"
+  "reject.question": "Are you sure you want to reject this contract? Please enter the reason for rejection",
+  "config.sms":"Config SMS",
+  "refuse.contract":"Refuse contract",
+  "contract.about.expire":"Contract is about to expire",
+  "contract.expired":"Contract expired",
+  "contract.completed":"Completed contract",
+  "config.day.expiration":"Configuring expiration date"
   }

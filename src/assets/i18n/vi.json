@@ -645,5 +645,11 @@
   "customer.delete": "Bạn có chắc chắn muốn xóa khách hàng này không?",
   "currency": "Số tiền",
   "default": "Mặc định",
-  "find.partner": "Tìm kiếm đối tác"
+  "find.partner": "Tìm kiếm đối tác",
+  "config.sms":"Cấu hình SMS",
+  "refuse.contract":"Từ chối hợp đồng",
+  "contract.about.expire":"Hợp đồng sắp hết hạn",
+  "contract.expired":"Hợp đồng quá hạn",
+  "contract.completed":"Hợp đồng hoàn thành",
+  "config.day.expiration":"Cấu hình ngày sắp hết hạn"
 }

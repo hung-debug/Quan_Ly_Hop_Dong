@@ -18,6 +18,8 @@ export class ConfigSmsEmailComponent implements OnInit {
   cancelContract: boolean = false;
   completedContract: boolean = false;
 
+  numberExpirationDate: number;
+
   constructor(
     private appService: AppService,
     private contractService: ContractService,
@@ -30,6 +32,15 @@ export class ConfigSmsEmailComponent implements OnInit {
 
     //gọi api thông tin cấu hình sms của tổ chức
     this.infoConfigSms();
+
+    //gọi api cấu hình ngày sắp hết hạn
+    this.infoDayExpiration();
+  }
+
+  infoDayExpiration() {
+    this.contractService.getConfigExpirationDate().subscribe((response: any) => {
+      console.log("response info ", response);
+    })
   }
 
   infoConfigSms() {

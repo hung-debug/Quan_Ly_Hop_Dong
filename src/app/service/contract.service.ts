@@ -144,7 +144,9 @@ export class ContractService {
 
   deleteTokenUrl: any = `${environment.apiUrl}/api/v1/auth/logout`;
 
-  configSmsUrl: any = `${environment.apiUrl}/api/v1/notification/sms-types/`
+  configSmsUrl: any = `${environment.apiUrl}/api/v1/notification/sms-types/`;
+
+  configExpirationDateUrl: any = `${environment.apiUrl}/api/v1/organizations/`
 
   token: any;
   customer_id: any;
@@ -884,6 +886,15 @@ export class ContractService {
       headers: headers,
       observe: 'response',
     }).pipe();
+  }
+
+  getConfigExpirationDate() {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+    .append('Content-Type', 'application/json')
+    .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.get<any>(this.configExpirationDateUrl + this.organization_id+"/config");
   }
 
   changeLink(code: any) {
