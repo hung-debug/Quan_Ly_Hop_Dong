@@ -1373,9 +1373,11 @@ export class ConsiderContractComponent
       );
       if (this.type == 1) {
         this.router.navigate(['/login']);
+        this.dialog.closeAll();
         return
       } else {
         this.router.navigate(['/main/dashboard']);
+        this.dialog.closeAll();
         return
       }
     }
@@ -1409,9 +1411,11 @@ export class ConsiderContractComponent
           );
           if (this.type == 1) {
             this.router.navigate(['/login']);
+            this.dialog.closeAll();
             return;
           } else {
             this.router.navigate(['/main/dashboard']);
+            this.dialog.closeAll();
             return;
           }
         }

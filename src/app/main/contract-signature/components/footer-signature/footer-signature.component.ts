@@ -301,9 +301,13 @@ export class FooterSignatureComponent implements OnInit {
           );
           if (this.type == 1) {
             this.router.navigate(['/login']);
+            this.dialogRef.close();
+            this.spinner.hide();
             return
           } else {
             this.router.navigate(['/main/dashboard']);
+            this.dialogRef.close();
+            this.spinner.hide();
             return
           }
         };
@@ -438,9 +442,13 @@ export class FooterSignatureComponent implements OnInit {
           );
           if (this.type == 1) {
             this.router.navigate(['/login']);
+            this.dialogRef.close();
+            this.spinner.hide();
             return
           } else {
             this.router.navigate(['/main/dashboard']);
+            this.dialogRef.close();
+            this.spinner.hide();
             return
           }
         } else this.submitChanges.emit(1);
@@ -553,9 +561,13 @@ export class FooterSignatureComponent implements OnInit {
         );
         if (this.type == 1) {
           this.router.navigate(['/login']);
+          this.dialogRef.close();
+          this.spinner.hide();
           return
         } else {
           this.router.navigate(['/main/dashboard']);
+          this.dialogRef.close();
+          this.spinner.hide();
           return
         }
       };
@@ -650,9 +662,13 @@ export class FooterSignatureComponent implements OnInit {
         );
         if (this.type == 1) {
           this.router.navigate(['/login']);
+          this.dialogRef.close();
+          this.spinner.hide();
           return
         } else {
           this.router.navigate(['/main/dashboard']);
+          this.dialogRef.close();
+          this.spinner.hide();
           return
         }
       };
