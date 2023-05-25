@@ -257,7 +257,7 @@ export class ContractSignatureComponent implements OnInit {
 
     this.contractService.getViewContractMyProcessList().subscribe((data) => {
       console.log("data", data);
-
+      this.checkedAll = false;
       this.contractViewList = data;
       if (this.pageTotal == 0) {
         this.p = 0;
