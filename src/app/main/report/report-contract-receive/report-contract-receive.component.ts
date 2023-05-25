@@ -281,7 +281,7 @@ export class ReportContractReceiveComponent implements OnInit {
           document.body.appendChild(a);
           a.setAttribute('style', 'display: none');
           a.href = url;
-          a.download = `BaoCaoChiTiet_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
+          a.download = `BaoCaoHopDongNhan_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
           a.remove();

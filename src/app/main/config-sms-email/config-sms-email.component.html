@@ -54,7 +54,8 @@
         <!-- Cấu hình ngày sắp hết hạn -->
         <div class="border-table-email" style="text-align: center;">
             <div style="justify-content: center;padding-top: 20px;">
-                <input [(ngModel)]="this.soonExpireDay" type="number" class="input-expiration-date"/>
+                <input [(ngModel)]="this.soonExpireDay" type="number" class="input-expiration-date" min="0" oninput="this.value = 
+                !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null"/>
             </div>
 
             <div style="justify-content: center;padding-top: 20px;">
