@@ -71,10 +71,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       let timeNow = moment(new Date(), "YYYY/MM/DD").format("YYYY/MM/DD")
 
       this.isEndDate = this.endDate >= timeNow ? true : false
-
-      console.log("abc ", this.endDate);
-      console.log("time now ", timeNow);
-      console.log("is ", this.isEndDate);
     })
 
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {

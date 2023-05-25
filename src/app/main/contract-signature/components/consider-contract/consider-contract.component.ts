@@ -1924,22 +1924,20 @@ export class ConsiderContractComponent
             if (signUpdate.type == 1 || signUpdate.type == 4) {
               let imageRender = null;
 
-              imageRender = <HTMLElement>(document.getElementById('text-sign'));
-
               this.textSign = signUpdate.valueSign;
               this.width = signUpdate.width;
+
+              await of(null).pipe(delay(150)).toPromise();
+              imageRender = <HTMLElement>(document.getElementById('text-sign'));
 
               this.font = signUpdate.font;
               this.font_size = signUpdate.font_size;
 
               this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
 
-              if (Number(signUpdate.signDigitalX + this.widthText + 10) < 790)
-                signUpdate.signDigitalWidth = signUpdate.signDigitalX + imageRender.offsetWidth;
-
-              if (this.usbTokenVersion == 1) {
-                signUpdate.signDigitalHeight = signUpdate.signDigitalY + imageRender.offsetHeight;
-              }
+              signUpdate.signDigitalY = signUpdate.signDigitalY -signUpdate.page - 5;
+              signUpdate.signDigitalWidth = signUpdate.signDigitalX + imageRender.offsetWidth;
+              signUpdate.signDigitalHeight = signUpdate.signDigitalY + imageRender.offsetHeight;
 
               await of(null).pipe(delay(120)).toPromise();
 
@@ -2332,7 +2330,7 @@ export class ConsiderContractComponent
   }
 
   getOptions(imageRender: any) {
-    const scale = 1;
+    const scale = 5;
     const options = {
       quality: 0.99,
       width: imageRender.clientWidth * scale,
@@ -3899,11 +3897,7 @@ export class ConsiderContractComponent
         sign?.page == page
       ) {
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
-        sign.signDigitalY =
-          heightPage -
-          (sign.coordinate_y - currentHeight) -
-          sign.height +
-          sign.page * 6 /* * this.ratioPDF*/;
+        sign.signDigitalY = heightPage - (sign.coordinate_y - currentHeight) - sign.height + sign.page * 5.86 /* * this.ratioPDF*/;
 
         sign.signDigitalHeight =
           sign.signDigitalY + sign.height /* * this.ratioPDF*/;

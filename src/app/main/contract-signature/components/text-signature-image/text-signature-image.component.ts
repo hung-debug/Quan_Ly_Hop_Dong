@@ -29,8 +29,6 @@ export class TextSignatureImageComponent implements OnInit {
       'height': this.height + 'px',
       'text-align':'left',
       'max-width':this.width + 'px',
-      'margin': 0,
-      'padding': 0,
     };
   }
 

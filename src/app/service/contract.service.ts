@@ -671,16 +671,8 @@ export class ContractService {
           ? signCertDigital.signDigitalWidth
           : signCertDigital.width
       ).toString(),
-      px: Math.floor(
-        signCertDigital.signDigitalX
-          ? signCertDigital.signDigitalX
-          : signCertDigital.coordinate_x
-      ).toString(),
-      py: Math.floor(
-        signCertDigital.signDigitalY
-          ? signCertDigital.signDigitalY
-          : signCertDigital.coordinate_y
-      ).toString(),
+      px:signCertDigital.signDigitalX.toString(),
+      py: signCertDigital.signDigitalY.toString(),
 
       signDate: '11-05-2019 09:55:55',
       typeSign: '4',
