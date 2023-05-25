@@ -45,12 +45,16 @@ export class ConfigSmsEmailComponent implements OnInit {
   }
 
   infoDayExpiration() {
+
+
     this.contractService.getConfigExpirationDate().subscribe((response: any) => {
       this.spinner.hide();
       if(response.length > 0) {
         this.soonExpireDay = response[0].value;
         this.idExpireDay = response[0].id;
         this.isSoonExpireDay = true;
+
+        console.log("inffo ", this.idExpireDay);
       } else {
         this.soonExpireDay = 5;
         this.isSoonExpireDay = false;
@@ -69,8 +73,11 @@ export class ConfigSmsEmailComponent implements OnInit {
   }
 
   updateSoonExpireDay() {
+
+    console.log("id expire day ", this.idExpireDay);
+
     this.spinner.show();
-    if(this.soonExpireDay) {
+    if(this.isSoonExpireDay) {
       //call api put truyen id
       const body = [{
         id: this.idExpireDay,
