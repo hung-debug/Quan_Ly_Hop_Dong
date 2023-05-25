@@ -652,5 +652,6 @@
   "contract.about.expire":"Contract is about to expire",
   "contract.expired":"Contract expired",
   "contract.completed":"Completed contract",
-  "config.day.expiration":"Configuring expiration date"
+  "config.day.expiration":"Configuring expiration date",
+  "role.config.sms.email":"SMS/Email configuration function group"
   }

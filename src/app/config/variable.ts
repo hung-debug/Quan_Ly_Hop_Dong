@@ -433,6 +433,21 @@ export var roleList = [
       {label: 'role.contract.receive', value:'BAOCAO_HOPDONG_NHAN'}
     ]
 
+  },
+
+  //Nhóm chức năng cấu hình SMS/Email
+  {
+    label:'role.config.sms.email',
+    value:'QLCH',
+    items: [
+
+        //Cấu hình sms
+        {label:'config.sms',value:'CAUHINH_SMS'},
+
+        //Cấu hình ngày sắp hết hạn
+        {label:'config.day.expiration',value:'CAUHINH_NGAYSAPHETHAN'}
+      
+    ]
   }
 ];
 

@@ -1,5 +1,5 @@
 <div class="horizontal-container">
-    <div style="margin-right: 10px;">
+    <div *ngIf="isRoleConfigSms" style="margin-right: 10px;">
         <div class="sms-header">
             {{'config.sms' | translate}}
         </div>
@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    <div>
+    <div *ngIf="isRoleConfigExpirationDay">
         <div class="sms-header">
             {{'config.day.expiration' | translate}}
         </div>

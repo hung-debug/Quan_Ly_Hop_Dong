@@ -651,5 +651,6 @@
   "contract.about.expire":"Hợp đồng sắp hết hạn",
   "contract.expired":"Hợp đồng quá hạn",
   "contract.completed":"Hợp đồng hoàn thành",
-  "config.day.expiration":"Cấu hình ngày sắp hết hạn"
+  "config.day.expiration":"Cấu hình ngày sắp hết hạn",
+  "role.config.sms.email":"Nhóm chức năng cấu hình SMS/Email"
 }

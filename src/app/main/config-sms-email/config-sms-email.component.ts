@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
 import { Contract, ContractService } from 'src/app/service/contract.service';
+import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-config-sms-email',
@@ -24,18 +26,33 @@ export class ConfigSmsEmailComponent implements OnInit {
   isSoonExpireDay: boolean = false;
   idExpireDay: number;
 
+  isRoleConfigSms: boolean = false;
+  isRoleConfigExpirationDay: boolean = false;
+
 
   constructor(
     private appService: AppService,
     private contractService: ContractService,
     private spinner: NgxSpinnerService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private userService: UserService,
+    private roleService: RoleService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.appService.setTitle("menu.config-sms-email");
 
     this.spinner.show();
+    
+    let userId = this.userService.getAuthCurrentUser().id;
+
+    const infoUser = await this.userService.getUserById(userId).toPromise();
+    const inforRole = await this.roleService.getRoleById(infoUser.role_id).toPromise();
+    const listRole = inforRole.permissions;
+
+    this.isRoleConfigSms = listRole.some((element:any) => element.code == 'CAUHINH_SMS');
+    this.isRoleConfigExpirationDay = listRole.some((element:any) => element.code == 'CAUHINH_NGAYSAPHETHAN');
+
 
     //gọi api thông tin cấu hình sms của tổ chức
     this.infoConfigSms();
@@ -45,8 +62,6 @@ export class ConfigSmsEmailComponent implements OnInit {
   }
 
   infoDayExpiration() {
-
-
     this.contractService.getConfigExpirationDate().subscribe((response: any) => {
       this.spinner.hide();
       if(response.length > 0) {
@@ -73,15 +88,12 @@ export class ConfigSmsEmailComponent implements OnInit {
   }
 
   updateSoonExpireDay() {
-
-    console.log("id expire day ", this.idExpireDay);
-
     this.spinner.show();
     if(this.isSoonExpireDay) {
       //call api put truyen id
       const body = [{
         id: this.idExpireDay,
-        params: 'TG_SAP_HET_HAN_KY',
+        param: 'TG_SAP_HET_HAN_KY',
         value: this.soonExpireDay
       }]
 
@@ -92,13 +104,15 @@ export class ConfigSmsEmailComponent implements OnInit {
       //call api put khong truyen id
       const body = [
         {
-          params: 'TG_SAP_HET_HAN_KY',
+          param: 'TG_SAP_HET_HAN_KY',
           value: this.soonExpireDay
         }
       ]
 
       this.contractService.editConfigExpirationDate(body).subscribe((response: any) => {
         this.spinner.hide();
+        this.isSoonExpireDay = true;
+        this.idExpireDay = response[0].id;
       })
     }
   }
