@@ -113,6 +113,14 @@ export class CustomerComponent implements OnInit {
           }
         });
 
+        res.forEach((item: any) => {
+          if(item.card_id != null)
+          if(item.type === "PERSONAL" && item.card_id.includes(this.filter_name) && !filterList.includes(item)){
+            console.log(item);
+            filterList.push(item);
+          }
+        });
+
         this.list = filterList;
       });
     }
@@ -185,6 +193,28 @@ export class CustomerComponent implements OnInit {
       console.log('the close dialog');
       let is_data = result
     })
+  }
+
+  getMailOrPhone(item: any){
+    let value = '';
+    if(item.email && item.phone){
+      return item.email + '/ ' + item.phone;
+    }
+    if(item.phone){
+      value = item.phone;
+    }
+    if(item.email){
+      value = item.email;
+    }
+    return value;
+  }
+
+  getPlaceholderFind(){
+    if(this.isOrgCustomer){
+      return 'org.partner.search.name.placeholder';
+    }else {
+      return 'personal.partner.search.name.placeholder';
+    }
   }
 
   openDetail(id: String, type: String){

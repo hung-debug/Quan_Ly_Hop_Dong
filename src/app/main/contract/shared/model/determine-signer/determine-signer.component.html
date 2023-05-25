@@ -727,7 +727,7 @@
                 (change)="changeType($event, item, id)">
               <span>&nbsp;{{'organization' | translate}}</span>
               <div *ngIf="item.type != 2" class="none-button"></div>
-              <button  *ngIf="item.type == 2" class="btn" (click)="findPartner('ORGANIZATION')">{{'btn.search' | translate}}</button></label>
+              <button  *ngIf="item.type == 2" class="btn" (click)="findPartner('ORGANIZATION', id)">{{'btn.search' | translate}}</button></label>
 
               
           </div>
@@ -736,7 +736,7 @@
                 (change)="changeType($event, item, id)">
               <span>&nbsp;{{'personal' | translate}}</span>
               <div *ngIf="item.type != 3" class="none-button"></div>
-              <button *ngIf="item.type == 3" class="btn" (click)="findPartner('PERSONAL')">{{'btn.search' | translate}}</button>
+              <button *ngIf="item.type == 3" class="btn" (click)="findPartner('PERSONAL',id)">{{'btn.search' | translate}}</button>
             </label>
 
           </div>

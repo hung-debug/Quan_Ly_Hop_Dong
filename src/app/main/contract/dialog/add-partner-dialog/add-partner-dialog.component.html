@@ -8,7 +8,7 @@
         <div class="col-md-12">
           <div class="input-line search">
               <img src="../../assets/img/icon_search.svg" class="input-img" />
-              <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'customer.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+              <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{getPlaceholderFind() | translate}}" (keyup)="autoSearch($event)" />
               <img class="input-img" >
             </div>
         </div>
@@ -24,11 +24,11 @@
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-list>
-                  <tr>
+                  <tr style="cursor: pointer" (click)="choosePartner(list)">
                     <td><a  
                       style="color: #0160AE; cursor: pointer; text-decoration: none;">{{list.name}}</a></td>
                     <td *ngIf="type == 'ORGANIZATION'">{{list.taxCode}}</td>
-                    <td *ngIf="type == 'PERSONAL'">{{list.phone}}/{{list.email}}</td>
+                    <td *ngIf="type == 'PERSONAL'">{{getMailOrPhone(list)}}</td>
                     <td *ngIf="type == 'PERSONAL'">{{list.card_id}}</td>
                   </tr>
               </ng-template>

@@ -32,9 +32,10 @@ export class AddPartnerDialogComponent implements OnInit {
   list: any[] = [];
   orgListTmp:any[] = [];
   isOrg: string = 'off';
-  isOk: any = true;
   isOrgCustomer: boolean = true;
   filter_name: string ='';
+  isFirstFilter: boolean = true;
+  firstList: any[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -83,48 +84,82 @@ export class AddPartnerDialogComponent implements OnInit {
 
 
   getCustomerList(){
+    if(this.isFirstFilter){
+      this.firstList = this.list;
+      this.isFirstFilter = false;
+    }
+
     if(this.type == "ORGANIZATION"){
-    this.customerService.getCustomerList().subscribe((res: any) => {
       // this.list = res.filter((item: any) => {
       //     return item.type === "ORGANIZATION" && item.name.toLowerCase().includes(this.filter_name.toLowerCase());
       // });
       let filterList: any[] = [];
-      res.forEach((item: any) => {
+      this.firstList.forEach((item: any) => {
         if(item.type === "ORGANIZATION" && item.name.toLowerCase().includes(this.filter_name.toLowerCase())){
           filterList.push(item);
         }
       });
 
-      res.forEach((item: any) => {
+      this.firstList.forEach((item: any) => {
         if(item.type === "ORGANIZATION" && item.taxCode.includes(this.filter_name) && !filterList.includes(item)){
           filterList.push(item);
         }
       });
-      this.list = filterList;
-    });
-    }else if(this.type == "PERSONAL"){
-      this.customerService.getCustomerList().subscribe((res: any) => {
-        let filterList: any[]=[];
-        res.forEach((item: any) => {
-          if(item.type === "PERSONAL" && item.name.toLowerCase().includes(this.filter_name.toLowerCase())){
-            filterList.push(item);
-          }
-        });
-
-        res.forEach((item: any) => {
-          if(item.type === "PERSONAL" && item.phone.includes(this.filter_name) && !filterList.includes(item)){
-            filterList.push(item);
-          }
-        });
-
-        // res.forEach((item: any) => {
-        //   if(item.type === "PERSONAL" && item.card_id.includes(this.filter_name) && !filterList.includes(item)){
-        //     filterList.push(item);
-        //   }
-        // });
-
-        this.list = filterList;
+      if(filterList.length>0)
+      this.list = filterList.sort((a: any, b: any) => {
+        return a.name.localeCompare(b.name);
       });
+    
+    } 
+    if(this.type == "PERSONAL"){
+        let filterList: any[]=[];
+        this.firstList.forEach((item: any) => {
+          if(item.type === "PERSONAL" && item.name.toLowerCase().includes(this.filter_name.toLowerCase())){
+            console.log(item);
+            filterList.push(item);
+          }
+        });
+
+        this.firstList.forEach((item: any) => {
+          if(item.type === "PERSONAL" && item.phone.includes(this.filter_name) && !filterList.includes(item)){
+            console.log(item);
+            filterList.push(item);
+          }
+        });
+
+        this.firstList.forEach((item: any) => {
+          if(item.card_id != null)
+          if(item.type === "PERSONAL" && item.card_id.includes(this.filter_name) && !filterList.includes(item)){
+            console.log(item);
+            filterList.push(item);
+          }
+        });
+        if(filterList.length>0)
+        this.list = filterList.sort((a: any, b: any) => {
+          return a.name.localeCompare(b.name);
+        });
+    }
+  }
+
+  getMailOrPhone(item: any){
+    let value = '';
+    if(item.email && item.phone){
+      return item.email + '/ ' + item.phone;
+    }
+    if(item.phone){
+      value = item.phone;
+    }
+    if(item.email){
+      value = item.email;
+    }
+    return value;
+  }
+
+  getPlaceholderFind(){
+    if(this.type == "ORGANIZATION"){
+      return 'org.partner.search.name.placeholder';
+    }else {
+      return 'personal.partner.search.name.placeholder';
     }
   }
 
@@ -132,6 +167,11 @@ export class AddPartnerDialogComponent implements OnInit {
   checkEmailError:boolean;
   onSubmit() {    
 
+  }
+
+  choosePartner(item:any){
+    console.log(item)
+    this.dialogRef.close(item);
   }
 }
 

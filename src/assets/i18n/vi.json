@@ -613,7 +613,8 @@
   "phone_mail":"SĐT/Email",
   "report.number.contracts.type":"SL theo loại HĐ",
   "ceca.reason.one.person":"Hợp đồng một người ký sẽ không đẩy lên Bộ Công thương",
-  "customer.search.name.placeholder":"Nhập từ tìm kiếm",
+  "org.partner.search.name.placeholder":"Nhập tên, mã số thuế của tổ chức để tìm kiếm",
+  "personal.partner.search.name.placeholder":"Nhập tên, số điện thoại, CMT/CCCD của cá nhân để tìm kiếm",
   "organization.customer.add":"Thêm tổ chức",
   "personal.customer.add":"Thêm cá nhân",
   "organization.customer.detail":"Chi tiết tổ chức",
@@ -647,4 +648,5 @@
   "default": "Mặc định",
   "find.partner.personal": "Tìm kiếm đối tác cá nhân",
   "find.partner.organization": "Tìm kiếm đối tác tổ chức"
+  
 }

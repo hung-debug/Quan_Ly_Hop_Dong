@@ -147,11 +147,12 @@
                 width: 38%;
       
                 .input-data {
-                  border: 1px solid #106DB6;
+                  border: none;
                   border-radius: 5px;
                   height: 38px;
                   display: flex;
                   align-items: center;
+                  background-color: #EFF2F5;
       
                   > img {
                     padding-left: 14px;
@@ -162,6 +163,7 @@
                     outline: none;
                     padding-left: 19px;
                     width: 100%;
+                    background-color: #EFF2F5;
                   }
                 }
                 .header_language {

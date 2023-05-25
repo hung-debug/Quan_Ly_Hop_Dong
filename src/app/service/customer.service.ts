@@ -63,7 +63,7 @@ export class CustomerService {
   getCustomerUrl: any = `${environment.apiUrl}/api/v1/customers/my-partner`;
   deleteCustomerByIdUrl: any = `${environment.apiUrl}/api/v1/customers/my-partner/`;
   addCustomerUrl: any = `${environment.apiUrl}/api/v1/customers/my-partner`;
-  editCustomerUrl: any = `${environment.apiUrl}/api/v1/customers/my-partner/`;
+  editCustomerUrl: any = `${environment.apiUrl}/api/v1/customers/my-partner`;
 
   token: any;
   customer_id:any;
@@ -259,6 +259,7 @@ export class CustomerService {
       signType: data.signType,
       login_by : data.login_by,
       locale: data.locale,
+      card_id: data.card_id,
     });
     console.log(body);
     return this.http.post<any>(this.getCustomerUrl, body, { headers: headers });
@@ -277,7 +278,7 @@ export class CustomerService {
         name: data.handlers[i].name,
         email: data.handlers[i].email,
         phone: data.handlers[i].phone,
-        signType: data.handlers[i].signType[0],
+        signType: data.handlers[i].signType,
         login_by: data.handlers[i].login_by,
         locale: data.handlers[i].locale,
         card_id: data.handlers[i].card_id,
@@ -285,12 +286,13 @@ export class CustomerService {
       handlers.push(handler);
     }
     const body = JSON.stringify({
+      id: data.id,
       name: data.name,
       taxCode: data.taxCode,
       type: data.type,
       handlers: handlers,
     });
-    return this.http.put<any>(this.editCustomerUrl + data.id, body, { headers: headers });
+    return this.http.put<any>(this.editCustomerUrl, body, { headers: headers });
   }
 
   editPersonalCustomer(data: any){
@@ -299,13 +301,17 @@ export class CustomerService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
+      id: data.id,
       name: data.name,
       type: data.type,
       phone: data.phone,
       email: data.email,
-      signType: data.signType[0],
+      signType: data.signType,
+      login_by : data.login_by,
+      locale: data.locale,
+      card_id: data.card_id,
     });
-    return this.http.put<any>(this.editCustomerUrl + data.id, body, { headers: headers });
+    return this.http.put<any>(this.editCustomerUrl, body, { headers: headers });
   }
 
 
