@@ -7,6 +7,7 @@ import { ContractService } from "../../../../../service/contract.service";
 import { ToastService } from "../../../../../service/toast.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { parttern, parttern_input } from 'src/app/config/parttern';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-forward-contract',
@@ -22,7 +23,7 @@ export class ForwardContractComponent implements OnInit {
 
   isReqCardIdToken: boolean = false;
   isReqCardIdHsm: boolean = false;
-
+  site: string;
   login: string;
   type: any = 0;
   locale: string;
@@ -45,6 +46,11 @@ export class ForwardContractComponent implements OnInit {
   ngOnInit(): void {
     this.datas = this.data;
     this.login = "email";
+    if (environment.flag == 'NB') {
+      this.site = 'NB';
+    } else if (environment.flag == 'KD') {
+      this.site = 'KD';
+    }
 
     if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
       this.type = 1;
@@ -292,10 +298,8 @@ export class ForwardContractComponent implements OnInit {
             recipient_id: this.datas.recipientId,
             is_replace: false,
             login_by: this.login,
-            locale: this.myForm.value.locale
-          };
-          console.log("dataAuthorize",dataAuthorize);
-          
+            locale: this.locale
+          };         
 
           if (this.login == 'phone') {
             dataAuthorize.email = dataAuthorize.phone
