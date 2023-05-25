@@ -3690,12 +3690,17 @@ export class ConsiderContractComponent
     const determineCoordination = await this.contractService.getDetermineCoordination(recipientId).toPromise();
     console.log("determineCoordination", determineCoordination);
     let isInRecipient = false;
-    const cardId = this.datas?.dataContract?.card_id;
-    console.log("participants", cardId);
-    for (const card of determineCoordination.recipients) {
-      console.log("cardFor", card.card_id);
-      if (cardId == card.card_id) {
-        isInRecipient = true;
+    const participants = this.datas?.is_data_contract?.participants;
+    console.log("participants", participants);
+    for (const participant of participants) {
+      for (const card of participant.recipients) {
+        for (const item of determineCoordination.recipients) {
+          if (item.card_id == card.card_id) {
+            console.log("item.card_id", item.card_id);
+            console.log("card.card_id", card.card_id);
+            isInRecipient = true;
+          }
+        }
       }
     }
     if (!isInRecipient) {
