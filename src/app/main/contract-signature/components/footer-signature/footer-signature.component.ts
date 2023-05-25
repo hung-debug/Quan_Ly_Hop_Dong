@@ -514,14 +514,14 @@ export class FooterSignatureComponent implements OnInit {
         }
       }
     }
-    // if(!isInRecipient){
-    //   this.toastService.showErrorHTMLWithTimeout(
-    //     'Bạn không có quyền xử lý hợp đồng này111!',
-    //     '',
-    //     3000
-    //   );
-    //   if (this.type == 1) {
-    //     this.router.navigate(['/login']);
+    if(!isInRecipient){
+      this.toastService.showErrorHTMLWithTimeout(
+        'Bạn không có quyền xử lý hợp đồng này!',
+        '',
+        3000
+      );
+      if (this.type == 1) {
+        this.router.navigate(['/login']);
         this.dialogRef.close();
         this.spinner.hide();
     //     return
