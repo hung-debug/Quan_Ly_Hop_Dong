@@ -176,7 +176,7 @@ export const clone_load_org_customer = {
       phone: '',
       signType: [],
       locale : 'vi',
-      login_by: 'email'
+      login_by: 'email',
     }
   ],
 };

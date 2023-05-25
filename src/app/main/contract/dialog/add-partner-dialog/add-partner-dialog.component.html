@@ -1,17 +1,18 @@
 
 <div class="container-fluid">
     <div style="text-align: center; font-weight: bold">
-      <h3 style="color: #106DB6; font-family: inherit;text-transform: uppercase;">{{'find.partner' | translate}}</h3>
+      <h3 style="color: #106DB6; font-family: inherit;text-transform: uppercase;">{{ title | translate}}</h3>
     </div>
 
-    <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" >
-    </p-selectButton>
-
-    <div *ngIf="">
       <div class="row">
         <div class="col-md-12">
-            <div class="label text-color">Tổ chức</div>
+          <div class="input-line search">
+              <img src="../../assets/img/icon_search.svg" class="input-img" />
+              <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'customer.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+              <img class="input-img" >
+            </div>
         </div>
+
       </div>
         <div *ngIf="list.length > 0"  class="row" style="padding-top: 20px;">
             <p-table [value]="list" [paginator]="true" [rows]="5" id="table" [autoLayout]="true">
@@ -24,11 +25,11 @@
               </ng-template>
               <ng-template pTemplate="body" let-list>
                   <tr>
-                      <td>{{list.email}}</td>
-                      <td>{{list.organization_name}}</td>
-                      <td style="text-align: center">
-                        <img src="../../../assets/img/icon_delete.svg" width="16px" style="cursor: pointer;"/>
-                      </td>
+                    <td><a  
+                      style="color: #0160AE; cursor: pointer; text-decoration: none;">{{list.name}}</a></td>
+                    <td *ngIf="type == 'ORGANIZATION'">{{list.taxCode}}</td>
+                    <td *ngIf="type == 'PERSONAL'">{{list.phone}}/{{list.email}}</td>
+                    <td *ngIf="type == 'PERSONAL'">{{list.card_id}}</td>
                   </tr>
               </ng-template>
               <ng-template pTemplate="paginatorleft" let-state>
@@ -52,5 +53,5 @@
             <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
         </div>
     </div>
-  </div>
+
   

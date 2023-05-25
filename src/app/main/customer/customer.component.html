@@ -13,13 +13,13 @@
       <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
   </div>
 </div>
-<div *ngIf="this.isOrgCustomer" class="row justify-content-end" style="margin-right: 120px">
-  <div class="col-md-1 btn_search" style="padding-top: 10px;">
+<div *ngIf="this.isOrgCustomer" class="row" style="justify-content: flex-end;">
+  <div class="col-md-2 btn_search" style="padding-top: 10px; ">
       <button (click)="organizationAdd()" class="btn btn-lg btn-block btn_submit">{{'organization.customer.add'| translate}}</button>
   </div>
 </div>
-<div *ngIf="!this.isOrgCustomer" class="row justify-content-end" style="margin-right: 120px">
-  <div class="col-md-1 btn_search" style="padding-top: 10px;">
+<div *ngIf="!this.isOrgCustomer" class="row" style="justify-content: flex-end">
+  <div class="col-md-2 btn_search" style="padding-top: 10px;">
       <button (click)="personalAdd()" class="btn btn-lg btn-block btn_submit">{{'personal.customer.add'| translate}}</button>
   </div>
 </div>
@@ -38,6 +38,7 @@
               style="color: #0160AE; cursor: pointer; text-decoration: none;">{{list.name}}</a></td>
             <td *ngIf="isOrgCustomer">{{list.taxCode}}</td>
             <td *ngIf="!isOrgCustomer">{{list.phone}}/{{list.email}}</td>
+            <td *ngIf="!isOrgCustomer">{{list.card_id}}</td>
             <td style="text-align: center">
               <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editCustomer(list.id, this.isOrgCustomer)"  style="cursor: pointer;"/>&nbsp;&nbsp;
               <img src="../../../assets/img/icon_delete.svg" width="16px" (click)="deleteCustomer(list.id)" style="cursor: pointer;"/>

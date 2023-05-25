@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/service/app.service';
 import { CustomerService } from 'src/app/service/customer.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -14,16 +15,25 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class CustomerDetailComponent implements OnInit {
 
   isOrg = true;
+  emaill: string = "email";
+  phonee: string = "phone";
+
   name:String="";
-  email:String="";
-  phone:String="";
   taxCode:String="";
-  signType: any = {};
+  signType: SignType[] = [];
   handlers: Handler[] = [];
   id: String;
   orgCustomer: any[] = [];
   type: String;
   ordering: number = 0;
+  site: string = "";
+  locale: string = "";
+  login_by: string = "email";
+  email: string = "";
+  phone: string = "";
+  dropdownButtonText = '';
+  card_id = "";
+
   
   private sub: any;
 
@@ -36,6 +46,12 @@ export class CustomerDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (environment.flag == 'NB') {
+      this.site = 'NB';
+    } else if (environment.flag == 'KD') {
+      this.site = 'KD';
+    }
+
     this.sub = this.route.params.subscribe(params => {
       this.type = params['type'];
       if(this.type === 'organization'){
@@ -66,15 +82,48 @@ export class CustomerDetailComponent implements OnInit {
         if(this.orgCustomer[0].signType != null){
           this.signType = this.orgCustomer[0].signType;
         } else {
-          this.signType = null;
+          this.signType = [];
         }
+        this.locale = this.orgCustomer[0].locale;
+        this.login_by = this.orgCustomer[0].login_by;
+        if(this.orgCustomer[0].card_id != null){
+          this.card_id = this.orgCustomer[0].card_id;
+        }
+
       });
 
   })
+    //Test
+    //     this.sub = this.route.params.subscribe(params => {
+    //   this.type = params['type'];
+    //   if(this.type === 'organization'){
+    //     this.isOrg = true;
+    //     this.appService.setTitle("organization.customer.detail");}
+    //     else{
+    //       this.isOrg = false;
+    //       this.appService.setTitle("personal.customer.detail");
+    //     }
+    //   if(this.isOrg){  
+    // this.name = this.customerService.getDataOrgCustomerDemo().name;
+    // this.taxCode = this.customerService.getDataOrgCustomerDemo().taxCode;
+    // this.handlers = this.customerService.getDataOrgCustomerDemo().handlers;
+    // } else if( !this.isOrg){
+    //   this.name = this.customerService.getDataPersonalCustomer().name;
+    //   this.email = this.customerService.getDataPersonalCustomer().email;
+    //   this.phone = this.customerService.getDataPersonalCustomer().phone;
+    //   this.signType = this.customerService.getDataPersonalCustomer().signType;
+    //   this.login_by = this.customerService.getDataPersonalCustomer().login_by;
+    //   this.locale = this.customerService.getDataPersonalCustomer().locale;  
+    //   this.card_id = this.customerService.getDataPersonalCustomer().card_id;
+
+  //   }
+  // })
+    
+    
   }
 
   getSignerHandler(){
-    return this.handlers
+    let handlers:Handler[] = this.handlers
     .filter((item: any) => item.role === 'SIGNER')
     .sort((a: any, b: any) => {
       if (a.ordering < b.ordering) {
@@ -85,10 +134,11 @@ export class CustomerDetailComponent implements OnInit {
       }
       return 0;
     });
+    return handlers;
   }
 
   getCoordinatorHandler(){
-    return this.handlers
+    let handlers:Handler[] = this.handlers
     .filter((item: any) => item.role === 'COORDINATOR')
     .sort((a: any, b: any) => {
       if (a.ordering < b.ordering) {
@@ -99,10 +149,11 @@ export class CustomerDetailComponent implements OnInit {
       }
       return 0;
     });
+    return handlers;
   }
 
   getReviewerHandler(){
-    return this.handlers
+    let handlers:Handler[] = this.handlers
     .filter((item: any) => item.role === 'REVIEWER')
     .sort((a: any, b: any) => {
       if (a.ordering < b.ordering) {
@@ -113,10 +164,11 @@ export class CustomerDetailComponent implements OnInit {
       }
       return 0;
     });
+    return handlers;
   }
 
   getArchiverHandler(){
-    return this.handlers
+    let handlers:Handler[] = this.handlers
     .filter((item: any) => item.role === 'ARCHIVER')
     .sort((a: any, b: any) => {
       if (a.ordering < b.ordering) {
@@ -128,6 +180,57 @@ export class CustomerDetailComponent implements OnInit {
       return 0;
     }
     );
+    return handlers;
+  }
+
+  getDataSignCka(data: any) {
+    let filter: any[] = []
+    if(!data.signType)
+    data.signType = [];
+    if (data.signType.length>0) {
+      filter = data.signType.filter((p: any) => p.id == 1);
+    }
+    return filter;
+  }
+
+  getDataSignUSBToken(data: any) {
+    console.log(data);
+    let filter: any[] = []
+    if(!data.signType)
+    data.signType = [];
+    if (data.signType.length>0) {
+      filter = data.signType.filter((p: any) => p.id == 2);
+    }
+    return filter;
+  }
+
+  getDataSignEkyc(data: any) {
+    let filter = []
+    if(!data.signType)
+    data.signType = [];
+    if (data.signType.length>0) {
+      filter = data.signType.filter((p: any) => p.id == 5);
+    }
+    return filter;
+  }
+
+  getDataSignHsm(data: any) {
+    let filter: any[] = []
+    if(!data.signType)
+    data.signType = [];
+    if (data.signType.length>0) {
+      filter = data.signType.filter((p: any) => p.id == 4);
+    }
+    return filter;
+  }
+
+  checkSignType(data: any) {
+    if(data.signType != null) {
+    if (data.signType.length > 0) {
+      return true;
+    } else {
+      return false;
+    }} else return false;
   }
 
   onCancel(){

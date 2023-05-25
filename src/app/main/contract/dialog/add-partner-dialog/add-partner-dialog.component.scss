@@ -155,4 +155,25 @@
   .invalid{
     color: red;
   }
+
+  .input-line {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+  }
+  .search{
+    border: 1px solid #106DB6;
+    border-radius: 15px;
+    height: 38px;
+  }
+  .input-text {
+    border: 0;
+    padding: 10px;
+    width: 90%;
+    outline:0px;
+  }
   
+  .input-img {
+    padding: 10px;
+    cursor: pointer;
+  }

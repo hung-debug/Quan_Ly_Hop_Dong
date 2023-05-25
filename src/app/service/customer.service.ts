@@ -47,6 +47,7 @@ export interface Handler{
   signType: SignType[],
   login_by?: string,
   locale: string,
+  card_id?: string,
 }
 
 export interface SignType{
@@ -143,6 +144,64 @@ export class CustomerService {
       ],
     };
   }
+  
+  getDataOrgCustomerDemo(){
+    return {
+      name: 'Tan',
+      taxCode: '0123456789',
+      type: 'ORGANIZATION',
+      handlers: [
+        {
+          ordering: 1,
+          role: 'SIGNER',
+          name: 'Tannn',
+          email: 'ginvudz1@gmail.com',
+          phone: '',
+          signType: [{
+            id: 4,
+            name: "Ký số bằng HSM",
+            is_otp: false
+          }],
+          locale: 'vi',
+          login_by: 'email'
+        },
+        {
+          ordering: 1,
+          role: 'ARCHIVER',
+          name: '',
+          email: '',
+          phone: '',
+          signType: [{
+            id: 4,
+            name: "Ký số bằng HSM",
+            is_otp: false
+          }],
+          locale: 'vi',
+          login_by: 'email'
+        },
+        {
+          ordering: 1,
+          role: 'REVIEWER',
+          name: '',
+          email: '',
+          phone: '',
+          signType: [],
+          locale: 'vi',
+          login_by: 'email'
+        },
+        {
+          ordering: 1,
+          role: 'COORDINATOR',
+          name: '',
+          email: '',
+          phone: '',
+          signType: [],
+          locale: 'vi',
+          login_by: 'email'
+        },
+      ],
+    };
+  }
 
   getDataPersonalCustomer(){
     return {
@@ -171,9 +230,10 @@ export class CustomerService {
         name: data.handlers[i].name,
         email: data.handlers[i].email,
         phone: data.handlers[i].phone,
-        signType: data.handlers[i].signType[0],
+        signType: data.handlers[i].signType,
         login_by: data.handlers[i].login_by,
         locale: data.handlers[i].locale,
+        card_id: data.handlers[i].card_id,
       };
       handlers.push(handler);
     }
@@ -196,7 +256,9 @@ export class CustomerService {
       type: data.type,
       phone: data.phone,
       email: data.email,
-      signType: data.signType[0],
+      signType: data.signType,
+      login_by : data.login_by,
+      locale: data.locale,
     });
     console.log(body);
     return this.http.post<any>(this.getCustomerUrl, body, { headers: headers });
@@ -218,6 +280,7 @@ export class CustomerService {
         signType: data.handlers[i].signType[0],
         login_by: data.handlers[i].login_by,
         locale: data.handlers[i].locale,
+        card_id: data.handlers[i].card_id,
       };
       handlers.push(handler);
     }

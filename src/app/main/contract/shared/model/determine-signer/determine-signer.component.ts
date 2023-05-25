@@ -1780,8 +1780,10 @@ export class DetermineSignerComponent implements OnInit {
     return this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
-  findPartner(){
-    const data = {};
+  findPartner(type: string){
+    const data = {
+      type: type,
+    };
     this.dialog.open(AddPartnerDialogComponent, {
       width: '800px',
       data,
@@ -1809,9 +1811,6 @@ export class DetermineSignerComponent implements OnInit {
     }
   }
 
-  openAddPartnerDialog(){
-    
-  }
 
   // xóa đối tham gia bên đối tác
   deletePartner(index: any, item: any) {

@@ -723,14 +723,22 @@
       <div class="contract__content--participants">
         <div class="row">
           <div class="radio col-md-6 label_type">
-            <label><input type="radio" name="type_{{id}}" [value]="2" [(ngModel)]="item.type"
+            <label class="type-partner"><input type="radio" name="type_{{id}}" [value]="2" [(ngModel)]="item.type"
                 (change)="changeType($event, item, id)">
-              <span> {{'organization' | translate}}</span></label>
+              <span>&nbsp;{{'organization' | translate}}</span>
+              <div *ngIf="item.type != 2" class="none-button"></div>
+              <button  *ngIf="item.type == 2" class="btn" (click)="findPartner('ORGANIZATION')">{{'btn.search' | translate}}</button></label>
+
+              
           </div>
           <div class="radio col-md-6 label_type">
-            <label><input type="radio" name="type_{{id}}" [value]="3" [(ngModel)]="item.type"
+            <label class="type-partner"><input type="radio" name="type_{{id}}" [value]="3" [(ngModel)]="item.type"
                 (change)="changeType($event, item, id)">
-              <span> {{'personal' | translate}}</span></label>
+              <span>&nbsp;{{'personal' | translate}}</span>
+              <div *ngIf="item.type != 3" class="none-button"></div>
+              <button *ngIf="item.type == 3" class="btn" (click)="findPartner('PERSONAL')">{{'btn.search' | translate}}</button>
+            </label>
+
           </div>
         </div>
         <div *ngIf="item.type == 2">
@@ -1749,8 +1757,6 @@
   <div style="margin-right: 80px"></div>
   <div style="display: flex; cursor: pointer">
     <u class="label text-color" (click)="addPartner()" style="background-color: #FFFFFF">{{'them_doi_tac' |
-      translate}}</u>
-    <u class="label text-color" (click)="findPartner()" style="background-color: #FFFFFF">{{'find.partner' |
       translate}}</u>
   </div>
 </div>
