@@ -451,8 +451,7 @@ export class FooterSignatureComponent implements OnInit {
             this.spinner.hide();
             return
           }
-        } else 
-        this.submitChanges.emit(1);
+        } else this.submitChanges.emit(1);
         console.log("this.currentUser.email", this.currentUser);
       })
     }
@@ -524,14 +523,14 @@ export class FooterSignatureComponent implements OnInit {
         this.router.navigate(['/login']);
         this.dialogRef.close();
         this.spinner.hide();
-    //     return
-    //   } else {
-    //     this.router.navigate(['/main/dashboard']);
+        return
+      } else {
+        this.router.navigate(['/main/dashboard']);
         this.dialogRef.close();
         this.spinner.hide();
-    //     return
-    //   }
-    // }
+        return
+      }
+    }
     const data = {
       title: 'ỦY QUYỀN XỬ LÝ',
       is_content: 'processing_author',
@@ -542,6 +541,7 @@ export class FooterSignatureComponent implements OnInit {
 
     this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
       const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+      console.log("ArrRecipients", ArrRecipients);
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
@@ -550,6 +550,7 @@ export class FooterSignatureComponent implements OnInit {
           return
         }
       });
+      console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
       if (!ArrRecipientsNew) {
 
@@ -613,7 +614,6 @@ export class FooterSignatureComponent implements OnInit {
         }
       }
     }
-
     if(!isInRecipient){
       this.toastService.showErrorHTMLWithTimeout(
         'Bạn không có quyền xử lý hợp đồng này!',
@@ -622,9 +622,13 @@ export class FooterSignatureComponent implements OnInit {
       );
       if (this.type == 1) {
         this.router.navigate(['/login']);
+        this.dialogRef.close();
+        this.spinner.hide();
         return
       } else {
         this.router.navigate(['/main/dashboard']);
+        this.dialogRef.close();
+        this.spinner.hide();
         return
       }
     }

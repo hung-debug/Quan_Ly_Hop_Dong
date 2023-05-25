@@ -3679,7 +3679,7 @@ export class ConsiderContractComponent
     });
   }
 
-  hsmDialogSignOpen(recipientId: number) {
+  async hsmDialogSignOpen(recipientId: number) {
     this.spinner.hide();
     const data = {
       title: 'CHỮ KÝ HSM',
