@@ -362,7 +362,6 @@ export class ConsiderContractComponent
   }
 
   async getVersionUsbToken(orgId: any) {
-    console.log('o ', orgId);
     const dataOrg = await this.contractService
       .getDataNotifyOriganzationOrgId(orgId)
       .toPromise();
@@ -1784,6 +1783,7 @@ export class ConsiderContractComponent
   }
 
   openMarkSign(code: string,signUpdatePayload?: any,notContainSignImage?: any) {
+    this.spinner.hide();
     const data = {
       title: this.translate.instant('mark.contract').toUpperCase(),
       is_content: 'forward_contract',
@@ -1935,9 +1935,16 @@ export class ConsiderContractComponent
 
               this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
 
-              signUpdate.signDigitalY = signUpdate.signDigitalY -signUpdate.page - 5;
-              signUpdate.signDigitalWidth = signUpdate.signDigitalX + imageRender.offsetWidth;
-              signUpdate.signDigitalHeight = signUpdate.signDigitalY + imageRender.offsetHeight;
+              if(this.usbTokenVersion == 1) {
+                signUpdate.signDigitalY = signUpdate.signDigitalY -signUpdate.page - 5;
+                signUpdate.signDigitalWidth = signUpdate.signDigitalX + imageRender.offsetWidth;
+                signUpdate.signDigitalHeight = signUpdate.signDigitalY + imageRender.offsetHeight;
+              } else if(this.usbTokenVersion == 2) {
+                signUpdate.signDigitalY = signUpdate.signDigitalY -signUpdate.page - 5;
+                signUpdate.signDigitalWidth = imageRender.offsetWidth;
+                signUpdate.signDigitalHeight = imageRender.offsetHeight;
+              }
+             
 
               await of(null).pipe(delay(120)).toPromise();
 
@@ -2776,8 +2783,6 @@ export class ConsiderContractComponent
 
     const sessionId = JSON.parse(window.atob(apiSessionId.data)).SessionId;
     this.sessionIdUsbToken = sessionId;
-
-    console.log('sess ', this.sessionIdUsbToken);
 
     if (!sessionId) {
       this.spinner.hide();
@@ -3928,11 +3933,7 @@ export class ConsiderContractComponent
         sign?.page == page
       ) {
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
-        sign.signDigitalY =
-          heightPage -
-          (sign.coordinate_y - currentHeight) -
-          sign.height +
-          sign.page * 6 /* * this.ratioPDF*/;
+        sign.signDigitalY = heightPage - (sign.coordinate_y - currentHeight) - sign.height + sign.page * 6 /* * this.ratioPDF*/;
 
         sign.signDigitalWidth = sign.width /* * this.ratioPDF*/;
         sign.signDigitalHeight = sign.height;
