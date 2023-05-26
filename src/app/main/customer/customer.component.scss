@@ -234,7 +234,6 @@
   .btn-block {
     background-color: #106DB6;
     color: white;
-    height: 40px;
     font-size: 14px;
     width: 100%;
     border-radius: 5px;
@@ -264,8 +263,9 @@
   .btn_submit{
     border: 0px;
     border-radius: 5px;
-    height: 33px;
-    width: 200px;
+    min-height: 33px;
+    max-height: 50px;
+    width: 100%;
     box-sizing: border-box;
     color: white;
     background-color: #106DB6;

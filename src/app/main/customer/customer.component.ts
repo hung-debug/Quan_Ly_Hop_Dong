@@ -54,19 +54,19 @@ export class CustomerComponent implements OnInit {
 
   ngOnInit() {
     this.appService.setTitle("customer.list");
-
-    this.cols = [
-      {header: 'organization.customer.name', style:'text-align: left;', class:'col-md-5' },
-      {header: 'tax.code', style:'text-align: left;', class:'col-md-5' },
-      {header: '', style:'text-align: center;',class:'col-md-2' },
-    ];
-
     this.customerService.getCustomerList().subscribe((res: any) => {
       this.list = res.filter((item: any) => {
           return item.type === "ORGANIZATION"; 
       });
       this.spinner.hide();
     });
+    this.cols = [
+      {header: 'organization.customer.name', style:'text-align: left;', class:'col-md-5' },
+      {header: 'tax.code', style:'text-align: left;', class:'col-md-5' },
+      {header: '', style:'text-align: center;',class:'col-md-2' },
+    ];
+
+
   }
 
   autoSearch(event: any){
@@ -81,15 +81,47 @@ export class CustomerComponent implements OnInit {
   getCustomerList(){
     if(this.isOrgCustomer){
     this.customerService.getCustomerList().subscribe((res: any) => {
-      this.list = res.filter((item: any) => {
-          return item.type === "ORGANIZATION" && item.name.toLowerCase().includes(this.filter_name.toLowerCase());
+      // this.list = res.filter((item: any) => {
+      //     return item.type === "ORGANIZATION" && item.name.toLowerCase().includes(this.filter_name.toLowerCase());
+      // });
+      let filterList: any[] = [];
+      res.forEach((item: any) => {
+        if(item.type === "ORGANIZATION" && item.name.toLowerCase().includes(this.filter_name.toLowerCase())){
+          filterList.push(item);
+        }
       });
+
+      res.forEach((item: any) => {
+        if(item.type === "ORGANIZATION" && item.taxCode.includes(this.filter_name) && !filterList.includes(item)){
+          filterList.push(item);
+        }
+      });
+      this.list = filterList;
     });
     }else if(!this.isOrgCustomer){
       this.customerService.getCustomerList().subscribe((res: any) => {
-        this.list = res.filter((item: any) => {
-            return item.type === "PERSONAL" && item.name.toLowerCase().includes(this.filter_name.toLowerCase());
+        let filterList: any[]=[];
+        res.forEach((item: any) => {
+          if(item.type === "PERSONAL" && item.name.toLowerCase().includes(this.filter_name.toLowerCase())){
+            filterList.push(item);
+          }
         });
+
+        res.forEach((item: any) => {
+          if(item.type === "PERSONAL" && item.phone.includes(this.filter_name) && !filterList.includes(item)){
+            filterList.push(item);
+          }
+        });
+
+        res.forEach((item: any) => {
+          if(item.card_id != null)
+          if(item.type === "PERSONAL" && item.card_id.includes(this.filter_name) && !filterList.includes(item)){
+            console.log(item);
+            filterList.push(item);
+          }
+        });
+
+        this.list = filterList;
       });
     }
   }
@@ -97,8 +129,9 @@ export class CustomerComponent implements OnInit {
   changeTab(){
     if(!this.isOrgCustomer){
     this.cols=[
-      {header: 'personal.customer.name', style:'text-align: left;', class:'col-md-5' },
-      {header: 'phone_mail', style:'text-align: left;', class:'col-md-5' },
+      {header: 'personal.customer.name', style:'text-align: left;', class:'col-md-3' },
+      {header: 'phone_mail', style:'text-align: left;', class:'col-md-4' },
+      {header: 'cardId', style:'text-align: left;', class:'col-md-3'},
       {header: '', style:'text-align: center;', class:'col-md-2' },
     ]}
     else if(this.isOrgCustomer){
@@ -160,6 +193,28 @@ export class CustomerComponent implements OnInit {
       console.log('the close dialog');
       let is_data = result
     })
+  }
+
+  getMailOrPhone(item: any){
+    let value = '';
+    if(item.email && item.phone){
+      return item.email + '/ ' + item.phone;
+    }
+    if(item.phone){
+      value = item.phone;
+    }
+    if(item.email){
+      value = item.email;
+    }
+    return value;
+  }
+
+  getPlaceholderFind(){
+    if(this.isOrgCustomer){
+      return 'org.partner.search.name.placeholder';
+    }else {
+      return 'personal.partner.search.name.placeholder';
+    }
   }
 
   openDetail(id: String, type: String){

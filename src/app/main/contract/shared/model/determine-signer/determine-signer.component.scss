@@ -26,6 +26,7 @@
   display: flex;
   align-items: center;
   padding-left: 16px;
+
 }
 
 .label_detail {
@@ -581,4 +582,32 @@ input[type=number] {
 }
 .btn-outline-primary:hover{
   color: grey;
+}
+
+.btn {
+  margin-left: 10px;
+  background-color: #1487E1;
+  border-radius: 10px;
+  color: white;
+  height: 33px;
+  font-size: 13px;
+}
+
+.none-button {
+  width: 82.45px; 
+  height: 33px; 
+  margin-left:10px;
+  display:relative; 
+  background-color: #F9FDFF;
+}
+
+.type-partner{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  span {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  
 }

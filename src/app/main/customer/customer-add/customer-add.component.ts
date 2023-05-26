@@ -69,17 +69,26 @@ export class CustomerAddComponent implements OnInit {
         if(this.action == 'edit'){
           this.customerService.getCustomerList().subscribe((res: any) => {
             this.orgCustomer = res.filter((item: any) => {
+                 console.log(res);
                  return item.id.toString() === this.id;
              })[0]})
         } 
       }
       else{
-        if(type == 'personal')
+        if(type == 'personal'){
         this.isOrg = false;
         this.appService.setTitle("personal.customer.add");
       }
+      if(this.action == 'add')
       this.personalCustomer = JSON.parse(JSON.stringify(personal_customer_clone));
-    })
+      else {
+        this.customerService.getCustomerList().subscribe((res: any) => {
+          this.personalCustomer = res.filter((item: any) => {
+               console.log(res);
+               return item.id.toString() === this.id;
+           })[0]})
+      }
+    }})
 
     this.dropdownSignTypeSettings = {
       singleSelection: false,
@@ -171,6 +180,7 @@ export class CustomerAddComponent implements OnInit {
   }
 
   getDataSignUSBToken(data: any) {
+    console.log(data);
     return data.signType.filter((p: any) => p.id == 2);
   }
 
@@ -310,7 +320,7 @@ export class CustomerAddComponent implements OnInit {
               return false;
             }
             // check duplicate 
-            if (this.getCheckDuplicateValue('phone', dataArrPartner)) {
+            if (isPartnerSort[k].phone != '' && this.getCheckDuplicateValue('phone', dataArrPartner)) {
               this.getNotificationValid("Số điện thoại của tổ chức không được trùng nhau!")
               return false;
             }
@@ -340,7 +350,7 @@ export class CustomerAddComponent implements OnInit {
               return false;
             }
 
-            if (!personalData.email) {
+            if (!personalData.email && personalData.login_by == 'email') {
               this.getNotificationValid("Vui lòng nhập email" + this.getNameObjectValid('SIGNER') + "  cá nhân!")
               return false;
             }
@@ -350,7 +360,7 @@ export class CustomerAddComponent implements OnInit {
               return false;
             }
 
-            if(personalData.login_by == 'phone'){
+            if(personalData.login_by == 'phone' || personalData.signType[0].id == 1){
               if (!personalData.phone) {
                 this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObjectValid('SIGNER') + "  cá nhân!")
                 return false;
@@ -409,7 +419,7 @@ export class CustomerAddComponent implements OnInit {
     let checkDuplicate: any = [];
     if(valueType == 'phone'){
       for(let i = 0; i < dataValid.handlers.length; i++){
-        if(checkDuplicate.includes(dataValid.handlers[i].phone)){
+        if(dataValid.handlers[i].login_by=="phone" && checkDuplicate.includes(dataValid.handlers[i].phone)){
           return true;
         } else {
           checkDuplicate.push(dataValid.handlers[i].phone);
@@ -420,7 +430,7 @@ export class CustomerAddComponent implements OnInit {
 
     if(valueType =='email'){
       for(let i = 0; i< dataValid.handlers.length; i++){
-        if(checkDuplicate.includes(dataValid.handlers[i].email)){
+        if(dataValid.handlers[i].login_by=="email" && checkDuplicate.includes(dataValid.handlers[i].email)){
           return true;
         } else {
           checkDuplicate.push(dataValid.handlers[i].email);
@@ -430,7 +440,7 @@ export class CustomerAddComponent implements OnInit {
 
     if(valueType =='card_id'){
       for(let i = 0; i< dataValid.handlers.length; i++){
-        if(checkDuplicate.includes(dataValid.handlers[i].card_id)){
+        if((dataValid.handlers[i].role == "ARCHIVER" || dataValid.handlers[i].role == "SIGNER") && checkDuplicate.includes(dataValid.handlers[i].card_id)){
           return true;
         } else {
           checkDuplicate.push(dataValid.handlers[i].card_id);
@@ -498,7 +508,7 @@ export class CustomerAddComponent implements OnInit {
         },
         (error) => {
           this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout('Thêm khách hàng thất bại!',"", 2000);
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!',"", 2000);
         })
       }
       if(!this.isOrg){
@@ -509,7 +519,7 @@ export class CustomerAddComponent implements OnInit {
         },
         (error) => {
           this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout('Thêm khách hàng thất bại!',"", 2000);
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!',"", 2000);
         })
       }}
       if(this.action == 'edit'){
@@ -522,7 +532,7 @@ export class CustomerAddComponent implements OnInit {
           },
           (error) => {
             this.spinner.hide();
-            this.toastService.showErrorHTMLWithTimeout('Sửa thông tin khách hàng thất bại!',"", 2000);
+            this.toastService.showErrorHTMLWithTimeout('Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!',"", 2000);
           })
         }
         if(!this.isOrg){
@@ -534,7 +544,7 @@ export class CustomerAddComponent implements OnInit {
           },
           (error) => {
             this.spinner.hide();
-            this.toastService.showErrorHTMLWithTimeout('Sửa thông tin khách hàng thất bại!',"", 2000);
+            this.toastService.showErrorHTMLWithTimeout('Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!',"", 2000);
           })
         }
       }

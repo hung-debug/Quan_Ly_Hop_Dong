@@ -111,7 +111,7 @@
                     <div *ngIf="getOrganizationHandler('COORDINATOR').length < 1" class="col-md-1 delete-element"></div>
                 </div>
                 <div *ngIf="getOrganizationHandler('COORDINATOR').length < 1" class="participants--add">
-                    <u class="label text-color" (click)="addOrganizationHandler('COORDINATOR')">{{'btn.add.user.lead' | translate}}</u>
+                    <u class="label text-color" style="color: #106DB6;" (click)="addOrganizationHandler('COORDINATOR')">{{'btn.add.user.lead' | translate}}</u>
                   </div>
             </div>
 
@@ -230,7 +230,7 @@
                                 </div>
                                 <div class="input-data">
                                   <img class="input-img">
-                                  <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                                  <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                                 </div>
                               </div>
         
@@ -408,7 +408,7 @@
                             <div style="display: flex;">
                               <div class="input-data" style="width: 85%;">
                                 <img class="input-img">
-                                <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                                <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                               </div>
         
                               <div class="input-data" style="width: 7%;margin-left: 8%;">
@@ -504,7 +504,7 @@
                                 class="required-title">*</span></div>
                             <div class="input-data">
                               <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
-                              <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                              <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                             </div>
                           </div>
         
@@ -889,7 +889,7 @@
                               <div style="display: flex;">
                                 <div class="input-data" style="width: 85%;">
                                   <img class="input-img">
-                                  <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="this.personalCustomer.email">
+                                  <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="this.personalCustomer.phone">
                                 </div>
           
                                 <div class="input-data" style="width: 7%;margin-left: 8%;">
@@ -988,7 +988,7 @@
                                   class="required-title">*</span></div>
                               <div class="input-data">
                                 <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
-                                <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="this.personalCustomer.email">
+                                <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="this.personalCustomer.phone">
                               </div>
                             </div>
           
