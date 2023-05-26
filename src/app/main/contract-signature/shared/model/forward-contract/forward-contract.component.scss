@@ -145,7 +145,7 @@
     width: 100%;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (min-width: 370px) and (max-width: 480px) {
   .dropdownSMS{
     width: 12%;
     margin-top: 9px;
@@ -249,7 +249,7 @@
     }
   }
 }
-@media only screen and (max-width: 560px) {
+@media only screen and (min-width: 480px) and (max-width: 560px) {
   .dropdownSMS{
     width: 9%;
     margin-top: 9px;
