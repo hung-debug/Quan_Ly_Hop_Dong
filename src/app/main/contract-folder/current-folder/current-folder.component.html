@@ -1,0 +1,127 @@
+<!--Truong hop dang xu ly va sap het han-->
+<div class="col-md-4" class="container-fluid">
+    <ng-template [ngIf]="!roleMess">
+        <!-- <div class="col-md-12" style="padding-top: 20px;">
+            <div class="input-line search">
+                <img src="../../assets/img/icon_search.svg" class="input-img" />
+                <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
+            </div>
+
+        </div> -->
+
+
+        <div class="row list_header" *ngIf="pageTotal > 0;">
+            <div class="col-md-4"></div>
+            <div class="col-md-2">{{'create-date' | translate}}</div>
+            <div class="col-md-2">{{'expiration-date' | translate}}</div>
+            <div class="col-md-3">{{'action' | translate}}</div>
+        </div>
+
+        <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
+            <div class="row">
+                <!--Cột 1-->
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <div class="item_contract_name">
+                                <a class="item_contract_name" style="text-decoration: none;" (click)="openDetail(item.id)" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
+                                            'action': 'view'
+                                          }">
+                                    {{item.name}}
+                                </a>
+                            </div>
+
+                            <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
+                                <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--Cột 2: Ngày tạo-->
+                <div class="col-md-2 calendar_create">
+                    <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date:
+                            'dd/MM/yyyy HH:mm'}}</span></div>
+                </div>
+
+                <!--Cột 3: Ngày hết hạn ký-->
+                <div class="col-md-2 calendar_deadline">
+                    <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date:
+                            'dd/MM/yyyy'}}</span></div>
+                </div>
+
+                <!--Cột 4: Thao tác-->
+                <div class="col-md-3 item_icon">
+                    <div style="display: flex; justify-content: center;">
+                        <div class="div_icon">
+                            <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'contract.copy' | translate}}" />
+                        </div>
+                        <div class="div_icon">
+                            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.edit' | translate}}"/>
+                        </div>
+                        <div class="div_icon">
+                            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'contract.delete' | translate}}"/>
+                        </div>
+                        <div class="div_icon">
+                            <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.view' | translate}}"/>
+                        </div>
+                        <!-- 
+                            <div class="div_icon" *ngIf="status == 'processing' || status == 'expire'">
+                                <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnect(item.id)"/>
+                            </div> -->
+                        <div class="div_icon">
+                            <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}"/>
+                        </div>
+                        <div class="div_icon">
+                            <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="{{'contract.cancel' | translate}}"/>
+                        </div>
+                        <div class="div_icon">
+                            <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}"/>
+                        </div>
+                        <div class="div_icon">
+                            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}"/>
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'cancel'">
+                            <!-- <img src="../../assets/img/view_reason_icon.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" /> -->
+                            <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{ 'reasson.cancel.contract' | translate}}"/>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Cột 5: Input checkbox-->
+                <div class="col-md-1 item_icon">
+                    <div style="display: flex; justify-content: center;">
+                        <div class="div_icon">
+                            <div class="col-md-1 calendar_create">
+                                <div>
+                                    <input name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+            <div style="display: table-cell;vertical-align: middle;">
+                <img src="../../../assets/img/empty_data.svg" />
+                <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+            </div>
+        </div>
+
+        <div class="contract_footer">
+            <div class="footer_title"></div>
+            <div class="footer_pagination">
+                <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
+            </div>
+            <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}
+            </div>
+        </div>
+    </ng-template>
+
+    <div>{{roleMess | translate}}</div>
+</div>

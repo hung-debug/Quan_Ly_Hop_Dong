@@ -15,8 +15,10 @@ export interface Folder {
 })
 export class ContractFolderService {
 
-  getContractFolderListUrl = `${environment.apiUrl}/api/v1/contracts/contract-folder`;
-  getContractFolderNameUrl = `${environment.apiUrl}/api/v1/contracts/contract-folder`;
+  // getContractFolderListUrl = `${environment.apiUrl}/api/v1/contracts/contract-folder`;
+  // getContractFolderNameUrl = `${environment.apiUrl}/api/v1/contracts/contract-folder`;
+  getContractFolderListUrl = `${environment.apiFolder}/contract-folder`;
+  getContractFolderNameUrl = `${environment.apiFolder}/contract-folder`;
   // getContractFolderListUrl = `${environment.apiUrl}`;
   // getContractFolderNameUrl = `${environment.apiUrl}`;
 
