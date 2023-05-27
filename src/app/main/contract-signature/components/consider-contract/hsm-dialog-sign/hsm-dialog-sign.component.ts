@@ -143,52 +143,22 @@ export class HsmDialogSignComponent implements OnInit {
     if (this.myForm.invalid) {
       return;
     }
-    const determineCoordination = await this.contractService.getDetermineCoordination(this.data.recipientId).toPromise();
-    let isInRecipient = false;
-    const cardId = this.data?.dataContract?.card_id;
-    for (const card of determineCoordination.recipients) {
-      if (cardId == card.card_id) {
-        isInRecipient = true;
-      }
-    }
-    if (!isInRecipient) {
-      this.toastService.showErrorHTMLWithTimeout(
-        'Bạn không có quyền xử lý hợp đồng này!',
-        '',
-        3000
-      );
-      if (this.type == 1) {
-        this.router.navigate(['/login']);
-        this.dialogRef.close();
-        this.spinner.hide();
-        return
-      } else {
-        this.router.navigate(['/main/dashboard']);
-        this.dialogRef.close();
-        this.spinner.hide();
-        return
-      }
+    this.submitted = true;
+
+    if (this.myForm.invalid) {
+      return;
     }
 
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    console.log("currentUser", this.currentUser);
-
-    this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
-      console.log("response", response);
-      const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-      console.log("ArrRecipients", ArrRecipients);
-
-      let ArrRecipientsNew = false
-      ArrRecipients.map((item: any) => {
-        if (item.email === this.currentUser.email) {
-          ArrRecipientsNew = true
-          return
+    if(!this.data.id) {
+      const determineCoordination = await this.contractService.getDetermineCoordination(this.data.recipientId).toPromise();
+      let isInRecipient = false;
+      const cardId = this.data?.dataContract?.card_id;
+      for (const card of determineCoordination.recipients) {
+        if (cardId == card.card_id) {
+          isInRecipient = true;
         }
-      });
-      console.log("ArrRecipientsNew111", ArrRecipientsNew);
-
-      if (!ArrRecipientsNew) {
-        console.log("ArrRecipientsNew111", ArrRecipientsNew);
+      }
+      if (!isInRecipient) {
         this.toastService.showErrorHTMLWithTimeout(
           'Bạn không có quyền xử lý hợp đồng này!',
           '',
@@ -205,19 +175,81 @@ export class HsmDialogSignComponent implements OnInit {
           this.spinner.hide();
           return
         }
-      };
-      console.log("this.currentUser.email", this.currentUser);
-      //Check voi nguoi dung trong he thong
-      if (!this.data.id)
-        this.contractService.getCheckSignatured(this.data.recipientId).subscribe((res: any) => {
-          if (res && res.status == 2) {
-            this.toastService.showErrorHTMLWithTimeout('contract_signature_success', "", 3000);
-            return;
+      }
+  
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+      console.log("currentUser", this.currentUser);
+  
+      this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
+        console.log("response", response);
+        const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+        console.log("ArrRecipients", ArrRecipients);
+  
+        let ArrRecipientsNew = false
+        ArrRecipients.map((item: any) => {
+          if (item.email === this.currentUser.email) {
+            ArrRecipientsNew = true
+            return
           }
-        }, (error: HttpErrorResponse) => {
-          this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
-        })
-
+        });
+        console.log("ArrRecipientsNew111", ArrRecipientsNew);
+  
+        if (!ArrRecipientsNew) {
+          console.log("ArrRecipientsNew111", ArrRecipientsNew);
+          this.toastService.showErrorHTMLWithTimeout(
+            'Bạn không có quyền xử lý hợp đồng này!',
+            '',
+            3000
+          );
+          if (this.type == 1) {
+            this.router.navigate(['/login']);
+            this.dialogRef.close();
+            this.spinner.hide();
+            return
+          } else {
+            this.router.navigate(['/main/dashboard']);
+            this.dialogRef.close();
+            this.spinner.hide();
+            return
+          }
+        };
+        console.log("this.currentUser.email", this.currentUser);
+        //Check voi nguoi dung trong he thong
+        if (!this.data.id)
+          this.contractService.getCheckSignatured(this.data.recipientId).subscribe((res: any) => {
+            if (res && res.status == 2) {
+              this.toastService.showErrorHTMLWithTimeout('contract_signature_success', "", 3000);
+              return;
+            }
+          }, (error: HttpErrorResponse) => {
+            this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
+          })
+  
+        const data = {
+          ma_dvcs: this.myForm.value.taxCode,
+          username: this.myForm.value.username,
+          password: this.myForm.value.pass1,
+          password2: this.myForm.value.pass2
+        };
+  
+        console.log("id ", this.data.id);
+  
+        if (!this.data.id) {
+          //Trường hợp không phải ký nhiều
+          if (data.ma_dvcs === this.taxCode) {
+            this.dialogRef.close(data);
+          } else {
+            this.toastService.showErrorHTMLWithTimeout('Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng', '', 3000);
+          }
+        }
+  
+        else if (this.data.id == 1) {
+          //Trường hợp ký nhiều
+          console.log("vao day ");
+          this.dialogRef.close(data);
+        }
+      })
+    } else {
       const data = {
         ma_dvcs: this.myForm.value.taxCode,
         username: this.myForm.value.username,
@@ -225,22 +257,8 @@ export class HsmDialogSignComponent implements OnInit {
         password2: this.myForm.value.pass2
       };
 
-      if (!this.data.id) {
-        //Trường hợp không phải ký nhiều
-
-
-        if (data.ma_dvcs === this.taxCode) {
-          this.dialogRef.close(data);
-        } else {
-          this.toastService.showErrorHTMLWithTimeout('Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng', '', 3000);
-        }
-      }
-
-      else if (this.data.id == 1) {
-        //Trường hợp ký nhiều
-        this.dialogRef.close(data);
-      }
-    })
+      this.dialogRef.close(data);
+    }
   }
 
   get f() { return this.myForm.controls; }
