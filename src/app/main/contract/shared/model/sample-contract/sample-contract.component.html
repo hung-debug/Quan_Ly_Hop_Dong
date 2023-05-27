@@ -46,7 +46,7 @@
                         (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
                 </div>
 
-                <div class="sign-unit-select" *ngIf="isEnableText">
+                <!-- <div class="sign-unit-select" *ngIf="isEnableText">
                     <label class="label-require">{{'attribute.text.type' | translate}}: *</label>
                     <select class="form-select" id="select-dropdown-text" aria-label="Default select example"
                         (change)="changePositionSign($event, 'text_type', 'text')" [disabled]="isEnableSelect"
@@ -56,7 +56,7 @@
                         <option *ngFor="let d of this.list_text_type, let i = index" [selected]="d.selected"
                             value="{{d.id}}" [disabled]="d.is_disable">{{d.name | translate}}</option>
                     </select>
-                </div>
+                </div> -->
 
                 <div class="sign-unit-select">
                     <label class="label-require">{{isEnableText || isChangeText ? ('user.import' | translate) : ('user.sign' | translate)}}: *</label>
