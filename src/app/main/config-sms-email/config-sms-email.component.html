@@ -46,7 +46,8 @@
         </div>
     </div>
 
-    <div *ngIf="isRoleConfigExpirationDay">
+    <!--Lệnh if để ẩn-->
+    <div *ngIf="isRoleConfigExpirationDay && !isRoleConfigExpirationDay">
         <div class="sms-header">
             {{'config.day.expiration' | translate}}
         </div>
