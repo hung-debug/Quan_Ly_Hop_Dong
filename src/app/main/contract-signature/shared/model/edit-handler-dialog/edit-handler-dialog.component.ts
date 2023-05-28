@@ -187,6 +187,7 @@ export class EditHandlerComponent implements OnInit {
         }
         this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
           (res: any) => {
+            this.spinner.hide();
             if (!res.success) {
               switch (res.message) {
                 case "E01": {
