@@ -2,6 +2,8 @@ import { Folder, ContractFolderService } from '../../service/contract-folder.ser
 import { Component, Input, OnInit } from '@angular/core';
 import { AppService } from 'src/app/service/app.service';
 import { Route, ActivatedRoute, Router } from '@angular/router';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { AddFolderComponent } from './add-folder/add-folder.component';
 
 
 @Component({
@@ -21,13 +23,15 @@ export class ContractFolderComponent implements OnInit {
   parent_id_list_name: any[]=[];
   currentFolders: Folder[]=[];
   haveContract: boolean = false;
+  folderLevel: number = 0;
 
 
   constructor(
     private appService: AppService,
     private contractFolderService: ContractFolderService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -59,7 +63,8 @@ export class ContractFolderComponent implements OnInit {
               parentId = parentFolder.parentId;
             }
             this.currentFolders.reverse();
-            console.log(this.currentFolders)
+            this.folderLevel = this.currentFolders.length;
+            console.log(this.folderLevel);
           }
         )
         
@@ -116,6 +121,14 @@ export class ContractFolderComponent implements OnInit {
       }
     );
     return false;
+  }
+
+  addFolder(){
+    let data = 'add'
+    const matDialogRef = this.dialog.open(AddFolderComponent, {
+      width: '500px',
+      data: data
+    });
   }
 
 

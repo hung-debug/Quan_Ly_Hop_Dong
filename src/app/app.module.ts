@@ -1,3 +1,5 @@
+import { DeleteFolderComponent } from './main/contract-folder/delete-folder/delete-folder.component';
+import { AddFolderComponent } from './main/contract-folder/add-folder/add-folder.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ChartModule } from 'angular-highcharts';
 import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
@@ -113,6 +115,7 @@ import { CustomerDetailComponent } from './main/customer/customer-detail/custome
 import { ContractFolderComponent } from './main/contract-folder/contract-folder.component';
 import { ReportContractReceiveComponent } from './main/report/report-contract-receive/report-contract-receive.component';
 import { CustomerAddComponent } from './main/customer/customer-add/customer-add.component';
+import { CurrentFolderComponent } from './main/contract-folder/current-folder/current-folder.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -194,6 +197,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ReportContractReceiveComponent,
     ContractFolderComponent,
     CustomerAddComponent,
+    AddFolderComponent,
+    DeleteFolderComponent,
+    CurrentFolderComponent
   ],
   imports: [
     TranslateModule,
