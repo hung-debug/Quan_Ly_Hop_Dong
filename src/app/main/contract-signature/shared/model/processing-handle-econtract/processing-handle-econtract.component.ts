@@ -130,21 +130,19 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   checkChangeNum(participants: any, recipientId: any) {
     let change_num = 0;
 
-      this.is_list_name.map((x: any) => {
-        participants.map((item: any) => {
-          item.recipients.map((y: any) => {
-           if(y.id == recipientId) {
+    this.is_list_name.map((x: any) => {
+      participants.map((item: any) => {
+        item.recipients.map((y: any) => {
+          if(x.id === y.id) {
+            console.log("x id ",x.id);
             change_num = y.change_num;
             return;
-           }
-
-          })
+          }
         })
       })
+    })
 
-      console.log("change num ", change_num);
-
-      return change_num;
+    return change_num;
   }
 
   getStatus(status: any) {
