@@ -23,6 +23,7 @@ export class ContractFolderComponent implements OnInit {
   parent_id_list_name: any[]=[];
   currentFolders: Folder[]=[];
   haveContract: boolean = false;
+  folderLevel: number = 0;
 
 
   constructor(
@@ -62,7 +63,8 @@ export class ContractFolderComponent implements OnInit {
               parentId = parentFolder.parentId;
             }
             this.currentFolders.reverse();
-            console.log(this.currentFolders)
+            this.folderLevel = this.currentFolders.length;
+            console.log(this.folderLevel);
           }
         )
         

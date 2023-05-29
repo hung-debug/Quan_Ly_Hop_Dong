@@ -57,29 +57,29 @@ export class CurrentFolderComponent implements OnInit {
 
 
       //get list contract
-      this.contractFolderService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
-        this.contracts = data.entities;
-        this.pageTotal = data.total_elements;
-        if (this.pageTotal == 0) {
-          this.p = 0;
-          this.pageStart = 0;
-          this.pageEnd = 0;
-        } else {
-          this.setPage();
-        }
-        const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
-        console.log('checkedDownloadFiles',checkedDownloadFiles);
-        for(let i = 0; i< this.contracts.length; i++){
-          let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
-          if(checkIf){
-            this.contracts[i].checked = true;
-          } else {
-            this.contracts[i].checked = false;
-          }
-        }
-      });
+      // this.contractFolderService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
+      //   this.contracts = data.entities;
+      //   this.pageTotal = data.total_elements;
+      //   if (this.pageTotal == 0) {
+      //     this.p = 0;
+      //     this.pageStart = 0;
+      //     this.pageEnd = 0;
+      //   } else {
+      //     this.setPage();
+      //   }
+      //   const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
+      //   console.log('checkedDownloadFiles',checkedDownloadFiles);
+      //   for(let i = 0; i< this.contracts.length; i++){
+      //     let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
+      //     if(checkIf){
+      //       this.contracts[i].checked = true;
+      //     } else {
+      //       this.contracts[i].checked = false;
+      //     }
+      //   }
+      // });
     }
-  }
+  
 
   setPage() {
     this.pageStart = (this.p - 1) * this.page + 1;
@@ -90,3 +90,4 @@ export class CurrentFolderComponent implements OnInit {
   }
 
 }
+

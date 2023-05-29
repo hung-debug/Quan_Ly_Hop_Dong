@@ -132,6 +132,12 @@ export class ConfirmContractFormComponent implements OnInit {
           if (res.type == 4) {
             res['sign_unit'] = 'so_tai_lieu'
           }
+          if(res.type == 5) {
+            res['sign_unit'] = 'text';
+            res['text_attribute_name'] = res.name;
+            res.name = res.text_attribute_name;
+            res['text_type'] = 'currency';
+          }
         })
       }
     }
@@ -267,7 +273,10 @@ export class ConfirmContractFormComponent implements OnInit {
               element.type = 3;
             } else if(element.sign_unit == 'so_tai_lieu') {
               element.type = 4;
-            } else {
+            } else if(element.sign_unit =='text'){
+              if(element.text_type == 'currency'){
+                element.type = 5;
+              } else 
               element.type = 1;
             }
           }

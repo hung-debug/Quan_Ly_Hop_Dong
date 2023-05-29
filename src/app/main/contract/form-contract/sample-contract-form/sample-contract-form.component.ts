@@ -1489,16 +1489,17 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   contractNo: any;
   getValueText(e: any, d: any) {
     // const num = e.toString().replace(/\./g, '');
-    // if (!isNaN(parseFloat(num)) && isFinite(num)) { // check if value is a number
-    //   d.value = parseFloat(num).toLocaleString('vi-VN'); // format value as currency
-    // } else {
-    //   d.value = e; // value is not a number, set to original value
-    // }
+    const num = e;
+    if (!isNaN(parseFloat(num)) && isFinite(num)) { // check if value is a number
+      d.value = parseFloat(num).toLocaleString('vi-VN', { useGrouping: true, minimumFractionDigits: 0 }); // format value as currency with dot separator
+    } else {
+      d.value = e; // value is not a number, set to original value
+    }
 
     // const num = this.convertCurrency(e);
-    console.log(e);
-    const num = e;
-    d.value = num;
+    // console.log(e);
+    // const num = e;
+    // d.value = num;
 
     if (d.sign_unit == 'so_tai_lieu') {
       this.datasForm.contract_no = e;
@@ -1672,7 +1673,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     if (dataSignId.length > 0) {
       let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text", "text_type"];
       dataSignId.forEach((res: any) => {
-        if(res.type == 1) {
+        if(res.type == 1 || res.type == 5) {
           res.name = res.text_attribute_name;
         }
         data_remove_arr_signId.forEach((itemRemove: any) => {
