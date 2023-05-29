@@ -167,8 +167,6 @@ export class EditHandlerComponent implements OnInit {
     console.log("datas", this.currentUser);
     const login_by = this.isCheckRadio ? "email" : "phone"
     this.spinner.show();
-
-    console.log("vao day ");
     let dataUpdate = {
       ...this.data,
       name: this.name,
