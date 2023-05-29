@@ -137,6 +137,7 @@ export class ConfirmContractFormComponent implements OnInit {
             res['text_attribute_name'] = res.name;
             res.name = res.text_attribute_name;
             res['text_type'] = 'currency';
+            
           }
         })
       }
