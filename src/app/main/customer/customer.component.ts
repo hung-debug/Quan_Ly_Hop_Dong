@@ -1,5 +1,5 @@
 import { CustomerService } from './../../service/customer.service';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppService } from 'src/app/service/app.service';
 import { DeleteCustomerComponent } from './delete-customer/delete-customer.component';
@@ -20,6 +20,7 @@ export class CustomerComponent implements OnInit {
   stateOptions: any[];
   organization_id: any = "";
   isOrgCustomer: boolean = true;
+  isDelete: boolean = false;
 
   code:any = "";
   name:any = "";
@@ -53,21 +54,35 @@ export class CustomerComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(sessionStorage.getItem('partnerType') == null)
+    sessionStorage.setItem('partnerType', 'ORGANIZATION')
+    if(sessionStorage.getItem('partnerType') == 'PERSONAL'){
+      this.isOrgCustomer = false;
+      this.changeTab();
+      this.getCustomerList();
+      this.isOrg = 'on';
+    } else if(sessionStorage.getItem('partnerType') == 'ORGANIZATION'){
+      this.isOrgCustomer = true;
+      this.changeTab();
+      this.getCustomerList();
+      this.isOrg = 'off';
+    }
     this.appService.setTitle("customer.list");
-    this.customerService.getCustomerList().subscribe((res: any) => {
-      this.list = res.filter((item: any) => {
-          return item.type === "ORGANIZATION"; 
-      });
-      this.spinner.hide();
-    });
-    this.cols = [
-      {header: 'organization.customer.name', style:'text-align: left;', class:'col-md-5' },
-      {header: 'tax.code', style:'text-align: left;', class:'col-md-5' },
-      {header: '', style:'text-align: center;',class:'col-md-2' },
-    ];
+    // this.customerService.getCustomerList().subscribe((res: any) => {
+    //   this.list = res.filter((item: any) => {
+    //       return item.type === sessionStorage.getItem('partnerType'); 
+    //   });
+    //   this.spinner.hide();
+    // });
+    // this.cols = [
+    //   {header: 'organization.customer.name', style:'text-align: left;', class:'col-md-5' },
+    //   {header: 'tax.code', style:'text-align: left;', class:'col-md-5' },
+    //   {header: '', style:'text-align: center;',class:'col-md-2' },
+    // ];
 
 
   }
+
 
   autoSearch(event: any){
     this.filter_name=event.target.value;
@@ -96,7 +111,9 @@ export class CustomerComponent implements OnInit {
           filterList.push(item);
         }
       });
-      this.list = filterList;
+      this.list = filterList.sort(
+        (a, b) => (a.id > b.id ? 1 : -1)
+      );
     });
     }else if(!this.isOrgCustomer){
       this.customerService.getCustomerList().subscribe((res: any) => {
@@ -120,14 +137,16 @@ export class CustomerComponent implements OnInit {
             filterList.push(item);
           }
         });
-
-        this.list = filterList;
+        this.list = filterList.sort(
+          (a, b) => (a.id > b.id ? 1 : -1)
+        );
       });
     }
   }
 
   changeTab(){
     if(!this.isOrgCustomer){
+      sessionStorage.setItem('partnerType', 'PERSONAL')
     this.cols=[
       {header: 'personal.customer.name', style:'text-align: left;', class:'col-md-3' },
       {header: 'phone_mail', style:'text-align: left;', class:'col-md-4' },
@@ -135,6 +154,7 @@ export class CustomerComponent implements OnInit {
       {header: '', style:'text-align: center;', class:'col-md-2' },
     ]}
     else if(this.isOrgCustomer){
+      sessionStorage.setItem('partnerType', 'ORGANIZATION')
       this.cols = [
         {header: 'organization.customer.name', style:'text-align: left;', class:'col-md-5' },
         {header: 'tax.code', style:'text-align: left;', class:'col-md-5' },
@@ -180,6 +200,7 @@ export class CustomerComponent implements OnInit {
     const data = {
       title: 'customer.delete',
       id: id,
+      isOrg: this.isOrgCustomer
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(DeleteCustomerComponent, {
@@ -192,6 +213,7 @@ export class CustomerComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
       let is_data = result
+      this.getCustomerList();
     })
   }
 
@@ -224,5 +246,10 @@ export class CustomerComponent implements OnInit {
     this.router.navigate(['/main/info-customer/personal', id]);
   }
 
+  ngOnDestroy(): void {
+    if(this.isDelete == false)
+    sessionStorage.removeItem('partnerType');
+    console.log("destroy")
+  }
 
 }

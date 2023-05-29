@@ -56,10 +56,13 @@ export class CustomerDetailComponent implements OnInit {
       this.type = params['type'];
       if(this.type === 'organization'){
         this.isOrg = true;
-        this.appService.setTitle("organization.customer.detail");}
+        this.appService.setTitle("organization.customer.detail");
+        sessionStorage.setItem('partnerType', 'ORGANIZATION');
+        }
         else{
           this.isOrg = false;
           this.appService.setTitle("personal.customer.detail");
+          sessionStorage.setItem('partnerType', 'PERSONAL');
         }
       this.id = params['id'];
       this.customerService.getCustomerList().subscribe((res: any) => {
