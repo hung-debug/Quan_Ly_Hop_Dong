@@ -1527,6 +1527,26 @@ export class ContractService {
     return value;
   }
 
+  checkCurrencyValue(datasForm: any){
+    datasForm.contract_user_sign[1].sign_config.forEach((res: any) => {
+      console.log(datasForm.contract_user_sign);
+      if(res.type == 5 && res.value != undefined){
+        const num = res.value.toString().replace(/\./g, '');
+        if (!isNaN(parseFloat(num)) && isFinite(num)) { // check if value is a number
+          res.value = parseFloat(num).toLocaleString('vi-VN')
+        }
+      }
+    })
+    datasForm.is_data_object_signature.forEach((res: any) => {
+      if(res.type == 5 && res.value != undefined){
+        const num = res.value.toString().replace(/\./g, '');
+        if (!isNaN(parseFloat(num)) && isFinite(num)) { // check if value is a number
+          res.value = parseFloat(num).toLocaleString('vi-VN')
+        }
+      }
+    })
+  }
+
   getDetailInforContract(idContract: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()

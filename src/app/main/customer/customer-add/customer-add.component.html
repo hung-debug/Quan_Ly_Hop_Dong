@@ -30,8 +30,7 @@
                     <div class="col-md-10 participants__content--input">
                         <div class="participants--input" style="display: flex">
                             <div class="participants__name">
-                                <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span
-                                        class="required-title">:</span></div>
+                                <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;</div>
                                 <div class="input-data">
                                     <img src="assets/img/icon_name.svg" class="input-img">
                                     <input type="text" [(ngModel)]="d.name" placeholder="{{'nhap_ho_va_ten' | translate}}">
@@ -40,7 +39,6 @@
 
                             <div class="participants__name">
                                 <div class="label_detail text-color">Email
-                                    <span class="required-title">:&nbsp;</span>
                                 </div>
                                 <div class="input-data">
                                     <img src="assets/img/login_email.svg" class="input-img">
@@ -1121,4 +1119,6 @@
 
     </div>
 </div>
-<ngx-spinner></ngx-spinner>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+  <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+</ngx-spinner>

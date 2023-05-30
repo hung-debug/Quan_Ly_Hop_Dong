@@ -1784,8 +1784,7 @@ export class DetermineSignerComponent implements OnInit {
     return this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
-  findPartner(type: string, index: any){
-    console.log(index);
+  findPartner(type: string, index: any, dataValid: any){
     const data = {
       type: type,
     };
@@ -1800,7 +1799,7 @@ export class DetermineSignerComponent implements OnInit {
           let data_partner_add ={
             name: data.name,
             type: 3,
-            ordering: index + 2,
+            ordering: dataValid.ordering,
             recipients: [
               {
                 name: data.name,
@@ -1820,14 +1819,23 @@ export class DetermineSignerComponent implements OnInit {
               }
             ]
           }
-          console.log(data_partner_add);
-          this.datas.is_determine_clone[index+1] = data_partner_add;
+          if(data_partner_add.recipients[0].email == '' && data_partner_add.recipients[0].phone && 
+          data_partner_add.recipients[0].login_by == 'phone')
+          data_partner_add.recipients[0].email = data_partner_add.recipients[0].phone;
+          let true_index = 0
+          for(let i = 0; i < this.datas.is_determine_clone.length; i++){
+            if(this.datas.is_determine_clone[i].ordering == dataValid.ordering){
+                true_index = i;
+              break;
+            }
+          }
+          this.datas.is_determine_clone[true_index] = data_partner_add;
         }
         if(data.type == "ORGANIZATION"){
           let data_partner_add ={
             name: data.name,
             type: 2,
-            ordering: index + 2,
+            ordering: dataValid.ordering,
             status: 0,
             recipients: [] as any
           }
@@ -1860,6 +1868,11 @@ export class DetermineSignerComponent implements OnInit {
                   name: item.signType[0].name,
                 });
                 recipient.card_id= item.card_id;
+                if(recipient.email == '' && recipient.phone && 
+                recipient.login_by == 'phone'){
+                  recipient.email = recipient.phone;
+                }
+
                 break;
               case "ARCHIVER":
                 recipient.role = 4;
@@ -1868,12 +1881,22 @@ export class DetermineSignerComponent implements OnInit {
                   name: item.signType[0].name,
                 });
                 recipient.card_id= item.card_id;
+                if(recipient.email = '' && recipient.phone && 
+                recipient.login_by == 'phone'){
+                  recipient.email = recipient.phone;
+                }
                 break;
             }
             data_partner_add.recipients.push(recipient);
           })
-          console.log(data_partner_add);
-          this.datas.is_determine_clone[index+1] = data_partner_add;
+          let true_index = 0
+          for(let i = 0; i < this.datas.is_determine_clone.length; i++){
+            if(this.datas.is_determine_clone[i].ordering == dataValid.ordering){
+                true_index = i;
+              break;
+            }
+          }
+          this.datas.is_determine_clone[true_index] = data_partner_add;
         }
   }});  
    

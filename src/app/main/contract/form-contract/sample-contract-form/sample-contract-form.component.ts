@@ -1489,17 +1489,11 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   contractNo: any;
   getValueText(e: any, d: any) {
     // const num = e.toString().replace(/\./g, '');
-    const num = e;
-    if (!isNaN(parseFloat(num)) && isFinite(num)) { // check if value is a number
-      d.value = parseFloat(num).toLocaleString('vi-VN', { useGrouping: true, minimumFractionDigits: 0 }); // format value as currency with dot separator
-    } else {
-      d.value = e; // value is not a number, set to original value
-    }
 
     // const num = this.convertCurrency(e);
-    // console.log(e);
-    // const num = e;
-    // d.value = num;
+    console.log(e);
+    const num = e;
+    d.value = num;
 
     if (d.sign_unit == 'so_tai_lieu') {
       this.datasForm.contract_no = e;
@@ -1783,10 +1777,13 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     }
   }
 
+
   // forward data component
   nextOrPreviousStep(step: string) {
+    this.contractService.checkCurrencyValue(this.datasForm);
     // this.getRemoveCopyRight();
     this.datasForm.stepLast = step;
+    console.log(this.datasForm);
     this.stepChangeSampleContractForm.emit(step);
   }
   async checkNumber(countCeCa: number, countTimestamp: number) {

@@ -1,5 +1,5 @@
 import { ToastService } from './../../../service/toast.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { parttern, parttern_input } from 'src/app/config/parttern';
 import {Route, ActivatedRoute, Router} from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -15,14 +15,12 @@ import { environment } from 'src/environments/environment';
   templateUrl: './customer-add.component.html',
   styleUrls: ['./customer-add.component.scss']
 })
-export class CustomerAddComponent implements OnInit {
+export class CustomerAddComponent implements OnInit, OnDestroy {
   isOrg: boolean;
 
   //dropdown
   signTypeList: Array<SignType> = type_signature;
   signType_doc: Array<SignType> = type_signature_doc;
-
-
   dropdownSignTypeSettings: any = {};
   email: string = "email";
   phone: string = "phone";
@@ -64,6 +62,7 @@ export class CustomerAddComponent implements OnInit {
       if(type == 'organization'){
         this.isOrg = true;
         this.appService.setTitle("organization.customer.add");
+        sessionStorage.setItem('partnerType', 'ORGANIZATION');
         if(this.action == 'add')
         this.orgCustomer= JSON.parse(JSON.stringify(org_customer_clone));
         if(this.action == 'edit'){
@@ -78,6 +77,7 @@ export class CustomerAddComponent implements OnInit {
         if(type == 'personal'){
         this.isOrg = false;
         this.appService.setTitle("personal.customer.add");
+        sessionStorage.setItem('partnerType', 'PERSONAL');
       }
       if(this.action == 'add')
       this.personalCustomer = JSON.parse(JSON.stringify(personal_customer_clone));
@@ -201,7 +201,7 @@ export class CustomerAddComponent implements OnInit {
       }
       //Nếu là văn thư
       else if (data.role == 'ARCHIVER') {
-        if (this.getDataSignUSBToken(data).length == 0) {
+        if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0) {
           data.card_id = "";
         }
       }
@@ -247,6 +247,11 @@ export class CustomerAddComponent implements OnInit {
 
             if(!dataArrPartner.taxCode) {
               this.getNotificationValid("Vui lòng nhập mã số thuế của tổ chức!")
+              return false;
+            }
+
+            if(!parttern_input.taxCode_form.test(dataArrPartner.taxCode)){
+              this.getNotificationValid("Mã số thuế của tổ chức không hợp lệ!")
               return false;
             }
            
@@ -550,4 +555,7 @@ export class CustomerAddComponent implements OnInit {
       }
   }
 }
+  ngOnDestroy(): void {
+      
+  }
 }
