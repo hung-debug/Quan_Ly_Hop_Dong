@@ -37,7 +37,8 @@
             <td><a (click)="openDetail(list.id,list.type)" [routerLink]="['/main/form-customer/customer-detail/organization', list.id]"  
               style="color: #0160AE; cursor: pointer; text-decoration: none;">{{list.name}}</a></td>
             <td *ngIf="isOrgCustomer">{{list.taxCode}}</td>
-            <td *ngIf="!isOrgCustomer">{{getMailOrPhone(list)}}</td>
+            <td *ngIf="!isOrgCustomer">{{list.phone}}</td>
+            <td *ngIf="!isOrgCustomer">{{list.email}}</td>
             <td *ngIf="!isOrgCustomer">{{list.card_id}}</td>
             <td style="text-align: center">
               <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editCustomer(list.id, this.isOrgCustomer)"  style="cursor: pointer;"/>&nbsp;&nbsp;

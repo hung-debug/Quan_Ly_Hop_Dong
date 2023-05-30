@@ -15,7 +15,8 @@
                     {{ "tax.code" | translate | uppercase }}&nbsp;
                     <span style="color: red">*</span>
                 </div>
-                <input [(ngModel)]="orgCustomer.taxCode" class="input1" type="text" />
+                <input [(ngModel)]="orgCustomer.taxCode" class="input1" 
+                oninput="this.value = this.value.replace(/[^\d-]/g, '');" type="text" />
             </div>
         </div>
 
@@ -861,7 +862,7 @@
                             </div>
 
                             <div class="participants__name">
-                              <div class="label_detail text-color">{{'user.sign-type' | translate}}:&nbsp;
+                              <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;
                                   <span style="color: red">*</span>
                               </div>
                               <ng-multiselect-dropdown [(ngModel)]="this.personalCustomer.signType" placeholder="{{'choose' | translate }}"

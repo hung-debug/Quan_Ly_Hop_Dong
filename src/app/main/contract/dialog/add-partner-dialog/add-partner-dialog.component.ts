@@ -68,9 +68,10 @@ export class AddPartnerDialogComponent implements OnInit {
   }else if(this.type == "PERSONAL"){
     this.title = "find.partner.personal";
     this.cols=[
-      {header: 'personal.customer.name', style:'text-align: left;', class:'col-md-4' },
-      {header: 'phone_mail', style:'text-align: left;', class:'col-md-4' },
-      {header: 'cardId', style:'text-align: left;', class:'col-md-4'},
+      {header: 'personal.customer.name', style:'text-align: left;', class:'col-md-3'},
+      {header: 'user.phone', style:'text-align: left;', class:'col-md-3'},
+      {header: 'user.email', style:'text-align: left;', class:'col-md-3'},
+      {header: 'cardId', style:'text-align: left;', class:'col-md-3'},
     ];
   }
 

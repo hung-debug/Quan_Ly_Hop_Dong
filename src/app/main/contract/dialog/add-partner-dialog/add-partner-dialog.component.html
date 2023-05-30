@@ -28,7 +28,8 @@
                     <td><a  
                       style="color: #0160AE; cursor: pointer; text-decoration: none;">{{list.name}}</a></td>
                     <td *ngIf="type == 'ORGANIZATION'">{{list.taxCode}}</td>
-                    <td *ngIf="type == 'PERSONAL'">{{getMailOrPhone(list)}}</td>
+                    <td *ngIf="type == 'PERSONAL'">{{list.phone}}</td>
+                    <td *ngIf="type=='PERSONAL'">{{list.email}}</td>
                     <td *ngIf="type == 'PERSONAL'">{{list.card_id}}</td>
                   </tr>
               </ng-template>
