@@ -7,19 +7,19 @@
 <div class="container-fluid">
 
 <div class="col-md-12" style="padding-top: 20px;">
-  <div class="input-line search">
+  <div class="input-line search" style="justify-content:left">
       <img src="../../assets/img/icon_search.svg" class="input-img" />
-      <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'customer.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
-      <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
+      <input type="text" id="filter_name" [value]="filter_name" class="input-text" style="width: 90%!important"
+      placeholder="{{getPlaceholderFind() | translate}}" (keyup)="autoSearch($event)" />
   </div>
 </div>
-<div *ngIf="this.isOrgCustomer" class="row justify-content-end" style="margin-right: 120px">
-  <div class="col-md-1 btn_search" style="padding-top: 10px;">
+<div *ngIf="this.isOrgCustomer" class="row" style="justify-content: flex-end;">
+  <div class="col-md-2 btn_search" style="padding-top: 10px; ">
       <button (click)="organizationAdd()" class="btn btn-lg btn-block btn_submit">{{'organization.customer.add'| translate}}</button>
   </div>
 </div>
-<div *ngIf="!this.isOrgCustomer" class="row justify-content-end" style="margin-right: 120px">
-  <div class="col-md-1 btn_search" style="padding-top: 10px;">
+<div *ngIf="!this.isOrgCustomer" class="row" style="justify-content: flex-end">
+  <div class="col-md-2 btn_search" style="padding-top: 10px;">
       <button (click)="personalAdd()" class="btn btn-lg btn-block btn_submit">{{'personal.customer.add'| translate}}</button>
   </div>
 </div>
@@ -37,7 +37,8 @@
             <td><a (click)="openDetail(list.id,list.type)" [routerLink]="['/main/form-customer/customer-detail/organization', list.id]"  
               style="color: #0160AE; cursor: pointer; text-decoration: none;">{{list.name}}</a></td>
             <td *ngIf="isOrgCustomer">{{list.taxCode}}</td>
-            <td *ngIf="!isOrgCustomer">{{list.phone}}/{{list.email}}</td>
+            <td *ngIf="!isOrgCustomer">{{getMailOrPhone(list)}}</td>
+            <td *ngIf="!isOrgCustomer">{{list.card_id}}</td>
             <td style="text-align: center">
               <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editCustomer(list.id, this.isOrgCustomer)"  style="cursor: pointer;"/>&nbsp;&nbsp;
               <img src="../../../assets/img/icon_delete.svg" width="16px" (click)="deleteCustomer(list.id)" style="cursor: pointer;"/>
@@ -63,4 +64,6 @@ style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: cente
   </div>
 </div>
 </div>
-<ngx-spinner></ngx-spinner>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+  <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+</ngx-spinner>

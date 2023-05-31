@@ -1,278 +1,966 @@
-<div *ngIf="!isOrg" class="container-fluid">
-    <div class="contract-determine">
-
-        <div class="contract__content--participants">
-
-            <!--ngươi ky-->
-            <div class="participants-border">
-            <div class="dropdown-header">
-                <div class="label">{{'user.sign' | translate}}</div>
-            </div>
-                <div class="participants--content">
-                    <!-- <input [id]="'ordering-sign-'" class="col-md-1 contract-total" style="width: 25px; height: 25px"
-                        type="number" [disabled]="1"
-                        oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly> -->
-                    <div class="col-md-10 participants__content--input">
-                        <div class="participants--input" style="display: flex">
-                            <div class="participants__name">
-                                <div class="label_detail text-color">{{'user.name' | translate}}:&nbsp;
-                                </div>
-                                <div class="input-data">
-                                    <img src="assets/img/icon_name.svg" class="input-img">
-                                    <input type="text" value="{{this.name}}" readonly>
-                                </div>
-                            </div>
-
-                            <div class="participants__name">
-                                <div class="label_detail text-color">Email:&nbsp;
-                                </div>
-                                <div class="input-data">
-                                    <img src="assets/img/login_email.svg" class="input-img">
-                                    <input type="text" value="{{this.email}}" readonly>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="participants--input">
-                            <div class="participants__name">
-                                <div class="label_detail text-color">{{'user.sign-type' | translate}}:&nbsp;
-                                </div>
-                                <div class="input-data">
-                                    <input type="text" value="{{this.signType.name}}" readonly>
-                                </div>
-                            </div>
-                            <div class="participants__name">
-                                <div class="label_detail text-color">{{'user.phone' | translate}}:&nbsp;
-                                </div>
-                                <div class="input-data">
-                                    <img class="input-img">
-                                    <input type="text" value="{{this.phone}}" readonly/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-btn">
-                <button (click)="onCancel()" >{{"btn.close" | translate}}</button>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
+<!-- Thêm cho tổ chức -->
 <div *ngIf="isOrg" class="container-fluid">
-    <div class="contract-determine">
-        <div class="contract--content">
-            <div class="contract__content--title-doi-tac">
-                <div style="width: 100px">
-                    {{ "organization.partner.name" | translate | uppercase }}&nbsp;
-                </div>
-                <input class="input1" type="text" value="{{this.name}}" readonly/>
-            </div>
+  <div class="contract-determine">
+      <div class="contract--content">
+          <div class="contract__content--title-doi-tac">
+              <div style="width: 100px">
+                  {{ "organization.partner.name" | translate | uppercase }}&nbsp;
+                  <span style="color: red">*</span>
+              </div>
+              <input [(ngModel)]="this.name" class="input1" type="text" readonly/>
+          </div>
 
-            <div class="contract__content--title-mst"> 
-                <div style="width: 100px">
-                    {{ "tax.code" | translate | uppercase }}&nbsp;
-                </div>
-                <input class="input1" type="text" value="{{this.taxCode}}" readonly>
-            </div>
+          <div class="contract__content--title-mst">
+              <div style="width: 100px">
+                  {{ "tax.code" | translate | uppercase }}&nbsp;
+                  <span style="color: red">*</span>
+              </div>
+              <input [(ngModel)]="this.taxCode" class="input1" type="text" readonly/>
+          </div>
+      </div>
+
+      <div class="contract__content--participants">
+          <!--nguoi dieu phoi-->
+          <div class="participants-border">
+              <div class="label">{{'user.lead' | translate}}</div>
+              <div class="participants--content" *ngFor="let d of getCoordinatorHandler(); let index = index">
+                  <input [id]="'ordering-sign-'" class="col-md-1 contract-total" style="width: 25px; height: 25px"
+                      [disabled]="getCoordinatorHandler().length == 1" [(ngModel)]="d.ordering"
+                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
+                  <div class="col-md-10 participants__content--input">
+                      <div class="participants--input" style="display: flex">
+                          <div class="participants__name">
+                              <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span
+                                      class="required-title">:</span></div>
+                              <div class="input-data">
+                                  <img src="assets/img/icon_name.svg" class="input-img">
+                                  <input type="text" [(ngModel)]="d.name" readonly>
+                              </div>
+                          </div>
+
+                          <div class="participants__name">
+                              <div class="label_detail text-color">Email
+                                  <span class="required-title">:&nbsp;</span>
+                              </div>
+                              <div class="input-data">
+                                  <img src="assets/img/login_email.svg" class="input-img">
+                                  <input type="text" [(ngModel)]="d.email" readonly>
+                              </div>
+                          </div>
+                      </div>
+
+                  <div *ngIf="this.site == 'NB'" class="participants--input" style="display: flex">
+                      <div class="participants__name" style="width:80%; margin-right: -10%;">
+                        <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;-&nbsp;<div
+                            style="color: #ffc107;">({{'Nhận thông báo khi xử lý hợp đồng' | translate}})</div>
+                        </div>
+                        <div class="input-data">
+                          <input type="text" [(ngModel)]="d.phone"
+                            oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
+                        </div>
+                      </div>
+    
+                      <div class="participants__name" style="width: 6%">
+                        <div class="label_detail text-color"><span class="required-title"></span></div>
+                        <div class="input-data">
+                          <div ngbDropdown class="d-inline-block" style="margin-left: 6px; pointer-events: none;" [(ngModel)]="d.locale" [disabled]="true">
+                            <div *ngIf="d.locale =='vi'">
+                              <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                                id="dropdownMenu1" ngbDropdownToggle></button>
+                            </div>
+                            <div *ngIf="d.locale =='en'">
+                              <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                                id="dropdownMenu1" ngbDropdownToggle></button>
+                            </div>
+                            <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                              <div class="switch-language">
+                                <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                                  <div class="language">{{ "vie" | translate }}</div>
+                                </button>
+                              </div>
+                              <div class="switch-language">
+                                <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                                  <div class="language">{{ "eng" | translate }}</div>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                  </div>
+              </div>
+          </div>
+
+          <!--nguoi xem xet-->
+          <div class="participants-border">
+              <div class="label">{{'user.view' | translate}}</div>
+              <div class="participants--content" *ngFor="let d of getReviewerHandler(); let index = index">
+                  <input [id]="'ordering-sign-'" class="col-md-1 contract-total" style="width: 25px; height: 25px"
+                   [disabled]="getReviewerHandler().length > 1" [(ngModel)]="d.ordering"
+                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
+                      <div class="col-md-10 participants__content--input"
+                      style="display: flex; flex-direction: column; margin-bottom: 14px">
+      
+                      <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}} cho nguoi xem xet doi tac-->
+                      <div class="participants--input" style="display: flex">
+                        <div class="participants__name">
+                          <div class="label_detail text-color">
+                            <div>
+                              <input  type="radio"
+                                name="checkPhoneMailParticipantViewer_{{index}}" [value]="email" [(ngModel)]="d.login_by" [disabled]="true"/>
+                            </div>&nbsp;
+                            <div>
+                              {{'typeOfSignEmail' | translate}}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="participants__name">
+                          <div class="label_detail text-color">
+                            <div>
+                              <input  type="radio"
+                                name="checkPhoneMailParticipantViewer_{{index}}" [(ngModel)]="d.login_by" [value]="phonee" [disabled]="true"/>
+                            </div>&nbsp;
+                            <div>
+                              {{'typeOfSignPhone' | translate}}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+      
+                      <div class="participants--input">
+                        <div class="participants__name">
+                          <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;</div>
+                          <div class="input-data">
+                            <img src="assets/img/icon_name.svg" class="input-img">
+                            <input type="text" [(ngModel)]="d.name" readonly>
+                          </div>
+                        </div>
+      
+                        <!--NB-->
+                        <div class="participants__name" *ngIf="d.login_by == 'email' && this.site == 'NB'">
+                          <div class="label_detail text-color">Email&nbsp;
+                            <span class="required-title">*</span>
+                          </div>
+                          <div class="input-data">
+                            <img src="assets/img/login_email.svg" class="input-img">
+                            <input type="text" [(ngModel)]="d.email" readonly>
+                          </div>
+                        </div>
+      
+                        <div class="participants__name" *ngIf="d.login_by == 'phone' && this.site == 'NB'">
+                          <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                            <span class="required-title">*</span>
+                          </div>
+                          <div style="display: flex;">
+                            <div class="input-data" style="width: 88%;margin-right: -3%;">
+                              <img class="input-img">
+                              <input type="text" [(ngModel)]="d.phone" readonly>
+                            </div>
+      
+                            <div class="participants__name" style="width: 17%;margin-left: 5%;">
+                              <div class="input-data">
+                                <div ngbDropdown class="d-inline-block" style="margin-left: 6px; pointer-events: none;" [(ngModel)]="d.locale" [disabled]="true">
+                                  <div *ngIf="d.locale =='vi'">
+                                    <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                                      id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                                  </div>
+                                  <div *ngIf="d.locale =='en'">
+                                    <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                                      id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                                  </div>
+                                  <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                                    <div class="switch-language">
+                                      <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                                        <div class="language">{{ "vie" | translate }}</div>
+                                      </button>
+                                    </div>
+                                    <div class="switch-language">
+                                      <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                                        <div class="language">{{ "eng" | translate }}</div>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+      
+                        <!--KD-->
+                        <div class="participants__name" *ngIf="d.login_by == 'email' && this.site == 'KD'">
+                          <div class="label_detail text-color">Email&nbsp;
+                            <span class="required-title">*</span>
+                          </div>
+                          <div class="input-data">
+                            <img src="assets/img/login_email.svg" class="input-img">
+                            <input type="text" [(ngModel)]="d.email" readonly>
+                          </div>
+                        </div>
+      
+                        <div class="participants__name" *ngIf="d.login_by == 'phone' && this.site == 'KD'">
+                          <div style="display: flex;">
+                            <div class="participants__name" style="width: 88%;">
+                              <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                                <span class="required-title">*</span>
+                              </div>
+                              <div class="input-data">
+                                <img class="input-img">
+                                <input type="text" [(ngModel)]="d.phone" readonly>
+                              </div>
+                            </div>
+      
+                            <div class="participants__name" style="width: 16%; margin-left: 2%;">
+                              <div class="label_detail text-color"><span class="required-title"></span></div>
+                              <div class="input-data">
+                                <div ngbDropdown class="d-inline-block" style="margin-left: 6px; pointer-events: none;" [(ngModel)]="d.locale" [disabled]="true">
+                                  <div *ngIf="d.locale =='vi'">
+                                    <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                                      id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                                  </div>
+                                  <div *ngIf="d.locale =='en'">
+                                    <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                                      id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                                  </div>
+                                  <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                                    <div class="switch-language">
+                                      <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                                        <div class="language">{{ "vie" | translate }}</div>
+                                      </button>
+                                    </div>
+                                    <div class="switch-language">
+                                      <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                                        <div class="language">{{ "eng" | translate }}</div>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+      
+                      <!--NB email-->
+                      <div *ngIf="this.site == 'NB' && d.login_by === 'email'" class="participants--input"
+                        style="display: flex">
+                        <div class="participants__name" style="width:80%; margin-right: -10%;">
+                          <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                            <div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div>
+                          </div>
+                          <div class="input-data">
+                            <img class="input-img">
+                            <input type="text" [(ngModel)]="d.phone" readonly>
+                          </div>
+                        </div>
+      
+                        <div class="participants__name" style="width: 6%">
+                          <div class="label_detail text-color"><span class="required-title"></span></div>
+                          <div class="input-data">
+                            <div ngbDropdown class="d-inline-block" style="margin-left: 6px; pointer-events: none;" [(ngModel)]="d.locale" [disabled]="true">
+                              <div *ngIf="d.locale =='vi'">
+                                <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                                  id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                              </div>
+                              <div *ngIf="d.locale =='en'">
+                                <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                                  id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                              </div>
+                              <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                                <div class="switch-language">
+                                  <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                                    <div class="language">{{ "vie" | translate }}</div>
+                                  </button>
+                                </div>
+                                <div class="switch-language">
+                                  <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                                    <div class="language">{{ "eng" | translate }}</div>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+              </div>
+          </div>
+
+          <!--ngươi ky-->
+          <div class="participants-border">
+              <div class="label">{{'user.sign' | translate}}</div>
+              <div class="participants--content" *ngFor="let d of this.getSignerHandler(); let index=index">
+                  <input [id]="'ordering-sign-' + index" class="col-md-1 contract-total" style="width: 25px; height: 25px"    
+                  [(ngModel)]="d.ordering" [disabled]="getSignerHandler().length == 1"
+                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
+                  <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
+
+                      <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}}-->
+                      <div class="participants--input" style="display: flex">
+                        <div class="participants__name">
+                          <div class="label_detail text-color">
+                            <div>
+                              <input  name="checkPhoneMailParticipantSigner_{{index}}_{{id}}"
+                                type="radio" [value]="emaill" [(ngModel)]="d.login_by" [disabled]="true"/>
+                            </div>&nbsp;
+                            <div>
+                              {{'typeOfSignEmail' | translate}}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="participants__name">
+                          <div class="label_detail text-color">
+                            <div>
+                              <input name="checkPhoneMailParticipantSigner_{{index}}_{{id}}"
+                                type="radio" [value]="phonee" [(ngModel)]="d.login_by" [disabled]="true"/>
+                            </div>&nbsp;
+                            <div>
+                              {{'typeOfSignPhone' | translate}}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+      
+                      <div class="participants--input" style="display: flex">
+                        <div class="participants__name">
+                          <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;
+                          </div>
+                          <div class="input-data">
+                            <img src="assets/img/icon_name.svg" class="input-img">
+                            <input [id]="'signature-partner-' + d.ordering" type="text"
+                              [(ngModel)]="d.name" readonly>
+                          </div>
+                        </div>
+      
+                        <div class="participants__name">
+                          <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;
+                          </div>
+                          <div class="input-data">
+                            <input type="text" value="{{d.signType[0].name}}" readonly>
+                          </div>
+                        </div>
+                      </div>
+      
+      
+                      <!--KD-->
+                      <div *ngIf="this.site == 'KD'" class="participants--input" style="display: flex">
+                        <div *ngIf="d.login_by === 'email'" class="participants__name" style="width: 88%">
+                          <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+                          <div class="input-data">
+                            <img src="assets/img/login_email.svg" class="input-img">
+                            <input type="text" [(ngModel)]="d.email" readonly>
+                          </div>
+                        </div>
+      
+                        <div *ngIf="d.login_by === 'phone'" class="participants__name" style="width: 88%">
+                          <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                            <span class="required-title">*</span>
+                          </div>
+                          <div style="display: flex;">
+                            <div class="input-data" style="width: 85%;">
+                              <img class="input-img">
+                              <input type="text" [(ngModel)]="d.phone" readonly>
+                            </div>
+      
+                            <div class="input-data" style="width: 7%;margin-left: 8%;">
+                              <div ngbDropdown class="d-inline-block" style="margin-left: 6px; pointer-events: none;" [(ngModel)]="d.locale" [disabled]="true">
+                                <div *ngIf="d.locale =='vi'">
+                                  <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                                    id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                                </div>
+                                <div *ngIf="d.locale =='en'">
+                                  <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                                    id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                                </div>
+                                <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                                  <div class="switch-language">
+                                    <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                                      <div class="language">{{ "vie" | translate }}</div>
+                                    </button>
+                                  </div>
+                                  <div class="switch-language">
+                                    <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                                      <div class="language">{{ "eng" | translate }}</div>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+      
+      
+                      </div>
+      
+                      <!--NB email-->
+                      <div *ngIf="this.site == 'NB' && d.login_by === 'email'" class="participants--input"
+                        style="display: flex">
+                        <div class="participants__name">
+                          <div class="label_detail text-color">Email&nbsp;
+                            <span class="required-title">*</span>
+                          </div>
+                          <div class="input-data">
+                            <img src="assets/img/login_email.svg" class="input-img">
+                            <input type="text" [(ngModel)]="d.email" readonly> 
+                          </div>
+                        </div>
+                        
+                        <div class="participants__name" style="display:flex">
+                          
+                        <div class="participants__name" style="width: 80%">
+                          <div class="label_detail text-color" style="width: 120%">{{'user.phone' | translate}}&nbsp;<div style="color: #ffc107;">
+                              ({{'receive.contract.process' | translate}})</div>
+                          </div>
+                          <div class="input-data">
+                            <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
+                            <input type="text" [(ngModel)]="d.phone" readonly>
+                          </div>
+                        </div>
+      
+                        <div class="participants__name" style="width: 15%; margin-left:5%;">
+                          <div class="label_detail text-color"><span class="required-title"></span></div>
+                          <div class="input-data">
+                            <div ngbDropdown class="d-inline-block" style="margin-left: 6px; pointer-events: none;" [(ngModel)]="d.locale" [disabled]="true">
+                              <div *ngIf="d.locale =='vi'">
+                                <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                                  id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                              </div>
+                              <div *ngIf="d.locale =='en'">
+                                <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                                  id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                              </div>
+                              <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                                <div class="switch-language">
+                                  <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                                    <div class="language">{{ "vie" | translate }}</div>
+                                  </button>
+                                </div>
+                                <div class="switch-language">
+                                  <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                                    <div class="language">{{ "eng" | translate }}</div>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        </div>
+                      </div>
+      
+                      <!--NB phone-->
+                      <div *ngIf="this.site == 'NB' && d.login_by === 'phone'" class="participants--input"
+                        style="display: flex">
+                        <div class="participants__name" style="width:88%; ">
+                          <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;</div>
+                          <div class="input-data">
+                            <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
+                            <input type="text" [(ngModel)]="d.phone" readonly>
+                          </div>
+                        </div>
+      
+                        <div class="participants__name" style="width: 6%">
+                          <div class="label_detail text-color">
+                            <span class="required-title"></span>
+                          </div>
+                          <div class="input-data">
+                            <div ngbDropdown class="d-inline-block" style="margin-left: 6px; pointer-events: none;" [(ngModel)]="d.locale" [disabled]="true">
+                              <div *ngIf="d.locale =='vi'">
+                                <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                                  id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                              </div>
+                              <div *ngIf="d.locale =='en'">
+                                <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                                  id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                              </div>
+                              <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                                <div class="switch-language">
+                                  <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                                    <div class="language">{{ "vie" | translate }}</div>
+                                  </button>
+                                </div>
+                                <div class="switch-language">
+                                  <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                                    <div class="language">{{ "eng" | translate }}</div>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+      
+                      </div>
+      
+                      <!--Check ký usb token cho đối tác, nếu có thì render trường {{'tax_code' | translate}}/cccd-->
+                      <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
+                        <div class="participants__name" style="width: 88%">
+                          <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                            <div style="color: #ffc107;">({{'info.token' | translate}})</div>
+                          </div>
+                          <div class="input-data">
+                            <input type="text" [(ngModel)]="d.card_id"
+                              oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
+                          </div>
+                        </div>
+                      </div>
+      
+                      <!--trường hiển thị khi người ký của đối tác chọn loại ký là hsm-->
+                      <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
+                        <div class="participants__name" style="width: 88%">
+                          <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                            <div style="color: #ffc107;">({{'info.hsm' | translate}})</div>
+                          </div>
+                          <div class="input-data">
+                            <input type="text" [(ngModel)]="d.card_id"
+                              oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
+                          </div>
+                        </div>
+                      </div>
+      
+                    </div>
+              </div>
+          </div>
+
+          <!--van thu-->
+          <div class="participants-border">
+              <div class="label">{{'user.doc' | translate}}</div>
+              <div class="participants--content" *ngFor="let d of getArchiverHandler(); let index = index">
+                  <input [id]="'ordering-sign-'" class="col-md-1 contract-total" style="width: 25px; height: 25px"
+                      [disabled]="getArchiverHandler().length == 1" [(ngModel)]="d.ordering"
+                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
+
+                  <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
+
+                      <div class="participants--input" style="display: flex">
+                        <div class="participants__name">
+                          <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;
+                          </div>
+                          <div class="input-data">
+                            <img src="assets/img/icon_name.svg" class="input-img">
+                            <input type="text" [(ngModel)]="d.name" readonly>
+                          </div>
+                        </div>
+      
+                        <!--Văn thư-->
+                        <div class="participants__name">
+                          <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;
+                          </div>
+                          <div class="input-data">
+                            <input type="text" value="{{d.signType[0].name}}" readonly>
+                          </div>
+                        </div>
+      
+                      </div>
+      
+                      <!--NB-->
+                      <div class="participants--input" style="display: flex" *ngIf="this.site == 'NB'">
+                        <div class="participants__name">
+                          <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+                          <div class="input-data">
+                            <img src="assets/img/login_email.svg" class="input-img">
+                            <input type="text" [(ngModel)]="d.email" readonly>
+                          </div>
+                        </div>
+                        
+                        <div class="participants__name" style="display: flex">
+                        <div class="participants__name" style="width: 80%">
+                          <div class="label_detail text-color" style="width: 120%">{{'user.phone' | translate}}&nbsp;<div style="color: #ffc107;">
+                              ({{'receive.contract.process' | translate}})</div>
+                          </div>
+                          <div class="input-data">
+                            <img class="input-img">
+                            <input type="text" [(ngModel)]="d.phone" readonly>
+                          </div>
+                        </div>
+      
+                        <div class="participants__name" style="width: 15%; margin-left: 5%;">
+                          <div class="label_detail text-color">
+                            <span class="required-title"></span>
+                          </div>
+                          <div class="input-data">
+                            <div ngbDropdown class="d-inline-block" style="margin-left: 6px; pointer-events: none;" [(ngModel)]="d.locale" [disabled]="true">
+                              <div *ngIf="d.locale =='vi'">
+                                <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                                  id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                              </div>
+                              <div *ngIf="d.locale =='en'">
+                                <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                                  id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                              </div>
+                              <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                                <div class="switch-language">
+                                  <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                                    <div class="language">{{ "vie" | translate }}</div>
+                                  </button>
+                                </div>
+                                <div class="switch-language">
+                                  <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                                    <div class="language">{{ "eng" | translate }}</div>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        </div>
+                      </div>
+      
+                      <!--KD-->
+                      <div class="participants--input" style="display: flex" *ngIf="this.site == 'KD'">
+                        <div class="participants__name" style="width: 88%">
+                          <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+                          <div class="input-data">
+                            <img src="assets/img/login_email.svg" class="input-img">
+                            <input type="text" [(ngModel)]="d.email" readonly>
+                          </div>
+                        </div>
+                      </div>
+      
+                      <div class="participants--input" style="display: flex" *ngIf="getDataSignEkyc(d).length > 0">
+                        <div class="participants__name" style="width: 88%">
+                          <div class="label_detail text-color">{{'cardId' | translate}}&nbsp;</div>
+                          <div class="input-data">
+                            <input type="text" [(ngModel)]="d.card_id"
+                              oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
+                          </div>
+                        </div>
+                      </div>
+      
+                      <!--trường hiển thị khi văn thư đối tác của tổ chức chọn loại ký là usb token-->
+                      <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
+                        <div class="participants__name" style="width: 88%">
+                          <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                            <div style="color: #ffc107;">({{'info.token' | translate}})</div>
+                          </div>
+                          <div class="input-data">
+                            <input type="text" [(ngModel)]="d.card_id"
+                              oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
+                          </div>
+                        </div>
+                      </div>
+      
+                      <!--trường hiển thị khi văn thư đối tác của tổ chức chọn loại ký là hsm-->
+                      <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
+                        <div class="participants__name" style="width: 88%">
+                          <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;</div>
+                          <div class="input-data">
+                            <input type="text" [(ngModel)]="d.card_id"
+                              oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
+                          </div>
+                        </div>
+                      </div>
+      
+                    </div>
+              </div>
+          </div>
+          <div class="footer-btn">
+            <button (click)="onCancel()">{{"btn.close" | translate}}</button>
+        
         </div>
+      </div>
 
-
-        <div class="contract__content--participants">
-            <!--nguoi dieu phoi-->
-            <div class="participants-border">
-                <div class="label">{{'user.lead' | translate}}</div>
-                <div *ngFor="let d of this.getCoordinatorHandler()" class="participants--content">
-                    <input [id]="'ordering-sign-'" class="col-md-1 contract-total"
-                    style="width: 25px; height: 25px"
-                    [disabled]="1" value="{{d.ordering}}"
-                     />
-                    <div class="col-md-10 participants__content--input">
-                        <div class="participants--input" style="display: flex">
-                            <div class="participants__name">
-                                <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span
-                                        class="required-title">:</span></div>
-                                <div class="input-data">
-                                    <img src="assets/img/icon_name.svg" class="input-img">
-                                    <input type="text" value="{{d.name}}" readonly>
-                                </div>
-                            </div>
-
-                            <div class="participants__name">
-                                <div class="label_detail text-color">Email&nbsp;
-                                    <span class="required-title">:</span>
-                                </div>
-                                <div class="input-data">
-                                    <img src="assets/img/login_email.svg" class="input-img">
-                                    <input type="text" value="{{d.email}}" readonly>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="participants--input">
-                            <div class="participants__name" style="width: 88%">
-                                <div class="label_detail text-color">{{'user.phone' | translate}}:&nbsp;
-                                </div>
-                                <div class="input-data">
-                                    <img class="input-img" style="padding: 0">
-                                    <input type="text" value="{{d.phone}}" readonly/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!--nguoi xem xet-->
-            <div class="participants-border">
-                <div class="label">{{'user.view' | translate}}</div>
-                <div *ngFor="let d of this.getReviewerHandler()" class="participants--content">
-                    <input [id]="'ordering-sign-'" class="col-md-1 contract-total"
-                    style="width: 25px; height: 25px"
-                    [disabled]="1" value="{{d.ordering}}"
-                     />
-                    <div class="col-md-10 participants__content--input">
-                        <div class="participants--input" style="display: flex">
-                            <div class="participants__name">
-                                <div class="label_detail text-color">{{'user.name' | translate}}:&nbsp;
-                                </div>
-                                <div class="input-data">
-                                    <img src="assets/img/icon_name.svg" class="input-img">
-                                    <input type="text" value="{{d.name}}" readonly>
-                                </div>
-                            </div>
-
-                            <div class="participants__name">
-                                <div class="label_detail text-color">Email:&nbsp;
-                                </div>
-                                <div class="input-data">
-                                    <img src="assets/img/login_email.svg" class="input-img">
-                                    <input type="text" value="{{d.email}}" readonly>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="participants--input">
-                            <div class="participants__name" style="width: 88%">
-                                <div class="label_detail text-color">{{'user.phone' | translate}}:&nbsp;
-                                </div>
-                                <div class="input-data">
-                                    <img class="input-img">
-                                    <input type="text" value="{{d.phone}}" readonly/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!--ngươi ky-->
-            <div class="participants-border">
-                <div class="label">{{'user.sign' | translate}}</div>
-                <div *ngFor="let d of this.getSignerHandler()" class="participants--content">
-                        <input [id]="'ordering-sign-'" class="col-md-1 contract-total"
-                        style="width: 25px; height: 25px"
-                        [disabled]="1" value="{{d.ordering}}"
-                         />
-                    <div class="col-md-10 participants__content--input">
-                        <div class="participants--input" style="display: flex">
-                            <div class="participants__name">
-                                <div class="label_detail text-color">{{'user.name' | translate}}:&nbsp;
-                                </div>
-                                <div class="input-data">
-                                    <img src="assets/img/icon_name.svg" class="input-img">
-                                    <input type="text" value="{{d.name}}" readonly>
-                                </div>
-                            </div>
-
-                            <div class="participants__name">
-                                <div class="label_detail text-color">Email:&nbsp;
-                                </div>
-                                <div class="input-data">
-                                    <img src="assets/img/login_email.svg" class="input-img">
-                                    <input type="text" value="{{d.email}}" readonly>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="participants--input">
-                            <div class="participants__name">
-                                <div class="label_detail text-color">{{'user.sign-type' | translate}}:&nbsp;
-                                </div>
-                                <div class="input-data">
-                                    <input type="text" value="{{d.signType != null ? d.signType.name : ('')}}" readonly>
-                                </div>
-                            </div>
-                            <div class="participants__name">
-                                <div class="label_detail text-color">{{'user.phone' | translate}}:&nbsp;
-                                </div>
-                                <div class="input-data">
-                                    <img class="input-img">
-                                    <input type="text" value="{{d.phone}}" readonly/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!--van thu-->
-            <div class="participants-border">
-                <div class="label">{{'user.doc' | translate}}</div>
-                <div *ngFor="let d of this.getArchiverHandler()" class="participants--content">
-                    <input [id]="'ordering-sign-'" class="col-md-1 contract-total"
-                    style="width: 25px; height: 25px"
-                    [disabled]="1" value="{{d.ordering}}"
-                     />
-                    <div class="col-md-10 participants__content--input">
-                        <div class="participants--input" style="display: flex">
-                            <div class="participants__name">
-                                <div class="label_detail text-color">{{'user.name' | translate}}:&nbsp;
-                                </div>
-                                <div class="input-data">
-                                    <img src="assets/img/icon_name.svg" class="input-img">
-                                    <input type="text" value="{{d.name}}" readonly>
-                                </div>
-                            </div>
-
-                            <div class="participants__name">
-                                <div class="label_detail text-color">Email:&nbsp;
-                                </div>
-                                <div class="input-data">
-                                    <img src="assets/img/login_email.svg" class="input-img">
-                                    <input type="text" value="{{d.email}}" readonly>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="participants--input">
-                            <div class="participants__name">
-                                <div class="label_detail text-color">{{'user.sign-type' | translate}}:&nbsp;
-                                </div>
-                                <div class="input-data">
-                                    <input type="text" value="{{d.signType != null ? d.signType.name : ('')}}" readonly>
-                                </div>
-                            </div>
-                            <div class="participants__name">
-                                <div class="label_detail text-color">{{'user.phone' | translate}}:&nbsp;
-                                </div>
-                                <div class="input-data">
-                                    <img class="input-img">
-                                    <input type="text" value="{{d.phone}}" readonly/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-btn">
-                <button (click)="onCancel()" >{{"btn.close" | translate}}</button>
-            </div>
-        </div>
-
-    </div>
+  </div>
 </div>
 
+
+<!-- Thêm cá nhân -->
+<div *ngIf="!isOrg" class="container-fluid">
+  <div class="contract-determine">
+
+      <div class="contract__content--participants">
+
+          <!--ngươi ky-->
+          <div class="participants-border">
+          <div class="dropdown-header">
+              <div class="label">{{'user.sign' | translate}}</div>
+          </div>
+              <div class="participants--content">
+                  <div class="col-md-10 participants__content--input">
+
+                    <div class="participants--input" style="display: flex">
+                      <div class="participants__name">
+                        <div class="label_detail text-color">
+                          <div>
+                            <input name="checkPhoneMailPerson_{{0}}_{{id}}" type="radio"
+                              [value]="emaill" [(ngModel)]="orgCustomer[0].login_by" [disabled]="true"/>
+                          </div>&nbsp;
+                          <div>
+                            {{'typeOfSignEmail' | translate}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="participants__name">
+                        <div class="label_detail text-color">
+                          <div>
+                            <input name="checkPhoneMailPerson_{{0}}_{{id}}" type="radio"
+                              [value]="phonee" [(ngModel)]="orgCustomer[0].login_by" [disabled]="true"/>
+                          </div>&nbsp;
+                          <div>
+                            {{'typeOfSignPhone' | translate}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                      <div class="participants--input" style="display: flex">
+                          <div class="participants__name">
+                              <div class="label_detail text-color">{{'user.name' | translate}}:&nbsp;
+                                  <span style="color: red">*</span>
+                              </div>
+                              <div class="input-data">
+                                  <img src="assets/img/icon_name.svg" class="input-img">
+                                  <input type="text" [(ngModel)]="this.name" readonly>
+                              </div>
+                          </div>
+
+                          <div class="participants__name">
+                            <div class="label_detail text-color">{{'user.sign-type' | translate}}:&nbsp;
+                                <span style="color: red">*</span>
+                            </div>
+                            <div class="input-data">
+                              <input type="text"  value="{{this.signType[0].name}}" readonly>
+                            </div>
+                        </div>
+                      </div>
+
+                        <div *ngIf="this.site == 'KD'" class="participants--input" style="display: flex">
+
+                          <div *ngIf="orgCustomer[0].login_by === 'phone'" class="participants__name" style="width: 88%">
+                            <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                              <span class="required-title">*</span>
+                            </div>
+                            <div style="display: flex;">
+                              <div class="input-data" style="width: 85%;">
+                                <img class="input-img">
+                                <input type="text" [(ngModel)]="orgCustomer[0].phone" readonly>
+                              </div>
+        
+                              <div class="input-data" style="width: 7%;margin-left: 8%;">
+                                <div ngbDropdown class="d-inline-block" style="margin-left: 6px; pointer-events: none;" [(ngModel)]="this.locale" [disabled]="true">
+                                  <div *ngIf="this.locale =='vi'">
+                                    <button *ngIf="this.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                                      id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                                  </div>
+                                  <div *ngIf="this.locale =='en'">
+                                    <button *ngIf="this.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                                      id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                                  </div>
+                                  <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                                    <div class="switch-language">
+                                      <button class="db_icon_vietnam" ngbDropdownItem (click)="this.locale = 'vi'">
+                                        <div class="language">{{ "vie" | translate }}</div>
+                                      </button>
+                                    </div>
+                                    <div class="switch-language">
+                                      <button class="db_icon_english" ngbDropdownItem (click)="this.locale = 'en'">
+                                        <div class="language">{{ "eng" | translate }}</div>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+        
+                          <div *ngIf="orgCustomer[0].login_by === 'email'" class="participants__name" style="width: 88%">
+                            <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+                            <div class="input-data">
+                              <img src="assets/img/login_email.svg" class="input-img">
+                              <input type="text" [(ngModel)]="this.email" readonly>
+                            </div>
+                          </div>
+                        </div>
+        
+                        <!--NB email-->
+                        <div *ngIf="this.site == 'NB' && orgCustomer[0].login_by === 'email'" class="participants--input"
+                          style="display: flex">
+                          <div class="participants__name" style="margin-left: 4%;">
+                            <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+                            <div class="input-data">
+                              <img src="assets/img/login_email.svg" class="input-img">
+                              <input type="text" [(ngModel)]="this.email" readonly>
+                            </div>
+                          </div>
+        
+                          <div class="participants__name" style="width: 34%; margin-left: 8%;">
+                            <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span
+                                *ngIf="getDataSignCka(this).length > 0" class="required-title">*</span>
+                              <div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div>
+                            </div>
+                            <div class="input-data">
+                              <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
+                              <input type="text" [(ngModel)]="this.phone" readonly>
+                            </div>
+                          </div>
+        
+                          <div class="participants__name" style="width: 6%; margin-right: 4%;">
+                            <div class="label_detail text-color"><span class="required-title"></span></div>
+                            <div class="input-data">
+                              <div ngbDropdown class="d-inline-block" style="margin-left: 6px; pointer-events: none;" [(ngModel)]="this.locale" [disabled]="true">
+                                <div *ngIf="this.locale =='vi'">
+                                  <button *ngIf="this.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                                    id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                                </div>
+                                <div *ngIf="this.locale =='en'">
+                                  <button *ngIf="this.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                                    id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                                </div>
+                                <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                                  <div class="switch-language">
+                                    <button class="db_icon_vietnam" ngbDropdownItem (click)="this.locale = 'vi'">
+                                      <div class="language">{{ "vie" | translate }}</div>
+                                    </button>
+                                  </div>
+                                  <div class="switch-language">
+                                    <button class="db_icon_english" ngbDropdownItem (click)="this.locale = 'en'">
+                                      <div class="language">{{ "eng" | translate }}</div>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+        
+                        </div>
+        
+                        <!--NB phone-->
+                        <div *ngIf="this.site == 'NB' && orgCustomer[0].login_by === 'phone'" class="participants--input"
+                          style="display: flex">
+                          <div class="participants__name" style="width:80%; margin-right: -4%;">
+                            <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span
+                                class="required-title">*</span></div>
+                            <div class="input-data">
+                              <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
+                              <input type="text" [(ngModel)]="this.phone" readonly>
+                            </div>
+                          </div>
+        
+                          <div class="participants__name" style="width: 6%">
+                            <div class="label_detail text-color"><span class="required-title"></span></div>
+                            <div class="input-data">
+                              <div ngbDropdown class="d-inline-block" style="margin-left: 6px; pointer-events: none;" [(ngModel)]="this.locale" [disabled]="true">
+                                <div *ngIf="this.locale =='vi'">
+                                  <button *ngIf="this.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                                    id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                                </div>
+                                <div *ngIf="this.locale =='en'">
+                                  <button *ngIf="this.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                                    id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                                </div>
+                                <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                                  <div class="switch-language">
+                                    <button class="db_icon_vietnam" ngbDropdownItem (click)="this.locale = 'vi'">
+                                      <div class="language">{{ "vie" | translate }}</div>
+                                    </button>
+                                  </div>
+                                  <div class="switch-language">
+                                    <button class="db_icon_english" ngbDropdownItem (click)="this.locale = 'en'">
+                                      <div class="language">{{ "eng" | translate }}</div>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+        
+                        </div>
+        
+                        <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là eKYC-->
+                        <div class="participants--input" style="display: flex" *ngIf="getDataSignEkyc(this).length > 0">
+                          <div class="participants__name" style="width: 88%">
+                            <div class="label_detail text-color">{{'cardId' | translate}}&nbsp;<span
+                                class="required-title">*</span></div>
+                            <div class="input-data">
+                              <input type="text" [(ngModel)]="this.card_id"
+                                oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
+                            </div>
+                          </div>
+                        </div>
+        
+                        <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là usb token-->
+                        <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(this).length > 0">
+                          <div class="participants__name" style="width: 88%">
+                            <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span
+                                class="required-title">*</span>
+                              <div style="color: #ffc107;">({{'info.token' | translate}})</div>
+                            </div>
+                            <div class="input-data">
+                              <input type="text" [(ngModel)]="this.card_id"
+                                oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!--trường hiển thị khi văn thư đối tác của tổ chức chọn loại ký là hsm-->
+                        <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(this).length > 0">
+                          <div class="participants__name" style="width: 88%">
+                            <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;<span
+                                class="required-title">*</span></div>
+                            <div class="input-data">
+                              <input type="text" [(ngModel)]="this.card_id"
+                                oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
+                            </div>
+                          </div>
+                        </div>                          
+        
+                        <!--KD-->
+                        <div class="participants--input" style="display: flex"
+                          *ngIf="this.site === 'KD' && getDataSignCka(this).length > 0 && orgCustomer[0].login_by == 'email'">
+        
+                          <div class="participants__name" style="width: 88%">
+                            <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
+                              <span class="required-title">*</span>
+                            </div>
+                            <div class="input-data" style="width: 85%;">
+                              <input type="text" [(ngModel)]="this.phone"
+                                oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" >
+                            </div>
+                          </div>
+        
+        
+                          <div class="participants__name" style="width: 6%; margin-left: -18%;">
+                            <div class="label_detail text-color"><span class="required-title"></span></div>
+                            <div class="input-data">
+                              <div ngbDropdown class="d-inline-block" style="margin-left: 6px; pointer-events: none;" [(ngModel)]="this.locale" [disabled]="true">
+                                <div *ngIf="this.locale =='vi'">
+                                  <button *ngIf="this.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                                    id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                                </div>
+                                <div *ngIf="this.locale =='en'">
+                                  <button *ngIf="this.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                                    id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                                </div>
+                                <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                                  <div class="switch-language">
+                                    <button class="db_icon_vietnam" ngbDropdownItem (click)="this.locale = 'vi'">
+                                      <div class="language">{{ "vie" | translate }}</div>
+                                    </button>
+                                  </div>
+                                  <div class="switch-language">
+                                    <button class="db_icon_english" ngbDropdownItem (click)="this.locale = 'en'">
+                                      <div class="language">{{ "eng" | translate }}</div>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          </div>
+
+                      
+                  </div>
+
+                  <!-- <div class="col-md-1 delete-element">
+                      <img src="assets/img/border_close.svg" alt="close.vn">
+                      <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
+                  </div> -->
+              </div>
+          </div>
+          <div class="footer-btn">
+              <button (click)="onCancel()">{{"btn.close" | translate}}</button>
+          
+          </div>
+      </div>
+
+  </div>
+</div>
+<ngx-spinner></ngx-spinner>

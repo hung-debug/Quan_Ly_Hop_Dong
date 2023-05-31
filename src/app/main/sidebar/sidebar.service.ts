@@ -65,6 +65,9 @@ export class SidebarService {
   isBaoCaoSoLuongLoai: boolean = true; // báo cáo số lượng hợp đồng theo loại
   isBaoCaoHopDongNhan: boolean = true; //báo cáo hợp đồng nhận
 
+  isConfigSms: boolean = true; //cấu hình sms
+  isConfigSoonExpireDay: boolean = true;
+
   toggled = false;
   _hasBackgroundImage = true;
 
@@ -258,7 +261,11 @@ export class SidebarService {
 
             this.isBaoCaoSoLuongLoai = listRole.some((element) => element.code == 'BAOCAO_SOLUONG_LOAIHOPDONG');
 
-            this.isBaoCaoHopDongNhan = listRole.some((element) => element.code == 'BAOCAO_HOPDONG_NHAN')
+            this.isBaoCaoHopDongNhan = listRole.some((element) => element.code == 'BAOCAO_HOPDONG_NHAN');
+
+            this.isConfigSms = listRole.some((element) => element.code == 'CAUHINH_SMS');
+
+            this.isConfigSoonExpireDay = listRole.some((element) => element.code == 'CAUHINH_NGAYSAPHETHAN')  
 
             this.buildMenu(currentUserC);
           },
@@ -550,7 +557,7 @@ export class SidebarService {
       type: 'simple',
       href: '/main/customer',
       id: 11,
-  })
+    })
 
     this.menus.push({
       title: 'contract.folder',
@@ -561,15 +568,17 @@ export class SidebarService {
       id: 12,
     })
    
-
-    this.menus.push({
-      title: 'menu.config-sms-email',
-      icon: '/assets/img/email-sms.svg',
-      active: false,
-      type: 'simple',
-      href: '/main/config-sms-email',
-      id: 9,
-    })
+    if(this.isConfigSms || this.isConfigSoonExpireDay) {
+      this.menus.push({
+        title: 'menu.config-sms-email',
+        icon: '/assets/img/email-sms.svg',
+        active: false,
+        type: 'simple',
+        href: '/main/config-sms-email',
+        id: 9,
+      })
+    }
+  
 
     //xu ly highlight
     this.menus.forEach((element: any) => {

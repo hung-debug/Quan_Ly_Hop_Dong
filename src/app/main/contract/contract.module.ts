@@ -35,6 +35,9 @@ import {TreeSelectModule} from 'primeng/treeselect';
 import { CancelContractDialogComponent } from './dialog/cancel-contract-dialog/cancel-contract-dialog.component';
 import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
 import { ContractConnectDialogComponent } from './dialog/contract-connect-dialog/contract-connect-dialog.component';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { TableModule } from 'primeng/table';
+import { TreeTableModule } from 'primeng/treetable';
 
 import {NgxInputSearchModule} from "ngx-input-search";
 import { AddConnectDialogComponent } from './dialog/add-connect-dialog/add-connect-dialog.component';
@@ -53,6 +56,8 @@ import { ConfirmCecaContractComponent } from './shared/model/confirm-ceca-contra
 import { ConfirmCecaFormComponent } from './form-contract/confirm-ceca-form/confirm-ceca-form.component';
 import { ConfirmCecaBatchComponent } from './batch-contract/confirm-ceca-batch/confirm-ceca-batch.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+
+import { AddPartnerDialogComponent } from './dialog/add-partner-dialog/add-partner-dialog.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -84,6 +89,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ConfirmCecaContractComponent,
     ConfirmCecaFormComponent,
     ConfirmCecaBatchComponent,
+    AddPartnerDialogComponent,
   ],
   exports: [
     ContractHeaderComponent,
@@ -127,7 +133,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NgxPaginationModule,
     ChipsModule,
     TreeSelectModule,
-    PdfViewerModule
+    PdfViewerModule,
+    SelectButtonModule,
+    TableModule,
+    TreeTableModule
   ],
   entryComponents: [
     ConfirmInforContractComponent,

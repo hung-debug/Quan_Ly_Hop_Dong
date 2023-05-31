@@ -131,6 +131,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   status: any;
   pdfSrcMobile: string;
   trustedUrl: any;
+  action: any;
 
   consider: boolean = false;
 
@@ -233,6 +234,12 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         this.statusLink = params.status;
       } else {
         this.statusLink = '';
+      }
+
+      if(typeof params.action != 'undefined' && params.action){
+        this.action = params.action;
+      }else{
+        this.action = '';
       }
     });
 
@@ -373,6 +380,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           }
           if (element.type == 4) {
             element['sign_unit'] = 'so_tai_lieu';
+          }
+          if (element.type == 5) {
+            element['sign_unit'] = 'text';
+            element['text_type'] = 'currency'
           }
         });
 
@@ -998,11 +1009,15 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   endContract() {
+    if(this.action = 'viewInFolder'){
+      this.router.navigate(['/main/contract/view/' + this.idContract]);
+    } else 
     this.actionBack();
   }
 
   actionBack() {
     console.log('vao day ');
+
 
     // console.log("is ", this.isOrg);
     if (this.pageBefore && this.isOrg) {

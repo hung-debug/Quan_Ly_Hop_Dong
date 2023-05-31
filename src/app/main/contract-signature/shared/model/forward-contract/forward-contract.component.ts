@@ -7,6 +7,7 @@ import { ContractService } from "../../../../../service/contract.service";
 import { ToastService } from "../../../../../service/toast.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { parttern, parttern_input } from 'src/app/config/parttern';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-forward-contract',
@@ -22,10 +23,11 @@ export class ForwardContractComponent implements OnInit {
 
   isReqCardIdToken: boolean = false;
   isReqCardIdHsm: boolean = false;
-
+  site: string;
   login: string;
   type: any = 0;
   locale: string;
+  isVietnamese: boolean = true;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -43,6 +45,11 @@ export class ForwardContractComponent implements OnInit {
   ngOnInit(): void {
     this.datas = this.data;
     this.login = "email";
+    if (environment.flag == 'NB') {
+      this.site = 'NB';
+    } else if (environment.flag == 'KD') {
+      this.site = 'KD';
+    }
 
     if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
       this.type = 1;
@@ -56,10 +63,13 @@ export class ForwardContractComponent implements OnInit {
       phone: "",
       card_id: "",
     });
-
+    console.log("datas",this.datas);
+    
+    // this.locale = this.datas?.dataContract?.is_data_contract?.participants[0]?.recipients[0]?.locale;
+    const currentRecipientData = this.getTargetRecipientData(this.datas?.recipientId);
+    this.locale = currentRecipientData?.locale ? currentRecipientData?.locale: 'vi';
 
     for (const d of this.datas.dataContract.is_data_contract.participants) {
-      this.locale = this.datas?.dataContract?.is_data_contract?.participants[0]?.recipients[0]?.locale;
       for (const q of d.recipients) {
         if (q.email == this.currentUser.customer.info.email && q.status == 1) {
           let data_sign_cka = q.sign_type.filter((p: any) => p.id == 1)[0];
@@ -95,9 +105,22 @@ export class ForwardContractComponent implements OnInit {
     }
   }
 
+  getTargetRecipientData(targetId : number){
+    if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
+      const participants = this.datas?.dataContract?.is_data_contract?.participants;
+      for (const participant of participants) {
+        for (const recipient of participant.recipients) {
+          if (targetId == recipient.id) {
+            return recipient;
+          }
+        }
+      }
+    }
+  }
 
   changeTypeSign(e: any,) {
     this.login = e.target.value;
+    
   }
 
   setLocale(lang: string) {
@@ -107,6 +130,39 @@ export class ForwardContractComponent implements OnInit {
   dropdownButtonText = '';
   async onSubmit() {
     const updatedInfo = await this.contractService.getInforPersonProcess(this.datas.recipientId).toPromise()
+    let isInRecipient = false;
+
+    if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
+      const participants = this.datas?.dataContract?.is_data_contract?.participants;
+      console.log("participants",participants);
+      for (const participant of participants) {
+        for (const recipient of participant.recipients) {
+          if (updatedInfo.name == recipient.name) {
+            isInRecipient = true;
+          }
+        }
+      }
+    }
+
+    if (!isInRecipient) {
+      console.log("isInRecipient",isInRecipient);
+      this.toastService.showErrorHTMLWithTimeout(
+        'Bạn không có quyền xử lý hợp đồng này do tên không trùng khớp!',
+        '',
+        3000
+      );
+      if (this.type == 1) {
+        this.router.navigate(['/login']);
+        this.dialogRef.close();
+        this.spinner.hide();
+        return
+      } else {
+        this.router.navigate(['/main/dashboard']);
+        this.dialogRef.close();
+        this.spinner.hide();
+        return
+      }
+    }
 
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
     this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
@@ -121,25 +177,25 @@ export class ForwardContractComponent implements OnInit {
       });
       console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
-      // if (!ArrRecipientsNew) {
+      if (!ArrRecipientsNew) {
 
-      //   this.toastService.showErrorHTMLWithTimeout(
-      //     'Bạn không có quyền xử lý hợp đồng này!',
-      //     '',
-      //     3000
-      //   );
-      //   if (this.type == 1) {
-      //     this.router.navigate(['/login']);
-      //     this.dialogRef.close();
-      //     this.spinner.hide();
-      //     return
-      //   } else {
-      //     this.router.navigate(['/main/dashboard']);
-      //     this.dialogRef.close();
-      //     this.spinner.hide();
-      //     return
-      //   }
-      // };
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        }
+      };
       console.log("this.currentUser.email", this.currentUser);
       if (!String(this.myForm.value.name)) {
         // this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền'
@@ -241,6 +297,8 @@ export class ForwardContractComponent implements OnInit {
             login_by: this.login,
             locale: this.locale
           };
+          console.log("dataAuthorize",dataAuthorize);
+          
 
           if (this.login == 'phone') {
             dataAuthorize.email = dataAuthorize.phone
@@ -303,9 +361,7 @@ export class ForwardContractComponent implements OnInit {
     if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
       for (const participant of this.datas.dataContract.is_data_contract.participants) {
         for (const recipient of participant.recipients) {
-          // console.log("rec ",recipient);
-          // console.log("this ", this.myForm.value);
-          if (this.myForm.value.email == recipient.email) {
+          if (this.myForm.value.phone == recipient.phone && recipient.status !== 4 ) {
             return false;
           }
         }

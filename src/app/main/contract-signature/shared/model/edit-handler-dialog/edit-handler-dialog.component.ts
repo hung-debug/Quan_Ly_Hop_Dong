@@ -74,8 +74,8 @@ export class EditHandlerComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('currentValue',changes.login_by.currentValue);
-    console.log('previousValue',changes.login_by.previousValue);
+    console.log('currentValue', changes.login_by.currentValue);
+    console.log('previousValue', changes.login_by.previousValue);
   }
 
   ngOnInit(): void {
@@ -99,8 +99,8 @@ export class EditHandlerComponent implements OnInit {
 
 
     console.log("this.data.update process person", this.data);
-    console.log("datas",this.datas);
-    
+    console.log("datas", this.datas);
+
 
     this.name = this.data.name;
     this.login_by = this.data.login_by;
@@ -164,120 +164,58 @@ export class EditHandlerComponent implements OnInit {
   }
   UpdateHandler() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    console.log("datas",this.currentUser);
-
+    console.log("datas", this.currentUser);
+    const login_by = this.isCheckRadio ? "email" : "phone"
     this.spinner.show();
-    if(this.id_sign_type !== 1 && this.id_sign_type !== 5){
-      let dataUpdate = {
-        ...this.data,
-        name: this.name,
-        email: this.isCheckRadio ? this.email.toLowerCase() : this.phone,
-        phone: !this.isCheckRadio ? this.phone : "",
-        login_by: this.isCheckRadio ? "email" : "phone",
-        card_id: this.card_id,
-      };
-      // console.log("a",dataUpdate);
-      
-  
-      if (!this.validData()) {
-        console.log("dataUpdate", this.validData());
-        console.log("b");
-        return;
-      }
-      else {
-        if (this.name !== "") {
-          if (JSON.stringify(this.data) === JSON.stringify(dataUpdate)) {
-  
-            return;
-          }
-          console.log("c");
-          this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
-            (res: any) => {
-              if (!res.success) {
-                switch (res.message) {
-                  case "E01": {
-                    this.toastService.showErrorHTMLWithTimeout(this.translate.instant('email.already.exist'), "", 3000);
-                    break
-                  }
-                  case "E02": {
-                    this.toastService.showErrorHTMLWithTimeout(this.translate.instant('phone.already.exist'), "", 3000);
-                    break
-                  }
-                  case "E03": {
-                    this.toastService.showErrorHTMLWithTimeout(this.translate.instant('cardid.already.exist'), "", 3000);
-                    break
-                  } default: this.toastService.showErrorHTMLWithTimeout(this.translate.instant('error.update.handler'), "", 3000);
-                }
-              } else {
-                this.toastService.showSuccessHTMLWithTimeout(this.translate.instant('update.success'), "", 3000);
-                dataUpdate = { ...dataUpdate, "change_num": this.data.change_num + 1 }
-                this.dialogRef.close(dataUpdate);
-                // this.router.navigate(['/main/form-contract/detail/' + this.id]);
-              }
-            }
-          )
-        } else {
-          this.toastService.showWarningHTMLWithTimeout("Tên người xử lý không được bỏ trống", "", 3000);
-        }
-  
-      }
-    } else{
-        let dataUpdate = {
-          ...this.data,
-          name: this.name,
-          email: this.isCheckRadio ? this.email.toLowerCase() : this.phone,
-          phone: this.isCheckRadio ? this.phone : "",
-          login_by: this.isCheckRadio ? "email" : "phone",
-          card_id: this.card_id,
-        };
-        // console.log("a",dataUpdate);
-        
-    
-        if (!this.validData()) {
-          console.log("dataUpdate", this.validData());
-          console.log("b");
+    let dataUpdate = {
+      ...this.data,
+      name: this.name,
+      email: login_by === 'email' ? this.email.toLowerCase() : login_by === 'phone' ? this.phone : '',
+      phone: this.phone,
+      login_by: login_by,
+      card_id: this.card_id,
+    };
+
+    if (!this.validData()) {
+      console.log("dataUpdate", this.validData());
+      return;
+    }
+    else {
+      if (this.name !== "") {
+        if (JSON.stringify(this.data) === JSON.stringify(dataUpdate)) {
           return;
         }
-        else {
-          if (this.name !== "") {
-            if (JSON.stringify(this.data) === JSON.stringify(dataUpdate)) {
-    
-              return;
-            }
-            console.log("c");
-            this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
-              (res: any) => {
-                if (!res.success) {
-                  switch (res.message) {
-                    case "E01": {
-                      this.toastService.showErrorHTMLWithTimeout(this.translate.instant('email.already.exist'), "", 3000);
-                      break
-                    }
-                    case "E02": {
-                      this.toastService.showErrorHTMLWithTimeout(this.translate.instant('phone.already.exist'), "", 3000);
-                      break
-                    }
-                    case "E03": {
-                      this.toastService.showErrorHTMLWithTimeout(this.translate.instant('cardid.already.exist'), "", 3000);
-                      break
-                    } default: this.toastService.showErrorHTMLWithTimeout(this.translate.instant('error.update.handler'), "", 3000);
-                  }
-                } else {
-                  this.toastService.showSuccessHTMLWithTimeout(this.translate.instant('update.success'), "", 3000);
-                  dataUpdate = { ...dataUpdate, "change_num": this.data.change_num + 1 }
-                  this.dialogRef.close(dataUpdate);
-                  // this.router.navigate(['/main/form-contract/detail/' + this.id]);
+        this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
+          (res: any) => {
+            this.spinner.hide();
+            if (!res.success) {
+              switch (res.message) {
+                case "E01": {
+                  this.toastService.showErrorHTMLWithTimeout(this.translate.instant('email.already.exist'), "", 3000);
+                  break
                 }
+                case "E02": {
+                  this.toastService.showErrorHTMLWithTimeout(this.translate.instant('phone.already.exist'), "", 3000);
+                  break
+                }
+                case "E03": {
+                  this.toastService.showErrorHTMLWithTimeout(this.translate.instant('cardid.already.exist'), "", 3000);
+                  break
+                } default: this.toastService.showErrorHTMLWithTimeout(this.translate.instant('error.update.handler'), "", 3000);
               }
-            )
-          } else {
-            this.toastService.showWarningHTMLWithTimeout("Tên người xử lý không được bỏ trống", "", 3000);
+            } else {
+              this.toastService.showSuccessHTMLWithTimeout(this.translate.instant('update.success'), "", 3000);
+              dataUpdate = { ...dataUpdate, "change_num": this.data.change_num + 1 }
+              this.dialogRef.close(dataUpdate);
+              // this.router.navigate(['/main/form-contract/detail/' + this.id]);
+            }
           }
-    
-        }
-      
+        )
+      } else {
+        this.toastService.showWarningHTMLWithTimeout("Tên người xử lý không được bỏ trống", "", 3000);
+      }
     }
-    
+
   }
   validData() {
     this.clearError();

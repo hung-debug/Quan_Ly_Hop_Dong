@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { variable } from "../../../../config/variable";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog,MatDialogRef } from "@angular/material/dialog";
 import { ForwardContractComponent } from "../../shared/model/forward-contract/forward-contract.component";
 import { ContractService } from "../../../../service/contract.service";
 import { DisplayDigitalSignatureComponent } from "../../display-digital-signature/display-digital-signature.component";
@@ -64,7 +64,8 @@ export class FooterSignatureComponent implements OnInit {
     private unitService: UnitService,
     private router: Router,
     private _location: Location,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    public dialogRef: MatDialogRef<FooterSignatureComponent>
   ) {
   }
 
@@ -291,21 +292,25 @@ export class FooterSignatureComponent implements OnInit {
         });
         console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
-        // if (!ArrRecipientsNew) {
+        if (!ArrRecipientsNew) {
 
-        //   this.toastService.showErrorHTMLWithTimeout(
-        //     'Bạn không có quyền xử lý hợp đồng này!',
-        //     '',
-        //     3000
-        //   );
-        //   if (this.type == 1) {
-        //     this.router.navigate(['/login']);
-        //     return
-        //   } else {
-        //     this.router.navigate(['/main/dashboard']);
-        //     return
-        //   }
-        // };
+          this.toastService.showErrorHTMLWithTimeout(
+            'Bạn không có quyền xử lý hợp đồng này!',
+            '',
+            3000
+          );
+          if (this.type == 1) {
+            this.router.navigate(['/login']);
+            this.dialogRef.close();
+            this.spinner.hide();
+            return
+          } else {
+            this.router.navigate(['/main/dashboard']);
+            this.dialogRef.close();
+            this.spinner.hide();
+            return
+          }
+        };
         console.log("this.currentUser.email", this.currentUser);
       })
 
@@ -428,22 +433,25 @@ export class FooterSignatureComponent implements OnInit {
         });
         console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
-        // if (!ArrRecipientsNew) {
+        if (!ArrRecipientsNew) {
 
-        //   this.toastService.showErrorHTMLWithTimeout(
-        //     'Bạn không có quyền xử lý hợp đồng này!',
-        //     '',
-        //     3000
-        //   );
-        //   if (this.type == 1) {
-        //     this.router.navigate(['/login']);
-        //     return
-        //   } else {
-        //     this.router.navigate(['/main/dashboard']);
-        //     return
-        //   }
-        // } else 
-        this.submitChanges.emit(1);
+          this.toastService.showErrorHTMLWithTimeout(
+            'Bạn không có quyền xử lý hợp đồng này!',
+            '',
+            3000
+          );
+          if (this.type == 1) {
+            this.router.navigate(['/login']);
+            this.dialogRef.close();
+            this.spinner.hide();
+            return
+          } else {
+            this.router.navigate(['/main/dashboard']);
+            this.dialogRef.close();
+            this.spinner.hide();
+            return
+          }
+        } else this.submitChanges.emit(1);
         console.log("this.currentUser.email", this.currentUser);
       })
     }
@@ -490,23 +498,39 @@ export class FooterSignatureComponent implements OnInit {
 
   async processingAuthorization() {
     this.getCoordination();
+    // const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
+    // const isInRecipient = this.is_data_coordination.recipients.some( (el: any) => el.name === updatedInfo.name)
     const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
-    const isInRecipient = this.is_data_coordination.recipients.some( (el: any) => el.name === updatedInfo.name)
+    let isInRecipient = false;
 
-    // if(!isInRecipient){
-    //   this.toastService.showErrorHTMLWithTimeout(
-    //     'Bạn không có quyền xử lý hợp đồng này!',
-    //     '',
-    //     3000
-    //   );
-    //   if (this.type == 1) {
-    //     this.router.navigate(['/login']);
-    //     return
-    //   } else {
-    //     this.router.navigate(['/main/dashboard']);
-    //     return
-    //   }
-    // }
+    if (this.datas?.is_data_contract?.participants?.length) {
+      const participants = this.datas?.is_data_contract?.participants;
+      for (const participant of participants) {
+        for (const recipient of participant.recipients) {
+          if (updatedInfo.name == recipient.name) {
+            isInRecipient = true;
+          }
+        }
+      }
+    }
+    if(!isInRecipient){
+      this.toastService.showErrorHTMLWithTimeout(
+        'Bạn không có quyền xử lý hợp đồng này!',
+        '',
+        3000
+      );
+      if (this.type == 1) {
+        this.router.navigate(['/login']);
+        this.dialogRef.close();
+        this.spinner.hide();
+        return
+      } else {
+        this.router.navigate(['/main/dashboard']);
+        this.dialogRef.close();
+        this.spinner.hide();
+        return
+      }
+    }
     const data = {
       title: 'ỦY QUYỀN XỬ LÝ',
       is_content: 'processing_author',
@@ -517,6 +541,7 @@ export class FooterSignatureComponent implements OnInit {
 
     this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
       const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+      console.log("ArrRecipients", ArrRecipients);
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
@@ -525,22 +550,27 @@ export class FooterSignatureComponent implements OnInit {
           return
         }
       });
+      console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
-      // if (!ArrRecipientsNew) {
+      if (!ArrRecipientsNew) {
 
-      //   this.toastService.showErrorHTMLWithTimeout(
-      //     'Bạn không có quyền xử lý hợp đồng này!',
-      //     '',
-      //     3000
-      //   );
-      //   if (this.type == 1) {
-      //     this.router.navigate(['/login']);
-      //     return
-      //   } else {
-      //     this.router.navigate(['/main/dashboard']);
-      //     return
-      //   }
-      // };
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        }
+      };
 
       if (this.datas.action_title == 'dieu_phoi') {
 
@@ -565,23 +595,43 @@ export class FooterSignatureComponent implements OnInit {
 
   async forWardContract() {
     this.getCoordination();
+    console.log("datassssss ",this.datas);
+    
+    // const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
+    // const isInRecipient = this.is_data_coordination.recipients.some( (el: any) => el.name === updatedInfo.name)
     const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
-    const isInRecipient = this.is_data_coordination.recipients.some( (el: any) => el.name === updatedInfo.name)
+    let isInRecipient = false;
 
-    // if(!isInRecipient){
-    //   this.toastService.showErrorHTMLWithTimeout(
-    //     'Bạn không có quyền xử lý hợp đồng này!',
-    //     '',
-    //     3000
-    //   );
-    //   if (this.type == 1) {
-    //     this.router.navigate(['/login']);
-    //     return
-    //   } else {
-    //     this.router.navigate(['/main/dashboard']);
-    //     return
-    //   }
-    // }
+    if (this.datas?.is_data_contract?.participants?.length) {
+      const participants = this.datas?.is_data_contract?.participants;
+      console.log("participants",participants);
+      
+      for (const participant of participants) {
+        for (const recipient of participant.recipients) {
+          if (updatedInfo.name == recipient.name) {
+            isInRecipient = true;
+          }
+        }
+      }
+    }
+    if(!isInRecipient){
+      this.toastService.showErrorHTMLWithTimeout(
+        'Bạn không có quyền xử lý hợp đồng này!',
+        '',
+        3000
+      );
+      if (this.type == 1) {
+        this.router.navigate(['/login']);
+        this.dialogRef.close();
+        this.spinner.hide();
+        return
+      } else {
+        this.router.navigate(['/main/dashboard']);
+        this.dialogRef.close();
+        this.spinner.hide();
+        return
+      }
+    }
     const data = {
       title: 'CHUYỂN TIẾP',
       is_content: 'forward_contract',
@@ -603,21 +653,25 @@ export class FooterSignatureComponent implements OnInit {
       });
       console.log("ArrRecipientsNew111", ArrRecipientsNew);
 
-      // if (!ArrRecipientsNew) {
+      if (!ArrRecipientsNew) {
 
-      //   this.toastService.showErrorHTMLWithTimeout(
-      //     'Bạn không có quyền xử lý hợp đồng này!',
-      //     '',
-      //     3000
-      //   );
-      //   if (this.type == 1) {
-      //     this.router.navigate(['/login']);
-      //     return
-      //   } else {
-      //     this.router.navigate(['/main/dashboard']);
-      //     return
-      //   }
-      // };
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        }
+      };
       if (this.datas.action_title == 'dieu_phoi') {
         // @ts-ignore
         data['role_coordination'] = 1;

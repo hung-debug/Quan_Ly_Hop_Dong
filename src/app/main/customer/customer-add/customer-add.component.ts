@@ -1,32 +1,38 @@
 import { ToastService } from './../../../service/toast.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { parttern, parttern_input } from 'src/app/config/parttern';
 import {Route, ActivatedRoute, Router} from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { type_signature, org_customer_clone, personal_customer_clone,
-clone_load_org_customer, clone_load_personal_customer} from 'src/app/config/variable';
+clone_load_org_customer, clone_load_personal_customer, type_signature_doc} from 'src/app/config/variable';
 import { AppService } from 'src/app/service/app.service';
 import { Customer, CustomerService, OrgCustomer, PersonalCustomer, SignType } from 'src/app/service/customer.service';
 import { includes } from 'lodash';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-customer-add',
   templateUrl: './customer-add.component.html',
   styleUrls: ['./customer-add.component.scss']
 })
-export class CustomerAddComponent implements OnInit {
+export class CustomerAddComponent implements OnInit, OnDestroy {
   isOrg: boolean;
 
   //dropdown
   signTypeList: Array<SignType> = type_signature;
-
+  signType_doc: Array<SignType> = type_signature_doc;
   dropdownSignTypeSettings: any = {};
+  email: string = "email";
+  phone: string = "phone";
 
   isListSignNotPerson: any[] = [];
+  isListSignNotPersonPartner: any[] = [];
+  isListSignPersonal: any[] = [];
   id: any;
   action: any;
   orgCustomer: OrgCustomer = clone_load_org_customer;
   personalCustomer: PersonalCustomer = clone_load_personal_customer;
+  site: string;
 
   constructor(
     private appService: AppService,
@@ -39,6 +45,16 @@ export class CustomerAddComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.signTypeList)
+    console.log(!this.isListSignNotPersonPartner);
+    console.log(this.signTypeList);
+    console.log(this.isListSignNotPersonPartner);
+
+    if (environment.flag == 'NB') {
+      this.site = 'NB';
+    } else if (environment.flag == 'KD') {
+      this.site = 'KD';
+    }
+
     this.route.params.subscribe(params => {
       this.action = params['action'];
       const type = params['type'];
@@ -46,22 +62,33 @@ export class CustomerAddComponent implements OnInit {
       if(type == 'organization'){
         this.isOrg = true;
         this.appService.setTitle("organization.customer.add");
+        sessionStorage.setItem('partnerType', 'ORGANIZATION');
         if(this.action == 'add')
         this.orgCustomer= JSON.parse(JSON.stringify(org_customer_clone));
         if(this.action == 'edit'){
           this.customerService.getCustomerList().subscribe((res: any) => {
             this.orgCustomer = res.filter((item: any) => {
+                 console.log(res);
                  return item.id.toString() === this.id;
              })[0]})
         } 
       }
       else{
-        if(type == 'personal')
+        if(type == 'personal'){
         this.isOrg = false;
         this.appService.setTitle("personal.customer.add");
+        sessionStorage.setItem('partnerType', 'PERSONAL');
       }
+      if(this.action == 'add')
       this.personalCustomer = JSON.parse(JSON.stringify(personal_customer_clone));
-    })
+      else {
+        this.customerService.getCustomerList().subscribe((res: any) => {
+          this.personalCustomer = res.filter((item: any) => {
+               console.log(res);
+               return item.id.toString() === this.id;
+           })[0]})
+      }
+    }})
 
     this.dropdownSignTypeSettings = {
       singleSelection: false,
@@ -75,11 +102,14 @@ export class CustomerAddComponent implements OnInit {
     };
   }
 
+  dropdownButtonText = '';
+
   getOrganizationHandler(role: string){
     let handlers: any = [];
     handlers = this.orgCustomer.handlers?.filter(
       (handler: any) => handler.role == role
     );
+    console.log(handlers);
     return handlers;
   }
 
@@ -101,6 +131,10 @@ export class CustomerAddComponent implements OnInit {
     })
     new_arr = arr_clone_dif.concat(array_empty);
     this.orgCustomer.handlers = new_arr;
+    if(role == 'COORDINATOR'){
+      if(this.getOrganizationHandler('SIGNER').length == 0)
+      this.addOrganizationHandler('SIGNER');
+    }
     // if(arr_clone[i])
   }
 
@@ -109,7 +143,11 @@ export class CustomerAddComponent implements OnInit {
       (handler) => handler.role == role
     );
     let data=data_add[0];
-    data.ordering = this.getOrganizationHandler(role).length + 1;
+    if(this.getOrganizationHandler(role).length){
+    data.ordering = this.getOrganizationHandler(role).length + 1;}
+    else{
+      data.ordering = 1;
+    }
     console.log(data);
     console.log(this.orgCustomer.handlers);
     this.orgCustomer.handlers?.push(data);
@@ -118,6 +156,13 @@ export class CustomerAddComponent implements OnInit {
 
   onCancel(){
     this.router.navigate(['/main/customer'])
+  }
+
+  get getContractConnectItems() {
+    return this.signTypeList.reduce((acc: any, curr: any) => {
+      acc[curr.id] = curr;
+      return acc;
+    }, {});
   }
 
   onChangeValue(e: any, orering_data: string) {
@@ -130,22 +175,46 @@ export class CustomerAddComponent implements OnInit {
     }
   }
 
+  getDataSignCka(data: any) {
+    return data.signType.filter((p: any) => p.id == 1);
+  }
 
-  selectWithOtp(e: any, data: any, type: any){
-    console.log(e);
+  getDataSignUSBToken(data: any) {
     console.log(data);
-    // if(data.signType != null) 
-    // data.signType = data.signType[0];
-    console.log(e);
-    console.log(data);
+    return data.signType.filter((p: any) => p.id == 2);
+  }
+
+  getDataSignEkyc(data: any) {
+    return data.signType.filter((p: any) => p.id == 5);
+  }
+
+  getDataSignHsm(data: any) {
+    return data.signType.filter((p: any) => p.id == 4);
+  }
+
+
+  selectWithOtp(e: any, data: any, type?: any){
+      if (data.role == 'SIGNER') {
+        if (this.getDataSignHsm(data).length == 0 && this.getDataSignUSBToken(data).length == 0) {
+          data.card_id = "";
+        }
+      }
+      //Nếu là văn thư
+      else if (data.role == 'ARCHIVER') {
+        if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0) {
+          data.card_id = "";
+        }
+      }
+
   }
 
   getListSignType(role?: any) {
-    if(role == 'personal' || role == 'org') {
+    if(role == 'org') {
       return this.signTypeList.filter((p: any) => ![1,5].includes(p.id));
     } else {
       return this.signTypeList;
     }
+    return this.signTypeList;
   }
 
   getNotificationValid(is_notify: string) {
@@ -180,6 +249,11 @@ export class CustomerAddComponent implements OnInit {
               this.getNotificationValid("Vui lòng nhập mã số thuế của tổ chức!")
               return false;
             }
+
+            if(!parttern_input.taxCode_form.test(dataArrPartner.taxCode)){
+              this.getNotificationValid("Mã số thuế của tổ chức không hợp lệ!")
+              return false;
+            }
            
             if (!isPartnerSort[k].name) {
               console.log(isPartnerSort.name)
@@ -193,12 +267,33 @@ export class CustomerAddComponent implements OnInit {
             }
 
             if (!isPartnerSort[k].signType && ((isPartnerSort[k].role == 'SIGNER') || (isPartnerSort[k].role == 'ARCHIVER'))) {
-              console.log((isPartnerSort[k].role == 'SIGNER') || (isPartnerSort[k].role == 'ARCHIVER'))
               this.getNotificationValid("Vui lòng chọn loại ký " + this.getNameObjectValid(isPartnerSort[k].role) + "!")
-              console.log('????');
-              console.log(isPartnerSort[k].signType);
               return false;
             } 
+
+            if(isPartnerSort[k].signType.length != 0 && (isPartnerSort[k].role == 'SIGNER' || isPartnerSort[k].role == 'ARCHIVER')){
+              if(isPartnerSort[k].signType[0].id == 2){
+                if(!isPartnerSort[k].card_id){
+                  this.getNotificationValid("Vui lòng nhập mã số thuế/CMT/CCCD của " + this.getNameObjectValid(isPartnerSort[k].role) + "!")
+                  return false;
+                }
+                if(!parttern.cardid.test(isPartnerSort[k].card_id)){
+                  this.getNotificationValid("Mã số thuế/CMT/CCCD của " + this.getNameObjectValid(isPartnerSort[k].role) + " không hợp lệ!")
+                  return false;
+                }
+              }
+              if(isPartnerSort[k].signType[0].id == 4){
+                if(!isPartnerSort[k].card_id){
+                  this.getNotificationValid("Vui lòng nhập mã số thuế/CMT/CCCD HSM của " + this.getNameObjectValid(isPartnerSort[k].role) + "!")
+                  return false;
+                }
+                if(!parttern.cardid.test(isPartnerSort[k].card_id)){
+                  this.getNotificationValid("Mã số thuế/CMT/CCCD HSM của " + this.getNameObjectValid(isPartnerSort[k].role) + " không hợp lệ!")
+                  return false;
+                }
+              }
+            }
+
             // else if (isPartnerSort[k].signType.length > 0 && [3, 4].includes(isPartnerSort[k].role)) {
             //   let isPartnerOriganzationDuplicate = [];
             //   //check chu ky so
@@ -219,7 +314,7 @@ export class CustomerAddComponent implements OnInit {
             //   isPartnerOriganzationDuplicate = [];
             // }
 
-            if (!isPartnerSort[k].phone) {
+            if (!isPartnerSort[k].phone && isPartnerSort[k].login_by == 'phone') {
               this.getNotificationValid("Vui lòng nhập số điện thoại của " + this.getNameObjectValid(isPartnerSort[k].role) + "!")
               return false;
             }
@@ -230,13 +325,18 @@ export class CustomerAddComponent implements OnInit {
               return false;
             }
             // check duplicate 
-            if (this.getCheckDuplicateValue('phone', dataArrPartner)) {
+            if (isPartnerSort[k].phone != '' && this.getCheckDuplicateValue('phone', dataArrPartner)) {
               this.getNotificationValid("Số điện thoại của tổ chức không được trùng nhau!")
               return false;
             }
 
             if(this.getCheckDuplicateValue('email', dataArrPartner)){
               this.getNotificationValid("valid.login.user")
+              return false;
+            }
+
+            if(this.getCheckDuplicateValue('card_id', dataArrPartner)){
+              this.getNotificationValid("Mã số thuế/CMT/CCCD của tổ chức không được trùng nhau!");
               return false;
             }
           }
@@ -255,15 +355,50 @@ export class CustomerAddComponent implements OnInit {
               return false;
             }
 
-            if (!personalData.email) {
+            if (!personalData.email && personalData.login_by == 'email') {
               this.getNotificationValid("Vui lòng nhập email" + this.getNameObjectValid('SIGNER') + "  cá nhân!")
               return false;
             }
 
-            if (!personalData.signType) {
+            if (!parttern.email.test(personalData.email.trim())) {
+              this.getNotificationValid("Email" + this.getNameObjectValid('SIGNER') + "  cá nhân không hợp lệ!")
+              return false;
+            }
+
+            if(personalData.login_by == 'phone' || personalData.signType[0].id == 1){
+              if (!personalData.phone) {
+                this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObjectValid('SIGNER') + "  cá nhân!")
+                return false;
+              }
+            }
+
+            if (personalData.signType.length == 0) {
               this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObjectValid('SIGNER') + " cá nhân!"
               )
               return false;
+            }
+
+            if(this.personalCustomer.signType.length != 0){
+              if(this.personalCustomer.signType[0].id == 2){
+                if(!this.personalCustomer.card_id){
+                  this.getNotificationValid("Vui lòng nhập mã số thuế/CMT/CCCD của " + this.getNameObjectValid('SIGNER') + "!")
+                  return false;
+                }
+                if(!parttern.cardid.test(this.personalCustomer.card_id)){
+                  this.getNotificationValid("Mã số thuế/CMT/CCCD của " + this.getNameObjectValid('SIGNER') + " không hợp lệ!")
+                  return false;
+                }
+              }
+              if(this.personalCustomer.signType[0].id == 4){
+                if(!this.personalCustomer.card_id){
+                  this.getNotificationValid("Vui lòng nhập mã số thuế/CMT/CCCD HSM của " + this.getNameObjectValid('SIGNER') + "!")
+                  return false;
+                }
+                if(!parttern.cardid.test(this.personalCustomer.card_id)){
+                  this.getNotificationValid("Mã số thuế/CMT/CCCD HSM của " + this.getNameObjectValid('SIGNER') + " không hợp lệ!")
+                  return false;
+                }
+              }
             }
 
             // valid phone number
@@ -276,12 +411,20 @@ export class CustomerAddComponent implements OnInit {
           }
           return true;
   }
+
+  onItemSelect(e: any){
+
+  }
+
+  deSelect(e: any){
+
+  }
   
   getCheckDuplicateValue(valueType: string, dataValid: any){
     let checkDuplicate: any = [];
     if(valueType == 'phone'){
       for(let i = 0; i < dataValid.handlers.length; i++){
-        if(checkDuplicate.includes(dataValid.handlers[i].phone)){
+        if(dataValid.handlers[i].login_by=="phone" && checkDuplicate.includes(dataValid.handlers[i].phone)){
           return true;
         } else {
           checkDuplicate.push(dataValid.handlers[i].phone);
@@ -292,10 +435,20 @@ export class CustomerAddComponent implements OnInit {
 
     if(valueType =='email'){
       for(let i = 0; i< dataValid.handlers.length; i++){
-        if(checkDuplicate.includes(dataValid.handlers[i].email)){
+        if(dataValid.handlers[i].login_by=="email" && checkDuplicate.includes(dataValid.handlers[i].email)){
           return true;
         } else {
           checkDuplicate.push(dataValid.handlers[i].email);
+        }
+      }
+    }
+
+    if(valueType =='card_id'){
+      for(let i = 0; i< dataValid.handlers.length; i++){
+        if((dataValid.handlers[i].role == "ARCHIVER" || dataValid.handlers[i].role == "SIGNER") && checkDuplicate.includes(dataValid.handlers[i].card_id)){
+          return true;
+        } else {
+          checkDuplicate.push(dataValid.handlers[i].card_id);
         }
       }
     }
@@ -316,6 +469,37 @@ export class CustomerAddComponent implements OnInit {
     }
   }
 
+  changeTypeSign(d: any,index: any,id?: any,role?: any) {
+    console.log("a ");
+    console.log(d);
+    if (d.login_by == 'phone' || d.login_by == 'email') {
+      d.email = '';
+      d.phone = '';
+    }
+
+
+    if(role == 'sign_partner') {
+        if (d.login_by == 'phone') {
+          this.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,2,5].includes(p.id));
+        } else {
+          console.log("email ");
+          this.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,5].includes(p.id));
+        }
+    } else if(role == 'signer') {
+      if (d.login_by == 'phone') {
+        this.isListSignNotPerson[index] = this.signTypeList.filter((p) => ![1, 2, 5].includes(p.id));
+      } else {
+        this.isListSignNotPerson[index] = this.signTypeList.filter((p) => ![1,5].includes(p.id));
+      }
+    } else if(role == 'personal') {
+      if (d.login_by == 'phone') {
+        this.isListSignPersonal = this.signTypeList.filter((p) => ![2].includes(p.id));
+      } else {
+        this.isListSignPersonal = this.signTypeList;
+      }
+    }
+  }
+
   submit(){
     if(this.validData()){
       this.spinner.show();
@@ -329,7 +513,7 @@ export class CustomerAddComponent implements OnInit {
         },
         (error) => {
           this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout('Thêm khách hàng thất bại!',"", 2000);
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!',"", 2000);
         })
       }
       if(!this.isOrg){
@@ -340,7 +524,7 @@ export class CustomerAddComponent implements OnInit {
         },
         (error) => {
           this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout('Thêm khách hàng thất bại!',"", 2000);
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!',"", 2000);
         })
       }}
       if(this.action == 'edit'){
@@ -353,7 +537,7 @@ export class CustomerAddComponent implements OnInit {
           },
           (error) => {
             this.spinner.hide();
-            this.toastService.showErrorHTMLWithTimeout('Sửa thông tin khách hàng thất bại!',"", 2000);
+            this.toastService.showErrorHTMLWithTimeout('Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!',"", 2000);
           })
         }
         if(!this.isOrg){
@@ -365,10 +549,13 @@ export class CustomerAddComponent implements OnInit {
           },
           (error) => {
             this.spinner.hide();
-            this.toastService.showErrorHTMLWithTimeout('Sửa thông tin khách hàng thất bại!',"", 2000);
+            this.toastService.showErrorHTMLWithTimeout('Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!',"", 2000);
           })
         }
       }
   }
 }
+  ngOnDestroy(): void {
+      
+  }
 }

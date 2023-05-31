@@ -474,7 +474,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   getListNameSign(data_user_sign: any) {
     data_user_sign.forEach((element: any) => {
-      if (element.type == 1) {
+      if (element.type == 1 || element.type == 5) {
         element.recipients.forEach((item: any) => {
           if (item.role == 3 || item.role == 4 || item.role == 2) {
             item['type_unit'] = 'organization';
@@ -555,7 +555,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (event.relatedTarget && event.relatedTarget.id) {
       canvasElement = document.getElementById(event.relatedTarget.id);
 
-      console.log("eve ", document?.getElementById("pdf-viewer-step-3")?.clientLeft);
+      console.log("event ", event);
       let canvasInfo = canvasElement ? canvasElement.getBoundingClientRect() : '';
       this.coordinates_signature = event.rect;
       let id = event.target.id;
@@ -601,14 +601,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // @ts-ignore
         if ("left" in canvasInfo) {
           // layerX = event.rect.left - canvasInfo.left;
-
-          console.log("rec ", rect_location);
-          console.log("can ", canvasInfo);
-
-          console.log("ev ", event);
-
           layerX = rect_location.left - canvasInfo.left;
         }
+
+        let pages = event.relatedTarget.id.split('-');
+
 
         let layerY = 0;
         //@ts-ignore
@@ -616,7 +613,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           // layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);
           layerY = canvasInfo.top <= 0 ? rect_location.top + Math.abs(canvasInfo.top) : rect_location.top - Math.abs(canvasInfo.top);
         }
-        let pages = event.relatedTarget.id.split("-");
         let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
 
         /* test set location signature

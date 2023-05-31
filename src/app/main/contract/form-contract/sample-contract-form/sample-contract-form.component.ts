@@ -170,8 +170,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             }
           }
           if (res.type == 5){
-            res['sign_unit']=  'text',
-            res['text_type'] = 'currency'
+            res['sign_unit']=  'text';
+            res['text_type'] = 'currency';
           }
         })
       }
@@ -472,7 +472,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   getListNameSign(data_user_sign: any) {
     data_user_sign.forEach((element: any) => {
-      if (element.type == 1) {
+      if (element.type == 1 || element.type == 5) {
         element.recipients.forEach((item: any) => {
           if (item.role == 3 || item.role == 4 || item.role == 2) {
             item['type_unit'] = 'organization';
@@ -1287,7 +1287,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     let arrSignConfig: any = [];
     let cloneUserSign = [...this.datasForm.contract_user_sign];
 
-    console.log("clone ", cloneUserSign);
+    // console.log("clone ", cloneUserSign);
 
     cloneUserSign.forEach(element => {
       if (this.datasForm.is_action_contract_created) {
@@ -1297,7 +1297,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       } else arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
 
-    console.log("arr ", arrSignConfig);
+    // console.log("arr ", arrSignConfig);
     return arrSignConfig;
   }
 
@@ -1489,11 +1489,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   contractNo: any;
   getValueText(e: any, d: any) {
     // const num = e.toString().replace(/\./g, '');
-    // if (!isNaN(parseFloat(num)) && isFinite(num)) { // check if value is a number
-    //   d.value = parseFloat(num).toLocaleString('vi-VN'); // format value as currency
-    // } else {
-    //   d.value = e; // value is not a number, set to original value
-    // }
 
     // const num = this.convertCurrency(e);
     console.log(e);
@@ -1672,7 +1667,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     if (dataSignId.length > 0) {
       let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text", "text_type"];
       dataSignId.forEach((res: any) => {
-        if(res.type == 1) {
+        if(res.type == 1 || res.type == 5) {
           res.name = res.text_attribute_name;
         }
         data_remove_arr_signId.forEach((itemRemove: any) => {
@@ -1782,10 +1777,13 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     }
   }
 
+
   // forward data component
   nextOrPreviousStep(step: string) {
+    this.contractService.checkCurrencyValue(this.datasForm);
     // this.getRemoveCopyRight();
     this.datasForm.stepLast = step;
+    console.log(this.datasForm);
     this.stepChangeSampleContractForm.emit(step);
   }
   async checkNumber(countCeCa: number, countTimestamp: number) {

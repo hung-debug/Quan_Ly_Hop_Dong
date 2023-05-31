@@ -1,3 +1,5 @@
+import { AddPartnerDialogComponent } from './../../../dialog/add-partner-dialog/add-partner-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 // import { locale } from 'date-fns/locale/en-US';
 // import { map } from 'rxjs/operators';
 import { ContractService } from 'src/app/service/contract.service';
@@ -62,6 +64,7 @@ export class DetermineSignerComponent implements OnInit {
   arrSearch: any = [];
   totalUseItem: number;
   totalPurcharItem: number;
+  loadedMyPartner: boolean = false;
 
   //dropdown
   signTypeList: Array<any> = type_signature;
@@ -113,6 +116,7 @@ export class DetermineSignerComponent implements OnInit {
     private router: Router,
     public translate: TranslateService,
     private unitService: UnitService,
+    private dialog: MatDialog
   ) {
     this.step = variable.stepSampleContract.step2
   }
@@ -514,17 +518,20 @@ export class DetermineSignerComponent implements OnInit {
       //Nếu là người ký
       if (data.role == 3) {
         if (this.getDataSignHsm(data).length == 0 && this.getDataSignUSBToken(data).length == 0) {
+          if(this.loadedMyPartner == false)
           data.card_id = "";
         }
       }
       //Nếu là văn thư
       else if (data.role == 4) {
         if (this.getDataSignUSBToken(data).length == 0) {
+          if(this.loadedMyPartner == false)
           data.card_id = "";
         }
       }
     } else if (type == 3) {
       if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignEkyc(data).length == 0) {
+        if(this.loadedMyPartner == false)
         data.card_id = "";
       }
 
@@ -1777,6 +1784,124 @@ export class DetermineSignerComponent implements OnInit {
     return this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
+  findPartner(type: string, index: any, dataValid: any){
+    const data = {
+      type: type,
+    };
+    let dialogRef = this.dialog.open(AddPartnerDialogComponent, {
+      width: '800px',
+      data,
+    })
+    dialogRef.afterClosed().subscribe(
+      (data) => {if(data){
+        this.loadedMyPartner = true;
+        if(data.type == "PERSONAL"){
+          let data_partner_add ={
+            name: data.name,
+            type: 3,
+            ordering: dataValid.ordering,
+            recipients: [
+              {
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                card_id: data.card_id,
+                role: 3,
+                ordering: 1,
+                status: 0,
+                is_otp: 0,
+                sign_type: [{
+                  id: data.signType[0].id,
+                  name: data.signType[0].name,
+                }],
+                locale: data.locale,
+                login_by: data.login_by,
+              }
+            ]
+          }
+          if(data_partner_add.recipients[0].email == '' && data_partner_add.recipients[0].phone && 
+          data_partner_add.recipients[0].login_by == 'phone')
+          data_partner_add.recipients[0].email = data_partner_add.recipients[0].phone;
+          let true_index = 0
+          for(let i = 0; i < this.datas.is_determine_clone.length; i++){
+            if(this.datas.is_determine_clone[i].ordering == dataValid.ordering){
+                true_index = i;
+              break;
+            }
+          }
+          this.datas.is_determine_clone[true_index] = data_partner_add;
+        }
+        if(data.type == "ORGANIZATION"){
+          let data_partner_add ={
+            name: data.name,
+            type: 2,
+            ordering: dataValid.ordering,
+            status: 0,
+            recipients: [] as any
+          }
+          data.handlers.forEach((item: any) => {
+            console.log(item);
+            let recipient: any = {
+                name: item.name,
+                email: item.email,
+                phone: item.phone,
+                role: '',
+                ordering: item.ordering,
+                status: 0,
+                is_otp: 0,
+                sign_type: [] as any,
+                locale: item.locale,
+                login_by: item.login_by,
+                card_id: '',
+            }
+            switch(item.role) {
+              case "COORDINATOR":
+                recipient.role = 1;
+                break;
+              case "REVIEWER":
+                recipient.role = 2;
+                break;
+              case "SIGNER":
+                recipient.role = 3;
+                recipient.sign_type.push({
+                  id: item.signType[0].id,
+                  name: item.signType[0].name,
+                });
+                recipient.card_id= item.card_id;
+                if(recipient.email == '' && recipient.phone && 
+                recipient.login_by == 'phone'){
+                  recipient.email = recipient.phone;
+                }
+
+                break;
+              case "ARCHIVER":
+                recipient.role = 4;
+                recipient.sign_type.push({
+                  id: item.signType[0].id,
+                  name: item.signType[0].name,
+                });
+                recipient.card_id= item.card_id;
+                if(recipient.email = '' && recipient.phone && 
+                recipient.login_by == 'phone'){
+                  recipient.email = recipient.phone;
+                }
+                break;
+            }
+            data_partner_add.recipients.push(recipient);
+          })
+          let true_index = 0
+          for(let i = 0; i < this.datas.is_determine_clone.length; i++){
+            if(this.datas.is_determine_clone[i].ordering == dataValid.ordering){
+                true_index = i;
+              break;
+            }
+          }
+          this.datas.is_determine_clone[true_index] = data_partner_add;
+        }
+  }});  
+   
+  }
+
   // thêm đối tác
   addPartner() {
     let data_partner_add = {};
@@ -1797,6 +1922,7 @@ export class DetermineSignerComponent implements OnInit {
       return this.signTypeList;
     }
   }
+
 
   // xóa đối tham gia bên đối tác
   deletePartner(index: any, item: any) {

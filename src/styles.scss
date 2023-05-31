@@ -6,6 +6,8 @@
 /* Importing Bootstrap SCSS file. */
 @import "~bootstrap/scss/bootstrap";
 
+@import '~material-icons/iconfont/material-icons.css';
+
 html, body { height: 100%; }
 body { margin: 0; font-family: font_lexend_deca , Roboto, "Helvetica Neue", sans-serif !important; font-size: 13px !important;}
 

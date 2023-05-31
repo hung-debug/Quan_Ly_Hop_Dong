@@ -59,6 +59,15 @@ th:nth-child(3) {
     height: 242px;
 }
 
+.border-table-email {
+    box-sizing: border-box;
+    border: 1px solid #87CAFF;
+    border-radius: 5px;
+    padding-top: 2px;
+    width: 361px;
+    height: 120px;
+}
+
 .footer-btn{
     display: flex;
     justify-content: center;
@@ -95,29 +104,6 @@ th:nth-child(3) {
 }
 
 input[type="checkbox"] {
-    // /* Thiết lập kích thước checkbox */
-    // width: 20px;
-    // height: 20px;
-    
-    // /* Thiết lập kiểu đường viền */
-    // border: 1px solid #ccc;
-    // border-radius: 3px;
-    
-    // /* Thiết lập màu nền khi được chọn */
-    // background-color: #fff;
-    
-    // /* Thiết lập kích thước tick */
-    // background-size: 16px 16px;
-    
-    // /* Thiết lập margin và padding */
-    // margin: 0;
-    // padding: 0;
-    
-    // /* Ẩn checkbox mặc định */
-    // appearance: none;
-    // -webkit-appearance: none;
-    // -moz-appearance: none;
-
     box-sizing: border-box;
     background: #FFFFFF;
     border: 1px solid #1487E1;
@@ -126,4 +112,17 @@ input[type="checkbox"] {
     height: 15px;
 }
 
+.horizontal-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.input-expiration-date {
+    box-sizing: border-box;
+    background: #FFFFFF;
+    border: 1px solid #67B6F4;
+    border-radius: 5px;
+    width: 229px;
+    height: 33px;
+}
   

@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import { networkList } from 'src/app/config/variable';
 import { ContractService } from 'src/app/service/contract.service';
 import {ToastService} from "../../../../../service/toast.service";
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-pki-dialog-sign',
@@ -22,12 +23,14 @@ export class PkiDialogSignComponent implements OnInit {
   nl: Array<any> = [];
   networkCompany: any = 0;
   phoneNum: any;
+  type: any = 0;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
     public dialogRef: MatDialogRef<PkiDialogSignComponent>,
     private toastService : ToastService,
-    private contractService: ContractService
+    private contractService: ContractService,
+    private spinner: NgxSpinnerService,
   ) {
   }
 
@@ -36,9 +39,50 @@ export class PkiDialogSignComponent implements OnInit {
     this.datas = this.data;
     this.phoneNum = this.datas?.sign?.phone;
     this.networkCode = this.datas?.sign?.phone_tel;
+    if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
+      this.type = 1;
+    } else
+      this.type = 0;
   }
 
   onSubmit() {
+    console.log("data",this.datas);
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
+      console.log("response", response);
+      const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+      console.log("ArrRecipients", ArrRecipients);
+
+      let ArrRecipientsNew = false
+      ArrRecipients.map((item: any) => {
+        if (item.email === this.currentUser.email) {
+          ArrRecipientsNew = true
+          return
+        }
+      });
+      console.log("ArrRecipientsNew111", ArrRecipientsNew);
+
+      if (!ArrRecipientsNew) {
+        console.log("ArrRecipientsNew111", ArrRecipientsNew);
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        }
+      };
+      console.log("this.currentUser.email", this.currentUser);
+
     this.contractService.getCheckSignatured(this.data.recipientId).subscribe((res: any) => {
       if (res && res.status == 2) {
         this.toastService.showErrorHTMLWithTimeout('contract_signature_success', "", 3000);
@@ -90,5 +134,6 @@ export class PkiDialogSignComponent implements OnInit {
 
     this.dialogRef.close(resDialog);
   }
-
+  )
+}
 }

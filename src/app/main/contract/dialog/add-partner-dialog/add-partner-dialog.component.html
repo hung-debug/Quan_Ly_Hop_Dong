@@ -1,0 +1,57 @@
+
+<div class="container-fluid">
+    <div style="text-align: center; font-weight: bold">
+      <h3 style="color: #106DB6; font-family: inherit;text-transform: uppercase;">{{ title | translate}}</h3>
+    </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="input-line search">
+              <img src="../../assets/img/icon_search.svg" class="input-img" />
+              <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{getPlaceholderFind() | translate}}" (keyup)="autoSearch($event)" />
+              <img class="input-img" >
+            </div>
+        </div>
+
+      </div>
+        <div *ngIf="list.length > 0"  class="row" style="padding-top: 20px;">
+            <p-table [value]="list" [paginator]="true" [rows]="5" id="table" [autoLayout]="true">
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of cols" [style]='col.style'>
+                      {{col.header | translate}}
+                    </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-list>
+                  <tr style="cursor: pointer" (click)="choosePartner(list)">
+                    <td><a  
+                      style="color: #0160AE; cursor: pointer; text-decoration: none;">{{list.name}}</a></td>
+                    <td *ngIf="type == 'ORGANIZATION'">{{list.taxCode}}</td>
+                    <td *ngIf="type == 'PERSONAL'">{{getMailOrPhone(list)}}</td>
+                    <td *ngIf="type == 'PERSONAL'">{{list.card_id}}</td>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="paginatorleft" let-state>
+                <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+              </ng-template>
+              <ng-template pTemplate="paginatorright" let-state>
+                <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+              </ng-template> 
+            </p-table>
+          </div>
+        
+        <div *ngIf="list.length == 0" 
+          style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+            <div style="display: table-cell;vertical-align: middle;">
+              <img src="../../../assets/img/empty_data.svg"/>
+              <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+            </div>
+        </div>
+
+        <div class="row" style="justify-content: center;padding-top: 10px;">
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
+        </div>
+    </div>
+
+  
