@@ -1,3 +1,4 @@
+import { ToastService } from './../../service/toast.service';
 import {Component, Input, OnInit, Output} from '@angular/core';
 import {AppService} from 'src/app/service/app.service';
 import {Chart} from 'angular-highcharts';
@@ -29,12 +30,15 @@ export class DashboardComponent implements OnInit {
   date: any = "";
   filter_from_date: any = "";
   filter_to_date: any = "";
+  chartHeight: number = 450;
 
   user: any;
   numberWaitProcess: any = 0;
   numberExpire: any = 0;
   numberComplete: any = 0;
   numberWaitComplete: any = 0;
+  numContractUse: number = 0;
+  numContractBuy: number = 0;
 
   isOrg: string = 'off';
   stateOptions: any[];
@@ -54,6 +58,7 @@ export class DashboardComponent implements OnInit {
     private unitService: UnitService,
     private router: Router,
     public datepipe: DatePipe,
+    private toastService: ToastService
   ) {
     this.stateOptions = [
       {label: "my.contract", value: 'off'},
@@ -85,6 +90,23 @@ export class DashboardComponent implements OnInit {
       for (var i = 0; i < dataUnit.length; i++) {
         this.orgListTmp.push(dataUnit[i]);
       }
+
+      this.unitService.getNumberContractUseOriganzation(this.userService.getInforUser().organization_id).toPromise().then(
+        data => {
+          this.numContractUse = data.contract;
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
+        }
+      )
+
+      //lay so luong hop dong da mua
+      this.unitService.getNumberContractBuyOriganzation(this.userService.getInforUser().organization_id).toPromise().then(
+        data => {
+          this.numContractBuy = data.contract;
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+        }
+      )
 
       this.orgList = this.orgListTmp;
       console.log(this.orgList);
@@ -184,6 +206,16 @@ export class DashboardComponent implements OnInit {
       
       this.totalCreate = newData.total_process + newData.total_signed + newData.total_reject + newData.total_cancel + newData.total_expires;
 
+      let numContractHeight = document.getElementById('num-contract')?.offsetHeight || 0;
+      let numContractBodyHeight = document.getElementById('num-contract-body')?.offsetHeight || 0;
+      let notiHeight = document.getElementById('noti')?.offsetHeight || 450;
+      console.log(notiHeight)
+      console.log(numContractHeight)
+      console.log(numContractBodyHeight)
+      this.chartHeight = numContractHeight + notiHeight + numContractBodyHeight - 37;
+      console.log(this.chartHeight)
+
+
       if(localStorage.getItem('lang') == 'vi' || sessionStorage.getItem('lang') == 'vi')
         this.createChart("Đang xử lý","Hoàn thành","Từ chối","Huỷ bỏ", "Quá hạn", "Số lượng", newData);
       else if(localStorage.getItem('lang') == 'en' || sessionStorage.getItem('lang') == 'en')
@@ -198,7 +230,8 @@ export class DashboardComponent implements OnInit {
         type: 'column',
         style: {
           fontFamily: 'inherit',
-        }
+        },
+        height: 500
       },
       title: {
         text: this.chartContractCreated,
@@ -295,6 +328,18 @@ export class DashboardComponent implements OnInit {
           ]
         }]
     });
+  }
+
+  getNumberContractBoxHeight(){
+    let chartHeight = document.getElementById('chart-column')?.offsetHeight || 0;
+    let notiHeight = document.getElementById('noti')?.offsetHeight || 450;
+    let numContractHeight = document.getElementById('num-contract')?.offsetHeight || 0;
+    let numContractBodyHeight = chartHeight - notiHeight - numContractHeight;
+    console.log(numContractBodyHeight);
+    return {'height': numContractBodyHeight + 'px', 
+            'display': 'flex', 
+            'flex-wrap': 'wrap', 
+            'padding-top':'15px'};
   }
 
   search() {

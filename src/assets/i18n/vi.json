@@ -647,6 +647,8 @@
   "currency": "Số tiền",
   "default": "Mặc định",
   "find.partner.personal": "Tìm kiếm đối tác cá nhân",
-  "find.partner.organization": "Tìm kiếm đối tác tổ chức"
+  "find.partner.organization": "Tìm kiếm đối tác tổ chức",
+  "num.contract.buy": "Số lượng hợp đồng đã mua",
+  "num.contract.use": "Số lượng hợp đồng đã sử dụng"
   
 }

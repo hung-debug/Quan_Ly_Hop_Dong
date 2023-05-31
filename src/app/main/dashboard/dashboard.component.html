@@ -75,7 +75,7 @@
           <h3>{{'dashboard.contract.created' | translate}}</h3>
         </div>
       </div>
-      <div class="body">
+      <div class="body" id="chart-column">
         <div class="row" style="margin: 0 1%;">
 
           <div class="col-md-6" style="text-align: center;">
@@ -96,11 +96,23 @@
               <p-treeSelect [(ngModel)]="selectedNodeOrganization" [options]="list" placeholder="{{'all' | translate}}" [filter]="true" filterBy="name"  [droppable]="true" (onNodeSelect)="search()"></p-treeSelect>
           </div>
         </div>
+        <!-- <div class="row" style="margin: 0 1%">
+          <div class="col-md-6">
+          </div>
+          <div class="col-md-6" style="display: flex; justify-content: flex-end; flex-wrap: wrap; padding: 12px">
+            <div class="row" style="width: 100%; text-align: right;">
+              <span>SL hợp đồng đã sử dụng: 10000</span>
+            </div>
+            <div class="row" style="width: 100%; text-align: right">
+              <span>SL hợp đồng đã mua: 10000</span>
+            </div>
+          </div>
+        </div> -->
         
         <div class="row">
           <div class="col-md-12">
             <div *ngIf="totalCreate == 0"
-              style="height:421px;display: table;top: 0;left: 0;width: 100%;text-align: center;">
+              style="height:470px;display: table;top: 0;left: 0;width: 100%;text-align: center;">
               <div style="display: table-cell;vertical-align: middle;">
                 <img src="../../../assets/img/empty_data.svg"/>
                 <div style="color: #94A7C6">{{'no.data' | translate}}</div>
@@ -121,15 +133,15 @@
           <h3>{{'dashboard.notification' | translate}}</h3>
         </div>
       </div>
-      <div class="body">
+      <div class="body" style="min-height: 424.8px"  id="noti">
         <div *ngIf="listNotification.length == 0"
-        style="height: 453px;display: table;top: 0;left: 0;width: 100%;text-align: center;">
+        style="height: 364.8px;display: table;top: 0;left: 0;width: 100%;text-align: center;">
         <div style="display: table-cell;vertical-align: middle;">
           <img src="../../../assets/img/empty_data.svg"/>
           <div style="color: #94A7C6">{{'no.data' | translate}}</div>
         </div>
       </div>
-        <div *ngIf="listNotification.length > 0" [ngStyle]="{ 'min-height': isOrg=='on'? '494px':' 453px'}" style="min-height: 453px;">
+        <div *ngIf="listNotification.length > 0" >
           <div *ngFor="let item of listNotification; let i = index" [style.border-bottom]="i != listNotification.length-1 ? '1px solid #C7D0E9' : ''" style="padding: 4px;">
             <a href="{{item.notice_url}}" style="text-decoration: none;">
             <div class="row">
@@ -169,6 +181,25 @@
             </a>
           </div>
         </div>
+
+      </div>
+      <div class="row" id="num-contract">
+        <div class="col-md-12" style="padding-top: 10px">
+          <h3>SỐ LƯỢNG HỢP ĐỒNG</h3>
+        </div>
+      </div >
+      <div class="body" [ngStyle]="getNumberContractBoxHeight()" 
+      id="num-contract-body">
+        <div class="first-col" style="width: 40%">
+          <div style="padding-left: 4px; width: 100%; margin: 0">{{'num.contract.buy' | translate}}</div>
+          <div style="padding-left: 4px; width: 100%; margin: 0">{{'num.contract.use' | translate}}</div>
+        </div>
+        <div class="second-col">
+          <div style=" width: 100%; margin: 0">{{numContractBuy}} </div>
+          <div style=" width: 100%; margin: 0">{{numContractUse}} </div>
+        </div>
+
+
       </div>
     </div>
   </div>

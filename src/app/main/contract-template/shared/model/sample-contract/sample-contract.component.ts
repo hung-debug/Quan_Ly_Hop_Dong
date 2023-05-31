@@ -94,6 +94,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   isEnableText: boolean = false;
   isChangeText: boolean = false;
   dataSignPosition: any;
+  showSignClear: boolean = false;
 
   listSignNameClone: any = [];
   data_sample_contract: any = [];
@@ -1162,6 +1163,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       d.font = 'Times New Roman';
       this.list_font = [d.font];
     }
+    if(d.sign_unit == 'text' && d.recipient_id){
+      this.showSignClear = true;
+    }
 
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
@@ -1324,11 +1328,39 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     interact.removeDocument(document);
   }
 
+  clearSign(){
+    let signElement = document.getElementById(this.objSignInfo.id);
+    if(signElement){
+      let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+      if(isObjSign){
+        isObjSign.name = undefined;
+        signElement.removeAttribute("name");
+
+        delete isObjSign.signature_party;
+        signElement.removeAttribute("signature_party");
+
+        delete isObjSign.recipient_id;
+        signElement.removeAttribute("recipient_id");
+
+        delete isObjSign.status;
+        signElement.removeAttribute("status");
+
+        delete isObjSign.email;
+        signElement.removeAttribute("email");
+      }
+    }
+    let signElement1: any = document.getElementById('select-dropdown');
+    if(signElement1)
+    signElement1.value = "";
+    this.showSignClear = false;
+  }
+
   // edit location doi tuong ky
   changePositionSign(e: any, locationChange: any, property: any) {
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+      console.log(this.convertToSignConfig());
       if (isObjSign) {
         if (property == 'location') {
           if (locationChange == 'x') {
@@ -1412,6 +1444,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             isObjSign.email = data_name.email;
             signElement.setAttribute("email", isObjSign.email);
 
+            this.showSignClear = true;
             let idTypeSign = data_name.sign_type[0].id;
 
             if((data_name.role == 4 || ((idTypeSign == 2 || idTypeSign == 4))) && this.isChangeText) {
