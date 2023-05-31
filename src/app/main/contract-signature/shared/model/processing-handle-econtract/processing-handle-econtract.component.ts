@@ -56,20 +56,21 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   lang: string;
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
 
     if(sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     } else if (sessionStorage.getItem('lang') == 'en') {
       this.lang = 'en';
     }
-    console.log("data", this.data)
-    this.contractService.getDetailContract(this.data.is_data_contract.id).subscribe(response => {
-      this.endDate = moment(response[0].sign_time, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss")
-      let timeNow = moment(new Date(), "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss")
+    console.log("data",this.data);
+    
+    const detailContract = await this.contractService.getDetailContract(this.data.is_data_contract.id).toPromise();
+    this.endDate = moment(detailContract[0].sign_time, "YYYY/MM/DD").format("YYYY/MM/DD")
+    let timeNow = moment(new Date(), "YYYY/MM/DD").format("YYYY/MM/DD")
+    this.isEndDate = this.endDate >= timeNow ? true : false;
+    let participants = detailContract[0].participants;
 
-      this.isEndDate = this.endDate >= timeNow ? true : false
-    })
 
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
       this.personCreate = response.createdBy.name;
@@ -100,21 +101,22 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           reasonReject: element.reasonReject,
           type: element.participantType,
           statusNumber: element.status,
-          phone: element.phone
+          phone: element.phone,
+          change_num: this.checkChangeNum(participants, element.id)
         }
 
         this.is_list_name.push(data);
       })
 
-      this.is_list_name.map((x: any) => {
-        this.data.is_data_contract.participants.map((item: any) => {
-          item.recipients.map((y: any) => {
-            if (x.id === y.id) {
-              x["change_num"] = y.change_num
-            }
-          })
-        })
-      })
+      // this.is_list_name.map((x: any) => {
+      //   this.data.is_data_contract.participants.map((item: any) => {
+      //     item.recipients.map((y: any) => {
+      //       if (x.id === y.id) {
+      //         x["change_num"] = y.change_num
+      //       }
+      //     })
+      //   })
+      // })
 
       this.listCheckSmsEmail = true
 
@@ -125,6 +127,26 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     });
 
   }
+
+  checkChangeNum(participants: any, recipientId: any) {
+    let change_num = 0;
+
+    this.is_list_name.map((x: any) => {
+      participants.map((item: any) => {
+        item.recipients.map((y: any) => {
+          if(x.id === y.id) {
+            console.log("x id ",x.id);
+            change_num = y.change_num;
+            return;
+          }
+        })
+      })
+    })
+
+    return change_num;
+  }
+
+
 
   getStatus(status: any) {
     if (status == 1) {

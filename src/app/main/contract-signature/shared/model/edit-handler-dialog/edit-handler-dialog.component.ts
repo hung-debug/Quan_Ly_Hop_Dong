@@ -57,7 +57,7 @@ export class EditHandlerComponent implements OnInit {
   errorPhone: any = '';
   errorCardid: any = '';
   errorEmail: any = '';
-
+  locale: string;
   //dropdown
   signTypeList: Array<any> = type_signature;
   checkCount = 1;
@@ -92,15 +92,7 @@ export class EditHandlerComponent implements OnInit {
       this.signTypeList = type_signature;
     }
 
-    // this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
-    //   console.log("data_organization",this.datas);
-    // this.datas.is_handler = [...this.contractService.getDataDetermineInitialization()];
-    //   console.log("this.datas.is_handler",this.datas.is_handler);
-
-
     console.log("this.data.update process person", this.data);
-    console.log("datas", this.datas);
-
 
     this.name = this.data.name;
     this.login_by = this.data.login_by;
@@ -126,6 +118,9 @@ export class EditHandlerComponent implements OnInit {
       disabledField: 'item_disable',
     };
 
+    // const currentRecipientData = this.data
+    // this.locale = currentRecipientData?.locale ? currentRecipientData?.locale: 'vi';
+    // this.locale = this.data?.locale ? this.data?.locale: 'vi';
   }
   //dropdown contract type
   get getSignTypeItems() {
@@ -134,6 +129,10 @@ export class EditHandlerComponent implements OnInit {
       return acc;
     }, {});
   }
+  // setLocale(lang: string) {
+  //   this.locale = lang;
+  // }
+
   handleCancel() {
     this.dialogRef.close();
   }
@@ -174,6 +173,7 @@ export class EditHandlerComponent implements OnInit {
       phone: this.phone,
       login_by: login_by,
       card_id: this.card_id,
+      // locale: this.locale,
     };
 
     if (!this.validData()) {
@@ -187,6 +187,7 @@ export class EditHandlerComponent implements OnInit {
         }
         this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
           (res: any) => {
+            this.spinner.hide();
             if (!res.success) {
               switch (res.message) {
                 case "E01": {
