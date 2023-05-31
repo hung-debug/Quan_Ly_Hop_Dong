@@ -332,14 +332,12 @@ export class DashboardComponent implements OnInit {
 
   getNumberContractBoxHeight(){
     let chartHeight = document.getElementById('chart-column')?.offsetHeight || 0;
-    let notiHeight = document.getElementById('noti')?.offsetHeight || 450;
+    let numContractBodyHeight = document.getElementById('num-contract-body')?.offsetHeight || 450;
     let numContractHeight = document.getElementById('num-contract')?.offsetHeight || 0;
-    let numContractBodyHeight = chartHeight - notiHeight - numContractHeight;
+    let notiHeight = chartHeight - numContractBodyHeight - numContractHeight;
     console.log(numContractBodyHeight);
-    return {'height': numContractBodyHeight + 'px', 
-            'display': 'flex', 
-            'flex-wrap': 'wrap', 
-            'padding-top':'15px'};
+    return {'height': notiHeight + 'px', 
+};
   }
 
   search() {

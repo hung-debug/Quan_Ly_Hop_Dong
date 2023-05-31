@@ -133,7 +133,7 @@
           <h3>{{'dashboard.notification' | translate}}</h3>
         </div>
       </div>
-      <div class="body" style="min-height: 424.8px"  id="noti">
+      <div class="body" style="min-height: 424.8px"  id="noti" [ngStyle]="getNumberContractBoxHeight()" >
         <div *ngIf="listNotification.length == 0"
         style="height: 364.8px;display: table;top: 0;left: 0;width: 100%;text-align: center;">
         <div style="display: table-cell;vertical-align: middle;">
@@ -185,14 +185,14 @@
       </div>
       <div class="row" id="num-contract">
         <div class="col-md-12" style="padding-top: 10px">
-          <h3>SỐ LƯỢNG HỢP ĐỒNG</h3>
+          <h3>{{'num.contract'| translate}}</h3>
         </div>
       </div >
-      <div class="body" [ngStyle]="getNumberContractBoxHeight()" 
-      id="num-contract-body">
+      <div class="body" 
+      id="num-contract-body" style="display: flex; flex-wrap: wrap; align-items: center">
         <div class="first-col" style="width: 40%">
-          <div style="padding-left: 4px; width: 100%; margin: 0">{{'num.contract.buy' | translate}}</div>
-          <div style="padding-left: 4px; width: 100%; margin: 0">{{'num.contract.use' | translate}}</div>
+          <div style="padding-left: 4px; width: 100%; margin: 0">{{'num.contract.buy' | translate}}:</div>
+          <div style="padding-left: 4px; width: 100%; margin: 0">{{'num.contract.use' | translate}}:</div>
         </div>
         <div class="second-col">
           <div style=" width: 100%; margin: 0">{{numContractBuy}} </div>

@@ -650,5 +650,6 @@
   "choose.font": "Choose font",
   "reject.question": "Are you sure you want to reject this contract? Please enter the reason for rejection",
   "num.contract.buy":"Number of contracts purchased",
-  "num.contract.use":"Number of contracts used"
+  "num.contract.use":"Number of contracts used",
+  "num.contract": "Number of contracts"
   }
