@@ -36,13 +36,11 @@ export class ConfirmSignOtpComponent implements OnInit {
   isSentOpt = false;
   submitted = false;
 
-  currentUser: any;
   phoneOtp:any;
   isDateTime:any;
   userOtp:any;
   smsContractUse: any;
   smsContractBuy: any;
-  type: any = 0;
   
   @Output() confirmOtpForm = new EventEmitter();
 
@@ -73,10 +71,6 @@ export class ConfirmSignOtpComponent implements OnInit {
       this.checkSMS(this.datasOtp.contract_id, this.datasOtp.recipient_id, this.datasOtp.phone);
 
       this.getDeviceApp();
-      if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
-        this.type = 1;
-      } else
-        this.type = 0;
   }
 
   async checkSMS(contractId: any, recipientId: any, phone: any) {
@@ -97,70 +91,6 @@ export class ConfirmSignOtpComponent implements OnInit {
   }
 
   async onSubmit() {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    console.log("currentUser",this.currentUser);
-    
-    let id_recipient_signature = null;
-
-    for (const d of this.datas.is_data_contract.participants) {
-      for (const q of d.recipients) {
-        if (q.email) {
-          if (q.email == this.currentUser.email && q.status == 1) {
-            id_recipient_signature = q.id;
-            break
-          }
-        }
-      }
-      if (id_recipient_signature) break;
-    }
-    this.contractService.getDetermineCoordination(id_recipient_signature).subscribe(async (response) => {
-      console.log("response", response);
-
-      // const ArrRecipients = response.is_data_contract.participants.map((ele: any) => ele.recipients);
-      const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-      console.log("ArrRecipients", ArrRecipients);
-
-      let ArrRecipientsNew = false
-      
-      ArrRecipients.map((item: any) => {
-        console.log("item",item);
-        if (item.phone === this.currentUser.phone) {
-          console.log("phone");
-          ArrRecipientsNew = true
-          return
-        }
-        else if(item.email === this.currentUser.email){
-          ArrRecipientsNew = true
-          console.log("email");
-          return
-        }
-        console.log("item.phone",item.phone);
-        console.log("this.currentUser.phone",this.currentUser.phone);
-        
-        
-      });
-
-      if (!ArrRecipientsNew) {
-
-        this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
-          '',
-          3000
-        );
-        if (this.type == 1) {
-          this.router.navigate(['/login']);
-          this.dialogRef.close();
-          this.spinner.hide();
-          return
-        } else {
-          this.router.navigate(['/main/dashboard']);
-          this.dialogRef.close();
-          this.spinner.hide();
-          return
-        }
-      };
-      console.log("this.currentUser.email", this.currentUser);
-    
     // @ts-ignore
     document.getElementById("otp").focus();
     this.submitted = true;
@@ -171,7 +101,6 @@ export class ConfirmSignOtpComponent implements OnInit {
     // console.log(this.addForm.value.otp);
     // this.confirmOtpForm.emit(this.addForm.value.otp);
     await this.signContractSubmit();
-  })
   }
 
   countTimeOtp() {
@@ -271,7 +200,6 @@ export class ConfirmSignOtpComponent implements OnInit {
             organizationId: this.datas?.is_data_contract?.organization_id
           }
           
-          console.log("form ", formData);
           signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
     
           indexSignUpload.push(iu);
@@ -301,6 +229,7 @@ export class ConfirmSignOtpComponent implements OnInit {
     
 
     forkJoin(signUploadObs$).subscribe(async results => {
+      let bucket = results[0].file_object.bucket;
       let ir = 0;
       for (const resE of results) {
         this.datas.filePath = resE?.file_object?.file_path;
@@ -309,7 +238,7 @@ export class ConfirmSignOtpComponent implements OnInit {
         }
         ir++;
       }
-      await this.signContract(false);
+      await this.signContract(false, bucket);
     }, error => {
       this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
     });
@@ -328,7 +257,7 @@ export class ConfirmSignOtpComponent implements OnInit {
     }
   }
 
-  async signContract(notContainSignImage?: boolean) {
+  async signContract(notContainSignImage?: boolean,bucket?: string) {
     const signUpdateTemp = JSON.parse(JSON.stringify(this.datas.is_data_object_signature));
     let signUpdatePayload = "";
     //neu khong chua chu ky anh
@@ -341,7 +270,8 @@ export class ConfirmSignOtpComponent implements OnInit {
             name: item.name,
             value: (item.type == 1 || item.type == 4) ? item.valueSign : item.value,
             font: item.font,
-            font_size: item.font_size
+            font_size: item.font_size,
+            bucket: bucket
           }
         });
     }else{
@@ -388,8 +318,9 @@ export class ConfirmSignOtpComponent implements OnInit {
                 id: item.id,
                 name: item.name,
                 value: (item.type == 1 || item.type == 4) ? item.valueSign : item.value,
-                font: 'Arial',
-                font_size: 14
+                font: 'Times New Roman',
+                font_size: 14,
+                bucket: bucket
               }]
           }
         });
@@ -441,11 +372,9 @@ export class ConfirmSignOtpComponent implements OnInit {
         async (result) => {
           if(result?.success == false){
             if(result.message == 'Wrong otp'){
-              console.log("message",result);
               this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng', '', 3000);
               this.spinner.hide();
             }else if(result.message == 'Otp code has been expired'){
-              console.log("message",result);
               this.toastService.showErrorHTMLWithTimeout('Mã OTP quá hạn', '', 3000);
               this.spinner.hide();
             }else if(result.message == 'You have entered wrong otp 5 times in a row'){
@@ -454,14 +383,7 @@ export class ConfirmSignOtpComponent implements OnInit {
               this.spinner.hide();
               this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
               
-            }else if(result.message == 'Wrong phone!'){
-              console.log("message",result);
-              this.toastService.showErrorHTMLWithTimeout('Mã OTP hết hiệu lực', '', 4000);
-              this.spinner.hide();
-              window.location.reload();
-            }
-            else{
-              console.log("message",result);
+            } else{
               this.toastService.showErrorHTMLWithTimeout('Ký hợp đồng không thành công', '', 3000);
               this.dialog.closeAll();
               this.spinner.hide();
