@@ -148,9 +148,10 @@ export class CustomerComponent implements OnInit {
     if(!this.isOrgCustomer){
       sessionStorage.setItem('partnerType', 'PERSONAL')
     this.cols=[
-      {header: 'personal.customer.name', style:'text-align: left;', class:'col-md-3' },
-      {header: 'phone_mail', style:'text-align: left;', class:'col-md-4' },
-      {header: 'cardId', style:'text-align: left;', class:'col-md-3'},
+      {header: 'personal.customer.name', style:'text-align: left;', class:'col-md-2' },
+      {header: 'user.phone', style:'text-align: left;', class:'col-md-3' },
+      {header: 'user.email', style:'text-align: left;', class:'col-md-3'},
+      {header: 'cardId', style:'text-align: left;', class:'col-md-2'},
       {header: '', style:'text-align: center;', class:'col-md-2' },
     ]}
     else if(this.isOrgCustomer){

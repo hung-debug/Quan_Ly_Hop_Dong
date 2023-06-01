@@ -15,7 +15,8 @@
                     {{ "tax.code" | translate | uppercase }}&nbsp;
                     <span style="color: red">*</span>
                 </div>
-                <input [(ngModel)]="orgCustomer.taxCode" class="input1" type="text" />
+                <input [(ngModel)]="orgCustomer.taxCode" class="input1" 
+                oninput="this.value = this.value.replace(/[^\d-]/g, '');" type="text" />
             </div>
         </div>
 
@@ -30,7 +31,7 @@
                     <div class="col-md-10 participants__content--input">
                         <div class="participants--input" style="display: flex">
                             <div class="participants__name">
-                                <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;</div>
+                                <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span style="color: red">*</span></div>
                                 <div class="input-data">
                                     <img src="assets/img/icon_name.svg" class="input-img">
                                     <input type="text" [(ngModel)]="d.name" placeholder="{{'nhap_ho_va_ten' | translate}}">
@@ -38,7 +39,7 @@
                             </div>
 
                             <div class="participants__name">
-                                <div class="label_detail text-color">Email
+                                <div class="label_detail text-color">Email<span style="color: red">*</span>
                                 </div>
                                 <div class="input-data">
                                     <img src="assets/img/login_email.svg" class="input-img">
@@ -861,7 +862,7 @@
                             </div>
 
                             <div class="participants__name">
-                              <div class="label_detail text-color">{{'user.sign-type' | translate}}:&nbsp;
+                              <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;
                                   <span style="color: red">*</span>
                               </div>
                               <ng-multiselect-dropdown [(ngModel)]="this.personalCustomer.signType" placeholder="{{'choose' | translate }}"

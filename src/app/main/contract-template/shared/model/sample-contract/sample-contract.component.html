@@ -54,10 +54,19 @@
                 <!--Người ký/người nhập-->
                 <div class="sign-unit-select">
                     <label class="label-require">{{isEnableText || isChangeText ? ('user.import' | translate) : ('user.sign' | translate)+': *'}}</label>
-                    <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
-                        <option value="" hidden>{{isEnableText || isChangeText ? ('choose.importer' | translate) : ('choose.signer' | translate)}}</option>
-                        <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}" [disabled]="d.is_disable">{{getName(d)}}</option>
-                    </select>
+                    <div style="position: relative;">
+                        <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
+                          <option value="" hidden>{{isEnableText || isChangeText ? ('choose.importer' | translate) : ('choose.signer' | translate)}}</option>
+                          <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}" [disabled]="d.is_disable">{{getName(d)}}</option>
+                        </select>
+                        <div *ngIf="isEnableText && showSignClear" style="position: absolute; top: 50%; right: 32px; transform: translateY(-50%); display: flex; align-items: center; cursor: pointer" (click)="clearSign()">
+                          <!-- <img src="../../../../../../assets/img/close.svg" style="width: 16px"> -->
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="15px" stroke="#000000" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 6L6 18M6 6l12 12"></path>
+                          </svg>
+                        </div>
+                    </div>
+                      
                 </div>
 
                 <!--Option chọn font + size chữ-->

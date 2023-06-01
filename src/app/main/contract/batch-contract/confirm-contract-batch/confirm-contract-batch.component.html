@@ -136,10 +136,16 @@
               <img width="16px" height="20px" *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
             </button>
         </a>
-            <a style="position: absolute; right: 5px;">
-                <button (click)="submit()" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button>
-            </a>
+
         </div>
+    </div>
+    <div class="col-md-9" style="position: absolute; display: flex; justify-content: flex-end; width: 82%!important; z-index: -1">
+      <!-- <a style="position: relative;">
+        <button type="button" name="next" class="next action-button" style="background-color: #FCAF17">{{'btn.save-draft' | translate}}</button>
+      </a> -->
+      <a style="position: relative;">
+        <button (click)="submit()" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button>
+      </a>
     </div>
     </div>
   

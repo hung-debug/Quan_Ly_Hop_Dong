@@ -235,6 +235,12 @@ export class CustomerService {
         locale: data.handlers[i].locale,
         card_id: data.handlers[i].card_id,
       };
+      if(handler.card_id == null)
+      handler.card_id = '';
+      if(handler.phone == null)
+      handler.phone = '';
+      if(handler.email == null)
+      handler.email = '';
       handlers.push(handler);
     }
     const body = JSON.stringify({
@@ -251,7 +257,19 @@ export class CustomerService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = JSON.stringify({
+    // const body = JSON.stringify({
+    //   name: data.name,
+    //   type: data.type,
+    //   phone: data.phone,
+    //   email: data.email,
+    //   signType: data.signType,
+    //   login_by : data.login_by,
+    //   locale: data.locale,
+    //   card_id: data.card_id,
+    // });
+    // console.log(body);
+    const customer = {
+      id: data.id,
       name: data.name,
       type: data.type,
       phone: data.phone,
@@ -260,8 +278,17 @@ export class CustomerService {
       login_by : data.login_by,
       locale: data.locale,
       card_id: data.card_id,
-    });
-    console.log(body);
+      handlers: [],
+      taxCode: '',
+    }
+    if(customer.card_id == null)
+    customer.card_id = '';
+    if(customer.phone == null)
+    customer.phone = '';
+    if(customer.email == null)
+    customer.email = '';
+
+    const body = JSON.stringify(customer);
     return this.http.post<any>(this.getCustomerUrl, body, { headers: headers });
   }
 
@@ -283,6 +310,12 @@ export class CustomerService {
         locale: data.handlers[i].locale,
         card_id: data.handlers[i].card_id,
       };
+      if(handler.card_id == null)
+      handler.card_id = '';
+      if(handler.phone == null)
+      handler.phone = '';
+      if(handler.email == null)
+      handler.email = '';
       handlers.push(handler);
     }
     const body = JSON.stringify({
@@ -300,7 +333,7 @@ export class CustomerService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = JSON.stringify({
+    const customer = {
       id: data.id,
       name: data.name,
       type: data.type,
@@ -310,7 +343,17 @@ export class CustomerService {
       login_by : data.login_by,
       locale: data.locale,
       card_id: data.card_id,
-    });
+      handlers: [],
+      taxCode: '',
+    }
+    if(customer.card_id == null)
+    customer.card_id = '';
+    if(customer.phone == null)
+    customer.phone = '';
+    if(customer.email == null)
+    customer.email = '';
+
+    const body = JSON.stringify(customer);
     return this.http.put<any>(this.editCustomerUrl, body, { headers: headers });
   }
 

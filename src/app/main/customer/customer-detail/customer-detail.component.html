@@ -4,8 +4,7 @@
       <div class="contract--content">
           <div class="contract__content--title-doi-tac">
               <div style="width: 100px">
-                  {{ "organization.partner.name" | translate | uppercase }}&nbsp;
-                  <span style="color: red">*</span>
+                  {{ "organization.partner.name" | translate | uppercase }}&nbsp;                  
               </div>
               <input [(ngModel)]="this.name" class="input1" type="text" readonly/>
           </div>
@@ -13,7 +12,6 @@
           <div class="contract__content--title-mst">
               <div style="width: 100px">
                   {{ "tax.code" | translate | uppercase }}&nbsp;
-                  <span style="color: red">*</span>
               </div>
               <input [(ngModel)]="this.taxCode" class="input1" type="text" readonly/>
           </div>
@@ -30,8 +28,7 @@
                   <div class="col-md-10 participants__content--input">
                       <div class="participants--input" style="display: flex">
                           <div class="participants__name">
-                              <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span
-                                      class="required-title">:</span></div>
+                              <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;</div>
                               <div class="input-data">
                                   <img src="assets/img/icon_name.svg" class="input-img">
                                   <input type="text" [(ngModel)]="d.name" readonly>
@@ -40,7 +37,6 @@
 
                           <div class="participants__name">
                               <div class="label_detail text-color">Email
-                                  <span class="required-title">:&nbsp;</span>
                               </div>
                               <div class="input-data">
                                   <img src="assets/img/login_email.svg" class="input-img">
@@ -140,7 +136,7 @@
                         <!--NB-->
                         <div class="participants__name" *ngIf="d.login_by == 'email' && this.site == 'NB'">
                           <div class="label_detail text-color">Email&nbsp;
-                            <span class="required-title">*</span>
+
                           </div>
                           <div class="input-data">
                             <img src="assets/img/login_email.svg" class="input-img">
@@ -150,7 +146,7 @@
       
                         <div class="participants__name" *ngIf="d.login_by == 'phone' && this.site == 'NB'">
                           <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
-                            <span class="required-title">*</span>
+
                           </div>
                           <div style="display: flex;">
                             <div class="input-data" style="width: 88%;margin-right: -3%;">
@@ -190,7 +186,6 @@
                         <!--KD-->
                         <div class="participants__name" *ngIf="d.login_by == 'email' && this.site == 'KD'">
                           <div class="label_detail text-color">Email&nbsp;
-                            <span class="required-title">*</span>
                           </div>
                           <div class="input-data">
                             <img src="assets/img/login_email.svg" class="input-img">
@@ -201,8 +196,7 @@
                         <div class="participants__name" *ngIf="d.login_by == 'phone' && this.site == 'KD'">
                           <div style="display: flex;">
                             <div class="participants__name" style="width: 88%;">
-                              <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
-                                <span class="required-title">*</span>
+                              <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;    
                               </div>
                               <div class="input-data">
                                 <img class="input-img">
@@ -345,7 +339,7 @@
                       <!--KD-->
                       <div *ngIf="this.site == 'KD'" class="participants--input" style="display: flex">
                         <div *ngIf="d.login_by === 'email'" class="participants__name" style="width: 88%">
-                          <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+                          <div class="label_detail text-color">Email&nbsp;</div>
                           <div class="input-data">
                             <img src="assets/img/login_email.svg" class="input-img">
                             <input type="text" [(ngModel)]="d.email" readonly>
@@ -354,7 +348,7 @@
       
                         <div *ngIf="d.login_by === 'phone'" class="participants__name" style="width: 88%">
                           <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
-                            <span class="required-title">*</span>
+
                           </div>
                           <div style="display: flex;">
                             <div class="input-data" style="width: 85%;">
@@ -397,7 +391,7 @@
                         style="display: flex">
                         <div class="participants__name">
                           <div class="label_detail text-color">Email&nbsp;
-                            <span class="required-title">*</span>
+
                           </div>
                           <div class="input-data">
                             <img src="assets/img/login_email.svg" class="input-img">
@@ -554,7 +548,7 @@
                       <!--NB-->
                       <div class="participants--input" style="display: flex" *ngIf="this.site == 'NB'">
                         <div class="participants__name">
-                          <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+                          <div class="label_detail text-color">Email&nbsp;</div>
                           <div class="input-data">
                             <img src="assets/img/login_email.svg" class="input-img">
                             <input type="text" [(ngModel)]="d.email" readonly>
@@ -607,7 +601,7 @@
                       <!--KD-->
                       <div class="participants--input" style="display: flex" *ngIf="this.site == 'KD'">
                         <div class="participants__name" style="width: 88%">
-                          <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+                          <div class="label_detail text-color">Email&nbsp;</div>
                           <div class="input-data">
                             <img src="assets/img/login_email.svg" class="input-img">
                             <input type="text" [(ngModel)]="d.email" readonly>
@@ -704,7 +698,7 @@
                       <div class="participants--input" style="display: flex">
                           <div class="participants__name">
                               <div class="label_detail text-color">{{'user.name' | translate}}:&nbsp;
-                                  <span style="color: red">*</span>
+                                  
                               </div>
                               <div class="input-data">
                                   <img src="assets/img/icon_name.svg" class="input-img">
@@ -714,7 +708,7 @@
 
                           <div class="participants__name">
                             <div class="label_detail text-color">{{'user.sign-type' | translate}}:&nbsp;
-                                <span style="color: red">*</span>
+                                
                             </div>
                             <div class="input-data">
                               <input type="text"  value="{{this.signType[0].name}}" readonly>
@@ -726,7 +720,7 @@
 
                           <div *ngIf="orgCustomer[0].login_by === 'phone'" class="participants__name" style="width: 88%">
                             <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
-                              <span class="required-title">*</span>
+  
                             </div>
                             <div style="display: flex;">
                               <div class="input-data" style="width: 85%;">
@@ -762,7 +756,7 @@
                           </div>
         
                           <div *ngIf="orgCustomer[0].login_by === 'email'" class="participants__name" style="width: 88%">
-                            <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+                            <div class="label_detail text-color">Email&nbsp;</div>
                             <div class="input-data">
                               <img src="assets/img/login_email.svg" class="input-img">
                               <input type="text" [(ngModel)]="this.email" readonly>
@@ -774,7 +768,7 @@
                         <div *ngIf="this.site == 'NB' && orgCustomer[0].login_by === 'email'" class="participants--input"
                           style="display: flex">
                           <div class="participants__name" style="margin-left: 4%;">
-                            <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+                            <div class="label_detail text-color">Email&nbsp;</div>
                             <div class="input-data">
                               <img src="assets/img/login_email.svg" class="input-img">
                               <input type="text" [(ngModel)]="this.email" readonly>
@@ -782,8 +776,7 @@
                           </div>
         
                           <div class="participants__name" style="width: 34%; margin-left: 8%;">
-                            <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span
-                                *ngIf="getDataSignCka(this).length > 0" class="required-title">*</span>
+                            <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
                               <div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div>
                             </div>
                             <div class="input-data">
@@ -826,8 +819,7 @@
                         <div *ngIf="this.site == 'NB' && orgCustomer[0].login_by === 'phone'" class="participants--input"
                           style="display: flex">
                           <div class="participants__name" style="width:80%; margin-right: -4%;">
-                            <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span
-                                class="required-title">*</span></div>
+                            <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;</div>
                             <div class="input-data">
                               <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
                               <input type="text" [(ngModel)]="this.phone" readonly>
@@ -867,8 +859,7 @@
                         <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là eKYC-->
                         <div class="participants--input" style="display: flex" *ngIf="getDataSignEkyc(this).length > 0">
                           <div class="participants__name" style="width: 88%">
-                            <div class="label_detail text-color">{{'cardId' | translate}}&nbsp;<span
-                                class="required-title">*</span></div>
+                            <div class="label_detail text-color">{{'cardId' | translate}}&nbsp;</div>
                             <div class="input-data">
                               <input type="text" [(ngModel)]="this.card_id"
                                 oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
@@ -879,8 +870,7 @@
                         <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là usb token-->
                         <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(this).length > 0">
                           <div class="participants__name" style="width: 88%">
-                            <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span
-                                class="required-title">*</span>
+                            <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
                               <div style="color: #ffc107;">({{'info.token' | translate}})</div>
                             </div>
                             <div class="input-data">
@@ -893,8 +883,7 @@
                         <!--trường hiển thị khi văn thư đối tác của tổ chức chọn loại ký là hsm-->
                         <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(this).length > 0">
                           <div class="participants__name" style="width: 88%">
-                            <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;<span
-                                class="required-title">*</span></div>
+                            <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;</div>
                             <div class="input-data">
                               <input type="text" [(ngModel)]="this.card_id"
                                 oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
@@ -908,7 +897,7 @@
         
                           <div class="participants__name" style="width: 88%">
                             <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
-                              <span class="required-title">*</span>
+  
                             </div>
                             <div class="input-data" style="width: 85%;">
                               <input type="text" [(ngModel)]="this.phone"

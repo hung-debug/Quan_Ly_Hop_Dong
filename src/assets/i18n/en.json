@@ -655,5 +655,8 @@
   "contract.expired":"Contract expired",
   "contract.completed":"Completed contract",
   "config.day.expiration":"Configuring expiration date",
-  "role.config.sms.email":"SMS/Email configuration function group"
+  "role.config.sms.email":"SMS/Email configuration function group",
+  "num.contract.buy":"Number of contracts purchased",
+  "num.contract.use":"Number of contracts used",
+  "num.contract": "Number of contracts"
   }
