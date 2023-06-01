@@ -6,6 +6,7 @@ import { variable } from 'src/app/config/variable';
 import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { NgxSpinnerService } from "ngx-spinner";
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-confirm-info-contract',
@@ -44,6 +45,7 @@ export class ConfirmInfoContractComponent implements OnInit {
     private contractService: ContractService,
     private router: Router,
     private spinner: NgxSpinnerService,
+    private dialog: MatDialog,
     private toastService: ToastService,) {
     this.step = variable.stepSampleContract.step4
   }
@@ -141,9 +143,11 @@ export class ConfirmInfoContractComponent implements OnInit {
         );
         if (this.type == 1) {
           this.router.navigate(['/login']);
+          this.dialog.closeAll();
           return
         } else {
           this.router.navigate(['/main/dashboard']);
+          this.dialog.closeAll();
           return
         }
       };

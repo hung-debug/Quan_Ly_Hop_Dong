@@ -102,6 +102,8 @@ export class ContractService {
   checkTaxCodeExistUrl: any = `${environment.apiUrl}/api/v1/contracts/check-mst-exist`;
 
   signHsmUrl: any = `${environment.apiUrl}/api/v1/sign/hsm/`;
+  //signHsmUrl2: any = `${environment.apiUrl}/api/v1/sign/hsm-v2/`;
+
   signHsmOldUrl: any = `${environment.apiUrl}/api/v1/sign/old-hsm/`
 
   getFilePdfForMobileUrl: any = `${environment.apiUrl}/api/v1/contracts/review/`;
@@ -142,7 +144,9 @@ export class ContractService {
 
   deleteTokenUrl: any = `${environment.apiUrl}/api/v1/auth/logout`;
 
-  configSmsUrl: any = `${environment.apiUrl}/api/v1/notification/sms-types/`
+  configSmsUrl: any = `${environment.apiUrl}/api/v1/notification/sms-types/`;
+
+  configExpirationDateUrl: any = `${environment.apiUrl}/api/v1/organizations/`
 
   token: any;
   customer_id: any;
@@ -667,16 +671,8 @@ export class ContractService {
           ? signCertDigital.signDigitalWidth
           : signCertDigital.width
       ).toString(),
-      px: Math.floor(
-        signCertDigital.signDigitalX
-          ? signCertDigital.signDigitalX
-          : signCertDigital.coordinate_x
-      ).toString(),
-      py: Math.floor(
-        signCertDigital.signDigitalY
-          ? signCertDigital.signDigitalY
-          : signCertDigital.coordinate_y
-      ).toString(),
+      px:signCertDigital.signDigitalX.toString(),
+      py: signCertDigital.signDigitalY.toString(),
 
       signDate: '11-05-2019 09:55:55',
       typeSign: '4',
@@ -882,6 +878,24 @@ export class ContractService {
       headers: headers,
       observe: 'response',
     }).pipe();
+  }
+
+  getConfigExpirationDate() {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+    .append('Content-Type', 'application/json')
+    .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.get<any>(this.configExpirationDateUrl + this.organization_id+"/config",{headers}).pipe();
+  }
+
+  editConfigExpirationDate(body: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+    .append('Content-Type', 'application/json')
+    .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.put<any>(this.configExpirationDateUrl + this.organization_id+"/config",body,{headers}).pipe();
   }
 
   changeLink(code: any) {
@@ -1105,6 +1119,28 @@ export class ContractService {
       .post<any>(this.signHsmUrl + recipientId, body, { headers: headers })
       .toPromise();
   }
+
+  // signHsm2(datas: any, recipientId: number, isTimestamp: any) {
+  //   this.getCurrentUser();
+
+  //   const headers = new HttpHeaders()
+  //     .append('Content-Type', 'application/json')
+  //     .append('Authorization', 'Bearer ' + this.token);
+
+  //   const body = JSON.stringify({
+  //     ma_dvcs: datas.ma_dvcs,
+  //     username: datas.username,
+  //     password: datas.password,
+  //     password2: datas.password2,
+  //     image_base64: datas.imageBase64,
+  //     // isTimestamp: isTimestamp
+  //     field: datas.field
+  //   });
+
+  //   return this.http
+  //     .post<any>(this.signHsmUrl2 + recipientId, body, { headers: headers })
+  //     .toPromise();
+  // }
 
   signHsmOld(datas: any, recipientId: number) {
     this.getCurrentUser();
