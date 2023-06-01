@@ -507,9 +507,14 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       if(this.isOrg){
         console.log(this.orgCustomer);
         this.customerService.addOrgCustomer(this.orgCustomer).subscribe((res: any) => {
-          this.spinner.hide();
-          this.toastService.showSuccessHTMLWithTimeout('Thêm khách hàng tổ chức thành công!',"", 2000);
-          this.router.navigate(['/main/customer']);
+          if(res.errors){
+            this.spinner.hide();
+            this.showError(res.errors[0].code, 'add', 'org')
+          } else {
+            this.spinner.hide();
+            this.toastService.showSuccessHTMLWithTimeout('Thêm khách hàng tổ chức thành công!',"", 2000);
+            this.router.navigate(['/main/customer']);
+          }
         },
         (error) => {
           this.spinner.hide();
@@ -518,9 +523,14 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       }
       if(!this.isOrg){
         this.customerService.addPersonalCustomer(this.personalCustomer).subscribe((res: any) => {
-          this.spinner.hide();
-          this.toastService.showSuccessHTMLWithTimeout('Thêm khách hàng thành công!',"", 2000);
-          this.router.navigate(['/main/customer']);
+          if(res.errors){
+            this.spinner.hide();
+            this.showError(res.errors[0].code, 'add', 'personal')
+          } else {
+            this.spinner.hide();
+            this.toastService.showSuccessHTMLWithTimeout('Thêm khách hàng cá nhân thành công!',"", 2000);
+            this.router.navigate(['/main/customer']);
+          }
         },
         (error) => {
           this.spinner.hide();
@@ -531,9 +541,15 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
         if(this.isOrg){
           this.orgCustomer.id = this.id;
           this.customerService.editOrgCustomer(this.orgCustomer).subscribe((res: any) => {
-            this.spinner.hide();
-            this.toastService.showSuccessHTMLWithTimeout('Sửa thông tin khách hàng tổ chức thành công!',"", 2000);
-            this.router.navigate(['/main/customer']);
+            if(res.errors){
+              this.spinner.hide();
+              this.showError(res.errors[0].code, 'edit', 'org')
+            } else {
+              this.spinner.hide();
+              this.toastService.showSuccessHTMLWithTimeout('Sửa thông tin khách hàng tổ chức thành công!',"", 2000);
+              this.router.navigate(['/main/customer']);
+            }
+
           },
           (error) => {
             this.spinner.hide();
@@ -543,9 +559,15 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
         if(!this.isOrg){
           this.personalCustomer.id = this.id;
           this.customerService.editPersonalCustomer(this.personalCustomer).subscribe((res: any) => {
-            this.spinner.hide();
-            this.toastService.showSuccessHTMLWithTimeout('Sửa thông tin khách hàng thành công!',"", 2000);
-            this.router.navigate(['/main/customer']);
+            if(res.errors){
+              this.spinner.hide();
+              this.showError(res.errors[0].code, 'edit', 'personal')
+            } else {
+              this.spinner.hide();
+              this.toastService.showSuccessHTMLWithTimeout('Sửa thông tin khách hàng thành công!',"", 2000);
+              this.router.navigate(['/main/customer']);
+            }
+
           },
           (error) => {
             this.spinner.hide();
@@ -555,6 +577,33 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       }
   }
 }
+  showError(code: number, action: string, type: string ){
+    let actionError: string = '';
+    if(action == 'add') 
+      actionError = 'Thêm khách hàng ';
+    else if(action == 'edit')
+      actionError = 'Sửa thông tin khách hàng ';
+    if(type == 'org')
+      actionError += 'tổ chức không thành công, ';
+    else if(type == 'personal')
+      actionError += 'cá nhân không thành công, ';
+    if(code == 1002){
+      actionError += 'số điện thoại đã tồn tại!'
+      this.toastService.showErrorHTMLWithTimeout(actionError, "", 3000);
+    } else
+    if(code == 1014){
+      actionError += 'CMT/CCCD đã tồn tại!'
+      this.toastService.showErrorHTMLWithTimeout(actionError, "", 3000);
+    } else
+    if(code == 1006){
+      actionError += 'mã số thuế đã tồn tại!'
+      this.toastService.showErrorHTMLWithTimeout(actionError, "", 3000);
+    } else
+    if(code == 1013){
+      actionError += 'tên khách hàng đã tồn tại!'
+      this.toastService.showErrorHTMLWithTimeout(actionError, "", 3000);
+    }
+  }
   ngOnDestroy(): void {
       
   }
