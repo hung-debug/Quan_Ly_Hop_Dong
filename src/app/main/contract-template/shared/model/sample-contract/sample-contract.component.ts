@@ -1152,6 +1152,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   getSignSelect(d: any) {
     console.log(d);
     if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
+      if(d.recipient_id) {
+        this.showSignClear = true;
+      }
       this.textSign = true;
       this.list_font = ["Arial","Calibri","Times New Roman"];
       this.selectedTextType = 1;
@@ -1163,9 +1166,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       d.font = 'Times New Roman';
       this.list_font = [d.font];
     }
-    if(d.sign_unit == 'text' && d.recipient_id){
-      this.showSignClear = true;
-    }
+    // if(d.sign_unit == 'text' && d.recipient_id){
+    //   this.showSignClear = true;
+    // }
 
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
