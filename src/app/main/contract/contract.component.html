@@ -142,7 +142,7 @@
             <div class="footer_contract_per_page">
                 <div>Hiển thị&nbsp;</div>
                 <select (change)="changePageNumber($event)">
-                    <option value="" hidden>10</option>
+                    <option value="" hidden>{{this.page}}</option>
                     <option *ngFor="let d of this.pageOptions">{{d}}</option>
                 </select>
                 <div>&nbsp;{{'contracts.per.page' | translate}}</div>

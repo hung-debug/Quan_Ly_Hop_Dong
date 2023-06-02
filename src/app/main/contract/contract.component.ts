@@ -530,6 +530,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   changePageNumber(e: any){
     this.spinner.show();
+    this.p = 1;
     this.page = e.target.value;
     this.getContractList();
   }

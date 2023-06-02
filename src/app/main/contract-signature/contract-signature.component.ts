@@ -50,7 +50,7 @@ export class ContractSignatureComponent implements OnInit {
   closeResult: string = '';
   public contracts: any[] = [];
   public contractsSignMany: any[] = [];
-  pageOptions: any[] = [10, 20, 50, 100];
+  pageOptions: any[] = [5,10, 20, 50, 100];
 
   p: number = 1;
   page: number = 5;
@@ -819,8 +819,8 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   changePageNumber(e: any){
-    console.log("call vao day?")
     this.spinner.show();
+    this.p = 1;
     this.page = e.target.value;
     this.getContractList();
   }
