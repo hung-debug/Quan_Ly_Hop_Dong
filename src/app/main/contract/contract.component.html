@@ -162,6 +162,10 @@
             </div>
         </div>
 
+        <!-- <div class="col-md-1 btn_search" style="padding-top: 10px;">
+            <button *ngIf="status == 'draft'" (click)="release()" class="btn btn-lg btn-block btn_submit">{{'release'|translate}}</button>
+        </div> -->
+
         <div class="row list_header" *ngIf="pageTotal > 0;">
             <div class="col-md-4"></div>
             <div class="col-md-2">{{'create-date' | translate}}</div>
@@ -552,6 +556,7 @@
         <div>{{roleMess | translate}}</div>
     </div>
 </div>
+
 
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
     <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>

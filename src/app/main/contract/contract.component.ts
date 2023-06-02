@@ -346,6 +346,61 @@ export class ContractComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // release() {
+  //   this.spinner.show();
+  //   this.typeDisplay = 'release';
+  //   this.roleMess = "";
+  //   if (this.isOrg == 'off' && !this.isQLHD_05) {
+  //     this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
+
+  //   } else if (this.isOrg == 'on' && !this.isQLHD_04) {
+  //     this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
+  //   }
+  //   if (!this.roleMess) {
+      
+  //     let isOrg = this.isOrg;
+
+  //     if(!this.isQLHD_03) {
+  //       isOrg ='off';
+  //     }
+
+  //   this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, 20).subscribe(data => {
+  //     this.contracts = data.entities;
+  //     this.pageTotal = data.total_elements;
+  //     this.checkedAll = false;
+  //     this.dataChecked = [];
+  //     if (this.pageTotal == 0) {
+  //       this.p = 0;
+  //       this.pageStart = 0;
+  //       this.pageEnd = 0;
+  //     } else {
+  //       this.setPageDownload();
+  //     }
+  //     const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
+  //     console.log('checkedDownloadFiles',checkedDownloadFiles);
+  //     for(let i = 0; i< this.contracts.length; i++){
+  //       let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
+  //       if(checkIf){
+  //         this.contracts[i].checked = true;
+  //       } else {
+  //         this.contracts[i].checked = false;
+  //       }
+  //     }
+  
+  //       this.spinner.hide();
+  //     },
+  //       (error) => {
+  //         setTimeout(() => this.router.navigate(['/login']));
+  //         this.toastService.showErrorHTMLWithTimeout(
+  //           'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+  //           '',
+  //           3000
+  //         );
+  //       }
+  //     );
+  //   }
+  // }
+
   ngAfterViewInit(): void {
     this.spinner.hide();
   }
