@@ -31,6 +31,7 @@ export class UserComponent implements OnInit {
   cols: any[];
   orgList: any[] = [];
   orgListTmp: any[] = [];
+  myEmail: string;
 
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
@@ -42,6 +43,7 @@ export class UserComponent implements OnInit {
   lang: any;
   async ngOnInit(): Promise<void> {
     let userId = this.userService.getAuthCurrentUser().id;
+    this.myEmail = this.userService.getInforUser().email;
     
     this.userService.getUserById(userId).subscribe(
       data => {

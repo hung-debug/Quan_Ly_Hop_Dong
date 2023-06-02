@@ -65,7 +65,7 @@
 
               <td>{{list.role?.name}}</td>
               <td style="text-align: center">
-                <img *ngIf="isQLND_02" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
+                <img *ngIf="isQLND_02 || list.email == this.myEmail" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
               </td>
           </tr>
       </ng-template>
