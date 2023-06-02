@@ -50,6 +50,7 @@ export class ContractSignatureComponent implements OnInit {
   closeResult: string = '';
   public contracts: any[] = [];
   public contractsSignMany: any[] = [];
+  pageOptions: any[] = [10, 20, 50, 100];
 
   p: number = 1;
   page: number = 5;
@@ -433,6 +434,7 @@ export class ContractSignatureComponent implements OnInit {
             } else {
               this.setPage();
             }
+            this.spinner.hide();
           },
           (error) => {
             setTimeout(() => this.router.navigate(['/login']));
@@ -474,6 +476,7 @@ export class ContractSignatureComponent implements OnInit {
               } else {
                 this.setPage();
               }
+              this.spinner.hide();
               this.contracts.forEach((key: any, v: any) => {
                 this.contracts[v].contractId = key.participant.contract.id;
                 this.contracts[v].contractName = key.participant.contract.name;
@@ -513,6 +516,7 @@ export class ContractSignatureComponent implements OnInit {
             } else {
               this.setPage();
             }
+            this.spinner.hide();
             this.contractsSignMany.forEach((key: any, v: any) => {
               this.contractsSignMany[v].contractId =
                 key.participant.contract.id;
@@ -564,6 +568,7 @@ export class ContractSignatureComponent implements OnInit {
             } else {
               this.setPage();
             }
+            this.spinner.hide();
           },
           (error) => {
             setTimeout(() => this.router.navigate(['/login']));
@@ -804,6 +809,13 @@ export class ContractSignatureComponent implements OnInit {
     } else if (this.status == 'processed-complete-dashboard') {
       this.filter_status = 14;
     }
+  }
+
+  changePageNumber(e: any){
+    console.log("call vao day?")
+    this.spinner.show();
+    this.page = e.target.value;
+    this.getContractList();
   }
 
   setPage() {

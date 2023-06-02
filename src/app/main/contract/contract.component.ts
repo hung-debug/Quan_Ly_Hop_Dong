@@ -42,6 +42,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   pageTotal: number = 0;
   statusPopup: number = 1;
   notificationPopup: string = '';
+  pageOptions: any[] = [10, 20, 50, 100];
 
   title: any = "";
   id: any = "";
@@ -86,6 +87,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   isQLHD_12: boolean = true;  //xem hop dong lien quan
   isQLHD_13: boolean = true;  //chia se hop dong
 
+
   constructor(private appService: AppService,
     private contractService: ContractService,
     private ContractSignatureService: ContractSignatureService,
@@ -108,6 +110,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
+    console.log(this.typeDisplay);
     this.route.queryParams.subscribe(async params => {
       if (typeof params.filter_name != 'undefined' && params.filter_name) {
         this.filter_name = params.filter_name;
@@ -225,6 +228,23 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.cancelContract(idMany);
   }
 
+  dataReleaseChecked: any[] = [];
+  toggleRelease(item: any){
+    console.log("item",item);
+    let data = {
+      id: item.participants[0]?.contract_id,
+      selectedId: item.id
+    }
+    if(this.dataReleaseChecked.some(element => element.id === data.id)){
+      this.dataReleaseChecked = this.dataReleaseChecked.filter((item) => {
+        return item.id != data.id
+      })
+    } else {
+      this.dataReleaseChecked.push(data);
+    }
+  }
+
+
   dataChecked: any[] = [];
   toggleOneDownload(item: any){
     console.log("item",item);
@@ -240,6 +260,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
     } else {
       this.dataChecked.push(data);
     }
+  }
+
+  toggleReleaseAll(checkedAll: boolean){
+    this.dataReleaseChecked = [];
+    
   }
 
   toggleDownload(checkedAll: boolean){
@@ -346,60 +371,60 @@ export class ContractComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // release() {
-  //   this.spinner.show();
-  //   this.typeDisplay = 'release';
-  //   this.roleMess = "";
-  //   if (this.isOrg == 'off' && !this.isQLHD_05) {
-  //     this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
+  release() {
+    this.spinner.show();
+    this.typeDisplay = 'release';
+    this.roleMess = "";
+    if (this.isOrg == 'off' && !this.isQLHD_05) {
+      this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
 
-  //   } else if (this.isOrg == 'on' && !this.isQLHD_04) {
-  //     this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
-  //   }
-  //   if (!this.roleMess) {
+    } else if (this.isOrg == 'on' && !this.isQLHD_04) {
+      this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
+    }
+    if (!this.roleMess) {
       
-  //     let isOrg = this.isOrg;
+      let isOrg = this.isOrg;
 
-  //     if(!this.isQLHD_03) {
-  //       isOrg ='off';
-  //     }
+      if(!this.isQLHD_03) {
+        isOrg ='off';
+      }
 
-  //   this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, 20).subscribe(data => {
-  //     this.contracts = data.entities;
-  //     this.pageTotal = data.total_elements;
-  //     this.checkedAll = false;
-  //     this.dataChecked = [];
-  //     if (this.pageTotal == 0) {
-  //       this.p = 0;
-  //       this.pageStart = 0;
-  //       this.pageEnd = 0;
-  //     } else {
-  //       this.setPageDownload();
-  //     }
-  //     const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
-  //     console.log('checkedDownloadFiles',checkedDownloadFiles);
-  //     for(let i = 0; i< this.contracts.length; i++){
-  //       let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
-  //       if(checkIf){
-  //         this.contracts[i].checked = true;
-  //       } else {
-  //         this.contracts[i].checked = false;
-  //       }
-  //     }
+    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, 20).subscribe(data => {
+      this.contracts = data.entities;
+      this.pageTotal = data.total_elements;
+      this.checkedAll = false;
+      this.dataChecked = [];
+      if (this.pageTotal == 0) {
+        this.p = 0;
+        this.pageStart = 0;
+        this.pageEnd = 0;
+      } else {
+        this.setPageDownload();
+      }
+      const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
+      console.log('checkedDownloadFiles',checkedDownloadFiles);
+      for(let i = 0; i< this.contracts.length; i++){
+        let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
+        if(checkIf){
+          this.contracts[i].checked = true;
+        } else {
+          this.contracts[i].checked = false;
+        }
+      }
   
-  //       this.spinner.hide();
-  //     },
-  //       (error) => {
-  //         setTimeout(() => this.router.navigate(['/login']));
-  //         this.toastService.showErrorHTMLWithTimeout(
-  //           'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
-  //           '',
-  //           3000
-  //         );
-  //       }
-  //     );
-  //   }
-  // }
+        this.spinner.hide();
+      },
+        (error) => {
+          setTimeout(() => this.router.navigate(['/login']));
+          this.toastService.showErrorHTMLWithTimeout(
+            'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+            '',
+            3000
+          );
+        }
+      );
+    }
+  }
 
   ngAfterViewInit(): void {
     this.spinner.hide();
@@ -415,6 +440,12 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.typeDisplay = 'signOne';
     this.spinner.show();
     window.location.reload();
+  }
+
+  cancelRelease(){
+    this.spinner.show();
+    this.typeDisplay='';
+    this.router.navigate(['/main/contract/create/draft']);
   }
 
   getContractList() {
@@ -436,6 +467,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
       //get list contract
       this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
+        console.log(this.filter_status);
         this.contracts = data.entities;
         this.pageTotal = data.total_elements;
         if (this.pageTotal == 0) {
@@ -445,6 +477,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         } else {
           this.setPage();
         }
+        this.spinner.hide();
         const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
         console.log('checkedDownloadFiles',checkedDownloadFiles);
         for(let i = 0; i< this.contracts.length; i++){
@@ -493,6 +526,12 @@ export class ContractComponent implements OnInit, AfterViewInit {
     } else if (this.status == 'past-complete') {
       this.filter_status = 40;
     }
+  }
+
+  changePageNumber(e: any){
+    this.spinner.show();
+    this.page = e.target.value;
+    this.getContractList();
   }
 
   setPageDownload() {

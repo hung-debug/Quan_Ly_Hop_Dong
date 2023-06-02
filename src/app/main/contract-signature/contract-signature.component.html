@@ -678,6 +678,14 @@
     </div>
 
     <div *ngIf="this.typeDisplay === 'signOne'|| this.typeDisplay === 'downloadMany'" class="contract_footer">
+        <div class="footer_contract_per_page">
+            <div>Hiển thị&nbsp;</div>
+            <select (change)="changePageNumber($event)">
+                <option value="" hidden>10</option>
+                <option *ngFor="let d of this.pageOptions">{{d}}</option>
+            </select>
+            <div>&nbsp;{{'contracts.per.page' | translate}}</div>
+        </div>
         <div class="footer_title"></div>
         <div class="footer_pagination">
             <pagination-controls *ngIf="pageTotal > 0" (pageChange)="p=$event; getPageData()" previousLabel="" nextLabel=""></pagination-controls>

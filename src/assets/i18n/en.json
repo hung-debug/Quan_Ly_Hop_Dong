@@ -658,5 +658,9 @@
   "role.config.sms.email":"SMS/Email configuration function group",
   "num.contract.buy":"Number of contracts purchased",
   "num.contract.use":"Number of contracts used",
-  "num.contract": "Number of contracts"
+  "num.contract": "Number of contracts",
+  "release": "Release",
+  "display": "Display ",
+  "contracts.per.page": " contracts/page",
+  "continue.using.web": "Continue using the web version"
   }

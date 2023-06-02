@@ -658,6 +658,10 @@
   "find.partner.organization": "Tìm kiếm đối tác tổ chức",
   "num.contract.buy": "Số lượng hợp đồng đã mua",
   "num.contract.use": "Số lượng hợp đồng đã sử dụng",
-  "num.contract": "Số lượng hợp đồng"
+  "num.contract": "Số lượng hợp đồng",
+  "release": "Phát hành",
+  "display": "Hiển thị ",
+  "contracts.per.page": " hợp đồng/trang",
+  "continue.using.web": "Tiếp tục sử dụng trên web"
   
 }

@@ -14,19 +14,20 @@
       color: #106DB6;
       font-weight: 500;
       margin: 13px 0 0 0;
+      padding: 2px;
     }
     &-text {
       font-size: 12px;
     }
 
     .footer {
-      margin-top: 38px;
+      padding-top: 15px;
       text-align: center;
       .footer-btn {
         outline: none;
         border: none;
         padding: 5px 15px;
-        background-color: #106DB6;
+        background-color: #1487E1;
         color: white;
         border-radius: 5px;
         img {
