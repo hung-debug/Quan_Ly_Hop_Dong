@@ -93,6 +93,7 @@ export class ContractSignatureComponent implements OnInit {
   public contractDownloadList: any[] = [];
   public contractViewList: any[] = [];
   currentUser: any;
+  keyword: string = '';
 
   constructor(
     private appService: AppService,
@@ -215,7 +216,7 @@ export class ContractSignatureComponent implements OnInit {
     this.spinner.show();
     this.typeDisplay = 'signMany';
 
-    this.contractService.getContractMyProcessListSignMany().subscribe((data) => {
+    this.contractService.getContractMyProcessListSignMany(this.keyword).subscribe((data) => {
 
       this.spinner.hide();
       this.contractsSignMany = data;
@@ -506,7 +507,7 @@ export class ContractSignatureComponent implements OnInit {
             }
           );
       } else {
-        this.contractService.getContractMyProcessListSignMany().subscribe(
+        this.contractService.getContractMyProcessListSignMany(this.keyword).subscribe(
           (data) => {
             this.contractsSignMany = data;
             if (this.pageTotal == 0) {
@@ -597,9 +598,15 @@ export class ContractSignatureComponent implements OnInit {
 
   //auto search
   autoSearch(event: any) {
-    // this.p = 1;
-    this.filter_name = event.target.value;
-    this.getContractList();
+    setTimeout(() => {
+      if(this.typeDisplay == 'signOne') {
+        this.filter_name = event.target.value;
+      } else if(this.typeDisplay == 'signMany' || this.typeDisplay == 'downloadMany') {
+        this.keyword = event.target.value;
+      }
+
+      this.getContractList();
+    }, 1000)
   }
 
   private convertActionStr(): string {

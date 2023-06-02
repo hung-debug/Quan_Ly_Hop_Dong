@@ -82,7 +82,7 @@ export class ContractSignatureService {
     return this.http.get<any[]>(this.getViewContractList+'orgId='+orgId+'&platform=web',{headers}).pipe();
   }
 
-  public getContractMyProcessListSignMany() {
+  public getContractMyProcessListSignMany(keyword?: string) {
     this.getCurrentUser();
 
     const headers = {'Authorization': 'Bearer ' + this.token};
@@ -90,7 +90,7 @@ export class ContractSignatureService {
       localStorage.getItem('currentUser') || ''
     ).customer.info.organizationId;
 
-    return this.http.get<any[]>(this.listContractMyProcessUrlSignMany+'orgId='+orgId+'&platform=web',{headers}).pipe();
+    return this.http.get<any[]>(this.listContractMyProcessUrlSignMany+'orgId='+orgId+'&platform=web'+'&keyword='+keyword,{headers}).pipe();
   }
 
   public getContractMyProcessListDownloadMany(ids: any): Observable<any> {
