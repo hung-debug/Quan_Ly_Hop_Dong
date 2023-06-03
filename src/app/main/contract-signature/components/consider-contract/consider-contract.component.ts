@@ -2198,7 +2198,7 @@ export class ConsiderContractComponent
             let imageRender: HTMLElement | null = null;
 
             //render khi role là 4 (văn thư) hoặc role khác (người ký)
-            if (this.datas.roleContractReceived == 4) {
+            if (this.markImage) {
               imageRender = <HTMLElement>(
                 document.getElementById('export-html-hsm1-image')
               );
