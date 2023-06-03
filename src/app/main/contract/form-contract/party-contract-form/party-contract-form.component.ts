@@ -244,6 +244,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   isCeCaPushNo: boolean = false;
   async next(action: string) {
     this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
+
+      this.datasForm.is_determine_clone[index].id = null;
       
       if (items.type == 3) {
         this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
@@ -348,7 +350,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   async getApiDetermine(is_save?: boolean) {
-
       //Đưa giá trị email về chũ thường
       this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
         for(let i = 0; i < this.datasForm.is_determine_clone[index].recipients.length; i++) {
@@ -388,8 +389,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         // this.datasForm.is_determine_clone[index].id = null;
     })
     this.spinner.show();
-
-    console.log("next ", this.datasForm.is_determine_clone);
 
     this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
       this.datasForm.is_determine_clone = res;  
