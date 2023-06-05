@@ -1,4 +1,4 @@
-import {AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
@@ -342,6 +342,31 @@ export class LoginComponent implements OnInit, AfterViewInit {
       this.mobile = true;
     } else {
       this.mobile = false;
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onWindowResize(event: Event) {
+    this.getStyleFooter();
+  }
+  
+  getStyleFooter() {
+    let loginForm: HTMLElement | null = document.getElementById('login-form');
+    let all: HTMLElement | null = document.getElementById('all');
+
+    let loginFormHeight: number | undefined = loginForm?.offsetHeight;
+    let allOffsetHeight: number | undefined = all?.offsetHeight;
+
+    if(loginFormHeight && allOffsetHeight) {
+      if(loginFormHeight > 0.75*allOffsetHeight) {
+        return {
+          'display': 'none'
+        }
+      }
+    }
+
+    return {
+
     }
   }
 
