@@ -71,7 +71,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
     this.data_parnter_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
 
-    console.log("datas ", this.datas);
+    
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -228,7 +228,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         // dataSignId[i].font = this.datas.font;
         // dataSignId[i].font_size = this.datas.size ? this.datas.size : 13;
 
-        console.log("dataSignId ", dataSignId);
+        
 
         if(!dataSignId[i].type) 
           dataSignId[i].type = 4

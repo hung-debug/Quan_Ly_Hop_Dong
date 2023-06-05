@@ -123,7 +123,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       this.sign.valueSign = result;
     })
   }
@@ -163,15 +163,15 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
 
   doneEditTextSign(e?: any) {
     this.checkShowEdit = false;
-    console.log(e)
-    console.log(this.sign)
+    
+    
     if(this.sign.text_type == 'currency'){
         e.target.value = this.contractService.convertCurrency(e.target.value);
       this.sign.valueSign = e.target.value;}
@@ -199,17 +199,17 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ConfirmSignOtpComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
 
   doEditText() {
-    console.log("sign", this.sign)
+    
     if(this.sign.valueSign != undefined)
     this.sign.valueSign = this.contractService.removePeriodsFromCurrencyValue(this.sign.valueSign);
 
-    console.log("sign ", this.sign.valueSign);
+    
     if ([2,3,4].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
       this.checkShowEdit = !this.checkShowEdit;
 
@@ -244,14 +244,14 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     } else {
       if (sign.value) {
         // sign.value= this.convertCurrency(sign.value);
-        console.log("vao day ");
+        
         return sign.value;
       } else if(sign.valueSign) {
         // sign.valueSign= this.convertCurrency(sign.valueSign);
-        console.log("vao day ");
+        
         return sign.valueSign;
       } else if(this.contractNoValueSign) {
-        console.log("vao day ");
+        
         // sign.valueSign= this.convertCurrency(sign.valueSign);
         this.count++;
         return sign.valueSign;

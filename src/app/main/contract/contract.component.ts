@@ -110,7 +110,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    console.log(this.typeDisplay);
+    
     this.route.queryParams.subscribe(async params => {
       if (typeof params.filter_name != 'undefined' && params.filter_name) {
         this.filter_name = params.filter_name;
@@ -230,7 +230,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   dataReleaseChecked: any[] = [];
   toggleRelease(item: any){
-    console.log("item",item);
+    
     let data = {
       id: item.participants[0]?.contract_id,
       selectedId: item.id
@@ -247,7 +247,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   dataChecked: any[] = [];
   toggleOneDownload(item: any){
-    console.log("item",item);
+    
     
     let data = {
       id: item.participants[0]?.contract_id,
@@ -269,7 +269,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   toggleDownload(checkedAll: boolean){
     this.dataChecked = [];
-    console.log("contracts",this.contracts);
+    
     if(checkedAll){
       
       
@@ -347,7 +347,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         this.setPageDownload();
       }
       const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
-      console.log('checkedDownloadFiles',checkedDownloadFiles);
+      
       for(let i = 0; i< this.contracts.length; i++){
         let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
         if(checkIf){
@@ -402,7 +402,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         this.setPageDownload();
       }
       const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
-      console.log('checkedDownloadFiles',checkedDownloadFiles);
+      
       for(let i = 0; i< this.contracts.length; i++){
         let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
         if(checkIf){
@@ -467,7 +467,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
       //get list contract
       this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
-        console.log(this.filter_status);
+        
         this.contracts = data.entities;
         this.pageTotal = data.total_elements;
         if (this.pageTotal == 0) {
@@ -479,7 +479,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         }
         this.spinner.hide();
         const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
-        console.log('checkedDownloadFiles',checkedDownloadFiles);
+        
         for(let i = 0; i< this.contracts.length; i++){
           let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
           if(checkIf){
@@ -538,7 +538,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   setPageDownload() {
     this.pageStart = (this.p - 1) * 20 + 1;
     this.pageEnd = this.p * 20;
-    console.log("pageTotal",this.pageTotal);
+    
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
     }
@@ -571,7 +571,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
@@ -606,7 +606,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     if (this.status != 'complete') {
       this.spinner.show();
       this.contractService.getContractCopy(id).subscribe((res: any) => {
-        // console.log(res);
+        // 
         this.toastService.showSuccessHTMLWithTimeout(`Sao chép hợp đồng ${res.name} thành công!`, "", 3000)
         this.getContractList();
 
@@ -710,7 +710,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
@@ -729,7 +729,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
@@ -748,7 +748,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
@@ -777,14 +777,14 @@ export class ContractComponent implements OnInit, AfterViewInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
 
   downloadContract(id: any) {
     this.contractService.getFileZipContract(id).subscribe((data) => {
-      //console.log(data);
+      //
       this.uploadService.downloadFile(data.path).subscribe((response: any) => {
         let url = window.URL.createObjectURL(response);
         let a = document.createElement('a');

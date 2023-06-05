@@ -217,7 +217,7 @@ export class ConsiderContractComponent
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
     const checkViewContract = await this.checkViewContractService.callAPIcheckViewContract(this.idContract,false);
-    console.log(checkViewContract);
+    
 
     if (checkViewContract) {
       this.actionRoleContract();
@@ -365,12 +365,12 @@ export class ConsiderContractComponent
     const dataOrg = await this.contractService
       .getDataNotifyOriganzationOrgId(orgId)
       .toPromise();
-    console.log('da ', dataOrg);
+    
 
     if (dataOrg.usb_token_version == 1) {
       this.usbTokenVersion = 1;
     } else if (dataOrg.usb_token_version == 2) {
-      console.log('2 ', 2);
+      
       this.usbTokenVersion = 2;
     }
   }
@@ -444,7 +444,7 @@ export class ConsiderContractComponent
           )
           .subscribe();
         this.checkIsViewContract();
-        console.log(this.datas.is_data_object_signature);
+        
         this.datas.is_data_object_signature.forEach((element: any) => {
           // 1: van ban, 2: ky anh, 3: ky so
           // tam thoi de 1: ky anh, 2: ky so
@@ -489,7 +489,7 @@ export class ConsiderContractComponent
           this.contractService.getDataFormatContractUserSign();
 
         this.datas.contract_user_sign.forEach((element: any) => {
-          // console.log(element.sign_unit, element.sign_config);
+          // 
           if (element.sign_unit == 'chu_ky_so') {
             Array.prototype.push.apply(
               element.sign_config,
@@ -969,7 +969,7 @@ export class ConsiderContractComponent
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result;
     });
   }
@@ -1350,7 +1350,7 @@ export class ConsiderContractComponent
     const counteKYC = this.recipient?.sign_type.filter(
       (p: any) => p.id == 5
     ).length;
-    console.log("datas", this.datas);
+    
 
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
@@ -1522,10 +1522,10 @@ export class ConsiderContractComponent
                 this.markImage = false;
               }
               const determineCoordination = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
-              console.log("determineCoordination", determineCoordination);
+              
               let isInRecipient = false;
               const participants = this.datas?.is_data_contract?.participants;
-              console.log("participants", participants);
+              
               for (const participant of participants) {
                 for (const card of participant.recipients) {
                   for (const item of determineCoordination.recipients) {
@@ -1536,7 +1536,7 @@ export class ConsiderContractComponent
                 }
               }
               if (!isInRecipient) {
-                console.log("isInRecipient", isInRecipient);
+                
                 this.toastService.showErrorHTMLWithTimeout(
                   'Bạn không có quyền xử lý hợp đồng này!',
                   '',
@@ -1586,7 +1586,7 @@ export class ConsiderContractComponent
                   this.spinner.show();
                   let id_recipient_signature: any = null;
                   let phone_recipient_signature: any = null;
-                  // console.log(this.datas);
+                  // 
                   for (const d of this.datas.is_data_contract.participants) {
                     for (const q of d.recipients) {
                       if (q.email == this.currentUser.email && q.status == 1) {
@@ -1702,7 +1702,7 @@ export class ConsiderContractComponent
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(async (result: any) => {
-      console.log('the close dialog image ', result);
+      
       let is_data = result;
 
       this.datas.is_data_object_signature.valueSign = result;
@@ -1720,7 +1720,7 @@ export class ConsiderContractComponent
         ) {
           let id_recipient_signature: any = null;
           let phone_recipient_signature: any = null;
-          // console.log(this.datas);
+          // 
           for (const d of this.datas.is_data_contract.participants) {
             for (const q of d.recipients) {
               if (q.email == this.currentUser.email && q.status == 1) {
@@ -1972,7 +1972,7 @@ export class ConsiderContractComponent
 
                     signI = textSignB.split(',')[1];
                   } catch (err) {
-                    console.log('err ', err);
+                    
                   }
                 }
               } else if (this.usbTokenVersion == 2) {
@@ -2026,7 +2026,7 @@ export class ConsiderContractComponent
                 return false;
               }
             } else if (this.usbTokenVersion == 1) {
-              console.log('vao day ');
+              
               const dataSignMobi: any =
                 await this.contractService.postSignDigitalMobi(
                   signDigital,
@@ -2634,10 +2634,10 @@ export class ConsiderContractComponent
       const checkTaxCodeBase64 = await this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, dataDigital.data.Base64).toPromise();
 
       const determineCoordination = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
-      console.log("determineCoordination", determineCoordination);
+      
       let isInRecipient = false;
       const participants = this.datas?.is_data_contract?.participants;
-      console.log("participants", participants);
+      
       for (const participant of participants) {
         for (const card of participant.recipients) {
           for (const item of determineCoordination.recipients) {
@@ -2648,7 +2648,7 @@ export class ConsiderContractComponent
         }
       }
       if (!isInRecipient) {
-        console.log("isInRecipient", isInRecipient);
+        
         this.toastService.showErrorHTMLWithTimeout(
           'Bạn không có quyền xử lý hợp đồng này!', '', 3000
         );
@@ -2916,7 +2916,7 @@ export class ConsiderContractComponent
       );
 
       if (dataSignatureToken.ResponseCode != 0) {
-        console.log('da ', dataSignatureToken);
+        
         this.toastService.showErrorHTMLWithTimeout(
           'Lỗi ký usb token ' + dataSignatureToken.ResponseMsg,
           '',
@@ -3242,7 +3242,7 @@ export class ConsiderContractComponent
     let ir = 0;
     for (const signLinkP of signUploadObs$) {
       const imgLinksRes = await signLinkP;
-      console.log(imgLinksRes);
+      
       this.datas.filePath = imgLinksRes?.file_object?.file_path;
 
       if (this.datas.filePath) {
@@ -3285,7 +3285,7 @@ export class ConsiderContractComponent
     this.contractService
       .getDetailContract(this.idContract)
       .subscribe(async (response) => {
-        console.log('response organization ', response);
+        
 
         let organization_id = response[0].organization_id;
 
@@ -3316,7 +3316,7 @@ export class ConsiderContractComponent
         this.contractService
           .uploadFileImageBase64Signature(formData)
           .subscribe((responseBase64) => {
-            console.log('response base 64 ', responseBase64);
+            
 
             const filePath = responseBase64.file_object.file_path;
 
@@ -3412,7 +3412,7 @@ export class ConsiderContractComponent
         .getDetermineCoordination(this.recipientId)
         .subscribe(async (response) => {
           //  = response.recipients[0].email
-          console.log('ArrRecipientsNew123444444', response.recipients);
+          
           this.ArrRecipientsNew = response.recipients.filter(
             (x: any) => x.email === this.currentUser.email
           );
@@ -3471,7 +3471,7 @@ export class ConsiderContractComponent
   }
 
   t() {
-    console.log(this);
+    
   }
 
   downloadContract(id: any) {
@@ -3480,7 +3480,7 @@ export class ConsiderContractComponent
         this.uploadService
           .downloadFile(data.path)
           .subscribe((response: any) => {
-            //console.log(response);
+            //
 
             let url = window.URL.createObjectURL(response);
             let a = document.createElement('a');
@@ -3636,7 +3636,7 @@ export class ConsiderContractComponent
       this.contractService
         .detectCCCD(this.cccdFront, data.contractId, data.recipientId)
         .subscribe((response) => {
-          console.log('response ', response);
+          
 
           this.nameCompany = response.name;
           this.cardId = response.id;
@@ -3676,7 +3676,7 @@ export class ConsiderContractComponent
 
         final.afterClosed().subscribe(async (result: any) => {
           if (result == 2) {
-            console.log('Nhận dạng khuôn mặt thành công ');
+            
             await this.signContractSubmit();
           }
         });
@@ -3693,23 +3693,23 @@ export class ConsiderContractComponent
       dataContract: this.recipient,
     };
     const determineCoordination = await this.contractService.getDetermineCoordination(recipientId).toPromise();
-    console.log("determineCoordination", determineCoordination);
+    
     let isInRecipient = false;
     const participants = this.datas?.is_data_contract?.participants;
-    console.log("participants", participants);
+    
     for (const participant of participants) {
       for (const card of participant.recipients) {
         for (const item of determineCoordination.recipients) {
           if (item.card_id == card.card_id) {
-            console.log("item.card_id", item.card_id);
-            console.log("card.card_id", card.card_id);
+            
+            
             isInRecipient = true;
           }
         }
       }
     }
     if (!isInRecipient) {
-      console.log("isInRecipient", isInRecipient);
+      
       this.toastService.showErrorHTMLWithTimeout(
         'Bạn không có quyền xử lý hợp đồng này!',
         '',
@@ -3730,7 +3730,7 @@ export class ConsiderContractComponent
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
     this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
       const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-      console.log("ArrRecipients", ArrRecipients);
+      
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
@@ -3739,7 +3739,7 @@ export class ConsiderContractComponent
           return
         }
       });
-      console.log("ArrRecipientsNew111", ArrRecipientsNew);
+      
 
       if (!ArrRecipientsNew) {
 
@@ -3775,12 +3775,12 @@ export class ConsiderContractComponent
 
         this.cardId = result.ma_dvcs.trim();
 
-      console.log("src mark ", this.srcMark);
+      
 
       // if (this.markImage) {
       //   imageRender = <HTMLElement>(document.getElementById('export-html-hsm1-image'));
 
-      //   console.log("image render", imageRender);
+      //   
       // } else {
       //   imageRender = <HTMLElement>document.getElementById('export-html-hsm1');
       // }
@@ -3790,14 +3790,14 @@ export class ConsiderContractComponent
       //   try {
       //   const textSignB = await domtoimage.toPng(imageRender);
 
-      //   console.log("te ", textSignB);
+      //   
       //   signI = textSignB.split(',')[1];
       //   } catch(err) {
-      //     console.log("err ",err);
+      //     
       //   }
       // }
 
-      console.log("vao day ");
+      
 
         if (result) {
           this.dataHsm.ma_dvcs = result.ma_dvcs;
@@ -3879,7 +3879,7 @@ export class ConsiderContractComponent
   }
 
   confirmOtp(otp: any) {
-    console.log(otp);
+    
     this.dataOTP = {
       otp: otp,
     };

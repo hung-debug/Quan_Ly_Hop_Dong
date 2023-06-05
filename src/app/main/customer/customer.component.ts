@@ -133,7 +133,7 @@ export class CustomerComponent implements OnInit {
         res.forEach((item: any) => {
           if(item.card_id != null)
           if(item.type === "PERSONAL" && item.card_id.includes(this.filter_name) && !filterList.includes(item)){
-            console.log(item);
+            
             filterList.push(item);
           }
         });
@@ -162,7 +162,7 @@ export class CustomerComponent implements OnInit {
         {header: '', style:'text-align: center;', class:'col-md-2' },
       ];
     }
-    console.log(this.isOrgCustomer);
+    
   }
 
   personalAdd(){
@@ -185,7 +185,7 @@ export class CustomerComponent implements OnInit {
       this.isOrgCustomer = false;
       this.changeTab();
       this.getCustomerList();
-      console.log(this.list);
+      
     }
   }
 
@@ -212,7 +212,7 @@ export class CustomerComponent implements OnInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
       this.getCustomerList();
     })
@@ -250,7 +250,7 @@ export class CustomerComponent implements OnInit {
   ngOnDestroy(): void {
     if(this.isDelete == false)
     sessionStorage.removeItem('partnerType');
-    console.log("destroy")
+    
   }
 
 }

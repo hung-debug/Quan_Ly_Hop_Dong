@@ -24,8 +24,8 @@ export class ContractBatchHeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("console.log(this.stepBatch);");
-    console.log(this.stepBatch);
+    
+    
   }
 
   open(content:any) {  
@@ -146,7 +146,7 @@ export class ContractBatchHeaderComponent implements OnInit {
   }
 
   t() {
-    console.log(this.datas);
+    
   }
 
 }

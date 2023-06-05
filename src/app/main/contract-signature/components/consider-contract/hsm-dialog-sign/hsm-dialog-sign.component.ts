@@ -52,7 +52,7 @@ export class HsmDialogSignComponent implements OnInit {
 
   ngOnInit(): void {
     this.datas = this.data;
-    console.log("datas", this.data);
+    
 
 
     this.user = this.userService.getInforUser();
@@ -178,12 +178,12 @@ export class HsmDialogSignComponent implements OnInit {
       }
   
       this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-      console.log("currentUser", this.currentUser);
+      
   
       this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
-        console.log("response", response);
+        
         const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-        console.log("ArrRecipients", ArrRecipients);
+        
   
         let ArrRecipientsNew = false
         ArrRecipients.map((item: any) => {
@@ -192,10 +192,10 @@ export class HsmDialogSignComponent implements OnInit {
             return
           }
         });
-        console.log("ArrRecipientsNew111", ArrRecipientsNew);
+        
   
         if (!ArrRecipientsNew) {
-          console.log("ArrRecipientsNew111", ArrRecipientsNew);
+          
           this.toastService.showErrorHTMLWithTimeout(
             'Bạn không có quyền xử lý hợp đồng này!',
             '',
@@ -213,7 +213,7 @@ export class HsmDialogSignComponent implements OnInit {
             return
           }
         };
-        console.log("this.currentUser.email", this.currentUser);
+        
         //Check voi nguoi dung trong he thong
         if (!this.data.id)
           this.contractService.getCheckSignatured(this.data.recipientId).subscribe((res: any) => {
@@ -232,7 +232,7 @@ export class HsmDialogSignComponent implements OnInit {
           password2: this.myForm.value.pass2
         };
   
-        console.log("id ", this.data.id);
+        
   
         if (!this.data.id) {
           //Trường hợp không phải ký nhiều
@@ -245,7 +245,7 @@ export class HsmDialogSignComponent implements OnInit {
   
         else if (this.data.id == 1) {
           //Trường hợp ký nhiều
-          console.log("vao day ");
+          
           this.dialogRef.close(data);
         }
       })

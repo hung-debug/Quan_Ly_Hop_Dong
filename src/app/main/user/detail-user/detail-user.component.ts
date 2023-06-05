@@ -61,7 +61,7 @@ export class DetailUserComponent implements OnInit {
         //lay id role
         this.roleService.getRoleById(data?.role_id).subscribe(
           data => {
-            console.log(data);
+            
             let listRole: any[];
             listRole = data.permissions;
             this.isQLND_04 = listRole.some(element => element.code == 'QLND_04');
@@ -84,7 +84,7 @@ export class DetailUserComponent implements OnInit {
       this.id = params['id'];
       this.userService.getUserById(this.id).subscribe(
         data => {
-          console.log(data);
+          
           this.name = data.name;
           this.email = data.email;
           this.birthday = data.birthday;
@@ -108,7 +108,7 @@ export class DetailUserComponent implements OnInit {
           if(data.organization_id != null){
             this.unitService.getUnitById(data.organization_id).subscribe(
               data => {
-                console.log(data);
+                
                 this.organizationId = data.name
               }, error => {
                 this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
@@ -118,7 +118,7 @@ export class DetailUserComponent implements OnInit {
           if(data.role_id != null){
             //lay danh sach vai tro
             this.roleService.getRoleById(data?.role_id).subscribe(data => {
-              console.log(data);
+              
               this.role = data.name;
             });
           }

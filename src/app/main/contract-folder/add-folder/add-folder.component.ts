@@ -18,7 +18,7 @@ export class AddFolderComponent implements OnInit {
 
   ngOnInit() {
     if(this.data){
-      console.log(this.data);
+      
       this.action = this.data;
       if(this.action == 'rename'){
         this.title = 'folder.rename';

@@ -50,7 +50,7 @@ export class ContractSignatureService {
       page = page - 1;
     }
     let listContractMyProcessUrl = this.listContractMyProcessUrl + '?keyword=' + filter_name.trim() + '&type=' + filter_type + '&status=' + filter_status + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size + "&contractStatus=" + contractStatus;
-    console.log(listContractMyProcessUrl);
+    
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Contract[]>(listContractMyProcessUrl, {headers}).pipe();
   }
@@ -121,7 +121,7 @@ export class ContractSignatureService {
       email: email,
       contract_id: id
     });
-    console.log(body);
+    
     return this.http.post<any>(this.shareContractUrl, body, {'headers': headers}).pipe();
   }
 
@@ -243,7 +243,7 @@ export class ContractSignatureService {
       // Get server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
-    console.log(errorMessage);
+    
     return throwError(errorMessage);
  }
 

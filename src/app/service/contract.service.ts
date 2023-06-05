@@ -323,7 +323,7 @@ export class ContractService {
       }
     }
 
-    // console.log(listContractUrl);
+    // 
     const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
   }
@@ -396,7 +396,7 @@ export class ContractService {
         .pipe(
           map((contract) => {
             if (JSON.parse(JSON.stringify(contract)).id != 0) {
-              console.log('contract ', contract);
+              
               return contract;
             } else {
               return null;
@@ -678,7 +678,7 @@ export class ContractService {
       typeSign: '4',
     };
 
-    console.log("data ", dataPost);
+    
 
     return axios.post(this.postSignDigital, dataPost, config);
   }
@@ -1471,7 +1471,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-      console.log("contractid",idContract);
+      
     return this.http.put<any>(
       this.updateInforPersonProcessUrl + idContract + '/' + recipient,
       datas,
@@ -1529,7 +1529,7 @@ export class ContractService {
 
   checkCurrencyValue(datasForm: any){
     datasForm.contract_user_sign[1].sign_config.forEach((res: any) => {
-      console.log(datasForm.contract_user_sign);
+      
       if(res.type == 5 && res.value != undefined){
         const num = res.value.toString().replace(/\./g, '');
         if (!isNaN(parseFloat(num)) && isFinite(num)) { // check if value is a number

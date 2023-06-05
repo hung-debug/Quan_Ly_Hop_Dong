@@ -74,8 +74,8 @@ export class EditHandlerComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('currentValue', changes.login_by.currentValue);
-    console.log('previousValue', changes.login_by.previousValue);
+    
+    
   }
 
   ngOnInit(): void {
@@ -93,13 +93,13 @@ export class EditHandlerComponent implements OnInit {
     }
 
     // this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
-    //   console.log("data_organization",this.datas);
+    //   
     // this.datas.is_handler = [...this.contractService.getDataDetermineInitialization()];
-    //   console.log("this.datas.is_handler",this.datas.is_handler);
+    //   
 
 
-    console.log("this.data.update process person", this.data);
-    console.log("datas", this.datas);
+    
+    
 
 
     this.name = this.data.name;
@@ -164,7 +164,7 @@ export class EditHandlerComponent implements OnInit {
   }
   UpdateHandler() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    console.log("datas", this.currentUser);
+    
     const login_by = this.isCheckRadio ? "email" : "phone"
     this.spinner.show();
     let dataUpdate = {
@@ -177,7 +177,7 @@ export class EditHandlerComponent implements OnInit {
     };
 
     if (!this.validData()) {
-      console.log("dataUpdate", this.validData());
+      
       return;
     }
     else {
@@ -288,7 +288,7 @@ export class EditHandlerComponent implements OnInit {
 
   onItemSelect(e: any, data: any) {
 
-    // console.log(setOrdering, setOrderingParnter.length)
+    // 
     this.checkCount = 1; // gan lai de lan sau ko bi tang index
   }
   // dataParnterOrganization() {
@@ -309,7 +309,7 @@ export class EditHandlerComponent implements OnInit {
   }
 
   selectWithOtp(e: any, data: any, type: any) { // sort ordering
-    console.log("type ", type);
+    
 
     //clear lai gia tri card_id
     //Check với tổ chức của tôi ký
@@ -324,7 +324,7 @@ export class EditHandlerComponent implements OnInit {
   }
 
   changeTypeSign(d: any) {
-    console.log("d ", d);
+    
 
     d === 1 ? this.isCheckRadio = false : this.isCheckRadio = true
   }
@@ -344,7 +344,7 @@ export class EditHandlerComponent implements OnInit {
   }
 
   onFocusIn(e: any, is_index: number, action: string) {
-    // console.log(e);
+    // 
     if (e.type == "focusin") {
       this.arrSearch = [];
       let arrData = [];
@@ -368,7 +368,7 @@ export class EditHandlerComponent implements OnInit {
   }
 
   onFocusOut(e: any, dItem: any) {
-    // console.log(e)
+    // 
     if (!e.relatedTarget || (e.relatedTarget && e.relatedTarget.className && !e.relatedTarget.className.includes('search-name-items'))) {
       if (!dItem.name) dItem.email = '';
       this.arrSearchNameView = [];
@@ -393,7 +393,7 @@ export class EditHandlerComponent implements OnInit {
         } else {
           this.arrSearchNameDoc = data;
         }
-        // console.log(data, res);
+        // 
       }, () => {
         this.getNotificationValid('có lỗi, vui lòng liên hệ với nhà phát triển để được xử lý!')
       })
@@ -420,7 +420,7 @@ export class EditHandlerComponent implements OnInit {
   }
 
   onChangeValue(e: any, orering_data: string) {
-    // console.log(e.target.value);
+    // 
     if (!e.target.value) {
       let data_ordering = document.getElementById(orering_data);
       if (data_ordering)

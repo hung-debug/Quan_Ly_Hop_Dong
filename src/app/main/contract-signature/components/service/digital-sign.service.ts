@@ -14,7 +14,7 @@ export class DigitalSignatureService {
 
   getJson() {
     axios.get(this.urlSignUsbToken).then((response) => {
-        console.log(response)
+        
       }
     )
   }

@@ -149,7 +149,7 @@ export class UserService {
       .post<User>(this.resetPasswordUrl, body, { headers: headers })
       .pipe(
         map((user) => {
-          console.log(user);
+          
           if (JSON.parse(JSON.stringify(user)).status == 0) {
             return user;
           } else {
@@ -194,7 +194,7 @@ export class UserService {
       .post<User>(this.resetPasswordTokenUrl, body, { headers: headers })
       .pipe(
         map((user) => {
-          console.log(user);
+          
           if (JSON.parse(JSON.stringify(user)).status == 0) {
             return user;
           } else {
@@ -232,8 +232,8 @@ export class UserService {
       tax_code: datas.taxCodeHsm,
       hsm_pass: datas.password1Hsm,
     });
-    console.log(headers);
-    console.log(body);
+    
+    
     return this.http.post<User>(this.addUserUrl, body, { headers: headers });
   }
 
@@ -311,7 +311,7 @@ export class UserService {
     const body = JSON.stringify({
       email: email,
     });
-    console.log(headers);
+    
     return this.http.post<User>(this.getUserByEmailUrl, body, {
       headers: headers,
     });
@@ -419,7 +419,7 @@ export class UserService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    console.log(headers);
+    
     return this.http.get<any>(this.getCheckContractUserUrl + '?id=' + id, {
       headers: headers,
     });

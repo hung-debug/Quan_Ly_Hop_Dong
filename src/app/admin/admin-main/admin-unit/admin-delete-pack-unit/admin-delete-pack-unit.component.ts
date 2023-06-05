@@ -28,7 +28,7 @@ export class AdminDeletePackUnitComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit() {
-    console.log('t', this.data);
+    
     this.adminUnitService
       .deletePackUnit(this.data.id, this.data.idPack)
       .subscribe(
@@ -54,7 +54,7 @@ export class AdminDeletePackUnitComponent implements OnInit {
             data,
           });
           dialogRef1.afterClosed().subscribe((result: any) => {
-            console.log('the close dialog');
+            
           });
         },
         (error) => {

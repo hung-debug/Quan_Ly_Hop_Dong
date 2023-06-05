@@ -309,7 +309,7 @@ export class AddUserComponent implements OnInit {
           (sign_image as string[]).push(sign_image_content);
           data.sign_image = sign_image;
         } catch(err) {
-          console.log("errr ", err);
+          
         }
       }
 
@@ -326,11 +326,11 @@ export class AddUserComponent implements OnInit {
           (sign_image as string[]).push(sign_image_content);
           data.stampImage = sign_image;
         } catch(err) {
-          console.log("errr ", err);
+          
         }  
       }
 
-      console.log("data ", data);
+      
       this.userService.updateUser(data).subscribe(
         dataOut => {
           
@@ -463,12 +463,12 @@ export class AddUserComponent implements OnInit {
       
                   if(data.fileImage != null){
                     this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
-                      console.log(JSON.stringify(dataFile));
+                      
                       const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
                       const sign_image:never[]=[];
                       (sign_image as string[]).push(sign_image_content);
                       data.sign_image = sign_image;
-                      console.log(data);
+                      
             
                       //call api them moi
                       this.userService.addUser(data).subscribe(

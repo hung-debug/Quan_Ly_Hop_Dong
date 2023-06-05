@@ -119,7 +119,7 @@ export class AdminAddPackComponent implements OnInit {
 
     //lay du lieu form cap nhat
     if (this.data.id != null) {
-      console.log('this flag ', this.flagComboBoxTheThucTinh);
+      
 
       this.adminPackService.getPackById(this.data.id).subscribe(
         (data) => {
@@ -284,11 +284,11 @@ export class AdminAddPackComponent implements OnInit {
 
     // stop here if form is invalid
     if (this.addForm.invalid) {
-      console.log('invalid');
+      
       return;
     }
 
-    console.log("time ", this.addForm.controls.time);
+    
 
     let dataForm = {
       id: this.data.id,
@@ -358,8 +358,8 @@ export class AdminAddPackComponent implements OnInit {
           }
         },
         (error) => {
-          console.log('error ');
-          console.log(error);
+          
+          
           this.toastService.showErrorHTMLWithTimeout(
             'Cập nhật thất bại',
             '',
@@ -374,8 +374,8 @@ export class AdminAddPackComponent implements OnInit {
 
       this.adminPackService.addPack(dataForm).subscribe(
         (data) => {
-          console.log('data add ');
-          console.log(data);
+          
+          
 
           if (data.id != null && data.id != undefined) {
             this.toastService.showSuccessHTMLWithTimeout(
@@ -401,8 +401,8 @@ export class AdminAddPackComponent implements OnInit {
           }
         },
         (error) => {
-          console.log('error ');
-          console.log(error);
+          
+          
           this.toastService.showErrorHTMLWithTimeout(
             'Thêm mới thất bại',
             '',
@@ -417,7 +417,7 @@ export class AdminAddPackComponent implements OnInit {
   //Bat su kien khi combobox the thuc tinh thay doi
   onChangeTheThucTinh(event: any) {
 
-    console.log("event ", event);
+    
 
     if (event.value == 1) {
       this.addForm.controls.time.setValidators([Validators.required, Validators.pattern(parttern_input.number_form)]);
@@ -430,7 +430,7 @@ export class AdminAddPackComponent implements OnInit {
       this.numberContractName = '';
 
 
-      console.log("vao day nhe event 1");
+      
       this.flagComboBoxTheThucTinh = 1;
     } else if (event.value == 2) {
       this.addForm.controls.number_contract.setValidators([Validators.required, Validators.pattern(parttern_input.number_form)]);
@@ -441,7 +441,7 @@ export class AdminAddPackComponent implements OnInit {
       this.timeName = '';
 
 
-      console.log("vao day nhe event 2");
+      
       this.flagComboBoxTheThucTinh = 2;
     } else {
       this.addForm.controls.time.disable();

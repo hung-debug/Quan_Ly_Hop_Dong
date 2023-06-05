@@ -52,7 +52,7 @@ export class AddRoleComponent implements OnInit {
     if(this.data.id != null){
       this.roleService.getRoleById(this.data.id).subscribe(
         data => {
-          console.log(data);
+          
           this.addForm = this.fbd.group({
             name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
@@ -101,13 +101,13 @@ export class AddRoleComponent implements OnInit {
     }
     
     if (this.addForm.invalid) {
-      console.log(this.addForm.invalid);
+      
       return;
     }
     this.spinner.show();
     this.selectedRoleConvert = [];
     data.selectedRole.forEach((key: any, v: any) => {
-      console.log(key);
+      
       let jsonData = {code: key, status: 1};
       this.selectedRoleConvert.push(jsonData);
     });

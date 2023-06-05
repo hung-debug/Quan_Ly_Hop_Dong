@@ -124,7 +124,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
 
   async ngOnInit() {
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
-    // console.log(this.datas);
+    // 
 
     this.idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
 
@@ -133,7 +133,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     if(!this.idContract || this.checkView) {
       this.getDataContractSignature();
 
-      console.log("datas ", this.datas)
+      
     } else {
       this.router.navigate(['/page-not-found']);
     }
@@ -265,7 +265,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
 
     // this.datas.action_title = 'Xác nhận';
     this.activeRoute.url.subscribe(params => {
-      // console.log(params);
+      // 
       if (params && params.length > 0) {
         params.forEach(item => {
           if (item.path == 'consider-contract') {
@@ -594,7 +594,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
     }, null, () => {
     }).unsubscribe();
 

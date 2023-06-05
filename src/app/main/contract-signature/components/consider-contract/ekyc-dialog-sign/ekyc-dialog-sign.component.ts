@@ -95,7 +95,7 @@ export class EkycDialogSignComponent implements OnInit {
       const determineCoordination = await this.contractService.getDetermineCoordination(this.data.recipientId).toPromise();
       this.cardId = determineCoordination.recipients[0].card_id;
       this.name = determineCoordination.recipients[0].name;
-      console.log("determineCoordination",determineCoordination);
+      
       let ArrRecipientsNew = false
 
     }
@@ -256,7 +256,7 @@ export class EkycDialogSignComponent implements OnInit {
   }
 
   public cameraWasSwitched(deviceId: string): void {
-    console.log('active device: ' + deviceId);
+    
     this.deviceId = deviceId;
   }
 

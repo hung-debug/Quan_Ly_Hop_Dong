@@ -97,7 +97,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
   async ngOnInit(): Promise<void> {
 
-    console.log("vao day ");
+    
     this.spinner.hide();
 
     let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
@@ -195,7 +195,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
       this.onChangeForm(e);
 
-      // console.log("id temp ", this.datasForm.template_contract_id)
+      // 
     } else {
       
     this.datasForm.type_id = e.value;
@@ -243,7 +243,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         this.typeList = data;
       },
       (error) => {
-        console.log(error);
+        
       }
     );
   }

@@ -48,7 +48,7 @@ export class ReportService {
     let url = prefix+params;
 
     if(excel) {
-      console.log("this ", url);
+      
       return this.http.get<any>(url, { headers: headers,responseType: 'blob' as 'json'}).pipe();
     } else {
       return this.http.get<any>(url,{headers: headers}).pipe();

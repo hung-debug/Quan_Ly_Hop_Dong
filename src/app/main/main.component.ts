@@ -116,7 +116,7 @@ export class MainComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
@@ -210,7 +210,7 @@ export class MainComponent implements OnInit {
   openLinkNotification(link:any, id:any) {
     window.location.href = link.replace('&type=', '').replace('&type=1', '').replace('?id','?recipientId').replace('contract-signature','c').replace('signatures','s9').replace('consider','c9').replace('secretary','s8').replace('coordinates','c8');
     this.dashboardService.updateViewNotification(id).subscribe(data => {
-      console.log(data);
+      
     });
   }
 
@@ -218,7 +218,7 @@ export class MainComponent implements OnInit {
     this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
       //this.numberNotification = data.total_elements;
       this.listNotification = data.entities;
-      console.log(data);
+      
     });
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
       this.numberNotification = data.total_elements;

@@ -29,7 +29,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   getText(sign: any) {
     if (sign.sign_unit == 'text') {
       if(sign.value) {
-        console.log("ac")
+        
         return sign.value      
       } else if (sign.text_type!= undefined && sign.text_type == "currency"){
           return 'Số tiền'
@@ -80,7 +80,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
 
   reverseInput(e: any){
     e.target.value = this.contractService.removePeriodsFromCurrencyValue(e.target.value);
-    console.log(e.target.value);
+    
   }
 
   getSpecifiedHandle() {

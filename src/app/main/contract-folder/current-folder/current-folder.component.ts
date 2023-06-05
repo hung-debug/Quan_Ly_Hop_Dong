@@ -68,7 +68,7 @@ export class CurrentFolderComponent implements OnInit {
       //     this.setPage();
       //   }
       //   const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
-      //   console.log('checkedDownloadFiles',checkedDownloadFiles);
+      //   
       //   for(let i = 0; i< this.contracts.length; i++){
       //     let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
       //     if(checkIf){

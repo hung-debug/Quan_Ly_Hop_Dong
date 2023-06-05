@@ -41,7 +41,7 @@ export class SidebarComponent implements OnInit {
 
   // set active dropdown
   toggle(currentMenu: any) {
-    console.log(currentMenu);
+    
     if (currentMenu.type === 'dropdown') {
       currentMenu.activeDrop = true;
       this.menus.forEach((element: any) => {

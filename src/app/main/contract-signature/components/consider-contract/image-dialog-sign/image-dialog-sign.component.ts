@@ -72,7 +72,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   }
 
   fileChangedAttach(e: any) {
-    console.log("e ", e);
+    
     let files = e.target.files;
     let valid = ["jpg", "jpeg", "png"];
     for(let i = 0; i < files.length; i++){
@@ -109,13 +109,13 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   }
 
   handleUpload(event: any) {
-    console.log("e ", event);
+    
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
       this.imgSignPCSelect = reader.result? reader.result.toString() : '';
-      console.log("img ", this.imgSignPCSelect);
+      
     };
   }
 
@@ -152,7 +152,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     } else if (ev == 1 && !this.datas.imgSignAcc && !this.data.mark) {
       this.toastService.showWarningHTMLWithTimeout('notify_have_not_sign_acc', "", 3000);
     } else  if (ev == 1 && !this.datas.markSignAcc && !this.data.mark) {
-      console.log("abc ", this.markSignAccountSelect)
+      
       this.toastService.showWarningHTMLWithTimeout('notify_have_not_sign_mark_acc',"",3000);
     }
   }

@@ -182,7 +182,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     if (file) {
       // giới hạn file upload lên là 5mb
       if (e.target.files[0].size <= 5000000) {
-        console.log(e.target.files[0].size);
+        
         const file_name = file.name;
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
@@ -254,7 +254,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           ) {
             this.attachFileArr.push(file);
             this.datas.attachFileArr = this.attachFileArr;
-            // console.log(this.datas.attachFileArr);
+            // 
             this.attachFileNameArr.push({filename: file.name});
             if (!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length && this.datas.attachFileNameArr.length == 0) {
               this.datas.attachFileNameArr = [];
@@ -278,7 +278,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   onChange(e: any) {
-    console.log(e, this.contractConnect)
+    
   }
 
   addFileAttach() {
@@ -345,7 +345,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
 
         await this.contractTemplateService.updateFile(fileContract_1.id, this.datas).toPromise().then((respon: any) => {
-          console.log(respon);
+          
           this.datas.document_id = respon?.id;
         }, (error: HttpErrorResponse) => {
           countSuccess++
@@ -371,7 +371,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             //kiem tra file cu da bi danh dau xoa hay chua
             let id_type="";
             if(this.attachFileArr[i].id){
-              console.log(this.attachFileArr[i].id);
+              
               id_type = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 3 && p.id == this.datas.attachFileArr[i].id)[0].id;
             }
 
@@ -598,7 +598,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   changeAddContract(link: any) {
-    // console.log(link);
+    // 
     this.router.navigate([link]);
   }
 

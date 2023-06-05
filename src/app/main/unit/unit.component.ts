@@ -64,7 +64,7 @@ export class UnitComponent implements OnInit {
           //lay id role
           this.roleService.getRoleById(data?.role_id).subscribe(
             data => {
-              console.log(data);
+              
               let listRole: any[];
               listRole = data.permissions;
               this.isQLTC_01 = listRole.some(element => element.code == 'QLTC_01');
@@ -167,7 +167,7 @@ export class UnitComponent implements OnInit {
     let dataChildren:any[]=[];
     let arrCon = this.listData.filter((p: any) => p.parent_id == element.id);
 
-    // console.log("arrCon ", arrCon);
+    // 
     
     arrCon.forEach((elementCon: any, indexCOn: number) => {
 
@@ -219,7 +219,7 @@ export class UnitComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
@@ -246,13 +246,13 @@ export class UnitComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
 
   detailUnit(id:any) {
-    console.log("detatil unit ");
+    
     const data = {
       title: 'unit.information',
       id: id,
@@ -265,7 +265,7 @@ export class UnitComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }

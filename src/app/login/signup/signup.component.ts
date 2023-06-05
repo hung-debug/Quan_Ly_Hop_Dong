@@ -85,7 +85,7 @@ export class SignupComponent implements OnInit {
     //them to chuc
     this.userService.signup(data).subscribe(
       data => {
-        console.log(data);        
+        
         if(data.id != null && data.id != undefined) {
         this.sendNotifi("Bạn đã đăng ký thành công dịch vụ hệ thống eContract.<br>Vui lòng chờ liên hệ của nhà cung cấp!");
         } else {
@@ -119,7 +119,7 @@ export class SignupComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }

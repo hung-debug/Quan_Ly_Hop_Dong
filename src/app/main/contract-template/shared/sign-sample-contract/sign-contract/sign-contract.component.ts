@@ -13,7 +13,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    console.log("datas ", this.sign);
+    
   }
 
   getText(sign: any) {
@@ -21,7 +21,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
     if (sign.sign_unit == 'text') {
       if(sign.text_type == "currency")
         return 'Số tiền';
-      // console.log("text ");
+      // 
       return 'Text';
     } else {
       return 'Số hợp đồng';

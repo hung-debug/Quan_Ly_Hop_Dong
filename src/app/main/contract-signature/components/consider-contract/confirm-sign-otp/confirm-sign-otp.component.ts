@@ -98,7 +98,7 @@ export class ConfirmSignOtpComponent implements OnInit {
       return;
     }
     //this.dialogRef.close(this.addForm.value.otp);
-    // console.log(this.addForm.value.otp);
+    // 
     // this.confirmOtpForm.emit(this.addForm.value.otp);
     await this.signContractSubmit();
   }
@@ -188,7 +188,7 @@ export class ConfirmSignOtpComponent implements OnInit {
 
     if(!this.mobile) {
       for (const signUpdate of this.datas.is_data_object_signature) {
-        console.log('ki anh', signUpdate);
+        
         if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived)
           && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
           && signUpdate?.recipient?.role === this.datas?.roleContractReceived
@@ -392,7 +392,7 @@ export class ConfirmSignOtpComponent implements OnInit {
             if (!notContainSignImage) {
             }
             setTimeout(() => {
-              console.log("vao day ky hop dong thanh cong ");
+              
               this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
               this.toastService.showSuccessHTMLWithTimeout(
                 [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'

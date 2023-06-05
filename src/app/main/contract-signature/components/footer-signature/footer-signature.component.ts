@@ -71,8 +71,8 @@ export class FooterSignatureComponent implements OnInit {
 
   lang: string;
   ngOnInit(): void {
-    console.log("ngOnInit: ", this.datas)
-    console.log("ngOnInit keys: ", Object.keys(this.datas))
+    
+    
     this.getDeviceApp();
 
     if (sessionStorage.getItem('lang') == 'en') {
@@ -158,8 +158,8 @@ export class FooterSignatureComponent implements OnInit {
   }
 
   switchesValueChange($event: any) {
-    console.log("abc")
-    console.log("event ", $event);
+    
+    
   }
 
   indexY: number = 0;
@@ -260,7 +260,7 @@ export class FooterSignatureComponent implements OnInit {
   }
   ArrRecipientsNew: boolean;
   action() {
-    console.log("##############datas", this.datas);
+    
     if (this.datas.action_title == 'dieu_phoi') {
       this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
       let id_recipient_signature = null;
@@ -276,12 +276,12 @@ export class FooterSignatureComponent implements OnInit {
         }
         if (id_recipient_signature) break;
       }
-      console.log("id_recipient_signature", id_recipient_signature);
+      
 
       this.contractService.getDetermineCoordination(id_recipient_signature).subscribe(async (response) => {
-        console.log("response", response);
+        
         const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-        console.log("ArrRecipients", ArrRecipients);
+        
 
         let ArrRecipientsNew = false
         ArrRecipients.map((item: any) => {
@@ -290,7 +290,7 @@ export class FooterSignatureComponent implements OnInit {
             return
           }
         });
-        console.log("ArrRecipientsNew111", ArrRecipientsNew);
+        
 
         if (!ArrRecipientsNew) {
 
@@ -311,7 +311,7 @@ export class FooterSignatureComponent implements OnInit {
             return
           }
         };
-        console.log("this.currentUser.email", this.currentUser);
+        
       })
 
 
@@ -398,7 +398,7 @@ export class FooterSignatureComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
@@ -420,9 +420,9 @@ export class FooterSignatureComponent implements OnInit {
         if (id_recipient_signature) break;
       }
       this.contractService.getDetermineCoordination(id_recipient_signature).subscribe(async (response) => {
-        console.log("response", response);
+        
         const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-        console.log("ArrRecipients", ArrRecipients);
+        
 
         let ArrRecipientsNew = false
         ArrRecipients.map((item: any) => {
@@ -431,7 +431,7 @@ export class FooterSignatureComponent implements OnInit {
             return
           }
         });
-        console.log("ArrRecipientsNew111", ArrRecipientsNew);
+        
 
         if (!ArrRecipientsNew) {
 
@@ -452,7 +452,7 @@ export class FooterSignatureComponent implements OnInit {
             return
           }
         } else this.submitChanges.emit(1);
-        console.log("this.currentUser.email", this.currentUser);
+        
       })
     }
   }
@@ -541,7 +541,7 @@ export class FooterSignatureComponent implements OnInit {
 
     this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
       const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-      console.log("ArrRecipients", ArrRecipients);
+      
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
@@ -550,7 +550,7 @@ export class FooterSignatureComponent implements OnInit {
           return
         }
       });
-      console.log("ArrRecipientsNew111", ArrRecipientsNew);
+      
 
       if (!ArrRecipientsNew) {
 
@@ -586,7 +586,7 @@ export class FooterSignatureComponent implements OnInit {
         data
       })
       dialogRef.afterClosed().subscribe((result: any) => {
-        console.log('the close dialog');
+        
         let is_data = result
       })
     }
@@ -595,7 +595,7 @@ export class FooterSignatureComponent implements OnInit {
 
   async forWardContract() {
     this.getCoordination();
-    console.log("datassssss ",this.datas);
+    
     
     // const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
     // const isInRecipient = this.is_data_coordination.recipients.some( (el: any) => el.name === updatedInfo.name)
@@ -604,7 +604,7 @@ export class FooterSignatureComponent implements OnInit {
 
     if (this.datas?.is_data_contract?.participants?.length) {
       const participants = this.datas?.is_data_contract?.participants;
-      console.log("participants",participants);
+      
       
       for (const participant of participants) {
         for (const recipient of participant.recipients) {
@@ -639,10 +639,10 @@ export class FooterSignatureComponent implements OnInit {
       recipientId: this.recipientId
     };
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    // console.log("localStorage.type",sessionStorage.getItem('type'))
+    // 
     this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
       const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-      console.log("ArrRecipients", ArrRecipients);
+      
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
@@ -651,7 +651,7 @@ export class FooterSignatureComponent implements OnInit {
           return
         }
       });
-      console.log("ArrRecipientsNew111", ArrRecipientsNew);
+      
 
       if (!ArrRecipientsNew) {
 
@@ -684,7 +684,7 @@ export class FooterSignatureComponent implements OnInit {
         data
       })
       dialogRef.afterClosed().subscribe((result: any) => {
-        console.log('the close dialog');
+        
         let is_data = result
       })
     }

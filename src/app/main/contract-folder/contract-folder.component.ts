@@ -43,14 +43,14 @@ export class ContractFolderComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       const id = params['id'];
-      console.log(id);
+      
       if(id){
         this.contractFolderService.getContractFoldersList().subscribe(
           (data) => {
             this.folders = data.filter((folder: any) => folder.parentId == id);
-            console.log(this.folders);
+            
           })
-        console.log(this.folders);
+        
         this.contractFolderService.getContractFolderName().subscribe(
           (data) => {
             this.currentFolders = [];
@@ -64,7 +64,7 @@ export class ContractFolderComponent implements OnInit {
             }
             this.currentFolders.reverse();
             this.folderLevel = this.currentFolders.length;
-            console.log(this.folderLevel);
+            
           }
         )
         
@@ -80,7 +80,7 @@ export class ContractFolderComponent implements OnInit {
     // if(!this.datas){
     //   this.folders = [];
     //   this.folders = this.treeFolderService.getFolders();  
-    //   console.log(this.folders)               
+    //   
     // } else if(this.datas){
     //   this.childrenFolder = this.datas;
     //   this.folders = this.childrenFolder;
@@ -92,13 +92,13 @@ export class ContractFolderComponent implements OnInit {
   openFolder(id: any){
     if(!this.checkHaveContract(id)){
     this.router.navigate(['/main/contract-folder', id]);
-    console.log("false")
+    
     } else {
-      console.log("true")
+      
       this.router.navigate(['/main/contract-folder/c/', id]);
     }
     
-    console.log("dbclick");
+    
   }
 
   checkLastChildFolderBreadcrumber(folder: any, folders: any){
@@ -113,9 +113,9 @@ export class ContractFolderComponent implements OnInit {
     this.contractFolderService.getContractFoldersList().subscribe(
       (data) => {
         let folder = data.filter((folder: any) => folder.id == id)[0];
-        console.log(folder.contracts)
+        
         if(folder.contracts && folder.contracts.length > 0){
-          console.log("true")
+          
           return true;
         }
       }

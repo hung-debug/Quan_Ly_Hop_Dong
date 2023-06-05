@@ -34,7 +34,7 @@ export class DialogSignManyComponentComponent implements OnInit {
   }
 
   async onSubmit() {
-    console.log("id ", this.id);
+    
 
     const data = {
       mark: this.id,

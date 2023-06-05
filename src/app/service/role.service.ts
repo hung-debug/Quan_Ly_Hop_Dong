@@ -55,7 +55,7 @@ export class RoleService {
       permissions: data.selectedRole,
       description: data.note
     });
-    console.log(body);
+    
     return this.http.post<any>(this.addRoleUrl, body, {headers}).pipe();
   }
 
@@ -72,7 +72,7 @@ export class RoleService {
       permissions: data.selectedRole,
       description: data.note
     });
-    console.log(body);
+    
     return this.http.post<any>(this.addRoleUrl, body, {headers}).pipe();
   }
 

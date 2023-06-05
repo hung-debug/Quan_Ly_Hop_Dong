@@ -48,7 +48,7 @@ export class AddConnectDialogComponent implements OnInit {
         data.refs.forEach((key : any, val: any) => {
           this.idList.push(key.ref_id);
         })
-        console.log(this.idList);
+        
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
       }
@@ -57,7 +57,7 @@ export class AddConnectDialogComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.idList);
+    
     if(this.idList.length == 0){
       this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn hợp đồng liên quan', "", 3000);
     }else{
@@ -72,7 +72,7 @@ export class AddConnectDialogComponent implements OnInit {
     this.contractService.getContractList('off', '', "", "", "", "", "", 30, this.pD, this.pageD).subscribe(data => {
       this.contractsD = data.entities;
       this.pageTotalD = data.total_elements;
-      console.log(this.contractsD);
+      
       if(this.pageTotalD == 0){
         this.pD = 0;
         this.pageStartD = 0;
@@ -82,18 +82,18 @@ export class AddConnectDialogComponent implements OnInit {
       }
       this.contractsD.forEach((key : any, v: any) => {
         let participants = key.participants;
-        //console.log(participants);
+        //
         participants.forEach((key : any, val: any) => {
           if (key.type == 1) {
             this.contractsD[v].sideA = key.name;
           }else{
             this.contractsD[v].sideB = key.name;
           }
-          console.log(this.contractsD[v].sideA);
+          
         })
       });
-      console.log(this.contractsD);
-      console.log(this.pageTotalD);
+      
+      
     });
   }
 

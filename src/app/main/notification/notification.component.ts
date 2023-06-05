@@ -27,7 +27,7 @@ export class NotificationComponent implements OnInit {
       this.lang = 'en';
     }
 
-    console.log("lang ", this.lang);
+    
 
     this.appService.setTitle("no.list");
     this.getNotification();
@@ -36,7 +36,7 @@ export class NotificationComponent implements OnInit {
   getNotification(){
     this.dashboardService.getNotification('', '', '', this.page, this.p).subscribe(data => {
       this.listNotification = data.entities;
-      console.log(this.listNotification);
+      
       this.pageTotal = data.total_elements;
       if(this.pageTotal == 0){
         this.p = 0;
@@ -51,7 +51,7 @@ export class NotificationComponent implements OnInit {
   openLinkNotification(link:any, id:any) {
     window.location.href = link.replace('&type=1', '').replace('&type=', '').replace('?id','?recipientId').replace('contract-signature','c').replace('signatures','s9').replace('consider','c9').replace('secretary','s8').replace('coordinates','c8');;
     this.dashboardService.updateViewNotification(id).subscribe(data => {
-      console.log(data);
+      
     });
   }
 

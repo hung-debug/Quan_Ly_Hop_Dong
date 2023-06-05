@@ -57,7 +57,7 @@ export class AddPartnerDialogComponent implements OnInit {
       this.list = res.filter((item: any) => {
           return item.type === this.type; 
       });
-      console.log(this.list)
+      
     });
     if(this.type == "ORGANIZATION"){
     this.title = "find.partner.organization";
@@ -75,7 +75,7 @@ export class AddPartnerDialogComponent implements OnInit {
     ];
   }
 
-    console.log(this.list)
+    
   }
 
   autoSearch(event: any){
@@ -116,14 +116,14 @@ export class AddPartnerDialogComponent implements OnInit {
         let filterList: any[]=[];
         this.firstList.forEach((item: any) => {
           if(item.type === "PERSONAL" && item.name.toLowerCase().includes(this.filter_name.toLowerCase())){
-            console.log(item);
+            
             filterList.push(item);
           }
         });
 
         this.firstList.forEach((item: any) => {
           if(item.type === "PERSONAL" && item.phone.includes(this.filter_name) && !filterList.includes(item)){
-            console.log(item);
+            
             filterList.push(item);
           }
         });
@@ -131,7 +131,7 @@ export class AddPartnerDialogComponent implements OnInit {
         this.firstList.forEach((item: any) => {
           if(item.card_id != null)
           if(item.type === "PERSONAL" && item.card_id.includes(this.filter_name) && !filterList.includes(item)){
-            console.log(item);
+            
             filterList.push(item);
           }
         });
@@ -171,7 +171,7 @@ export class AddPartnerDialogComponent implements OnInit {
   }
 
   choosePartner(item:any){
-    console.log(item)
+    
     this.dialogRef.close(item);
   }
 }

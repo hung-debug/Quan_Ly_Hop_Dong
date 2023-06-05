@@ -89,7 +89,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("ng on changes ", this.datas);
+    
     if (
       this.save_draft_infor &&
       this.save_draft_infor.close_header &&
@@ -100,9 +100,9 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   }
 
   back(e: any, step?: any) {
-    console.log("back  ", this.datas);
     
-    console.log("back temp ", this.temp);
+    
+    
 
     this.nextOrPreviousStep(step);
   }
@@ -114,13 +114,13 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
   // forward data component
   nextOrPreviousStep(step: string) {
-    console.log("next or previous step ");
+    
     this.datas.stepLast = step;
     this.stepChangeConfirmInforContract.emit(step);
   }
 
   saveDraft() {
-    console.log("save draft ");
+    
     this.toastService.showSuccessHTMLWithTimeout(
       'Lưu nháp thành công!',
       '',
@@ -137,12 +137,12 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     //call API step confirm
     //this.contractService.addConfirmContract(this.datas).subscribe((data) => {
     this.spinner.show();
-    console.log("this datas ", this.datas);
+    
     this.contractService.changeStatusContract(this.datas.id, 10, '').subscribe(
       (data) => {
         //this.router.navigate(['/main/contract/create/processing']);
 
-        console.log("data change status contract ", data);
+        
         this.router
           .navigateByUrl('/', { skipLocationChange: true })
           .then(() => {
@@ -296,7 +296,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
       this.spinner.show();
 
-      console.log("data ", this.data_sample_contract);
+      
       this.contractService.getContractSample(this.data_sample_contract).subscribe(
           (data) => {
             if (action == 'finish_contract') {

@@ -109,7 +109,7 @@ export class DetermineSignerComponent implements OnInit {
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
       this.datas.is_determine_clone = [...this.contractTemplateService.getDataDetermineInitialization()];
     } else {
-      console.log("clone ", this.datas.is_determine_clone);
+      
     }
 
     // data Tổ chức của tôi
@@ -121,7 +121,7 @@ export class DetermineSignerComponent implements OnInit {
     this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
     this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
 
-    console.log("clone 1", this.data_organization);
+    
     // data đối tác
     this.data_parnter_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
     // this.data_parnter_individual = this.datas.is_determine_clone.filter((p: any) => p.type == 3);
@@ -140,13 +140,13 @@ export class DetermineSignerComponent implements OnInit {
     if (this.datas.is_determine_clone.some((p: any) => p.type == 3)) this.is_change_party = true;
   }
   // onChange(event: any) {
-  //   console.log(event.target.value);
+  //   
   // }
 
   changeTypeSign(d: any,index?: any,id?: any,role?: any) {
-    console.log("role ", role);
+    
 
-    console.log("d ", d);
+    
 
     if (d.login_by == 'phone' || d.login_by == 'email') {
       d.email = '';
@@ -159,12 +159,12 @@ export class DetermineSignerComponent implements OnInit {
 
     if(role == 'sign_partner') {
         if (d.login_by == 'phone') {
-          console.log("phone");
+          
           d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,2,5].includes(p.id));
 
-          console.log("d ", d.isListSignNotPersonPartner);
+          
         } else {
-          console.log("email ");
+          
           d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,5].includes(p.id));
         }
     } else if(role == 'signer') {
@@ -338,7 +338,7 @@ export class DetermineSignerComponent implements OnInit {
   // }
   switchLang(locale: string, d: any) {
     // this.data_organization.recipients.filter((p: any) => p.role == 2);
-    // console.log("SU", this.data_organization)
+    // 
   }
 
   toggleDown: boolean = false;
@@ -360,7 +360,7 @@ export class DetermineSignerComponent implements OnInit {
       this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 3000)
       void this.router.navigate(['/main/contract/create/draft']);
     } else if (!this.saveDraftStep || is_save) {
-      console.log("data clone after ", this.datas.is_determine_clone);
+      
 
       this.datas.is_determine_clone = res ? res : this.datas.is_determine_clone;
       this.step = variable.stepSampleContract.step3;
@@ -404,12 +404,12 @@ export class DetermineSignerComponent implements OnInit {
     }
 
     // }
-    // console.log(setOrdering, setOrderingParnter.length)
+    // 
     this.checkCount = 1; // gan lai de lan sau ko bi tang index
   }
 
   selectWithOtp(e: any, data: any, type?: any) {
-    console.log("data ", data);
+    
     if(e.length > 0) {
 
     }
@@ -960,7 +960,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   getDataSignature(e: any) {
-    console.log(e)
+    
   }
 
   getValueData(data: any, index: any) {
@@ -1002,7 +1002,7 @@ export class DetermineSignerComponent implements OnInit {
 
   // tạo mảng người xem xét đối tác
   getPartnerReviewer(item: any) {
-    // console.log('###############',item)
+    // 
     // return item.recipients.filter((p: any) => p.role == 2)
     return item.recipients.filter((p: any) => p.role == 2).map((x: any) => {
       if (!x.locale) {
@@ -1149,7 +1149,7 @@ export class DetermineSignerComponent implements OnInit {
 
   // tạo mảng các đối tượng người ký tổ chức của tôi
   getOriganzationSignature() {
-    // console.log("this.data_organization.recipients SUUUUUUUUUUUU", this.data_organization.recipients);
+    // 
 
     return this.data_organization.recipients.filter((p: any) => p.role == 3).map((x: any) => {
       if (!x.locale) {
@@ -1365,7 +1365,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeType(e: any, item: any, index: number) {
-    // console.log(item, e);
+    // 
     //item.name = "Người ký 1";
     let newArr: any[] = [];
     for (let i = 0; i < item.recipients.length; i++) {
@@ -1403,7 +1403,7 @@ export class DetermineSignerComponent implements OnInit {
 
   changeIsSmsReviewer(e: any, item: any, index: any) {
     let data = item.recipients.filter((p: any) => p.role == 2)[index];
-    console.log("data ", data.locale);
+    
     if (e.target.checked) {
       data.is_otp = 1;
       data.locale = 'vi';
@@ -1415,16 +1415,16 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeIsSmsSignature(e: any, item: any, index: any,d?: any) {
-    console.log("item",item);
-    console.log("index",index);
+    
+    
     
     
     let data = item.recipients.filter((p: any) => p.role == 3)[index];
     if (e.target.checked) {
-      // console.log("d ",d.is_otp);
+      // 
       data.is_otp = 1;
       d.is_otp = 1;
-      console.log("dddddđ ",data);
+      
 
     } else {
       data.is_otp = 0;
@@ -1455,7 +1455,7 @@ export class DetermineSignerComponent implements OnInit {
 
   doTheSearch($event: Event, indexs: number, action: string): void {
     const stringEmitted = ($event.target as HTMLInputElement).value;
-    console.log(stringEmitted);
+    
     this.arrSearchNameView = [];
     this.arrSearchNameSignature = [];
     this.arrSearchNameDoc = [];
@@ -1471,7 +1471,7 @@ export class DetermineSignerComponent implements OnInit {
         } else {
           this.arrSearchNameDoc = data;
         }
-        // console.log(data, res);
+        // 
       }, () => {
         this.getNotificationValid('có lỗi, vui lòng liên hệ với nhà phát triển để được xử lý!')
       })
@@ -1480,7 +1480,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   onFocusIn(e: any, is_index: number, action: string) {
-    // console.log(e);
+    // 
     if (e.type == "focusin") {
       this.arrSearch = [];
       let arrData = [];
@@ -1504,7 +1504,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   onFocusOut(e: any, dItem: any) {
-    // console.log(e)
+    // 
     if (!e.relatedTarget || (e.relatedTarget && e.relatedTarget.className && !e.relatedTarget.className.includes('search-name-items'))) {
       if (!dItem.name) dItem.email = '';
       this.arrSearchNameView = [];
@@ -1523,7 +1523,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   onChangeValue(e: any, orering_data: string) {
-    // console.log(e.target.value);
+    // 
     if (!e.target.value) {
       let data_ordering = document.getElementById(orering_data);
       if (data_ordering)

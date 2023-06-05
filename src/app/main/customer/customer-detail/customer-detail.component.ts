@@ -197,7 +197,7 @@ export class CustomerDetailComponent implements OnInit {
   }
 
   getDataSignUSBToken(data: any) {
-    console.log(data);
+    
     let filter: any[] = []
     if(!data.signType)
     data.signType = [];

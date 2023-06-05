@@ -360,7 +360,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           )
           .subscribe();
 
-        console.log('this datas ', this.datas.is_data_contract);
+        
 
         this.allFileAttachment = this.datas.i_data_file_contract.filter(
           (f: any) => f.type == 3
@@ -402,7 +402,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           this.contractService.getDataFormatContractUserSign();
 
         this.datas.contract_user_sign.forEach((element: any) => {
-          // console.log(element.sign_unit, element.sign_config);
+          // 
           if (element.sign_unit == 'chu_ky_so') {
             Array.prototype.push.apply(
               element.sign_config,
@@ -793,7 +793,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         this.objSignInfo.offsetHeight = parseInt(d.offsetHeight);
         // this.signCurent.offsetWidth = d.offsetWidth;
         // this.signCurent.offsetHeight = d.offsetHeight;
-        // console.log(this.signCurent)
+        // 
 
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
@@ -841,7 +841,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   processHandleContract() {
     // alert('Luồng xử lý hợp đồng!');
     const data = this.datas;
-    console.log('the close dialog', data);
+    
     // @ts-ignore
     const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
       width: '1000px',
@@ -850,7 +850,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       // this.reLoadData();
       let is_data = result;
     });
@@ -875,7 +875,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   // edit location doi tuong ky
   changePositionSign(e: any, locationChange: any, property: any) {
-    // console.log(e, this.objSignInfo, this.signCurent);
+    // 
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter(
@@ -919,8 +919,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
             );
           }
         }
-        // console.log(this.signCurent)
-        // console.log(this.objSignInfo)
+        // 
+        // 
       }
     }
   }
@@ -1016,10 +1016,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   actionBack() {
-    console.log('vao day ');
+    
 
 
-    // console.log("is ", this.isOrg);
+    // 
     if (this.pageBefore && this.isOrg) {
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         this.router.navigate(['/main/contract/create/' + this.statusLink], {
@@ -1062,7 +1062,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         if (this.isOrg) {
           this._location.back();
         } else {
-          // console.log("vao day ");
+          // 
           this.router.navigate(['/login']);
 
           this.contractService.deleteToken().subscribe();
@@ -1114,7 +1114,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     dialogConfig.data = data;
     // const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
     // dialogRef.afterClosed().subscribe((result: any) => {
-    //   console.log('the close dialog');
+    //   
     //   let is_data = result
     // })
   }
@@ -1131,7 +1131,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     dialogConfig.data = data;
     // const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
     // dialogRef.afterClosed().subscribe((result: any) => {
-    //   console.log('the close dialog');
+    //   
     //   let is_data = result
     // })
   }
@@ -1324,17 +1324,17 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   t() {
-    console.log(this);
+    
   }
 
   downloadContract(id: any) {
     if (this.isDataContract.status == 30) {
       this.contractService.getFileZipContract(id).subscribe((data) => {
-          console.log(data);
+          
           this.uploadService
             .downloadFile(data.path)
             .subscribe((response: any) => {
-              //console.log(response);
+              //
 
               let url = window.URL.createObjectURL(response);
               let a = document.createElement('a');

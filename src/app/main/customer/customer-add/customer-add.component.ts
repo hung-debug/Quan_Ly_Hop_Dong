@@ -44,10 +44,10 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.signTypeList)
-    console.log(!this.isListSignNotPersonPartner);
-    console.log(this.signTypeList);
-    console.log(this.isListSignNotPersonPartner);
+    
+    
+    
+    
 
     if (environment.flag == 'NB') {
       this.site = 'NB';
@@ -68,7 +68,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
         if(this.action == 'edit'){
           this.customerService.getCustomerList().subscribe((res: any) => {
             this.orgCustomer = res.filter((item: any) => {
-                 console.log(res);
+                 
                  return item.id.toString() === this.id;
              })[0]})
         } 
@@ -84,7 +84,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       else {
         this.customerService.getCustomerList().subscribe((res: any) => {
           this.personalCustomer = res.filter((item: any) => {
-               console.log(res);
+               
                return item.id.toString() === this.id;
            })[0]})
       }
@@ -109,7 +109,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
     handlers = this.orgCustomer.handlers?.filter(
       (handler: any) => handler.role == role
     );
-    console.log(handlers);
+    
     return handlers;
   }
 
@@ -148,10 +148,10 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
     else{
       data.ordering = 1;
     }
-    console.log(data);
-    console.log(this.orgCustomer.handlers);
+    
+    
     this.orgCustomer.handlers?.push(data);
-    console.log(this.orgCustomer.handlers);
+    
   }
 
   onCancel(){
@@ -166,7 +166,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
   }
 
   onChangeValue(e: any, orering_data: string) {
-    // console.log(e.target.value);
+    // 
     if (!e.target.value) {
       let data_ordering = document.getElementById(orering_data);
       if (data_ordering)
@@ -180,7 +180,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
   }
 
   getDataSignUSBToken(data: any) {
-    console.log(data);
+    
     return data.signType.filter((p: any) => p.id == 2);
   }
 
@@ -236,10 +236,10 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
         for (let k = 0; k < isPartnerSort.length; k++) {
           //Tổ chức
 
-            console.log("1235")
-            console.log(dataArrPartner)
-            console.log(!dataArrPartner.name)
-            console.log(isPartnerSort[k]);
+            
+            
+            
+            
             if (!dataArrPartner.name) {
               this.getNotificationValid("Vui lòng nhập tên tổ chức!")
               return false;
@@ -256,7 +256,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
             }
            
             if (!isPartnerSort[k].name) {
-              console.log(isPartnerSort.name)
+              
               this.getNotificationValid("Vui lòng nhập tên " + this.getNameObjectValid(isPartnerSort[k].role) + " !")
               return false;
             }
@@ -470,8 +470,8 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
   }
 
   changeTypeSign(d: any,index: any,id?: any,role?: any) {
-    console.log("a ");
-    console.log(d);
+    
+    
     if (d.login_by == 'phone' || d.login_by == 'email') {
       d.email = '';
       d.phone = '';
@@ -482,7 +482,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
         if (d.login_by == 'phone') {
           this.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,2,5].includes(p.id));
         } else {
-          console.log("email ");
+          
           this.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,5].includes(p.id));
         }
     } else if(role == 'signer') {
@@ -505,7 +505,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       this.spinner.show();
       if(this.action == 'add'){
       if(this.isOrg){
-        console.log(this.orgCustomer);
+        
         this.customerService.addOrgCustomer(this.orgCustomer).subscribe((res: any) => {
           if(res.errors){
             this.spinner.hide();

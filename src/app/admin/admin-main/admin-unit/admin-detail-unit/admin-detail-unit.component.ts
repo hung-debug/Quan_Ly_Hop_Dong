@@ -37,7 +37,7 @@ export class AdminDetailUnitComponent implements OnInit {
   ngOnInit(): void {
     this.adminUnitService.getUnitById(this.data.id).subscribe(
       data => {
-        console.log(data);
+        
         this.datas = data;
         
       }, error => {
@@ -58,7 +58,7 @@ export class AdminDetailUnitComponent implements OnInit {
   }
   searchPackUnit() {
     this.adminUnitService.getUnitById(this.data.id).subscribe((response) => {
-      console.log("res ",response);
+      
       this.list = response.services;
     })
 
@@ -78,7 +78,7 @@ export class AdminDetailUnitComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
@@ -90,7 +90,7 @@ export class AdminDetailUnitComponent implements OnInit {
       idPack: null
     };
 
-    console.log("add ",data.id);
+    
 
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddPackUnitComponent, {
@@ -100,7 +100,7 @@ export class AdminDetailUnitComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
@@ -119,7 +119,7 @@ export class AdminDetailUnitComponent implements OnInit {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result;
     });
   }
@@ -131,7 +131,7 @@ export class AdminDetailUnitComponent implements OnInit {
       idPack: id
     };
 
-    console.log("edit ", data.idPack);
+    
 
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddPackUnitComponent, {
@@ -141,7 +141,7 @@ export class AdminDetailUnitComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }

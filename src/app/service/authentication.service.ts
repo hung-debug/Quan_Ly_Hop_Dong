@@ -69,7 +69,7 @@ export class AuthenticationService {
             localStorage.setItem('currentUser', JSON.stringify(user));
             return user;
           }else{
-            console.log(JSON.stringify(user));
+            
             return null;
           }
         }),
@@ -85,7 +85,7 @@ export class AuthenticationService {
   }
 
   private handleError(error: HttpErrorResponse) {
-    console.log(error);
+    
     if (error.error instanceof ErrorEvent) {
       console.error('An error occurred:', error.error.message);
     } else {
@@ -101,7 +101,7 @@ export class AuthenticationService {
   }
 
   private loginError(error: HttpErrorResponse) {
-    console.log(error);
+    
     if (JSON.parse(JSON.stringify(error)).status == 400 && JSON.parse(JSON.stringify(error)).access_token == null) {
       localStorage.setItem('checkUser', "error");
     }else{

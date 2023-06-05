@@ -44,7 +44,7 @@ export class CheckSignDigitalComponent implements OnInit {
 
   fileChangedAttach(e: any) {
     
-    console.log(e.target.files)
+    
     let files = e.target.files;
     this.fileName = '';
     for (let i = 0; i < files.length; i++) {
