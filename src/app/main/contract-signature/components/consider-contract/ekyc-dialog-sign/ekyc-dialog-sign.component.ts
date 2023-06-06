@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 export class EkycDialogSignComponent implements OnInit {
   @Input() datas: any;
   personEkyc: any;
+  width: number = 100;
 
   constructor(
     private contractService: ContractService,
@@ -66,6 +67,11 @@ export class EkycDialogSignComponent implements OnInit {
     } else
       this.type = 0;
 
+    this.width = window.innerWidth;
+    if(this.width > 768){
+      this.width = 0.5*window.innerWidth;
+    }
+
     this.initWebcamImage = this.webcamImage;
 
     //title = 0: nhan dang anh can cuoc cong dan
@@ -88,7 +94,9 @@ export class EkycDialogSignComponent implements OnInit {
   currentUser: any;
   public async triggerSnapshot(): Promise<void> {
     this.trigger.next();
+  }
 
+  public async confirmData(): Promise<void>{
     this.spinner.show();
 
     if(this.data.recipientId) {
@@ -201,6 +209,7 @@ export class EkycDialogSignComponent implements OnInit {
       }
   
     })
+    
   }
 
   upFileImageToDb(formData: any) {
