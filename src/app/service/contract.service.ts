@@ -1678,6 +1678,21 @@ export class ContractService {
     );
   }
 
+  saveDraftContractBatch(file: any, idContractTemplate: any, isCeCA: any){
+    this.getCurrentUser();
+    let formData = new FormData();
+    formData.append('file', file);
+
+    const headers = new HttpHeaders()
+      //.append('Content-Type', 'multipart/form-data')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.post<any>(
+      this.confirmContractBatchListUrl + idContractTemplate + '/' + isCeCA + '?status=draft',
+      formData,
+      { headers: headers }
+    );
+  }
+
   viewFlowContract(id: any): Observable<any> {
     this.getCurrentUser();
     const headers = { Authorization: 'Bearer ' + this.token };
