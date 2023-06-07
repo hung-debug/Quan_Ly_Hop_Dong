@@ -25,7 +25,7 @@
   </div>
 
   <div *ngIf = "!webcamImage && !this.flagSuccess && this.title==1" class="webcam">
-    <webcam class="webcam-image-circle" [width]="this.width*0.85" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+    <webcam class="webcam-image-circle" [width]="this.width*0.7" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
             [videoOptions]="videoOptions" 
             [imageQuality]="1"
             (cameraSwitched)="cameraWasSwitched($event)"
@@ -46,7 +46,7 @@
     <img src="../../../../../../assets/img/cancel-circle.svg" (click)="this.webcamImage = this.initWebcamImage;" class="icon-cancel">
   </div>
   <div  *ngIf="webcamImage && this.title==1" class="webcam-image-circle">
-    <img class="img-face" [height]="this.width*0.85*4/3" [width]="this.width*0.85" [src]="webcamImage.imageAsDataUrl"/>
+    <img class="img-face" [height]="this.width*0.7*4/3" [width]="this.width*0.7" [src]="webcamImage.imageAsDataUrl"/>
   </div>
   <div *ngIf="webcamImage && this.title==1" class="button-camera">    
     <img src="../../../../../../assets/img/check-circle.svg" (click)="confirmData();" class="icon-check" >
