@@ -186,10 +186,14 @@ export class EkycDialogSignComponent implements OnInit {
         //up file anh len db
         this.upFileImageToDb(formData);
   
-        this.contractService.detectFace(this.data.cccdFront, this.webcamImage.imageAsDataUrl).subscribe((response) => {
+        this.contractService.detectFace(this.data.cccdFront, this.webcamImage.imageAsDataUrl).subscribe(async (response) => {
           this.spinner.hide();
           if(response.verify_result == 2 && response.face_anti_spoof_status == 'REAL') {
             alert(this.translate.instant('confirm.success'));
+
+            //call api trừ ekyc
+            await this.contractService.decreaseNumberOfEkyc(this.organizationId).toPromise();
+
             this.dialogRef.close(response.verify_result);
           } else {
             if(response.face_anti_spoof_status == 'FAKE') {
