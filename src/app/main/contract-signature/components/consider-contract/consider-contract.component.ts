@@ -3618,12 +3618,13 @@ export class ConsiderContractComponent
     const data = {
       id: 0,
       title: 'Xác thực CMT/CCCD mặt trước',
+      noti: 'Vui lòng đưa CMT/CCCD mặt trước vào gần khung hình',
       recipientId: this.recipientId,
       contractId: this.idContract,
     };
 
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.panelClass = 'custom-dialog-container';
+    // dialogConfig.panelClass = 'custom-dialog-container';
     dialogConfig.data = data;
     dialogConfig.disableClose = true;
     // dialogConfig.width = '100000000000000000000000000000px';  
@@ -3650,6 +3651,7 @@ export class ConsiderContractComponent
     const data = {
       id: 1,
       title: 'Xác thực CMT/CCCD mặt sau',
+      noti: 'Vui lòng đưa CMT/CCCD mặt sau vào gần khung hình',
       contractId: this.idContract,
     };
 

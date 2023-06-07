@@ -803,6 +803,46 @@ export class ConfirmContractBatchComponent
     // });
   }
 
+  saveDraft(){
+    if (!this.datasBatch.ceca_push)
+    this.datasBatch.ceca_push = 0;
+
+  this.nextDraft(this.datasBatch.ceca_push);
+  }
+
+  async nextDraft(isCeCA: any) {
+    const isAllow = await this.checkNumber(this.datasBatch.ceca_push, this.convertToSignConfig().length);
+    if (isAllow) {
+      this.spinner.show();
+
+      this.contractService
+        .saveDraftContractBatch(
+          this.datasBatch.contractFile,
+          this.datasBatch.idContractTemplate,
+          isCeCA
+        )
+        .subscribe((response: any) => {
+          this.router
+            .navigateByUrl('/', { skipLocationChange: true })
+            .then(() => {
+              this.router.navigate(['/main/contract/create/draft']);
+            });
+          this.spinner.hide();
+          this.toastService.showSuccessHTMLWithTimeout(
+            'Lưu nháp thành công',
+            '',
+            3000
+          );
+        }),
+        (error: any) =>
+          this.toastService.showErrorHTMLWithTimeout(
+            'Lưu nháp thất bại',
+            '',
+            3000
+          );
+    }
+  }
+
   async next(isCeCA: any) {
     const isAllow = await this.checkNumber(this.datasBatch.ceca_push, this.convertToSignConfig().length);
     if (isAllow) {
