@@ -174,6 +174,11 @@ export class ContractSignatureComponent implements OnInit {
         this.organization_id = '';
       }
     });
+
+    if(sessionStorage.getItem('receivePageNum')){
+      this.page = Number(sessionStorage.getItem('receivePageNum'));
+    }
+
     this.sub = this.route.params.subscribe((params) => {
       // this.action = params['action'];
       this.status = params['status'];
@@ -822,6 +827,7 @@ export class ContractSignatureComponent implements OnInit {
     this.spinner.show();
     this.p = 1;
     this.page = e.target.value;
+    sessionStorage.setItem('receivePageNum', this.page.toString());
     this.getContractList();
   }
 

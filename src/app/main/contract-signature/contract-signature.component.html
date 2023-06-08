@@ -680,7 +680,7 @@
     <div *ngIf="this.typeDisplay === 'signOne'|| this.typeDisplay === 'downloadMany'" class="contract_footer">
         <div class="footer_contract_per_page">
             <div>Hiển thị&nbsp;</div>
-            <select (change)="changePageNumber($event)">
+            <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
                 <option value="" hidden>{{this.page}}</option>
                 <option *ngFor="let d of this.pageOptions">{{d}}</option>
             </select>

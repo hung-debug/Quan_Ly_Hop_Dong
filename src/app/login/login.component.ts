@@ -70,6 +70,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('myTaxCode');
     localStorage.removeItem('url');
+    sessionStorage.removeItem('receivePageNum');
+    sessionStorage.removeItem('createdPageNum');
     
     if(!sessionStorage.getItem('lang')) {
       sessionStorage.setItem('lang','vi')

@@ -110,7 +110,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    console.log(this.typeDisplay);
     this.route.queryParams.subscribe(async params => {
       if (typeof params.filter_name != 'undefined' && params.filter_name) {
         this.filter_name = params.filter_name;
@@ -158,9 +157,14 @@ export class ContractComponent implements OnInit, AfterViewInit {
         this.organization_id = "";
       }
     });
+
+    if(sessionStorage.getItem('createdPageNum'))
+     this.page = Number(sessionStorage.getItem('createdPageNum'));
+
     this.sub = this.route.params.subscribe(params => {
       this.action = params['action'];
       this.status = params['status'];
+      console.log("this.status",this.status);
 
       //set status
       this.convertStatusStr();
@@ -444,8 +448,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   cancelRelease(){
     this.spinner.show();
-    this.typeDisplay='';
-    this.router.navigate(['/main/contract/create/draft']);
+    this.typeDisplay = 'signOne';
+    window.location.reload();
   }
 
   getContractList() {
@@ -467,7 +471,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
       //get list contract
       this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
-        console.log(this.filter_status);
         this.contracts = data.entities;
         this.pageTotal = data.total_elements;
         if (this.pageTotal == 0) {
@@ -523,7 +526,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       this.filter_status = 32;
     } else if (this.status == 'complete') {
       this.filter_status = 30;
-    } else if (this.status == 'past-complete') {
+    } else if (this.status =='liquidated') {
       this.filter_status = 40;
     }
   }
@@ -532,6 +535,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     this.p = 1;
     this.page = e.target.value;
+    sessionStorage.setItem('createdPageNum', this.page.toString());
     this.getContractList();
   }
 
@@ -627,6 +631,10 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   addContractConnectNew(id: number) {
     this.router.navigate(['main/form-contract/add-contract-connect/' + id]);
+  }
+
+  addContractLiquidationNew(id: number){
+    this.router.navigate(['main/form-contract/add-contract-liquidation/' + id]);
   }
 
   deleteItem(id: number) {
