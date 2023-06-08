@@ -662,6 +662,17 @@
   "release": "Phát hành",
   "display": "Hiển thị ",
   "contracts.per.page": " hợp đồng/trang",
-  "continue.using.web": "Tiếp tục sử dụng trên web"
+  "continue.using.web": "Tiếp tục sử dụng trên web",
+  "contract.liquidation": "Thanh lý hợp đồng",
+  "contract.status.liquidated": "Đã thanh lý",
+  "contract.original": "Hợp đồng gốc",
+  "folder.add": "Thêm thư mục",
+  "folder.name": "Tên thư mục",
+  "folder.description": "Mô tả",
+  "folder.edit": "Sửa thư mục",
+  "folder.delete": "Xóa thư mục",
+  "folder.openDetail": "Xem chi tiết thư mục",
+  "confirm.folder.delete": "Bạn có chắc chắn muốn xóa thư mục này không?"
+
   
 }

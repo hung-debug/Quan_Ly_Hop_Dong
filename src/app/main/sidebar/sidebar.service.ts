@@ -351,6 +351,11 @@ export class SidebarService {
           title: 'contract.status.complete',
           active: false,
           href: '/main/contract/create/complete',
+        },
+        {
+          title: 'contract.status.liquidated',
+          active: false,
+          href: '/main/contract/create/liquidated',
         }
       );
 

@@ -19,6 +19,7 @@ export interface Contract {
   status: string;
   createdAt: Date;
   signTime: Date;
+  originalContractId?: number;
 }
 export interface File {
   path: string;
@@ -248,7 +249,7 @@ export class ContractService {
     }
     let listContractUrl = '';
     if (isOrg == 'off') {
-      if (filter_status == '40') {
+      if (filter_status == '50') {
         filter_status = '30';
         listContractUrl =
           this.listPastContractUrl +
@@ -387,7 +388,8 @@ export class ContractService {
         datas.expire_time,
         "yyyy-MM-dd'T'HH:mm:ss'Z'"
       )?.slice(0,11).concat("00:00:00Z"),
-      ceca_push: datas.ceca_push
+      ceca_push: datas.ceca_push,
+      originalContractId: datas.original_contract_id ? datas.original_contract_id : null,
     });
 
     if (id) {

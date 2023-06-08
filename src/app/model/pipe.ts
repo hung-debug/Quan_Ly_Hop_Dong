@@ -24,6 +24,8 @@ export class PipeTrs implements PipeTransform {
       return 'contract.status.expire';
     }else if(value == 34){
       return 'contract.status.overdue';
+    }else if(value == 40){
+      return 'contract.status.liquidated';
     }
     return 'contract.status.undefined';
   }

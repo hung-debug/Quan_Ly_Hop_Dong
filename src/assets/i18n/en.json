@@ -662,5 +662,15 @@
   "release": "Release",
   "display": "Display ",
   "contracts.per.page": " contracts/page",
-  "continue.using.web": "Continue using the web version"
+  "continue.using.web": "Continue using the web version",
+  "contract.liquidation": "Contract liquidation",
+  "contract.status.liquidated": "Liquidated",
+  "contract.original": "Original contract",
+  "folder.add": "Add folder",
+  "folder.name": "Folder name",
+  "folder.description": "Folder description",
+  "folder.edit": "Edit folder",
+  "folder.delete": "Delete folder",
+  "folder.openDetail": "Detail folder",
+  "confirm.folder.delete": "Are you sure you want to delete this folder?"
   }

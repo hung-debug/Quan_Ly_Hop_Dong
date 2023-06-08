@@ -27,6 +27,12 @@
             <a style="color: #106DB6" rel="stylesheet" [href]="d.path" target="_blank">{{d.filename}}</a>
           </span>
         </div>
+        <div *ngIf="datas.is_data_contract.status == 30 && datas.is_data_contract.originalContractId">
+          <span class="title-contract">{{'contract.original' | translate}}:</span>
+          <span style="cursor: pointer; text-decoration: underline; color:#106DB6" (click)="openDetailOriginalContract(datas.is_data_contract.orginalContractId)">
+            {{datas.is_data_contract.original_contract_name}}
+          </span>
+        </div>
         <div>
           <span class="title-contract">{{'contract.connect' | translate}}:
           </span>

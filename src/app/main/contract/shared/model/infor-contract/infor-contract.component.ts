@@ -684,6 +684,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.datas.notes = this.notes;
       this.datas.contract_expire_time = this.expire_time;
 
+      if(this.activeRoute.snapshot.paramMap.get('id'))
+      this.datas.original_contract_id = Number(this.activeRoute.snapshot.paramMap.get('id'));
+
       this.defineData(this.datas);
       const fileReader = new FileReader();
       if (this.datas.is_action_contract_created) {
