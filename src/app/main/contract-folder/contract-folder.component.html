@@ -1,11 +1,3 @@
-<!-- <ul>
-  <li *ngFor="let folder of folders" [ngClass]="{ 'open': folder.open, 'highlight': folder.open }">
-    <span (click)="openFolder(folder.id)">
-      <i class="material-icons" style = "color: blue">{{ folder.open ? 'folder_open' : 'folder' }}</i>
-      {{ folder.name }}
-    </span>
-  </li>
-</ul> -->
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-6 breadcrumb-container">
@@ -35,9 +27,11 @@
               <td><img src = "../../../assets/img/contract.svg" width="20px">
                 <a style="color: #0160AE; cursor: pointer; padding-left: 10px;" 
                 (click)="openFolder(list.id)">{{list.name}}</a></td>
+              <td></td>
               <td style="text-align: center">
-                <img  src="../../../assets/img/icon_edit.svg" width="20px"  style="cursor: pointer;"  (dblclick)="$event.stopPropagation()"/>&nbsp;&nbsp;
-                <img  src="../../../assets/img/icon_delete.svg" width="16px"  style="cursor: pointer;"  (dblclick)="$event.stopPropagation()"/>
+                <img src="../../../assets/img/icon_edit.svg" width="20px"  style="cursor: pointer;" (click)="editFolder(list.id)"  (dblclick)="$event.stopPropagation()"/>&nbsp;&nbsp;
+                <img src="../../../assets/img/icon_delete.svg" width="16px"  style="cursor: pointer;" (click)="deleteFolder(list.id)"  (dblclick)="$event.stopPropagation()"/>&nbsp;&nbsp;
+                <img src="../.././/../assets/img/view-folder.svg" width="20px" style="cursor: pointer" (click)="openDetailFolder(list.id)" (dblclick)="$event.stopPropagation()" >
               </td>
           </tr>
       </ng-template>

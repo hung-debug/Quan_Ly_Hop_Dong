@@ -8,7 +8,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 })
 export class AddFolderComponent implements OnInit {
   action: string;
-  title: string;
+  title: string ="";
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
@@ -19,14 +19,22 @@ export class AddFolderComponent implements OnInit {
   ngOnInit() {
     if(this.data){
       console.log(this.data);
-      this.action = this.data;
-      if(this.action == 'rename'){
-        this.title = 'folder.rename';
-      }
-      if(this.action == 'add'){
-        this.title = 'folder.add';
-      }
+      this.action = this.data.action;
+      this.title=this.convertActionFolder(this.action);
     }
   }
+
+  convertActionFolder(action: string){
+    switch (action){
+      case 'add':
+        return 'folder.add';
+      case 'edit':
+        return 'folder.edit';
+      case 'openDetail':
+        return 'folder.openDetail';
+      default:
+        return ''
+  }
+}
 
 }

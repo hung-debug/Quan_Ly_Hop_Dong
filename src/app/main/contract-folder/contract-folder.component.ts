@@ -1,3 +1,4 @@
+import { DeleteFolderComponent } from './delete-folder/delete-folder.component';
 import { Folder, ContractFolderService } from '../../service/contract-folder.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { AppService } from 'src/app/service/app.service';
@@ -37,8 +38,9 @@ export class ContractFolderComponent implements OnInit {
   ngOnInit(): void {
     this.appService.setTitle("contract.folder");
     this.cols = [
-      {header: 'Tên', style:'text-align: left;', class:'col-md-8' },
-      {header: 'contract-type.manage', style:'text-align: center;',class:'col-md-4' },
+      {header: 'Tên', style:'text-align: left;', class:'col-md-5' },
+      {header: 'Ngày tạo', style:'text-align: left;', class:'col-md-5'},
+      {header: 'contract-type.manage', style:'text-align: center;',class:'col-md-2'},
     ];
 
     this.route.params.subscribe(params => {
@@ -124,24 +126,46 @@ export class ContractFolderComponent implements OnInit {
   }
 
   addFolder(){
-    let data = 'add'
+    let data = {
+      action: 'add',
+    }
     const matDialogRef = this.dialog.open(AddFolderComponent, {
       width: '500px',
       data: data
     });
   }
 
-
-  onDelete(folder: any) {
-    // Implement folder deletion logic here
+  editFolder(id: number){
+    let data = {
+      action: 'edit',
+      folderId: id
+    }
+    const matDialogRef = this.dialog.open(AddFolderComponent, {
+      width: '500px',
+      data: data
+    });
   }
 
-  onMove(folder: any) {
-    // Implement folder moving logic here
+  openDetailFolder(id: number){
+    let data = {
+      action: 'openDetail',
+      folderId: id
+    }
+    const matDialogRef = this.dialog.open(AddFolderComponent, {
+      width: '500px',
+      data: data
+    });
   }
 
-  onCopy(folder: any) {
-    // Implement folder copying logic here
-  }
+  deleteFolder(id: number){
+    let data = {
+      folderId: id
+    }
 
+    const matDialogRef = this.dialog.open(DeleteFolderComponent, {
+      width: '500px',
+      data: data
+    })
+
+  }
 }

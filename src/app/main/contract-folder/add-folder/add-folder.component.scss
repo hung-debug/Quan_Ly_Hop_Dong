@@ -1,23 +1,96 @@
 .folder-name {
     display: flex;
     width: 100%;
-    justify-content: center;
+    flex-wrap:wrap;
+    margin: 0;
 
-    .input-data {
+    .label-input {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 90%;
+        margin: 0;
+        padding: 0;
+        font-size: 14px;
+        font-weight: 500;
+        color: black;
+        flex-wrap: nowrap;
+        padding-bottom: 5px;
+    }
+
+    .label-input-description {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 90%;
+        margin: 0;
+        padding: 0;
+        font-size: 14px;
+        font-weight: 500;
+        color: black;
+        flex-wrap: nowrap;
+        padding-bottom: 5px;
+        padding-top: 10px;
+    }
+
+    .input-data-name {
         display: flex;
         justify-content: center;
-        border: 1px solid #106DB6;
-        border-radius: 5px;
         align-items: center;
         width: 100%;
+        margin: 0;
+        height: 37px;
+        width: 100%;
+        border-radius: 5px;
+        border: 1px solid #106DB6;
         input{
-            width: 90%;
-            border: none;
-            // border-bottom: 1px solid grey;
             outline: none;
-            font-size: 20px;
-            padding: 12px 0 12px 0;
+            border: none;
+            width: 98%
+
+        }
+    }
+    .input-data-description {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin: 0;
+        height: 147px;
+        width: 100%;
+        border-radius: 5px;
+        border: 1px solid #106DB6;
+        textarea{
+            outline: none;
+            border: none;
+            width: 98%;
+            height: 132px;
+            resize: none;
         }
     }
 
+}
+
+.cancel-button{
+    border: 0px;
+    border-radius: 5px;
+    height: 33px;
+    width: 100px;
+    box-sizing: border-box;
+    color: white;
+    background-color: #8b8b8b;
+    font-size: 13px;
+    margin: 0 10px;
+}
+
+.save-button {
+    border: 0px;
+    border-radius: 5px;
+    height: 33px;
+    width: 100px;
+    box-sizing: border-box;
+    color: white;
+    background-color: #106DB6;
+    font-size: 13px;
+    margin: 0 10px;
 }
