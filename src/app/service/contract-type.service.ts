@@ -44,7 +44,7 @@ export class ContractTypeService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    console.log("datas ", datas);
+    
     const body = JSON.stringify({
       name: datas.name,
       code: datas.code,
@@ -77,7 +77,7 @@ export class ContractTypeService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-      console.log(this.deleteContractTypeUrl + id);
+      
     return this.http.delete<any>(this.deleteContractTypeUrl + id, {'headers': headers});
   }
 
@@ -97,7 +97,7 @@ export class ContractTypeService {
       listContractTypeUrl = this.listContractTypeUrl + idOrg + "?name=" + name.trim() + "&code=" + code.trim();
     }
 
-    console.log(listContractTypeUrl);
+    
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<ContractType[]>(listContractTypeUrl, {headers}).pipe();
   }

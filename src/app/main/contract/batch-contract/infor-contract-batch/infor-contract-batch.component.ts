@@ -89,7 +89,7 @@ export class InforContractBatchComponent implements OnInit {
 
   getContractTemplateForm() {
     this.contractTemplateService.getListFileTemplate().subscribe((response) => {
-      // console.log(response);
+      // 
       this.typeListForm = response;
     });
   }
@@ -170,7 +170,7 @@ export class InforContractBatchComponent implements OnInit {
       this.contractService.getFileContractBatch(this.idContractTemplate).subscribe(
           (res: any) => {
             this.uploadService.downloadFile(res.path).subscribe((response: any) => {
-                //console.log(response);
+                //
 
                 let url = window.URL.createObjectURL(response);
                 let a = document.createElement('a');
@@ -200,7 +200,7 @@ export class InforContractBatchComponent implements OnInit {
             // this.spinner.hide();
           },
           (error) => {
-            console.log(error);
+            
             this.spinner.hide();
           },
           () => {
@@ -384,10 +384,10 @@ export class InforContractBatchComponent implements OnInit {
                                       variable.stepSampleContractBatch.step2;
                                     this.datasBatch.stepLast = this.step;
                                     this.nextOrPreviousStep(this.step);
-                                    console.log(this.datasBatch);
+                                    
                                     this.spinner.hide();
                                   } else {
-                                    console.log("err detail ", this.errorDetail);
+                                    
                                     this.errorDetail = responseUpload.detail;
                                     this.toastService.showErrorHTMLWithTimeout(
                                       'File mẫu không hợp lệ',

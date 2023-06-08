@@ -228,7 +228,7 @@ export class InforUserComponent implements OnInit {
 
   async updateSign(data:any){
 
-    console.log("this ", this.attachFile);
+    
 
       //upload file
       if(this.attachFile) {
@@ -256,7 +256,7 @@ export class InforUserComponent implements OnInit {
           (sign_image as string[]).push(sign_image_content);
           data.sign_image = sign_image;
         } catch(err) {
-          console.log("errr ", err);
+          
         }
       }
 
@@ -273,7 +273,7 @@ export class InforUserComponent implements OnInit {
           (sign_image as string[]).push(sign_image_content);
           data.stampImage = sign_image;
         } catch(err) {
-          console.log("errr ", err);
+          
         }  
       }
 

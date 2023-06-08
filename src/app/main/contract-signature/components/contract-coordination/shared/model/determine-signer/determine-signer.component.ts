@@ -156,7 +156,7 @@ export class DetermineSignerComponent implements OnInit {
   dropdownButtonText = '';
 
   getData(item: any) {
-    // console.log(item)
+    // 
   }
 
   // valid data step 2
@@ -231,7 +231,7 @@ export class DetermineSignerComponent implements OnInit {
             break;
           }
 
-          console.log("dataArrPartner ", dataArrPartner[j]);
+          
           if(!dataArrPartner[j].recipients[k].card_id && (dataArrPartner[j].recipients[k].role == 3 || dataArrPartner[j].recipients[k].role == 4) && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
             this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObject(3)+"của đối tác");
             count++;
@@ -342,9 +342,9 @@ export class DetermineSignerComponent implements OnInit {
 
   getCheckDuplicateCardId(isParty: string, dataValid?: any) {
 
-    console.log("all check email ", isParty);
+    
 
-    console.log("data valid ", dataValid);
+    
 
     let arrCheckCardId = [];
     // valid card_id đối tác và các bên tham gia
@@ -373,7 +373,7 @@ export class DetermineSignerComponent implements OnInit {
           let countCheck_duplicate = true;
           for (const d of arrCardId) {
             if (duplicateCardId.length > 0 && duplicateCardId.some((p: any) => p.card_id == d.card_id && (p.type != d.type || p.ordering != d.ordering))) { // check duplicate card_id coordination with between party
-              console.log("vao day ");
+              
               return true;
             }
             duplicateCardId.push(d);
@@ -399,7 +399,7 @@ export class DetermineSignerComponent implements OnInit {
     for (var k = 0; k < arrCheckCardId.length; ++k) {
       var value: any = arrCheckCardId[k];
       if (value in valueSoFar) {
-        console.log("vao day ");
+        
         return true;
       }
       valueSoFar[value] = true;
@@ -504,7 +504,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   getDataSignature(e: any) {
-    console.log(e)
+    
   }
 
   getValueData(data: any, index: any) {
@@ -802,7 +802,7 @@ export class DetermineSignerComponent implements OnInit {
       res.ordering = index + 1;
     })
 
-    console.log(this.data_parnter_organization);
+    
   }
 
   // xóa đối tượng tham gia bên đối tác
@@ -822,7 +822,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeType(e: any, item: any, index: number) {
-    // console.log(item, e);
+    // 
     item.name = "";
     let newArr: any[] = [];
     for (let i = 0; i < item.recipients.length; i++) {

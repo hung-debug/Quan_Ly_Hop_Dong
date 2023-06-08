@@ -68,7 +68,7 @@ export class DetailUnitComponent implements OnInit {
   async getData() {
     await this.unitService.getUnitById(this.data.id).toPromise().then(
       data => {
-        console.log("data", data);
+        
         this.name = data.name,
           this.short_name = data.short_name,
           this.code = data.code,
@@ -84,7 +84,7 @@ export class DetailUnitComponent implements OnInit {
         if (data.parent_id != null) {
           this.unitService.getUnitById(data.parent_id).subscribe(
             data => {
-              console.log(data);
+              
               this.parent_id = data.name
             }, error => {
               this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);

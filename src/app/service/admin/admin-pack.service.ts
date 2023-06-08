@@ -37,7 +37,7 @@ export class AdminPackService {
 
   getPackListComboBox(name:any, code:any, totalBeforeVAT:any,totalAfterVAT: any, duration:any, numberOfContracts:any, status:any){
 
-    console.log("status ",status);
+    
 
     this.getCurrentUser();
     let listPackUrl = this.listPackUrl + '?name=' + name.trim() + '&code=' + code.trim() + '&totalBeforeVAT=' + totalBeforeVAT + '&totalAfterVAT='+totalAfterVAT+'&duration=' + duration.trim() + 
@@ -67,8 +67,8 @@ export class AdminPackService {
       status: datas.status
     });
 
-    console.log('body unit');
-    console.log(body);
+    
+    
 
     return this.http.post<any>(this.listPackUrl, body, { headers: headers });
   }
@@ -108,7 +108,7 @@ export class AdminPackService {
       status: datas.status
     });
 
-    console.log("body update pack ", body);
+    
 
 
     return this.http.put<any>(this.listPackUrl + datas.id,body, { headers: headers });

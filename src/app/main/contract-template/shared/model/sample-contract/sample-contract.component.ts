@@ -483,7 +483,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   getListNameSign(data_user_sign: any) {
     data_user_sign.forEach((element: any) => {
-      console.log(element);
+      
       if (element.type == 1 || element.type == 5) {
         element.recipients.forEach((item: any) => {
           if (item.role == 3 || item.role == 4 || item.role == 2) {
@@ -740,7 +740,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 // element['number'] = _arrPage[_arrPage.length - 1];
                 element['page'] = _arrPage[_arrPage.length - 1];
 
-                console.log("page ", element['page']);
+                
                 element['position'] = this.signCurent['position'];
                 element['coordinate_x'] = this.signCurent['coordinate_x'];
                 element['coordinate_y'] = this.signCurent['coordinate_y'];
@@ -1150,7 +1150,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // get select người ký
   getSignSelect(d: any) {
-    console.log(d);
+    
     if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
       if(d.recipient_id) {
         this.showSignClear = true;
@@ -1216,7 +1216,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.objSignInfo.font_size = 13;
         }
 
-        // console.log("sd ",document.getElementById('select-dropdown').value);
+        // 
         this.getCheckSignature(d.sign_unit, d.name, d.recipient_id);
 
         if (!d.name) {
@@ -1363,7 +1363,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-      console.log(this.convertToSignConfig());
+      
       if (isObjSign) {
         if (property == 'location') {
           if (locationChange == 'x') {
@@ -1388,7 +1388,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           }
           if(locationChange== 'text_type'){
             let type_name = this.list_text_type.filter((p: any) => p.id == e.target.value)[0].name;
-            console.log(type_name);
+            
             isObjSign.text_type = type_name;
             signElement.setAttribute("text_type", isObjSign.text_type);
           }
@@ -1497,7 +1497,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   async next(action: string) {
-    console.log(this.list_sign_name);
+    
     this.datas.font = this.selectedFont;
     this.datas.size = this.size;
     if (action == 'next_step' && !this.validData()) {
@@ -1512,7 +1512,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
           let isHaveFieldId: any[] = [];
           let isNotFieldId: any[] = [];
-          // console.log(this.datas.contract_user_sign);
+          // 
           let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
           isUserSign_clone.forEach((res: any) => {
             res.sign_config.forEach((element: any) => {
@@ -1842,7 +1842,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }  else if (count_number > 1) {
    
       } else if (count_text > 0) {
-        console.log("cc ", count_text);
+        
 
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Thiếu tên trường cho đối tượng nhập Text!", "", 3000);

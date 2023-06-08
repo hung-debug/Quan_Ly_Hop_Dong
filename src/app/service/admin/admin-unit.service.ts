@@ -47,7 +47,7 @@ export class AdminUnitService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    console.log('token ', this.token);
+    
 
     return this.http
       .patch<any>(this.listUnitUrl + id + '/service/cancel/' + idPack, '', {
@@ -69,8 +69,8 @@ export class AdminUnitService {
   ) {
     this.getCurrentUser();
 
-    console.log('page ', page);
-    console.log('size ', size);
+    
+    
 
     let listUnitUrl =
       this.listUnitUrl +
@@ -95,7 +95,7 @@ export class AdminUnitService {
       '&sort=createdAt,desc';
     const headers = { Authorization: 'Bearer ' + this.token };
 
-    console.log('vao api tim kiem');
+    
 
     return this.http.get<any>(listUnitUrl, { headers }).pipe();
   }
@@ -117,8 +117,8 @@ export class AdminUnitService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    console.log('upate unit service');
-    console.log(datas.id);
+    
+    
 
     const body = JSON.stringify({
       name: datas.name,
@@ -134,7 +134,7 @@ export class AdminUnitService {
       status: datas.status,
     });
 
-    console.log("body ", body);
+    
 
     return this.http.put<any>(this.addUnitUrl + datas.id, body, {
       headers: headers,
@@ -158,7 +158,7 @@ export class AdminUnitService {
       paymentDate: datas.paymentDate,
     });
 
-    console.log('body ', body);
+    
 
     return this.http.patch<any>(
       this.listUnitUrl + datas.id + '/service/register/',
@@ -192,8 +192,8 @@ export class AdminUnitService {
   }
 
   addUnit(datas: any) {
-    console.log('datas');
-    console.log(datas);
+    
+    
 
     this.getCurrentUser();
 
@@ -215,14 +215,14 @@ export class AdminUnitService {
       status: datas.status,
     });
 
-    console.log('body unit');
-    console.log(body);
+    
+    
 
     return this.http.post<any>(this.addUnitUrl, body, { headers: headers });
   }
 
   addPackUnit(datas: any) {
-    console.log('datas ', datas);
+    
 
     this.getCurrentUser();
 
@@ -240,7 +240,7 @@ export class AdminUnitService {
       paymentDate: datas.paymentDate,
     });
 
-    console.log('body ', body);
+    
 
     return this.http.patch<any>(
       this.listUnitUrl + datas.id + '/service/register',
@@ -262,7 +262,7 @@ export class AdminUnitService {
       permissions: data.selectedRole,
       description: data.note,
     });
-    console.log("role ",body);
+    
     return this.http.post<any>(this.addRoleUrl, body, { headers }).pipe();
   }
 
@@ -291,8 +291,8 @@ export class AdminUnitService {
 
       hsm_name: datas.nameHsm,
     });
-    console.log(headers);
-    console.log(body);
+    
+    
     return this.http.post<User>(this.addUserUrl, body, { headers: headers });
   }
 
@@ -304,7 +304,7 @@ export class AdminUnitService {
     if(datas.birthday != null){
         datas.birthday = this.datepipe.transform(datas.birthday, 'yyyy/MM/dd');
     }
-    console.log("update user ",datas);
+    
 
     const body = JSON.stringify({
       name: datas.name,
@@ -323,8 +323,8 @@ export class AdminUnitService {
       hsm_name: datas.nameHsm,
 
       organization_change: datas.organization_change
-    });console.log(headers);
-    console.log(body);
+    });
+    
     return this.http.put<User>(this.updateUserUrl + datas.id, body, {'headers': headers});
   }
 
@@ -336,7 +336,7 @@ export class AdminUnitService {
     const body = JSON.stringify({
       email: email
     });
-    console.log(headers);
+    
     return this.http.post<User>(this.getUserByEmailUrl, body, {'headers': headers});
   }
 

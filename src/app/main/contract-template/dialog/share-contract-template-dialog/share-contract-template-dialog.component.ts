@@ -61,7 +61,7 @@ export class ShareContractTemplateDialogComponent implements OnInit {
     if(this.isList == 'off'){
       //lay danh sach to chuc
       this.unitService.getUnitList('', '').subscribe(data => {
-        console.log(data.entities);
+        
         this.orgList = data.entities;
       });
 
@@ -80,7 +80,7 @@ export class ShareContractTemplateDialogComponent implements OnInit {
     }else{
       //lay danh sach to chuc
       this.unitService.getUnitList('', '').subscribe(data => {
-        console.log(data.entities);
+        
         this.orgListTmp.push({name: "Tất cả", id:""});
         let dataUnit = data.entities.sort((a:any,b:any) => a.name.toString().localeCompare(b.name.toString()));
         for(var i = 0; i < dataUnit.length; i++){
@@ -101,19 +101,19 @@ export class ShareContractTemplateDialogComponent implements OnInit {
 
   getDataShareByOrgId(){
     this.contractTemplateService.getEmailShareList(this.data.id, this.orgId).subscribe(response => {
-      console.log(response);
+      
       this.list = response;
     });
   }
 
   getUserByOrg(orgId:any){
-    console.log(orgId);
+    
     let emailLogin = this.userService.getAuthCurrentUser().email;
-    console.log(emailLogin);
+    
     //lay danh sach email da duoc chia se
     this.contractTemplateService.getEmailShareList(this.data.id, orgId).subscribe(listShared => {
       this.userService.getUserList(orgId, "").subscribe(data => {
-        console.log(data);
+        
         let dataFilter = data.entities.filter((p: any) => p.email != emailLogin && p.status == 1);
         //chi lay danh sach user chua duoc chia se
         this.userList = dataFilter.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
@@ -126,15 +126,15 @@ export class ShareContractTemplateDialogComponent implements OnInit {
   //email:any;
   checkEmailError:boolean;
   onSubmit() {    
-    console.log(this.addFormUser.value.email);
+    
     this.submittedUser = true;
     // stop here if form is invalid
     if (this.addFormUser.invalid) {
       return;
     }
-    console.log("email=" + this.addFormUser.value.email);
+    
     this.contractTemplateService.shareContract(this.addFormUser.value.email, this.data.id).subscribe(data => {
-      console.log(data);
+      
       if(data.contract_id != null){
         this.dialogRef.close();
         this.toastService.showSuccessHTMLWithTimeout('Chia sẻ mẫu hợp đồng thành công', "", 3000);

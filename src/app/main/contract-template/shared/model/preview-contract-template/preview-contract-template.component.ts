@@ -82,14 +82,14 @@ export class PreviewContractTemplateComponent implements OnInit {
 
   changePosition(d?: any, e?: any, sizeChange?: any) {
 
-    console.log("ddd ", d);
+    
 
     let style: any = {
 
     };
 
     if(d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu') {
-      // console.log("xx ");
+      // 
       style = {
         "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
         "position": "absolute",

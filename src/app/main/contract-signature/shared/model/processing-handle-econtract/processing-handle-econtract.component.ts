@@ -134,7 +134,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       participants.map((item: any) => {
         item.recipients.map((y: any) => {
           if(x.id === y.id) {
-            console.log("x id ",x.id);
+            
             change_num = y.change_num;
             return;
           }
@@ -243,7 +243,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
     })
   }
 
@@ -266,8 +266,8 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       let data: any;
       data = response;
       data["contract_id"] = this.data.is_data_contract.id
-      console.log("data luongxly hodng", data);
-      console.log("contractid", this.data.is_data_contract.id);
+      
+      
       const dialogRef = this.dialog.open(EditHandlerComponent, {
         width: '1000px',
         data,

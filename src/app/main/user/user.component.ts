@@ -169,7 +169,7 @@ export class UserComponent implements OnInit {
 
   
   changeOrg(){
-    console.log(this.selectedNodeOrganization);
+    
     this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
   }
 

@@ -1,4 +1,4 @@
-import {AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
@@ -172,7 +172,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
         const date = moment(data.active_at);
 
-        console.log("date ", date);
+        
 
         this.errorDetail = "Tài khoản bị khoá đến "+moment(date).format('YYYY/MM/DD HH:mm:ss');
       }else if(data?.code == '02'){
@@ -183,7 +183,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.countLoginFail++;
         this.error = true;
 
-        console.log("mm ", moment(data?.active_at).toDate());
+        
 
         this.errorDetail = "error.username.password";
       }
@@ -191,7 +191,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       },
       error => {
         this.countLoginFail++;
-        console.log(localStorage.getItem('checkUser'));
+        
         if(localStorage.getItem('checkUser') == 'error'){
           this.error = true;
           this.errorDetail = "error.username.password";
@@ -347,11 +347,36 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
   }
 
+  @HostListener('window:resize', ['$event'])
+  onWindowResize(event: Event) {
+    this.getStyleFooter();
+  }
+  
+  getStyleFooter() {
+    let loginForm: HTMLElement | null = document.getElementById('login-form');
+    let all: HTMLElement | null = document.getElementById('all');
+
+    let loginFormHeight: number | undefined = loginForm?.offsetHeight;
+    let allOffsetHeight: number | undefined = all?.offsetHeight;
+
+    if(loginFormHeight && allOffsetHeight) {
+      if(loginFormHeight > 0.75*allOffsetHeight) {
+        return {
+          'display': 'none'
+        }
+      }
+    }
+
+    return {
+
+    }
+  }
+
   switchLang(lang: string) {
     this.translate.use(lang);
     this.translate.currentLang = lang;
 
-    console.log("lang ", lang);
+    
     localStorage.setItem('lang', lang);
     sessionStorage.setItem('lang', lang);
   }
@@ -359,7 +384,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
 
-      console.log(this.deviceService.isMobile(), this.deviceService.deviceType, this.deviceService);
+      
       // @ts-ignore
       const dialogRef = this.dialog.open(ActionDeviceComponent, {
         width: '580px',
@@ -368,7 +393,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         panelClass: 'custom-modalbox'
       })
       dialogRef.afterClosed().subscribe((result: any) => {
-        console.log('the close dialog');
+        
         if (!this.router.url.endsWith('login')) {
           this.sub = this.route.params.subscribe(params => {
             this.type = params['loginType'];

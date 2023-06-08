@@ -35,7 +35,7 @@ export class IndexComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // console.log(this.router.url);
+    // 
     // @ts-ignore
     let dataLocal = JSON.parse(localStorage.getItem('data_coordinates_contract_id'));
     let data_element = undefined;
@@ -70,7 +70,7 @@ export class IndexComponent implements OnInit {
 
     })
     // this.datas = Object.assign(this.datas, this.data_contract);
-    // console.log(this.datas);
+    // 
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
 

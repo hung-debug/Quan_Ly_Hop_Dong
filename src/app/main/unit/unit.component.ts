@@ -64,7 +64,7 @@ export class UnitComponent implements OnInit {
           //lay id role
           this.roleService.getRoleById(data?.role_id).subscribe(
             data => {
-              console.log(data);
+              
               let listRole: any[];
               listRole = data.permissions;
               this.isQLTC_01 = listRole.some(element => element.code == 'QLTC_01');
@@ -123,7 +123,7 @@ export class UnitComponent implements OnInit {
       this.listData = response.entities;
       this.total = this.listData.length;
 
-      this.listData = this.listData.sort((a,b) => a.id - b.id || a.parent_id - b.parent_id || a.name.toString().localeCompare(b.name.toString()));
+      this.listData = this.listData.sort((a,b) => (a.id - b.id || a.parent_id - b.parent_id || a.name.toString().localeCompare(b.name.toString())));
 
       let data:any="";
 
@@ -149,7 +149,7 @@ export class UnitComponent implements OnInit {
             code: element.code,
             status: element.status,
             parent_id: element.parent_id,
-            is_edit: is_edit
+            is_edit: is_edit,
           },
           expanded: true,
           children: dataChildren
@@ -159,7 +159,15 @@ export class UnitComponent implements OnInit {
         // this.removeElementFromStringArray(element.id);
       })
 
-      this.list = this.array_empty;
+      const maxLength = Math.max(...this.array_empty.map((subArray:any) => subArray.children.length));
+
+      // Lọc ra mảng con có độ dài lớn nhất
+      const longestArrays = this.array_empty.filter((subArray:any) => subArray.children.length === maxLength);
+
+      if(this.array_empty.length > 1)
+        this.list = longestArrays
+      else
+        this.list = this.array_empty;
     });
   }
 
@@ -167,7 +175,7 @@ export class UnitComponent implements OnInit {
     let dataChildren:any[]=[];
     let arrCon = this.listData.filter((p: any) => p.parent_id == element.id);
 
-    // console.log("arrCon ", arrCon);
+    // 
     
     arrCon.forEach((elementCon: any, indexCOn: number) => {
 
@@ -219,7 +227,7 @@ export class UnitComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
@@ -246,13 +254,13 @@ export class UnitComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
 
   detailUnit(id:any) {
-    console.log("detatil unit ");
+    
     const data = {
       title: 'unit.information',
       id: id,
@@ -265,7 +273,7 @@ export class UnitComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }

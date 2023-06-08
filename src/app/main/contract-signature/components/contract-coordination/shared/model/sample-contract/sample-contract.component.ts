@@ -1168,7 +1168,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // edit location doi tuong ky
   changePositionSign(e: any, locationChange: any, property: any) {
-    // console.log(e, this.objSignInfo, this.signCurent);
+    // 
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];

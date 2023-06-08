@@ -52,7 +52,7 @@ export class ShareContractDialogComponent implements OnInit {
     let orgId = this.userService.getInforUser().organization_id;
     //lay danh sach to chuc
     this.unitService.getUnitList('', '').subscribe(data => {
-      console.log(data.entities);
+      
       this.orgList = data.entities;
     });
 
@@ -78,10 +78,10 @@ export class ShareContractDialogComponent implements OnInit {
   }
 
   getUserByOrg(orgId:any){
-    console.log(orgId);
+    
     let emailLogin = this.userService.getAuthCurrentUser().email;
     this.userService.getUserList(orgId, "").subscribe(data => {
-      console.log(data);
+      
       this.userList = data.entities.filter((p: any) => p.email != emailLogin && p.status == 1);
 
       this.addFormUser = this.fbd.group({
@@ -97,7 +97,7 @@ export class ShareContractDialogComponent implements OnInit {
   onSubmit() {
     this.emailArr = [];
     if(this.type == 1){
-      console.log(this.addForm.value.email);
+      
       this.submitted = true;
       // stop here if form is invalid
       if (this.addForm.invalid) {
@@ -105,10 +105,10 @@ export class ShareContractDialogComponent implements OnInit {
       }
       this.checkEmailError=false;
       // this.email = this.addForm.value.email;
-      console.log(this.addForm.value.email);
+      
       let emailLogin = this.userService.getAuthCurrentUser().email;
       this.addForm.value.email.split(',').forEach((key: any, v: any) => {
-        console.log(key);
+        
         if(this.isValidEmail(key.trim())== false){
           this.toastService.showErrorHTMLWithTimeout('Tồn tại email ' + key.trim() + ' sai định dạng', "", 3000);
           this.checkEmailError=true;
@@ -123,7 +123,7 @@ export class ShareContractDialogComponent implements OnInit {
 
       if(!this.checkEmailError){
         this.contractService.shareContract(this.emailArr, this.data.id).subscribe(data => {
-          console.log(data);
+          
           if(data.contract_id != null){
             this.dialogRef.close();
             this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 3000);
@@ -135,16 +135,16 @@ export class ShareContractDialogComponent implements OnInit {
       
       
     }else{
-      console.log(this.addFormUser.value.email);
+      
       this.submittedUser = true;
       // stop here if form is invalid
       if (this.addFormUser.invalid) {
         return;
       }
-      console.log("email=" + this.addFormUser.value.email);
+      
     
       this.contractService.shareContract(this.addFormUser.value.email, this.data.id).subscribe(data => {
-        console.log(data);
+        
         if(data.contract_id != null){
           this.dialogRef.close();
           this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 3000);

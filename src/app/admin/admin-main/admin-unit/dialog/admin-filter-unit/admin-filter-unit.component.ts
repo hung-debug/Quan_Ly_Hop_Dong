@@ -84,7 +84,7 @@ export class AdminFilterUnitComponent implements OnInit {
     }
 
     this.dialogRef.close();
-    console.log(data);
+    
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['/admin-main/unit'],
       {

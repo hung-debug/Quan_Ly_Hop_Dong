@@ -11,7 +11,7 @@ export class CheckZoomService {
     var ratio = (screen.availWidth / document.documentElement.clientWidth);
     var zoomLevel = Number(ratio.toFixed(1).replace(".", "") + "0");
 
-    console.log("zoom level ", zoomLevel);
+    
 
     if(zoomLevel != 100) {
       this.toastService.showWarningHTMLWithTimeout('zoom.warning','',3000);

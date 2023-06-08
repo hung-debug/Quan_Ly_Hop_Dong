@@ -145,7 +145,7 @@ export class AdminInfoUserComponent implements OnInit {
                   }
 
                   if (flag == 0) {
-                    console.log('vao day ');
+                    
                     for (
                       let i = 0;
                       i < dataUpdate.user.permissions.length;
@@ -154,11 +154,11 @@ export class AdminInfoUserComponent implements OnInit {
                       if (
                         dataUpdate.user.permissions[i].code.includes('QLTC')
                       ) {
-                        console.log('vao phan quan ly to chuc');
+                        
                         this.router.navigate(['/admin-main/unit']);
                         break;
                       } else {
-                        console.log('vao day goi dich vu');
+                        
                         this.router.navigate(['/admin-main/pack']);
                         break;
                       }

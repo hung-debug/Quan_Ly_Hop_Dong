@@ -108,7 +108,7 @@ export class SidebarService {
     ];
 
     const currentUserC = JSON.parse(localStorage.getItem('currentUser') || '');
-    console.log(currentUserC.customer.info.organizationChange);
+    
     this.userService.getUserById(currentUserC.customer.info.id).subscribe(
       (data) => {
         this.roleService.getRoleById(data?.role_id).subscribe(
@@ -615,8 +615,8 @@ export class SidebarService {
   getSubMenuList(menuParent: any) {
     this.menus.forEach((element: any) => {
       if (element === menuParent) {
-        console.log(element);
-        console.log(element.submenus);
+        
+        
         return element.submenus;
       }
     });

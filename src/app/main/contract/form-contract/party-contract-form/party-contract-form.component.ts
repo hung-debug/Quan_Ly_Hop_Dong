@@ -174,7 +174,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         if (d.login_by == 'phone') {
           d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,2,5].includes(p.id));
         } else {
-          console.log("email ");
+          
           d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,5].includes(p.id));
         }
     } else if(role == 'signer') {
@@ -244,6 +244,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   isCeCaPushNo: boolean = false;
   async next(action: string) {
     this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
+
+      this.datasForm.is_determine_clone[index].id = null;
       
       if (items.type == 3) {
         this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
@@ -348,7 +350,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   async getApiDetermine(is_save?: boolean) {
-
       //Đưa giá trị email về chũ thường
       this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
         for(let i = 0; i < this.datasForm.is_determine_clone[index].recipients.length; i++) {
@@ -388,8 +389,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         // this.datasForm.is_determine_clone[index].id = null;
     })
     this.spinner.show();
-
-    console.log("next ", this.datasForm.is_determine_clone);
 
     this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
       this.datasForm.is_determine_clone = res;  
@@ -478,7 +477,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     }
 
     // }
-    // console.log(setOrdering, setOrderingParnter.length)
+    // 
     this.checkCount = 1; // gan lai de lan sau ko bi tang index
   }
 
@@ -1283,7 +1282,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   getdatasFormignature(e: any) {
-    console.log(e)
+    
   }
 
   getValueData(data: any, index: any) {
@@ -1486,7 +1485,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // tạo mảng các đối tượng người ký tổ chức của tôi
   getOriganzationSignature() {
-    // console.log("this.data_organization.recipients SUUUUUUUUUUUU", this.data_organization.recipients);
+    // 
 
     return this.data_organization.recipients.filter((p: any) => p.role == 3).map((x: any) => {
       if (!x.locale) {
@@ -1644,7 +1643,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     //   res.ordering = index + 1;
     // })
     //
-    // console.log(this.data_parnter_organization);
+    // 
     //@ts-ignore
     let is_ordering: number = parseInt(this.getMaxNumberOrderingSign()); // set ordering follow data have max ordering
     this.datasForm.is_determine_clone[this.datasForm.is_determine_clone.length - 1].ordering = is_ordering + 1;
@@ -1653,7 +1652,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // xóa đối tham gia bên đối tác
   deletePartner(index: any, item: any) {
-    console.log("item ", item);
+    
     //xoa doi tuong tham gia
     if (item.id && this.router.url.includes('edit')) {
       this.spinner.show();
@@ -1674,7 +1673,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       })
     } else {
       this.datasForm.is_determine_clone = this.datasForm.is_determine_clone.filter((p: any) => p.id != item.id);
-      console.log("co chay cai nay k vay?");
+      
     }
   }
 
@@ -1726,7 +1725,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   doTheSearch($event: Event, indexs: number, action: string): void {
     const stringEmitted = ($event.target as HTMLInputElement).value;
-    console.log(stringEmitted);
+    
     this.arrSearchNameView = [];
     this.arrSearchNameSignature = [];
     this.arrSearchNameDoc = [];
@@ -1742,7 +1741,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         } else {
           this.arrSearchNameDoc = data;
         }
-        // console.log(data, res);
+        // 
       }, () => {
         this.getNotificationValid('có lỗi, vui lòng liên hệ với nhà phát triển để được xử lý!')
       })
@@ -1751,7 +1750,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   onFocusIn(e: any, is_index: number, action: string) {
-    // console.log(e);
+    // 
     if (e.type == "focusin") {
       this.arrSearch = [];
       let arrData = [];
@@ -1775,7 +1774,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   onFocusOut(e: any, dItem: any) {
-    // console.log(e)
+    // 
     if (!e.relatedTarget || (e.relatedTarget && e.relatedTarget.className && !e.relatedTarget.className.includes('search-name-items'))) {
       if (!dItem.name) dItem.email = '';
       this.arrSearchNameView = [];

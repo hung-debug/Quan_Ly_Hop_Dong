@@ -27,7 +27,7 @@ export class AdminDetailPackComponent implements OnInit {
   ngOnInit(): void {
     this.adminPackService.getPackById(this.data.id).subscribe(
       data => {
-        console.log(data);
+        
         this.datas = data
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);

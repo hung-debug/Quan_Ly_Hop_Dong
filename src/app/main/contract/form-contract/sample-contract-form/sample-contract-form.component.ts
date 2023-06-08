@@ -484,7 +484,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         })
       } else if (element.type == 2 || element.type == 3) {
         element.recipients.forEach((item: any) => {
-          console.log("item ", item);
+          
           if (item.role == 3 || item.role == 4 || item.role == 2) {
             item['type_unit'] = 'partner'
             item['selected'] = false;
@@ -805,7 +805,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             if (isSignType != 'text') {
               if(isSignType == 'so_tai_lieu') {
                 // element.is_disable = (element.role != 4 || (this.datasForm.contract_no && element.role == 4));
-                console.log("vao day ");
+                
                 element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
 
               } else {
@@ -1139,7 +1139,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   // get select người ký
   getSignSelect(d: any) {
-    console.log("d ",d);
+    
     if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
       this.textSign = true;
       this.list_font = ["Arial","Calibri","Times New Roman"];
@@ -1164,7 +1164,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     } else
       signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
-      console.log("d ", d);
+      
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
 
@@ -1202,7 +1202,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           this.isEnableSelect = true;
         }
 
-        console.log("d ",d);
+        
 
         if (!d.name && !d.recipient?.name) {
           //@ts-ignore
@@ -1219,8 +1219,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       }
     }
 
-    console.log("d ",d);
-    console.log(d.value);
+    
+    
   }
 
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
@@ -1287,7 +1287,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     let arrSignConfig: any = [];
     let cloneUserSign = [...this.datasForm.contract_user_sign];
 
-    // console.log("clone ", cloneUserSign);
+    // 
 
     cloneUserSign.forEach(element => {
       if (this.datasForm.is_action_contract_created) {
@@ -1297,7 +1297,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       } else arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
 
-    // console.log("arr ", arrSignConfig);
+    // 
     return arrSignConfig;
   }
 
@@ -1345,14 +1345,14 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   changePositionSign(e: any, locationChange: any, property: any) {
     let signElement = document.getElementById(this.objSignInfo.id);
 
-    console.log("si ", signElement);
+    
 
-    console.log("e ", e);
+    
 
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
 
-      console.log("si ", isObjSign);
+      
 
 
       if (isObjSign) {
@@ -1378,7 +1378,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
           } else if (locationChange == 'text_type') {
             let type_name = this.list_text_type.filter((p: any) => p.id == e.target.value)[0].name;
-            console.log(type_name);
+            
             isObjSign.text_type = type_name;
             signElement.setAttribute("text_type", isObjSign.text_type);
           }
@@ -1418,13 +1418,13 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             }
           });
         } else {
-          console.log("e ",e.target.value);
+          
 
-          console.log("list ", this.list_sign_name);
+          
 
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
           
-          console.log("data ", data_name);
+          
 
           if (data_name) {
             
@@ -1491,7 +1491,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     // const num = e.toString().replace(/\./g, '');
 
     // const num = this.convertCurrency(e);
-    console.log(e);
+    
     const num = e;
     d.value = num;
 
@@ -1506,7 +1506,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   }
 
   reverseInput(e: any, d: any){
-    // console.log(e);
+    // 
     // const num = this.removePeriodsFromCurrencyValue(e);
     // d.value = num;
   }
@@ -1622,7 +1622,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           })
 
           this.spinner.show();
-          console.log(this.data_sample_contract)
+          
           this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
             this.router.navigate(['/main/contract/create/draft']);
             this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
@@ -1678,7 +1678,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       let countIsSignId = 0;
       this.spinner.show();
       for (let i = 0; i < dataSignId.length; i++) {
-        console.log("data sign id ", dataSignId[i]);
+        
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
         await this.contractService.getContractSampleEdit(dataSignId[i], id).toPromise().then((data: any) => {
@@ -1783,7 +1783,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     this.contractService.checkCurrencyValue(this.datasForm);
     // this.getRemoveCopyRight();
     this.datasForm.stepLast = step;
-    console.log(this.datasForm);
+    
     this.stepChangeSampleContractForm.emit(step);
   }
   async checkNumber(countCeCa: number, countTimestamp: number) {

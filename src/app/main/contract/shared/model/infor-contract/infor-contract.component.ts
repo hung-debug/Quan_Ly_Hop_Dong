@@ -280,7 +280,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             ) {
               this.attachFileArr.push(file);
               this.datas.attachFileArr = this.attachFileArr;
-              // console.log(this.datas.attachFileArr);
+              // 
               this.attachFileNameArr.push({filename: file.name});
               if (!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length && this.datas.attachFileNameArr.length == 0) {
                 this.datas.attachFileNameArr = [];
@@ -398,7 +398,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
 
       if (countSuccess == 0 && this.uploadFileContractAgain) {
-        // console.log(this.datas.contractFile);
+        // 
         await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data: any) => {
           this.datas.filePath = data.file_object.file_path;
           this.datas.fileName = data.file_object.filename;
@@ -731,7 +731,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   convertData(datas: any) {
-    // console.log(this.datas.contractConnect);
+    // 
     if (this.datas.contractConnect != null && this.datas.contractConnect != '') {
       const array_empty: any[] = [];
       this.datas.contractConnect.forEach((element: any, index: number) => {
@@ -838,7 +838,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   callAPI_Draft() {
     //call API step 1
     this.contractService.addContractStep1(this.datas).subscribe((data) => {
-        // console.log(JSON.stringify(data));
+        // 
         this.datas.id = data?.id;
         this.datas.contract_id = data?.id;
         if (this.datas.contractFile) {
@@ -963,7 +963,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   changeAddContract(link: any) {
-    // console.log(link);
+    // 
     this.router.navigate([link]);
   }
 

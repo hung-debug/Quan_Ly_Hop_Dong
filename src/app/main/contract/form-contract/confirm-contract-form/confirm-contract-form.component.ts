@@ -109,12 +109,12 @@ export class ConfirmContractFormComponent implements OnInit {
       (p: any) => p.type == 2 || p.type == 3
     );
 
-    console.log("vao day ");
-    console.log("dsf ", this.datasForm);
+    
+    
     if (!this.datasForm.contract_user_sign) {
       if (this.datasForm.is_data_object_signature && this.datasForm.is_data_object_signature.length && this.datasForm.is_data_object_signature.length > 0) {
         this.datasForm.is_data_object_signature.forEach((res: any) => {
-          console.log("res ", res);
+          
           res['id_have_data'] = res.id;
           if (res.type == 1) {
             res['sign_unit'] = 'text';
@@ -335,7 +335,7 @@ export class ConfirmContractFormComponent implements OnInit {
       });
 
       this.spinner.show();
-      console.log(this.data_sample_contract);
+      
       this.contractService.getContractSample(this.data_sample_contract).subscribe(
           (data) => {
             if (action == 'finish_contract') {
@@ -383,10 +383,10 @@ export class ConfirmContractFormComponent implements OnInit {
   async getDefinddatasFormignEdit(datasFormignId: any,datasFormignNotId: any,action: any) {
     let datasFormample_contract: any[] = [];
     if (datasFormignId.length > 0) {
-      console.log("dsid ", datasFormignId);
+      
       datasFormignId.forEach((res: any) => {
         this.arrVariableRemove.forEach((itemRemove: any) => {
-          console.log("itt ", itemRemove);
+          
           if (itemRemove !== 'id_have_data') {
             delete res[itemRemove];
           }
@@ -405,7 +405,7 @@ export class ConfirmContractFormComponent implements OnInit {
         // datasFormignId[i].font = datasFormignId[i].font ? datasFormignId[i].font : 'Times New Roman';
         // datasFormignId[i].font_size = datasFormignId[i].size ? datasFormignId[i].size : 13;
 
-        // console.log("vao day ");
+        // 
         await this.contractService.getContractSampleEdit(datasFormignId[i], id).toPromise().then((data: any) => {
               datasFormample_contract.push(data);
             },

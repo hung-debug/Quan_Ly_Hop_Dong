@@ -39,7 +39,7 @@ export class AdminFilterPackComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    console.log("data ", this.data);
+    
 
     this.addForm = this.fbd.group({
       filter_code: this.fbd.control(this.data.filter_code),
@@ -68,7 +68,7 @@ export class AdminFilterPackComponent implements OnInit {
       filter_number_contract: this.addForm.value.filter_number_contract,
     }
     this.dialogRef.close();
-    console.log("data filter code ",data);
+    
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['/admin-main/pack'],
       {

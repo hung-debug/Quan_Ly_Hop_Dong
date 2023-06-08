@@ -69,7 +69,7 @@ export class ConfigSmsEmailComponent implements OnInit {
         this.idExpireDay = response[0].id;
         this.isSoonExpireDay = true;
 
-        console.log("inffo ", this.idExpireDay);
+        
       } else {
         this.soonExpireDay = 5;
         this.isSoonExpireDay = false;

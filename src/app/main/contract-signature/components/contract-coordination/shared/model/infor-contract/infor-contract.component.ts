@@ -160,7 +160,7 @@ export class InforContractComponent implements OnInit {
   }
 
   fileChangedAttach(e: any) {
-    console.log(e.target.files)
+    
     let files = e.target.files;
     for(let i = 0; i < files.length; i++){
 
@@ -245,7 +245,7 @@ export class InforContractComponent implements OnInit {
   }
 
   changeAddContract(link:any){
-    console.log(link);
+    
     this.router.navigate([link]);
   }
 

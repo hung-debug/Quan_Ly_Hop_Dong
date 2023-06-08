@@ -109,9 +109,9 @@ export class DashboardComponent implements OnInit {
       )
 
       this.orgList = this.orgListTmp;
-      console.log(this.orgList);
+      
       this.convertData();
-      console.log(this.list);
+      
     });
   }
 
@@ -182,7 +182,7 @@ export class DashboardComponent implements OnInit {
     window.location.href = link.replace('&type=1', '').replace('&type=', '').replace('?id','?recipientId').replace('contract-signature','c').replace('signatures','s9').replace('consider','c9').replace('secretary','s8').replace('coordinates','c8');
 
     this.dashboardService.updateViewNotification(id).subscribe(data => {
-      console.log(data);
+      
     });
   }
 
@@ -209,11 +209,11 @@ export class DashboardComponent implements OnInit {
       let numContractHeight = document.getElementById('num-contract')?.offsetHeight || 0;
       let numContractBodyHeight = document.getElementById('num-contract-body')?.offsetHeight || 0;
       let notiHeight = document.getElementById('noti')?.offsetHeight || 450;
-      console.log(notiHeight)
-      console.log(numContractHeight)
-      console.log(numContractBodyHeight)
+      
+      
+      
       this.chartHeight = numContractHeight + notiHeight + numContractBodyHeight - 37;
-      console.log(this.chartHeight)
+      
 
 
       if(localStorage.getItem('lang') == 'vi' || sessionStorage.getItem('lang') == 'vi')
@@ -335,7 +335,7 @@ export class DashboardComponent implements OnInit {
     let numContractBodyHeight = document.getElementById('num-contract-body')?.offsetHeight || 450;
     let numContractHeight = document.getElementById('num-contract')?.offsetHeight || 0;
     let notiHeight = chartHeight - numContractBodyHeight - numContractHeight;
-    console.log(numContractBodyHeight);
+    
     return {'height': notiHeight + 'px', 
 };
   }
@@ -344,7 +344,7 @@ export class DashboardComponent implements OnInit {
     this.searchCountCreate();
 
     this.dashboardService.countContractReceived("", "").subscribe(data => {
-      console.log(data);
+      
       this.numberWaitProcess = data.processing;
       this.numberComplete = data.processed;
       this.numberExpire = data.prepare_expires;
@@ -353,7 +353,7 @@ export class DashboardComponent implements OnInit {
 
     this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
       this.listNotification = data.entities;
-      console.log(this.listNotification);
+      
     });
   }
 }

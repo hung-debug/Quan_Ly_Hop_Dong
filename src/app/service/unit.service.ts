@@ -65,7 +65,7 @@ export class UnitService {
 
   //add api thêm mới tổ chức user
   addUnit(datas: any) {
-    console.log("datas unit ", datas);
+    
 
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -210,7 +210,7 @@ export class UnitService {
   handleError(error: HttpErrorResponse) {
     if (error.status === 0 && error.error instanceof ProgressEvent) {
       // A client-side or network error occurred. Handle it accordingly.
-      console.log('Client side error:', error.error)
+      
       this.router.navigateByUrl("/login");
     }
     return throwError(this.errorData);

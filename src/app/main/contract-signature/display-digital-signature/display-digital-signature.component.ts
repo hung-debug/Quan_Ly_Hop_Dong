@@ -18,7 +18,7 @@ export class DisplayDigitalSignatureComponent implements OnInit {
   @Input() srcMark: any | undefined | null;
 
   constructor() {
-    console.log("s ", this.srcMark)
+    
    }
 
   async ngOnInit(): Promise<void> {
@@ -37,10 +37,10 @@ export class DisplayDigitalSignatureComponent implements OnInit {
 
   convertImage() {
     const imageRender = <HTMLElement>document.getElementById('export-html');
-    console.log(imageRender);
+    
     if (imageRender) {
       domtoimage.toPng(imageRender).then((res: any) => {
-        console.log(res.split(",")[1]);
+        
       })
     }
   }

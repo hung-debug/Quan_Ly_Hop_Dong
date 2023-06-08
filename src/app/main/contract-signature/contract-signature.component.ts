@@ -271,10 +271,10 @@ export class ContractSignatureComponent implements OnInit {
   viewMany() {
     this.spinner.show();
     this.typeDisplay = 'viewMany';
-    console.log();
+    
 
     this.contractService.getViewContractMyProcessList().subscribe((data) => {
-      console.log("data", data);
+      
       this.checkedAll = false;
       this.contractViewList = data;
       if (this.pageTotal == 0) {
@@ -284,7 +284,7 @@ export class ContractSignatureComponent implements OnInit {
       } else {
         this.setPage();
       }
-      console.log("contractViewList", this.contractViewList);
+      
 
       this.contractViewList.forEach((key: any, v: any) => {
         this.contractViewList[v].contractId =
@@ -306,7 +306,7 @@ export class ContractSignatureComponent implements OnInit {
         this.contractViewList[v].contractReleaseState =
           key.participant.contract.release_state;
       });
-      console.log('this.contractViewList', this.contractViewList);
+      
 
       this.spinner.hide();
     },
@@ -329,12 +329,12 @@ export class ContractSignatureComponent implements OnInit {
       this.p, 20, 30).subscribe((data) => {
         this.checkedAll = false;
         this.dataChecked = [];
-        console.log("data", data);
+        
 
         this.contractDownloadList = data.entities;
         this.pageTotal = data.total_elements;
         this.totalPage = data.total_pages;
-        // console.log("totalPage",this.totalPage);
+        // 
         
         if (this.pageTotal == 0) {
           this.p = 0;
@@ -644,7 +644,7 @@ export class ContractSignatureComponent implements OnInit {
           return;
         }
 
-        console.log('data ', this.dataChecked);
+        
 
         if (
           this.dataChecked[lengthItem - 1].card_id !=
@@ -687,7 +687,7 @@ export class ContractSignatureComponent implements OnInit {
 
   toggleDownload(checkedAll: boolean){
     this.dataChecked = [];
-    console.log("contractDownloadList",this.contractDownloadList);
+    
     if(checkedAll){
       
       
@@ -742,7 +742,7 @@ export class ContractSignatureComponent implements OnInit {
       id: item.id,
       selectedId: item.id
     }
-    console.log("dataaaa", data);
+    
 
     this.contractViewList[index1].checked = item.checked
     if (this.dataChecked.some(el => el.id === data.id)) {
@@ -854,7 +854,7 @@ export class ContractSignatureComponent implements OnInit {
   setPageDownload() {
     this.pageStart = (this.p - 1) * 20 + 1;
     this.pageEnd = this.p * 20;
-    console.log("pageTotal",this.pageTotal);
+    
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
     }
@@ -915,14 +915,14 @@ export class ContractSignatureComponent implements OnInit {
       width: '580px',
     });
     dialogRef.afterClosed().subscribe(async (isSubmit: any) => {
-      console.log("dataChecked", this.dataChecked);
+      
       if (isSubmit) {
         for (let index = 0; index < this.dataChecked.length; index++) {
           this.contractServiceV1
             .updateInfoContractConsider([], this.dataChecked[index].id)
             .subscribe(
               (result) => {
-                console.log("#######result", result);
+                
                 this.router
                   .navigateByUrl('/', { skipLocationChange: true })
                   .then(() => {
@@ -1040,7 +1040,7 @@ export class ContractSignatureComponent implements OnInit {
           }
         }
 
-        console.log("result ", result);
+        
 
         if (result.mark) {
           const data = {
@@ -1391,7 +1391,7 @@ export class ContractSignatureComponent implements OnInit {
                       idSignMany[i],
                       dataSignMobi.data.FileDataSigned
                     );
-                    console.log('sign ', sign);
+                    
                   } catch (err) {
                     this.toastService.showErrorHTMLWithTimeout(
                       'Lỗi  đẩy file sau khi ký USB Token ',
@@ -1761,7 +1761,7 @@ export class ContractSignatureComponent implements OnInit {
             .toPromise();
           const filePdfSigned = mergeTimeStamp.base64Data;
 
-          console.log('pdf ', filePdfSigned);
+          
 
           const sign = await this.contractServiceV1.updateDigitalSignatured(
             idSignMany[i],
@@ -1866,7 +1866,7 @@ export class ContractSignatureComponent implements OnInit {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result;
     });
   }
@@ -1874,7 +1874,7 @@ export class ContractSignatureComponent implements OnInit {
   downloadContract(id: any) {
     this.isContractService.getFileZipContract(id).subscribe(
       (data) => {
-        //console.log(data);
+        //
         this.uploadService
           .downloadFile(data.path)
           .subscribe((response: any) => {
@@ -1920,7 +1920,7 @@ export class ContractSignatureComponent implements OnInit {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result;
     });
   }
@@ -1932,7 +1932,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   openDetail(id: number) {
-    console.log('status ', this.status);
+    
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this.router.navigate(['/main/form-contract/detail/' + id], {
         queryParams: {
@@ -2051,7 +2051,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   t(item: any) {
-    console.log(item);
+    
   }
 
   getNameStatusCeca(status: any, ceca_push: any, ceca_status: any) {

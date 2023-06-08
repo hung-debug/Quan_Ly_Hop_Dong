@@ -81,9 +81,6 @@ export class AdminPackComponent implements OnInit {
     this.infoPackRole = this.checkRole(this.infoPackRole, 'QLGDV_04');
 
     this.route.queryParams.subscribe((params) => {
-      console.log('param filter re ', params);
-      console.log(params.filter_address);
-
       if (typeof params.filter_code != 'undefined' && params.filter_code) {
         this.filter_code = params.filter_code;
       } else {
@@ -109,8 +106,6 @@ export class AdminPackComponent implements OnInit {
       }
 
       if (typeof params.filter_status != 'undefined' && params.filter_status) {
-        console.log('pa ', params.filter_status);
-
         if (params.filter_status == 1) {
           this.filter_status = 1;
         } else if (params.filter_status == 2) {
@@ -205,7 +200,6 @@ export class AdminPackComponent implements OnInit {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
       let is_data = result;
     });
   }
@@ -223,7 +217,6 @@ export class AdminPackComponent implements OnInit {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
       let is_data = result;
     });
   }
@@ -242,7 +235,6 @@ export class AdminPackComponent implements OnInit {
         data,
       });
       dialogRef.afterClosed().subscribe((result: any) => {
-        console.log('the close dialog');
         let is_data = result;
       });
     }
@@ -261,7 +253,7 @@ export class AdminPackComponent implements OnInit {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result;
     });
   }
@@ -269,7 +261,7 @@ export class AdminPackComponent implements OnInit {
   autoSearch(event: any) {
     this.table.first = 0;
 
-    console.log('event ', event);
+    
 
     this.table.first = 0;
 
@@ -301,7 +293,7 @@ export class AdminPackComponent implements OnInit {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result;
     });
   }

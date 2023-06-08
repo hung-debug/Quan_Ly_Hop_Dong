@@ -113,7 +113,7 @@ export class AddContractTemplateComponent implements OnInit {
         const array_empty: any [] = [];
         array_empty.push({ref_id: Number(params['id'])});
         this.datas.contractConnect = array_empty;
-        console.log(this.datas.contractConnect);
+        
       } else if (this.action == 'edit') {
         this.id = params['id'];
         this.appService.setTitle('Sửa mẫu hợp đồng');
@@ -144,7 +144,7 @@ export class AddContractTemplateComponent implements OnInit {
   }
 
   getDataContractCreated(data: any) {
-    console.log("data ", data);
+    
     // this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
     if (data) {
       let fileName = data.i_data_file_contract.filter((p: any) => p.type == 1 && p.status == 1)[0];
@@ -170,8 +170,8 @@ export class AddContractTemplateComponent implements OnInit {
       this.datas.start_time = data.is_data_contract.start_time;
       this.datas.end_time = data.is_data_contract.end_time;
 
-      console.log("add ", data.is_data_contract.start_time);
-      console.log("add1 ", this.datas.end_time);
+      
+      
   
       this.datas = Object.assign(this.datas, data.is_data_contract);
       this.step = variable.stepSampleContract.step1;
@@ -180,7 +180,7 @@ export class AddContractTemplateComponent implements OnInit {
 
 
   receiveMessage(event: any) {
-    console.log(event)
+    
     this.shareData = event;
   }
 

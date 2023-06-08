@@ -51,7 +51,7 @@ export class AdminActiveUnitComponent implements OnInit {
             this.adminUnitService.addRoleByOrg(dataRoleIn).subscribe(
               (dataRole) => {
                 //this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò cho tổ chức thành công!', "", 3000);
-                console.log(dataRole);
+                
                 //them nguoi dung
                 const dataUserIn = {
                   name: 'Admin',
@@ -65,7 +65,7 @@ export class AdminActiveUnitComponent implements OnInit {
 
                 this.adminUnitService.addUser(dataUserIn).subscribe(
                   (dataUser) => {
-                    console.log(dataUser);
+                    
                     this.toastService.showSuccessHTMLWithTimeout(
                       'Kích hoạt thành công!',
                       '',

@@ -297,7 +297,7 @@ export class AddUnitComponent implements OnInit {
     this.submitted = true;
     // stop here if form is invalid
     if (this.addForm.invalid) {
-      console.log("invalid ", this.addForm);
+      
       return;
     }
     const data = {

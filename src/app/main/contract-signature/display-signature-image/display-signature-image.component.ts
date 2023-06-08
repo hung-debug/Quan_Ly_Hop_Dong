@@ -32,10 +32,10 @@ export class DisplaySignatureImageComponent implements OnInit {
 
   convertImage() {
     const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
-    console.log(imageRender);
+    
     if (imageRender) {
       domtoimage.toPng(imageRender).then((res: any) => {
-        console.log(res.split(",")[1]);
+        
       })
     }
   }

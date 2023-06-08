@@ -47,7 +47,7 @@ export class FilterListDialogComponent implements OnInit {
     this.organization_id = Number(this.data.organization_id);
     //lay danh sach to chuc
     this.contractTypeService.getContractTypeList("", "").subscribe(data => {
-      console.log(data);
+      
       this.contractTypeList = data;
     });
 
@@ -96,7 +96,7 @@ export class FilterListDialogComponent implements OnInit {
       organization_id: this.organization_id
     }
     this.dialogRef.close();
-    console.log(data);
+    
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['/main/contract/create/' + data.status],
       {

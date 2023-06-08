@@ -31,7 +31,7 @@ export class DeleteCustomerComponent implements OnInit {
         this.spinner.hide();
         this.toastService.showSuccessHTMLWithTimeout("Xóa khách hàng thành công!", "", 3000);
         this.dialogRef.close();
-        console.log(data);
+        
         // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         //   this.router.navigate(['/main/customer']);
         // });

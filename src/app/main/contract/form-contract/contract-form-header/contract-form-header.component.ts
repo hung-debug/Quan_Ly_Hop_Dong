@@ -38,7 +38,7 @@ export class ContractFormHeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("form header ");
+    
   }
 
   saveContract(modal: any): void {

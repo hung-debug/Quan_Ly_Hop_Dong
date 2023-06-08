@@ -46,12 +46,12 @@ export class PkiDialogSignComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log("data",this.datas);
+    
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
     this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
-      console.log("response", response);
+      
       const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-      console.log("ArrRecipients", ArrRecipients);
+      
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
@@ -60,10 +60,10 @@ export class PkiDialogSignComponent implements OnInit {
           return
         }
       });
-      console.log("ArrRecipientsNew111", ArrRecipientsNew);
+      
 
       if (!ArrRecipientsNew) {
-        console.log("ArrRecipientsNew111", ArrRecipientsNew);
+        
         this.toastService.showErrorHTMLWithTimeout(
           'Bạn không có quyền xử lý hợp đồng này!',
           '',
@@ -81,7 +81,7 @@ export class PkiDialogSignComponent implements OnInit {
           return
         }
       };
-      console.log("this.currentUser.email", this.currentUser);
+      
 
     this.contractService.getCheckSignatured(this.data.recipientId).subscribe((res: any) => {
       if (res && res.status == 2) {
@@ -92,7 +92,7 @@ export class PkiDialogSignComponent implements OnInit {
       this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
     })
 
-    console.log("pki open ");
+    
     const pattern = /^[0-9]*$/;
 
     if (!this.phoneNum || (this.phoneNum && this.phoneNum.length < 9 || this.phoneNum.length > 11) || (this.phoneNum && !pattern.test(this.phoneNum))) {
@@ -106,7 +106,7 @@ export class PkiDialogSignComponent implements OnInit {
     }
 
     if(!this.networkCode) {
-      console.log("netwwork code ", this.networkCode);
+      
       this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn nhà mạng', '', 3000);
       return;
     }
@@ -118,7 +118,7 @@ export class PkiDialogSignComponent implements OnInit {
     }
     const itemNameNetwork = this.nl.find((nc: any) => nc.id == this.networkCode);
     if (itemNameNetwork) {
-      console.log("itemNameNetwork ", itemNameNetwork);
+      
 
 
       this.networkCompany = itemNameNetwork.id == 'bcy' ? 'bcy' : itemNameNetwork.name;
@@ -130,7 +130,7 @@ export class PkiDialogSignComponent implements OnInit {
       phone_tel: this.networkCode,
     };
 
-    console.log("res dialog ",resDialog);
+    
 
     this.dialogRef.close(resDialog);
   }

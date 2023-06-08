@@ -248,7 +248,7 @@ export class ContractHeaderComponent implements OnInit {
   }
 
   t() {
-    console.log(this.datas);
+    
   }
 
   //--end

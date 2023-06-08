@@ -63,7 +63,7 @@ export class ForwardContractComponent implements OnInit {
       phone: "",
       card_id: "",
     });
-    console.log("datas",this.datas);
+    
     
     // this.locale = this.datas?.dataContract?.is_data_contract?.participants[0]?.recipients[0]?.locale;
     const currentRecipientData = this.getTargetRecipientData(this.datas?.recipientId);
@@ -134,7 +134,7 @@ export class ForwardContractComponent implements OnInit {
 
     if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
       const participants = this.datas?.dataContract?.is_data_contract?.participants;
-      console.log("participants",participants);
+      
       for (const participant of participants) {
         for (const recipient of participant.recipients) {
           if (updatedInfo.name == recipient.name) {
@@ -145,7 +145,7 @@ export class ForwardContractComponent implements OnInit {
     }
 
     if (!isInRecipient) {
-      console.log("isInRecipient",isInRecipient);
+      
       this.toastService.showErrorHTMLWithTimeout(
         'Bạn không có quyền xử lý hợp đồng này do tên không trùng khớp!',
         '',
@@ -175,7 +175,7 @@ export class ForwardContractComponent implements OnInit {
           return
         }
       });
-      console.log("ArrRecipientsNew111", ArrRecipientsNew);
+      
 
       if (!ArrRecipientsNew) {
 
@@ -196,7 +196,7 @@ export class ForwardContractComponent implements OnInit {
           return
         }
       };
-      console.log("this.currentUser.email", this.currentUser);
+      
       if (!String(this.myForm.value.name)) {
         // this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền'
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập tên người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
@@ -280,9 +280,9 @@ export class ForwardContractComponent implements OnInit {
           this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
         })
 
-        console.log("role ", this.data.role_coordination);
+        
 
-        console.log("role 1 ", this.datas.dataContract.roleContractReceived)
+        
 
         if (coutError == 0) {
           //is_replace: false = giữ lại uỷ quyền
@@ -297,7 +297,7 @@ export class ForwardContractComponent implements OnInit {
             login_by: this.login,
             locale: this.locale
           };
-          console.log("dataAuthorize",dataAuthorize);
+          
           
 
           if (this.login == 'phone') {
@@ -391,7 +391,7 @@ export class ForwardContractComponent implements OnInit {
   }
 
   t() {
-    console.log(this);
+    
   }
 
 }

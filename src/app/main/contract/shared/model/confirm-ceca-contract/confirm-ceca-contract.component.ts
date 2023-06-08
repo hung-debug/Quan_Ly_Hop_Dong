@@ -20,7 +20,7 @@ export class ConfirmCecaContractComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log("isceca ", this.isCeCA);
+    
     this.dialogRef.close(this.isCeCA);
   }
 }

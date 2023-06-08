@@ -25,7 +25,7 @@ export class AdminDetailPackUnitComponent implements OnInit {
       .getPackUnitByIdPack(this.data.id, this.data.idPack)
       .subscribe(
         (response) => {
-          console.log("response ", response);
+          
           this.datas = response;
 
           if(this.datas.serviceType == 'NORMAL') {

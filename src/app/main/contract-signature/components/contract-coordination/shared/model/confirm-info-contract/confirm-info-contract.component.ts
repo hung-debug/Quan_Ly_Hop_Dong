@@ -103,7 +103,7 @@ export class ConfirmInfoContractComponent implements OnInit {
 
   next() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    console.log("datas dieu phoi", this.datas);
+    
     let id_recipient_signature = null;
 
     for (const d of this.datas.is_data_contract.participants) {
@@ -117,13 +117,13 @@ export class ConfirmInfoContractComponent implements OnInit {
       }
       if (id_recipient_signature) break;
     }
-    console.log("id_recipient_signature", id_recipient_signature);
+    
     this.contractService.getDetermineCoordination(id_recipient_signature).subscribe(async (response) => {
-      console.log("response", response);
+      
 
       // const ArrRecipients = response.is_data_contract.participants.map((ele: any) => ele.recipients);
       const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-      console.log("ArrRecipients", ArrRecipients);
+      
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
@@ -132,7 +132,7 @@ export class ConfirmInfoContractComponent implements OnInit {
           return
         }
       });
-      console.log("ArrRecipientsNew111", ArrRecipientsNew);
+      
 
       if (!ArrRecipientsNew) {
 
@@ -151,7 +151,7 @@ export class ConfirmInfoContractComponent implements OnInit {
           return
         }
       };
-      console.log("this.currentUser.email", this.currentUser);
+      
 
 
       let isHaveFieldId: any[] = [];
@@ -204,7 +204,7 @@ export class ConfirmInfoContractComponent implements OnInit {
     // if (isSuccess == 0) {
     let response_determine_contract: any = [];
     await this.contractService.getContractDetermine(this.datas.determine_contract, this.datas.data_contract_document_id.contract_id).toPromise().then((res: any) => {
-      // console.log('success step confirm 2');
+      // 
       if (res && res.length > 0) {
         response_determine_contract = res.filter((res: any) => res.type != 1 && res.recipients.some((val: any) => val.id == this.datas.recipient_id_coordition))[0];
       }
@@ -217,7 +217,7 @@ export class ConfirmInfoContractComponent implements OnInit {
     // }
     // =============================
 
-    console.log(response_determine_contract);
+    
     // mang update cac doi tuong o ky moi (them or bi xoa)
     let isErrorNotId = false;
     if (dataSignNotId.length > 0) {

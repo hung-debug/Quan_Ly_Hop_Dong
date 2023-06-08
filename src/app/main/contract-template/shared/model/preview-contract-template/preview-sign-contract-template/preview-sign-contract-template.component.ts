@@ -19,7 +19,7 @@ export class PreviewSignContractTemplateComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log("datas ", this.datas);
+    
   }
 
   getText(sign: any) {

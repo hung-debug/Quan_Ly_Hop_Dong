@@ -152,7 +152,7 @@ export class AddContractComponent implements OnInit {
   isQLHD_11: boolean = true;
 
   ngOnInit() {
-    console.log("this ");
+    
     this.userService.checkServiceStatus().subscribe((response) => {
 
       if (response.status == 'Using' || environment.flag == 'NB') {
@@ -167,17 +167,17 @@ export class AddContractComponent implements OnInit {
               //lay id role
               this.roleService.getRoleById(data?.role_id).subscribe(
                 (data) => {
-                  console.log(data);
+                  
                   let listRole: any[];
                   listRole = data.permissions;
                   this.isQLHD_01 = listRole.some((element) => element.code == 'QLHD_01');
-                  console.log("ql ", this.isQLHD_01);
+                  
 
                   this.isQLHD_14 = listRole.some((element) => element.code == 'QLHD_14');
-                  console.log("ql ", this.isQLHD_14);
+                  
 
                   this.isQLHD_15 = listRole.some((element) => element.code == 'QLHD_15');
-                  console.log("ql ", this.isQLHD_15);
+                  
 
                   // this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
                   // this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
@@ -192,10 +192,10 @@ export class AddContractComponent implements OnInit {
                     this.type = 3;
                     this.stepBatch = variable.stepSampleContractBatch.step1;
 
-                    console.log("step ", this.stepBatch);
+                    
                   }
 
-                  console.log("type ", this.type);
+                  
                 },
                 (error) => {
                   setTimeout(() => this.router.navigate(['/login']));
@@ -259,7 +259,7 @@ export class AddContractComponent implements OnInit {
                   is_data_object_signature: rs[2],
                 };
 
-                console.log("rs ", rs);
+                
 
                 this.getDataContractCreated(data_api);
               },
@@ -281,7 +281,7 @@ export class AddContractComponent implements OnInit {
             } else if (this.type == 2) {
               this.stepForm = variable.stepSampleContractForm.step1;
 
-              console.log("stepForm ", this.stepForm);
+              
             } else if (this.type == 3) {
               this.stepBatch = variable.stepSampleContractBatch.step1;
             }
@@ -372,9 +372,9 @@ export class AddContractComponent implements OnInit {
   }
 
   changeType(e: any) {
-    console.log('a');
-    console.log(this.type);
-    console.log(this.isQLHD_14);
+    
+    
+    
     if (this.type == 1) {
       this.step = variable.stepSampleContract.step1;
     } else if (this.type == 2) {
@@ -406,7 +406,7 @@ export class AddContractComponent implements OnInit {
   }
 
   receiveMessage(event: any) {
-    console.log(event);
+    
     this.shareData = event;
   }
 
@@ -456,12 +456,12 @@ export class AddContractComponent implements OnInit {
 
   getStep(e: any) {
     if (this.type == 1) {
-      console.log("vao day ");
+      
       this.step = e;
     } else if (this.type == 2) {
       this.stepForm = e;
     } else if (this.type == 3) {
-      console.log("vao day ");
+      
       this.stepBatch = e;
     }
     this.is_disable =
@@ -471,7 +471,7 @@ export class AddContractComponent implements OnInit {
   }
 
   t() {
-    console.log(this);
+    
   }
 
   getDataContractForm(idContractTemplate: any) {

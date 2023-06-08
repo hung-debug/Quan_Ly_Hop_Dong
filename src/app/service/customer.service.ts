@@ -221,7 +221,7 @@ export class CustomerService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    console.log(data);
+    
     const handlers: Handler[] = [];
     for(let i = 0; i < data.handlers.length; i++){
       let handler: Handler = {
@@ -267,7 +267,7 @@ export class CustomerService {
     //   locale: data.locale,
     //   card_id: data.card_id,
     // });
-    // console.log(body);
+    // 
     const customer = {
       id: data.id,
       name: data.name,

@@ -33,7 +33,7 @@ export class DetailRoleComponent implements OnInit {
   ngOnInit(): void {
     this.roleService.getRoleById(this.data.id).subscribe(
       data => {
-        console.log(data);
+        
         this.name = data.name,
         this.code = data.code,
         this.role = data.role,  
