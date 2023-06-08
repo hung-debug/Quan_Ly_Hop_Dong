@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from 'src/app/service/toast.service';
@@ -16,7 +16,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   templateUrl: './add-user.component.html',
   styleUrls: ['./add-user.component.scss']
 })
-export class AddUserComponent implements OnInit {
+export class AddUserComponent implements OnInit, OnDestroy {
   
   submitted = false;
   get f() { return this.addForm.controls; }
@@ -38,6 +38,7 @@ export class AddUserComponent implements OnInit {
   imgSignBucket:null;
   imgSignPath:null;
   isEditRole:boolean=false;
+  isMailSame: boolean = false;
 
   organizationName:any;
   roleName:any;
@@ -231,6 +232,8 @@ export class AddUserComponent implements OnInit {
     //lay id user
     this.spinner.show();
     let userId = this.userService.getAuthCurrentUser().id;
+    this.isMailSame = sessionStorage.getItem('isMailSame') == "true" ? true : false;  
+
     
     this.userService.getUserById(userId).subscribe(
       data => {
@@ -244,7 +247,7 @@ export class AddUserComponent implements OnInit {
             listRole = data.permissions;
 
             this.isQLND_01 = listRole.some(element => element.code == 'QLND_01');
-            this.isQLND_02 = listRole.some(element => element.code == 'QLND_02');
+            this.isQLND_02 = listRole.some(element => element.code == 'QLND_02') || this.isMailSame;
 
             this.getDataOnInit();
           }, error => {
@@ -579,5 +582,9 @@ export class AddUserComponent implements OnInit {
     else if(code == 'mark')
       // @ts-ignore
       document.getElementById('attachFileMark').click();
+  }
+
+  ngOnDestroy(): void {
+      sessionStorage.removeItem('isMailSame');
   }
 }
