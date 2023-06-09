@@ -402,6 +402,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   getPageData() {
+    window.scrollTo({ top: 0 });
     if (this.typeDisplay == 'signOne') {
       this.getContractList();
     }
@@ -414,6 +415,10 @@ export class ContractSignatureComponent implements OnInit {
     if (this.filter_status % 10 == 1) {
       this.filter_status = 1;
     }
+    this.contractServiceV1.sidebarContractEvent.subscribe((event: any) => {
+      if(event='contract-signature')
+      this.p = 1;
+    });
 
     //get list contract share
     if (this.filter_status == -1) {
