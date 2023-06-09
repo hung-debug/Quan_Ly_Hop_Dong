@@ -33,6 +33,12 @@
             {{datas.is_data_contract.original_contract_name}}
           </span>
         </div>
+        <div *ngIf="datas.is_data_contract.status == 40 && datas.is_data_contract.liquidationContractId">
+          <span class="title-contract">{{'contract.liquidated' | translate}}:</span>
+          <span style="cursor: pointer; text-decoration: underline; color:#106DB6" (click)="openDetailLiquidatedContract(datas.is_data_contract.orginalContractId)">
+            {{datas.is_data_contract.liquidation_contract_name}}
+          </span>
+        </div>
         <div>
           <span class="title-contract">{{'contract.connect' | translate}}:
           </span>
