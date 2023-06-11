@@ -25,6 +25,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { UserService } from 'src/app/service/user.service';
 import { isPdfFile } from "pdfjs-dist";
 import { CheckZoomService } from "src/app/service/check-zoom.service";
+import { DetectCoordinateService } from "src/app/service/detect-coordinate.service";
 
 @Component({
   selector: 'app-sample-contract-form',
@@ -126,6 +127,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     public translate: TranslateService,
     private userService: UserService,
     private checkZoomService: CheckZoomService,
+    private detectCoordinateService: DetectCoordinateService
   ) {
     this.stepForm = variable.stepSampleContractForm.step3
   }
@@ -590,45 +592,47 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           this.objDrag[this.signCurent['id']] = {};
         }
         // this.isMove = false;
-        let layerX;
-        // @ts-ignore
-        if ("left" in canvasInfo) {
-          layerX = rect_location.left - canvasInfo.left;
-        }
-
-        let layerY = 0;
-        //@ts-ignore
-        if ("top" in canvasInfo) {
-          layerY = canvasInfo.top <= 0 ? rect_location.top + Math.abs(canvasInfo.top) : rect_location.top - Math.abs(canvasInfo.top);
-        }
-
-        let pages = event.relatedTarget.id.split("-");
-        let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
-        // @ts-ignore
-        // if (page > 1) {
-        //   // @ts-ignore
-        //   for (let i = 1; i < page; i++) {
-        //     let canvasElement = document.getElementById("canvas-step3-" + i);
-        //     // @ts-ignore
-        //     let canvasInfo = canvasElement.getBoundingClientRect();
-        //     layerY += canvasInfo.height + 2;
-        //   }
-        //   // @ts-ignore
-        //   layerY += page / 3;
+        // let layerX;
+        // // @ts-ignore
+        // if ("left" in canvasInfo) {
+        //   layerX = rect_location.left - canvasInfo.left;
         // }
 
-        if (page > 1) {
-          let countPage = 0;
-          for (let i = 1; i < page; i++) {
-            let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
-            let canvasInfo = canvasElement.getBoundingClientRect();
-            countPage += canvasInfo.height;
-          }
-          let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
-          let canvasInfo = canvasElement.getBoundingClientRect();
-          layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5*(page - 1);
-        }
+        // let layerY = 0;
+        // //@ts-ignore
+        // if ("top" in canvasInfo) {
+        //   layerY = canvasInfo.top <= 0 ? rect_location.top + Math.abs(canvasInfo.top) : rect_location.top - Math.abs(canvasInfo.top);
+        // }
 
+        // let pages = event.relatedTarget.id.split("-");
+        // let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
+        // // @ts-ignore
+        // // if (page > 1) {
+        // //   // @ts-ignore
+        // //   for (let i = 1; i < page; i++) {
+        // //     let canvasElement = document.getElementById("canvas-step3-" + i);
+        // //     // @ts-ignore
+        // //     let canvasInfo = canvasElement.getBoundingClientRect();
+        // //     layerY += canvasInfo.height + 2;
+        // //   }
+        // //   // @ts-ignore
+        // //   layerY += page / 3;
+        // // }
+
+        // if (page > 1) {
+        //   let countPage = 0;
+        //   for (let i = 1; i < page; i++) {
+        //     let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
+        //     let canvasInfo = canvasElement.getBoundingClientRect();
+        //     countPage += canvasInfo.height;
+        //   }
+        //   let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
+        //   let canvasInfo = canvasElement.getBoundingClientRect();
+        //   layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5*(page - 1);
+        // }
+
+        let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth);
+        let layerY = this.detectCoordinateService.detectY(event, rect_location, canvasInfo);
 
         let _array = Object.values(this.obj_toa_do);
         this.cdRef.detectChanges(); // render lại view
