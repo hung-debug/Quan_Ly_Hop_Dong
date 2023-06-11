@@ -673,5 +673,6 @@
   "folder.edit": "Edit folder",
   "folder.delete": "Delete folder",
   "folder.openDetail": "Detail folder",
-  "confirm.folder.delete": "Are you sure you want to delete this folder?"
+  "confirm.folder.delete": "Are you sure you want to delete this folder?",
+  "edit.exp.sign.time":"Edit signing expiration date"
   }

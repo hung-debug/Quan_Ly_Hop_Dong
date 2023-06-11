@@ -673,7 +673,8 @@
   "folder.edit": "Sửa thư mục",
   "folder.delete": "Xóa thư mục",
   "folder.openDetail": "Xem chi tiết thư mục",
-  "confirm.folder.delete": "Bạn có chắc chắn muốn xóa thư mục này không?"
+  "confirm.folder.delete": "Bạn có chắc chắn muốn xóa thư mục này không?",
+  "edit.exp.sign.time":"Chỉnh sửa ngày hết hạn ký"
 
   
 }
