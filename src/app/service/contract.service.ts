@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -31,6 +31,7 @@ export interface File {
 export class ContractService {
   private messageShareData = new BehaviorSubject<unknown>('');
   currentMessage = this.messageShareData.asObservable();
+  sidebarContractEvent: EventEmitter<any> = new EventEmitter() ;
 
   listContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract`;
   listPastContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract/organization-old`;
@@ -1547,6 +1548,10 @@ export class ContractService {
         }
       }
     })
+  }
+
+  emitSidebarContractEvent(eventData: any) {
+    this.sidebarContractEvent.emit(eventData);
   }
 
   getDetailInforContract(idContract: any) {

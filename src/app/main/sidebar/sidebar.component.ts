@@ -1,3 +1,4 @@
+import { ContractService } from 'src/app/service/contract.service';
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {trigger, state, style, transition, animate} from '@angular/animations';
 import {SidebarService} from './sidebar.service';
@@ -24,7 +25,8 @@ export class SidebarComponent implements OnInit {
 
   constructor(
     public sidebarservice: SidebarService,
-    private router: Router
+    private router: Router,
+    private contractService: ContractService
   ) {
     this.menus = sidebarservice.getMenuList();
   }
@@ -41,7 +43,7 @@ export class SidebarComponent implements OnInit {
 
   // set active dropdown
   toggle(currentMenu: any) {
-    
+    console.log("click sidebar")
     if (currentMenu.type === 'dropdown') {
       currentMenu.activeDrop = true;
       this.menus.forEach((element: any) => {
@@ -95,11 +97,13 @@ export class SidebarComponent implements OnInit {
         });
       }
     });
-
     if (routerLink == 'contract-signature') {
-      this.evenSelectSidebar.emit(routerLink)
-    } else
+      this.evenSelectSidebar.emit(routerLink);
+      this.contractService.sidebarContractEvent.emit(routerLink);
+    } else {
       this.evenSelectSidebar.emit(undefined)
+      this.contractService.sidebarContractEvent.emit(undefined);
+    }
     //set parent active
     currentMenu.active = true;
     this.getState(currentMenu);

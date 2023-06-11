@@ -666,6 +666,7 @@
   "contract.liquidation": "Thanh lý hợp đồng",
   "contract.status.liquidated": "Đã thanh lý",
   "contract.original": "Hợp đồng gốc",
+  "contract.liquidated": "Hợp đồng thanh lý",
   "folder.add": "Thêm thư mục",
   "folder.name": "Tên thư mục",
   "folder.description": "Mô tả",

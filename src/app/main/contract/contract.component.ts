@@ -456,6 +456,10 @@ export class ContractComponent implements OnInit, AfterViewInit {
   getContractList() {
     this.pageTotal = 0;
     this.roleMess = "";
+    this.contractService.sidebarContractEvent.subscribe((event: any) => {
+      if(event='contract-signature')
+      this.p = 1;
+    })
     if (this.isOrg == 'off' && !this.isQLHD_05) {
       this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
 

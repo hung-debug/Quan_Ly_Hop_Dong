@@ -330,8 +330,13 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         if(this.datas.is_data_contract.originalContractId)
         this.contractService.getDataCoordination(this.datas.is_data_contract.originalContractId).subscribe((item) =>{
           this.datas.is_data_contract.original_contract_name =  item.name;
-          console.log(item)
         })
+
+        if(this.datas.is_data_contract.liquidationContractId)
+        this.contractService.getDataCoordination(this.datas.is_data_contract.liquidationContractId).subscribe((item) =>{
+          this.datas.is_data_contract.liquidation_contract_name =  item.name;
+        })
+        console.log(this.datas);
 
         let email = JSON.parse(localStorage.getItem('currentUser') || '')
           ?.customer.info.email;
@@ -1015,9 +1020,9 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   endContract() {
-    if(this.action = 'viewInFolder'){
-      this.router.navigate(['/main/contract/view/' + this.idContract]);
-    } else 
+    // if(this.action = 'viewInFolder'){
+    //   this.router.navigate(['/main/contract/view/' + this.idContract]);
+    // } else 
     this.actionBack();
   }
 
@@ -1581,23 +1586,41 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     }
   }
 
-  openDetailOriginalContract(id: number){
+  openDetailOriginalContract(data: any){
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-      this.router.navigate(['/main/form-contract/detail/' + id],
+      this.router.navigate(['/main/form-contract/detail/' +data.originalContractId],
       {
         queryParams: {
           'page': 1,
-          'filter_type': this.activeRoute.snapshot.paramMap.get('filter_type'), 
-          'filter_contract_no': this.activeRoute.snapshot.paramMap.get('filter_contract_no'),
-          'filter_from_date': this.activeRoute.snapshot.paramMap.get('filter_from_date'),
-          'filter_to_date': this.activeRoute.snapshot.paramMap.get('filter_to_date'),
-          'isOrg': this.activeRoute.snapshot.paramMap.get('isOrg'),
-          'organization_id': this.activeRoute.snapshot.paramMap.get('organization_id'),
+          'filter_type': '', 
+          'filter_contract_no':'',
+          'filter_from_date': '',
+          'filter_to_date': '',
+          'isOrg': 'off',
+          'organization_id': '',
           'status': 'complete'
         },
         skipLocationChange: false
       });
     });
+  }
 
+  openDetailLiquidatedContract(data: any){
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/main/form-contract/detail/' + data.liquidationContractId],
+      {
+        queryParams: {
+          'page': 1,
+          'filter_type': '', 
+          'filter_contract_no':'',
+          'filter_from_date': '',
+          'filter_to_date': '',
+          'isOrg': 'off',
+          'organization_id': '',
+          'status': 'liquidated'
+        },
+        skipLocationChange: false
+      });
+    });
   }
 }
