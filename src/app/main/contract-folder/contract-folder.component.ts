@@ -79,6 +79,30 @@ export class ContractFolderComponent implements OnInit {
       }
 
     });
+
+    this.folders = [
+      {
+        id: 3,
+        name: "Hợp đồng 2024",
+        contracts: [],
+        parentId: undefined
+      },
+      {
+        id: 4,
+        name: "Tháng 1",
+        contracts: [
+          24194,
+          24183
+        ],
+        parentId: undefined
+      },
+      {
+        id: 5,
+        name: "Hợp đồng 2023",
+        contracts: [],
+        parentId: undefined
+      }
+    ]
     // if(!this.datas){
     //   this.folders = [];
     //   this.folders = this.treeFolderService.getFolders();  
@@ -135,7 +159,7 @@ export class ContractFolderComponent implements OnInit {
     });
   }
 
-  editFolder(id: number){
+  editFolder(id: number | undefined){
     let data = {
       action: 'edit',
       folderId: id
