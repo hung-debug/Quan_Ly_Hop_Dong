@@ -1,0 +1,61 @@
+import { Injectable } from '@angular/core';
+import { Helper } from '../core/Helper';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DetectCoordinateService {
+
+  constructor() { }
+
+  getPage(event: any) {
+    const pages = event.relatedTarget.id.split('-');
+    const page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
+
+    return page;
+  }
+
+  detectX(event: any, rect_location: any, canvasInfo: any,canvasWidth: any) {
+    const page = this.getPage(event);
+
+    let layerX;
+    // @ts-ignore
+    if ("left" in canvasInfo) {
+      const canvas = document.getElementById('canvas-step3-'+page);
+
+      let width = 0;
+      if(canvas) {
+        width = canvas.offsetWidth;
+      }
+
+      layerX = rect_location.left - canvasInfo.left + (canvasWidth - width)/2;
+    }
+
+    return layerX;
+  }
+  
+
+  detectY(event: any, rect_location: any, canvasInfo: any) {
+    const page = this.getPage(event);
+
+    let layerY = 0;
+     //@ts-ignore
+    if ("top" in canvasInfo) {
+      layerY = canvasInfo.top <= 0 ? rect_location.top + Math.abs(canvasInfo.top) : rect_location.top - Math.abs(canvasInfo.top);
+    }
+    if (page > 1) {
+        let countPage = 0;
+        for (let i = 1; i < page; i++) {
+          let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
+          let canvasInfo = canvasElement.getBoundingClientRect();
+          countPage += canvasInfo.height;
+        }
+        let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
+        let canvasInfo = canvasElement.getBoundingClientRect();
+        // @ts-ignore
+        layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5 * (page - 1);
+    }
+    
+    return layerY;
+  }
+}

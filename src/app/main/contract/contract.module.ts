@@ -58,6 +58,7 @@ import { ConfirmCecaBatchComponent } from './batch-contract/confirm-ceca-batch/c
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 import { AddPartnerDialogComponent } from './dialog/add-partner-dialog/add-partner-dialog.component';
+import { EditExpirationSigningTimeComponent } from './edit-expiration-signing-time/edit-expiration-signing-time.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -90,6 +91,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ConfirmCecaFormComponent,
     ConfirmCecaBatchComponent,
     AddPartnerDialogComponent,
+    EditExpirationSigningTimeComponent,
   ],
   exports: [
     ContractHeaderComponent,

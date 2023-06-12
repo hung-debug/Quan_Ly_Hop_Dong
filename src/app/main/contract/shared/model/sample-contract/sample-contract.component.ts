@@ -24,6 +24,7 @@ import * as _ from 'lodash';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { CheckZoomService } from 'src/app/service/check-zoom.service';
+import { DetectCoordinateService } from 'src/app/service/detect-coordinate.service';
 
 @Component({
   selector: 'app-sample-contract',
@@ -118,6 +119,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     private router: Router,
     private checkZoomService: CheckZoomService,
     private userService: UserService,
+    private detectCoordinateService: DetectCoordinateService
   ) {
     this.step = variable.stepSampleContract.step3
   }
@@ -596,41 +598,44 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (!this.objDrag[this.signCurent['id']]) {
           this.objDrag[this.signCurent['id']] = {};
         }
-        // this.isMove = false;
-        let layerX;
-        // @ts-ignore
-        if ("left" in canvasInfo) {
-          // layerX = event.rect.left - canvasInfo.left;
-          layerX = rect_location.left - canvasInfo.left;
-        }
+        this.isMove = false;
+        // let layerX;
+        // // @ts-ignore
+        // if ("left" in canvasInfo) {
+        //   // layerX = event.rect.left - canvasInfo.left;
+        //   layerX = rect_location.left - canvasInfo.left;
+        // }
 
-        let pages = event.relatedTarget.id.split('-');
+        // let pages = event.relatedTarget.id.split('-');
 
 
-        let layerY = 0;
-        //@ts-ignore
-        if ("top" in canvasInfo) {
-          // layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);
-          layerY = canvasInfo.top <= 0 ? rect_location.top + Math.abs(canvasInfo.top) : rect_location.top - Math.abs(canvasInfo.top);
-        }
-        let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
+        // let layerY = 0;
+        // //@ts-ignore
+        // if ("top" in canvasInfo) {
+        //   // layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);
+        //   layerY = canvasInfo.top <= 0 ? rect_location.top + Math.abs(canvasInfo.top) : rect_location.top - Math.abs(canvasInfo.top);
+        // }
+        // let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
 
-        /* test set location signature
-        Duongdt
-         */
-        if (page > 1) {
-          let countPage = 0;
-          for (let i = 1; i < page; i++) {
-            let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
-            let canvasInfo = canvasElement.getBoundingClientRect();
-            countPage += canvasInfo.height;
-          }
-          let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
-          let canvasInfo = canvasElement.getBoundingClientRect();
-          // @ts-ignore
-          layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5 * (page - 1);
-        }
-        //END
+        // /* test set location signature
+        // Duongdt
+        //  */
+        // if (page > 1) {
+        //   let countPage = 0;
+        //   for (let i = 1; i < page; i++) {
+        //     let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
+        //     let canvasInfo = canvasElement.getBoundingClientRect();
+        //     countPage += canvasInfo.height;
+        //   }
+        //   let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
+        //   let canvasInfo = canvasElement.getBoundingClientRect();
+        //   // @ts-ignore
+        //   layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5 * (page - 1);
+        // }
+
+        let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth);
+        let layerY = this.detectCoordinateService.detectY(event, rect_location, canvasInfo);
+        // //END
 
         let _array = Object.values(this.obj_toa_do);
         this.cdRef.detectChanges(); // render lại view

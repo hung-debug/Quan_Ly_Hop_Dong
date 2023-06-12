@@ -21,6 +21,8 @@ import { sideList } from 'src/app/config/variable';
 import { DialogReasonCancelComponent } from '../contract-signature/shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
 import { ContractSignatureService } from '../../service/contract-signature.service';
 import { DatePipe } from '@angular/common';
+import { TranslateService } from '@ngx-translate/core';
+import { EditExpirationSigningTimeComponent } from './edit-expiration-signing-time/edit-expiration-signing-time.component';
 
 @Component({
   selector: 'app-contract',
@@ -99,7 +101,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
     private spinner: NgxSpinnerService,
     private userService: UserService,
     private roleService: RoleService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private translate: TranslateService
   ) {
 
     this.stateOptions = [
@@ -633,6 +636,26 @@ export class ContractComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       void this.router.navigate(['main/form-contract/edit/' + id]);
     }, 100)
+  }
+
+  openEditExpiration(time: any) {
+
+    let title = this.translate.instant('edit.exp.sign.time')
+    const data = {
+      title: title,
+      expirationSign: time
+    }
+
+     // @ts-ignore
+    const dialogRef = this.dialog.open(EditExpirationSigningTimeComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      let is_data = result
+    })
   }
 
   addContractConnectNew(id: number) {
