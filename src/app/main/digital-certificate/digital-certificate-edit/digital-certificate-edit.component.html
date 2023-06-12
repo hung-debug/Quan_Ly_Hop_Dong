@@ -1,0 +1,107 @@
+<div class="container-fluid">
+  <div class="header">
+    <h3 class="label-header">{{this.datas.title | translate}}</h3>
+  </div>
+  <form [formGroup]="addForm" class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="label text-color">{{'email.user' | translate}}
+          <span class="required-title">*</span>
+        </div>
+        <div class="input-line">
+          <input type="text" [(ngModel)]="emailUser" class="input-text" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 20px;">
+      <div class="col-md-12" style="display: flex;justify-content: space-evenly;">
+        <div class="label_detail text-color">
+          <div>
+            <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="status" name="status">
+          </div>&nbsp;
+          <div>
+            {{'unit.active' | translate}}
+          </div>
+        </div>
+        <div class="label_detail text-color">
+          <div>
+            <input type="radio" name='confirm-radio-consider' [value]="0" formControlName="status" name="status">
+          </div>&nbsp;
+          <div>
+            {{'unit.inactive' | translate}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 20px;">
+      <div class="col-md-12" style="justify-content: flex-start;">
+        <div class="label text-color" style="color: #106DB6;">{{'infor.file.certificate' | translate}}</div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 20px;">
+      <div class="col-md-6">
+        <div class="label_item">
+          {{ "notation" | translate }}:
+          <!-- <span class="highlight_result">
+            {{ this.numContractUse }}
+          </span> -->
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="label_item">
+          {{ "subject" | translate }}:
+          <!-- <span class="highlight_result">
+            {{ this.numContractBuy }}
+          </span> -->
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-top: 20px;">
+      <div class="col-md-6">
+        <div class="label_item">
+          {{ "file.name" | translate }}:
+          <!-- <span class="highlight_result">
+            {{ this.numContractUse }}
+          </span> -->
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="label_item">
+          {{ "unit" | translate }}:
+          <!-- <span class="highlight_result">
+            {{ this.numContractBuy }}
+          </span> -->
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-top: 20px;">
+      <div class="col-md-6">
+        <div class="label_item">
+          {{ "start-date" | translate }}:
+          <!-- <span class="highlight_result">
+            {{ this.numContractUse }}
+          </span> -->
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="label_item">
+          {{ "end-date" | translate }}:
+          <!-- <span class="highlight_result">
+            {{ this.numContractBuy }}
+          </span> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-btn" style="padding-top: 20px;">
+      <button (click)="handleCancel()">{{"btn.cancel" | translate}}</button>
+      <button (click)="save()" class="update-btn">{{"btn.save" | translate}}</button>
+    </div>
+  </form>
+</div>

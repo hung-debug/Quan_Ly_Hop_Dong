@@ -106,11 +106,14 @@ import { ReportContractNumberFollowStatusComponent } from './main/report/report-
 import { ContractNumberFollowSignComponent } from './main/report/contract-number-follow-sign/contract-number-follow-sign.component';
 
 import { ContractNumberFollowTypeComponent } from './main/report/contract-number-follow-type/contract-number-follow-type.component';
- 
+
 import { ConfigSmsEmailComponent } from './main/config-sms-email/config-sms-email.component';
 import { CustomerOrganizationAddComponent } from './main/customer/customer-organization-add/customer-organization-add.component';
 import { CustomerPersonalAddComponent } from './main/customer/customer-personal-add/customer-personal-add.component';
-
+import {DigitalCertificateComponent} from './main/digital-certificate/digital-certificate.component';
+import {DigitalCertificateAddComponent} from './main/digital-certificate/digital-certificate-add/digital-certificate-add.component';
+import {DigitalCertificateDetailComponent} from './main/digital-certificate/digital-certificate-detail/digital-certificate-detail.component';
+import {DigitalCertificateEditComponent} from './main/digital-certificate/digital-certificate-edit/digital-certificate-edit.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -121,6 +124,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     LoginComponent,
     MainComponent,
     UserComponent,
+    DigitalCertificateComponent,
+    DigitalCertificateAddComponent,
+    DigitalCertificateDetailComponent,
+    DigitalCertificateEditComponent,
     ContractComponent,
     ContractSignatureComponent,
     UnitComponent,

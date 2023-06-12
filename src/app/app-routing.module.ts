@@ -41,7 +41,11 @@ import { ContractNumberFollowSignComponent } from './main/report/contract-number
 import { ConfigSmsEmailComponent } from './main/config-sms-email/config-sms-email.component';
 import { CustomerComponent } from './main/customer/customer.component';
 import {CustomerOrganizationAddComponent} from './main/customer/customer-organization-add/customer-organization-add.component';
-import {CustomerPersonalAddComponent} from './main/customer/customer-personal-add/customer-personal-add.component'
+import {CustomerPersonalAddComponent} from './main/customer/customer-personal-add/customer-personal-add.component';
+import {DigitalCertificateComponent} from './main/digital-certificate/digital-certificate.component';
+import {DigitalCertificateAddComponent} from './main/digital-certificate/digital-certificate-add/digital-certificate-add.component';
+import {DigitalCertificateDetailComponent} from './main/digital-certificate/digital-certificate-detail/digital-certificate-detail.component';
+import {DigitalCertificateEditComponent} from './main/digital-certificate/digital-certificate-edit/digital-certificate-edit.component';
 
 const contract_signatures = "c";
 const signatures = "s9";
@@ -140,6 +144,10 @@ const routes: Routes = [
       {
         path: 'contract/:action/:status',
         component: ContractComponent,
+      },
+      {
+        path: 'digital-certificate',
+        component: DigitalCertificateComponent,
       },
       {
         path: contract_signatures,
@@ -252,7 +260,7 @@ const routes: Routes = [
         path:'config-sms-email',
         component: ConfigSmsEmailComponent
       }
-      
+
     ],
   },
   {
@@ -287,7 +295,7 @@ const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full',
   },
-  
+
   {path: '**', component: PageNotFoundComponent}
 ];
 
