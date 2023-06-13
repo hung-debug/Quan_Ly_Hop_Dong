@@ -56,15 +56,13 @@ export class FilterListDialogComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    console.log("data status ", this.data.status);
-
     //lay danh sach to chuc
     this.contractTypeService.getContractTypeList("", "").subscribe(data => {
-      
+      console.log(data);
       this.contractTypeList = data;
     });
 
-    
+    console.log("this.data.filter_type",this.data.filter_type);
     this.addForm = this.fbd.group({
       filter_type: this.data.filter_type!=""?this.fbd.control(Number(this.data.filter_type)):"",
       filter_contract_no:this.fbd.control(this.data.filter_contract_no),
@@ -73,7 +71,7 @@ export class FilterListDialogComponent implements OnInit {
       status:this.data.status,
       contractStatus: this.fbd.control(this.data.contractStatus),
     });
-    
+    console.log("addddd form",this.addForm);    
   }
 
   onSubmit() {
@@ -91,8 +89,8 @@ export class FilterListDialogComponent implements OnInit {
       contractStatus: this.addForm.value.contractStatus
     }
     this.dialogRef.close();
-    
-    // 
+    console.log("dataaaaaaaa",data);
+    // console.log("contractStatus",contractStatus);
     
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['main/c/receive/' + data.status],
@@ -103,7 +101,8 @@ export class FilterListDialogComponent implements OnInit {
           'filter_contract_no': data.filter_contract_no,
           'filter_from_date': data.filter_from_date,
           'filter_to_date': data.filter_to_date,
-          'contractStatus' : data.contractStatus
+          'contractStatus' : data.contractStatus,
+          'type_display': this.data.type_display
         },
         skipLocationChange: true
       });
