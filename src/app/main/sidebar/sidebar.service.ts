@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 import { DashboardService } from 'src/app/service/dashboard.service';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
@@ -74,6 +75,10 @@ export class SidebarService {
   subMenus: any = [];
   
   contract_signatures: any = "c";
+
+  private reloadSidebarSubject = new Subject<void>();
+
+  reloadSidebar$ = this.reloadSidebarSubject.asObservable();
 
   constructor(
     private userService: UserService,
@@ -620,6 +625,10 @@ export class SidebarService {
         return element.submenus;
       }
     });
+  }
+
+  triggerReloadSidebar() {
+    this.reloadSidebarSubject.next();
   }
 
   get hasBackgroundImage() {

@@ -1,6 +1,6 @@
-import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AppService} from '../service/app.service';
 import {SidebarService} from './sidebar/sidebar.service';
@@ -42,11 +42,19 @@ export class MainComponent implements OnInit {
               private dialog: MatDialog,
               private userService: UserService,
               private deviceService: DeviceDetectorService,
-              private contractService: ContractService
+              private contractService: ContractService,
               ) {
     this.title = 'err';
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang(localStorage.getItem('lang') || 'vi');
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const currentRoute = event.urlAfterRedirects;
+        if (currentRoute.includes('/main/contract/create/')) {
+          this.sidebarservice.triggerReloadSidebar();
+        }
+      }
+    });
   }
 
   lang: any;
@@ -236,4 +244,5 @@ export class MainComponent implements OnInit {
   viewLink(){
     window.open("https://drive.google.com/drive/folders/1NHaCYOMCMsLvrw1uPbX2ezsC-Uo9huW3");
   }
+
 }
