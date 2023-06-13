@@ -65,9 +65,10 @@ export class ContractSignatureService {
 
     filter_type = filter_type ? filter_type : '';
     filter_contract_no = filter_contract_no ? filter_contract_no: '';
-    filter_from_date = filter_from_date ? filter_from_date : '';
-    filter_to_date = filter_to_date ? filter_to_date : '';
-
+    
+    filter_from_date = filter_from_date ? this.datepipe.transform(filter_from_date, 'yyyy-MM-dd'): '';
+    filter_to_date = filter_to_date ? this.datepipe.transform(filter_to_date, 'yyyy-MM-dd'): '';
+    
     return this.http.get<any[]>(this.listContractMyProcessUrlSignMany+'orgId='+orgId+'&platform=web'+'&keyword='+keyword+'&type=' + filter_type+ '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date,{headers}).pipe();
   }
 
@@ -81,8 +82,9 @@ export class ContractSignatureService {
 
     filter_type = filter_type ? filter_type : '';
     filter_contract_no = filter_contract_no ? filter_contract_no: '';
-    filter_from_date = filter_from_date ? filter_from_date : '';
-    filter_to_date = filter_to_date ? filter_to_date : '';
+    
+    filter_from_date = filter_from_date ? this.datepipe.transform(filter_from_date, 'yyyy-MM-dd'): '';
+    filter_to_date = filter_to_date ? this.datepipe.transform(filter_to_date, 'yyyy-MM-dd'): '';
 
     return this.http.get<any[]>(this.getViewContractList+'orgId='+orgId+'&platform=web'+'&keyword='+keyword+'&type=' + filter_type+ '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date,{headers}).pipe();
   }
