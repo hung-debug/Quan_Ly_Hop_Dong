@@ -336,7 +336,10 @@ export class DashboardComponent implements OnInit {
     let numContractHeight = document.getElementById('num-contract')?.offsetHeight || 0;
     let notiHeight = chartHeight - numContractBodyHeight - numContractHeight;
     
-    return {'height': notiHeight + 'px'};
+    return {
+      'height': notiHeight + 'px',
+      'overflow': 'auto'
+    };
   }
 
   search() {
