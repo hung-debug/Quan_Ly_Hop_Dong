@@ -36,10 +36,9 @@
       </ng-template>
       <ng-template pTemplate="body" let-list>
           <tr>
-              <td>{{list.notation}}</td>
-              <td>{{list.email}}</td>
-              <td>{{list.startDate}}</td>
-              <td>{{list.endDate}}</td>
+              <td>{{list.fileName}}</td>
+              <td>{{list.keystoreDateStart | date:'dd/MM/yyyy HH:mm'}}</td>
+              <td>{{list.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}</td>
 
               <td *ngIf="list.status == 1">{{'unit.active' | translate}}</td>
               <td *ngIf="list.status != 1">{{'unit.inactive' | translate}}</td>

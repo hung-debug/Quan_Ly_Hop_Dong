@@ -35,13 +35,9 @@
           </div>
 
           <div>
-
-          </div>
-
-          <div>
-            <p-multiSelect  panelStyleClass="font" appendTo="body" [options]="emailList" formControlName="email"
+            <p-dropdown panelStyleClass="font" appendTo="body" [options]="emailList" formControlName="email"
               optionLabel="email" optionValue="id" placeholder="Chọn email" [filter]="true" filterBy="email"
-              [showClear]="true" (onFilter)="getListAllEmail($event)" display="chip" [multiple]="true"></p-multiSelect>
+              [showClear]="true" (onFilter)="getListAllEmail($event)" display="chip" [multiple]="true"></p-dropdown>
               <!-- <p-multiSelect [options]="emailList" formControlName="email" optionLabel="email"></p-multiSelect> -->
           </div>
           <!-- <div *ngIf="submittedUser && fUser.email.errors" class="invalid">

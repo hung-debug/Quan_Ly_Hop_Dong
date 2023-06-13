@@ -7,6 +7,8 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { DigitalCertificateAddComponent } from './digital-certificate-add/digital-certificate-add.component';
 import { DigitalCertificateDetailComponent } from './digital-certificate-detail/digital-certificate-detail.component';
 import { DigitalCertificateEditComponent } from './digital-certificate-edit/digital-certificate-edit.component';
+import { DigitalCertificateService } from 'src/app/service/digital-certificate.service';
+
 @Component({
   selector: 'app-user',
   templateUrl: './digital-certificate.component.html',
@@ -20,8 +22,19 @@ export class DigitalCertificateComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private appService: AppService,
     public dialog: MatDialog,
+    private DigitalCertificateService: DigitalCertificateService,
   ) { }
   username: any = "";
+  file_name: any;
+  status: any;
+  size: number = 10;
+  keystoreDateStart: any ='';
+  keystoreDateEnd: any ='';
+  number: number = 1;
+  page: number = 10;
+  pageStart: number = 0;
+  pageEnd: number = 0;
+  pageTotal: number = 0;
   lang: any;
   first: number = 0;
   list: any[];
@@ -40,7 +53,6 @@ export class DigitalCertificateComponent implements OnInit {
     this.appService.setTitle("certificate.list");
     this.cols = [
       { header: 'notation', style: 'text-align: left;' },
-      { header: 'email.used', style: 'text-align: left;' },
       { header: 'start-date', style: 'text-align: left;' },
       { header: 'end-date', style: 'text-align: left;' },
       { header: 'unit.status', style: 'text-align: left;' },
@@ -51,13 +63,14 @@ export class DigitalCertificateComponent implements OnInit {
     ]
   }
   searchUser() {
-    // this.first = 0;
+    this.first = 0;
 
-    // this.spinner.show();
-    // this.userService.getUserList(!this.organization_id? this.organization_id_user_login :this.organization_id, this.email).subscribe(response => {
-    //   this.spinner.hide();
-    //   this.list = response.entities;
-    // });
+    this.spinner.show();
+    this.DigitalCertificateService.getAllCertificate(this.file_name, this.status, this.keystoreDateStart, this.keystoreDateEnd, this.number, this.size).subscribe(response =>{
+      console.log("res",response);
+      this.list = response.content;
+    })
+    this.spinner.hide();
   }
   addUnit() {
     const data = {
