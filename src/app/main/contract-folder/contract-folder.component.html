@@ -1,19 +1,26 @@
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-md-6 breadcrumb-container">
-      <ul class="breadcrumb">
-        <li *ngFor="let d of this.currentFolders">
-          <a *ngIf="!checkLastChildFolderBreadcrumber(d, this.currentFolders)" (click)="openFolder(d.id)" style="cursor: pointer; color: rgba(16, 109, 182, 0.7)"
-          onmouseover="this.style.textDecoration='underline';" onmouseout="this.style.textDecoration='none';">{{ d.name }}</a>
-          <a *ngIf="checkLastChildFolderBreadcrumber(d, this.currentFolders)">{{ d.name }}</a>
-        </li>
-      </ul>
+  <!-- <div class="col-md-6 breadcrumb-container">
+    <ul class="breadcrumb">
+      <li *ngFor="let d of this.currentFolders">
+        <a *ngIf="!checkLastChildFolderBreadcrumber(d, this.currentFolders)" (click)="openFolder(d.id)" style="cursor: pointer; color: rgba(16, 109, 182, 0.7)"
+        onmouseover="this.style.textDecoration='underline';" onmouseout="this.style.textDecoration='none';">{{ d.name }}</a>
+        <a *ngIf="checkLastChildFolderBreadcrumber(d, this.currentFolders)">{{ d.name }}</a>
+      </li>
+    </ul>
+  </div> -->
+  <div class="col-md-12" style="padding-top: 20px;">
+    <div class="input-line search" style="justify-content:left">
+        <img src="../../assets/img/icon_search.svg" class="input-img" />
+        <input type="text" id="filter_name" class="input-text" style="width: 90%!important"
+        />
     </div>
-    <div class="col-md-6 btn-container">
+  </div>
+  <div class="row">
+    <div class="col-md-6 btn-container" style="padding-top: 10px">
       <button class="btn btn-lg btn-block btn_submit" (click)="addFolder()">Thêm thư mục</button>
     </div>
   </div>
-  <div class="row" style="padding-top: 20px;">
+  <!-- <div class="row" style="padding-top: 20px;">
     <p-table [value]="folders" [paginator]="false" id="table" [autoLayout]="true">
       <ng-template pTemplate="header" let-columns>
         <tr>
@@ -35,13 +42,53 @@
               </td>
           </tr>
       </ng-template>
-      <!-- <ng-template pTemplate="paginatorleft" let-state>
-        <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-      </ng-template>
-      <ng-template pTemplate="paginatorright" let-state>
-        <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-      </ng-template>  -->
     </p-table>
+  </div> -->
+  <div class="row list_header" *ngIf="this.folders.length > 0;">
+    <div class="col-md-4"></div>
+    <div class="col-md-3">{{'create-date' | translate}}</div>
+    <div class="col-md-3">Cập nhật lần cuối</div>
+    <div class="col-md-2">{{'action' | translate}}</div>
+  </div>
+
+  <div class="item_folder" *ngFor="let item of folders">
+    
+    <div class="row">
+      <div class="col-md-4">
+        <div class="row">
+          <div class="col-md-12 item_folder_name">
+            <img src = "../../../assets/img/contract.svg" height="45px">
+            <a>
+            {{item.name}}
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 calendar_create">
+        <div><i class="fa fa-calendar fa_icon"></i>
+          <span class="item_date">{{01/01/2001 | date: 'dd/MM/yyyy HH:mm'}}</span>
+        </div>
+      </div>
+      <div class="col-md-3 calendar_create">
+        <div><i class="fa fa-calendar fa_icon"></i>
+          <span class="item_date">{{01/01/2001 | date: 'dd/MM/yyyy HH:mm'}}</span>
+        </div>
+      </div>
+
+      <div class="col-md-2 item_icon">
+        <div style="display: flex; justify-content: center;">
+          <div class="div_icon">
+            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'role.contract-template.edit' | translate}}" (click)="editFolder(item.id)" />
+          </div>
+          <div class="div_icon">
+            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'role.contract-template.delete' | translate}}"  />
+          </div>
+          <div class="div_icon">
+            <img src="../../../assets/img/view-folder.svg" class="img_icon" ngbTooltip="{{'role.contract-template.delete' | translate}}"  />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div *ngIf="folders && folders.length == 0" 

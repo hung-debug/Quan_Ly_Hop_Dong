@@ -4,7 +4,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 export interface Folder {
   name: string;
-  open: boolean;
   contracts?: any[];
   id?: number;
   parentId?: number
