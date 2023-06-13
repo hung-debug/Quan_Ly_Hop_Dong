@@ -1,6 +1,6 @@
-import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, OnDestroy } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AppService} from '../service/app.service';
 import {SidebarService} from './sidebar/sidebar.service';
@@ -13,12 +13,13 @@ import { UserService } from '../service/user.service';
 import {DeviceDetectorService} from "ngx-device-detector";
 import { ContractService } from '../service/contract.service';
 import { environment } from 'src/environments/environment';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
   title: string;
 
   isShowCopyRight: boolean = true;
@@ -42,11 +43,20 @@ export class MainComponent implements OnInit {
               private dialog: MatDialog,
               private userService: UserService,
               private deviceService: DeviceDetectorService,
-              private contractService: ContractService
+              private contractService: ContractService,
+              private routeChangeSubscription: Subscription
               ) {
     this.title = 'err';
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang(localStorage.getItem('lang') || 'vi');
+    this.routeChangeSubscription = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const currentRoute = event.urlAfterRedirects;
+        if (currentRoute.includes('/main/contract/create/')) {
+          this.sidebarservice.triggerReloadSidebar();
+        }
+      }
+    });
   }
 
   lang: any;
@@ -235,5 +245,11 @@ export class MainComponent implements OnInit {
 
   viewLink(){
     window.open("https://drive.google.com/drive/folders/1NHaCYOMCMsLvrw1uPbX2ezsC-Uo9huW3");
+  }
+
+  ngOnDestroy() {
+    if (this.routeChangeSubscription) {
+      this.routeChangeSubscription.unsubscribe();
+    }
   }
 }

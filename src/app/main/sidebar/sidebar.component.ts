@@ -32,6 +32,9 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.sidebarservice.reloadSidebar$.subscribe(() => {
+      this.changeSubMenu();
+    });
     //this.menus = this.sidebarservice.getMenuList();
     
   }
@@ -141,4 +144,17 @@ export class SidebarComponent implements OnInit {
     // });
   }
 
+  changeSubMenu(){
+    let currentMenu = this.menus.find((menu: any) => menu.active);
+    if(currentMenu.submenus){
+      currentMenu.submenus.forEach((submenu: any) => {
+        if(submenu.href == this.router.url){
+          submenu.active = true;
+        } else {
+          submenu.active = false;
+        }
+      });
+    }
+
+  }
 }
