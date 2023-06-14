@@ -428,6 +428,16 @@ export class ContractService {
     }
   }
 
+  editContract(body: any,contractId: number) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+    .append('Content-Type', 'application/json')
+    .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.put<Contract>(this.addGetDataContract + contractId, body, { headers: headers })
+  }
+
   getSignPositionCoordinatesForm(id_contract_form: number) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
