@@ -337,11 +337,10 @@ export class ForwardContractComponent implements OnInit {
             recipient_id: this.datas.recipientId,
             is_replace: false,
             login_by: this.login,
-            locale: this.locale
+            locale: this.locale,
+            sign_type: this.myForm.value.dataSign
           };
           
-          
-
           if (this.login == 'phone') {
             dataAuthorize.email = dataAuthorize.phone
           }
