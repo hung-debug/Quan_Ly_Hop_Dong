@@ -336,7 +336,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         this.contractService.getDataCoordination(this.datas.is_data_contract.liquidationContractId).subscribe((item) =>{
           this.datas.is_data_contract.liquidation_contract_name =  item.name;
         })
-        console.log(this.datas);
 
         let email = JSON.parse(localStorage.getItem('currentUser') || '')
           ?.customer.info.email;

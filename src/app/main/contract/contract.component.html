@@ -602,7 +602,7 @@
 
             <div style="width: 100%; display: flex; flex-wrap: nowrap">
                 <div class="col-md-1 btn_search" style="padding-top: 10px;">
-                    <button class="btn btn-lg btn-block btn_submit">{{'release'|translate}}</button>
+                    <button (click)="releaseMany()" class="btn btn-lg btn-block btn_submit">{{'release'|translate}}</button>
                 </div>
                 <div class="col-md-1 btn_search" style="padding-top: 10px; padding-left: 10px">
                     <button (click)="cancelDownloadMany()" class="btn btn-lg btn-block btn_submit">{{'cancel'|translate}}</button>
@@ -616,7 +616,7 @@
                 <div class="col-md-3">{{'action' | translate}}</div>
 
                 <div *ngIf="this.filter_status == 0" class="col-md-1">
-                    <input style="margin-left: 4px;" id="allDownload" name="allDownload" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDownload(checkedAll)" />
+                    <input style="margin-left: 4px;" id="allRelease" name="allRelease" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleReleaseAll(checkedAll)" />
                 </div>
             </div>
 
@@ -709,7 +709,7 @@
                             <div class="div_icon">
                                 <div class="col-md-1 calendar_create">
                                     <div>
-                                        <input name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleRelease(item)" />
+                                        <input name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneRelease(item)" />
                                     </div>
                                 </div>
                             </div>

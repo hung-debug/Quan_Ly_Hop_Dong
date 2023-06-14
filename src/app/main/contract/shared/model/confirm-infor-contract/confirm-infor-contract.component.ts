@@ -310,6 +310,10 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
                 this.save_draft_infor.close_header = false;
                 this.save_draft_infor.close_modal.close();
               }
+              this.contractService.getDataPreRelease(this.datas.contract_id).subscribe((contract: any) => {
+                this.contractService.addContractRelease(contract).subscribe((res: any) => {
+                });
+              });
               this.router.navigate(['/main/contract/create/draft']);
               this.toastService.showSuccessHTMLWithTimeout(
                 'no.push.contract.draft.success',
@@ -377,6 +381,10 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         await this.contractService.getContractSampleEdit(dataSignId[i], id).toPromise().then(
             (data: any) => {
               dataSample_contract.push(data);
+              this.contractService.getDataPreRelease(this.datas.contract_id).subscribe((contract: any) => {
+                this.contractService.addContractRelease(contract).subscribe((res: any) => {
+                });
+              });
             },
             (error) => {
               this.spinner.hide();

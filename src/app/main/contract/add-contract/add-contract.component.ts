@@ -237,7 +237,6 @@ export class AddContractComponent implements OnInit {
             const array_empty: any[] = [];
             array_empty.push({ ref_id: Number(params['id']) });
             this.datas.contractConnect = array_empty;
-            console.log(this.datas.contractConnect);
           } else if (this.action =='add-contract-liquidation') {
             this.appService.setTitle('contract.add');
           } else if (this.action == 'edit') {

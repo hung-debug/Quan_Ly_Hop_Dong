@@ -94,7 +94,6 @@ export class ContractFolderComponent implements OnInit {
   }
 
   editFolder(id: number | undefined){
-    console.log(id);
     let data = {
       action: 'edit',
       folderId: id

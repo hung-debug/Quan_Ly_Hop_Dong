@@ -24,6 +24,13 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    if (this.sign.sign_unit == 'text') {
+      if(this.sign.value) {
+        if(this.sign.text_type == 'currency') {
+          this.sign.value = this.contractService.convertCurrency(this.sign.value);
+        } 
+      }
+    }
   }
 
   getText(sign: any) {
@@ -85,8 +92,8 @@ export class SignContractComponent implements OnInit, AfterViewInit {
 
   reverseInput(e: any){
     e.target.value = this.contractService.removePeriodsFromCurrencyValue(e.target.value);
-    
   }
+
 
   getSpecifiedHandle() {
     if ((!this.sign.is_have_text && this.sign.recipient_id) || (this.sign.value !== null && this.sign.value === undefined))

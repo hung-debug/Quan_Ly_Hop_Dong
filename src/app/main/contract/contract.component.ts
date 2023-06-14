@@ -236,7 +236,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   dataReleaseChecked: any[] = [];
-  toggleRelease(item: any){
+  toggleOneRelease(item: any){
     
     let data = {
       id: item.participants[0]?.contract_id,
@@ -271,6 +271,21 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   toggleReleaseAll(checkedAll: boolean){
     this.dataReleaseChecked = [];
+    if(checkedAll){
+      
+      
+      for(let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = false;
+      }
+    } else {
+      for (let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = true;
+        this.dataReleaseChecked.push({
+          id: this.contracts[i].participants[0]?.contract_id,
+          selectedId : this.contracts[i].id
+        })
+      }
+    }
     
   }
 
@@ -292,6 +307,26 @@ export class ContractComponent implements OnInit, AfterViewInit {
         })
       }
     }
+  }
+
+
+  releaseMany(){
+    if(this.dataReleaseChecked.length === 0){
+      return;
+    }
+    this.spinner.show();
+    const ids = this.dataReleaseChecked.map(el => el.id);
+    this.contractService.confirmContractRelease(ids).subscribe(
+      (data) => {
+        this.toastService.showSuccessHTMLWithTimeout('release.contract.success', '', 3000);
+        this.spinner.hide();
+        window.location.reload();
+      },
+      (error) => {
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout('release.contract.error', '', 3000);
+      }
+    )
   }
 
   downloadManyContract() {
@@ -396,7 +431,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         isOrg ='off';
       }
 
-    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, 20).subscribe(data => {
+    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, 20, true).subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = data.total_elements;
       this.checkedAll = false;
