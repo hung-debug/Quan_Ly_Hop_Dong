@@ -375,7 +375,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4))) ||
           (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4))) ||
           (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-        ((val.recipient ? (val.recipient.name == data.name && ((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email)) : (((val.name && val.name == data.name) ||
+        ((val.recipient ? (((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email)) : ((
             !val.name ||
             (val.sign_unit == 'text' && !val.recipient_id)) && ((val.email && val.email == data.email) || !val.email)))
         )));
