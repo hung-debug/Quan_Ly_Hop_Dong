@@ -56,7 +56,6 @@ export class FilterListDialogComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    console.log("data status ", this.data.status);
 
     //lay danh sach to chuc
     this.contractTypeService.getContractTypeList("", "").subscribe(data => {

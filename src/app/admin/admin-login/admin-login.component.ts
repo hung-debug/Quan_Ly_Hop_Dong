@@ -171,7 +171,6 @@ export class AdminLoginComponent implements OnInit {
         panelClass: 'custom-modalbox',
       });
       dialogRef.afterClosed().subscribe((result: any) => {
-        console.log('the close dialog');
         if (!this.router.url.endsWith('login')) {
           this.sub = this.route.params.subscribe((params) => {
             this.type = params['loginType'];

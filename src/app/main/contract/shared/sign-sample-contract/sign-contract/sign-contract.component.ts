@@ -36,7 +36,6 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   getText(sign: any) {
     if (sign.sign_unit == 'text') {
       if(sign.value) {
-        console.log(sign.value)
         if(sign.text_type == 'currency') {
           return this.contractService.convertCurrency(sign.value);
         } else 
@@ -48,7 +47,6 @@ export class SignContractComponent implements OnInit, AfterViewInit {
       if (this.datas.contract_no) {
         return this.datas.contract_no
       } else if (sign.value) {
-        console.log("dung dua", sign)
         if(sign.text_type == 'currency') {
           return this.contractService.convertCurrency(sign.value);
         } else 

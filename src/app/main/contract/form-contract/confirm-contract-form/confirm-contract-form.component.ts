@@ -349,6 +349,10 @@ export class ConfirmContractFormComponent implements OnInit {
                 this.save_draft_infor_form.close_header = false;
                 this.save_draft_infor_form.close_modal.close();
               }
+              this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
+                this.contractService.addContractRelease(contract).subscribe((res: any) => {
+                });
+              });
               this.router.navigate(['/main/contract/create/draft']);
               this.toastService.showSuccessHTMLWithTimeout(
                 'no.push.contract.draft.success',
@@ -408,6 +412,10 @@ export class ConfirmContractFormComponent implements OnInit {
         // 
         await this.contractService.getContractSampleEdit(datasFormignId[i], id).toPromise().then((data: any) => {
               datasFormample_contract.push(data);
+              this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
+                this.contractService.addContractRelease(contract).subscribe((res: any) => {
+                });
+              });
             },
             (error) => {
               this.spinner.hide();

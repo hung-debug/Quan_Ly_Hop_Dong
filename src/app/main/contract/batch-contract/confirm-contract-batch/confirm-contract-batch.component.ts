@@ -748,7 +748,6 @@ export class ConfirmContractBatchComponent
     } else {
       this.pageNumberCurrent = value;
       this.pageNumberOld = this.pageNumberCurrent;
-      console.log(this.pageNumberCurrent);
       this.getDataContractSignature(this.pageNumberCurrent - 1);
     }
   }

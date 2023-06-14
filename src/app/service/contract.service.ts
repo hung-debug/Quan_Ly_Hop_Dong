@@ -97,6 +97,7 @@ export class ContractService {
   changeStatusHandle: any = `${environment.apiUrl}/api/v1/recipients/`;
   updateInfoContractConsiderAndOtpUrl: any = `${environment.apiUrl}/api/v1/processes/approval-sign-image/`;
   updateContractIsPushCeCAUrl: any = `${environment.apiUrl}/api/v1/contracts/ceca-push/`;
+  releaseContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract/issue`;
 
   getStatusSignImageOtpUrl: any = `${environment.apiUrl}/api/v1/processes/approval-sign-image/`;
   getSendOtpContractProcessUrl: any = `${environment.apiUrl}/api/v1/processes/approval/`;
@@ -228,7 +229,8 @@ export class ContractService {
 
   public getContractList(isOrg: any,organization_id: any,filter_name: any,filter_type: any,filter_contract_no: any,filter_from_date: any,filter_to_date: any,filter_status: any,
     page: any,
-    size: any
+    size: any,
+    issue?: any
   ): Observable<any> {
     this.getCurrentUser();
 
@@ -325,6 +327,9 @@ export class ContractService {
       }
     }
 
+    if(issue) {
+      listContractUrl += '&issue=' + issue;
+    }
     // 
     const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
@@ -1517,6 +1522,44 @@ export class ContractService {
     // addGetDataContract:any = `${environment.apiUrl}/api/v1/contracts/`;
   }
 
+  getDataPreRelease(idContract: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.addGetDataContract + idContract, {
+      headers,
+    });
+  }
+
+  addContractRelease(contract: any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+    .append('Content-Type', 'application/json')
+    .append('Authorization', 'Bearer ' + this.token);
+    let contractDetail = {
+      name: contract.name,
+      notes: contract.notes,
+      refs: contract.refs,
+      contract_no: contract.contract_no,
+      sign_time: contract.sign_time,
+      type_id: contract.type_id,
+      ceca_push: contract.ceca_push,
+      contract_expire_time: contract.contract_expire_time,
+      readyIssue: true
+    }
+    const body = JSON.stringify(contractDetail);
+    return this.http.put<any>(this.addGetDataContract + contract.id, body, {headers});
+  }
+
+  confirmContractRelease(ids: any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+    .append('Content-Type', 'application/json')
+    .append('Authorization', 'Bearer ' + this.token);
+    return this.http.put<any>(this.releaseContractUrl, ids, {headers});
+  }
+  
   removePeriodsFromCurrencyValue(value: string): string {
     const result = value.toString().replace(/\./g, '');
   return result;

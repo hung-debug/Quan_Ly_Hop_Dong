@@ -1628,8 +1628,18 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           this.spinner.show();
           
           this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
+            if(this.validData('release-check') == true){
+              this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
+                this.contractService.addContractRelease(contract).subscribe((res: any) => {
+                  console.log("du dk");
+                  this.router.navigate(['/main/contract/create/draft']);
+                  this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
+                });
+              });
+            } else {
             this.router.navigate(['/main/contract/create/draft']);
             this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
+            }
           },
             (error: HttpErrorResponse) => {
               this.spinner.hide();
@@ -1687,6 +1697,14 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         delete dataSignId[i].id_have_data;
         await this.contractService.getContractSampleEdit(dataSignId[i], id).toPromise().then((data: any) => {
           dataSample_contract.push(data);
+          if(this.validData('release-check') == true){
+            this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
+              this.contractService.addContractRelease(contract).subscribe((res: any) => {
+                this.router.navigate(['/main/contract/create/draft']);
+                this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
+              });
+            });
+          }
         }, (error: HttpErrorResponse) => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! vui lòng thao tác lại hoặc liên hệ với nhà phát triển để xử lý!', "", 3000);
           countIsSignId++;
@@ -1812,12 +1830,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     // }
   }
  
-  validData() {
+  validData(isSaveDraft?: any) {
     let data_not_drag = this.datasForm.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
 
     if (!data_not_drag) {
       this.spinner.hide();
-      this.toastService.showWarningHTMLWithTimeout("Vui lòng chọn ít nhất 1 đối tượng kéo thả!", "", 3000);
+      if(!isSaveDraft) this.toastService.showWarningHTMLWithTimeout("Vui lòng chọn ít nhất 1 đối tượng kéo thả!", "", 3000);
       return false;
     } else {
       let count = 0;
@@ -1911,7 +1929,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             (Number(coordinate_y[i]) <= Number(coordinate_y[j]) && Number(coordinate_y[j] <= (Number(coordinate_y[i]) + Number(height[i]))))
             // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
           ) {
-            this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+            if(!isSaveDraft) this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
             return false;
           }
         }
@@ -1926,7 +1944,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             (Number(coordinate_y[i]) <= (Number(coordinate_y[j]) + Number(height[j])) && (Number(coordinate_y[j] + Number(height[j])) <= (Number(coordinate_y[i]) + Number(height[i]))))
               // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
             ) {
-              this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+              if(!isSaveDraft) this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
               return false;
             }
           }
@@ -1940,7 +1958,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             &&
             (Number(coordinate_y[j]) <= Number(coordinate_y[i]) && Number(coordinate_y[i] <= (Number(coordinate_y[j]) + Number(height[j]))))
           ) {
-            this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+            if(!isSaveDraft) this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
             return false;
           }
         }
@@ -1955,25 +1973,25 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             (Number(coordinate_y[j]) <= (Number(coordinate_y[i]) + Number(height[i])) && (Number(coordinate_y[i] + Number(height[i])) <= (Number(coordinate_y[j]) + Number(height[j]))))
               // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
             ) {
-              this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+              if(!isSaveDraft) this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
               return false;
             }
           }
       }
 
       if (this.onContentTextEvent()) {
-        this.toastService.showWarningHTMLWithTimeout("Trùng tên trường ô text. Vui lòng kiểm tra lại!", "", 3000);
+        if(!isSaveDraft) this.toastService.showWarningHTMLWithTimeout("Trùng tên trường ô text. Vui lòng kiểm tra lại!", "", 3000);
         return false;
       }
 
       if (count > 0) {
         // alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
         this.spinner.hide();
-        this.toastService.showWarningHTMLWithTimeout("select.signer.obj", "", 3000);
+        if(!isSaveDraft) this.toastService.showWarningHTMLWithTimeout("select.signer.obj", "", 3000);
         return false;
       } else if (count_number > 1) {
         this.spinner.hide();
-        this.toastService.showWarningHTMLWithTimeout("Hợp đồng chỉ được phép có 1 số hợp đồng!", "", 3000);
+        if(!isSaveDraft) this.toastService.showWarningHTMLWithTimeout("Hợp đồng chỉ được phép có 1 số hợp đồng!", "", 3000);
         return false;
       } else if (count_text > 0) {
         // this.spinner.hide();
@@ -1985,7 +2003,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         // return false;
       } else if (count_text_number > 0) {
         this.spinner.hide();
-        this.toastService.showWarningHTMLWithTimeout("please_input_text_number_contract", "", 3000);
+        if(!isSaveDraft) this.toastService.showWarningHTMLWithTimeout("please_input_text_number_contract", "", 3000);
         return false;
       } else {
         // valid đối tượng ký của tổ chức
@@ -2048,7 +2066,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
         if (countError_partner > 0) {
           this.spinner.hide();
-          this.toastService.showWarningHTMLWithTimeout(`Thiếu đối tượng ${nameSign_partner.sign_type == 'chu_ky_so' ? 'ký số' : 'ký ảnh'} của đối tác ${nameSign_partner.name}, vui lòng chọn đủ người ký!`, "", 3000);
+          if(!isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Thiếu đối tượng ${nameSign_partner.sign_type == 'chu_ky_so' ? 'ký số' : 'ký ảnh'} của đối tác ${nameSign_partner.name}, vui lòng chọn đủ người ký!`, "", 3000);
           return false;
         }
 
@@ -2057,7 +2075,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         if (arrSign_partner.length < data_partner.length) {
           // alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!');
           this.spinner.hide();
-          this.toastService.showWarningHTMLWithTimeout("Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!", "", 3000);
+          if(!isSaveDraft) this.toastService.showWarningHTMLWithTimeout("Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!", "", 3000);
           return false;
         }
       }
