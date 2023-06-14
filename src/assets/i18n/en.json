@@ -678,6 +678,6 @@
   "edit.exp.sign.time":"Edit signing expiration date",
   "add.contract.folder":"Add contract",
   "release.contract.success": "Release contract successfully",
-  "release.contract.error": "Release contract failed"
-
+  "release.contract.error": "Release contract failed",
+  "hide.processing.thread":"Hide processing thread"
   }

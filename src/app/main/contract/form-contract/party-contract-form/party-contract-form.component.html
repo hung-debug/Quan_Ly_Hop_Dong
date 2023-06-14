@@ -7,9 +7,15 @@
         oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
     </div>
     <div class="contract--content">
-      <div class="contract__content--title">
-        <div>{{ "organization.me" | translate | uppercase }} -</div>
-        <input type="text" [(ngModel)]="data_organization.name" />
+      <div class="contract__content--title-doi-tac">
+        <div style="width: 85px">
+          {{ "organization.me" | translate | uppercase }}&nbsp;<span style="color: red">*</span>
+        </div>
+        <input class="input1" type="text" [(ngModel)]="data_organization.name" />
+        <div style="width: 120px; margin-left: 5px">
+          {{'hide.processing.thread' | translate}}
+        </div>
+        <input type ="checkbox">
       </div>
 
       <div class="contract__content--participants">
@@ -706,10 +712,17 @@
     </div>
     <div class="contract--content">
       <div class="contract__content--title-doi-tac">
-        <div style="width: 85px">{{ "doi_tac" | translate | uppercase }} -</div>
+        <div style="width: 85px">
+          {{ "doi_tac" | translate | uppercase }}&nbsp;<span style="color: red">*</span>
+          -
+        </div>
         <input class="input1" type="text" placeholder="{{
             (item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate
           }}" [(ngModel)]="item.name" [disabled]="item.type == 3" />
+          <div style="width: 120px; margin-left: 5px">
+            {{'hide.processing.thread' | translate}}
+          </div>
+          <input type ="checkbox">
       </div>
       <div *ngIf="this.dataParnterOrganization().length >= 1" style="display: flex; justify-content: flex-end">
         <u class="label text-color" (click)="deletePartner(id, item)"
