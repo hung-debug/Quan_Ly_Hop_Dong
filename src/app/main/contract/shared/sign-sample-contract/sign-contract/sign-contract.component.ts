@@ -29,7 +29,9 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   getText(sign: any) {
     if (sign.sign_unit == 'text') {
       if(sign.value) {
-        
+        if(sign.text_type == 'currency') {
+          return this.contractService.convertCurrency(sign.value);
+        } else 
         return sign.value      
       } else if (sign.text_type!= undefined && sign.text_type == "currency"){
           return 'Số tiền'
@@ -38,6 +40,9 @@ export class SignContractComponent implements OnInit, AfterViewInit {
       if (this.datas.contract_no) {
         return this.datas.contract_no
       } else if (sign.value) {
+        if(sign.text_type == 'currency') {
+          return this.contractService.convertCurrency(sign.value);
+        } else 
         return sign.value;
       } else return (this.translate.instant('contract.number'));
     }
