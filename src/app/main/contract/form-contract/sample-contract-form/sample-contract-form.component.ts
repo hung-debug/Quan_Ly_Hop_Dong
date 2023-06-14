@@ -1629,8 +1629,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           isContractUserSign_clone.forEach((element: any) => {
             if (element.sign_config.length > 0) {
               element.sign_config.forEach((item: any) => {
-                item['font'] = this.datasForm.font;
-                item['font_size'] = this.datasForm.size;
+                item['font'] = item.font ? item.font : 'Times New Roman';
+                item['font_size'] = item.font_size ? item.font_size : 13;
                 item['contract_id'] = this.datasForm.contract_id;
                 item['document_id'] = this.datasForm.document_id;
                 if (item.text_attribute_name) {
@@ -1761,8 +1761,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     if (dataSignNotId.length > 0) {
       let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text", "id_have_data", "text_type"];
       dataSignNotId.forEach((item: any) => {
-        item['font'] = this.datasForm.font;
-        item['font_size'] = this.datasForm.size;
+        item['font'] = item.font ? item.font : 'Times New Roman';
+        item['font_size'] = item.font_size ? item.font_size : 12;
         item['contract_id'] = this.datasForm.contract_id;
         item['document_id'] = this.datasForm.document_id;
         if (item.text_attribute_name) {
