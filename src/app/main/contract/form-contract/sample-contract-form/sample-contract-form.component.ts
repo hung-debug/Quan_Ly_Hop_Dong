@@ -117,6 +117,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   textSign: boolean = false;
   isContractNoNameNull: boolean = false;
 
+  imageSign: number = 2;
+  digitalSign: number = 3;
+
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
@@ -262,8 +265,47 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         this.size = this.datasForm.size;
       }
     }
+
+    this.synchronized1(this.imageSign);
+    this.synchronized1(this.digitalSign);
+
+    this.checkDifferent();
   }
 
+  synchronized1(numberSign: number) {
+    for(let i = 0; i < this.datasForm.is_determine_clone.length; i++) {
+      const clone = this.datasForm.is_determine_clone[i];
+
+      for(let j = 0; j < this.datasForm.contract_user_sign[numberSign].sign_config.length; j++) {
+        const signImage = this.datasForm.contract_user_sign[numberSign].sign_config[j];
+
+        for(let k = 0; k < clone.recipients.length; k++) {
+          if(clone.recipients[k].id == signImage.recipient_id) {
+             this.datasForm.contract_user_sign[numberSign].sign_config[j].email = clone.recipients[k].email;
+             this.datasForm.contract_user_sign[numberSign].sign_config[j].recipient.email = clone.recipients[k].email;
+             this.datasForm.contract_user_sign[numberSign].sign_config[j].name = clone.recipients[k].name;
+          }
+        }
+      }
+    }
+  }
+
+
+  checkDifferent() {
+    //Lấy tất cả recipientId trong clone
+    const recipientIds = this.datasForm.is_determine_clone.flatMap((item:any) => item.recipients.map((recipient:any) => recipient.id));
+
+    //Check mảng sign_config có id recipient trên thì giữ lại; còn lại xoá hết
+    for(let i = 0; i < 4; i++) {
+      for(let j = 0; j < this.datasForm.contract_user_sign[i].sign_config.length; j++) {
+        const sign_config = this.datasForm.contract_user_sign[i].sign_config[j];
+
+        if(sign_config.recipient_id &&  !recipientIds.includes(sign_config.recipient_id)) {
+          this.datasForm.contract_user_sign[i].sign_config.splice(j,1);
+        }
+      }
+    }
+  }
 
   onResize(e?: any) {
     this.checkZoomService.onResize();
@@ -343,7 +385,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
       ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5)) || (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) || (val.sign_unit == 'so_tai_lieu' && data.role == 4) ||
         (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-      ((val.recipient ? (val.recipient.name == data.name && ((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email)) : (((val.name && val.name == data.name) || !val.name || (val.sign_unit == 'text' && !val.recipient_id)) && ((val.email && val.email == data.email) || !val.email))
+      ((val.recipient ? (((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email)) : (( !val.name || (val.sign_unit == 'text' && !val.recipient_id)) && ((val.email && val.email == data.email) || !val.email))
       ))));
     //
     // }
@@ -370,28 +412,26 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       })
     }
 
-    // this.datasForm.contract_user_sign.forEach((resForm: any) => {
-    //   if (resForm.sign_config.length > 0) {
-    //     let arrConfig = [];
-    //     arrConfig = resForm.sign_config.filter((val: any) =>
-    //       !val.recipient_id || dataContractUserSign.some((data) => data.sign_unit == val.sign_unit &&
-    //         (val.recipient ? val.recipient.name : val.name) == (data.recipient ? data.recipient.name : data.name) &&
-    //         (val.recipient ? val.recipient.email : val.email) == (data.recipient ? data.recipient.email : data.email))
-    //     )
-    //     resForm.sign_config = arrConfig; // set data with object not change data
-    //     resForm.sign_config.forEach((items: any) => {
-    //       items.id = items.id + '1'; // tránh trùng với id cũ, gây ra lỗi
-    //       let data: any = {};
-    //       data = dataDetermine.filter((data: any) =>
-    //         items.recipient_id == data.template_recipient_id ||
-    //         data.email == (items.recipient ? items.recipient.email : items.email) &&
-    //         data.name == (items.recipient ? items.recipient.name : items.name))[0];
-    //       if (data) {
-    //         items.is_type_party = data.is_type_party;
-    //       }
-    //     })
-    //   }
-    // })
+    this.datasForm.contract_user_sign.forEach((resForm: any) => {
+      if (resForm.sign_config.length > 0 && resForm.sign_unit != 'so_tai_lieu') {
+        let arrConfig = [];
+        arrConfig = resForm.sign_config.filter((val: any) =>
+          !val.recipient_id || dataContractUserSign.some((data) => data.sign_unit == val.sign_unit &&
+            (val.recipient ? val.recipient.email : val.email) == (data.recipient ? data.recipient.email : data.email))
+        )
+        resForm.sign_config = arrConfig; // set data with object not change data
+        resForm.sign_config.forEach((items: any) => {
+          items.id = items.id + '1'; // tránh trùng với id cũ, gây ra lỗi
+          let data: any = {};
+          data = dataDetermine.filter((data: any) =>
+            items.recipient_id == data.template_recipient_id ||
+            data.email == (items.recipient ? items.recipient.email : items.email))[0];
+          if (data) {
+            items.is_type_party = data.is_type_party;
+          }
+        })
+      }
+    })
     //
     if (this.isNoEmailObj) {
       // lấy ra người ký từ mẫu chưa có email để gán lại
@@ -456,7 +496,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         }
       }
     }
-
   }
 
   ngOnChanges(changes: SimpleChanges): void {
