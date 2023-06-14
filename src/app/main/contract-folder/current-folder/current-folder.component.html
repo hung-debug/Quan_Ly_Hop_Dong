@@ -1,14 +1,17 @@
-<!--Truong hop dang xu ly va sap het han-->
 <div class="col-md-4" class="container-fluid">
-    <ng-template [ngIf]="!roleMess">
-        <!-- <div class="col-md-12" style="padding-top: 20px;">
+    <ng-template [ngIf]="roleMess">
+        <div class="col-md-12" style="padding-top: 20px;">
             <div class="input-line search">
                 <img src="../../assets/img/icon_search.svg" class="input-img" />
-                <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
-                <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
+                <input type="text" id="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" />
             </div>
+        </div>
 
-        </div> -->
+        <div class="row">
+            <div class="col-md-6 btn-container" style="padding-top: 10px">
+              <button (click)="addContract()" class="btn btn-lg btn-block btn_submit">Thêm hợp đồng</button>
+            </div>
+        </div>
 
 
         <div class="row list_header" *ngIf="pageTotal > 0;">

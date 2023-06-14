@@ -11,7 +11,7 @@
   <div class="col-md-12" style="padding-top: 20px;">
     <div class="input-line search" style="justify-content:left">
         <img src="../../assets/img/icon_search.svg" class="input-img" />
-        <input type="text" id="filter_name" class="input-text" style="width: 90%!important"
+        <input placeholder="{{'folder.search.name.placeholder' | translate}}" type="text" id="filter_name" class="input-text" style="width: 90%!important"
         />
     </div>
   </div>
@@ -56,7 +56,7 @@
     <div class="row">
       <div class="col-md-4">
         <div class="row">
-          <div class="col-md-12 item_folder_name">
+          <div class="col-md-12 item_folder_name" (click)="openFolder(item.name)">
             <img src = "../../../assets/img/contract.svg" height="45px">
             <a>
             {{item.name}}
@@ -66,12 +66,12 @@
       </div>
       <div class="col-md-3 calendar_create">
         <div><i class="fa fa-calendar fa_icon"></i>
-          <span class="item_date">{{01/01/2001 | date: 'dd/MM/yyyy HH:mm'}}</span>
+          <span class="item_date">{{getDateTime(item.createdAt) | date: 'dd/MM/yyyy HH:mm'}}</span>
         </div>
       </div>
-      <div class="col-md-3 calendar_create">
+      <div class="col-md-3 calendar_last_updated">
         <div><i class="fa fa-calendar fa_icon"></i>
-          <span class="item_date">{{01/01/2001 | date: 'dd/MM/yyyy HH:mm'}}</span>
+          <span class="item_date">{{getDateTime(item.updatedAt) | date: 'dd/MM/yyyy HH:mm'}}</span>
         </div>
       </div>
 
@@ -81,10 +81,10 @@
             <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'role.contract-template.edit' | translate}}" (click)="editFolder(item.id)" />
           </div>
           <div class="div_icon">
-            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'role.contract-template.delete' | translate}}"  />
+            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'role.contract-template.delete' | translate}}" (click)="deleteFolder(item.id)" />
           </div>
           <div class="div_icon">
-            <img src="../../../assets/img/view-folder.svg" class="img_icon" ngbTooltip="{{'role.contract-template.delete' | translate}}"  />
+            <img src="../../../assets/img/view-folder.svg" class="img_icon" ngbTooltip="{{'role.contract-template.delete' | translate}}" (click)=" openDetailFolder(item.id)" />
           </div>
         </div>
       </div>
@@ -99,3 +99,6 @@
     </div>
   </div>
 </div>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+  <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+</ngx-spinner>

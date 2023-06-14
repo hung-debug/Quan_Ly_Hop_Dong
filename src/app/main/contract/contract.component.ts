@@ -44,7 +44,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   pageTotal: number = 0;
   statusPopup: number = 1;
   notificationPopup: string = '';
-  pageOptions: any[] = [10, 20, 50, 100];
+  pageOptions: any[] = [10, 20, 50, 100 , 200, 1000];
 
   title: any = "";
   id: any = "";
@@ -168,7 +168,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.sub = this.route.params.subscribe(params => {
       this.action = params['action'];
       this.status = params['status'];
-      console.log("this.status",this.status);
 
       //set status
       this.convertStatusStr();
@@ -479,7 +478,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
       //get list contract
       this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
-        console.log(this.filter_status);
         this.contracts = data.entities;
         this.pageTotal = data.total_elements;
         if (this.pageTotal == 0) {

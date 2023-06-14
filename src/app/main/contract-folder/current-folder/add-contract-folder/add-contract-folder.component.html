@@ -1,0 +1,28 @@
+<div class="container-fluid">
+    <div style="text-align: center; font-weight: bold">
+      <h3 style="color: #106DB6; font-family: inherit;text-transform: uppercase;">{{ title | translate}}</h3>
+    </div>
+    <div class="search-row">
+      <div class="contract-type">
+        <div class="label-input">{{'folder.name' | translate}}&nbsp;</div>
+        <p-treeSelect class="md:w-20rem w-full" containerStyleClass="w-full" style="width: 100%!important" 
+        [(ngModel)]="selectedContractType" [options]="contractTypes" placeholder="Chọn loại hợp đồng"></p-treeSelect>
+      </div>
+      <div class="contract-type">
+        <div class="label-input">{{'folder.name' | translate}}&nbsp;</div>
+        <div class="input-data-name"><input type="text border" [readonly]="this.action == 'openDetail'"></div>
+      </div>
+      <div class="contract-type">
+        <div class="label-input">{{'folder.name' | translate}}&nbsp;</div>
+        <div class="input-data-name"><input type="text border" [readonly]="this.action == 'openDetail'"></div>
+      </div>
+      <div class="contract-name"></div>
+      <div class="contract-partner"></div>
+    </div>
+
+    <div class="row" style="justify-content: center;padding-top: 10px;">
+      <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
+      <button class="save-button" (click)="dialog.closeAll()" type="button">{{'btn.save' | translate}}</button>
+  </div>
+  
+  </div>

@@ -1,3 +1,4 @@
+import { NgxSpinnerService } from 'ngx-spinner';
 import { DeleteFolderComponent } from './delete-folder/delete-folder.component';
 import { Folder, ContractFolderService } from '../../service/contract-folder.service';
 import { Component, Input, OnInit } from '@angular/core';
@@ -19,13 +20,11 @@ export class ContractFolderComponent implements OnInit {
 
   @Input() datas: any;
   
-  folders :Folder[] = [];
+  folders :any[] = [];
   cols : any[];
   parent_id_list_name: any[]=[];
   currentFolders: Folder[]=[];
   haveContract: boolean = false;
-  folderLevel: number = 0;
-
 
   constructor(
     private appService: AppService,
@@ -33,6 +32,7 @@ export class ContractFolderComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
@@ -42,89 +42,18 @@ export class ContractFolderComponent implements OnInit {
       {header: 'Ngày tạo', style:'text-align: left;', class:'col-md-5'},
       {header: 'contract-type.manage', style:'text-align: center;',class:'col-md-2'},
     ];
-
-    this.route.params.subscribe(params => {
-      const id = params['id'];
-      
-      if(id){
-        this.contractFolderService.getContractFoldersList().subscribe(
-          (data) => {
-            this.folders = data.filter((folder: any) => folder.parentId == id);
-            
-          })
         
-        this.contractFolderService.getContractFolderName().subscribe(
-          (data) => {
-            this.currentFolders = [];
-            let currentFolder = data.filter((folder: any) => folder.id == id)[0];
-            this.currentFolders.push(currentFolder);
-            let parentId = currentFolder.parentId;
-            while(parentId != null){
-              let parentFolder = data.filter((folder: any) => folder.id == parentId)[0];
-              this.currentFolders.push(parentFolder);
-              parentId = parentFolder.parentId;
-            }
-            this.currentFolders.reverse();
-            this.folderLevel = this.currentFolders.length;
-            
-          }
-        )
-        
-      } else {
-        this.contractFolderService.getContractFoldersList().subscribe(
-          (data) => {
-            this.folders = data.filter((folder: any) => folder.parentId == null);
-          })
-        this.parent_id_list_name = [];
-      }
+    this.contractFolderService.getContractFoldersList().subscribe((data) => 
+    {
+        this.folders = data.filter((folder: any) => folder.parentId == 0).sort((a: any, b: any) => a.name.localeCompare(b.name));
+    })
 
-    });
-
-    this.folders = [
-      {
-        id: 3,
-        name: "Hợp đồng 2024",
-        contracts: [],
-        parentId: undefined
-      },
-      {
-        id: 4,
-        name: "Tháng 1",
-        contracts: [
-          24194,
-          24183
-        ],
-        parentId: undefined
-      },
-      {
-        id: 5,
-        name: "Hợp đồng 2023",
-        contracts: [],
-        parentId: undefined
-      }
-    ]
-    // if(!this.datas){
-    //   this.folders = [];
-    //   this.folders = this.treeFolderService.getFolders();  
-    //   
-    // } else if(this.datas){
-    //   this.childrenFolder = this.datas;
-    //   this.folders = this.childrenFolder;
-    // }
 
   }
   
-  
-  openFolder(id: any){
-    if(!this.checkHaveContract(id)){
-    this.router.navigate(['/main/contract-folder', id]);
-    
-    } else {
-      
-      this.router.navigate(['/main/contract-folder/c/', id]);
-    }
-    
-    
+
+  openFolder(name: any){
+    this.router.navigate(['/main/my-folder', name]);
   }
 
   checkLastChildFolderBreadcrumber(folder: any, folders: any){
@@ -157,9 +86,15 @@ export class ContractFolderComponent implements OnInit {
       width: '500px',
       data: data
     });
+
+    matDialogRef.afterClosed().subscribe((item) => {
+      this.getFolderList();
+      this.spinner.hide();
+    })
   }
 
   editFolder(id: number | undefined){
+    console.log(id);
     let data = {
       action: 'edit',
       folderId: id
@@ -168,6 +103,18 @@ export class ContractFolderComponent implements OnInit {
       width: '500px',
       data: data
     });
+
+    matDialogRef.afterClosed().subscribe((item) => {
+      this.getFolderList();
+      this.spinner.hide();
+    });
+  }
+
+  getFolderList(){
+    this.contractFolderService.getContractFoldersList().subscribe((data) => 
+    {
+        this.folders = data.filter((folder: any) => folder.parentId == 0).sort((a: any, b: any) => a.name.localeCompare(b.name));
+    })
   }
 
   openDetailFolder(id: number){
@@ -191,5 +138,10 @@ export class ContractFolderComponent implements OnInit {
       data: data
     })
 
+  }
+
+  getDateTime(item: string){
+    let formattedDate = this.contractFolderService.convertDateTime(item);
+    return formattedDate;
   }
 }

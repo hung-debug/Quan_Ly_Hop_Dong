@@ -245,6 +245,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   async next(action: string) {
     this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
 
+      if(this.action != 'edit')
       this.datasForm.is_determine_clone[index].id = null;
       
       if (items.type == 3) {

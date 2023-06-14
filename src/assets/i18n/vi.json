@@ -673,8 +673,10 @@
   "folder.edit": "Sửa thư mục",
   "folder.delete": "Xóa thư mục",
   "folder.openDetail": "Xem chi tiết thư mục",
+  "folder.search.name.placeholder": "Nhập tên thư mục để tìm kiếm",
   "confirm.folder.delete": "Bạn có chắc chắn muốn xóa thư mục này không?",
-  "edit.exp.sign.time":"Chỉnh sửa ngày hết hạn ký"
+  "edit.exp.sign.time":"Chỉnh sửa ngày hết hạn ký",
+  "add.contract.folder": "Thêm hợp đồng"
 
   
 }

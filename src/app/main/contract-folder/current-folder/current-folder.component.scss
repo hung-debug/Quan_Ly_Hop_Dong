@@ -1,0 +1,40 @@
+.search{
+    border: 1px solid #106DB6;
+    border-radius: 15px;
+    height: 38px;
+  }
+
+  .input-line {
+    display: flex;
+    position: relative;
+  }
+
+  .input-text {
+    border: 0;
+    padding: 10px;
+    width: 93%;
+    outline:0px;
+  }
+
+  .input-img {
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .btn-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .btn_submit{
+    border: 0px;
+    border-radius: 5px;
+    height: 37px;
+    box-sizing: border-box;
+    color: white;
+    background-color: #106DB6;
+    font-size: 13px;
+    margin: 0 10px;
+  }

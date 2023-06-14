@@ -116,7 +116,7 @@ import { ContractFolderComponent } from './main/contract-folder/contract-folder.
 import { ReportContractReceiveComponent } from './main/report/report-contract-receive/report-contract-receive.component';
 import { CustomerAddComponent } from './main/customer/customer-add/customer-add.component';
 import { CurrentFolderComponent } from './main/contract-folder/current-folder/current-folder.component';
-import { AddContractFolderComponent } from './main/contract-folder/add-contract-folder/add-contract-folder.component';
+import { AddContractFolderComponent } from './main/contract-folder/current-folder/add-contract-folder/add-contract-folder.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
