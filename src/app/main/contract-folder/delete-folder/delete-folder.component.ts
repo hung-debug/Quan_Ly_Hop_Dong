@@ -1,3 +1,4 @@
+import { ContractFolderService } from 'src/app/service/contract-folder.service';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -15,28 +16,23 @@ export class DeleteFolderComponent implements OnInit {
   public dialogRef: MatDialogRef<DeleteFolderComponent>,
   public router: Router,
   public dialog: MatDialog,
+  private contractFolderService: ContractFolderService
 ) { }
 
   ngOnInit(): void {
   }
 
   onSubmit(){
-    // this.roleService.deleteRole(this.data.id).subscribe(
-    //   data => {
-    //     if(data.code == '00'){
-    //       this.toastService.showSuccessHTMLWithTimeout("Xóa thư mục thành công!", "", 3000);
-    //     }else {
-    //       this.toastService.showErrorHTMLWithTimeout("Lỗi hệ thống!", "", 3000);
-    //     }
-        
-    //     this.dialogRef.close();
-    //     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-    //       this.router.navigate(['/main/contract-folder']);
-    //     });
-            
-    //   }, error => {
-    //     this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-    //   }
-    // )
+    this.contractFolderService.deleteContractFolder(this.data.id).subscribe(
+      (data) => {
+        this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục thành công','',2000);
+        this.dialogRef.close();
+        this.router.navigateByUrl('/main/contract-folder');
+      },
+      (error) => {
+        this.toastService.showErrorHTMLWithTimeout('Xóa thư mục thất bại', '', 2000);
+      }
+    )
+    
   }
 }

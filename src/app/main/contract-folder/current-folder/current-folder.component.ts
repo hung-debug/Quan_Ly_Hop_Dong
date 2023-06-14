@@ -1,6 +1,9 @@
+import { AddContractFolderComponent } from './add-contract-folder/add-contract-folder.component';
+import { AppService } from './../../../service/app.service';
 import { Component, OnInit } from '@angular/core';
-import { Router, Route } from '@angular/router';
+import { Router, Route, ActivatedRoute } from '@angular/router';
 import { ContractFolderService } from 'src/app/service/contract-folder.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-current-folder',
@@ -24,18 +27,17 @@ export class CurrentFolderComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private contractFolderService : ContractFolderService
+    private contractFolderService : ContractFolderService,
+    private activatedRoute : ActivatedRoute,
+    private appService: AppService,
+    private dialog: MatDialog,
     
   ) { }
 
   ngOnInit(): void {
-    this.sub = this.router.routerState.root.queryParams.subscribe(params => {
-      this.action = params['action'];
-      this.status = params['status'];
-      this.type = params['type'];
-      this.id = params['id'];
-      this.getContractList();
-    });
+    console.log(this.activatedRoute.snapshot.params['name'])
+    this.appService.setTitle(this.activatedRoute.snapshot.params['name'])
+    this.getContractList();
   }
 
   openDetail(id: number) {
@@ -87,6 +89,13 @@ export class CurrentFolderComponent implements OnInit {
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
     }
+  }
+
+  addContract(){
+    const matDialogRef = this.dialog.open(AddContractFolderComponent, {
+      width: '800px',
+      height: '800px',
+    });
   }
 
 }

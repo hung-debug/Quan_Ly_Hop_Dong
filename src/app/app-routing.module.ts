@@ -1,3 +1,4 @@
+import { CurrentFolderComponent } from './main/contract-folder/current-folder/current-folder.component';
 import { CustomerAddComponent } from './main/customer/customer-add/customer-add.component';
 import { ContractFolderComponent } from './main/contract-folder/contract-folder.component';
 import { CustomerDetailComponent } from './main/customer/customer-detail/customer-detail.component';
@@ -147,8 +148,8 @@ const routes: Routes = [
         component: ContractFolderComponent
       },
       {
-        path: 'contract-folder/:id',
-        component: ContractFolderComponent
+        path: 'my-folder/:name',
+        component: CurrentFolderComponent
       },
       {
         path: 'contract/:action/:status',
