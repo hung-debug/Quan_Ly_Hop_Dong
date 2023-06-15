@@ -506,28 +506,54 @@ export class ContractSignatureComponent implements OnInit {
     if (this.filter_status % 10 == 1) {
       this.filter_status = 1;
     }
+    this.contractServiceV1.sidebarContractEvent.subscribe((event: any) => {
+      if(event='contract-signature')
+      this.p = 1;
+    });
 
     //get list contract share
     if (this.filter_status == -1) {
-      this.contractService.getContractShareList(this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p,
-        this.page, this.contractStatus).subscribe((data) => {
-          this.contracts = data.entities;
-          this.pageTotal = data.total_elements;
-          if (this.pageTotal == 0) {
-            this.p = 0;
-            this.pageStart = 0;
-            this.pageEnd = 0;
-          } else {
-            this.setPage();
+      this.contractService
+        .getContractShareList(
+          this.filter_name,
+          this.filter_type,
+          this.filter_contract_no,
+          this.filter_from_date,
+          this.filter_to_date,
+          this.filter_status,
+          this.p,
+          this.page,
+          this.contractStatus
+        )
+        .subscribe(
+          (data) => {
+            this.contracts = data.entities;
+            this.pageTotal = data.total_elements;
+            if (this.pageTotal == 0) {
+              this.p = 0;
+              this.pageStart = 0;
+              this.pageEnd = 0;
+            } else {
+              this.setPage();
+            }
+            this.spinner.hide();
+          },
+          (error) => {
+            setTimeout(() => this.router.navigate(['/login']));
+            this.toastService.showErrorHTMLWithTimeout(
+              'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+              '',
+              3000
+            );
           }
-        }, error => {
-          setTimeout(() => this.router.navigate(['/login']));
-          this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-        });
+        );
     } else if (this.filter_status == 1 || this.filter_status == 4) {
-      if (this.typeDisplay == 'signOne'|| this.typeDisplay === 'downloadMany'){
-        if(this.typeDisplay === 'downloadMany'){
-          this.contractStatus = 30
+      if (
+        this.typeDisplay == 'signOne' ||
+        this.typeDisplay === 'downloadMany'
+      ) {
+        if (this.typeDisplay === 'downloadMany') {
+          this.contractStatus = 30;
         }
         this.contractService
           .getContractMyProcessList(
@@ -541,7 +567,100 @@ export class ContractSignatureComponent implements OnInit {
             this.page,
             this.contractStatus
           )
-          .subscribe((data) => {
+          .subscribe(
+            (data) => {
+              this.contracts = data.entities;
+              this.pageTotal = data.total_elements;
+              if (this.pageTotal == 0) {
+                this.p = 0;
+                this.pageStart = 0;
+                this.pageEnd = 0;
+              } else {
+                this.setPage();
+              }
+              this.spinner.hide();
+              this.contracts.forEach((key: any, v: any) => {
+                this.contracts[v].contractId = key.participant.contract.id;
+                this.contracts[v].contractName = key.participant.contract.name;
+                this.contracts[v].contractNumber =
+                  key.participant.contract.code;
+                this.contracts[v].contractSignTime =
+                  key.participant.contract.sign_time;
+                this.contracts[v].contractCreateTime =
+                  key.participant.contract.created_time;
+                this.contracts[v].contractStatus =
+                  key.participant.contract.status;
+                this.contracts[v].contractCecaPush =
+                  key.participant.contract.ceca_push;
+                this.contracts[v].contractCecaStatus =
+                  key.participant.contract.ceca_status;
+                this.contracts[v].contractReleaseState =
+                  key.participant.contract.release_state;
+              });
+            },
+            (error) => {
+              setTimeout(() => this.router.navigate(['/login']));
+              this.toastService.showErrorHTMLWithTimeout(
+                'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+                '',
+                3000
+              );
+            }
+          );
+      } else {
+        this.contractService.getContractMyProcessListSignMany(this.keyword).subscribe(
+          (data) => {
+            this.contractsSignMany = data;
+            if (this.pageTotal == 0) {
+              this.p = 0;
+              this.pageStart = 0;
+              this.pageEnd = 0;
+            } else {
+              this.setPage();
+            }
+            this.spinner.hide();
+            this.contractsSignMany.forEach((key: any, v: any) => {
+              this.contractsSignMany[v].contractId =
+                key.participant.contract.id;
+              this.contractsSignMany[v].contractName =
+                key.participant.contract.name;
+              this.contractsSignMany[v].contractNumber =
+                key.participant.contract.code;
+              this.contractsSignMany[v].contractSignTime =
+                key.participant.contract.sign_time;
+              this.contractsSignMany[v].contractCreateTime =
+                key.participant.contract.created_time;
+              this.contractsSignMany[v].contractStatus =
+                key.participant.contract.status;
+              this.contractsSignMany[v].contractCecaPush =
+                key.participant.contract.ceca_push;
+              this.contractsSignMany[v].contractCecaStatus =
+                key.participant.contract.ceca_status;
+              this.contractsSignMany[v].contractReleaseState =
+                key.participant.contract.release_state;
+              this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
+              this.contractsSignMany[v].checked = false;
+            });
+          },
+          (error) => {
+            setTimeout(() => this.router.navigate(['/login']));
+            this.toastService.showErrorHTMLWithTimeout(
+              'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+              '',
+              3000
+            );
+          }
+        );
+      }
+    } else {
+      this.contractService
+        .getContractMyProcessDashboard(
+          this.filter_status % 10,
+          this.p,
+          this.page
+        )
+        .subscribe(
+          (data) => {
             this.contracts = data.entities;
             this.pageTotal = data.total_elements;
             if (this.pageTotal == 0) {
@@ -551,107 +670,17 @@ export class ContractSignatureComponent implements OnInit {
             } else {
               this.setPage();
             }
-            this.contracts.forEach((key: any, v: any) => {
-              this.contracts[v].contractId = key.participant.contract.id;
-              this.contracts[v].contractName = key.participant.contract.name;
-              this.contracts[v].contractNumber = key.participant.contract.code;
-              this.contracts[v].contractSignTime =
-                key.participant.contract.sign_time;
-              this.contracts[v].contractCreateTime =
-                key.participant.contract.created_time;
-              this.contracts[v].contractStatus =
-                key.participant.contract.status;
-              this.contracts[v].contractCecaPush =
-                key.participant.contract.ceca_push;
-              this.contracts[v].contractCecaStatus =
-                key.participant.contract.ceca_status;
-              this.contracts[v].contractReleaseState =
-                key.participant.contract.release_state;
-            });
-          }, error => {
+            this.spinner.hide();
+          },
+          (error) => {
             setTimeout(() => this.router.navigate(['/login']));
-            this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-          });
-        }
-      else {
-        if(this.typeDisplay == 'signMany') {
-          this.contractService.getContractMyProcessListSignMany(this.keyword,this.filter_type,
-            this.filter_contract_no,
-            this.filter_from_date,
-            this.filter_to_date).subscribe((data) => {
-            this.contractsSignMany = data;
-            if (this.pageTotal == 0) {
-              this.p = 0;
-              this.pageStart = 0;
-              this.pageEnd = 0;
-            } else {
-              this.setPage();
-            }
-            this.contractsSignMany.forEach((key: any, v: any) => {
-              this.contractsSignMany[v].contractId = key.participant.contract.id;
-              this.contractsSignMany[v].contractName = key.participant.contract.name;
-              this.contractsSignMany[v].contractNumber = key.participant.contract.code;
-              this.contractsSignMany[v].contractSignTime = key.participant.contract.sign_time;
-              this.contractsSignMany[v].contractCreateTime = key.participant.contract.created_time;
-              this.contractsSignMany[v].contractStatus = key.participant.contract.status;
-              this.contractsSignMany[v].contractCecaPush = key.participant.contract.ceca_push;
-              this.contractsSignMany[v].contractCecaStatus = key.participant.contract.ceca_status;
-              this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
-              this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
-              this.contractsSignMany[v].checked = false;
-            });
-          }, error => {
-            setTimeout(() => this.router.navigate(['/login']));
-            this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-          });
-        } else if(this.typeDisplay == 'viewMany') {
-          this.contractService.getViewContractMyProcessList(this.keyword, this.filter_type,
-            this.filter_contract_no,
-            this.filter_from_date,
-            this.filter_to_date).subscribe((data) => {
-            this.contractViewList = data;
-            if (this.pageTotal == 0) {
-              this.p = 0;
-              this.pageStart = 0;
-              this.pageEnd = 0;
-            } else {
-              this.setPage();
-            }
-            this.contractsSignMany.forEach((key: any, v: any) => {
-              this.contractsSignMany[v].contractId = key.participant.contract.id;
-              this.contractsSignMany[v].contractName = key.participant.contract.name;
-              this.contractsSignMany[v].contractNumber = key.participant.contract.code;
-              this.contractsSignMany[v].contractSignTime = key.participant.contract.sign_time;
-              this.contractsSignMany[v].contractCreateTime = key.participant.contract.created_time;
-              this.contractsSignMany[v].contractStatus = key.participant.contract.status;
-              this.contractsSignMany[v].contractCecaPush = key.participant.contract.ceca_push;
-              this.contractsSignMany[v].contractCecaStatus = key.participant.contract.ceca_status;
-              this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
-              this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
-              this.contractsSignMany[v].checked = false;
-            });
-          }, error => {
-            setTimeout(() => this.router.navigate(['/login']));
-            this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-          });
-        }
-       
-      }
-    } else {
-      this.contractService.getContractMyProcessDashboard(this.filter_status % 10, this.p, this.page).subscribe((data) => {
-        this.contracts = data.entities;
-        this.pageTotal = data.total_elements;
-        if (this.pageTotal == 0) {
-          this.p = 0;
-          this.pageStart = 0;
-          this.pageEnd = 0;
-        } else {
-          this.setPage();
-        }
-      }, error => {
-        setTimeout(() => this.router.navigate(['/login']));
-        this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-      });
+            this.toastService.showErrorHTMLWithTimeout(
+              'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+              '',
+              3000
+            );
+          }
+        );
     }
   }
 
