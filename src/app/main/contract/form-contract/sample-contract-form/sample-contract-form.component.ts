@@ -1672,11 +1672,10 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             if(this.validData('release-check') == true){
               this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
                 this.contractService.addContractRelease(contract).subscribe((res: any) => {
-                  console.log("du dk");
-                  this.router.navigate(['/main/contract/create/draft']);
-                  this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
                 });
               });
+              this.router.navigate(['/main/contract/create/draft']);
+              this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
             } else {
             this.router.navigate(['/main/contract/create/draft']);
             this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
@@ -1741,8 +1740,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           if(this.validData('release-check') == true){
             this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
               this.contractService.addContractRelease(contract).subscribe((res: any) => {
-                this.router.navigate(['/main/contract/create/draft']);
-                this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
               });
             });
           }
@@ -1919,6 +1916,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             let element = this.datasForm.contract_user_sign[i].sign_config[j];
 
             if (!element.name && !element.recipient && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') {
+              if(isSaveDraft && element.sign_unit == 'text'){
+                break;
+              }
               count++;
               break
             } else if (element.sign_unit == 'so_tai_lieu') {
@@ -1932,11 +1932,11 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                 count++;
                 break;
               }
-            } else if (element.sign_unit == 'text') { 
+            } else if (element.sign_unit == 'text' && !isSaveDraft) { 
               if (!element.text_attribute_name && !element.is_have_text) {
                 count_text++;
                 break
-              } else if (element.is_have_text && !element.value) {
+              } else if (element.is_have_text && !element.value ) {
                 count_text_number++;
                 break;
               } else if(!element.name && !element.value) {
