@@ -44,7 +44,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   pageTotal: number = 0;
   statusPopup: number = 1;
   notificationPopup: string = '';
-  pageOptions: any[] = [10, 20, 50, 100 , 200, 1000];
+  pageOptions: any[] = [10, 20, 50, 100];
 
   title: any = "";
   id: any = "";
