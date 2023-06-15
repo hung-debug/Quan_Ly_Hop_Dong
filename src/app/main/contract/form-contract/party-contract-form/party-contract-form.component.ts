@@ -250,11 +250,14 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         items.recipients.forEach((recipient: any) => {
           recipient.id = null;
 
-          recipient.fields.forEach((field: any) => {
-            field.id = null;
-
-            field.recipient.id = null;
-          })
+          if(recipient.fields.length > 0) {
+            recipient.fields.forEach((field: any) => {
+              field.id = null;
+  
+              field.recipient.id = null;
+            })
+          }
+          
         })
       }
       
