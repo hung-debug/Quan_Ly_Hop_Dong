@@ -1915,10 +1915,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           for (let j = 0; j < this.datasForm.contract_user_sign[i].sign_config.length; j++) {
             let element = this.datasForm.contract_user_sign[i].sign_config[j];
 
+            if(isSaveDraft && element.sign_unit == 'text'){
+              if(element.recipient_id == null && !element.value)
+              count++;
+              break;
+            }
             if (!element.name && !element.recipient && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') {
-              if(isSaveDraft && element.sign_unit == 'text'){
-                break;
-              }
               count++;
               break
             } else if (element.sign_unit == 'so_tai_lieu') {
