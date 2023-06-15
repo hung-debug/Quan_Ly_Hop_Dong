@@ -671,12 +671,15 @@ export class ContractComponent implements OnInit, AfterViewInit {
     }, 100)
   }
 
-  openEditExpiration(time: any) {
+  openEditExpiration(item: any) {
+
+    console.log("item ", item);
 
     let title = this.translate.instant('edit.exp.sign.time')
     const data = {
       title: title,
-      expirationSign: time
+      expirationSign: item.sign_time,
+      contractId: item.id
     }
 
      // @ts-ignore

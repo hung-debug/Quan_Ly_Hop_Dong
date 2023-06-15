@@ -8,6 +8,7 @@ import { ToastService } from "../../../../../service/toast.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { parttern, parttern_input } from 'src/app/config/parttern';
 import { environment } from 'src/environments/environment';
+import { type_signature } from 'src/app/config/variable';
 
 @Component({
   selector: 'app-forward-contract',
@@ -28,6 +29,9 @@ export class ForwardContractComponent implements OnInit {
   type: any = 0;
   locale: string;
   isVietnamese: boolean = true;
+  dropdownSignTypeSettings: any = {};
+  dataSign: any;
+  signTypeList: Array<any> = type_signature;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -57,13 +61,6 @@ export class ForwardContractComponent implements OnInit {
       this.type = 0;
 
     this.getCurrentUser();
-    this.myForm = this.fbd.group({
-      name: this.fbd.control("", [Validators.required]),
-      email: this.fbd.control("", [Validators.required]),
-      phone: "",
-      card_id: "",
-    });
-    
     
     // this.locale = this.datas?.dataContract?.is_data_contract?.participants[0]?.recipients[0]?.locale;
     const currentRecipientData = this.getTargetRecipientData(this.datas?.recipientId);
@@ -102,6 +99,51 @@ export class ForwardContractComponent implements OnInit {
         }
       }
       if (this.isReqPhone || this.isReqCardId) break;
+    }
+
+    this.actionWithSignTypeForm()
+  }
+
+  actionWithSignTypeForm() {
+    this.dropdownSignTypeSettings = {
+      singleSelection: false,
+      idField: "id",
+      textField: "name",
+      enableCheckAll: false,
+      allowSearchFilter: true,
+      itemsShowLimit: 1,
+      limitSelection: 1,
+      disabledField: 'item_disable',
+    };
+
+    const currentRecipientData = this.getTargetRecipientData(this.datas?.recipientId);
+
+    if(currentRecipientData.sign_type[0].id == 2 || currentRecipientData.sign_type[0].id == 4) {
+      this.dataSign = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 4);
+    } else if(currentRecipientData.sign_type[0].id == 1 ||  currentRecipientData.sign_type[0].id == 5) {
+      this.dataSign = this.signTypeList.filter((p: any) => p.id == 1 || p.id == 5);
+    } else if(currentRecipientData.sign_type[0].id == 3) {
+      this.dataSign = this.signTypeList.filter((p: any) => p.id == 3);
+    }
+
+    this.myForm = this.fbd.group({
+      name: this.fbd.control("", [Validators.required]),
+      email: this.fbd.control("", [Validators.required]),
+      phone: "",
+      card_id: "",
+      dataSign: this.fbd.control(this.signTypeList.filter((p: any) => p.id == currentRecipientData.sign_type[0].id),[Validators.required])
+    });
+  }
+
+  onItemSelect(event: any) {
+    //1: Ký ảnh
+    //5: Ký ekyc
+    if(event.id == 1) {
+      this.isReqPhone = true;
+      this.isReqCardId = false;
+    } else if(event.id == 5) {
+      this.isReqPhone = false;
+      this.isReqCardId = true;
     }
   }
 
@@ -295,11 +337,10 @@ export class ForwardContractComponent implements OnInit {
             recipient_id: this.datas.recipientId,
             is_replace: false,
             login_by: this.login,
-            locale: this.locale
+            locale: this.locale,
+            sign_type: this.myForm.value.dataSign
           };
           
-          
-
           if (this.login == 'phone') {
             dataAuthorize.email = dataAuthorize.phone
           }

@@ -95,15 +95,31 @@
       </div>
     </div>
 
+    <div class="name-item">
+      <div class="label_item">{{'user.sign-type' | translate}} <span class="require_star">*</span></div>
+      <div class="custom-multiselect">
+        <ng-multiselect-dropdown placeholder="{{'choose' | translate }}" [settings]="dropdownSignTypeSettings" [data]="dataSign" formControlName="dataSign"
+        (onSelect)="onItemSelect($event)">
+        </ng-multiselect-dropdown>
+      </div>
+    </div>
+
+    <div class="name-item" *ngIf="isReqPhone">
+      <div class="label_item">{{'user.phone' | translate}} <span class="require_star">*</span></div>
+      <div class="input-data">
+        <input style="width: 88%" autocomplete="off" type="text" formControlName="phone" class="input-text">
+      </div>
+    </div>
+
     <div class="name-item" *ngIf="isReqCardId">
-      <div class="label_item">CMT/CCCD <span class="require_star">*</span></div>
+      <div class="label_item">{{'cardId' | translate}} <span class="require_star">*</span></div>
       <div class="input-data">
         <input style="width: 88%" autocomplete="off" type="text" formControlName="card_id" class="input-text">
       </div>
     </div>
 
     <div class="name-item" *ngIf="isReqCardIdToken">
-      <div class="label_item">Mã số thuế/CMT/CCCD <span class="require_star">*</span>
+      <div class="label_item">{{'tax_code' | translate}} <span class="require_star">*</span>
         <div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div>
       </div>
       <div class="input-data">
@@ -112,7 +128,7 @@
     </div>
 
     <div class="name-item" *ngIf="isReqCardIdHsm">
-      <div class="label_item">Mã số thuế <span class="require_star">*</span></div>
+      <div class="label_item">{{'tax_code' | translate}} <span class="require_star">*</span></div>
       <div class="input-data">
         <input style="width: 88%" autocomplete="off" type="text" formControlName="card_id" class="input-text">
       </div>

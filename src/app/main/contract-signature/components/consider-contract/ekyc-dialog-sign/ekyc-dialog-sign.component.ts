@@ -188,7 +188,7 @@ export class EkycDialogSignComponent implements OnInit {
   
         this.contractService.detectFace(this.data.cccdFront, this.webcamImage.imageAsDataUrl).subscribe(async (response) => {
           this.spinner.hide();
-          if(response.verify_result == 2 && response.face_anti_spoof_status == 'REAL') {
+          if(response.verify_result == 2 && response.face_anti_spoof_status.status == 'REAL') {
             alert(this.translate.instant('confirm.success'));
 
             //call api trừ ekyc
@@ -196,7 +196,7 @@ export class EkycDialogSignComponent implements OnInit {
 
             this.dialogRef.close(response.verify_result);
           } else {
-            if(response.face_anti_spoof_status == 'FAKE') {
+            if(response.face_anti_spoof_status.status == 'FAKE') {
               alert(this.translate.instant('face.fail'));
             } else if(response.message.error_message && response.message.error_message != 'undefined') {
               alert(response.message.error_message);
