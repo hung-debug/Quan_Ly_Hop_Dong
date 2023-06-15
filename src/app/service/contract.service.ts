@@ -1576,7 +1576,7 @@ export class ContractService {
   }
 
   convertCurrency(value: any) {    
-    if (!isNaN(parseFloat(value)) && isFinite(value)) {
+    if (!isNaN(parseFloat(value)) && isFinite(value) && value.indexOf(".") === -1) {
     value = parseFloat(value).toLocaleString('vi-VN');
     return value;
   }
