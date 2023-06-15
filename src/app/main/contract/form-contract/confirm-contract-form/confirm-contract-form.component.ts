@@ -91,6 +91,8 @@ export class ConfirmContractFormComponent implements OnInit {
 
   conn: string;
   ngOnInit(): void {
+
+    console.log("form ", this.datasForm);
     this.spinner.hide();
     this.data_organization = this.datasForm.is_determine_clone.filter(
       (p: any) => p.type == 1
@@ -109,12 +111,12 @@ export class ConfirmContractFormComponent implements OnInit {
       (p: any) => p.type == 2 || p.type == 3
     );
 
-    
-    
+    console.log("vao day ");
+    console.log("dsf ", this.datasForm);
     if (!this.datasForm.contract_user_sign) {
       if (this.datasForm.is_data_object_signature && this.datasForm.is_data_object_signature.length && this.datasForm.is_data_object_signature.length > 0) {
         this.datasForm.is_data_object_signature.forEach((res: any) => {
-          
+          console.log("res ", res);
           res['id_have_data'] = res.id;
           if (res.type == 1) {
             res['sign_unit'] = 'text';
@@ -131,13 +133,6 @@ export class ConfirmContractFormComponent implements OnInit {
           }
           if (res.type == 4) {
             res['sign_unit'] = 'so_tai_lieu'
-          }
-          if(res.type == 5) {
-            res['sign_unit'] = 'text';
-            res['text_attribute_name'] = res.name;
-            res.name = res.text_attribute_name;
-            res['text_type'] = 'currency';
-            
           }
         })
       }
@@ -190,11 +185,9 @@ export class ConfirmContractFormComponent implements OnInit {
     //call API step confirm
     //this.contractService.addConfirmContract(this.datasForm).subscribe((data) => {
     this.spinner.show();
-    this.contractService
-      .changeStatusContract(this.datasForm.id, 10, '')
-      .subscribe(
+    this.contractService.changeStatusContract(this.datasForm.id, 10, '').subscribe(
         (data) => {
-          //this.router.navigate(['/main/contract/create/processing']);
+          this.router.navigate(['/main/contract/create/processing']);
           this.router
             .navigateByUrl('/', { skipLocationChange: true })
             .then(() => {
@@ -206,6 +199,10 @@ export class ConfirmContractFormComponent implements OnInit {
             '',
             3000
           );
+
+          this.spinner.hide();
+
+          console.log("data ", data);
         },
         (error) => {
           this.spinner.show();
@@ -259,6 +256,7 @@ export class ConfirmContractFormComponent implements OnInit {
     // });
   }
 
+  isButtonDisabled: boolean = false;
   async SaveContract(action: string) {
     if (this.router.url.includes('edit')) {
       let isHaveFieldId: any[] = [];
@@ -274,10 +272,7 @@ export class ConfirmContractFormComponent implements OnInit {
               element.type = 3;
             } else if(element.sign_unit == 'so_tai_lieu') {
               element.type = 4;
-            } else if(element.sign_unit =='text'){
-              if(element.text_type == 'currency'){
-                element.type = 5;
-              } else 
+            } else {
               element.type = 1;
             }
           }
@@ -296,8 +291,8 @@ export class ConfirmContractFormComponent implements OnInit {
       isContractUserSign_clone.forEach((element: any) => {
         if (element.sign_config.length > 0) {
           element.sign_config.forEach((item: any) => {
-            item['font'] = this.datasForm.font ? this.datasForm.font : 'Times New Roman';
-            item['font_size'] = this.datasForm.size ? this.datasForm.size : 13;
+            item['font'] = item.font ? item.font : 'Times New Roman';
+            item['font_size'] = item.font_size ? item.font_size : 12;
             item['contract_id'] = this.datasForm.contract_id;
             item['document_id'] = this.datasForm.document_id;
             if (item.text_attribute_name) {
@@ -317,8 +312,6 @@ export class ConfirmContractFormComponent implements OnInit {
 
                 if (!item.status) item.status = 0;
               }
-            } else if(item.sign_unit == 'text' && item.text_type == 'currency') {
-              item['type'] = 5;
             } else {
               item['type'] = 1;
             }
@@ -335,10 +328,10 @@ export class ConfirmContractFormComponent implements OnInit {
       });
 
       this.spinner.show();
-      
       this.contractService.getContractSample(this.data_sample_contract).subscribe(
           (data) => {
             if (action == 'finish_contract') {
+              this.isButtonDisabled = true;
               this.callAPIFinish();
             } else {
               if (
@@ -349,10 +342,6 @@ export class ConfirmContractFormComponent implements OnInit {
                 this.save_draft_infor_form.close_header = false;
                 this.save_draft_infor_form.close_modal.close();
               }
-              this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
-                this.contractService.addContractRelease(contract).subscribe((res: any) => {
-                });
-              });
               this.router.navigate(['/main/contract/create/draft']);
               this.toastService.showSuccessHTMLWithTimeout(
                 'no.push.contract.draft.success',
@@ -378,7 +367,7 @@ export class ConfirmContractFormComponent implements OnInit {
             this.spinner.hide();
           },
           () => {
-            this.spinner.hide();
+            // this.spinner.hide();
           }
         );
     }
@@ -387,10 +376,10 @@ export class ConfirmContractFormComponent implements OnInit {
   async getDefinddatasFormignEdit(datasFormignId: any,datasFormignNotId: any,action: any) {
     let datasFormample_contract: any[] = [];
     if (datasFormignId.length > 0) {
-      
+      console.log("dsid ", datasFormignId);
       datasFormignId.forEach((res: any) => {
         this.arrVariableRemove.forEach((itemRemove: any) => {
-          
+          console.log("itt ", itemRemove);
           if (itemRemove !== 'id_have_data') {
             delete res[itemRemove];
           }
@@ -403,19 +392,9 @@ export class ConfirmContractFormComponent implements OnInit {
         let id = datasFormignId[i].id_have_data;
         delete datasFormignId[i].id_have_data;
 
-        // datasFormignId[i].font_size = this.datasForm.size;
-        // datasFormignId[i].font = this.datasForm.font;
-        
-        // datasFormignId[i].font = datasFormignId[i].font ? datasFormignId[i].font : 'Times New Roman';
-        // datasFormignId[i].font_size = datasFormignId[i].size ? datasFormignId[i].size : 13;
-
-        // 
+        // console.log("vao day ");
         await this.contractService.getContractSampleEdit(datasFormignId[i], id).toPromise().then((data: any) => {
               datasFormample_contract.push(data);
-              this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
-                this.contractService.addContractRelease(contract).subscribe((res: any) => {
-                });
-              });
             },
             (error) => {
               this.spinner.hide();
@@ -438,7 +417,7 @@ export class ConfirmContractFormComponent implements OnInit {
     if (datasFormignNotId.length > 0) {
       datasFormignNotId.forEach((item: any) => {
         item['font'] = item.font ? item.font : 'Times New Roman';
-        item['font_size'] = item.size ? item.size : 13;
+        item['font_size'] = item.font_size ? item.font_size : 12;
         item['contract_id'] = this.datasForm.contract_id;
         item['document_id'] = this.datasForm.document_id;
         if (item.text_attribute_name) {
@@ -457,8 +436,6 @@ export class ConfirmContractFormComponent implements OnInit {
 
             if (!item.status) item.status = 0;
           }
-        } else if(item.sign_unit == 'text' && item.text_type == 'currency') {
-          item['type'] = 5;
         } else {
           item['type'] = 1;
         }
