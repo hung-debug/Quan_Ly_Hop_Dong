@@ -46,7 +46,6 @@
               "node_modules/primeicons/primeicons.css"
             ],
             "scripts": [
-              "src/script.js?v=1.0"
             ]
           },
           "configurations": {
