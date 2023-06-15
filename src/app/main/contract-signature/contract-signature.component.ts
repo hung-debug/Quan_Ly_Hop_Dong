@@ -608,8 +608,11 @@ export class ContractSignatureComponent implements OnInit {
             }
           );
       } else {
-        this.contractService.getContractMyProcessListSignMany(this.keyword).subscribe(
-          (data) => {
+        if(this.typeDisplay == 'signMany') {
+          this.contractService.getContractMyProcessListSignMany(this.keyword,this.filter_type,
+            this.filter_contract_no,
+            this.filter_from_date,
+            this.filter_to_date).subscribe((data) => {
             this.contractsSignMany = data;
             if (this.pageTotal == 0) {
               this.p = 0;
@@ -618,39 +621,58 @@ export class ContractSignatureComponent implements OnInit {
             } else {
               this.setPage();
             }
-            this.spinner.hide();
             this.contractsSignMany.forEach((key: any, v: any) => {
-              this.contractsSignMany[v].contractId =
-                key.participant.contract.id;
-              this.contractsSignMany[v].contractName =
-                key.participant.contract.name;
-              this.contractsSignMany[v].contractNumber =
-                key.participant.contract.code;
-              this.contractsSignMany[v].contractSignTime =
-                key.participant.contract.sign_time;
-              this.contractsSignMany[v].contractCreateTime =
-                key.participant.contract.created_time;
-              this.contractsSignMany[v].contractStatus =
-                key.participant.contract.status;
-              this.contractsSignMany[v].contractCecaPush =
-                key.participant.contract.ceca_push;
-              this.contractsSignMany[v].contractCecaStatus =
-                key.participant.contract.ceca_status;
-              this.contractsSignMany[v].contractReleaseState =
-                key.participant.contract.release_state;
+              this.contractsSignMany[v].contractId = key.participant.contract.id;
+              this.contractsSignMany[v].contractName = key.participant.contract.name;
+              this.contractsSignMany[v].contractNumber = key.participant.contract.code;
+              this.contractsSignMany[v].contractSignTime = key.participant.contract.sign_time;
+              this.contractsSignMany[v].contractCreateTime = key.participant.contract.created_time;
+              this.contractsSignMany[v].contractStatus = key.participant.contract.status;
+              this.contractsSignMany[v].contractCecaPush = key.participant.contract.ceca_push;
+              this.contractsSignMany[v].contractCecaStatus = key.participant.contract.ceca_status;
+              this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
               this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
               this.contractsSignMany[v].checked = false;
             });
-          },
-          (error) => {
+
+            this.spinner.hide();
+          }, error => {
             setTimeout(() => this.router.navigate(['/login']));
-            this.toastService.showErrorHTMLWithTimeout(
-              'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
-              '',
-              3000
-            );
-          }
-        );
+            this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+          });
+        } else if(this.typeDisplay == 'viewMany') {
+          this.contractService.getViewContractMyProcessList(this.keyword, this.filter_type,
+            this.filter_contract_no,
+            this.filter_from_date,
+            this.filter_to_date).subscribe((data) => {
+            this.contractViewList = data;
+            if (this.pageTotal == 0) {
+              this.p = 0;
+              this.pageStart = 0;
+              this.pageEnd = 0;
+            } else {
+              this.setPage();
+            }
+            this.contractsSignMany.forEach((key: any, v: any) => {
+              this.contractsSignMany[v].contractId = key.participant.contract.id;
+              this.contractsSignMany[v].contractName = key.participant.contract.name;
+              this.contractsSignMany[v].contractNumber = key.participant.contract.code;
+              this.contractsSignMany[v].contractSignTime = key.participant.contract.sign_time;
+              this.contractsSignMany[v].contractCreateTime = key.participant.contract.created_time;
+              this.contractsSignMany[v].contractStatus = key.participant.contract.status;
+              this.contractsSignMany[v].contractCecaPush = key.participant.contract.ceca_push;
+              this.contractsSignMany[v].contractCecaStatus = key.participant.contract.ceca_status;
+              this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
+              this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
+              this.contractsSignMany[v].checked = false;
+            });
+
+            this.spinner.hide();
+          }, error => {
+            setTimeout(() => this.router.navigate(['/login']));
+            this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+          });
+        }
       }
     } else {
       this.contractService
