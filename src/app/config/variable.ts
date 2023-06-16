@@ -529,11 +529,19 @@ export const contractTypes = [
     children: [
       {
         id: 1,
+        label: 'contract.status.draft'
+      },
+      {
+        id: 2,
         label: 'contract.status.wait-processing'
       }, 
       {
-        id: 2,
+        id: 3,
         label: 'contract.status.processed'
+      },
+      {
+        id: 4,
+        label: 'contract.status.expire'
       }
     ]
   }
