@@ -12,10 +12,10 @@
           {{ "organization.me" | translate | uppercase }}&nbsp;<span style="color: red">*</span>
         </div>
         <input class="input1" type="text" [(ngModel)]="data_organization.name" />
-        <div style="width: 120px; margin-left: 5px">
+        <!-- <div style="width: 120px; margin-left: 5px">
           {{'hide.processing.thread' | translate}}
         </div>
-        <input type ="checkbox">
+        <input type ="checkbox"> -->
       </div>
 
       <div class="contract__content--participants">
@@ -716,10 +716,10 @@
         <input class="input1" type="text" placeholder="{{
             (item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate
           }}" [(ngModel)]="item.name" [disabled]="item.type == 3" />
-          <div style="width: 120px; margin-left: 5px">
+          <!-- <div style="width: 120px; margin-left: 5px">
             {{'hide.processing.thread' | translate}}
           </div>
-          <input type ="checkbox">
+          <input type ="checkbox"> -->
       </div>
 
       <div *ngIf="this.dataParnterOrganization().length >= 1" style="display: flex; justify-content: flex-end">
@@ -898,7 +898,7 @@
                     <div style="display: flex;">
                       <div class="input-data" style="width: 91%;margin-right: -3%;">
                         <img class="input-img">
-                        <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                        <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
                       </div>
 
                       <div class="participants__name" style="width: 17%;margin-left: 5%;">
