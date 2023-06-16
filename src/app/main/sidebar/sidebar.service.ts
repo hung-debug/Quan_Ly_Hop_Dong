@@ -357,11 +357,11 @@ export class SidebarService {
           active: false,
           href: '/main/contract/create/complete',
         },
-        {
-          title: 'contract.status.liquidated',
-          active: false,
-          href: '/main/contract/create/liquidated',
-        }
+        // {
+        //   title: 'contract.status.liquidated',
+        //   active: false,
+        //   href: '/main/contract/create/liquidated',
+        // }
       );
 
       if (currentUserC.customer.info.organizationChange == 1) {
@@ -560,23 +560,23 @@ export class SidebarService {
       })
     }
 
-    this.menus.push({
-      title: 'customer.list',
-      icon: '/assets/img/customer_list.svg',
-      active: false,
-      type: 'simple',
-      href: '/main/customer',
-      id: 11,
-    })
+    // this.menus.push({
+    //   title: 'customer.list',
+    //   icon: '/assets/img/customer_list.svg',
+    //   active: false,
+    //   type: 'simple',
+    //   href: '/main/customer',
+    //   id: 11,
+    // })
 
-    this.menus.push({
-      title: 'contract.folder',
-      icon: '/assets/img/contract.svg',
-      active: false,
-      type: 'simple',
-      href: '/main/contract-folder',
-      id: 12,
-    })
+    // this.menus.push({
+    //   title: 'contract.folder',
+    //   icon: '/assets/img/contract.svg',
+    //   active: false,
+    //   type: 'simple',
+    //   href: '/main/contract-folder',
+    //   id: 12,
+    // })
    
     if(this.isConfigSms || this.isConfigSoonExpireDay) {
       this.menus.push({
