@@ -734,8 +734,9 @@
             <label class="type-partner"><input type="radio" name="type_{{id}}" [value]="2" [(ngModel)]="item.type"
                 (change)="changeType($event, item, id)">
               <span>&nbsp;{{'organization' | translate}}</span>
-              <div *ngIf="item.type != 2" class="none-button"></div>
-              <button  *ngIf="item.type == 2" class="btn" (click)="findPartner('ORGANIZATION', id, item)">{{'btn.search' | translate}}</button></label>
+              <!-- <div *ngIf="item.type != 2" class="none-button"></div> -->
+              <!-- <button  *ngIf="item.type == 2" class="btn" (click)="findPartner('ORGANIZATION', id, item)">{{'btn.search' | translate}}</button> -->
+              </label>
 
               
           </div>
@@ -743,8 +744,8 @@
             <label class="type-partner"><input type="radio" name="type_{{id}}" [value]="3" [(ngModel)]="item.type"
                 (change)="changeType($event, item, id)">
               <span>&nbsp;{{'personal' | translate}}</span>
-              <div *ngIf="item.type != 3" class="none-button"></div>
-              <button *ngIf="item.type == 3" class="btn find-button" (click)="findPartner('PERSONAL',id, item)">{{'btn.search' | translate}}</button>
+              <!-- <div *ngIf="item.type != 3" class="none-button"></div> -->
+              <!-- <button *ngIf="item.type == 3" class="btn find-button" (click)="findPartner('PERSONAL',id, item)">{{'btn.search' | translate}}</button> -->
             </label>
 
           </div>
