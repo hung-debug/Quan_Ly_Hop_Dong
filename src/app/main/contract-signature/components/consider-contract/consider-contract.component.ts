@@ -1901,7 +1901,7 @@ export class ConsiderContractComponent
     if (typeSignDigital == 2) {
       if (this.signCertDigital) {
         for (const signUpdate of this.isDataObjectSignature) {
-          if (signUpdate && (signUpdate.type == 1 || signUpdate.type == 3 || signUpdate.type == 4) && [3, 4].includes(this.datas.roleContractReceived) &&
+          if (signUpdate && (signUpdate.type == 1 || signUpdate.type == 3 || signUpdate.type == 4 || signUpdate.type == 5) && [3, 4].includes(this.datas.roleContractReceived) &&
             signUpdate?.recipient?.email === this.currentUser.email && signUpdate?.recipient?.role === this.datas?.roleContractReceived) {
             let fileC = await this.contractService.getFileContractPromise(this.idContract);
             const pdfC2 = fileC.find((p: any) => p.type == 2);
@@ -1921,7 +1921,7 @@ export class ConsiderContractComponent
             else if (this.usbTokenVersion == 2)
               this.prepareInfoSignUsbTokenV2(signUpdate.page);
               
-            if (signUpdate.type == 1 || signUpdate.type == 4) {
+            if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
               let imageRender = null;
 
               this.textSign = signUpdate.valueSign;
@@ -2136,7 +2136,7 @@ export class ConsiderContractComponent
           signUpdate &&
           (signUpdate.type == 1 ||
             signUpdate.type == 3 ||
-            signUpdate.type == 4) &&
+            signUpdate.type == 4 || signUpdate.type == 5) &&
           [3, 4].includes(this.datas.roleContractReceived) &&
           signUpdate?.recipient?.email === this.currentUser.email &&
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
@@ -2172,7 +2172,7 @@ export class ConsiderContractComponent
             height: signUpdate.signDigitalHeight,
             page: signUpdate.page,
           };
-          if (signUpdate.type == 1 || signUpdate.type == 4) {
+          if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
             this.textSign = signUpdate.valueSign;
 
             this.font = signUpdate.font;
