@@ -43,7 +43,7 @@
     <span id="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
   </div>
   <div *ngIf="checkShowEdit">
-    <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" class="input-edit-text" [(ngModel)]="sign.valueSign" (blur)="doneEditTextSign($event)" #inputEditText>
+    <input type="text" oninput="this.value = this.value.replace(/\D/g, '');" class="input-edit-text" [(ngModel)]="sign.valueSign" (blur)="doneEditTextSign($event)" #inputEditText>
   </div>
 </div>
 
