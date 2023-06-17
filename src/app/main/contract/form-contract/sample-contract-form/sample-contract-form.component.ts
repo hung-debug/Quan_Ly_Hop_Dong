@@ -177,6 +177,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           if (res.type == 5){
             res['sign_unit']=  'text';
             res['text_type'] = 'currency';
+            res['text_attribute_name'] = res.name;
+            res.name = res.text_attribute_name;
           }
         })
       }
