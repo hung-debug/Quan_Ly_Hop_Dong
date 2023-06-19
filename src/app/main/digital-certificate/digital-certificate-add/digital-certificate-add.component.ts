@@ -32,13 +32,16 @@ export class DigitalCertificateAddComponent implements OnInit {
   uploadFileContractAgain: boolean = false;
   toppingList: any[];
   toppings: any;
-  email: any;
+  email: any[];
   arrSearchEmailView: any = [];
-  emailList: any;
+  emailList: any = [];
   errorEmail: any = '';
   pattern = parttern;
   pattern_input = parttern_input;
   addFormEmail: FormGroup;
+  listSelectedEmail: any = [];
+  password:any;
+  status: number = 1;
 
 
   get f() { return this.addForm.controls; }
@@ -79,6 +82,8 @@ export class DigitalCertificateAddComponent implements OnInit {
     this.addFormEmail = this.fbd.group({
       email: this.fbd.control("", [Validators.required])
     });
+    // chạy mồi lấy list dữ liệu cho component
+    this.getListAllEmail({ filter: 'a' })
 
   }
 
@@ -94,16 +99,19 @@ export class DigitalCertificateAddComponent implements OnInit {
         const file_name = file.name;
         const extension = file.name.split('.').pop();
         if (extension && extension.toLowerCase() == 'p12') {
+          // this.datas.contractFile = file;
+          // this.DigitalCertificateService.getList(file).subscribe((response :any)=>{
+            this.spinner.hide();
+            const fileInput: any = document.getElementById('file-input');
+            fileInput.value = '';
+            this.datas.file_name = file_name;
+            this.datas.contractFile = file;
+            this.contractFileRequired();
+          //   // if (this.datas.is_action_contract_created) {
+          //   //   this.uploadFileContractAgain = true;
+          //   // }
+          // })
 
-          this.spinner.hide();
-          const fileInput: any = document.getElementById('file-input');
-          fileInput.value = '';
-          this.datas.file_name = file_name;
-          this.datas.contractFile = file;
-          this.contractFileRequired();
-          if (this.datas.is_action_contract_created) {
-            this.uploadFileContractAgain = true;
-          }
         }
         else {
           this.toastService.showWarningHTMLWithTimeout("File hợp đồng yêu cầu định dạng p12", "", 3000);
@@ -121,10 +129,40 @@ export class DigitalCertificateAddComponent implements OnInit {
     // let emailLogin = this.userService.getAuthCurrentUser().email;
 
     this.DigitalCertificateService.getListAllEmail(email).subscribe((response) => {
-      // console.log("responseSU 2", response);
-      this.emailList = response;
-      // console.log("responseSU 1", this.emailList);
+      if (response && response.length > 0) {
+        response.forEach((item: any) => {
+          const id = item.id;
+          if (!this.emailList.some((existingItem: any) => existingItem.id === id)) {
+            this.emailList.push(item);
+          }
+        });
+      }
+
+
     });
+
+  }
+  onSelectionChange() {
+    console.log('dddđ', this.listSelectedEmail)
+    // const control = this.addFormEmail.controls; // Truy cập đối tượng AbstractControl
+    // console.log("âgsd",  control);
+
+    // if (control.email.value) {
+    //   this.listSelectedEmail.push(control.email.value); // Sao chép giá trị của AbstractControl
+    //   console.log('kasjkdasjd',   this.listSelectedEmail)
+    // }
+    const emailControl = this.addForm.get('email');
+    console.log("âgsd", emailControl);
+
+    if (emailControl) {
+
+      const control = emailControl.value
+
+      if (control) {
+        this.listSelectedEmail = [...this.listSelectedEmail, ...control];
+      }
+
+    }
 
   }
   getNotificationValid(is_notify: string) {
@@ -176,10 +214,17 @@ export class DigitalCertificateAddComponent implements OnInit {
     return true
   }
   save() {
-    if (!this.validData()) {
-      return;
-    } else {
-      this.spinner.show();
-    }
+    this.submitted = true;
+
+    this.DigitalCertificateService.addImportCTS(this.datas.contractFile,this.addForm.value.email,this.addForm.value.password,this.addForm.value.status).subscribe(response => {
+
+      console.log("this.datassdddddddddddddd",response);
+      if(response.success == false){
+        this.toastService.showErrorHTMLWithTimeout(response.message,"", 3000)
+      }else{
+        this.toastService.showSuccessHTMLWithTimeout('Lưu file chứng thư số thành công',"",3000)
+        this.dialog.closeAll();
+      }
+    })
   }
 }

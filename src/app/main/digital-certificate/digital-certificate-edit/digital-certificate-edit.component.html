@@ -8,8 +8,16 @@
         <div class="label text-color">{{'email.user' | translate}}
           <span class="required-title">*</span>
         </div>
-        <div class="input-line">
-          <input type="text" [(ngModel)]="emailUser" class="input-text" />
+        <!-- <div class="input-line">
+          <span type="text" class="input-text" >{{ this.email }}</span>
+        </div> -->
+        <div>
+          <p-multiSelect panelStyleClass="font" appendTo="body" [options]="emailList" formControlName="email"
+            optionLabel="email" optionValue="email" placeholder="Chọn email"
+            [filter]="true" filterBy="email"
+            [showClear]="true" (onFilter)="getListAllEmail($event)" display="chip" [multiple]="true" (onChange)="onSelectionChange()"
+            >
+          </p-multiSelect>
         </div>
       </div>
     </div>
@@ -45,18 +53,18 @@
       <div class="col-md-6">
         <div class="label_item">
           {{ "notation" | translate }}:
-          <!-- <span class="highlight_result">
-            {{ this.numContractUse }}
-          </span> -->
+          <span class="highlight_result">
+            {{ this.keystoreSerialNumber }}
+          </span>
         </div>
       </div>
 
       <div class="col-md-6">
         <div class="label_item">
           {{ "subject" | translate }}:
-          <!-- <span class="highlight_result">
-            {{ this.numContractBuy }}
-          </span> -->
+          <span class="highlight_result">
+            {{ this.subject }}
+          </span>
         </div>
       </div>
     </div>
@@ -64,18 +72,18 @@
       <div class="col-md-6">
         <div class="label_item">
           {{ "file.name" | translate }}:
-          <!-- <span class="highlight_result">
-            {{ this.numContractUse }}
-          </span> -->
+          <span class="highlight_result">
+            {{ this.keyStoreFileName }}
+          </span>
         </div>
       </div>
 
       <div class="col-md-6">
         <div class="label_item">
           {{ "unit" | translate }}:
-          <!-- <span class="highlight_result">
-            {{ this.numContractBuy }}
-          </span> -->
+          <span class="highlight_result">
+            {{ this.unit }}
+          </span>
         </div>
       </div>
     </div>
@@ -83,18 +91,18 @@
       <div class="col-md-6">
         <div class="label_item">
           {{ "start-date" | translate }}:
-          <!-- <span class="highlight_result">
-            {{ this.numContractUse }}
-          </span> -->
+          <span class="highlight_result">
+            {{this.keystoreDateStart | date:'dd/MM/yyyy HH:mm'}}
+          </span>
         </div>
       </div>
 
       <div class="col-md-6">
         <div class="label_item">
           {{ "end-date" | translate }}:
-          <!-- <span class="highlight_result">
-            {{ this.numContractBuy }}
-          </span> -->
+          <span class="highlight_result">
+            {{this.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}
+          </span>
         </div>
       </div>
     </div>

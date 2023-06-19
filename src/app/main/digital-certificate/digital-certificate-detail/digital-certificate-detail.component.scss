@@ -93,7 +93,11 @@
   display: flex;
   justify-content: space-between;
   position: relative;
-  height: 30px;
+  height: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 200px; /* Điều chỉnh chiều cao tối đa */
+  overflow-y: auto; /* Tạo thanh cuộn khi vượt quá chiều cao tối đa */
 
   > input, div {
     border: none;

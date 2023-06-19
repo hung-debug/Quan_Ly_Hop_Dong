@@ -11,6 +11,7 @@ import { User } from './user.service';
 import { encode } from 'base64-arraybuffer';
 import { SysService } from './sys.service';
 import { Router } from '@angular/router';
+import { log } from 'console';
 
 export interface DigitalCertificate {
   file: File;
@@ -26,6 +27,7 @@ export class DigitalCertificateService {
   addCertificate: any = `${environment.apiUrl}/api/v1/sign/import-cert`;
   getListEmail: any = `${environment.apiUrl}/api/v1/customers/list-email-containing`;
   getAllCert: any = `${environment.apiUrl}/api/v1/sign/find-cert`;
+  updateCert: any = `${environment.apiUrl}/api/v1/sign/update-user-from-cert`;
 
   token: any;
   customer_id: any;
@@ -40,17 +42,34 @@ export class DigitalCertificateService {
     public datepipe: DatePipe,
     public router: Router,) { }
 
-  addImportCTS(datas: any) {
+  addImportCTS(file: any,email:any,password:any,status:any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
-      .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+    let formData = new FormData();
+    formData.append('file', file);
+    formData.append('list_email', email);
+    formData.append('password', password);
+    formData.append('status', status);
+    return this.http.post<any>(this.addCertificate, formData, {'headers': headers}).pipe();
+  }
+  updateCTS(status:any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Authorization', 'Bearer ' + this.token);
+    let formData = new FormData();
+    // formData.append('list_email', email);
+    formData.append('status', status);
+    return this.http.put<any>(this.updateCert, formData, {'headers': headers}).pipe();
+  }
 
-    const body = JSON.stringify({
-
-    });
-
-    return this.http.post<any>(this.addCertificate, body, {'headers': headers});
+  getList(file:any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Authorization', 'Bearer ' + this.token);
+    let formData = new FormData();
+    formData.append('file', file);
+    return file;
   }
 
   getListAllEmail(email: string){
@@ -77,6 +96,24 @@ export class DigitalCertificateService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
       let listCertificate = this.getAllCert+ '?file_name=' + '' + '&status=' + '' + '&size=' +size + '&number=' +number;
+    return this.http.get<any>(listCertificate, {headers});
+  }
+
+  public searchCertificate(FileName: string, status: any, keystoreDateStart: any, keystoreDateEnd: any, number:any, size:any,): Observable<any>{
+    this.getCurrentUser();
+    if (keystoreDateStart != "") {
+      keystoreDateStart = this.datepipe.transform(keystoreDateStart, 'yyyy-MM-dd');
+    }
+    if (keystoreDateEnd != "") {
+      keystoreDateEnd = this.datepipe.transform(keystoreDateEnd, 'yyyy-MM-dd');
+    }
+    if(number != ""){
+      number = number - 1;
+    }
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+      let listCertificate = this.getAllCert+ '?file_name=' + FileName + '&status=' + status + '&size=' +size + '&number=' +number;
     return this.http.get<any>(listCertificate, {headers});
   }
 

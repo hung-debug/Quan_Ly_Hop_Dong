@@ -9,7 +9,7 @@
           <span class="required-title">*</span>
         </div>
         <div class="input-line">
-          <input type="text" [(ngModel)]="emailUser" [innerText]="emailUser" class="input-text" readonly/>
+          <span type="text"  class="input-text" readonly>{{ this.email }}</span>
         </div>
       </div>
     </div>
@@ -21,7 +21,9 @@
             <input type="radio" />
           </div>&nbsp;
           <div>
-            {{'unit.active' | translate}}
+            {{
+              (status == 1 ? "unit.active" : "unit.inactive") | translate
+            }}
           </div>
         </div>
       </div>
@@ -37,18 +39,18 @@
       <div class="col-md-6">
         <div class="label_item">
           {{ "notation" | translate }}:
-          <!-- <span class="highlight_result">
-            {{ this.numContractUse }}
-          </span> -->
+          <span class="highlight_result">
+            {{ this.keystoreSerialNumber }}
+          </span>
         </div>
       </div>
 
       <div class="col-md-6">
         <div class="label_item">
           {{ "subject" | translate }}:
-          <!-- <span class="highlight_result">
-            {{ this.numContractBuy }}
-          </span> -->
+          <span class="highlight_result">
+            {{ this.subject }}
+          </span>
         </div>
       </div>
     </div>
@@ -56,18 +58,18 @@
       <div class="col-md-6">
         <div class="label_item">
           {{ "file.name" | translate }}:
-          <!-- <span class="highlight_result">
-            {{ this.numContractUse }}
-          </span> -->
+          <span class="highlight_result">
+            {{ this.keyStoreFileName }}
+          </span>
         </div>
       </div>
 
       <div class="col-md-6">
         <div class="label_item">
           {{ "unit" | translate }}:
-          <!-- <span class="highlight_result">
-            {{ this.numContractBuy }}
-          </span> -->
+          <span class="highlight_result">
+            {{ this.unit }}
+          </span>
         </div>
       </div>
     </div>
@@ -75,18 +77,18 @@
       <div class="col-md-6">
         <div class="label_item">
           {{ "start-date" | translate }}:
-          <!-- <span class="highlight_result">
-            {{ this.numContractUse }}
-          </span> -->
+          <span class="highlight_result">
+            {{this.keystoreDateStart | date:'dd/MM/yyyy HH:mm'}}
+          </span>
         </div>
       </div>
 
       <div class="col-md-6">
         <div class="label_item">
           {{ "end-date" | translate }}:
-          <!-- <span class="highlight_result">
-            {{ this.numContractBuy }}
-          </span> -->
+          <span class="highlight_result">
+            {{this.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}
+          </span>
         </div>
       </div>
     </div>
