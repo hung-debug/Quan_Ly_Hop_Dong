@@ -151,8 +151,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
       }, 200);
     } else if (ev == 1 && !this.datas.imgSignAcc && !this.data.mark) {
       this.toastService.showWarningHTMLWithTimeout('notify_have_not_sign_acc', "", 3000);
-    } else  if (ev == 1 && !this.datas.markSignAcc && !this.data.mark) {
-      
+    } else  if (ev == 1 && !this.datas.markSignAcc && !this.data.mark && this.data.code.includes('usb') && this.data.code.includes('hsm')) {
       this.toastService.showWarningHTMLWithTimeout('notify_have_not_sign_mark_acc',"",3000);
     }
   }

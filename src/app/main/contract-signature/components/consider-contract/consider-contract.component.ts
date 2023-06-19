@@ -1694,6 +1694,7 @@ export class ConsiderContractComponent
       title: 'KÝ HỢP ĐỒNG ',
       is_content: 'forward_contract',
       orgId: this.orgId,
+      imgSignAcc: this.datas.imgSignAcc
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -1795,7 +1796,8 @@ export class ConsiderContractComponent
     const dialogRef = this.dialog.open(ImageDialogSignComponent, {
       width: '1024px',
       backdrop: 'static',
-      data: data
+      data: data,
+      code: code
     });
 
     dialogRef.afterClosed().subscribe((res: any) => {
