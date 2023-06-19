@@ -110,6 +110,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   textSign: boolean = false;
 
+  imageSign: number = 2;
+  digitalSign: number = 3;
+  textUnit: number = 1;
+
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
@@ -258,6 +262,48 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       this.datas.size = 13;
       this.size = this.datas.size;
+    }
+
+    
+    this.synchronized1(this.imageSign);
+    this.synchronized1(this.digitalSign);
+    this.synchronized1(this.textUnit);
+
+    this.checkDifferent();
+  }
+
+  synchronized1(numberSign: number) {
+    for(let i = 0; i < this.datas.is_determine_clone.length; i++) {
+      const clone = this.datas.is_determine_clone[i];
+
+      for(let j = 0; j < this.datas.contract_user_sign[numberSign].sign_config.length; j++) {
+        const signImage = this.datas.contract_user_sign[numberSign].sign_config[j];
+
+        for(let k = 0; k < clone.recipients.length; k++) {
+          if(clone.recipients[k].id == signImage.recipient_id) {
+             this.datas.contract_user_sign[numberSign].sign_config[j].email = clone.recipients[k].email;
+             this.datas.contract_user_sign[numberSign].sign_config[j].recipient.email = clone.recipients[k].email;
+             this.datas.contract_user_sign[numberSign].sign_config[j].name = clone.recipients[k].name;
+          }
+        }
+      }
+    }
+  }
+
+
+  checkDifferent() {
+    //Lấy tất cả recipientId trong clone
+    const recipientIds = this.datas.is_determine_clone.flatMap((item:any) => item.recipients.map((recipient:any) => recipient.id));
+
+    //Check mảng sign_config có id recipient trên thì giữ lại; còn lại xoá hết
+    for(let i = 0; i < 4; i++) {
+      for(let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
+        const sign_config = this.datas.contract_user_sign[i].sign_config[j];
+
+        if(sign_config.recipient_id && !recipientIds.includes(sign_config.recipient_id) && sign_config.sign_unit != 'text_currency') {
+          this.datas.contract_user_sign[i].sign_config.splice(j,1);
+        }
+      }
     }
   }
 

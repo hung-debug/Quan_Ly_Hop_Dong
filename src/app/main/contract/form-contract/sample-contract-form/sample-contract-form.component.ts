@@ -119,6 +119,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   imageSign: number = 2;
   digitalSign: number = 3;
+  textUnit: number = 1;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -270,6 +271,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
     this.synchronized1(this.imageSign);
     this.synchronized1(this.digitalSign);
+    this.synchronized1(this.textUnit);
 
     this.checkDifferent();
   }
