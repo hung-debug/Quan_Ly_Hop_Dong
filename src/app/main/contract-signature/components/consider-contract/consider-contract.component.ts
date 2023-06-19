@@ -3637,10 +3637,16 @@ export class ConsiderContractComponent
       this.contractService
         .detectCCCD(this.cccdFront, data.contractId, data.recipientId)
         .subscribe((response) => {
-          
+          console.log('response ', response);
 
-          this.nameCompany = response.name;
-          this.cardId = response.id;
+          if(response.name) {
+            this.nameCompany = response.name;
+            this.cardId = response.id;
+          } else {
+            this.nameCompany = this.recipient.name;
+            this.cardId = this.recipient.cardId;
+          }
+        
         });
 
       if (result) this.eKYCSignOpenAfter();
