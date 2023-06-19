@@ -378,9 +378,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       for (const data of dataDetermine) {
         if (((d.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5)) ||
           (d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
-          (d.sign_unit == 'so_tai_lieu' && data.role == 4) ||
+          (d.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
           (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-          ((d.name === data.name) && ((d.email ? d.email : d.recipient.email) === data.email)) ||
+          (((d.email ? d.email : d.recipient.email) === data.email)) ||
           (!d.email && this.datas.contract_no && d.sign_unit == 'so_tai_lieu')) {
 
           isContractSign.push(d); // mảng get dữ liệu không bị thay đổi
@@ -421,7 +421,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           */
           res.sign_config = res.sign_config.filter((val: any) =>
             isContractSign.some((data: any) =>
-              (val.name as any) == (data.name as any) &&
               (val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email as any : data.email as any) &&
               val.sign_unit == data.sign_unit));
           // res.sign_config = isContractSign;
