@@ -1697,6 +1697,20 @@
                   </div>
                 </div>
 
+                   <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là hsm-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span
+                      class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'info.hsm' | translate}})</div>
+                  </div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+
                 <!--KD-->
                 <div class="participants--input" style="display: flex"
                   *ngIf="this.site === 'KD' && getDataSignCka(d).length > 0 && d.login_by == 'email'">
