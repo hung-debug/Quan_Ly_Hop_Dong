@@ -1,4 +1,3 @@
-import { ContractService } from 'src/app/service/contract.service';
 import { Component, OnInit, Input, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { NgxInputSearchModule } from "ngx-input-search";
 import {TranslateService} from '@ngx-translate/core';
@@ -18,31 +17,19 @@ export class SignContractComponent implements OnInit, AfterViewInit {
 
   constructor(
     public translate: TranslateService,
-    public contractService: ContractService
   ) {
     
   }
 
   ngOnInit(): void {
-    if (this.sign.sign_unit == 'text') {
-      if(this.sign.value) {
-        if(this.sign.text_type == 'currency') {
-          this.sign.value = this.contractService.convertCurrency(this.sign.value);
-        } 
-      }
-    }
   }
 
   getText(sign: any) {
     if (sign.sign_unit == 'text') {
       if(sign.value) {
-        if(sign.text_type == 'currency') {
-          return this.contractService.convertCurrency(sign.value);
-        } else 
-        return sign.value      
-      } else if (sign.text_type!= undefined && sign.text_type == "currency"){
-          return 'Số tiền'
-          } else return 'Text';
+        return sign.value
+      } else
+        return 'Text';
     } else {
       if (this.datas.contract_no) {
         return this.datas.contract_no
@@ -56,7 +43,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   getStyleText(sign: any) {
     return {
       'font-size': sign.font_size+'px',
-      'font':sign.font
+      'font':sign.font ? sign.font: 'Times New Roman',
     };
   }
 
@@ -84,13 +71,12 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   }
 
   changeInput(e: any){
-    e.target.value = this.contractService.convertCurrency(e.target.value);
+    // e.target.value = this.convertCurrency(e.target.value);
   }
 
   reverseInput(e: any){
-    e.target.value = this.contractService.removePeriodsFromCurrencyValue(e.target.value);
+    e.target.value = this.removePeriodsFromCurrencyValue(e.target.value);
   }
-
 
   getSpecifiedHandle() {
     if ((!this.sign.is_have_text && this.sign.recipient_id) || (this.sign.value !== null && this.sign.value === undefined))
@@ -105,4 +91,45 @@ export class SignContractComponent implements OnInit, AfterViewInit {
     else return false;
   }
 
+  removePeriodsFromCurrencyValue(value: string): string {
+    const regex = /(\d[\d.]*(?:\.\d+)?)\b/g;
+    let result = '';
+    let lastIndex = 0;
+    let match;
+  
+    while ((match = regex.exec(value)) !== null) {
+      const numericPart = match[1].replace(/\./g, '');
+      const prefix = value.slice(lastIndex, match.index);
+      result += prefix + numericPart;
+      lastIndex = match.index + match[0].length;
+    }
+  
+    const suffix = value.slice(lastIndex);
+    result += suffix;
+  
+    return result;
+  }
+
+  convertCurrency(value: any) {
+    const regex = /(\d[\d.]*(?:\.\d+)?)\b(?=\.{0,2}\d*$)/g;
+    const text = value.toString();
+    let formattedText = '';
+    let lastIndex = 0;
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      const numericPart = match[1].replace(/\./g, '');
+      const formattedNumericPart = parseFloat(numericPart).toLocaleString('vi-VN');
+      const prefix = text.slice(lastIndex, match.index);
+      formattedText += prefix + formattedNumericPart;
+      lastIndex = match.index + match[0].length;
+      if (text.charAt(lastIndex) === '.') {
+        formattedText += '.';
+        lastIndex++;
+      }
+    }
+    const suffix = text.slice(lastIndex);
+    formattedText += suffix;
+    value = formattedText;
+    return value;
+  }
 }
