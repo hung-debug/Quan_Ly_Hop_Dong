@@ -42,7 +42,7 @@
                 <label class="label">{{'attribute' | translate}}</label>
                 <div class="name-text" *ngIf="isEnableText">
                     <label class="label-require">{{'attribute.name' | translate}}: *</label>
-                    <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name"
+                    <input id="text-input-element" type="text" [(ngModel)]="this.objSignInfo.text_attribute_name"
                         (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
                 </div>
 

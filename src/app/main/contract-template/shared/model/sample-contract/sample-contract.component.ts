@@ -1155,7 +1155,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // get select người ký
   getSignSelect(d: any) {
-    
+    this.objSignInfo.text_attribute_name = '';
+
     if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
       if(d.recipient_id) {
         this.showSignClear = true;
