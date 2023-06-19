@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { NgxInputSearchModule } from "ngx-input-search";
 import {TranslateService} from '@ngx-translate/core';
+import { ContractService } from 'src/app/service/contract.service';
 @Component({
   selector: 'app-sign-contract',
   templateUrl: './sign-contract.component.html',
@@ -17,6 +18,8 @@ export class SignContractComponent implements OnInit, AfterViewInit {
 
   constructor(
     public translate: TranslateService,
+    public contractService: ContractService
+
   ) {
     
   }
@@ -27,9 +30,13 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   getText(sign: any) {
     if (sign.sign_unit == 'text') {
       if(sign.value) {
-        return sign.value
-      } else
-        return 'Text';
+        if(sign.text_type == 'currency') {
+          return this.contractService.convertCurrency(sign.value);
+        } else 
+        return sign.value      
+      } else if (sign.text_type!= undefined && sign.text_type == "currency"){
+          return 'Số tiền'
+          } else return 'Text';
     } else {
       if (this.datas.contract_no) {
         return this.datas.contract_no
@@ -37,7 +44,6 @@ export class SignContractComponent implements OnInit, AfterViewInit {
         return sign.value;
       } else return (this.translate.instant('contract.number'));
     }
-
   }
 
   getStyleText(sign: any) {

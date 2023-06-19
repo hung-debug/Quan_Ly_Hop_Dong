@@ -3906,7 +3906,7 @@ export class ConsiderContractComponent
 
     this.isDataObjectSignature.map((sign: any) => {
       if (
-        (sign.type == 3 || sign.type == 1 || sign.type == 4) &&
+        (sign.type == 3 || sign.type == 1 || sign.type == 4 || sign.type == 5) &&
         sign?.recipient?.email === this.currentUser.email &&
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
@@ -3937,7 +3937,7 @@ export class ConsiderContractComponent
 
     this.isDataObjectSignature.map((sign: any) => {
       if (
-        (sign.type == 3 || sign.type == 1 || sign.type == 4) &&
+        (sign.type == 3 || sign.type == 1 || sign.type == 4 || sign.type == 5) &&
         sign?.recipient?.email === this.currentUser.email &&
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
