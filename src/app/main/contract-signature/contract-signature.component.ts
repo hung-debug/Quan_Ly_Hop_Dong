@@ -1778,10 +1778,12 @@ export class ContractSignatureComponent implements OnInit {
     );
     const cert = JSON.parse(window.atob(apiCert.data));
 
+    const utf8 = require('utf8');
+
     let certInfoBase64 = '';
     if (cert.certInfo) {
       certInfoBase64 = cert.certInfo.Base64Encode;
-      this.nameCompany = cert.certInfo.CommonName;
+      this.nameCompany = utf8.decode(cert.certInfo.CommonName);
     } else {
       this.toastService.showErrorHTMLWithTimeout(
         'Lỗi không lấy được thông tin usb token',
