@@ -134,6 +134,13 @@ export class ConfirmContractFormComponent implements OnInit {
           if (res.type == 4) {
             res['sign_unit'] = 'so_tai_lieu'
           }
+
+          if(res.type == 5) {
+            res['sign_unit'] = 'text';
+            res['text_attribute_name'] = res.name;
+            res.name = res.text_attribute_name;
+            res['text_type'] = 'currency';
+          }
         })
       }
     }
@@ -273,6 +280,9 @@ export class ConfirmContractFormComponent implements OnInit {
             } else if(element.sign_unit == 'so_tai_lieu') {
               element.type = 4;
             } else {
+              if(element.text_type == 'currency'){
+                element.type = 5;
+              } else 
               element.type = 1;
             }
           }
@@ -312,6 +322,8 @@ export class ConfirmContractFormComponent implements OnInit {
 
                 if (!item.status) item.status = 0;
               }
+            } else if(item.sign_unit == 'text' && item.text_type == 'currency') {
+              item['type'] = 5;
             } else {
               item['type'] = 1;
             }
@@ -342,6 +354,11 @@ export class ConfirmContractFormComponent implements OnInit {
                 this.save_draft_infor_form.close_header = false;
                 this.save_draft_infor_form.close_modal.close();
               }
+
+              this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
+                this.contractService.addContractRelease(contract).subscribe((res: any) => {
+                });
+              });
               this.router.navigate(['/main/contract/create/draft']);
               this.toastService.showSuccessHTMLWithTimeout(
                 'no.push.contract.draft.success',
@@ -395,6 +412,10 @@ export class ConfirmContractFormComponent implements OnInit {
         // console.log("vao day ");
         await this.contractService.getContractSampleEdit(datasFormignId[i], id).toPromise().then((data: any) => {
               datasFormample_contract.push(data);
+              this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
+                this.contractService.addContractRelease(contract).subscribe((res: any) => {
+                });
+              });
             },
             (error) => {
               this.spinner.hide();
@@ -436,6 +457,8 @@ export class ConfirmContractFormComponent implements OnInit {
 
             if (!item.status) item.status = 0;
           }
+        } else if(item.sign_unit == 'text' && item.text_type == 'currency') {
+          item['type'] = 5;
         } else {
           item['type'] = 1;
         }

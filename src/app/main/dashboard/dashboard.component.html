@@ -190,13 +190,18 @@
       </div >
       <div class="body" 
       id="num-contract-body" style="display: flex; flex-wrap: wrap; align-items: center">
-        <div class="first-col" style="width: 40%">
-          <div style="padding-left: 4px; width: 100%; margin: 0">{{'num.contract.buy' | translate}}:</div>
-          <div style="padding-left: 4px; width: 100%; margin: 0">{{'num.contract.use' | translate}}:</div>
+        <div class="first-col" style="width: 100%">
+          <div style="padding-left: 4px; margin: 0">
+            <span id="col-num-1" style="display: inline-block; width: fit-content">{{'num.contract.buy' | translate}}:&nbsp;</span>
+            <span style=" width: fit-content; margin: 0; color: red">{{numContractBuy}} </span>
+          </div>
+          <div style="padding-left: 4px; margin: 0">
+            <span id="col-num-2" style="display: inline-block; width: fit-content">{{'num.contract.use' | translate}}:&nbsp;</span>
+            <span style=" width: fit-content; margin: 0; color: red">{{numContractUse}} </span>
+          </div>
         </div>
         <div class="second-col">
-          <div style=" width: 100%; margin: 0; color: red">{{numContractBuy}} </div>
-          <div style=" width: 100%; margin: 0; color: red">{{numContractUse}} </div>
+
         </div>
 
 
