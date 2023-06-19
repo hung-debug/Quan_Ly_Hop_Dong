@@ -1936,7 +1936,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                 count++;
                 break;
               }
-            } else if (element.sign_unit == 'text' && !isSaveDraft) { 
+            } else if (element.sign_unit == 'text') { 
               if (!element.text_attribute_name && !element.is_have_text) {
                 count_text++;
                 break
