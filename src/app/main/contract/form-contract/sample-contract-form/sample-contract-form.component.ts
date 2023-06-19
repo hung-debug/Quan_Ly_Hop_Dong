@@ -1671,9 +1671,11 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           })
 
           this.spinner.show();
-          
+
+          this.isCheckRelease = true;
+          this.data_sample_contract = this.data_sample_contract.filter((element:any) => typeof element.name !== 'undefined');
+
           this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
-            this.isCheckRelease = true;
             if(this.validData() == true){
               this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
                 this.contractService.addContractRelease(contract).subscribe((res: any) => {
