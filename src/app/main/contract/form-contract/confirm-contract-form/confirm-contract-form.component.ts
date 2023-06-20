@@ -92,7 +92,8 @@ export class ConfirmContractFormComponent implements OnInit {
   conn: string;
   ngOnInit(): void {
 
-    console.log("form ", this.datasForm);
+    console.log("datas form 2 ", this.datasForm.contract_user_sign);
+
     this.spinner.hide();
     this.data_organization = this.datasForm.is_determine_clone.filter(
       (p: any) => p.type == 1

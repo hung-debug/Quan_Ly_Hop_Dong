@@ -269,11 +269,16 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       }
     }
 
+    console.log("datas form 1 ", this.datasForm.contract_user_sign);
+
     this.synchronized1(this.imageSign);
     this.synchronized1(this.digitalSign);
     this.synchronized1(this.textUnit);
 
     this.checkDifferent();
+
+    console.log("datas form 2 ", this.datasForm.contract_user_sign);
+
   }
 
   synchronized1(numberSign: number) {
@@ -423,8 +428,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       if (resForm.sign_config.length > 0 && resForm.sign_unit != 'so_tai_lieu') {
         let arrConfig = [];
         arrConfig = resForm.sign_config.filter((val: any) =>
-          !val.recipient_id || dataContractUserSign.some((data) => data.sign_unit == val.sign_unit &&
-            (val.recipient ? val.recipient.email : val.email) == (data.recipient ? data.recipient.email : data.email))
+          !val.recipient_id || dataContractUserSign.some((data) => data.sign_unit == val.sign_unit)
         )
         resForm.sign_config = arrConfig; // set data with object not change data
         resForm.sign_config.forEach((items: any) => {
