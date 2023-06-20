@@ -24,6 +24,13 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    if (this.sign.sign_unit == 'text') {
+      if(this.sign.value) {
+        if(this.sign.text_type == 'currency') {
+          this.sign.value = this.contractService.convertCurrency(this.sign.value);
+        } 
+      }
+    }
   }
 
   getText(sign: any) {
