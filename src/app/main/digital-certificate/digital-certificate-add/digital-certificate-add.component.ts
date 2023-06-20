@@ -224,6 +224,7 @@ export class DigitalCertificateAddComponent implements OnInit {
       }else{
         this.toastService.showSuccessHTMLWithTimeout('Lưu file chứng thư số thành công',"",3000)
         this.dialog.closeAll();
+        window.location.reload();
       }
     })
   }

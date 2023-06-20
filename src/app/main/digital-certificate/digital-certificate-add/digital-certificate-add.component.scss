@@ -22,22 +22,7 @@
   outline:0px;
   border-radius: 0 5px 5px 0;
 }
-.multiSelect {
-  height: 50px;
-  display: flex;
-  flex-wrap: wrap;
-  max-height: 200px; /* Điều chỉnh chiều cao tối đa */
-  overflow-y: auto; /* Tạo thanh cuộn khi vượt quá chiều cao tối đa */
-}
-.p-multiselect-label {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-}
-p-multiselect-chip{
-  width: 100%;
-}
+
 .input-data {
   border: 1px solid #106DB6;
   border-radius: 5px;
@@ -85,7 +70,7 @@ p-multiselect-chip{
   margin-bottom: 0;
 }
 :host ::ng-deep {
-  .p-dropdown {
+  .p-dropdown, .p-multiselect {
       border: 1px solid #106DB6;
       border-radius: 5px;
       height: 33px;
@@ -93,11 +78,67 @@ p-multiselect-chip{
       outline: 0;
       color: black !important;
   }
-  .p-dropdown-label {
+  .p-dropdown-label, .p-multiselect-label {
       padding: 5px 5px 5px 15px;
   }
-  .p-multiselect .p-multiselect-label.p-placeholder, .p-dropdown .p-dropdown-label.p-placeholder {
-      color: #6c757d !important;
+  .p-chips{
+    width: 100%;
+  }
+  .p-chips .p-chips-multiple-container{
+    width: 100%;
+    border: 1px solid #106DB6;
+    outline: none !important;
+    outline-offset: 0;
+    box-shadow: none !important;
+    padding: 2px 0.25rem;
+  }
+  .p-chips-token{
+    margin: 2px 0;
+  }
+
+  .p-selectbutton .p-button {
+    outline: 0 !important;
+    box-shadow: none !important;
+    height: 33px;
+    width: 50%;
+  }
+  .p-selectbutton .p-button.p-highlight {
+    background: #c5ebff;
+    border-color: #c5ebff;
+    color: #106DB6;
+  }
+  .p-paginator .p-paginator-pages .p-paginator-page{
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+    margin: 4px;
+    height: 26px !important;
+    width: 50px;
+    border-radius: 5px;
+    background-color: #e6e6e6;
+  }
+
+  .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    background-color: #2199e8;
+    color: white;
+    border: 1px solid #2199e8;
+  }
+
+  .p-paginator-bottom .p-ripple{
+    padding: 10px;
+    border-width: 0 !important;
+    height: 26px !important;
+    width: 50px !important;
+  }
+  .p-datatable-table, .p-datatable-table .ng-star-inserted, .p-paginator-pages .ng-star-inserted{
+    font-size: 13px;
+    font-family: font_lexend_deca;
+  }
+  .p-datatable .p-paginator-bottom {
+    border-width: 0;
   }
 }
 .invalid{

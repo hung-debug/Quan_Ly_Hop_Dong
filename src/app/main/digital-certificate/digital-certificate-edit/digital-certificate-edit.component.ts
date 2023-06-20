@@ -18,7 +18,7 @@ export class DigitalCertificateEditComponent implements OnInit {
   datas: any;
   addForm: FormGroup;
   emailUser: any[];
-  email: any = "";
+  email: any = [];
   listEmail: any[];
   status: any = "";
   keystoreSerialNumber: any = "";
@@ -32,6 +32,8 @@ export class DigitalCertificateEditComponent implements OnInit {
   emailList: any = [];
   submitted = false;
   listSelectedEmail: any = [];
+  listID: any[];
+
   get f() { return this.addForm.controls; }
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -51,19 +53,25 @@ export class DigitalCertificateEditComponent implements OnInit {
     });
   }
   async ngOnInit(): Promise<void> {
+    this.spinner.show();
     this.datas = this.data;
+
+    this.getListAllEmail();
     this.getData();
     console.log("dataCert", this.datas);
+
   }
 
   async getData() {
     this.emailUser = this.datas.dataCert[0].customers
     const listEmail = this.emailUser.map(item => item.email)
-    console.log("listEmail", listEmail.join(", "));
-
-    this.addForm.patchValue({
-      email: listEmail.map(email => ({ email }))
+    this.addForm = this.fbd.group({
+      password: this.fbd.control("", [Validators.pattern(parttern.password)]),
+      status: this.fbd.control(this.datas.dataCert[0].status),
+      email: this.fbd.control(listEmail, [Validators.required])
     });
+    console.log("this.addForm",this.datas.dataCert[0].status);
+
     this.keystoreSerialNumber = this.datas.dataCert[0].keystoreSerialNumber,
       this.keyStoreFileName = this.datas.dataCert[0].keyStoreFileName,
       this.keystoreDateStart = this.datas.dataCert[0].keystoreDateStart,
@@ -79,12 +87,17 @@ export class DigitalCertificateEditComponent implements OnInit {
   handleCancel() {
     this.dialogRef.close();
   }
-  getListAllEmail(event: any) {
-    console.log("responseSU", event.filter);
-    let email: any = event.filter
-    // let emailLogin = this.userService.getAuthCurrentUser().email;
+  getListAllEmail(event?: any) {
+
+    let email: any = null
+    if (!event) {
+      email = ""
+    } else {
+      email = event.filter;
+    }
 
     this.DigitalCertificateService.getListAllEmail(email).subscribe((response) => {
+      console.log("responseEmail", response);
       if (response && response.length > 0) {
         response.forEach((item: any) => {
           const id = item.id;
@@ -93,10 +106,8 @@ export class DigitalCertificateEditComponent implements OnInit {
           }
         });
       }
-
-
     });
-
+    this.spinner.hide();
   }
 
   onSelectionChange() {
@@ -112,19 +123,41 @@ export class DigitalCertificateEditComponent implements OnInit {
   save() {
     this.submitted = true;
     console.log("lít meo", this.addForm);
+    console.log("addForm", this.addForm.value.status);
+    console.log("mail", this.addForm.value.email);
+    console.log("id", this.datas.dataCert[0].id);
+    this.listID = this.datas.dataCert[0].customers
+    // let id_customer = this.listID.map(item => item.id)
+    console.log("listID",this.listID);
 
-    this.DigitalCertificateService.updateCTS( this.addForm.value.status).subscribe(response => {
 
+
+    let id_customer = this.listID.filter((value, index, self) => {
+      // Kiểm tra xem có index đầu tiên của value.id trong mảng không
+      return self.findIndex(obj => obj.id === value.id) === index;
+    }).map(item => item.id);
+    console.log("idcuss",id_customer);
+
+    let checkDelete = false;
+    this.DigitalCertificateService.updateCTS(this.datas.dataCert[0].id, this.addForm.value.status, this.addForm.value.email).subscribe(response => {
       console.log("this.datassdddddddddddddd", response);
       if (response.success == false) {
         this.toastService.showErrorHTMLWithTimeout(response.message, "", 3000)
       } else {
-        this.toastService.showSuccessHTMLWithTimeout('Lưu file chứng thư số thành công', "", 3000)
+        this.DigitalCertificateService.deleteUserCTS(this.datas.dataCert[0].id, id_customer).subscribe(deleteUser => {
+          if (deleteUser.success == false) {
+            this.toastService.showErrorHTMLWithTimeout(deleteUser.message, "", 3000)
+          } else {
+            checkDelete = true;
+          }
+        })
+        if (checkDelete = true) {
+        this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin chứng thư số thành công', "", 3000)
         this.dialog.closeAll();
+        window.location.reload();
+        }
       }
     })
   }
-  changeTypeSign() {
 
-  }
 }

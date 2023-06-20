@@ -546,7 +546,7 @@ export class SidebarService {
     if (this.isQLND_01 || this.isQLND_02 || this.isQLND_03 || this.isQLND_04) {
       this.menus.push({
         title: 'certificate.list',
-        icon: '/assets/img/db_user.svg',
+        icon: '/assets/img/analytics1.svg',
         active: false,
         type: 'simple',
         href: '/main/digital-certificate',

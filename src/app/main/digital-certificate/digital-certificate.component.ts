@@ -27,6 +27,7 @@ export class DigitalCertificateComponent implements OnInit {
   ) { }
 
   listStatus = [
+    { label: 'Tất cả', value: '' },
     { label: 'Hoạt động', value: 1 },
     { label: 'Không hoạt động', value: 0 },
   ];
@@ -74,17 +75,19 @@ export class DigitalCertificateComponent implements OnInit {
   }
   array_empty: any = [];
   searchUser() {
-    this.first = 0;
+    // this.first = 0;
 
-    this.spinner.show();
+    // this.spinner.show();
     this.DigitalCertificateService.getAllCertificate(this.file_name, this.status, this.keystoreDateStart, this.keystoreDateEnd, this.number, this.size).subscribe(response =>{
       console.log("res",response);
       this.list = response.content;
     })
-    this.spinner.hide();
+    // this.spinner.hide();
     console.log("dataacert",this.list);
+    const statusValue = this.status.value;
+    console.log("statusValue",statusValue);
 
-    this.DigitalCertificateService.searchCertificate(this.FileName, this.listStatus, this.keystoreDateStart, this.keystoreDateEnd, this.number, this.size).subscribe(response =>{
+    this.DigitalCertificateService.searchCertificate(this.FileName, statusValue, this.keystoreDateStart, this.keystoreDateEnd, this.number, this.size).subscribe(response =>{
       console.log("resssss",response);
       this.list = response.content;
       console.log("status",this.status);
