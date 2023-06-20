@@ -491,7 +491,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     if (type == 'organization') {
       //Nếu là người ký
       if (data.role == 3) {
-        if (this.getDataSignHsm(data).length == 0 && this.getDataSignUSBToken(data).length == 0) {
+        if (this.getDataSignHsm(data).length == 0 && this.getDataSignUSBToken(data).length == 0 && this.getDataSignEkyc(data.length) == 0) {
           data.card_id = "";
         }
       }
@@ -976,7 +976,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
             if (isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) && 
             !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
             isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
-              this.getNotificationValid("Mã số thuế" + this.getNameObject(3) + "của đối tác cá nhân không hợp lệ!")
+              this.getNotificationValid("CMT/CCCD" + this.getNameObject(3) + "của đối tác cá nhân không hợp lệ!")
               count++;
               break;
             }
