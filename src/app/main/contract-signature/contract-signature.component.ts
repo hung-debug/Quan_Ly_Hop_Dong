@@ -26,6 +26,7 @@ import { DialogReasonCancelComponent } from './shared/model/dialog-reason-cancel
 import { environment } from 'src/environments/environment';
 import { ImageDialogSignComponent } from './components/consider-contract/image-dialog-sign/image-dialog-sign.component';
 import { UserService } from 'src/app/service/user.service';
+import { DowloadPluginService } from 'src/app/service/dowload-plugin.service';
 // import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
@@ -110,7 +111,7 @@ export class ContractSignatureComponent implements OnInit {
     public datepipe: DatePipe,
     private spinner: NgxSpinnerService,
     private userService: UserService,
-    private changeDetectorRef: ChangeDetectorRef,
+    private downloadPluginService: DowloadPluginService
   ) {
     this.constantModel = contractModel;
 
@@ -1753,15 +1754,7 @@ export class ContractSignatureComponent implements OnInit {
     const sessionId = JSON.parse(window.atob(apiSessionId.data)).SessionId;
 
     if (!sessionId) {
-      Swal.fire({
-        html:
-          'Vui lòng bật tool ký số hoặc tải ' +
-          `<a href='https://drive.google.com/file/d/1MPnntDPSoTX8AitnSEruZB_ovB9M8gOU/view' target='_blank'>Tại đây</a>  và cài đặt`,
-        icon: 'warning',
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#b0bec5',
-        confirmButtonText: 'Xác nhận',
-      });
+      this.downloadPluginService.getLinkDownLoadV2();
       return;
     }
 

@@ -46,6 +46,7 @@ import { UnitService } from 'src/app/service/unit.service';
 import { Helper } from 'src/app/core/Helper';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 import { TranslateService } from '@ngx-translate/core';
+import { DowloadPluginService } from 'src/app/service/dowload-plugin.service';
 
 @Component({
   selector: 'app-consider-contract',
@@ -197,6 +198,7 @@ export class ConsiderContractComponent
     private checkViewContractService: CheckViewContractService,
     private translate: TranslateService,
     public dialogRef: MatDialogRef<ConsiderContractComponent>,
+    private downloadPluginService: DowloadPluginService
   ) {
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
@@ -2771,15 +2773,7 @@ export class ConsiderContractComponent
       );
     } catch (error) {
       this.spinner.hide();
-      Swal.fire({
-        html:
-          'Vui lòng bật tool ký số hoặc tải ' +
-          `<a href='https://drive.google.com/file/d/1MPnntDPSoTX8AitnSEruZB_ovB9M8gOU/view' target='_blank'>Tại đây</a>  và cài đặt`,
-        icon: 'warning',
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#b0bec5',
-        confirmButtonText: 'Xác nhận',
-      });
+      this.downloadPluginService.getLinkDownLoadV2();
       return;
     }
 
@@ -2788,15 +2782,7 @@ export class ConsiderContractComponent
 
     if (!sessionId) {
       this.spinner.hide();
-      Swal.fire({
-        html:
-          'Vui lòng bật tool ký số hoặc tải ' +
-          `<a href='https://drive.google.com/file/d/1MPnntDPSoTX8AitnSEruZB_ovB9M8gOU/view' target='_blank'>Tại đây</a>  và cài đặt`,
-        icon: 'warning',
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#b0bec5',
-        confirmButtonText: 'Xác nhận',
-      });
+      this.downloadPluginService.getLinkDownLoadV2();
       return;
     } else {
       this.getCertificate(
