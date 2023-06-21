@@ -47,6 +47,7 @@ import { Helper } from 'src/app/core/Helper';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DowloadPluginService } from 'src/app/service/dowload-plugin.service';
+import { DetectCoordinateService } from 'src/app/service/detect-coordinate.service';
 
 @Component({
   selector: 'app-consider-contract',
@@ -198,7 +199,8 @@ export class ConsiderContractComponent
     private checkViewContractService: CheckViewContractService,
     private translate: TranslateService,
     public dialogRef: MatDialogRef<ConsiderContractComponent>,
-    private downloadPluginService: DowloadPluginService
+    private downloadPluginService: DowloadPluginService,
+    private detectCoordinateService: DetectCoordinateService
   ) {
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
@@ -3886,11 +3888,16 @@ export class ConsiderContractComponent
     const canvasPageSign: any = document.getElementById('canvas-step3-' + page);
     const heightPage = canvasPageSign.height;
 
+    const canvasPageSignElement: any = canvasPageSign.getBoundingClientRect();
+    const canvasPageSignLeft: any = canvasPageSignElement.left;
+
     let currentHeight: number = 0;
     for (let i = 1; i < page; i++) {
       const canvas: any = document.getElementById('canvas-step3-' + i);
       currentHeight += canvas.height;
     }
+
+    const minCanvas = this.detectCoordinateService.getMinCanvasX(this.pageNumber);
 
     this.isDataObjectSignature.map((sign: any) => {
       if (
@@ -3899,7 +3906,7 @@ export class ConsiderContractComponent
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
-        sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
+        sign.signDigitalX = sign.coordinate_x - (canvasPageSignLeft - minCanvas) /* * this.ratioPDF*/;
         sign.signDigitalY = heightPage - (sign.coordinate_y - currentHeight) - sign.height + sign.page * 5.86 /* * this.ratioPDF*/;
 
         sign.signDigitalHeight =
@@ -3917,11 +3924,16 @@ export class ConsiderContractComponent
     const canvasPageSign: any = document.getElementById('canvas-step3-' + page);
     const heightPage = canvasPageSign.height;
 
+    const canvasPageSignElement: any = canvasPageSign.getBoundingClientRect();
+    const canvasPageSignLeft: any = canvasPageSignElement.left;
+
     let currentHeight: number = 0;
     for (let i = 1; i < page; i++) {
       const canvas: any = document.getElementById('canvas-step3-' + i);
       currentHeight += canvas.height;
     }
+
+    const minCanvas = this.detectCoordinateService.getMinCanvasX(this.pageNumber);
 
     this.isDataObjectSignature.map((sign: any) => {
       if (
@@ -3930,8 +3942,8 @@ export class ConsiderContractComponent
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
-        sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
-        sign.signDigitalY = heightPage - (sign.coordinate_y - currentHeight) - sign.height + sign.page * 6 /* * this.ratioPDF*/;
+        sign.signDigitalX = sign.coordinate_x - (canvasPageSignLeft - minCanvas) /* * this.ratioPDF*/;
+        sign.signDigitalY = heightPage - (sign.coordinate_y - currentHeight) - sign.height + sign.page * 5.86 /* * this.ratioPDF*/;
 
         sign.signDigitalWidth = sign.width /* * this.ratioPDF*/;
         sign.signDigitalHeight = sign.height;

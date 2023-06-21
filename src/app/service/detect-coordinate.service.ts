@@ -15,7 +15,7 @@ export class DetectCoordinateService {
     return page;
   }
 
-  detectX(event: any, rect_location: any, canvasInfo: any,canvasWidth: any, pageNumber: number) {
+  getMinCanvasX(pageNumber: number) {
     let arr: any[] = [];
     for(let i = 1; i < pageNumber; i++) {
       const canvas = document.getElementById("canvas-step3-"+i);
@@ -24,6 +24,11 @@ export class DetectCoordinateService {
     }
 
     const minCanvas = Math.min(...arr);
+    return minCanvas;
+  }
+
+  detectX(event: any, rect_location: any, canvasInfo: any,canvasWidth: any, pageNumber: number) {
+    const minCanvas = this.getMinCanvasX(pageNumber);
 
     const page = this.getPage(event);
 
