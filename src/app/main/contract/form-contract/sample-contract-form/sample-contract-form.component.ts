@@ -681,7 +681,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         //   layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5*(page - 1);
         // }
 
-        let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth);
+        let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth, this.pageNumber);
         let layerY = this.detectCoordinateService.detectY(event, rect_location, canvasInfo);
 
         let _array = Object.values(this.obj_toa_do);

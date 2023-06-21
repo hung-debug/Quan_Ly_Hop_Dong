@@ -15,7 +15,16 @@ export class DetectCoordinateService {
     return page;
   }
 
-  detectX(event: any, rect_location: any, canvasInfo: any,canvasWidth: any) {
+  detectX(event: any, rect_location: any, canvasInfo: any,canvasWidth: any, pageNumber: number) {
+    let arr: any[] = [];
+    for(let i = 1; i < pageNumber; i++) {
+      const canvas = document.getElementById("canvas-step3-"+i);
+      const canvasInfo = canvas?.getBoundingClientRect();
+      arr.push(canvasInfo?.left);
+    }
+
+    const minCanvas = Math.min(...arr);
+
     const page = this.getPage(event);
 
     let layerX;
@@ -28,7 +37,7 @@ export class DetectCoordinateService {
         width = canvas.offsetWidth;
       }
 
-      layerX = rect_location.left - canvasInfo.left + (canvasWidth - width)/2;
+      layerX = rect_location.left - minCanvas;
     }
 
     return layerX;

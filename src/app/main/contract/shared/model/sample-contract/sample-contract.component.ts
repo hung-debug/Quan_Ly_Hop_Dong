@@ -601,13 +601,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let canvasElement: HTMLElement | null;
     if (event.relatedTarget && event.relatedTarget.id) {
       canvasElement = document.getElementById(event.relatedTarget.id);
-
       
-      let canvasInfo = canvasElement ? canvasElement.getBoundingClientRect() : '';
+      let canvasInfo: any = canvasElement ? canvasElement.getBoundingClientRect() : '';
+
       this.coordinates_signature = event.rect;
       let id = event.target.id;
       let signElement = <HTMLElement>document.getElementById(id);
       let rect_location = signElement.getBoundingClientRect();
+
+      console.log("signElement ", signElement);
+      console.log("rec ", rect_location);
+
       if (id.includes('chua-keo')) {  //Khi kéo vào trong hợp đồng thì sẽ thêm 1 object vào trong mảng sign_config
         event.target.style.webkitTransform = event.target.style.transform = 'none';// Đẩy chữ ký về vị trí cũ
         event.target.setAttribute('data-x', 0);
@@ -678,7 +682,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         //   layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5 * (page - 1);
         // }
 
-        let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth);
+        let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth, this.pageNumber);
         let layerY = this.detectCoordinateService.detectY(event, rect_location, canvasInfo);
         // //END
 
@@ -1077,6 +1081,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
+  canvasLeft: any;
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
 
@@ -1088,6 +1093,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;
+
+      this.canvasLeft = viewport.left;
+
       canvas.height = viewport.height;
       canvas.width = viewport.width;
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
