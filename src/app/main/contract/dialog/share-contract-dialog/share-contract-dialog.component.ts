@@ -80,7 +80,7 @@ export class ShareContractDialogComponent implements OnInit {
   getUserByOrg(orgId:any){
     
     let emailLogin = this.userService.getAuthCurrentUser().email;
-    this.userService.getUserList(orgId, "").subscribe(data => {
+    this.userService.getUserList(orgId, "","").subscribe(data => {
       
       this.userList = data.entities.filter((p: any) => p.email != emailLogin && p.status == 1);
 
