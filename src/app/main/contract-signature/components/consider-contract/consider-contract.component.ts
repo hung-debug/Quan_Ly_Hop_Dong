@@ -46,6 +46,8 @@ import { UnitService } from 'src/app/service/unit.service';
 import { Helper } from 'src/app/core/Helper';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 import { TranslateService } from '@ngx-translate/core';
+import { DowloadPluginService } from 'src/app/service/dowload-plugin.service';
+import { DetectCoordinateService } from 'src/app/service/detect-coordinate.service';
 
 @Component({
   selector: 'app-consider-contract',
@@ -197,6 +199,8 @@ export class ConsiderContractComponent
     private checkViewContractService: CheckViewContractService,
     private translate: TranslateService,
     public dialogRef: MatDialogRef<ConsiderContractComponent>,
+    private downloadPluginService: DowloadPluginService,
+    private detectCoordinateService: DetectCoordinateService
   ) {
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
@@ -1694,6 +1698,7 @@ export class ConsiderContractComponent
       title: 'KÝ HỢP ĐỒNG ',
       is_content: 'forward_contract',
       orgId: this.orgId,
+      imgSignAcc: this.datas.imgSignAcc
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -1795,7 +1800,8 @@ export class ConsiderContractComponent
     const dialogRef = this.dialog.open(ImageDialogSignComponent, {
       width: '1024px',
       backdrop: 'static',
-      data: data
+      data: data,
+      code: code
     });
 
     dialogRef.afterClosed().subscribe((res: any) => {
@@ -2769,15 +2775,7 @@ export class ConsiderContractComponent
       );
     } catch (error) {
       this.spinner.hide();
-      Swal.fire({
-        html:
-          'Vui lòng bật tool ký số hoặc tải ' +
-          `<a href='https://drive.google.com/file/d/1MPnntDPSoTX8AitnSEruZB_ovB9M8gOU/view' target='_blank'>Tại đây</a>  và cài đặt`,
-        icon: 'warning',
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#b0bec5',
-        confirmButtonText: 'Xác nhận',
-      });
+      this.downloadPluginService.getLinkDownLoadV2();
       return;
     }
 
@@ -2786,15 +2784,7 @@ export class ConsiderContractComponent
 
     if (!sessionId) {
       this.spinner.hide();
-      Swal.fire({
-        html:
-          'Vui lòng bật tool ký số hoặc tải ' +
-          `<a href='https://drive.google.com/file/d/1MPnntDPSoTX8AitnSEruZB_ovB9M8gOU/view' target='_blank'>Tại đây</a>  và cài đặt`,
-        icon: 'warning',
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#b0bec5',
-        confirmButtonText: 'Xác nhận',
-      });
+      this.downloadPluginService.getLinkDownLoadV2();
       return;
     } else {
       this.getCertificate(
@@ -3637,10 +3627,16 @@ export class ConsiderContractComponent
       this.contractService
         .detectCCCD(this.cccdFront, data.contractId, data.recipientId)
         .subscribe((response) => {
-          
+          console.log('response ', response);
 
-          this.nameCompany = response.name;
-          this.cardId = response.id;
+          if(response.name) {
+            this.nameCompany = response.name;
+            this.cardId = response.id;
+          } else {
+            this.nameCompany = this.recipient.name;
+            this.cardId = this.recipient.cardId;
+          }
+        
         });
 
       if (result) this.eKYCSignOpenAfter();
@@ -3892,20 +3888,25 @@ export class ConsiderContractComponent
     const canvasPageSign: any = document.getElementById('canvas-step3-' + page);
     const heightPage = canvasPageSign.height;
 
+    const canvasPageSignElement: any = canvasPageSign.getBoundingClientRect();
+    const canvasPageSignLeft: any = canvasPageSignElement.left;
+
     let currentHeight: number = 0;
     for (let i = 1; i < page; i++) {
       const canvas: any = document.getElementById('canvas-step3-' + i);
       currentHeight += canvas.height;
     }
 
+    const minCanvas = this.detectCoordinateService.getMinCanvasX(this.pageNumber);
+
     this.isDataObjectSignature.map((sign: any) => {
       if (
-        (sign.type == 3 || sign.type == 1 || sign.type == 4) &&
+        (sign.type == 3 || sign.type == 1 || sign.type == 4 || sign.type == 5) &&
         sign?.recipient?.email === this.currentUser.email &&
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
-        sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
+        sign.signDigitalX = sign.coordinate_x - (canvasPageSignLeft - minCanvas) /* * this.ratioPDF*/;
         sign.signDigitalY = heightPage - (sign.coordinate_y - currentHeight) - sign.height + sign.page * 5.86 /* * this.ratioPDF*/;
 
         sign.signDigitalHeight =
@@ -3923,21 +3924,26 @@ export class ConsiderContractComponent
     const canvasPageSign: any = document.getElementById('canvas-step3-' + page);
     const heightPage = canvasPageSign.height;
 
+    const canvasPageSignElement: any = canvasPageSign.getBoundingClientRect();
+    const canvasPageSignLeft: any = canvasPageSignElement.left;
+
     let currentHeight: number = 0;
     for (let i = 1; i < page; i++) {
       const canvas: any = document.getElementById('canvas-step3-' + i);
       currentHeight += canvas.height;
     }
 
+    const minCanvas = this.detectCoordinateService.getMinCanvasX(this.pageNumber);
+
     this.isDataObjectSignature.map((sign: any) => {
       if (
-        (sign.type == 3 || sign.type == 1 || sign.type == 4) &&
+        (sign.type == 3 || sign.type == 1 || sign.type == 4 || sign.type == 5) &&
         sign?.recipient?.email === this.currentUser.email &&
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
-        sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
-        sign.signDigitalY = heightPage - (sign.coordinate_y - currentHeight) - sign.height + sign.page * 6 /* * this.ratioPDF*/;
+        sign.signDigitalX = sign.coordinate_x - (canvasPageSignLeft - minCanvas) /* * this.ratioPDF*/;
+        sign.signDigitalY = heightPage - (sign.coordinate_y - currentHeight) - sign.height + sign.page * 5.86 /* * this.ratioPDF*/;
 
         sign.signDigitalWidth = sign.width /* * this.ratioPDF*/;
         sign.signDigitalHeight = sign.height;

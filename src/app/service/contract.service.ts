@@ -497,6 +497,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+    
     const body = JSON.stringify(data_sample_contract);
     return this.http.post<Contract>(this.addSampleCntractUrl, body, { headers: headers })
       .pipe(
@@ -1577,9 +1578,9 @@ export class ContractService {
 
   convertCurrency(value: any) {    
     if (!isNaN(parseFloat(value)) && isFinite(value) && value.indexOf(".") === -1) {
-    value = parseFloat(value).toLocaleString('vi-VN');
-    return value;
-  }
+      value = parseFloat(value).toLocaleString('vi-VN');
+      return value;
+    }
     return value;
   }
 

@@ -12,10 +12,10 @@
           {{ "organization.me" | translate | uppercase }}&nbsp;<span style="color: red">*</span>
         </div>
         <input class="input1" type="text" [(ngModel)]="data_organization.name" />
-        <!-- <div style="width: 120px; margin-left: 5px">
+        <div style="width: 120px; margin-left: 5px">
           {{'hide.processing.thread' | translate}}
         </div>
-        <input type ="checkbox"> -->
+        <input type ="checkbox">
       </div>
 
       <div class="contract__content--participants">
@@ -716,10 +716,10 @@
         <input class="input1" type="text" placeholder="{{
             (item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate
           }}" [(ngModel)]="item.name" [disabled]="item.type == 3" />
-          <!-- <div style="width: 120px; margin-left: 5px">
+          <div style="width: 120px; margin-left: 5px">
             {{'hide.processing.thread' | translate}}
           </div>
-          <input type ="checkbox"> -->
+          <input type ="checkbox">
       </div>
 
       <div *ngIf="this.dataParnterOrganization().length >= 1" style="display: flex; justify-content: flex-end">
@@ -734,8 +734,8 @@
             <label class="type-partner"><input type="radio" name="type_{{id}}" [value]="2" [(ngModel)]="item.type"
                 (change)="changeType($event, item, id)">
               <span>&nbsp;{{'organization' | translate}}</span>
-              <!-- <div *ngIf="item.type != 2" class="none-button"></div> -->
-              <!-- <button  *ngIf="item.type == 2" class="btn" (click)="findPartner('ORGANIZATION', id, item)">{{'btn.search' | translate}}</button> -->
+              <div *ngIf="item.type != 2" class="none-button"></div>
+              <button  *ngIf="item.type == 2" class="btn" (click)="findPartner('ORGANIZATION', id, item)">{{'btn.search' | translate}}</button>
               </label>
 
               
@@ -744,8 +744,8 @@
             <label class="type-partner"><input type="radio" name="type_{{id}}" [value]="3" [(ngModel)]="item.type"
                 (change)="changeType($event, item, id)">
               <span>&nbsp;{{'personal' | translate}}</span>
-              <!-- <div *ngIf="item.type != 3" class="none-button"></div> -->
-              <!-- <button *ngIf="item.type == 3" class="btn find-button" (click)="findPartner('PERSONAL',id, item)">{{'btn.search' | translate}}</button> -->
+              <div *ngIf="item.type != 3" class="none-button"></div>
+              <button *ngIf="item.type == 3" class="btn find-button" (click)="findPartner('PERSONAL',id, item)">{{'btn.search' | translate}}</button>
             </label>
 
           </div>
@@ -1696,6 +1696,20 @@
                     </div>
                   </div>
                 </div>
+
+                   <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là hsm-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span
+                      class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'info.hsm' | translate}})</div>
+                  </div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
 
                 <!--KD-->
                 <div class="participants--input" style="display: flex"

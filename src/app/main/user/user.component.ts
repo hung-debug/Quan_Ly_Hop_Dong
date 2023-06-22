@@ -32,6 +32,7 @@ export class UserComponent implements OnInit {
   orgList: any[] = [];
   orgListTmp: any[] = [];
   myEmail: string;
+  name: string = "";
 
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
@@ -177,7 +178,7 @@ export class UserComponent implements OnInit {
     this.first = 0;
 
     this.spinner.show();
-    this.userService.getUserList(this.organization_id? this.organization_id : '', this.email).subscribe(response => {
+    this.userService.getUserList(this.organization_id? this.organization_id : '', this.email, this.name).subscribe(response => {
       this.spinner.hide();
       this.list = response.entities;
     });

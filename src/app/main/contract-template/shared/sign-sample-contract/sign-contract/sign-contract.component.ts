@@ -16,6 +16,13 @@ export class SignContractComponent implements OnInit, AfterViewInit {
     
   }
 
+  getStyleText(sign: any) {
+    return {
+      'font-size': sign.font_size+'px',
+      'font':sign.font ? sign.font: 'Times New Roman',
+    };
+  }
+
   getText(sign: any) {
     // ? 'Text' : 'Số hợp đồng'
     if (sign.sign_unit == 'text') {

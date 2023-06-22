@@ -110,6 +110,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   textSign: boolean = false;
 
+  imageSign: number = 2;
+  digitalSign: number = 3;
+  textUnit: number = 1;
+
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
@@ -259,6 +263,48 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.datas.size = 13;
       this.size = this.datas.size;
     }
+
+    
+    this.synchronized1(this.imageSign);
+    this.synchronized1(this.digitalSign);
+    this.synchronized1(this.textUnit);
+
+    this.checkDifferent();
+  }
+
+  synchronized1(numberSign: number) {
+    for(let i = 0; i < this.datas.is_determine_clone.length; i++) {
+      const clone = this.datas.is_determine_clone[i];
+
+      for(let j = 0; j < this.datas.contract_user_sign[numberSign].sign_config.length; j++) {
+        const signImage = this.datas.contract_user_sign[numberSign].sign_config[j];
+
+        for(let k = 0; k < clone.recipients.length; k++) {
+          if(clone.recipients[k].id == signImage.recipient_id) {
+             this.datas.contract_user_sign[numberSign].sign_config[j].email = clone.recipients[k].email;
+             this.datas.contract_user_sign[numberSign].sign_config[j].recipient.email = clone.recipients[k].email;
+             this.datas.contract_user_sign[numberSign].sign_config[j].name = clone.recipients[k].name;
+          }
+        }
+      }
+    }
+  }
+
+
+  checkDifferent() {
+    //Lấy tất cả recipientId trong clone
+    const recipientIds = this.datas.is_determine_clone.flatMap((item:any) => item.recipients.map((recipient:any) => recipient.id));
+
+    //Check mảng sign_config có id recipient trên thì giữ lại; còn lại xoá hết
+    for(let i = 0; i < 4; i++) {
+      for(let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
+        const sign_config = this.datas.contract_user_sign[i].sign_config[j];
+
+        if(sign_config.recipient_id && !recipientIds.includes(sign_config.recipient_id) && sign_config.sign_unit != 'text_currency') {
+          this.datas.contract_user_sign[i].sign_config.splice(j,1);
+        }
+      }
+    }
   }
 
   onResize(e?: any) {
@@ -378,9 +424,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       for (const data of dataDetermine) {
         if (((d.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5)) ||
           (d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
-          (d.sign_unit == 'so_tai_lieu' && data.role == 4) ||
+          (d.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
           (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-          ((d.name === data.name) && ((d.email ? d.email : d.recipient.email) === data.email)) ||
+          (((d.email ? d.email : d.recipient.email) === data.email)) ||
           (!d.email && this.datas.contract_no && d.sign_unit == 'so_tai_lieu')) {
 
           isContractSign.push(d); // mảng get dữ liệu không bị thay đổi
@@ -421,7 +467,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           */
           res.sign_config = res.sign_config.filter((val: any) =>
             isContractSign.some((data: any) =>
-              (val.name as any) == (data.name as any) &&
               (val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email as any : data.email as any) &&
               val.sign_unit == data.sign_unit));
           // res.sign_config = isContractSign;
@@ -556,13 +601,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let canvasElement: HTMLElement | null;
     if (event.relatedTarget && event.relatedTarget.id) {
       canvasElement = document.getElementById(event.relatedTarget.id);
-
       
-      let canvasInfo = canvasElement ? canvasElement.getBoundingClientRect() : '';
+      let canvasInfo: any = canvasElement ? canvasElement.getBoundingClientRect() : '';
+
       this.coordinates_signature = event.rect;
       let id = event.target.id;
       let signElement = <HTMLElement>document.getElementById(id);
       let rect_location = signElement.getBoundingClientRect();
+
+      console.log("signElement ", signElement);
+      console.log("rec ", rect_location);
+
       if (id.includes('chua-keo')) {  //Khi kéo vào trong hợp đồng thì sẽ thêm 1 object vào trong mảng sign_config
         event.target.style.webkitTransform = event.target.style.transform = 'none';// Đẩy chữ ký về vị trí cũ
         event.target.setAttribute('data-x', 0);
@@ -633,7 +682,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         //   layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5 * (page - 1);
         // }
 
-        let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth);
+        let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth, this.pageNumber);
         let layerY = this.detectCoordinateService.detectY(event, rect_location, canvasInfo);
         // //END
 
@@ -1032,6 +1081,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
+  canvasLeft: any;
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
 
@@ -1043,6 +1093,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;
+
+      this.canvasLeft = viewport.left;
+
       canvas.height = viewport.height;
       canvas.width = viewport.width;
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
