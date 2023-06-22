@@ -401,9 +401,9 @@
                         <div class="div_icon" *ngIf="status == 'complete' && isQLHD_13 && this.isOrg == 'off'">
                             <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}" (click)="shareContract(item.id);" />
                         </div>
-                        <!-- <div class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'">
+                        <div class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'">
                             <img src="../../../assets/img/contract-liquidation.svg" class="img_icon" ngbTooltip="{{'contract.liquidation' | translate}}" (click)="addContractLiquidationNew(item.id);" />
-                        </div> -->
+                        </div>
                     </div>
                     <div class="div_icon" *ngIf="status == 'cancel'">
                         <!-- <img src="../../assets/img/view_reason_icon.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" /> -->

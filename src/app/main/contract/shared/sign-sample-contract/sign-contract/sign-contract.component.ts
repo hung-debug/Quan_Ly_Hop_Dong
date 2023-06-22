@@ -83,11 +83,11 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   }
 
   changeInput(e: any){
-    e.target.value = this.convertCurrency(e.target.value);
+    e.target.value = this.contractService.convertCurrency(e.target.value);
   }
 
   reverseInput(e: any){
-    e.target.value = this.removePeriodsFromCurrencyValue(e.target.value);
+    e.target.value = this.contractService.removePeriodsFromCurrencyValue(e.target.value);
   }
 
   getSpecifiedHandle() {
@@ -103,45 +103,5 @@ export class SignContractComponent implements OnInit, AfterViewInit {
     else return false;
   }
 
-  removePeriodsFromCurrencyValue(value: string): string {
-    const regex = /(\d[\d.]*(?:\.\d+)?)\b/g;
-    let result = '';
-    let lastIndex = 0;
-    let match;
-  
-    while ((match = regex.exec(value)) !== null) {
-      const numericPart = match[1].replace(/\./g, '');
-      const prefix = value.slice(lastIndex, match.index);
-      result += prefix + numericPart;
-      lastIndex = match.index + match[0].length;
-    }
-  
-    const suffix = value.slice(lastIndex);
-    result += suffix;
-  
-    return result;
-  }
 
-  convertCurrency(value: any) {
-    const regex = /(\d[\d.]*(?:\.\d+)?)\b(?=\.{0,2}\d*$)/g;
-    const text = value.toString();
-    let formattedText = '';
-    let lastIndex = 0;
-    let match;
-    while ((match = regex.exec(text)) !== null) {
-      const numericPart = match[1].replace(/\./g, '');
-      const formattedNumericPart = parseFloat(numericPart).toLocaleString('vi-VN');
-      const prefix = text.slice(lastIndex, match.index);
-      formattedText += prefix + formattedNumericPart;
-      lastIndex = match.index + match[0].length;
-      if (text.charAt(lastIndex) === '.') {
-        formattedText += '.';
-        lastIndex++;
-      }
-    }
-    const suffix = text.slice(lastIndex);
-    formattedText += suffix;
-    value = formattedText;
-    return value;
-  }
 }
