@@ -1,38 +1,49 @@
-<div class="container-fluid">
+<div class="container-fluid" id="dialog-content">
     <div style="text-align: center; font-weight: bold">
       <h3 style="color: #106DB6; font-family: inherit;text-transform: uppercase;">{{ title | translate}}</h3>
     </div>
-    <div class="search-row">
-      <div class="contract-type">
-        <div class="label-input">{{'folder.name' | translate}}&nbsp;</div>
-        <p-treeSelect class="md:w-20rem w-full" containerStyleClass="w-full" style="width: 100%!important" 
-        [(ngModel)]="selectedContractType" [options]="contractTypes" placeholder="Chọn loại hợp đồng"></p-treeSelect>
-      </div>
-      <div class="contract-type">
-        <div class="label-input">{{'folder.name' | translate}}&nbsp;</div>
-        <div class="input-data-name"><input type="text border" [readonly]="this.action == 'openDetail'"></div>
-      </div>
-      <div class="contract-type">
-        <div class="label-input">{{'folder.name' | translate}}&nbsp;</div>
-        <div class="input-data-name"><input type="text border" [readonly]="this.action == 'openDetail'"></div>
-      </div>
-      <div class="contract-name"></div>
-      <div class="contract-partner"></div>
+    <div class="row">
+        <div class="search-row">
+            <div class="contract-type">
+              <div class="label-input">{{'folder.type.contract' | translate}}&nbsp;<span style="color: red">*</span></div>
+              <p-treeSelect class="md:w-20rem w-full" containerStyleClass="w-full" style="width: 100%!important" 
+              [(ngModel)]="selectedContractType" [options]="contractTypes" placeholder="Chọn loại hợp đồng" scrollHeight="200px" [showClear]="showClearValue" (ngModelChange)="chooseContractType()" selectionMode="single"
+              >
+              </p-treeSelect>
+            </div>
+            <!-- <div class="contract-name">
+              <div class="label-input">{{'folder.name' | translate}}&nbsp;</div>
+              <div class="input-data-name"><input type="text border" [readonly]="this.action == 'openDetail'"></div>
+            </div>
+            <div class="contract-partner">
+              <div class="label-input">{{'folder.partner.name' | translate}}&nbsp;</div>
+              <div class="input-data-name"><input type="text border" [readonly]="this.action == 'openDetail'"></div>
+            </div> -->
+            <div class="contract-name">
+                <div class="label-input">Từ khóa tìm kiếm&nbsp;</div>
+                <div class="input-data-name"><input type="text border" [readonly]="this.action == 'openDetail'" [(ngModel)]="filter_name" placeholder="Nhập tên hợp đồng, đối tác cần tìm kiếm"></div>
+              </div>
+            <div class="contract-button">
+                <div class="label-input">&nbsp;</div>
+                <div class="search-btn"(click)="filterContract()">Tìm kiếm</div>
+            </div>
+          </div>
     </div>
+
     <div class="col-md-4" class="container-fluid">
-      <ng-template [ngIf]="!roleMess">
+      <ng-template [ngIf]="isOrg">
   
           <div class="row list_header" *ngIf="pageTotal > 0;">
-              <div class="col-md-4"></div>
+              <div class="col-md-5"></div>
               <div class="col-md-2">{{'create-date' | translate}}</div>
               <div class="col-md-2">{{'expiration-date' | translate}}</div>
-              <div class="col-md-3">{{'action' | translate}}</div>
+              <!-- <div class="col-md-3">{{'action' | translate}}</div> -->
           </div>
   
           <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
               <div class="row">
                   <!--Cột 1-->
-                  <div class="col-md-4">
+                  <div class="col-md-5">
                       <div class="row">
                           <div class="col-md-11">
                               <div class="item_contract_name">
@@ -41,41 +52,43 @@
                                   </a>
                               </div>
   
-                              <!-- <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
-                                  <div class="item_contract_infor">{{'side' | translate}} 
-                                  </div>
-                              </div> -->
-  
-                              <div class="row">
-                                  <div class="item_contract_infor">{{'contract.status' | translate}}:
-                                      <span class="status_blue"></span>
+                              <div class="row" *ngFor="let itemPar of sortParticipant(item); let index = index">
+                                    <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
                                   </div>
                               </div>
+
+                              <div class="row">
+                                <div class="item_contract_infor">{{'contract.status' | translate}}:
+                                    <span class="status_blue">{{this.status | pipe | translate}}
+                                        {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
+                                        translate}}</span>
+                                </div>
+                            </div>
                           </div>
                       </div>
                   </div>
   
                   <!--Cột 2: Ngày tạo-->
                   <div class="col-md-2 calendar_create">
-                      <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date:
+                      <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{ getCreatedDate(item) | date:
                               'dd/MM/yyyy HH:mm'}}</span></div>
                   </div>
   
                   <!--Cột 3: Ngày hết hạn ký-->
                   <div class="col-md-2 calendar_deadline">
                       <div style="display: flex; justify-content: center;">
-                          <div class="div_icon"><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date:
+                          <div class="div_icon"><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{ getSignTime(item) | date:
                                   'dd/MM/yyyy'}}</span></div>
                       </div>
                   </div>
   
                   <!--Cột 5: Input checkbox-->
-                  <div class="col-md-1 item_icon">
+                  <div class="col-md-2 item_icon">
                       <div style="display: flex; justify-content: center;">
                           <div class="div_icon">
                               <div class="col-md-1 calendar_create">
                                   <div>
-                                      <input name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" />
+                                      <input name="item" type="checkbox" value="{{item.contractId}}" (change)="selectContract(item.id)" />
                                   </div>
                               </div>
                           </div>
@@ -84,7 +97,7 @@
               </div>
           </div>
   
-          <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+          <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;padding-top: 50px;">
               <div style="display: table-cell;vertical-align: middle;">
                   <img src="../../../assets/img/empty_data.svg" />
                   <div style="color: #94A7C6">{{'no.data' | translate}}</div>
@@ -102,20 +115,22 @@
               </div> -->
               <div class="footer_title">
               </div>
-              <!-- <div class="footer_pagination">
+              <div class="footer_pagination">
                   <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
-              </div> -->
-              <!-- <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}} 
-              </div> -->
+              </div>
+              <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}} 
+              </div>
           </div>
       </ng-template>
   
       <div>{{roleMess | translate}}</div>
   </div>
 
-    <div class="row" style="justify-content: center;padding-top: 10px;">
-      <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
-      <button class="save-button" (click)="dialog.closeAll()" type="button">{{'btn.save' | translate}}</button>
+    <div class="footer" style="justify-content: center">
+        <div style="display:flex; justify-content: center;">
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
+            <button class="save-button" (click)="dialog.closeAll()" type="button">{{'btn.save' | translate}}</button>
+        </div>
   </div>
   
   </div>

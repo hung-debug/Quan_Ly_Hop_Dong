@@ -968,6 +968,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       this.arrPage = [];
       for (let page = 1; page <= this.pageNumber; page++) {
         let canvas = document.createElement("canvas");
+        // const viewport = pageObj.getViewport({ scale: 1 });
         this.arrPage.push({ page: page });
         canvas.className = 'dropzone';
         canvas.id = "canvas-step3-" + page;

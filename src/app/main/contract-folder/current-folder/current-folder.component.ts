@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, Route, ActivatedRoute } from '@angular/router';
 import { ContractFolderService } from 'src/app/service/contract-folder.service';
 import { MatDialog } from '@angular/material/dialog';
+import { sideList } from 'src/app/config/variable';
 
 @Component({
   selector: 'app-current-folder',
@@ -24,6 +25,7 @@ export class CurrentFolderComponent implements OnInit {
 
   roleMess: any = "";
   id: number;
+  isOrg: string = "off";
 
   constructor(
     private router: Router,
@@ -52,10 +54,10 @@ export class CurrentFolderComponent implements OnInit {
     });
   }
 
-  getContractList() {
-    this.pageTotal = 0;
-    this.roleMess = "";
-    this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
+  // getContractList() {
+  //   this.pageTotal = 0;
+  //   this.roleMess = "";
+  //   this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
 
 
       //get list contract
@@ -80,7 +82,7 @@ export class CurrentFolderComponent implements OnInit {
       //     }
       //   }
       // });
-    }
+    // }
   
 
   setPage() {
@@ -93,10 +95,54 @@ export class CurrentFolderComponent implements OnInit {
 
   addContract(){
     const matDialogRef = this.dialog.open(AddContractFolderComponent, {
-      width: '800px',
-      height: '800px',
+      width: '1200px',
     });
   }
+  getContractList() {
+    this.contractFolderService.getContractCreatedList('', this.status, this.p, 5).subscribe(data => {
+      this.contracts = data.entities;
+      this.pageTotal = data.total_elements;
+      if (this.pageTotal == 0) {
+        this.p = 0;
+        this.pageStart = 0;
+        this.pageEnd = 0;
+      } else {
+        this.setPage();
+      }
+    });
+    }
+
+    sortParticipant(list: any) {
+      return list.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
+    }
+    
+    getNameOrganization(item: any, index: any) {
+      if(item.type == 3 && item.recipients.length > 0)
+        return sideList[index].name + " : " + item.recipients[0].name;
+      return sideList[index].name + " : " + item.name;
+    }
+
+    getNameStatusCeca(status: any, ceca_push: any, ceca_status: any) {
+      if (status == 30) {
+        if (ceca_push == 0) {
+          return "";
+        } else if (ceca_push == 1) {
+          if (ceca_status == -1) {
+            return "[Gửi lên CeCA thất bại]";
+          } else if (ceca_status == 1) {
+            return "[Chờ BCT xác thực]";
+          } else if (ceca_status == -2) {
+            return "[Xác thực thất bại]";
+          } else if (ceca_status == 0) {
+            return "[BCT xác thực thành công]";
+          } else {
+            return "[Chưa gửi lên CeCA]";
+          }
+        }
+        return "[Không xác định]";
+      }
+      return "";
+    }
 
 }
 

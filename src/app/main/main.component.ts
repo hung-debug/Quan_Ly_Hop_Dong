@@ -65,6 +65,7 @@ export class MainComponent implements OnInit {
       this.lang = 'en';
     }
 
+    this.getScreenResolution();
     this.getDeviceApp();
 
     //update title by component
@@ -85,6 +86,12 @@ export class MainComponent implements OnInit {
   //apply change title
   ngAfterContentChecked() {
     this.changeDetectorRef.detectChanges();
+  }
+
+  getScreenResolution(): void {
+    let screenWidth = window.screen.width;
+    let screenHeight = window.screen.height;
+    console.log(screenWidth, screenHeight);
   }
 
   //click logout

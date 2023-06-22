@@ -3,6 +3,8 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Timestamp } from 'rxjs/internal/operators/timestamp';
 import { dateFormat } from 'highcharts';
+import { Contract } from './contract.service';
+import { Observable } from 'rxjs';
 
 export interface Folder {
   name: string;
@@ -22,6 +24,9 @@ export class ContractFolderService {
   getContractFolderNameUrl = `${environment.apiUrl}/api/v1/contracts/contract-folder`;
   addContractFolderUrl = `${environment.apiUrl}/api/v1/contracts/contract-folder`;
   deleteContractFolderUrl = `${environment.apiUrl}/api/v1/contracts/contract-folder/`;
+  getContractCreatedListUrl = `${environment.apiUrl}/api/v1/contracts/my-contract?keyword=`;
+  getContractShareListUrl: any = `${environment.apiUrl}/api/v1/shares`;
+  getContractMyProcessListUrl: any = `${environment.apiUrl}/api/v1/contracts/my-process`;
   // getContractFolderListUrl = `${environment.apiFolder}/contract-folder`;
   // getContractFolderNameUrl = `${environment.apiFolder}/contract-folder`;
   // getContractFolderListUrl = `${environment.apiUrl}`;
@@ -97,5 +102,35 @@ export class ContractFolderService {
     return date;
   }
 
+  getContractCreatedList(filter_name: string, status: any, page: number, size: number): Observable<any>{
+    this.getCurrentUser();
+    const headers = { Authorization: 'Bearer ' + this.token };
+    if(page){
+      page = page - 1;
+    }
+    const getContractUrl = this.getContractCreatedListUrl +  filter_name.trim() + '&type=&contract_no=&from_date=&to_date=&' + 'status=' + status + '&remain_day=' + '&page=' + page + '&size=' + size;
+    return this.http.get<Contract[]>(getContractUrl, { headers }).pipe();
+  }
+
+  public getContractMyProcessList(filter_name:any, filter_status:any, page:any, size:any): Observable<any> {
+    this.getCurrentUser();
+    if(page != ""){
+      page = page - 1;
+    }
+    let listContractMyProcessUrl = this.getContractMyProcessListUrl + '?keyword=' + filter_name.trim() + '&type=&status=' + filter_status + '&contract_no=' + "&from_date=" + "&to_date=" + "&page=" + page + "&size=" + size + "&contractStatus=";
+    
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<Contract[]>(listContractMyProcessUrl, {headers}).pipe();
+  }
+
+  public getContractShareList(filter_name:any, page:any, size:any): Observable<any> {
+    this.getCurrentUser();
+    if(page != ""){
+      page = page - 1;
+    }
+    let shareListContractUrl = this.getContractShareListUrl + '?keyword=' + filter_name.trim() + '&type=' + '&status=' + '&contract_no=' + "&from_date=" + "&to_date=" + "&page=" + page + "&size=" + size + "&contractStatus=";
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<any[]>(shareListContractUrl, {headers}).pipe();
+  }
 
 }

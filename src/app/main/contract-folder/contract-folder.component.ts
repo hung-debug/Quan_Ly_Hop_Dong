@@ -52,7 +52,7 @@ export class ContractFolderComponent implements OnInit {
         id: 3,
         name: "Hợp đồng 2024",
         contracts: [],
-        parentId: undefined
+        parentId: 0
       },
       {
         id: 4,
@@ -61,13 +61,13 @@ export class ContractFolderComponent implements OnInit {
           24194,
           24183
         ],
-        parentId: undefined
+        parentId: 0
       },
       {
         id: 5,
         name: "Hợp đồng 2023",
         contracts: [],
-        parentId: undefined
+        parentId: 0
       }
     ]
 

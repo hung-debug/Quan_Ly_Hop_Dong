@@ -526,22 +526,69 @@ export const contractTypes = [
   { 
     id: 1,
     label: 'menu.contract.create.list',
+    selectable: false,
     children: [
       {
         id: 1,
-        label: 'contract.status.draft'
+        label: 'contract.status.draft',
+        status: 0
       },
       {
         id: 2,
-        label: 'contract.status.wait-processing'
+        label: 'contract.status.processing',
+        status: 20
       }, 
       {
         id: 3,
-        label: 'contract.status.processed'
+        label: 'contract.status.expire',
+        status: 33
       },
       {
         id: 4,
-        label: 'contract.status.expire'
+        label: 'contract.status.overdue',
+        status: 34
+      },
+      {
+        id: 5,
+        label: 'contract.status.fail',
+        status: 31
+      },
+      {
+        id: 6,
+        label: 'contract.status.cancel',
+        status: 32
+      }, 
+      {
+        id: 7,
+        label: 'contract.status.complete',
+        status: 30
+      },
+      {
+        id: 8,
+        label: 'contract.status.liquidated',
+        status: 40
+      }
+    ]
+  },
+  {
+    id: 2,
+    label: 'menu.contract.receive.list',
+    selectable: false,
+    children: [
+      {
+        id: 1,
+        label: 'contract.status.wait-processing',
+        status: 1
+      },
+      {
+        id: 2,
+        label: 'contract.status.processed',
+        status: 4
+      },
+      {
+        id:3,
+        label: 'contract.status.share',
+        status: -1
       }
     ]
   }

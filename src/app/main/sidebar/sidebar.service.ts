@@ -560,23 +560,23 @@ export class SidebarService {
       })
     }
 
-    // this.menus.push({
-    //   title: 'customer.list',
-    //   icon: '/assets/img/customer_list.svg',
-    //   active: false,
-    //   type: 'simple',
-    //   href: '/main/customer',
-    //   id: 11,
-    // })
+    this.menus.push({
+      title: 'customer.list',
+      icon: '/assets/img/customer_list.svg',
+      active: false,
+      type: 'simple',
+      href: '/main/customer',
+      id: 11,
+    })
 
-    // this.menus.push({
-    //   title: 'contract.folder',
-    //   icon: '/assets/img/contract.svg',
-    //   active: false,
-    //   type: 'simple',
-    //   href: '/main/contract-folder',
-    //   id: 12,
-    // })
+    this.menus.push({
+      title: 'contract.folder',
+      icon: '/assets/img/contract.svg',
+      active: false,
+      type: 'simple',
+      href: '/main/contract-folder',
+      id: 12,
+    })
    
     if(this.isConfigSms || this.isConfigSoonExpireDay) {
       this.menus.push({

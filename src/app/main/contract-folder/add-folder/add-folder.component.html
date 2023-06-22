@@ -7,7 +7,7 @@
     <div class="input-data-name" [ngStyle]="getStyleDetail()"><input type="text border" [readonly]="this.action == 'openDetail'" [ngStyle]="getStyleDetail()" [(ngModel)]="this.name"></div>
   </div>
   <div class="folder-name">
-    <div class="label-input-description">{{'folder.description' | translate}}&nbsp;<span style="color: red; padding: 0">*</span></div>
+    <div class="label-input-description">{{'folder.description' | translate}}&nbsp;</div>
     <div class="input-data-description" [ngStyle]="getStyleDetail()"><textarea type="text border" [ngStyle]="getStyleDetail()" [readonly]="this.action == 'openDetail'" [(ngModel)]="this.description"></textarea></div>
   </div>
   <div class="row" style="justify-content: center;padding-top: 10px;">

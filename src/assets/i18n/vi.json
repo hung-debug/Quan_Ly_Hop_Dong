@@ -675,6 +675,8 @@
   "folder.openDetail": "Xem chi tiết thư mục",
   "folder.search.name.placeholder": "Nhập tên thư mục để tìm kiếm",
   "confirm.folder.delete": "Bạn có chắc chắn muốn xóa thư mục này không?",
+  "folder.type.contract": "Loại hợp đồng",
+  "folder.partner.name": "Tên đối tác",
   "edit.exp.sign.time":"Chỉnh sửa ngày hết hạn ký",
   "add.contract.folder": "Thêm hợp đồng",
   "release.contract.success": "Phát hành hợp đồng thành công",

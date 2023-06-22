@@ -675,6 +675,8 @@
   "folder.openDetail": "Detail folder",
   "folder.search.name.placeholder": "Please enter the folder name to search",
   "confirm.folder.delete": "Are you sure you want to delete this folder?",
+  "folder.type.contract": "Contract type",
+  "folder.partner.name": "Partner name",
   "edit.exp.sign.time":"Edit signing expiration date",
   "add.contract.folder":"Add contract",
   "release.contract.success": "Release contract successfully",

@@ -1,4 +1,4 @@
-.contract-type {
+.contract-type, .contract-name, .contract-partner, .contract-button {
     display: flex;
     width: 100%;
     flex-wrap:wrap;
@@ -97,12 +97,181 @@
 .search-row {
     display: flex;
     flex-wrap: nowrap;
+    width: 100%;
+    padding-left: 24px;
+}
+
+.button-row {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 15%;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.search-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    height: 37px;
+    border-radius: 5px;
+    border: 1px solid #106DB6;
+    background-color: #106DB6;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+}
+
+.status_blue{
+  color: #027e21;
 }
 
 :host ::ng-deep {
     .p-treeselect {
         width: 90%;
-        border-radius: 3px;
+        border-radius: 5px;
         border: 1px solid #106DB6;
     }
 }
+
+.footer{
+    display: absolute;
+    bottom: 0;
+    justify-content: center;
+}
+
+#dialog-content {
+    height: 85%;
+}
+
+.list_header{
+    color:#898989;
+    text-align: center;
+    padding: 12px 12px 0;
+    font-weight: 500;
+  }
+
+  .item_contract {
+    border: 1px solid #106DB6;
+    border-radius: 10px;
+    padding: 8px;
+    margin-top: 5px;
+    line-height: 24px;
+  }
+  
+  .item_contract:hover{
+    background-color: rgb(255, 254, 254);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  
+  .item_contract_name {
+    font-weight: 500;
+    font-size: 16px;
+    color: #106DB6;
+    cursor: pointer;
+  }
+  
+  
+  .item_contract_infor{
+    color: #666666;
+  }
+  
+  .item_contract_created{
+    color: #666666;
+    font-size: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .footer_title{
+    width: 120px;
+  }
+  .footer_pagination{
+    text-align: center;
+  }
+  .footer_page_number{
+    color: #0160AE
+  }
+  .contract_footer{
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  :host ::ng-deep {
+    .ngx-pagination {
+      padding: 0;
+    }
+    .ngx-pagination a, .ngx-pagination button {
+      text-decoration: none;
+      background: #f3f3f3;
+    }
+    .ngx-pagination li {
+      width: 50px;
+      border-radius: 5px;
+    }
+    .ngx-pagination .pagination-previous a::before,
+    .ngx-pagination .pagination-previous.disabled::before {
+      font-family: 'Material Icons';
+      content: 'keyboard_arrow_left';
+      vertical-align: middle;
+      display: inline;
+      margin: 0;
+    }
+    .ngx-pagination .pagination-next a::after,
+    .ngx-pagination .pagination-next.disabled::after {
+      font-family: 'Material Icons';
+      content: 'keyboard_arrow_right';
+      vertical-align: middle;
+      display: inline;
+      margin: 0;
+    }
+  
+    .nav-link.active {
+      color: #0d6efd;
+      font-weight: 500;
+      background-color: #c5ebff;
+    }
+    .nav-link {
+      color: #6c6c6d;
+    }
+  
+    .p-selectbutton .p-button {
+      outline: 0 !important;
+      box-shadow: none !important;
+      height: 33px;
+      width: 50%;
+    }
+  
+    .p-selectbutton .p-button.p-highlight {
+      background: #c5ebff;
+      border-color: #c5ebff;
+      color: #106DB6;
+    }
+  }
+
+  .calendar_create{
+    text-align: center;
+    color:#106DB6
+  }
+  .calendar_deadline{
+    text-align: center;
+    color:red
+  }
+
+  .calendar_create, .calendar_deadline, .item_icon{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .non-clickable-parent {
+    pointer-events: none;
+    cursor: default;
+  }
+  
