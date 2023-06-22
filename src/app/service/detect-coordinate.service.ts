@@ -42,7 +42,7 @@ export class DetectCoordinateService {
         width = canvas.offsetWidth;
       }
 
-      layerX = rect_location.left - minCanvas;
+      layerX = rect_location.left - canvasInfo.left;
     }
 
     return layerX;
