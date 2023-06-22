@@ -17,7 +17,7 @@ export class DetectCoordinateService {
 
   getMinCanvasX(pageNumber: number) {
     let arr: any[] = [];
-    for(let i = 1; i < pageNumber; i++) {
+    for(let i = 1; i <= pageNumber; i++) {
       const canvas = document.getElementById("canvas-step3-"+i);
       const canvasInfo = canvas?.getBoundingClientRect();
       arr.push(canvasInfo?.left);
