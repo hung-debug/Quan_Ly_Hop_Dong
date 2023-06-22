@@ -282,6 +282,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         for(let k = 0; k < clone.recipients.length; k++) {
           if(clone.recipients[k].id == signImage.recipient_id) {
              this.datas.contract_user_sign[numberSign].sign_config[j].email = clone.recipients[k].email;
+             if(this.datas.contract_user_sign[numberSign].sign_config[j].recipient)
              this.datas.contract_user_sign[numberSign].sign_config[j].recipient.email = clone.recipients[k].email;
              this.datas.contract_user_sign[numberSign].sign_config[j].name = clone.recipients[k].name;
           }
