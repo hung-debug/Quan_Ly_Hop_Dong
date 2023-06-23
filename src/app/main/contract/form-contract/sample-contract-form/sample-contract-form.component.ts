@@ -46,12 +46,14 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   pageNumber = 1;
   canvasWidth = 0;
   arrPage: any = [];
+  arrDifPage: any = [];
   objDrag: any = {};
   scale: any;
   objPdfProperties: any = {
     pages: [],
   };
   orgId: any;
+  difX: number;
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
@@ -277,8 +279,28 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
     this.checkDifferent();
 
-    console.log("datas form 2 ", this.datasForm.contract_user_sign);
 
+  }
+
+  setX(){
+    console.log("setX");
+    let i = 0;
+    this.datasForm.contract_user_sign.forEach((element: any) => {
+      element.sign_config.forEach((item: any) => {
+        const htmlElement: HTMLElement | null = document.getElementById(item.id);
+        console.log(htmlElement);
+        if(htmlElement) {
+          var oldX = Number(htmlElement.getAttribute('data-x'));
+          if(oldX) {
+          var newX = oldX + this.difX;
+          htmlElement.setAttribute('data-x', newX.toString());
+          }
+        }
+        if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+          item.coordinate_x += this.difX;
+        }
+      })
+    })
   }
 
   synchronized1(numberSign: number) {
@@ -681,9 +703,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         //   layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5*(page - 1);
         // }
 
-        let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth, this.pageNumber);
+        let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth, this.pageNumber)
         let layerY = this.detectCoordinateService.detectY(event, rect_location, canvasInfo);
-
+  
         let _array = Object.values(this.obj_toa_do);
         this.cdRef.detectChanges(); // render lại view
         let _sign = <HTMLElement>document.getElementById(this.signCurent['id']);
@@ -789,6 +811,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                 element['position'] = this.signCurent['position'];
                 element['coordinate_x'] = this.signCurent['coordinate_x'];
                 element['coordinate_y'] = this.signCurent['coordinate_y'];
+                element['dif_x'] = this.signCurent['dif_x'];
                 if (!this.objDrag[this.signCurent['id']].count) {
                   // element['width'] = this.datasForm.configs.e_document.format_signature_image.signature_width;
                   if (!element.width && !element.height) {
@@ -946,6 +969,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     // // keep the dragged position in the data-x/data-y attributes
     var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
     var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+    console.log(x, y);
     // // translate the element
     target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
     // // update the posiion attributes
@@ -1000,13 +1024,25 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           if(i < this.pageNumber)
             this.sum[i] = 0;
         }
-
+        let canvasWidth: any [] = [];
         for(let i = 1; i <= this.pageNumber; i++) {
           let canvas: any = document.getElementById('canvas-step3-'+i);
           this.top[i] = canvas.height;
+          canvasWidth.push(canvas.getBoundingClientRect().left)
         }
-        
-
+        this.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
+        console.log(canvasWidth);
+        console.log(Math.min(...canvasWidth));
+        console.log(Math.max(...canvasWidth));
+        for(let i = 0; i < this.pageNumber; i++) {
+          if(canvasWidth[i] == Math.min(...canvasWidth))
+          this.arrDifPage.push('min');
+          else  
+          this.arrDifPage.push('max');
+        }
+        this.setX();
+        this.datasForm.arrDifPage = this.arrDifPage;
+        this.datasForm.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
         for(let i = 0; i < this.pageNumber; i++) {
           this.top[i+1] += this.top[i];
           this.sum[i] = this.top[i+1];
@@ -1194,6 +1230,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   // get select người ký
   getSignSelect(d: any) {
+    const htmlElement = document.getElementById(d.id);
+    console.log(htmlElement)
     
     if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
       this.textSign = true;
@@ -1679,7 +1717,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
           this.isCheckRelease = true;
           this.data_sample_contract = this.data_sample_contract.filter((element:any) => typeof element.name !== 'undefined');
-
+          console.log(this.data_sample_contract);
           this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
             if(this.validData() == true){
               this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {

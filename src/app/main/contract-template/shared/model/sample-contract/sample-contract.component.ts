@@ -47,6 +47,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   objPdfProperties: any = {
     pages: [],
   };
+  difX: number = 0;
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
@@ -110,6 +111,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   top: any[]= [];
 
   textSign: boolean = false;
+  arrDifPage: any[] = [];
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -635,7 +637,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // }
         //END
 
-        let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth, this.pageNumber);
+        let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth, this.pageNumber)
         let layerY = this.detectCoordinateService.detectY(event, rect_location, canvasInfo);
 
         let _array = Object.values(this.obj_toa_do);
@@ -941,12 +943,24 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             this.sum[i] = 0;
         }
 
+        let canvasWidth: any [] = [];
         for(let i = 1; i <= this.pageNumber; i++) {
           let canvas: any = document.getElementById('canvas-step3-'+i);
           this.top[i] = canvas.height;
+          canvasWidth.push(canvas.getBoundingClientRect().left)
         }
-        
-
+        this.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
+        console.log(canvasWidth);
+        console.log(Math.min(...canvasWidth));
+        console.log(Math.max(...canvasWidth));
+        for(let i = 0; i < this.pageNumber; i++) {
+          if(canvasWidth[i] == Math.min(...canvasWidth))
+          this.arrDifPage.push('min');
+          else  
+          this.arrDifPage.push('max');
+        }
+        this.datas.arrDifPage = this.arrDifPage;
+        this.datas.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
         for(let i = 0; i < this.pageNumber; i++) {
           this.top[i+1] += this.top[i];
           this.sum[i] = this.top[i+1];

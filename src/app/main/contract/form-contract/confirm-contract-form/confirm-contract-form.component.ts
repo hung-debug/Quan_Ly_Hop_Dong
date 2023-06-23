@@ -341,8 +341,15 @@ export class ConfirmContractFormComponent implements OnInit {
       });
 
       this.spinner.show();
+      console.log(this.data_sample_contract)
+      this.data_sample_contract.forEach((element: any) => {
+        if(this.datasForm.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datasForm.difX;
+        }
+      })
       this.contractService.getContractSample(this.data_sample_contract).subscribe(
           (data) => {
+            console.log("goi vo day");
             if (action == 'finish_contract') {
               this.isButtonDisabled = true;
               this.callAPIFinish();

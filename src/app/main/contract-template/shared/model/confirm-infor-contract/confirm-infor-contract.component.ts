@@ -181,7 +181,15 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       })
 
       this.spinner.show();
-
+      this.data_sample_contract.forEach((element: any) => {
+        console.log(element);
+        console.log(Number(element.page)-1)
+        console.log(this.datas.arrDifPage)
+        console.log(this.datas)
+        if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datas.difX;
+        }
+      })
       this.contractTemplateService.getContractSample(this.data_sample_contract).subscribe((data) => {
         if (action == 'finish_contract') {
           this.callAPIFinish();

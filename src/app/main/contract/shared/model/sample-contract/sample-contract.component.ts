@@ -48,6 +48,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   objPdfProperties: any = {
     pages: [],
   };
+  difX: number = 0;
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
@@ -683,7 +684,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         //   layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5 * (page - 1);
         // }
 
-        let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth, this.pageNumber);
+        let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth, this.pageNumber)
         let layerY = this.detectCoordinateService.detectY(event, rect_location, canvasInfo);
         // //END
 
