@@ -19,6 +19,7 @@ export interface DigitalCertificate {
   password: string;
   status: string;
   file_name: string;
+  id: number;
 }
 @Injectable({
   providedIn: 'root',
@@ -29,6 +30,7 @@ export class DigitalCertificateService {
   getAllCert: any = `${environment.apiUrl}/api/v1/sign/find-cert`;
   updateCert: any = `${environment.apiUrl}/api/v1/sign/update-user-from-cert`;
   deleteUser: any = `${environment.apiUrl}/api/v1/sign/remove-user-from-cert`;
+  getCertByIdUrl: any = `${environment.apiUrl}/api/v1/sign/find-cert-by-id`;
 
   token: any;
   customer_id: any;
@@ -54,6 +56,15 @@ export class DigitalCertificateService {
     formData.append('status', status);
     return this.http.post<any>(this.addCertificate, formData, { 'headers': headers }).pipe();
   }
+
+  getCertById(id: any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.getCertByIdUrl + "?id=" + id, {headers}).pipe();
+  }
+
   updateCTS(id: any, status: any, email: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -128,7 +139,7 @@ export class DigitalCertificateService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    let listCertificate = this.getAllCert + '?file_name=' + FileName + '&status=' + status + '&size=' + size + '&number=' + number;
+    let listCertificate = this.getAllCert + '?file_name=' + FileName.trim() + '&status=' + status.trim() + '&size=' + size + '&number=' + number;
     return this.http.get<any>(listCertificate, { headers });
   }
 

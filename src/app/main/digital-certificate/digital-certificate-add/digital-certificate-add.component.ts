@@ -203,7 +203,7 @@ export class DigitalCertificateAddComponent implements OnInit {
       this.errorContractFile = '';
     }
   }
-
+  // error.password.required
   validData() {
     this.clearError();
     this.contractFileRequired();
@@ -216,6 +216,14 @@ export class DigitalCertificateAddComponent implements OnInit {
   save() {
     this.submitted = true;
 
+    if (!this.validData()) {
+      console.log("a");
+      return;
+    }else{
+
+console.log("b");
+
+
     this.DigitalCertificateService.addImportCTS(this.datas.contractFile,this.addForm.value.email,this.addForm.value.password,this.addForm.value.status).subscribe(response => {
 
       console.log("this.datassdddddddddddddd",response);
@@ -227,5 +235,6 @@ export class DigitalCertificateAddComponent implements OnInit {
         window.location.reload();
       }
     })
+  }
   }
 }

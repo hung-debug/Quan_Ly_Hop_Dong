@@ -27,7 +27,7 @@ export class DigitalCertificateComponent implements OnInit {
   ) { }
 
   listStatus = [
-    { label: 'Tất cả', value: '' },
+    { label: 'Tất cả', value: '',default: true },
     { label: 'Hoạt động', value: 1 },
     { label: 'Không hoạt động', value: 0 },
   ];
@@ -46,6 +46,7 @@ export class DigitalCertificateComponent implements OnInit {
   first: number = 0;
   list: any[];
   cols: any[];
+  dataSearch: any[];
   FileName: any;
   // listStatus: any[];
   isQLDC_01: boolean = true; //them moi chung thu so
@@ -67,10 +68,8 @@ export class DigitalCertificateComponent implements OnInit {
       { header: 'unit.status', style: 'text-align: left;' },
       { header: 'unit.manage', style: 'text-align: center;' },
     ];
-
-    this.getData();
     this.searchUser();
-    // console.log("thias dastas",this.dataa);
+    // this.getData();
 
   }
   array_empty: any = [];
@@ -142,9 +141,10 @@ export class DigitalCertificateComponent implements OnInit {
   editUser(id: any) {
     const data = {
       title: 'update.infor.certificate',
-      dataCert: this.list.filter((x: any) => x.id == id),
+      id: id,
     };
-    this.getData()
+    console.log("dataID",data);
+    // this.getData()
     // @ts-ignore
     const dialogRef = this.dialog.open(DigitalCertificateEditComponent, {
       width: '550px',
@@ -161,9 +161,10 @@ export class DigitalCertificateComponent implements OnInit {
   detailUser(id: any) {
     const data = {
       title: 'infor.certificate',
-      dataCert: this.list.filter((x: any) => x.id == id),
+      // dataCert: this.list.filter((x: any) => x.id == id),
+      id: id,
     };
-    this.getData()
+    // this.getData()
     // @ts-ignore
     const dialogRef = this.dialog.open(DigitalCertificateDetailComponent, {
       width: '550px',
