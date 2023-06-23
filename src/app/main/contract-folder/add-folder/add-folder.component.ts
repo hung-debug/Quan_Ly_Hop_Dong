@@ -1,3 +1,4 @@
+import { ToastService } from './../../../service/toast.service';
 import { Folder } from './../../../service/contract-folder.service';
 import { ContractFolderService } from 'src/app/service/contract-folder.service';
 import { Component, Inject, OnInit } from '@angular/core';
@@ -21,7 +22,8 @@ export class AddFolderComponent implements OnInit {
     public dialogRef: MatDialogRef<AddFolderComponent>,
     public dialog : MatDialog,
     private contractFolderService: ContractFolderService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
@@ -57,8 +59,14 @@ export class AddFolderComponent implements OnInit {
         description: this.description,
       }
       this.contractFolderService.addContractFolder(folder).subscribe(
-        (data) => {
+        (data: any) => {
+          if(data.errors)
+          if(data.errors[0].code == 1003){
+            this.toastService.showErrorHTMLWithTimeout('folder.name.exist', '', 2000);
+            return;
+          }
           this.dialogRef.close();
+          this.toastService.showSuccessHTMLWithTimeout('folder.add.success', '', 2000);
         }
       )
     } else if(this.action=='edit' && this.valid()){
@@ -68,7 +76,13 @@ export class AddFolderComponent implements OnInit {
         description: this.description,
       }
       this.contractFolderService.editContractFolder(folder).subscribe(
-        (data) => {
+        (data: any) => {
+          if(data.errors)
+          if(data.errors[0].code == 1003){
+            this.toastService.showErrorHTMLWithTimeout('folder.name.exist', '', 2000);
+            return;
+          }
+          this.toastService.showSuccessHTMLWithTimeout('folder.edit.success', '', 2000);
           this.dialogRef.close();
         }
       )

@@ -43,33 +43,33 @@ export class ContractFolderComponent implements OnInit {
       {header: 'contract-type.manage', style:'text-align: center;',class:'col-md-2'},
     ];
         
-    // this.contractFolderService.getContractFoldersList().subscribe((data) => 
-    // {
-    //     this.folders = data.filter((folder: any) => folder.parentId == 0).sort((a: any, b: any) => a.name.localeCompare(b.name));
-    // })
-    this.folders = [
-      {
-        id: 3,
-        name: "Hợp đồng 2024",
-        contracts: [],
-        parentId: 0
-      },
-      {
-        id: 4,
-        name: "Tháng 1",
-        contracts: [
-          24194,
-          24183
-        ],
-        parentId: 0
-      },
-      {
-        id: 5,
-        name: "Hợp đồng 2023",
-        contracts: [],
-        parentId: 0
-      }
-    ]
+    this.contractFolderService.getContractFoldersList().subscribe((data) => 
+    {
+        this.folders = data.filter((folder: any) => folder.parentId == 0).sort((a: any, b: any) => a.name.localeCompare(b.name));
+    })
+    // this.folders = [
+    //   {
+    //     id: 3,
+    //     name: "Hợp đồng 2024",
+    //     contracts: [],
+    //     parentId: 0
+    //   },
+    //   {
+    //     id: 4,
+    //     name: "Tháng 1",
+    //     contracts: [
+    //       24194,
+    //       24183
+    //     ],
+    //     parentId: 0
+    //   },
+    //   {
+    //     id: 5,
+    //     name: "Hợp đồng 2023",
+    //     contracts: [],
+    //     parentId: 0
+    //   }
+    // ]
 
 
   }

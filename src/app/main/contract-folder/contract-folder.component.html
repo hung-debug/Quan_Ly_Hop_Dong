@@ -20,30 +20,7 @@
       <button class="btn btn-lg btn-block btn_submit" (click)="addFolder()">Thêm thư mục</button>
     </div>
   </div>
-  <!-- <div class="row" style="padding-top: 20px;">
-    <p-table [value]="folders" [paginator]="false" id="table" [autoLayout]="true">
-      <ng-template pTemplate="header" let-columns>
-        <tr>
-            <th *ngFor="let col of cols" [style]='col.style' [class]="col.class">
-              {{col.header | translate}}
-            </th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-list>
-          <tr (dblclick)="openFolder(list.id)">
-              <td><img src = "../../../assets/img/contract.svg" width="20px">
-                <a style="color: #0160AE; cursor: pointer; padding-left: 10px;" 
-                (click)="openFolder(list.id)">{{list.name}}</a></td>
-              <td></td>
-              <td style="text-align: center">
-                <img src="../../../assets/img/icon_edit.svg" width="20px"  style="cursor: pointer;" (click)="editFolder(list.id)"  (dblclick)="$event.stopPropagation()"/>&nbsp;&nbsp;
-                <img src="../../../assets/img/icon_delete.svg" width="16px"  style="cursor: pointer;" (click)="deleteFolder(list.id)"  (dblclick)="$event.stopPropagation()"/>&nbsp;&nbsp;
-                <img src="../.././/../assets/img/view-folder.svg" width="20px" style="cursor: pointer" (click)="openDetailFolder(list.id)" (dblclick)="$event.stopPropagation()" >
-              </td>
-          </tr>
-      </ng-template>
-    </p-table>
-  </div> -->
+
   <div class="row list_header" *ngIf="this.folders.length > 0;">
     <div class="col-md-4"></div>
     <div class="col-md-3">{{'create-date' | translate}}</div>
@@ -65,14 +42,14 @@
         </div>
       </div>
       <div class="col-md-3 calendar_create">
-        <!-- <div><i class="fa fa-calendar fa_icon"></i>
+        <div><i class="fa fa-calendar fa_icon"></i>
           <span class="item_date">{{getDateTime(item.createdAt) | date: 'dd/MM/yyyy HH:mm'}}</span>
-        </div> -->
+        </div>
       </div>
       <div class="col-md-3 calendar_last_updated">
-        <!-- <div><i class="fa fa-calendar fa_icon"></i>
+        <div><i class="fa fa-calendar fa_icon"></i>
           <span class="item_date">{{getDateTime(item.updatedAt) | date: 'dd/MM/yyyy HH:mm'}}</span>
-        </div> -->
+        </div>
       </div>
 
       <div class="col-md-2 item_icon">
