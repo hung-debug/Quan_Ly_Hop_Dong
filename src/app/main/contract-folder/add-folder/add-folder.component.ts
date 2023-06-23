@@ -62,6 +62,7 @@ export class AddFolderComponent implements OnInit {
         (data: any) => {
           if(data.errors)
           if(data.errors[0].code == 1003){
+            this.spinner.hide();
             this.toastService.showErrorHTMLWithTimeout('folder.name.exist', '', 2000);
             return;
           }
@@ -79,6 +80,7 @@ export class AddFolderComponent implements OnInit {
         (data: any) => {
           if(data.errors)
           if(data.errors[0].code == 1003){
+            this.spinner.hide();
             this.toastService.showErrorHTMLWithTimeout('folder.name.exist', '', 2000);
             return;
           }

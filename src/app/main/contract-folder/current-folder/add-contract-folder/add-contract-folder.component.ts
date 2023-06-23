@@ -1,3 +1,4 @@
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractFolderService } from 'src/app/service/contract-folder.service';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -64,7 +65,8 @@ export class AddContractFolderComponent implements OnInit {
     public dialog : MatDialog,
     private translateService: TranslateService,
     private contractFolderService: ContractFolderService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit() {
@@ -91,6 +93,7 @@ getContractList() {
   this.contractFolderService.getContractCreatedList(this.filter_name, this.status.toString(), this.p, 4).subscribe(data => {
     this.contracts = data.entities;
     this.pageTotal = data.total_elements;
+    this.spinner.hide();
     if (this.pageTotal == 0) {
       this.p = 0;
       this.pageStart = 0;
@@ -98,6 +101,9 @@ getContractList() {
     } else {
       this.setPage();
     }
+  }, error => {
+    this.spinner.hide();
+    this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
   });
 
   if(this.parentId == 2){
@@ -105,6 +111,7 @@ getContractList() {
       this.contractFolderService.getContractShareList(this.filter_name, this.p, 4).subscribe(data => {
         this.contracts = data.entities;
         this.pageTotal = data.total_elements;
+        this.spinner.hide();
         if (this.pageTotal == 0) {
           this.p = 0;
           this.pageStart = 0;
@@ -112,11 +119,15 @@ getContractList() {
         } else {
           this.setPage();
         }
+      }, error => {
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
       })
     } else {
       this.contractFolderService.getContractMyProcessList(this.filter_name, this.status, this.p, 4).subscribe(data => {
         this.contracts = data.entities;
         this.pageTotal = data.total_elements;
+        this.spinner.hide();
         if (this.pageTotal == 0) {
           this.p = 0;
           this.pageStart = 0;
@@ -124,6 +135,9 @@ getContractList() {
         } else {
           this.setPage();
         }
+      }, error => {
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
       });
     }
   }
