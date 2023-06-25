@@ -341,12 +341,13 @@ export class ConfirmContractFormComponent implements OnInit {
       });
 
       this.spinner.show();
-      console.log(this.data_sample_contract)
+
       this.data_sample_contract.forEach((element: any) => {
         if(this.datasForm.arrDifPage[Number(element.page)-1] == 'max'){
           element.coordinate_x = element.coordinate_x - this.datasForm.difX;
         }
       })
+
       this.contractService.getContractSample(this.data_sample_contract).subscribe(
           (data) => {
             console.log("goi vo day");
@@ -475,7 +476,12 @@ export class ConfirmContractFormComponent implements OnInit {
           delete item[item_remove];
         });
       });
-      // Array.prototype.push.apply(this.data_sample_contract, datasFormignNotId);
+
+      this.data_sample_contract.forEach((element: any) => {
+        if(this.datasForm.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datasForm.difX;
+        }
+      })
       await this.contractService.getContractSample(datasFormignNotId).toPromise().then(
           (data) => {
             this.spinner.hide();

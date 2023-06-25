@@ -296,7 +296,11 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
       this.spinner.show();
 
-      
+      this.data_sample_contract.forEach((element: any) => {
+        if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datas.difX;
+        }
+      })
       this.contractService.getContractSample(this.data_sample_contract).subscribe(
           (data) => {
             if (action == 'finish_contract') {
@@ -447,11 +451,13 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           delete item[item_remove];
         });
       });
-      // Array.prototype.push.apply(this.data_sample_contract, dataSignNotId);
-      await this.contractService
-        .getContractSample(dataSignNotId)
-        .toPromise()
-        .then(
+
+      this.data_sample_contract.forEach((element: any) => {
+        if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datas.difX;
+        }
+      })
+      await this.contractService.getContractSample(dataSignNotId).toPromise().then(
           (data) => {
             this.spinner.hide();
           },

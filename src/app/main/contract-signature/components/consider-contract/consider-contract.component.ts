@@ -178,6 +178,8 @@ export class ConsiderContractComponent
   idElement: any[] = [];
 
   loginType: any;
+  difX: number;
+  arrDifPage: any = [];
 
   sum: number[] = [];
   top: any[] = [];
@@ -716,8 +718,45 @@ export class ConsiderContractComponent
             this.top[i + 1] += this.top[i];
             this.sum[i] = this.top[i + 1];
           }
+
+          //vuthanhtan
+          let canvasWidth: any [] = [];
+          for(let i = 1; i <= this.pageNumber; i++) {
+            let canvas: any = document.getElementById('canvas-step3-'+i);
+            this.top[i] = canvas.height;
+            canvasWidth.push(canvas.getBoundingClientRect().left)
+          }
+          this.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
+  
+          for(let i = 0; i < this.pageNumber; i++) {
+            if(canvasWidth[i] == Math.min(...canvasWidth))
+            this.arrDifPage.push('min');
+            else  
+            this.arrDifPage.push('max');
+          }
+  
+          this.setX();
         }, 100);
       });
+  }
+
+  setX(){
+    let i = 0;
+    this.datas.contract_user_sign.forEach((element: any) => {
+      element.sign_config.forEach((item: any) => {
+        const htmlElement: HTMLElement | null = document.getElementById(item.id);
+        if(htmlElement) {
+          var oldX = Number(htmlElement.getAttribute('data-x'));
+          if(oldX) {
+            var newX = oldX + this.difX;
+            htmlElement.setAttribute('data-x', newX.toString());
+          }
+        }
+        if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+          item.coordinate_x += this.difX;
+        }
+      })
+    })
   }
 
   eventMouseover() { }
@@ -1045,242 +1084,6 @@ export class ConsiderContractComponent
     // // update the posiion attributes
     target.setAttribute('data-x', x);
     target.setAttribute('data-y', y);
-  };
-
-  // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
-  showEventInfo = (event: any) => {
-    let canvasElement: HTMLElement | null;
-    if (event.relatedTarget && event.relatedTarget.id) {
-      canvasElement = document.getElementById(event.relatedTarget.id);
-      let canvasInfo = canvasElement
-        ? canvasElement.getBoundingClientRect()
-        : '';
-
-      this.coordinates_signature = event.rect;
-      let id = event.target.id;
-
-      let signElement = <HTMLElement>document.getElementById(id);
-      let rect_location = signElement.getBoundingClientRect();
-      if (id.includes('chua-keo')) {
-        //Khi kéo vào trong hợp đồng thì sẽ thêm 1 object vào trong mảng sign_config
-        event.target.style.webkitTransform = event.target.style.transform =
-          'none'; // Đẩy chữ ký về vị trí cũ
-        event.target.setAttribute('data-x', 0);
-        event.target.setAttribute('data-y', 0);
-        id = event.target.id.replace('chua-keo-', '');
-        // this.datas.documents.document_user_sign_clone.forEach((element, index) => {
-        this.datas.contract_user_sign.forEach((element: any, index: any) => {
-          if (element.id == id) {
-            let _obj: any = {
-              sign_unit: element.sign_unit,
-              name: element.name,
-              text_attribute_name: element.text_attribute_name,
-              required: 1,
-            };
-            if (element.sign_config.length == 0) {
-              _obj['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
-            } else {
-              _obj['id'] =
-                'signer-' +
-                index +
-                '-index-' +
-                element.sign_config.length +
-                '_' +
-                element.id;
-            }
-            element['sign_config'].push(_obj);
-          }
-        });
-        // lay doi tuong vua duoc keo moi vao hop dong
-        this.signCurent = this.convertToSignConfig().filter(
-          (p: any) => !p.position && !p.coordinate_x && !p.coordinate_y
-        )[0];
-      } else {
-        // doi tuong da duoc keo tha vao hop dong
-        this.signCurent = this.convertToSignConfig().filter(
-          (p: any) => p.id == id
-        )[0];
-      }
-
-      if (this.signCurent) {
-        if (!this.objDrag[this.signCurent['id']]) {
-          this.objDrag[this.signCurent['id']] = {};
-        }
-        // this.isMove = false;
-        let layerX;
-        // @ts-ignore
-        if ('left' in canvasInfo) {
-          // layerX = event.rect.left - canvasInfo.left;
-          layerX = rect_location.left - canvasInfo.left;
-        }
-
-        let layerY = 0;
-        //@ts-ignore
-        if ('top' in canvasInfo) {
-          // layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);
-          layerY =
-            canvasInfo.top <= 0
-              ? rect_location.top + Math.abs(canvasInfo.top)
-              : rect_location.top - Math.abs(canvasInfo.top);
-        }
-        let pages = event.relatedTarget.id.split('-');
-        let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
-
-        /* test set location signature
-        Duongdt
-         */
-        if (page > 1) {
-          let countPage = 0;
-          for (let i = 1; i < page; i++) {
-            let canvasElement = document.getElementById(
-              'canvas-step3-' + i
-            ) as HTMLElement;
-            let canvasInfo = canvasElement.getBoundingClientRect();
-            countPage += canvasInfo.height;
-          }
-          let canvasElement = document.getElementById(
-            'canvas-step3-' + page
-          ) as HTMLElement;
-          let canvasInfo = canvasElement.getBoundingClientRect();
-          // @ts-ignore
-          layerY =
-            countPage +
-            canvasInfo.height -
-            (canvasInfo.height - layerY) +
-            5 * (page - 1);
-        }
-        //END
-
-        let _array = Object.values(this.obj_toa_do);
-        let _sign = <HTMLElement>document.getElementById(this.signCurent['id']);
-        if (_sign) {
-          _sign.style.transform =
-            'translate(' + layerX + 'px,' + layerY + 'px)';
-          this.signCurent['coordinate_x'] = layerX;
-          this.signCurent['coordinate_y'] = layerY;
-          _sign.setAttribute('data-x', layerX + 'px');
-          _sign.setAttribute('data-y', layerY + 'px');
-          this.objSignInfo.traf_x = layerX;
-          this.objSignInfo.traf_y = layerY;
-          //
-          this.objSignInfo['id'] = this.signCurent['id'];
-          //
-          this.signCurent.position = _array.join(',');
-          _sign.style.display = '';
-          // @ts-ignore
-          _sign.style['z-index'] = '1';
-          this.isEnableSelect = false;
-        }
-
-        this.objSignInfo.traf_x = Math.round(this.signCurent['coordinate_x']);
-        this.objSignInfo.traf_y = Math.round(this.signCurent['coordinate_y']);
-
-        this.signCurent['position'] = _array.join(',');
-        this.signCurent['left'] = this.obj_toa_do.x1;
-        //@ts-ignore
-        if ('top' in canvasInfo) {
-          this.signCurent['top'] = (
-            rect_location.top - canvasInfo.top
-          ).toFixed();
-        }
-        let name_accept_signature = '';
-
-        // lay lai danh sach signer sau khi keo vao hop dong
-        this.datas.contract_user_sign.forEach((res: any) => {
-          if (res.sign_config.length > 0) {
-            let arrSignConfigItem = res.sign_config;
-            arrSignConfigItem.forEach((element: any) => {
-              if (element.id == this.signCurent['id']) {
-                let _arrPage = event.relatedTarget.id.split('-');
-                // gán hình thức kéo thả => disable element trong list sign
-                name_accept_signature = res.sign_unit;
-                // hiển thị ô nhập tên trường khi kéo thả đối tượng Text
-                if (res.sign_unit == 'text') {
-                  this.isEnableText = true;
-                  setTimeout(() => {
-                    //@ts-ignore
-                    document.getElementById('text-input-element').focus();
-                  }, 10);
-                } else this.isEnableText = false;
-
-                if (res.sign_unit == 'so_tai_lieu') {
-                  this.isChangeText = true;
-                } else {
-                  this.isChangeText = false;
-                }
-
-                // element['number'] = _arrPage[_arrPage.length - 1];
-                element['page'] = _arrPage[_arrPage.length - 1];
-                element['position'] = this.signCurent['position'];
-                element['coordinate_x'] = this.signCurent['coordinate_x'];
-                element['coordinate_y'] = this.signCurent['coordinate_y'];
-                if (!this.objDrag[this.signCurent['id']].count) {
-                  // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
-                  if (
-                    res.sign_unit == 'text' ||
-                    res.sign_unit == 'so_tai_lieu'
-                  ) {
-                    if (
-                      res.sign_unit == 'so_tai_lieu' &&
-                      this.datas.contract_no
-                    ) {
-                      element['width'] = rect_location.width;
-                      element['height'] = rect_location.height;
-                    } else {
-                      element['width'] = '135';
-                      element['height'] = '28';
-                    }
-                  } else {
-                    element['width'] = '135';
-                    element['height'] = '85';
-                  }
-
-                  this.objSignInfo.width = element['width'];
-                  this.objSignInfo.height = element['height'];
-                  this.objSignInfo.text_attribute_name = '';
-                  this.list_sign_name.forEach((item: any) => {
-                    item['selected'] = false;
-                  });
-                  // document.getElementById('select-dropdown'). = 0;
-                  // @ts-ignore
-                  // document.getElementById('select-dropdown').value = "";
-                  this.objDrag[this.signCurent['id']].count = 2;
-                } else {
-                  element['width'] = event.target.offsetWidth;
-                  element['height'] = event.target.offsetHeight;
-                }
-              }
-            });
-          }
-        });
-      }
-    } else {
-      if (event.type == 'dragend') {
-        if (!event.dragenter && event.target.id.includes('chua-keo')) {
-          event.target.style.webkitTransform = event.target.style.transform =
-            'none';
-          event.target.setAttribute('data-x', 0);
-          event.target.setAttribute('data-y', 0);
-        } else if (!event.dragenter && !event.target.id.includes('chua-keo')) {
-          let id = event.target.id;
-          let signCurent = this.convertToSignConfig().filter(
-            (p: any) => p.id == id
-          )[0];
-          // translate the element
-          if (signCurent) {
-            event.target.style.webkitTransform = event.target.style.transform =
-              'translate(' +
-              signCurent['coordinate_x'] +
-              'px, ' +
-              signCurent['coordinate_y'] +
-              'px)';
-            // update the posiion attributes
-            event.target.setAttribute('data-x', signCurent['coordinate_x']);
-            event.target.setAttribute('data-y', signCurent['coordinate_y']);
-          }
-        }
-      }
-    }
   };
 
   getTrafX() {

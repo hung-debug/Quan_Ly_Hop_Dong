@@ -278,8 +278,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     this.synchronized1(this.textUnit);
 
     this.checkDifferent();
-
-
   }
 
   setX(){
@@ -288,12 +286,11 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     this.datasForm.contract_user_sign.forEach((element: any) => {
       element.sign_config.forEach((item: any) => {
         const htmlElement: HTMLElement | null = document.getElementById(item.id);
-        console.log(htmlElement);
         if(htmlElement) {
           var oldX = Number(htmlElement.getAttribute('data-x'));
           if(oldX) {
-          var newX = oldX + this.difX;
-          htmlElement.setAttribute('data-x', newX.toString());
+            var newX = oldX + this.difX;
+            htmlElement.setAttribute('data-x', newX.toString());
           }
         }
         if(this.arrDifPage[Number(item.page)-1] == 'max' ){
@@ -663,45 +660,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         if (!this.objDrag[this.signCurent['id']]) {
           this.objDrag[this.signCurent['id']] = {};
         }
-        // this.isMove = false;
-        // let layerX;
-        // // @ts-ignore
-        // if ("left" in canvasInfo) {
-        //   layerX = rect_location.left - canvasInfo.left;
-        // }
-
-        // let layerY = 0;
-        // //@ts-ignore
-        // if ("top" in canvasInfo) {
-        //   layerY = canvasInfo.top <= 0 ? rect_location.top + Math.abs(canvasInfo.top) : rect_location.top - Math.abs(canvasInfo.top);
-        // }
-
-        // let pages = event.relatedTarget.id.split("-");
-        // let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
-        // // @ts-ignore
-        // // if (page > 1) {
-        // //   // @ts-ignore
-        // //   for (let i = 1; i < page; i++) {
-        // //     let canvasElement = document.getElementById("canvas-step3-" + i);
-        // //     // @ts-ignore
-        // //     let canvasInfo = canvasElement.getBoundingClientRect();
-        // //     layerY += canvasInfo.height + 2;
-        // //   }
-        // //   // @ts-ignore
-        // //   layerY += page / 3;
-        // // }
-
-        // if (page > 1) {
-        //   let countPage = 0;
-        //   for (let i = 1; i < page; i++) {
-        //     let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
-        //     let canvasInfo = canvasElement.getBoundingClientRect();
-        //     countPage += canvasInfo.height;
-        //   }
-        //   let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
-        //   let canvasInfo = canvasElement.getBoundingClientRect();
-        //   layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5*(page - 1);
-        // }
 
         let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth, this.pageNumber)
         let layerY = this.detectCoordinateService.detectY(event, rect_location, canvasInfo);
@@ -880,11 +838,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       } else {
           if (this.convertToSignConfig().some((p: any) => (p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType)) {
             if (isSignType != 'text') {
-              if(isSignType == 'so_tai_lieu') {
-                // element.is_disable = (element.role != 4 || (this.datasForm.contract_no && element.role == 4));
-                
+              if(isSignType == 'so_tai_lieu') {                
                 element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
-
               } else {
                 element.is_disable = true
               }
@@ -975,8 +930,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     // // update the posiion attributes
     target.setAttribute('data-x', x)
     target.setAttribute('data-y', y);
-    //this.objSignInfo.traf_x = x;
-    //this.objSignInfo.traf_y = y;
   }
 
   setWidth(d: any) {
@@ -1003,9 +956,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         this.arrPage.push({ page: page });
         canvas.className = 'dropzone';
         canvas.id = "canvas-step3-" + page;
-        // canvas.style.paddingLeft = '15px';
-        // canvas.style.border = '9px solid transparent';
-        // canvas.style.borderImage = 'url(assets/img/shadow.png) 9 9 repeat';
+
         let idPdf = 'pdf-viewer-step-3'
         let viewer = document.getElementById(idPdf);
         if (viewer) {
@@ -1024,6 +975,13 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           if(i < this.pageNumber)
             this.sum[i] = 0;
         }
+
+        for(let i = 0; i < this.pageNumber; i++) {
+          this.top[i+1] += this.top[i];
+          this.sum[i] = this.top[i+1];
+        }
+
+        //vuthanhtan
         let canvasWidth: any [] = [];
         for(let i = 1; i <= this.pageNumber; i++) {
           let canvas: any = document.getElementById('canvas-step3-'+i);
@@ -1031,22 +989,17 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           canvasWidth.push(canvas.getBoundingClientRect().left)
         }
         this.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
-        console.log(canvasWidth);
-        console.log(Math.min(...canvasWidth));
-        console.log(Math.max(...canvasWidth));
+
         for(let i = 0; i < this.pageNumber; i++) {
           if(canvasWidth[i] == Math.min(...canvasWidth))
           this.arrDifPage.push('min');
           else  
           this.arrDifPage.push('max');
         }
+
         this.setX();
         this.datasForm.arrDifPage = this.arrDifPage;
         this.datasForm.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
-        for(let i = 0; i < this.pageNumber; i++) {
-          this.top[i+1] += this.top[i];
-          this.sum[i] = this.top[i+1];
-        }
       }, 100)
     })
   }
@@ -1094,9 +1047,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       this.convertToSignConfig().forEach((element: any) => {
         let a = document.getElementById(element.id);
         if (a) {
-          // if (element['position']) { // @ts-ignore
-          //   a.style["z-index"] = '1';
-          // }
           if (element['coordinate_x'] && element['coordinate_y']) { // @ts-ignore
             a.style["z-index"] = '1';
           }
@@ -1229,10 +1179,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   }
 
   // get select người ký
-  getSignSelect(d: any) {
-    const htmlElement = document.getElementById(d.id);
-    console.log(htmlElement)
-    
+  getSignSelect(d: any) {    
     if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
       this.textSign = true;
       this.list_font = ["Arial","Calibri","Times New Roman"];

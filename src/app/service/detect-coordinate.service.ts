@@ -67,7 +67,7 @@ export class DetectCoordinateService {
         let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
         let canvasInfo = canvasElement.getBoundingClientRect();
         // @ts-ignore
-        layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) ;
+        layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5*(page - 1);
     }
     
     return layerY;

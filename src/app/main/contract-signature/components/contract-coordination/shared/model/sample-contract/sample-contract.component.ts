@@ -21,6 +21,7 @@ import {ToastService} from "../../../../../../../service/toast.service";
 import {HttpErrorResponse} from '@angular/common/http';
 
 import * as _ from 'lodash';
+import { DetectCoordinateService } from 'src/app/service/detect-coordinate.service';
 
 
 @Component({
@@ -100,6 +101,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     private contractService: ContractService,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
+    private detectCoordinateService: DetectCoordinateService
   ) {
     this.step = variable.stepSampleContract.step3
   }
@@ -427,34 +429,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (!this.objDrag[this.signCurent['id']]) {
           this.objDrag[this.signCurent['id']] = {};
         }
-        // this.isMove = false;
-        let layerX;
-        // @ts-ignore
-        if ("left" in canvasInfo) {
-          layerX = rect_location.left - canvasInfo.left;
-        }
 
-        let layerY = 0;
-        //@ts-ignore
-        if ("top" in canvasInfo) {
-          layerY = canvasInfo.top <= 0 ? rect_location.top + Math.abs(canvasInfo.top) : rect_location.top - Math.abs(canvasInfo.top);
-        }
-
-
-        let pages = event.relatedTarget.id.split("-");
-        let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;   
-
-        if (page > 1) {
-          let countPage = 0;
-          for (let i = 1; i < page; i++) {
-            let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
-            let canvasInfo = canvasElement.getBoundingClientRect();
-            countPage += canvasInfo.height;
-          }
-          let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
-          let canvasInfo = canvasElement.getBoundingClientRect();
-          layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5*(page - 1);
-        }
+        let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth, this.pageNumber)
+        let layerY = this.detectCoordinateService.detectY(event, rect_location, canvasInfo);
 
         let _array = Object.values(this.obj_toa_do);
         this.cdRef.detectChanges(); // render lại view

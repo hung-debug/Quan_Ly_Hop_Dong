@@ -97,6 +97,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   isEnableText: boolean = false;
   isChangeText: boolean = false;
   dataSignPosition: any;
+  arrDifPage: any = [];
 
   listSignNameClone: any = [];
   data_sample_contract: any = [];
@@ -271,6 +272,26 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.synchronized1(this.textUnit);
 
     this.checkDifferent();
+  }
+
+  setX(){
+    let i = 0;
+    this.datas.contract_user_sign.forEach((element: any) => {
+      element.sign_config.forEach((item: any) => {
+        const htmlElement: HTMLElement | null = document.getElementById(item.id);
+        console.log(htmlElement);
+        if(htmlElement) {
+          var oldX = Number(htmlElement.getAttribute('data-x'));
+          if(oldX) {
+            var newX = oldX + this.difX;
+            htmlElement.setAttribute('data-x', newX.toString());
+          }
+        }
+        if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+          item.coordinate_x += this.difX;
+        }
+      })
+    })
   }
 
   synchronized1(numberSign: number) {
@@ -796,6 +817,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 element['position'] = this.signCurent['position'];
                 element['coordinate_x'] = this.signCurent['coordinate_x'];
                 element['coordinate_y'] = this.signCurent['coordinate_y'];
+                element['dif_x'] = this.signCurent['dif_x'];
                 if (!this.objDrag[this.signCurent['id']].count) {
                   // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                   if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
@@ -1003,13 +1025,30 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.top[i] = canvas.height;
         }
 
-
         for (let i = 0; i < this.pageNumber; i++) {
           this.top[i + 1] += this.top[i];
           this.sum[i] = this.top[i + 1];
         }
 
+        //vuthanhtan
+        let canvasWidth: any [] = [];
+        for(let i = 1; i <= this.pageNumber; i++) {
+          let canvas: any = document.getElementById('canvas-step3-'+i);
+          this.top[i] = canvas.height;
+          canvasWidth.push(canvas.getBoundingClientRect().left)
+        }
+        this.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
 
+        for(let i = 0; i < this.pageNumber; i++) {
+          if(canvasWidth[i] == Math.min(...canvasWidth))
+          this.arrDifPage.push('min');
+          else  
+          this.arrDifPage.push('max');
+        }
+
+        this.setX();
+        this.datas.arrDifPage = this.arrDifPage;
+        this.datas.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
       }, 100)
     })
   }
