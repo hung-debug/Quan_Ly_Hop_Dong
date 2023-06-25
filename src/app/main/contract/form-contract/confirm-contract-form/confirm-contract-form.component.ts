@@ -303,7 +303,7 @@ export class ConfirmContractFormComponent implements OnInit {
         if (element.sign_config.length > 0) {
           element.sign_config.forEach((item: any) => {
             item['font'] = item.font ? item.font : 'Times New Roman';
-            item['font_size'] = item.font_size ? item.font_size : 12;
+            item['font_size'] = item.font_size ? item.font_size : 13;
             item['contract_id'] = this.datasForm.contract_id;
             item['document_id'] = this.datasForm.document_id;
             if (item.text_attribute_name) {
