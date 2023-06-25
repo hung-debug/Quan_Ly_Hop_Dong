@@ -102,6 +102,8 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   valid: boolean = false;
   loaded: boolean = false;
   confirmCoordition: number = 1;
+  difX: number;
+  arrDifPage: any = [];
 
   checkView: boolean = true;
 
@@ -132,12 +134,9 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
 
     if(!this.idContract || this.checkView) {
       this.getDataContractSignature();
-
-      
     } else {
       this.router.navigate(['/page-not-found']);
     }
-
   }
 
   indexY: number = 0;
@@ -362,12 +361,50 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
           this.top[i] = canvas.height;
         }
         
-
         for(let i = 0; i < this.pageNumber; i++) {
           this.top[i+1] += this.top[i];
           this.sum[i] = this.top[i+1];
         }
+
+        //vuthanhtan
+        let canvasWidth: any [] = [];
+        for(let i = 1; i <= this.pageNumber; i++) {
+          let canvas: any = document.getElementById('canvas-step3-'+i);
+          this.top[i] = canvas.height;
+          canvasWidth.push(canvas.getBoundingClientRect().left)
+        }
+        this.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
+
+        for(let i = 0; i < this.pageNumber; i++) {
+          if(canvasWidth[i] == Math.min(...canvasWidth))
+          this.arrDifPage.push('min');
+          else  
+          this.arrDifPage.push('max');
+        }
+
+        this.setX();
+        this.datas.arrDifPage = this.arrDifPage;
+        this.datas.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
       }, 100)
+    })
+  }
+
+  setX(){
+    let i = 0;
+    this.datas.contract_user_sign.forEach((element: any) => {
+      element.sign_config.forEach((item: any) => {
+        const htmlElement: HTMLElement | null = document.getElementById(item.id);
+        if(htmlElement) {
+          var oldX = Number(htmlElement.getAttribute('data-x'));
+          if(oldX) {
+            var newX = oldX + this.difX;
+            htmlElement.setAttribute('data-x', newX.toString());
+          }
+        }
+        if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+          item.coordinate_x += this.difX;
+        }
+      })
     })
   }
 

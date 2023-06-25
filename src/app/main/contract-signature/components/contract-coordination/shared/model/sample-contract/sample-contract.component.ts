@@ -796,6 +796,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.sum[i] = this.top[i+1];
         }
 
+        //vuthanhtan
         let canvasWidth: any [] = [];
         for(let i = 1; i <= this.pageNumber; i++) {
           let canvas: any = document.getElementById('canvas-step3-'+i);
