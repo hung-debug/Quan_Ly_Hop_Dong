@@ -152,8 +152,6 @@ export class ConfirmInfoContractComponent implements OnInit {
         }
       };
       
-
-
       let isHaveFieldId: any[] = [];
       let isNotFieldId: any[] = [];
       let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
@@ -222,8 +220,8 @@ export class ConfirmInfoContractComponent implements OnInit {
     let isErrorNotId = false;
     if (dataSignNotId.length > 0) {
       dataSignNotId.forEach((item: any) => {
-        item['font'] = 'Times New Roman';
-        item['font_size'] = 13;
+        item['font'] = item.font ? item.font : 'Times New Roman';
+        item['font_size'] = item.font_size ? item.font_size : 13;
         item['contract_id'] = this.datas.data_contract_document_id.contract_id;
         item['document_id'] = this.datas.data_contract_document_id.document_id;
         if (item.text_attribute_name) {
@@ -258,6 +256,12 @@ export class ConfirmInfoContractComponent implements OnInit {
           delete item[item_remove]
         })
       })
+
+      dataSignNotId.forEach((element: any) => {
+        if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datas.difX;
+        }
+      })      
       await this.contractService.getContractSample(dataSignNotId).toPromise().then((data) => {
       }, error => {
         isErrorNotId = true;
