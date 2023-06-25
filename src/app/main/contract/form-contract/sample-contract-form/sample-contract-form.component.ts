@@ -1664,7 +1664,13 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
           this.isCheckRelease = true;
           this.data_sample_contract = this.data_sample_contract.filter((element:any) => typeof element.name !== 'undefined');
-          console.log(this.data_sample_contract);
+
+          this.data_sample_contract.forEach((element: any) => {
+            if(this.datasForm.arrDifPage[Number(element.page)-1] == 'max'){
+              element.coordinate_x = element.coordinate_x - this.datasForm.difX;
+            }
+          })
+          
           this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
             if(this.validData() == true){
               this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
@@ -1790,7 +1796,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           delete item[item_remove]
         })
       })
-      // Array.prototype.push.apply(this.data_sample_contract, dataSignNotId);
+
+      this.data_sample_contract.forEach((element: any) => {
+        if(this.datasForm.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datasForm.difX;
+        }
+      })
       await this.contractService.getContractSample(dataSignNotId).toPromise().then((data) => {
         this.spinner.hide();
       }, error => {

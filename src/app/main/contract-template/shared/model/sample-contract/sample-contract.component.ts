@@ -1577,6 +1577,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           })
 
           this.spinner.show();
+
+          this.data_sample_contract.forEach((element: any) => {
+            if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
+              element.coordinate_x = element.coordinate_x - this.datas.difX;
+            }
+          })
           this.contractTemplateService.getContractSample(this.data_sample_contract).subscribe((data) => {
             this.router.navigate(['/main/contract/create/draft']);
             this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
@@ -1665,7 +1671,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           delete item[item_remove]
         })
       })
-      // Array.prototype.push.apply(this.data_sample_contract, dataSignNotId);
+
+      this.data_sample_contract.forEach((element: any) => {
+        if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datas.difX;
+        }
+      })
       await this.contractTemplateService.getContractSample(dataSignNotId).toPromise().then((data) => {
         this.spinner.hide();
       }, error => {
