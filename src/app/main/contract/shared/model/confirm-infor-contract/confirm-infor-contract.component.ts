@@ -377,6 +377,12 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
       let countIsSignId = 0;
       this.spinner.show();
+
+      dataSignId.forEach((element: any) => {
+        if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datas.difX;
+        }
+      })
       for (let i = 0; i < dataSignId.length; i++) {
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
@@ -452,7 +458,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         });
       });
 
-      this.data_sample_contract.forEach((element: any) => {
+      dataSignNotId.forEach((element: any) => {
         if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
           element.coordinate_x = element.coordinate_x - this.datas.difX;
         }

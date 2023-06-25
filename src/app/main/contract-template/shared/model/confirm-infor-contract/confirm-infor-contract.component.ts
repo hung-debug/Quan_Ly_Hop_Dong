@@ -182,10 +182,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
       this.spinner.show();
       this.data_sample_contract.forEach((element: any) => {
-        console.log(element);
-        console.log(Number(element.page)-1)
-        console.log(this.datas.arrDifPage)
-        console.log(this.datas)
         if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
           element.coordinate_x = element.coordinate_x - this.datas.difX;
         }
@@ -230,6 +226,11 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       let countIsSignId = 0;
       this.spinner.show();
 
+      dataSignId.forEach((element: any) => {
+        if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datas.difX;
+        }
+      })
       for (let i = 0; i < dataSignId.length; i++) {
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
@@ -281,7 +282,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         })
       })
 
-      this.data_sample_contract.forEach((element: any) => {
+      dataSignNotId.forEach((element: any) => {
         if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
           element.coordinate_x = element.coordinate_x - this.datas.difX;
         }

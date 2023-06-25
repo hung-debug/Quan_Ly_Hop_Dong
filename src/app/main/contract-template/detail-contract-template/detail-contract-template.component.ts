@@ -110,6 +110,8 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   allFileAttachment: any[];
   role:any;
   status:any;
+  difX: number = 0;
+  arrDifPage: any[] = [];
 
   sum: number[] = [];
   top: any[]= [];
@@ -137,6 +139,25 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
     this.getDataContractSignature();
   }
 
+  setX(){
+    let i = 0;
+    this.datas.contract_user_sign.forEach((element: any) => {
+      element.sign_config.forEach((item: any) => {
+        const htmlElement: HTMLElement | null = document.getElementById(item.id);
+        if(htmlElement) {
+          var oldX = Number(htmlElement.getAttribute('data-x'));
+          if(oldX) {
+            var newX = oldX + this.difX;
+            htmlElement.setAttribute('data-x', newX.toString());
+          }
+        }
+        if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+          item.coordinate_x += this.difX;
+        }
+      })
+    })
+  }
+
   endContract() {
     this.actionBack();
   }
@@ -147,7 +168,6 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   }
 
   actionBack() {
-    
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['/main/contract-template/'],
       {
@@ -366,11 +386,26 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
           this.top[i] = canvas.height;
         }
         
-
         for(let i = 0; i < this.pageNumber; i++) {
           this.top[i+1] += this.top[i];
           this.sum[i] = this.top[i+1];
         }
+
+        let canvasWidth: any [] = [];
+        for(let i = 1; i <= this.pageNumber; i++) {
+          let canvas: any = document.getElementById('canvas-step3-'+i);
+          this.top[i] = canvas.height;
+          canvasWidth.push(canvas.getBoundingClientRect().left)
+        }
+        this.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
+        for(let i = 0; i < this.pageNumber; i++) {
+          if(canvasWidth[i] == Math.min(...canvasWidth))
+          this.arrDifPage.push('min');
+          else  
+          this.arrDifPage.push('max');
+        }
+
+        this.setX();
       }, 100)
     })
   }
