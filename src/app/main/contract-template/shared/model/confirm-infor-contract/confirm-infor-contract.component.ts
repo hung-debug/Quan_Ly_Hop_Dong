@@ -332,6 +332,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   }
 
   preview() {
+    this.datas.isFirstLoadPreview = false;
     // @ts-ignore
     const dialogRef = this.dialog.open(PreviewContractTemplateComponent, {
       width: '800px',
@@ -339,7 +340,14 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       backdrop: 'static',
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+        this.datas.isFirstLoadPreview = false;
+        this.datas.contract_user_sign.forEach((element: any) => {
+          element.sign_config.forEach((item: any) => {
+            if(this.datas.arrDifPage[Number(item.page)-1] == 'max'){
+              item.coordinate_x = item.coordinate_x + this.datas.difX;
+            }
+          })
+        })
     }) 
   }
 

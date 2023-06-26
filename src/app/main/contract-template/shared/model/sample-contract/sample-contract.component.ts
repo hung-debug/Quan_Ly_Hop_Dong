@@ -255,6 +255,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   setX(){
+    this.datas.isFirstLoadDrag = true;
     let i = 0;
     this.datas.contract_user_sign.forEach((element: any) => {
       element.sign_config.forEach((item: any) => {
@@ -981,7 +982,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           else  
           this.arrDifPage.push('max');
         }
-
+        
+        if(this.datas.isFirstLoadDrag != true)
         this.setX();
         this.datas.arrDifPage = this.arrDifPage;
         this.datas.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
