@@ -274,25 +274,25 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.checkDifferent();
   }
 
-  setX(){
-    let i = 0;
-    this.datas.contract_user_sign.forEach((element: any) => {
-      element.sign_config.forEach((item: any) => {
-        const htmlElement: HTMLElement | null = document.getElementById(item.id);
-        console.log(htmlElement);
-        if(htmlElement) {
-          var oldX = Number(htmlElement.getAttribute('data-x'));
-          if(oldX) {
-            var newX = oldX + this.difX;
-            htmlElement.setAttribute('data-x', newX.toString());
-          }
-        }
-        if(this.arrDifPage[Number(item.page)-1] == 'max' ){
-          item.coordinate_x += this.difX;
-        }
-      })
-    })
-  }
+  // setX(){
+  //   let i = 0;
+  //   this.datas.contract_user_sign.forEach((element: any) => {
+  //     element.sign_config.forEach((item: any) => {
+  //       const htmlElement: HTMLElement | null = document.getElementById(item.id);
+  //       console.log(htmlElement);
+  //       if(htmlElement) {
+  //         var oldX = Number(htmlElement.getAttribute('data-x'));
+  //         if(oldX) {
+  //           var newX = oldX + this.difX;
+  //           htmlElement.setAttribute('data-x', newX.toString());
+  //         }
+  //       }
+  //       if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+  //         item.coordinate_x += this.difX;
+  //       }
+  //     })
+  //   })
+  // }
 
   synchronized1(numberSign: number) {
     for(let i = 0; i < this.datas.is_determine_clone.length; i++) {
@@ -1046,7 +1046,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.arrDifPage.push('max');
         }
 
-        this.setX();
+        // this.setX();
         this.datas.arrDifPage = this.arrDifPage;
         this.datas.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
       }, 100)
