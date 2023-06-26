@@ -162,7 +162,7 @@ export class DigitalCertificateEditComponent implements OnInit {
             if (checkDelete = true) {
               this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin chứng thư số thành công', "", 3000)
               this.dialog.closeAll();
-              // window.location.reload();
+              window.location.reload();
             }
           })
         }
