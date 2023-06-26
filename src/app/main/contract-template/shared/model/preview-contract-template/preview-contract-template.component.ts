@@ -13,6 +13,7 @@ export class PreviewContractTemplateComponent implements OnInit {
 
   pdfSrc: any;
   thePDF: any;
+  isFirstLoadDrag: boolean = false;
   pageNumber: number = 1;
   arrPage: any = [];
   datas: any;
@@ -50,7 +51,21 @@ export class PreviewContractTemplateComponent implements OnInit {
 
   convertToSignConfig() {
     let arrSignConfig: any = [];
+
+
     let cloneUserSign = [...this.datas.contract_user_sign];
+    if(this.datas.isFirstLoadPreview != true){
+      this.datas.isFirstLoadPreview = true;
+      console.log(this.datas.isFirstLoadPreview);
+      cloneUserSign.forEach((element: any) => {
+        element.sign_config.forEach((item: any) => {
+        console.log(this.datas.arrDifPage[Number(element.page)-1] == 'max')
+        if(this.datas.arrDifPage[Number(item.page)-1] == 'max'){
+                    item.coordinate_x = item.coordinate_x - this.datas.difX;
+        }
+      })
+      })
+    }
     cloneUserSign.forEach(element => {
       if (this.datas.is_action_contract_created) {
         if ((element.recipient && ![2, 3].includes(element.recipient.status)) || (!element.recipient && ![2, 3].includes(element.status))) {
@@ -81,8 +96,6 @@ export class PreviewContractTemplateComponent implements OnInit {
   }
 
   changePosition(d?: any, e?: any, sizeChange?: any) {
-
-    
 
     let style: any = {
 
@@ -155,7 +168,6 @@ export class PreviewContractTemplateComponent implements OnInit {
           this.renderPage(page, canvas);
         }
       }).then(() => {
-      
       })
   }
 
