@@ -1732,7 +1732,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       let countIsSignId = 0;
       this.spinner.show();
 
-      dataSignNotId.forEach((element: any) => {
+      dataSignId.forEach((element: any) => {
         if(this.datasForm.arrDifPage[Number(element.page)-1] == 'max'){
           element.coordinate_x = element.coordinate_x - this.datasForm.difX;
         }
