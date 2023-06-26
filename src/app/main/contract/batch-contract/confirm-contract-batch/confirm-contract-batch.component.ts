@@ -103,6 +103,8 @@ export class ConfirmContractBatchComponent
   loaded = false;
   isDisablePrevious = false;
   isDisableNext = false;
+  difX: number;
+  arrDifPage: any = [];
 
   data_organization: any;
   is_origanzation_reviewer: any = [];
@@ -389,13 +391,52 @@ export class ConfirmContractBatchComponent
             this.top[i] = canvas.height;
           }
 
-
           for (let i = 0; i < this.pageNumber; i++) {
             this.top[i + 1] += this.top[i];
             this.sum[i] = this.top[i + 1];
           }
+
+          //vuthanhtan
+          let canvasWidth: any [] = [];
+          for(let i = 1; i <= this.pageNumber; i++) {
+            let canvas: any = document.getElementById('canvas-step3-'+i);
+            this.top[i] = canvas.height;
+            canvasWidth.push(canvas.getBoundingClientRect().left)
+          }
+          this.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
+  
+          for(let i = 0; i < this.pageNumber; i++) {
+            if(canvasWidth[i] == Math.min(...canvasWidth))
+            this.arrDifPage.push('min');
+            else  
+            this.arrDifPage.push('max');
+          }
+          console.log(this.datasBatch.isFirstLoadDrag)
+          this.setX();
+          this.datasBatch.arrDifPage = this.arrDifPage;
+          this.datasBatch.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
         }, 100);
       });
+  }
+
+  setX(){
+    this.datasBatch.isFirstLoadDrag = true;
+    let i = 0;
+    this.datasBatch.contract_user_sign.forEach((element: any) => {
+      element.sign_config.forEach((item: any) => {
+        const htmlElement: HTMLElement | null = document.getElementById(item.id);
+        if(htmlElement) {
+          var oldX = Number(htmlElement.getAttribute('data-x'));
+          if(oldX) {
+            var newX = oldX + this.difX;
+            htmlElement.setAttribute('data-x', newX.toString());
+          }
+        }
+        if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+          item.coordinate_x += this.difX;
+        }
+      })
+    })
   }
 
   eventMouseover() { }

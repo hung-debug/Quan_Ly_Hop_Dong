@@ -271,8 +271,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       }
     }
 
-    console.log("datas form 1 ", this.datasForm.contract_user_sign);
-
     this.synchronized1(this.imageSign);
     this.synchronized1(this.digitalSign);
     this.synchronized1(this.textUnit);
@@ -996,9 +994,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           else  
           this.arrDifPage.push('max');
         }
-        console.log(this.datasForm.isFirstLoadDrag)
-        if(this.datasForm.isFirstLoadDrag != true)
-        this.setX();
+        if(this.datasForm.isFirstLoadDrag != true) this.setX();
         this.datasForm.arrDifPage = this.arrDifPage;
         this.datasForm.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
       }, 100)
