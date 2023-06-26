@@ -3709,7 +3709,7 @@ export class ConsiderContractComponent
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
-        sign.signDigitalX = sign.coordinate_x - (canvasPageSignLeft - minCanvas) /* * this.ratioPDF*/;
+        sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
         sign.signDigitalY = heightPage - (sign.coordinate_y - currentHeight) - sign.height + sign.page * 5.86 /* * this.ratioPDF*/;
 
         sign.signDigitalHeight =
@@ -3745,7 +3745,7 @@ export class ConsiderContractComponent
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
-        sign.signDigitalX = sign.coordinate_x - (canvasPageSignLeft - minCanvas) /* * this.ratioPDF*/;
+        sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
         sign.signDigitalY = heightPage - (sign.coordinate_y - currentHeight) - sign.height + sign.page * 5.86 /* * this.ratioPDF*/;
 
         sign.signDigitalWidth = sign.width /* * this.ratioPDF*/;
