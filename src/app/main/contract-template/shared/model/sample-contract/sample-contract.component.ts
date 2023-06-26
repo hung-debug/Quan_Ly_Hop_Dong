@@ -773,13 +773,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 if (!this.objDrag[this.signCurent['id']].count) {
                   // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                   if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
-                    if (res.sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
-                      element['width'] = rect_location.width;
-                      element['height'] = rect_location.height;
-                    } else {
-                      element['width'] = '135';
-                      element['height'] = '28';
-                    }
+                    element['width'] = rect_location.width;
+                    element['height'] = rect_location.height;
                   } else {
                     element['width'] = '135';
                     element['height'] = '85';
@@ -905,16 +900,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.objSignInfo.id = event.currentTarget.id;
     var target = event.target
     this.isMove = true;
-    // // keep the dragged position in the data-x/data-y attributes
+    
     var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
     var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
-    // // translate the element
+
     target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
     // // update the posiion attributes
     target.setAttribute('data-x', x)
     target.setAttribute('data-y', y);
-    //this.objSignInfo.traf_x = x;
-    //this.objSignInfo.traf_y = y;
+    
   }
 
   setWidth(d: any) {

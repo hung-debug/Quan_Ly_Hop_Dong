@@ -821,13 +821,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 if (!this.objDrag[this.signCurent['id']].count) {
                   // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                   if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
-                    if (res.sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
-                      element['width'] = rect_location.width;
-                      element['height'] = rect_location.height;
-                    } else {
-                      element['width'] = '135';
-                      element['height'] = '28';
-                    }
+                    element['width'] = rect_location.width;
+                    element['height'] = rect_location.height;
                   } else {
                     element['width'] = '135';
                     element['height'] = '85';
