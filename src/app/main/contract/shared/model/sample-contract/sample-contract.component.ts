@@ -274,25 +274,26 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.checkDifferent();
   }
 
-  // setX(){
-  //   let i = 0;
-  //   this.datas.contract_user_sign.forEach((element: any) => {
-  //     element.sign_config.forEach((item: any) => {
-  //       const htmlElement: HTMLElement | null = document.getElementById(item.id);
-  //       console.log(htmlElement);
-  //       if(htmlElement) {
-  //         var oldX = Number(htmlElement.getAttribute('data-x'));
-  //         if(oldX) {
-  //           var newX = oldX + this.difX;
-  //           htmlElement.setAttribute('data-x', newX.toString());
-  //         }
-  //       }
-  //       if(this.arrDifPage[Number(item.page)-1] == 'max' ){
-  //         item.coordinate_x += this.difX;
-  //       }
-  //     })
-  //   })
-  // }
+  setX(){
+    this.datas.isFirstLoadDrag = true;
+    let i = 0;
+    this.datas.contract_user_sign.forEach((element: any) => {
+      element.sign_config.forEach((item: any) => {
+        const htmlElement: HTMLElement | null = document.getElementById(item.id);
+        console.log(htmlElement);
+        if(htmlElement) {
+          var oldX = Number(htmlElement.getAttribute('data-x'));
+          if(oldX) {
+            var newX = oldX + this.difX;
+            htmlElement.setAttribute('data-x', newX.toString());
+          }
+        }
+        if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+          item.coordinate_x += this.difX;
+        }
+      })
+    })
+  }
 
   synchronized1(numberSign: number) {
     for(let i = 0; i < this.datas.is_determine_clone.length; i++) {
@@ -821,8 +822,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 if (!this.objDrag[this.signCurent['id']].count) {
                   // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                   if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
-                    element['width'] = rect_location.width;
-                    element['height'] = rect_location.height;
+                    if (res.sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
+                      element['width'] = rect_location.width;
+                      element['height'] = rect_location.height;
+                    } else {
+                      element['width'] = '135';
+                      element['height'] = '28';
+                    }
                   } else {
                     element['width'] = '135';
                     element['height'] = '85';
@@ -1041,7 +1047,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.arrDifPage.push('max');
         }
 
-        // this.setX();
+        if(this.router.url.includes('edit') && !this.datas.isFirstLoadDrag) this.setX();
         this.datas.arrDifPage = this.arrDifPage;
         this.datas.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
       }, 100)

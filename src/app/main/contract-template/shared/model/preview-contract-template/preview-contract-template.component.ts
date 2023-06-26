@@ -61,7 +61,7 @@ export class PreviewContractTemplateComponent implements OnInit {
         element.sign_config.forEach((item: any) => {
         console.log(this.datas.arrDifPage[Number(element.page)-1] == 'max')
         if(this.datas.arrDifPage[Number(item.page)-1] == 'max'){
-                    item.coordinate_x = item.coordinate_x - this.datas.difX;
+          item.coordinate_x = item.coordinate_x - this.datas.difX;
         }
       })
       })
@@ -96,13 +96,11 @@ export class PreviewContractTemplateComponent implements OnInit {
   }
 
   changePosition(d?: any, e?: any, sizeChange?: any) {
-
     let style: any = {
 
     };
 
     if(d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu') {
-      // 
       style = {
         "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
         "position": "absolute",
@@ -115,18 +113,8 @@ export class PreviewContractTemplateComponent implements OnInit {
         style = {
           "transform": 'translate(' + d['coordinate_x'] + 'px, ' + Number(d['coordinate_y']+Number(d['height'])-Number(font_size)*1.3 - 1) + 'px)',
           "position": "absolute",
-          // "left":"0px",
-          // "bottom":"0px"
         }
-      } 
-      
-      // else if(d.sign_unit == 'so_tai_lieu') {
-      //   style = {
-      //     "transform": 'translate(' + d['coordinate_x'] + 'px, ' + Number(Number(d['coordinate_y']) + 5) + 'px)',
-      //     "position": "absolute",
-      //   }
-      // }
-       
+      }      
     }
   
     if (d['width'] && (d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu')) {
