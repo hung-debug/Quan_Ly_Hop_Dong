@@ -57,12 +57,12 @@ export class DigitalCertificateService {
     return this.http.post<any>(this.addCertificate, formData, { 'headers': headers }).pipe();
   }
 
-  getCertById(id: any){
+  getCertById(id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<any>(this.getCertByIdUrl + "?id=" + id, {headers}).pipe();
+    return this.http.get<any>(this.getCertByIdUrl + "?id=" + id, { headers }).pipe();
   }
 
   updateCTS(id: any, status: any, email: any) {
@@ -85,7 +85,7 @@ export class DigitalCertificateService {
     // let formData = new FormData();
     // formData.append('id_cert', id_cert);
     // formData.append('id_customer', id_customer);
-    return this.http.delete<any>(this.deleteUser + "?id_cert=" +id_cert + "&id_customer="+id_customer, { headers });
+    return this.http.delete<any>(this.deleteUser + "?id_cert=" + id_cert + "&id_customer=" + id_customer, { headers });
     // return this.http.delete<any>(this.deleteInfoContractUrl + id, { headers });
   }
 
@@ -125,7 +125,7 @@ export class DigitalCertificateService {
     return this.http.get<any>(listCertificate, { headers });
   }
 
-  public searchCertificate(FileName: string, status: any, keystoreDateStart: any, keystoreDateEnd: any, number: any, size: any,): Observable<any> {
+  public searchCertificate(fileName: string, status: any, keystoreDateStart: any, keystoreDateEnd: any, number: any, size: any,): Observable<any> {
     this.getCurrentUser();
     if (keystoreDateStart != "") {
       keystoreDateStart = this.datepipe.transform(keystoreDateStart, 'yyyy-MM-dd');
@@ -139,7 +139,7 @@ export class DigitalCertificateService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    let listCertificate = this.getAllCert + '?file_name=' + FileName.trim() + '&status=' + status.trim() + '&size=' + size + '&number=' + number;
+    let listCertificate = this.getAllCert + '?file_name=' + ( fileName ? fileName.trim() : '') + '&status=' + status + '&size=' + size + '&number=' + number;
     return this.http.get<any>(listCertificate, { headers });
   }
 

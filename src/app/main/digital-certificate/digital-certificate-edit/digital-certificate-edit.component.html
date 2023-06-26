@@ -8,16 +8,15 @@
         <div class="label text-color">{{'email.user' | translate}}
           <span class="required-title">*</span>
         </div>
-        <!-- <div class="input-line">
-          <span type="text" class="input-text" >{{ this.email }}</span>
-        </div> -->
         <div>
-          <p-multiSelect panelStyleClass="font" appendTo="body" [options]="emailList" formControlName="email"
-            optionLabel="email" optionValue="email" placeholder="Chọn email"
-            [filter]="true" filterBy="email"
-            [showClear]="true" (onFilter)="getListAllEmail($event)" display="chip" [multiple]="true" (onChange)="onSelectionChange()"
-            >
+          <p-multiSelect panelStyleClass="font" appendTo="body" [options]="listEmailOptions" formControlName="email"
+            optionLabel="email" optionValue="email" placeholder="Chọn email" [filter]="true" filterBy="email"
+            [showClear]="true" (onFilter)="getListAllEmail($event)" display="chip" [multiple]="true"
+            (onChange)="onSelectionChange()">
           </p-multiSelect>
+        </div>
+        <div class="invalid" *ngIf="errorEmail">
+          {{errorEmail | translate}}
         </div>
       </div>
     </div>

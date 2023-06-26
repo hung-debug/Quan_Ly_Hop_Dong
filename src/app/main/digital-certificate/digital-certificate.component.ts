@@ -8,7 +8,8 @@ import { DigitalCertificateAddComponent } from './digital-certificate-add/digita
 import { DigitalCertificateDetailComponent } from './digital-certificate-detail/digital-certificate-detail.component';
 import { DigitalCertificateEditComponent } from './digital-certificate-edit/digital-certificate-edit.component';
 import { DigitalCertificateService } from 'src/app/service/digital-certificate.service';
-import {TranslateService} from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
+import { LazyLoadEvent } from 'primeng/api';
 @Component({
   selector: 'app-user',
   templateUrl: './digital-certificate.component.html',
@@ -27,27 +28,28 @@ export class DigitalCertificateComponent implements OnInit {
   ) { }
 
   listStatus = [
-    { label: 'Tất cả', value: '',default: true },
+    { label: 'Tất cả', value: '', default: true },
     { label: 'Hoạt động', value: 1 },
     { label: 'Không hoạt động', value: 0 },
   ];
   username: any = "";
   file_name: any;
   status: any;
-  size: number = 10;
-  keystoreDateStart: any ='';
-  keystoreDateEnd: any ='';
-  number: number = 1;
+  size: number = 5;
+  keystoreDateStart: any = '';
+  keystoreDateEnd: any = '';
+  number: number = 0;
   page: number = 10;
   pageStart: number = 0;
   pageEnd: number = 0;
   pageTotal: number = 0;
   lang: any;
   first: number = 0;
+  totalRecords: number = 0;
   list: any[];
   cols: any[];
   dataSearch: any[];
-  FileName: any;
+  fileName: any;
   // listStatus: any[];
   isQLDC_01: boolean = true; //them moi chung thu so
   isQLDC_02: boolean = true; //sua thong tin chung thu so
@@ -68,39 +70,51 @@ export class DigitalCertificateComponent implements OnInit {
       { header: 'unit.status', style: 'text-align: left;' },
       { header: 'unit.manage', style: 'text-align: center;' },
     ];
-    this.searchUser();
+    this.status = { label: 'Tất cả', value: '', default: true };
+    this.getFirstPageSearchData();
     // this.getData();
 
   }
   array_empty: any = [];
-  searchUser() {
-    // this.first = 0;
+  getFirstPageSearchData() {
+    this.first = 0;
 
-    // this.spinner.show();
-    this.DigitalCertificateService.getAllCertificate(this.file_name, this.status, this.keystoreDateStart, this.keystoreDateEnd, this.number, this.size).subscribe(response =>{
-      console.log("res",response);
-      this.list = response.content;
-    })
-    // this.spinner.hide();
-    console.log("dataacert",this.list);
-    const statusValue = this.status.value;
-    console.log("statusValue",statusValue);
-
-    this.DigitalCertificateService.searchCertificate(this.FileName, statusValue, this.keystoreDateStart, this.keystoreDateEnd, this.number, this.size).subscribe(response =>{
-      console.log("resssss",response);
-      this.list = response.content;
-      console.log("status",this.status);
-
+    this.spinner.show();
+    this.DigitalCertificateService.searchCertificate(this.fileName, this.status.value, this.keystoreDateStart, this.keystoreDateEnd, 0, this.size).subscribe(response => {
+      if (response.content) {
+        this.list = response.content;
+        this.totalRecords = response.totalElements;
+        this.spinner.hide();
+      } else {
+        // bao loi
+        this.toastService.showErrorHTMLWithTimeout('Không tìm thấy dữ liệu', '', 3000);
+      }
     })
   }
 
-  getData(){
-    this.DigitalCertificateService.getAllCertificate(this.file_name, this.status, this.keystoreDateStart, this.keystoreDateEnd, this.number, this.size).subscribe(response =>{
-      console.log("res",response);
+  getPageableCert(event: LazyLoadEvent) {
+    const first = event.first ? event.first : 0;
+    const pageNumber = Math.floor(first / this.size) + 1;
+    this.spinner.show();
+    this.DigitalCertificateService.searchCertificate(this.fileName, this.status.value, this.keystoreDateStart, this.keystoreDateEnd, pageNumber, this.size).subscribe(response => {
+      if (response.content) {
+        this.list = response.content;
+        this.totalRecords = response.totalElements;
+        this.spinner.hide();
+      } else {
+        // bao loi
+        this.toastService.showErrorHTMLWithTimeout('Không tìm thấy dữ liệu', '', 3000);
+      }
+    })
+  }
+
+  getData() {
+    this.DigitalCertificateService.getAllCertificate(this.file_name, this.status, this.keystoreDateStart, this.keystoreDateEnd, this.number, this.size).subscribe(response => {
+      console.log("res", response);
       this.list = response.content;
 
-      let dataCert: any ="";
-      this.array_empty=[];
+      let dataCert: any = "";
+      this.array_empty = [];
       this.list.forEach((element: any, index: number) => {
         dataCert = {
           dataCert:
@@ -118,7 +132,6 @@ export class DigitalCertificateComponent implements OnInit {
         this.array_empty.push(dataCert);
       })
       this.list = this.array_empty;
-      console.log("cert",dataCert);
 
     })
   }
@@ -143,8 +156,6 @@ export class DigitalCertificateComponent implements OnInit {
       title: 'update.infor.certificate',
       id: id,
     };
-    console.log("dataID",data);
-    // this.getData()
     // @ts-ignore
     const dialogRef = this.dialog.open(DigitalCertificateEditComponent, {
       width: '550px',
@@ -164,7 +175,6 @@ export class DigitalCertificateComponent implements OnInit {
       // dataCert: this.list.filter((x: any) => x.id == id),
       id: id,
     };
-    // this.getData()
     // @ts-ignore
     const dialogRef = this.dialog.open(DigitalCertificateDetailComponent, {
       width: '550px',

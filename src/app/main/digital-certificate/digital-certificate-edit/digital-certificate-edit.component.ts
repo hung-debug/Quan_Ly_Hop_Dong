@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DigitalCertificateService } from 'src/app/service/digital-certificate.service';
 import { parttern_input } from "../../../config/parttern";
 import { parttern } from '../../../config/parttern';
+import { log } from 'console';
 @Component({
   selector: 'app-user',
   templateUrl: './digital-certificate-edit.component.html',
@@ -19,7 +20,6 @@ export class DigitalCertificateEditComponent implements OnInit {
   addForm: FormGroup;
   emailUser: any[];
   email: any = [];
-  listEmail: any[];
   status: any = "";
   keystoreSerialNumber: any = "";
   keyStoreFileName: any = "";
@@ -29,10 +29,11 @@ export class DigitalCertificateEditComponent implements OnInit {
   sub: any[];
   unit: any = "";
   pattern = parttern;
-  emailList: any = [];
+  listEmailOptions: any = [];
   submitted = false;
   listSelectedEmail: any = [];
   listID: any[];
+  errorEmail: any = '';
 
   get f() { return this.addForm.controls; }
   constructor(
@@ -56,8 +57,8 @@ export class DigitalCertificateEditComponent implements OnInit {
     this.spinner.show();
     this.datas = this.data;
 
-    this.getListAllEmail();
-    this.getData();
+    await this.getData();
+    await this.getListAllEmail();
     console.log("dataCert", this.datas);
 
   }
@@ -65,24 +66,19 @@ export class DigitalCertificateEditComponent implements OnInit {
   async getData() {
     await this.DigitalCertificateService.getCertById(this.datas.id).toPromise().then(
       data => {
-        data.customers.forEach((item: any) => {
-          const id = item.id;
-          if (!this.emailList.some((existingItem: any) => existingItem.id === id)) {
-            this.emailList.push(item);
-          }
-        });
-        const listEmail = data.customers.map((item: any) => item.email);
+        this.listEmailOptions.push(...data.customers);
+        const listCustomer = data.customers.map((item: any) => item.email);
         this.addForm = this.fbd.group({
           password: this.fbd.control("", [Validators.pattern(parttern.password)]),
           status: this.fbd.control(data.status),
-          email: this.fbd.control(listEmail, [Validators.required])
+          email: this.fbd.control(listCustomer, [Validators.required])
         });
         this.keystoreSerialNumber = data.keystoreSerialNumber,
-        this.keyStoreFileName = data.keyStoreFileName,
-        this.keystoreDateStart = data.keystoreDateStart,
-        this.keystoreDateEnd = data.keystoreDateEnd,
-        this.status = data.status,
-        this.sub = data.certInformation.split(",")
+          this.keyStoreFileName = data.keyStoreFileName,
+          this.keystoreDateStart = data.keystoreDateStart,
+          this.keystoreDateEnd = data.keystoreDateEnd,
+          this.status = data.status,
+          this.sub = data.certInformation.split(",")
         const subjectt = this.sub.find(item => item.includes('CN='))
         this.subject = subjectt.split("=")[1]
         const unitt = this.sub.find(item => item.includes('O='))
@@ -96,7 +92,7 @@ export class DigitalCertificateEditComponent implements OnInit {
   handleCancel() {
     this.dialogRef.close();
   }
-  getListAllEmail(event?: any) {
+  async getListAllEmail(event?: any) {
 
     let email: any = null
     if (!event) {
@@ -105,13 +101,11 @@ export class DigitalCertificateEditComponent implements OnInit {
       email = event.filter;
     }
 
-    this.DigitalCertificateService.getListAllEmail(email).subscribe((response) => {
-      console.log("responseEmail", response);
+    await this.DigitalCertificateService.getListAllEmail(email).toPromise().then((response) => {
       if (response && response.length > 0) {
         response.forEach((item: any) => {
-          const id = item.id;
-          if (!this.emailList.some((existingItem: any) => existingItem.id === id)) {
-            this.emailList.push(item);
+          if (!this.listEmailOptions.some((existingItem: any) => existingItem.email === item.email)) {
+            this.listEmailOptions.push(item);
           }
         });
       }
@@ -122,8 +116,6 @@ export class DigitalCertificateEditComponent implements OnInit {
   }
 
   onSelectionChange() {
-    console.log('FIRST???');
-
     // const emailControl = this.addForm.get('email');
     // console.log("âgsd", emailControl);
     // if (emailControl) {
@@ -132,12 +124,12 @@ export class DigitalCertificateEditComponent implements OnInit {
     //     this.listSelectedEmail = [...this.listSelectedEmail, ...control];
     //   }
     //   console.log("listSelectedEmail", this.listSelectedEmail);
-    //   this.emailList.push(this.listSelectedEmail)
+    //   this.listEmailOptions.push(this.listSelectedEmail)
     // }
 
     const selectedValues = this.addForm.get('email')?.value;
     selectedValues.forEach((value: any) => {
-      const option = this.emailList.find((opt: any) => opt.email === value);
+      const option = this.listEmailOptions.find((opt: any) => opt.email === value);
       if (option) {
         value = option.email;
       }
@@ -146,35 +138,60 @@ export class DigitalCertificateEditComponent implements OnInit {
   }
   save() {
     this.submitted = true;
-console.log("datas",this.datas);
-
-    // this.listID = this.datas.dataCert[0].customers
+    if(!this.validData()){
+      return;
+    }
     let id_customer = this.listID.filter((value, index, self) => {
       // Kiểm tra xem có index đầu tiên của value.id trong mảng không
       return self.findIndex(obj => obj.id === value.id) === index;
     }).map(item => item.id);
-    console.log("idcuss",id_customer);
 
     let checkDelete = false;
-    this.DigitalCertificateService.updateCTS(this.data.id, this.addForm.value.status, this.addForm.value.email).subscribe(response => {
-      console.log("this.datassdddddddddddddd", response);
-      if (response.success == false) {
-        this.toastService.showErrorHTMLWithTimeout(response.message, "", 3000)
-      } else {
-        this.DigitalCertificateService.deleteUserCTS(this.datas.id, id_customer).subscribe(deleteUser => {
-          if (deleteUser.success == false) {
-            this.toastService.showErrorHTMLWithTimeout(deleteUser.message, "", 3000)
-          } else {
-            checkDelete = true;
-          }
-        })
-        if (checkDelete = true) {
-        this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin chứng thư số thành công', "", 3000)
-        this.dialog.closeAll();
-        window.location.reload();
+
+    // moi lan save thi can xoa toan bo list customer trc r add email moi vao
+    this.DigitalCertificateService.deleteUserCTS(this.datas.id, id_customer)
+      .subscribe((deleteUser: any) => {
+        if (deleteUser.success == false) {
+          this.toastService.showErrorHTMLWithTimeout(deleteUser.message, "", 3000)
+        } else {
+          checkDelete = true;
+          this.DigitalCertificateService.updateCTS(this.data.id, this.addForm.value.status, this.addForm.value.email).subscribe(response => {
+            if (response.success == false) {
+              this.toastService.showErrorHTMLWithTimeout(response.message, "", 3000)
+            }
+            if (checkDelete = true) {
+              this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin chứng thư số thành công', "", 3000)
+              this.dialog.closeAll();
+              // window.location.reload();
+            }
+          })
         }
-      }
-    })
+      })
   }
 
+  validateEmail() {
+    this.errorEmail = "";
+    if (!this.addForm.controls.email.valid) {
+      this.errorEmail = "error.email.required";
+      return false;
+    }
+    return true;
+  }
+
+  clearError() {
+    // if (this.datas.contractFile) {
+    //   this.errorContractFile = '';
+    // }
+  }
+
+  validData() {
+    this.clearError();
+    let validateResult = {
+      email: this.validateEmail(),
+    }
+    if (!validateResult.email) {
+      return false;
+    }
+    return true
+  }
 }

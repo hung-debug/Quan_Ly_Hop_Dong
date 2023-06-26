@@ -19,48 +19,33 @@
               }" (click)="toggleFieldTextType()" style="color: #106db6"></i>
           </div>
         </div>
-
-        <!-- <div *ngIf="submitted && f.pass1.errors" class="invalid">
-          <div *ngIf="f.pass1.errors.required">{{'password.level1.blank' | translate}}</div>
-        </div> -->
+        <div class="invalid" *ngIf="errorPassword">
+          {{errorPassword | translate}}
+        </div>
       </div>
     </div>
 
 
-    <!-- <form  [formGroup]="addFormEmail"> -->
-      <div class="row" style="padding-top: 20px;">
-        <div class="col-md-12">
-          <div class="label text-color">Email
-            <span class="required-title">*</span>
-          </div>
-
-          <div >
-            <p-multiSelect panelStyleClass="font" appendTo="body" [options]="emailList" formControlName="email"
-              optionLabel="email" optionValue="email" placeholder="Chọn email"
-              [filter]="true" filterBy="email"
-              [showClear]="true" (onFilter)="getListAllEmail($event)" display="chip" [multiple]="true" (onChange)="onSelectionChange()"
-              >
-            </p-multiSelect>
-          </div>
-
-          <!-- <div *ngIf="submittedUser && fUser.email.errors" class="invalid">
-              <div *ngIf="fUser.email.errors.required">Email không được để trống</div>
-          </div> -->
-        </div>
-      </div>
-    <!-- </form> -->
-
-
-
-    <!-- <div class="row">
+    <div class="row" style="padding-top: 20px;">
       <div class="col-md-12">
-        <div class="label text-color">{{'file.certificate' | translate}} <span class="required-title">*</span></div>
+        <div class="label text-color">Email
+          <span class="required-title">*</span>
+        </div>
+
         <div>
-          <p-treeSelect [droppable]="true">
-          </p-treeSelect>
+          <p-multiSelect panelStyleClass="font" appendTo="body" [options]="emailList" formControlName="email"
+            optionLabel="email" optionValue="email" placeholder="Chọn email" [filter]="true" filterBy="email"
+            [showClear]="true" (onFilter)="getListAllEmail($event)" display="chip" [multiple]="true"
+            (onChange)="onSelectionChange()">
+          </p-multiSelect>
+        </div>
+
+        <div class="invalid" *ngIf="errorEmail">
+          {{errorEmail | translate}}
         </div>
       </div>
-    </div> -->
+    </div>
+
 
     <div class="row" style="padding-top: 20px;">
       <div class="col-md-12">
@@ -80,7 +65,7 @@
         </div>
 
         <div class="form-group">
-          <div class="invalid" *ngIf="errorContractFile!=''">
+          <div class="invalid" *ngIf="errorContractFile">
             {{errorContractFile | translate}}
           </div>
         </div>
