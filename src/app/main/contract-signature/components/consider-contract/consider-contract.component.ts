@@ -1974,13 +1974,17 @@ export class ConsiderContractComponent
           }
 
           let signI = null;
+
+          this.convertXForHsm(signUpdate.page);
+
           let fieldHsm = {
-            coordinate_x: signUpdate.coordinate_x,
+            coordinate_x: signUpdate.signDigitalX,
             coordinate_y: signUpdate.coordinate_y,
             width: signUpdate.signDigitalWidth,
             height: signUpdate.signDigitalHeight,
             page: signUpdate.page,
           };
+
           if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
             this.textSign = signUpdate.valueSign;
 
@@ -3709,12 +3713,42 @@ export class ConsiderContractComponent
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
-        sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
+        sign.signDigitalX = sign.coordinate_x - (canvasPageSignLeft - minCanvas) /* * this.ratioPDF*/;
         sign.signDigitalY = heightPage - (sign.coordinate_y - currentHeight) - sign.height + sign.page * 5.86 /* * this.ratioPDF*/;
 
         sign.signDigitalHeight =
           sign.signDigitalY + sign.height /* * this.ratioPDF*/;
         sign.signDigitalWidth = sign.signDigitalX + sign.width;
+
+        return sign;
+      } else {
+        return sign;
+      }
+    });
+  }
+
+  convertXForHsm(page: any) {
+    const canvasPageSign: any = document.getElementById('canvas-step3-' + page);
+
+    const canvasPageSignElement: any = canvasPageSign.getBoundingClientRect();
+    const canvasPageSignLeft: any = canvasPageSignElement.left;
+
+    let currentHeight: number = 0;
+    for (let i = 1; i < page; i++) {
+      const canvas: any = document.getElementById('canvas-step3-' + i);
+      currentHeight += canvas.height;
+    }
+
+    const minCanvas = this.detectCoordinateService.getMinCanvasX(this.pageNumber);
+
+    this.isDataObjectSignature.map((sign: any) => {
+      if (
+        (sign.type == 3 || sign.type == 1 || sign.type == 4 || sign.type == 5) &&
+        sign?.recipient?.email === this.currentUser.email &&
+        sign?.recipient?.role === this.datas?.roleContractReceived &&
+        sign?.page == page
+      ) {
+        sign.signDigitalX = sign.coordinate_x - (canvasPageSignLeft - minCanvas);
 
         return sign;
       } else {
@@ -3745,7 +3779,7 @@ export class ConsiderContractComponent
         sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
-        sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
+        sign.signDigitalX = sign.coordinate_x - (canvasPageSignLeft - minCanvas) /* * this.ratioPDF*/;
         sign.signDigitalY = heightPage - (sign.coordinate_y - currentHeight) - sign.height + sign.page * 5.86 /* * this.ratioPDF*/;
 
         sign.signDigitalWidth = sign.width /* * this.ratioPDF*/;
