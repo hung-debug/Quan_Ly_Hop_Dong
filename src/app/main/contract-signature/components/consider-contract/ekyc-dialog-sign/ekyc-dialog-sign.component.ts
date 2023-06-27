@@ -163,20 +163,21 @@ export class EkycDialogSignComponent implements OnInit {
           alert(this.translate.instant('card.id.fail'));
         })
       } else {
-        if (this.cardId != response.participants[0].recipients[0].card_id) {
-          this.toastService.showErrorHTMLWithTimeout('Bạn không có quyền xử lý hợp đồng này!', '', 3000);
-          if (this.type == 1) {
-            this.router.navigate(['/login']);
-            this.dialogRef.close();
-            this.spinner.hide();
-            return
-          } else {
-            this.router.navigate(['/main/dashboard']);
-            this.dialogRef.close();
-            this.spinner.hide();
-            return
-          }
-        }
+        // if (this.cardId != response.participants[0].recipients[0].card_id) {
+        //   this.toastService.showErrorHTMLWithTimeout('Bạn không có quyền xử lý hợp đồng này!', '', 3000);
+        //   if (this.type == 1) {
+        //     this.router.navigate(['/login']);
+        //     this.dialogRef.close();
+        //     this.spinner.hide();
+        //     return
+        //   } else {
+        //     this.router.navigate(['/main/dashboard']);
+        //     this.dialogRef.close();
+        //     this.spinner.hide();
+        //     return
+        //   }
+        // }
+        
         let formData = {
           "name": "image_ekyc_web_face" + new Date().getTime() + ".jpg",
           "content":this.webcamImage.imageAsDataUrl,
