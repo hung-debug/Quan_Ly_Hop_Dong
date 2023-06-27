@@ -611,5 +611,21 @@
   "personal.customer.name":"Tên cá nhân",
   "tax.code":"Mã số thuế",
   "phone_mail":"SĐT/Email",
-  "contract.views": "Xem xét nhiều"
+  "contract.views": "Xem xét nhiều",
+  "certificate.list": "Danh sách chứng thư số",
+  "file.name":"Tên file",
+  "start-date": "Ngày bắt đầu",
+  "end-date": "Ngày hết hạn",
+  "add.certificate":"Thêm mới chứng thư số",
+  "email.user":"Email người dùng",
+  "file.certificate": "File chứng thư số",
+  "choose.file.certificate": "Chọn file chứng thư số (.p12)",
+  "notation": "Ký hiệu",
+  "email.used": "Email sử dụng",
+  "infor.certificate":"Thông tin chứng thư số",
+  "update.infor.certificate": "Cập nhật thông tin chứng thư số",
+  "infor.file.certificate": "Thông Tin File Chứng Thư Số",
+  "subject": "Chủ thể",
+  "unit":"Đơn vị",
+  "contract.folder": "Quản lý thư mục"
 }

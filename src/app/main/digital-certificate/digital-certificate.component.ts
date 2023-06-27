@@ -81,10 +81,10 @@ export class DigitalCertificateComponent implements OnInit {
 
     this.spinner.show();
     this.DigitalCertificateService.searchCertificate(this.fileName, this.status.value, this.keystoreDateStart, this.keystoreDateEnd, 0, this.size).subscribe(response => {
+      this.spinner.hide();
       if (response.content) {
         this.list = response.content;
         this.totalRecords = response.totalElements;
-        this.spinner.hide();
       } else {
         // bao loi
         this.toastService.showErrorHTMLWithTimeout('Không tìm thấy dữ liệu', '', 3000);

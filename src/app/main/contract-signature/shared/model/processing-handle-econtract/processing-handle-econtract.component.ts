@@ -57,8 +57,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
   lang: string;
   async ngOnInit(): Promise<void> {
-  async ngOnInit(): Promise<void> {
-
     if(sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     } else if (sessionStorage.getItem('lang') == 'en') {
@@ -101,8 +99,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           reasonReject: element.reasonReject,
           type: element.participantType,
           statusNumber: element.status,
-          phone: element.phone,
-          change_num: this.checkChangeNum(participants, element.id)
           phone: element.phone,
           change_num: this.checkChangeNum(participants, element.id)
         }
