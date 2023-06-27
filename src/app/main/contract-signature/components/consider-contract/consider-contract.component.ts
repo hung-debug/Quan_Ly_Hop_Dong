@@ -1624,7 +1624,7 @@ export class ConsiderContractComponent
   }
 
   getSwalFire(code: string) {
-    if (code == 'digital') {
+    if (code == 'digital' && !this.mobile) {
       return Swal.fire({
         title: this.getTextAlertConfirm(),
         icon: 'warning',
