@@ -58,6 +58,11 @@ export class SidebarService {
   isQLLHD_04: boolean = true; //tim kiem loai hop dong
   isQLLHD_05: boolean = true; //xem thong tin chi tiet loai hop dong
   
+  isQLDC_01: boolean = true; //them moi chung thu so
+  isQLDC_02: boolean = true; //sua thong tin chung thu so
+  isQLDC_03: boolean = true; //tim kiem thong tin
+  isQLDC_04: boolean = true; //xem thong tin chung thu so
+
 
   isBaoCaoChiTiet: boolean = true; // báo cáo chi tiết hợp đồng
   isBaoCaoSapHetHieuLuc: boolean = true; // báo cáo hợp đồng sắp hết hiệu lực
@@ -73,7 +78,7 @@ export class SidebarService {
   _hasBackgroundImage = true;
 
   subMenus: any = [];
-  
+
   contract_signatures: any = "c";
 
   private reloadSidebarSubject = new Subject<void>();
@@ -247,6 +252,18 @@ export class SidebarService {
             this.isQLLHD_05 = listRole.some(
               (element) => element.code == 'QLLHD_05'
             );
+            this.isQLDC_01 = listRole.some(
+              (element) => element.code == 'isQLDC_01'
+            );
+            this.isQLDC_02 = listRole.some(
+              (element) => element.code == 'isQLDC_02'
+            );
+            this.isQLDC_03 = listRole.some(
+              (element) => element.code == 'isQLDC_03'
+            );
+            this.isQLDC_04 = listRole.some(
+              (element) => element.code == 'isQLDC_04'
+            );
 
             this.isBaoCaoChiTiet = listRole.some(
               (element) => element.code == 'BAOCAO_CHITIET'
@@ -287,12 +304,12 @@ export class SidebarService {
           '',
           3000
         );
-        
+
       }
     );
 
     this.menus =  this.menus.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
-    
+
     return this.menus;
   }
 
@@ -504,7 +521,7 @@ export class SidebarService {
         active: false,
         href: '/main/report/detail',
       })
-    } 
+    }
     if(this.isBaoCaoSapHetHieuLuc) {
       submenusReport.push({
         title: 'report.expires-soon.contract',
@@ -531,23 +548,8 @@ export class SidebarService {
       )
     }
 
-    if(this.isBaoCaoSoLuongLoai) {
-      submenusReport.push({
-        title:'report.number.contracts.type',
-        active: false,
-        href: '/main/report/contract-number-follow-type'
-      })
-    }
-
-    if(this.isBaoCaoHopDongNhan) {
-      submenusReport.push({
-        title:'report.contract.receive',
-        active: false,
-        href: '/main/report/contract-receive'
-      })
-    }
-
-    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai || this.isBaoCaoHopDongNhan || this.isBaoCaoSoLuongTrangThai) {
+   
+    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiXuLy) {
       this.menus.push({
         title: 'report',
         icon: '/assets/img/analytics1.svg',
@@ -558,6 +560,16 @@ export class SidebarService {
         submenus: submenusReport,
         id: 10,
       })
+    }
+    if (this.isQLND_01 || this.isQLND_02 || this.isQLND_03 || this.isQLND_04) {
+      this.menus.push({
+        title: 'certificate.list',
+        icon: '/assets/img/icon-document.svg',
+        active: false,
+        type: 'simple',
+        href: '/main/digital-certificate',
+        id: 6,
+      });
     }
 
     this.menus.push({
@@ -577,7 +589,7 @@ export class SidebarService {
       href: '/main/contract-folder',
       id: 12,
     })
-   
+
     if(this.isConfigSms || this.isConfigSoonExpireDay) {
       this.menus.push({
         title: 'menu.config-sms-email',

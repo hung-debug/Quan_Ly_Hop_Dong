@@ -89,14 +89,14 @@ export class UserComponent implements OnInit {
     this.unitService.getUnitList('', '').subscribe(data => {
       if(this.lang == 'vi')
         this.orgListTmp.push({name: "Tất cả", id:""});
-      else if(this.lang == 'en') 
+      else if(this.lang == 'en')
         this.orgListTmp.push({name: "All", id:""});
-      
+
       let dataUnit = data.entities.sort((a:any,b:any) => a.path.toString().localeCompare(b.path.toString()));
       for(var i = 0; i < dataUnit.length; i++){
         this.orgListTmp.push(dataUnit[i]);
       }
-      
+
       this.orgList = this.orgListTmp;
       this.convertData();
       this.selectedNodeOrganization = this.listOrgCombobox.filter((p: any) => p.data == this.organization_id);
@@ -128,12 +128,12 @@ export class UserComponent implements OnInit {
       let dataChildren = this.findChildren(element);
       let data:any="";
       data = {
-        label: element.name, 
+        label: element.name,
         data: element.id,
         expanded: true,
         children: dataChildren
       };
-      
+
       this.array_empty.push(data);
       //this.removeElementFromStringArray(element.id);
     })
@@ -143,13 +143,13 @@ export class UserComponent implements OnInit {
   findChildren(element:any){
     let dataChildren:any[]=[];
     let arrCon = this.orgList.filter((p: any) => p.parent_id == element.id);
-    
+
     arrCon.forEach((elementCon: any, indexCOn: number) => {
       let is_edit = false;
-      
+
       dataChildren.push(
       {
-        label: elementCon.name, 
+        label: elementCon.name,
         data: elementCon.id,
         expanded: true,
         children: this.findChildren(elementCon)
@@ -164,11 +164,11 @@ export class UserComponent implements OnInit {
         if(value.id==element){
           this.orgList.splice(index,1);
         }
-        
+
     });
   }
 
-  
+
   changeOrg(){
     
     this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
@@ -181,6 +181,8 @@ export class UserComponent implements OnInit {
     this.userService.getUserList(this.organization_id? this.organization_id : '', this.email, this.name).subscribe(response => {
       this.spinner.hide();
       this.list = response.entities;
+      console.log("ressponse",response);
+
     });
   }
 
@@ -196,9 +198,9 @@ export class UserComponent implements OnInit {
     this.router.navigate(['/main/user-detail/' + id]);
   }
 
-  
+
   downFileExample() {
-    
+
   }
 
   fileChanged(e: any) {

@@ -1,0 +1,65 @@
+<div *ngIf="isQLDC_01 || isQLDC_02 || isQLDC_03 || isQLDC_04" class="container-fluid">
+  <div class="row">
+    <div class="col-md-3" *ngIf="isQLDC_03">
+      <div>{{'notation' | translate}}</div>
+      <div class="input-line">
+        <input type="text" [(ngModel)]="fileName" class="input_text"/>
+      </div>
+    </div>
+    <div class="col-md-3" *ngIf="isQLDC_03">
+      <div>{{'contract.status' | translate}}</div>
+      <div>
+          <p-treeSelect placeholder="{{'all' | translate}}"
+          [options]="listStatus"
+          [(ngModel)]="status">
+          </p-treeSelect>
+      </div>
+    </div>
+
+    <div class="col-md-3 btn_search">
+      <button *ngIf="isQLDC_03" class="btn btn-lg btn-block btn_submit" (click)="getFirstPageSearchData()">{{'btn.search' | translate }}</button>
+        <button *ngIf="isQLDC_01" class="btn btn-lg btn-block btn_submit" (click)="addUnit()">{{'btn.add' | translate }}</button>
+    </div>
+  </div>
+
+  <div class="row" style="padding-top: 20px;">
+    <p-table [value]="list" [paginator]="true" [lazy]="true" (onLazyLoad)="getPageableCert($event)" [totalRecords]="totalRecords" [rows]="size" id="table" [autoLayout]="true" [(first)]="first">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of cols" [style]='col.style'>
+              {{col.header | translate}}
+            </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-list>
+          <tr>
+              <td>{{list.keyStoreFileName}}</td>
+              <td>{{list.keystoreDateStart | date:'dd/MM/yyyy HH:mm'}}</td>
+              <td>{{list.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}</td>
+
+              <td *ngIf="list.status == 1">{{'unit.active' | translate}}</td>
+              <td *ngIf="list.status != 1">{{'unit.inactive' | translate}}</td>
+              <td style="text-align: center">
+                <i class="fa" [ngClass]="'fa-eye'" style="color: #106DB6;width: 25%;cursor: pointer;" (click)="detailUser(list.id)"></i>
+                <img *ngIf="isQLDC_02 && isQLDC_04" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
+              </td>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft" let-state>
+        <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+      </ng-template>
+      <ng-template pTemplate="paginatorright" let-state>
+        <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+      </ng-template>
+    </p-table>
+  </div>
+
+</div>
+<div *ngIf="!isQLDC_01 && !isQLDC_02 && !isQLDC_03 && !isQLDC_04">
+  {{'no.role' | translate}}
+</div>
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+  <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+</ngx-spinner>
+

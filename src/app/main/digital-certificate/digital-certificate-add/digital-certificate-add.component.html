@@ -1,0 +1,101 @@
+<div class="container-fluid">
+  <div class="header">
+    <h3 class="label-header">{{this.datas.title | translate}}</h3>
+  </div>
+  <form [formGroup]="addForm" class="content">
+    <!--Hàng 0!-->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="label text-color">{{'login.password' | translate}}
+          <span class="required-title">*</span>
+        </div>
+
+        <div class="input-line">
+          <input [type]="fieldTextType ? 'text' : 'password'" formControlName="password" class="input-text" />
+          <div class="icon-password">
+            <i class="fa" [ngClass]="{
+                'fa-eye-slash': !fieldTextType,
+                'fa-eye': fieldTextType
+              }" (click)="toggleFieldTextType()" style="color: #106db6"></i>
+          </div>
+        </div>
+        <div class="invalid" *ngIf="errorPassword">
+          {{errorPassword | translate}}
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row" style="padding-top: 20px;">
+      <div class="col-md-12">
+        <div class="label text-color">Email
+          <span class="required-title">*</span>
+        </div>
+
+        <div>
+          <p-multiSelect panelStyleClass="font" appendTo="body" [options]="emailList" formControlName="email"
+            optionLabel="email" optionValue="email" placeholder="Chọn email" [filter]="true" filterBy="email"
+            [showClear]="true" (onFilter)="getListAllEmail($event)" display="chip" [multiple]="true"
+            (onChange)="onSelectionChange()">
+          </p-multiSelect>
+        </div>
+
+        <div class="invalid" *ngIf="errorEmail">
+          {{errorEmail | translate}}
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row" style="padding-top: 20px;">
+      <div class="col-md-12">
+
+        <!--upload file hợp đồng-->
+        <div class="form-group">
+          <div class="label text-color">{{'file.certificate' | translate}}
+            <span class="required-title">*</span>
+          </div>
+          <input id="file-input" type="file" accept=".p12" (change)="fileChanged($event)" style="display: none;" />
+          <div class="file-contract" (click)="addFile()">
+            <img src="assets/img/upload_file.svg" alt="mobifone.contract">
+            <div style="padding-top: 7px;"><span style="color: #798693"
+                *ngIf="this.datas.file_name==null">{{'choose.file.certificate' | translate }}</span>{{datas.file_name}}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="invalid" *ngIf="errorContractFile">
+            {{errorContractFile | translate}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 20px;">
+      <div class="col-md-12" style="display: flex;justify-content: space-evenly;">
+        <div class="label_detail text-color">
+          <div>
+            <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="status" name="status">
+          </div>&nbsp;
+          <div>
+            {{'unit.active' | translate}}
+          </div>
+        </div>
+        <div class="label_detail text-color">
+          <div>
+            <input type="radio" name='confirm-radio-consider' [value]="0" formControlName="status" name="status">
+          </div>&nbsp;
+          <div>
+            {{'unit.inactive' | translate}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-btn">
+      <button (click)="handleCancel()">{{"btn.cancel" | translate}}</button>
+      <button (click)="save()" class="update-btn">{{"btn.save" | translate}}</button>
+    </div>
+  </form>
+</div>

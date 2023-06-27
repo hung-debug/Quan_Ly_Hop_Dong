@@ -681,5 +681,20 @@
   "add.contract.folder":"Add contract",
   "release.contract.success": "Release contract successfully",
   "release.contract.error": "Release contract failed",
-  "hide.processing.thread":"Hide processing thread"
+  "hide.processing.thread":"Hide processing thread",
+  "certificate.list": "Digital certificate list",
+  "file.name":"File name",
+  "start-date": "Start date",
+  "end-date": "End date",
+  "add.certificate":"Add new digital certificate",
+  "email.user":"User email",
+  "file.certificate": "File digital certificate",
+  "choose.file.certificate": "Choose file digital certificate (.p12)",
+  "notation": "Notation",
+  "email.used": "Used email",
+  "infor.certificate":"Information digital certificate",
+  "infor.file.certificate": "Information file digital certificate",
+  "subject": "Subject",
+  "unit":"Unit",
+  "update.infor.certificate": "Update information digital certificate"
   }

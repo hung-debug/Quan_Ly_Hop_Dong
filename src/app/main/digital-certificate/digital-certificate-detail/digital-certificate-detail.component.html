@@ -1,0 +1,101 @@
+<div class="container-fluid">
+  <div class="header">
+    <h3 class="label-header">{{this.datas.title | translate}}</h3>
+  </div>
+  <form [formGroup]="addForm" class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="label text-color">{{'email.user' | translate}}
+          <span class="required-title">*</span>
+        </div>
+        <div class="input-line">
+          <span type="text"  class="input-text" readonly>{{ this.email }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 20px;">
+      <div class="col-md-12" style="display: flex;justify-content: flex-start;">
+        <div class="label_detail text-color">
+          <div>
+            <input type="radio" checked/>
+          </div>&nbsp;
+          <div>
+            {{
+              (status == 1 ? "unit.active" : "unit.inactive") | translate
+            }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 20px;">
+      <div class="col-md-12" style="justify-content: flex-start;">
+        <div class="label text-color" style="color: #106DB6;">{{'infor.file.certificate' | translate}}</div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 20px;">
+      <div class="col-md-6">
+        <div class="label_item">
+          {{ "notation" | translate }}:
+          <span class="highlight_result">
+            {{ this.keystoreSerialNumber }}
+          </span>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="label_item">
+          {{ "subject" | translate }}:
+          <span class="highlight_result">
+            {{ this.subject }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-top: 20px;">
+      <div class="col-md-6">
+        <div class="label_item">
+          {{ "file.name" | translate }}:
+          <span class="highlight_result">
+            {{ this.keyStoreFileName }}
+          </span>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="label_item">
+          {{ "unit" | translate }}:
+          <span class="highlight_result">
+            {{ this.unit }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="padding-top: 20px;">
+      <div class="col-md-6">
+        <div class="label_item">
+          {{ "start-date" | translate }}:
+          <span class="highlight_result">
+            {{this.keystoreDateStart | date:'dd/MM/yyyy HH:mm'}}
+          </span>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="label_item">
+          {{ "end-date" | translate }}:
+          <span class="highlight_result">
+            {{this.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-btn" style="padding-top: 20px;">
+      <button (click)="handleCancel()">{{"btn.cancel" | translate}}</button>
+      <button (click)="save()" class="update-btn">{{"btn.save" | translate}}</button>
+    </div>
+  </form>
+</div>

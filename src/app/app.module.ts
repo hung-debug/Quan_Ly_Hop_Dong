@@ -13,6 +13,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { MatBadgeModule} from '@angular/material/badge';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { CommonModule, CurrencyPipe, DatePipe} from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
 
@@ -108,7 +109,7 @@ import { ReportContractNumberFollowStatusComponent } from './main/report/report-
 import { ContractNumberFollowSignComponent } from './main/report/contract-number-follow-sign/contract-number-follow-sign.component';
 
 import { ContractNumberFollowTypeComponent } from './main/report/contract-number-follow-type/contract-number-follow-type.component';
- 
+
 import { ConfigSmsEmailComponent } from './main/config-sms-email/config-sms-email.component';
 import { DeleteCustomerComponent } from './main/customer/delete-customer/delete-customer.component';
 import { CustomerDetailComponent } from './main/customer/customer-detail/customer-detail.component';
@@ -117,7 +118,10 @@ import { ReportContractReceiveComponent } from './main/report/report-contract-re
 import { CustomerAddComponent } from './main/customer/customer-add/customer-add.component';
 import { CurrentFolderComponent } from './main/contract-folder/current-folder/current-folder.component';
 import { AddContractFolderComponent } from './main/contract-folder/current-folder/add-contract-folder/add-contract-folder.component';
-
+import {DigitalCertificateComponent} from './main/digital-certificate/digital-certificate.component';
+import {DigitalCertificateAddComponent} from './main/digital-certificate/digital-certificate-add/digital-certificate-add.component';
+import {DigitalCertificateDetailComponent} from './main/digital-certificate/digital-certificate-detail/digital-certificate-detail.component';
+import {DigitalCertificateEditComponent} from './main/digital-certificate/digital-certificate-edit/digital-certificate-edit.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -128,6 +132,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     LoginComponent,
     MainComponent,
     UserComponent,
+    DigitalCertificateComponent,
+    DigitalCertificateAddComponent,
+    DigitalCertificateDetailComponent,
+    DigitalCertificateEditComponent,
     ContractComponent,
     ContractSignatureComponent,
     UnitComponent,
@@ -220,6 +228,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MatBadgeModule,
     ContractModule,
     NgMultiSelectDropDownModule,
+    MultiSelectModule,
     CommonModule,
     NgxPaginationModule,
     MdbTabsModule,

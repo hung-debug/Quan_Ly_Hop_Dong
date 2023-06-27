@@ -57,7 +57,7 @@ export class EditHandlerComponent implements OnInit {
   errorPhone: any = '';
   errorCardid: any = '';
   errorEmail: any = '';
-
+  locale: string;
   //dropdown
   signTypeList: Array<any> = type_signature;
   checkCount = 1;
@@ -134,6 +134,10 @@ export class EditHandlerComponent implements OnInit {
       return acc;
     }, {});
   }
+  // setLocale(lang: string) {
+  //   this.locale = lang;
+  // }
+
   handleCancel() {
     this.dialogRef.close();
   }
@@ -174,6 +178,7 @@ export class EditHandlerComponent implements OnInit {
       phone: this.phone,
       login_by: login_by,
       card_id: this.card_id,
+      // locale: this.locale,
     };
 
     if (!this.validData()) {

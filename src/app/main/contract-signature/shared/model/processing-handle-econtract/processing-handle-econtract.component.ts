@@ -57,6 +57,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
   lang: string;
   async ngOnInit(): Promise<void> {
+  async ngOnInit(): Promise<void> {
 
     if(sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
@@ -102,11 +103,22 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           statusNumber: element.status,
           phone: element.phone,
           change_num: this.checkChangeNum(participants, element.id)
+          phone: element.phone,
+          change_num: this.checkChangeNum(participants, element.id)
         }
 
         this.is_list_name.push(data);
       })
 
+      // this.is_list_name.map((x: any) => {
+      //   this.data.is_data_contract.participants.map((item: any) => {
+      //     item.recipients.map((y: any) => {
+      //       if (x.id === y.id) {
+      //         x["change_num"] = y.change_num
+      //       }
+      //     })
+      //   })
+      // })
       // this.is_list_name.map((x: any) => {
       //   this.data.is_data_contract.participants.map((item: any) => {
       //     item.recipients.map((y: any) => {
