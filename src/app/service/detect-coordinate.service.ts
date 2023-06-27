@@ -89,6 +89,8 @@ export class DetectCoordinateService {
         // @ts-ignore
         layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + deltaPage*(page - 1);
     }
+
+    console.log("layerY ", layerY);
     
     return layerY;
   }

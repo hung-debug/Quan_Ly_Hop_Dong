@@ -1140,6 +1140,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       canvas.height = viewport.height;
       canvas.width = viewport.width;
+
+      canvas.style.height = viewport.height + 'px';
+      canvas.style.width = viewport.width + 'px';
+
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
       if (!_objPage) {
         this.objPdfProperties.pages.push({
