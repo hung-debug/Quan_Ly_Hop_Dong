@@ -62,8 +62,8 @@ export class DetectCoordinateService {
         for (let i = 1; i < page; i++) {
           let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
           let canvasInfo = canvasElement.getBoundingClientRect();
-          console.log("i ",canvasInfo.height)
-          countPage += canvasInfo.height;
+          countPage += parseFloat(canvasInfo.height.toFixed(2));
+          console.log("countPage ",i," ", countPage);
         }
 
         let sum = 0;
