@@ -1975,7 +1975,8 @@ export class ConsiderContractComponent
 
           let signI = null;
 
-          this.convertXForHsm(signUpdate.page);
+          if(!this.mobile)
+            this.convertXForHsm(signUpdate.page);
 
           let fieldHsm = {
             coordinate_x: signUpdate.signDigitalX,
