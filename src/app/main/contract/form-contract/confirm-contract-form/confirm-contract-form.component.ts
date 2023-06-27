@@ -414,11 +414,16 @@ export class ConfirmContractFormComponent implements OnInit {
 
       let countIsSignId = 0;
       this.spinner.show();
+
+      datasFormignId.forEach((element: any) => {
+        if(this.datasForm.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datasForm.difX;
+        }
+      })
       for (let i = 0; i < datasFormignId.length; i++) {
         let id = datasFormignId[i].id_have_data;
         delete datasFormignId[i].id_have_data;
 
-        // console.log("vao day ");
         await this.contractService.getContractSampleEdit(datasFormignId[i], id).toPromise().then((data: any) => {
               datasFormample_contract.push(data);
               this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
@@ -477,7 +482,7 @@ export class ConfirmContractFormComponent implements OnInit {
         });
       });
 
-      this.data_sample_contract.forEach((element: any) => {
+      datasFormignNotId.forEach((element: any) => {
         if(this.datasForm.arrDifPage[Number(element.page)-1] == 'max'){
           element.coordinate_x = element.coordinate_x - this.datasForm.difX;
         }

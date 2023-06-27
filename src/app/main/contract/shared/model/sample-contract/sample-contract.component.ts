@@ -707,7 +707,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // }
 
         let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth, this.pageNumber)
-        let layerY = this.detectCoordinateService.detectY(event, rect_location, canvasInfo);
+        let layerY = this.detectCoordinateService.detectY(event, rect_location, canvasInfo, this.pageNumber);
         // //END
 
         let _array = Object.values(this.obj_toa_do);
