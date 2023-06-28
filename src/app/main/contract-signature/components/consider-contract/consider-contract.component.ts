@@ -595,7 +595,7 @@ export class ConsiderContractComponent
               }
           }
 
-          if (this.mobile && this.recipient.status != 2 && this.recipient.status != 3) {
+          if (this.mobile && this.recipient.status < 2) {
             if (image_base64) {
               const recipient = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
 
