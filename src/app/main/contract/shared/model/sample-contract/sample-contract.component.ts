@@ -279,16 +279,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let i = 0;
     this.datas.contract_user_sign.forEach((element: any) => {
       element.sign_config.forEach((item: any) => {
-        const htmlElement: HTMLElement | null = document.getElementById(item.id);
-        console.log(htmlElement);
-        if(htmlElement) {
-          var oldX = Number(htmlElement.getAttribute('data-x'));
-          if(oldX) {
-            var newX = oldX + this.difX;
-            htmlElement.setAttribute('data-x', newX.toString());
-          }
-        }
         if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+          const htmlElement: HTMLElement | null = document.getElementById(item.id);
+          if(htmlElement) {
+            var oldX = Number(htmlElement.getAttribute('data-x'));
+            if(oldX) {
+              var newX = oldX + this.difX;
+              htmlElement.setAttribute('data-x', newX.toString());
+            }
+          }
           item.coordinate_x += this.difX;
         }
       })
@@ -1123,10 +1122,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-  canvasLeft: any;
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
-
     //This gives us the page's dimensions at full scale
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
@@ -1136,13 +1133,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       this.canvasWidth = viewport.width;
 
-      this.canvasLeft = viewport.left;
-
       canvas.height = viewport.height;
       canvas.width = viewport.width;
-
-      canvas.style.height = viewport.height + 'px';
-      canvas.style.width = viewport.width + 'px';
 
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
       if (!_objPage) {
