@@ -1590,6 +1590,10 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           });
 
           if (!coutError) {
+            if(action == 'save_draft') {
+              this.datasForm.code = null;
+              this.datasForm.contract_no = null;
+            }
             await this.contractService.addContractStep1(this.datasForm, this.datasForm.contract_id, 'template_form').toPromise().then((data) => {
         
             }, (error) => {
