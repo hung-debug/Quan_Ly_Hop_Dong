@@ -560,6 +560,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       }
     }
   }
+
   imgSignPCSelect: string;
   imgSignPCSelectMark: string;
   handleUpload(event: any, code: string) {
@@ -567,10 +568,12 @@ export class AddUserComponent implements OnInit, OnDestroy {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      if(code == 'sign')
+      if(code == 'sign') {
         this.imgSignPCSelect = reader.result? reader.result.toString() : '';
-      else if(code == 'mark')
+      }
+      else if(code == 'mark') {
         this.imgSignPCSelectMark = reader.result? reader.result.toString() : '';
+      }
     };
   }
 
