@@ -595,7 +595,7 @@ export class ConsiderContractComponent
               }
           }
 
-          if (this.mobile && this.recipient.status != 2 && this.recipient.status != 3) {
+          if (this.mobile && this.recipient.status < 2) {
             if (image_base64) {
               const recipient = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
 
@@ -1624,7 +1624,7 @@ export class ConsiderContractComponent
   }
 
   getSwalFire(code: string) {
-    if (code == 'digital') {
+    if (code == 'digital' && !this.mobile) {
       return Swal.fire({
         title: this.getTextAlertConfirm(),
         icon: 'warning',

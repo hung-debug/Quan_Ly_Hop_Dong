@@ -279,16 +279,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let i = 0;
     this.datas.contract_user_sign.forEach((element: any) => {
       element.sign_config.forEach((item: any) => {
-        const htmlElement: HTMLElement | null = document.getElementById(item.id);
-        console.log(htmlElement);
-        if(htmlElement) {
-          var oldX = Number(htmlElement.getAttribute('data-x'));
-          if(oldX) {
-            var newX = oldX + this.difX;
-            htmlElement.setAttribute('data-x', newX.toString());
-          }
-        }
         if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+          const htmlElement: HTMLElement | null = document.getElementById(item.id);
+          if(htmlElement) {
+            var oldX = Number(htmlElement.getAttribute('data-x'));
+            if(oldX) {
+              var newX = oldX + this.difX;
+              htmlElement.setAttribute('data-x', newX.toString());
+            }
+          }
           item.coordinate_x += this.difX;
         }
       })
@@ -672,39 +671,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.objDrag[this.signCurent['id']] = {};
         }
         this.isMove = false;
-        // let layerX;
-        // // @ts-ignore
-        // if ("left" in canvasInfo) {
-        //   // layerX = event.rect.left - canvasInfo.left;
-        //   layerX = rect_location.left - canvasInfo.left;
-        // }
-
-        // let pages = event.relatedTarget.id.split('-');
-
-
-        // let layerY = 0;
-        // //@ts-ignore
-        // if ("top" in canvasInfo) {
-        //   // layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);
-        //   layerY = canvasInfo.top <= 0 ? rect_location.top + Math.abs(canvasInfo.top) : rect_location.top - Math.abs(canvasInfo.top);
-        // }
-        // let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
-
-        // /* test set location signature
-        // Duongdt
-        //  */
-        // if (page > 1) {
-        //   let countPage = 0;
-        //   for (let i = 1; i < page; i++) {
-        //     let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
-        //     let canvasInfo = canvasElement.getBoundingClientRect();
-        //     countPage += canvasInfo.height;
-        //   }
-        //   let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
-        //   let canvasInfo = canvasElement.getBoundingClientRect();
-        //   // @ts-ignore
-        //   layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5 * (page - 1);
-        // }
 
         let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth, this.pageNumber)
         let layerY = this.detectCoordinateService.detectY(event, rect_location, canvasInfo, this.pageNumber);
@@ -896,7 +862,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (isSignType == 'chu_ky_anh') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
         } else if (isSignType == 'chu_ky_so') {
-          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6) && element.role != 2);
         } else if (isSignType == 'text') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
         } else {
@@ -1123,10 +1089,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-  canvasLeft: any;
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
-
     //This gives us the page's dimensions at full scale
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
@@ -1136,13 +1100,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       this.canvasWidth = viewport.width;
 
-      this.canvasLeft = viewport.left;
-
       canvas.height = viewport.height;
       canvas.width = viewport.width;
-
-      canvas.style.height = viewport.height + 'px';
-      canvas.style.width = viewport.width + 'px';
 
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
       if (!_objPage) {

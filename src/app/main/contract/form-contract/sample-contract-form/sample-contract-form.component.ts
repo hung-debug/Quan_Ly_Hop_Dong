@@ -283,15 +283,15 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     let i = 0;
     this.datasForm.contract_user_sign.forEach((element: any) => {
       element.sign_config.forEach((item: any) => {
-        const htmlElement: HTMLElement | null = document.getElementById(item.id);
-        if(htmlElement) {
-          var oldX = Number(htmlElement.getAttribute('data-x'));
-          if(oldX) {
-            var newX = oldX + this.difX;
-            htmlElement.setAttribute('data-x', newX.toString());
-          }
-        }
         if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+          const htmlElement: HTMLElement | null = document.getElementById(item.id);
+          if(htmlElement) {
+            var oldX = Number(htmlElement.getAttribute('data-x'));
+            if(oldX) {
+              var newX = oldX + this.difX;
+              htmlElement.setAttribute('data-x', newX.toString());
+            }
+          }
           item.coordinate_x += this.difX;
         }
       })
@@ -1590,6 +1590,10 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           });
 
           if (!coutError) {
+            if(action == 'save_draft') {
+              this.datasForm.code = null;
+              this.datasForm.contract_no = null;
+            }
             await this.contractService.addContractStep1(this.datasForm, this.datasForm.contract_id, 'template_form').toPromise().then((data) => {
         
             }, (error) => {
