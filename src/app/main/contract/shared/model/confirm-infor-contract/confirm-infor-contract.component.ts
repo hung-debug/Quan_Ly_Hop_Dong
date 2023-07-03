@@ -89,7 +89,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    
     if (
       this.save_draft_infor &&
       this.save_draft_infor.close_header &&
@@ -100,17 +99,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   }
 
   back(e: any, step?: any) {
-    
-    
-    
-
     this.nextOrPreviousStep(step);
   }
-
-  // next step event
-  // next() {
-  //   this.callAPI();
-  // }
 
   // forward data component
   nextOrPreviousStep(step: string) {
@@ -120,7 +110,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   }
 
   saveDraft() {
-    
     this.toastService.showSuccessHTMLWithTimeout(
       'Lưu nháp thành công!',
       '',
@@ -129,10 +118,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     void this.router.navigate(['/main/contract/create/draft']);
   }
 
-  // callAPI(action: string) {
-  //   this.next(action);
-  // }
-
   callAPIFinish() {
     //call API step confirm
     //this.contractService.addConfirmContract(this.datas).subscribe((data) => {
@@ -140,15 +125,12 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     
     this.contractService.changeStatusContract(this.datas.id, 10, '').subscribe(
       (data) => {
-        //this.router.navigate(['/main/contract/create/processing']);
-
-        
         this.router
           .navigateByUrl('/', { skipLocationChange: true })
           .then(() => {
             this.router.navigate(['/main/contract/create/processing']);
           });
-        this.spinner.show();
+        this.spinner.hide();
         this.toastService.showSuccessHTMLWithTimeout(
           'Tạo hợp đồng thành công!',
           '',
@@ -169,7 +151,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
   user: any;
   submit(action: string) {
-
     this.SaveContract(action);
 
     // const data = {
@@ -343,7 +324,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
             this.spinner.hide();
           },
           () => {
-            this.spinner.hide();
+            // this.spinner.hide();
           }
         );
     }
