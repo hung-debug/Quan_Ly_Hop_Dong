@@ -66,9 +66,9 @@
                     </div>
                     <span style="color: #8B8B8B" *ngIf="d.type != 3 && d.name_company">{{d.name_company}}</span>
 
-                    <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'vi'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name : ''}}</span>
+                    <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'vi'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name}}</span>
 
-                    <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'en'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name.replace("Ký số bằng","Sign by").replace("và","and").replace("ảnh","OTP"): ''}}</span>
+                    <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'en'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name.replace("Ký số bằng","Sign by").replace("và","and").replace("ảnh","OTP")}}</span>
                 </div>
 
                 <div class="col-md-4" style="display: flex; flex-direction: column;text-align: center">
