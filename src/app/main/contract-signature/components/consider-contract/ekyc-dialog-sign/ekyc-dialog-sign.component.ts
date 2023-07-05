@@ -103,9 +103,6 @@ export class EkycDialogSignComponent implements OnInit {
       const determineCoordination = await this.contractService.getDetermineCoordination(this.data.recipientId).toPromise();
       this.cardId = determineCoordination.recipients[0].card_id;
       this.name = determineCoordination.recipients[0].name;
-      
-      let ArrRecipientsNew = false
-
     }
  
 
@@ -123,7 +120,7 @@ export class EkycDialogSignComponent implements OnInit {
   
         this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl, this.data.contractId, this.data.recipientId).subscribe((response) => {
           this.spinner.hide();
-          if(response.result_code == 200 && response.action == 'pass') {
+          if(response.result_code == 200 && (response.action == 'pass' || (response.action == 'manualReview' && this.checkWarning(response.warning)))) {
             if(this.cardId) {
               if(this.cardId == response.id && this.name.toUpperCase().split(" ").join("") == response.name.toUpperCase().split(" ").join("")) {
                 this.flagSuccess == true;
@@ -134,7 +131,7 @@ export class EkycDialogSignComponent implements OnInit {
                 this.webcamImage = this.initWebcamImage;
                 alert(this.translate.instant('card.id.not.match'));
                 // string.replace(/  +/g, ' ');
-              } else if(this.name.toUpperCase().split(" ").join("") != response.name.toUpperCase().split(" ").join("")) {
+              } else if(this.name.toUpperCase().split(" ").join("").normalize() != response.name.toUpperCase().split(" ").join("").normalize()) {
                 this.flagSuccess == false;
                 this.webcamImage = this.initWebcamImage;
                 alert(this.translate.instant('name.not.match'));
@@ -163,21 +160,6 @@ export class EkycDialogSignComponent implements OnInit {
           alert(this.translate.instant('card.id.fail'));
         })
       } else {
-        // if (this.cardId != response.participants[0].recipients[0].card_id) {
-        //   this.toastService.showErrorHTMLWithTimeout('Bạn không có quyền xử lý hợp đồng này!', '', 3000);
-        //   if (this.type == 1) {
-        //     this.router.navigate(['/login']);
-        //     this.dialogRef.close();
-        //     this.spinner.hide();
-        //     return
-        //   } else {
-        //     this.router.navigate(['/main/dashboard']);
-        //     this.dialogRef.close();
-        //     this.spinner.hide();
-        //     return
-        //   }
-        // }
-        
         let formData = {
           "name": "image_ekyc_web_face" + new Date().getTime() + ".jpg",
           "content":this.webcamImage.imageAsDataUrl,
@@ -187,7 +169,7 @@ export class EkycDialogSignComponent implements OnInit {
         //up file anh len db
         this.upFileImageToDb(formData);
   
-        this.contractService.detectFace(this.data.cccdFront, this.webcamImage.imageAsDataUrl).subscribe(async (response) => {
+        this.contractService.detectFace(this.data.cccdFront, this.webcamImage.imageAsDataUrl,this.data.contractId, this.data.recipientId).subscribe(async (response) => {
           this.spinner.hide();
           if(response.verify_result == 2 && response.face_anti_spoof_status.status == 'REAL') {
             alert(this.translate.instant('confirm.success'));
@@ -217,8 +199,25 @@ export class EkycDialogSignComponent implements OnInit {
     
   }
 
-  upFileImageToDb(formData: any) {
+  checkWarning(warning: any) {
+    if(warning.length > 0) {
+      for (let i = 0; i < warning.length; i++) {
+        if (warning[i].includes("giay_to_co_do_phan_giai_thap")) {
+          return true;
+        }
+        if (warning[i].includes("giay_to_bi_mo")) {
+          return true;
+        }
+        if (warning[i].includes("giay_to_bi_choi_sang")) {
+          return true;
+        }
+      }
+    }
+  
+    return false;
+  }
 
+  upFileImageToDb(formData: any) {
      //up file anh len db
      this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseImage) => {
       if(responseImage.success == true) {

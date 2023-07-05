@@ -471,7 +471,7 @@ export class ContractService {
   }
 
 
-  detectFace(imageCCCD: any, imageFace: any) {
+  detectFace(imageCCCD: any, imageFace: any, contractId: number, recipientId:number) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -481,13 +481,20 @@ export class ContractService {
     const body = {
       image_cmt: imageCCCD,
       image_live: imageFace,
+      request_id: contractId+"_"+recipientId+"-web"
     };
 
     if (environment.apiUrl == 'https://econtract.mobifone.vn/service') {
       return this.http.post<any>(this.detectFaceUrlNB, body, { headers });
     } else if (environment.apiUrl == 'https://mobifone-econtract.vn/service') {
       return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
-    } else {
+    } else if(environment.apiUrl == 'http://10.111.125.86/service') {
+      //server uat vinmec
+      return this.http.post<any>('http://10.111.125.86/eKYC/verification', body ,{headers})
+    } else if(environment.apiUrl == 'http://10.111.130.27/service') {
+      //server prod vinmec
+      return this.http.post<any>('http://10.111.130.27/eKYC/verification', body ,{headers})
+    }  {
       return this.http.post<any>(this.detectFaceUrl, body, { headers });
     }
   }
