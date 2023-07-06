@@ -583,7 +583,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     // translate when resizing from top or left edges
     this.signCurent = this.convertToSignConfig().filter((p: any) => p.id == event.target.id)[0];
     if (this.signCurent) {
-      if (event.rect.width <= 280) {
+      // if (event.rect.width <= 280) {
         this.signCurent.coordinate_x = x;
         this.signCurent.coordinate_y = y;
         this.objSignInfo.id = event.target.id;
@@ -596,7 +596,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         this.tinhToaDoSign("canvas-step3-" + this.signCurent.page, this.signCurent.width, this.signCurent.height, this.objSignInfo);
         let _array = Object.values(this.obj_toa_do);
         this.signCurent.position = _array.join(",");
-      }
+      // }
     }
   }
 
