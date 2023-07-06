@@ -113,7 +113,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    
     this.route.queryParams.subscribe(async params => {
       if (typeof params.filter_name != 'undefined' && params.filter_name) {
         this.filter_name = params.filter_name;
@@ -160,61 +159,57 @@ export class ContractComponent implements OnInit, AfterViewInit {
       } else {
         this.organization_id = "";
       }
-    });
 
-    if(sessionStorage.getItem('createdPageNum'))
-     this.page = Number(sessionStorage.getItem('createdPageNum'));
+      this.sub = this.route.params.subscribe(params => {
+        this.action = params['action'];
+        this.status = params['status'];
+  
+        //set status
+        this.convertStatusStr();
+  
+        this.appService.setTitle("contract.list.created");
+  
+        //lay id user
+        let userId = this.userService.getAuthCurrentUser().id;
+        this.userService.getUserById(userId).subscribe(
+          data => {
+            //lay id role
+            this.roleService.getRoleById(data?.role_id).subscribe(
+              data => {
+                let listRole: any[];
+                listRole = data.permissions;
+                this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
+                this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
+                this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');
+                this.isQLHD_04 = listRole.some(element => element.code == 'QLHD_04');
+                this.isQLHD_05 = true;
+                this.isQLHD_06 = listRole.some(element => element.code == 'QLHD_06');
+                this.isQLHD_07 = listRole.some(element => element.code == 'QLHD_07');
+                this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
+                this.isQLHD_09 = listRole.some(element => element.code == 'QLHD_09');
+                this.isQLHD_10 = listRole.some(element => element.code == 'QLHD_10');
+                this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
+                this.isQLHD_12 = listRole.some(element => element.code == 'QLHD_12');
+                this.isQLHD_13 = listRole.some(element => element.code == 'QLHD_13');
+  
+                //neu co quyen xem danh sach hop dong cua to chuc minh va to chuc con
+                this.filter_is_org_me_and_children = this.isQLHD_03;
+  
+                this.getContractList();
 
-    this.sub = this.route.params.subscribe(params => {
-      this.action = params['action'];
-      this.status = params['status'];
-
-      //set status
-      this.convertStatusStr();
-
-      this.appService.setTitle("contract.list.created");
-
-      //lay id user
-      let userId = this.userService.getAuthCurrentUser().id;
-      this.userService.getUserById(userId).subscribe(
-        data => {
-          //lay id role
-          this.roleService.getRoleById(data?.role_id).subscribe(
-            data => {
-              let listRole: any[];
-              listRole = data.permissions;
-              this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
-              this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
-              this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');
-              this.isQLHD_04 = listRole.some(element => element.code == 'QLHD_04');
-              this.isQLHD_05 = true;
-              this.isQLHD_06 = listRole.some(element => element.code == 'QLHD_06');
-              this.isQLHD_07 = listRole.some(element => element.code == 'QLHD_07');
-              this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
-              this.isQLHD_09 = listRole.some(element => element.code == 'QLHD_09');
-              this.isQLHD_10 = listRole.some(element => element.code == 'QLHD_10');
-              this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
-              this.isQLHD_12 = listRole.some(element => element.code == 'QLHD_12');
-              this.isQLHD_13 = listRole.some(element => element.code == 'QLHD_13');
-
-              //neu co quyen xem danh sach hop dong cua to chuc minh va to chuc con
-              this.filter_is_org_me_and_children = this.isQLHD_03;
-
-              this.getContractList();
-            }, error => {
-              setTimeout(() => this.router.navigate(['/login']));
-              this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-              
-            }
-          );
-
-        }, error => {
-          setTimeout(() => this.router.navigate(['/login']));
-          this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-          
-
-        }
-      )
+                if(sessionStorage.getItem('createdPageNum')) this.page = Number(sessionStorage.getItem('createdPageNum'));
+              }, error => {
+                setTimeout(() => this.router.navigate(['/login']));
+                this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+              }
+            );
+  
+          }, error => {
+            setTimeout(() => this.router.navigate(['/login']));
+            this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+          }
+        )
+      });
     });
   }
 
