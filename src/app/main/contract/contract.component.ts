@@ -140,11 +140,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
       } else {
         this.filter_to_date = "";
       }
+      
       if (typeof params.isOrg != 'undefined' && params.isOrg) {
         this.isOrg = params.isOrg;
-      } else {
-        this.isOrg = "off";
       }
+
       if (typeof params.status != 'undefined' && params.status) {
         this.status = params.status;
       } else {

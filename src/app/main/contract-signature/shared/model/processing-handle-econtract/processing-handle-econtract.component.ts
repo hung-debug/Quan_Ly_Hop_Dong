@@ -268,7 +268,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   openEdit(recipient: any) {
-
     this.contractService.getInforPersonProcess(recipient).subscribe((response) => {
 
       let data: any;
