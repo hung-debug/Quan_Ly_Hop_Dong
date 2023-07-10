@@ -803,7 +803,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             })
           }
         });
-
         this.getCheckSignature(name_accept_signature);
       }
     } else {
@@ -858,9 +857,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             }
 
           }
-        // }
       }
-
 
       if (listSelect) {
         // element.is_disable = false;
@@ -1240,7 +1237,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         }
 
         
-
         if (!d.name && !d.recipient?.name) {
           //@ts-ignore
           document.getElementById('select-dropdown').value = "";
@@ -1255,9 +1251,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         }
       }
     }
-
-    
-    
   }
 
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
@@ -1324,8 +1317,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     let arrSignConfig: any = [];
     let cloneUserSign = [...this.datasForm.contract_user_sign];
 
-    // 
-
     cloneUserSign.forEach(element => {
       if (this.datasForm.is_action_contract_created) {
         if ((element.recipient && ![2, 3].includes(element.recipient.status)) || (!element.recipient && ![2, 3].includes(element.status))) {
@@ -1382,15 +1373,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   changePositionSign(e: any, locationChange: any, property: any) {
     let signElement = document.getElementById(this.objSignInfo.id);
 
-    
-
-    
-
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-
-      
-
 
       if (isObjSign) {
         if (property == 'location') {
@@ -1567,7 +1551,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   isCheckRelease: boolean = false;
   async next(action: string) {
     if (action == 'next_step' && !this.validData()) {
-
       if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
         this.save_draft_infor_form.close_header = false;
         this.save_draft_infor_form.close_modal.close();
@@ -1575,6 +1558,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       return;
     } else {
       let coutError = false;
+      let contract_no = this.datasForm.contract_no;
+      let code = this.datasForm.code;
       if (this.isChangeNumberContract != this.datasForm.contract_no) {
         await this.contractService.checkCodeUnique(this.datasForm.contract_no).toPromise().then(
           dataCode => {
@@ -1602,6 +1587,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           }
       }
 
+      this.datasForm.contract_no = contract_no;
+      this.datasForm.code = code;
       if (coutError) return;
 
       if (action == 'save_draft') {
@@ -1672,6 +1659,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             }
           })
           
+          this.setValueForContractNo(this.data_sample_contract);
           this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
             if(this.validData() == true){
               this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
@@ -1707,14 +1695,20 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             }
           })
         })
-          // this.stepForm = variable.stepSampleContractForm.step4;
-          // this.datasForm.stepLast = this.stepForm
-          // this.nextOrPreviousStep(this.stepForm);
           this.checkNumber(this.datasForm.ceca_push, this.convertToSignConfig().length)
           this.spinner.hide();
       }
     }
   }
+
+  setValueForContractNo(dataSign: any) {
+    dataSign.forEach((item:any) => {
+      if (item.type === 4) {
+        item.value = this.datasForm.contract_no;
+      }
+    });
+  }
+
 
   setClass(dataDrag: any) {
     return 'resize-drag';
@@ -1741,8 +1735,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           element.coordinate_x = element.coordinate_x - this.datasForm.difX;
         }
       })
+
+      this.setValueForContractNo(dataSignId);
       for (let i = 0; i < dataSignId.length; i++) {
-        
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
         await this.contractService.getContractSampleEdit(dataSignId[i], id).toPromise().then((data: any) => {
