@@ -1918,9 +1918,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               if (element.length > 1) {
                 count_number++;
                 break;
-              } else if (!this.datasForm.contract_no && !element.email) {
-                count_text_number++;
-                break
               } else if(!element.name && !element.value && !this.datasForm.contract_no) {
                 count++;
                 break;
