@@ -21,12 +21,12 @@
       </div>
     </div>
 
-    <div class="col-md-3" *ngIf="isQLND_03">
+    <!-- <div class="col-md-3" *ngIf="isQLND_03">
       <div>{{'user.name' | translate}}</div>
       <div class="input-line">
         <input type="text" [(ngModel)]="name" class="input_text"/>
       </div>
-    </div>
+    </div> -->
 
     <div class="col-md-3 btn_search">
       <button *ngIf="isQLND_03" class="btn btn-lg btn-block btn_submit" (click)="searchUser()">{{'btn.search' | translate }}</button>
