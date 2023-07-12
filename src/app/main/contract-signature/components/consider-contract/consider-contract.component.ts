@@ -3432,20 +3432,19 @@ export class ConsiderContractComponent
     dialogRef.afterClosed().subscribe((result) => {
       this.cccdFront = result;
 
-      this.contractService
+      if(this.recipient.name && this.recipient.cardId) {
+        this.nameCompany = this.recipient.name;
+        this.cardId = this.recipient.cardId;
+      } else {
+        this.contractService
         .detectCCCD(this.cccdFront, data.contractId, data.recipientId)
         .subscribe((response) => {
-          console.log('response ', response);
-
           if(response.name) {
             this.nameCompany = response.name;
             this.cardId = response.id;
-          } else {
-            this.nameCompany = this.recipient.name;
-            this.cardId = this.recipient.cardId;
           }
-        
         });
+      }
 
       if (result) this.eKYCSignOpenAfter();
     });

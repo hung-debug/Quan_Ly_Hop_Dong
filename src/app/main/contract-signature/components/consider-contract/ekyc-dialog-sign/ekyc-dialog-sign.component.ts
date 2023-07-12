@@ -122,7 +122,7 @@ export class EkycDialogSignComponent implements OnInit {
           this.spinner.hide();
           if(response.result_code == 200 && (response.action == 'pass' || (response.action == 'manualReview' && this.checkWarning(response.warning)))) {
             if(this.cardId) {
-              if(this.cardId == response.id && this.name.toUpperCase().split(" ").join("") == response.name.toUpperCase().split(" ").join("")) {
+              if(this.cardId == response.id && this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") == response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "")) {
                 this.flagSuccess == true;
                 alert(this.translate.instant('confirm.success'));
                 this.dialogRef.close(this.webcamImage.imageAsDataUrl);
@@ -131,7 +131,7 @@ export class EkycDialogSignComponent implements OnInit {
                 this.webcamImage = this.initWebcamImage;
                 alert(this.translate.instant('card.id.not.match'));
                 // string.replace(/  +/g, ' ');
-              } else if(this.name.toUpperCase().split(" ").join("").normalize() != response.name.toUpperCase().split(" ").join("").normalize()) {
+              } else if(this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") != response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "")) {
                 this.flagSuccess == false;
                 this.webcamImage = this.initWebcamImage;
                 alert(this.translate.instant('name.not.match'));
