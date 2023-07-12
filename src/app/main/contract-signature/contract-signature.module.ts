@@ -36,11 +36,13 @@ import { PkiDialogSignComponent } from './components/consider-contract/pki-dialo
 import { ImageDialogSignComponent } from './components/consider-contract/image-dialog-sign/image-dialog-sign.component';
 import {NgxSelectModule} from "ngx-select-ex";
 import { HsmDialogSignComponent } from './components/consider-contract/hsm-dialog-sign/hsm-dialog-sign.component';
+import { CertDialogSignComponent } from './components/consider-contract/cert-dialog-sign/cert-dialog-sign.component';
 import {AngularSignaturePadModule} from "@almothafar/angular-signature-pad";
 import {ChooseTypeSignComponent} from "./components/consider-contract/choose-type-sign/choose-type-sign.component";
 import {NgxSpinnerModule} from "ngx-spinner";
 import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
-
+import {TreeTableModule} from 'primeng/treetable';
+import {TableModule} from 'primeng/table';
 import {DropdownModule} from 'primeng/dropdown';
 import {CalendarModule} from 'primeng/calendar';
 import {MultiSelectModule} from 'primeng/multiselect';
@@ -108,6 +110,7 @@ export const contractSignatureRoutes1: Routes = [
     ChooseTypeSignComponent,
     ImageDialogSignComponent,
     HsmDialogSignComponent,
+    CertDialogSignComponent,
     FilterListDialogComponent,
     DisplayDigitalSignatureComponent,
     TextSignatureImageComponent,
@@ -143,10 +146,11 @@ export const contractSignatureRoutes1: Routes = [
     DropdownModule,
     CalendarModule,
     MultiSelectModule,
-
+    TreeTableModule,
+    TableModule,
     WebcamModule,
     PdfViewerModule,
-    
+
   ],
   providers: [
     NoAuthGuard,

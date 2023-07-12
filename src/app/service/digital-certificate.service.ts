@@ -31,6 +31,7 @@ export class DigitalCertificateService {
   updateCert: any = `${environment.apiUrl}/api/v1/sign/update-user-from-cert`;
   deleteUser: any = `${environment.apiUrl}/api/v1/sign/remove-user-from-cert`;
   getCertByIdUrl: any = `${environment.apiUrl}/api/v1/sign/find-cert-by-id`;
+  getDataSignCert: any = `${environment.apiUrl}/api/v1/sign/find-cert-user`;
 
   token: any;
   customer_id: any;
@@ -141,6 +142,14 @@ export class DigitalCertificateService {
       .append('Authorization', 'Bearer ' + this.token);
     let listCertificate = this.getAllCert + '?file_name=' + ( fileName ? fileName.trim() : '') + '&status=' + status + '&size=' + size + '&number=' + number;
     return this.http.get<any>(listCertificate, { headers });
+  }
+
+  public dataSignCert() {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.getDataSignCert, { headers });
   }
 
 }

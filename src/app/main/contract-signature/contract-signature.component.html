@@ -9,7 +9,7 @@
             </div>
         </div>
 
-        <!--Header danh sách ký 1--> 
+        <!--Header danh sách ký 1-->
         <div *ngIf="filter_status == 1">
             <div style="display: flex;">
                 <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
@@ -117,6 +117,7 @@
                                         <span *ngIf="item.sign_type.length > 0 && item.sign_type[0].id == 3" class="status_blue">{{'sign_by_pki' | translate}}</span>
                                         <span *ngIf="item.sign_type.length > 0 && item.sign_type[0].id == 4" class="status_blue">{{'sign_by_hsm' | translate}}</span>
                                         <span *ngIf="item.sign_type.length > 0 && item.sign_type[0].id == 5" class="status_blue">{{'sign_by_eKYC' | translate}}</span>
+                                        <span *ngIf="item.sign_type.length > 0 && item.sign_type[0].id == 6" class="status_blue">{{'sign_by_cert' | translate}}</span>
                                         <span *ngIf="item.sign_type.length == 0 && item.role == 1" class="status_blue">{{'contract.lead' | translate}}</span>
                                     </div>
                                 </div>
@@ -460,8 +461,8 @@
                         <div class="row">
                             <div class="col-md-11">
                                 <div class="item_contract_name">
-                                    <a  class="item_contract_name" style="text-decoration: none;" 
-                                        (click)="openDetail(item.contractId)" 
+                                    <a  class="item_contract_name" style="text-decoration: none;"
+                                        (click)="openDetail(item.contractId)"
                                         [routerLink]="['/main/form-contract/detail', item.contractId]"
                                         [queryParams]="{
                                         page: this.p,
@@ -473,7 +474,7 @@
                                         status: this.status
                                         }">
                                             {{item.participant.contract.name}}
-                                    </a>                                    
+                                    </a>
                                 </div>
 
                                 <!--Cac ben ky-->
@@ -597,7 +598,7 @@
             </div>
         </div>
     </div>
-    
+
     <div id="export-html-hsm"  style="min-height: 80px;display: flex; font-size: 9px">
       <img style="width: 30px"  src="assets/img/tick_signature.svg" alt="duongdt.vn">
       <div style="color: #4FC123; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
@@ -620,4 +621,3 @@
         </div>
     </div>
 </div>
-  
