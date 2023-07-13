@@ -311,11 +311,33 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     });
 
     this.contractService.getDetailContract(this.idContract).subscribe(
-      (rs) => {
+      async (rs) => {
 
         this.isDataContract = rs[0];
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
+
+         //Hợp đồng huỷ status = 32 => link 404 đối với những người xử lý trong hợp đồng đó trừ người tạo
+         if(this.isDataContract.status == 32) {
+          const callApiBpmn = await this.contractService
+          .viewFlowContract(this.idContract)
+          .toPromise();
+
+          if(!this.mobile) {
+            if (callApiBpmn.createdBy.email != this.currentUser.email) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'not.process.contract',
+                '',
+                3000
+              );
+              return;
+            }
+          } else {
+            alert(this.translate.instant('not.process.contract'));
+            return;
+          }
+        }
+
         if (rs[0] && rs[1] && rs[1].length && rs[2] && rs[2].length) {
           this.valid = true;
         }
