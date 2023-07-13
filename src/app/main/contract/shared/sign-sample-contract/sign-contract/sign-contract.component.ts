@@ -91,10 +91,14 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   }
 
   getSpecifiedHandle() {
-    if ((!this.sign.is_have_text && this.sign.recipient_id) || (this.sign.value !== null && this.sign.value === undefined) || this.datas.contract_no)
-      // sign.sign_unit == 'so_tai_lieu' && !sign.recipient_id
+    if(this.contractNo) return false;
+
+    if ((!this.sign.is_have_text && this.sign.recipient_id) || (this.sign.value !== null && this.sign.value === undefined) || this.datas.contract_no || (this.sign.sign_unit == 'so_tai_lieu' && this.sign.value)) {
       return true;
-    else return false;
+    } else {
+      return false;
+    }
+
   }
 
   getNotSpecifiedYetHandle() {
