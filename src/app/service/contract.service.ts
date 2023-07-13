@@ -2124,6 +2124,7 @@ export class ContractService {
         type: 1,
         ordering: 1,
         status: 1,
+        hideFlow: false,
         recipients: [
           {
             login_by: 'email',
@@ -2140,26 +2141,6 @@ export class ContractService {
           },
         ],
       },
-      // {
-      //   name: '',
-      //   type: 2,
-      //   ordering: 2,
-      //   status: 1,
-      //   recipients: [
-      //     {
-      //       login_by: 'email',
-      //       name: '',
-      //       email: '',
-      //       phone: '',
-      //       card_id: '',
-      //       role: 3,
-      //       ordering: 1,
-      //       status: 0,
-      //       is_otp: 0,
-      //       sign_type: [],
-      //     },
-      //   ],
-      // },
     ];
   }
 
@@ -2170,6 +2151,7 @@ export class ContractService {
         type: 1,
         ordering: 1,
         status: 1,
+        hideFlow: false,
         recipients: [
           {
             login_by: 'email',
@@ -2191,6 +2173,7 @@ export class ContractService {
         type: 2,
         ordering: 1,
         status: 1,
+        hideFlow: false,
         recipients: [
           {
             login_by: 'email',

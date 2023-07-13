@@ -123,9 +123,6 @@ export class DetermineSignerComponent implements OnInit {
 
   clonex: any;
   ngOnInit(): void {
-
-    
-
     if (environment.flag == 'NB') {
       this.site = 'NB';
     } else if (environment.flag == 'KD') {
@@ -144,19 +141,10 @@ export class DetermineSignerComponent implements OnInit {
 
     this.user = this.userService.getInforUser();
 
-
-    // if (!this.datas.flagDigitalSign) {
-    //   this.isListSignNotPerson[0] = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
-    // } else {
-      
-    // }
-
     this.isListSignNotPerson[0] = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
 
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
       this.datas.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
-    }else {
-      
     }
 
     // data Tổ chức của tôi
@@ -190,8 +178,6 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   getSignTypeList() {
-    // 
-
     return this.signTypeList.filter((p) => ![1, 5].includes(p.id))
   }
 
@@ -340,14 +326,7 @@ export class DetermineSignerComponent implements OnInit {
 
     this.spinner.show();
 
-
-    // this.datas.is_determine_clone[0].recipients[0]["locale"] = this.checkDropDownLanguage;
-
     this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
-      
-      
-
-
       this.getDataApiDetermine(res, is_save)
     }, (error: HttpErrorResponse) => {
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {

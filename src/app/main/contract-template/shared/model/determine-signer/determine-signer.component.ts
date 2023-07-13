@@ -95,7 +95,6 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     if (environment.flag == 'NB') {
       this.site = 'NB';
     } else if (environment.flag == 'KD') {
@@ -108,8 +107,6 @@ export class DetermineSignerComponent implements OnInit {
 
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
       this.datas.is_determine_clone = [...this.contractTemplateService.getDataDetermineInitialization()];
-    } else {
-      
     }
 
     // data Tổ chức của tôi

@@ -12,10 +12,12 @@
           {{ "organization.me" | translate | uppercase }}&nbsp;<span style="color: red">*</span>
         </div>
         <input class="input1" type="text" [(ngModel)]="data_organization.name" />
+
+        <!--Ẩn luồng xử lý-->
         <div style="width: 120px; margin-left: 5px">
           {{'hide.processing.thread' | translate}}
         </div>
-        <input type ="checkbox">
+        <input type ="checkbox" [(ngModel)]="data_organization.hideFlow">
       </div>
 
       <div class="contract__content--participants">
@@ -35,7 +37,6 @@
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
                   <div class="label_detail text-color">
-
                     <div>
                       <input (change)="changeTypeSign(d, index)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [value]="email" [(ngModel)]="d.login_by" />
                     </div>&nbsp;
@@ -719,7 +720,7 @@
           <div style="width: 120px; margin-left: 5px">
             {{'hide.processing.thread' | translate}}
           </div>
-          <input type ="checkbox">
+          <input type ="checkbox" [(ngModel)]="item.hideFlow">
       </div>
 
       <div *ngIf="this.dataParnterOrganization().length >= 1" style="display: flex; justify-content: flex-end">

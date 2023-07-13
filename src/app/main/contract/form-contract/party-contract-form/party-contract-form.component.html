@@ -15,7 +15,7 @@
         <div style="width: 120px; margin-left: 5px">
           {{'hide.processing.thread' | translate}}
         </div>
-        <input type ="checkbox">
+        <input type ="checkbox" [(ngModel)]="data_organization.hideFlow">
       </div>
 
       <div class="contract__content--participants">
@@ -722,7 +722,7 @@
           <div style="width: 120px; margin-left: 5px">
             {{'hide.processing.thread' | translate}}
           </div>
-          <input type ="checkbox">
+          <input type ="checkbox" [(ngModel)]="item.hideFlow">
       </div>
       <div *ngIf="this.dataParnterOrganization().length >= 1" style="display: flex; justify-content: flex-end">
         <u class="label text-color" (click)="deletePartner(id, item)"

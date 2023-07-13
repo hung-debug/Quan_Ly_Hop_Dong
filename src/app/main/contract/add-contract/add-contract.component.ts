@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmInforContractComponent } from '../shared/model/confirm-infor-contract/confirm-infor-contract.component';
 import { ContractHeaderComponent } from '../shared/model/contract-header/contract-header.component';
@@ -9,7 +9,6 @@ import { variable } from '../../../config/variable';
 import { AppService } from 'src/app/service/app.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContractService } from '../../../service/contract.service';
-import { UploadService } from '../../../service/upload.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastService } from '../../../service/toast.service';
 import { UserService } from 'src/app/service/user.service';
@@ -191,11 +190,7 @@ export class AddContractComponent implements OnInit {
                   } else if ((this.action == 'add' || this.action == 'add-batch') && this.isQLHD_15) {
                     this.type = 3;
                     this.stepBatch = variable.stepSampleContractBatch.step1;
-
-                    
                   }
-
-                  
                 },
                 (error) => {
                   setTimeout(() => this.router.navigate(['/login']));
@@ -258,8 +253,6 @@ export class AddContractComponent implements OnInit {
                   is_data_object_signature: rs[2],
                 };
 
-                
-
                 this.getDataContractCreated(data_api);
               },
               () => {
@@ -279,8 +272,6 @@ export class AddContractComponent implements OnInit {
               this.step = variable.stepSampleContract.step1;
             } else if (this.type == 2) {
               this.stepForm = variable.stepSampleContractForm.step1;
-
-              
             } else if (this.type == 3) {
               this.stepBatch = variable.stepSampleContractBatch.step1;
             }
@@ -298,14 +289,6 @@ export class AddContractComponent implements OnInit {
       );
     });
   }
-  // logOutSession() {
-  //   setTimeout(() => this.router.navigate(['/login']));
-  //   this.toastService.showErrorHTMLWithTimeout(
-  //     '1. Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
-  //     '',
-  //     3000
-  //   );
-  // }
 
   getDataContractCreated(data: any) {
     let fileNameAttach = data.i_data_file_contract.filter(
@@ -371,9 +354,6 @@ export class AddContractComponent implements OnInit {
   }
 
   changeType(e: any) {
-    
-    
-    
     if (this.type == 1) {
       this.step = variable.stepSampleContract.step1;
     } else if (this.type == 2) {
@@ -405,7 +385,6 @@ export class AddContractComponent implements OnInit {
   }
 
   receiveMessage(event: any) {
-    
     this.shareData = event;
   }
 
@@ -455,12 +434,10 @@ export class AddContractComponent implements OnInit {
 
   getStep(e: any) {
     if (this.type == 1) {
-      
       this.step = e;
     } else if (this.type == 2) {
       this.stepForm = e;
     } else if (this.type == 3) {
-      
       this.stepBatch = e;
     }
     this.is_disable =

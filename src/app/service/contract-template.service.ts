@@ -521,6 +521,7 @@ export class ContractTemplateService {
         type: 1,
         ordering: 1,
         status: 1,
+        hideFlow: false,
         recipients: [
           {
             login_by: 'email',
@@ -568,6 +569,7 @@ export class ContractTemplateService {
         type: 1,
         ordering: 1,
         status: 1,
+        hideFlow: false,
         recipients: [
           {
             login_by: 'email',

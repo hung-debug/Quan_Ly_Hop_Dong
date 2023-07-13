@@ -26,7 +26,7 @@ export class UserComponent implements OnInit {
 
   organization_id_user_login:any;
   organization_id:any = "";
-  email:any = "";
+  nameOrEmail:any = "";
   list: any[];
   cols: any[];
   orgList: any[] = [];
@@ -178,7 +178,7 @@ export class UserComponent implements OnInit {
     this.first = 0;
 
     this.spinner.show();
-    this.userService.getUserList(this.organization_id? this.organization_id : '', this.email, this.name).subscribe(response => {
+    this.userService.getUserList(this.organization_id? this.organization_id : '', this.nameOrEmail, this.name).subscribe(response => {
       this.spinner.hide();
       this.list = response.entities;
       console.log("ressponse",response);
