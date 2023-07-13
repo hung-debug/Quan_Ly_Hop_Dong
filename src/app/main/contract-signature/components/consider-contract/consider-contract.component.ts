@@ -3432,9 +3432,9 @@ export class ConsiderContractComponent
     dialogRef.afterClosed().subscribe((result) => {
       this.cccdFront = result;
 
-      if(this.recipient.name && this.recipient.cardId) {
+      if(this.recipient.name && this.recipient.card_id) {
         this.nameCompany = this.recipient.name;
-        this.cardId = this.recipient.cardId;
+        this.cardId = this.recipient.card_id;
       } else {
         this.contractService
         .detectCCCD(this.cccdFront, data.contractId, data.recipientId)
