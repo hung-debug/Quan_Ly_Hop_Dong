@@ -57,7 +57,7 @@ export class SidebarService {
   isQLLHD_03: boolean = true; //xoa loai hop dong
   isQLLHD_04: boolean = true; //tim kiem loai hop dong
   isQLLHD_05: boolean = true; //xem thong tin chi tiet loai hop dong
-  
+
   isQLDC_01: boolean = true; //them moi chung thu so
   isQLDC_02: boolean = true; //sua thong tin chung thu so
   isQLDC_03: boolean = true; //tim kiem thong tin
@@ -118,7 +118,7 @@ export class SidebarService {
     ];
 
     const currentUserC = JSON.parse(localStorage.getItem('currentUser') || '');
-    
+
     this.userService.getUserById(currentUserC.customer.info.id).subscribe(
       (data) => {
         this.roleService.getRoleById(data?.role_id).subscribe(
@@ -287,7 +287,7 @@ export class SidebarService {
 
             this.isConfigSms = listRole.some((element) => element.code == 'CAUHINH_SMS');
 
-            this.isConfigSoonExpireDay = listRole.some((element) => element.code == 'CAUHINH_NGAYSAPHETHAN')  
+            this.isConfigSoonExpireDay = listRole.some((element) => element.code == 'CAUHINH_NGAYSAPHETHAN')
 
             this.buildMenu(currentUserC);
           },
@@ -548,7 +548,7 @@ export class SidebarService {
       )
     }
 
-   
+
     if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiXuLy) {
       this.menus.push({
         title: 'report',
@@ -600,7 +600,7 @@ export class SidebarService {
         id: 9,
       })
     }
-  
+
 
     //xu ly highlight
     this.menus.forEach((element: any) => {
@@ -632,8 +632,8 @@ export class SidebarService {
   getSubMenuList(menuParent: any) {
     this.menus.forEach((element: any) => {
       if (element === menuParent) {
-        
-        
+
+
         return element.submenus;
       }
     });

@@ -696,5 +696,7 @@
   "infor.file.certificate": "Information file digital certificate",
   "subject": "Subject",
   "unit":"Unit",
-  "update.infor.certificate": "Update information digital certificate"
+  "update.infor.certificate": "Update information digital certificate",
+  "sign_by_cert":"Sign by certificate",
+  "choice": "Choice"
   }

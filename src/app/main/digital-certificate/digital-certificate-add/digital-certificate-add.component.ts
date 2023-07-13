@@ -161,7 +161,7 @@ export class DigitalCertificateAddComponent implements OnInit {
   passwordRequired() {
     this.errorPassword = "";
     if (!this.addForm.controls.password.valid) {
-      this.errorPassword = "error.password.required";
+      this.errorPassword = "password.required";
       return false;
     }
     return true;
