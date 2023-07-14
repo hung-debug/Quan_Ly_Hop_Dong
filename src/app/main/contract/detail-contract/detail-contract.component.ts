@@ -1427,17 +1427,18 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       }
 
       if (recipients.length == 2) {
-        for (const participant of this.datas.is_data_contract.participants) {
-          for (const recipient of participant.recipients) {
-            if (
-              this.currentUser.email == recipient.email &&
-              recipient.role != 1
-            ) {
-              this.recipient = recipient;
-              return;
-            }
-          }
-        }
+        // for (const participant of this.datas.is_data_contract.participants) {
+        //   for (const recipient of participant.recipients) {
+        //     if (
+        //       this.currentUser.email == recipient.email &&
+        //       recipient.role != 1
+        //     ) {
+        //       this.recipient = recipient;
+        //       return;
+        //     }
+        //   }
+        // }
+        this.recipient = recipients[recipients.length - 1];
       } else if (recipients.length == 1) {
         for (const participant of this.datas.is_data_contract.participants) {
           for (const recipient of participant.recipients) {
