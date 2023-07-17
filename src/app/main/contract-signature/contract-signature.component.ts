@@ -131,9 +131,8 @@ export class ContractSignatureComponent implements OnInit {
 
       if (typeof params.filter_name != 'undefined' && params.filter_name) {
         this.filter_name = params.filter_name;
-      } else {
-        this.filter_name = '';
       }
+
       if (typeof params.filter_type != 'undefined' && params.filter_type) {
         this.filter_type = params.filter_type;
       } else {
@@ -920,8 +919,6 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   private convertStatusStr() {
-    this.filter_name = '';
-
     if (this.myInput) {
       this.myInput.nativeElement.value = null;
     }
@@ -2051,7 +2048,6 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   openDetail(id: number) {
-    
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this.router.navigate(['/main/form-contract/detail/' + id], {
         queryParams: {
@@ -2062,6 +2058,7 @@ export class ContractSignatureComponent implements OnInit {
           filter_to_date: this.filter_to_date,
           organization_id: this.organization_id,
           status: this.status,
+          filter_name: this.filter_name
         },
         skipLocationChange: false,
       });

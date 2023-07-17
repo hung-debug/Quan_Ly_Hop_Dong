@@ -1041,17 +1041,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   endContract() {
-    // if(this.action = 'viewInFolder'){
-    //   this.router.navigate(['/main/contract/view/' + this.idContract]);
-    // } else 
     this.actionBack();
   }
 
   actionBack() {
-    
-
-
-    // 
     if (this.pageBefore && this.isOrg) {
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         this.router.navigate(['/main/contract/create/' + this.statusLink], {
@@ -1064,6 +1057,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
             isOrg: this.isOrg,
             organization_id: this.organization_id,
             status: this.statusLink,
+            filter_name:this.filter_name
           },
           skipLocationChange: true,
         });
@@ -1081,6 +1075,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
             isOrg: this.isOrg,
             organization_id: this.organization_id,
             status: this.statusLink,
+            filter_name:this.filter_name
           },
           skipLocationChange: true,
         });
@@ -1094,9 +1089,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         if (this.isOrg) {
           this._location.back();
         } else {
-          // 
           this.router.navigate(['/login']);
-
           this.contractService.deleteToken().subscribe();
         }
       }

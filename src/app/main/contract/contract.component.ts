@@ -116,9 +116,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.route.queryParams.subscribe(async params => {
       if (typeof params.filter_name != 'undefined' && params.filter_name) {
         this.filter_name = params.filter_name;
-      } else {
-        this.filter_name = "";
       }
+
       if (typeof params.filter_type != 'undefined' && params.filter_type) {
         this.filter_type = params.filter_type;
       } else {
@@ -636,7 +635,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
           'filter_to_date': this.filter_to_date,
           'isOrg': this.isOrg,
           'organization_id': this.organization_id,
-          'status': this.status
+          'status': this.status,
+          filter_name: this.filter_name
         },
         skipLocationChange: false
       });

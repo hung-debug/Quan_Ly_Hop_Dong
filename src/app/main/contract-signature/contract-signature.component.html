@@ -4,7 +4,7 @@
         <div class="col-md-12" style="padding-top: 10px" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
             <div class="input-line search">
                 <img src="../../assets/img/icon_search.svg" class="input-img" />
-                <input #myInputRef type="text" id="search"  class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                <input #myInputRef [value]="filter_name" type="text" id="search"  class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                 <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
             </div>
         </div>
