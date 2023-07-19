@@ -698,5 +698,6 @@
   "unit":"Unit",
   "update.infor.certificate": "Update information digital certificate",
   "sign_by_cert":"Sign by certificate",
-  "choice": "Choice"
+  "choice": "Choice",
+  "sign.multi.success": "Sign multi successfully"
   }

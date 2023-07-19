@@ -33,7 +33,7 @@ export class DialogSignManyComponentComponent implements OnInit {
   }
 
   onChangeForm(event: any) {
-    this.id = event.target.value;
+    this.id = event.value;
   }
 
   async onSubmit() {
@@ -41,6 +41,8 @@ export class DialogSignManyComponentComponent implements OnInit {
       mark: this.id,
       agree: 1,
     }
+    console.log("data",data);
+
     this.dialogRef.close(data);
   }
 

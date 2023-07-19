@@ -108,6 +108,15 @@ export class DigitalCertificateService {
     return this.http.get<any>(listEmailUrl, { headers });
   }
 
+  getListOrg(email: string, orgId: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let listEmailUrl = this.getListEmail + '?email=' + email + "&orgId=" + orgId;
+    return this.http.get<any>(listEmailUrl, { headers });
+  }
+
   public getAllCertificate(FileName: string, status: any, keystoreDateStart: any, keystoreDateEnd: any, number: any, size: any,): Observable<any> {
     this.getCurrentUser();
     if (keystoreDateStart != "") {
