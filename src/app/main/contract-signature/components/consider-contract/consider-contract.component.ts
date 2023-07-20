@@ -1487,7 +1487,6 @@ export class ConsiderContractComponent
                           haveSignHsm
                         ) {
                           if (this.markImage) {
-                            console.log("A", this.markImage);
                             this.openMarkSign('hsm');
 
                           } else {
@@ -3770,8 +3769,12 @@ export class ConsiderContractComponent
 
     const dialogRef = this.dialog.open(CertDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(async (result: any) => {
-      this.cert_id = result;
-      await this.signContractSubmit();
+
+      if(result){
+        this.cert_id = result;
+        await this.signContractSubmit();
+      }
+
     });
   }
 

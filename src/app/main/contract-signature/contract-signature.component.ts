@@ -27,6 +27,7 @@ import { environment } from 'src/environments/environment';
 import { ImageDialogSignComponent } from './components/consider-contract/image-dialog-sign/image-dialog-sign.component';
 import { UserService } from 'src/app/service/user.service';
 import { DowloadPluginService } from 'src/app/service/dowload-plugin.service';
+import { CertDialogSignComponent } from './components/consider-contract/cert-dialog-sign/cert-dialog-sign.component';
 // import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
@@ -53,7 +54,7 @@ export class ContractSignatureComponent implements OnInit {
   closeResult: string = '';
   public contracts: any[] = [];
   public contractsSignMany: any[] = [];
-  pageOptions: any[] = [5,10, 20, 50, 100];
+  pageOptions: any[] = [5, 10, 20, 50, 100];
 
   p: number = 1;
   page: number = 5;
@@ -88,15 +89,26 @@ export class ContractSignatureComponent implements OnInit {
   signCertDigital: any;
   nameCompany: any;
   dataHsm: any;
+  dataCert: any;
   isDateTime: any = new Date();
   srcMark: any;
   checkedAll: boolean = false;
-
+  cert_id: any;
   organization_id: any = '';
   public contractDownloadList: any[] = [];
   public contractViewList: any[] = [];
   currentUser: any;
   keyword: string = '';
+  name: string | null = null;
+  mst: string | null = null;
+  cccd: string | null = null;
+  cmnd: string | null = null;
+  cardId: any;
+  company: any;
+  widthSign: number;
+  markImage: boolean = false;
+  signImage: string | null = null;
+  position: string | null = null;
 
   constructor(
     private appService: AppService,
@@ -123,7 +135,7 @@ export class ContractSignatureComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
 
-      if(typeof params.type_display != 'undefined' && params.type_display) {
+      if (typeof params.type_display != 'undefined' && params.type_display) {
         this.typeDisplay = params.type_display;
       } else {
         this.typeDisplay = 'signOne';
@@ -185,7 +197,7 @@ export class ContractSignatureComponent implements OnInit {
       }
     });
 
-    if(sessionStorage.getItem('receivePageNum')){
+    if (sessionStorage.getItem('receivePageNum')) {
       this.page = Number(sessionStorage.getItem('receivePageNum'));
     }
 
@@ -285,7 +297,7 @@ export class ContractSignatureComponent implements OnInit {
       });
     });
   }
-  viewMany() {   
+  viewMany() {
     if (this.myInput) {
       this.myInput.nativeElement.value = null;
     }
@@ -294,7 +306,7 @@ export class ContractSignatureComponent implements OnInit {
     this.setNullFilter();
 
     this.contractService.getViewContractMyProcessList().subscribe((data) => {
-      
+
       this.checkedAll = false;
       this.contractViewList = data;
       if (this.pageTotal == 0) {
@@ -304,7 +316,7 @@ export class ContractSignatureComponent implements OnInit {
       } else {
         this.setPage();
       }
-      
+
 
       this.contractViewList.forEach((key: any, v: any) => {
         this.contractViewList[v].contractId =
@@ -326,7 +338,7 @@ export class ContractSignatureComponent implements OnInit {
         this.contractViewList[v].contractReleaseState =
           key.participant.contract.release_state;
       });
-      
+
 
       this.spinner.hide();
     },
@@ -349,13 +361,13 @@ export class ContractSignatureComponent implements OnInit {
       this.p, 20, 30).subscribe((data) => {
         this.checkedAll = false;
         this.dataChecked = [];
-        
+
 
         this.contractDownloadList = data.entities;
         this.pageTotal = data.total_elements;
         this.totalPage = data.total_pages;
-        // 
-        
+        //
+
         if (this.pageTotal == 0) {
           this.p = 0;
           this.pageStart = 0;
@@ -383,16 +395,16 @@ export class ContractSignatureComponent implements OnInit {
           this.contractDownloadList[v].contractReleaseState =
             key.participant.contract.release_state;
         });
-        const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
-        for(let i = 0; i< this.contractDownloadList.length; i++){
+        const checkedDownloadFiles = this.dataChecked.map(el => el.selectedId)
+        for (let i = 0; i < this.contractDownloadList.length; i++) {
           let checkIf = checkedDownloadFiles.some(el => el === this.contractDownloadList[i].id)
-          if(checkIf){
+          if (checkIf) {
             this.contractDownloadList[i].checked = true;
           } else {
             this.contractDownloadList[i].checked = false;
           }
         }
-  
+
         this.spinner.hide();
       },
         (error) => {
@@ -408,7 +420,7 @@ export class ContractSignatureComponent implements OnInit {
 
   cancelSignMany() {
     this.typeDisplay = 'signOne';
-   
+
     this.setNullFilter();
 
     if (this.myInput) {
@@ -428,48 +440,48 @@ export class ContractSignatureComponent implements OnInit {
 
   getListAfterCancel() {
     this.contractService
-    .getContractMyProcessList(
-      '',
-      this.filter_type,
-      this.filter_contract_no,
-      this.filter_from_date,
-      this.filter_to_date,
-      this.filter_status,
-      this.p,
-      this.page,
-      this.contractStatus
-    )
-    .subscribe((data) => {
-      this.contracts = data.entities;
-      this.pageTotal = data.total_elements;
-      if (this.pageTotal == 0) {
-        this.p = 0;
-        this.pageStart = 0;
-        this.pageEnd = 0;
-      } else {
-        this.setPage();
-      }
-      this.contracts.forEach((key: any, v: any) => {
-        this.contracts[v].contractId = key.participant.contract.id;
-        this.contracts[v].contractName = key.participant.contract.name;
-        this.contracts[v].contractNumber = key.participant.contract.code;
-        this.contracts[v].contractSignTime =
-          key.participant.contract.sign_time;
-        this.contracts[v].contractCreateTime =
-          key.participant.contract.created_time;
-        this.contracts[v].contractStatus =
-          key.participant.contract.status;
-        this.contracts[v].contractCecaPush =
-          key.participant.contract.ceca_push;
-        this.contracts[v].contractCecaStatus =
-          key.participant.contract.ceca_status;
-        this.contracts[v].contractReleaseState =
-          key.participant.contract.release_state;
+      .getContractMyProcessList(
+        '',
+        this.filter_type,
+        this.filter_contract_no,
+        this.filter_from_date,
+        this.filter_to_date,
+        this.filter_status,
+        this.p,
+        this.page,
+        this.contractStatus
+      )
+      .subscribe((data) => {
+        this.contracts = data.entities;
+        this.pageTotal = data.total_elements;
+        if (this.pageTotal == 0) {
+          this.p = 0;
+          this.pageStart = 0;
+          this.pageEnd = 0;
+        } else {
+          this.setPage();
+        }
+        this.contracts.forEach((key: any, v: any) => {
+          this.contracts[v].contractId = key.participant.contract.id;
+          this.contracts[v].contractName = key.participant.contract.name;
+          this.contracts[v].contractNumber = key.participant.contract.code;
+          this.contracts[v].contractSignTime =
+            key.participant.contract.sign_time;
+          this.contracts[v].contractCreateTime =
+            key.participant.contract.created_time;
+          this.contracts[v].contractStatus =
+            key.participant.contract.status;
+          this.contracts[v].contractCecaPush =
+            key.participant.contract.ceca_push;
+          this.contracts[v].contractCecaStatus =
+            key.participant.contract.ceca_status;
+          this.contracts[v].contractReleaseState =
+            key.participant.contract.release_state;
+        });
+      }, error => {
+        setTimeout(() => this.router.navigate(['/login']));
+        this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
       });
-    }, error => {
-      setTimeout(() => this.router.navigate(['/login']));
-      this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-    });
   }
 
   cancelDownloadMany() {
@@ -507,8 +519,8 @@ export class ContractSignatureComponent implements OnInit {
       this.filter_status = 1;
     }
     this.contractServiceV1.sidebarContractEvent.subscribe((event: any) => {
-      if(event='contract-signature')
-      this.p = 1;
+      if (event = 'contract-signature')
+        this.p = 1;
     });
 
     //get list contract share
@@ -608,70 +620,70 @@ export class ContractSignatureComponent implements OnInit {
             }
           );
       } else {
-        if(this.typeDisplay == 'signMany') {
-          this.contractService.getContractMyProcessListSignMany(this.keyword,this.filter_type,
+        if (this.typeDisplay == 'signMany') {
+          this.contractService.getContractMyProcessListSignMany(this.keyword, this.filter_type,
             this.filter_contract_no,
             this.filter_from_date,
             this.filter_to_date).subscribe((data) => {
-            this.contractsSignMany = data;
-            if (this.pageTotal == 0) {
-              this.p = 0;
-              this.pageStart = 0;
-              this.pageEnd = 0;
-            } else {
-              this.setPage();
-            }
-            this.contractsSignMany.forEach((key: any, v: any) => {
-              this.contractsSignMany[v].contractId = key.participant.contract.id;
-              this.contractsSignMany[v].contractName = key.participant.contract.name;
-              this.contractsSignMany[v].contractNumber = key.participant.contract.code;
-              this.contractsSignMany[v].contractSignTime = key.participant.contract.sign_time;
-              this.contractsSignMany[v].contractCreateTime = key.participant.contract.created_time;
-              this.contractsSignMany[v].contractStatus = key.participant.contract.status;
-              this.contractsSignMany[v].contractCecaPush = key.participant.contract.ceca_push;
-              this.contractsSignMany[v].contractCecaStatus = key.participant.contract.ceca_status;
-              this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
-              this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
-              this.contractsSignMany[v].checked = false;
-            });
+              this.contractsSignMany = data;
+              if (this.pageTotal == 0) {
+                this.p = 0;
+                this.pageStart = 0;
+                this.pageEnd = 0;
+              } else {
+                this.setPage();
+              }
+              this.contractsSignMany.forEach((key: any, v: any) => {
+                this.contractsSignMany[v].contractId = key.participant.contract.id;
+                this.contractsSignMany[v].contractName = key.participant.contract.name;
+                this.contractsSignMany[v].contractNumber = key.participant.contract.code;
+                this.contractsSignMany[v].contractSignTime = key.participant.contract.sign_time;
+                this.contractsSignMany[v].contractCreateTime = key.participant.contract.created_time;
+                this.contractsSignMany[v].contractStatus = key.participant.contract.status;
+                this.contractsSignMany[v].contractCecaPush = key.participant.contract.ceca_push;
+                this.contractsSignMany[v].contractCecaStatus = key.participant.contract.ceca_status;
+                this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
+                this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
+                this.contractsSignMany[v].checked = false;
+              });
 
-            this.spinner.hide();
-          }, error => {
-            setTimeout(() => this.router.navigate(['/login']));
-            this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-          });
-        } else if(this.typeDisplay == 'viewMany') {
+              this.spinner.hide();
+            }, error => {
+              setTimeout(() => this.router.navigate(['/login']));
+              this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+            });
+        } else if (this.typeDisplay == 'viewMany') {
           this.contractService.getViewContractMyProcessList(this.keyword, this.filter_type,
             this.filter_contract_no,
             this.filter_from_date,
             this.filter_to_date).subscribe((data) => {
-            this.contractViewList = data;
-            if (this.pageTotal == 0) {
-              this.p = 0;
-              this.pageStart = 0;
-              this.pageEnd = 0;
-            } else {
-              this.setPage();
-            }
-            this.contractsSignMany.forEach((key: any, v: any) => {
-              this.contractsSignMany[v].contractId = key.participant.contract.id;
-              this.contractsSignMany[v].contractName = key.participant.contract.name;
-              this.contractsSignMany[v].contractNumber = key.participant.contract.code;
-              this.contractsSignMany[v].contractSignTime = key.participant.contract.sign_time;
-              this.contractsSignMany[v].contractCreateTime = key.participant.contract.created_time;
-              this.contractsSignMany[v].contractStatus = key.participant.contract.status;
-              this.contractsSignMany[v].contractCecaPush = key.participant.contract.ceca_push;
-              this.contractsSignMany[v].contractCecaStatus = key.participant.contract.ceca_status;
-              this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
-              this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
-              this.contractsSignMany[v].checked = false;
-            });
+              this.contractViewList = data;
+              if (this.pageTotal == 0) {
+                this.p = 0;
+                this.pageStart = 0;
+                this.pageEnd = 0;
+              } else {
+                this.setPage();
+              }
+              this.contractsSignMany.forEach((key: any, v: any) => {
+                this.contractsSignMany[v].contractId = key.participant.contract.id;
+                this.contractsSignMany[v].contractName = key.participant.contract.name;
+                this.contractsSignMany[v].contractNumber = key.participant.contract.code;
+                this.contractsSignMany[v].contractSignTime = key.participant.contract.sign_time;
+                this.contractsSignMany[v].contractCreateTime = key.participant.contract.created_time;
+                this.contractsSignMany[v].contractStatus = key.participant.contract.status;
+                this.contractsSignMany[v].contractCecaPush = key.participant.contract.ceca_push;
+                this.contractsSignMany[v].contractCecaStatus = key.participant.contract.ceca_status;
+                this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
+                this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
+                this.contractsSignMany[v].checked = false;
+              });
 
-            this.spinner.hide();
-          }, error => {
-            setTimeout(() => this.router.navigate(['/login']));
-            this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-          });
+              this.spinner.hide();
+            }, error => {
+              setTimeout(() => this.router.navigate(['/login']));
+              this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+            });
         }
       }
     } else {
@@ -722,9 +734,9 @@ export class ContractSignatureComponent implements OnInit {
   //auto search
   autoSearch(event: any) {
     setTimeout(() => {
-      if(this.typeDisplay == 'signOne') {
+      if (this.typeDisplay == 'signOne') {
         this.filter_name = event.target.value;
-      } else if(this.typeDisplay == 'signMany' || this.typeDisplay == 'downloadMany') {
+      } else if (this.typeDisplay == 'signMany' || this.typeDisplay == 'downloadMany') {
         this.keyword = event.target.value;
       }
 
@@ -762,7 +774,7 @@ export class ContractSignatureComponent implements OnInit {
           return;
         }
 
-        
+
 
         if (
           this.dataChecked[lengthItem - 1].card_id !=
@@ -803,21 +815,21 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
-  toggleDownload(checkedAll: boolean){
+  toggleDownload(checkedAll: boolean) {
     this.dataChecked = [];
-    
-    if(checkedAll){
-      
-      
-      for(let i = 0; i < this.contractDownloadList.length; i++){
+
+    if (checkedAll) {
+
+
+      for (let i = 0; i < this.contractDownloadList.length; i++) {
         this.contractDownloadList[i].checked = false;
       }
     } else {
-      for (let i = 0; i < this.contractDownloadList.length; i++){
+      for (let i = 0; i < this.contractDownloadList.length; i++) {
         this.contractDownloadList[i].checked = true;
         this.dataChecked.push({
           id: this.contractDownloadList[i].participant?.contract?.id,
-          selectedId : this.contractDownloadList[i].id
+          selectedId: this.contractDownloadList[i].id
         })
       }
     }
@@ -860,7 +872,7 @@ export class ContractSignatureComponent implements OnInit {
       id: item.id,
       selectedId: item.id
     }
-    
+
 
     this.contractViewList[index1].checked = item.checked
     if (this.dataChecked.some(el => el.id === data.id)) {
@@ -901,18 +913,18 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
-  toggleDownloadShare(checkedAll: boolean){
+  toggleDownloadShare(checkedAll: boolean) {
     this.dataChecked = [];
-    if(checkedAll){
-      for(let i = 0; i < this.contracts.length; i++){
+    if (checkedAll) {
+      for (let i = 0; i < this.contracts.length; i++) {
         this.contracts[i].checked = false;
       }
     } else {
-      for (let i = 0; i < this.contracts.length; i++){
+      for (let i = 0; i < this.contracts.length; i++) {
         this.contracts[i].checked = true;
         this.dataChecked.push({
           id: this.contracts[i].participants[0]?.contract_id,
-          selectedId : this.contracts[i].id
+          selectedId: this.contracts[i].id
         })
       }
     }
@@ -944,7 +956,7 @@ export class ContractSignatureComponent implements OnInit {
 
   }
 
-  changePageNumber(e: any){
+  changePageNumber(e: any) {
     this.spinner.show();
     this.p = 1;
     this.page = e.target.value;
@@ -962,7 +974,7 @@ export class ContractSignatureComponent implements OnInit {
 
   getPageStartEnd() {
     const temp: number = this.pageStart;
-    if(this.pageStart < 0) {
+    if (this.pageStart < 0) {
       this.pageStart = 1;
       this.pageEnd = Math.abs(temp) + 1;
     }
@@ -975,7 +987,7 @@ export class ContractSignatureComponent implements OnInit {
   setPageDownload() {
     this.pageStart = (this.p - 1) * 20 + 1;
     this.pageEnd = this.p * 20;
-    
+
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
     }
@@ -1010,16 +1022,16 @@ export class ContractSignatureComponent implements OnInit {
   toggleView(checkedAll: boolean) {
     //han che cac checkbox true tick truoc dan den push trung value
     this.dataChecked = [];
-    if(checkedAll){
-      for(let i = 0; i < this.contractViewList.length; i++){
+    if (checkedAll) {
+      for (let i = 0; i < this.contractViewList.length; i++) {
         this.contractViewList[i].checked = false;
       }
     } else {
-      for (let i = 0; i < this.contractViewList.length; i++){
+      for (let i = 0; i < this.contractViewList.length; i++) {
         this.contractViewList[i].checked = true;
         this.dataChecked.push({
           id: this.contractViewList[i].id,
-          selectedId : this.contractViewList[i].id
+          selectedId: this.contractViewList[i].id
         })
       }
     }
@@ -1036,14 +1048,14 @@ export class ContractSignatureComponent implements OnInit {
       width: '580px',
     });
     dialogRef.afterClosed().subscribe(async (isSubmit: any) => {
-      
+
       if (isSubmit) {
         for (let index = 0; index < this.dataChecked.length; index++) {
           this.contractServiceV1
             .updateInfoContractConsider([], this.dataChecked[index].id)
             .subscribe(
               (result) => {
-                
+
                 this.router
                   .navigateByUrl('/', { skipLocationChange: true })
                   .then(() => {
@@ -1076,8 +1088,7 @@ export class ContractSignatureComponent implements OnInit {
     for (let i = 0; i < contractsSignManyChecked.length; i++) {
       for (let j = i + 1; j < contractsSignManyChecked.length; j++) {
         if (
-          contractsSignManyChecked[i].sign_type[0].id !=
-          contractsSignManyChecked[j].sign_type[0].id
+          contractsSignManyChecked[i].sign_type[0].id != contractsSignManyChecked[j].sign_type[0].id
         ) {
           this.toastService.showErrorHTMLWithTimeout(
             'Vui lòng chọn những hợp đồng cùng loại ký',
@@ -1138,6 +1149,27 @@ export class ContractSignatureComponent implements OnInit {
             });
           });
       }
+    } else if (signId == 6) {
+      idSignMany = contractsSignManyChecked
+        .filter((opt) => opt.checked)
+        .map((opt) => opt.id);
+
+      recipientId = contractsSignManyChecked
+        .filter((opt) => opt.checked)
+        .map((opt) => opt.id);
+
+      //Lay ra mang chua tat ca ma so thue cua cac hop dong ky bang usb token
+      for (let i = 0; i < recipientId.length; i++) {
+        this.contractServiceV1
+          .getDetermineCoordination(recipientId[i])
+          .subscribe((response) => {
+            response.recipients.forEach((item: any) => {
+              if (item.id == recipientId[i]) {
+                taxCode.push(item.fields[0].recipient.cardId);
+              }
+            });
+          });
+      }
     }
 
     this.openDialogSignManyComponent(recipientId, taxCode, idSignMany, signId);
@@ -1161,8 +1193,6 @@ export class ContractSignatureComponent implements OnInit {
           }
         }
 
-        
-
         if (result.mark) {
           const data = {
             title: 'ĐÓNG DẤU HỢP ĐỒNG ',
@@ -1182,7 +1212,7 @@ export class ContractSignatureComponent implements OnInit {
           );
 
           dialogRef.afterClosed().subscribe((res: any) => {
-            if(res) {
+            if (res) {
               this.srcMark = res;
               this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
               // this.spinner.hide();
@@ -1375,6 +1405,104 @@ export class ContractSignatureComponent implements OnInit {
           }
         }
       });
+    } else if (signId == 6) {
+      let contractsSignManyChecked = this.contractsSignMany.filter(
+        (opt) => opt.checked
+      );
+
+      //Ký nhiều CTS
+      const dataCert = {
+        id: 1,
+        title: 'KÝ CHỨNG THƯ SỐ',
+      };
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = '500px';
+      dialogConfig.hasBackdrop = true;
+      dialogConfig.data = dataCert;
+      dialogConfig.panelClass = 'custom-dialog-container';
+      const dialogRef = this.dialog.open(
+        CertDialogSignComponent,
+        dialogConfig
+      );
+      dialogRef.afterClosed().subscribe(async (resultCert: any) => {
+        if (resultCert) {
+
+          this.cert_id = resultCert;
+          let countSuccess = 0;
+          try {
+            const inforCert = await this.contractServiceV1.certInfoCert(this.cert_id).toPromise();
+            this.name = inforCert.name;
+            this.company = inforCert.company;
+            this.cardId = inforCert.mst;
+            this.cccd = inforCert.cccd;
+            this.cmnd = inforCert.cmnd;
+          } catch (err) {
+
+          }
+
+          // const idList = clusteredLists.map((list: any) => list.map((item: any) => item.id));
+          // const widthList = clusteredLists.map((list: any) => list.map((item: any) => item.fields[0].width));
+
+          let isResult: boolean = true;
+
+          // for(let i = 0; i < clusteredLists.length; i++) {
+          // this.widthSign = widthList[i][0];
+          await of(null).pipe(delay(150)).toPromise();
+          let imageRender: HTMLElement | null = null;
+          //check role là văn thư hoặc người ký để lấy các template khác nhau
+          if (this.srcMark) {
+            imageRender = <HTMLElement>(document.getElementById('export-html-cert-image'));
+          } else {
+            imageRender = <HTMLElement>(document.getElementById('export-html-cert'));
+          }
+          let signI = '';
+
+          if (imageRender) {
+            const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
+            signI = textSignB.split(',')[1];
+          }
+
+          for (let i = 0; i < contractsSignManyChecked.length; i++) {
+            const signSlots = contractsSignManyChecked[i].fields;
+
+            if (signSlots?.length > 0) {
+              for (let y = 0; y < signSlots.length; y++) {
+
+                const signCertPayload = {
+                  cert_id: this.cert_id,
+                  image_base64: signI,
+                  field: null,
+                  width: signSlots[y].width,
+                  height: signSlots[y].height
+                };
+
+                try {
+                  const checkSign = await this.contractServiceV1.signCertMulti(contractsSignManyChecked[i].id, signCertPayload);
+                  countSuccess++;
+                  if (countSuccess == checkSign.length) {
+                    this.spinner.hide();
+                    this.toastService.showSuccessHTMLWithTimeout(
+                      'sign.multi.success',
+                      '',
+                      3000
+                    );
+
+                    this.router
+                      .navigateByUrl('/', { skipLocationChange: true })
+                      .then(() => {
+                        this.router.navigate(['main/c/receive/processed']);
+                      });
+                  }
+                } catch (err) {
+                  // this.toastService.showErrorHTMLWithTimeout(err,'',3000);
+                }
+              }
+            }
+          }
+
+
+        }
+      })
     }
   }
 
@@ -1512,7 +1640,7 @@ export class ContractSignatureComponent implements OnInit {
                       idSignMany[i],
                       dataSignMobi.data.FileDataSigned
                     );
-                    
+
                   } catch (err) {
                     this.toastService.showErrorHTMLWithTimeout(
                       'Lỗi  đẩy file sau khi ký USB Token ',
@@ -1876,7 +2004,7 @@ export class ContractSignatureComponent implements OnInit {
             .toPromise();
           const filePdfSigned = mergeTimeStamp.base64Data;
 
-          
+
 
           const sign = await this.contractServiceV1.updateDigitalSignatured(
             idSignMany[i],
@@ -2036,7 +2164,7 @@ export class ContractSignatureComponent implements OnInit {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+
       let is_data = result;
     });
   }
@@ -2167,7 +2295,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   t(item: any) {
-    
+
   }
 
   getNameStatusCeca(status: any, ceca_push: any, ceca_status: any) {

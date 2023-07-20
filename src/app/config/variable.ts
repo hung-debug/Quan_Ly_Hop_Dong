@@ -53,7 +53,7 @@ export const type_signature = [
   },
   {
     id: 6,
-    name: 'Ký bằng chứng thư số',
+    name: 'Ký số bằng chứng thư số',
     is_otp: false
   }
 ];
@@ -121,6 +121,11 @@ export const type_signature_doc = [
     name: 'Ký số bằng HSM',
     is_otp: false
   },
+  {
+    id: 6,
+    name: 'Ký số bằng chứng thư số',
+    is_otp: false
+  }
 ];
 
 export const type_signature_template = [
@@ -428,7 +433,7 @@ export var roleList = [
       //Báo cáo trạng thái xử lý
       {label: 'role.processing.status.contract',value:'BAOCAO_TRANGTHAIXULY'},
 
-      //Báo cáo số lượng trạng thái      
+      //Báo cáo số lượng trạng thái
       {label: 'role.number.status', value:'BAOCAO_SOLUONG_TRANGTHAI'},
 
       //Báo cáo số lượng theo loại hợp đồng
@@ -451,7 +456,7 @@ export var roleList = [
 
         //Cấu hình ngày sắp hết hạn
         {label:'config.day.expiration',value:'CAUHINH_NGAYSAPHETHAN'}
-      
+
     ]
   }
 ];
@@ -528,7 +533,7 @@ export var adminRoleList = [
 ];
 
 export const contractTypes = [
-  { 
+  {
     id: 1,
     label: 'menu.contract.create.list',
     selectable: false,
@@ -542,7 +547,7 @@ export const contractTypes = [
         id: 2,
         label: 'contract.status.processing',
         status: 20
-      }, 
+      },
       {
         id: 3,
         label: 'contract.status.expire',
@@ -562,7 +567,7 @@ export const contractTypes = [
         id: 6,
         label: 'contract.status.cancel',
         status: 32
-      }, 
+      },
       {
         id: 7,
         label: 'contract.status.complete',

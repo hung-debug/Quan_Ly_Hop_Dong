@@ -73,7 +73,7 @@ export class CertDialogSignComponent implements OnInit {
 
 
   handleCancel() {
-    this.dialogRef.close();
+    this.dialogRef.close(this.id);
   }
 
   signCert(){

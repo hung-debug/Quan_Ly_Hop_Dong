@@ -16,7 +16,7 @@ import { ContractService } from 'src/app/service/contract.service';
 import { DigitalCertificateService } from 'src/app/service/digital-certificate.service';
 import { UserService } from 'src/app/service/user.service';
 import { MultiSelectModule } from 'primeng/multiselect';
-
+import { UnitService } from 'src/app/service/unit.service';
 
 @Component({
   selector: 'app-user',
@@ -42,7 +42,11 @@ export class DigitalCertificateAddComponent implements OnInit {
   listSelectedEmail: any = [];
   password: any;
   status: number = 1;
-
+  orgList: Array<any> = [];
+  userList: Array<any> = [];
+  orgId: any;
+  code:any = "";
+  // name:any = "";
 
   get f() { return this.addForm.controls; }
   constructor(
@@ -61,6 +65,7 @@ export class DigitalCertificateAddComponent implements OnInit {
     private DigitalCertificateService: DigitalCertificateService,
     private userService: UserService,
     private MultiSelectModule: MultiSelectModule,
+    private unitService: UnitService,
   ) {
     // this.addForm = this.fbd.group({
     //   password: this.fbd.control("", [Validators.required, Validators.pattern(parttern.password)]),
@@ -77,7 +82,7 @@ export class DigitalCertificateAddComponent implements OnInit {
     });
     // chạy mồi lấy list dữ liệu cho component
     this.getListAllEmail({ filter: 'a' })
-
+    // this.getData({ filter: 'a' })
   }
 
   toggleFieldTextType() {
@@ -132,6 +137,40 @@ export class DigitalCertificateAddComponent implements OnInit {
       }
     });
   }
+
+  // getData(event: any){
+  //   let name: any = event.filter
+  //   this.unitService.getUnitList(this.code, name).subscribe(response => {
+  //     // if (response && response.length > 0) {
+  //     //   response.forEach((item: any) => {
+  //     //     const id = item.id;
+  //     //     if (!this.orgList.some((existingItem: any) => existingItem.id === id)) {
+  //     //       this.orgList.push(item);
+  //     //     }
+  //     //   });
+  //     // }
+  //     this.orgList = response.entities;
+  //     console.log("orgList",this.orgList);
+
+  //     // this.total = this.listData.length;
+  //   })
+  // }
+
+  // getUserByOrg(orgId:any){
+
+  //   let emailLogin = this.userService.getAuthCurrentUser().email;
+  //   this.userService.getUserList(orgId, "","").subscribe(data => {
+
+  //     this.userList = data.entities.filter((p: any) => p.email != emailLogin && p.status == 1);
+
+  //     this.addForm = this.fbd.group({
+  //       orgId: orgId,
+  //       email: this.fbd.control("", [Validators.required])
+  //     });
+  //   });
+  // }
+
+
   onSelectionChange() {
     console.log('listSelectedEmail', this.listSelectedEmail)
     const emailControl = this.addForm.get('email');
