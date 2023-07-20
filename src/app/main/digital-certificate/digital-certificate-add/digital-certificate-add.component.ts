@@ -169,6 +169,10 @@ export class DigitalCertificateAddComponent implements OnInit {
 
   contractFileRequired() {
     this.errorContractFile = "";
+    if (this.datas?.contractFile?.size == 0) {
+      this.toastService.showWarningHTMLWithTimeout("File trống, vui lòng upload file khác", "", 3000);
+      return false
+    }
     if (!this.datas.contractFile && !this.datas.file_name) {
       this.errorContractFile = "error.contract.file.required";
       return false;
