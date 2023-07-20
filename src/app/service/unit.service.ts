@@ -61,11 +61,11 @@ export class UnitService {
     let listUnitUrl = this.listUnitUrl + '?code=' + filter_code.trim() + '&name=' + filter_name.trim() + "&size=10000";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Unit[]>(listUnitUrl, {headers}).pipe(catchError(this.handleError));
-  }  
+  }
 
   //add api thêm mới tổ chức user
   addUnit(datas: any) {
-    
+
 
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -95,7 +95,7 @@ export class UnitService {
 
     const headers = new HttpHeaders()
       .append('Authorization', 'Bearer ' + this.token)
-          
+
       return this.http.post(
         this.uploadFileUnitUrl,
         formData,
@@ -148,7 +148,7 @@ export class UnitService {
     });
     return this.http.post<any>(this.checkNameUniqueUrl, body, {headers}).pipe();
   }
-  
+
   checkCodeUnique(data:any, code:any){
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -210,7 +210,7 @@ export class UnitService {
   handleError(error: HttpErrorResponse) {
     if (error.status === 0 && error.error instanceof ProgressEvent) {
       // A client-side or network error occurred. Handle it accordingly.
-      
+
       this.router.navigateByUrl("/login");
     }
     return throwError(this.errorData);

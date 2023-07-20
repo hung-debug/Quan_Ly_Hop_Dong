@@ -699,5 +699,6 @@
   "update.infor.certificate": "Update information digital certificate",
   "sign_by_cert":"Sign by certificate",
   "choice": "Choice",
-  "unit.email.name": "Email/name"
+  "unit.email.name": "Email/name",
+  "error.org.required":"Organization is required"
   }

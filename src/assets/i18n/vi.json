@@ -704,5 +704,6 @@
   "sign_by_cert":"Ký số bằng chứng thư số",
   "choice": "Lựa chọn",
   "signer":"Người ký",
-  "unit.email.name": "Địa chỉ email/Họ tên"
+  "unit.email.name": "Địa chỉ email/Họ tên",
+  "error.org.required":"Tổ chức không được để trống"
 }
