@@ -98,7 +98,6 @@ export class SignContractComponent implements OnInit, AfterViewInit {
     } else {
       return false;
     }
-
   }
 
   getNotSpecifiedYetHandle() {

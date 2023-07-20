@@ -673,7 +673,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.isMove = false;
 
         let layerX = this.detectCoordinateService.detectX(event, rect_location, canvasInfo, this.canvasWidth, this.pageNumber)
-        let layerY = this.detectCoordinateService.detectY(event, rect_location, canvasInfo, this.pageNumber);
+        let layerY = this.detectCoordinateService.detectY(event, rect_location, canvasInfo);
         // //END
 
         let _array = Object.values(this.obj_toa_do);
@@ -1204,7 +1204,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // get select người ký
   getSignSelect(d: any) {
-
     if (d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
       this.textSign = true;
       this.list_font = ["Arial", "Calibri", "Times New Roman"];

@@ -49,7 +49,7 @@ export class DetectCoordinateService {
   }
   
 
-  detectY(event: any, rect_location: any, canvasInfo: any, pageNumber?: any) {
+  detectY(event: any, rect_location: any, canvasInfo: any) {
     const page = this.getPage(event);
 
     let layerY = 0;
@@ -62,35 +62,13 @@ export class DetectCoordinateService {
         for (let i = 1; i < page; i++) {
           let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
           let canvasInfo = canvasElement.getBoundingClientRect();
-          countPage += parseFloat(canvasInfo.height.toFixed(2));
-          console.log("countPage ",i," ", countPage);
+          countPage += canvasInfo.height;
         }
-
-        let sum = 0;
-        for (let i = 1; i <= pageNumber; i++) {
-          let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
-          let canvasInfo = canvasElement.getBoundingClientRect();
-          console.log("i ",canvasInfo.height)
-          sum += canvasInfo.height;
-        }
-
-        let divPdf = document.getElementById("pdf-viewer-step-3") as HTMLElement;
-        let divPdfInfo = divPdf.getBoundingClientRect();
-        let height = divPdfInfo.height;
-
-        console.log("sum ", sum);
         let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
         let canvasInfo = canvasElement.getBoundingClientRect();
-
-        console.log("height ", height) 
-
-        let deltaPage = (height - sum)/pageNumber;
-        console.log("delta page ", deltaPage);
         // @ts-ignore
-        layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + deltaPage*(page - 1);
+        layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5*(page - 1);
     }
-
-    console.log("layerY ", layerY);
     
     return layerY;
   }

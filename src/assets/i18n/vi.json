@@ -548,6 +548,7 @@
   "report.number.contracts.status":"SL theo trạng thái",
   "report.number.contracts.contract-type":"SL theo loại HĐ",
   "report.number.contracts.type.sign":"SL theo hình thức ký",
+  "report.number.contracts.type":"SL theo loại HĐ",
   "report.detail.contract.full":"Báo cáo chi tiết hợp đồng",
   "report.expires-soon.contract.full":"Báo cáo hợp đồng sắp hết hiệu lực",
   "report.processing.status.contract.full":"Báo cáo trạng thái xử lý hợp đồng",

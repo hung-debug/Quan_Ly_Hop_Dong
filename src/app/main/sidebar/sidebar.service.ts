@@ -548,8 +548,24 @@ export class SidebarService {
       )
     }
 
+    if(this.isBaoCaoSoLuongLoai) {
+      submenusReport.push({
+        title:'report.number.contracts.type',
+        active: false,
+        href: '/main/report/contract-number-follow-type'
+      })
+    }
 
-    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiXuLy) {
+    if(this.isBaoCaoHopDongNhan) {
+      submenusReport.push({
+        title:'report.contract.receive',
+        active: false,
+        href: '/main/report/contract-receive'
+      })
+    }
+
+
+    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai || this.isBaoCaoHopDongNhan || this.isBaoCaoSoLuongTrangThai) {
       this.menus.push({
         title: 'report',
         icon: '/assets/img/analytics1.svg',
@@ -632,8 +648,6 @@ export class SidebarService {
   getSubMenuList(menuParent: any) {
     this.menus.forEach((element: any) => {
       if (element === menuParent) {
-
-
         return element.submenus;
       }
     });

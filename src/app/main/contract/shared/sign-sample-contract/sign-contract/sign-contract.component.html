@@ -21,9 +21,9 @@
   <span *ngIf="getSpecifiedHandle() && sign.sign_unit != 'text'" class="font-style" id="input-text">{{getText(sign)}}</span>
 
   <input *ngIf="sign.sign_unit == 'text' && sign.is_have_text" id="input-text-value" placeholder="Nhập nội dung Text.."
-    [(ngModel)]="sign.value" type="text" (click)="reverseInput($event)" (blur)="changeInput($event)" (ngxInputSearch)="doTheSearch($event,'text')">
+    [(ngModel)]="sign.value" type="text" (click)="reverseInput($event)" (blur)="changeInput($event)" (ngxInputSearch)="doTheSearch($event,'text')" style="white-space: nowrap;">
 
-  <input *ngIf="getNotSpecifiedYetHandle()" id="input-number-value"
+  <input *ngIf="getNotSpecifiedYetHandle() && sign.sign_unit == 'so_tai_lieu'" id="input-number-value"
     (focusout)="focusOutFunction()" [(ngModel)]="this.contractNo" placeholder="Nhập số hợp đồng.." type="text"
-    (ngxInputSearch)="doTheSearch($event,'contractNo')">
+    (ngxInputSearch)="doTheSearch($event,'contractNo')" style="white-space: nowrap;">
 </div>
