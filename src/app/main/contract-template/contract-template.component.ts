@@ -14,6 +14,8 @@ import { ReleaseContractTemplateDialogComponent } from './dialog/release-contrac
 import { ShareContractTemplateDialogComponent } from './dialog/share-contract-template-dialog/share-contract-template-dialog.component';
 import { StopContractTemplateDialogComponent } from './dialog/stop-contract-template-dialog/stop-contract-template-dialog.component';
 import { sideList } from 'src/app/config/variable';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-contract-template',
   templateUrl: './contract-template.component.html',
@@ -56,6 +58,7 @@ export class ContractTemplateComponent implements OnInit {
               private roleService: RoleService,
               private toastService: ToastService,
               private route: ActivatedRoute,
+              private spinner: NgxSpinnerService,
               ) { 
 
     this.stateOptions = [
@@ -186,6 +189,21 @@ export class ContractTemplateComponent implements OnInit {
 
   add(){
     this.router.navigate(['/main/contract-template/form/add']);
+  }
+
+  cloneContractTemplateCall(id: number) {
+      this.spinner.show();
+      this.contractTemplateService.cloneContractTemplate(id).subscribe((res: any) => {
+        // 
+        this.toastService.showSuccessHTMLWithTimeout(`Sao chép mẫu hợp đồng ${res.name} thành công!`, "", 3000)
+        this.getContractTemplateList();
+
+      }, (error: HttpErrorResponse) => {
+        this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000)
+        this.spinner.hide();
+      }, () => {
+        this.spinner.hide();
+      })
   }
 
   openEdit(id: number) {
