@@ -30,6 +30,7 @@ export class DigitalCertificateAddComponent implements OnInit {
   submitted = false;
   errorContractFile: any = '';
   errorPassword: any = '';
+  errorOrg: any = '';
   uploadFileContractAgain: boolean = false;
   toppingList: any[];
   toppings: any;
@@ -44,8 +45,8 @@ export class DigitalCertificateAddComponent implements OnInit {
   status: number = 1;
   orgList: Array<any> = [];
   userList: Array<any> = [];
-  orgId: any;
-  code:any = "";
+  orgIdSelected: any;
+  code:string = "";
   // name:any = "";
 
   get f() { return this.addForm.controls; }
@@ -78,11 +79,11 @@ export class DigitalCertificateAddComponent implements OnInit {
     this.addForm = this.fbd.group({
       password: this.fbd.control("", [Validators.required, Validators.pattern(parttern.password)]),
       status: 1,
-      email: this.fbd.control("", [Validators.required])
+      email: this.fbd.control("", [Validators.required]),
+      orgId: this.fbd.control("", [Validators.required])
     });
     // chạy mồi lấy list dữ liệu cho component
-    this.getListAllEmail({ filter: 'a' })
-    // this.getData({ filter: 'a' })
+    this.getData({ filter: '' })
   }
 
   toggleFieldTextType() {
@@ -122,11 +123,13 @@ export class DigitalCertificateAddComponent implements OnInit {
     }
   }
   getListAllEmail(event: any) {
+    this.emailList = []
     console.log("responseSU", event.filter);
-    let email: any = event.filter
+    let email: any = event.filter || ''
     // let emailLogin = this.userService.getAuthCurrentUser().email;
+    console.log("event",event);
 
-    this.DigitalCertificateService.getListAllEmail(email).subscribe((response) => {
+    this.DigitalCertificateService.getListOrgByEmail(email,event.value || '').subscribe((response) => {
       if (response && response.length > 0) {
         response.forEach((item: any) => {
           const id = item.id;
@@ -138,37 +141,33 @@ export class DigitalCertificateAddComponent implements OnInit {
     });
   }
 
-  // getData(event: any){
-  //   let name: any = event.filter
-  //   this.unitService.getUnitList(this.code, name).subscribe(response => {
-  //     // if (response && response.length > 0) {
-  //     //   response.forEach((item: any) => {
-  //     //     const id = item.id;
-  //     //     if (!this.orgList.some((existingItem: any) => existingItem.id === id)) {
-  //     //       this.orgList.push(item);
-  //     //     }
-  //     //   });
-  //     // }
-  //     this.orgList = response.entities;
-  //     console.log("orgList",this.orgList);
+  getListAllEmailOnFillter(event: any) {
+    // this.emailList = []
+    console.log("responseSU", event.filter);
+    let email: any = event.filter || ''
+    // let emailLogin = this.userService.getAuthCurrentUser().email;
+    console.log("event",event);
 
-  //     // this.total = this.listData.length;
-  //   })
-  // }
+    this.DigitalCertificateService.getListOrgByEmail(email,this.addForm.value.orgId || '').subscribe((response) => {
+      if (response && response.length > 0) {
+        response.forEach((item: any) => {
+          const id = item.id;
+          if (!this.emailList.some((existingItem: any) => existingItem.id === id)) {
+            this.emailList.push(item);
+          }
+        });
+      }
+    });
+  }
 
-  // getUserByOrg(orgId:any){
+  getData(event: any){
+    let name: string = event.filter
+    this.orgIdSelected = this.addForm.value.orgId || ''
+    this.unitService.getUnitList(this.code, name).subscribe(response => {
+      this.orgList = response.entities;
+    })
+  }
 
-  //   let emailLogin = this.userService.getAuthCurrentUser().email;
-  //   this.userService.getUserList(orgId, "","").subscribe(data => {
-
-  //     this.userList = data.entities.filter((p: any) => p.email != emailLogin && p.status == 1);
-
-  //     this.addForm = this.fbd.group({
-  //       orgId: orgId,
-  //       email: this.fbd.control("", [Validators.required])
-  //     });
-  //   });
-  // }
 
 
   onSelectionChange() {
@@ -197,6 +196,15 @@ export class DigitalCertificateAddComponent implements OnInit {
     return true;
   }
 
+  validateOrg() {
+    this.errorOrg = "";
+    if (!this.addForm.controls.orgId.valid) {
+      this.errorOrg = "error.org.required";
+      return false;
+    }
+    return true;
+  }
+
   passwordRequired() {
     this.errorPassword = "";
     if (!this.addForm.controls.password.valid) {
@@ -208,6 +216,10 @@ export class DigitalCertificateAddComponent implements OnInit {
 
   contractFileRequired() {
     this.errorContractFile = "";
+    if (this.datas?.contractFile?.size == 0) {
+      this.toastService.showWarningHTMLWithTimeout("File trống, vui lòng upload file khác", "", 3000);
+      return false
+    }
     if (!this.datas.contractFile && !this.datas.file_name) {
       this.errorContractFile = "error.contract.file.required";
       return false;
@@ -234,8 +246,9 @@ export class DigitalCertificateAddComponent implements OnInit {
       file: this.contractFileRequired(),
       password: this.passwordRequired(),
       email: this.validateEmail(),
+      orgId:this.validateOrg()
     }
-    if (!validateResult.file || !validateResult.password || !validateResult.email) {
+    if (!validateResult.file || !validateResult.password || !validateResult.email || !validateResult.orgId) {
       // this.spinner.hide();
       return false;
     }

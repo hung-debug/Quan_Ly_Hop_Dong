@@ -699,5 +699,6 @@
   "update.infor.certificate": "Update information digital certificate",
   "sign_by_cert":"Sign by certificate",
   "choice": "Choice",
-  "sign.multi.success": "Sign multi successfully"
+  "sign.multi.success": "Sign multi successfully",
+  "error.org.required":"Organization is required"
   }

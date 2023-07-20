@@ -108,7 +108,7 @@ export class DigitalCertificateService {
     return this.http.get<any>(listEmailUrl, { headers });
   }
 
-  getListOrg(email: string, orgId: any) {
+  getListOrgByEmail(email: string, orgId: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
