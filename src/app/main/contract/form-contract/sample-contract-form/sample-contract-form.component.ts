@@ -1695,8 +1695,15 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             }
           })
         })
-          this.checkNumber(this.datasForm.ceca_push, this.convertToSignConfig().length)
-          this.spinner.hide();
+
+        if(!this.datasForm.contract_no || !this.datasForm.code) {
+          if(this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0]) {
+            this.datasForm.contract_no = this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0].value;
+            this.datasForm.code = this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0].value;
+          }
+        }
+        this.checkNumber(this.datasForm.ceca_push, this.convertToSignConfig().length)
+        this.spinner.hide();
       }
     }
   }

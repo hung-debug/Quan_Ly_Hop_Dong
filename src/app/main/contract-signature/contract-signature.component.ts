@@ -293,7 +293,7 @@ export class ContractSignatureComponent implements OnInit {
         this.contractsSignMany[v].checked = false;
 
         //Gan document id
-        this.contractsSignMany[v].documentId = key.fields[0].documentId;
+        this.contractsSignMany[v].documentId = key.fields[0]?.documentId;
       });
     });
   }
