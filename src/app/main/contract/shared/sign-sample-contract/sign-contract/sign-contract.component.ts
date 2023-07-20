@@ -34,6 +34,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   }
 
   getText(sign: any) {
+    console.log("sign ", sign);
     if (sign.sign_unit == 'text') {
       if(sign.value) {
         if(sign.text_type == 'currency') {
@@ -42,7 +43,10 @@ export class SignContractComponent implements OnInit, AfterViewInit {
         return sign.value      
       } else if (sign.text_type!= undefined && sign.text_type == "currency"){
           return 'Số tiền'
-          } else return 'Text';
+      } else {
+        console.log("vao day");
+        return 'Text';
+      }
     } else {
       if (this.datas.contract_no) {
         return this.datas.contract_no
@@ -93,7 +97,8 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   getSpecifiedHandle() {
     if(this.contractNo) return false;
 
-    if ((!this.sign.is_have_text && this.sign.recipient_id) || (this.sign.value !== null && this.sign.value === undefined) || this.datas.contract_no || (this.sign.sign_unit == 'so_tai_lieu' && this.sign.value)) {
+    if (((!this.sign.is_have_text && this.sign.recipient_id) || (this.sign.value !== null && this.sign.value === undefined) || this.datas.contract_no || 
+    (this.sign.sign_unit == 'so_tai_lieu' && this.sign.value)) || (this.sign.sign_unit == 'text' && this.sign.recipient_id)) {
       return true;
     } else {
       return false;
