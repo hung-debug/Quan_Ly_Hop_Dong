@@ -35,7 +35,8 @@
         <div>
           <p-multiSelect panelStyleClass="font" appendTo="body" [options]="emailList" formControlName="email"
             optionLabel="email" optionValue="email" placeholder="Chọn email" [filter]="true" filterBy="email"
-            [showClear]="true" (onFilter)="getListAllEmail($event)"  [multiple]="true"
+            [showClear]="true" (onFilter)="getListAllEmailOnFillter($event)"  [multiple]="true" 
+            display="chip"
             (onChange)="onSelectionChange()">
           </p-multiSelect>
         </div>

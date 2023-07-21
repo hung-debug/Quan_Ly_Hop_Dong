@@ -46,6 +46,7 @@ export class DigitalCertificateEditComponent implements OnInit {
   lang: any;
   orgListTmp: any[] = [];
   array_empty: any = [];
+  currentOrgId: string = ""
 
   get f() { return this.addForm.controls; }
   constructor(
@@ -68,11 +69,8 @@ export class DigitalCertificateEditComponent implements OnInit {
     });
   }
   async ngOnInit(): Promise<void> {
+    this.currentOrgId = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId.toString()
     this.datas = this.data;
-
-    // await this.getData();
-    // await this.getListAllEmail();
-    // this.getOrg({ filter: '' })
     this.unitService.getUnitList('', '').subscribe(data => {
       this.getData()
       if(this.lang == 'vi')
@@ -87,7 +85,7 @@ export class DigitalCertificateEditComponent implements OnInit {
 
       this.orgList = this.orgListTmp;
       this.convertData();
-      this.selectedNodeOrganization = this.listOrgCombobox.filter((p: any) => p.data == this.organization_id);
+      this.selectedNodeOrganization = this.listOrgCombobox.filter((p: any) => p.data == this.currentOrgId);
     }, error => {
       setTimeout(() => this.router.navigate(['/login']));
       this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
@@ -102,12 +100,13 @@ export class DigitalCertificateEditComponent implements OnInit {
         this.emailList.push(...data.customers);
 
         const listCustomer = data.customers.map((item: any) => item.email);
-        this.addForm = this.fbd.group({
-          password: this.fbd.control("", [Validators.pattern(parttern.password)]),
-          status: this.fbd.control(data.status),
-          email: this.fbd.control(listCustomer, [Validators.required]),
-          orgId: this.fbd.control('', [Validators.required])
-        });
+        this.addForm.patchValue({
+          status: data.status,
+          email: listCustomer
+        })
+      
+        // set emailOptionsList
+        this.getListAllEmailFirstCall()
         this.keystoreSerialNumber = data.keystoreSerialNumber,
           this.keyStoreFileName = data.keyStoreFileName,
           this.keystoreDateStart = data.keystoreDateStart,
@@ -120,7 +119,6 @@ export class DigitalCertificateEditComponent implements OnInit {
         this.unit = unitt.split("=")[1]
         this.listID = data.customers
         this.orgID = data.orgAdminCreate.toString()
-        // this.addForm.patchValue({ orgId: this.orgID });
       }
     )
 
@@ -184,30 +182,6 @@ export class DigitalCertificateEditComponent implements OnInit {
   handleCancel() {
     this.dialogRef.close();
   }
-  async getListAllEmail(event?: any) {
-    this.emailList = []
-    this.addForm.patchValue({ email: [''] });
-    let email: any = null
-    if (!event) {
-      email = ""
-    } else {
-      email = event.filter;
-    }
-
-    await this.DigitalCertificateService.getListOrgByEmail(email || '',event?.value || '').toPromise().then((response) => {
-      if (response && response.length > 0) {
-        response.forEach((item: any) => {
-          if (!this.emailList.some((existingItem: any) => existingItem.email === item.email)) {
-            this.emailList.push(item);
-          }
-        });
-      }
-
-    });
-
-    this.spinner.hide();
-  }
-
   onSelectionChange() {
     let selectedValues = []
     selectedValues = this.addForm.get('email')?.value;
@@ -236,16 +210,19 @@ export class DigitalCertificateEditComponent implements OnInit {
       .subscribe((deleteUser: any) => {
         if (deleteUser.success == false) {
           this.toastService.showErrorHTMLWithTimeout(deleteUser.message, "", 3000)
+          return
         } else {
           checkDelete = true;
           this.DigitalCertificateService.updateCTS(this.data.id, this.addForm.value.status, this.addForm.value.email).subscribe(response => {
             if (response.success == false) {
               this.toastService.showErrorHTMLWithTimeout(response.message, "", 3000)
-            }
-            if (checkDelete = true) {
-              this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin chứng thư số thành công', "", 3000)
-              this.dialog.closeAll();
-              window.location.reload();
+              return
+            } else {
+              if (checkDelete = true) {
+                this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin chứng thư số thành công', "", 3000)
+                this.dialog.closeAll();
+                window.location.reload()
+              }
             }
           })
         }
@@ -270,6 +247,19 @@ export class DigitalCertificateEditComponent implements OnInit {
       }
     });
   }
+
+  getListAllEmailFirstCall() {
+    this.DigitalCertificateService.getListOrgByEmail("", this.currentOrgId || '').subscribe((response) => {
+      if (response && response.length > 0) {
+        for (const item of response) {
+          if (item?.email != this.emailList.find((value: any) => value.email == item.email)?.email) {
+            this.emailList.push({email: item.email})
+          }
+        }
+      }
+    });
+  }
+
 
   validateEmail() {
     this.errorEmail = "";
