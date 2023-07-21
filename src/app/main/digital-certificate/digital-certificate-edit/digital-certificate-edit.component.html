@@ -3,7 +3,24 @@
     <h3 class="label-header">{{this.datas.title | translate}}</h3>
   </div>
   <form [formGroup]="addForm" class="content">
-    <div class="row">
+    <div class="row" >
+      <div class="col-md-12">
+        <div class="label text-color">{{'menu.organization.list' | translate}}
+          <span class="required-title">*</span>
+        </div>
+
+        <div>
+          <p-dropdown panelStyleClass="font" appendTo="body" [options]="orgList" formControlName="orgId"
+            optionLabel="name" optionValue="id" placeholder="Chọn tổ chức" [filter]="true" filterBy="name"
+            [showClear]="true" (onChange)="getListAllEmail($event)" style="height: 33px!important"></p-dropdown>
+        </div>
+        <div class="invalid" *ngIf="errorOrg">
+          {{errorOrg | translate}}
+        </div>
+      </div>
+
+    </div>
+    <div class="row" style="padding-top: 20px;">
       <div class="col-md-12">
         <div class="label text-color">{{'email.user' | translate}}
           <span class="required-title">*</span>
@@ -11,7 +28,7 @@
         <div>
           <p-multiSelect panelStyleClass="font" appendTo="body" [options]="listEmailOptions" formControlName="email"
             optionLabel="email" optionValue="email" placeholder="Chọn email" [filter]="true" filterBy="email"
-            [showClear]="true" (onFilter)="getListAllEmail($event)" display="chip" [multiple]="true"
+            [showClear]="true" (onFilter)="getListAllEmail($event)"  [multiple]="true"
             (onChange)="onSelectionChange()">
           </p-multiSelect>
         </div>
