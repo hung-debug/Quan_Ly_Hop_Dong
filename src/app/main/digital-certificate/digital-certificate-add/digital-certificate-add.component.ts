@@ -194,11 +194,11 @@ export class DigitalCertificateAddComponent implements OnInit {
 
         }
         else {
-          this.toastService.showWarningHTMLWithTimeout("File hợp đồng yêu cầu định dạng p12", "", 3000);
+          this.toastService.showWarningHTMLWithTimeout("File chứng thư số yêu cầu định dạng p12", "", 3000);
           this.spinner.hide();
         }
       } else {
-        this.toastService.showWarningHTMLWithTimeout("File hợp đồng yêu cầu nhỏ hơn 5MB", "", 3000);
+        this.toastService.showWarningHTMLWithTimeout("File chứng thư số yêu cầu nhỏ hơn 5MB", "", 3000);
         this.spinner.hide();
       }
     }
