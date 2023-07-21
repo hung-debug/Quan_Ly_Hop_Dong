@@ -73,14 +73,14 @@
   .p-dropdown, .p-multiselect {
       border: 1px solid #106DB6;
       border-radius: 5px;
-      height: 33px;
+      // height: 33px;
       width: 100%;
       outline: 0;
       color: black !important;
   }
-  .p-dropdown-label, .p-multiselect-label {
-      padding: 5px 5px 5px 15px;
-  }
+  // .p-dropdown-label, .p-multiselect-label {
+  //     padding: 5px 5px 5px 15px;
+  // }
   .p-chips{
     width: 100%;
   }

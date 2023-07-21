@@ -30,7 +30,7 @@ export class DigitalCertificateEditComponent implements OnInit {
   sub: any[];
   unit: any = "";
   pattern = parttern;
-  listEmailOptions: any = [];
+  emailList: any = [];
   submitted = false;
   listSelectedEmail: any = [];
   listID: any[];
@@ -40,6 +40,12 @@ export class DigitalCertificateEditComponent implements OnInit {
   orgIdSelected: any;
   code:string = "";
   orgID: any;
+  selectedNodeOrganization:any = '';
+  listOrgCombobox: any[];
+  organization_id:any = "";
+  lang: any;
+  orgListTmp: any[] = [];
+  array_empty: any = [];
 
   get f() { return this.addForm.controls; }
   constructor(
@@ -62,34 +68,46 @@ export class DigitalCertificateEditComponent implements OnInit {
     });
   }
   async ngOnInit(): Promise<void> {
-    this.spinner.show();
     this.datas = this.data;
 
     // await this.getData();
-    await this.getListAllEmail();
-    console.log("dataCert", this.datas);
-    this.getOrg({ filter: '' })
+    // await this.getListAllEmail();
+    // this.getOrg({ filter: '' })
+    this.unitService.getUnitList('', '').subscribe(data => {
+      this.getData()
+      if(this.lang == 'vi')
+        this.orgListTmp.push({name: "Tất cả", id:""});
+      else if(this.lang == 'en')
+        this.orgListTmp.push({name: "All", id:""});
+
+      let dataUnit = data.entities.sort((a:any,b:any) => a.path.toString().localeCompare(b.path.toString()));
+      for(var i = 0; i < dataUnit.length; i++){
+        this.orgListTmp.push(dataUnit[i]);
+      }
+
+      this.orgList = this.orgListTmp;
+      this.convertData();
+      this.selectedNodeOrganization = this.listOrgCombobox.filter((p: any) => p.data == this.organization_id);
+    }, error => {
+      setTimeout(() => this.router.navigate(['/login']));
+      this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+    }
+    );
 
   }
 
   async getData() {
     await this.DigitalCertificateService.getCertById(this.datas.id).toPromise().then(
       data => {
-        console.log('dtaaaa',data);
-        this.listEmailOptions.push(...data.customers);
-        console.log("listEmailOptions",this.listEmailOptions);
+        this.emailList.push(...data.customers);
 
         const listCustomer = data.customers.map((item: any) => item.email);
-        console.log('dât001',data.orgAdminCreate);
-        console.log('002',this.orgList);
         this.addForm = this.fbd.group({
           password: this.fbd.control("", [Validators.pattern(parttern.password)]),
           status: this.fbd.control(data.status),
           email: this.fbd.control(listCustomer, [Validators.required]),
-          orgId: this.fbd.control(data.orgAdminCreate.toString(), [Validators.required])
+          orgId: this.fbd.control('', [Validators.required])
         });
-        console.log("addfomer",this.addForm);
-
         this.keystoreSerialNumber = data.keystoreSerialNumber,
           this.keyStoreFileName = data.keyStoreFileName,
           this.keystoreDateStart = data.keystoreDateStart,
@@ -108,26 +126,67 @@ export class DigitalCertificateEditComponent implements OnInit {
 
   }
 
-  getOrg(event: any){
-    let name: string = event.filter
-    this.orgIdSelected = this.addForm.value.orgId || ''
-    this.unitService.getUnitList(this.code, name).subscribe(response => {
-      this.orgList = response.entities.map((item: any) => ({
-        id: item.id.toString(), name: item.name
-      }))
-      console.log("ỏg",this.orgList);
-      this.getData()
+  changeOrg(){
+    this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
+    this.addForm.patchValue({
+      email: this.addForm.value.email? this.addForm.value.email : []
     })
+    this.getListAllEmailOnFillter(this.organization_id)
   }
 
+  convertData(){
+    this.array_empty=[];
+    this.orgList.forEach((element: any, index: number) => {
+
+      let is_edit = false;
+      let dataChildren = this.findChildren(element);
+      let data:any="";
+      data = {
+        label: element.name,
+        data: element.id,
+        expanded: true,
+        children: dataChildren
+      };
+
+      this.array_empty.push(data);
+      //this.removeElementFromStringArray(element.id);
+    })
+    this.listOrgCombobox = this.array_empty;
+  }
+
+  findChildren(element:any){
+    let dataChildren:any[]=[];
+    let arrCon = this.orgList.filter((p: any) => p.parent_id == element.id);
+
+    arrCon.forEach((elementCon: any, indexCOn: number) => {
+      let is_edit = false;
+
+      dataChildren.push(
+      {
+        label: elementCon.name,
+        data: elementCon.id,
+        expanded: true,
+        children: this.findChildren(elementCon)
+      });
+      this.removeElementFromStringArray(elementCon.id);
+    })
+    return dataChildren;
+  }
+  removeElementFromStringArray(element: string) {
+    this.orgList.forEach((value,index)=>{
+        if(value.id==element){
+          this.orgList.splice(index,1);
+        }
+
+    });
+  }
 
   handleCancel() {
     this.dialogRef.close();
   }
   async getListAllEmail(event?: any) {
-    this.listEmailOptions = []
+    this.emailList = []
     this.addForm.patchValue({ email: [''] });
-    console.log('evennnt',event);
     let email: any = null
     if (!event) {
       email = ""
@@ -138,8 +197,8 @@ export class DigitalCertificateEditComponent implements OnInit {
     await this.DigitalCertificateService.getListOrgByEmail(email || '',event?.value || '').toPromise().then((response) => {
       if (response && response.length > 0) {
         response.forEach((item: any) => {
-          if (!this.listEmailOptions.some((existingItem: any) => existingItem.email === item.email)) {
-            this.listEmailOptions.push(item);
+          if (!this.emailList.some((existingItem: any) => existingItem.email === item.email)) {
+            this.emailList.push(item);
           }
         });
       }
@@ -150,20 +209,10 @@ export class DigitalCertificateEditComponent implements OnInit {
   }
 
   onSelectionChange() {
-    // const emailControl = this.addForm.get('email');
-    // console.log("âgsd", emailControl);
-    // if (emailControl) {
-    //   const control = emailControl.value
-    //   if (control) {
-    //     this.listSelectedEmail = [...this.listSelectedEmail, ...control];
-    //   }
-    //   console.log("listSelectedEmail", this.listSelectedEmail);
-    //   this.listEmailOptions.push(this.listSelectedEmail)
-    // }
     let selectedValues = []
     selectedValues = this.addForm.get('email')?.value;
     selectedValues.forEach((value: any) => {
-      const option = this.listEmailOptions.find((opt: any) => opt.email === value);
+      const option = this.emailList.find((opt: any) => opt.email === value);
       if (option) {
         value = option.email;
       }
@@ -203,40 +252,21 @@ export class DigitalCertificateEditComponent implements OnInit {
       })
   }
 
-  // getListAllEmail(event: any) {
-  //   this.emailList = []
-  //   console.log("responseSU", event.filter);
-  //   let email: any = event.filter || ''
-  //   // let emailLogin = this.userService.getAuthCurrentUser().email;
-  //   console.log("event",event);
-
-  //   this.DigitalCertificateService.getListOrgByEmail(email,event.value || '').subscribe((response) => {
-  //     if (response && response.length > 0) {
-  //       response.forEach((item: any) => {
-  //         const id = item.id;
-  //         if (!this.emailList.some((existingItem: any) => existingItem.id === id)) {
-  //           this.emailList.push(item);
-  //         }
-  //       });
-  //     }
-  //   });
-  // }
-
-    getListAllEmailOnFillter(event: any) {
-    // this.emailList = []
-    console.log("responseSU", event.filter);
+  getListAllEmailOnFillter(event: any) {
+    this.emailList = []
+    if (this.addForm.value.email.length > 0) {
+      for (const item of this.addForm.value.email) {
+        this.emailList.push({email: item})
+      }
+    }
     let email: any = event.filter || ''
-    // let emailLogin = this.userService.getAuthCurrentUser().email;
-    console.log("event",event);
-
-    this.DigitalCertificateService.getListOrgByEmail(email,this.addForm.value.orgId || '').subscribe((response) => {
+    this.DigitalCertificateService.getListOrgByEmail(email, this.addForm.value.orgId.data || '').subscribe((response) => {
       if (response && response.length > 0) {
-        response.forEach((item: any) => {
-          const id = item.id;
-          if (!this.listEmailOptions.some((existingItem: any) => existingItem.id === id)) {
-            this.listEmailOptions.push(item);
+        for (const item of response) {
+          if (item?.email != this.emailList.find((value: any) => value.email == item.email)?.email) {
+            this.emailList.push({email: item.email})
           }
-        });
+        }
       }
     });
   }

@@ -10,9 +10,16 @@
         </div>
 
         <div>
-          <p-dropdown panelStyleClass="font" appendTo="body" [options]="orgList" formControlName="orgId"
-            optionLabel="name" optionValue="id" placeholder="Chọn tổ chức" [filter]="true" filterBy="name"
-            [showClear]="true" (onChange)="getListAllEmail($event)" style="height: 33px!important"></p-dropdown>
+            <p-treeSelect 
+              [(ngModel)]="selectedNodeOrganization"
+              formControlName="orgId"
+              [options]="listOrgCombobox" 
+              placeholder="{{'all' | translate}}" 
+              [filter]="true" 
+              filterBy="name"  
+              [droppable]="true" 
+              (onNodeSelect)="changeOrg()">
+            </p-treeSelect>
         </div>
         <div class="invalid" *ngIf="errorOrg">
           {{errorOrg | translate}}
@@ -26,7 +33,7 @@
           <span class="required-title">*</span>
         </div>
         <div>
-          <p-multiSelect panelStyleClass="font" appendTo="body" [options]="listEmailOptions" formControlName="email"
+          <p-multiSelect panelStyleClass="font" appendTo="body" [options]="emailList" formControlName="email"
             optionLabel="email" optionValue="email" placeholder="Chọn email" [filter]="true" filterBy="email"
             [showClear]="true" (onFilter)="getListAllEmail($event)"  [multiple]="true"
             (onChange)="onSelectionChange()">
