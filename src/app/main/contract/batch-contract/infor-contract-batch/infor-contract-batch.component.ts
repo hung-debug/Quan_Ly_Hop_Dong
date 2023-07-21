@@ -156,7 +156,7 @@ export class InforContractBatchComponent implements OnInit {
       } else {
         this.optionsCeCa = optionsCeCa;
         this.optionsCeCaValue = 0;
-        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
       }
     } else {
       this.optionsCeCaValue = 0;
