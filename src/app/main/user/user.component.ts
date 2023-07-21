@@ -117,6 +117,22 @@ export class UserComponent implements OnInit {
     ];
   }
 
+  onInputChange(event: any) {
+    // Lấy giá trị đã nhập từ sự kiện
+    let inputValue = event.target.value;
+
+    // Chuỗi chứa những ký tự đặc biệt mà bạn muốn loại bỏ
+    const specialCharacters = /[`!#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/;
+
+    // Kiểm tra xem giá trị nhập vào có chứa ký tự đặc biệt không
+    if (specialCharacters.test(inputValue)) {
+      // Nếu có, thay thế ký tự đặc biệt bằng chuỗi rỗng
+      inputValue = inputValue.replace(specialCharacters, '');
+      // Gán lại giá trị của input mà không chứa các ký tự đặc biệt
+      event.target.value = inputValue;
+    }
+  }
+
   array_empty: any = [];
   listOrgCombobox: any[];
   selectedNodeOrganization:any;

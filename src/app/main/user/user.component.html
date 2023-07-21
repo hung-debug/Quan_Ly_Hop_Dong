@@ -17,7 +17,7 @@
     <div class="col-md-3" *ngIf="isQLND_03">
       <div>{{'unit.email.name' | translate}}</div>
       <div class="input-line">
-        <input type="text" [(ngModel)]="nameOrEmail" class="input_text"/>
+        <input type="text" [(ngModel)]="nameOrEmail" (input)="onInputChange($event)" class="input_text"/>
       </div>
     </div>
 
