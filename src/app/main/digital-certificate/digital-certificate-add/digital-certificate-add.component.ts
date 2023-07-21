@@ -48,6 +48,12 @@ export class DigitalCertificateAddComponent implements OnInit {
   orgIdSelected: any;
   code:string = "";
   // name:any = "";
+  lang: any;
+  orgListTmp: any[] = [];
+  array_empty: any = [];
+  listOrgCombobox: any[];
+  selectedNodeOrganization:any = '';
+  organization_id:any = "";
 
   get f() { return this.addForm.controls; }
   constructor(
@@ -84,6 +90,81 @@ export class DigitalCertificateAddComponent implements OnInit {
     });
     // chạy mồi lấy list dữ liệu cho component
     this.getData({ filter: '' })
+
+    this.unitService.getUnitList('', '').subscribe(data => {
+      if(this.lang == 'vi')
+        this.orgListTmp.push({name: "Tất cả", id:""});
+      else if(this.lang == 'en')
+        this.orgListTmp.push({name: "All", id:""});
+
+      let dataUnit = data.entities.sort((a:any,b:any) => a.path.toString().localeCompare(b.path.toString()));
+      for(var i = 0; i < dataUnit.length; i++){
+        this.orgListTmp.push(dataUnit[i]);
+      }
+
+      this.orgList = this.orgListTmp;
+      this.convertData();
+      this.selectedNodeOrganization = this.listOrgCombobox.filter((p: any) => p.data == this.organization_id);
+    }, error => {
+      setTimeout(() => this.router.navigate(['/login']));
+      this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+    }
+    );
+  }
+
+  convertData(){
+    this.array_empty=[];
+    this.orgList.forEach((element: any, index: number) => {
+
+      let is_edit = false;
+      let dataChildren = this.findChildren(element);
+      let data:any="";
+      data = {
+        label: element.name,
+        data: element.id,
+        expanded: true,
+        children: dataChildren
+      };
+
+      this.array_empty.push(data);
+      //this.removeElementFromStringArray(element.id);
+    })
+    this.listOrgCombobox = this.array_empty;
+  }
+
+  findChildren(element:any){
+    let dataChildren:any[]=[];
+    let arrCon = this.orgList.filter((p: any) => p.parent_id == element.id);
+
+    arrCon.forEach((elementCon: any, indexCOn: number) => {
+      let is_edit = false;
+
+      dataChildren.push(
+      {
+        label: elementCon.name,
+        data: elementCon.id,
+        expanded: true,
+        children: this.findChildren(elementCon)
+      });
+      this.removeElementFromStringArray(elementCon.id);
+    })
+    return dataChildren;
+  }
+  removeElementFromStringArray(element: string) {
+    this.orgList.forEach((value,index)=>{
+        if(value.id==element){
+          this.orgList.splice(index,1);
+        }
+
+    });
+  }
+
+  changeOrg(){
+    this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
+    this.addForm.patchValue({
+      email: this.addForm.value.email? this.addForm.value.email : []
+    })
+    this.getListAllEmailOnFillter(this.organization_id)
   }
 
   toggleFieldTextType() {
@@ -113,27 +194,22 @@ export class DigitalCertificateAddComponent implements OnInit {
 
         }
         else {
-          this.toastService.showWarningHTMLWithTimeout("File hợp đồng yêu cầu định dạng p12", "", 3000);
+          this.toastService.showWarningHTMLWithTimeout("File chứng thư số yêu cầu định dạng p12", "", 3000);
           this.spinner.hide();
         }
       } else {
-        this.toastService.showWarningHTMLWithTimeout("File hợp đồng yêu cầu nhỏ hơn 5MB", "", 3000);
+        this.toastService.showWarningHTMLWithTimeout("File chứng thư số yêu cầu nhỏ hơn 5MB", "", 3000);
         this.spinner.hide();
       }
     }
   }
   getListAllEmail(event: any) {
-    this.emailList = []
-    console.log("responseSU", event.filter);
     let email: any = event.filter || ''
-    // let emailLogin = this.userService.getAuthCurrentUser().email;
-    console.log("event",event);
-
     this.DigitalCertificateService.getListOrgByEmail(email,event.value || '').subscribe((response) => {
       if (response && response.length > 0) {
-        response.forEach((item: any) => {
+       response.forEach((item: any) => {
           const id = item.id;
-          if (!this.emailList.some((existingItem: any) => existingItem.id === id)) {
+          if (!this.emailList.some((existingItem: any) => existingItem.id == id)) {
             this.emailList.push(item);
           }
         });
@@ -142,22 +218,27 @@ export class DigitalCertificateAddComponent implements OnInit {
   }
 
   getListAllEmailOnFillter(event: any) {
-    // this.emailList = []
-    console.log("responseSU", event.filter);
+    this.emailList = []
+    if (this.addForm.value.email.length > 0) {
+      for (const item of this.addForm.value.email) {
+        this.emailList.push({email: item})
+      }
+    }
     let email: any = event.filter || ''
     // let emailLogin = this.userService.getAuthCurrentUser().email;
-    console.log("event",event);
-
-    this.DigitalCertificateService.getListOrgByEmail(email,this.addForm.value.orgId || '').subscribe((response) => {
+    this.DigitalCertificateService.getListOrgByEmail(email,this.addForm.value.orgId.data || '').subscribe((response) => {
       if (response && response.length > 0) {
-        response.forEach((item: any) => {
-          const id = item.id;
-          if (!this.emailList.some((existingItem: any) => existingItem.id === id)) {
-            this.emailList.push(item);
+        for (const item of response) {
+          if (item?.email != this.emailList.find((value: any) => value.email == item.email)?.email) {
+            this.emailList.push({email: item.email})
           }
-        });
+        }
       }
-    });
+
+    }, (error) => {
+      console.log(error)
+    }
+    );
   }
 
   getData(event: any){
@@ -171,16 +252,6 @@ export class DigitalCertificateAddComponent implements OnInit {
 
 
   onSelectionChange() {
-    console.log('listSelectedEmail', this.listSelectedEmail)
-    const emailControl = this.addForm.get('email');
-    console.log("emailControl", emailControl);
-
-    if (emailControl) {
-      const control = emailControl.value
-      if (control) {
-        this.listSelectedEmail = [...this.listSelectedEmail, ...control];
-      }
-    }
   }
   getNotificationValid(is_notify: string) {
     this.spinner.hide();
@@ -261,10 +332,7 @@ export class DigitalCertificateAddComponent implements OnInit {
     if (!this.validData()) {
       return;
     }
-
     this.DigitalCertificateService.addImportCTS(this.datas.contractFile, this.addForm.value.email, this.addForm.value.password, this.addForm.value.status).subscribe(response => {
-
-      console.log("this.datassdddddddddddddd", response);
       if (response.success == false) {
         this.toastService.showErrorHTMLWithTimeout(response.message, "", 3000)
       } else {

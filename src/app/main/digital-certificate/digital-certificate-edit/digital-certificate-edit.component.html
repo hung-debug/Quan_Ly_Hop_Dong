@@ -3,15 +3,39 @@
     <h3 class="label-header">{{this.datas.title | translate}}</h3>
   </div>
   <form [formGroup]="addForm" class="content">
-    <div class="row">
+    <div class="row" >
+      <div class="col-md-12">
+        <div class="label text-color">{{'menu.organization.list' | translate}}
+          <span class="required-title">*</span>
+        </div>
+
+        <div>
+            <p-treeSelect 
+              [(ngModel)]="selectedNodeOrganization"
+              formControlName="orgId"
+              [options]="listOrgCombobox" 
+              placeholder="{{'all' | translate}}" 
+              [filter]="true" 
+              filterBy="name"  
+              [droppable]="true" 
+              (onNodeSelect)="changeOrg()">
+            </p-treeSelect>
+        </div>
+        <div class="invalid" *ngIf="errorOrg">
+          {{errorOrg | translate}}
+        </div>
+      </div>
+
+    </div>
+    <div class="row" style="padding-top: 20px;">
       <div class="col-md-12">
         <div class="label text-color">{{'email.user' | translate}}
           <span class="required-title">*</span>
         </div>
         <div>
-          <p-multiSelect panelStyleClass="font" appendTo="body" [options]="listEmailOptions" formControlName="email"
+          <p-multiSelect panelStyleClass="font" appendTo="body" [options]="emailList" formControlName="email"
             optionLabel="email" optionValue="email" placeholder="Chọn email" [filter]="true" filterBy="email"
-            [showClear]="true" (onFilter)="getListAllEmail($event)" display="chip" [multiple]="true"
+            [showClear]="true" (onFilter)="getListAllEmail($event)"  [multiple]="true"
             (onChange)="onSelectionChange()">
           </p-multiSelect>
         </div>

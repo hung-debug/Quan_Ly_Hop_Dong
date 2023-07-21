@@ -27,6 +27,8 @@ export class DigitalCertificateDetailComponent implements OnInit {
   subject: any = "";
   sub: any[];
   unit: any = "";
+  orgList: any[]
+  selectedNodeOrganization: any = "226"
 
   get f() { return this.addForm.controls; }
   constructor(
