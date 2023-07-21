@@ -72,7 +72,6 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   }
 
   fileChangedAttach(e: any) {
-    
     let files = e.target.files;
     let valid = ["jpg", "jpeg", "png"];
     for(let i = 0; i < files.length; i++){
@@ -104,8 +103,6 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
         }
       }
     }
-
-
   }
 
   handleUpload(event: any) {

@@ -174,7 +174,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         if (d.login_by == 'phone') {
           d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,2,5].includes(p.id));
         } else {
-          
           d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,5].includes(p.id));
         }
     } else if(role == 'signer') {
@@ -221,7 +220,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     } else {
       this.flagUsbToken[id] = false;
     }
-
   }
 
   deSelectPartnerSign(e: any, id: number) {
@@ -313,7 +311,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
             }
           })
         })
-
         this.checkNumber(countEkyc, countSMS);
       } else {
         this.getApiDetermine(is_save);
