@@ -705,5 +705,6 @@
   "choice": "Lựa chọn",
   "signer":"Người ký",
   "unit.email.name": "Địa chỉ email/Họ tên",
-  "error.org.required":"Tổ chức không được để trống"
+  "error.org.required":"Tổ chức không được để trống",
+  "sign.multi.success":"Ký nhiều hợp đồng thành công"
 }
