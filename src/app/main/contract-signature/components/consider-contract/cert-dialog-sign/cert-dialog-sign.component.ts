@@ -60,9 +60,8 @@ export class CertDialogSignComponent implements OnInit {
 
     this.spinner.show();
     this.DigitalCertificateService.dataSignCert().subscribe(response =>{
-      this.spinner.hide();
-      console.log("res",response);
 
+      this.spinner.hide();
       this.list = response.certificates;
       this.id = response.certificates.id;
       // console.log("iddđ",this.id);
@@ -78,7 +77,6 @@ export class CertDialogSignComponent implements OnInit {
 
   signCert(){
     // console.log("id",this.list[0].id);
-    console.log("iddđ",this.id);
     // const dataSignCert = {
     //   // ma_dvcs: this.myForm.value.taxCode,
     //   // username: this.myForm.value.username,
@@ -86,6 +84,14 @@ export class CertDialogSignComponent implements OnInit {
     //   // password2: this.myForm.value.pass2
     //   id: this.id,
     // };
-    this.dialogRef.close(this.id);
+    if (!this.id) {
+      this.toastService.showErrorHTMLWithTimeout(
+        'Cần chọn chứng thư số trước khi ký',
+        '',
+        3000
+      )
+    } else {
+      this.dialogRef.close(this.id);
+    }
   }
 }

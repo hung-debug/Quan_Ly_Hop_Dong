@@ -1480,6 +1480,7 @@ export class ContractSignatureComponent implements OnInit {
                 };
 
                 try {
+                  this.spinner.show()
                   const checkSign = await this.contractServiceV1.signCertMulti(contractsSignManyChecked[i].id, signCertPayload);
                   countSuccess++;
                   if (countSuccess == checkSign.length) {
@@ -1497,6 +1498,7 @@ export class ContractSignatureComponent implements OnInit {
                       });
                   }
                 } catch (err) {
+                  this.spinner.hide()
                   // this.toastService.showErrorHTMLWithTimeout(err,'',3000);
                 }
               }
