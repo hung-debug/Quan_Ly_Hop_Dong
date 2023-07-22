@@ -719,11 +719,11 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   sortParticipant(list: any) {
-    if (list && list.length > 0) {
-      return list.sort(
-        (beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type
-      );
-    }
+    // if (list && list.length > 0) {
+    //   return list.sort(
+    //     (beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type
+    //   );
+    // }
     return list;
   }
 
