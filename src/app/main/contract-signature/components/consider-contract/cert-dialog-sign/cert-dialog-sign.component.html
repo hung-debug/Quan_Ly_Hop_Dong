@@ -12,7 +12,7 @@
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-list>
-        <tr>
+        <tr *ngIf="list.status=='1'">
           <td>
             <input type="radio" name="confirm-radio-consider" [value]="list.id" [(ngModel)]="id" name="status" style="margin-left: 20px;">
           </td>
