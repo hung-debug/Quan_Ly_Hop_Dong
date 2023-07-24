@@ -122,7 +122,7 @@ export class UserComponent implements OnInit {
     let inputValue = event.target.value;
 
     // Chuỗi chứa những ký tự đặc biệt mà bạn muốn loại bỏ
-    const specialCharacters = /[`!#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/;
+    const specialCharacters = /[`!#$%^&*()_+\=[\]{};':"\\|,<>/?~]/;
 
     // Kiểm tra xem giá trị nhập vào có chứa ký tự đặc biệt không
     if (specialCharacters.test(inputValue)) {
