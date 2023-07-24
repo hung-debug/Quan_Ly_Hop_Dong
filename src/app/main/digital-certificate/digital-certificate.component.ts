@@ -50,6 +50,7 @@ export class DigitalCertificateComponent implements OnInit {
   cols: any[];
   dataSearch: any[];
   fileName: any;
+  serial_number: any;
   // listStatus: any[];
   isQLDC_01: boolean = true; //them moi chung thu so
   isQLDC_02: boolean = true; //sua thong tin chung thu so
@@ -65,6 +66,7 @@ export class DigitalCertificateComponent implements OnInit {
     this.appService.setTitle("certificate.list");
     this.cols = [
       { header: 'notation', style: 'text-align: left;' },
+      { header: 'file.name', style: 'text-align: left;' },
       { header: 'start-date', style: 'text-align: left;' },
       { header: 'end-date', style: 'text-align: left;' },
       { header: 'unit.status', style: 'text-align: left;' },
@@ -80,7 +82,7 @@ export class DigitalCertificateComponent implements OnInit {
     this.first = 0;
 
     this.spinner.show();
-    this.DigitalCertificateService.searchCertificate(this.fileName, this.status.value, this.keystoreDateStart, this.keystoreDateEnd, 0, this.size).subscribe(response => {
+    this.DigitalCertificateService.searchCertificate(this.fileName, this.serial_number, this.status.value, this.keystoreDateStart, this.keystoreDateEnd, 0, this.size).subscribe(response => {
       this.spinner.hide();
       if (response.content) {
         this.list = response.content;
@@ -96,7 +98,7 @@ export class DigitalCertificateComponent implements OnInit {
     const first = event.first ? event.first : 0;
     const pageNumber = Math.floor(first / this.size) + 1;
     this.spinner.show();
-    this.DigitalCertificateService.searchCertificate(this.fileName, this.status.value, this.keystoreDateStart, this.keystoreDateEnd, pageNumber, this.size).subscribe(response => {
+    this.DigitalCertificateService.searchCertificate(this.fileName, this.serial_number, this.status.value, this.keystoreDateStart, this.keystoreDateEnd, pageNumber, this.size).subscribe(response => {
       if (response.content) {
         this.list = response.content;
         this.totalRecords = response.totalElements;

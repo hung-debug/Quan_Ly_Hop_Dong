@@ -3,6 +3,12 @@
     <div class="col-md-3" *ngIf="isQLDC_03">
       <div>{{'notation' | translate}}</div>
       <div class="input-line">
+        <input type="text" [(ngModel)]="serial_number" class="input_text"/>
+      </div>
+    </div>
+    <div class="col-md-3" *ngIf="isQLDC_03">
+      <div>{{'file.name' | translate}}</div>
+      <div class="input-line">
         <input type="text" [(ngModel)]="fileName" class="input_text"/>
       </div>
     </div>
@@ -34,6 +40,7 @@
       <ng-template pTemplate="body" let-list>
           <tr>
               <td>{{list.keystoreSerialNumber}}</td>
+              <td>{{list.keyStoreFileName}}</td>
               <td>{{list.keystoreDateStart | date:'dd/MM/yyyy HH:mm'}}</td>
               <td>{{list.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}</td>
 

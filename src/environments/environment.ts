@@ -6,9 +6,9 @@
 export const environment = {
   production: false,
 
-  apiUrl: 'http://14.160.91.174:1387',
+  // apiUrl: 'http://14.160.91.174:1387',
   // apiFolder: 'http://localhost:3000',
-  // apiUrl: 'https://econtractdev.mobifone.ai/service',
+  apiUrl: 'https://econtractdev.mobifone.ai/service',
   // apiUrl: 'http://192.168.0.101:8762',
   // apiUrl: 'http://192.168.1.14:8762',
   // flag: 'NB',
