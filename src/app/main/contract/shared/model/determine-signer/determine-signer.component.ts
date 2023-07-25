@@ -282,7 +282,7 @@ export class DetermineSignerComponent implements OnInit {
   }
   switchLang(locale: string, d: any) {
     // this.data_organization.recipients.filter((p: any) => p.role == 2);
-    // 
+    //
   }
 
   async checkNumber(countEkyc: number, countSMS: number) {
@@ -400,7 +400,7 @@ export class DetermineSignerComponent implements OnInit {
     }
 
     // }
-    // 
+    //
     this.checkCount = 1; // gan lai de lan sau ko bi tang index
   }
 
@@ -475,6 +475,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   selectWithOtp(e: any, data: any, type: any) { // sort ordering
+    data.card_id = ""
     //clear lai gia tri card_id
     //Check với tổ chức của tôi ký
     if (type == 'organization') {
@@ -486,7 +487,9 @@ export class DetermineSignerComponent implements OnInit {
       }
       //Nếu là văn thư
       else if (data.role == 4) {
-        if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0) {
+        if (e[0]?.id==6) {
+          data.card_id = "";
+        } else if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0) {
           this.unitService.getTaxCodeOriganzation(this.userService.getInforUser().organization_id).subscribe((res: any) => {
             data.card_id=res.tax_code;})
         }
@@ -523,7 +526,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeTypeSign(d: any,index: any,id?: any,role?: any) {
-    
+
     if (d.login_by == 'phone' || d.login_by == 'email') {
       d.email = '';
       d.phone = '';
@@ -537,7 +540,7 @@ export class DetermineSignerComponent implements OnInit {
         if (d.login_by == 'phone') {
           d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,2,5].includes(p.id));
         } else {
-          
+
           d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,5].includes(p.id));
         }
     } else if(role == 'signer') {
@@ -640,7 +643,7 @@ export class DetermineSignerComponent implements OnInit {
     let count = 0;
     let dataArr = [];
     dataArr = (this.data_organization.recipients).sort((beforeItemRole: any, afterItemRole: any) => beforeItemRole.role - afterItemRole.role);
-    
+
     for (let i = 0; i < dataArr.length; i++) {
 
       if (!dataArr[i].name) {
@@ -782,7 +785,7 @@ export class DetermineSignerComponent implements OnInit {
               break;
             }
 
-           
+
             if (!isParterSort[k].name) {
               this.getNotificationValid("Vui lòng nhập tên " + this.getNameObjectValid(isParterSort[k].role) + " của đối tác!")
               count++;
@@ -938,7 +941,7 @@ export class DetermineSignerComponent implements OnInit {
                 break;
               }
 
-              // if(isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) && 
+              // if(isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
               //   !this.pattern.card_id12.test(isParterSort[k].card_id.trim() &&
               //   !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) && isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 4).length > 0)) {
               //   this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của tôi không hợp lệ!");
@@ -1145,7 +1148,7 @@ export class DetermineSignerComponent implements OnInit {
 
     var valueSoFar = Object.create(null);
     for (var k = 0; k < arrCheckTaxCode.length; ++k) {
-      
+
       var value: any = arrCheckTaxCode[k];
       if (value in valueSoFar) {
         return true;
@@ -1206,7 +1209,7 @@ export class DetermineSignerComponent implements OnInit {
 
     var valueSoFar = Object.create(null);
     for (var k = 0; k < arrCheckTaxCode.length; ++k) {
-      
+
       var value: any = arrCheckTaxCode[k];
       if (value in valueSoFar) {
         return true;
@@ -1357,6 +1360,8 @@ export class DetermineSignerComponent implements OnInit {
               ordering: dataValid[i].ordering
             }
             arrCardId.push(items);
+            console.log("arrCardId",arrCardId);
+
           }
         }
       }
@@ -1372,6 +1377,8 @@ export class DetermineSignerComponent implements OnInit {
               return true;
             }
             duplicateCardId.push(d);
+            console.log("duplicateCardId",duplicateCardId);
+
           }
           if (countCheck_duplicate) return false;
         }
@@ -1437,7 +1444,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   getDataSignature(e: any) {
-    
+
   }
 
   getValueData(data: any, index: any) {
@@ -1564,7 +1571,7 @@ export class DetermineSignerComponent implements OnInit {
     // let is_ordering: number = parseInt(this.getMaxNumberOrderingSign(count_data)); // set ordering follow data have max ordering
     data.ordering = count_data.length + 1;
     // data.ordering = is_ordering + 1;
-  
+
 
     (this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
   }
@@ -1798,7 +1805,7 @@ export class DetermineSignerComponent implements OnInit {
               }
             ]
           }
-          if(data_partner_add.recipients[0].email == '' && data_partner_add.recipients[0].phone && 
+          if(data_partner_add.recipients[0].email == '' && data_partner_add.recipients[0].phone &&
           data_partner_add.recipients[0].login_by == 'phone')
           data_partner_add.recipients[0].email = data_partner_add.recipients[0].phone;
           let true_index = 0
@@ -1819,7 +1826,7 @@ export class DetermineSignerComponent implements OnInit {
             recipients: [] as any
           }
           data.handlers.forEach((item: any) => {
-            
+
             let recipient: any = {
                 name: item.name,
                 email: item.email,
@@ -1847,7 +1854,7 @@ export class DetermineSignerComponent implements OnInit {
                   name: item.signType[0].name,
                 });
                 recipient.card_id= item.card_id;
-                if(recipient.email == '' && recipient.phone && 
+                if(recipient.email == '' && recipient.phone &&
                 recipient.login_by == 'phone'){
                   recipient.email = recipient.phone;
                 }
@@ -1860,7 +1867,7 @@ export class DetermineSignerComponent implements OnInit {
                   name: item.signType[0].name,
                 });
                 recipient.card_id= item.card_id;
-                if(recipient.email = '' && recipient.phone && 
+                if(recipient.email = '' && recipient.phone &&
                 recipient.login_by == 'phone'){
                   recipient.email = recipient.phone;
                 }
@@ -1877,8 +1884,8 @@ export class DetermineSignerComponent implements OnInit {
           }
           this.datas.is_determine_clone[true_index] = data_partner_add;
         }
-  }});  
-   
+  }});
+
   }
 
   // thêm đối tác
@@ -1942,7 +1949,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeType(e: any, item: any, index: number) {
-    // 
+    //
     item.name = "";
     let newArr: any[] = [];
     for (let i = 0; i < item.recipients.length; i++) {
@@ -1997,7 +2004,7 @@ export class DetermineSignerComponent implements OnInit {
         } else {
           this.arrSearchNameDoc = data;
         }
-        // 
+        //
       }, () => {
         this.getNotificationValid('có lỗi, vui lòng liên hệ với nhà phát triển để được xử lý!')
       })
@@ -2006,7 +2013,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   onFocusIn(e: any, is_index: number, action: string) {
-    // 
+    //
     if (e.type == "focusin") {
       this.arrSearch = [];
       let arrData = [];
@@ -2030,7 +2037,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   onFocusOut(e: any, dItem: any) {
-    // 
+    //
     if (!e.relatedTarget || (e.relatedTarget && e.relatedTarget.className && !e.relatedTarget.className.includes('search-name-items'))) {
       if (!dItem.name) dItem.email = '';
       this.arrSearchNameView = [];
@@ -2049,7 +2056,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   onChangeValue(e: any, orering_data: string) {
-    // 
+    //
     if (!e.target.value) {
       let data_ordering = document.getElementById(orering_data);
       if (data_ordering)

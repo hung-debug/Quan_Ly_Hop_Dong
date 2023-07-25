@@ -84,6 +84,11 @@ export const type_signature_en = [
     name: 'Signed by PKI',
     is_otp: false,
   },
+  {
+    id: 6,
+    name: 'Sign by cert',
+    is_otp: false
+  }
 
 ];
 
