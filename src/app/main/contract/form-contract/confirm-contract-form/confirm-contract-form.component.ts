@@ -111,8 +111,6 @@ export class ConfirmContractFormComponent implements OnInit {
       (p: any) => p.type == 2 || p.type == 3
     );
 
-    console.log("vao day ");
-    console.log("dsf ", this.datasForm);
     if (!this.datasForm.contract_user_sign) {
       if (this.datasForm.is_data_object_signature && this.datasForm.is_data_object_signature.length && this.datasForm.is_data_object_signature.length > 0) {
         this.datasForm.is_data_object_signature.forEach((res: any) => {
