@@ -475,7 +475,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   selectWithOtp(e: any, data: any, type: any) { // sort ordering
-    data.card_id = ""
+    // data.card_id = ""
     //clear lai gia tri card_id
     //Check với tổ chức của tôi ký
     if (type == 'organization') {
