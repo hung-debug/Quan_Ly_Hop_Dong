@@ -52,7 +52,7 @@
           <div class="select-file-contract" [hidden]="imgSignPCSelect">
             <div class="file-approve">
               <div class="label_item">File đính kèm:</div>
-              <input id="attachFileSignature" type="file" accept=".jpg, .png, .jpge"
+              <input id="attachFileSignature" type="file" accept="image/*"
                 (change)="fileChangedAttach($event)" style="display: none;">
               <div class="select-contract container-img-file" (click)="addFileAttach()">
                 <div class="upload-image-region d-flex flex-column container-img-file-1">
