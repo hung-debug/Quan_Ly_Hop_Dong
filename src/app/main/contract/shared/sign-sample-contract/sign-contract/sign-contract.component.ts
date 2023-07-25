@@ -34,7 +34,6 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   }
 
   getText(sign: any) {
-    console.log("sign ", sign);
     if (sign.sign_unit == 'text') {
       if(sign.value) {
         if(sign.text_type == 'currency') {
@@ -49,9 +48,11 @@ export class SignContractComponent implements OnInit, AfterViewInit {
       }
     } else {
       if (this.datas.contract_no) {
-        return this.datas.contract_no
+        this.contractNo = this.datas.contract_no;
+        return this.contractNo
       } else if (sign.value) {
-        return sign.value;
+        this.contractNo = sign.value;
+        return this.contractNo;
       } else return (this.translate.instant('contract.number'));
     }
   }

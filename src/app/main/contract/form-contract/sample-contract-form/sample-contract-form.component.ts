@@ -139,6 +139,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+
+    console.log("contract no ", this.contractNo);
     this.onResize();
 
     if(this.datasForm.font) {
@@ -1509,10 +1511,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   contractNo: any;
   getValueText(e: any, d: any) {
-    // const num = e.toString().replace(/\./g, '');
-
-    // const num = this.convertCurrency(e);
-
     const num = e;
     d.value = num;
 
@@ -1544,6 +1542,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   }
 
   back(e: any, step?: any) {
+    console.log("abc ", this.datasForm.contract_no);
     this.contractNo = this.datasForm.contract_no;
     this.nextOrPreviousStep(step);
   }
