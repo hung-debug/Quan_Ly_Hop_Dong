@@ -72,18 +72,11 @@ export class CertDialogSignComponent implements OnInit {
 
 
   handleCancel() {
-    this.dialogRef.close(this.id);
+    this.dialogRef.close();
   }
 
   signCert(){
-    // console.log("id",this.list[0].id);
-    // const dataSignCert = {
-    //   // ma_dvcs: this.myForm.value.taxCode,
-    //   // username: this.myForm.value.username,
-    //   // password: this.myForm.value.pass1,
-    //   // password2: this.myForm.value.pass2
-    //   id: this.id,
-    // };
+
     if (!this.id) {
       this.toastService.showErrorHTMLWithTimeout(
         'Cần chọn chứng thư số trước khi ký',
