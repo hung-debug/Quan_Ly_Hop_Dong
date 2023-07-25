@@ -20,7 +20,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
     public translate: TranslateService,
     public contractService: ContractService
   ) {
-    
+
   }
 
   ngOnInit(): void {
@@ -28,7 +28,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
       if(this.sign.value) {
         if(this.sign.text_type == 'currency') {
           this.sign.value = this.contractService.convertCurrency(this.sign.value);
-        } 
+        }
       }
     }
   }
@@ -38,12 +38,11 @@ export class SignContractComponent implements OnInit, AfterViewInit {
       if(sign.value) {
         if(sign.text_type == 'currency') {
           return this.contractService.convertCurrency(sign.value);
-        } else 
-        return sign.value      
+        } else
+        return sign.value
       } else if (sign.text_type!= undefined && sign.text_type == "currency"){
           return 'Số tiền'
       } else {
-        console.log("vao day");
         return 'Text';
       }
     } else {
@@ -77,7 +76,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
 
   doTheSearch($event: Event, key: string): void {
     const stringEmitted = ($event.target as HTMLInputElement).value;
-    this.isContent = stringEmitted; 
+    this.isContent = stringEmitted;
     this.onChangeValueText.emit(stringEmitted);
   }
 
@@ -98,7 +97,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   getSpecifiedHandle() {
     if(this.contractNo) return false;
 
-    if (((!this.sign.is_have_text && this.sign.recipient_id) || (this.sign.value !== null && this.sign.value === undefined) || this.datas.contract_no || 
+    if (((!this.sign.is_have_text && this.sign.recipient_id) || (this.sign.value !== null && this.sign.value === undefined) || this.datas.contract_no ||
     (this.sign.sign_unit == 'so_tai_lieu' && this.sign.value)) || (this.sign.sign_unit == 'text' && this.sign.recipient_id)) {
       return true;
     } else {

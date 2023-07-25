@@ -227,7 +227,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       this.flagUsbToken[id] = false;
     }
   }
-  
+
   dropdownButtonText = '';
 
   changeButtonText(text: string) {
@@ -242,7 +242,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   isCeCaPushNo: boolean = false;
   async next(action: string) {
     this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
-            
+
       this.datasForm.is_determine_clone[index].id = null;
 
       if (items.type == 3) {
@@ -301,7 +301,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                   countEkyc++;
               }else if(element.sign_type.length > 0 && element.sign_type[0].id == 1) {
                   countSMS++;
-              } 
+              }
             } else if(element.login_by == 'phone') {
               if(element.sign_type.length > 0 && element.sign_type[0].id == 1) {
                 countSMS = countSMS + 2;
@@ -388,7 +388,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     this.spinner.show();
 
     this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
-      this.datasForm.is_determine_clone = res;  
+      this.datasForm.is_determine_clone = res;
         this.getDataApiDetermine(res, is_save)
       }, (error: HttpErrorResponse) => {
         if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
@@ -474,7 +474,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     }
 
     // }
-    // 
+    //
     this.checkCount = 1; // gan lai de lan sau ko bi tang index
   }
 
@@ -494,7 +494,10 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       }
       //Nếu là văn thư
       else if (data.role == 4) {
-        if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0) {
+        if (e[0]?.id==6) {
+          data.card_id = "";
+        }
+        else if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0) {
           this.unitService.getTaxCodeOriganzation(this.userService.getInforUser().organization_id).subscribe((res: any) => {
             data.card_id=res.tax_code;})
         }
@@ -690,7 +693,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
           break;
         }
       }
-      
+
 
       // valid phone number
       if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone.trim())) {
@@ -699,14 +702,14 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         break;
       }
 
-      if(!dataArr[i].card_id.trim() && (dataArr[i].role == 3 || dataArr[i].role == 4) && 
+      if(!dataArr[i].card_id.trim() && (dataArr[i].role == 3 || dataArr[i].role == 4) &&
         (dataArr[i].sign_type.filter((p: any) => p.id == 2).length > 0 || dataArr[i].sign_type.filter((p: any) => p.id == 4).length > 0)) {
         this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObject(dataArr[i].role)+"tổ chức của tôi");
         count++;
         break;
       }
 
-      if(dataArr[i].card_id.trim() && !this.pattern.cardid.test(dataArr[i].card_id.trim()) && 
+      if(dataArr[i].card_id.trim() && !this.pattern.cardid.test(dataArr[i].card_id.trim()) &&
         (dataArr[i].sign_type.filter((p: any) => p.id == 2).length > 0 || dataArr[i].sign_type.filter((p: any) => p.id == 4).length > 0)) {
         this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!");
         count++;
@@ -818,7 +821,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                 break;
               }
             }
-          
+
 
             // valid phone number
             if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone.trim())) {
@@ -828,7 +831,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
             }
 
             // valid cccd number
-            if (isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) && 
+            if (isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
             !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
               isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
               this.getNotificationValid("CMT/CCCD" + this.getNameObject(3) + "của đối tác không hợp lệ!")
@@ -836,20 +839,20 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               break;
             }
 
-            if(!isParterSort[k].card_id.trim() && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && 
-                (isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0 || 
-                isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0 
+            if(!isParterSort[k].card_id.trim() && (isParterSort[k].role == 3 || isParterSort[k].role == 4) &&
+                (isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0 ||
+                isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0
               )) {
               this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObject(isParterSort[k].role)+"tổ chức của đối tác");
               count++;
               break;
             }
 
-            if(isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) && 
+            if(isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
               !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
-                !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) && 
-                (isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0 || 
-                  isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0 
+                !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) &&
+                (isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0 ||
+                  isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0
               )) {
               this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(isParterSort[k].role) + "tổ chức của tôi không hợp lệ!");
               count++;
@@ -880,7 +883,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                 count++;
                 break;
               }
-             
+
             }
 
             if (isParterSort[k].sign_type.length == 0 && [3, 4].includes(isParterSort[k].role) && isParterSort[k].role == 3) {
@@ -912,7 +915,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                 break;
               }
 
-              if(isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) && 
+              if(isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
                 !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
                 !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
                 this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(isParterSort[k].role) + "tổ chức của tôi không hợp lệ!");
@@ -925,7 +928,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                 count++;
                 break;
               }
-              
+
             }
 
             if(isParterSort[k].login_by === 'email') {
@@ -970,7 +973,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
             }
 
             // valid cccd number
-            if (isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) && 
+            if (isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
             !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
             isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
               this.getNotificationValid("CMT/CCCD" + this.getNameObject(3) + "của đối tác cá nhân không hợp lệ!")
@@ -1279,7 +1282,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   getdatasFormignature(e: any) {
-    
+
   }
 
   getValueData(data: any, index: any) {
@@ -1343,7 +1346,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // tạo mảng người ký đối tác tổ chức
   getPartnerSignature(item: any) {
-    
+
     // return item.recipients.filter((p: any) => p.role == 3)
     return item.recipients.filter((p: any) => p.role == 3).map((x: any) => {
       if (!x.locale) {
@@ -1482,7 +1485,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // tạo mảng các đối tượng người ký tổ chức của tôi
   getOriganzationSignature() {
-    // 
+    //
 
     return this.data_organization.recipients.filter((p: any) => p.role == 3).map((x: any) => {
       if (!x.locale) {
@@ -1640,7 +1643,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     //   res.ordering = index + 1;
     // })
     //
-    // 
+    //
     //@ts-ignore
     let is_ordering: number = parseInt(this.getMaxNumberOrderingSign()); // set ordering follow data have max ordering
     this.datasForm.is_determine_clone[this.datasForm.is_determine_clone.length - 1].ordering = is_ordering + 1;
@@ -1649,7 +1652,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // xóa đối tham gia bên đối tác
   deletePartner(index: any, item: any) {
-    
+
     //xoa doi tuong tham gia
     if (item.id && this.router.url.includes('edit')) {
       this.spinner.show();
@@ -1670,7 +1673,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       })
     } else {
       this.datasForm.is_determine_clone = this.datasForm.is_determine_clone.filter((p: any) => p.id != item.id);
-      
+
     }
   }
 
@@ -1722,11 +1725,11 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   doTheSearch($event: Event, indexs: number, action: string): void {
     const stringEmitted = ($event.target as HTMLInputElement).value;
-    
+
     this.arrSearchNameView = [];
     this.arrSearchNameSignature = [];
     this.arrSearchNameDoc = [];
-    
+
     setTimeout(() => {
       this.contractService.getAllInfoUser(stringEmitted).subscribe((res) => {
         let arr_all = res;
@@ -1738,7 +1741,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         } else {
           this.arrSearchNameDoc = data;
         }
-        // 
+        //
       }, () => {
         this.getNotificationValid('có lỗi, vui lòng liên hệ với nhà phát triển để được xử lý!')
       })
@@ -1747,7 +1750,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   onFocusIn(e: any, is_index: number, action: string) {
-    // 
+    //
     if (e.type == "focusin") {
       this.arrSearch = [];
       let arrData = [];
@@ -1771,7 +1774,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   onFocusOut(e: any, dItem: any) {
-    // 
+    //
     if (!e.relatedTarget || (e.relatedTarget && e.relatedTarget.className && !e.relatedTarget.className.includes('search-name-items'))) {
       if (!dItem.name) dItem.email = '';
       this.arrSearchNameView = [];
