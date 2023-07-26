@@ -864,7 +864,7 @@ export class DetermineSignerComponent implements OnInit {
               break;
             }
 
-            if (!isParterSort[k].card_id.trim() && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+            if (!isParterSort[k].card_id.trim() && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 4).length > 0) {
               this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của đối tác");
               count++;
               break;
@@ -934,7 +934,7 @@ export class DetermineSignerComponent implements OnInit {
               }
               isPartnerCaNhanDuplicate = [];
 
-              if (!isParterSort[k].card_id.trim() && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+              if (!isParterSort[k].card_id.trim() && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 4).length > 0) {
                 this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác cá nhân");
                 count++;
                 break;
