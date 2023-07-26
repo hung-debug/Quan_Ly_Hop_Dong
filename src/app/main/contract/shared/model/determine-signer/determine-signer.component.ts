@@ -511,7 +511,7 @@ export class DetermineSignerComponent implements OnInit {
         }
       }
     } else if (type == 3) {
-      if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignEkyc(data).length == 0) {
+      if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignEkyc(data).length == 0 && this.getDataSignHsm(data).length == 0) {
         if(this.loadedMyPartner == false)
         data.card_id = "";
       }
