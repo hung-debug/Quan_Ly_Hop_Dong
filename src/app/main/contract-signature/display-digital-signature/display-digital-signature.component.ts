@@ -10,28 +10,18 @@ import { environment } from 'src/environments/environment';
 })
 export class DisplayDigitalSignatureComponent implements OnInit {
 
-  isDateTime: any = new Date();
   // isNameSignature: string = 'Công ty cổ phần phần mềm công nghệ cao Việt Nam';
   @Input() nameCompany: any | undefined | null;
   @Input() cardId: any | undefined | null;
   @Input() phonePKI: any | undefined | null;
   @Input() srcMark: any | undefined | null;
+  @Input() isDateTime: any | undefined | null;
 
   constructor() {
     
    }
 
   async ngOnInit(): Promise<void> {
-    let http = "";
-    if(environment.apiUrl == 'http://14.160.91.174:1387') {
-      http = "http";
-    } else {
-      http = "https";
-    }
-
-    const date = await fetch(http+"://worldtimeapi.org/api/ip").then(response => response.json());
-
-    this.isDateTime = date.datetime;
   }
 
 
@@ -40,7 +30,6 @@ export class DisplayDigitalSignatureComponent implements OnInit {
     
     if (imageRender) {
       domtoimage.toPng(imageRender).then((res: any) => {
-        
       })
     }
   }

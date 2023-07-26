@@ -49,6 +49,7 @@ import { CheckViewContractService } from 'src/app/service/check-view-contract.se
 import { TranslateService } from '@ngx-translate/core';
 import { DowloadPluginService } from 'src/app/service/dowload-plugin.service';
 import { DetectCoordinateService } from 'src/app/service/detect-coordinate.service';
+import { TimeService } from 'src/app/service/time.service';
 
 @Component({
   selector: 'app-consider-contract',
@@ -213,7 +214,8 @@ export class ConsiderContractComponent
     private translate: TranslateService,
     public dialogRef: MatDialogRef<ConsiderContractComponent>,
     private downloadPluginService: DowloadPluginService,
-    private detectCoordinateService: DetectCoordinateService
+    private detectCoordinateService: DetectCoordinateService,
+    private timeService: TimeService
   ) {
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
@@ -1817,7 +1819,6 @@ export class ConsiderContractComponent
                 signUpdate.signDigitalHeight = imageRender.offsetHeight;
               }
 
-
               await of(null).pipe(delay(120)).toPromise();
 
               if (imageRender) {
@@ -1827,6 +1828,8 @@ export class ConsiderContractComponent
             } else if (signUpdate.type == 3) {
               //lấy ảnh chữ ký usb token
               let imageRender: any = '';
+
+              this.isDateTime = await this.timeService.getRealTime().toPromise();
 
               if (this.usbTokenVersion == 1) {
                 if (this.markImage) {
@@ -1962,6 +1965,7 @@ export class ConsiderContractComponent
 
       this.phonePKI = this.dataNetworkPKI.phone;
       this.nameCompany = this.recipient.name;
+      this.isDateTime = await this.timeService.getRealTime().toPromise();
 
       await of(null).pipe(delay(120)).toPromise();
 
@@ -2069,6 +2073,8 @@ export class ConsiderContractComponent
               signI = this.textSignBase64Gen = textSignB.split(',')[1];
             }
           } else if (signUpdate.type == 3) {
+            this.isDateTime = await this.timeService.getRealTime().toPromise();
+
             await of(null).pipe(delay(150)).toPromise();
 
             let imageRender: HTMLElement | null = null;
@@ -2288,6 +2294,7 @@ export class ConsiderContractComponent
 
             this.widthSign = signUpdate.width;
             this.heightSign = signUpdate.height;
+            this.isDateTime = await this.timeService.getRealTime().toPromise();
 
             await of(null).pipe(delay(150)).toPromise();
             let imageRender: HTMLElement | null = null;
@@ -3055,6 +3062,9 @@ export class ConsiderContractComponent
               };
             });
         } else {
+          this.isDateTime = await this.timeService.getRealTime().toPromise();
+          await of(null).pipe(delay(150)).toPromise();
+
           //đẩy chữ ký vào file pdf
           const imageRender = <HTMLElement>(
             document.getElementById('export-html-ekyc')
@@ -3142,6 +3152,9 @@ export class ConsiderContractComponent
     }
 
     if (notContainSignImage && this.eKYC == false) {
+      signUpdateTempN[0] = {
+        "processAt": this.isDateTime
+      };
       this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
         async (result) => {
           if (!notContainSignImage) {
@@ -3868,30 +3881,6 @@ export class ConsiderContractComponent
         let imageRender = null;
 
         this.cardId = result.ma_dvcs.trim();
-
-
-
-        // if (this.markImage) {
-        //   imageRender = <HTMLElement>(document.getElementById('export-html-hsm1-image'));
-
-        //
-        // } else {
-        //   imageRender = <HTMLElement>document.getElementById('export-html-hsm1');
-        // }
-
-        // if (imageRender) {
-
-        //   try {
-        //   const textSignB = await domtoimage.toPng(imageRender);
-
-        //
-        //   signI = textSignB.split(',')[1];
-        //   } catch(err) {
-        //
-        //   }
-        // }
-
-
 
         if (result) {
           this.dataHsm.ma_dvcs = result.ma_dvcs;
