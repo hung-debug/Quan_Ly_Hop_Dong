@@ -3059,6 +3059,7 @@ export class ConsiderContractComponent
                 font: item.font,
                 font_size: item.font_size,
                 bucket: null,
+                processAt: null,
               };
             });
         } else {
@@ -3084,9 +3085,9 @@ export class ConsiderContractComponent
           };
 
           this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseBase64) => {
-            // signUpdateTempN.value = responseBase64.file_object.file_path;
             signUpdateTempN[0].value = responseBase64.file_object.file_path;
             signUpdateTempN[0].bucket = responseBase64.file_object.bucket;
+            signUpdateTempN[0].processAt = this.isDateTime;
 
             this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
               async (result) => {
