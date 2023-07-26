@@ -45,14 +45,14 @@ export class UserComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     let userId = this.userService.getAuthCurrentUser().id;
     this.myEmail = this.userService.getInforUser().email;
-    
+
     this.userService.getUserById(userId).subscribe(
       data => {
 
         //lay id role
         this.roleService.getRoleById(data?.role_id).subscribe(
           data => {
-            
+
             let listRole: any[];
             listRole = data.permissions;
 
@@ -64,7 +64,7 @@ export class UserComponent implements OnInit {
             this.router.navigate(['/login'])
           }
         );
-      
+
       }, error => {
         this.spinner.hide();
         // this.toastService.showErrorHTMLWithTimeout('Hết phiên đăng nhập, Vui lòng đăng nhập lại', "", 3000);
@@ -117,21 +117,21 @@ export class UserComponent implements OnInit {
     ];
   }
 
-  onInputChange(event: any) {
-    // Lấy giá trị đã nhập từ sự kiện
-    let inputValue = event.target.value;
+  // onInputChange(event: any) {
+  //   // Lấy giá trị đã nhập từ sự kiện
+  //   let inputValue = event.target.value;
 
-    // Chuỗi chứa những ký tự đặc biệt mà bạn muốn loại bỏ
-    const specialCharacters = /[`!#$%^&*()_+\=[\]{};':"\\|,<>/?~]/;
+  //   // Chuỗi chứa những ký tự đặc biệt mà bạn muốn loại bỏ
+  //   const specialCharacters = /[`!#$%^&*()_+\=[\]{};':"\\|,<>/?~]/;
 
-    // Kiểm tra xem giá trị nhập vào có chứa ký tự đặc biệt không
-    if (specialCharacters.test(inputValue)) {
-      // Nếu có, thay thế ký tự đặc biệt bằng chuỗi rỗng
-      inputValue = inputValue.replace(specialCharacters, '');
-      // Gán lại giá trị của input mà không chứa các ký tự đặc biệt
-      event.target.value = inputValue;
-    }
-  }
+  //   // Kiểm tra xem giá trị nhập vào có chứa ký tự đặc biệt không
+  //   if (specialCharacters.test(inputValue)) {
+  //     // Nếu có, thay thế ký tự đặc biệt bằng chuỗi rỗng
+  //     inputValue = inputValue.replace(specialCharacters, '');
+  //     // Gán lại giá trị của input mà không chứa các ký tự đặc biệt
+  //     event.target.value = inputValue;
+  //   }
+  // }
 
   array_empty: any = [];
   listOrgCombobox: any[];
@@ -186,7 +186,7 @@ export class UserComponent implements OnInit {
 
 
   changeOrg(){
-    
+
     this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
   }
 
