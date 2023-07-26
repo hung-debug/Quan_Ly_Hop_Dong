@@ -3762,7 +3762,7 @@ export class ConsiderContractComponent
       recipientId: recipientId,
     }
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '500px';
+    dialogConfig.width = '600px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = dataCert;
     dialogConfig.panelClass = 'custom-dialog-container';

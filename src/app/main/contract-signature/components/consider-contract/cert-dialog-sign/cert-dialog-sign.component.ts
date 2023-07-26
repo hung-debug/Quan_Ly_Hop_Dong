@@ -48,8 +48,9 @@ export class CertDialogSignComponent implements OnInit {
       this.lang = 'en';
     }
     this.cols = [
-      { header: 'choice', style: 'text-align: left;' },
+      { header: 'choice', style: 'text-align: left; width: 75px;' },
       { header: 'notation', style: 'text-align: left;' },
+      { header: 'subject', style: 'text-align: left;' },
       { header: 'end-date', style: 'text-align: left;' },
     ]
     this.datas = this.data;
@@ -64,10 +65,20 @@ export class CertDialogSignComponent implements OnInit {
       this.spinner.hide();
       this.list = response.certificates;
       this.id = response.certificates.id;
-      // console.log("iddđ",this.id);
+      console.log("response",response);
 
     })
     // console.log("iddđ",this.id);
+  }
+  getValueByKey(inputString:string, key:string) {
+    const elements = inputString.split(', ');
+    for (const element of elements) {
+      const [currentKey, value] = element.split('=');
+      if (currentKey === key) {
+        return value;
+      }
+    }
+    return null; // Return null if the key is not found
   }
 
 

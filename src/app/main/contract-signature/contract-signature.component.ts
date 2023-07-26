@@ -1416,7 +1416,7 @@ export class ContractSignatureComponent implements OnInit {
         title: 'KÝ CHỨNG THƯ SỐ',
       };
       const dialogConfig = new MatDialogConfig();
-      dialogConfig.width = '500px';
+      dialogConfig.width = '600px';
       dialogConfig.hasBackdrop = true;
       dialogConfig.data = dataCert;
       dialogConfig.panelClass = 'custom-dialog-container';
