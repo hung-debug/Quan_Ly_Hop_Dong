@@ -475,7 +475,6 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   selectWithOtp(e: any, data: any, type: any) { // sort ordering
-    // data.card_id = ""
     //clear lai gia tri card_id
     //Check với tổ chức của tôi ký
     if (type == 'organization') {
@@ -512,7 +511,7 @@ export class DetermineSignerComponent implements OnInit {
         }
       }
     } else if (type == 3) {
-      if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignEkyc(data).length == 0) {
+      if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignEkyc(data).length == 0 && this.getDataSignHsm(data).length == 0) {
         if(this.loadedMyPartner == false)
         data.card_id = "";
       }
