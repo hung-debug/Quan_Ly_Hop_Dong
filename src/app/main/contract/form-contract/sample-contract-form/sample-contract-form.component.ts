@@ -139,6 +139,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+
+    console.log("contract no ", this.contractNo);
     this.onResize();
 
     if(this.datasForm.font) {
@@ -847,12 +849,16 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             } else if (isSignType == 'chu_ky_so') {
               element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6) && element.role != 2);
             } else if (isSignType == 'text') {
-              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4); // ô text chỉ có ký usb token mới được chỉ định hoặc là văn thư
+              // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4);
+              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4)); //disable van thu select text
+
             } else {
               if(this.datasForm.contract_no) {
                 element.is_disable = true;
               } else {
-                element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4 )
+                // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4 )
+                element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4)) //disable van thu select o^ so^'
+
               }
             }
 
@@ -1236,7 +1242,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           this.isEnableSelect = true;
         }
 
-        
+
         if (!d.name && !d.recipient?.name) {
           //@ts-ignore
           document.getElementById('select-dropdown').value = "";
@@ -1509,10 +1515,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   contractNo: any;
   getValueText(e: any, d: any) {
-    // const num = e.toString().replace(/\./g, '');
-
-    // const num = this.convertCurrency(e);
-
     const num = e;
     d.value = num;
 
@@ -1544,6 +1546,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   }
 
   back(e: any, step?: any) {
+    console.log("abc ", this.datasForm.contract_no);
     this.contractNo = this.datasForm.contract_no;
     this.nextOrPreviousStep(step);
   }
@@ -1658,7 +1661,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               element.coordinate_x = element.coordinate_x - this.datasForm.difX;
             }
           })
-          
+
           this.setValueForContractNo(this.data_sample_contract);
           this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
             if(this.validData() == true){

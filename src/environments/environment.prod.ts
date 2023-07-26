@@ -2,8 +2,8 @@ export const environment = {
   production: true,
 
   // apiUrl: 'http://192.168.0.115:8762',
-  apiUrl: 'http://14.160.91.174:1387',
-  // apiUrl: 'https://econtractdev.mobifone.ai/service',
+  // apiUrl: 'http://14.160.91.174:1387',
+  apiUrl: 'https://econtractdev.mobifone.ai/service',
   // apiUrl: 'http://192.168.1.14:8762',
   // flag: 'NB',
   flag: 'KD',

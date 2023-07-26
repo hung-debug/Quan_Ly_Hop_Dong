@@ -339,11 +339,37 @@ export class LoginComponent implements OnInit, AfterViewInit {
     } else this.type = 0;
 
     if ((this.deviceService.isMobile() || this.deviceService.isTablet())) {
+
+      this.checkBrowser();
       this.getDeviceApp();
 
       this.mobile = true;
     } else {
       this.mobile = false;
+    }
+  }
+
+  checkBrowser() {
+    if(this.deviceService.os == 'iOS') {
+      if(this.deviceService.browser == 'Safari' && parseFloat(this.deviceService.browser_version) >= 11) {
+        console.log("có hỗ trợ")
+      } else {
+        alert("Trình duyệt này hiện không support tốt cho việc ký eKYC trên web. Vui lòng ký eKYC trên app để có trải nghiệm tốt nhất")
+      }
+    } else if(this.deviceService.os == 'Android') {
+      if(this.deviceService.browser == 'Chrome' && parseFloat(this.deviceService.browser_version) >= 53) {
+        console.log("có hỗ trợ ");
+      } else if(this.deviceService.browser == 'Firefox' && parseFloat(this.deviceService.browser_version) >= 36) {
+        console.log("có hỗ trợ");
+      } else if(this.deviceService.browser == 'Opera' && parseFloat(this.deviceService.browser_version) >= 41) {
+        console.log("có hỗ trợ")
+      } else if(this.deviceService.browser == 'Samsung' && parseFloat(this.deviceService.browser_version) >= 6) {
+        console.log("có hỗ trợ");
+      } else {
+        alert("Trình duyệt này hiện không support tốt cho việc ký eKYC trên web. Vui lòng ký eKYC trên app để có trải nghiệm tốt nhất")
+      }
+    } else {
+      alert("Trình duyệt này hiện không support tốt cho việc ký eKYC trên web. Vui lòng ký eKYC trên app để có trải nghiệm tốt nhất")
     }
   }
 

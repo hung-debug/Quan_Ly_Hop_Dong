@@ -9,6 +9,7 @@ import { Observable, Subject } from 'rxjs';
 import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { Router } from '@angular/router';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-ekyc-dialog-sign',
@@ -28,6 +29,7 @@ export class EkycDialogSignComponent implements OnInit {
     private toastService: ToastService,
     private translate: TranslateService,
     private router: Router,
+    private deviceSerce: DeviceDetectorService
   ) {
 
   }
@@ -67,10 +69,20 @@ export class EkycDialogSignComponent implements OnInit {
     } else
       this.type = 0;
 
-    this.width = window.innerWidth;
+    if(window.innerWidth > window.innerHeight) {
+      this.width=window.innerHeight
+    } else
+      this.width = window.innerWidth;
+     
     if(this.width > 768){
       this.width = 0.5*window.innerWidth;
     }
+
+    console.log("inner width ", window.innerWidth);
+    console.log("inner height ", window.innerHeight);
+
+    console.log("width ", this.width*0.85);
+    console.log("height ", this.width*4/3*0.85);
 
     this.initWebcamImage = this.webcamImage;
 
@@ -105,7 +117,105 @@ export class EkycDialogSignComponent implements OnInit {
       this.name = determineCoordination.recipients[0].name;
     }
  
+    // this.contractService.getDataCoordination(this.data.contractId).subscribe(async (response) => {
+    //   this.organizationId =  response.organization_id;
 
+    //   if(this.title == 0) {
+    //     let formData = {
+    //       "name": "image_ekyc_web_cardId" + new Date().getTime() + ".jpg",
+    //       "content":this.webcamImage.imageAsDataUrl,
+    //       "organizationId": this.organizationId,
+    //     }
+  
+    //     this.upFileImageToDb(formData);
+  
+    //     this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl, this.data.contractId, this.data.recipientId).subscribe((response) => {
+    //       this.spinner.hide();
+    //       if(response.result_code == 200 && (response.action == 'pass' || (response.action == 'manualReview' && this.checkWarning(response.warning)))) {
+    //         if(this.cardId) {
+    //           if(this.cardId == response.id && this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") == response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "")) {
+    //             this.flagSuccess == true;
+    //             alert(this.translate.instant('confirm.success'));
+    //             this.dialogRef.close(this.webcamImage.imageAsDataUrl);
+    //           } else if(this.cardId != response.id){
+    //             this.flagSuccess == false;
+    //             this.webcamImage = this.initWebcamImage;
+    //             alert(this.translate.instant('card.id.not.match'));
+    //             // string.replace(/  +/g, ' ');
+    //           } else if(this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") != response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "")) {
+    //             this.flagSuccess == false;
+    //             this.webcamImage = this.initWebcamImage;
+    //             alert(this.translate.instant('name.not.match'));
+    //           }else{
+    //             this.flagSuccess == false;
+    //             alert(this.translate.instant('invalid.infor'));
+    //           }
+    //         } else {
+    //           alert(this.translate.instant('confirm.success'));
+    //           this.dialogRef.close(this.webcamImage.imageAsDataUrl);
+    //         }
+             
+    //       } else {
+    //         this.flagSuccess = false;
+    //         this.webcamImage = this.initWebcamImage;
+            
+    //         if(response.warning_msg?.length > 0)
+    //           alert(this.translate.instant('confirm.fail')+ response.warning_msg[0]);
+    //         else if(response.reason_for_action?.length > 0)
+    //           alert(this.translate.instant('image.not.clear'));
+    //         else
+    //           alert(this.translate.instant('confirm.fail'));
+    //       }
+         
+    //     }, (error: any) => {
+    //       alert(this.translate.instant('card.id.fail'));
+    //     })
+    //   } else {
+    //     let formData = {
+    //       "name": "image_ekyc_web_face" + new Date().getTime() + ".jpg",
+    //       "content":this.webcamImage.imageAsDataUrl,
+    //       "organizationId": this.organizationId,
+    //     }
+  
+    //     //up file anh len db
+    //     this.upFileImageToDb(formData);
+  
+    //     this.contractService.detectFace(this.data.cccdFront, this.webcamImage.imageAsDataUrl,this.data.contractId, this.data.recipientId).subscribe(async (response) => {
+    //       this.spinner.hide();
+    //       if(response.verify_result == 2 && response.face_anti_spoof_status.status == 'REAL') {
+    //         alert(this.translate.instant('confirm.success'));
+
+    //         //call api trừ ekyc
+    //         await this.contractService.decreaseNumberOfEkyc(this.organizationId).toPromise();
+
+    //         this.dialogRef.close(response.verify_result);
+    //       } else {
+    //         if(response.face_anti_spoof_status.status == 'FAKE') {
+    //           alert(this.translate.instant('face.fail'));
+    //         } else if(response.message.error_message && response.message.error_message != 'undefined') {
+    //           alert(response.message.error_message);
+    //         } else {
+    //           alert(this.translate.instant('confirm.fail'))
+    //         }
+
+    //         this.flagSuccess = false;
+    //         this.webcamImage = this.initWebcamImage; 
+    //       }
+    //     }, (error: any) => {
+    //       alert(this.translate.instant('confirm.fail'))
+    //     })
+    //   }
+  
+    // })
+
+    const img = new Image();
+    img.onload = () => {
+      this.callAPI(img);
+    };
+    img.src = this.webcamImage.imageAsDataUrl;
+  }
+
+  callAPI(img: any) {
     this.contractService.getDataCoordination(this.data.contractId).subscribe(async (response) => {
       this.organizationId =  response.organization_id;
 
@@ -118,11 +228,11 @@ export class EkycDialogSignComponent implements OnInit {
   
         this.upFileImageToDb(formData);
   
-        this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl, this.data.contractId, this.data.recipientId).subscribe((response) => {
+        this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl, this.data.contractId, this.data.recipientId,img,this.deviceSerce).subscribe((response) => {
           this.spinner.hide();
           if(response.result_code == 200 && (response.action == 'pass' || (response.action == 'manualReview' && this.checkWarning(response.warning)))) {
             if(this.cardId) {
-              if(this.cardId == response.id && this.name.toUpperCase().split(" ").join("").normalize() == response.name.toUpperCase().split(" ").join("").normalize()) {
+              if(this.cardId == response.id && this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") == response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "")) {
                 this.flagSuccess == true;
                 alert(this.translate.instant('confirm.success'));
                 this.dialogRef.close(this.webcamImage.imageAsDataUrl);
@@ -131,7 +241,7 @@ export class EkycDialogSignComponent implements OnInit {
                 this.webcamImage = this.initWebcamImage;
                 alert(this.translate.instant('card.id.not.match'));
                 // string.replace(/  +/g, ' ');
-              } else if(this.name.toUpperCase().split(" ").join("").normalize() != response.name.toUpperCase().split(" ").join("").normalize()) {
+              } else if(this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") != response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "")) {
                 this.flagSuccess == false;
                 this.webcamImage = this.initWebcamImage;
                 alert(this.translate.instant('name.not.match'));
@@ -169,7 +279,7 @@ export class EkycDialogSignComponent implements OnInit {
         //up file anh len db
         this.upFileImageToDb(formData);
   
-        this.contractService.detectFace(this.data.cccdFront, this.webcamImage.imageAsDataUrl,this.data.contractId, this.data.recipientId).subscribe(async (response) => {
+        this.contractService.detectFace(this.data.cccdFront, this.webcamImage.imageAsDataUrl,this.data.contractId, this.data.recipientId,img,this.deviceSerce).subscribe(async (response) => {
           this.spinner.hide();
           if(response.verify_result == 2 && response.face_anti_spoof_status.status == 'REAL') {
             alert(this.translate.instant('confirm.success'));
@@ -196,7 +306,6 @@ export class EkycDialogSignComponent implements OnInit {
       }
   
     })
-    
   }
 
   checkWarning(warning: any) {

@@ -54,6 +54,7 @@ export class DigitalCertificateAddComponent implements OnInit {
   listOrgCombobox: any[];
   selectedNodeOrganization:any = '';
   organization_id:any = "";
+  currentOrgId: any = ""
 
   get f() { return this.addForm.controls; }
   constructor(
@@ -61,26 +62,21 @@ export class DigitalCertificateAddComponent implements OnInit {
     private router: Router,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private appService: AppService,
     public dialogRef: MatDialogRef<DigitalCertificateAddComponent>,
     public dialog: MatDialog,
     private fbd: FormBuilder,
-    private checkSignDigitalService: CheckSignDigitalService,
-    private MatSelectModule: MatSelectModule,
-    private MatFormFieldModule: MatFormFieldModule,
-    private contractService: ContractService,
     private DigitalCertificateService: DigitalCertificateService,
-    private userService: UserService,
-    private MultiSelectModule: MultiSelectModule,
     private unitService: UnitService,
   ) {
-    // this.addForm = this.fbd.group({
-    //   password: this.fbd.control("", [Validators.required, Validators.pattern(parttern.password)]),
-    //   status: 1,
-    //   email: this.fbd.control("", [Validators.required])
-    // });
+    this.addForm = this.fbd.group({
+      password: this.fbd.control("", [Validators.required, Validators.pattern(parttern.password)]),
+      email: this.fbd.control("", [Validators.required]),
+      orgId: this.fbd.control("", [Validators.required]),
+      status: 1,
+    });
   }
   async ngOnInit(): Promise<void> {
+    this.currentOrgId = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId.toString()
     this.datas = this.data;
     this.addForm = this.fbd.group({
       password: this.fbd.control("", [Validators.required, Validators.pattern(parttern.password)]),
@@ -104,7 +100,8 @@ export class DigitalCertificateAddComponent implements OnInit {
 
       this.orgList = this.orgListTmp;
       this.convertData();
-      this.selectedNodeOrganization = this.listOrgCombobox.filter((p: any) => p.data == this.organization_id);
+      this.selectedNodeOrganization = this.listOrgCombobox.filter((p: any) => p.data == this.currentOrgId);
+      this.getListAllEmailOnFillter(this.currentOrgId)
     }, error => {
       setTimeout(() => this.router.navigate(['/login']));
       this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
@@ -127,7 +124,6 @@ export class DigitalCertificateAddComponent implements OnInit {
       };
 
       this.array_empty.push(data);
-      //this.removeElementFromStringArray(element.id);
     })
     this.listOrgCombobox = this.array_empty;
   }
@@ -206,15 +202,17 @@ export class DigitalCertificateAddComponent implements OnInit {
   getListAllEmail(event: any) {
     let email: any = event.filter || ''
     this.DigitalCertificateService.getListOrgByEmail(email,event.value || '').subscribe((response) => {
-      if (response && response.length > 0) {
-       response.forEach((item: any) => {
-          const id = item.id;
-          if (!this.emailList.some((existingItem: any) => existingItem.id == id)) {
-            this.emailList.push(item);
-          }
-        });
-      }
-    });
+      response.forEach((item: any) => {
+        const id = item.id;
+        if (!this.emailList.some((existingItem: any) => existingItem.id == id)) {
+          this.emailList.push(item);
+        }
+      });
+    },
+    (error) => {
+      console.log(error)
+    }
+    );
   }
 
   getListAllEmailOnFillter(event: any) {
@@ -248,8 +246,6 @@ export class DigitalCertificateAddComponent implements OnInit {
       this.orgList = response.entities;
     })
   }
-
-
 
   onSelectionChange() {
   }
@@ -328,7 +324,6 @@ export class DigitalCertificateAddComponent implements OnInit {
 
   save() {
     this.submitted = true;
-
     if (!this.validData()) {
       return;
     }

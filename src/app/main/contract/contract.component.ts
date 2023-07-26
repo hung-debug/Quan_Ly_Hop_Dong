@@ -737,7 +737,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   cancelContract(id: any) {
-
     let data: any = "";
 
     if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
@@ -824,7 +823,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   deleteContract(id: any) {
     let data: any = "";
 
-    if (sessionStorage.getItem('lang') == 'vi') {
+    if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       data = {
         title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
         id: id

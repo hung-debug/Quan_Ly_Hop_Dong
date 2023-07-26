@@ -353,16 +353,21 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   async changeTypeContract() {
-    const informationContractType = await this.contractTypeService.getContractTypeById(this.type_id).toPromise();
+    if(this.type_id) {
+      const informationContractType = await this.contractTypeService.getContractTypeById(this.type_id).toPromise();
 
-    if(informationContractType.ceca_push == 1) {
-      this.optionsCeCa = optionsCeCa;
-      this.optionsCeCaValue = 1;
-      this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
-    } else if(!informationContractType.ceca_push) {
-      this.optionsCeCa = optionsCeCa;
-      this.optionsCeCaValue = 0;
-      this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
+      if(informationContractType.ceca_push == 1) {
+        this.optionsCeCa = optionsCeCa;
+        this.optionsCeCaValue = 1;
+        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+      } else if(!informationContractType.ceca_push) {
+        this.optionsCeCa = optionsCeCa;
+        this.optionsCeCaValue = 0;
+        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
+      } else {
+        this.optionsCeCaValue = null;
+        this.optionsCeCa = optionsCeCa;
+      }
     } else {
       this.optionsCeCaValue = null;
       this.optionsCeCa = optionsCeCa;

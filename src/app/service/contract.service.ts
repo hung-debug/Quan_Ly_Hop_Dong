@@ -453,7 +453,7 @@ export class ContractService {
   }
 
   api_key: any = '9b84cd8c-f042-11ec-aae7-0c4de99e932e';
-  detectCCCD(image: any, contractId: number, recipientId: number) {
+  detectCCCD(image: any, contractId: number, recipientId: number, img?: any,deviceSerce?: any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -462,7 +462,7 @@ export class ContractService {
 
     const body = {
       image: image,
-      request_id: contractId + "_" + recipientId + "-web"
+      request_id: contractId+"_"+recipientId+"_"+img?.width+"_"+img?.height+"_"+deviceSerce?.device+"_"+deviceSerce?.browser+"_"+deviceSerce?.browser_version+"-webMBF"
     };
 
     if (environment.apiUrl == 'https://econtract.mobifone.vn/service') {
@@ -475,7 +475,7 @@ export class ContractService {
   }
 
 
-  detectFace(imageCCCD: any, imageFace: any, contractId: number, recipientId:number) {
+  detectFace(imageCCCD: any, imageFace: any, contractId: number, recipientId:number, img: any,deviceService: any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -485,7 +485,7 @@ export class ContractService {
     const body = {
       image_cmt: imageCCCD,
       image_live: imageFace,
-      request_id: contractId+"_"+recipientId+"-web"
+      request_id: contractId+"_"+recipientId+"_"+img?.width+"_"+img?.height+"-"+deviceService?.device+"_"+deviceService?.browser+"_"+deviceService?.browser_version+"-web"
     };
 
     if (environment.apiUrl == 'https://econtract.mobifone.vn/service') {

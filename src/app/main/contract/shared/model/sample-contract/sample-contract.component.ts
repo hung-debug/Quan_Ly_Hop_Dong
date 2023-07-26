@@ -138,7 +138,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.spinner.hide();
 
     this.list_font = ["Arial", "Calibri", "Times New Roman"];
-
+    console.log("data",this.datas);
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
       // ham chuyen doi hinh thuc ky type => sign_unit
@@ -449,7 +449,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           (d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
           (d.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
           (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6))) &&
-          (((d.email ? d.email : d.recipient.email) === data.email)) ||
+          (((d.email ? d.email : d.recipient?.email) === data.email)) ||
+          (!d.recipient && d.sign_unit == 'text') ||
           (!d.email && this.datas.contract_no && d.sign_unit == 'so_tai_lieu')) {
 
           isContractSign.push(d); // mảng get dữ liệu không bị thay đổi
@@ -543,6 +544,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getListNameSign(data_user_sign: any) {
+    console.log('data_user_sign',data_user_sign);
     data_user_sign.forEach((element: any) => {
       if (element.type == 1 || element.type == 5) {
         element.recipients.forEach((item: any) => {
@@ -864,12 +866,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         } else if (isSignType == 'chu_ky_so') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6) && element.role != 2);
         } else if (isSignType == 'text') {
-          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
+          // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
+
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4)); // disable van thu chon. nguoi nhap.
         } else {
           if (this.datas.contract_no) {
             element.is_disable = true;
           } else {
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
+            // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4))
           }
         }
         // element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4));

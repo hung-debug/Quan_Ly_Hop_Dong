@@ -192,8 +192,6 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       }
 
       this.onChangeForm(e);
-
-      // 
     } else {
       
     this.datasForm.type_id = e.value;
