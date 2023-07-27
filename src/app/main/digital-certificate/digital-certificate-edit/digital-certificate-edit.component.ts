@@ -85,7 +85,7 @@ export class DigitalCertificateEditComponent implements OnInit {
 
       this.orgList = this.orgListTmp;
       this.convertData();
-      this.selectedNodeOrganization = this.listOrgCombobox.filter((p: any) => p.data == this.currentOrgId);
+      this.selectedNodeOrganization = this.listOrgCombobox?.filter((p: any) => p.data == this.currentOrgId);
     }, error => {
       setTimeout(() => this.router.navigate(['/login']));
       this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
@@ -107,18 +107,18 @@ export class DigitalCertificateEditComponent implements OnInit {
       
         // set emailOptionsList
         this.getListAllEmailFirstCall()
+        this.listID = data.customers
+        this.orgID = data.orgAdminCreate.toString()
         this.keystoreSerialNumber = data.keystoreSerialNumber,
           this.keyStoreFileName = data.keyStoreFileName,
           this.keystoreDateStart = data.keystoreDateStart,
           this.keystoreDateEnd = data.keystoreDateEnd,
           this.status = data.status,
-          this.sub = data.certInformation.split(",")
-        const subjectt = this.sub.find(item => item.includes('CN='))
-        this.subject = subjectt.split("=")[1]
-        const unitt = this.sub.find(item => item.includes('O='))
-        this.unit = unitt.split("=")[1]
-        this.listID = data.customers
-        this.orgID = data.orgAdminCreate.toString()
+          this.sub = data.certInformation?.split(",")
+        const subjectt = this.sub?.find(item => item.includes('CN='))
+        this.subject = subjectt?.split("=")[1]
+        const unitt = this.sub?.find(item => item.includes('O='))
+        this.unit = unitt?.split("=")[1]
       }
     )
 
@@ -198,11 +198,11 @@ export class DigitalCertificateEditComponent implements OnInit {
     if(!this.validData()){
       return;
     }
-    let id_customer = this.listID.filter((value, index, self) => {
-      // Kiểm tra xem có index đầu tiên của value.id trong mảng không
-      return self.findIndex(obj => obj.id === value.id) === index;
-    }).map(item => item.id);
 
+    let id_customer = this.listID?.filter((value, index, self) => {
+      // Kiểm tra xem có index đầu tiên của value.id trong mảng không
+      return self.findIndex(obj => obj.id == value.id) == index;
+    }).map(item => item.id);
     let checkDelete = false;
 
     // moi lan save thi can xoa toan bo list customer trc r add email moi vao
