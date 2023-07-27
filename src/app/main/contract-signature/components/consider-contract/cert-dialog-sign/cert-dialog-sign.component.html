@@ -17,6 +17,7 @@
             <input type="radio" name="confirm-radio-consider" [value]="list.id" [(ngModel)]="id" name="status" style="margin-left: 20px;">
           </td>
           <td>{{list.keystoreSerialNumber}}</td>
+          <td>{{getValueByKey(list.certInformation, "CN")}}</td>
           <td>{{list.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}</td>
         </tr>
       </ng-template>
