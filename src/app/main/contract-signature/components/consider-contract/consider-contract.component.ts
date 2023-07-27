@@ -1830,6 +1830,7 @@ export class ConsiderContractComponent
               let imageRender: any = '';
 
               this.isDateTime = await this.timeService.getRealTime().toPromise();
+              console.log("is date time ",this.isDateTime);
 
               if (this.usbTokenVersion == 1) {
                 if (this.markImage) {
