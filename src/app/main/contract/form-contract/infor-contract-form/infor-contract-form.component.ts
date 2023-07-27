@@ -125,13 +125,12 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
   actionSuccess() {
     this.optionsCeCa = optionsCeCa;
-    this.optionsCeCaValue = null;
-    this.optionsCeCaValue = null;
-    this.datasForm.ceca_push = this.optionsCeCaValue;
 
     if (this.datasForm.ceca_push != 0 && this.datasForm.ceca_push != 1)
       this.datasForm.ceca_push = this.optionsCeCaValue;
-    else this.optionsCeCaValue = this.datasForm.ceca_push;
+    else 
+      this.optionsCeCaValue = this.datasForm.ceca_push;
+
 
     let dataRouter = this.route.params.subscribe(
       (params: any) => {
@@ -166,54 +165,55 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       this.datasForm['isChangeForm'] = false;
     }
 
-    this.getContractTemplateForm(); // ham lay mau hop dong
-    this.getListTypeContract(); // ham get contract type
-    this.getContractList(); // ham lay danh sach hop dong
-    this.convertData();
-
     this.contractService.getDataNotifyOriganzation().subscribe((response) => {
       if (response.ceca_push_mode == 'NONE') {
         this.ceca = false;
       } else if (response.ceca_push_mode == 'SELECTION') {
         this.ceca = true;
       }
+
+      this.getContractTemplateForm(); // ham lay mau hop dong
+      this.getListTypeContract(); // ham get contract type
+      this.getContractList(); // ham lay danh sach hop dong
+      this.convertData();
     });
   }
 
   async changeTypeContract(e: any) {
-
     if(!e.value) {
+
       this.optionsCeCa = optionsCeCa;
       this.datasForm.ceca_push = 0;
       this.optionsCeCaValue = 0;
+      this.datasForm.type_id = null;
 
       const e = {
         value: this.datasForm.template_contract_id
       }
 
-      this.onChangeForm(e);
+      // this.onChangeForm(e);
     } else {
-      
-    this.datasForm.type_id = e.value;
+      console.log("2 ");
+      this.datasForm.type_id = e.value;
 
-    const informationContractType = await this.contractTypeService
-      .getContractTypeById(this.datasForm.type_id)
-      .toPromise();
+      const informationContractType = await this.contractTypeService
+        .getContractTypeById(this.datasForm.type_id)
+        .toPromise();
 
-    if (informationContractType.ceca_push == 1) {
-      this.optionsCeCa = optionsCeCa;
-      this.optionsCeCaValue = 1;
-      this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
-    } else if (!informationContractType.ceca_push) {
-      this.optionsCeCa = optionsCeCa;
-      this.optionsCeCaValue = 0;
-      this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
-    } else {
-      this.optionsCeCaValue = null;
-      this.optionsCeCa = optionsCeCa;
-    }
+      if (informationContractType.ceca_push == 1) {
+        this.optionsCeCa = optionsCeCa;
+        this.optionsCeCaValue = 1;
+        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+      } else if (!informationContractType.ceca_push) {
+        this.optionsCeCa = optionsCeCa;
+        this.optionsCeCaValue = 0;
+        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
+      } else {
+        this.optionsCeCaValue = null;
+        this.optionsCeCa = optionsCeCa;
+      }
 
-    this.datasForm.ceca_push = this.optionsCeCaValue;
+      this.datasForm.ceca_push = this.optionsCeCaValue;
     }
   }
 
@@ -237,11 +237,34 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     this.contractService.getContractTypeList().subscribe(
       (data) => {
         this.typeList = data;
+
+        this.checkCeCa(this.datasForm.type_id);
       },
       (error) => {
         
       }
     );
+  }
+
+  async checkCeCa(typeId: number) {
+    if(typeId) {
+      const informationContractType = await this.contractTypeService
+      .getContractTypeById(typeId)
+      .toPromise();
+  
+      if (informationContractType.ceca_push == 1) {
+        this.optionsCeCa = optionsCeCa;
+        this.optionsCeCaValue = 1;
+        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+      } else if (!informationContractType.ceca_push) {
+        this.optionsCeCa = optionsCeCa;
+        this.optionsCeCaValue = 0;
+        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
+      } else {
+        this.optionsCeCaValue = null;
+        this.optionsCeCa = optionsCeCa;
+      }
+    }
   }
 
   getContractList() {
