@@ -58,20 +58,16 @@ export class DigitalCertificateDetailComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.datas = this.data;
     this.getData();
-    console.log("dataCert", this.datas);
     this.addForm = this.fbd.group({
       status: 1,
     });
-    console.log("addForm", this.addForm);
   }
 
   async getData() {
     await this.DigitalCertificateService.getCertById(this.datas.id).toPromise().then(
       data => {
-        console.log("data", data);
         this.emailUser = data.customers
         const listEmail = this.emailUser.map(item => item.email)
-        console.log("listEmail", listEmail.join(", "));
         this.email = listEmail.join(", ")
         this.keystoreSerialNumber = data.keystoreSerialNumber,
         this.keyStoreFileName = data.keyStoreFileName,
@@ -79,10 +75,10 @@ export class DigitalCertificateDetailComponent implements OnInit {
         this.keystoreDateEnd = data.keystoreDateEnd,
         this.status = data.status,
         this.sub = data.certInformation.split(",")
-        const subjectt = this.sub.find(item => item.includes('CN='))
-        this.subject = subjectt.split("=")[1]
-        const unitt = this.sub.find(item => item.includes('O='))
-        this.unit = unitt.split("=")[1]
+        const subjectt = this.sub?.find(item => item.includes('CN='))
+        this.subject = subjectt?.split("=")[1]
+        const unitt = this.sub?.find(item => item.includes('O='))
+        this.unit = unitt?.split("=")[1]
       }
     )
 

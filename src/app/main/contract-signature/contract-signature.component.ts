@@ -1302,7 +1302,13 @@ export class ContractSignatureComponent implements OnInit {
           this.nameCompany = resultHsm.ma_dvcs;
           let imageRender = null;
 
-          this.isDateTime = this.timeService.getRealTime().toPromise();
+          try {
+            this.isDateTime = await this.timeService.getRealTime().toPromise();
+          } catch(err) {
+            this.isDateTime = new Date();
+          }
+
+          if(!this.isDateTime) this.isDateTime = new Date();
           await of(null).pipe(delay(100)).toPromise();
 
           if (result.mark) {
@@ -1403,7 +1409,7 @@ export class ContractSignatureComponent implements OnInit {
         title: 'KÝ CHỨNG THƯ SỐ',
       };
       const dialogConfig = new MatDialogConfig();
-      dialogConfig.width = '500px';
+      dialogConfig.width = '600px';
       dialogConfig.hasBackdrop = true;
       dialogConfig.data = dataCert;
       dialogConfig.panelClass = 'custom-dialog-container';
@@ -1577,8 +1583,14 @@ export class ContractSignatureComponent implements OnInit {
 
                 let signI = '';
                 let imageRender = null;
-                this.isDateTime = await this.timeService.getRealTime().toPromise();
 
+                try {
+                  this.isDateTime = await this.timeService.getRealTime().toPromise();
+                } catch(err) {
+                  this.isDateTime = new Date();
+                }
+  
+                if(!this.isDateTime) this.isDateTime = new Date();
                 await of(null).pipe(delay(100)).toPromise();
 
                 if (isMark) {
@@ -1918,7 +1930,13 @@ export class ContractSignatureComponent implements OnInit {
 
       let signI = '';
 
-      this.isDateTime = await this.timeService.getRealTime().toPromise();
+      try {
+        this.isDateTime = await this.timeService.getRealTime().toPromise();
+      } catch(err) {
+        this.isDateTime = new Date();
+      }
+
+      if(!this.isDateTime) this.isDateTime = new Date();
       await of(null).pipe(delay(100)).toPromise();
       let imageRender = null;
 

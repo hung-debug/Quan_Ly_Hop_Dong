@@ -51,6 +51,9 @@ export class DigitalCertificateComponent implements OnInit {
   dataSearch: any[];
   fileName: any;
   serial_number: any;
+  sub: any[];
+  subject: any = "";
+  subjectSearch: any = "";
   // listStatus: any[];
   isQLDC_01: boolean = true; //them moi chung thu so
   isQLDC_02: boolean = true; //sua thong tin chung thu so
@@ -66,7 +69,7 @@ export class DigitalCertificateComponent implements OnInit {
     this.appService.setTitle("certificate.list");
     this.cols = [
       { header: 'notation', style: 'text-align: left;' },
-      { header: 'file.name', style: 'text-align: left;' },
+      { header: 'subject', style: 'text-align: left;' },
       { header: 'start-date', style: 'text-align: left;' },
       { header: 'end-date', style: 'text-align: left;' },
       { header: 'unit.status', style: 'text-align: left;' },
@@ -82,7 +85,7 @@ export class DigitalCertificateComponent implements OnInit {
     this.first = 0;
 
     this.spinner.show();
-    this.DigitalCertificateService.searchCertificate(this.fileName, this.serial_number, this.status.value, this.keystoreDateStart, this.keystoreDateEnd, 0, this.size).subscribe(response => {
+    this.DigitalCertificateService.searchCertificate(this.subjectSearch, this.serial_number, this.status.value, this.keystoreDateStart, this.keystoreDateEnd, 0, this.size).subscribe(response => {
       this.spinner.hide();
       if (response.content) {
         this.list = response.content;
@@ -98,7 +101,7 @@ export class DigitalCertificateComponent implements OnInit {
     const first = event.first ? event.first : 0;
     const pageNumber = Math.floor(first / this.size) + 1;
     this.spinner.show();
-    this.DigitalCertificateService.searchCertificate(this.fileName, this.serial_number, this.status.value, this.keystoreDateStart, this.keystoreDateEnd, pageNumber, this.size).subscribe(response => {
+    this.DigitalCertificateService.searchCertificate(this.subjectSearch, this.serial_number, this.status.value, this.keystoreDateStart, this.keystoreDateEnd, pageNumber, this.size).subscribe(response => {
       if (response.content) {
         this.list = response.content;
         this.totalRecords = response.totalElements;
@@ -110,14 +113,23 @@ export class DigitalCertificateComponent implements OnInit {
     })
   }
 
+  getValueByKey(inputString:string, key:string) {
+    const elements = inputString.split(', ');
+    for (const element of elements) {
+      const [currentKey, value] = element.split('=');
+      if (currentKey === key) {
+        return value;
+      }
+    }
+    return null; // Return null if the key is not found
+  }
+
   getData() {
     this.DigitalCertificateService.getAllCertificate(this.file_name, this.status, this.keystoreDateStart, this.keystoreDateEnd, this.number, this.size).subscribe(response => {
-      console.log("res", response);
       this.list = response.content;
-
       let dataCert: any = "";
       this.array_empty = [];
-      this.list.forEach((element: any, index: number) => {
+      response.content.forEach((element: any, index: number) => {
         dataCert = {
           dataCert:
           {
@@ -149,7 +161,6 @@ export class DigitalCertificateComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
       let is_data = result
     })
   }
@@ -160,13 +171,12 @@ export class DigitalCertificateComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(DigitalCertificateEditComponent, {
-      width: '550px',
+      width: '787px',
       backdrop: 'static',
       keyboard: false,
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
       let is_data = result
     })
   }
@@ -179,13 +189,12 @@ export class DigitalCertificateComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(DigitalCertificateDetailComponent, {
-      width: '550px',
+      width: '787px',
       backdrop: 'static',
       keyboard: false,
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
       let is_data = result
     })
   }

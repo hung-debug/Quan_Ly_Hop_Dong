@@ -1829,7 +1829,13 @@ export class ConsiderContractComponent
               //lấy ảnh chữ ký usb token
               let imageRender: any = '';
 
-              this.isDateTime = await this.timeService.getRealTime().toPromise();
+              try {
+                this.isDateTime = await this.timeService.getRealTime().toPromise();
+              } catch(err) {
+                this.isDateTime = new Date();
+              }
+
+              if(!this.isDateTime) this.isDateTime = new Date();
               console.log("is date time ",this.isDateTime);
 
               if (this.usbTokenVersion == 1) {
@@ -1966,8 +1972,14 @@ export class ConsiderContractComponent
 
       this.phonePKI = this.dataNetworkPKI.phone;
       this.nameCompany = this.recipient.name;
-      this.isDateTime = await this.timeService.getRealTime().toPromise();
 
+      try {
+        this.isDateTime = await this.timeService.getRealTime().toPromise();
+      } catch(err) {
+        this.isDateTime = new Date();
+      }
+
+      if(!this.isDateTime) this.isDateTime = new Date();
       await of(null).pipe(delay(120)).toPromise();
 
       let imageRender = null;
@@ -2074,8 +2086,14 @@ export class ConsiderContractComponent
               signI = this.textSignBase64Gen = textSignB.split(',')[1];
             }
           } else if (signUpdate.type == 3) {
-            this.isDateTime = await this.timeService.getRealTime().toPromise();
 
+            try {
+              this.isDateTime = await this.timeService.getRealTime().toPromise();
+            } catch(err) {
+              this.isDateTime = new Date();
+            }
+
+            if(!this.isDateTime) this.isDateTime = new Date();
             await of(null).pipe(delay(150)).toPromise();
 
             let imageRender: HTMLElement | null = null;
@@ -2295,8 +2313,14 @@ export class ConsiderContractComponent
 
             this.widthSign = signUpdate.width;
             this.heightSign = signUpdate.height;
-            this.isDateTime = await this.timeService.getRealTime().toPromise();
 
+            try {
+              this.isDateTime = await this.timeService.getRealTime().toPromise();
+            } catch(err) {
+              this.isDateTime = new Date();
+            }
+
+            if(!this.isDateTime) this.isDateTime = new Date();
             await of(null).pipe(delay(150)).toPromise();
             let imageRender: HTMLElement | null = null;
             try {
@@ -3064,7 +3088,13 @@ export class ConsiderContractComponent
               };
             });
         } else {
-          this.isDateTime = await this.timeService.getRealTime().toPromise();
+          try {
+            this.isDateTime = await this.timeService.getRealTime().toPromise();
+          } catch(err) {
+            this.isDateTime = new Date();
+          }
+
+          if(!this.isDateTime) this.isDateTime = new Date();
           await of(null).pipe(delay(150)).toPromise();
 
           //đẩy chữ ký vào file pdf
@@ -3777,7 +3807,7 @@ export class ConsiderContractComponent
       recipientId: recipientId,
     }
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '500px';
+    dialogConfig.width = '600px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = dataCert;
     dialogConfig.panelClass = 'custom-dialog-container';
