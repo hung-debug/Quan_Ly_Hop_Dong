@@ -19,6 +19,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { TRISTATECHECKBOX_VALUE_ACCESSOR } from 'primeng/tristatecheckbox';
 import { UnitService } from 'src/app/service/unit.service';
 import { environment } from 'src/environments/environment';
+import { TimeService } from 'src/app/service/time.service';
 
 
 @Component({
@@ -57,7 +58,8 @@ export class ConfirmSignOtpComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public datepipe: DatePipe,
     private deviceService: DeviceDetectorService,
-    private unitService: UnitService
+    private unitService: UnitService,
+    private timeService: TimeService
   ) { }
 
 
@@ -280,21 +282,7 @@ export class ConfirmSignOtpComponent implements OnInit {
       
       let http = null;
 
-      if(environment.apiUrl == 'http://14.160.91.174:1387') {
-        http = "http";
-      } else {
-        http = "https";
-      }
-      
-      try {
-        const date = await fetch(http+"://worldtimeapi.org/api/ip").then(response => response.json());
-        this.isDateTime = date.datetime;
-      } catch(err) {
-        this.isDateTime = new Date();
-      }
-     
-
-      this.isDateTime = this.datepipe.transform(this.isDateTime, "dd/MM/yyyy HH:mm");
+      this.isDateTime = await this.timeService.getRealTime().toPromise();
       await of(null).pipe(delay(100)).toPromise();
       
       const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
@@ -312,7 +300,7 @@ export class ConfirmSignOtpComponent implements OnInit {
           return {
             otp: this.addForm.value.otp,
             signInfo: signI,
-            processAt: this.datepipe.transform(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'"),
+            processAt: this.isDateTime,
             fields:[
               {
                 id: item.id,

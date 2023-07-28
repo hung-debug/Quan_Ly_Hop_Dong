@@ -40,8 +40,8 @@ export class EkycDialogSignComponent implements OnInit {
   public multipleWebcamsAvailable = false;
   public deviceId: string;
   public videoOptions: MediaTrackConstraints = {
-    // width: {exact: 480},
-    // height: {exact: 640},
+    width: {exact: 640},
+    height: {exact: 640},
     // facingMode: 'environment'
     
   };
