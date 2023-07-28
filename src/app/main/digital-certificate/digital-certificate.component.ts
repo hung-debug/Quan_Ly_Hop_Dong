@@ -126,9 +126,7 @@ export class DigitalCertificateComponent implements OnInit {
 
   getData() {
     this.DigitalCertificateService.getAllCertificate(this.file_name, this.status, this.keystoreDateStart, this.keystoreDateEnd, this.number, this.size).subscribe(response => {
-      console.log("res", response);
-      // this.list = response.content;
-
+      this.list = response.content;
       let dataCert: any = "";
       this.array_empty = [];
       response.content.forEach((element: any, index: number) => {
@@ -163,7 +161,6 @@ export class DigitalCertificateComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
       let is_data = result
     })
   }
@@ -174,13 +171,12 @@ export class DigitalCertificateComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(DigitalCertificateEditComponent, {
-      width: '730px',
+      width: '787px',
       backdrop: 'static',
       keyboard: false,
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
       let is_data = result
     })
   }
@@ -193,13 +189,12 @@ export class DigitalCertificateComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(DigitalCertificateDetailComponent, {
-      width: '730px',
+      width: '787px',
       backdrop: 'static',
       keyboard: false,
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
       let is_data = result
     })
   }

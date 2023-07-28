@@ -46,9 +46,9 @@
 
               <td *ngIf="list.status == 1">{{'unit.active' | translate}}</td>
               <td *ngIf="list.status != 1">{{'unit.inactive' | translate}}</td>
-              <td style="text-align: center">
-                <i class="fa" [ngClass]="'fa-eye'" style="color: #106DB6;width: 25%;cursor: pointer;" (click)="detailUser(list.id)"></i>
-                <img *ngIf="isQLDC_02 && isQLDC_04" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
+              <td style="text-align: center; ">
+                <i class="fa" ngbTooltip="{{'report.detail.contract' | translate}}" [ngClass]="'fa-eye'" style="color: #106DB6;width: 25%;cursor: pointer; margin-right: 5px" (click)="detailUser(list.id)"></i>
+                <img *ngIf="isQLDC_02 && isQLDC_04" ngbTooltip="{{'contract.edit' | translate}}" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
               </td>
           </tr>
       </ng-template>
