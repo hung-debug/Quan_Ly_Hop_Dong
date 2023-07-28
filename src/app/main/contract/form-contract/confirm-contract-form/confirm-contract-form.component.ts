@@ -374,7 +374,7 @@ export class ConfirmContractFormComponent implements OnInit {
               this.save_draft_infor_form.close_modal.close();
             }
             this.toastService.showErrorHTMLWithTimeout(
-              'Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý.',
+              'Vui lòng liên hệ đội hỗ trợ để được xử lý.',
               '',
               3000
             );
@@ -420,7 +420,7 @@ export class ConfirmContractFormComponent implements OnInit {
             (error) => {
               this.spinner.hide();
               this.toastService.showErrorHTMLWithTimeout(
-                'Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý',
+                'Vui lòng liên hệ đội hỗ trợ để được xử lý',
                 '',
                 3000
               );
@@ -479,7 +479,7 @@ export class ConfirmContractFormComponent implements OnInit {
             isErrorNotId = true;
             this.spinner.hide();
             this.toastService.showErrorHTMLWithTimeout(
-              'Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý',
+              'Vui lòng liên hệ đội hỗ trợ để được xử lý',
               '',
               3000
             );

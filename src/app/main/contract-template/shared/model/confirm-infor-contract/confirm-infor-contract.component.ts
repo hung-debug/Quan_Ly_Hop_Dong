@@ -203,7 +203,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
             this.save_draft_infor.close_header = false;
             this.save_draft_infor.close_modal.close();
           }
-          this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý.", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("Vui lòng liên hệ đội hỗ trợ để được xử lý.", "", 3000);
           this.spinner.hide();
         }, () => {
           this.spinner.hide();
@@ -245,7 +245,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           dataSample_contract.push(data);
         }, (error) => {
           this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("Vui lòng liên hệ đội hỗ trợ để được xử lý", "", 3000);
           countIsSignId++;
         })
         if (countIsSignId > 0) {
@@ -292,7 +292,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       }, error => {
         isErrorNotId = true;
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý", "", 3000);
+        this.toastService.showErrorHTMLWithTimeout("Vui lòng liên hệ đội hỗ trợ để được xử lý", "", 3000);
         return false;
       });
     }

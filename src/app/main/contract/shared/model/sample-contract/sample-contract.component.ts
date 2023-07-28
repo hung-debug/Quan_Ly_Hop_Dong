@@ -1680,7 +1680,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             });
           }
         }, (error: HttpErrorResponse) => {
-          this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("Vui lòng liên hệ đội hỗ trợ để được xử lý", "", 3000);
           countIsSignId++;
         })
         if (countIsSignId > 0) {
@@ -1728,7 +1728,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }, error => {
         isErrorNotId = true;
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý", "", 3000);
+        this.toastService.showErrorHTMLWithTimeout("Vui lòng liên hệ đội hỗ trợ để được xử lý", "", 3000);
         return false;
       });
     }

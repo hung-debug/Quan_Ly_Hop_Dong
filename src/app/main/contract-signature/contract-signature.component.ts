@@ -2268,7 +2268,7 @@ export class ContractSignatureComponent implements OnInit {
         }
       },
       (res: any) => {
-        alert('Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý!');
+        alert('Vui lòng liên hệ đội hỗ trợ để được xử lý!');
       }
     );
   }

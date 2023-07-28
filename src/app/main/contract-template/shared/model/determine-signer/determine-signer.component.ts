@@ -306,7 +306,7 @@ export class DetermineSignerComponent implements OnInit {
           this.save_draft_infor.close_header = false;
           this.save_draft_infor.close_modal.close();
         }
-        this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
+        this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Vui lòng liên hệ đội hỗ trợ để được xử lý.', "", 3000);
       }
 
       this.spinner.hide()
