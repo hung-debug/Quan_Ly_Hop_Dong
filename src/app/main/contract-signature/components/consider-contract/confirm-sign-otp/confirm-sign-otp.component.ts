@@ -300,7 +300,7 @@ export class ConfirmSignOtpComponent implements OnInit {
           return {
             otp: this.addForm.value.otp,
             signInfo: signI,
-            processAt: this.datepipe.transform(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'"),
+            processAt: this.isDateTime,
             fields:[
               {
                 id: item.id,

@@ -10,7 +10,7 @@
   </div>
 
   <div *ngIf = "!webcamImage && !this.flagSuccess && this.title!=1">
-    <webcam class="webcam-image" style="border-radius: 10px" [width]="this.width*0.85" [height]="this.width*3/4*0.85" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+    <webcam class="webcam-image" style="border-radius: 10px" [width]="this.width*0.85" [height]="this.width*0.85*3/4" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
             [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
             [videoOptions]="{ width: {exact: 480}, height: {exact: 640}, facingMode: 'environment'}" 
             [imageQuality]="1"
@@ -25,7 +25,7 @@
   </div>
 
   <div *ngIf = "!webcamImage && !this.flagSuccess && this.title==1" class="webcam">
-    <webcam class="webcam-image-circle" [width]="this.width*0.7" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+    <webcam class="webcam-image-circle" [width]="this.width*0.7"  [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
             [videoOptions]="videoOptions" 
             [imageQuality]="1"
             (cameraSwitched)="cameraWasSwitched($event)"

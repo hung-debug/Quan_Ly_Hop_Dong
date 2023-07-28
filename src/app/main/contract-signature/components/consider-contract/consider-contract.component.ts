@@ -1982,7 +1982,7 @@ export class ConsiderContractComponent
 
       let image_base64 = '';
       if (imageRender) {
-        const textSignB = await domtoimage.toJpeg(imageRender);
+        const textSignB = await domtoimage.toJpeg(imageRender, this.getOptions(imageRender));
         image_base64 = this.textSignBase64Gen = textSignB.split(',')[1];
       }
 
