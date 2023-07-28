@@ -28,6 +28,7 @@ import { ImageDialogSignComponent } from './components/consider-contract/image-d
 import { UserService } from 'src/app/service/user.service';
 import { DowloadPluginService } from 'src/app/service/dowload-plugin.service';
 import { CertDialogSignComponent } from './components/consider-contract/cert-dialog-sign/cert-dialog-sign.component';
+import { TimeService } from 'src/app/service/time.service';
 // import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
@@ -123,7 +124,8 @@ export class ContractSignatureComponent implements OnInit {
     public datepipe: DatePipe,
     private spinner: NgxSpinnerService,
     private userService: UserService,
-    private downloadPluginService: DowloadPluginService
+    private downloadPluginService: DowloadPluginService,
+    private timeService: TimeService
   ) {
     this.constantModel = contractModel;
 
@@ -222,22 +224,6 @@ export class ContractSignatureComponent implements OnInit {
     this.datas.markSignAcc = markSignAcc;
   }
 
-  async getDateTime() {
-    let http = null;
-
-    if (environment.apiUrl == 'http://14.160.91.174:1387') {
-      http = 'http';
-    } else {
-      http = 'https';
-    }
-
-    const date = await fetch(http + '://worldtimeapi.org/api/ip').then(
-      (response) => response.json()
-    );
-
-    this.isDateTime = date.datetime;
-  }
-
   documentId: any = [];
   signMany() {
     if (this.myInput) {
@@ -245,7 +231,6 @@ export class ContractSignatureComponent implements OnInit {
     }
 
     this.setNullFilter();
-
 
     this.spinner.show();
     this.typeDisplay = 'signMany';
@@ -1317,6 +1302,7 @@ export class ContractSignatureComponent implements OnInit {
           this.nameCompany = resultHsm.ma_dvcs;
           let imageRender = null;
 
+          this.isDateTime = this.timeService.getRealTime().toPromise();
           await of(null).pipe(delay(100)).toPromise();
 
           if (result.mark) {
@@ -1338,6 +1324,7 @@ export class ContractSignatureComponent implements OnInit {
             password: resultHsm.password,
             password2: resultHsm.password2,
             image_base64: signI,
+            processAt: this.isDateTime
           };
 
           this.spinner.show();
@@ -1590,6 +1577,7 @@ export class ContractSignatureComponent implements OnInit {
 
                 let signI = '';
                 let imageRender = null;
+                this.isDateTime = await this.timeService.getRealTime().toPromise();
 
                 await of(null).pipe(delay(100)).toPromise();
 
@@ -1663,11 +1651,9 @@ export class ContractSignatureComponent implements OnInit {
 
                   let updateInfo: any = null;
                   try {
-                    updateInfo =
-                      await this.contractServiceV1.updateInfoContractConsiderPromise(
-                        [],
-                        recipientId[i]
-                      );
+                    updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([{
+                      processAt: this.isDateTime
+                    }],recipientId[i]);
                   } catch (err) {
                     this.toastService.showErrorHTMLWithTimeout(
                       'Lỗi cập nhật trạng thái hợp đồng ',
@@ -1932,6 +1918,7 @@ export class ContractSignatureComponent implements OnInit {
 
       let signI = '';
 
+      this.isDateTime = this.timeService.getRealTime().toPromise();
       await of(null).pipe(delay(100)).toPromise();
       let imageRender = null;
 
