@@ -1577,7 +1577,7 @@ export class ContractSignatureComponent implements OnInit {
 
                 let signI = '';
                 let imageRender = null;
-                this.isDateTime = this.timeService.getRealTime().toPromise();
+                this.isDateTime = await this.timeService.getRealTime().toPromise();
 
                 await of(null).pipe(delay(100)).toPromise();
 
