@@ -1918,7 +1918,7 @@ export class ContractSignatureComponent implements OnInit {
 
       let signI = '';
 
-      this.isDateTime = this.timeService.getRealTime().toPromise();
+      this.isDateTime = await this.timeService.getRealTime().toPromise();
       await of(null).pipe(delay(100)).toPromise();
       let imageRender = null;
 
@@ -1994,7 +1994,6 @@ export class ContractSignatureComponent implements OnInit {
           const filePdfSigned = mergeTimeStamp.base64Data;
 
 
-
           const sign = await this.contractServiceV1.updateDigitalSignatured(
             idSignMany[i],
             filePdfSigned
@@ -2011,7 +2010,9 @@ export class ContractSignatureComponent implements OnInit {
 
           const updateInfo =
             await this.contractServiceV1.updateInfoContractConsiderPromise(
-              [],
+              [{
+                processAt: this.isDateTime
+              }],
               recipientId[i]
             );
 
