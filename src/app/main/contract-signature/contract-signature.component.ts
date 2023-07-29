@@ -1481,7 +1481,6 @@ export class ContractSignatureComponent implements OnInit {
                   const checkSign = await this.contractServiceV1.signCertMulti(contractsSignManyChecked[i].id, signCertPayload);
                   countSuccess++;
                   if (countSuccess == checkSign.length) {
-                    this.spinner.hide();
                     this.toastService.showSuccessHTMLWithTimeout(
                       'sign.multi.success',
                       '',
@@ -1494,6 +1493,7 @@ export class ContractSignatureComponent implements OnInit {
                         this.router.navigate(['main/c/receive/processed']);
                       });
                   }
+                  this.spinner.hide();
                 } catch (err) {
                   this.spinner.hide()
                   // this.toastService.showErrorHTMLWithTimeout(err,'',3000);

@@ -79,10 +79,10 @@ export class DigitalCertificateDetailComponent implements OnInit {
         this.keystoreDateEnd = data.keystoreDateEnd,
         this.status = data.status,
         this.sub = data.certInformation.split(",")
-        const subjectt = this.sub.find(item => item.includes('CN='))
-        this.subject = subjectt.split("=")[1]
-        const unitt = this.sub.find(item => item.includes('O='))
-        this.unit = unitt.split("=")[1]
+        const subjectt = this.sub?.find(item => item.includes('CN='))
+        this.subject = subjectt?.split("=")[1]
+        const unitt = this.sub?.find(item => item.includes('O='))
+        this.unit = unitt?.split("=")[1]
       }
     )
 

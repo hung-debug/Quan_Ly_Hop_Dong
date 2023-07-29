@@ -52,8 +52,7 @@ export class DigitalCertificateComponent implements OnInit {
   fileName: any;
   serial_number: any;
   sub: any[];
-  subject: any = "";
-  subjectSearch: any = "";
+  subject: any;
   // listStatus: any[];
   isQLDC_01: boolean = true; //them moi chung thu so
   isQLDC_02: boolean = true; //sua thong tin chung thu so
@@ -85,7 +84,7 @@ export class DigitalCertificateComponent implements OnInit {
     this.first = 0;
 
     this.spinner.show();
-    this.DigitalCertificateService.searchCertificate(this.subjectSearch, this.serial_number, this.status.value, this.keystoreDateStart, this.keystoreDateEnd, 0, this.size).subscribe(response => {
+    this.DigitalCertificateService.searchCertificate(this.subject, this.serial_number, this.status.value, this.keystoreDateStart, this.keystoreDateEnd, 0, this.size).subscribe(response => {
       this.spinner.hide();
       if (response.content) {
         this.list = response.content;
@@ -101,7 +100,7 @@ export class DigitalCertificateComponent implements OnInit {
     const first = event.first ? event.first : 0;
     const pageNumber = Math.floor(first / this.size) + 1;
     this.spinner.show();
-    this.DigitalCertificateService.searchCertificate(this.subjectSearch, this.serial_number, this.status.value, this.keystoreDateStart, this.keystoreDateEnd, pageNumber, this.size).subscribe(response => {
+    this.DigitalCertificateService.searchCertificate(this.subject, this.serial_number, this.status.value, this.keystoreDateStart, this.keystoreDateEnd, pageNumber, this.size).subscribe(response => {
       if (response.content) {
         this.list = response.content;
         this.totalRecords = response.totalElements;
