@@ -1863,6 +1863,7 @@ export class ConsiderContractComponent
                   imageRender = <HTMLElement>(document.getElementById('export-html2-image'));
                   signUpdate.signDigitalWidth = imageRender.offsetWidth;
                 } else {
+                  await of(null).pipe(delay(150)).toPromise();
                   imageRender = <HTMLElement>(document.getElementById('export-html2'));
                 }
 
