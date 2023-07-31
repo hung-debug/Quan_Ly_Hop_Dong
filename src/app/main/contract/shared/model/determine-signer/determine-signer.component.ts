@@ -2071,6 +2071,11 @@ export class DetermineSignerComponent implements OnInit {
       if (data_ordering)
         data_ordering.focus();
       this.toastService.showWarningHTMLWithTimeout("Bạn chưa nhập thứ tự ký!", "", 3000);
+    } else if (e.target.value == 0) {
+      let data_ordering = document.getElementById(orering_data);
+      if (data_ordering)
+      data_ordering.focus();
+      this.toastService.showWarningHTMLWithTimeout("Thứ tự đã nhập phải lớn hơn 0", "", 3000);
     }
   }
 
