@@ -88,7 +88,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   smsContractBuy: any;
 
   site: string;
-
+  isOrderValueValid: boolean = false
   get determineContract() {
     return this.determineDetails.controls;
   }
@@ -241,6 +241,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   // next step event
   isCeCaPushNo: boolean = false;
   async next(action: string) {
+    if (!this.isOrderValueValid) {
+      return
+    }
     this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
 
       this.datasForm.is_determine_clone[index].id = null;
@@ -1802,6 +1805,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       if (data_ordering)
       data_ordering.focus();
       this.toastService.showWarningHTMLWithTimeout("Thứ tự đã nhập phải lớn hơn 0", "", 3000);
+      this.isOrderValueValid = false
+    } else {
+      this.isOrderValueValid = true
     }
   }
 
