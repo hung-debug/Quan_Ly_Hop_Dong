@@ -103,6 +103,7 @@ export class DetermineSignerComponent implements OnInit {
   eKYCContractBuy: any;
   smsContractBuy: any;
   site: string;
+  isOrderValueValid: boolean = true;
 
   get determineContract() {
     return this.determineDetails.controls;
@@ -203,6 +204,9 @@ export class DetermineSignerComponent implements OnInit {
   // next step event
   isCeCaPushNo: boolean = false;
   next(action: string) {
+    if (!this.isOrderValueValid) {
+      return
+    }
     this.datas.is_determine_clone.forEach((items: any, index: number) => {
 
       if (items.type == 3) {
@@ -2068,6 +2072,7 @@ export class DetermineSignerComponent implements OnInit {
     //
     if (!e.target.value) {
       let data_ordering = document.getElementById(orering_data);
+      this.isOrderValueValid = false
       if (data_ordering)
         data_ordering.focus();
       this.toastService.showWarningHTMLWithTimeout("Bạn chưa nhập thứ tự ký!", "", 3000);
@@ -2076,6 +2081,9 @@ export class DetermineSignerComponent implements OnInit {
       if (data_ordering)
       data_ordering.focus();
       this.toastService.showWarningHTMLWithTimeout("Thứ tự đã nhập phải lớn hơn 0", "", 3000);
+      this.isOrderValueValid = false
+    } else {
+      this.isOrderValueValid = true
     }
   }
 
