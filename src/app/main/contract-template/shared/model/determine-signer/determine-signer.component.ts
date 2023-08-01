@@ -76,6 +76,7 @@ export class DetermineSignerComponent implements OnInit {
 
   site: string;
   checkSms = true;
+  isOrderValueValid: boolean = true
 
   get determineContract() {
     return this.determineDetails.controls;
@@ -208,6 +209,9 @@ export class DetermineSignerComponent implements OnInit {
 
   // next step event
   next(action: string) {
+    if (!this.isOrderValueValid) {
+      return
+    }
     this.datas.is_determine_clone.forEach((items: any, index: number) => {
       if (items.type == 3) {
         this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
@@ -286,7 +290,6 @@ export class DetermineSignerComponent implements OnInit {
           if(fields)
             this.datas.is_determine_clone[i].recipients[j].fields = fields.filter((field: any) => field.type == 2 || field.type == 3);
       }
-
       await this.contractTemplateService.editContractDetermine(this.datas.is_determine_clone[i], this.datas.is_determine_clone[i].id).toPromise().then((res: any) => {
           isBody.push(res);
         }, (res: any) => {
@@ -1526,6 +1529,14 @@ export class DetermineSignerComponent implements OnInit {
       if (data_ordering)
         data_ordering.focus();
       this.toastService.showErrorHTMLWithTimeout("Bạn chưa nhập thứ tự ký!", "", 3000);
+    } else if (e.target.value == 0) {
+      let data_ordering = document.getElementById(orering_data);
+      if (data_ordering)
+      data_ordering.focus();
+      this.toastService.showWarningHTMLWithTimeout("Thứ tự ký phải bắt đầu từ 1", "", 3000);
+      this.isOrderValueValid = false
+    } else {
+      this.isOrderValueValid = true
     }
   }
 
