@@ -88,7 +88,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   smsContractBuy: any;
 
   site: string;
-  isOrderValueValid: boolean = false
+  isOrderValueValid: boolean = true
   get determineContract() {
     return this.determineDetails.controls;
   }
