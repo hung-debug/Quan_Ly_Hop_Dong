@@ -1929,7 +1929,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                 count_number++;
                 break;
               } else if(!element.name && !element.value && !this.datasForm.contract_no) {
-                count++;
+                count_text_number++;
                 break;
               }
             } else if (element.sign_unit == 'text') {
