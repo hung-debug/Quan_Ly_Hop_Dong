@@ -86,12 +86,14 @@ export class SignContractComponent implements OnInit, AfterViewInit {
     }
   }
 
-  changeInput(e: any){
-    e.target.value = this.contractService.convertCurrency(e.target.value);
+  changeInput(e: any,sign: any){
+    if(sign.text_type == 'currency')
+      e.target.value = this.contractService.convertCurrency(e.target.value);
   }
 
-  reverseInput(e: any){
-    e.target.value = this.contractService.removePeriodsFromCurrencyValue(e.target.value);
+  reverseInput(e: any,sign: any){
+    if(sign.text_type == 'currency')
+      e.target.value = this.contractService.removePeriodsFromCurrencyValue(e.target.value);
   }
 
   getSpecifiedHandle() {
