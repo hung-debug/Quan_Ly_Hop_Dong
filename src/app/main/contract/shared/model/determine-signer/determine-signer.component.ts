@@ -2012,7 +2012,6 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   onFocusIn(e: any, is_index: number, action: string) {
-    //
     if (e.type == "focusin") {
       this.arrSearch = [];
       let arrData = [];
@@ -2023,6 +2022,7 @@ export class DetermineSignerComponent implements OnInit {
       } else if (action == 'doc') {
         arrData = this.data_organization.recipients.filter((p: any) => p.role == 4);
       }
+
       if (arrData.length > 0) {
         arrData.forEach((res: any, index: number) => {
           this.arrSearch.push(false);
@@ -2031,6 +2031,8 @@ export class DetermineSignerComponent implements OnInit {
           } else this.arrSearch[index] = false;
         })
       }
+
+      arrData = [];
 
     }
   }
@@ -2047,8 +2049,13 @@ export class DetermineSignerComponent implements OnInit {
 
   onSelectName(tData: any, dData: any) {
     dData.name = tData.name;
-    dData.email = tData.email;
-    dData.phone = tData.phone;
+
+    if(dData.login_by == 'email')
+      dData.email = tData.email;
+
+    if(dData.login_by == 'phone')
+      dData.phone = tData.phone;
+      
     this.arrSearchNameView = [];
     this.arrSearchNameSignature = [];
     this.arrSearchNameDoc = [];
