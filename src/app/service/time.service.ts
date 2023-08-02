@@ -10,7 +10,7 @@ import { catchError } from 'rxjs/operators';
 export class TimeService {
 
   private apiUrlHTTP = 'http://worldtimeapi.org/api/ip';
-  private apiUrlHTTPS = 'http://worldtimeapi.org/api/ip';
+  private apiUrlHTTPS = 'https://worldtimeapi.org/api/ip';
 
   constructor(
     private http: HttpClient,
