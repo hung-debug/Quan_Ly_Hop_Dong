@@ -172,8 +172,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
         const date = moment(data.active_at);
 
-        
-
         this.errorDetail = "Tài khoản bị khoá đến "+moment(date).format('YYYY/MM/DD HH:mm:ss');
       }else if(data?.code == '02'){
         this.countLoginFail++;
@@ -182,8 +180,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
       }else {
         this.countLoginFail++;
         this.error = true;
-
-        
 
         this.errorDetail = "error.username.password";
       }
@@ -340,7 +336,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
     if ((this.deviceService.isMobile() || this.deviceService.isTablet())) {
 
-      this.checkBrowser();
+      if(localStorage.getItem('sign_type') == '5') {
+        console.log("vao day ");
+        this.checkBrowser();
+      }
       this.getDeviceApp();
 
       this.mobile = true;

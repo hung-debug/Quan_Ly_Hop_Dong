@@ -57,6 +57,8 @@ export class AuthGuard implements CanActivate {
           urlChange = url.substring(index);
         }
 
+        if(response.sign_type.length > 0)
+          localStorage.setItem('sign_type',response.sign_type[0].id)
         this.router.navigateByUrl(urlChange, { skipLocationChange: true });
       })
      }
