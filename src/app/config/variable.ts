@@ -53,7 +53,7 @@ export const type_signature = [
   },
   {
     id: 6,
-    name: 'Ký số bằng chứng thư số',
+    name: 'Ký bằng chứng thư số server',
     is_otp: false
   }
 ];
@@ -128,7 +128,7 @@ export const type_signature_doc = [
   },
   {
     id: 6,
-    name: 'Ký số bằng chứng thư số',
+    name: 'Ký bằng chứng thư số server',
     is_otp: false
   }
 ];
