@@ -38,7 +38,8 @@
                 <div class="participants__name">
                   <div class="label_detail text-color">
                     <div>
-                      <input (change)="changeTypeSign(d, index)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [value]="email" [(ngModel)]="d.login_by" />
+                      <input (change)="changeTypeSign(d, index)" type="radio" name="checkPhoneMailOrgViewer_{{index}}"
+                        [value]="email" [(ngModel)]="d.login_by" />
                     </div>&nbsp;
                     <div>
                       {{'typeOfSignEmail' | translate}}
@@ -48,7 +49,8 @@
                 <div class="participants__name">
                   <div class="label_detail text-color">
                     <div>
-                      <input (change)="changeTypeSign(d, index)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [(ngModel)]="d.login_by" [value]="phone" />
+                      <input (change)="changeTypeSign(d, index)" type="radio" name="checkPhoneMailOrgViewer_{{index}}"
+                        [(ngModel)]="d.login_by" [value]="phone" />
                     </div>&nbsp;
                     <div>
                       {{'typeOfSignPhone' | translate}}
@@ -265,8 +267,8 @@
                   <div class="label_detail text-color">
 
                     <div>
-                      <input (change)="changeTypeSign(d, index,null,'signer')" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
-                        [value]="email" [(ngModel)]="d.login_by" />
+                      <input (change)="changeTypeSign(d, index,null,'signer')" type="radio"
+                        name="checkPhoneMailOrgSigner_{{index}}" [value]="email" [(ngModel)]="d.login_by" />
                     </div>&nbsp;
                     <div>
                       {{'typeOfSignEmail' | translate}}
@@ -276,8 +278,8 @@
                 <div class="participants__name">
                   <div class="label_detail text-color">
                     <div>
-                      <input (change)="changeTypeSign(d, index,null,'signer')" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
-                        [(ngModel)]="d.login_by" [value]="phone" />
+                      <input (change)="changeTypeSign(d, index,null,'signer')" type="radio"
+                        name="checkPhoneMailOrgSigner_{{index}}" [(ngModel)]="d.login_by" [value]="phone" />
                     </div>&nbsp;
                     <div>
                       {{'typeOfSignPhone' | translate}}
@@ -321,7 +323,8 @@
 
                   <!--Tổ chức của tôi chọn loại ký-->
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                    [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson[index] ? isListSignNotPerson[index] : this.getListSignType('org')"
+                    [settings]="dropdownSignTypeSettings"
+                    [data]="isListSignNotPerson[index] ? isListSignNotPerson[index] : this.getListSignType('org')"
                     (onSelect)="onItemSelect($event, data_organization.name)" (onDeSelect)="deSelectOrg($event)"
                     (ngModelChange)="selectWithOtp($event, d, 'organization')">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
@@ -514,6 +517,20 @@
                 </div>
               </div>
 
+              <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là chứng thư số-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                  </div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+
             </div>
             <div *ngIf="getOriganzationSignature().length > 1" class="col-md-1 delete-element"
               (click)="deleteOriganzationSignature(index)">
@@ -522,7 +539,7 @@
             </div>
             <div *ngIf="getOriganzationSignature().length == 1" class="col-md-1 delete-element"></div>
             <div>
-            <!-- <div class="participants--add">
+              <!-- <div class="participants--add">
               <u class="label text-color" style="color: #106DB6"
                 (click)="addOriganzationSignature()">{{'btn.add.user.sign' | translate}}</u>
             </div> -->
@@ -640,7 +657,7 @@
 
               <!--KD-->
               <div class="participants--input" style="display: flex" *ngIf="this.site == 'KD'">
-                <div class="participants__name" style="width: 90%">
+                <div class="participants__name" style="width: 91%">
                   <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
@@ -650,7 +667,7 @@
               </div>
 
               <div class="participants--input" style="display: flex" *ngIf="getDataSignEkyc(d).length > 0">
-                <div class="participants__name" style="width: 90%">
+                <div class="participants__name" style="width: 91%">
                   <div class="label_detail text-color">{{'cardId' | translate}}&nbsp;<span
                       class="required-title">*</span></div>
                   <div class="input-data">
@@ -678,6 +695,20 @@
                 <div class="participants__name" style="width: 91%">
                   <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;<span
                       class="required-title">*</span></div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+
+              <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là chứng thư số-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                  </div>
                   <div class="input-data">
                     <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
                       oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
@@ -718,8 +749,8 @@
             (item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate
           }}" [(ngModel)]="item.name" [disabled]="item.type == 3" />
 
-          <!--Ẩn luồng xử lý-->
-          <!-- <div style="width: 120px; margin-left: 5px">
+        <!--Ẩn luồng xử lý-->
+        <!-- <div style="width: 120px; margin-left: 5px">
             {{'hide.processing.thread' | translate}}
           </div>
           <input type ="checkbox" [(ngModel)]="item.hideFlow"> -->
@@ -739,7 +770,7 @@
               <span>&nbsp;{{'organization' | translate}}</span>
               <div *ngIf="item.type != 2" class="none-button"></div>
               <!-- <button  *ngIf="item.type == 2" class="btn" (click)="findPartner('ORGANIZATION', id, item)">{{'btn.search' | translate}}</button> -->
-              </label>
+            </label>
 
 
           </div>
@@ -1057,8 +1088,9 @@
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div>
-                        <input (change)="changeTypeSign(d, index,id, 'sign_partner')" name="checkPhoneMailParticipantSigner_{{index}}_{{id}}"
-                          type="radio" [value]="email" [(ngModel)]="d.login_by" />
+                        <input (change)="changeTypeSign(d, index,id, 'sign_partner')"
+                          name="checkPhoneMailParticipantSigner_{{index}}_{{id}}" type="radio" [value]="email"
+                          [(ngModel)]="d.login_by" />
                       </div>&nbsp;
                       <div>
                         {{'typeOfSignEmail' | translate}}
@@ -1068,8 +1100,9 @@
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div>
-                        <input (change)="changeTypeSign(d, index,id,'sign_partner')" name="checkPhoneMailParticipantSigner_{{index}}_{{id}}"
-                          type="radio" [value]="phone" [(ngModel)]="d.login_by" />
+                        <input (change)="changeTypeSign(d, index,id,'sign_partner')"
+                          name="checkPhoneMailParticipantSigner_{{index}}_{{id}}" type="radio" [value]="phone"
+                          [(ngModel)]="d.login_by" />
                       </div>&nbsp;
                       <div>
                         {{'typeOfSignPhone' | translate}}
@@ -1097,7 +1130,8 @@
 
                     <!--Người ký đối tác tổ chức chọn loại ký-->
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings" [data]="d.isListSignNotPersonPartner ? d.isListSignNotPersonPartner : this.getListSignType('partner')"
+                      [settings]="dropdownSignTypeSettings"
+                      [data]="d.isListSignNotPersonPartner ? d.isListSignNotPersonPartner : this.getListSignType('partner')"
                       (onSelect)="onItemSelect($event,item.type)" (onDeSelect)="deSelectPartnerSign($event, item)"
                       (ngModelChange)="selectWithOtp($event, d, item.type)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
@@ -1288,6 +1322,20 @@
                   </div>
                 </div>
 
+                <!--trường hiển thị khi người ký đối tác chọn loại ký là chứng thư số-->
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                  <div class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                      <span class="required-title">*</span>
+                      <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                    </div>
+                    <div class="input-data">
+                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                  </div>
+                </div>
+
               </div>
               <div *ngIf="getPartnerSignature(item).length > 1 || getPartnerCoordination(item).length > 0"
                 class="col-md-1 delete-element" (click)="deletePartnerSignature(index, item)">
@@ -1450,6 +1498,20 @@
                   </div>
                 </div>
 
+                <!--trường hiển thị khi văn thư đối tác chọn loại ký là chứng thư số-->
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                  <div class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                      <span class="required-title">*</span>
+                      <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                    </div>
+                    <div class="input-data">
+                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                  </div>
+                </div>
+
               </div>
               <div class="col-md-1 delete-element" (click)="deletePartnerDocument(index, item)">
                 <img src="assets/img/border_close.svg" alt="close.vn">
@@ -1481,8 +1543,9 @@
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div>
-                        <input (change)="changeTypeSign(d, index,null,'personal')" name="checkPhoneMailPerson_{{index}}_{{id}}" type="radio"
-                          [value]="email" [(ngModel)]="d.login_by" />
+                        <input (change)="changeTypeSign(d, index,null,'personal')"
+                          name="checkPhoneMailPerson_{{index}}_{{id}}" type="radio" [value]="email"
+                          [(ngModel)]="d.login_by" />
                       </div>&nbsp;
                       <div>
                         {{'typeOfSignEmail' | translate}}
@@ -1492,8 +1555,9 @@
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div>
-                        <input (change)="changeTypeSign(d, index,null,'personal')" name="checkPhoneMailPerson_{{index}}_{{id}}" type="radio"
-                          [value]="phone" [(ngModel)]="d.login_by" />
+                        <input (change)="changeTypeSign(d, index,null,'personal')"
+                          name="checkPhoneMailPerson_{{index}}_{{id}}" type="radio" [value]="phone"
+                          [(ngModel)]="d.login_by" />
                       </div>&nbsp;
                       <div>
                         {{'typeOfSignPhone' | translate}}
@@ -1522,7 +1586,8 @@
 
                     <!--Đối tác là cá nhân ký-->
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings" [data]="d.isListSignPersonal ? d.isListSignPersonal : this.getListSignType('personal')"
+                      [settings]="dropdownSignTypeSettings"
+                      [data]="d.isListSignPersonal ? d.isListSignPersonal : this.getListSignType('personal')"
                       (onSelect)="onItemSelect($event,item.type)" (onDeSelect)="deSelectPartnerSign($event, item)"
                       (ngModelChange)="selectWithOtp($event, d, item.type)">
                       <ng-template #data let-item>
@@ -1700,19 +1765,33 @@
                   </div>
                 </div>
 
-                   <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là hsm-->
-              <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
-                <div class="participants__name" style="width: 91%">
-                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span
-                      class="required-title">*</span>
-                    <div style="color: #ffc107;">({{'info.hsm' | translate}})</div>
-                  </div>
-                  <div class="input-data">
-                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
-                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là hsm-->
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
+                  <div class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span
+                        class="required-title">*</span>
+                      <div style="color: #ffc107;">({{'info.hsm' | translate}})</div>
+                    </div>
+                    <div class="input-data">
+                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
                   </div>
                 </div>
-              </div>
+
+                <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là chứng thư số-->
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                  <div class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                      <span class="required-title">*</span>
+                      <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                    </div>
+                    <div class="input-data">
+                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                  </div>
+                </div>
 
                 <!--KD-->
                 <div class="participants--input" style="display: flex"
