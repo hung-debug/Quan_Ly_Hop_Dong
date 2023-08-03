@@ -701,7 +701,7 @@
   "release.contract.success": "Phát hành hợp đồng thành công",
   "release.contract.error": "Phát hành hợp đồng thất bại",
   "hide.processing.thread":"Ẩn luồng xử lý",
-  "sign_by_cert":"Ký số bằng chứng thư số",
+  "sign_by_cert":"Ký bằng chứng thư số server",
   "choice": "Lựa chọn",
   "signer":"Người ký",
   "unit.email.name": "Địa chỉ email/Họ tên",
