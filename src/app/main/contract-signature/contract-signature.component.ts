@@ -817,9 +817,7 @@ export class ContractSignatureComponent implements OnInit {
 
   toggleDownload(checkedAll: boolean) {
     this.dataChecked = [];
-
     if (checkedAll) {
-
 
       for (let i = 0; i < this.contractDownloadList.length; i++) {
         this.contractDownloadList[i].checked = false;
