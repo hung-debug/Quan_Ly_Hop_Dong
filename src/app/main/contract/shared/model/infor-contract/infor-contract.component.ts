@@ -289,6 +289,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               if (this.datas.is_action_contract_created) {
                 this.uploadFileAttachAgain = true;
               }
+
+              console.log("attt ", this.datas.attachFileArr.length);
             } else {
               this.toastService.showWarningHTMLWithTimeout("attach.file.valid", "", 3000);
             }
