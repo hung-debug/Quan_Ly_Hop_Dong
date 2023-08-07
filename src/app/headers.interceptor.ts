@@ -20,7 +20,7 @@ export class HeadersInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
+        if (error.status === 401 || error.status === 403) {
           this.router.navigate(['/login']);
         }
         // Nếu không phải lỗi 401, tiếp tục quăng lỗi để xử lý ở các nơi khác

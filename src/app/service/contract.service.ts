@@ -470,7 +470,8 @@ export class ContractService {
     } else if (environment.apiUrl == 'https://mobifone-econtract.vn/service') {
       return this.http.post<any>(this.cccdFrontKD, body, { headers });
     } else {
-      return this.http.post<any>(this.cccdFront, body, { headers });
+      // return this.http.post<any>(this.cccdFront, body, { headers });
+      return this.http.post<any>(this.cccdFrontKD, body, { headers });
     }
   }
 
@@ -499,7 +500,8 @@ export class ContractService {
       //server prod vinmec
       return this.http.post<any>('http://10.111.130.27/eKYC/verification', body ,{headers})
     }  {
-      return this.http.post<any>(this.detectFaceUrl, body, { headers });
+      // return this.http.post<any>(this.detectFaceUrl, body, { headers });
+      return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
     }
   }
 
