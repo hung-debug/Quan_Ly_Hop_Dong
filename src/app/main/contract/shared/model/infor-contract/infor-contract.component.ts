@@ -485,12 +485,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           // this.datas.attachFile
           if (this.datas.attachFileArr != null) {
             for (var i = 0; i < this.datas.attachFileArr.length; i++) {
-              await this.uploadService.uploadFile(this.datas.attachFileArr[i]).toPromise().then((data) => {
+              await this.uploadService.uploadFile(this.datas.attachFileArr[i]).toPromise().then(async (data) => {
                   if (!this.datas.attachFileArr[i].id) {
                     this.datas.filePathAttach = data.file_object.file_path;
                     this.datas.fileNameAttach = data.file_object.filename;
                     this.datas.fileBucketAttach = data.file_object.bucket;
-                    this.contractService.addDocumentAttach(this.datas).toPromise().then((data) => {
+                    await this.contractService.addDocumentAttach(this.datas).toPromise().then((data) => {
                         // this.datas.document_attach_id = data?.id;
                         this.datas.attachFileArr[i].id = data?.id;
                       },
