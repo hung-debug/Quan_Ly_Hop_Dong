@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from 'src/app/service/app.service';
 import * as contractModel from './model/contract-model';
@@ -23,7 +23,6 @@ import { HsmDialogSignComponent } from './components/consider-contract/hsm-dialo
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { DialogReasonCancelComponent } from './shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
-import { environment } from 'src/environments/environment';
 import { ImageDialogSignComponent } from './components/consider-contract/image-dialog-sign/image-dialog-sign.component';
 import { UserService } from 'src/app/service/user.service';
 import { DowloadPluginService } from 'src/app/service/dowload-plugin.service';
@@ -38,7 +37,6 @@ import { TimeService } from 'src/app/service/time.service';
 })
 export class ContractSignatureComponent implements OnInit {
   @ViewChild('myInputRef', { static: false }) myInput: ElementRef;
-
   constantModel: any;
 
   datas: any = {
@@ -110,6 +108,8 @@ export class ContractSignatureComponent implements OnInit {
   markImage: boolean = false;
   signImage: string | null = null;
   position: string | null = null;
+  contractSelected: boolean = false;
+
 
   constructor(
     private appService: AppService,
@@ -735,6 +735,7 @@ export class ContractSignatureComponent implements OnInit {
 
   dataChecked: any[] = [];
   toggleOne(item: any, index1: any) {
+    item.checked = !item.checked
     let data = {
       id: index1,
       sign_type: item.sign_type[0].id,
@@ -1084,7 +1085,7 @@ export class ContractSignatureComponent implements OnInit {
     }
 
     //Lay hop dong ky nhieu bang hsm hay usb token
-    let signId = contractsSignManyChecked[0].sign_type[0].id;
+    let signId = contractsSignManyChecked[0]?.sign_type[0]?.id;
 
     let recipientId: any = [];
     let taxCode: any = [];
@@ -1165,7 +1166,7 @@ export class ContractSignatureComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(async (result: any) => {
       //result = 1 tương ứng với nhấn nút đồng ý và ký
-      if (result.agree == 1) {
+      if (result?.agree == 1) {
         //Mã số thuế tại các hợp đồng cần giống nhau
         for (let i = 0; i < taxCode.length; i++) {
           for (let j = i + 1; j < taxCode.length; j++) {
@@ -2111,7 +2112,6 @@ export class ContractSignatureComponent implements OnInit {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
       let is_data = result;
     });
   }
