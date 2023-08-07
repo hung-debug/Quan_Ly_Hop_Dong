@@ -1302,7 +1302,13 @@ export class ContractSignatureComponent implements OnInit {
           this.nameCompany = resultHsm.ma_dvcs;
           let imageRender = null;
 
-          this.isDateTime = this.timeService.getRealTime().toPromise();
+          try {
+            this.isDateTime = await this.timeService.getRealTime().toPromise();
+          } catch(err) {
+            this.isDateTime = new Date();
+          }
+
+          if(!this.isDateTime) this.isDateTime = new Date();
           await of(null).pipe(delay(100)).toPromise();
 
           if (result.mark) {
@@ -1577,8 +1583,14 @@ export class ContractSignatureComponent implements OnInit {
 
                 let signI = '';
                 let imageRender = null;
-                this.isDateTime = await this.timeService.getRealTime().toPromise();
 
+                try {
+                  this.isDateTime = await this.timeService.getRealTime().toPromise();
+                } catch(err) {
+                  this.isDateTime = new Date();
+                }
+  
+                if(!this.isDateTime) this.isDateTime = new Date();
                 await of(null).pipe(delay(100)).toPromise();
 
                 if (isMark) {
@@ -1918,7 +1930,13 @@ export class ContractSignatureComponent implements OnInit {
 
       let signI = '';
 
-      this.isDateTime = this.timeService.getRealTime().toPromise();
+      try {
+        this.isDateTime = await this.timeService.getRealTime().toPromise();
+      } catch(err) {
+        this.isDateTime = new Date();
+      }
+
+      if(!this.isDateTime) this.isDateTime = new Date();
       await of(null).pipe(delay(100)).toPromise();
       let imageRender = null;
 
@@ -1994,7 +2012,6 @@ export class ContractSignatureComponent implements OnInit {
           const filePdfSigned = mergeTimeStamp.base64Data;
 
 
-
           const sign = await this.contractServiceV1.updateDigitalSignatured(
             idSignMany[i],
             filePdfSigned
@@ -2011,7 +2028,9 @@ export class ContractSignatureComponent implements OnInit {
 
           const updateInfo =
             await this.contractServiceV1.updateInfoContractConsiderPromise(
-              [],
+              [{
+                processAt: this.isDateTime
+              }],
               recipientId[i]
             );
 

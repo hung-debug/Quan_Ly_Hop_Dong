@@ -532,7 +532,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   sortParticipant(list: any) {
-    return list.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
+    // return list.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
+    return list;
   }
 
   getNameOrganization(item: any, index: any) {

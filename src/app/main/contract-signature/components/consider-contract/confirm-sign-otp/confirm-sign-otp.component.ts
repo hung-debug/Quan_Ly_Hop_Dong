@@ -289,7 +289,7 @@ export class ConfirmSignOtpComponent implements OnInit {
       
       let signI:any;
       if (imageRender) {
-        const textSignB = await domtoimage.toPng(imageRender);
+        const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
         signI = textSignB.split(",")[1];
       }
      
@@ -300,7 +300,7 @@ export class ConfirmSignOtpComponent implements OnInit {
           return {
             otp: this.addForm.value.otp,
             signInfo: signI,
-            processAt: this.datepipe.transform(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'"),
+            processAt: this.isDateTime,
             fields:[
               {
                 id: item.id,
@@ -338,6 +338,18 @@ export class ConfirmSignOtpComponent implements OnInit {
       await this.signImageC(signUpdatePayload, notContainSignImage);
     }
 
+  }
+
+  getOptions(imageRender: any) {
+    const scale = 5;
+    const options = {
+      quality: 0.99,
+      width: imageRender.clientWidth * scale,
+      height: imageRender.clientHeight * scale,
+      style: { transform: 'scale(' + scale + ')', transformOrigin: 'top left' },
+    };
+
+    return options;
   }
 
   async signImageC(signUpdatePayload: any, notContainSignImage: any) {

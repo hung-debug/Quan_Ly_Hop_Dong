@@ -118,21 +118,32 @@ export class ForwardContractComponent implements OnInit {
 
     const currentRecipientData = this.getTargetRecipientData(this.datas?.recipientId);
 
-    if(currentRecipientData.sign_type[0].id == 2 || currentRecipientData.sign_type[0].id == 4) {
-      this.dataSign = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 4);
-    } else if(currentRecipientData.sign_type[0].id == 1 ||  currentRecipientData.sign_type[0].id == 5) {
-      this.dataSign = this.signTypeList.filter((p: any) => p.id == 1 || p.id == 5);
-    } else if(currentRecipientData.sign_type[0].id == 3) {
-      this.dataSign = this.signTypeList.filter((p: any) => p.id == 3);
+    if(currentRecipientData.sign_type.length > 0) {
+      if(currentRecipientData.sign_type[0].id == 2 || currentRecipientData.sign_type[0].id == 4) {
+        this.dataSign = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 4);
+      } else if(currentRecipientData.sign_type[0].id == 1 ||  currentRecipientData.sign_type[0].id == 5) {
+        this.dataSign = this.signTypeList.filter((p: any) => p.id == 1 || p.id == 5);
+      } else if(currentRecipientData.sign_type[0].id == 3) {
+        this.dataSign = this.signTypeList.filter((p: any) => p.id == 3);
+      }
+
+      this.myForm = this.fbd.group({
+        name: this.fbd.control("", [Validators.required]),
+        email: this.fbd.control("", [Validators.required]),
+        phone: "",
+        card_id: "",
+        dataSign: this.fbd.control(this.signTypeList.filter((p: any) => p.id == currentRecipientData.sign_type[0].id),[Validators.required])
+      });
+    } else {
+      this.myForm = this.fbd.group({
+        name: this.fbd.control("", [Validators.required]),
+        email: this.fbd.control("", [Validators.required]),
+        phone: "",
+        card_id: "",
+      });
     }
 
-    this.myForm = this.fbd.group({
-      name: this.fbd.control("", [Validators.required]),
-      email: this.fbd.control("", [Validators.required]),
-      phone: "",
-      card_id: "",
-      dataSign: this.fbd.control(this.signTypeList.filter((p: any) => p.id == currentRecipientData.sign_type[0].id),[Validators.required])
-    });
+  
   }
 
   onItemSelect(event: any) {
