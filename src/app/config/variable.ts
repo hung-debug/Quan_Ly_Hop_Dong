@@ -236,7 +236,7 @@ export const personal_customer_clone ={
 };
 
 export var networkList = [
-  { id: 1, name: 'Mobifone' },
+  { id: 1, name: 'MobiFone' },
   { id: 2, name: 'Viettel' },
   // { id: 3, name: 'Vietnamobile' },
   {id: 'bcy', name:'Ban cơ yếu'}
