@@ -39,6 +39,7 @@ export class ContractTemplateService {
   templateUseUrl: any = `${environment.apiUrl}/api/v1/contracts/template/is-use/`;
 
   checkViewTemplateContractUrl: any = `${environment.apiUrl}/api/v1/contracts/template/check-view-contract/`
+  getCopyContractTemplate: any = `${environment.apiUrl}/api/v1/contracts/template/clone/`;
 
   constructor(private http: HttpClient,
     public datepipe: DatePipe,) { }
@@ -634,5 +635,13 @@ export class ContractTemplateService {
         sign_config: []
       },
     ]
+  }
+
+  cloneContractTemplate(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.getCopyContractTemplate + id, { headers });
   }
 }

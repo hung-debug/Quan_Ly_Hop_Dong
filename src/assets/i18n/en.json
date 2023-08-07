@@ -199,6 +199,7 @@
   "role.contract-template.list": "Contract template management",
   "role.contract-template.add": "Add contract template",
   "role.contract-template.edit": "Edit contract template",
+  "role.contract-template.copy": "Copy contract template",
   "role.contract-template.create-contract": "Create contract by template",
   "role.contract-template.create-batch": "Create batch contracts",
   "role.contract-template.stop": "Stop releasing contract templates",

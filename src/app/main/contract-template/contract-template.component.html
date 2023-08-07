@@ -71,6 +71,9 @@
       <div class="col-md-3 item_icon">
         <div style="display: flex; justify-content: center;">
           <div class="div_icon" *ngIf="isShare=='off' && isQLMHD_02">
+            <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'role.contract-template.copy' | translate}}" (click)="cloneContractTemplateCall(item.id)" />
+          </div>
+          <div class="div_icon" *ngIf="isShare=='off' && isQLMHD_02">
             <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'role.contract-template.edit' | translate}}" (click)="openEdit(item.id)" />
           </div>
           <div class="div_icon" *ngIf="isShare=='off' && item.releaseState=='CON_HIEU_LUC' && (isQLMHD_03 || isQLMHD_04)">

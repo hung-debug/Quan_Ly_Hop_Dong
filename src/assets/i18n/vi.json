@@ -202,6 +202,7 @@
   "role.contract-template.list": "Nhóm chức năng quản lý mẫu hợp đồng",
   "role.contract-template.add": "Thêm mới mẫu hợp đồng",
   "role.contract-template.edit": "Sửa mẫu hợp đồng",
+  "role.contract-template.copy": "Sao chép mẫu hợp đồng",
   "role.contract-template.create-contract": "Tạo hợp đồng đơn lẻ theo mẫu",
   "role.contract-template.create-batch": "Tạo hợp đồng theo lô",
   "role.contract-template.stop": "Ngừng phát hành mẫu hợp đồng",
