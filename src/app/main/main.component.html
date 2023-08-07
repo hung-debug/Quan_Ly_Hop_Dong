@@ -111,7 +111,17 @@
                 <div>{{'login.reset_password_new' | translate }}</div>
               </div>
             </button>
-                      
+
+            <!-- for test OTP -->
+            <button ngbDropdownItem class="drop" (click)="imageDialogSignOpen()">
+              <div style="display: flex; align-items: center;">
+                <div class="db_user">
+                  <div class="db_user_detail"></div>
+                </div>
+                <div>New OTP test</div>
+              </div>
+            </button>
+
             <button ngbDropdownItem class="drop_red" routerLink="/login" (click)="logout()">
               <div style="display: flex; align-items: center;">
                 <div class="db_user">

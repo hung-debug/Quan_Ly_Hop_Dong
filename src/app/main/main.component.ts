@@ -7,12 +7,13 @@ import {SidebarService} from './sidebar/sidebar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ToastService} from '../service/toast.service';
 import{ ResetPasswordDialogComponent } from '../../app/main/dialog/reset-password-dialog/reset-password-dialog.component'
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DashboardService } from '../service/dashboard.service';
 import { UserService } from '../service/user.service';
 import {DeviceDetectorService} from "ngx-device-detector";
 import { ContractService } from '../service/contract.service';
 import { environment } from 'src/environments/environment';
+import { ImageDialogSignComponent } from './contract-signature/components/consider-contract/image-dialog-sign/image-dialog-sign.component';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -250,6 +251,21 @@ export class MainComponent implements OnInit {
 
   viewLink(){
     window.open("https://drive.google.com/drive/folders/1NHaCYOMCMsLvrw1uPbX2ezsC-Uo9huW3");
+  }
+
+    // for test OTP
+  imageDialogSignOpen() {
+    const data = {
+      title: 'KÝ HỢP ĐỒNG ',
+      is_content: 'forward_contract',
+      // imgSignAcc: this.datas.imgSignAcc
+    };
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '1024px';
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.data = data;
+    const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
   }
 
 }
