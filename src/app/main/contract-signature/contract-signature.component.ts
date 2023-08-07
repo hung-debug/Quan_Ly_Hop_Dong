@@ -802,9 +802,7 @@ export class ContractSignatureComponent implements OnInit {
 
   toggleDownload(checkedAll: boolean) {
     this.dataChecked = [];
-
     if (checkedAll) {
-
 
       for (let i = 0; i < this.contractDownloadList.length; i++) {
         this.contractDownloadList[i].checked = false;
@@ -1455,12 +1453,12 @@ export class ContractSignatureComponent implements OnInit {
             signI = textSignB.split(',')[1];
           }
 
+          this.spinner.show()
           for (let i = 0; i < contractsSignManyChecked.length; i++) {
             const signSlots = contractsSignManyChecked[i].fields;
 
             if (signSlots?.length > 0) {
               for (let y = 0; y < signSlots.length; y++) {
-
                 const signCertPayload = {
                   cert_id: this.cert_id,
                   image_base64: signI,
@@ -1468,13 +1466,10 @@ export class ContractSignatureComponent implements OnInit {
                   width: signSlots[y].width,
                   height: signSlots[y].height
                 };
-
                 try {
-                  this.spinner.show()
                   const checkSign = await this.contractServiceV1.signCertMulti(contractsSignManyChecked[i].id, signCertPayload);
                   countSuccess++;
                   if (countSuccess == checkSign.length) {
-                    this.spinner.hide();
                     this.toastService.showSuccessHTMLWithTimeout(
                       'sign.multi.success',
                       '',
@@ -1488,14 +1483,12 @@ export class ContractSignatureComponent implements OnInit {
                       });
                   }
                 } catch (err) {
-                  this.spinner.hide()
                   // this.toastService.showErrorHTMLWithTimeout(err,'',3000);
                 }
               }
             }
           }
-
-
+          this.spinner.hide()
         }
       })
     }

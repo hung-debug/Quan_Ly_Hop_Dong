@@ -36,9 +36,9 @@
         </div>
 
         <div *ngIf="filter_status == 4">
-            <!-- <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
+            <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
                 <button (click)="downloadMany()" class="btn btn-lg btn-block btn_submit">{{'download.multi'| translate}}</button>
-            </div> -->
+            </div>
 
             <div *ngIf="this.typeDisplay === 'downloadMany'" style="padding-top: 10px;">
                 <button class="btn_submit" (click)="downloadManyContract()">{{'contract.down'| translate}}</button>
@@ -74,9 +74,9 @@
             <input id="allView" name="allView" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleView(checkedAll)" />
         </div>
 
-        <!-- <div *ngIf="this.typeDisplay === 'downloadMany'" class="col-md-3">
-            <input id="all" name="all" type="checkbox" (click)="toggle()" />
-        </div> -->
+        <div *ngIf="this.typeDisplay === 'downloadMany'" class="col-md-3">
+            <input id="all" name="all" type="checkbox" (click)="toggleDownload(checkedAll)" [(ngModel)]="checkedAll" />
+        </div>
 
     </div>
 
@@ -290,7 +290,7 @@
                     </div>
 
                     <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractSignTime | date: 'dd/MM/yyyy'}}</span></div>
+                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{'hoho' + item.checked }}</span></div>
                     </div>
 
                     <div class="col-md-3 item_icon">
@@ -304,13 +304,13 @@
                             <div class="div_icon" *ngIf="item.status == 1 && (item.role == 3 || item.role == 4) && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                                 <div class="col-md-1 calendar_create">
                                     <div>
-                                        <input name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" (change)="toggleOne(item, index1)" />
+                                        <input name="item" type="checkbox" [(ngModel)]="item.checked" (change)="toggleOne(item, index1)" />
                                     </div>
                                 </div>
                             </div>
 
                             <div class="div_icon" *ngIf="this.typeDisplay == 'downloadMany'">
-                                <input id="all" name="all" type="checkbox" (click)="toggleOneDownload(item, index1)" />
+                                <input id="all" name="all" type="checkbox" (click)="toggleOneDownload(item, index1)" [(ngModel)]="item.checked"/>
                             </div>
                         </div>
                     </div>

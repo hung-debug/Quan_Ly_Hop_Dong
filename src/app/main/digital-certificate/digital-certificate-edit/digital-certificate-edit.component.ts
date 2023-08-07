@@ -104,21 +104,23 @@ export class DigitalCertificateEditComponent implements OnInit {
           status: data.status,
           email: listCustomer
         })
-      
+
         // set emailOptionsList
         this.getListAllEmailFirstCall()
         this.listID = data.customers
         this.orgID = data.orgAdminCreate.toString()
         this.keystoreSerialNumber = data.keystoreSerialNumber,
-          this.keyStoreFileName = data.keyStoreFileName,
-          this.keystoreDateStart = data.keystoreDateStart,
-          this.keystoreDateEnd = data.keystoreDateEnd,
-          this.status = data.status,
-          this.sub = data.certInformation?.split(",")
+        this.keyStoreFileName = data.keyStoreFileName,
+        this.keystoreDateStart = data.keystoreDateStart,
+        this.keystoreDateEnd = data.keystoreDateEnd,
+        this.status = data.status,
+        this.sub = data.certInformation?.split(",")
         const subjectt = this.sub?.find(item => item.includes('CN='))
         this.subject = subjectt?.split("=")[1]
         const unitt = this.sub?.find(item => item.includes('O='))
         this.unit = unitt?.split("=")[1]
+        this.listID = data.customers
+        this.orgID = data.orgAdminCreate.toString()
       }
     )
 
