@@ -605,17 +605,24 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       }
 
       if (!error_api) {
-        await this.contractService.getDataNotifyOriganzation().toPromise().then((data: any) => {
+        await this.contractService.getDataNotifyOriganzation().toPromise().then(async (data: any) => {
           this.datas.name_origanzation = data.name;
           // file attach upload
           if (this.datas.attachFileArr != null) {
             for (var i = 0; i < this.datas.attachFileArr.length; i++) {
-              this.uploadService.uploadFile(this.datas.attachFileArr[i]).subscribe((data) => {
+              console.log("abc ",this.datas)
+              if(!this.datas.attachFileArr[i].id) {
+                await this.uploadService.uploadFile(this.datas.attachFileArr[i]).toPromise().then(async (data) => {
                   this.datas.filePathAttach = data.file_object.file_path;
                   this.datas.fileNameAttach = data.file_object.filename;
                   this.datas.fileBucketAttach = data.file_object.bucket;
-                  this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
+                  console.log("dataas ",this.datas);
+                  await this.contractService.addDocumentAttach(this.datas).toPromise().then((data) => {
                       this.datas.document_attach_id = data?.id;
+                      this.datas.attachFileArr[i].id = data?.id;
+
+                      console.log("dataas 1 ",this.datas);
+
                     },
                     error => {
                       this.spinner.hide();
@@ -629,9 +636,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                   this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 3000);
                   return false;
                 }
-              );
+                )
+              }
+               ;
             }
 
+            console.log("dataas 2 ",this.datas);
             if (action == "save_draft") {
               this.router.navigate(['/main/contract/create/draft']);
               this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
