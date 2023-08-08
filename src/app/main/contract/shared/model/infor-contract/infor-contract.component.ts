@@ -200,7 +200,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     }
   }
 
-  convertFileName(str: any) {
+  convertFileName(str1: any) {
+    let str = str1.normalize('NFC');
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a"); 
     str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e"); 
     str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i"); 
