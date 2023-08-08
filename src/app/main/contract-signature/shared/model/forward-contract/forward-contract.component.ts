@@ -9,6 +9,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { parttern, parttern_input } from 'src/app/config/parttern';
 import { environment } from 'src/environments/environment';
 import { type_signature } from 'src/app/config/variable';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-forward-contract',
@@ -42,6 +43,7 @@ export class ForwardContractComponent implements OnInit {
     public dialogRef: MatDialogRef<ForwardContractComponent>,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
+    private translate: TranslateService
   ) {
   }
 

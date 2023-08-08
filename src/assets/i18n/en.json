@@ -427,6 +427,7 @@
   "relate.party": "Related parties",
   "authorization": "Authorization",
   "forward": "Forward",
+  "processing.auth":"Processing authorization",
   "confirm": "Confirm",
   "contract.sign.confirm": "CONFIRM SIGN CONTRACT",
   "content.confirm": "Do you agree to the content, terms of the contract and the use of electronic methods to make transactions?",

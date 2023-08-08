@@ -138,8 +138,10 @@
       <button class="dx-button-form dx-button-close dx-button-90" (click)="dialog.closeAll()" type="button">{{'cancel' |
         translate}}
       </button>
-      <button class="dx-button-form dx-button-submit dx-button-90" type="default">{{this.datas.is_content ==
-        'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền'}}
+      <button
+        style="width: fit-content;"
+        class="dx-button-form dx-button-submit dx-button-90"
+        type="default">{{this.datas.is_content == 'forward_contract' ? ('forward' | translate) : 'authorization' | translate}}
       </button>
     </div>
   </form>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { variable } from "../../../../config/variable";
 import { MatDialog,MatDialogRef } from "@angular/material/dialog";
 import { ForwardContractComponent } from "../../shared/model/forward-contract/forward-contract.component";
@@ -10,7 +10,7 @@ import { UnitService } from 'src/app/service/unit.service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { type } from 'os';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-footer-signature',
   templateUrl: './footer-signature.component.html',
@@ -63,7 +63,7 @@ export class FooterSignatureComponent implements OnInit {
     private deviceService: DeviceDetectorService,
     private unitService: UnitService,
     private router: Router,
-    private _location: Location,
+    public translate: TranslateService,
     private spinner: NgxSpinnerService,
     public dialogRef: MatDialogRef<FooterSignatureComponent>
   ) {
@@ -71,7 +71,6 @@ export class FooterSignatureComponent implements OnInit {
 
   lang: string;
   ngOnInit(): void {
-    
     
     this.getDeviceApp();
 
@@ -532,7 +531,7 @@ export class FooterSignatureComponent implements OnInit {
       }
     }
     const data = {
-      title: 'ỦY QUYỀN XỬ LÝ',
+      title: this.translate.instant('processing.auth'),
       is_content: 'processing_author',
       dataContract: this.datas,
       recipientId: this.recipientId
@@ -633,7 +632,7 @@ export class FooterSignatureComponent implements OnInit {
       }
     }
     const data = {
-      title: 'CHUYỂN TIẾP',
+      title: this.translate.instant('forward').toUpperCase(),
       is_content: 'forward_contract',
       dataContract: this.datas,
       recipientId: this.recipientId
