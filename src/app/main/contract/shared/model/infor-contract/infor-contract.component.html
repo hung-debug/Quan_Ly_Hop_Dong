@@ -90,7 +90,7 @@
             <input id="attachFile" type="file" accept=".pdf, .doc, .docx, .png, .jpg, .jpeg, .zip, .rar, .txt, .xls, .xlsx"(change)="fileChangedAttach($event)" multiple/>
             <div class="select-contract">
               <div class="div_file_attach">
-                <div *ngIf="this.attachFileNameArr.length == 0" style="color:gray">{{'choose.contract.file.attach' |
+                <div *ngIf="!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length == 0" style="color:gray">{{'choose.contract.file.attach' |
                   translate }}</div>
                 <div *ngFor="let item of this.datas.attachFileNameArr; let i = index" style="width: 80%;">
                   {{item.filename}} <img *ngIf="item" style="cursor: pointer;" (click)="deleteFileAttach(item, i)"
