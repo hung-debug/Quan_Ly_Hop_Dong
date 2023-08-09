@@ -319,7 +319,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                 this.uploadFileAttachAgain = true;
               }
 
-              console.log("attt ", this.datas.attachFileArr.length);
             } else {
               this.toastService.showWarningHTMLWithTimeout("attach.file.valid", "", 3000);
             }
@@ -485,12 +484,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           // this.datas.attachFile
           if (this.datas.attachFileArr != null) {
             for (var i = 0; i < this.datas.attachFileArr.length; i++) {
-              await this.uploadService.uploadFile(this.datas.attachFileArr[i]).toPromise().then((data) => {
+              await this.uploadService.uploadFile(this.datas.attachFileArr[i]).toPromise().then(async (data) => {
                   if (!this.datas.attachFileArr[i].id) {
                     this.datas.filePathAttach = data.file_object.file_path;
                     this.datas.fileNameAttach = data.file_object.filename;
                     this.datas.fileBucketAttach = data.file_object.bucket;
-                    this.contractService.addDocumentAttach(this.datas).toPromise().then((data) => {
+                    await this.contractService.addDocumentAttach(this.datas).toPromise().then((data) => {
                         // this.datas.document_attach_id = data?.id;
                         this.datas.attachFileArr[i].id = data?.id;
                       },
@@ -634,17 +633,19 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       }
 
       if (!error_api) {
-        await this.contractService.getDataNotifyOriganzation().toPromise().then((data: any) => {
+        await this.contractService.getDataNotifyOriganzation().toPromise().then(async (data: any) => {
           this.datas.name_origanzation = data.name;
           // file attach upload
           if (this.datas.attachFileArr != null) {
             for (var i = 0; i < this.datas.attachFileArr.length; i++) {
-              this.uploadService.uploadFile(this.datas.attachFileArr[i]).subscribe((data) => {
+              if(!this.datas.attachFileArr[i].id) {
+                await this.uploadService.uploadFile(this.datas.attachFileArr[i]).toPromise().then(async (data) => {
                   this.datas.filePathAttach = data.file_object.file_path;
                   this.datas.fileNameAttach = data.file_object.filename;
                   this.datas.fileBucketAttach = data.file_object.bucket;
-                  this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
+                  await this.contractService.addDocumentAttach(this.datas).toPromise().then((data) => {
                       this.datas.document_attach_id = data?.id;
+                      this.datas.attachFileArr[i].id = data?.id;
                     },
                     error => {
                       this.spinner.hide();
@@ -658,9 +659,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                   this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 3000);
                   return false;
                 }
-              );
+                )
+              };
             }
-
             if (action == "save_draft") {
               this.router.navigate(['/main/contract/create/draft']);
               this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);

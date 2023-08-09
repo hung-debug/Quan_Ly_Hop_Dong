@@ -193,7 +193,6 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
       // this.onChangeForm(e);
     } else {
-      console.log("2 ");
       this.datasForm.type_id = e.value;
 
       const informationContractType = await this.contractTypeService
@@ -269,7 +268,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
   getContractList() {
     this.contractService
-      .getContractList('off', '', '', '', '', '', '', 30, '', '')
+      .getContractList('off', '', '', '', '', '', '', 30, '', 10000)
       .subscribe(
         (data) => {
           this.contractConnectList = data.entities;
