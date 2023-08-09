@@ -69,7 +69,7 @@ export class InforUserComponent implements OnInit {
     private spinner: NgxSpinnerService
     ) {
       this.addInforForm = this.fbd.group({
-        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
         email: this.fbd.control("", [Validators.required, Validators.email]),
         birthday: null,
         phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -85,7 +85,7 @@ export class InforUserComponent implements OnInit {
       });
    
       this.addHsmForm = this.fbd.group({
-        nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
+        nameHsm: this.fbd.control("", Validators.pattern(parttern_input.new_input_form)),
         taxCodeHsm: this.fbd.control("",[
             Validators.pattern(parttern.cardid),
             ]
@@ -114,7 +114,7 @@ export class InforUserComponent implements OnInit {
     this.userService.getUserById(this.id).subscribe(
       data => {
         this.addInforForm = this.fbd.group({
-          name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+          name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
           email: this.fbd.control(data.email, [Validators.required, Validators.email]),
           birthday: data.birthday==null?null:new Date(data.birthday),
           phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -148,7 +148,7 @@ export class InforUserComponent implements OnInit {
         });
 
         this.addHsmForm = this.fbd.group({
-          nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.input_form)),
+          nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.new_input_form)),
           taxCodeHsm: this.fbd.control(data.tax_code, [
               Validators.pattern(parttern.cardid),
             ]
@@ -165,7 +165,7 @@ export class InforUserComponent implements OnInit {
         this.imgSignPathMark = data.stampImage != null && data.stampImage.length>0?data.stampImage[0].path:null;
 
         this.addInforFormOld = this.fbd.group({
-          name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+          name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
           email: this.fbd.control(data.email, [Validators.required, Validators.email]),
           birthday: data.birthday==null?null:new Date(data.birthday),
           phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -178,7 +178,7 @@ export class InforUserComponent implements OnInit {
           networkKpi: data.phone_tel
         });
         this.addHsmFormOld = this.fbd.group({
-          nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.input_form)),
+          nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.new_input_form)),
           taxCodeHsm: this.fbd.control(data.tax_code, [
             Validators.pattern(parttern.cardid),
           ]),

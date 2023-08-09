@@ -30,7 +30,8 @@ export const parttern_input = {
 
   contract_name_valid: /^[^!@#$%^&*+~<?'';{}\[\]]*$/,
   input_form: /^[^!@#$%^&*+~<?'';{}\[\]]*$/,
-
+  // regex input ten nguoi ky
+  new_input_form: /^[^!@#$%^&*+~<?;{}\[\],_/\\]*$/,
   number_form: /^([0-9]+)|([0-9.])$/,
 
   //ma so thue

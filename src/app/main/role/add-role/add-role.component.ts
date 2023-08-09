@@ -40,9 +40,9 @@ export class AddRoleComponent implements OnInit {
     private spinner: NgxSpinnerService
     ) { 
       this.addForm = this.fbd.group({
-        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
-        note: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
+        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
+        note: this.fbd.control("", Validators.pattern(parttern_input.new_input_form)),
         selectedRole: this.fbd.control([], [Validators.required]),
       });
     }
@@ -54,9 +54,9 @@ export class AddRoleComponent implements OnInit {
         data => {
           
           this.addForm = this.fbd.group({
-            name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
-            note: this.fbd.control(data.description, Validators.pattern(parttern_input.input_form)),
+            name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
+            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
+            note: this.fbd.control(data.description, Validators.pattern(parttern_input.new_input_form)),
             selectedRole: this.fbd.control(this.convertRoleArr(data.permissions), [Validators.required]),
           });
           this.name = data.name;
@@ -64,9 +64,9 @@ export class AddRoleComponent implements OnInit {
         });
     }else{
       this.addForm = this.fbd.group({
-        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
-        note: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
+        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
+        note: this.fbd.control("", Validators.pattern(parttern_input.new_input_form)),
         selectedRole: this.fbd.control([], [Validators.required]),
       });
     }

@@ -661,7 +661,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                   return false;
                 }
                 )
-              };
+              }
             }
             if (action == "save_draft") {
               this.router.navigate(['/main/contract/create/draft']);
