@@ -63,7 +63,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
               private spinner: NgxSpinnerService
     ) {
     this.addForm = this.fbd.group({
-      name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
       email: this.fbd.control("", [Validators.required, Validators.email]),
       birthday: null,
       phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -74,7 +74,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
       networkKpi: null,
 
-      nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
+      nameHsm: this.fbd.control("", Validators.pattern(parttern_input.new_input_form)),
       taxCodeHsm: this.fbd.control("",Validators.pattern(parttern_input.taxCode_form)),
       password1Hsm: this.fbd.control(""),
 
@@ -114,7 +114,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
         this.isEditRole = true;
         if(this.isQLND_01){
           this.addForm = this.fbd.group({
-            name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+            name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
             email: this.fbd.control("", [Validators.required, Validators.email]),
             birthday: null,
             phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -125,7 +125,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
             phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
             networkKpi: null,
 
-            nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
+            nameHsm: this.fbd.control("", Validators.pattern(parttern_input.new_input_form)),
             taxCodeHsm: this.fbd.control("",Validators.pattern(parttern.cardid)),
             password1Hsm: this.fbd.control(""),
 
@@ -150,7 +150,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
                   this.roleName = dataRoleUser.name;
                   this.orgIdOld = data.organization_id;
                   this.addForm = this.fbd.group({
-                    name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+                    name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
                     email: this.fbd.control(data.email, [Validators.required, Validators.email]),
                     birthday: data.birthday==null?null:new Date(data.birthday),
                     phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -161,7 +161,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
                     phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
                     networkKpi: data.phone_tel,
 
-                    nameHsm: this.fbd.control(data.hsm_name , Validators.pattern(parttern_input.input_form)),
+                    nameHsm: this.fbd.control(data.hsm_name , Validators.pattern(parttern_input.new_input_form)),
                     taxCodeHsm: this.fbd.control(data.tax_code,Validators.pattern(parttern.cardid)),
                     password1Hsm: this.fbd.control(data.hsm_pass),
 

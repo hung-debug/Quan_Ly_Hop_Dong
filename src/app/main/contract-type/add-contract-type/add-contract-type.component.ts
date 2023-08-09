@@ -43,8 +43,8 @@ export class AddContractTypeComponent implements OnInit {
     private contractService: ContractService
     ) {
       this.addForm = this.fbd.group({
-        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
+        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
         ceca_push: 0
       });
     }
@@ -59,8 +59,8 @@ export class AddContractTypeComponent implements OnInit {
       this.contractTypeService.getContractTypeById(this.data.id).subscribe(
         data => {
           this.addForm = this.fbd.group({
-            name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
+            name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
+            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
             ceca_push: this.convertCeCa(data.ceca_push)
           });
           this.nameOld = data.name;
@@ -71,8 +71,8 @@ export class AddContractTypeComponent implements OnInit {
       )
     }else{
       this.addForm = this.fbd.group({
-        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
+        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
         ceca_push: 0
       });
     }

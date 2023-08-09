@@ -543,7 +543,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       return false;
     }
 
-    // if(!parttern_input.input_form.test(this.datasForm.name)) {
+    // if(!parttern_input.new_input_form.test(this.datasForm.name)) {
     //   this.toastService.showWarningHTMLWithTimeout(this.translate.instant('error.contract.name.valid'),'',3000);
     //   return false;
     // }

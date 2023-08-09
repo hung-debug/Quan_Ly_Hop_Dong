@@ -658,7 +658,7 @@ export class DetermineSignerComponent implements OnInit {
         break;
       }
 
-      if(!parttern_input.input_form.test(dataArr[i].name)) {
+      if(!parttern_input.new_input_form.test(dataArr[i].name)) {
         this.getNotificationValid("Họ tên " + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không được chứa ký tự đặc biệt");
         count++;
         break;
@@ -798,7 +798,7 @@ export class DetermineSignerComponent implements OnInit {
               break;
             }
 
-            if(!parttern_input.input_form.test(isParterSort[k].name)) {
+            if(!parttern_input.new_input_form.test(isParterSort[k].name)) {
               this.getNotificationValid("Họ tên " + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của tôi không được chứa ký tự đặc biệt");
               count++;
               break;
@@ -906,7 +906,7 @@ export class DetermineSignerComponent implements OnInit {
               break;
             }
 
-            if (!parttern_input.input_form.test(isParterSort[k].name) && isParterSort[k].role == 3) {
+            if (!parttern_input.new_input_form.test(isParterSort[k].name) && isParterSort[k].role == 3) {
               this.getNotificationValid("Họ tên" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác cá nhân không hợp lệ!")
               count++;
               break;

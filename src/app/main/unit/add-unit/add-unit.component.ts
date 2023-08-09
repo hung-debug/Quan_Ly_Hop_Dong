@@ -46,11 +46,11 @@ export class AddUnitComponent implements OnInit {
 
       this.addForm = this.fbd.group({
         nameOrg: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.contract_name_valid)]),
-        short_name: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
+        short_name: this.fbd.control("", [Validators.pattern(parttern_input.new_input_form)]),
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
         email: this.fbd.control("", [Validators.email]),
         phone: this.fbd.control("", [Validators.pattern("[0-9 ]{10}")]),
-        fax: this.fbd.control("",[Validators.pattern(parttern_input.input_form)]),
+        fax: this.fbd.control("",[Validators.pattern(parttern_input.new_input_form)]),
         status: 1,
         parent_id: this.fbd.control("", [Validators.required]),
         taxCode: this.fbd.control("",Validators.pattern(parttern.cardid)),
@@ -75,11 +75,11 @@ export class AddUnitComponent implements OnInit {
         data => {
           this.addForm = this.fbd.group({
             nameOrg: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.contract_name_valid)]),
-            short_name: this.fbd.control(data.short_name, [Validators.pattern(parttern_input.input_form)]),
-            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
+            short_name: this.fbd.control(data.short_name, [Validators.pattern(parttern_input.new_input_form)]),
+            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
             email: this.fbd.control(data.email, [Validators.email]),
             phone: this.fbd.control(data.phone, [Validators.pattern("[0-9 ]{10}")]),
-            fax: this.fbd.control(data.fax,[Validators.pattern(parttern_input.input_form)]),
+            fax: this.fbd.control(data.fax,[Validators.pattern(parttern_input.new_input_form)]),
             status: this.fbd.control(data.status),
             parent_id: this.fbd.control(data.parent_id),
             path: this.fbd.control(data.path),
@@ -114,11 +114,11 @@ export class AddUnitComponent implements OnInit {
       });
       this.addForm = this.fbd.group({
         nameOrg: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.contract_name_valid)]),
-        short_name: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
+        short_name: this.fbd.control("", [Validators.pattern(parttern_input.new_input_form)]),
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
         email: this.fbd.control("", [Validators.email]),
         phone: this.fbd.control("", [Validators.pattern("[0-9 ]{10}")]),
-        fax: this.fbd.control("",[Validators.pattern(parttern_input.input_form)]),
+        fax: this.fbd.control("",[Validators.pattern(parttern_input.new_input_form)]),
         status: 1,
         parent_id: this.fbd.control(orgId, [Validators.required]),
         taxCode: this.fbd.control("",[Validators.pattern(parttern.cardid)]),

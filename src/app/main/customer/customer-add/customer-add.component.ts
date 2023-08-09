@@ -261,7 +261,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
               return false;
             }
 
-            if(!parttern_input.input_form.test(isPartnerSort[k].name)) {
+            if(!parttern_input.new_input_form.test(isPartnerSort[k].name)) {
               this.getNotificationValid("Họ tên " + this.getNameObjectValid(isPartnerSort[k].role) + " của tổ chức không được chứa ký tự đặc biệt");
               return false;
             }
@@ -350,7 +350,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
               return false;
             }
 
-            if (!parttern_input.input_form.test(personalData.name)) {
+            if (!parttern_input.new_input_form.test(personalData.name)) {
               this.getNotificationValid("Họ tên" + this.getNameObjectValid('SIGNER') + "  cá nhân không hợp lệ!")
               return false;
             }

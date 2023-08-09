@@ -70,11 +70,11 @@ export class AdminAddPackComponent implements OnInit {
     this.addForm = this.fbd.group({
       code: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
       name: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
 
       totalBeforeVAT: this.fbd.control('', [
@@ -88,7 +88,7 @@ export class AdminAddPackComponent implements OnInit {
 
       calc: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
       type: this.fbd.control(''),
 
@@ -102,7 +102,7 @@ export class AdminAddPackComponent implements OnInit {
         Validators.pattern(parttern_input.number_form),
       ]),
       describe: this.fbd.control('', [
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
       status: this.fbd.control(''),
     });
@@ -126,11 +126,11 @@ export class AdminAddPackComponent implements OnInit {
           this.addForm = this.fbd.group({
             code: this.fbd.control(data.code, [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.new_input_form),
             ]),
             name: this.fbd.control(data.name, [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.new_input_form),
             ]),
 
             totalBeforeVAT: this.fbd.control(this.currencyPipe.transform(data.totalBeforeVAT,'VND','')?.replaceAll(',','.'), [
@@ -154,9 +154,9 @@ export class AdminAddPackComponent implements OnInit {
           });
 
           if(this.flagComboBoxTheThucTinh == 1) {
-            this.addForm.controls.time.setValidators([Validators.required, Validators.pattern(parttern_input.input_form)]);
+            this.addForm.controls.time.setValidators([Validators.required, Validators.pattern(parttern_input.new_input_form)]);
           } else if(this.flagComboBoxTheThucTinh == 2) {
-            this.addForm.controls.number_contract.setValidators([Validators.required, Validators.pattern(parttern_input.input_form)]);
+            this.addForm.controls.number_contract.setValidators([Validators.required, Validators.pattern(parttern_input.new_input_form)]);
           }
 
         },
@@ -175,11 +175,11 @@ export class AdminAddPackComponent implements OnInit {
       this.addForm = this.fbd.group({
         code: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.new_input_form),
         ]),
         name: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.new_input_form),
         ]),
 
         totalBeforeVAT: this.fbd.control('', [
@@ -193,7 +193,7 @@ export class AdminAddPackComponent implements OnInit {
 
         calc: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.new_input_form),
         ]),
         type: this.fbd.control(''),
 

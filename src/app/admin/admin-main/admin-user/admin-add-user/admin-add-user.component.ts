@@ -64,7 +64,7 @@ export class AdminAddUserComponent implements OnInit {
     this.addForm = this.fbd.group({
       name: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
       email: this.fbd.control('', [Validators.required, Validators.email]),
       phone: this.fbd.control('', [
@@ -99,7 +99,7 @@ export class AdminAddUserComponent implements OnInit {
         this.addForm = this.fbd.group({
           name: this.fbd.control('', [
             Validators.required,
-            Validators.pattern(parttern_input.input_form),
+            Validators.pattern(parttern_input.new_input_form),
           ]),
           email: this.fbd.control('', [Validators.required, Validators.email]),
           phone: this.fbd.control('', [
@@ -121,7 +121,7 @@ export class AdminAddUserComponent implements OnInit {
             this.addForm = this.fbd.group({
               name: this.fbd.control(data.name, [
                 Validators.required,
-                Validators.pattern(parttern_input.input_form),
+                Validators.pattern(parttern_input.new_input_form),
               ]),
               email: this.fbd.control(data.email, [
                 Validators.required,

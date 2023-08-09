@@ -53,14 +53,14 @@ export class AdminAddUnitComponent implements OnInit {
     this.addForm = this.fbd.group({
       nameOrg: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
       short_name: this.fbd.control('', [
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
       code: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
       email: this.fbd.control('', [Validators.required, Validators.email]),
       phone: this.fbd.control('', [
@@ -69,12 +69,12 @@ export class AdminAddUnitComponent implements OnInit {
       ]),
       size: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
       status: 1,
       representatives: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
       tax_code: this.fbd.control('', [
         Validators.required,
@@ -82,11 +82,11 @@ export class AdminAddUnitComponent implements OnInit {
       ]),
       address: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
       position: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
     });
   }
@@ -109,14 +109,14 @@ export class AdminAddUnitComponent implements OnInit {
           this.addForm = this.fbd.group({
             nameOrg: this.fbd.control(data.name, [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.new_input_form),
             ]),
             short_name: this.fbd.control(data.shortName, [
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.new_input_form),
             ]),
             code: this.fbd.control(data.code, [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.new_input_form),
             ]),
             email: this.fbd.control(data.email, [
               Validators.required,
@@ -128,12 +128,12 @@ export class AdminAddUnitComponent implements OnInit {
             ]),
             size: this.fbd.control(data.size, [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.new_input_form),
             ]),
             status: this.convertStatus(data.status),
             representatives: this.fbd.control(data.representative, [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.new_input_form),
             ]),
             tax_code: this.fbd.control(data.taxCode, [
               Validators.required,
@@ -141,11 +141,11 @@ export class AdminAddUnitComponent implements OnInit {
             ]),
             address: this.fbd.control(data.address, [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.new_input_form),
             ]),
             position: this.fbd.control(data.position, [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.new_input_form),
             ]),
           });
         },
@@ -162,14 +162,14 @@ export class AdminAddUnitComponent implements OnInit {
       this.addForm = this.fbd.group({
         nameOrg: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.new_input_form),
         ]),
         short_name: this.fbd.control('', [
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.new_input_form),
         ]),
         code: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.new_input_form),
         ]),
         email: this.fbd.control('', [Validators.required, Validators.email]),
         phone: this.fbd.control('', [
@@ -178,12 +178,12 @@ export class AdminAddUnitComponent implements OnInit {
         ]),
         size: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.new_input_form),
         ]),
         status: 1,
         representatives: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.new_input_form),
         ]),
         tax_code: this.fbd.control('', [
           Validators.required,
@@ -191,11 +191,11 @@ export class AdminAddUnitComponent implements OnInit {
         ]),
         address: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.new_input_form),
         ]),
         position: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.new_input_form),
         ]),
       });
     }

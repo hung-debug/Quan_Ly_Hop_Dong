@@ -45,15 +45,15 @@ export class SignupComponent implements OnInit {
 
   ngOnInit(): void {
     this.addForm = this.fbd.group({
-      code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-      name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-      size: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-      address: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
+      code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
+      name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
+      size: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
+      address: this.fbd.control("", [Validators.pattern(parttern_input.new_input_form)]),
 
       tax_code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.taxCode_form)]),
 
-      representatives: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-      position: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      representatives: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
+      position: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
       email: this.fbd.control("", [Validators.required, Validators.email]),
       phone: this.fbd.control("", [Validators.required, Validators.pattern(parttern.phone)]),
     });

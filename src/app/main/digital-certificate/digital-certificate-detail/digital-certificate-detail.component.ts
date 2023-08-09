@@ -44,11 +44,11 @@ export class DigitalCertificateDetailComponent implements OnInit {
   ) {
     this.addForm = this.fbd.group({
       // nameOrg: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.contract_name_valid)]),
-      // short_name: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
-      // code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
+      // short_name: this.fbd.control("", [Validators.pattern(parttern_input.new_input_form)]),
+      // code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
       // email: this.fbd.control("", [Validators.email]),
       // phone: this.fbd.control("", [Validators.pattern("[0-9 ]{10}")]),
-      // fax: this.fbd.control("",[Validators.pattern(parttern_input.input_form)]),
+      // fax: this.fbd.control("",[Validators.pattern(parttern_input.new_input_form)]),
       status: 1,
       // parent_id: this.fbd.control("", [Validators.required]),
       // taxCode: this.fbd.control("",Validators.pattern(parttern_input.taxCode_form)),
