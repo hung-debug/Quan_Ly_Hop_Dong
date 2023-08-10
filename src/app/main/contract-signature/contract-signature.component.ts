@@ -1408,7 +1408,7 @@ export class ContractSignatureComponent implements OnInit {
         title: 'KÝ CHỨNG THƯ SỐ',
       };
       const dialogConfig = new MatDialogConfig();
-      dialogConfig.width = '600px';
+      dialogConfig.width = '750px';
       dialogConfig.hasBackdrop = true;
       dialogConfig.data = dataCert;
       dialogConfig.panelClass = 'custom-dialog-container';
@@ -1418,8 +1418,9 @@ export class ContractSignatureComponent implements OnInit {
       );
       dialogRef.afterClosed().subscribe(async (resultCert: any) => {
         if (resultCert) {
+          console.log("resultCert",resultCert);
 
-          this.cert_id = resultCert;
+          this.cert_id = resultCert.id;
           let countSuccess = 0;
           try {
             const inforCert = await this.contractServiceV1.certInfoCert(this.cert_id).toPromise();
@@ -1498,6 +1499,7 @@ export class ContractSignatureComponent implements OnInit {
             // Handle errors
             // this.toastService.showErrorHTMLWithTimeout(err,'',3000);
           }
+
           this.spinner.hide()
         }
       })
