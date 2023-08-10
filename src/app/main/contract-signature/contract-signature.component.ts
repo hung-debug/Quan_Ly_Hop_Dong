@@ -1414,7 +1414,7 @@ export class ContractSignatureComponent implements OnInit {
         title: 'KÝ CHỨNG THƯ SỐ',
       };
       const dialogConfig = new MatDialogConfig();
-      dialogConfig.width = '600px';
+      dialogConfig.width = '750px';
       dialogConfig.hasBackdrop = true;
       dialogConfig.data = dataCert;
       dialogConfig.panelClass = 'custom-dialog-container';
@@ -1424,8 +1424,9 @@ export class ContractSignatureComponent implements OnInit {
       );
       dialogRef.afterClosed().subscribe(async (resultCert: any) => {
         if (resultCert) {
+          console.log("resultCert",resultCert);
 
-          this.cert_id = resultCert;
+          this.cert_id = resultCert.id;
           let countSuccess = 0;
           try {
             const inforCert = await this.contractServiceV1.certInfoCert(this.cert_id).toPromise();
@@ -1461,6 +1462,8 @@ export class ContractSignatureComponent implements OnInit {
           }
 
           this.spinner.show()
+          const promises = [];
+
           for (let i = 0; i < contractsSignManyChecked.length; i++) {
             const signSlots = contractsSignManyChecked[i].fields;
 
@@ -1473,28 +1476,37 @@ export class ContractSignatureComponent implements OnInit {
                   width: signSlots[y].width,
                   height: signSlots[y].height
                 };
-                try {
-                  const checkSign = await this.contractServiceV1.signCertMulti(contractsSignManyChecked[i].id, signCertPayload);
-                  countSuccess++;
-                  if (countSuccess == checkSign.length) {
-                    this.toastService.showSuccessHTMLWithTimeout(
-                      'sign.multi.success',
-                      '',
-                      3000
-                    );
 
-                    this.router
-                      .navigateByUrl('/', { skipLocationChange: true })
-                      .then(() => {
-                        this.router.navigate(['main/c/receive/processed']);
-                      });
-                  }
-                } catch (err) {
-                  // this.toastService.showErrorHTMLWithTimeout(err,'',3000);
-                }
+                promises.push(
+                  this.contractServiceV1.signCertMulti(contractsSignManyChecked[i].id, signCertPayload)
+                );
               }
             }
           }
+
+          try {
+            const checkSignResults = await Promise.all(promises);
+            // Count successful responses
+            let countSuccess = 0;
+            for (const checkSign of checkSignResults) {
+              countSuccess += checkSign.length;
+            }
+
+            if (countSuccess === promises.length) {
+              this.toastService.showSuccessHTMLWithTimeout(
+                'sign.multi.success',
+                '',
+                3000
+              );
+
+              await this.router.navigateByUrl('/', { skipLocationChange: true });
+              await this.router.navigate(['main/c/receive/processed']);
+            }
+          } catch (err) {
+            // Handle errors
+            // this.toastService.showErrorHTMLWithTimeout(err,'',3000);
+          }
+
           this.spinner.hide()
         }
       })
