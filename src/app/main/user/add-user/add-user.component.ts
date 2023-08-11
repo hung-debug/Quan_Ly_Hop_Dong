@@ -298,8 +298,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   imgSignPathMark: any
   async update(data:any){
     data.id = this.id;
-
-      if(this.imgSignBucket != null && this.imgSignPath != null){
+      if(this.imgSignBucket != null && this.imgSignPath != null && !data.fileImage){
         const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
         const sign_image:never[]=[];
         (sign_image as string[]).push(sign_image_content);
@@ -316,7 +315,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
         }
       }
 
-      if(this.imgSignBucketMark != null && this.imgSignPathMark != null){
+      if(this.imgSignBucketMark != null && this.imgSignPathMark != null && !data.fileImageMark){
         const sign_image_content:any = {bucket: this.imgSignBucketMark, path: this.imgSignPathMark};
         const sign_image:never[]=[];
         (sign_image as string[]).push(sign_image_content);
@@ -437,7 +436,6 @@ export class AddUserComponent implements OnInit, OnDestroy {
                   this.spinner.hide();
                 }
               )
-
               //ham update nguoi dung
               this.checkChangeUnit(data);
             }else if(dataByPhone.code == '01'){
@@ -450,6 +448,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
           }
         )
       }else{
+        // this.attachFile ? data.sign_image = this.attachFile : data.sign_image = []
+        // this.attachFileMark ? data.stampImage = this.attachFileMark : data.stampImage = []
         //ham update
         this.checkChangeUnit(data);
       }
