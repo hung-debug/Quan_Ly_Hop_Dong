@@ -429,11 +429,9 @@ export class ConsiderContractComponent
         //Show thông báo khi hợp đồng hết hiệu lực
         if(this.isDataContract.release_state != 'CON_HIEU_LUC') {
           if(!this.mobile) {
-            this.toastService.showErrorHTMLWithTimeout('expire.time','',3000);
-            return;
+            this.toastService.showErrorHTMLWithTimeout('expire.time.contract.notif','',3000);
           } else {
-            alert(this.translate.instant('expire.time'));
-            return;
+            alert(this.translate.instant('expire.time.contract.notif'));
           }
         }
 
