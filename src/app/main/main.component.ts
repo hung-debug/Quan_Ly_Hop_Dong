@@ -253,19 +253,4 @@ export class MainComponent implements OnInit {
     window.open("https://drive.google.com/drive/folders/1NHaCYOMCMsLvrw1uPbX2ezsC-Uo9huW3");
   }
 
-    // for test OTP
-  imageDialogSignOpen() {
-    const data = {
-      title: 'KÝ HỢP ĐỒNG ',
-      is_content: 'forward_contract',
-      // imgSignAcc: this.datas.imgSignAcc
-    };
-
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '1024px';
-    dialogConfig.hasBackdrop = true;
-    dialogConfig.data = data;
-    const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
-  }
-
 }
