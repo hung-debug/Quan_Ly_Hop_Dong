@@ -46,6 +46,7 @@ export class ContractTemplateComponent implements OnInit {
   isQLMHD_06:boolean=true;  //tim kiem mau hop dong
   isQLMHD_07:boolean=true;  //xoa mau hop dong
   isQLMHD_08:boolean=true;  //xem thong tin chi tiet mau hop dong
+  isQLMHD_09:boolean=true;  //Clone mau hop dong
   isQLHD_14:boolean=true;   //tao hop dong don le theo mau
   isQLHD_15:boolean=true;   //tao hop dong don le theo lo
 
@@ -86,6 +87,7 @@ export class ContractTemplateComponent implements OnInit {
             this.isQLMHD_06 = listRole.some(element => element.code == 'QLMHD_06');
             this.isQLMHD_07 = listRole.some(element => element.code == 'QLMHD_07');
             this.isQLMHD_08 = listRole.some(element => element.code == 'QLMHD_08');
+            this.isQLMHD_09 = listRole.some(element => element.code == 'QLMHD_09');
             this.isQLHD_14 = listRole.some(element => element.code == 'QLHD_14');
             this.isQLHD_15 = listRole.some(element => element.code == 'QLHD_15');
 
