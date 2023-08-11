@@ -426,6 +426,17 @@ export class ConsiderContractComponent
           }
         }
 
+        //Show thông báo khi hợp đồng hết hiệu lực
+        if(this.isDataContract.release_state != 'CON_HIEU_LUC') {
+          if(!this.mobile) {
+            this.toastService.showErrorHTMLWithTimeout('expire.time','',3000);
+            return;
+          } else {
+            alert(this.translate.instant('expire.time'));
+            return;
+          }
+        }
+
 
         if (this.isDataContract.ceca_push == 1) {
           this.isTimestamp = 'true';
@@ -1667,7 +1678,6 @@ export class ConsiderContractComponent
       data: data,
       code: code
     });
-    console.log("dialogRef", code);
 
 
     dialogRef.afterClosed().subscribe((res: any) => {
@@ -1836,7 +1846,6 @@ export class ConsiderContractComponent
               }
 
               if(!this.isDateTime) this.isDateTime = new Date();
-              console.log("is date time ",this.isDateTime);
 
               if (this.usbTokenVersion == 1) {
                 if (this.markImage) {

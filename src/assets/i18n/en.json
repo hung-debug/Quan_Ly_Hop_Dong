@@ -704,5 +704,6 @@
   "choice": "Choice",
   "unit.email.name": "Email/name",
   "error.org.required":"Organization is required",
-  "multi.sign.warning": "The system supports signing up to 50 contracts/ signing time"
-  }
+  "multi.sign.warning": "The system supports signing up to 50 contracts/ signing time",
+  "expire.time.contract.notif":"Contract has expired"
+}

@@ -710,5 +710,6 @@
   "unit.email.name": "Địa chỉ email/Họ tên",
   "error.org.required":"Tổ chức không được để trống",
   "sign.multi.success":"Ký nhiều hợp đồng thành công",
-  "multi.sign.warning": "Hệ thống hỗ trợ ký tối đa 50 hợp đồng/ 1 lần ký"
+  "multi.sign.warning": "Hệ thống hỗ trợ ký tối đa 50 hợp đồng/ 1 lần ký",
+  "expire.time.contract.notif":"Hợp đồng đã hết hạn ký"
 }
