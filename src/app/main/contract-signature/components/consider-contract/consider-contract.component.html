@@ -58,7 +58,7 @@
       <hr>
 
       <div class="flex-column" *ngIf="![2,3].includes(recipient.status)">
-        <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2 && this.datas.is_data_contract.release_state == 'CON_HIEU_LUC'">
+        <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2 && this.isDataContract.release_state== 'CON_HIEU_LUC'">
           <p class="d-flex justify-content-center mb-4">XEM XÉT HỢP ĐỒNG</p>
           <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
           <div class="confirm-radio d-flex justify-content-between mx-4">
@@ -72,7 +72,7 @@
             </div>
           </div>
         </div>
-        <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 3 || this.datas.roleContractReceived == 4 && this.datas.is_data_contract.release_state == 'CON_HIEU_LUC'">
+        <div class="label" style="text-align: center; font-weight: bold;" *ngIf="(this.datas.roleContractReceived == 3 || this.datas.roleContractReceived == 4) && this.isDataContract.release_state == 'CON_HIEU_LUC'">
           <p class="d-flex justify-content-center mb-4 text-uppercase">{{'contract.sign.confirm' | translate}}</p>
           <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
           <div class="confirm-radio d-flex justify-content-between mx-4">
@@ -170,7 +170,7 @@
     </div>
 
     <div class="flex-column" *ngIf="![2,3].includes(recipient.status)" style="margin-top: 5px">
-      <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2 && this.datas.is_data_contract.release_state == 'CON_HIEU_LUC'">
+      <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2 && this.isDataContract.release_state == 'CON_HIEU_LUC'">
         <p class="d-flex justify-content-center mb-4">{{'contract.review' | translate}}</p>
         <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
         <div class="confirm-radio d-flex justify-content-between mx-4">
@@ -184,7 +184,7 @@
           </div>
         </div>
       </div>
-      <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 3 || this.datas.roleContractReceived == 4 && this.datas.is_data_contract.release_state == 'CON_HIEU_LUC'">
+      <div class="label" style="text-align: center; font-weight: bold;" *ngIf="(this.datas.roleContractReceived == 3 || this.datas.roleContractReceived == 4) && this.isDataContract.release_state == 'CON_HIEU_LUC'">
         <p class="d-flex justify-content-center mb-4 text-uppercase">{{'contract.sign.confirm' | translate}}</p>
         <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
         <div class="confirm-radio d-flex justify-content-between mx-4">
