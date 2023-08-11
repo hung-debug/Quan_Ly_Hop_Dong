@@ -357,6 +357,7 @@ export var roleList = [
       { label: 'role.contract-template.delete', value: "QLMHD_07"},
       //Xem thông tin chi tiết mẫu hợp đồng
       { label: 'role.contract-template.view.detail', value: "QLMHD_08"},
+      { label: 'role.contract-template.copy', value: 'QLMHD_09' },
     ]
   },
   {
