@@ -700,5 +700,6 @@
   "sign_by_cert":"Sign by certificate",
   "choice": "Choice",
   "unit.email.name": "Email/name",
-  "error.org.required":"Organization is required"
-  }
+  "error.org.required":"Organization is required",
+  "expire.time.contract.notif":"Contract has expired"
+}
