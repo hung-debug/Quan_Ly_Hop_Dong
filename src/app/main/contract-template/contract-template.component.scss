@@ -193,3 +193,11 @@
   justify-content: center;
   text-align: center;
 }
+
+.col-cell-ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
+  margin: auto;
+}

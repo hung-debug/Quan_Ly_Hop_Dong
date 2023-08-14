@@ -47,11 +47,12 @@
     <div class="row">
       <div class="col-md-5">
         <div class="row">
-          <div class="col-md-12 item_contract_name">
+          <div class="col-md-12 item_contract_name col-cell-ellipsis">
             <a  class="item_contract_name" style="text-decoration: none;" 
             (click)="isQLMHD_08?openDetail(item.id):null" 
             [routerLink]="['/main/contract-template/form/detail/', item.id]"
-            [queryParams]="{'page': this.p}">
+            [queryParams]="{'page': this.p}"
+            ngbTooltip="{{item.name}}">
             {{item.name}}
             </a>
           </div>
@@ -64,8 +65,8 @@
         <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span></div>
       </div>
 
-      <div class="col-md-2 contract_code">
-        <span class="item_date">{{item.code}}</span>
+      <div class="col-md-2 contract_code col-cell-ellipsis">
+        <span class="item_date" ngbTooltip="{{item.code}}">{{item.code}}</span>
       </div>
 
       <div class="col-md-3 item_icon">
