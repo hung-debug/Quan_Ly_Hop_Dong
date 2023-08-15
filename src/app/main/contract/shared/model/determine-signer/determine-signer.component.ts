@@ -491,9 +491,10 @@ export class DetermineSignerComponent implements OnInit {
       }
       //Nếu là văn thư
       else if (data.role == 4) {
-        if (e[0]?.id==6) {
-          data.card_id = "";
-        } else if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0 && this.getDataSignCert(data).length == 0) {
+        // if (e[0]?.id==6) {
+        //   data.card_id = "";
+        // } else
+        if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0 && this.getDataSignCert(data).length == 0) {
           this.unitService.getTaxCodeOriganzation(this.userService.getInforUser().organization_id).subscribe((res: any) => {
             data.card_id=res.tax_code;})
         }

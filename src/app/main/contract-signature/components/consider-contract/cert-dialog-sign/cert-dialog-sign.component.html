@@ -14,11 +14,21 @@
       <ng-template pTemplate="body" let-list>
         <tr *ngIf="list.status=='1'">
           <td>
-            <input type="radio" name="confirm-radio-consider" [value]="list.id" [(ngModel)]="id" name="status" style="margin-left: 20px;">
+            <input type="radio" name="confirm-radio-consider" [value]="list" [(ngModel)]="selectedCert" name="status"
+              style="margin-left: 20px;">
           </td>
-          <td>{{list.keystoreSerialNumber}}</td>
-          <td>{{getValueByKey(list.certInformation, "CN")}}</td>
-          <td>{{list.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}</td>
+          <td>
+            <span class="text_webmobile">Ký hiệu: </span>{{list.keystoreSerialNumber}}
+          </td>
+          <td>
+            <span class="text_webmobile">Chủ thể: </span>{{getValueByKey(list.certInformation, "CN")}}
+          </td>
+          <td>
+            <span class="text_webmobile">MST/CCCD:</span> {{getValueByKey(list.certInformation, "UID")}}
+          </td>
+          <td>
+            <span class="text_webmobile">Ngày hết hạn:</span> {{list.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}
+          </td>
         </tr>
       </ng-template>
     </p-table>

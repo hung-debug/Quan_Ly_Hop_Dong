@@ -519,6 +519,21 @@
                   </div>
                 </div>
               </div>
+
+              <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là chứng thư số-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                  </div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+
             </div>
             <div *ngIf="getOriganzationSignature().length > 1" class="col-md-1 delete-element"
               (click)="deleteOriganzationSignature(index)">
@@ -651,7 +666,7 @@
 
               <!--KD-->
               <div class="participants--input" style="display: flex" *ngIf="this.site == 'KD'">
-                <div class="participants__name" style="width: 90%">
+                <div class="participants__name" style="width: 91%">
                   <div class="label_detail text-color">Email&nbsp;
                     <span class="required-title">*</span>
                   </div>
@@ -664,7 +679,7 @@
 
               <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là usb token-->
               <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
-                <div class="participants__name" style="width: 90%">
+                <div class="participants__name" style="width: 91%">
                   <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
                     <span class="required-title">*</span>
                     <div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div>
@@ -679,7 +694,7 @@
 
               <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là hsm-->
               <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
-                <div class="participants__name" style="width: 90%">
+                <div class="participants__name" style="width: 91%">
                   <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;
                     <span class="required-title">*</span>
                   </div>
@@ -689,6 +704,21 @@
                   </div>
                 </div>
               </div>
+
+              <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là chứng thư số-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                  </div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+
             </div>
             <div class="col-md-1 delete-element" (click)="deleteOriganzationDocument(index)">
               <img src="assets/img/border_close.svg" alt="close.vn" />
@@ -1314,6 +1344,21 @@
                     </div>
                   </div>
                 </div>
+
+                <!--trường hiển thị khi người ký của đối tác chọn loại ký là chứng thư số-->
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                  <div class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                      <span class="required-title">*</span>
+                      <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                    </div>
+                    <div class="input-data">
+                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                  </div>
+                </div>
+
               </div>
               <div *ngIf="
                   getPartnerSignature(item).length > 1 ||
@@ -1494,6 +1539,20 @@
                         class="required-title">*</span></div>
                     <div class="input-data">
                       <input type="text" placeholder="{{'enter.tax.code' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                  </div>
+                </div>
+
+                <!--trường hiển thị khi văn thư đối tác chọn loại ký là chứng thư số-->
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                  <div class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                      <span class="required-title">*</span>
+                      <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                    </div>
+                    <div class="input-data">
+                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
                         oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
@@ -1760,7 +1819,7 @@
                         oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
-                  
+
                   <div class="participants__name" style="width: 6%; margin-left: -15%;">
                     <div class="label_detail text-color"><span class="required-title"></span></div>
                     <div class="input-data">
@@ -1815,6 +1874,21 @@
                     </div>
                   </div>
                 </div>
+
+                <!--trường hiển thị khi người ký đối tác cá nhân chọn loại ký là chứng thư số-->
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                  <div class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                      <span class="required-title">*</span>
+                      <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                    </div>
+                    <div class="input-data">
+                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
               <div *ngIf="getPartnerSignature(item).length > 1" class="col-md-1 delete-element"

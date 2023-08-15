@@ -1142,7 +1142,7 @@ export class ContractSignatureComponent implements OnInit {
         .filter((opt) => opt.checked)
         .map((opt) => opt.id);
 
-      //Lay ra mang chua tat ca ma so thue cua cac hop dong ky bang usb token
+      //Lay ra mang chua tat ca ma so thue cua cac hop dong ky bang CTS
       for (let i = 0; i < recipientId.length; i++) {
         this.contractServiceV1
           .getDetermineCoordination(recipientId[i])
@@ -1401,11 +1401,12 @@ export class ContractSignatureComponent implements OnInit {
       let contractsSignManyChecked = this.contractsSignMany.filter(
         (opt) => opt.checked
       );
-
       //Ký nhiều CTS
       const dataCert = {
         id: 1,
         title: 'KÝ CHỨNG THƯ SỐ',
+        recipientId: recipientId,
+        isDataObjectSignature: contractsSignManyChecked
       };
       const dialogConfig = new MatDialogConfig();
       dialogConfig.width = '750px';
@@ -1418,7 +1419,6 @@ export class ContractSignatureComponent implements OnInit {
       );
       dialogRef.afterClosed().subscribe(async (resultCert: any) => {
         if (resultCert) {
-          console.log("resultCert",resultCert);
 
           this.cert_id = resultCert.id;
           let countSuccess = 0;
