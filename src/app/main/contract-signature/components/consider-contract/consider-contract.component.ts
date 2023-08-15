@@ -2381,7 +2381,7 @@ export class ConsiderContractComponent
               }
             } else {
               const checkSign = await this.contractService.signCert(
-                this.dataCert, this.dataCert
+                this.recipientId, this.dataCert
               );
 
               if (!checkSign || (checkSign && !checkSign.success)) {
