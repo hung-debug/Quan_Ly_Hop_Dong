@@ -270,5 +270,12 @@
   color: white;
   background-color: #106DB6 !important;
 }
+.text_webmobile{
+  display: none;
+  /* Medium devices (landscape tablets, 768px and up) */
+  @media only screen and (max-width: 768px) {
+    display: block;
+  }
+}
 
 
