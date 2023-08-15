@@ -74,8 +74,8 @@ export class EditHandlerComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    
-    
+
+
   }
 
   ngOnInit(): void {
@@ -93,13 +93,13 @@ export class EditHandlerComponent implements OnInit {
     }
 
     // this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
-    //   
+    //
     // this.datas.is_handler = [...this.contractService.getDataDetermineInitialization()];
-    //   
+    //
 
 
-    
-    
+
+
 
 
     this.name = this.data.name;
@@ -168,7 +168,7 @@ export class EditHandlerComponent implements OnInit {
   }
   UpdateHandler() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    
+
     const login_by = this.isCheckRadio ? "email" : "phone"
     this.spinner.show();
     let dataUpdate = {
@@ -182,7 +182,7 @@ export class EditHandlerComponent implements OnInit {
     };
 
     if (!this.validData()) {
-      
+
       return;
     }
     else {
@@ -293,7 +293,7 @@ export class EditHandlerComponent implements OnInit {
 
   onItemSelect(e: any, data: any) {
 
-    // 
+    //
     this.checkCount = 1; // gan lai de lan sau ko bi tang index
   }
   // dataParnterOrganization() {
@@ -314,7 +314,7 @@ export class EditHandlerComponent implements OnInit {
   }
 
   selectWithOtp(e: any, data: any, type: any) { // sort ordering
-    
+
 
     //clear lai gia tri card_id
     //Check với tổ chức của tôi ký
@@ -329,7 +329,7 @@ export class EditHandlerComponent implements OnInit {
   }
 
   changeTypeSign(d: any) {
-    
+
 
     d === 1 ? this.isCheckRadio = false : this.isCheckRadio = true
   }
@@ -340,6 +340,9 @@ export class EditHandlerComponent implements OnInit {
   getDataSignUSBToken(data: any) {
     return data.sign_type.filter((p: any) => p.id == 2);
   }
+  getDataSignCert(data: any) {
+    return data.sign_type.filter((p: any) => p.id == 6);
+  }
 
   get getContractConnectItems() {
     return this.signTypeList.reduce((acc, curr) => {
@@ -349,7 +352,7 @@ export class EditHandlerComponent implements OnInit {
   }
 
   onFocusIn(e: any, is_index: number, action: string) {
-    // 
+    //
     if (e.type == "focusin") {
       this.arrSearch = [];
       let arrData = [];
@@ -373,7 +376,7 @@ export class EditHandlerComponent implements OnInit {
   }
 
   onFocusOut(e: any, dItem: any) {
-    // 
+    //
     if (!e.relatedTarget || (e.relatedTarget && e.relatedTarget.className && !e.relatedTarget.className.includes('search-name-items'))) {
       if (!dItem.name) dItem.email = '';
       this.arrSearchNameView = [];
@@ -398,7 +401,7 @@ export class EditHandlerComponent implements OnInit {
         } else {
           this.arrSearchNameDoc = data;
         }
-        // 
+        //
       }, () => {
         this.getNotificationValid('có lỗi, vui lòng liên hệ với nhà phát triển để được xử lý!')
       })
@@ -425,7 +428,7 @@ export class EditHandlerComponent implements OnInit {
   }
 
   onChangeValue(e: any, orering_data: string) {
-    // 
+    //
     if (!e.target.value) {
       let data_ordering = document.getElementById(orering_data);
       if (data_ordering)

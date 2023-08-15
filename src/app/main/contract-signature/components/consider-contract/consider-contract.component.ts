@@ -195,6 +195,7 @@ export class ConsiderContractComponent
   cccd: string | null = null;
   cmnd: string | null = null;
   cert_id: any;
+  dataCardId: any;
 
   constructor(
     private contractService: ContractService,
@@ -409,7 +410,7 @@ export class ConsiderContractComponent
             .viewFlowContract(this.idContract)
             .toPromise();
 
-          if(!this.mobile) {
+          if (!this.mobile) {
             if (callApiBpmn.createdBy.email != this.currentUser.email) {
               this.toastService.showErrorHTMLWithTimeout(
                 'not.process.contract',
@@ -2350,7 +2351,7 @@ export class ConsiderContractComponent
           if (fileC && objSign.length) {
             if (!this.mobile) {
               const checkSign = await this.contractService.signCert(
-                this.recipientId,this.dataCert
+                this.recipientId, this.dataCert
               );
 
               if (!checkSign || (checkSign && !checkSign.success)) {
@@ -2380,7 +2381,7 @@ export class ConsiderContractComponent
               }
             } else {
               const checkSign = await this.contractService.signCert(
-                this.dataCert,this.dataCert
+                this.dataCert, this.dataCert
               );
 
               if (!checkSign || (checkSign && !checkSign.success)) {
@@ -3244,7 +3245,7 @@ export class ConsiderContractComponent
                 if (!this.mobile) {
                   this.toastService.showSuccessHTMLWithTimeout(
                     [3, 4].includes(this.datas.roleContractReceived)
-                      ? 'success_sign1'
+                      ? 'success_sign'
                       : 'success_watch',
                     '',
                     3000
@@ -3698,18 +3699,18 @@ export class ConsiderContractComponent
     dialogRef.afterClosed().subscribe((result) => {
       this.cccdFront = result;
 
-      if(this.recipient.name && this.recipient.card_id) {
+      if (this.recipient.name && this.recipient.card_id) {
         this.nameCompany = this.recipient.name;
         this.cardId = this.recipient.card_id;
       } else {
         this.contractService
-        .detectCCCD(this.cccdFront, data.contractId, data.recipientId)
-        .subscribe((response) => {
-          if(response.name) {
-            this.nameCompany = response.name;
-            this.cardId = response.id;
-          }
-        });
+          .detectCCCD(this.cccdFront, data.contractId, data.recipientId)
+          .subscribe((response) => {
+            if (response.name) {
+              this.nameCompany = response.name;
+              this.cardId = response.id;
+            }
+          });
       }
 
       if (result) this.eKYCSignOpenAfter();
@@ -3755,14 +3756,26 @@ export class ConsiderContractComponent
     });
   }
 
+  getValueByKey(inputString: string, key: string) {
+    const elements = inputString.split(', ');
+    for (const element of elements) {
+      const [currentKey, value] = element.split('=');
+      if (currentKey === key) {
+        return value;
+      }
+    }
+    return null; // Return null if the key is not found
+  }
+
   async certDialogSignOpen(recipientId: number) {
     this.spinner.hide();
     const dataCert = {
       title: 'KÝ CHỨNG THƯ SỐ',
       recipientId: recipientId,
+      isDataObjectSignature: this.isDataObjectSignature
     }
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '600px';
+    dialogConfig.width = '750px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = dataCert;
     dialogConfig.panelClass = 'custom-dialog-container';
@@ -3770,11 +3783,12 @@ export class ConsiderContractComponent
     const dialogRef = this.dialog.open(CertDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(async (result: any) => {
 
-      if(result){
-        this.cert_id = result;
+      if (result) {
+        const uidCert = this.getValueByKey(result.certInformation, "UID")
+        this.dataCardId = uidCert?.split(":")[1];
+        this.cert_id = result.id;
         await this.signContractSubmit();
       }
-
     });
   }
 
