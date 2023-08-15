@@ -104,10 +104,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   uploadFileAttachAgain: boolean = false;
   isFileAttachUploadNewEdit: any;
   public subscription: Subscription;
-
   minDate: Date = moment().toDate();
   public messageForSibling: string;
-
+  attachFilesList: any[] = []
   constructor(
     private uploadService: UploadService,
     private contractService: ContractService,
@@ -493,6 +492,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                     await this.contractService.addDocumentAttach(this.datas).toPromise().then((data) => {
                         // this.datas.document_attach_id = data?.id;
                         this.datas.attachFileArr[i].id = data?.id;
+                        this.datas.attachFileNameArr[i].id = data?.id
                       },
                       error => {
                         this.spinner.hide();
@@ -508,7 +508,16 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                 }
               );
             }
-
+            // set data attach file uploaded - edit step
+            this.contractService.getFileContract(this.datas.contract_id).subscribe((res:any) => {
+              // let attachFilesList: any[] = []
+              this.datas.attachFilesList = []
+              for (let i = 0; i < res.length; i++){
+                // this.datas?.i_data_file_contract?.push(res[i])
+                this.attachFilesList.push(res[i])
+                this.datas.attachFilesList.push(res[i])
+              }
+            })
             if (action != "save_draft") {
               this.step = variable.stepSampleContract.step2;
               this.datas.stepLast = this.step;
@@ -542,7 +551,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       }
     } else {
       let error_api = false;
-      await this.contractService.addContractStep1(this.datas, this.datas.contract_id ? this.datas.contract_id : null).toPromise().then((data) => {
+      await this.contractService.addContractStep1(this.datas, this.datas.contract_id ? this.datas.contract_id : null).toPromise().then((data: any) => {
         this.datas.id = data?.id;
         this.datas.contract_id = data?.id;
       }, (error) => {
@@ -647,6 +656,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                   await this.contractService.addDocumentAttach(this.datas).toPromise().then((data) => {
                       this.datas.document_attach_id = data?.id;
                       this.datas.attachFileArr[i].id = data?.id;
+                      this.datas.attachFileNameArr[i].id = data?.id
                     },
                     error => {
                       this.spinner.hide();
@@ -663,6 +673,16 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                 )
               }
             }
+            // set data attach file uploaded - create contract
+            this.contractService.getFileContract(this.datas.contract_id).subscribe((res:any) => {
+              // let attachFilesList: any[] = []
+              this.datas.attachFilesList = []
+              for (let i = 0; i < res.length; i++){
+                // this.datas?.i_data_file_contract?.push(res[i])
+                this.attachFilesList.push(res[i])
+                this.datas.attachFilesList.push(res[i])
+              }
+            })
             if (action == "save_draft") {
               this.router.navigate(['/main/contract/create/draft']);
               this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
@@ -721,7 +741,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.datas.sign_time = this.sign_time;
       this.datas.notes = this.notes;
       this.datas.contract_expire_time = this.expire_time;
-
       if(this.activeRoute.snapshot.paramMap.get('id'))
       this.datas.original_contract_id = Number(this.activeRoute.snapshot.paramMap.get('id'));
 
@@ -903,6 +922,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                                   this.datas.fileBucketAttach = data.file_object.bucket;
                                   this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
                                       this.datas.document_attach_id = data?.id;
+                                      this.datas.attachFileNameArr[i].id = data?.id
                                     },
                                     error => {
                                       this.spinner.hide();
@@ -918,6 +938,16 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                                 }
                               );
                             }
+                            // set data attach file uploaded - save draft step
+                            this.contractService.getFileContract(this.datas.contract_id).subscribe((res:any) => {
+                              // let attachFilesList: any[] = []
+                              this.datas.attachFilesList = []
+                              for (let i = 0; i < res.length; i++){
+                                // this.datas?.i_data_file_contract?.push(res[i])
+                                this.attachFilesList.push(res[i])
+                                this.datas.attachFilesList.push(res[i])
+                              }
+                            })
                             //next step
                             if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
                               this.save_draft_infor.close_header = false;
@@ -1069,7 +1099,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   deleteFileAttach(item: any, index_dlt: number) {
     if (item.id) {
       this.spinner.show();
-      let data = this.datas.i_data_file_contract.filter((p: any) => p.id == item.id)[0];
+      let data = this.datas?.i_data_file_contract?.filter((p: any) => p.id == item.id)[0] || this.datas.attachFilesList?.filter((p: any) => p.id == item.id)[0]
       if (data) data.status = 0;
       this.contractService.updateFileAttach(item.id, data).subscribe((res: any) => {
         this.datas.attachFileNameArr.splice(index_dlt, 1);
