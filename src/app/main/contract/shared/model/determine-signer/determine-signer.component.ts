@@ -2057,6 +2057,7 @@ export class DetermineSignerComponent implements OnInit {
 
     if(dData.login_by == 'email')
       dData.email = tData.email;
+      dData.phone = tData.phone;
 
     if(dData.login_by == 'phone')
       dData.phone = tData.phone;
