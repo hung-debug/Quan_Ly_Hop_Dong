@@ -1854,10 +1854,10 @@
     </button>
   </div>
   <div>
-    <button type="button" name="next" class="next draft-button" (click)="next('save-draft')">
+    <button [disabled]="isButtonDisabled" type="button" name="next" class="next draft-button" (click)="next('save-draft')">
       {{ "btn.save-draft" | translate }}
     </button>
-    <button (click)="next('save-step')" type="button" name="next" class="next action-button pull-right">
+    <button [disabled]="isButtonDisabled" (click)="next('save-step')" type="button" name="next" class="next action-button pull-right">
       {{ "btn.next" | translate }}
     </button>
   </div>

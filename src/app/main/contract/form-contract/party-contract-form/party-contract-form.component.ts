@@ -86,6 +86,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   numContractBuy: any;
   eKYCContractBuy: any;
   smsContractBuy: any;
+  isButtonDisabled: boolean = false;
 
   site: string;
   isOrderValueValid: boolean = true
@@ -241,6 +242,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   // next step event
   isCeCaPushNo: boolean = false;
   async next(action: string) {
+    this.isButtonDisabled = true;
+
     if (!this.isOrderValueValid) {
       return
     }
@@ -391,7 +394,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     this.spinner.show();
 
     this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
-      this.datasForm.is_determine_clone = res;
+        this.datasForm.is_determine_clone = res;
         this.getDataApiDetermine(res, is_save)
       }, (error: HttpErrorResponse) => {
         if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
@@ -400,14 +403,13 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         }
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-      }, () => {
-        this.spinner.hide();
-      }
+      },
     );
   }
 
   getDataApiDetermine(res: any, is_save?: boolean) {
     if (!is_save) {
+      this.spinner.hide();
       if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
         this.save_draft_infor_form.close_header = false;
         this.save_draft_infor_form.close_modal.close();
@@ -416,14 +418,14 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       void this.router.navigate(['/main/contract/create/draft']);
     } else if (!this.saveDraftStepForm || is_save) {
       if (this.datasForm.is_data_object_signature) {
-        // this.datasForm.is_determine_clone = res ? res : this.datasForm.is_determine_clone;
+        this.spinner.hide();
         this.stepForm = variable.stepSampleContractForm.step3;
         this.datasForm.stepLast = this.stepForm;
         this.nextOrPreviousStep(this.stepForm);
       } else {
         this.spinner.show();
         this.contractService.getSignPositionCoordinatesForm(this.datasForm.template_contract_id).subscribe((result: any) => {
-          // this.datasForm.i_data_file_contract = result.i_data_file_contract;
+          this.spinner.hide();
           this.datasForm['is_data_object_signature'] = result;
           this.datasForm.is_determine_clone = res ? res : this.datasForm.is_determine_clone;
           this.stepForm = variable.stepSampleContractForm.step3;
@@ -431,8 +433,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
           this.nextOrPreviousStep(this.stepForm);
         }, () => {
           this.getNotificationValid('error.server');
-        }, () => {
-          this.spinner.hide()
         })
       }
     }
