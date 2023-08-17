@@ -1875,7 +1875,7 @@ export class ConsiderContractComponent
                 }
 
                 if (imageRender) {
-                  const textSignB = await domtoimage.toJpeg(imageRender, this.getOptions(imageRender));
+                  const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
                   signI = textSignB.split(',')[1];
                 }
               }
@@ -2002,7 +2002,7 @@ export class ConsiderContractComponent
 
       let image_base64 = '';
       if (imageRender) {
-        const textSignB = await domtoimage.toJpeg(imageRender, this.getOptions(imageRender));
+        const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
         image_base64 = this.textSignBase64Gen = textSignB.split(',')[1];
       }
 
