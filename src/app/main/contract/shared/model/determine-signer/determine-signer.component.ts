@@ -204,6 +204,8 @@ export class DetermineSignerComponent implements OnInit {
   // next step event
   isCeCaPushNo: boolean = false;
   next(action: string) {
+    this.isButtonDisabled = true;
+
     if (!this.isOrderValueValid) {
       return
     }
@@ -317,6 +319,7 @@ export class DetermineSignerComponent implements OnInit {
     }
   }
 
+  isButtonDisabled: boolean = false;
   async getApiDetermine(is_save?: boolean) {
 
     //Đưa giá trị email về chũ thường
@@ -339,9 +342,7 @@ export class DetermineSignerComponent implements OnInit {
       }
       this.spinner.hide();
       this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-    }, () => {
-      this.spinner.hide();
-    }
+    },
     );
     // }
   }

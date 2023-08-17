@@ -1511,6 +1511,8 @@ export class ContractService {
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
+    
+    console.log("form data ", formData);
 
     return this.http.post<any>(
       this.uploadFileBase64Url + formData?.organizationId + `/base64`,
