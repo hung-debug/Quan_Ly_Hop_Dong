@@ -1938,9 +1938,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if(!isSaveDraft)
         this.toastService.showWarningHTMLWithTimeout("Thiếu tên trường cho đối tượng nhập Text!", "", 3000);
         return false;
-      } else if (count_type_text > 0 ) {
-        // this.toastService.showWarningHTMLWithTimeout("Thiếu loại text cho đối tượng nhập Text!", "", 3000);
-        // return false;
       } else {
         let data_organization = this.list_sign_name.filter((p: any) => p.type_unit == "organization" && p.role != 2);
         let error_organization = 0;
