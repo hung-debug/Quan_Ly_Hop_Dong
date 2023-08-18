@@ -864,6 +864,8 @@ export class ConsiderContractComponent
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
       let viewport = page.getViewport({ scale: this.scale });
+
+      console.log("rotate ",viewport.rotation);
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;

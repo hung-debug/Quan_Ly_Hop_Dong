@@ -303,12 +303,15 @@ export class InforContractBatchComponent implements OnInit {
       let countSMS = 0;
       let countEkyc = 0;
       this.contractService.uploadFileContractBatch(this.datasBatch.contractFile,this.datasBatch.idContractTemplate).subscribe((responseUpload: any) => {
+
+          if(!responseUpload.success) {
+            this.errorDetail = responseUpload.detail;
+            this.toastService.showErrorHTMLWithTimeout('File mẫu không hợp lệ','',3000);
+            this.spinner.hide();
+          }
+
           this.contractService.getContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,this.optionsCeCaValue).subscribe((response: any) => {
-              for (
-                let i = 0;
-                i < response[0].participants[0].recipients.length;
-                i++
-              ) {
+              for (let i = 0;i < response[0].participants[0].recipients.length;i++) {
                 let recipients = response[0].participants[0].recipients;
 
                 for(let j = 0; j < recipients.length; j++) {
@@ -380,20 +383,10 @@ export class InforContractBatchComponent implements OnInit {
                                     
                                   if (responseUpload.success) {
                                     //next step
-                                    this.step =
-                                      variable.stepSampleContractBatch.step2;
+                                    this.step = variable.stepSampleContractBatch.step2;
                                     this.datasBatch.stepLast = this.step;
                                     this.nextOrPreviousStep(this.step);
                                     
-                                    this.spinner.hide();
-                                  } else {
-                                    
-                                    this.errorDetail = responseUpload.detail;
-                                    this.toastService.showErrorHTMLWithTimeout(
-                                      'File mẫu không hợp lệ',
-                                      '',
-                                      3000
-                                    );
                                     this.spinner.hide();
                                   }
                                   }
