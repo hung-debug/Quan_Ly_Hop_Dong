@@ -242,7 +242,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   // next step event
   isCeCaPushNo: boolean = false;
   async next(action: string) {
-    this.isButtonDisabled = true;
+    this.isButtonDisabled = this.validData() ? true : false;
 
     if (!this.isOrderValueValid) {
       return
@@ -392,6 +392,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         // this.datasForm.is_determine_clone[index].id = null;
     })
     this.spinner.show();
+    this.isButtonDisabled = true;
 
     this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
         this.datasForm.is_determine_clone = res;

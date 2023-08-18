@@ -204,7 +204,7 @@ export class DetermineSignerComponent implements OnInit {
   // next step event
   isCeCaPushNo: boolean = false;
   next(action: string) {
-    this.isButtonDisabled = true;
+    this.isButtonDisabled = this.validData() ? true : false;
 
     if (!this.isOrderValueValid) {
       return
@@ -331,6 +331,7 @@ export class DetermineSignerComponent implements OnInit {
       }
     })
 
+ 
     this.spinner.show();
 
     this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
