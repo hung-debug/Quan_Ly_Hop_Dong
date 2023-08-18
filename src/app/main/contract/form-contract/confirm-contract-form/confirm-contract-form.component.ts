@@ -90,9 +90,10 @@ export class ConfirmContractFormComponent implements OnInit {
   data_parnter_organization: any = [];
 
   conn: string;
+  userSignType: any;
   ngOnInit(): void {
-
-    console.log("form ", this.datasForm);
+    console.log("b4 1 ", this.datasForm.contract_user_sign);  
+    
     this.spinner.hide();
     this.data_organization = this.datasForm.is_determine_clone.filter(
       (p: any) => p.type == 1
@@ -112,6 +113,7 @@ export class ConfirmContractFormComponent implements OnInit {
     );
 
     if (!this.datasForm.contract_user_sign) {
+      console.log("vao day ");
       if (this.datasForm.is_data_object_signature && this.datasForm.is_data_object_signature.length && this.datasForm.is_data_object_signature.length > 0) {
         this.datasForm.is_data_object_signature.forEach((res: any) => {
           console.log("res ", res);
@@ -135,6 +137,9 @@ export class ConfirmContractFormComponent implements OnInit {
         })
       }
     }
+
+    console.log("form 3 ", this.datasForm.contract_user_sign)
+
   }
 
   getPartnerCoordinationer(item: any) {
@@ -152,6 +157,7 @@ export class ConfirmContractFormComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log("usss ", this.datasForm.contract_user_sign);
     if (
       this.save_draft_infor_form &&
       this.save_draft_infor_form.close_header &&
@@ -159,9 +165,13 @@ export class ConfirmContractFormComponent implements OnInit {
     ) {
       this.SaveContract('saveDraft_contract');
     }
+    console.log("usss 1 ", this.datasForm.contract_user_sign);
+
   }
 
   back(e: any, step?: any) {
+    console.log("back ", this.datasForm.contract_user_sign);
+
     this.nextOrPreviousStep(step);
   }
 
