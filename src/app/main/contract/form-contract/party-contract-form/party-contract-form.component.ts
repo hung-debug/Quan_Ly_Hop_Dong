@@ -242,8 +242,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   // next step event
   isCeCaPushNo: boolean = false;
   async next(action: string) {
-    this.isButtonDisabled = this.validData() ? true : false;
-
     if (!this.isOrderValueValid) {
       return
     }
@@ -291,6 +289,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       }
       return;
     } else {
+      this.isButtonDisabled = true;
       let is_save = false;
       if (action == 'save-step') {
         is_save = true;
