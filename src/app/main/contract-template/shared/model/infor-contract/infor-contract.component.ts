@@ -219,13 +219,20 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               }
               this.datas.flagDigitalSign = true;
             }
-          })
+          }, (error) => {
+            this.spinner.hide()
+            this.toastService.showErrorHTMLWithTimeout('error.contract.file.type','','3000')
+          }
+          )
         } else if (extension && (extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx')) {
+          this.spinner.hide()
           this.toastService.showErrorHTMLWithTimeout("File hợp đồng chưa hỗ trợ định dạng DOC, DOCX", "", 3000);
         } else {
+          this.spinner.hide()
           this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng PDF", "", 3000);
         }
       } else {
+        this.spinner.hide()
         this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu nhỏ hơn 5MB", "", 3000);
       }
     }
