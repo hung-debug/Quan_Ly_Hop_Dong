@@ -242,6 +242,7 @@ export class ConfirmSignOtpComponent implements OnInit {
       }
       await this.signContract(false, bucket);
     }, error => {
+      this.spinner.hide()
       this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
     });
     if (signUploadObs$.length == 0) {
