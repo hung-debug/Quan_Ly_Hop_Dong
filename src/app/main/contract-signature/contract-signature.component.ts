@@ -1913,171 +1913,174 @@ export class ContractSignatureComponent implements OnInit {
       );
       return;
     }
-
     //check trùng mã số thuế
-    const checkTaxCode = await this.contractServiceV1
-      .checkTaxCodeExist(taxCode[0], certInfoBase64)
-      .toPromise();
-
-    if (checkTaxCode.success) {
-      let signUpdate = {
-        id: Number,
-      };
-      let signDigital = {
-        signDigitalX: Number,
-        signDigitalY: Number,
-        signDigitalWidth: Number,
-        signDigitalHeight: Number,
-        page: Number,
-      };
-
-      let signI = '';
-
-      try {
-        this.isDateTime = await this.timeService.getRealTime().toPromise();
-      } catch(err) {
-        this.isDateTime = new Date();
-      }
-
-      if(!this.isDateTime) this.isDateTime = new Date();
-      await of(null).pipe(delay(100)).toPromise();
-      let imageRender = null;
-
-      if (isMark) {
-        imageRender = <HTMLElement>document.getElementById('export-html-image');
-      } else {
-        imageRender = <HTMLElement>document.getElementById('export-html');
-      }
-
-      if (imageRender) {
-        const textSignB = await domtoimage.toPng(
-          imageRender,
-          this.getOptions(imageRender)
-        );
-        signI = textSignB.split(',')[1];
-      }
-
-      for (let i = 0; i < fileC.length; i++) {
-        y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
-
-        signUpdate.id = idSignMany[i];
-        signDigital.signDigitalX = x[i];
-        signDigital.signDigitalY = y[i];
-        signDigital.signDigitalWidth = w[i];
-        signDigital.signDigitalHeight = h[i];
-        signDigital.page = page[i];
-        const emptySignature = await this.contractServiceV1
-          .createEmptySignature(
-            recipientId[i],
-            signUpdate,
-            signDigital,
-            signI,
-            certInfoBase64
-          )
-          .toPromise();
-        const base64TempData = emptySignature.base64TempData;
-        const fieldName = emptySignature.fieldName;
-        const hexDigestTempFile = emptySignature.hexDigestTempFile;
-
-        var json_req = JSON.stringify({
-          OperationId: 5,
-          SessionId: sessionId,
-          DataToBeSign: base64TempData,
-          checkOCSP: 0,
-          reqDigest: 0,
-          algDigest: 'SHA_256',
-        });
-
-        json_req = window.btoa(json_req);
-
+    try {
+      const checkTaxCode = await this.contractServiceV1
+        .checkTaxCodeExist(taxCode[0], certInfoBase64)
+        .toPromise();
+      if (checkTaxCode.success) {
+        let signUpdate = {
+          id: Number,
+        };
+        let signDigital = {
+          signDigitalX: Number,
+          signDigitalY: Number,
+          signDigitalWidth: Number,
+          signDigitalHeight: Number,
+          page: Number,
+        };
+  
+        let signI = '';
+  
         try {
-          const callServiceDCSigner = await this.contractServiceV1.signUsbToken(
-            'request=' + json_req
+          this.isDateTime = await this.timeService.getRealTime().toPromise();
+        } catch(err) {
+          this.isDateTime = new Date();
+        }
+  
+        if(!this.isDateTime) this.isDateTime = new Date();
+        await of(null).pipe(delay(100)).toPromise();
+        let imageRender = null;
+  
+        if (isMark) {
+          imageRender = <HTMLElement>document.getElementById('export-html-image');
+        } else {
+          imageRender = <HTMLElement>document.getElementById('export-html');
+        }
+  
+        if (imageRender) {
+          const textSignB = await domtoimage.toPng(
+            imageRender,
+            this.getOptions(imageRender)
           );
-
-          const dataSignatureToken = JSON.parse(
-            window.atob(callServiceDCSigner.data)
-          );
-
-          const signatureToken = dataSignatureToken.Signature;
-
-          const mergeTimeStamp = await this.contractServiceV1
-            .meregeTimeStamp(
+          signI = textSignB.split(',')[1];
+        }
+  
+        for (let i = 0; i < fileC.length; i++) {
+          y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
+  
+          signUpdate.id = idSignMany[i];
+          signDigital.signDigitalX = x[i];
+          signDigital.signDigitalY = y[i];
+          signDigital.signDigitalWidth = w[i];
+          signDigital.signDigitalHeight = h[i];
+          signDigital.page = page[i];
+          const emptySignature = await this.contractServiceV1
+            .createEmptySignature(
               recipientId[i],
-              idContract[i],
-              signatureToken,
-              fieldName,
-              certInfoBase64,
-              hexDigestTempFile,
-              ceca_push[i]
+              signUpdate,
+              signDigital,
+              signI,
+              certInfoBase64
             )
             .toPromise();
-          const filePdfSigned = mergeTimeStamp.base64Data;
-
-
-          const sign = await this.contractServiceV1.updateDigitalSignatured(
-            idSignMany[i],
-            filePdfSigned
-          );
-
-          if (!sign.recipient_id) {
+          const base64TempData = emptySignature.base64TempData;
+          const fieldName = emptySignature.fieldName;
+          const hexDigestTempFile = emptySignature.hexDigestTempFile;
+  
+          var json_req = JSON.stringify({
+            OperationId: 5,
+            SessionId: sessionId,
+            DataToBeSign: base64TempData,
+            checkOCSP: 0,
+            reqDigest: 0,
+            algDigest: 'SHA_256',
+          });
+  
+          json_req = window.btoa(json_req);
+  
+          try {
+            const callServiceDCSigner = await this.contractServiceV1.signUsbToken(
+              'request=' + json_req
+            );
+  
+            const dataSignatureToken = JSON.parse(
+              window.atob(callServiceDCSigner.data)
+            );
+  
+            const signatureToken = dataSignatureToken.Signature;
+  
+            const mergeTimeStamp = await this.contractServiceV1
+              .meregeTimeStamp(
+                recipientId[i],
+                idContract[i],
+                signatureToken,
+                fieldName,
+                certInfoBase64,
+                hexDigestTempFile,
+                ceca_push[i]
+              )
+              .toPromise();
+            const filePdfSigned = mergeTimeStamp.base64Data;
+  
+  
+            const sign = await this.contractServiceV1.updateDigitalSignatured(
+              idSignMany[i],
+              filePdfSigned
+            );
+  
+            if (!sign.recipient_id) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'Lỗi ký usb token không cập nhật được recipient id',
+                '',
+                3000
+              );
+              return false;
+            }
+  
+            const updateInfo =
+              await this.contractServiceV1.updateInfoContractConsiderPromise(
+                [{
+                  processAt: this.isDateTime
+                }],
+                recipientId[i]
+              );
+  
+            if (!updateInfo.id) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'Lỗi cập nhật trạng thái hợp đồng ',
+                '',
+                3000
+              );
+            }
+  
+            if (i == fileC.length - 1) {
+              this.spinner.hide();
+              this.toastService.showSuccessHTMLWithTimeout(
+                'sign.success',
+                '',
+                3000
+              );
+  
+              this.router
+                .navigateByUrl('/', { skipLocationChange: true })
+                .then(() => {
+                  this.router.navigate(['main/c/receive/processed']);
+                });
+            }
+          } catch (err) {
+            this.spinner.hide()
             this.toastService.showErrorHTMLWithTimeout(
-              'Lỗi ký usb token không cập nhật được recipient id',
+              'Lỗi ký usb token ',
               '',
               3000
             );
-            return false;
+            return;
           }
-
-          const updateInfo =
-            await this.contractServiceV1.updateInfoContractConsiderPromise(
-              [{
-                processAt: this.isDateTime
-              }],
-              recipientId[i]
-            );
-
-          if (!updateInfo.id) {
-            this.toastService.showErrorHTMLWithTimeout(
-              'Lỗi cập nhật trạng thái hợp đồng ',
-              '',
-              3000
-            );
-          }
-
-          if (i == fileC.length - 1) {
-            this.spinner.hide();
-            this.toastService.showSuccessHTMLWithTimeout(
-              'sign.success',
-              '',
-              3000
-            );
-
-            this.router
-              .navigateByUrl('/', { skipLocationChange: true })
-              .then(() => {
-                this.router.navigate(['main/c/receive/processed']);
-              });
-          }
-        } catch (err) {
-          this.spinner.hide()
-          this.toastService.showErrorHTMLWithTimeout(
-            'Lỗi ký usb token ',
-            '',
-            3000
-          );
-          return;
         }
+      } else {
+        this.spinner.hide();
+        Swal.fire({
+          title: `Mã số thuế/CMT/CCCD trên chữ ký số không trùng mã số thuế/CMT/CCCD của tổ chức`,
+          icon: 'warning',
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#b0bec5',
+          confirmButtonText: 'Xác nhận',
+        });
       }
-    } else {
-      this.spinner.hide();
-      Swal.fire({
-        title: `Mã số thuế/CMT/CCCD trên chữ ký số không trùng mã số thuế/CMT/CCCD của tổ chức`,
-        icon: 'warning',
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#b0bec5',
-        confirmButtonText: 'Xác nhận',
-      });
+    } catch (error) {
+      this.spinner.hide()
+      this.toastService.showErrorHTMLWithTimeout('Lỗi không lấy được thông tin usb token','',3000)
     }
   }
 
