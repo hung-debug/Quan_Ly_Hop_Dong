@@ -2060,8 +2060,9 @@ export class ContractSignatureComponent implements OnInit {
               });
           }
         } catch (err) {
+          this.spinner.hide()
           this.toastService.showErrorHTMLWithTimeout(
-            'Lỗi ký usb token ' + err,
+            'Lỗi ký usb token ',
             '',
             3000
           );
