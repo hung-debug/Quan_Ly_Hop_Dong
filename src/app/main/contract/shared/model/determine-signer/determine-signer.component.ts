@@ -204,8 +204,6 @@ export class DetermineSignerComponent implements OnInit {
   // next step event
   isCeCaPushNo: boolean = false;
   next(action: string) {
-    this.isButtonDisabled = this.validData() ? true : false;
-
     if (!this.isOrderValueValid) {
       return
     }
@@ -252,6 +250,7 @@ export class DetermineSignerComponent implements OnInit {
       return;
     } else {
       let is_save = false;
+      this.isButtonDisabled = true
       if (action == 'save-step') {
         is_save = true;
 
