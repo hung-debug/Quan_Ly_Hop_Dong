@@ -102,13 +102,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   data_sample_contract: any = [];
   list_font: any;
 
-  selectedFont: any="";
+  selectedFont: any = "";
   size: any;
 
   data_sign: any;
 
   sum: number[] = [];
-  top: any[]= [];
+  top: any[] = [];
 
   textSign: boolean = false;
   arrDifPage: any[] = [];
@@ -130,15 +130,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     this.spinner.hide();
 
-    if(this.datas.font) {
+    if (this.datas.font) {
       this.selectedFont = this.datas.font;
     }
 
-    if(this.datas.size) {
+    if (this.datas.size) {
       this.size = this.datas.size;
     }
 
-    this.list_font = ["Arial","Calibri","Times New Roman"];
+    this.list_font = ["Arial", "Calibri", "Times New Roman"];
 
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
@@ -231,11 +231,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     this.data_sign = this.datas.contract_user_sign;
 
-    if(this.datas.participants && this.datas.participants[0].recipients[0].fields.length > 0) {
+    if (this.datas.participants && this.datas.participants[0].recipients[0].fields.length > 0) {
       const font = this.datas.participants[0].recipients[0].fields[0].font;
       const font_size = this.datas.participants[0].recipients[0].fields[0].font_size;
 
-      if(font && !this.datas.font) {
+      if (font && !this.datas.font) {
         this.datas.font = font;
         this.selectedFont = this.datas.font;
 
@@ -245,7 +245,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     }
 
-    if(!this.datas.font) {
+    if (!this.datas.font) {
       this.datas.font = "Times New Roman";
       this.selectedFont = this.datas.font;
 
@@ -254,16 +254,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-  setX(){
+  setX() {
     this.datas.isFirstLoadDrag = true;
     let i = 0;
     this.datas.contract_user_sign.forEach((element: any) => {
       element.sign_config.forEach((item: any) => {
-        if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+        if (this.arrDifPage[Number(item.page) - 1] == 'max') {
           const htmlElement: HTMLElement | null = document.getElementById(item.id);
-          if(htmlElement) {
+          if (htmlElement) {
             var oldX = Number(htmlElement.getAttribute('data-x'));
-            if(oldX) {
+            if (oldX) {
               var newX = oldX + this.difX;
               htmlElement.setAttribute('data-x', newX.toString());
             }
@@ -306,9 +306,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (res.type == 4) {
               res['sign_unit'] = 'so_tai_lieu'
             }
-            if (res.type == 5){
-              res['sign_unit']=  'text',
-              res['text_type'] = 'currency'
+            if (res.type == 5) {
+              res['sign_unit'] = 'text',
+                res['text_type'] = 'currency'
             }
             // res.name = res.recipient.name;
             res.email = res.recipient.email;
@@ -326,7 +326,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     //add cac o chua duoc assign
     let dataNotAssign: any[] = [];
     this.datas.is_data_object_signature.forEach((res: any) => {
-      if(!res.recipient){
+      if (!res.recipient) {
         res['id_have_data'] = res.id;
         res['is_type_party'] = res.type;
         //res['role'] = res.recipient.role;
@@ -342,9 +342,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (res.type == 4) {
           res['sign_unit'] = 'so_tai_lieu'
         }
-        if (res.type == 5){
-          res['sign_unit']=  'text',
-          res['text_type'] = 'currency'
+        if (res.type == 5) {
+          res['sign_unit'] = 'text',
+            res['text_type'] = 'currency'
         }
         res.name = res.name;
         res.email = res.email;
@@ -394,6 +394,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
         dataDetermine.push(isObj);
       })
+
     })
 
     // lay du lieu vi tri va toa do ky cua buoc 3 da thao tac
@@ -415,12 +416,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // lay du lieu trung ten, trung email (doi voi ky so + ky text da gan nguoi xu ly) + trung ten (doi voi ky text chua co nguoi xu ly)
     // (val.recipient_id as any) == (data.id as any) &&
     dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
-      (
-        (val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && (val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any))
+    (
+      (val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && (val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any))
       || (val.sign_unit == 'text' && (!val.recipient_id || ((val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any))))
       || (val.sign_unit == 'so_tai_lieu' && (!val.recipient_id || ((val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any))))
       || (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6) && (val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any))
-      )
+    )
 
     ));
 
@@ -432,7 +433,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         (val.sign_unit == "chu_ky_so" && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6))) ||
         val.name == data.name || (val.recipient ? val.recipient_id as any : val.email as any) == (val.recipient ? data.id as any : data.email as any)));
     }
-
     // xoa nhung du lieu doi tuong bi thay doi
     if (dataDiffirent.length > 0) {
       this.datas.contract_user_sign.forEach((res: any) => {
@@ -455,14 +455,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           */
           //giu lai cac ban ghi chua gan nguoi xu ly + o so tai lieu chua gan nguoi xu ly + o text da co ten chua gan nguoi xu ly + da gan nguoi xu ly va nguoi xu ly con ton tai
           //!(val.recipient ? val.recipient : val.name) ||
-          res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) =>!(val.recipient ? val.recipient : val.name) ||
-                                                                                                  (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'so_tai_lieu')
-                                                                                                  || (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'text' && val.text_attribute_name)
-                                                                                                  || (
-                                                                                                      (val.name as any) == (data.name as any)
-                                                                                                      && (val.type as any) == (data.type as any)
-                                                                                                      && (val.recipient_id ? val.recipient_id as any : val.email as any) === (val.recipient_id ? data.recipient_id as any : data.email as any)
-                                                                                                      && val.sign_unit == data.sign_unit)));
+          res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) => !(val.recipient ? val.recipient : val.name) ||
+            (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'so_tai_lieu')
+            || (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'text' && val.text_attribute_name)
+            || (
+              (val.name as any) == (data.name as any)
+              && (val.type as any) == (data.type as any)
+              && (val.recipient_id ? val.recipient_id as any : val.email as any) === (val.recipient_id ? data.recipient_id as any : data.email as any)
+              && val.sign_unit == data.sign_unit)));
           res.sign_config.forEach((items: any) => {
             items.id = items.id + '1';
           })
@@ -477,7 +477,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let dataChangeName: any[] = [];
     dataChangeName = dataContractUserSign.filter(val => dataDetermine.some((data: any) => ((val.recipient_id as any) == (data.id as any) && (val.name as any) != (data.name as any))));
 
-    if(dataChangeName.length > 0){
+    if (dataChangeName.length > 0) {
       this.datas.contract_user_sign.forEach((res: any) => {
         res.sign_config.forEach((element: any) => {
 
@@ -550,19 +550,19 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.signCurent = this.convertToSignConfig().filter((p: any) => p.id == event.target.id)[0];
     if (this.signCurent) {
       // if (event.rect.width <= 280) {
-        this.signCurent.coordinate_x = x;
-        this.signCurent.coordinate_y = y;
-        this.objSignInfo.id = event.target.id;
-        this.objSignInfo.traf_x = x;
-        this.objSignInfo.traf_y = y;
-        this.objSignInfo.width = event.rect.width;
-        this.objSignInfo.height = event.rect.height;
+      this.signCurent.coordinate_x = x;
+      this.signCurent.coordinate_y = y;
+      this.objSignInfo.id = event.target.id;
+      this.objSignInfo.traf_x = x;
+      this.objSignInfo.traf_y = y;
+      this.objSignInfo.width = event.rect.width;
+      this.objSignInfo.height = event.rect.height;
 
-        this.signCurent.width = event.rect.width;
-        this.signCurent.height = event.rect.height;
-        this.tinhToaDoSign("canvas-step3-" + this.signCurent.page, this.signCurent.width, this.signCurent.height, this.objSignInfo);
-        let _array = Object.values(this.obj_toa_do);
-        this.signCurent.position = _array.join(",");
+      this.signCurent.width = event.rect.width;
+      this.signCurent.height = event.rect.height;
+      this.tinhToaDoSign("canvas-step3-" + this.signCurent.page, this.signCurent.width, this.signCurent.height, this.objSignInfo);
+      let _array = Object.values(this.obj_toa_do);
+      this.signCurent.position = _array.join(",");
       // }
     }
   }
@@ -822,19 +822,19 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-  getCheckSignature(isSignType: any, listSelect?: string, recipient_id?:any) {
+  getCheckSignature(isSignType: any, listSelect?: string, recipient_id?: any) {
     this.list_sign_name.forEach((element: any) => {
       if (isSignType != 'text' && (element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
         let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
 
         if (data.length >= 0) {
           element.is_disable = true;
-        } else  {
+        } else {
           element.is_disable = false;
         }
       } else {
         if (isSignType != 'text' && this.convertToSignConfig().some((p: any) => ((element.email && p.email == element.email) || (element.id && p.recipient_id == element.id)) && p.sign_unit == isSignType)) {
-          if(isSignType == 'so_tai_lieu') {
+          if (isSignType == 'so_tai_lieu') {
             element.is_disable = false;
           } else {
             element.is_disable = true
@@ -845,17 +845,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           } else if (isSignType == 'chu_ky_so') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6) && element.role != 2);
           } else if (isSignType == 'text') {
-            // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4)); //disable van thu select text
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role == 4); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
+            // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4)); //disable van thu select text
           } else
-          // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4);
-          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4));
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role == 4);
+          // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4));
         }
       }
 
       if (recipient_id || listSelect) {
         // element.is_disable = false;
-        element.selected = (recipient_id ? element.id==recipient_id: element.name == listSelect);
+        element.selected = (recipient_id ? element.id == recipient_id : element.name == listSelect);
       }
     })
   }
@@ -952,35 +952,35 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.setPosition();
         this.eventMouseover();
 
-        for(let i = 0; i <= this.pageNumber;i++) {
+        for (let i = 0; i <= this.pageNumber; i++) {
           this.top[i] = 0;
 
-          if(i < this.pageNumber)
+          if (i < this.pageNumber)
             this.sum[i] = 0;
         }
 
-        for(let i = 0; i < this.pageNumber; i++) {
-          this.top[i+1] += this.top[i];
-          this.sum[i] = this.top[i+1];
+        for (let i = 0; i < this.pageNumber; i++) {
+          this.top[i + 1] += this.top[i];
+          this.sum[i] = this.top[i + 1];
         }
 
         //vuthanhtan
-        let canvasWidth: any [] = [];
-        for(let i = 1; i <= this.pageNumber; i++) {
-          let canvas: any = document.getElementById('canvas-step3-'+i);
+        let canvasWidth: any[] = [];
+        for (let i = 1; i <= this.pageNumber; i++) {
+          let canvas: any = document.getElementById('canvas-step3-' + i);
           this.top[i] = canvas.height;
           canvasWidth.push(canvas.getBoundingClientRect().left)
         }
         this.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
-        for(let i = 0; i < this.pageNumber; i++) {
-          if(canvasWidth[i] == Math.min(...canvasWidth))
-          this.arrDifPage.push('min');
+        for (let i = 0; i < this.pageNumber; i++) {
+          if (canvasWidth[i] == Math.min(...canvasWidth))
+            this.arrDifPage.push('min');
           else
-          this.arrDifPage.push('max');
+            this.arrDifPage.push('max');
         }
 
-        if(this.datas.isFirstLoadDrag != true)
-        this.setX();
+        if (this.datas.isFirstLoadDrag != true)
+          this.setX();
         this.datas.arrDifPage = this.arrDifPage;
         this.datas.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
       }, 100)
@@ -1083,11 +1083,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       var interval = setInterval(() => {
         page.render(renderContext);
-      },1000)
+      }, 1000)
 
       setTimeout(() => {
         clearInterval(interval)
-      },2000);
+      }, 2000);
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
         $('.viewer-pdf').css('padding-left', paddingPdf + 'px');
@@ -1189,14 +1189,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   getSignSelect(d: any) {
     this.objSignInfo.text_attribute_name = '';
 
-    if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
-      if(d.recipient_id) {
+    if (d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
+      if (d.recipient_id) {
         this.showSignClear = true;
       }
       this.textSign = true;
-      this.list_font = ["Arial","Calibri","Times New Roman"];
+      this.list_font = ["Arial", "Calibri", "Times New Roman"];
       this.selectedTextType = 1;
-      if(d.type == 5 || d.text_type == 'currency')
+      if (d.type == 5 || d.text_type == 'currency')
         this.selectedTextType = 2;
     } else {
       this.textSign = false;
@@ -1242,13 +1242,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.objSignInfo.text_attribute_name = d.text_attribute_name
         }
 
-        if(isObjSign.font) {
+        if (isObjSign.font) {
           this.objSignInfo.font = isObjSign.font;
         } else {
           this.objSignInfo.font = 'Times New Roman';
         }
 
-        if(isObjSign.font_size) {
+        if (isObjSign.font_size) {
           this.objSignInfo.font_size = isObjSign.font_size;
         } else {
           this.objSignInfo.font_size = 13;
@@ -1261,7 +1261,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           //@ts-ignore
           document.getElementById('select-dropdown').value = "";
         } else {
-          if(d.recipient_id) {
+          if (d.recipient_id) {
             //@ts-ignore
             document.getElementById('select-dropdown').value = d.recipient_id;
           } else {
@@ -1369,11 +1369,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     interact.removeDocument(document);
   }
 
-  clearSign(){
+  clearSign() {
     let signElement = document.getElementById(this.objSignInfo.id);
-    if(signElement){
+    if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-      if(isObjSign){
+      if (isObjSign) {
         isObjSign.name = undefined;
         signElement.removeAttribute("name");
 
@@ -1391,8 +1391,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     }
     let signElement1: any = document.getElementById('select-dropdown');
-    if(signElement1)
-    signElement1.value = "";
+    if (signElement1)
+      signElement1.value = "";
     this.showSignClear = false;
   }
 
@@ -1420,11 +1420,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             signElement.setAttribute("height", isObjSign.height);
           }
         } else if (property == 'text') {
-          if(locationChange != 'text_type'){
+          if (locationChange != 'text_type') {
             isObjSign.text_attribute_name = e;
             signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
           }
-          if(locationChange== 'text_type'){
+          if (locationChange == 'text_type') {
             let type_name = this.list_text_type.filter((p: any) => p.id == e.target.value)[0].name;
 
             isObjSign.text_type = type_name;
@@ -1438,7 +1438,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (res.sign_config.length > 0) {
               let arrSignConfigItem: any = "";
 
-              if(res.sign_unit == 'so_tai_lieu') {
+              if (res.sign_unit == 'so_tai_lieu') {
                 arrSignConfigItem = res.sign_config;
 
                 arrSignConfigItem.forEach((element: any) => {
@@ -1448,7 +1448,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             }
           });
 
-        } else if(property == 'font_size') {
+        } else if (property == 'font_size') {
           isObjSign.font_size = e.target.value;
           signElement.setAttribute("font_size", isObjSign.font_size);
 
@@ -1456,7 +1456,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (res.sign_config.length > 0) {
               let arrSignConfigItem: any = "";
 
-              if(res.sign_unit == 'so_tai_lieu') {
+              if (res.sign_unit == 'so_tai_lieu') {
                 arrSignConfigItem = res.sign_config;
 
                 arrSignConfigItem.forEach((element: any) => {
@@ -1488,7 +1488,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             this.showSignClear = true;
             let idTypeSign = data_name.sign_type[0].id;
 
-            if((data_name.role == 4 || ((idTypeSign == 2 || idTypeSign == 4))) && this.isChangeText) {
+            if ((data_name.role == 4 || ((idTypeSign == 2 || idTypeSign == 4))) && this.isChangeText) {
               this.soHopDong = data_name;
 
               //Gán lại tất cả số hợp đồng cho một người ký
@@ -1496,7 +1496,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 if (res.sign_config.length > 0) {
                   let arrSignConfigItem: any = "";
 
-                  if(res.sign_unit == 'so_tai_lieu') {
+                  if (res.sign_unit == 'so_tai_lieu') {
                     arrSignConfigItem = res.sign_config;
 
                     arrSignConfigItem.forEach((element: any) => {
@@ -1562,7 +1562,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId, action);
         } else {
           this.data_sample_contract = [];
-          let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value","text_type"];
+          let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value", "text_type"];
           let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
           isContractUserSign_clone.forEach((element: any) => {
             if (element.sign_config.length > 0) {
@@ -1580,10 +1580,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   item['type'] = 3;
                 } else if (item.sign_unit == 'so_tai_lieu') {
                   item['type'] = 4;
-                } else if(item.sign_unit = 'text') {
-                  if(item.text_type == 'currency'){
-                  item['type'] = 5; } else {
-                  item['type'] = 1;}
+                } else if (item.sign_unit = 'text') {
+                  if (item.text_type == 'currency') {
+                    item['type'] = 5;
+                  } else {
+                    item['type'] = 1;
+                  }
                 }
 
                 data_remove_arr_request.forEach((item_remove: any) => {
@@ -1597,7 +1599,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.spinner.show();
 
           this.data_sample_contract.forEach((element: any) => {
-            if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
+            if (this.datas.arrDifPage[Number(element.page) - 1] == 'max') {
               element.coordinate_x = element.coordinate_x - this.datas.difX;
             }
           })
@@ -1645,7 +1647,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.spinner.show();
 
       dataSignId.forEach((element: any) => {
-        if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
+        if (this.datas.arrDifPage[Number(element.page) - 1] == 'max') {
           element.coordinate_x = element.coordinate_x - this.datas.difX;
         }
       })
@@ -1682,9 +1684,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           item['type'] = 3;
         } else if (item.sign_unit == 'so_tai_lieu') {
           item['type'] = 4;
-        } else if (item.sign_unit == 'text'){
-          if(item.text_type == 'currency'){
-            item['type'] = 5; }
+        } else if (item.sign_unit == 'text') {
+          if (item.text_type == 'currency') {
+            item['type'] = 5;
+          }
           else {
             item['type'] = 1;
           }
@@ -1697,7 +1700,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
 
       dataSignNotId.forEach((element: any) => {
-        if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
+        if (this.datas.arrDifPage[Number(element.page) - 1] == 'max') {
           element.coordinate_x = element.coordinate_x - this.datas.difX;
         }
       })
@@ -1762,7 +1765,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
     var valueSoFar = Object.create(null);
     for (var k = 0; k < arrCheckName.length; ++k) {
-      var value:any = arrCheckName[k];
+      var value: any = arrCheckName[k];
       if (value in valueSoFar) {
         return true;
       }
@@ -1786,10 +1789,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let arrSign_organization: any[] = [];
       let arrSign_partner: any[] = [];
 
-      let coordinate_x: number [] = [];
-      let coordinate_y: number [] = [];
-      let width: number [] = [];
-      let height: number [] = [];
+      let coordinate_x: number[] = [];
+      let coordinate_y: number[] = [];
+      let width: number[] = [];
+      let height: number[] = [];
 
       for (let i = 0; i < this.datas.contract_user_sign.length; i++) {
         if (this.datas.contract_user_sign[i].sign_config.length > 0) {
@@ -1816,7 +1819,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               else arrSign_partner.push(data_sign);
             }
 
-            if(element.coordinate_x) {
+            if (element.coordinate_x) {
               coordinate_x.push(Number(element.coordinate_x));
               coordinate_y.push(Number(element.coordinate_y));
               width.push(Number(element.width));
@@ -1826,64 +1829,64 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       }
 
-        //Trường hợp 1: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2 thuộc (y1 đến y1+h) = góc phải dưới
-        for(let i = 0; i < coordinate_x.length; i++) {
-          for(let j = i+1; j < coordinate_x.length; j++) {
-            if(
-              (Number(coordinate_x[i]) <= Number(coordinate_x[j]) && Number(coordinate_x[j]) <= (Number(coordinate_x[i]) + Number(width[i])))
-              &&
-              (Number(coordinate_y[i]) <= Number(coordinate_y[j]) && Number(coordinate_y[j] <= (Number(coordinate_y[i]) + Number(height[i]))))
-              // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
-            ) {
-              this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
-              return false;
-            }
+      //Trường hợp 1: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2 thuộc (y1 đến y1+h) = góc phải dưới
+      for (let i = 0; i < coordinate_x.length; i++) {
+        for (let j = i + 1; j < coordinate_x.length; j++) {
+          if (
+            (Number(coordinate_x[i]) <= Number(coordinate_x[j]) && Number(coordinate_x[j]) <= (Number(coordinate_x[i]) + Number(width[i])))
+            &&
+            (Number(coordinate_y[i]) <= Number(coordinate_y[j]) && Number(coordinate_y[j] <= (Number(coordinate_y[i]) + Number(height[i]))))
+            // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
+          ) {
+            this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau", "", 3000);
+            return false;
           }
         }
+      }
 
-        //Trường hợp 2: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc phải trên
-        for(let i = 0; i < coordinate_x.length; i++) {
-          for(let j = i+1; j < coordinate_x.length; j++) {
-            if(
-              (Number(coordinate_x[i]) <= Number(coordinate_x[j]) && Number(coordinate_x[j]) <= (Number(coordinate_x[i]) + Number(width[i])))
-              &&
-              (Number(coordinate_y[i]) <= (Number(coordinate_y[j]) + Number(height[j])) && (Number(coordinate_y[j] + Number(height[j])) <= (Number(coordinate_y[i]) + Number(height[i]))))
-                // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
-              ) {
-                this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
-                return false;
-              }
-            }
-        }
-
-        //Trường hợp 3: ô 1 giao ô 2 trong vùng x2+w thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc trái trên
-        for(let i = 0; i < coordinate_x.length; i++) {
-          for(let j = i+1; j < coordinate_x.length; j++) {
-            if(
-              (Number(coordinate_x[j]) <= Number(coordinate_x[i]) && Number(coordinate_x[i]) <= (Number(coordinate_x[j]) + Number(width[j])))
-              &&
-              (Number(coordinate_y[j]) <= Number(coordinate_y[i]) && Number(coordinate_y[i] <= (Number(coordinate_y[j]) + Number(height[j]))))
-            ) {
-              this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
-              return false;
-            }
+      //Trường hợp 2: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc phải trên
+      for (let i = 0; i < coordinate_x.length; i++) {
+        for (let j = i + 1; j < coordinate_x.length; j++) {
+          if (
+            (Number(coordinate_x[i]) <= Number(coordinate_x[j]) && Number(coordinate_x[j]) <= (Number(coordinate_x[i]) + Number(width[i])))
+            &&
+            (Number(coordinate_y[i]) <= (Number(coordinate_y[j]) + Number(height[j])) && (Number(coordinate_y[j] + Number(height[j])) <= (Number(coordinate_y[i]) + Number(height[i]))))
+            // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
+          ) {
+            this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau", "", 3000);
+            return false;
           }
         }
+      }
 
-         //Trường hợp 4: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc phải trên
-         for(let i = 0; i < coordinate_x.length; i++) {
-          for(let j = i+1; j < coordinate_x.length; j++) {
-            if(
-              (Number(coordinate_x[j]) <= Number(coordinate_x[i]) && Number(coordinate_x[i]) <= (Number(coordinate_x[j]) + Number(width[j])))
-              &&
-              (Number(coordinate_y[j]) <= (Number(coordinate_y[i]) + Number(height[i])) && (Number(coordinate_y[i] + Number(height[i])) <= (Number(coordinate_y[j]) + Number(height[j]))))
-                // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
-              ) {
-                this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
-                return false;
-              }
-            }
+      //Trường hợp 3: ô 1 giao ô 2 trong vùng x2+w thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc trái trên
+      for (let i = 0; i < coordinate_x.length; i++) {
+        for (let j = i + 1; j < coordinate_x.length; j++) {
+          if (
+            (Number(coordinate_x[j]) <= Number(coordinate_x[i]) && Number(coordinate_x[i]) <= (Number(coordinate_x[j]) + Number(width[j])))
+            &&
+            (Number(coordinate_y[j]) <= Number(coordinate_y[i]) && Number(coordinate_y[i] <= (Number(coordinate_y[j]) + Number(height[j]))))
+          ) {
+            this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau", "", 3000);
+            return false;
+          }
         }
+      }
+
+      //Trường hợp 4: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc phải trên
+      for (let i = 0; i < coordinate_x.length; i++) {
+        for (let j = i + 1; j < coordinate_x.length; j++) {
+          if (
+            (Number(coordinate_x[j]) <= Number(coordinate_x[i]) && Number(coordinate_x[i]) <= (Number(coordinate_x[j]) + Number(width[j])))
+            &&
+            (Number(coordinate_y[j]) <= (Number(coordinate_y[i]) + Number(height[i])) && (Number(coordinate_y[i] + Number(height[i])) <= (Number(coordinate_y[j]) + Number(height[j]))))
+            // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
+          ) {
+            this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau", "", 3000);
+            return false;
+          }
+        }
+      }
 
 
       if (count > 0) {
@@ -1891,13 +1894,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("select.signer.obj", "", 3000);
         return false;
-      }  else if (count_number > 1) {
+      } else if (count_number > 1) {
 
       } else if (count_text > 0) {
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Thiếu tên trường cho đối tượng nhập Text!", "", 3000);
         return false;
-      } else if ( count_text_type > 0 ){
+      } else if (count_text_type > 0) {
         // this.spinner.hide();
         // this.toastService.showErrorHTMLWithTimeout("Thiếu loại text cho đối tượng nhập Text!", "", 3000);
         // return false;
@@ -2012,7 +2015,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   page1: boolean = false;
   pageLast: boolean = true;
 
-  pageRendering:any;
+  pageRendering: any;
   pageNumPending: any = null;
   firstPage() {
     let pdffull: any = document.getElementById('pdf-full');
@@ -2023,7 +2026,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   lastPage() {
-    let canvas: any = document.getElementById('canvas-step3-'+this.pageNumber);
+    let canvas: any = document.getElementById('canvas-step3-' + this.pageNumber);
 
     let canvas1: any = document.getElementById('pdf-viewer-step-3');
 
@@ -2054,7 +2057,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (this.pageRendering) {
       this.pageNumPending = num;
     } else {
-      let canvas: any = document.getElementById('canvas-step3-'+num);
+      let canvas: any = document.getElementById('canvas-step3-' + num);
 
       let canvas1: any = document.getElementById('pdf-viewer-step-3');
 
@@ -2065,7 +2068,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   onEnter(event: any) {
-    let canvas: any = document.getElementById('canvas-step3-'+event.target.value);
+    let canvas: any = document.getElementById('canvas-step3-' + event.target.value);
 
     let canvas1: any = document.getElementById('pdf-viewer-step-3');
 
@@ -2078,28 +2081,28 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     //đổi màu cho nút back page
     let canvas1: any = document.getElementById('canvas-step3-1');
 
-    if(event.srcElement.scrollTop < canvas1.height/2) {
+    if (event.srcElement.scrollTop < canvas1.height / 2) {
       this.page1 = false;
     } else {
       this.page1 = true;
     }
 
     //đổi màu cho nút next page
-    let canvasLast: any = document.getElementById('canvas-step3-'+this.pageNumber);
+    let canvasLast: any = document.getElementById('canvas-step3-' + this.pageNumber);
     let step3: any = document.getElementById('pdf-viewer-step-3');
-    if(event.srcElement.scrollTop < Number(canvasLast.getBoundingClientRect().top - step3.getBoundingClientRect().top)) {
+    if (event.srcElement.scrollTop < Number(canvasLast.getBoundingClientRect().top - step3.getBoundingClientRect().top)) {
       this.pageLast = true;
     } else {
       this.pageLast = false;
     }
 
-    this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
+    this.pageNum = Number(Math.floor(event.srcElement.scrollTop / canvas1.height) + 1);
 
     let scrollTop = Number(event.srcElement.scrollTop);
 
-    for(let i = 0; i < this.sum.length;i++) {
-      if(this.sum[i] < scrollTop && scrollTop < this.sum[i+1]) {
-        this.pageNum = Number(i+2);
+    for (let i = 0; i < this.sum.length; i++) {
+      if (this.sum[i] < scrollTop && scrollTop < this.sum[i + 1]) {
+        this.pageNum = Number(i + 2);
       }
     }
   }

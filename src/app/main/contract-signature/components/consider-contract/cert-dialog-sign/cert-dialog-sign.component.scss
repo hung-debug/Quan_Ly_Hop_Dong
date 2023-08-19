@@ -2,6 +2,9 @@
   text-align: center;
   font-weight: bold
 }
+.container-fluid{
+  padding: 0px !important;
+}
 .label-header{
   color: #106DB6;
   font-family: inherit;
@@ -273,8 +276,14 @@
 .text_webmobile{
   display: none;
   /* Medium devices (landscape tablets, 768px and up) */
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 820px) {
     display: block;
+    color: #106DB6;
+  }
+}
+.popup_cert{
+  @media only screen and (max-width: 820px) {
+    justify-content: flex-start !important;
   }
 }
 
