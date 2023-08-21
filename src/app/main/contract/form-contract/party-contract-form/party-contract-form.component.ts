@@ -502,7 +502,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         //   data.card_id = "";
         // }
         // else
-        if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0 && this.getDataSignCert(data).length == 0) {
+         if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0 && this.getDataSignCert(data).length == 0) {
           this.unitService.getTaxCodeOriganzation(this.userService.getInforUser().organization_id).subscribe((res: any) => {
             data.card_id=res.tax_code;})
         }
@@ -617,6 +617,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   getDataSignHsm(data: any) {
     return data.sign_type.filter((p: any) => p.id == 4);
   }
+
   getDataSignCert(data: any){
     return data.sign_type.filter((p: any) => p.id == 6);
   }

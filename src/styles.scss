@@ -61,4 +61,10 @@ body { margin: 0; font-family: font_lexend_deca , Roboto, "Helvetica Neue", sans
 .custom-dialog-container .mat-dialog-container {
    padding:12px;
    margin: 0 auto;
+
+   //fix popup ký cts
+   @media only screen and (max-width: 390px) {
+    padding: 0px;
+    margin: 0 auto;
+  }
 }

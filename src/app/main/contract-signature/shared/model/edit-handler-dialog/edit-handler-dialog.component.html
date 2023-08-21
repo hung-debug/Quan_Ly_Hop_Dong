@@ -259,6 +259,25 @@
           </div>
         </div>
 
+
+        <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là chứng thứ số-->
+        <div class="participants--input" style="display: flex" *ngIf="id_sign_type == 6">
+          <div class="participants__name" style="width: 93%">
+            <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+              <span class="required-title">*</span>
+              <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+            </div>
+            <!-- <div class="input-data" style="width: 82%;"> -->
+            <div class="input-data">
+              <input type="text" placeholder="{{'enter.tax.code' | translate}}" [(ngModel)]="card_id"
+                oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+            </div>
+            <div class="invalid" *ngIf="errorCardid!=''">
+              {{errorCardid | translate}}
+            </div>
+          </div>
+        </div>
+
         <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là ảnh và otp-->
         <div class="participants--input" style="display: flex"
           *ngIf="this.site == 'KD' && id_sign_type == 1 && isCheckRadio">

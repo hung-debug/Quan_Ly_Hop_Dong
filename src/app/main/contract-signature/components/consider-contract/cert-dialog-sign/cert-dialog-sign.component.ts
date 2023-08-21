@@ -10,6 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { NgxSpinnerService } from "ngx-spinner";
 import { DigitalCertificateService } from 'src/app/service/digital-certificate.service';
 import { ConsiderContractComponent } from "src/app/main/contract-signature/components/consider-contract/consider-contract.component";
+import { log } from 'console';
 
 
 @Component({
@@ -24,7 +25,10 @@ export class CertDialogSignComponent implements OnInit {
   lang: any;
   cols: any[];
   list: any[];
-  id: any;
+  selectedCert: any;
+  dataCardId: any;
+  currentUser: any;
+  loginType: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -38,7 +42,13 @@ export class CertDialogSignComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private DigitalCertificateService: DigitalCertificateService,
   ) {
+    this.currentUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.info;
 
+    this.loginType = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
   async ngOnInit(): Promise<void> {
@@ -51,26 +61,23 @@ export class CertDialogSignComponent implements OnInit {
       { header: 'choice', style: 'text-align: left; width: 75px;' },
       { header: 'notation', style: 'text-align: left;' },
       { header: 'subject', style: 'text-align: left;' },
+      { header: 'MST/CCCD', style: 'text-align: left;' },
       { header: 'end-date', style: 'text-align: left;' },
     ]
     this.datas = this.data;
     this.getDataSignCert();
   }
 
-  getDataSignCert(){
+  getDataSignCert() {
 
     this.spinner.show();
-    this.DigitalCertificateService.dataSignCert().subscribe(response =>{
+    this.DigitalCertificateService.dataSignCert().subscribe(response => {
 
       this.spinner.hide();
       this.list = response.certificates;
-      this.id = response.certificates.id;
-      console.log("response",response);
-
     })
-    // console.log("iddđ",this.id);
   }
-  getValueByKey(inputString:string, key:string) {
+  getValueByKey(inputString: string, key: string) {
     const elements = inputString.split(', ');
     for (const element of elements) {
       const [currentKey, value] = element.split('=');
@@ -81,21 +88,78 @@ export class CertDialogSignComponent implements OnInit {
     return null; // Return null if the key is not found
   }
 
+  getValue(inputString:string , key:string) {
+    const elements = inputString.split(', ');
+    for (const element of elements) {
+      const [currentKey, value] = element.split('=');
+      if (currentKey === key) {
+        // Tách giá trị sau dấu ":"
+        const colonIndex = value.indexOf(':');
+        if (colonIndex !== -1) {
+          return value.slice(colonIndex + 1);
+        }
+      }
+    }
+    return null; // Return null if the key is not found
+  }
 
   handleCancel() {
     this.dialogRef.close();
   }
 
-  signCert(){
+  signCert() {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    const uidCert = this.getValueByKey(this.selectedCert.certInformation, "UID")
+    this.dataCardId = uidCert?.split(":")[1];
 
-    if (!this.id) {
+    if (!this.selectedCert.id) {
       this.toastService.showErrorHTMLWithTimeout(
         'Cần chọn chứng thư số trước khi ký',
         '',
         3000
       )
     } else {
-      this.dialogRef.close(this.id);
+      if (!this.data.id) {
+        //trường hợp ký đơn
+        for (const signUpdate of this.data.isDataObjectSignature) {
+          if (signUpdate?.recipient?.email === this.currentUser.email &&
+            this.dataCardId === signUpdate?.recipient?.cardId && signUpdate?.recipient?.status === 1) {
+            this.dialogRef.close(this.selectedCert);
+            return;
+          }
+          else {
+            if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng',
+                '',
+                3000
+              );
+              return;
+            }
+          }
+        }
+      } else if (this.data.id == 1) {
+        //trường hợp ký nhiều
+        for (const signUpdate of this.data.isDataObjectSignature) {
+          if (signUpdate?.email === this.currentUser.email &&
+            this.dataCardId === signUpdate?.cardId && signUpdate?.status === 1) {
+            this.dialogRef.close(this.selectedCert);
+            return;
+          }
+          else {
+            if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng',
+                '',
+                3000
+              );
+              return;
+            }
+          }
+        }
+      }
+
+
     }
   }
 }

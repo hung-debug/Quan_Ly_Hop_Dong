@@ -12,13 +12,23 @@
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-list>
-        <tr *ngIf="list.status=='1'">
-          <td>
-            <input type="radio" name="confirm-radio-consider" [value]="list.id" [(ngModel)]="id" name="status" style="margin-left: 20px;">
+        <tr *ngIf="list.status=='1'" >
+          <td class="popup_cert">
+            <input type="radio" name="confirm-radio-consider" [value]="list" [(ngModel)]="selectedCert" name="status"
+              style="margin-left: 20px;">
           </td>
-          <td>{{list.keystoreSerialNumber}}</td>
-          <td>{{getValueByKey(list.certInformation, "CN")}}</td>
-          <td>{{list.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}</td>
+          <td class="popup_cert">
+            <span class="text_webmobile">Ký hiệu: </span>{{list.keystoreSerialNumber}}
+          </td>
+          <td class="popup_cert">
+            <span class="text_webmobile">Chủ thể: </span>{{getValueByKey(list.certInformation, "CN")}}
+          </td>
+          <td class="popup_cert">
+            <span class="text_webmobile">MST/CCCD: </span> {{getValue(list.certInformation, "UID")}}
+          </td>
+          <td class="popup_cert">
+            <span class="text_webmobile">Ngày hết hạn: </span> {{list.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}
+          </td>
         </tr>
       </ng-template>
     </p-table>

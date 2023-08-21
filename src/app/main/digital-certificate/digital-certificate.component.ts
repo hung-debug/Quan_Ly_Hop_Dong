@@ -53,6 +53,7 @@ export class DigitalCertificateComponent implements OnInit {
   serial_number: any;
   sub: any[];
   subject: any;
+
   // listStatus: any[];
   isQLDC_01: boolean = true; //them moi chung thu so
   isQLDC_02: boolean = true; //sua thong tin chung thu so
@@ -69,6 +70,7 @@ export class DigitalCertificateComponent implements OnInit {
     this.cols = [
       { header: 'notation', style: 'text-align: left;' },
       { header: 'subject', style: 'text-align: left;' },
+      { header: 'MST/CCCD', style: 'text-align: left;' },
       { header: 'start-date', style: 'text-align: left;' },
       { header: 'end-date', style: 'text-align: left;' },
       { header: 'unit.status', style: 'text-align: left;' },
@@ -89,6 +91,9 @@ export class DigitalCertificateComponent implements OnInit {
       if (response.content) {
         this.list = response.content;
         this.totalRecords = response.totalElements;
+        console.log("res", response.content);
+        // const uidCert = this.getValueByKey(result.certInformation, "UID")
+        // this.dataCardId = uidCert?.split(":")[1];
       } else {
         // bao loi
         this.toastService.showErrorHTMLWithTimeout('Không tìm thấy dữ liệu', '', 3000);
@@ -118,6 +123,22 @@ export class DigitalCertificateComponent implements OnInit {
       const [currentKey, value] = element.split('=');
       if (currentKey === key) {
         return value;
+      }
+    }
+    return null; // Return null if the key is not found
+
+  }
+
+  getValue(inputString:string , key:string) {
+    const elements = inputString.split(', ');
+    for (const element of elements) {
+      const [currentKey, value] = element.split('=');
+      if (currentKey === key) {
+        // Tách giá trị sau dấu ":"
+        const colonIndex = value.indexOf(':');
+        if (colonIndex !== -1) {
+          return value.slice(colonIndex + 1);
+        }
       }
     }
     return null; // Return null if the key is not found
