@@ -88,6 +88,21 @@ export class CertDialogSignComponent implements OnInit {
     return null; // Return null if the key is not found
   }
 
+  getValue(inputString:string , key:string) {
+    const elements = inputString.split(', ');
+    for (const element of elements) {
+      const [currentKey, value] = element.split('=');
+      if (currentKey === key) {
+        // Tách giá trị sau dấu ":"
+        const colonIndex = value.indexOf(':');
+        if (colonIndex !== -1) {
+          return value.slice(colonIndex + 1);
+        }
+      }
+    }
+    return null; // Return null if the key is not found
+  }
+
   handleCancel() {
     this.dialogRef.close();
   }

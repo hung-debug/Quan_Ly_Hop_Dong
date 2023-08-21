@@ -91,6 +91,7 @@ export class DigitalCertificateComponent implements OnInit {
       if (response.content) {
         this.list = response.content;
         this.totalRecords = response.totalElements;
+        console.log("res", response.content);
         // const uidCert = this.getValueByKey(result.certInformation, "UID")
         // this.dataCardId = uidCert?.split(":")[1];
       } else {
@@ -122,6 +123,22 @@ export class DigitalCertificateComponent implements OnInit {
       const [currentKey, value] = element.split('=');
       if (currentKey === key) {
         return value;
+      }
+    }
+    return null; // Return null if the key is not found
+
+  }
+
+  getValue(inputString:string , key:string) {
+    const elements = inputString.split(', ');
+    for (const element of elements) {
+      const [currentKey, value] = element.split('=');
+      if (currentKey === key) {
+        // Tách giá trị sau dấu ":"
+        const colonIndex = value.indexOf(':');
+        if (colonIndex !== -1) {
+          return value.slice(colonIndex + 1);
+        }
       }
     }
     return null; // Return null if the key is not found

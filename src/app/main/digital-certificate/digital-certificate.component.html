@@ -41,7 +41,7 @@
           <tr>
               <td>{{list.keystoreSerialNumber}}</td>
               <td>{{getValueByKey(list.certInformation, "CN")}}</td>
-              <td>{{getValueByKey(list.certInformation, "UID")}}</td>
+              <td>{{getValue(list.certInformation, "UID")}}</td>
               <td>{{list.keystoreDateStart | date:'dd/MM/yyyy HH:mm'}}</td>
               <td>{{list.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}</td>
 
