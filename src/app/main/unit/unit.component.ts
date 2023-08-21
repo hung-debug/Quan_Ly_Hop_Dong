@@ -161,21 +161,23 @@ export class UnitComponent implements OnInit {
 
       const maxLength = Math.max(...this.array_empty.map((subArray:any) => subArray.children.length));
 
-      // Lọc ra mảng con có độ dài lớn nhất
-      const longestArrays = this.array_empty.filter((subArray:any) => subArray.children.length === maxLength);
+      if(!this.code && !this.name) {
+        // Lọc ra mảng con có độ dài lớn nhất
+        const longestArrays = this.array_empty.filter((subArray:any) => subArray.children.length === maxLength);
 
-      if(this.array_empty.length > 1)
-        this.list = longestArrays
-      else
+        if(this.array_empty.length > 1)
+          this.list = longestArrays
+        else
+          this.list = this.array_empty;
+      } else {
         this.list = this.array_empty;
+      }
     });
   }
 
   findChildren(element:any){
     let dataChildren:any[]=[];
     let arrCon = this.listData.filter((p: any) => p.parent_id == element.id);
-
-    // 
     
     arrCon.forEach((elementCon: any, indexCOn: number) => {
 
@@ -202,16 +204,17 @@ export class UnitComponent implements OnInit {
 
       this.removeElementFromStringArray(elementCon.id);
     })
+  // }
 
     return dataChildren;
   }
 
   removeElementFromStringArray(element: string) {
-    this.listData.forEach((value,index)=>{
-        if(value.id==element){
-          this.listData.splice(index,1);
-        }
-    });
+    // this.listData.forEach((value,index)=>{
+    //     if(value.id==element){
+    //       this.listData.splice(index,1);
+    //     }
+    // });
   }
 
   //Thêm mới tổ chức
