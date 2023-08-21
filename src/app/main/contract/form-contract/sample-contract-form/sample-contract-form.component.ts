@@ -140,7 +140,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
 
-    console.log("contract no ", this.contractNo);
+    console.log("user_sign 1 ", this.datasForm.contract_user_sign);
+
     this.onResize();
 
     if(this.datasForm.font) {
@@ -273,6 +274,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       }
     }
 
+    console.log("clone ", this.datasForm.is_determine_clone);
+
     this.synchronized1(this.imageSign);
     this.synchronized1(this.digitalSign);
     this.synchronized1(this.textUnit);
@@ -365,8 +368,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
       }
     })
-
-
   }
 
   defindDataContract() {
@@ -395,6 +396,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       }
     })
 
+    console.log("data determine ", dataDetermine);
+    console.log("data user sign ", dataContractUserSign);
     // Get data have change 1 in 3 value name, email, type sign
     let dataDiffirent: any[] = [];
     if (dataDetermine.length > 0) {
@@ -414,9 +417,14 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5)) ||
       (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4)))||
       (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4))) ||
-        (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6))) &&
-      ((val.recipient ? (((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email)) : (( !val.name || (val.sign_unit == 'text' && !val.recipient_id)) && ((val.email && val.email == data.email) || !val.email))
-      ))));
+        (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6))) 
+        &&
+      ((val.recipient ? (((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email) || val.email == data.email) : 
+      ((!val.name || (val.sign_unit == 'text' && !val.recipient_id)) || ((val.email && val.email == data.email) || !val.email))
+      ))
+      ));
+
+    console.log("data ", dataContractUserSign);
 
     //
     // }
@@ -443,12 +451,14 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       })
     }
 
+    console.log("abc ", dataContractUserSign);
     this.datasForm.contract_user_sign.forEach((resForm: any) => {
       if (resForm.sign_config.length > 0 && resForm.sign_unit != 'so_tai_lieu') {
         let arrConfig = [];
         arrConfig = resForm.sign_config.filter((val: any) =>
           !val.recipient_id || dataContractUserSign.some((data) => data.sign_unit == val.sign_unit)
         )
+        console.log("arr config ",arrConfig);
         resForm.sign_config = arrConfig; // set data with object not change data
         resForm.sign_config.forEach((items: any) => {
           items.id = items.id + '1'; // tránh trùng với id cũ, gây ra lỗi
@@ -528,17 +538,17 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.step == 'sample-contract-form') {
-      this.next('save_draft');
-    }
-  }
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.step == 'sample-contract-form') {
+  //     this.next('save_draft');
+  //   }
+  // }
 
   async removeDataSignChange(data: any) {
-    // this.spinner.show();
-    await this.contractService.deleteInfoContractSignature(data).toPromise().then((res: any) => {
-    }, (error: HttpErrorResponse) => {
-    })
+    if(data)
+      await this.contractService.deleteInfoContractSignature(data).toPromise().then((res: any) => {
+      }, (error: HttpErrorResponse) => {
+      })
   }
 
   getListNameSign(data_user_sign: any) {
@@ -647,10 +657,14 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         })
         // lay doi tuong vua duoc keo moi vao hop dong
 
-        if(this.isContractNoNameNull)
+        if(this.isContractNoNameNull) {
+          console.log("vao day 1 ");
           this.signCurent = this.convertToSignConfig().filter((p: any) => (p.sign_unit != 'so_tai_lieu' && !p.name) && !p.position && !p.coordinate_x && !p.coordinate_y)[0];
-        else
+        } else {
+          console.log("vao day 2 ");
           this.signCurent = this.convertToSignConfig().filter((p: any) => !p.position && !p.coordinate_x && !p.coordinate_y)[0];
+          console.log("sig ", this.signCurent);
+        }
       } else {
         // doi tuong da duoc keo tha vao hop dong
         this.signCurent = this.convertToSignConfig().filter((p: any) => p.id == id)[0];
@@ -1553,6 +1567,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   isCheckRelease: boolean = false;
   async next(action: string) {
+    console.log("user_sign next ", this.datasForm.contract_user_sign);
     if (action == 'next_step' && !this.validData()) {
       if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
         this.save_draft_infor_form.close_header = false;
@@ -1689,6 +1704,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           }
         }
       } else if (action == 'next_step') {
+        console.log("next step ", this.datasForm.contract_user_sign);
         // let coutError = false;
         this.spinner.show();
         this.datasForm.contract_user_sign.forEach((res: any) => {
@@ -1698,6 +1714,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             }
           })
         })
+
+        console.log("next step 1 ", this.datasForm.contract_user_sign);
 
         if(!this.datasForm.contract_no || !this.datasForm.code) {
           if(this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0]) {
@@ -1875,13 +1893,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     } catch (err) {
       this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng' + err, '', 3000);
     }
-    // if (countCeCa > 0 && (Number(getNumberContractCreateOrg.numberOfCeca) - this.datasForm.ceca_push) < 0) {
-    //   this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lần gửi xác nhận BCT. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-    //   return false;
-    // } else if (countTimestamp > 0 && (Number(getNumberContractCreateOrg.numberOfTimestamp) - this.convertToSignConfig().length) < 0) {
-    //   this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng timestamp đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-    //   return false;
-    // } else {
+        console.log("next step 2 ", this.datasForm.contract_user_sign);
+
         this.stepForm = variable.stepSampleContractForm.step4;
         this.datasForm.stepLast = this.stepForm
         this.nextOrPreviousStep(this.stepForm);

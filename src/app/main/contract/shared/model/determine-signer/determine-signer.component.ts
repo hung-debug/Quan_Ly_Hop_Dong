@@ -249,6 +249,7 @@ export class DetermineSignerComponent implements OnInit {
       }
       return;
     } else {
+      this.isButtonDisabled = true;
       let is_save = false;
       this.isButtonDisabled = true
       if (action == 'save-step') {

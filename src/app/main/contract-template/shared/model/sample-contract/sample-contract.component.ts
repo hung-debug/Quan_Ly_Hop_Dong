@@ -1803,9 +1803,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             } else if (element.sign_unit == 'text' && !element.text_attribute_name) {
               count_text++;
               break
-            } else if (element.sign_unit == 'text' && !element.text_type) {
-              count_text_type++;
-              break
             } else {
               let data_sign = {
                 name: element.name,
@@ -1897,8 +1894,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }  else if (count_number > 1) {
 
       } else if (count_text > 0) {
-
-
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Thiếu tên trường cho đối tượng nhập Text!", "", 3000);
         return false;
