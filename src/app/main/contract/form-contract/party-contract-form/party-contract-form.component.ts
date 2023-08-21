@@ -617,6 +617,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   getDataSignHsm(data: any) {
     return data.sign_type.filter((p: any) => p.id == 4);
   }
+  getDataSignCert(data: any){
+    return data.sign_type.filter((p: any) => p.id == 6);
+  }
 
   getDataSignCert(data: any){
     return data.sign_type.filter((p: any) => p.id == 6);

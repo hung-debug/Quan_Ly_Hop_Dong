@@ -330,7 +330,7 @@ export class DetermineSignerComponent implements OnInit {
       }
     })
 
- 
+
     this.spinner.show();
 
     this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
@@ -2090,7 +2090,7 @@ export class DetermineSignerComponent implements OnInit {
 
     if(dData.login_by == 'phone')
       dData.phone = tData.phone;
-      
+
     this.arrSearchNameView = [];
     this.arrSearchNameSignature = [];
     this.arrSearchNameDoc = [];
