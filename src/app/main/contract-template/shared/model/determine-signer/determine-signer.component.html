@@ -498,7 +498,7 @@
                       oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
-              </div>              
+              </div>
 
               <div class="participants--input" style="display: flex" *ngIf="getDataSignEkyc(d).length > 0">
                 <div class="participants__name" style="width: 91%">
@@ -509,6 +509,21 @@
                   </div>
                 </div>
               </div>
+
+              <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là chứng thư số-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                  </div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+
             </div>
             <div *ngIf="getOriganzationSignature().length > 1" class="col-md-1 delete-element"
               (click)="deleteOriganzationSignature(index)">
@@ -554,7 +569,7 @@
                       class="required-title">*</span>
                   </div>
 
-                  <!--Văn thư tổ chức của tôi chọn loại ký-->                  
+                  <!--Văn thư tổ chức của tôi chọn loại ký-->
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
                     [settings]="dropdownSignTypeSettings" [data]="signType_doc"  (ngModelChange)="selectWithOtp($event, d, 'organization')">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
@@ -669,6 +684,21 @@
                   </div>
                 </div>
               </div>
+
+              <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là chứng thư số-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                  </div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+
             </div>
             <div class="col-md-1 delete-element" (click)="deleteOriganzationDocument(index)">
               <img src="assets/img/border_close.svg" alt="close.vn">
@@ -748,9 +778,9 @@
                   <div style="padding: 0 20px 0 5px">Có người điều phối</div>
 
                   <div *ngIf="getPartnerCoordination(item).length > 0 && this.site === 'NB'" style="display: flex">
-                    <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="getPartnerCoordination(item)[0].is_otp != 1" 
+                    <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="getPartnerCoordination(item)[0].is_otp != 1"
                     (change)="changeIsSmsCoordination($event, item, 0)">
-                    <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="getPartnerCoordination(item)[0].is_otp == 1" checked 
+                    <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="getPartnerCoordination(item)[0].is_otp == 1" checked
                     (change)="changeIsSmsCoordination($event, item, 0)">
                     <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
                   </div>
@@ -862,7 +892,7 @@
                               id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
                           </div>
 
-                      
+
                             <!--Ko vào lần đầu-->
                             <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
                               <div class="switch-language">
@@ -876,7 +906,7 @@
                                 </button>
                               </div>
                             </div>
-                          <!-- </div> -->                         
+                          <!-- </div> -->
                         </div>
                       </div>
 
@@ -1044,7 +1074,7 @@
                             id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
                         </div>
 
-                        
+
                         <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
                           <div class="switch-language">
                             <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
@@ -1084,7 +1114,7 @@
                               id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
                           </div>
 
-                      
+
                             <!--Ko vào lần đầu-->
                             <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
                               <div class="switch-language">
@@ -1099,7 +1129,7 @@
                               </div>
                             </div>
                           <!-- </div> -->
-                          
+
                         </div>
                       </div>
 
@@ -1184,7 +1214,7 @@
                               id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
                           </div>
 
-                      
+
                             <!--Ko vào lần đầu-->
                             <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
                               <div class="switch-language">
@@ -1199,10 +1229,10 @@
                               </div>
                             </div>
                           <!-- </div> -->
-                          
+
                         </div>
                       </div>
-                      
+
                     </div>
                   </div>
                 </div>
@@ -1357,7 +1387,7 @@
                   </div>
                 </div>
 
-                <div *ngIf="this.site === 'NB' && d.login_by === 'email'" class="participants--input"  
+                <div *ngIf="this.site === 'NB' && d.login_by === 'email'" class="participants--input"
                   style="display: flex;margin-left: 5%;">
                   <div class="participants__name" style="width: 100%">
                     <div style="height: 40px; display: flex; align-items: center; margin-top: 8px;">
@@ -1379,7 +1409,7 @@
                               id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
                           </div>
 
-                      
+
                             <!--Ko vào lần đầu-->
                             <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
                               <div class="switch-language">
@@ -1394,7 +1424,7 @@
                               </div>
                             </div>
                           <!-- </div> -->
-                          
+
                         </div>
                       </div>
                     </div>
