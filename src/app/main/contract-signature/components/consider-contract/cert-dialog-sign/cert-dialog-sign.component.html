@@ -24,7 +24,7 @@
             <span class="text_webmobile">Chủ thể: </span>{{getValueByKey(list.certInformation, "CN")}}
           </td>
           <td class="popup_cert">
-            <span class="text_webmobile">MST/CCCD: </span> {{getValueByKey(list.certInformation, "UID")}}
+            <span class="text_webmobile">MST/CCCD: </span> {{getValue(list.certInformation, "UID")}}
           </td>
           <td class="popup_cert">
             <span class="text_webmobile">Ngày hết hạn: </span> {{list.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}
