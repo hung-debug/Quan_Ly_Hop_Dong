@@ -124,6 +124,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   async ngOnInit(): Promise<void> {
+    console.log("datas ", this.datas.i_data_file_contract);
     this.spinner.hide();
 
     let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
@@ -469,8 +470,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         }
 
         
-        if(this.datas.is_data_contract > 0) {
-          let id_type_1 = this.datas.is_data_contract.filter((p: any) => p.status == 1 && p.type == 1)[0].id;
+        if(this.datas.i_data_file_contract) {
+          let id_type_1 = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 1)[0].id;
         
           await this.contractService.updateFileAttach(id_type_1, data, 1).toPromise().then((res: any) => {
   
