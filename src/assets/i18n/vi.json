@@ -231,6 +231,11 @@
   "role.contract-type.delete": "Xóa loại hợp đồng",
   "role.contract-type.filter": "Tìm kiếm loại hợp đồng",
   "role.contract-type.view.detail": "Xem thông tin chi tiết loại hợp đồng",
+  "role.cerificate.list":"Nhóm chức năng quản lý danh sách chứng thư số",
+  "role.cerificate.add": "Thêm mới chứng thư số",
+  "role.cerificate.update": "Cập nhật thông tin chứng thư số",
+  "role.cerificate.detail": "Thông tin chứng thư số",
+  "role.cerificate.filter": "Tìm kiếm chứng thư số",
   "contract-type.list": "Danh sách loại hợp đồng",
   "contract-type.add": "Thêm mới loại hợp đồng",
   "contract-type.update": "Cập nhật thông tin loại hợp đồng",
@@ -712,5 +717,7 @@
   "error.org.required":"Tổ chức không được để trống",
   "sign.multi.success":"Ký nhiều hợp đồng thành công",
   "multi.sign.warning": "Hệ thống hỗ trợ ký tối đa 50 hợp đồng/ 1 lần ký",
-  "expire.time.contract.notif":"Hợp đồng đã hết hạn ký"
+  "expire.time.contract.notif":"Hợp đồng đã hết hạn ký",
+  "information": "Thông tin",
+  "sign_cert_title": "Ký Chứng thư số server"
 }
