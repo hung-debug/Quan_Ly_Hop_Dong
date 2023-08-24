@@ -740,7 +740,8 @@ export class DetermineSignerComponent implements OnInit {
 
       // valid cccd number
       if (dataArr[i].card_id.trim() && !this.pattern.card_id9.test(dataArr[i].card_id.trim()) &&
-        !this.pattern.card_id12.test(dataArr[i].card_id.trim()) &&
+      !this.pattern.card_id12.test(dataArr[i].card_id.trim()) &&
+      !this.pattern_input.taxCode_form.test(dataArr[i].card_id.trim()) &&
         dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 4).length > 0) {
         this.getNotificationValid("MST/CMT/CCCD của" + this.getNameObjectValid(3) + "tổ chức của tôi không hợp lệ!")
         count++;
@@ -859,15 +860,15 @@ export class DetermineSignerComponent implements OnInit {
               break;
             }
 
-            if (isParterSort.login_by == 'email') {
+            if (isParterSort[k].login_by == 'email') {
               if (isParterSort[k].email.trim() && !this.pattern.email.test(isParterSort[k].email.trim())) {
                 this.getNotificationValid("Email của " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác không hợp lệ!")
                 count++;
                 break;
               }
             } else if (isParterSort.login_by == 'phone') {
-              if (isParterSort[k].email && !this.pattern.phone.test(isParterSort[k].email.trim())) {
-                this.getNotificationValid("Email của " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác không hợp lệ!")
+              if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone.trim())) {
+                this.getNotificationValid("SĐT của " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác không hợp lệ!")
                 count++;
                 break;
               }
@@ -910,7 +911,10 @@ export class DetermineSignerComponent implements OnInit {
               break;
             }
 
-            if (isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) && isParterSort[k].sign_type.filter((p: any) => p.id == 4 || p.id == 6).length > 0) {
+            if (isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
+            !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
+            !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) &&
+            isParterSort[k].sign_type.filter((p: any) => p.id == 4 || p.id == 6).length > 0) {
               this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
               count++;
               break;
@@ -931,8 +935,12 @@ export class DetermineSignerComponent implements OnInit {
               break;
             }
 
-            if (!isParterSort[k].email && isParterSort[k].role == 3) {
+            if (isParterSort[k].login_by=="email" && !isParterSort[k].email && isParterSort[k].role == 3) {
               this.getNotificationValid("Vui lòng nhập email" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác cá nhân!")
+              count++;
+              break;
+            } else if (((isParterSort[k].login_by=="phone" && !isParterSort[k].phone) || !isParterSort[k].phone) && isParterSort[k].role == 3) {
+              this.getNotificationValid("Vui lòng nhập SĐT" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác cá nhân!")
               count++;
               break;
             }
@@ -982,7 +990,7 @@ export class DetermineSignerComponent implements OnInit {
 
             }
 
-            if (isParterSort[k].login_by === 'email') {
+            if (isParterSort[k].login_by == 'phone') {
               if (!isParterSort[k].phone && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
                 this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác cá nhân!")
                 count++;
