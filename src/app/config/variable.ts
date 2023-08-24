@@ -451,6 +451,22 @@ export var roleList = [
 
   },
 
+  //Nhóm chức năng quản lý danh sách chứng thư số
+  {
+    label:'role.cerificate.list',
+    value:'QLDSCTS',
+    items: [
+      //Thêm mới chứng thư số
+      { label: 'role.cerificate.add', value: 'QLDSCTS_01' },
+      //Sửa chứng thư số
+      { label: 'role.cerificate.update', value: 'QLDSCTS_02' },
+      //Xem thông tin chi tiết chứng thư số
+      { label: 'role.cerificate.detail', value: 'QLDSCTS_03' },
+      //Tìm kiếm chứng thư số
+      { label: 'role.cerificate.filter', value: 'QLDSCTS_04' },
+    ]
+  },
+
   //Nhóm chức năng cấu hình SMS/Email
   {
     label:'role.config.sms.email',
