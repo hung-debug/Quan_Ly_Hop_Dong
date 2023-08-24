@@ -155,6 +155,11 @@ export class ContractService {
   signCertificate: any = `${environment.apiUrl}/api/v1/sign/certificate`;
   signCertMultiUrl: any = `${environment.apiUrl}/api/v1/sign/multi/certificate`;
 
+  // detect CCCD
+  newEkycRecognitionUrl: any = `${environment.apiUrl}/api/v1/tp/contracts/ekyc/recognition`;
+  // detect Face
+  newEkycVerification: any = `${environment.apiUrl}/api/v1/tp/contracts/ekyc/verification`;
+
   token: any;
   customer_id: any;
   organization_id: any;
@@ -465,14 +470,15 @@ export class ContractService {
       request_id: contractId+"_"+recipientId+"_"+img?.width+"_"+img?.height+"_"+deviceSerce?.device+"_"+deviceSerce?.browser+"_"+deviceSerce?.browser_version+"-webMBF"
     };
 
-    if (environment.apiUrl == 'https://econtract.mobifone.vn/service') {
-      return this.http.post<any>(this.cccdFrontNB, body, { headers });
-    } else if (environment.apiUrl == 'https://mobifone-econtract.vn/service') {
-      return this.http.post<any>(this.cccdFrontKD, body, { headers });
-    } else {
-      // return this.http.post<any>(this.cccdFront, body, { headers });
-      return this.http.post<any>(this.cccdFrontKD, body, { headers });
-    }
+    // if (environment.apiUrl == 'https://econtract.mobifone.vn/service') {
+    //   return this.http.post<any>(this.cccdFrontNB, body, { headers });
+    // } else if (environment.apiUrl == 'https://mobifone-econtract.vn/service') {
+    //   return this.http.post<any>(this.cccdFrontKD, body, { headers });
+    // } else {
+    //   // return this.http.post<any>(this.cccdFront, body, { headers });
+    //   return this.http.post<any>(this.cccdFrontKD, body, { headers });
+    // }
+    return this.http.post<any>(this.newEkycRecognitionUrl, body, { headers });
   }
 
 
@@ -489,20 +495,21 @@ export class ContractService {
       request_id: contractId+"_"+recipientId+"_"+img?.width+"_"+img?.height+"-"+deviceService?.device+"_"+deviceService?.browser+"_"+deviceService?.browser_version+"-web"
     };
 
-    if (environment.apiUrl == 'https://econtract.mobifone.vn/service') {
-      return this.http.post<any>(this.detectFaceUrlNB, body, { headers });
-    } else if (environment.apiUrl == 'https://mobifone-econtract.vn/service') {
-      return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
-    } else if(environment.apiUrl == 'http://10.111.125.86/service') {
-      //server uat vinmec
-      return this.http.post<any>('http://10.111.125.86/eKYC/verification', body ,{headers})
-    } else if(environment.apiUrl == 'http://10.111.130.27/service') {
-      //server prod vinmec
-      return this.http.post<any>('http://10.111.130.27/eKYC/verification', body ,{headers})
-    }  {
-      // return this.http.post<any>(this.detectFaceUrl, body, { headers });
-      return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
-    }
+    // if (environment.apiUrl == 'https://econtract.mobifone.vn/service') {
+    //   return this.http.post<any>(this.detectFaceUrlNB, body, { headers });
+    // } else if (environment.apiUrl == 'https://mobifone-econtract.vn/service') {
+    //   return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
+    // } else if(environment.apiUrl == 'http://10.111.125.86/service') {
+    //   //server uat vinmec
+    //   return this.http.post<any>('http://10.111.125.86/eKYC/verification', body ,{headers})
+    // } else if(environment.apiUrl == 'http://10.111.130.27/service') {
+    //   //server prod vinmec
+    //   return this.http.post<any>('http://10.111.130.27/eKYC/verification', body ,{headers})
+    // }  {
+    //   // return this.http.post<any>(this.detectFaceUrl, body, { headers });
+    //   return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
+    // }
+    return this.http.post<any>(this.newEkycVerification, body, { headers });
   }
 
   getContractSample(data_sample_contract: any) {
