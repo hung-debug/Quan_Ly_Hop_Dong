@@ -521,7 +521,7 @@ export class DetermineSignerComponent implements OnInit {
         data.card_id = "";
       }
 
-      //Nếu cá nhân chọn loại ký là otp và ký bằng số điện thoại
+      //Nếu cá nhân chọn loại ký là otp và ký bằng SĐT
       if (data.typeSign == 1 && this.getDataSignCka(data).length > 0) {
         data.phone = data.email;
       }
@@ -702,19 +702,19 @@ export class DetermineSignerComponent implements OnInit {
       }
 
       if (!dataArr[i].phone && dataArr[i].sign_type.filter((p: any) => p.id == 1).length > 0) {
-        this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!")
+        this.getNotificationValid("Vui lòng nhập SĐT của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!")
         count++;
         break;
       }
 
-      // check nhap mst/cmt/cccd  - người ký + văn thư
+      // check nhap mst/cmt/cccd 
       if (!dataArr[i].card_id && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 4).length > 0) {
         this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của" + this.getNameObjectValid(3) + "tổ chức của tôi!")
         count++;
         break;
       }
 
-      if (dataArr[i].login_by == 'email' && (dataArr[i].role == 3 || dataArr[i].role == 4)) {
+      if (dataArr[i].login_by == 'email' && dataArr[i].email) {
         if (dataArr[i].email.trim() && !this.pattern.email.test(dataArr[i].email.trim())) {
           this.getNotificationValid("Email của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
           count++;
@@ -722,7 +722,7 @@ export class DetermineSignerComponent implements OnInit {
         }
       } else if (dataArr[i].login_by == 'phone') {
         if (dataArr[i].email.trim() && !this.pattern.phone.test(dataArr[i].email.trim())) {
-          this.getNotificationValid("SĐT của" + this.getNameObjectValid(3) + "tổ chức của tôi không hợp lệ!")
+          this.getNotificationValid("SĐT của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
           count++;
           break;
         }
@@ -731,7 +731,7 @@ export class DetermineSignerComponent implements OnInit {
 
       // valid phone number
       if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone.trim())) {
-        this.getNotificationValid("Số điện thoại của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
+        this.getNotificationValid("SĐT của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
         count++;
         break;
       }
@@ -769,12 +769,12 @@ export class DetermineSignerComponent implements OnInit {
       const onlyPartOrg = 'only_party_origanzation';
 
       if (this.getCheckDuplicateEmail(onlyPartOrg, dataArr)) {
-        this.getNotificationValid("Email/Số điện thoại tổ chức của tôi không được trùng nhau!");
+        this.getNotificationValid("Email/SĐT tổ chức của tôi không được trùng nhau!");
         return false
       }
 
       if (this.getCheckDuplicatePhone(onlyPartOrg, dataArr)) {
-        this.getNotificationValid("Email/Số điện thoại tổ chức của tôi không được trùng nhau!");
+        this.getNotificationValid("Email/SĐT tổ chức của tôi không được trùng nhau!");
         return false
       }
 
@@ -812,7 +812,6 @@ export class DetermineSignerComponent implements OnInit {
               count++;
               break;
             }
-
             if (isParterSort[k].sign_type.length == 0 && [3, 4].includes(isParterSort[k].role)) {
               this.getNotificationValid("Vui lòng chọn loại ký " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác!")
               count++;
@@ -838,7 +837,7 @@ export class DetermineSignerComponent implements OnInit {
             }
 
             // if (!isParterSort[k].phone && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
-            //   this.getNotificationValid("Vui lòng nhập số điện thoại của " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác!")
+            //   this.getNotificationValid("Vui lòng nhập SĐT của " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác!")
             //   count++;
             //   break;
             // }
@@ -846,7 +845,7 @@ export class DetermineSignerComponent implements OnInit {
               this.getNotificationValid("Vui lòng nhập SĐT của " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác!")
               count++;
               break;
-            } else if (isParterSort[k].login_by=="email" && !isParterSort[k].email) {
+            } else if ((isParterSort[k].login_by=="email" || isParterSort[k].role == 1) && !isParterSort[k].email) {
               this.getNotificationValid("Vui lòng nhập email của " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác!")
               count++;
               break;
@@ -858,7 +857,7 @@ export class DetermineSignerComponent implements OnInit {
               break;
             }
 
-            if (isParterSort[k].login_by == 'email') {
+            if (isParterSort[k].login_by == 'email' || (isParterSort[k].role == 1 && isParterSort[k].email)) {
               if (isParterSort[k].email.trim() && !this.pattern.email.test(isParterSort[k].email.trim())) {
                 this.getNotificationValid("Email của " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác không hợp lệ!")
                 count++;
@@ -875,7 +874,7 @@ export class DetermineSignerComponent implements OnInit {
 
             // valid phone number
             if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone.trim())) {
-              this.getNotificationValid("Số điện thoại " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác không hợp lệ!")
+              this.getNotificationValid("SĐT " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác không hợp lệ!")
               count++;
               break;
             }
@@ -933,11 +932,11 @@ export class DetermineSignerComponent implements OnInit {
               break;
             }
 
-            if (isParterSort[k].login_by=="email" && !isParterSort[k].email && isParterSort[k].role == 3) {
+            if (isParterSort[k].login_by=="email" && !isParterSort[k].email) {
               this.getNotificationValid("Vui lòng nhập email" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác cá nhân!")
               count++;
               break;
-            } else if (((isParterSort[k].login_by=="phone" && !isParterSort[k].phone) || !isParterSort[k].phone) && isParterSort[k].role == 3) {
+            } else if ((isParterSort[k].login_by=="phone" || isParterSort[k].sign_type.filter((p: any) => p.id == 1).length>0) && !isParterSort[k].phone ) {
               this.getNotificationValid("Vui lòng nhập SĐT" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác cá nhân!")
               count++;
               break;
@@ -980,8 +979,12 @@ export class DetermineSignerComponent implements OnInit {
               //   break;
               // }
 
-              if (isParterSort[k].card_id.trim() && !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
-                this.getNotificationValid("Mã số thuế của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
+              if (isParterSort[k].card_id.trim() && 
+              !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) &&
+              !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) && 
+              !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) && 
+              isParterSort[k].sign_type.length > 0) {
+                this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ!");
                 count++;
                 break;
               }
@@ -990,7 +993,7 @@ export class DetermineSignerComponent implements OnInit {
 
             if (isParterSort[k].login_by == 'phone') {
               if (!isParterSort[k].phone && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
-                this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác cá nhân!")
+                this.getNotificationValid("Vui lòng nhập SĐT" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác cá nhân!")
                 count++;
                 break;
               }
@@ -1018,7 +1021,7 @@ export class DetermineSignerComponent implements OnInit {
 
             // valid phone number
             if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone.trim())) {
-              this.getNotificationValid("Số điện thoại" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ!")
+              this.getNotificationValid("SĐT" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ!")
               count++;
               break;
             }
@@ -1057,7 +1060,7 @@ export class DetermineSignerComponent implements OnInit {
       }
 
       if (this.getCheckDuplicatePhone(onlyPartner, dataArrPartner)) {
-        this.getNotificationValid("Số điện thoại của đối tác không được trùng nhau!");
+        this.getNotificationValid("SĐT của đối tác không được trùng nhau!");
         return false
       }
 
@@ -1077,12 +1080,12 @@ export class DetermineSignerComponent implements OnInit {
       }
 
       if (this.getCheckDuplicateEmail(allCheckEmail, this.datas.is_determine_clone)) {
-        this.getNotificationValid("Email/Số điện thoại không được trùng nhau giữa các bên tham gia!");
+        this.getNotificationValid("Email/SĐT không được trùng nhau giữa các bên tham gia!");
         return false
       }
 
       if (this.getCheckDuplicatePhone(allCheckEmail, this.datas.is_determine_clone)) {
-        this.getNotificationValid("Email/Số điện thoại không được trùng nhau giữa các bên tham gia!");
+        this.getNotificationValid("Email/SĐT không được trùng nhau giữa các bên tham gia!");
         return false
       }
 
