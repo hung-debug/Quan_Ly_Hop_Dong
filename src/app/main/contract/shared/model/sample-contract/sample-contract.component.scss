@@ -731,4 +731,11 @@
   margin-left: 5px
 }
 
+.text-ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: inherit;
+}
+
 
