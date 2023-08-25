@@ -10,6 +10,8 @@ import { DigitalCertificateEditComponent } from './digital-certificate-edit/digi
 import { DigitalCertificateService } from 'src/app/service/digital-certificate.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LazyLoadEvent } from 'primeng/api';
+import { UserService } from 'src/app/service/user.service';
+import { RoleService } from 'src/app/service/role.service';
 @Component({
   selector: 'app-user',
   templateUrl: './digital-certificate.component.html',
@@ -25,6 +27,8 @@ export class DigitalCertificateComponent implements OnInit {
     public dialog: MatDialog,
     public translate: TranslateService,
     private DigitalCertificateService: DigitalCertificateService,
+    private userService:UserService,
+    private roleService:RoleService,
   ) { }
 
   listStatus = [
@@ -60,10 +64,10 @@ export class DigitalCertificateComponent implements OnInit {
   // isQLDC_03: boolean = true; //tim kiem thong tin
   // isQLDC_04: boolean = true; //xem thong tin chung thu so
 
-  QLDSCTS_01: boolean = true; //them moi chung thu so
-  QLDSCTS_02: boolean = true; //sua thong tin chung thu so
-  QLDSCTS_03: boolean = true; //xem thong tin chung thu so
-  QLDSCTS_04: boolean = true; //tim kiem thong tin
+  isQLDSCTS_01: boolean = true; //them moi chung thu so
+  isQLDSCTS_02: boolean = true; //sua thong tin chung thu so
+  isQLDSCTS_03: boolean = true; //xem thong tin chung thu so
+  isQLDSCTS_04: boolean = true; //tim kiem thong tin
   async ngOnInit(): Promise<void> {
     if (sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
@@ -84,7 +88,34 @@ export class DigitalCertificateComponent implements OnInit {
     this.status = { label: 'Tất cả', value: '', default: true };
     this.getFirstPageSearchData();
     // this.getData();
+        //lay id user
+        let userId = this.userService.getAuthCurrentUser().id;
+        console.log("userId",userId);
 
+        this.userService.getUserById(userId).subscribe(
+          data => {
+            //lay id role
+            this.roleService.getRoleById(data?.role_id).subscribe(
+              data => {
+                let listRole: any[];
+                console.log("data",data);
+
+                listRole = data.permissions;
+                this.isQLDSCTS_01 = listRole.some(element => element.code == 'QLDSCTS_01');
+                this.isQLDSCTS_02 = listRole.some(element => element.code == 'QLDSCTS_02');
+                this.isQLDSCTS_03 = listRole.some(element => element.code == 'QLDSCTS_03');
+                this.isQLDSCTS_04 = listRole.some(element => element.code == 'QLDSCTS_04');
+              }, error => {
+                setTimeout(() => this.router.navigate(['/login']));
+                this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+              }
+            );
+
+          }, error => {
+            setTimeout(() => this.router.navigate(['/login']));
+            this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+          }
+        )
   }
   array_empty: any = [];
   getFirstPageSearchData() {
