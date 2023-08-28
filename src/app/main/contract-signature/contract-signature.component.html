@@ -49,15 +49,15 @@
     </div>
 
     <div style="margin-top: 18px;" class="row list_header" *ngIf="pageTotal > 0 || (this.typeDisplay == 'signMany' || this.typeDisplay == 'viewMany')">
-        <div 
-            *ngIf="this.typeDisplay === 'signMany' && this.contractsSignMany?.length == 50" 
+        <div
+            *ngIf="this.typeDisplay === 'signMany' && this.contractsSignMany?.length == 50"
             style="
             text-align: left;
             color: #027e21;
             font-size: 14px;
             margin-left: 9px;
             font-weight: bold;"
-        
+
         >
             {{'multi.sign.warning' | translate}}
         </div>
@@ -636,7 +636,7 @@
       <img style="width: 30px" src="assets/img/tick_signature.svg" alt="duongdt.vn">
       <div style="color: #6cc449; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
           <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'user.sign-type' | translate}}: {{'sign_by_cert' | translate}}</span>
-          <!-- <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'signer' | translate}}: {{nameCompany}}</span> -->
+          <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'sign.by' | translate}}: {{nameCompany}}</span>
           <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'tax_code' | translate}}: {{cardId}}</span>
           <span style="text-align: left;white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'sign.day' | translate}}: {{isDateTime | date: 'dd/MM/YYYY HH:mm:ss'}}</span>
 
@@ -650,6 +650,7 @@
       <div class="signature-content" style="color: #6cc449; background-size: 40px 40px; display: flex; justify-content: space-between;align-items: center; width: 100%;">
           <div style="width: 165px;">
               <div style="z-index: 2;text-align: left;">{{'user.sign-type' | translate}}: {{'sign_by_cert' | translate}}</div>
+              <div style="z-index: 2;text-align: left;">{{'sign.by' | translate}}: {{nameCompany}}</div>
               <div style="z-index: 2;text-align: left;">{{'tax_code' | translate}}: {{cardId}}</div>
               <div style="z-index: 2;text-align: left;">{{'sign.day' | translate}}: {{isDateTime | date: 'dd/MM/YYYY HH:mm:ss'}}</div>
           </div>
