@@ -2287,9 +2287,8 @@ export class ConsiderContractComponent
           this.cardId = inforCert.mst;
           this.cccd = inforCert.cccd;
           this.cmnd = inforCert.cmnd;
-
           let signI = null;
-
+          // this.nameCompany = this.recipient.name;
           if (!this.mobile)
             this.convertXForHsm(signUpdate.page);
 
@@ -2321,6 +2320,7 @@ export class ConsiderContractComponent
               signI = this.textSignBase64Gen = textSignB.split(',')[1];
             }
           } else if (signUpdate.type == 3) {
+            // this.nameCompany = this.recipient.name;
 
             this.widthSign = signUpdate.width;
             this.heightSign = signUpdate.height;

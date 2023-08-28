@@ -38,7 +38,7 @@
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-list>
-          <tr>
+          <tr *ngIf="isQLDSCTS_03" (click)="detailUser(list.id)" style="cursor: pointer;">
               <td>{{list.keystoreSerialNumber}}</td>
               <td>{{getValueByKey(list.certInformation, "CN")}}</td>
               <td>{{getValue(list.certInformation, "UID")}}</td>
@@ -48,7 +48,7 @@
               <td *ngIf="list.status == 1">{{'unit.active' | translate}}</td>
               <td *ngIf="list.status != 1">{{'unit.inactive' | translate}}</td>
               <td style="text-align: center; ">
-                <img *ngIf="isQLDSCTS_03" src="../../../assets/img/icon_eyes.svg" ngbTooltip="{{'report.detail.contract' | translate}}" width="20px" style="cursor: pointer;" (click)="detailUser(list.id)"/>
+                <!-- <img *ngIf="isQLDSCTS_03" src="../../../assets/img/icon_eyes.svg" ngbTooltip="{{'report.detail.contract' | translate}}" width="20px" style="cursor: pointer;" (click)="detailUser(list.id)"/> -->
                 <img *ngIf="isQLDSCTS_02" ngbTooltip="{{'contract.edit' | translate}}" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
               </td>
           </tr>
