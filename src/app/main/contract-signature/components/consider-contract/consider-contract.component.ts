@@ -2031,6 +2031,7 @@ export class ConsiderContractComponent
         }
       }
     } else if (typeSignDigital == 4) {
+      // HSM SIGN
       for (const signUpdate of this.isDataObjectSignature) {
         if (
           signUpdate &&
@@ -2157,7 +2158,8 @@ export class ConsiderContractComponent
               const checkSign = await this.contractService.signHsm(
                 this.dataHsm,
                 this.recipientId,
-                this.isTimestamp
+                this.isTimestamp,
+                signUpdate.type
               );
               if (!checkSign || (checkSign && !checkSign.success)) {
                 if (!checkSign.message) {
