@@ -8,6 +8,7 @@ import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgxSpinnerService } from "ngx-spinner";
+import {DeviceDetectorService} from "ngx-device-detector";
 import { DigitalCertificateService } from 'src/app/service/digital-certificate.service';
 import { ConsiderContractComponent } from "src/app/main/contract-signature/components/consider-contract/consider-contract.component";
 import { log } from 'console';
@@ -24,6 +25,7 @@ export class CertDialogSignComponent implements OnInit {
   myForm: FormGroup;
   lang: any;
   cols: any[];
+  colsMobile: any[];
   list: any[];
   selectedCert: any;
   dataCardId: any;
@@ -41,6 +43,7 @@ export class CertDialogSignComponent implements OnInit {
     public dialogRef: MatDialogRef<CertDialogSignComponent>,
     private spinner: NgxSpinnerService,
     private DigitalCertificateService: DigitalCertificateService,
+    private deviceService: DeviceDetectorService,
   ) {
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
@@ -64,15 +67,28 @@ export class CertDialogSignComponent implements OnInit {
       { header: 'MST/CCCD', style: 'text-align: left;' },
       { header: 'end-date', style: 'text-align: left;' },
     ]
+    this.colsMobile = [
+      { header: 'choice', style: 'text-align: left;' },
+      { header: 'information', style: 'text-align: left;' },
+    ]
     this.datas = this.data;
     this.getDataSignCert();
+    this.getDeviceApp();
+  }
+
+  mobile: boolean = false;
+  getDeviceApp() {
+    if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
+      this.mobile = true;
+    } else {
+      this.mobile = false;
+    }
   }
 
   getDataSignCert() {
 
     this.spinner.show();
     this.DigitalCertificateService.dataSignCert().subscribe(response => {
-
       this.spinner.hide();
       this.list = response.certificates;
     })
