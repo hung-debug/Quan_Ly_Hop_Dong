@@ -290,10 +290,13 @@ export class DetermineSignerComponent implements OnInit {
           if(fields)
             this.datas.is_determine_clone[i].recipients[j].fields = fields.filter((field: any) => field.type == 2 || field.type == 3);
       }
-      await this.contractTemplateService.editContractDetermine(this.datas.is_determine_clone[i], this.datas.is_determine_clone[i].id).toPromise().then((res: any) => {
+      await this.contractTemplateService.editContractDetermine(this.datas.is_determine_clone[i], this.datas.is_determine_clone[i].id).toPromise().then(
+        (res: any) => {
           isBody.push(res);
-        }, (res: any) => {
-          is_error = res.error;
+        }, (err: any) => {
+          this.spinner.hide()
+          this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
+          is_error = err.error;
           count++
         })
 
