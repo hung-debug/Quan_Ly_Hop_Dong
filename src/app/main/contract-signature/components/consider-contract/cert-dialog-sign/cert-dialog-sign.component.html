@@ -39,8 +39,7 @@
 
       <div class="item" style="border-top: 1px solid #106DB6; display: flex" *ngFor="let lists of list">
         <div class="radioChoose">
-          <input type="radio" name="confirm-radio-consider" [value]="lists" [(ngModel)]="selectedCert" name="status"
-            style="margin-left: 40%;">
+          <input style="margin-left: 40%; margin: auto;" type="radio" name="confirm-radio-consider" [value]="lists" [(ngModel)]="selectedCert" name="status">
         </div>
         <div style="width: 75%; padding: 10px">
           <div style="color: #106DB6">Ký hiệu: <span style="word-wrap: break-word; color: #333333;">{{lists.keystoreSerialNumber}}</span></div>
