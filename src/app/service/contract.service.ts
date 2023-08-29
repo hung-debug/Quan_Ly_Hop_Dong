@@ -463,7 +463,8 @@ export class ContractService {
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
-      .append('api-key', this.api_key);
+      .append('api-key', this.api_key)
+      .append('Authorization', 'Bearer ' + this.token);
 
     const body = {
       image: image,
@@ -487,6 +488,7 @@ export class ContractService {
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token)
       .append('api-key', this.api_key);
 
     const body = {
