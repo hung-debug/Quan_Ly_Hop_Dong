@@ -2028,7 +2028,7 @@ export class DetermineSignerComponent implements OnInit {
     setTimeout(() => {
       this.contractService.getAllInfoUser(stringEmitted).subscribe((res) => {
         let arr_all = res;
-        let data = arr_all.map((p: any) => ({ name: p.name, email: p.email, phone: p.phone }));
+        let data = arr_all.map((p: any) => ({ name: p.name, email: p.email}));
         if (action == 'view') {
           this.arrSearchNameView = data;
         } else if (action == 'signature') {
