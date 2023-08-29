@@ -464,22 +464,22 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('api-key', this.api_key)
-      .append('Authorization', 'Bearer ' + this.token);
+      // .append('Authorization', 'Bearer ' + this.token);
 
     const body = {
       image: image,
       request_id: contractId+"_"+recipientId+"_"+img?.width+"_"+img?.height+"_"+deviceSerce?.device+"_"+deviceSerce?.browser+"_"+deviceSerce?.browser_version+"-webMBF"
     };
 
-    // if (environment.apiUrl == 'https://econtract.mobifone.vn/service') {
-    //   return this.http.post<any>(this.cccdFrontNB, body, { headers });
-    // } else if (environment.apiUrl == 'https://mobifone-econtract.vn/service') {
-    //   return this.http.post<any>(this.cccdFrontKD, body, { headers });
-    // } else {
-    //   // return this.http.post<any>(this.cccdFront, body, { headers });
-    //   return this.http.post<any>(this.cccdFrontKD, body, { headers });
-    // }
-    return this.http.post<any>(this.newEkycRecognitionUrl, body, { headers });
+    if (environment.apiUrl == 'https://econtract.mobifone.vn/service') {
+      return this.http.post<any>(this.cccdFrontNB, body, { headers });
+    } else if (environment.apiUrl == 'https://mobifone-econtract.vn/service') {
+      return this.http.post<any>(this.cccdFrontKD, body, { headers });
+    } else {
+      // return this.http.post<any>(this.cccdFront, body, { headers });
+      return this.http.post<any>(this.cccdFrontKD, body, { headers });
+    }
+    // return this.http.post<any>(this.newEkycRecognitionUrl, body, { headers });
   }
 
 
@@ -488,7 +488,7 @@ export class ContractService {
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token)
+      // .append('Authorization', 'Bearer ' + this.token)
       .append('api-key', this.api_key);
 
     const body = {
@@ -497,21 +497,21 @@ export class ContractService {
       request_id: contractId+"_"+recipientId+"_"+img?.width+"_"+img?.height+"-"+deviceService?.device+"_"+deviceService?.browser+"_"+deviceService?.browser_version+"-web"
     };
 
-    // if (environment.apiUrl == 'https://econtract.mobifone.vn/service') {
-    //   return this.http.post<any>(this.detectFaceUrlNB, body, { headers });
-    // } else if (environment.apiUrl == 'https://mobifone-econtract.vn/service') {
-    //   return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
-    // } else if(environment.apiUrl == 'http://10.111.125.86/service') {
-    //   //server uat vinmec
-    //   return this.http.post<any>('http://10.111.125.86/eKYC/verification', body ,{headers})
-    // } else if(environment.apiUrl == 'http://10.111.130.27/service') {
-    //   //server prod vinmec
-    //   return this.http.post<any>('http://10.111.130.27/eKYC/verification', body ,{headers})
-    // }  {
-    //   // return this.http.post<any>(this.detectFaceUrl, body, { headers });
-    //   return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
-    // }
-    return this.http.post<any>(this.newEkycVerification, body, { headers });
+    if (environment.apiUrl == 'https://econtract.mobifone.vn/service') {
+      return this.http.post<any>(this.detectFaceUrlNB, body, { headers });
+    } else if (environment.apiUrl == 'https://mobifone-econtract.vn/service') {
+      return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
+    } else if(environment.apiUrl == 'http://10.111.125.86/service') {
+      //server uat vinmec
+      return this.http.post<any>('http://10.111.125.86/eKYC/verification', body ,{headers})
+    } else if(environment.apiUrl == 'http://10.111.130.27/service') {
+      //server prod vinmec
+      return this.http.post<any>('http://10.111.130.27/eKYC/verification', body ,{headers})
+    }  {
+      // return this.http.post<any>(this.detectFaceUrl, body, { headers });
+      return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
+    }
+    // return this.http.post<any>(this.newEkycVerification, body, { headers });
   }
 
   getContractSample(data_sample_contract: any) {
