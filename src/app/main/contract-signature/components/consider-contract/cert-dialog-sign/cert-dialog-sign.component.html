@@ -22,27 +22,19 @@
             <input type="radio" name="confirm-radio-consider" [value]="list" [(ngModel)]="selectedCert" name="status"
               style="margin-left: 20px;">
           </td>
-          <td class="popup_cert">
-            <span class="text_webmobile">Ký hiệu: </span>{{list.keystoreSerialNumber}}
-          </td>
-          <td class="popup_cert">
-            <span class="text_webmobile">Chủ thể: </span>{{getValueByKey(list.certInformation, "CN")}}
-          </td>
-          <td class="popup_cert">
-            <span class="text_webmobile">MST/CCCD: </span> {{getValue(list.certInformation, "UID")}}
-          </td>
-          <td class="popup_cert">
-            <span class="text_webmobile">Ngày hết hạn: </span> {{list.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}
-          </td>
+          <td class="popup_cert">{{list.keystoreSerialNumber}}</td>
+          <td class="popup_cert">{{getValueByKey(list.certInformation, "CN")}}</td>
+          <td class="popup_cert">{{getValue(list.certInformation, "UID")}}</td>
+          <td class="popup_cert">{{list.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}</td>
         </tr>
       </ng-template>
     </p-table>
   </div>
-  <div class="row" style="padding-top: 20px;" *ngIf="this.mobile">
+  <div class="row" style="padding-top: 20px;height: 375px; overflow: scroll;" *ngIf="this.mobile">
     <div style="width: 90%; height: auto; border: 1px solid #106DB6; margin: auto;padding: 0px !important;">
-      <div class="header" style="display: flex;height: 30px; color: #106DB6; background-color: #d0e4fc;">
-        <div style="width: 25%">Chọn</div>
-        <div>Thông tin</div>
+      <div class="header" style="display: flex;height: 35px; color: #106DB6; background-color: #d0e4fc;">
+        <div style="width: 20%; margin-top:2%;">Chọn</div>
+        <div style="margin-top:2%;">Thông tin</div>
       </div>
 
       <div class="item" style="border-top: 1px solid #106DB6; display: flex" *ngFor="let lists of list">
@@ -50,14 +42,14 @@
           <input type="radio" name="confirm-radio-consider" [value]="lists" [(ngModel)]="selectedCert" name="status"
             style="margin-left: 40%;">
         </div>
-        <div style="width: 75%;">
-          <div>ký hiệu: <span style="word-wrap: break-word;">{{lists.keystoreSerialNumber}}</span></div>
+        <div style="width: 75%; padding: 10px">
+          <div style="color: #106DB6">Ký hiệu: <span style="word-wrap: break-word; color: #333333;">{{lists.keystoreSerialNumber}}</span></div>
 
-          <div>MST/CCCD: <span>{{getValue(lists.certInformation, "UID")}}</span></div>
+          <div style="color: #106DB6">MST/CCCD: <span style="color: #333333;">{{getValue(lists.certInformation, "UID")}}</span></div>
 
-          <div>Chủ thể: <span style="word-wrap: break-word;">{{getValueByKey(lists.certInformation, "CN")}}</span></div>
+          <div style="color: #106DB6">Chủ thể: <span style="word-wrap: break-word;color: #333333;">{{getValueByKey(lists.certInformation, "CN")}}</span></div>
 
-          <div>Ngày hết hạn: <span>{{lists.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}</span></div>
+          <div style="color: #106DB6">Ngày hết hạn: <span style="color: #333333;">{{lists.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}</span></div>
 
         </div>
       </div>
