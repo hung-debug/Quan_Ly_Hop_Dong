@@ -127,20 +127,26 @@
         <div id="pdf-viewer-step-3">
             <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag"
                 [style.width]="this.canvasWidth">
+                <!-- New version -->
                 <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement
-                    (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
-                    <div *ngIf="d.name" class="name-sig-img-daky text-ellipsis">{{d.name ? d.name : ''}}</div>
+                (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="(d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ? changePosition(d) : changePositionSignature(d)">
+                    <div *ngIf="d.name" class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
                     <div class="sig-img-daky" (click)="onCancel($event, d)">
                         <img src="assets/img/clear.svg" alt="">
                         <img src="assets/img/border-clear.svg" alt="">
                     </div>
-                    <app-sign-contract [datas]="datas" [signTemplate]="false" [sign]="d" >        
+                    <!-- <div *ngIf="d.sign_unit == 'chu_ky_anh' || d.sign_unit == 'chu_ky_so'" class="swap-stamp-btn" (click)="this.swapStampPosition()">
+                        <img *ngIf="this.isOnTheLeft" class="sign-swap-icon" src="assets/img/left-stamp.svg" alt="">
+                        <img *ngIf="!this.isOnTheLeft" class="sign-swap-icon" src="assets/img/right-stamp.svg" alt="">
+                    </div> -->
+                    <!-- New version -->
+
+                    <app-sign-contract style="display: flex; width: 100%; padding: 4px;" [datas]="datas" [signTemplate]="false" [sign]="d" >        
                     </app-sign-contract>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 <div class="footer-sample-contract">
     <div class="col-md-3">
