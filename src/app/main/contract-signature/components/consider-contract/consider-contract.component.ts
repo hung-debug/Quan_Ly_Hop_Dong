@@ -3135,9 +3135,9 @@ export class ConsiderContractComponent
             signUpdateTempN[0].bucket = responseBase64.file_object.bucket;
             signUpdateTempN[0].processAt = this.isDateTime;
 
-            // signUpdateTempN[0].signatureType = 'ekyc'
-            // signUpdateTempN[0].signerName = signUpdateTempN[0].name
-            // signUpdateTempN[0].taxCode = signUpdateTempN[0].recipient.cardId
+            signUpdateTempN[0].signatureType = 'ekyc'
+            signUpdateTempN[0].signerName = signUpdateTempN[0].name
+            signUpdateTempN[0].taxCode = signUpdateTempN[0].cardId
 
 
             console.log('check signUpdateTempN',signUpdateTempN);
