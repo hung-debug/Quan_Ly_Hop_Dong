@@ -3126,6 +3126,9 @@ export class ConsiderContractComponent
             content: 'data:image/png;base64,' + valueBase64,
             organizationId:
               this.data_contract?.is_data_contract?.organization_id,
+            // signerName: ekycFields.name,
+            // taxCode: ekycFields.taxCode,
+            // signatureType: 'ekyc',
           };
 
           this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseBase64) => {
@@ -3133,6 +3136,12 @@ export class ConsiderContractComponent
             signUpdateTempN[0].bucket = responseBase64.file_object.bucket;
             signUpdateTempN[0].processAt = this.isDateTime;
 
+            signUpdateTempN[0].signatureType = 'ekyc'
+            signUpdateTempN[0].signerName = signUpdateTempN[0].name
+            signUpdateTempN[0].taxCode = signUpdateTempN[0].recipient.cardId
+
+
+            console.log('check signUpdateTempN',signUpdateTempN);
             this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
               async (result) => {
                 if (!notContainSignImage) {
