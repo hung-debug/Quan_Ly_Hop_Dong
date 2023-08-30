@@ -385,7 +385,7 @@
     border-radius: 2px;
 }
 .ck-da-keo {
-  border: 1px solid #106DB6;
+  border: 1px dashed #6B6B6B;
   border-radius: 5px;
 }
 
@@ -414,4 +414,11 @@
   background: #FFFFFF;
   border: 1px solid #87CAFF;
   border-radius: 5px; 
+}
+
+.text-ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: inherit;
 }
