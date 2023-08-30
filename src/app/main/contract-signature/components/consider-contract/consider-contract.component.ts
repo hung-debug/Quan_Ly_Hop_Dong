@@ -2340,7 +2340,7 @@ export class ConsiderContractComponent
               if (this.markImage) {
                 imageRender = <HTMLElement>(document.getElementById('export-html-cert-image'));
               } else {
-                imageRender = <HTMLElement>(document.getElementById('export-html-cert'));
+                imageRender = <HTMLElement>(document.getElementById('export-html-cert-image'));
               }
             } catch (error) {
             }
@@ -2378,6 +2378,7 @@ export class ConsiderContractComponent
               width: null,
               height: null,
               isTimestamp: this.isTimestamp,
+              type: signUpdate.type
             };
           } else {
 
@@ -2388,6 +2389,7 @@ export class ConsiderContractComponent
               width: null,
               height: null,
               isTimestamp: this.isTimestamp,
+              type: signUpdate.type
             };
 
           }
