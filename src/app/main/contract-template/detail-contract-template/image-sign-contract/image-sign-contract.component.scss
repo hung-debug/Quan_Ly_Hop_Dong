@@ -1,9 +1,17 @@
+.content {
+  height: 100%;
+  width: 100%;
+  border-radius: 6px;
+  display: flex;
+}
 .content .skeleton-sign {
     //height: 102px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+    // height: 100%;
+    // width: 100%;
+    // align-items: center;
+    // justify-content: center;
+    // flex-direction: column;
   }
   
   .text-sign span {
@@ -25,5 +33,29 @@
     padding: 4px;
     margin-left: -1px;
     border-radius: 3px;
+  }
+
+  .stamp-content {
+    flex-basis: 33.33%;
+    background-color: #106DB6;
+    border-radius: 6px;
+    margin-right: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .sign-info-content {
+    // flex-basis: 66.66%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #EBF8FF;
+    border-radius: 6px;
+    color: #106DB6;
+    // font-family: Lexend Deca !important;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0px;
   }
   

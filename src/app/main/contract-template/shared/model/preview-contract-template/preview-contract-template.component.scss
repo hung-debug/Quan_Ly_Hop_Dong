@@ -262,3 +262,10 @@ border-radius: 5px;
   cursor: pointer;
   margin: 5px 5px;
 }
+
+.text-ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: inherit;
+}
