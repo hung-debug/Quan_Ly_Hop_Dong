@@ -866,7 +866,6 @@ export class ConsiderContractComponent
     this.thePDF.getPage(pageNumber).then((page) => {
       let viewport = page.getViewport({ scale: this.scale });
 
-      console.log("rotate ",viewport.rotation);
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;
@@ -2104,10 +2103,8 @@ export class ConsiderContractComponent
             } catch(err) {
               this.isDateTime = new Date();
             }
-
             if(!this.isDateTime) this.isDateTime = new Date();
             await of(null).pipe(delay(150)).toPromise();
-
             let imageRender: HTMLElement | null = null;
 
             //render khi role là 4 (văn thư) hoặc role khác (người ký)
@@ -2117,7 +2114,7 @@ export class ConsiderContractComponent
               );
             } else {
               imageRender = <HTMLElement>(
-                document.getElementById('export-html-hsm1-image')
+                document.getElementById('export-html-hsm1')
               );
             }
 
@@ -3138,9 +3135,9 @@ export class ConsiderContractComponent
             signUpdateTempN[0].bucket = responseBase64.file_object.bucket;
             signUpdateTempN[0].processAt = this.isDateTime;
 
-            signUpdateTempN[0].signatureType = 'ekyc'
-            signUpdateTempN[0].signerName = signUpdateTempN[0].name
-            signUpdateTempN[0].taxCode = signUpdateTempN[0].recipient.cardId
+            // signUpdateTempN[0].signatureType = 'ekyc'
+            // signUpdateTempN[0].signerName = signUpdateTempN[0].name
+            // signUpdateTempN[0].taxCode = signUpdateTempN[0].recipient.cardId
 
 
             console.log('check signUpdateTempN',signUpdateTempN);
