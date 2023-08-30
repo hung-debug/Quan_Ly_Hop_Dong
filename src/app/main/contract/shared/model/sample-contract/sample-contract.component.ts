@@ -138,7 +138,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.spinner.hide();
 
     this.list_font = ["Arial", "Calibri", "Times New Roman"];
-    console.log("data",this.datas);
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
       // ham chuyen doi hinh thuc ky type => sign_unit
@@ -544,7 +543,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getListNameSign(data_user_sign: any) {
-    console.log('data_user_sign',data_user_sign);
     data_user_sign.forEach((element: any) => {
       if (element.type == 1 || element.type == 5) {
         element.recipients.forEach((item: any) => {
@@ -634,8 +632,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let signElement = <HTMLElement>document.getElementById(id);
       let rect_location = signElement.getBoundingClientRect();
 
-      console.log("signElement ", signElement);
-      console.log("rec ", rect_location);
 
       if (id.includes('chua-keo')) {  //Khi kéo vào trong hợp đồng thì sẽ thêm 1 object vào trong mảng sign_config
         event.target.style.webkitTransform = event.target.style.transform = 'none';// Đẩy chữ ký về vị trí cũ
@@ -2017,10 +2013,22 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getName(data: any) {
+    let name = ''
+
     if (data.type_unit == 'organization') {
-      return 'Tổ chức của tôi - ' + data.name;
+      if (data.name.length>27) {
+        name = data.name.substring(0, 27) + ' ...'
+      } else {
+        name = data.name
+      }
+      return 'Tổ chức của tôi - ' + name;
     } else if (data.type_unit == 'partner') {
-      return 'Đối tác - ' + data.name;
+      if (data.name.length>35) {
+        name = data.name.substring(0, 35) + ' ...'
+      } else {
+        name = data.name
+      }
+      return 'Đối tác - ' + name;
     }
   }
 

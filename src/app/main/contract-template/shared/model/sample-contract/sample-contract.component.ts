@@ -1992,10 +1992,22 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getName(data: any) {
+    let name = ''
+
     if (data.type_unit == 'organization') {
-      return 'Tổ chức của tôi - ' + data.name;
+      if (data.name.length>24) {
+        name = data.name.substring(0, 24) + ' ...'
+      } else {
+        name = data.name
+      }
+      return 'Tổ chức của tôi - ' + name;
     } else if (data.type_unit == 'partner') {
-      return data.org_name + ' - ' + data.name;
+      if (data.name.length>32) {
+        name = data.name.substring(0, 32) + ' ...'
+      } else {
+        name = data.name
+      }
+      return 'Đối tác - ' + name;
     }
   }
 

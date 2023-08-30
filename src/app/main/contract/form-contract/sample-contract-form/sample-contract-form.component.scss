@@ -339,3 +339,10 @@
   border: 1px solid #87CAFF;
   border-radius: 5px; 
 }
+
+.text-ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: inherit;
+}
