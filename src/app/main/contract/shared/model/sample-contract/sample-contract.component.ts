@@ -232,7 +232,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }),
         // minimum size
         interact.modifiers.restrictSize({
-          min: { width: 180, height: 60 }
+          // min: { width: 180, height: 60 }
         })
       ],
       inertia: true,
