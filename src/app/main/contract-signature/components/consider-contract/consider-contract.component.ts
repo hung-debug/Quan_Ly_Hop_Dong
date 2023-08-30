@@ -2117,7 +2117,7 @@ export class ConsiderContractComponent
               );
             } else {
               imageRender = <HTMLElement>(
-                document.getElementById('export-html-hsm1')
+                document.getElementById('export-html-hsm1-image')
               );
             }
 
