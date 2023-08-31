@@ -2422,7 +2422,7 @@ export class ConsiderContractComponent
                 }
               }
             } else {
-              const checkSign = await this.contractService.signCert(
+              const checkSign = await this.contractService.signCertMobile(
                 this.recipientId, this.dataCert
               );
 
