@@ -365,3 +365,10 @@
   border-radius: 5px; 
   font-size: 15px;
 }
+
+.text-ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: inherit;
+}
