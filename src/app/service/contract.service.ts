@@ -153,6 +153,7 @@ export class ContractService {
   certInfoCertUrl: any = `${environment.apiUrl}/api/v1/sign/cert-information`;
 
   signCertificate: any = `${environment.apiUrl}/api/v1/sign/certificate`;
+  signCertWebMobile: any = `${environment.apiUrl}//api/v1/sign/certificate/web-mobile/`;
   signCertMultiUrl: any = `${environment.apiUrl}/api/v1/sign/multi/certificate`;
 
   token: any;
@@ -1238,6 +1239,19 @@ export class ContractService {
       .toPromise();
   }
 
+  signCertMobile(id: any, dataCert: any) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    //fix tạm
+    return this.http
+      .post<any>(this.signCertWebMobile + id ,dataCert,{ headers: headers })
+      .toPromise();
+  }
+
   signCertMulti(id: any, dataCert: any) {
     this.getCurrentUser();
 
@@ -1511,7 +1525,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
-    
+
     console.log("form data ", formData);
 
     return this.http.post<any>(
