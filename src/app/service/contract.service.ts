@@ -153,7 +153,7 @@ export class ContractService {
   certInfoCertUrl: any = `${environment.apiUrl}/api/v1/sign/cert-information`;
 
   signCertificate: any = `${environment.apiUrl}/api/v1/sign/certificate`;
-  signCertWebMobile: any = `${environment.apiUrl}//api/v1/sign/certificate/web-mobile/`;
+  signCertWebMobile: any = `${environment.apiUrl}/api/v1/sign/certificate/web-mobile/`;
   signCertMultiUrl: any = `${environment.apiUrl}/api/v1/sign/multi/certificate`;
 
   // detect CCCD
