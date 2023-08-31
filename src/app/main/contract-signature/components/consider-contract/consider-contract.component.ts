@@ -2138,7 +2138,7 @@ export class ConsiderContractComponent
               username: this.dataHsm.username,
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
-              imageBase64: signI,
+              imageBase64: !this.markImage ? null : signI,
             };
           } else {
             this.dataHsm = {
@@ -2146,7 +2146,7 @@ export class ConsiderContractComponent
               username: this.dataHsm.username,
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
-              imageBase64: signI,
+              imageBase64: !this.markImage ? null : signI,
             };
           }
 
