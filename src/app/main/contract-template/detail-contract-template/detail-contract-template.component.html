@@ -59,7 +59,7 @@
                
                [ngStyle]="changePosition(d)">
             <div class="name-sig-img-daky text-ellipsis">{{d.name}}</div>
-            <app-image-sign-contract-template-detail style="display: flex; width: 100%; height: 100%; padding: 4px;"  [datas]="datas" [sign]="d"></app-image-sign-contract-template-detail>
+            <app-image-sign-contract-template-detail [style]="d.type==2 || d.type==3 ? 'display: flex; width: 100%; height: 100%; padding: 4px;' : ''"  [datas]="datas" [sign]="d"></app-image-sign-contract-template-detail>
           </div>
         </div>
       </div>
