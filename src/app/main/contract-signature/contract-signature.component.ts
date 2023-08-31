@@ -1460,15 +1460,15 @@ export class ContractSignatureComponent implements OnInit {
 
           for (let i = 0; i < contractsSignManyChecked.length; i++) {
             const signSlots = contractsSignManyChecked[i].fields;
-
             if (signSlots?.length > 0) {
               for (let y = 0; y < signSlots.length; y++) {
                 const signCertPayload = {
                   cert_id: this.cert_id,
-                  image_base64: signI,
+                  image_base64: this.srcMark ? signI : null ,
                   field: null,
                   width: signSlots[y].width,
-                  height: signSlots[y].height
+                  height: signSlots[y].height,
+                  type: signSlots[y]?.type == "DIGITAL_SIGN" ? 3 : null
                 };
 
                 promises.push(
