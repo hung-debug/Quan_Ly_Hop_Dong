@@ -372,3 +372,10 @@
   height: 100%;
   padding: 4px;
 }
+
+.text-ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: inherit;
+}
