@@ -126,6 +126,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
+    console.log('hello');
     this.onResize();
 
     this.spinner.hide();
@@ -777,8 +778,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     element['width'] = rect_location.width;
                     element['height'] = rect_location.height;
                   } else {
-                    element['width'] = '135';
-                    element['height'] = '85';
+                    element['width'] = '180';
+                    element['height'] = '60';
                   }
 
                   this.objSignInfo.width = element['height'];
