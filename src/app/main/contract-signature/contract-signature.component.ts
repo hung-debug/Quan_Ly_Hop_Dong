@@ -1328,8 +1328,9 @@ export class ContractSignatureComponent implements OnInit {
             username: resultHsm.username,
             password: resultHsm.password,
             password2: resultHsm.password2,
-            image_base64: signI,
-            processAt: this.isDateTime
+            image_base64:  result.mark ? signI : null,
+            processAt: this.isDateTime,
+            type: 3
           };
 
           this.spinner.show();
