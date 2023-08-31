@@ -2551,6 +2551,8 @@ export class ConsiderContractComponent
             name: 'image_' + new Date().getTime() + '.jpg',
             organizationId:
               this.data_contract?.is_data_contract?.organization_id,
+            ocrResponseName: signUpdate.recipient.name || '',
+            signType: 'eKYC'
           };
         }
       }
@@ -3125,9 +3127,9 @@ export class ConsiderContractComponent
             content: 'data:image/png;base64,' + valueBase64,
             organizationId:
               this.data_contract?.is_data_contract?.organization_id,
-            // signerName: ekycFields.name,
-            // taxCode: ekycFields.taxCode,
-            // signatureType: 'ekyc',
+            ocrResponseName: signUpdateTempN[0].name,
+            signType: 'eKYC'
+
           };
 
           this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseBase64) => {
@@ -3135,7 +3137,7 @@ export class ConsiderContractComponent
             signUpdateTempN[0].bucket = responseBase64.file_object.bucket;
             signUpdateTempN[0].processAt = this.isDateTime;
 
-            signUpdateTempN[0].signatureType = 'ekyc'
+            signUpdateTempN[0].signatureType = 'eKYC'
             signUpdateTempN[0].signerName = signUpdateTempN[0].name
             signUpdateTempN[0].taxCode = signUpdateTempN[0].cardId
 
@@ -3357,6 +3359,8 @@ export class ConsiderContractComponent
           content:
             'data:image/png;base64,' + this.contractService.imageMobiBase64,
           organizationId: this.data_contract?.is_data_contract?.organization_id,
+          signType: '',
+          ocrResponseName: ''
         };
 
         signUploadObs$.push(
@@ -3441,6 +3445,8 @@ export class ConsiderContractComponent
           name: 'image_mobile' + new Date().getTime() + '.jpg',
           content: 'data:image/png;base64,' + valueBase64,
           organizationId: organization_id,
+          signType: '',
+          ocrResponseName: ''
         };
 
         this.contractService
