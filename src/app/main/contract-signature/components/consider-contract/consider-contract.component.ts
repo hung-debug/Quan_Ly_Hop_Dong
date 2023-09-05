@@ -3139,7 +3139,7 @@ export class ConsiderContractComponent
 
             signUpdateTempN[0].signerType = 'eKYC'
             signUpdateTempN[0].signerName = signUpdateTempN[0].name
-            signUpdateTempN[0].signerTaxCode = signUpdateTempN[0].cardId
+            signUpdateTempN[0].signerTaxCode = this.cardId
 
 
             console.log('check signUpdateTempN',signUpdateTempN);
