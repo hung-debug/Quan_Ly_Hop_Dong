@@ -74,7 +74,7 @@
                (click)="getSignSelect(d)"
                [ngClass]="changeColorDrag(null, true)"
                [ngStyle]="changePosition(d)">
-            <div *ngIf="d.name" class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
+            <div *ngIf="d.name" class="name-sig-img-daky long-text-ellipsis">{{(d.name && !d.value) ? d.name : ''}}</div>
             <app-image-sign-contract *ngIf="!view" [datas]="datas" [view]="true" [sign]="d"></app-image-sign-contract>
           </div>
         </div>

@@ -124,7 +124,7 @@
                 [style.width]="this.canvasWidth">
                 <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement
                     (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
-                    <div *ngIf="d.name || d.recipient" class="name-sig-img-daky text-ellipsis">{{d.name ? d.name : d.recipient.name}}</div>
+                    <div *ngIf="d.name || d.recipient" class="name-sig-img-daky long-text-ellipsis">{{d.name ? d.name : d.recipient.name}}</div>
                     <div *ngIf="(d.recipient!= null && d.sign_unit == 'text') || (d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu') || (d.sign_unit == 'text' && d.value === undefined)
                     || (d.recipient!= null && d.sign_unit == 'so_tai_lieu') || (d.sign_unit == 'so_tai_lieu' && d.value === undefined)" class="sig-img-daky" (click)="onCancel($event, d)">                    
                         <img src="assets/img/clear.svg" alt="">

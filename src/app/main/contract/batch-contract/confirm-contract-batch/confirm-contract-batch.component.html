@@ -100,7 +100,7 @@
              [ngStyle]="changePosition(d)"
              *ngIf="d.type==2 || d.type==3 || (d.type!==2 && d.type!==3 && d.value)"
              >
-          <div *ngIf="d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu'" class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
+          <div *ngIf="d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu'" class="name-sig-img-daky long-text-ellipsis">{{(d.name && !d.value) ? d.name : ''}}</div>
           <app-sign-contract  [datas]="datasBatch" [sign]="d"></app-sign-contract>
         </div>
       </div>
