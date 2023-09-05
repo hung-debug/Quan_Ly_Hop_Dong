@@ -131,7 +131,7 @@
                     (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="(d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ? changePosition(d) : changePositionSignature(d)">
                     <div *ngIf="d.name" class="name-sig-img-daky text-ellipsis">{{d.name ? d.name : ''}}</div>
                     <div class="sig-img-daky" (click)="onCancel($event, d)">
-                        <img src="assets/img/clear.svg" alt="">
+                        <!-- <img src="assets/img/clear.svg" alt=""> -->
                         <img src="assets/img/border-clear.svg" alt="">
                     </div>
                     <app-sign-contract style="display: flex; width: 100%; padding: 4px;"  [datas]="datas" [signTemplate]="false" [sign]="d" >        
