@@ -140,7 +140,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
 
-    console.log("contract no ", this.contractNo);
     this.onResize();
 
     if(this.datasForm.font) {
@@ -365,8 +364,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
       }
     })
-
-
   }
 
   defindDataContract() {
@@ -414,9 +411,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5)) ||
       (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4)))||
       (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4))) ||
-        (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6))) &&
-      ((val.recipient ? (((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email)) : (( !val.name || (val.sign_unit == 'text' && !val.recipient_id)) && ((val.email && val.email == data.email) || !val.email))
-      ))));
+        (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6))) 
+        &&
+      ((val.recipient ? (((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email) || val.email == data.email) : 
+      ((!val.name || (val.sign_unit == 'text' && !val.recipient_id)) || ((val.email && val.email == data.email) || !val.email))
+      ))
+      ));
 
     //
     // }
@@ -528,17 +528,17 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.step == 'sample-contract-form') {
-      this.next('save_draft');
-    }
-  }
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.step == 'sample-contract-form') {
+  //     this.next('save_draft');
+  //   }
+  // }
 
   async removeDataSignChange(data: any) {
-    // this.spinner.show();
-    await this.contractService.deleteInfoContractSignature(data).toPromise().then((res: any) => {
-    }, (error: HttpErrorResponse) => {
-    })
+    if(data)
+      await this.contractService.deleteInfoContractSignature(data).toPromise().then((res: any) => {
+      }, (error: HttpErrorResponse) => {
+      })
   }
 
   getListNameSign(data_user_sign: any) {
@@ -647,10 +647,11 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         })
         // lay doi tuong vua duoc keo moi vao hop dong
 
-        if(this.isContractNoNameNull)
+        if(this.isContractNoNameNull) {
           this.signCurent = this.convertToSignConfig().filter((p: any) => (p.sign_unit != 'so_tai_lieu' && !p.name) && !p.position && !p.coordinate_x && !p.coordinate_y)[0];
-        else
+        } else {
           this.signCurent = this.convertToSignConfig().filter((p: any) => !p.position && !p.coordinate_x && !p.coordinate_y)[0];
+        }
       } else {
         // doi tuong da duoc keo tha vao hop dong
         this.signCurent = this.convertToSignConfig().filter((p: any) => p.id == id)[0];
@@ -925,7 +926,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     // // keep the dragged position in the data-x/data-y attributes
     var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
     var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
-    console.log(x, y);
     // // translate the element
     target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
     // // update the posiion attributes
@@ -1546,7 +1546,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   }
 
   back(e: any, step?: any) {
-    console.log("abc ", this.datasForm.contract_no);
     this.contractNo = this.datasForm.contract_no;
     this.nextOrPreviousStep(step);
   }
@@ -1875,13 +1874,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     } catch (err) {
       this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng' + err, '', 3000);
     }
-    // if (countCeCa > 0 && (Number(getNumberContractCreateOrg.numberOfCeca) - this.datasForm.ceca_push) < 0) {
-    //   this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lần gửi xác nhận BCT. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-    //   return false;
-    // } else if (countTimestamp > 0 && (Number(getNumberContractCreateOrg.numberOfTimestamp) - this.convertToSignConfig().length) < 0) {
-    //   this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng timestamp đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-    //   return false;
-    // } else {
         this.stepForm = variable.stepSampleContractForm.step4;
         this.datasForm.stepLast = this.stepForm
         this.nextOrPreviousStep(this.stepForm);
