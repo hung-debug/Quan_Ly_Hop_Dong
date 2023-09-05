@@ -778,8 +778,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     element['width'] = rect_location.width;
                     element['height'] = rect_location.height;
                   } else {
-                    element['width'] = '180';
-                    element['height'] = '60';
+                    element['width'] = '140';
+                    element['height'] = '50';
                   }
 
                   this.objSignInfo.width = element['height'];

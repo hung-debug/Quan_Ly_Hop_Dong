@@ -821,8 +821,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     // set size ô ký
                     // element['width'] = '135';
                     // element['height'] = '85';
-                    element['width'] = '180';
-                    element['height'] = '60';
+                    element['width'] = '140';
+                    element['height'] = '50';
                   }
 
                   this.objSignInfo.width = element['height'];
