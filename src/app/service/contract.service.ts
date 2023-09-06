@@ -596,7 +596,7 @@ export class ContractService {
     });
   }
 
-  createEmptySignature(recipientId: number, signUpdate: any, signDigital: any, image: any, cert: any) {
+  createEmptySignature(recipientId: number, signUpdate: any, signDigital: any, image: any, cert: any, boxType?: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -610,7 +610,8 @@ export class ContractService {
       x: Math.floor(signDigital.signDigitalX),
       y: Math.floor(signDigital.signDigitalY),
       width: Math.floor(signDigital.signDigitalWidth),
-      height: Math.floor(signDigital.signDigitalHeight)
+      height: Math.floor(signDigital.signDigitalHeight),
+      type: boxType
     })
 
     return this.http.post<any>(this.emptySignatureUrl + recipientId + '/create-empty-token', body, {

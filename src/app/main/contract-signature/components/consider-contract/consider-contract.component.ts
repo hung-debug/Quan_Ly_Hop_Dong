@@ -1872,8 +1872,10 @@ export class ConsiderContractComponent
                   imageRender = <HTMLElement>(document.getElementById('export-html2-image'));
                   signUpdate.signDigitalWidth = imageRender.offsetWidth;
                 } else {
-                  await of(null).pipe(delay(150)).toPromise();
-                  imageRender = <HTMLElement>(document.getElementById('export-html2'));
+                  // await of(null).pipe(delay(150)).toPromise();
+                  // imageRender = <HTMLElement>(document.getElementById('export-html2'));
+                  imageRender = null
+                  signI = null
                 }
 
                 if (imageRender) {
@@ -1887,6 +1889,7 @@ export class ConsiderContractComponent
             signDigital.Serial = this.signCertDigital.Serial;
 
             const base64String = await this.contractService.getDataFileUrlPromise(fileC);
+            
             signDigital.valueSignBase64 = encode(base64String);
 
             if (this.usbTokenVersion == 2) {
@@ -2990,7 +2993,8 @@ export class ConsiderContractComponent
   }
 
   async createEmptySignature(signUpdate: any, signDigital: any, image: any) {
-    const emptySignature = await this.contractService.createEmptySignature(this.recipientId, signUpdate, signDigital, image, this.certInfoBase64).toPromise();
+    let boxType = signDigital.type
+    const emptySignature = await this.contractService.createEmptySignature(this.recipientId, signUpdate, signDigital, image, this.certInfoBase64, boxType).toPromise();
 
     const base64TempData = emptySignature.base64TempData;
     const hexDigestTempFile = emptySignature.hexDigestTempFile;
@@ -3142,7 +3146,6 @@ export class ConsiderContractComponent
             signUpdateTempN[0].signerTaxCode = this.cardId
 
 
-            console.log('check signUpdateTempN',signUpdateTempN);
             this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
               async (result) => {
                 if (!notContainSignImage) {

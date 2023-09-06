@@ -1588,7 +1588,7 @@ export class ContractSignatureComponent implements OnInit {
                 this.signCertDigital = data.data;
                 this.nameCompany = data.data.CN;
 
-                let signI = '';
+                let signI: any = '';
                 let imageRender = null;
 
                 try {
@@ -1603,7 +1603,9 @@ export class ContractSignatureComponent implements OnInit {
                 if (isMark) {
                   imageRender = <HTMLElement>(document.getElementById('export-html-image'));
                 } else {
-                  imageRender = <HTMLElement>(document.getElementById('export-html'));
+                  // imageRender = <HTMLElement>(document.getElementById('export-html'));
+                  imageRender = null
+                  signI = null
                 }
 
                 if (imageRender) {
@@ -1780,6 +1782,9 @@ export class ContractSignatureComponent implements OnInit {
 
     let currentHeight: any = [];
 
+    // type o keo tha
+    let boxTypes: any = []
+
     //tao mang currentHeight toan so 0;
     for (let i = 0; i < fileC.length; i++) {
       currentHeight[i] = 0;
@@ -1794,7 +1799,6 @@ export class ContractSignatureComponent implements OnInit {
       const dataObjectSignature = await this.contractServiceV1
         .getDataObjectSignatureLoadChange(idContract[i])
         .toPromise();
-
       for (let j = 0; j < dataObjectSignature.length; j++) {
         if (dataObjectSignature[j].recipient) {
           if (recipientId[i] == dataObjectSignature[j].recipient.id) {
@@ -1805,6 +1809,7 @@ export class ContractSignatureComponent implements OnInit {
 
             //Lấy ra trang ký của từng file hợp đồng
             page.push(dataObjectSignature[j].page);
+            boxTypes.push(dataObjectSignature[j].type)
           }
         }
       }
@@ -1934,7 +1939,7 @@ export class ContractSignatureComponent implements OnInit {
           page: Number,
         };
 
-        let signI = '';
+        let signI: any = '';
 
         try {
           this.isDateTime = await this.timeService.getRealTime().toPromise();
@@ -1949,7 +1954,9 @@ export class ContractSignatureComponent implements OnInit {
         if (isMark) {
           imageRender = <HTMLElement>document.getElementById('export-html-image');
         } else {
-          imageRender = <HTMLElement>document.getElementById('export-html');
+          // imageRender = <HTMLElement>document.getElementById('export-html');
+          imageRender = null
+          signI = null
         }
 
         if (imageRender) {
@@ -1962,7 +1969,6 @@ export class ContractSignatureComponent implements OnInit {
 
         for (let i = 0; i < fileC.length; i++) {
           y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
-
           signUpdate.id = idSignMany[i];
           signDigital.signDigitalX = x[i];
           signDigital.signDigitalY = y[i];
@@ -1975,7 +1981,8 @@ export class ContractSignatureComponent implements OnInit {
               signUpdate,
               signDigital,
               signI,
-              certInfoBase64
+              certInfoBase64,
+              boxTypes[i]
             )
             .toPromise();
           const base64TempData = emptySignature.base64TempData;
