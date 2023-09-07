@@ -70,6 +70,7 @@ export class SidebarService {
   isBaoCaoSoLuongTrangThai: boolean = true; // báo cáo số lượng hợp đồng theo trạng thái
   isBaoCaoSoLuongLoai: boolean = true; // báo cáo số lượng hợp đồng theo loại
   isBaoCaoHopDongNhan: boolean = true; //báo cáo hợp đồng nhận
+  isBaoCaoHopDongEcontractMsale: boolean = true; // báo cáo hợp đồng số lượng hợp đồng eContract-mSale
 
   isConfigSms: boolean = true; //cấu hình sms
   isConfigSoonExpireDay: boolean = true;
@@ -279,6 +280,10 @@ export class SidebarService {
 
             this.isBaoCaoSoLuongTrangThai = listRole.some(
               (element) => element.code == 'BAOCAO_SOLUONG_TRANGTHAI'
+            )
+
+            this.isBaoCaoHopDongEcontractMsale = listRole.some(
+              (element) => element.code == 'BAOCAO_SOLUONG_HOPDONG_ECONTRACT_MSALE'
             )
 
             this.isBaoCaoSoLuongLoai = listRole.some((element) => element.code == 'BAOCAO_SOLUONG_LOAIHOPDONG');
@@ -564,8 +569,16 @@ export class SidebarService {
       })
     }
 
+    if(this.isBaoCaoHopDongEcontractMsale){
+      submenusReport.push({
+        title: 'report.number.econtract.msale',
+        active: false,
+        href: '/main/report/contract-number-econtract-mSale',
+      })
+    }
 
-    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai || this.isBaoCaoHopDongNhan || this.isBaoCaoSoLuongTrangThai) {
+
+    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai || this.isBaoCaoHopDongNhan || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoHopDongEcontractMsale) {
       this.menus.push({
         title: 'report',
         icon: '/assets/img/analytics1.svg',
