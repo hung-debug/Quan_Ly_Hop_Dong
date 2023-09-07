@@ -621,10 +621,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     return data.sign_type.filter((p: any) => p.id == 6);
   }
 
-  getDataSignCert(data: any){
-    return data.sign_type.filter((p: any) => p.id == 6);
-  }
-
   pattern_input = parttern_input;
   // valid data step 2
   validData() {
