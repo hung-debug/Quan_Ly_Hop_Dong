@@ -2250,7 +2250,8 @@ export class ConsiderContractComponent
           signUpdate &&
           (signUpdate.type == 1 ||
             signUpdate.type == 3 ||
-            signUpdate.type == 4) &&
+            signUpdate.type == 4 ||
+            signUpdate.type == 5)  &&
           [3, 4].includes(this.datas.roleContractReceived) &&
           signUpdate?.recipient?.email === this.currentUser.email &&
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
@@ -2299,7 +2300,7 @@ export class ConsiderContractComponent
             width: signUpdate.signDigitalWidth,
             height: signUpdate.signDigitalHeight,
           };
-          if (signUpdate.type == 1 || signUpdate.type == 4) {
+          if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
             this.textSign = signUpdate.valueSign;
 
             this.font = signUpdate.font;
@@ -3841,6 +3842,9 @@ export class ConsiderContractComponent
       if (result) {
         const uidCert = this.getValueByKey(result.certInformation, "UID")
         this.dataCardId = uidCert?.split(":")[1];
+        const certSignerName = this.getValueByKey(result.certInformation, "CN")
+        this.nameCompany = certSignerName;
+
         this.cert_id = result.id;
         await this.signContractSubmit();
       }

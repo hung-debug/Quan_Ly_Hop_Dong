@@ -1419,9 +1419,11 @@ export class ContractSignatureComponent implements OnInit {
       );
       dialogRef.afterClosed().subscribe(async (resultCert: any) => {
         if (resultCert) {
-
+          console.log("resultCert",resultCert);
           this.cert_id = resultCert.id;
           let countSuccess = 0;
+          const certSignerName = this.getValueByKey(resultCert.certInformation, "CN")
+          this.nameCompany = certSignerName;
           try {
             const inforCert = await this.contractServiceV1.certInfoCert(this.cert_id).toPromise();
             this.name = inforCert.name;
@@ -1430,6 +1432,7 @@ export class ContractSignatureComponent implements OnInit {
             this.cccd = inforCert.cccd;
             this.cmnd = inforCert.cmnd;
           } catch (err) {
+            console.log(err);
 
           }
 
@@ -1437,7 +1440,7 @@ export class ContractSignatureComponent implements OnInit {
           // const widthList = clusteredLists.map((list: any) => list.map((item: any) => item.fields[0].width));
 
           let isResult: boolean = true;
-
+          console.log("test1");
           // for(let i = 0; i < clusteredLists.length; i++) {
           // this.widthSign = widthList[i][0];
           await of(null).pipe(delay(150)).toPromise();
@@ -1457,6 +1460,7 @@ export class ContractSignatureComponent implements OnInit {
 
           this.spinner.show()
           const promises = [];
+          console.log("test2");
           for (let i = 0; i < contractsSignManyChecked.length; i++) {
             const signSlots = contractsSignManyChecked[i].fields;
 
@@ -1504,6 +1508,17 @@ export class ContractSignatureComponent implements OnInit {
         }
       })
     }
+  }
+
+  getValueByKey(inputString: string, key: string) {
+    const elements : any = inputString?.split(', ');
+    for (const element of elements) {
+      const [currentKey, value] = element.split('=');
+      if (currentKey === key) {
+        return value;
+      }
+    }
+    return null; // Return null if the key is not found
   }
 
   //Ký usb token v1
@@ -1594,7 +1609,7 @@ export class ContractSignatureComponent implements OnInit {
                 } catch(err) {
                   this.isDateTime = new Date();
                 }
-  
+
                 if(!this.isDateTime) this.isDateTime = new Date();
                 await of(null).pipe(delay(100)).toPromise();
 
@@ -1931,25 +1946,25 @@ export class ContractSignatureComponent implements OnInit {
           signDigitalHeight: Number,
           page: Number,
         };
-  
+
         let signI = '';
-  
+
         try {
           this.isDateTime = await this.timeService.getRealTime().toPromise();
         } catch(err) {
           this.isDateTime = new Date();
         }
-  
+
         if(!this.isDateTime) this.isDateTime = new Date();
         await of(null).pipe(delay(100)).toPromise();
         let imageRender = null;
-  
+
         if (isMark) {
           imageRender = <HTMLElement>document.getElementById('export-html-image');
         } else {
           imageRender = <HTMLElement>document.getElementById('export-html');
         }
-  
+
         if (imageRender) {
           const textSignB = await domtoimage.toPng(
             imageRender,
@@ -1957,10 +1972,10 @@ export class ContractSignatureComponent implements OnInit {
           );
           signI = textSignB.split(',')[1];
         }
-  
+
         for (let i = 0; i < fileC.length; i++) {
           y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
-  
+
           signUpdate.id = idSignMany[i];
           signDigital.signDigitalX = x[i];
           signDigital.signDigitalY = y[i];
@@ -1979,7 +1994,7 @@ export class ContractSignatureComponent implements OnInit {
           const base64TempData = emptySignature.base64TempData;
           const fieldName = emptySignature.fieldName;
           const hexDigestTempFile = emptySignature.hexDigestTempFile;
-  
+
           var json_req = JSON.stringify({
             OperationId: 5,
             SessionId: sessionId,
@@ -1988,20 +2003,20 @@ export class ContractSignatureComponent implements OnInit {
             reqDigest: 0,
             algDigest: 'SHA_256',
           });
-  
+
           json_req = window.btoa(json_req);
-  
+
           try {
             const callServiceDCSigner = await this.contractServiceV1.signUsbToken(
               'request=' + json_req
             );
-  
+
             const dataSignatureToken = JSON.parse(
               window.atob(callServiceDCSigner.data)
             );
-  
+
             const signatureToken = dataSignatureToken.Signature;
-  
+
             const mergeTimeStamp = await this.contractServiceV1
               .meregeTimeStamp(
                 recipientId[i],
@@ -2014,13 +2029,13 @@ export class ContractSignatureComponent implements OnInit {
               )
               .toPromise();
             const filePdfSigned = mergeTimeStamp.base64Data;
-  
-  
+
+
             const sign = await this.contractServiceV1.updateDigitalSignatured(
               idSignMany[i],
               filePdfSigned
             );
-  
+
             if (!sign.recipient_id) {
               this.toastService.showErrorHTMLWithTimeout(
                 'Lỗi ký usb token không cập nhật được recipient id',
@@ -2029,7 +2044,7 @@ export class ContractSignatureComponent implements OnInit {
               );
               return false;
             }
-  
+
             const updateInfo =
               await this.contractServiceV1.updateInfoContractConsiderPromise(
                 [{
@@ -2037,7 +2052,7 @@ export class ContractSignatureComponent implements OnInit {
                 }],
                 recipientId[i]
               );
-  
+
             if (!updateInfo.id) {
               this.toastService.showErrorHTMLWithTimeout(
                 'Lỗi cập nhật trạng thái hợp đồng ',
@@ -2045,7 +2060,7 @@ export class ContractSignatureComponent implements OnInit {
                 3000
               );
             }
-  
+
             if (i == fileC.length - 1) {
               this.spinner.hide();
               this.toastService.showSuccessHTMLWithTimeout(
@@ -2053,7 +2068,7 @@ export class ContractSignatureComponent implements OnInit {
                 '',
                 3000
               );
-  
+
               this.router
                 .navigateByUrl('/', { skipLocationChange: true })
                 .then(() => {
