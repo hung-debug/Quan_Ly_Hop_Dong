@@ -1225,7 +1225,6 @@ export class ContractService {
   }
 
   certInfoCert(id: number) {
-    // console.log("username ", username);
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -1538,7 +1537,6 @@ export class ContractService {
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
 
-    console.log("form data ", formData);
 
     return this.http.post<any>(
       this.uploadFileBase64Url + formData?.organizationId + `/base64`,

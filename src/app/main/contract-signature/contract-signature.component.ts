@@ -1613,6 +1613,16 @@ export class ContractSignatureComponent implements OnInit {
                   signI = textSignB.split(',')[1];
                 }
 
+                try {
+                  const getSignatureInfoTokenV1Data: any = await this.contractServiceV1.getSignatureInfoTokenV1(
+                    this.signCertDigital.Base64, signI
+                  ).toPromise()
+                  signI = getSignatureInfoTokenV1Data.data
+                } catch (error) {
+                  this.spinner.hide()
+                  console.log(error);
+                }
+
                 //Lấy chiều dài của các trang trong các hợp đồng ký
                 //Gọi api ký usb token nhiều lần
                 for (let i = 0; i < fileC.length; i++) {
