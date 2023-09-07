@@ -289,7 +289,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   html: any;
   async setCaptcha() {
-    const fonts = ["cursive","sans-serif","serif","monospace"];
+    const fonts = ["Vesper libre","Zen Kurenaido","Old Standard TT","Roboto Slab","Dancing Script"];
+
     let html = this.captchaValue.split("").map((char: any) => {
       const rotate = -20 + Math.trunc(Math.random() * 30);
 

@@ -17,6 +17,42 @@ body { margin: 0; font-family: font_lexend_deca , Roboto, "Helvetica Neue", sans
   font-weight:normal;
   font-style:normal;
 }
+
+@font-face {
+  font-family: Vesper libre;
+  src: url('assets/scss/font/VesperLibre-Regular.ttf');
+  font-weight:normal;
+  font-style:normal;
+}
+
+@font-face {
+  font-family: Zen Kurenaido;
+  src: url('assets/scss/font/ZenKurenaido-Regular.ttf');
+  font-weight:normal;
+  font-style:normal;
+}
+
+@font-face {
+  font-family: Roboto Slab;
+  src: url('assets/scss/font/RobotoSlab-VariableFont_wght.ttf');
+  font-weight:normal;
+  font-style:normal;
+}
+
+@font-face {
+  font-family: Dancing Script;
+  src: url('assets/scss/font/DancingScript-VariableFont_wght.ttf');
+  font-weight:normal;
+  font-style:normal;
+}
+
+@font-face {
+  font-family: 'Inconsolata';
+  src: url('assets/scss/font/Inconsolata-VariableFont_wdth\,wght.ttf');
+  font-weight:normal;
+  font-style:normal;
+}
+
 .font, .p-inputtext, .p-component, .p-chips-input-token input{
   font-size: 13px !important;
   font-family: font_lexend_deca !important;
