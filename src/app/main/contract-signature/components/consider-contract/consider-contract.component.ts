@@ -1790,7 +1790,6 @@ export class ConsiderContractComponent
             let fileC = await this.contractService.getFileContractPromise(this.idContract);
             const pdfC2 = fileC.find((p: any) => p.type == 2);
             const pdfC1 = fileC.find((p: any) => p.type == 1);
-
             if (pdfC2) {
               fileC = pdfC2.path;
             } else if (pdfC1) {
@@ -1853,8 +1852,10 @@ export class ConsiderContractComponent
                   imageRender = <HTMLElement>(document.getElementById('export-html-image'));
                   signUpdate.signDigitalWidth = signUpdate.signDigitalX + imageRender.offsetWidth;
                 } else {
-                  await of(null).pipe(delay(150)).toPromise();
-                  imageRender = <HTMLElement>(document.getElementById('export-html'));
+                  // await of(null).pipe(delay(150)).toPromise();
+                  // imageRender = <HTMLElement>(document.getElementById('export-html'));
+                  imageRender = null
+                  signI = null
                 }
 
                 if (imageRender) {
@@ -1865,6 +1866,15 @@ export class ConsiderContractComponent
                   } catch (err) {
 
                   }
+                }
+                try {
+                  const getSignatureInfoTokenV1Data: any = await this.contractService.getSignatureInfoTokenV1(
+                    this.signCertDigital.Base64, signI
+                  ).toPromise()
+                  signI = getSignatureInfoTokenV1Data.data
+                } catch (error) {
+                  this.spinner.hide()
+                  console.log(error);
                 }
               } else if (this.usbTokenVersion == 2) {
                 if (this.markImage) {
@@ -1929,6 +1939,7 @@ export class ConsiderContractComponent
                 );
 
               if (!dataSignMobi.data.FileDataSigned) {
+                this.spinner.hide()
                 this.toastService.showErrorHTMLWithTimeout(
                   'Lỗi ký USB Token',
                   '',
@@ -3083,7 +3094,6 @@ export class ConsiderContractComponent
     let signUpdateTempN: any[] = [];
     if (signUpdatePayload) {
       signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
-
       if (notContainSignImage) {
         signDigitalStatus = await this.signDigitalDocument();
 

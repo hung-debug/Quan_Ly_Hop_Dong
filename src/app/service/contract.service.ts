@@ -160,6 +160,7 @@ export class ContractService {
   newEkycRecognitionUrl: any = `${environment.apiUrl}/api/v1/tp/contracts/ekyc/recognition`;
   // detect Face
   newEkycVerification: any = `${environment.apiUrl}/api/v1/tp/contracts/ekyc/verification`;
+  getSignatureInfoTokenV1Url: any = `${environment.apiUrl}/api/v1/sign/token/genImage`;
 
   token: any;
   customer_id: any;
@@ -1898,6 +1899,22 @@ export class ContractService {
     return this.http
       .get<any>(this.infoPageUrl + documentId, { headers: headers })
       .pipe();
+  }
+
+  getSignatureInfoTokenV1(base64Cert: any, base64Img: any) {
+      this.getCurrentUser();
+      const headers = new HttpHeaders()
+        .append('Content-Type', 'application/json')
+        .append('Authorization', 'Bearer ' + this.token);
+      const body = JSON.stringify({
+        base64_cert: base64Cert,
+        base64_image: base64Img,
+      });
+      return this.http.post<any>(
+        this.getSignatureInfoTokenV1Url,
+        body,
+        { headers }
+      );
   }
 
   objDefaultSampleContract() {
