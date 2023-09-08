@@ -892,7 +892,7 @@ export class ConfirmContractBatchComponent
         .subscribe((response: any) => {
           if(response.errors?.length > 0) {
             if(response.errors[0].code == 1015) {
-              this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng vượt quá số lượng hợp đồng đã mua','',3000);
+              this.toastService.showErrorHTMLWithTimeout('Số lượng hợp đồng đã mua không còn đủ để tạo hợp đồng','',3000);
               this.spinner.hide();
               return;
             } else {
