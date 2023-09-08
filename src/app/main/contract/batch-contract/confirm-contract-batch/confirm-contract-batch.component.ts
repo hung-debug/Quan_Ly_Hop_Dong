@@ -888,24 +888,32 @@ export class ConfirmContractBatchComponent
     if (isAllow) {
       this.spinner.show();
 
-      this.contractService
-        .confirmContractBatchList(
-          this.datasBatch.contractFile,
-          this.datasBatch.idContractTemplate,
-          isCeCA
-        )
+      this.contractService.confirmContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,isCeCA)
         .subscribe((response: any) => {
-          this.router
+          if(response.errors.length > 0) {
+            if(response.errors[0].code == 1015) {
+              this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng vượt quá số lượng hợp đồng đã mua','',3000);
+              this.spinner.hide();
+              return;
+            } else {
+              this.toastService.showErrorHTMLWithTimeout('Tạo hợp đồng theo lô thất bại','',3000);
+              this.spinner.hide();
+              return;
+            }
+          } else {
+            this.router
             .navigateByUrl('/', { skipLocationChange: true })
             .then(() => {
               this.router.navigate(['/main/contract/create/processing']);
             });
-          this.spinner.hide();
-          this.toastService.showSuccessHTMLWithTimeout(
-            'Tạo hợp đồng theo lô thành công',
-            '',
-            3000
-          );
+            this.spinner.hide();
+            this.toastService.showSuccessHTMLWithTimeout(
+              'Tạo hợp đồng theo lô thành công',
+              '',
+              3000
+            );
+          }
+         
         }),
         (error: any) =>
           this.toastService.showErrorHTMLWithTimeout(
