@@ -890,7 +890,7 @@ export class ConfirmContractBatchComponent
 
       this.contractService.confirmContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,isCeCA)
         .subscribe((response: any) => {
-          if(response.errors.length > 0) {
+          if(response.errors?.length > 0) {
             if(response.errors[0].code == 1015) {
               this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng vượt quá số lượng hợp đồng đã mua','',3000);
               this.spinner.hide();
