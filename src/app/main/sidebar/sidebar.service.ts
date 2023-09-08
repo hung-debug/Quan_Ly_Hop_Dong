@@ -5,6 +5,7 @@ import { DashboardService } from 'src/app/service/dashboard.service';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: 'root',
@@ -569,7 +570,7 @@ export class SidebarService {
       })
     }
 
-    if(this.isBaoCaoHopDongEcontractMsale){
+    if(this.isBaoCaoHopDongEcontractMsale && environment.flag == 'NB'){
       submenusReport.push({
         title: 'report.number.econtract.msale',
         active: false,
