@@ -106,6 +106,7 @@ import { ReportDetailComponent } from './main/report/report-detail/report-detail
 import { ReportStatusContractComponent } from './main/report/report-status-contract/report-status-contract.component';
 import { ReportSoonExpireComponent } from './main/report/report-soon-expire/report-soon-expire.component';
 import { ReportContractNumberFollowStatusComponent } from './main/report/report-contract-number-follow-status/report-contract-number-follow-status.component';
+import { ReportContractNumberEcontractMsaleComponent } from './main/report/report-contract-number-eContract-mSale/report-contract-number-eContract-mSale.component';
 import { ContractNumberFollowSignComponent } from './main/report/contract-number-follow-sign/contract-number-follow-sign.component';
 
 import { ContractNumberFollowTypeComponent } from './main/report/contract-number-follow-type/contract-number-follow-type.component';
@@ -197,6 +198,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ReportStatusContractComponent,
     ReportSoonExpireComponent,
     ReportContractNumberFollowStatusComponent,
+    ReportContractNumberEcontractMsaleComponent,
     ContractNumberFollowSignComponent,
     ContractNumberFollowTypeComponent,
 
@@ -275,8 +277,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
     },
     {
-      provide: HTTP_INTERCEPTORS, 
-      useClass: HeadersInterceptor, 
+      provide: HTTP_INTERCEPTORS,
+      useClass: HeadersInterceptor,
       multi: true
     }
   ],
