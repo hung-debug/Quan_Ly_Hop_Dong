@@ -403,6 +403,7 @@
   "watch.contract":"Watch contract",
   "not.have.sample.file": "You don't have a sample file?",
   "download.sample.file": "Download sample file",
+  "download.sample.file.fail":"Sample file download failed.",
   "expire.date.contract": "Contract expiration date",
   "enter.contract.no": "Enter contract code",
   "enter.contract.name": "Enter contract name",

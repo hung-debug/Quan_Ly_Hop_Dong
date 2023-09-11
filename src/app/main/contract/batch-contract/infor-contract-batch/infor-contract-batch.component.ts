@@ -200,7 +200,7 @@ export class InforContractBatchComponent implements OnInit {
             // this.spinner.hide();
           },
           (error) => {
-            
+            this.toastService.showErrorHTMLWithTimeout('download.sample.file.fail','',3000)
             this.spinner.hide();
           },
           () => {
