@@ -35,6 +35,8 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
   cols: any[];
   Arr = Array;
   site: string;
+  page: any;
+  size: any;
 
   constructor(
     private appService: AppService,
@@ -58,9 +60,9 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
 
     this.appService.setTitle('role.number.contract.econtract.msale');
 
-    if(environment.flag == 'NB') {
+    if (environment.flag == 'NB') {
       this.site = 'NB';
-    } else if(environment.flag == 'KD') {
+    } else if (environment.flag == 'KD') {
       this.site = 'KD';
     }
 
@@ -154,6 +156,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
 
     let from_date: any = '';
     let to_date: any = '';
+
     if (this.date && this.date.length > 0) {
       from_date = this.datepipe.transform(this.date[0], 'yyyy-MM-dd');
       to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
@@ -166,27 +169,30 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     // if (!contractStatus) contractStatus = -1;
 
     if (!to_date) to_date = from_date;
-
+    //?type=10&from_date=2022-06-20&page=0&size=10000&to_date=2023-06-20
     let params =
-      '?from_date=' +
-      from_date +
-      '&to_date=' +
-      to_date +
-      '&type=' +
+      '?type=' +
       this.type_id;
+      '&from_date=' +
+      from_date +
+      '&page=' +
+      this.page +
+      '&size=' +
+      this.size
+      '&to_date=' +
+      to_date;
 
     //chờ api, api mẫu báo cáo sắp hết hiệu lực
-    this.reportService.export('rp-by-effective-date', idOrg, params, flag).subscribe((response: any) => {
+    this.reportService.export('rp-by-contract-type', idOrg, params, flag).subscribe((response: any) => {
       this.spinner.hide();
-      if(flag){
+      if (flag) {
         let url = window.URL.createObjectURL(response);
         let a = document.createElement('a');
         document.body.appendChild(a);
         a.setAttribute('style', 'display: none');
         a.href = url;
-        a.download = `BaoCaoSanLuongHD_eContract_mSale_${new Date().getDate()}-${
-          new Date().getMonth() + 1
-        }-${new Date().getFullYear()}.xlsx`;
+        a.download = `BaoCaoSLHĐ_eContract_mSale_${new Date().getDate()}-${new Date().getMonth() + 1
+          }-${new Date().getFullYear()}.xlsx`;
         a.click();
         window.URL.revokeObjectURL(url);
         a.remove();
