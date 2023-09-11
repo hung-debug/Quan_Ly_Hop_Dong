@@ -369,9 +369,14 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
       if (countSuccess == 0 && this.uploadFileContractAgain) {
         await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data: any) => {
-          this.datas.filePath = data.file_object.file_path;
-          this.datas.fileName = data.file_object.filename;
-          this.datas.fileBucket = data.file_object.bucket;
+          this.datas.filePath = data?.file_object?.file_path;
+          this.datas.fileName = data?.file_object?.filename;
+          this.datas.fileBucket = data?.file_object?.bucket;
+          if (!data.success) {
+            this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
+            this.spinner.hide()
+            countSuccess++;
+          }
         }, (error: HttpErrorResponse) => {
           countSuccess++;
           this.spinner.hide();
