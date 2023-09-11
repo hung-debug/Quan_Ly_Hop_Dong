@@ -290,7 +290,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       }
       return;
     } else {
-      this.isButtonDisabled = true
+      this.isButtonDisabled = true;
       let is_save = false;
       if (action == 'save-step') {
         is_save = true;

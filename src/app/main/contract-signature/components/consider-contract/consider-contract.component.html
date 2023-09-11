@@ -101,7 +101,7 @@
              (click)="getSignSelect(d)"
              [ngClass]="changeColorDrag(null, d, true)"
              [ngStyle]="changePosition(d,null,null,'#EBF8FF')">
-          <app-image-sign-contract  id="image-sign-contract" (contractNoValue)="contractNoValueChange($event)" [contractNoValue]="contractNoValue"
+          <app-image-sign-contract class="main-sign-box"  id="image-sign-contract" (contractNoValue)="contractNoValueChange($event)" [contractNoValue]="contractNoValue"
             [contractNoValueSign]="contractNoValueSign"
             (checkedChange)="switchesValueChange($event)" 
             *ngIf="![2,3].includes(recipient.status)" 

@@ -124,10 +124,10 @@
                     <div *ngIf="d.sign_unit != 'text'" class="name-sig-img-daky long-text-ellipsis">{{d.name ? d.name : ''}}</div>
                     <div *ngIf="d.sign_unit == 'text'" class="name-sig-img-daky long-text-ellipsis">{{d.text_attribute_name ? d.text_attribute_name  : ''}}</div>
                     <div class="sig-img-daky" (click)="onCancel($event, d)">
-                        <img src="assets/img/clear.svg" alt="">
+                        <!-- <img src="assets/img/clear.svg" alt=""> -->
                         <img src="assets/img/border-clear.svg" alt="">
                     </div>
-                    <app-sign-contract-template [datas]="datas" [sign]="d"></app-sign-contract-template>
+                    <app-sign-contract-template class="main-sign-box" [datas]="datas" [sign]="d"></app-sign-contract-template>
                 </div>
             </div>
         </div>

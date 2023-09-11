@@ -95,7 +95,7 @@
                 <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
                     <div *ngIf="d.name" class="name-sig-img-daky long-text-ellipsis">{{d.name ? d.name : ''}}</div>
                     <div class="sig-img-daky" (click)="onCancel($event, d)">
-                        <img src="assets/img/clear.svg" alt="">
+                        <!-- <img src="assets/img/clear.svg" alt=""> -->
                         <img src="assets/img/border-clear.svg" alt="">
                     </div>
                     <app-sign-contract [datas]="datas" [sign]="d"></app-sign-contract>

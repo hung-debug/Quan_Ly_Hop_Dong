@@ -153,8 +153,14 @@ export class ContractService {
   certInfoCertUrl: any = `${environment.apiUrl}/api/v1/sign/cert-information`;
 
   signCertificate: any = `${environment.apiUrl}/api/v1/sign/certificate`;
-  signCertWebMobile: any = `${environment.apiUrl}//api/v1/sign/certificate/web-mobile/`;
+  signCertWebMobile: any = `${environment.apiUrl}/api/v1/sign/certificate/web-mobile/`;
   signCertMultiUrl: any = `${environment.apiUrl}/api/v1/sign/multi/certificate`;
+
+  // detect CCCD
+  newEkycRecognitionUrl: any = `${environment.apiUrl}/api/v1/tp/contracts/ekyc/recognition`;
+  // detect Face
+  newEkycVerification: any = `${environment.apiUrl}/api/v1/tp/contracts/ekyc/verification`;
+  getSignatureInfoTokenV1Url: any = `${environment.apiUrl}/api/v1/sign/token/genImage`;
 
   token: any;
   customer_id: any;
@@ -459,7 +465,8 @@ export class ContractService {
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
-      .append('api-key', this.api_key);
+      .append('api-key', this.api_key)
+      // .append('Authorization', 'Bearer ' + this.token);
 
     const body = {
       image: image,
@@ -474,6 +481,7 @@ export class ContractService {
       // return this.http.post<any>(this.cccdFront, body, { headers });
       return this.http.post<any>(this.cccdFrontKD, body, { headers });
     }
+    // return this.http.post<any>(this.newEkycRecognitionUrl, body, { headers });
   }
 
 
@@ -482,6 +490,7 @@ export class ContractService {
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
+      // .append('Authorization', 'Bearer ' + this.token)
       .append('api-key', this.api_key);
 
     const body = {
@@ -504,6 +513,7 @@ export class ContractService {
       // return this.http.post<any>(this.detectFaceUrl, body, { headers });
       return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
     }
+    // return this.http.post<any>(this.newEkycVerification, body, { headers });
   }
 
   getContractSample(data_sample_contract: any) {
@@ -587,7 +597,7 @@ export class ContractService {
     });
   }
 
-  createEmptySignature(recipientId: number, signUpdate: any, signDigital: any, image: any, cert: any) {
+  createEmptySignature(recipientId: number, signUpdate: any, signDigital: any, image: any, cert: any, boxType?: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -601,7 +611,8 @@ export class ContractService {
       x: Math.floor(signDigital.signDigitalX),
       y: Math.floor(signDigital.signDigitalY),
       width: Math.floor(signDigital.signDigitalWidth),
-      height: Math.floor(signDigital.signDigitalHeight)
+      height: Math.floor(signDigital.signDigitalHeight),
+      type: boxType
     })
 
     return this.http.post<any>(this.emptySignatureUrl + recipientId + '/create-empty-token', body, {
@@ -1131,7 +1142,7 @@ export class ContractService {
       .toPromise();
   }
 
-  signHsm(datas: any, recipientId: number, isTimestamp: any) {
+  signHsm(datas: any, recipientId: number, isTimestamp: any, boxType: any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -1145,7 +1156,8 @@ export class ContractService {
       password2: datas.password2,
       image_base64: datas.imageBase64,
       // isTimestamp: isTimestamp
-      field: datas.field
+      field: datas.field,
+      type: boxType
     });
 
     return this.http
@@ -1213,7 +1225,6 @@ export class ContractService {
   }
 
   certInfoCert(id: number) {
-    // console.log("username ", username);
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -1525,8 +1536,6 @@ export class ContractService {
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
-
-    console.log("form data ", formData);
 
     return this.http.post<any>(
       this.uploadFileBase64Url + formData?.organizationId + `/base64`,
@@ -1887,6 +1896,22 @@ export class ContractService {
     return this.http
       .get<any>(this.infoPageUrl + documentId, { headers: headers })
       .pipe();
+  }
+
+  getSignatureInfoTokenV1(base64Cert: any, base64Img: any) {
+      this.getCurrentUser();
+      const headers = new HttpHeaders()
+        .append('Content-Type', 'application/json')
+        .append('Authorization', 'Bearer ' + this.token);
+      const body = JSON.stringify({
+        base64_cert: base64Cert,
+        base64_image: base64Img,
+      });
+      return this.http.post<any>(
+        this.getSignatureInfoTokenV1Url,
+        body,
+        { headers }
+      );
   }
 
   objDefaultSampleContract() {

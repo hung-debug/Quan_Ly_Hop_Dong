@@ -272,6 +272,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       }
     }
 
+    console.log("clone ", this.datasForm.is_determine_clone);
+
     this.synchronized1(this.imageSign);
     this.synchronized1(this.digitalSign);
     this.synchronized1(this.textUnit);
@@ -392,6 +394,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       }
     })
 
+
     // Get data have change 1 in 3 value name, email, type sign
     let dataDiffirent: any[] = [];
     if (dataDetermine.length > 0) {
@@ -412,8 +415,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)))||
       (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) ||
         (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6))) &&
-      ((val.recipient ? (((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email)) : (( !val.name || (val.sign_unit == 'text' && !val.recipient_id)) && ((val.email && val.email == data.email) || !val.email))
-      ))));
+      ((val.recipient ? (((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email) || val.email == data.email) :
+      ((!val.name || (val.sign_unit == 'text' && !val.recipient_id)) || ((val.email && val.email == data.email) || !val.email))
+      ))
+      ));
+
+    console.log("data ", dataContractUserSign);
 
     //
     // }
@@ -440,12 +447,14 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       })
     }
 
+    console.log("abc ", dataContractUserSign);
     this.datasForm.contract_user_sign.forEach((resForm: any) => {
       if (resForm.sign_config.length > 0 && resForm.sign_unit != 'so_tai_lieu') {
         let arrConfig = [];
         arrConfig = resForm.sign_config.filter((val: any) =>
           !val.recipient_id || dataContractUserSign.some((data) => data.sign_unit == val.sign_unit)
         )
+        console.log("arr config ",arrConfig);
         resForm.sign_config = arrConfig; // set data with object not change data
         resForm.sign_config.forEach((items: any) => {
           items.id = items.id + '1'; // tránh trùng với id cũ, gây ra lỗi
@@ -1549,6 +1558,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   isCheckRelease: boolean = false;
   async next(action: string) {
+    console.log("user_sign next ", this.datasForm.contract_user_sign);
     if (action == 'next_step' && !this.validData()) {
       if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
         this.save_draft_infor_form.close_header = false;
@@ -1685,6 +1695,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           }
         }
       } else if (action == 'next_step') {
+        console.log("next step ", this.datasForm.contract_user_sign);
         // let coutError = false;
         this.spinner.show();
         this.datasForm.contract_user_sign.forEach((res: any) => {
@@ -1694,6 +1705,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             }
           })
         })
+
+        console.log("next step 1 ", this.datasForm.contract_user_sign);
 
         if(!this.datasForm.contract_no || !this.datasForm.code) {
           if(this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0]) {

@@ -224,6 +224,8 @@ export class EkycDialogSignComponent implements OnInit {
           "name": "image_ekyc_web_cardId" + new Date().getTime() + ".jpg",
           "content":this.webcamImage.imageAsDataUrl,
           "organizationId": this.organizationId,
+          signType: 'eKYC',
+          ocrResponseName: this.name
         }
   
         this.upFileImageToDb(formData);
@@ -274,6 +276,8 @@ export class EkycDialogSignComponent implements OnInit {
           "name": "image_ekyc_web_face" + new Date().getTime() + ".jpg",
           "content":this.webcamImage.imageAsDataUrl,
           "organizationId": this.organizationId,
+          signType: 'eKYC',
+          ocrResponseName: this.name
         }
   
         //up file anh len db

@@ -26,6 +26,10 @@ import { UserService } from 'src/app/service/user.service';
 import { CheckZoomService } from 'src/app/service/check-zoom.service';
 import { DetectCoordinateService } from 'src/app/service/detect-coordinate.service';
 
+interface DropdownOption {
+  value: number;
+  text: string;
+}
 @Component({
   selector: 'app-sample-contract',
   templateUrl: './sample-contract.component.html',
@@ -115,6 +119,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   imageSign: number = 2;
   digitalSign: number = 3;
   textUnit: number = 1;
+  isOnTheLeft: boolean = true
+  options: DropdownOption[] = [
+    { value: 1, text: 'Option 1 Option 1 Option 1 Option 1 Option 1 Option 1 Option 1 Option 1 ' },
+    { value: 2, text: 'Option 2' },
+    { value: 3, text: 'Option 3' },
+    // Add more options here
+  ];
+  
+  selectedOption: DropdownOption | undefined;
+  showDropdown: boolean = false;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -218,7 +232,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }),
         // minimum size
         interact.modifiers.restrictSize({
-          // min: { width: 100, height: 32 }
+          // min: { width: 180, height: 60 }
         })
       ],
       inertia: true,
@@ -273,6 +287,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.checkDifferent();
   }
 
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
+
+  selectOption(option: DropdownOption) {
+    this.selectedOption = option;
+    this.showDropdown = false;
+
+    // Perform any other actions based on the selected option
+  }
   setX(){
     this.datas.isFirstLoadDrag = true;
     let i = 0;
@@ -794,8 +818,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                       element['height'] = '28';
                     }
                   } else {
-                    element['width'] = '135';
-                    element['height'] = '85';
+                    // set size ô ký
+                    // element['width'] = '135';
+                    // element['height'] = '85';
+                    element['width'] = '140';
+                    element['height'] = '50';
                   }
 
                   this.objSignInfo.width = element['height'];
@@ -1160,21 +1187,42 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any) {
-    let style: any = {
-      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
-      "position": "absolute",
-      "backgroundColor": '#EBF8FF'
-    }
-    if (d['width']) {
-      style.width = parseInt(d['width']) + "px";
-    }
-    if (d['height']) {
-      style.height = parseInt(d['height']) + "px";
-    }
-    if (this.datas.contract_no && d.sign_unit == 'so_tai_lieu') {
-      style.padding = '6px';
-    }
-    return style;
+      let style: any = {
+        "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+        "position": "absolute",
+        "backgroundColor": '#EBF8FF'
+      }
+      if (d['width']) {
+        style.width = parseInt(d['width']) + "px";
+      }
+      if (d['height']) {
+        style.height = parseInt(d['height']) + "px";
+      }
+      if (this.datas.contract_no && d.sign_unit == 'so_tai_lieu') {
+        style.padding = '6px';
+      }
+      return style;
+  }
+
+  changePositionSignature(d?: any, e?: any, sizeChange?: any) {
+      // new-signature-box-style-v2
+      let style: any = {
+        "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+        "position": "absolute",
+        "backgroundColor": '#FFFFFF',
+        "border": "1px dashed #6B6B6B",
+        "border-radius": "6px"
+      }
+      if (d['width']) {
+        style.width = parseInt(d['width']) + "px";
+      }
+      if (d['height']) {
+        style.height = parseInt(d['height']) + "px";
+      }
+      if (this.datas.contract_no && d.sign_unit == 'so_tai_lieu') {
+        style.padding = '6px';
+      }
+      return style
   }
 
   getAddSignUnit() {
@@ -2129,5 +2177,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-
+  swapStampPosition() {
+    console.log('swapinnnn');
+    this.isOnTheLeft = !this.isOnTheLeft
+  }
 }
