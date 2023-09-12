@@ -1187,21 +1187,30 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any) {
-      let style: any = {
-        "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
-        "position": "absolute",
-        "backgroundColor": '#EBF8FF'
-      }
-      if (d['width']) {
-        style.width = parseInt(d['width']) + "px";
-      }
-      if (d['height']) {
-        style.height = parseInt(d['height']) + "px";
-      }
-      if (this.datas.contract_no && d.sign_unit == 'so_tai_lieu') {
-        style.padding = '6px';
-      }
-      return style;
+    let style: any =
+    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
+    {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#EBF8FF'
+    } :
+    {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#FFFFFF',
+      "border": "1px dashed #6B6B6B",
+      "border-radius": "6px"
+    }
+    if (d['width']) {
+      style.width = parseInt(d['width']) + "px";
+    }
+    if (d['height']) {
+      style.height = parseInt(d['height']) + "px";
+    }
+    if (this.datas.contract_no && d.sign_unit == 'so_tai_lieu') {
+      style.padding = '6px';
+    }
+    return style;
   }
 
   changePositionSignature(d?: any, e?: any, sizeChange?: any) {

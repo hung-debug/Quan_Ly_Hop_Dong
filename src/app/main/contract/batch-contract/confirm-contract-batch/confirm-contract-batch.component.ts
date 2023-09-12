@@ -558,13 +558,21 @@ export class ConfirmContractBatchComponent
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
-    let style: any = {
-      transform:
-        'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
-      position: 'absolute',
-      backgroundColor: '#EBF8FF',
-    };
-    style.backgroundColor = d.value ? '' : '#EBF8FF';
+    let style: any =
+    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
+    {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#EBF8FF'
+    } :
+    {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#FFFFFF',
+      "border": "1px dashed #6B6B6B",
+      "border-radius": "6px"
+    }
+    // style.backgroundColor = d.value ? '' : '#EBF8FF';
     if (d['width']) {
       style.width = parseInt(d['width']) + 'px';
     }

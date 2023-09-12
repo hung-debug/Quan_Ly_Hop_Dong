@@ -104,7 +104,9 @@ export class PreviewContractTemplateComponent implements OnInit {
       style = {
         "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
         "position": "absolute",
-        "backgroundColor": '#EBF8FF'
+        "backgroundColor": '#FFFFFF',
+        "border": "1px dashed #6B6B6B",
+        "border-radius": "6px"
       }
     } else {
       const font_size = d.font_size ? d.font_size : 13;

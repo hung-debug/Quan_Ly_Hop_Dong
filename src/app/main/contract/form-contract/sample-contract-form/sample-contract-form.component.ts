@@ -789,8 +789,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                         element['height'] = '28';
                       }
                     } else {
-                      element['width'] = '135';
-                      element['height'] = '85';
+                      element['width'] = '140';
+                      element['height'] = '50';
                     }
                   }
 
@@ -1141,10 +1141,19 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any) {
-    let style: any = {
+    let style: any =
+    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
+    {
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
+    } :
+    {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#FFFFFF',
+      "border": "1px dashed #6B6B6B",
+      "border-radius": "6px"
     }
     if (d['width']) {
       style.width = parseInt(d['width']) + "px";

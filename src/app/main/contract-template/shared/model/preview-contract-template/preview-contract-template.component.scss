@@ -6,8 +6,8 @@
     //position: relative;
     .sig-img-daky{
       position: absolute;
-      top: -11px;
-      right: -8px;
+      top: -20px;
+      right: -3px;
       //cursor: pointer;
     }
 
@@ -220,7 +220,7 @@ box-sizing: border-box;
   border-radius: 2px;
 }
 .ck-da-keo {
-  border: 1px dashed #6B6B6B;
+  border: 1px solid #106DB6;
   border-radius: 5px;
 }
 
@@ -263,10 +263,10 @@ box-sizing: border-box;
   margin: 5px 5px;
 }
 
-.long-text-ellipsis {
-  overflow: hidden;
-  white-space: nowrap;
-  width: inherit;
-  text-overflow: ellipsis;
-  max-width: -webkit-fill-available;
-}
+// .long-text-ellipsis {
+//   overflow: hidden;
+//   white-space: nowrap;
+//   width: inherit;
+//   text-overflow: ellipsis;
+//   max-width: -webkit-fill-available;
+// }

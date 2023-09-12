@@ -931,13 +931,23 @@ export class ConsiderContractComponent
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
-    let style: any = {
+    let style: any = 
+    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
+    {
       transform:
         'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       position: 'absolute',
       backgroundColor: backgroundColor,
-    };
-    style.backgroundColor = d.valueSign ? '' : backgroundColor;
+    } :
+    {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#FFFFFF',
+      "border": "1px dashed #6B6B6B",
+      "border-radius": "6px"
+    }
+
+    // style.backgroundColor = d.valueSign ? '' : backgroundColor;
     style.display =
       (this.confirmConsider && this.confirmConsider == 1) ||
         (this.confirmSignature && this.confirmSignature == 1)
