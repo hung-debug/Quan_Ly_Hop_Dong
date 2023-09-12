@@ -30,6 +30,16 @@
         <div class="input-line">
           <p-dropdown #typeContract optionValue="id" [(ngModel)]="type_id" placeholder="{{'all' | translate}}" [showClear]="true" [filter]="true" filterBy="name" [options]="typeList" optionLabel="name" >
         </p-dropdown>
+        <!-- <p-multiSelect
+        panelStyleClass="font"
+        appendTo="body"
+        [options]="typeList"
+        [(ngModel)]="type_id"
+        optionLabel="name" optionValue="id" placeholder="{{'all' | translate}}" [filter]="true" filterBy="name"
+        [showClear]="true"  [multiple]="true"
+        display="chip"
+        >
+      </p-multiSelect> -->
         </div>
     </div>
 
@@ -42,7 +52,9 @@
 
   <!--Bảng dữ liệu-->
   <div class="row" style="padding-top: 20px;">
-    <p-table #dt [value]="list" [paginator]="true" [rows]="this.size+1" id="table" [autoLayout]="true">
+    <p-table #dt [value]="list" [paginator]="true" [rows]="this.size" id="table" [autoLayout]="true"
+    [totalRecords]="this.totalRecords" [(first)]="this.first"
+    >
 
         <!--header-->
         <ng-template pTemplate="header">
@@ -68,11 +80,11 @@
             </tr>
         </ng-template>
 
-        <ng-template  pTemplate="paginatorleft" let-state>
-            <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ? (state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows - 1}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
-          </ng-template>
+        <ng-template pTemplate="paginatorleft" let-state>
+          <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        </ng-template>
         <ng-template pTemplate="paginatorright" let-state>
-            <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ?(state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows - 1}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
+          <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
         </ng-template>
     </p-table>
   </div>
