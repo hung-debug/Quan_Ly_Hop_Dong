@@ -9,6 +9,7 @@ import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import {parttern_input} from "../../../config/parttern";
 import { parttern } from '../../../config/parttern';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-add-contract-type',
@@ -27,7 +28,7 @@ export class AddContractTypeComponent implements OnInit {
   optionsCeCa: Array<any> = [];
 
   optionsCeCaValue: any;
-
+  enviroment: any = ""
   ceca: boolean;
   get f() { return this.addForm.controls; }
 
@@ -50,6 +51,7 @@ export class AddContractTypeComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    this.enviroment = environment
     this.datas = this.data;
 
     this.optionsCeCa = optionsCeCa;

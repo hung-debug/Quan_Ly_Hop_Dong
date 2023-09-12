@@ -12,6 +12,7 @@ import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
 import {TranslateService} from '@ngx-translate/core';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-infor-contract-batch',
   templateUrl: './infor-contract-batch.component.html',
@@ -71,7 +72,7 @@ export class InforContractBatchComponent implements OnInit {
   optionsCeCaValue: any;
 
   ceca: boolean;
-
+  environment: any
   constructor(
     private uploadService: UploadService,
     private contractService: ContractService,
@@ -95,6 +96,7 @@ export class InforContractBatchComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.environment = environment
     this.optionsCeCa = optionsCeCa;
     this.optionsCeCaValue = 0;
     this.idContractTemplate = this.datasBatch.idContractTemplate
