@@ -52,7 +52,7 @@
 
   <!--Bảng dữ liệu-->
   <div class="row" style="padding-top: 20px;">
-    <p-table #dt [value]="list" [paginator]="true" [rows]="this.size" id="table" [autoLayout]="true"
+    <p-table #dt [value]="list" [paginator]="true" [rows]="14" id="table" [autoLayout]="true"
     [totalRecords]="this.totalRecords" [(first)]="this.first"
     >
 
@@ -89,3 +89,7 @@
     </p-table>
   </div>
 </div>
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+  <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+</ngx-spinner>

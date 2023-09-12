@@ -722,5 +722,7 @@
   "multi.sign.warning": "Hệ thống hỗ trợ ký tối đa 50 hợp đồng/ 1 lần ký",
   "expire.time.contract.notif":"Hợp đồng đã hết hạn ký",
   "information": "Thông tin",
-  "sign_cert_title": "Ký Chứng thư số server"
+  "sign_cert_title": "Ký Chứng thư số server",
+  "report.msale.search.failed": "Tra cứu báo cáo thất bại",
+  "report.msale.download.failed": "Xuất file báo cáo thất bại"
 }

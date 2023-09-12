@@ -717,5 +717,7 @@
   "role.cerificate.add": "Add new digital certificate server",
   "role.cerificate.update": "Update information digital certificate server",
   "role.cerificate.detail": "View information digital certificate server",
-  "role.cerificate.filter": "Search digital certificate server"
+  "role.cerificate.filter": "Search digital certificate server",
+  "report.msale.search.failed": "Look up failed reports",
+  "report.msale.download.failed": "Export failed report file"
 }

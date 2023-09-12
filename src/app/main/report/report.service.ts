@@ -56,7 +56,7 @@ export class ReportService {
   }
 
 
-  exportMsale(code: string, orgId: number, type:any, params: any, excel: boolean, fromDate: any, toDate: any) {
+  exportMsale(code: string, orgId: number, type:any, params: any, excel: boolean) {
     this.getCurrentUser();
     let prefix = this.reportUrl + code + '/' + orgId;
     let headers = null;
@@ -77,7 +77,7 @@ export class ReportService {
     if(excel) {
       return this.http.get<any>(url, { headers: headers,responseType: 'blob' as 'json'}).pipe();
     } else {
-      return this.http.get<any>(url + '&from_date=' + fromDate + '&to_date=' + toDate,{headers: headers}).pipe();
+      return this.http.get<any>(url ,{headers: headers}).pipe();
     }
   }
 

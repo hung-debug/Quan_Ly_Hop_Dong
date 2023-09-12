@@ -1,12 +1,9 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
-import { ContractService } from 'src/app/service/contract.service';
 import { InputTreeService } from 'src/app/service/input-tree.service';
 import { ToastService } from 'src/app/service/toast.service';
-import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
 import { Table } from 'primeng/table';
@@ -52,7 +49,6 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private datepipe: DatePipe,
 
-    private contractService: ContractService,
     private contractTypeService: ContractTypeService
   ) {
     this.currentUser = JSON.parse(
@@ -60,7 +56,6 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     ).customer.info;
   }
   async ngOnInit(): Promise<void> {
-    this.spinner.hide();
 
     this.appService.setTitle('role.number.contract.econtract.msale');
 
@@ -150,6 +145,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     if (!this.validData()) {
       return;
     }
+    console.log('hello');
     this.spinner.show();
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length
@@ -174,46 +170,61 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     let params =
       '&from_date=' +
       from_date +
-      '&page=' +
-      this.page +
-      '&size=' +
-      this.size +
+      // '&page=' +
+      // this.page +
+      // '&size=' +
+      // this.size +
       '&to_date=' +
       to_date;
 
     //chờ api, api mẫu báo cáo sắp hết hiệu lực
-    this.reportService.exportMsale('rp-by-contract-type', idOrg, this.type_id, params, flag, from_date, to_date).subscribe((response: any) => {
-      console.log("response",response);
-      this.spinner.hide();
-      if (flag) {
-        let url = window.URL.createObjectURL(response);
-        let a = document.createElement('a');
-        document.body.appendChild(a);
-        a.setAttribute('style', 'display: none');
-        a.href = url;
-        a.download = `BaoCaoSLHĐ_eContract_mSale_${new Date().getDate()}-${new Date().getMonth() + 1
-          }-${new Date().getFullYear()}.xlsx`;
-        a.click();
-        window.URL.revokeObjectURL(url);
-        a.remove();
+    this.reportService.exportMsale('rp-by-contract-type', idOrg, this.type_id, params, flag).subscribe(
+      (response: any) => {
+        this.spinner.hide();
+        if (flag) {
+          let url = window.URL.createObjectURL(response);
+          let a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          a.download = `BaoCaoSLHĐ_eContract_mSale_${new Date().getDate()}-${new Date().getMonth() + 1
+            }-${new Date().getFullYear()}.xlsx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
 
-        this.toastService.showSuccessHTMLWithTimeout(
-          'no.contract.download.file.success',
-          '',
-          3000
-        );
-      } else {
-        this.list = [];
-        let list1 = [this.orgName]
-        let list2 = response;
-        this.list = list1.concat(list2)
-        this.totalRecords = response.total_elements
-        this.table.first = 0;
+          this.toastService.showSuccessHTMLWithTimeout(
+            'no.contract.download.file.success',
+            '',
+            3000
+          );
+        } else {
+          this.list = [];
+          let list1 = [this.orgName]
+          let list2 = response;
+          this.list = list1.concat(list2)
+          this.totalRecords = response.total_elements
+          this.table.first = 0;
 
-        this.setColForTable();
-      }
-
-    });
+          this.setColForTable();
+        }
+      }, (err: any) => {
+        this.spinner.hide()
+        if (!flag) {
+          this.toastService.showErrorHTMLWithTimeout(
+            'report.msale.search.failed',
+            '',
+            3000
+          )
+        } else {
+          if (flag) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'report.msale.download.failed',
+              '',
+              3000
+            )
+        }}
+      });
 
   }
 }
