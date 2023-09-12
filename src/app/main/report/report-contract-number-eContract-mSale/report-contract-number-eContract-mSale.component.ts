@@ -38,6 +38,8 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
   page: number = 0;
   size: number = 5;
 
+  isBaoCaoHopDongEcontractMsale: boolean = true;
+
   constructor(
     private appService: AppService,
     private inputTreeService: InputTreeService,
@@ -153,7 +155,9 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
     }
 
-    this.type_id = this.type_id ? this.type_id : '';
+    // this.type_id = this.type_id ? this.type_id : '';
+    console.log("type",this.type_id);
+
 
     if (!to_date) to_date = from_date;
 

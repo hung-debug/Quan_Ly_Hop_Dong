@@ -51,6 +51,7 @@ import {DigitalCertificateAddComponent} from './main/digital-certificate/digital
 import {DigitalCertificateDetailComponent} from './main/digital-certificate/digital-certificate-detail/digital-certificate-detail.component';
 import {DigitalCertificateEditComponent} from './main/digital-certificate/digital-certificate-edit/digital-certificate-edit.component';
 import { ReportContractReceiveComponent } from './main/report/report-contract-receive/report-contract-receive.component';
+import { environment } from 'src/environments/environment';
 
 const contract_signatures = "c";
 const signatures = "s9";
@@ -214,7 +215,7 @@ const routes: Routes = [
           //Báo cáo sản lượng hợp đồng eContract mSale
           {
             path: 'contract-number-econtract-mSale',
-            component: ReportContractNumberEcontractMsaleComponent
+            component: environment.flag == 'NB'? ReportContractNumberEcontractMsaleComponent: PageNotFoundComponent
           }
         ]
       },

@@ -28,7 +28,7 @@
     <div class="col-md-2">
         <div>{{'contract.type' | translate}}</div>
         <div class="input-line">
-          <p-dropdown #typeContract optionValue="name" [(ngModel)]="type_id" placeholder="{{'all' | translate}}" [showClear]="true" [filter]="true" filterBy="name" [options]="typeList" optionLabel="name" >
+          <p-dropdown #typeContract optionValue="id" [(ngModel)]="type_id" placeholder="{{'all' | translate}}" [showClear]="true" [filter]="true" filterBy="name" [options]="typeList" optionLabel="name" >
         </p-dropdown>
         </div>
     </div>
