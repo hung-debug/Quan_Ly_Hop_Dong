@@ -20,9 +20,7 @@
     <div class="col-md-2">
         <div>{{'completed-date' | translate}} <span style="color: red"> *</span></div>
         <div class="input-line">
-            <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"
-
-            ></p-calendar>
+            <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
         </div>
     </div>
 
@@ -44,7 +42,7 @@
 
   <!--Bảng dữ liệu-->
   <div class="row" style="padding-top: 20px;">
-    <p-table #dt [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
+    <p-table #dt [value]="list" [paginator]="true" [rows]="this.size+1" id="table" [autoLayout]="true">
 
         <!--header-->
         <ng-template pTemplate="header">
@@ -64,8 +62,8 @@
                 </ng-container>
 
                 <ng-container *ngIf="row > 0">
-                    <td>{{list.name}}</td>
-                    <td>{{list.contractNo}}</td>
+                    <td>{{list.typename}}</td>
+                    <td>{{list.quantity}}</td>
                 </ng-container>
             </tr>
         </ng-template>

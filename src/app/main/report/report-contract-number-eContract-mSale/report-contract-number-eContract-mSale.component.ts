@@ -35,8 +35,8 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
   cols: any[];
   Arr = Array;
   site: string;
-  page: any;
-  size: any;
+  page: number = 0;
+  size: number = 5;
 
   constructor(
     private appService: AppService,
@@ -98,7 +98,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
 
   async getTypeListContract(typeId?: number) {
     const inforType = await this.contractTypeService
-      .getContractTypeList('', '', typeId)
+      .getContractTypeList('', '',typeId)
       .toPromise();
     this.typeList = inforType;
   }
@@ -109,7 +109,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
 
   validData() {
     if (!this.date || (this.date && this.date.length < 2)) {
-      this.toastService.showErrorHTMLWithTimeout('date.full.valid.soon-expire', '', 3000);
+      this.toastService.showErrorHTMLWithTimeout('date.full.valid.completed', '', 3000);
       return false;
     }
     return true;
@@ -132,13 +132,6 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     ]
   }
 
-  // getNumberArray(num: number): number[] {
-  //   return Array(num)
-  //     .fill(0)
-  //     .map((x, i) => i + 1);
-  // }
-
-  // maxParticipants: number = 0;
   export(flag: boolean) {
     if (!this.validData()) {
       return;
@@ -151,8 +144,6 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
 
     this.orgName = this.selectedNodeOrganization.label;
     let idOrg = this.selectedNodeOrganization.data;
-    console.log("OrgName", this.orgName);
-    console.log("idOrg", idOrg);
 
     let from_date: any = '';
     let to_date: any = '';
@@ -162,28 +153,23 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
     }
 
-    // let contractStatus = this.contractStatus;
-
     this.type_id = this.type_id ? this.type_id : '';
 
-    // if (!contractStatus) contractStatus = -1;
-
     if (!to_date) to_date = from_date;
-    //?type=10&from_date=2022-06-20&page=0&size=10000&to_date=2023-06-20
+
     let params =
-      '?type=' +
-      this.type_id;
       '&from_date=' +
       from_date +
       '&page=' +
       this.page +
       '&size=' +
-      this.size
+      this.size +
       '&to_date=' +
       to_date;
 
     //chờ api, api mẫu báo cáo sắp hết hiệu lực
-    this.reportService.export('rp-by-contract-type', idOrg, params, flag).subscribe((response: any) => {
+    this.reportService.exportMsale('rp-by-contract-type', idOrg, this.type_id, params, flag, from_date, to_date).subscribe((response: any) => {
+      console.log("response",response);
       this.spinner.hide();
       if (flag) {
         let url = window.URL.createObjectURL(response);
@@ -204,7 +190,8 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
         );
       } else {
         this.list = [];
-
+        this.list = response.entities;
+        this.list.unshift(this.orgName);
         this.table.first = 0;
 
         this.setColForTable();
