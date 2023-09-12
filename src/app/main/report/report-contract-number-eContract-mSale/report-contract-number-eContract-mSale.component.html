@@ -75,7 +75,7 @@
 
                 <ng-container *ngIf="row > 0">
                     <td>{{list.typename}}</td>
-                    <td>{{list.quantity}}</td>
+                    <td>{{ list.na ? 'N/A' : list.quantity }}</td>
                 </ng-container>
             </tr>
         </ng-template>

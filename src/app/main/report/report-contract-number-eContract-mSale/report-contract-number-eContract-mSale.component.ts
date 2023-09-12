@@ -205,10 +205,9 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       } else {
         this.list = [];
         let list1 = [this.orgName]
-        let list2 = response.entities;
+        let list2 = response;
         this.list = list1.concat(list2)
         this.totalRecords = response.total_elements
-        // this.list.unshift(this.orgName);
         this.table.first = 0;
 
         this.setColForTable();
