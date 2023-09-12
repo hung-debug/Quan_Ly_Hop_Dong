@@ -145,7 +145,6 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     if (!this.validData()) {
       return;
     }
-    console.log('hello');
     this.spinner.show();
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length
@@ -194,7 +193,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
           a.remove();
 
           this.toastService.showSuccessHTMLWithTimeout(
-            'no.contract.download.file.success',
+            'download.success',
             '',
             3000
           );
