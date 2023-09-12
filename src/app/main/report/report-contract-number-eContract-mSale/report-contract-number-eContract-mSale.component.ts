@@ -28,7 +28,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
   organization_id_user_login: any;
   organization_id: any;
   orgName: any;
-  type_id: any;
+  type_id: any = '';
   typeList: Array<any> = [];
   date: any;
   list: any[] = [];
@@ -37,6 +37,10 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
   site: string;
   page: number = 0;
   size: number = 5;
+  totalRecords: number = 0;
+  first: number = 0;
+
+  isBaoCaoHopDongEcontractMsale: boolean = true;
 
   constructor(
     private appService: AppService,
@@ -100,7 +104,17 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     const inforType = await this.contractTypeService
       .getContractTypeList('', '',typeId)
       .toPromise();
-    this.typeList = inforType;
+    this.typeList = inforType
+    this.typeList.unshift(
+      {
+        "name": "Tất cả",
+        "id": ""
+      },
+      {
+        "name": "Hợp đồng điện tử hệ thống mSale",
+        "id": 209
+      }
+    )
   }
 
   convertTime(time: any, code?: any) {
@@ -153,7 +167,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
     }
 
-    this.type_id = this.type_id ? this.type_id : '';
+    // this.type_id = this.type_id ? this.type_id : '';
 
     if (!to_date) to_date = from_date;
 
@@ -190,8 +204,11 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
         );
       } else {
         this.list = [];
-        this.list = response.entities;
-        this.list.unshift(this.orgName);
+        let list1 = [this.orgName]
+        let list2 = response.entities;
+        this.list = list1.concat(list2)
+        this.totalRecords = response.total_elements
+        // this.list.unshift(this.orgName);
         this.table.first = 0;
 
         this.setColForTable();

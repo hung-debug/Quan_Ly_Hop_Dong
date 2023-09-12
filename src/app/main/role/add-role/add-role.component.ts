@@ -5,10 +5,11 @@ import { Router } from '@angular/router';
 import { SelectItemGroup } from 'primeng/api';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
-import {roleList} from "../../../config/variable";
+import {roleList, roleListNB} from "../../../config/variable";
 import {parttern_input} from "../../../config/parttern"
 import { parttern } from '../../../config/parttern';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-add-role',
@@ -38,7 +39,7 @@ export class AddRoleComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog,
     private spinner: NgxSpinnerService
-    ) { 
+    ) {
       this.addForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
         code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
@@ -52,7 +53,7 @@ export class AddRoleComponent implements OnInit {
     if(this.data.id != null){
       this.roleService.getRoleById(this.data.id).subscribe(
         data => {
-          
+
           this.addForm = this.fbd.group({
             name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
             code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
@@ -72,7 +73,12 @@ export class AddRoleComponent implements OnInit {
     }
 
     // if(sessionStorage.getItem('lang') == 'vi')
-      this.groupedRole = roleList;
+
+      if(environment.flag == 'KD'){
+        this.groupedRole = roleList;
+      }else{
+        this.groupedRole = roleListNB;
+      }
     // else if(sessionStorage.getItem('lang') == 'en')
     // this.groupedRole = roleList_en;
   }
@@ -99,15 +105,15 @@ export class AddRoleComponent implements OnInit {
       note: this.addForm.value.note,
       selectedRole: this.addForm.value.selectedRole,
     }
-    
+
     if (this.addForm.invalid) {
-      
+
       return;
     }
     this.spinner.show();
     this.selectedRoleConvert = [];
     data.selectedRole.forEach((key: any, v: any) => {
-      
+
       let jsonData = {code: key, status: 1};
       this.selectedRoleConvert.push(jsonData);
     });
@@ -139,7 +145,7 @@ export class AddRoleComponent implements OnInit {
           return false;
         }
         return true;
-      });      
+      });
 
       data.selectedRole = filteredData;
 
@@ -167,7 +173,7 @@ export class AddRoleComponent implements OnInit {
               dataByName => {
                 //neu chua ton tai
                 if(dataByName.code == '00'){
-                  
+
                   this.roleService.addRole(data).subscribe(
                     data => {
                       this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò thành công!', "", 3000);
@@ -202,7 +208,7 @@ export class AddRoleComponent implements OnInit {
         }
       )
     }
-    
+
   }
 
 }
