@@ -162,7 +162,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
     }
 
-    // this.type_id = this.type_id ? this.type_id : '';
+    this.type_id = this.type_id ? this.type_id : '';
 
     if (!to_date) to_date = from_date;
 
@@ -200,7 +200,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
         } else {
           this.list = [];
           let list1 = [this.orgName]
-          let list2 = response;
+          let list2 = response.entities;
           this.list = list1.concat(list2)
           this.totalRecords = response.total_elements
           this.table.first = 0;
