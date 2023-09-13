@@ -27,7 +27,7 @@ export class AddContractTypeComponent implements OnInit {
 
   optionsCeCa: Array<any> = [];
 
-  optionsCeCaValue: any;
+  optionsCeCaValue: any = 1;
   enviroment: any = ""
   ceca: boolean;
   get f() { return this.addForm.controls; }

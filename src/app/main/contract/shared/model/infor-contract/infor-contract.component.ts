@@ -414,7 +414,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         this.optionsCeCa = optionsCeCa;
       }
     } else {
-      this.optionsCeCaValue = null;
+      if (environment.flag == 'NB') {
+        this.optionsCeCaValue = 1;
+      } else {
+        this.optionsCeCaValue = 0;
+      }
       this.optionsCeCa = optionsCeCa;
     }
 

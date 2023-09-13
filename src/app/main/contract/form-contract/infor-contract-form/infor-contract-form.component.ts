@@ -188,12 +188,17 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     if(!e.value) {
 
       this.optionsCeCa = optionsCeCa;
-      this.datasForm.ceca_push = 0;
-      this.optionsCeCaValue = 0;
       this.datasForm.type_id = null;
-
       const e = {
         value: this.datasForm.template_contract_id
+      }
+
+      if (environment.flag == 'NB') {
+        this.datasForm.ceca_push = 1;
+        this.optionsCeCaValue = 1;
+      } else {
+        this.datasForm.ceca_push = 0;
+        this.optionsCeCaValue = 0;
       }
 
       // this.onChangeForm(e);
