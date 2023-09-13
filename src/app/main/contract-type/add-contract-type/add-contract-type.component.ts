@@ -85,6 +85,9 @@ export class AddContractTypeComponent implements OnInit {
         this.ceca = false;
       } else if(response.ceca_push_mode == 'SELECTION') {
         this.ceca = true
+        if (environment.flag == 'NB') {
+          this.optionsCeCaValue = 1;
+        }
       }
     })
   }
