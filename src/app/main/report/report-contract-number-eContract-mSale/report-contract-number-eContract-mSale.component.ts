@@ -25,7 +25,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
   organization_id_user_login: any;
   organization_id: any;
   orgName: any;
-  type_id: any = '';
+  type_id: any = [];
   typeList: Array<any> = [];
   date: any;
   list: any[] = [];
@@ -92,14 +92,20 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
   }
 
   changeOrg() {
+    this.typeList = []
+    this.type_id = []
     this.getTypeListContract(this.selectedNodeOrganization.data);
+
   }
 
   async getTypeListContract(typeId?: number) {
+    this.typeList = []
+    this.type_id = []
     const inforType = await this.contractTypeService
       .getContractTypeList('', '',typeId)
       .toPromise();
     this.typeList = inforType
+
     this.typeList.unshift(
       // {
       //   "name": "Tất cả",
@@ -110,6 +116,10 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
         "id": 209
       }
     )
+
+    for (let i = 0; i<this.typeList.length; i++){
+      this.type_id.push(this.typeList[i].id)
+    }
   }
 
   convertTime(time: any, code?: any) {
@@ -162,7 +172,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
     }
 
-    this.type_id = this.type_id ? this.type_id : '';
+    // this.type_id = this.type_id ? this.type_id : '';
 
     if (!to_date) to_date = from_date;
 
