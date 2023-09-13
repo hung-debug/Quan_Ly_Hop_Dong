@@ -172,6 +172,9 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         this.ceca = false;
       } else if (response.ceca_push_mode == 'SELECTION') {
         this.ceca = true;
+        if (environment.flag == 'NB') {
+          this.optionsCeCaValue = 1
+        } 
       }
 
       this.getContractTemplateForm(); // ham lay mau hop dong

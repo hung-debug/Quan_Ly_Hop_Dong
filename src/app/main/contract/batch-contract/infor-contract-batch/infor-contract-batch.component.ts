@@ -69,7 +69,7 @@ export class InforContractBatchComponent implements OnInit {
   smsContractBuy: any;
 
   optionsCeCa: any;
-  optionsCeCaValue: any;
+  optionsCeCaValue: any = 0;
 
   ceca: boolean;
   environment: any
@@ -98,7 +98,7 @@ export class InforContractBatchComponent implements OnInit {
   ngOnInit(): void {
     this.environment = environment
     this.optionsCeCa = optionsCeCa;
-    this.optionsCeCaValue = 0;
+    // this.optionsCeCaValue = 0;
     this.idContractTemplate = this.datasBatch.idContractTemplate
       ? this.datasBatch.idContractTemplate
       : '';
@@ -109,6 +109,9 @@ export class InforContractBatchComponent implements OnInit {
         this.ceca = false;
       } else if(response.ceca_push_mode == 'SELECTION') {
         this.ceca = true
+        if (environment.flag == 'NB') {
+          this.optionsCeCaValue = 1
+        } 
       }
     })
 
@@ -147,7 +150,6 @@ export class InforContractBatchComponent implements OnInit {
     });
 
     type_id = inforContractTemplate.type_id;
-
     if(type_id) {
       const informationContractType = await this.contractTypeService.getContractTypeById(type_id).toPromise();
 
@@ -161,7 +163,11 @@ export class InforContractBatchComponent implements OnInit {
         this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
       }
     } else {
-      this.optionsCeCaValue = 0;
+      if (environment.flag == 'NB') {
+        this.optionsCeCaValue = 1
+      } else {
+        this.optionsCeCaValue = 0
+      }
       this.optionsCeCa = optionsCeCa;
     }
   }
