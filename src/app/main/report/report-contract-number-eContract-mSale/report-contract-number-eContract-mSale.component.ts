@@ -101,10 +101,10 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       .toPromise();
     this.typeList = inforType
     this.typeList.unshift(
-      {
-        "name": "Tất cả",
-        "id": ""
-      },
+      // {
+      //   "name": "Tất cả",
+      //   "id": ""
+      // },
       {
         "name": "Hợp đồng điện tử hệ thống mSale",
         "id": 209
@@ -177,7 +177,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       to_date;
 
     //chờ api, api mẫu báo cáo sắp hết hiệu lực
-    this.reportService.exportMsale('rp-by-contract-type', idOrg, this.type_id, params, flag).subscribe(
+    this.reportService.exportMsale('rp-by-contract-type', idOrg, this.type_id.toString(), params, flag).subscribe(
       (response: any) => {
         this.spinner.hide();
         if (flag) {
@@ -200,9 +200,9 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
         } else {
           this.list = [];
           let list1 = [this.orgName]
-          let list2 = response.entities;
+          let list2 = response;
           this.list = list1.concat(list2)
-          this.totalRecords = response.total_elements
+          // this.totalRecords = response.total_elements
           this.table.first = 0;
 
           this.setColForTable();
