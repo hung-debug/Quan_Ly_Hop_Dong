@@ -106,7 +106,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       .toPromise();
     this.typeList = inforType
 
-    this.typeList.unshift(
+    this.typeList?.unshift(
       // {
       //   "name": "Tất cả",
       //   "id": ""
@@ -117,7 +117,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       }
     )
 
-    for (let i = 0; i<this.typeList.length; i++){
+    for (let i = 0; i<this.typeList?.length; i++){
       this.type_id.push(this.typeList[i].id)
     }
   }
