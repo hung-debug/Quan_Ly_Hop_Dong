@@ -113,7 +113,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       // },
       {
         "name": "Hợp đồng điện tử hệ thống mSale",
-        "id": 209
+        "id": 9999
       }
     )
 
