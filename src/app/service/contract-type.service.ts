@@ -105,10 +105,10 @@ export class ContractTypeService {
 
   public getContractTypeListV2(code:any, name:any,idOrg?: number): Observable<any> {
     this.getCurrentUser();
-    let listContractTypeV2Url = this.listContractTypeUrl + this.organization_id + "?name=" + name.trim() + "&code=" + code.trim();
+    let listContractTypeV2Url = this.listContractTypeV2Url + this.organization_id + "?name=" + name.trim() + "&code=" + code.trim();
 
     if(idOrg) {
-      listContractTypeV2Url = this.listContractTypeUrl + idOrg + "?name=" + name.trim() + "&code=" + code.trim();
+      listContractTypeV2Url = this.listContractTypeV2Url + idOrg + "?name=" + name.trim() + "&code=" + code.trim();
     }
 
     
