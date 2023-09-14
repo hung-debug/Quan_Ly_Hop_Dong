@@ -1120,7 +1120,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     } else {
       // valid email tổ chức của tôi
       for (let i = 0; i < dataValid.length; i++) {
-        if (dataValid[i].email) {
+        if (dataValid[i].email && dataValid[i].login_by=='email') {
           arrCheckEmail.push(dataValid[i].email);
         }
       }
@@ -1180,6 +1180,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     } else {
       // valid email tổ chức của tôi
       for (let i = 0; i < dataValid.length; i++) {
+        if ((dataValid[i].login_by=='email' && dataValid[i].role == 3)){
+          dataValid[i].phone = ''
+        }
         if (dataValid[i].phone) {
           arrCheckPhone.push(dataValid[i].phone);
         }
@@ -1735,7 +1738,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   doTheSearch($event: Event, indexs: number, action: string): void {
     const stringEmitted = ($event.target as HTMLInputElement).value;
-
     this.arrSearchNameView = [];
     this.arrSearchNameSignature = [];
     this.arrSearchNameDoc = [];
@@ -1743,7 +1745,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.contractService.getAllInfoUser(stringEmitted).subscribe((res) => {
         let arr_all = res;
-        let data = arr_all.map((p: any) => ({name: p.name, email: p.email, phone: p.phone}));
+        let data = arr_all.map((p: any) => (
+          environment.flag == 'NB' ? {name: p.name, email: p.email, phone: p.phone} : {name: p.name, email: p.email}
+        ));
         if (action == 'view') {
           this.arrSearchNameView = data;
         } else if (action == 'signature') {
