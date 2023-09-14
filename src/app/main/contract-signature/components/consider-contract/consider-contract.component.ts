@@ -937,13 +937,13 @@ export class ConsiderContractComponent
       transform:
         'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       position: 'absolute',
-      backgroundColor: backgroundColor,
+      backgroundColor: d.valueSign ? '' : backgroundColor,
     } :
     {
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
-      "backgroundColor": '#FFFFFF',
-      "border": "1px dashed #6B6B6B",
+      "backgroundColor": !d.valueSign ? '#FFFFFF' : '',
+      "border": !d.valueSign ? "1px dashed #6B6B6B" : '',
       "border-radius": "6px"
     }
 
