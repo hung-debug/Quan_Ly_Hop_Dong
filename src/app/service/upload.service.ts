@@ -24,8 +24,6 @@ export class UploadService {
 
   uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`;
 
-
-
   constructor(private http: HttpClient) { }
 
   getCurrentUser(){
@@ -61,4 +59,16 @@ export class UploadService {
     console.error(errorMessage);
     return throwError(errorMessage);
   }
+
+  uploadMultiFileToOrg(files: any) {
+    this.getCurrentUser();
+    let formData = new FormData();
+    for (let i = 0; i<files?.length; i++){
+      formData.append('file', files[i]);
+    }
+    const headers = new HttpHeaders()
+      //.append('Content-Type', 'multipart/form-data')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.post<File>(this.uploadFileUrl + this.organization_id + `/singleMultipleFile`, formData, {'headers':headers});
+  }  
 }

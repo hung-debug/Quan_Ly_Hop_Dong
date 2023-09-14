@@ -124,6 +124,7 @@ import {DigitalCertificateAddComponent} from './main/digital-certificate/digital
 import {DigitalCertificateDetailComponent} from './main/digital-certificate/digital-certificate-detail/digital-certificate-detail.component';
 import {DigitalCertificateEditComponent} from './main/digital-certificate/digital-certificate-edit/digital-certificate-edit.component';
 import { HeadersInterceptor } from './headers.interceptor';
+import { UploadAttachFilesComponent } from './main/contract/dialog/upload-attach-files-dialog/upload-attach-files-dialog.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -212,7 +213,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AddFolderComponent,
     DeleteFolderComponent,
     CurrentFolderComponent,
-    AddContractFolderComponent
+    AddContractFolderComponent,
+    UploadAttachFilesComponent
   ],
   imports: [
     TranslateModule,
