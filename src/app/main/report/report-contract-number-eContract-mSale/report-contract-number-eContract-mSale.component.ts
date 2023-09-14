@@ -102,7 +102,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     this.typeList = []
     this.type_id = []
     const inforType = await this.contractTypeService
-      .getContractTypeList('', '',typeId)
+      .getContractTypeListV2('', '',typeId)
       .toPromise();
     this.typeList = inforType
 
