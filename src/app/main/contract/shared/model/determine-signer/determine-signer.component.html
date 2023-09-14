@@ -14,10 +14,10 @@
         <input class="input1" type="text" [(ngModel)]="data_organization.name" />
 
         <!--Ẩn luồng xử lý-->
-        <!-- <div style="width: 120px; margin-left: 5px">
+        <div style="width: 120px; margin-left: 5px">
           {{'hide.processing.thread' | translate}}
         </div>
-        <input type ="checkbox" [(ngModel)]="data_organization.hideFlow"> -->
+        <input type ="checkbox" [(ngModel)]="data_organization.hideFlow">
       </div>
 
       <div class="contract__content--participants">
@@ -750,10 +750,10 @@
           }}" [(ngModel)]="item.name" [disabled]="item.type == 3" />
 
         <!--Ẩn luồng xử lý-->
-        <!-- <div style="width: 120px; margin-left: 5px">
+        <div style="width: 120px; margin-left: 5px">
             {{'hide.processing.thread' | translate}}
           </div>
-          <input type ="checkbox" [(ngModel)]="item.hideFlow"> -->
+          <input type ="checkbox" [(ngModel)]="item.hideFlow">
       </div>
 
       <div *ngIf="this.dataParnterOrganization().length >= 1" style="display: flex; justify-content: flex-end">
@@ -769,7 +769,7 @@
                 (change)="changeType($event, item, id)">
               <span>&nbsp;{{'organization' | translate}}</span>
               <div *ngIf="item.type != 2" class="none-button"></div>
-              <!-- <button  *ngIf="item.type == 2" class="btn" (click)="findPartner('ORGANIZATION', id, item)">{{'btn.search' | translate}}</button> -->
+              <button  *ngIf="item.type == 2" class="btn" (click)="findPartner('ORGANIZATION', id, item)">{{'btn.search' | translate}}</button>
             </label>
 
 
@@ -779,7 +779,7 @@
                 (change)="changeType($event, item, id)">
               <span>&nbsp;{{'personal' | translate}}</span>
               <div *ngIf="item.type != 3" class="none-button"></div>
-              <!-- <button *ngIf="item.type == 3" class="btn find-button" (click)="findPartner('PERSONAL',id, item)">{{'btn.search' | translate}}</button> -->
+              <button *ngIf="item.type == 3" class="btn find-button" (click)="findPartner('PERSONAL',id, item)">{{'btn.search' | translate}}</button>
             </label>
 
           </div>
