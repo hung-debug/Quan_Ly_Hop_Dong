@@ -55,6 +55,16 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.info;
+
+    // Tính toán ngày kết thúc (hiện tại)
+    const endDate = new Date();
+
+    // Tính toán ngày bắt đầu (7 ngày trước ngày kết thúc)
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 6);
+
+    // Gán giá trị mặc định cho biến date
+    this.date = [startDate, endDate];
   }
 
 
@@ -106,7 +116,7 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
     this.typeList = inforType;
   }
 
-  contentSMS(id: any){
+  contentSMS(id: any) {
     const data = {
       title: 'content.sms',
       id: id,
@@ -214,9 +224,9 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
           3000
         );
       } else {
-          this.list = [];
-          this.table.first = 0;
-          this.setColForTable();
+        this.list = [];
+        this.table.first = 0;
+        this.setColForTable();
       }
     });
   }

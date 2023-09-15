@@ -2,4 +2,21 @@
   <div class="header">
     <h3 class="label-header">{{this.datas.title | translate}}</h3>
   </div>
+
+  <form [formGroup]="addForm" class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div>
+                <textarea formControlName="reason"></textarea>
+            </div>
+            <div *ngIf="submitted && f.reason.errors" class="invalid">
+                <div *ngIf="f.reason.errors.required">Lý do hủy không được để trống</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="justify-content: center;padding-top: 10px;">
+        <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
+    </div>
+</form>
 </div>

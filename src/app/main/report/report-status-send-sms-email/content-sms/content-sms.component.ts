@@ -17,6 +17,9 @@ import { UnitService } from 'src/app/service/unit.service';
 export class ContentSmsComponent implements OnInit {
   currentOrgId: string = "";
   datas: any;
+  addForm: FormGroup;
+  submitted = false;
+  get f() { return this.addForm.controls; }
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
