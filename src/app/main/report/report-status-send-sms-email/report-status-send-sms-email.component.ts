@@ -28,10 +28,14 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
   cols: any[];
   typeList: Array<any> = [];
   inforContract: any;
-  optionsStatus: any = [];
+  optionsStatusContract: any = [];
+  optionsStatusProcess: any = [];
   contractStatus: any;
   orgName: any;
   Arr = Array;
+  organization_id_user_login: any;
+  organization_id: any;
+  lang: string;
 
   constructor(
     private appService: AppService,
@@ -56,10 +60,57 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
     this.spinner.hide();
 
     this.appService.setTitle('role.report.history.send.sms.email');
+
+    this.optionsStatusContract = [
+      { id: 20, name: 'Đang thực hiện' },
+      { id: 2, name: 'Quá hạn' },
+      { id: 31, name: 'Từ chối' },
+      { id: 32, name: 'Huỷ bỏ' },
+      { id: 30, name: 'Hoàn thành' },
+    ];
+
+    this.optionsStatusProcess = [
+      { id: 2, name: 'Đã ký' },
+      { id: 1, name: 'Đang ký' },
+    ];
+
+    if (sessionStorage.getItem('lang') == 'vi') {
+      this.lang = 'vi';
+    } else if (sessionStorage.getItem('lang') == 'en') {
+      this.lang = 'en';
+
+      this.optionsStatusContract = [
+        { id: 20, name: 'Processing' },
+        { id: 2, name: 'Overdue' },
+        { id: 31, name: 'Reject' },
+        { id: 32, name: 'Cancel' },
+        { id: 30, name: 'Complete' },
+      ];
+    }
+
+    //lay id user
+    this.organization_id_user_login =
+      this.userService.getAuthCurrentUser().organizationId;
+    //mac dinh se search theo ma to chuc minh
+    this.organization_id = this.organization_id_user_login;
+
+    //lấy danh sách tổ chức
+
+    this.inputTreeService.getData().then((res: any) => {
+      this.listOrgCombobox = res;
+
+      this.selectedNodeOrganization = this.listOrgCombobox.filter(
+        (p: any) => p.data == this.organization_id
+      );
+    });
+
+    this.setColForTable();
+
+    this.getTypeListContract(this.currentUser.organizationId);
   }
 
-  convertTime(time: any,code?: any) {
-    return moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") != 'Invalid date' ? moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") : "" ;
+  convertTime(time: any, code?: any) {
+    return moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") != 'Invalid date' ? moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") : "";
   }
 
   changeOrg() {
@@ -71,6 +122,41 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
       .getContractTypeList('', '', typeId)
       .toPromise();
     this.typeList = inforType;
+  }
+
+  setColForTable() {
+    this.cols = [
+      {
+        header: 'code.contract',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        header: 'contract.number',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        header: 'created.name',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        header: 'report.status.contract',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        header: 'report.processing.status.contract',
+        style: 'text-align: left',
+        colspan: 1,
+        rowspan: 1,
+      },
+    ];
   }
 
   export(flag: boolean) {

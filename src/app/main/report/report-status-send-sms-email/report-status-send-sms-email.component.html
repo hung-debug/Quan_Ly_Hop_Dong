@@ -1,7 +1,7 @@
 <div>
   <div class="row">
     <!--Tổ chức-->
-    <!-- <div class="col-md-2">
+    <div class="col-md-2">
           <div>{{'organization' | translate}}</div>
           <div class="input-line">
           <p-treeSelect #nameContract
@@ -14,7 +14,7 @@
           >
         </p-treeSelect>
           </div>
-      </div> -->
+      </div>
 
     <div class="col-md-2">
       <div>{{'contract.information' | translate}}</div>
@@ -28,7 +28,7 @@
       <div>{{'report.status.contract' | translate}}</div>
       <div class="input-line">
         <p-dropdown [(ngModel)]="contractStatus" panelStyleClass="font" appendTo="body" optionLabel="name"
-          optionValue="id" placeholder="{{'all' | translate}}" [showClear]="true" [options]="optionsStatus"
+          optionValue="id" placeholder="{{'all' | translate}}" [showClear]="true" [options]="optionsStatusContract"
           [autoDisplayFirst]="false"></p-dropdown>
       </div>
     </div>
@@ -38,7 +38,7 @@
       <div>{{'report.processing.status.contract' | translate}}</div>
       <div class="input-line">
         <p-dropdown [(ngModel)]="contractStatus" panelStyleClass="font" appendTo="body" optionLabel="name"
-          optionValue="id" placeholder="{{'all' | translate}}" [showClear]="true" [options]="optionsStatus"
+          optionValue="id" placeholder="{{'all' | translate}}" [showClear]="true" [options]="optionsStatusProcess"
           [autoDisplayFirst]="false"></p-dropdown>
       </div>
     </div>
@@ -53,14 +53,14 @@
     </div>
 
     <!--Trạng thái gửi SMS/EMAIL-->
-    <div class="col-md-2">
+    <!-- <div class="col-md-2">
       <div>{{'status.sms.email' | translate}}</div>
       <div class="input-line">
         <p-dropdown [(ngModel)]="contractStatus" panelStyleClass="font" appendTo="body" optionLabel="name"
           optionValue="id" placeholder="{{'all' | translate}}" [showClear]="true" [options]="optionsStatus"
           [autoDisplayFirst]="false"></p-dropdown>
       </div>
-    </div>
+    </div> -->
 
     <!--Button-->
     <div class="col-md-4 btn_search">

@@ -728,5 +728,6 @@
   "sign_cert_title": "Ký Chứng thư số server",
   "time.send.date":"Thời gian gửi",
   "report.status.contract": "Trạng thái HĐ",
-  "status.sms.email":"Trạng thái gửi SMS/EMAIL"
+  "status.sms.email":"Trạng thái gửi SMS/EMAIL",
+  "code.contract": "Mã HĐ"
 }
