@@ -670,8 +670,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   openEditExpiration(item: any) {
 
-    console.log("item ", item);
-
     let title = this.translate.instant('edit.exp.sign.time')
     const data = {
       title: title,
@@ -896,10 +894,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
     return "";
   }
 
-  uploadAttachFiles(id: any) {
+  uploadAttachFiles(contractData: any) {
     const data = {
       title: 'TẢI LÊN FILE ĐÍNH KÈM',
-      id: id,
+      contractId: contractData.id,
+      contractName: contractData.name
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(UploadAttachFilesComponent, {
@@ -911,7 +910,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('check result',result);
       let is_data = result
     })
   }

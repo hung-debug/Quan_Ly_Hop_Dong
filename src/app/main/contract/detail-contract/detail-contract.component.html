@@ -20,7 +20,7 @@
           <span class="title-contract">{{'contract.number' | translate}}:</span>
           <span>{{datas.is_data_contract.contract_no}}</span>
         </div>
-        <div>
+        <div style="overflow: auto; max-height: 150px;"> 
           <span class="title-contract">{{'file.attach' | translate}}:</span>
           <span *ngFor="let d of allFileAttachment;let i = index">
             <span *ngIf="i != 0">, </span>

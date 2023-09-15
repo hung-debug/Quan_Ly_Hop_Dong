@@ -246,7 +246,6 @@ export class UploadAttachFilesComponent implements OnInit {
 
 
   deleteFileAttach(item: any, index_dlt: number) {
-    console.log('itemm',item);
     if (item.id) {
       this.spinner.show();
       let data = this.attachFileArr?.filter((p: any) => p.id == item.id)[0]
@@ -267,7 +266,6 @@ export class UploadAttachFilesComponent implements OnInit {
       this.attachFileNameArr.splice(index_dlt, 1);
       this.datas.attachFileArr.splice(index_dlt, 1);
       this.attachFileArr.splice(index_dlt, 1)
-      console.log('this.attachFileArr removed',this.attachFileArr);
     }
   }
 
@@ -278,7 +276,6 @@ export class UploadAttachFilesComponent implements OnInit {
 
   fileChangedAttach(e: any) {
     let files = e.target.files;
-    console.log('check file',files);
     for (let i = 0; i < files.length; i++) {
       let file1 = e.target.files[i];
       if (file1) {
@@ -320,7 +317,6 @@ export class UploadAttachFilesComponent implements OnInit {
         }
       }
     }
-    console.log('check file2',this.attachFileArr);
     
     const valueEmpty: any = document.getElementById('attachFile');
     valueEmpty.value = "";
@@ -357,22 +353,37 @@ export class UploadAttachFilesComponent implements OnInit {
   }
 
   async uploadingAttachFiles(){
-    console.log('this.attachFileArr',this.attachFileArr);
-
+    let addDocsPayload: any = []
     // step1 - upload to org
     if (this.attachFileArr.length == 0) return
-    console.log('hello');
-    const listAttachFiles = await this.uploadService.uploadMultiFileToOrg(this.attachFileArr).toPromise()
-    console.log('listAttachFiles',listAttachFiles);
-
-    let addDocsPayload = []
-    // for (let i = 0; i< <any>listAttachFiles?.length)
-    // addDocsPayload = listAttachFiles.map((item: any) => ({
-
-    // }))
-    const res = await this.contractService.addDocument(listAttachFiles).toPromise()
-    console.log('res',res);
-
-    // attach files to contract
+    
+    try {
+      this.spinner.show()
+      this.uploadService.uploadMultiFileToOrg(this.attachFileArr).subscribe(
+        (res: any) => {
+          this.spinner.hide()
+          for (let i = 0; i < res.length; i++){
+            addDocsPayload[i] = {
+              id: this.data.contractId,
+              name: this.data.contractName,
+              filePath: res[i]?.file_object?.file_path,
+              fileName: res[i]?.file_object?.filename,
+              fileBucket: res[i]?.file_object?.bucket,
+            }
+          }
+          for (let i = 0; i < addDocsPayload.length; i++){
+            this.contractService.addDocument(addDocsPayload[i], 3).toPromise().then(
+              (res: any) => {
+                this.spinner.hide()
+              }
+            )
+          }
+          this.toastService.showSuccessHTMLWithTimeout('Upload file đính kèm thành công','',3000)
+        }
+      )
+    } catch (error) {
+      this.spinner.hide()
+      this.toastService.showErrorHTMLWithTimeout('Upload file đính kèm thất bại','',3000)
+    }
   }
 }
