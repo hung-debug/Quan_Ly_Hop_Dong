@@ -130,7 +130,12 @@
                         <!-- <img src="assets/img/clear.svg" alt=""> -->
                         <img src="assets/img/border-clear.svg" alt="">
                     </div>
-                    <app-sign-contract class="main-sign-box" [datas]="datasForm" (onChangeValueText)="getValueText($event, d)" [signTemplate]="true" [sign]="d"
+                    <app-sign-contract 
+                    [ngClass]="(d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh') ? 'main-sign-box': ''" 
+                    [datas]="datasForm" 
+                    (onChangeValueText)="getValueText($event, d)" 
+                    [signTemplate]="true" 
+                    [sign]="d"
                     [contractNo]="contractNo"
                     ></app-sign-contract>
                 </div>
