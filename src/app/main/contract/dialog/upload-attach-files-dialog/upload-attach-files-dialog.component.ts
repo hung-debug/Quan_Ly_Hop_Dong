@@ -379,6 +379,7 @@ export class UploadAttachFilesComponent implements OnInit {
             )
           }
           this.toastService.showSuccessHTMLWithTimeout('Upload file đính kèm thành công','',3000)
+          this.dialog.closeAll()
         }
       )
     } catch (error) {
