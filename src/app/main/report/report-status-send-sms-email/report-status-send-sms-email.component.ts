@@ -12,6 +12,8 @@ import { ReportService } from '../report.service';
 import { Table } from 'primeng/table';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import * as moment from 'moment';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ContentSmsComponent } from './content-sms/content-sms.component';
 
 @Component({
   selector: 'app-report-status-send-sms-email',
@@ -20,6 +22,7 @@ import * as moment from 'moment';
 })
 
 export class ReportStatusSendSmsEmailComponent implements OnInit {
+  @ViewChild('dt') table: Table;
   currentUser: any;
   selectedNodeOrganization: any;
   listOrgCombobox: any;
@@ -28,20 +31,19 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
   cols: any[];
   typeList: Array<any> = [];
   inforContract: any;
-  optionsStatusContract: any = [];
-  optionsStatusProcess: any = [];
-  contractStatus: any;
   orgName: any;
   Arr = Array;
   organization_id_user_login: any;
   organization_id: any;
   lang: string;
+  totalRecords: number = 0;
+  first: number = 0;
 
   constructor(
     private appService: AppService,
     private inputTreeService: InputTreeService,
     private userService: UserService,
-
+    public dialog: MatDialog,
     private reportService: ReportService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
@@ -61,31 +63,11 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
 
     this.appService.setTitle('role.report.history.send.sms.email');
 
-    this.optionsStatusContract = [
-      { id: 20, name: 'Đang thực hiện' },
-      { id: 2, name: 'Quá hạn' },
-      { id: 31, name: 'Từ chối' },
-      { id: 32, name: 'Huỷ bỏ' },
-      { id: 30, name: 'Hoàn thành' },
-    ];
-
-    this.optionsStatusProcess = [
-      { id: 2, name: 'Đã ký' },
-      { id: 1, name: 'Đang ký' },
-    ];
 
     if (sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     } else if (sessionStorage.getItem('lang') == 'en') {
       this.lang = 'en';
-
-      this.optionsStatusContract = [
-        { id: 20, name: 'Processing' },
-        { id: 2, name: 'Overdue' },
-        { id: 31, name: 'Reject' },
-        { id: 32, name: 'Cancel' },
-        { id: 30, name: 'Complete' },
-      ];
     }
 
     //lay id user
@@ -124,6 +106,20 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
     this.typeList = inforType;
   }
 
+  contentSMS(id: any){
+    const data = {
+      title: 'content.sms',
+      id: id,
+    };
+    const dialogRef = this.dialog.open(ContentSmsComponent, {
+      width: '600px',
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      let is_data = result
+    })
+  }
+
   setColForTable() {
     this.cols = [
       {
@@ -139,19 +135,31 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
         rowspan: 1,
       },
       {
-        header: 'created.name',
+        header: 'contract.name',
         style: 'text-align: left;',
         colspan: 1,
         rowspan: 1,
       },
       {
-        header: 'report.status.contract',
+        header: 'phone',
         style: 'text-align: left;',
         colspan: 1,
         rowspan: 1,
       },
       {
-        header: 'report.processing.status.contract',
+        header: 'content',
+        style: 'text-align: left',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        header: 'time.send.date',
+        style: 'text-align: left',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        header: 'Trạng thái gửi',
         style: 'text-align: left',
         colspan: 1,
         rowspan: 1,
@@ -161,5 +169,55 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
 
   export(flag: boolean) {
 
+    this.spinner.show();
+
+    this.selectedNodeOrganization = !this.selectedNodeOrganization.length
+      ? this.selectedNodeOrganization
+      : this.selectedNodeOrganization[0];
+
+    this.orgName = this.selectedNodeOrganization.label;
+    let idOrg = this.selectedNodeOrganization.data;
+
+    let from_date: any = '';
+    let to_date: any = '';
+    if (this.date && this.date.length > 0) {
+      from_date = this.datepipe.transform(this.date[0], 'yyyy-MM-dd');
+      to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
+    }
+
+    if (!to_date) to_date = from_date;
+
+    let params =
+      '?from_date=' +
+      from_date +
+      '&to_date=' +
+      to_date;
+
+    this.reportService.export('rp-by-effective-date', idOrg, params, flag).subscribe((response: any) => {
+      this.spinner.hide();
+
+      if (flag) {
+        let url = window.URL.createObjectURL(response);
+        let a = document.createElement('a');
+        document.body.appendChild(a);
+        a.setAttribute('style', 'display: none');
+        a.href = url;
+        a.download = `BaoCaoLichSuSms_${new Date().getDate()}-${new Date().getMonth() + 1
+          }-${new Date().getFullYear()}.xlsx`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+
+        this.toastService.showSuccessHTMLWithTimeout(
+          'no.contract.download.file.success',
+          '',
+          3000
+        );
+      } else {
+          this.list = [];
+          this.table.first = 0;
+          this.setColForTable();
+      }
+    });
   }
 }

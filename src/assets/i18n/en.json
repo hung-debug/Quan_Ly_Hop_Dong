@@ -650,7 +650,7 @@
   "role.contract.type.quantity":"Report quantity by contract type",
   "role.contract.receive":"Report contract receive",
   "role.number.contract.econtract.msale":"Report quantity of contracts eContract - mSale ",
-  "role.report.history.send.sms.email":"Report SMS/EMAIL sending history",
+  "role.report.history.send.sms.email":"Report SMS sending history",
   "currency": "Currency",
   "default": "Default",
   "customer.delete": "Delete partner",

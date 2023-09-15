@@ -51,6 +51,7 @@ import {DigitalCertificateComponent} from './main/digital-certificate/digital-ce
 import {DigitalCertificateAddComponent} from './main/digital-certificate/digital-certificate-add/digital-certificate-add.component';
 import {DigitalCertificateDetailComponent} from './main/digital-certificate/digital-certificate-detail/digital-certificate-detail.component';
 import {DigitalCertificateEditComponent} from './main/digital-certificate/digital-certificate-edit/digital-certificate-edit.component';
+import {ContentSmsComponent} from './main/report/report-status-send-sms-email/content-sms/content-sms.component';
 import { ReportContractReceiveComponent } from './main/report/report-contract-receive/report-contract-receive.component';
 
 const contract_signatures = "c";
