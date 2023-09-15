@@ -126,7 +126,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
-    console.log('hello');
     this.onResize();
 
     this.spinner.hide();
@@ -173,7 +172,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
         let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
         if (fileContract_2) {
-          this.pdfSrc = fileContract_2.path;
+
+          // fix lỗi set nhầm file hợp đồng hiển thị preview - edit mẫu HĐ
+          this.pdfSrc = fileContract_1.path;
         } else {
           this.pdfSrc = fileContract_1.path;
         }

@@ -293,7 +293,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
           const pdfC2 = this.datas.i_data_file_contract.find((p: any) => p.type == 2);
           const pdfC1 = this.datas.i_data_file_contract.find((p: any) => p.type == 1);
           if (pdfC2) {
-            fileC = pdfC2.path;
+            fileC = pdfC1.path;
           } else if (pdfC1) {
             fileC = pdfC1.path;
           } else {
