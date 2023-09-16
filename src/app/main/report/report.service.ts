@@ -12,6 +12,8 @@ export class ReportService {
   organization_id: any;
 
   reportUrl: any = `${environment.apiUrl}/api/v1/contracts/`
+  reportSmsUrl: any = `${environment.apiUrl}/api/v1/contracts/getNotificationLog`
+  exportReportSmsUrl: any = `${environment.apiUrl}/api/v1/contracts/rp-by-sms-log/export`
 
   constructor(
     private http: HttpClient
@@ -54,6 +56,31 @@ export class ReportService {
       return this.http.get<any>(url,{headers: headers}).pipe();
     }
   }
+  exportSmsReport(params: any, data: any, isExport: boolean) {
+    this.getCurrentUser();
 
+    let headers = null;
 
+    const body = JSON.stringify({
+      orgId: data.orgId,
+      contractInfo: data.contractInfo,
+      createDate: data.createDate
+    })
+
+    if(isExport) {
+      headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    } else {
+      headers = new HttpHeaders().append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    }
+
+    if (isExport) {
+      return this.http.post<any>(this.exportReportSmsUrl + params, body, { headers: headers,responseType: 'blob' as 'json'}).pipe();
+    } else {
+      return this.http.post<any>(this.reportSmsUrl + params, body, {headers: headers});
+    }
+
+  }
 }

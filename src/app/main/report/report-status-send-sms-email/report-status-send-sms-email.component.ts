@@ -1,12 +1,11 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
 import { ContractService } from 'src/app/service/contract.service';
 import { InputTreeService } from 'src/app/service/input-tree.service';
 import { ToastService } from 'src/app/service/toast.service';
-import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
 import { Table } from 'primeng/table';
@@ -30,7 +29,7 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
   list: any[] = [];
   cols: any[];
   typeList: Array<any> = [];
-  inforContract: any;
+  contractInfo: any;
   orgName: any;
   Arr = Array;
   organization_id_user_login: any;
@@ -56,15 +55,15 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
       localStorage.getItem('currentUser') || ''
     ).customer.info;
 
-    // Tính toán ngày kết thúc (hiện tại)
-    const endDate = new Date();
+    // // Tính toán ngày kết thúc (hiện tại)
+    // const endDate = new Date();
 
-    // Tính toán ngày bắt đầu (7 ngày trước ngày kết thúc)
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 6);
+    // // Tính toán ngày bắt đầu (7 ngày trước ngày kết thúc)
+    // const startDate = new Date();
+    // startDate.setDate(startDate.getDate() - 6);
 
-    // Gán giá trị mặc định cho biến date
-    this.date = [startDate, endDate];
+    // // Gán giá trị mặc định cho biến date
+    // this.date = [startDate, endDate];
   }
 
 
@@ -102,7 +101,7 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
   }
 
   convertTime(time: any, code?: any) {
-    return moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") != 'Invalid date' ? moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") : "";
+    return moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") != 'Invalid date' ? moment(time, "YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY HH:mm:ss") : "";
   }
 
   changeOrg() {
@@ -116,10 +115,10 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
     this.typeList = inforType;
   }
 
-  contentSMS(id: any) {
+  contentSMS(dataSendLog: any) {
     const data = {
       title: 'content.sms',
-      id: id,
+      dataSendLog: dataSendLog,
     };
     const dialogRef = this.dialog.open(ContentSmsComponent, {
       width: '600px',
@@ -152,13 +151,13 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
       },
       {
         header: 'phone',
-        style: 'text-align: left;',
+        style: 'text-align: center;',
         colspan: 1,
         rowspan: 1,
       },
       {
         header: 'content',
-        style: 'text-align: left',
+        style: 'text-align: center',
         colspan: 1,
         rowspan: 1,
       },
@@ -170,64 +169,87 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
       },
       {
         header: 'Trạng thái gửi',
-        style: 'text-align: left',
+        style: 'text-align: center',
         colspan: 1,
         rowspan: 1,
       },
     ];
   }
-
-  export(flag: boolean) {
-
-    this.spinner.show();
-
+  async exportSmsReportCall(isExport: boolean) {
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length
-      ? this.selectedNodeOrganization
-      : this.selectedNodeOrganization[0];
-
+    ? this.selectedNodeOrganization
+    : this.selectedNodeOrganization[0];
     this.orgName = this.selectedNodeOrganization.label;
     let idOrg = this.selectedNodeOrganization.data;
 
-    let from_date: any = '';
-    let to_date: any = '';
-    if (this.date && this.date.length > 0) {
-      from_date = this.datepipe.transform(this.date[0], 'yyyy-MM-dd');
-      to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
+    // let from_date: any = '';
+    // let to_date: any = '';
+    // if (this.date && this.date.length > 0) {
+    //   from_date = this.datepipe.transform(this.date[0], 'yyyy-MM-dd');
+    //   to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
+    // }
+
+    // if (!to_date) to_date = from_date;
+
+    // let params =
+    //   '?from_date=' +
+    //   from_date +
+    //   '&to_date=' +
+    //   to_date;
+
+    let payloadData = {
+      "orgId": idOrg,
+      "contractInfo": this.contractInfo,
+      "createDate": this.date
     }
 
-    if (!to_date) to_date = from_date;
-
-    let params =
-      '?from_date=' +
-      from_date +
-      '&to_date=' +
-      to_date;
-
-    this.reportService.export('rp-by-effective-date', idOrg, params, flag).subscribe((response: any) => {
-      this.spinner.hide();
-
-      if (flag) {
-        let url = window.URL.createObjectURL(response);
-        let a = document.createElement('a');
-        document.body.appendChild(a);
-        a.setAttribute('style', 'display: none');
-        a.href = url;
-        a.download = `BaoCaoLichSuSms_${new Date().getDate()}-${new Date().getMonth() + 1
-          }-${new Date().getFullYear()}.xlsx`;
-        a.click();
-        window.URL.revokeObjectURL(url);
-        a.remove();
-
-        this.toastService.showSuccessHTMLWithTimeout(
-          'no.contract.download.file.success',
-          '',
-          3000
-        );
-      } else {
-        this.list = [];
-        this.table.first = 0;
-        this.setColForTable();
+    let params = `?pageNumber=0&pageSize=10000`
+    
+    if (!isExport) {
+      this.spinner.show()
+      await this.reportService.exportSmsReport(params, payloadData, false).toPromise().then(
+        (res: any) => {
+          // this.list = [];
+          this.spinner.hide()
+          this.list = res.content.filter((item: any) => !item.emailOrPhone.includes('@'))
+        }
+      )
+    } else {
+      if (!this.date) {
+        this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn thời gian gửi!','',3000)
+        return
       }
-    });
+      this.spinner.show()
+      await this.reportService.exportSmsReport(params, payloadData, true).toPromise().then(
+        (res: any) => {
+          // this.list = [];
+          this.spinner.hide()
+          if (res) {
+            this.toastService.showSuccessHTMLWithTimeout('Xuất file báo cáo thành công','',3000)
+            this.downloadFile(res)
+          }
+          // this.list = res.content.filter((item: any) => !item.emailOrPhone.includes('@'))
+        }
+      )
+    }
   }
+
+  downloadFile(data: any) {
+    let currentDate = moment().format('HH:mm:ss')
+    let selectedDate = moment(this.date).format('DD-MM-YYYY')
+    const blob = new Blob([data], { type: 'application/x-binary' });
+    const url = window.URL.createObjectURL(blob);
+
+      // Create an anchor element for downloading the file
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Sms_Report_${selectedDate + '-' + currentDate}.xlsx`; // Specify the file name for the download
+
+    // Trigger a click event to initiate the download
+    a.click();
+
+    // Clean up by revoking the URL
+    window.URL.revokeObjectURL(url);
+  }
+
 }

@@ -19,7 +19,7 @@
     <div class="col-md-2">
       <div>{{'contract.information' | translate}}</div>
       <div class="input-line">
-        <input type="text" [(ngModel)]="inforContract" class="input_text" placeholder="Mã HĐ, Số HĐ, Tên HĐ" />
+        <input type="text" [(ngModel)]="contractInfo" class="input_text" placeholder="Mã HĐ, Số HĐ, Tên HĐ" />
       </div>
     </div>
 
@@ -29,7 +29,7 @@
         <!-- <span style="color: red"> *</span> -->
       </div>
       <div class="input-line">
-        <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true"
+        <p-calendar [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true"
           dateFormat="dd/mm/yy"></p-calendar>
       </div>
     </div>
@@ -37,8 +37,8 @@
 
     <!--Button-->
     <div class="col-md-4 btn_search">
-      <button class="btn btn-lg btn-block btn_submit" (click)="export(false)">{{'btn.report' | translate }}</button>
-      <button class="btn btn-lg btn-block btn_submit" (click)="export(true)">Export</button>
+      <button class="btn btn-lg btn-block btn_submit" (click)="exportSmsReportCall(false)">{{'btn.report' | translate }}</button>
+      <button class="btn btn-lg btn-block btn_submit" (click)="exportSmsReportCall(true)">Export</button>
     </div>
   </div>
 
@@ -50,7 +50,6 @@
 
       <!--header-->
       <ng-template pTemplate="header">
-        <!--header 1-->
         <tr>
           <th *ngFor="let col of cols" [style]='col.style' [colSpan]="col.colspan" [rowSpan]="col.rowspan">
             {{col.header | translate}}
@@ -60,16 +59,19 @@
 
       <ng-template pTemplate="body" let-list let-row="rowIndex">
         <tr>
-          <ng-container *ngIf="row > 0">
-            <td>{{list}}</td> <!--mã hđ-->
-            <td>{{list}}</td>  <!--số hđ-->
-            <td>{{list}}</td> <!--Tên HĐ-->
-            <td>{{list}}</td> <!--SĐT-->
+          <ng-container *ngIf="row >= 0">
+            <td>{{list.contractUuid}}</td> <!--mã hđ-->
+            <td>{{list.contractNo}}</td>  <!--số hđ-->
+            <td>{{list.contractName}}</td> <!--Tên HĐ-->
+            <td style="text-align: center; ">{{list.emailOrPhone}}</td> <!--SĐT-->
             <td style="text-align: center; ">
-              <img ngbTooltip="{{'content' | translate}}" src="../../../assets/img/icon_file_sms.svg" width="20px" (click)="contentSMS(list.id)" style="cursor: pointer;"/>
+              <img ngbTooltip="{{'content' | translate}}" src="../../../assets/img/icon_file_sms.svg" width="20px" (click)="contentSMS(list.dataSendLog)" style="cursor: pointer;"/>
             </td>
-            <td>{{this.convertTime(list)}}</td> <!--Thời gian gửi-->
-            <td>{{list}}</td> <!--Trạng thái gửi-->
+            <td>{{this.convertTime(list.createDate)}}</td> <!--Thời gian gửi-->
+            <td 
+            [ngStyle]="{color: list.status == 'Thành công' ? 'green' : 'red'}"
+            style="text-align: center; "
+            >{{list.status}}</td> <!--Trạng thái gửi-->
           </ng-container>
         </tr>
       </ng-template>
