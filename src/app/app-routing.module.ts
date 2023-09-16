@@ -220,7 +220,7 @@ const routes: Routes = [
           },
           //Báo cáo trạng thái gửi Sms/Email
           {
-            path: 'status-send-sms-email',
+            path: 'status-send-sms',
             component: ReportStatusSendSmsEmailComponent
           }
         ]
