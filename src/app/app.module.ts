@@ -105,6 +105,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ReportDetailComponent } from './main/report/report-detail/report-detail.component';
 import { ReportStatusContractComponent } from './main/report/report-status-contract/report-status-contract.component';
 import { ReportSoonExpireComponent } from './main/report/report-soon-expire/report-soon-expire.component';
+import { ReportStatusSendSmsEmailComponent } from './main/report/report-status-send-sms-email/report-status-send-sms-email.component';
 import { ReportContractNumberFollowStatusComponent } from './main/report/report-contract-number-follow-status/report-contract-number-follow-status.component';
 import { ReportContractNumberEcontractMsaleComponent } from './main/report/report-contract-number-eContract-mSale/report-contract-number-eContract-mSale.component';
 import { ContractNumberFollowSignComponent } from './main/report/contract-number-follow-sign/contract-number-follow-sign.component';
@@ -123,6 +124,7 @@ import {DigitalCertificateComponent} from './main/digital-certificate/digital-ce
 import {DigitalCertificateAddComponent} from './main/digital-certificate/digital-certificate-add/digital-certificate-add.component';
 import {DigitalCertificateDetailComponent} from './main/digital-certificate/digital-certificate-detail/digital-certificate-detail.component';
 import {DigitalCertificateEditComponent} from './main/digital-certificate/digital-certificate-edit/digital-certificate-edit.component';
+import {ContentSmsComponent} from './main/report/report-status-send-sms-email/content-sms/content-sms.component';
 import { HeadersInterceptor } from './headers.interceptor';
 import { UploadAttachFilesComponent } from './main/contract/dialog/upload-attach-files-dialog/upload-attach-files-dialog.component';
 
@@ -139,6 +141,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DigitalCertificateAddComponent,
     DigitalCertificateDetailComponent,
     DigitalCertificateEditComponent,
+    ContentSmsComponent,
     ContractComponent,
     ContractSignatureComponent,
     UnitComponent,
@@ -198,6 +201,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ReportDetailComponent,
     ReportStatusContractComponent,
     ReportSoonExpireComponent,
+    ReportStatusSendSmsEmailComponent,
     ReportContractNumberFollowStatusComponent,
     ReportContractNumberEcontractMsaleComponent,
     ContractNumberFollowSignComponent,

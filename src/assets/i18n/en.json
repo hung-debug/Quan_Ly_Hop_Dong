@@ -554,7 +554,8 @@
   "report.number.contracts.status.full":"Report number of contracts by status",
   "report.number.contracts.contract-type.full":"Report number of contracts by contract type",
   "report.number.contracts.type.sign.full":"Report the number of contracts in the type of sign",
-  "report.number.econtract.msale":"Report the number of contracts econtract - mSale",
+  "report.number.econtract.msale":"Report the number of contracts eContract - mSale",
+  "report.status.send.sms.email": "Report SMS/Email sending status",
   "include.org1":"Including sub-organizations (Sub-organizations include only tier-one sub-organizations)",
   "contract.time.create": "Time create",
   "signing.expiration.date":"Sign expiration time",
@@ -648,7 +649,8 @@
   "role.number.status":"Report quantity status",
   "role.contract.type.quantity":"Report quantity by contract type",
   "role.contract.receive":"Report contract receive",
-  "role.number.contract.econtract.msale":"Report quantity of contracts econtract - mSale ",
+  "role.number.contract.econtract.msale":"Report quantity of contracts eContract - mSale ",
+  "role.report.history.send.sms.email":"Report SMS sending history",
   "currency": "Currency",
   "default": "Default",
   "customer.delete": "Delete partner",
@@ -719,5 +721,8 @@
   "role.cerificate.update": "Update information digital certificate server",
   "role.cerificate.detail": "View information digital certificate server",
   "role.cerificate.filter": "Search digital certificate server",
-  "upload_attach_files": "Upload attachments"
+  "upload_attach_files": "Upload attachments",
+  "time.send.date":"Date Sending",
+  "report.status.contract": "Contract status",
+  "status.sms.email":"Status SMS/EMAIL sending"
 }

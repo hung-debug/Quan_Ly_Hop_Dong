@@ -453,6 +453,8 @@ environment.flag == 'NB'?
 
       //Báo cáo số lượng hợp đồng econtract-mSale
       {label: 'role.number.contract.econtract.msale', value:'BAOCAO_SOLUONG_HOPDONG_ECONTRACT_MSALE'},
+      //Báo cáo trạng thái gửi Sms/Email
+      {label: 'role.report.history.send.sms.email', value:'BAOCAO_TRANGTHAIGUI_SMSEMAIL'}
     ]
 
   },
