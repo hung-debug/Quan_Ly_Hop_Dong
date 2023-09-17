@@ -67,7 +67,7 @@
             <td style="text-align: center; ">
               <img ngbTooltip="{{'content' | translate}}" src="../../../assets/img/icon_file_sms.svg" width="20px" (click)="contentSMS(list.dataSendLog)" style="cursor: pointer;"/>
             </td>
-            <td>{{this.convertTime(list.createDate)}}</td> <!--Thời gian gửi-->
+            <td>{{convertTime(list.createDate)}}</td> <!--Thời gian gửi-->
             <td 
             [ngStyle]="{color: list.status == 'Thành công' ? 'green' : 'red'}"
             style="text-align: center; "

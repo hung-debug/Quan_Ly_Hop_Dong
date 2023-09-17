@@ -10,7 +10,7 @@ import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
 import { Table } from 'primeng/table';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ContentSmsComponent } from './content-sms/content-sms.component';
 
@@ -70,7 +70,7 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.spinner.hide();
 
-    this.appService.setTitle('role.report.history.send.sms.email');
+    this.appService.setTitle('role.report.history.send.sms');
 
 
     if (sessionStorage.getItem('lang') == 'vi') {
@@ -101,7 +101,7 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
   }
 
   convertTime(time: any, code?: any) {
-    return moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") != 'Invalid date' ? moment(time, "YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY HH:mm:ss") : "";
+    return moment(time).tz('Asia/Ho_Chi_Minh').format("DD/MM/YYYY HH:mm:ss");
   }
 
   changeOrg() {
@@ -215,10 +215,10 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
         }
       )
     } else {
-      if (!this.date) {
-        this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn thời gian gửi!','',3000)
-        return
-      }
+      // if (!this.date) {
+      //   this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn thời gian gửi!','',3000)
+      //   return
+      // }
       this.spinner.show()
       await this.reportService.exportSmsReport(params, payloadData, true).toPromise().then(
         (res: any) => {
