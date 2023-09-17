@@ -55,15 +55,14 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
       localStorage.getItem('currentUser') || ''
     ).customer.info;
 
-    // // Tính toán ngày kết thúc (hiện tại)
-    // const endDate = new Date();
-
-    // // Tính toán ngày bắt đầu (7 ngày trước ngày kết thúc)
-    // const startDate = new Date();
-    // startDate.setDate(startDate.getDate() - 6);
-
-    // // Gán giá trị mặc định cho biến date
-    // this.date = [startDate, endDate];
+    // Tính toán ngày kết thúc (hiện tại)
+    let endDate = new Date();
+    // Tính toán ngày bắt đầu (7 ngày trước ngày kết thúc)
+    let startDate = new Date();
+    startDate.setDate(startDate.getDate() - 6);
+    // Gán giá trị mặc định cho biến date
+    
+    this.date = [startDate, endDate];
   }
 
 
@@ -182,14 +181,16 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
     this.orgName = this.selectedNodeOrganization.label;
     let idOrg = this.selectedNodeOrganization.data;
 
-    // let from_date: any = '';
-    // let to_date: any = '';
-    // if (this.date && this.date.length > 0) {
-    //   from_date = this.datepipe.transform(this.date[0], 'yyyy-MM-dd');
-    //   to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
-    // }
+    let from_date: any = '';
+    let to_date: any = '';
+    if (this.date && this.date.length > 0) {
+      // from_date = this.datepipe.transform(this.date[0], 'yyyy-MM-dd');
+      // to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
+      from_date = this.date[0]
+      to_date = this.date[1]
+    }
 
-    // if (!to_date) to_date = from_date;
+    if (!to_date) to_date = from_date;
 
     // let params =
     //   '?from_date=' +
@@ -200,7 +201,9 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
     let payloadData = {
       "orgId": idOrg,
       "contractInfo": this.contractInfo,
-      "createDate": this.date
+      // "createDate": this.date,
+      "startDate": from_date,
+      "endDate": to_date,
     }
 
     let params = `?pageNumber=0&pageSize=10000`
@@ -209,7 +212,7 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
       this.spinner.show()
       await this.reportService.exportSmsReport(params, payloadData, false).toPromise().then(
         (res: any) => {
-          // this.list = [];
+          this.list = [];
           this.spinner.hide()
           this.list = res.content.filter((item: any) => !item.emailOrPhone.includes('@'))
         }

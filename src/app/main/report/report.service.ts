@@ -64,7 +64,9 @@ export class ReportService {
     const body = JSON.stringify({
       orgId: data.orgId,
       contractInfo: data.contractInfo,
-      createDate: data.createDate
+      // createDate: data.createDate
+      startDate: data.startDate,
+      endDate: data.endDate
     })
 
     if(isExport) {

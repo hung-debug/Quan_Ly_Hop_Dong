@@ -5,12 +5,12 @@
           <div>{{'organization' | translate}}</div>
           <div class="input-line">
           <p-treeSelect #nameContract
-              [(ngModel)]="selectedNodeOrganization"
-              [filter]="true"
-              filterBy="name"
-              [droppable]="true"
-              [options]="listOrgCombobox"
-              (onNodeSelect)="changeOrg()"
+            [(ngModel)]="selectedNodeOrganization"
+            [filter]="true"
+            filterBy="name"
+            [droppable]="true"
+            [options]="listOrgCombobox"
+            (onNodeSelect)="changeOrg()"
           >
         </p-treeSelect>
           </div>
@@ -29,7 +29,11 @@
         <!-- <span style="color: red"> *</span> -->
       </div>
       <div class="input-line">
-        <p-calendar [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true"
+        <p-calendar 
+          [readonlyInput]="true" 
+          [(ngModel)]="date" 
+          [showIcon]="true"
+          selectionMode="range"
           dateFormat="dd/mm/yy"></p-calendar>
       </div>
     </div>
@@ -46,7 +50,7 @@
   <!--Bảng dữ liệu-->
   <div class="row" style="padding-top: 30px;">
     <p-table #dt [value]="list" [paginator]="true" [rows]="10" id="table" [autoLayout]="true"
-    [totalRecords]="this.totalRecords" [(first)]="this.first">
+    [totalRecords]="totalRecords" [(first)]="first">
 
       <!--header-->
       <ng-template pTemplate="header">
