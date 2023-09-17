@@ -225,7 +225,7 @@ export class EkycDialogSignComponent implements OnInit {
           "content":this.webcamImage.imageAsDataUrl,
           "organizationId": this.organizationId,
           signType: 'eKYC',
-          ocrResponseName: this.name
+          ocrResponseName: this.name ? this.name : response.participants[0].name
         }
   
         this.upFileImageToDb(formData);
