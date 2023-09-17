@@ -215,7 +215,6 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
             this.spinner.hide()
             // this.list = res.content.filter((item: any) => !item.emailOrPhone.includes('@'))
             this.list = res.content
-            console.log('ress',res);
           }
         )
       } else {
