@@ -29,10 +29,9 @@ import { CheckViewContractService } from 'src/app/service/check-view-contract.se
 import { Validators } from '@angular/forms';
 import { parttern_input } from 'src/app/config/parttern';
 import { NgxInputSearchModule } from "ngx-input-search";
-
-
+import { environment } from 'src/environments/environment';
 export class ContractConnectArr {
-  ref_id: number;
+  ref_id: number; 
 
   constructor(ref_id: number) {
     this.ref_id = ref_id;
@@ -99,6 +98,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   checkView: boolean = true;
 
   ceca: boolean;
+  environment: any = ""
 
   uploadFileContractAgain: boolean = false;
   uploadFileAttachAgain: boolean = false;
@@ -124,6 +124,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   async ngOnInit(): Promise<void> {
+    this.environment = environment
     this.spinner.hide();
 
     let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
@@ -181,6 +182,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         this.ceca = false;
       } else if(response.ceca_push_mode == 'SELECTION') {
         this.ceca = true
+        if (environment.flag == 'NB') {
+          this.optionsCeCaValue = 1
+        } 
+      } else {
+        this.ceca = false
+        this.optionsCeCaValue = 0
       }
     })
 
@@ -394,7 +401,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   async changeTypeContract() {
     if(this.type_id) {
       const informationContractType = await this.contractTypeService.getContractTypeById(this.type_id).toPromise();
-
       if(informationContractType.ceca_push == 1) {
         this.optionsCeCa = optionsCeCa;
         this.optionsCeCaValue = 1;
@@ -408,7 +414,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         this.optionsCeCa = optionsCeCa;
       }
     } else {
-      this.optionsCeCaValue = null;
+      if (environment.flag == 'NB') {
+        this.optionsCeCaValue = 1;
+      } else {
+        this.optionsCeCaValue = 0;
+      }
       this.optionsCeCa = optionsCeCa;
     }
 

@@ -24,6 +24,7 @@ import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 import { parttern, parttern_input } from 'src/app/config/parttern';
 import { NgxInputSearchModule } from "ngx-input-search";
+import { environment } from 'src/environments/environment';
 
 export class ContractConnectArr {
   ref_id: number;
@@ -80,7 +81,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   checkView: boolean = false;
 
   ceca: any;
-
+  environment: any = ''
   constructor(
     private contractService: ContractService,
     private contractTemplateService: ContractTemplateService,
@@ -96,6 +97,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    this.environment = environment
     this.spinner.hide();
 
     let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
@@ -170,6 +172,9 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         this.ceca = false;
       } else if (response.ceca_push_mode == 'SELECTION') {
         this.ceca = true;
+        if (environment.flag == 'NB') {
+          this.optionsCeCaValue = 1
+        } 
       }
 
       this.getContractTemplateForm(); // ham lay mau hop dong
@@ -183,12 +188,17 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     if(!e.value) {
 
       this.optionsCeCa = optionsCeCa;
-      this.datasForm.ceca_push = 0;
-      this.optionsCeCaValue = 0;
       this.datasForm.type_id = null;
-
       const e = {
         value: this.datasForm.template_contract_id
+      }
+
+      if (environment.flag == 'NB') {
+        this.datasForm.ceca_push = 1;
+        this.optionsCeCaValue = 1;
+      } else {
+        this.datasForm.ceca_push = 0;
+        this.optionsCeCaValue = 0;
       }
 
       // this.onChangeForm(e);

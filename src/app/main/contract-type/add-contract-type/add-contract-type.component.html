@@ -4,7 +4,7 @@
     </div>
     <form (ngSubmit)="onSubmit()" [formGroup]="addForm" class="content">
         
-        <div *ngIf="this.ceca" class="row">
+        <div *ngIf=" this.enviroment.flag == 'NB' ? true : this.ceca" class="row">
             <div class="col-md-12">
                 <div class="label text-color">{{'contract-type.ceca' | translate}}</div>
                     <p-dropdown 

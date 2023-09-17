@@ -1,12 +1,9 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
-import { ContractService } from 'src/app/service/contract.service';
 import { InputTreeService } from 'src/app/service/input-tree.service';
 import { ToastService } from 'src/app/service/toast.service';
-import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
 import { Table } from 'primeng/table';
@@ -28,15 +25,19 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
   organization_id_user_login: any;
   organization_id: any;
   orgName: any;
-  type_id: any;
+  type_id: any = [];
   typeList: Array<any> = [];
   date: any;
   list: any[] = [];
   cols: any[];
   Arr = Array;
   site: string;
-  page: any;
-  size: any;
+  page: number = 0;
+  size: number = 5;
+  totalRecords: number = 0;
+  first: number = 0;
+
+  isBaoCaoHopDongEcontractMsale: boolean = true;
 
   constructor(
     private appService: AppService,
@@ -48,7 +49,6 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private datepipe: DatePipe,
 
-    private contractService: ContractService,
     private contractTypeService: ContractTypeService
   ) {
     this.currentUser = JSON.parse(
@@ -56,7 +56,6 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     ).customer.info;
   }
   async ngOnInit(): Promise<void> {
-    this.spinner.hide();
 
     this.appService.setTitle('role.number.contract.econtract.msale');
 
@@ -93,14 +92,34 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
   }
 
   changeOrg() {
+    this.typeList = []
+    this.type_id = []
     this.getTypeListContract(this.selectedNodeOrganization.data);
+
   }
 
   async getTypeListContract(typeId?: number) {
+    this.typeList = []
+    this.type_id = []
     const inforType = await this.contractTypeService
-      .getContractTypeList('', '', typeId)
+      .getContractTypeListV2('', '',typeId)
       .toPromise();
-    this.typeList = inforType;
+    this.typeList = inforType
+
+    this.typeList?.unshift(
+      // {
+      //   "name": "Tất cả",
+      //   "id": ""
+      // },
+      {
+        "name": "Hợp đồng điện tử hệ thống mSale",
+        "id": 9999
+      }
+    )
+
+    for (let i = 0; i<this.typeList?.length; i++){
+      this.type_id.push(this.typeList[i].id)
+    }
   }
 
   convertTime(time: any, code?: any) {
@@ -109,7 +128,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
 
   validData() {
     if (!this.date || (this.date && this.date.length < 2)) {
-      this.toastService.showErrorHTMLWithTimeout('date.full.valid.soon-expire', '', 3000);
+      this.toastService.showErrorHTMLWithTimeout('date.full.valid.completed', '', 3000);
       return false;
     }
     return true;
@@ -132,13 +151,6 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     ]
   }
 
-  // getNumberArray(num: number): number[] {
-  //   return Array(num)
-  //     .fill(0)
-  //     .map((x, i) => i + 1);
-  // }
-
-  // maxParticipants: number = 0;
   export(flag: boolean) {
     if (!this.validData()) {
       return;
@@ -151,8 +163,6 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
 
     this.orgName = this.selectedNodeOrganization.label;
     let idOrg = this.selectedNodeOrganization.data;
-    console.log("OrgName", this.orgName);
-    console.log("idOrg", idOrg);
 
     let from_date: any = '';
     let to_date: any = '';
@@ -162,55 +172,68 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
     }
 
-    // let contractStatus = this.contractStatus;
-
-    this.type_id = this.type_id ? this.type_id : '';
-
-    // if (!contractStatus) contractStatus = -1;
+    // this.type_id = this.type_id ? this.type_id : '';
 
     if (!to_date) to_date = from_date;
-    //?type=10&from_date=2022-06-20&page=0&size=10000&to_date=2023-06-20
+
     let params =
-      '?type=' +
-      this.type_id;
       '&from_date=' +
       from_date +
-      '&page=' +
-      this.page +
-      '&size=' +
-      this.size
+      // '&page=' +
+      // this.page +
+      // '&size=' +
+      // this.size +
       '&to_date=' +
       to_date;
 
     //chờ api, api mẫu báo cáo sắp hết hiệu lực
-    this.reportService.export('rp-by-contract-type', idOrg, params, flag).subscribe((response: any) => {
-      this.spinner.hide();
-      if (flag) {
-        let url = window.URL.createObjectURL(response);
-        let a = document.createElement('a');
-        document.body.appendChild(a);
-        a.setAttribute('style', 'display: none');
-        a.href = url;
-        a.download = `BaoCaoSLHĐ_eContract_mSale_${new Date().getDate()}-${new Date().getMonth() + 1
-          }-${new Date().getFullYear()}.xlsx`;
-        a.click();
-        window.URL.revokeObjectURL(url);
-        a.remove();
+    this.reportService.exportMsale('rp-by-contract-type', idOrg, this.type_id.toString(), params, flag).subscribe(
+      (response: any) => {
+        this.spinner.hide();
+        if (flag) {
+          let url = window.URL.createObjectURL(response);
+          let a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          a.download = `BaoCaoSLHĐ_eContract_mSale_${new Date().getDate()}-${new Date().getMonth() + 1
+            }-${new Date().getFullYear()}.xlsx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
 
-        this.toastService.showSuccessHTMLWithTimeout(
-          'no.contract.download.file.success',
-          '',
-          3000
-        );
-      } else {
-        this.list = [];
+          this.toastService.showSuccessHTMLWithTimeout(
+            'download.success',
+            '',
+            3000
+          );
+        } else {
+          this.list = [];
+          let list1 = [this.orgName]
+          let list2 = response;
+          this.list = list1.concat(list2)
+          // this.totalRecords = response.total_elements
+          this.table.first = 0;
 
-        this.table.first = 0;
-
-        this.setColForTable();
-      }
-
-    });
+          this.setColForTable();
+        }
+      }, (err: any) => {
+        this.spinner.hide()
+        if (!flag) {
+          this.toastService.showErrorHTMLWithTimeout(
+            'report.msale.search.failed',
+            '',
+            3000
+          )
+        } else {
+          if (flag) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'report.msale.download.failed',
+              '',
+              3000
+            )
+        }}
+      });
 
   }
 }

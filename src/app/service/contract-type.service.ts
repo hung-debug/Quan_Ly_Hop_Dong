@@ -22,6 +22,7 @@ export class ContractTypeService {
   deleteContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types/`;
   getContractTypeByIdUrl: any = `${environment.apiUrl}/api/v1/contract-types/`;
   listContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types/organizations/`;
+  listContractTypeV2Url: any = `${environment.apiUrl}/api/v1/contract-types/organizations-v2/`;
   checkCodeContractTypeUrl:any = `${environment.apiUrl}/api/v1/contract-types/check-code-unique`;
   checkNameContractTypeUrl:any = `${environment.apiUrl}/api/v1/contract-types/check-name-unique`;
 
@@ -100,6 +101,19 @@ export class ContractTypeService {
     
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<ContractType[]>(listContractTypeUrl, {headers}).pipe();
+  }
+
+  public getContractTypeListV2(code:any, name:any,idOrg?: number): Observable<any> {
+    this.getCurrentUser();
+    let listContractTypeV2Url = this.listContractTypeV2Url + this.organization_id + "?name=" + name.trim() + "&code=" + code.trim();
+
+    if(idOrg) {
+      listContractTypeV2Url = this.listContractTypeV2Url + idOrg + "?name=" + name.trim() + "&code=" + code.trim();
+    }
+
+    
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<ContractType[]>(listContractTypeV2Url, {headers}).pipe();
   }
 
   checkCodeContractType(code:any){
