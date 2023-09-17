@@ -63,6 +63,7 @@ export class ContractService {
   rejectContractUrl: any = `${environment.apiUrl}/api/v1/processes/reject/`;
   uploadFileUrl: any = `${environment.apiUrl}/api/v1/upload/organizations/`;
   uploadFileBase64Url: any = `${environment.apiUrl}/api/v1/upload/organizations/`;
+  uploadFileBase64UrlV2: any = `${environment.apiUrl}/api/v1/upload/organizations/v2/`;
   // currentUser: any = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
   isDataDetermine: any = `${environment.apiUrl}/api/v1/participants/byRecipient/`;
@@ -1538,7 +1539,7 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
 
     return this.http.post<any>(
-      this.uploadFileBase64Url + formData?.organizationId + `/base64`,
+      this.uploadFileBase64UrlV2 + formData?.organizationId + `/base64`,
       formData,
       { headers: headers }
     );
