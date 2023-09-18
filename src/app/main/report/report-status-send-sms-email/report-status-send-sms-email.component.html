@@ -2,19 +2,21 @@
   <div class="row">
     <!--Tổ chức-->
     <div class="col-md-2">
-          <div>{{'organization' | translate}}</div>
-          <div class="input-line">
-          <p-treeSelect #nameContract
-            [(ngModel)]="selectedNodeOrganization"
-            [filter]="true"
-            filterBy="name"
-            [droppable]="true"
-            [options]="listOrgCombobox"
-            (onNodeSelect)="changeOrg()"
-          >
+      <div>{{'organization' | translate}}</div>
+      <div class="input-line">
+        <p-treeSelect #nameContract
+          class="md:w-20rem w-full" 
+          containerStyleClass="w-full"
+          [(ngModel)]="selectedNodeOrganization"
+          [filter]="true"
+          filterBy="name"
+          [droppable]="true"
+          [options]="listOrgCombobox"
+          (onNodeSelect)="changeOrg()"
+        >
         </p-treeSelect>
-          </div>
       </div>
+    </div>
 
     <div class="col-md-2">
       <div>{{'contract.information' | translate}}</div>
@@ -84,7 +86,12 @@
         <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ? (state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
       </ng-template>
       <ng-template pTemplate="paginatorright" let-state>
-          <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ?(state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords : 0}}</span>
+          <span style="color: #0160AE !important;">
+            {{'chart.number' | translate}}: 
+            {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - 
+            {{(state.first+state.rows)> state.totalRecords ?(state.totalRecords > 0 ? state.totalRecords : 0) : state.first+state.rows}} / 
+            {{state.totalRecords > 0 ? state.totalRecords : 0}}
+          </span>
       </ng-template>
     </p-table>
   </div>
