@@ -110,7 +110,9 @@ export class ContractNumberFollowTypeComponent implements OnInit {
     //lấy danh sách tổ chức
     this.inputTreeService.getData().then((res: any) => {
       this.listOrgCombobox = res;
-
+      this.listOrgCombobox[0]?.children.forEach((element: any) => {
+        element.expanded = !element.expanded
+      });
       this.selectedNodeOrganization = this.listOrgCombobox.filter(
         (p: any) => p.data == this.organization_id
       );
