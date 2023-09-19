@@ -45,10 +45,10 @@ export class ForgotPasswordComponent implements OnInit {
   sendForgetPassword() {
     let email = this.forgotPasswordForm.value.email;
 
-    if(email.includes('@mobifone.vn')) {
-      this.toastService.showErrorHTMLWithTimeout('mobifone.fail','',3000);
-      return;
-    }
+    // if(email.includes('@mobifone.vn')) {
+    //   this.toastService.showErrorHTMLWithTimeout('mobifone.fail','',3000);
+    //   return;
+    // }
 
     if(email == ''){
       this.error = true;
