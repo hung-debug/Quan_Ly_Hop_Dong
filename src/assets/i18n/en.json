@@ -725,5 +725,8 @@
   "upload_attach_files": "Upload attachments",
   "time.send.date":"Date Sending",
   "report.status.contract": "Contract status",
-  "status.sms.email":"Status SMS/EMAIL sending"
+  "status.sms.email":"Status SMS/EMAIL sending",
+  "report.msale.search.failed": "Look up failed reports",
+  "report.msale.download.failed": "Export failed report file",
+  "download.success": "Downloaded successfully"
 }

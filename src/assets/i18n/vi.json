@@ -568,7 +568,7 @@
   "report.number.contracts.type.sign.full":"Báo cáo số lượng hợp đồng theo hình thức ký",
   "report.status.send.sms": "Lịch sử gửi SMS",
   "include.org1":"Bao gồm cả tổ chức con (Tổ chức con chỉ bao gồm tổ chức con cấp một)",
-  "report.number.econtract.msale":"SL HĐ econtract - mSale",
+  "report.number.econtract.msale":"SL HĐ eContract - mSale",
   "contract.time.create": "Thời gian tạo",
   "signing.expiration.date":"Ngày hết hạn hiệu lực",
   "date.completed":"Ngày hoàn thành/từ chối/huỷ",
@@ -734,5 +734,8 @@
   "code.contract": "Mã HĐ",
   "phone": "SĐT",
   "content":"Nội dung",
-  "content.sms": "NỘI DUNG GỬI SMS"
+  "content.sms": "NỘI DUNG GỬI SMS",
+  "report.msale.search.failed": "Tra cứu báo cáo thất bại",
+  "report.msale.download.failed": "Xuất file báo cáo thất bại",
+  "download.success": "Tải xuống thành công"
 }
