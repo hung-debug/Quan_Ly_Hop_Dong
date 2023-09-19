@@ -165,8 +165,12 @@ export class UnitComponent implements OnInit {
         // Lọc ra mảng con có độ dài lớn nhất
         const longestArrays = this.array_empty.filter((subArray:any) => subArray.children.length === maxLength);
 
-        if(this.array_empty.length > 1)
+        if(this.array_empty.length > 1){
           this.list = longestArrays
+          this.list[0].children.forEach((element: any) => 
+            element.expanded = !element.expanded
+          )
+        }
         else
           this.list = this.array_empty;
       } else {
