@@ -5,8 +5,6 @@
       <div>{{'organization' | translate}}</div>
       <div class="input-line">
         <p-treeSelect #nameContract
-          class="md:w-20rem w-full" 
-          containerStyleClass="w-full"
           [(ngModel)]="selectedNodeOrganization"
           [filter]="true"
           filterBy="name"
