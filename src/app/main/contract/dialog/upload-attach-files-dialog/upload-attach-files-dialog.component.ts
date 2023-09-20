@@ -353,38 +353,59 @@ export class UploadAttachFilesComponent implements OnInit {
   }
 
   async uploadingAttachFiles(){
-    let addDocsPayload: any = []
-    // step1 - upload to org
     if (this.attachFileArr.length == 0) return
-    
-    try {
-      this.spinner.show()
-      this.uploadService.uploadMultiFileToOrg(this.attachFileArr).subscribe(
-        (res: any) => {
-          this.spinner.hide()
-          for (let i = 0; i < res.length; i++){
-            addDocsPayload[i] = {
-              id: this.data.contractId,
-              name: this.data.contractName,
-              filePath: res[i]?.file_object?.file_path,
-              fileName: res[i]?.file_object?.filename,
-              fileBucket: res[i]?.file_object?.bucket,
-            }
-          }
-          for (let i = 0; i < addDocsPayload.length; i++){
-            this.contractService.addDocument(addDocsPayload[i], 3).toPromise().then(
+    let fileNameArr: any = []
+    this.attachFileArr.forEach((item: any) => {
+      fileNameArr.push({
+        contractId: this.data.contractId,
+        fileName: item.name
+      })
+    })
+    let count: number = 0
+    await this.uploadService.checkDuplicateFileUploaded(fileNameArr).toPromise().then(
+      (res) => {
+        let fileNameArrDupplicate: any = []
+        let listFileDupplicate = res.filter((item: any) => item.status == false)
+        listFileDupplicate.forEach((item: any) => {
+          fileNameArrDupplicate.push(item.fileName)
+        })
+        count = listFileDupplicate.length
+        if (count > 0) {
+          this.toastService.showErrorHTMLWithTimeout(`File ${fileNameArrDupplicate.toString().replace(',',', ')} đã tồn tại, vui lòng chọn file khác`,'',3000)
+        } else {
+          let addDocsPayload: any = []
+          // step1 - upload to org
+          try {
+            this.spinner.show()
+            this.uploadService.uploadMultiFileToOrg(this.attachFileArr).subscribe(
               (res: any) => {
                 this.spinner.hide()
+                for (let i = 0; i < res.length; i++){
+                  addDocsPayload[i] = {
+                    id: this.data.contractId,
+                    name: this.data.contractName,
+                    filePath: res[i]?.file_object?.file_path,
+                    fileName: res[i]?.file_object?.filename,
+                    fileBucket: res[i]?.file_object?.bucket,
+                  }
+                }
+                for (let i = 0; i < addDocsPayload.length; i++){
+                  this.contractService.addDocument(addDocsPayload[i], 3).toPromise().then(
+                    (res: any) => {
+                      this.spinner.hide()
+                    }
+                  )
+                }
+                this.toastService.showSuccessHTMLWithTimeout('Upload file đính kèm thành công','',3000)
+                this.dialog.closeAll()
               }
             )
+          } catch (error) {
+            this.spinner.hide()
+            this.toastService.showErrorHTMLWithTimeout('Upload file đính kèm thất bại','',3000)
           }
-          this.toastService.showSuccessHTMLWithTimeout('Upload file đính kèm thành công','',3000)
-          this.dialog.closeAll()
         }
-      )
-    } catch (error) {
-      this.spinner.hide()
-      this.toastService.showErrorHTMLWithTimeout('Upload file đính kèm thất bại','',3000)
-    }
+      }
+    )
   }
 }

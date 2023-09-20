@@ -23,7 +23,7 @@ export class UploadService {
   organization_id:any;
 
   uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`;
-
+  checkFileDuplicateUrl:any = `${environment.apiUrl}/api/v1/documents/checkFile`;
   constructor(private http: HttpClient) { }
 
   getCurrentUser(){
@@ -70,5 +70,19 @@ export class UploadService {
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.post<File>(this.uploadFileUrl + this.organization_id + `/singleMultipleFile`, formData, {'headers':headers});
-  }  
+  }
+  
+  checkDuplicateFileUploaded(fileNameArr: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = fileNameArr
+    ;
+    return this.http.post<any>(
+      this.checkFileDuplicateUrl,
+      body,
+      { headers: headers }
+    );
+  }
 }
