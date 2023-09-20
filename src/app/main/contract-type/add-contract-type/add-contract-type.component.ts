@@ -28,6 +28,10 @@ export class AddContractTypeComponent implements OnInit {
   optionsCeCa: Array<any> = [];
 
   optionsCeCaValue: any = 1;
+
+  optionsGroupContract: Array<any> = [];
+  optionsGroupContractValue: any = 1;
+
   enviroment: any = ""
   ceca: boolean;
   get f() { return this.addForm.controls; }
@@ -79,7 +83,7 @@ export class AddContractTypeComponent implements OnInit {
       });
     }
 
-    
+
     this.contractService.getDataNotifyOriganzation().subscribe((response) => {
       if(response.ceca_push_mode == 'NONE') {
         this.ceca = false;
@@ -99,7 +103,7 @@ export class AddContractTypeComponent implements OnInit {
     } else {
       this.optionsCeCaValue = 0;
       return 0;
-    } 
+    }
   }
 
   checkName(data:any){
@@ -110,7 +114,7 @@ export class AddContractTypeComponent implements OnInit {
         dataByName => {
           //neu ten loai hop dong chua ton tai
           if(dataByName.success){
-            
+
             //call update
             this.update(data);
 
@@ -139,7 +143,7 @@ export class AddContractTypeComponent implements OnInit {
         this.dialogRef.close();
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
           this.router.navigate(['/main/contract-type']);
-        });    
+        });
         this.spinner.hide();
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
@@ -170,7 +174,7 @@ export class AddContractTypeComponent implements OnInit {
           dataByCode => {
             //neu ma loai hop dong chua ton tai
             if(dataByCode.success){
-              
+
               //call ham check ten
               this.checkName(data);
 
@@ -189,7 +193,7 @@ export class AddContractTypeComponent implements OnInit {
         //ham check ten
         this.checkName(data);
       }
-    
+
     //ham them moi
     }else{
       //kiem tra ma loai hop dong

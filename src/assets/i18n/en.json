@@ -728,5 +728,6 @@
   "status.sms.email":"Status SMS/EMAIL sending",
   "report.msale.search.failed": "Look up failed reports",
   "report.msale.download.failed": "Export failed report file",
-  "download.success": "Downloaded successfully"
+  "download.success": "Downloaded successfully",
+  "group.type.contract":"Group contract type"
 }
