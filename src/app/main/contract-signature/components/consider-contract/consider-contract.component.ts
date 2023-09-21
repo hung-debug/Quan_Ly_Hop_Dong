@@ -938,6 +938,7 @@ export class ConsiderContractComponent
         'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       position: 'absolute',
       backgroundColor: d.valueSign ? '' : backgroundColor,
+      "justify-content": "left"
     } :
     {
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
