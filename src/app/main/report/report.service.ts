@@ -14,6 +14,9 @@ export class ReportService {
   reportUrl: any = `${environment.apiUrl}/api/v1/contracts/`
   reportSmsUrl: any = `${environment.apiUrl}/api/v1/contracts/getNotificationLog`
   exportReportSmsUrl: any = `${environment.apiUrl}/api/v1/contracts/rp-by-sms-log/export`
+  contractGroupUrl: any = `${environment.apiUrl}/api/v1/contracts-group`
+  msaleReportUrl: any = `${environment.apiUrl}/api/v1/contracts/rp-by-contract-type/`
+
 
   constructor(
     private http: HttpClient
@@ -101,7 +104,7 @@ export class ReportService {
       .append('Authorization', 'Bearer ' + this.token);
     }
 
-    let url = prefix + '?type=' + type + params;
+    let url = prefix + '?group-ids=' + type + params;
     //prefix = api/v1/contracts/rp-by-contract-type/226
 
     if(excel) {
@@ -109,5 +112,27 @@ export class ReportService {
     } else {
       return this.http.get<any>(url,{headers: headers}).pipe();
     }
+
+    // return this.http.get<any>(url,{headers: headers}).pipe();
+  }
+
+  getContractGroup() {
+    this.getCurrentUser();
+    let headers = null;
+
+      headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+      return this.http.get<any>(this.contractGroupUrl + '?contain-msale=true',{headers: headers}).pipe();
+  }
+
+  getMSaleReport(params: any) {
+    this.getCurrentUser();
+    let headers = null;
+    let prefix: string = params.orgId + `?from_date=${params.fromDate}&to_date=${params.toDate}`
+      headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+      return this.http.get<any>(this.msaleReportUrl + prefix, {headers: headers}).pipe();
   }
 }

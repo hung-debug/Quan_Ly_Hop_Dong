@@ -737,5 +737,6 @@
   "content.sms": "NỘI DUNG GỬI SMS",
   "report.msale.search.failed": "Tra cứu báo cáo thất bại",
   "report.msale.download.failed": "Xuất file báo cáo thất bại",
-  "download.success": "Tải xuống thành công"
+  "download.success": "Tải xuống thành công",
+  "contract.group": "Nhóm hợp đồng"
 }

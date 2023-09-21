@@ -56,7 +56,6 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     ).customer.info;
   }
   async ngOnInit(): Promise<void> {
-
     this.appService.setTitle('role.number.contract.econtract.msale');
 
     if (environment.flag == 'NB') {
@@ -90,34 +89,22 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     });
 
     this.setColForTable();
-    this.getTypeListContract(this.currentUser.organizationId);
+    this.getContractGroupList(this.currentUser.organizationId);
   }
 
   changeOrg() {
-    this.typeList = []
-    this.type_id = []
-    this.getTypeListContract(this.selectedNodeOrganization.data);
-
+    // this.typeList = []
+    // this.type_id = []
+    // this.getTypeListContract(this.selectedNodeOrganization.data);
   }
 
-  async getTypeListContract(typeId?: number) {
+  async getContractGroupList(typeId?: number) {
     this.typeList = []
     this.type_id = []
-    const inforType = await this.contractTypeService
-      .getContractTypeListV2('', '',typeId)
+    const inforType = await this.reportService
+      .getContractGroup()
       .toPromise();
     this.typeList = inforType
-
-    this.typeList?.unshift(
-      // {
-      //   "name": "Tất cả",
-      //   "id": ""
-      // },
-      {
-        "name": "Hợp đồng điện tử hệ thống mSale",
-        "id": 9999
-      }
-    )
 
     for (let i = 0; i<this.typeList?.length; i++){
       this.type_id.push(this.typeList[i].id)
@@ -139,7 +126,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
   setColForTable() {
     this.cols = [
       {
-        header: 'contract.type',
+        header: 'contract.group',
         style: 'text-align: left;',
         colspan: 1,
         rowspan: 1,
@@ -189,53 +176,97 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       to_date;
 
     //chờ api, api mẫu báo cáo sắp hết hiệu lực
-    this.reportService.exportMsale('rp-by-contract-type', idOrg, this.type_id.toString(), params, flag).subscribe(
-      (response: any) => {
-        this.spinner.hide();
-        if (flag) {
-          let url = window.URL.createObjectURL(response);
-          let a = document.createElement('a');
-          document.body.appendChild(a);
-          a.setAttribute('style', 'display: none');
-          a.href = url;
-          a.download = `BaoCaoSLHĐ_eContract_mSale_${new Date().getDate()}-${new Date().getMonth() + 1
-            }-${new Date().getFullYear()}.xlsx`;
-          a.click();
-          window.URL.revokeObjectURL(url);
-          a.remove();
-
-          this.toastService.showSuccessHTMLWithTimeout(
-            'download.success',
-            '',
-            3000
-          );
-        } else {
-          this.list = [];
-          let list1 = [this.orgName]
-          let list2 = response;
-          this.list = list1.concat(list2)
-          // this.totalRecords = response.total_elements
-          this.table.first = 0;
-
-          this.setColForTable();
-        }
-      }, (err: any) => {
-        this.spinner.hide()
-        if (!flag) {
-          this.toastService.showErrorHTMLWithTimeout(
-            'report.msale.search.failed',
-            '',
-            3000
-          )
-        } else {
-          if (flag) {
+    if (flag) {
+      this.reportService.exportMsale('rp-by-contract-type', idOrg, this.type_id.toString(), params, flag).subscribe(
+        (response: any) => {
+          this.spinner.hide();
+          // this.toastService.showSuccessHTMLWithTimeout('Xuất file báo cáo thành công','',3000)
+          this.exportToExcel(response)
+        }, 
+        (err: any) => {
+          this.spinner.hide()
+          if (!flag) {
             this.toastService.showErrorHTMLWithTimeout(
-              'report.msale.download.failed',
+              'report.msale.search.failed',
               '',
               3000
             )
-        }}
+          } else {
+            if (flag) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'report.msale.download.failed',
+                '',
+                3000
+              )
+          }}
       });
+    } else {
+      this.reportService.exportMsale('rp-by-contract-type', idOrg, this.type_id.toString(), params, flag).subscribe(
+        (response: any) => {
+          this.spinner.hide();
+  
+          let msaleData: any[] = this.convertObjDataToArr(response)
+          let newMsaleData: any = msaleData.map((item: any) => ({
+            ...item, orgName: this.getOrgNameFromString(item.key), orgId: this.getOrgIdFromString(item.key)
+          }))
+          let parentOrgIndex = newMsaleData.findIndex((item: any) => item.orgId == idOrg)
+          newMsaleData = [newMsaleData[parentOrgIndex], ...newMsaleData.toSpliced(parentOrgIndex, 1)]
+          this.list = newMsaleData
+        }, (err: any) => {
+          this.spinner.hide()
+          if (!flag) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'report.msale.search.failed',
+              '',
+              3000
+            )
+          } else {
+            if (flag) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'report.msale.download.failed',
+                '',
+                3000
+              )
+          }}
+      });
+    }
+  }
+  convertObjDataToArr(obj: any) {
+    let newData: any[] = Object.keys(obj).map((item: any) => ({
+      key: item, data: obj[item]
+    }))
 
+    return newData
+  }
+
+  getOrgNameFromString(str: string) {
+    str.toString()
+    let nameMatch = str.match(/name=([^,]+)/)
+    if (nameMatch) return nameMatch[1]
+  }
+
+  getOrgIdFromString(str: string) {
+    str.toString()
+    let nameMatch = str.match(/id=([^,]+)/)
+    if (nameMatch) return nameMatch[1]
+  }
+
+  exportToExcel(response: any) {
+    let url = window.URL.createObjectURL(response);
+        let a = document.createElement('a');
+        document.body.appendChild(a);
+        a.setAttribute('style', 'display: none');
+        a.href = url;
+        a.download = `BaoCaoSLHĐ_eContract_mSale_${new Date().getDate()}-${new Date().getMonth() + 1
+          }-${new Date().getFullYear()}.xlsx`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+
+        this.toastService.showSuccessHTMLWithTimeout(
+          'download.success',
+          '',
+          3000
+        );
   }
 }
