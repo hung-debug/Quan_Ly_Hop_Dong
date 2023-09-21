@@ -56,6 +56,14 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     ).customer.info;
   }
   async ngOnInit(): Promise<void> {
+    // Tính toán ngày kết thúc (hiện tại)
+    let endDate = new Date();
+    // Tính toán ngày bắt đầu (7 ngày trước ngày kết thúc)
+    let startDate = new Date();
+    startDate.setDate(startDate.getDate() - 30);
+    // Gán giá trị mặc định cho biến date
+    this.date = [startDate, endDate];
+
     this.appService.setTitle('role.number.contract.econtract.msale');
 
     if (environment.flag == 'NB') {
