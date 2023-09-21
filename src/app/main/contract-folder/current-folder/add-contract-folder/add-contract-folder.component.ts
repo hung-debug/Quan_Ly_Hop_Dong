@@ -157,7 +157,9 @@ export class AddContractFolderComponent implements OnInit {
       }
 
       this.contractFolderService.addContractIntoFolder(body).subscribe((response: any) => {
-        console.log("res ", response);
+        this.toastService.showSuccessHTMLWithTimeout("add.contract.in.folder.success","",3000);
+        this.dialogRef.close();
+        window.location.reload();
       })
     }
 

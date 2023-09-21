@@ -122,7 +122,7 @@ export class CurrentFolderComponent implements OnInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+      this.getContractList();
     })
   }
 
