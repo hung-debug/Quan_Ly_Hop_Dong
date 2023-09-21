@@ -32,62 +32,64 @@
               <div class="col-md-2">{{'expiration-date' | translate}}</div>
               <!-- <div class="col-md-3">{{'action' | translate}}</div> -->
           </div>
-  
-          <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
-              <div class="row">
-                  <!--Cột 1-->
-                  <div class="col-md-5">
-                      <div class="row">
-                          <div class="col-md-11">
-                              <div class="item_contract_name">
-                                  <a class="item_contract_name" style="text-decoration: none;">
-                                      {{item.name}}
-                                  </a>
-                              </div>
-  
-                              <div class="row" *ngFor="let itemPar of sortParticipant(item); let index = index">
-                                    <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
-                                  </div>
-                              </div>
+          
+          <div id="contract-list">
+            <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
+                <div class="row">
+                    <!--Cột 1-->
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="col-md-11">
+                                <div class="item_contract_name">
+                                    <a class="item_contract_name" style="text-decoration: none;">
+                                        {{item.name}}
+                                    </a>
+                                </div>
+    
+                                <div class="row" *ngFor="let itemPar of sortParticipant(item); let index = index">
+                                        <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                                    </div>
+                                </div>
 
-                              <div class="row">
-                                <div class="item_contract_infor">{{'contract.status' | translate}}:
-                                    <span class="status_blue">{{this.status | pipe | translate}}
-                                        {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
-                                        translate}}</span>
+                                <div class="row">
+                                    <div class="item_contract_infor">{{'contract.status' | translate}}:
+                                        <span class="status_blue">{{this.status | pipe | translate}}
+                                            {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
+                                            translate}}</span>
+                                    </div>
                                 </div>
                             </div>
-                          </div>
-                      </div>
-                  </div>
-  
-                  <!--Cột 2: Ngày tạo-->
-                  <div class="col-md-2 calendar_create">
-                      <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{ getCreatedDate(item) | date:
-                              'dd/MM/yyyy HH:mm'}}</span></div>
-                  </div>
-  
-                  <!--Cột 3: Ngày hết hạn ký-->
-                  <div class="col-md-2 calendar_deadline">
-                      <div style="display: flex; justify-content: center;">
-                          <div class="div_icon"><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{ getSignTime(item) | date:
-                                  'dd/MM/yyyy'}}</span></div>
-                      </div>
-                  </div>
-  
-                  <!--Cột 5: Input checkbox-->
-                  <div class="col-md-2 item_icon">
-                      <div style="display: flex; justify-content: center;">
-                          <div class="div_icon">
-                              <div class="col-md-1 calendar_create">
-                                  <div>
-                                      <input name="item" type="checkbox" value="{{item.contractId}}" (change)="selectContract(item.id)" />
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
+                        </div>
+                    </div>
+    
+                    <!--Cột 2: Ngày tạo-->
+                    <div class="col-md-2 calendar_create">
+                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{ getCreatedDate(item) | date:
+                                'dd/MM/yyyy HH:mm'}}</span></div>
+                    </div>
+    
+                    <!--Cột 3: Ngày hết hạn ký-->
+                    <div class="col-md-2 calendar_deadline">
+                        <div style="display: flex; justify-content: center;">
+                            <div class="div_icon"><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{ getSignTime(item) | date:
+                                    'dd/MM/yyyy'}}</span></div>
+                        </div>
+                    </div>
+    
+                    <!--Cột 5: Input checkbox-->
+                    <div class="col-md-2 item_icon">
+                        <div style="display: flex; justify-content: center;">
+                            <div class="div_icon">
+                                <div class="col-md-1 calendar_create">
+                                    <div>
+                                        <input name="item" type="checkbox" value="{{item.contractId}}" (change)="selectContract(item.id)" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
           </div>
   
           <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;padding-top: 50px;">
