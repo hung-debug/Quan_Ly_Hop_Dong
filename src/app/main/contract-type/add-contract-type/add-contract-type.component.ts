@@ -31,8 +31,8 @@ export class AddContractTypeComponent implements OnInit {
   optionsCeCaValue: any = 1;
 
   optionsGroupContract: any;
-  optionsGroupContractValue: any;
-
+  groupContract: any;
+  site: string;
   enviroment: any = ""
   ceca: boolean;
   get f() { return this.addForm.controls; }
@@ -52,9 +52,8 @@ export class AddContractTypeComponent implements OnInit {
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
         code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
         ceca_push: 0,
-        group_contract: 1,
+        group_contract: this.fbd.control(1, [Validators.required]),
       });
-      console.log("addForm",this.addForm);
 
     }
 
@@ -62,19 +61,16 @@ export class AddContractTypeComponent implements OnInit {
     this.enviroment = environment
     this.datas = this.data;
 
+    if (environment.flag == 'NB') {
+      this.site = 'NB';
+    } else if (environment.flag == 'KD') {
+      this.site = 'KD';
+    }
     this.optionsCeCa = optionsCeCa;
 
-    let dataGroup: any[]
     this.contractTypeService.getGroupContract().subscribe((response:any) =>{
-      console.log("response",response);
 
       this.optionsGroupContract = response;
-      response.map((item: any) => {
-        console.log("dataGroupưư",item);
-
-        dataGroup=[dataGroup,...item.id]
-        console.log("dataGroup",dataGroup);
-      });
 
     })
 
@@ -82,15 +78,17 @@ export class AddContractTypeComponent implements OnInit {
     if( this.data.id != null){
       this.contractTypeService.getContractTypeById(this.data.id).subscribe(
         data => {
-          console.log("data",data);
 
           this.addForm = this.fbd.group({
             name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
             code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
-            ceca_push: this.convertCeCa(data.ceca_push)
+            ceca_push: this.convertCeCa(data.ceca_push),
+            // group_contract: this.groupContract
+            group_contract: this.fbd.control(data.groupId, [Validators.required]),
           });
           this.nameOld = data.name;
           this.codeOld = data.code;
+          // this.optionsGroupContractValue = data.groupId;
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
         }
@@ -99,7 +97,8 @@ export class AddContractTypeComponent implements OnInit {
       this.addForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
         code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
-        ceca_push: 0
+        ceca_push: 0,
+        group_contract: this.fbd.control(this.groupContract, [Validators.required]),
       });
     }
 
@@ -182,8 +181,10 @@ export class AddContractTypeComponent implements OnInit {
       id: this.data.id,
       name: this.addForm.value.name,
       code: this.addForm.value.code,
-      ceca_push: this.addForm.value.ceca_push
+      ceca_push: this.addForm.value.ceca_push,
+      groupId: this.addForm.value.group_contract,
     }
+
     this.spinner.show();
     //ham sua
     if(this.data.id !=null){

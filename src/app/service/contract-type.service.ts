@@ -11,6 +11,7 @@ export interface ContractType {
   status: string,
   organization_id: string,
   ceca_push: any;
+  groupId:any;
 }
 @Injectable({
   providedIn: 'root'
@@ -69,7 +70,8 @@ export class ContractTypeService {
       ordering: 1,
       status: 1,
       organization_id: this.organization_id,
-      ceca_push: datas.ceca_push
+      ceca_push: datas.ceca_push,
+      groupId: datas.groupId
     });
     return this.http.put<ContractType>(this.updateContractTypeUrl + datas.id, body, {'headers': headers});
   }
@@ -84,11 +86,12 @@ export class ContractTypeService {
   }
 
   getGroupContract(){
+    let contain_msale = false;
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<ContractType>(this.listGroupContract, {headers}).pipe();
+    return this.http.get<ContractType>(this.listGroupContract + '?contain-msale=' + contain_msale, {headers}).pipe();
   }
 
   getContractTypeById(id: any) {

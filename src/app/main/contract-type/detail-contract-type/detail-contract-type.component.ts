@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { ToastService } from 'src/app/service/toast.service';
-
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-detail-contract-type',
@@ -18,6 +18,9 @@ export class DetailContractTypeComponent implements OnInit {
   name:any="";
   code:any="";
   ceca_push: any = "";
+  groupId: any = "";
+  site: string;
+  environment: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -37,10 +40,16 @@ export class DetailContractTypeComponent implements OnInit {
         this.name = data.name
         this.code = data.code,
         this.ceca_push = this.convertCeCa(data.ceca_push)
+        this.groupId = data.groupId
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
       }
     )
+    if (environment.flag == 'NB') {
+      this.site = 'NB';
+    } else if (environment.flag == 'KD') {
+      this.site = 'KD';
+    }
   }
 
   convertCeCa(ceca_push: any) {

@@ -3,8 +3,8 @@
       <h3 style="color: #106DB6; font-family: inherit;text-transform: uppercase;">{{this.data.title | translate}}</h3>
     </div>
     <div class="content">
-        <div class="row">  
-            <div class="col-md-12">  
+        <div class="row">
+            <div class="col-md-12">
                 <div class="label_item">{{'contract-type.name' | translate}}</div>
                 <div>
                     <div [innerText]="name" class="input_text"></div>
@@ -29,10 +29,18 @@
                 </div>
             </div>
         </div>
-    
+
+        <div *ngIf="this.site =='NB'" class="row" style="padding-top: 10px;">
+          <div class="col-md-12">
+              <div class="label_item">{{'group.type.contract' | translate}}</div>
+              <div>
+                  <div [innerText]="groupId == 1 ? 'Khác' : 'Công nghệ thông tin'" class="input_text"></div>
+              </div>
+          </div>
+      </div>
+
         <div class="row" style="justify-content: center;padding-top: 10px;">
             <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
         </div>
     </div>
   </div>
-  
