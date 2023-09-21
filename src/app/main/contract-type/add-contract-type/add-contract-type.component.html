@@ -4,7 +4,7 @@
     </div>
     <form (ngSubmit)="onSubmit()" [formGroup]="addForm" class="content">
 
-        <div *ngIf=" this.enviroment.flag == 'NB' ? true : this.ceca" class="row">
+        <div *ngIf=" this.enviroment.flag == 'NB' ? true : this.ceca" class="row"style="padding-top: 10px;">
             <div class="col-md-12">
                 <div class="label text-color">{{'contract-type.ceca' | translate}}</div>
                     <p-dropdown
@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        <div class="row" style="padding-top: 10px;">
+        <div class="row" style="padding-top: 20px;">
             <div class="col-md-12">
                 <div class="label text-color">{{'contract-type.code' | translate}} <span class="required-title">*</span></div>
                 <div class="input-data">
@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <div class="row" style="padding-top: 10px;">
+        <div class="row" style="padding-top: 20px;">
             <div class="col-md-12">
                 <div class="label text-color">{{'contract-type.name' | translate}} <span class="required-title">*</span></div>
                 <div class="input-data">
@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <div class="row" style="padding-top: 10px;">
+        <div class="row" style="padding-top: 20px;">
           <div class="col-md-12">
               <div class="label text-color">{{'group.type.contract' | translate}} <span class="required-title">*</span></div>
                 <p-dropdown
@@ -68,7 +68,7 @@
           </div>
         </div>
 
-        <div class="row" style="justify-content: center;padding-top: 30px;">
+        <div class="row" style="justify-content: center;padding-top: 70px;">
             <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.cancel' | translate}}</button>
             <button class="save-button">{{'btn.save' | translate}}</button>
         </div>

@@ -1,3 +1,4 @@
+import { map } from 'rxjs/operators';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -29,8 +30,8 @@ export class AddContractTypeComponent implements OnInit {
 
   optionsCeCaValue: any = 1;
 
-  optionsGroupContract: Array<any> = [];
-  optionsGroupContractValue: any = 1;
+  optionsGroupContract: any;
+  optionsGroupContractValue: any;
 
   enviroment: any = ""
   ceca: boolean;
@@ -50,8 +51,11 @@ export class AddContractTypeComponent implements OnInit {
       this.addForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
         code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
-        ceca_push: 0
+        ceca_push: 0,
+        group_contract: 1,
       });
+      console.log("addForm",this.addForm);
+
     }
 
   ngOnInit(): void {
@@ -60,10 +64,26 @@ export class AddContractTypeComponent implements OnInit {
 
     this.optionsCeCa = optionsCeCa;
 
+    let dataGroup: any[]
+    this.contractTypeService.getGroupContract().subscribe((response:any) =>{
+      console.log("response",response);
+
+      this.optionsGroupContract = response;
+      response.map((item: any) => {
+        console.log("dataGroupưư",item);
+
+        dataGroup=[dataGroup,...item.id]
+        console.log("dataGroup",dataGroup);
+      });
+
+    })
+
     //lay du lieu form cap nhat
-    if( this.data.id != null){
+    if( this.data.id = null){
       this.contractTypeService.getContractTypeById(this.data.id).subscribe(
         data => {
+          console.log("data",data);
+
           this.addForm = this.fbd.group({
             name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
             code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
@@ -153,93 +173,93 @@ export class AddContractTypeComponent implements OnInit {
   }
 
   onSubmit() {
-    this.submitted = true;
-    // stop here if form is invalid
-    if (this.addForm.invalid) {
-      return;
-    }
-    const data = {
-      id: this.data.id,
-      name: this.addForm.value.name,
-      code: this.addForm.value.code,
-      ceca_push: this.addForm.value.ceca_push
-    }
-    this.spinner.show();
-    //ham sua
-    if(this.data.id !=null){
+  //   this.submitted = true;
+  //   // stop here if form is invalid
+  //   if (this.addForm.invalid) {
+  //     return;
+  //   }
+  //   const data = {
+  //     id: this.data.id,
+  //     name: this.addForm.value.name,
+  //     code: this.addForm.value.code,
+  //     ceca_push: this.addForm.value.ceca_push
+  //   }
+  //   this.spinner.show();
+  //   //ham sua
+  //   if(this.data.id !=null){
 
-      //neu thay doi ma thi can check lai
-      if(data.code != this.codeOld){
-        this.contractTypeService.checkCodeContractType(data.code).subscribe(
-          dataByCode => {
-            //neu ma loai hop dong chua ton tai
-            if(dataByCode.success){
+  //     //neu thay doi ma thi can check lai
+  //     if(data.code != this.codeOld){
+  //       this.contractTypeService.checkCodeContractType(data.code).subscribe(
+  //         dataByCode => {
+  //           //neu ma loai hop dong chua ton tai
+  //           if(dataByCode.success){
 
-              //call ham check ten
-              this.checkName(data);
+  //             //call ham check ten
+  //             this.checkName(data);
 
-            //neu ma loai hop dong da ton tai
-            }else{
-              this.toastService.showErrorHTMLWithTimeout('Mã loại hợp đồng đã tồn tại', "", 3000);
-              this.spinner.hide();
-            }
-          }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-            this.spinner.hide();
-          }
-        )
-      //neu khong thay doi ma thi bo qua check ma
-      }else{
-        //ham check ten
-        this.checkName(data);
-      }
+  //           //neu ma loai hop dong da ton tai
+  //           }else{
+  //             this.toastService.showErrorHTMLWithTimeout('Mã loại hợp đồng đã tồn tại', "", 3000);
+  //             this.spinner.hide();
+  //           }
+  //         }, error => {
+  //           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+  //           this.spinner.hide();
+  //         }
+  //       )
+  //     //neu khong thay doi ma thi bo qua check ma
+  //     }else{
+  //       //ham check ten
+  //       this.checkName(data);
+  //     }
 
-    //ham them moi
-    }else{
-      //kiem tra ma loai hop dong
-      this.contractTypeService.checkCodeContractType(data.code).subscribe(
-        dataByCode => {
-          //neu ma loai hop dong chua ton tai
-          if(dataByCode.success){
-            //kiem tra ten loai hop dong
-            this.contractTypeService.checkNameContractType(data.name).subscribe(
-              dataByName => {
-                //neu ten loai hop dong chua ton tai
-                if(dataByName.success){
-                  this.contractTypeService.addContractType(data).subscribe(
-                    data => {
-                      this.toastService.showSuccessHTMLWithTimeout('Thêm mới loại hợp đồng thành công!', "", 3000);
-                      this.dialogRef.close();
-                      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                        this.router.navigate(['/main/contract-type']);
-                      });
-                      this.spinner.hide();
-                    }, error => {
-                      this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-                      this.spinner.hide();
-                    }
-                  )
-                //neu ten loai hop dong da ton tai
-                }else{
-                  this.toastService.showErrorHTMLWithTimeout('Tên loại hợp đồng đã tồn tại', "", 3000);
-                  this.spinner.hide();
-                }
-              }, error => {
-                this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-                this.spinner.hide();
-              }
-            )
-          //neu ma loai hop dong da ton tai
-          }else{
-            this.toastService.showErrorHTMLWithTimeout('Mã loại hợp đồng đã tồn tại', "", 3000);
-            this.spinner.hide();
-          }
-        }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-          this.spinner.hide();
-        }
-      )
-    }
+  //   //ham them moi
+  //   }else{
+  //     //kiem tra ma loai hop dong
+  //     this.contractTypeService.checkCodeContractType(data.code).subscribe(
+  //       dataByCode => {
+  //         //neu ma loai hop dong chua ton tai
+  //         if(dataByCode.success){
+  //           //kiem tra ten loai hop dong
+  //           this.contractTypeService.checkNameContractType(data.name).subscribe(
+  //             dataByName => {
+  //               //neu ten loai hop dong chua ton tai
+  //               if(dataByName.success){
+  //                 this.contractTypeService.addContractType(data).subscribe(
+  //                   data => {
+  //                     this.toastService.showSuccessHTMLWithTimeout('Thêm mới loại hợp đồng thành công!', "", 3000);
+  //                     this.dialogRef.close();
+  //                     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+  //                       this.router.navigate(['/main/contract-type']);
+  //                     });
+  //                     this.spinner.hide();
+  //                   }, error => {
+  //                     this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+  //                     this.spinner.hide();
+  //                   }
+  //                 )
+  //               //neu ten loai hop dong da ton tai
+  //               }else{
+  //                 this.toastService.showErrorHTMLWithTimeout('Tên loại hợp đồng đã tồn tại', "", 3000);
+  //                 this.spinner.hide();
+  //               }
+  //             }, error => {
+  //               this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+  //               this.spinner.hide();
+  //             }
+  //           )
+  //         //neu ma loai hop dong da ton tai
+  //         }else{
+  //           this.toastService.showErrorHTMLWithTimeout('Mã loại hợp đồng đã tồn tại', "", 3000);
+  //           this.spinner.hide();
+  //         }
+  //       }, error => {
+  //         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+  //         this.spinner.hide();
+  //       }
+  //     )
+  //   }
   }
 
 }
