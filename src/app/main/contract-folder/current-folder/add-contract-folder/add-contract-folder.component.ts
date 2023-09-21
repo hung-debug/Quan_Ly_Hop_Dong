@@ -89,7 +89,7 @@ export class AddContractFolderComponent implements OnInit {
 
     getContractList() {
       if(this.parentId == 1)
-        this.contractFolderService.getContractCreatedList(this.filter_name, this.status.toString(), this.p, 4).subscribe(data => {
+        this.contractFolderService.getContractCreatedList(this.filter_name, this.status.toString(), this.p, 15).subscribe(data => {
           this.contracts = data.entities;
           this.pageTotal = data.total_elements;
           this.spinner.hide();
@@ -107,7 +107,7 @@ export class AddContractFolderComponent implements OnInit {
 
       if(this.parentId == 2){
         if(this.status == -1){
-          this.contractFolderService.getContractShareList(this.filter_name, this.p, 4).subscribe(data => {
+          this.contractFolderService.getContractShareList(this.filter_name, this.p, 15).subscribe(data => {
             this.contracts = data.entities;
             this.pageTotal = data.total_elements;
             this.spinner.hide();

@@ -275,3 +275,13 @@
     cursor: default;
   }
   
+  #dialog-content {
+    // max-height: 800px; 
+    // overflow-y: auto; /* Thêm thanh cuộn khi cần */
+  }
+
+  #contract-list {
+    max-height: 600px; 
+    overflow-y: auto; /* Thêm thanh cuộn khi cần */
+    overflow-x: hidden;
+  }
