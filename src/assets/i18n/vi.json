@@ -723,6 +723,8 @@
   "role.contract-folder.edit":"Sửa thư mục",
   "role.contract-folder.delete":"Xóa thư mục",
   "role.contract-folder.detail":"Chi tiết thư mục",
-  "name.folder.invalid":"Tên thư mục không được để trống"
+  "name.folder.invalid":"Tên thư mục không được để trống",
+  "delete.contract.question.folder":"Bạn có chắc chắc muốn xóa hợp đồng khỏi thư mục này không?",
+  "delete.contract-folder.success": "Xóa hợp đồng khỏi thư mục thành công"
 
 }

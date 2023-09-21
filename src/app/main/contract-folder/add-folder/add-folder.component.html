@@ -6,7 +6,7 @@
     <div class="label-input">{{'folder.name' | translate}}&nbsp;<span style="color: red; padding: 0">*</span></div>
     <div class="input-data-name" [ngStyle]="getStyleDetail()"><input type="text border" [readonly]="this.action == 'openDetail'" [ngStyle]="getStyleDetail()" [(ngModel)]="this.name"></div>
     <div style="color: red" *ngIf="!this.valid() && this.isSubmit">
-        abc
+        {{'name.folder.invalid' | translate}}
     </div>
   </div>
   <div class="folder-name">

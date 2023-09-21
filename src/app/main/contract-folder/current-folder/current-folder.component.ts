@@ -5,6 +5,8 @@ import { Router, Route, ActivatedRoute } from '@angular/router';
 import { ContractFolderService } from 'src/app/service/contract-folder.service';
 import { MatDialog } from '@angular/material/dialog';
 import { sideList } from 'src/app/config/variable';
+import { DeleteContractDialogComponent } from '../../contract/dialog/delete-contract-dialog/delete-contract-dialog.component';
+import { DeleteContractFolderComponent } from './delete-contract-folder/delete-contract-folder.component';
 
 @Component({
   selector: 'app-current-folder',
@@ -82,14 +84,51 @@ export class CurrentFolderComponent implements OnInit {
   //api danh sách hợp đồng trong thư mục
   getContractList() {
     this.contractFolderService.getContractInFolder(this.parentId).subscribe((response: any) => {
-      this.contracts = response;
+      this.contracts = response.entities;
+      this.pageTotal = response.total_elements;
+      if (this.pageTotal == 0) {
+        this.p = 0;
+        this.pageStart = 0;
+        this.pageEnd = 0;
+      } else {
+        this.setPage();
+      }
     })
-
   }
 
-    sortParticipant(list: any) {
-      return list.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
+  deleteContract(contractId: number) {
+    let data: any = "";
+
+    if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
+      data = {
+        title: 'XÁC NHẬN XÓA HỢP ĐỒNG TRONG THƯ MỤC',
+        contractId: contractId,
+        folderId: this.parentId
+      };
+    } else if (sessionStorage.getItem('lang') == 'en') {
+      data = {
+        title: 'CONTRACT DELETE CONFIRMATION IN FOLDER',
+        contractId: contractId,
+        folderId: this.parentId
+      };
     }
+
+    // @ts-ignore
+    const dialogRef = this.dialog.open(DeleteContractFolderComponent, {
+      width: '480px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      
+    })
+  }
+
+  sortParticipant(list: any) {
+    return list.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
+  }
     
     getNameOrganization(item: any, index: any) {
       if(item.type == 3 && item.recipients.length > 0)
