@@ -13,7 +13,7 @@ import { sideList } from 'src/app/config/variable';
 })
 export class CurrentFolderComponent implements OnInit {
   action: string;
-  status: string;
+  status: string = '';
   type: string;
   private sub: any;
   public contracts: any[] = [];
@@ -26,6 +26,7 @@ export class CurrentFolderComponent implements OnInit {
   roleMess: any = "";
   id: number;
   isOrg: string = "off";
+  parentId: number | undefined = undefined;
 
   constructor(
     private router: Router,
@@ -33,13 +34,20 @@ export class CurrentFolderComponent implements OnInit {
     private activatedRoute : ActivatedRoute,
     private appService: AppService,
     private dialog: MatDialog,
+    private route: ActivatedRoute,
     
   ) { }
 
   ngOnInit(): void {
-    console.log(this.activatedRoute.snapshot.params['name'])
-    this.appService.setTitle(this.activatedRoute.snapshot.params['name'])
-    this.getContractList();
+
+    this.route.queryParams.subscribe((params) => {
+      this.parentId = params.id;
+
+      this.appService.setTitle(this.activatedRoute.snapshot.params['name'])
+      this.getContractList();
+    });
+
+   
   }
 
   openDetail(id: number) {
@@ -54,37 +62,6 @@ export class CurrentFolderComponent implements OnInit {
     });
   }
 
-  // getContractList() {
-  //   this.pageTotal = 0;
-  //   this.roleMess = "";
-  //   this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
-
-
-      //get list contract
-      // this.contractFolderService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
-      //   this.contracts = data.entities;
-      //   this.pageTotal = data.total_elements;
-      //   if (this.pageTotal == 0) {
-      //     this.p = 0;
-      //     this.pageStart = 0;
-      //     this.pageEnd = 0;
-      //   } else {
-      //     this.setPage();
-      //   }
-      //   const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
-      //   
-      //   for(let i = 0; i< this.contracts.length; i++){
-      //     let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
-      //     if(checkIf){
-      //       this.contracts[i].checked = true;
-      //     } else {
-      //       this.contracts[i].checked = false;
-      //     }
-      //   }
-      // });
-    // }
-  
-
   setPage() {
     this.pageStart = (this.p - 1) * this.page + 1;
     this.pageEnd = (this.p) * this.page;
@@ -96,21 +73,19 @@ export class CurrentFolderComponent implements OnInit {
   addContract(){
     const matDialogRef = this.dialog.open(AddContractFolderComponent, {
       width: '1200px',
-    });
-  }
-  getContractList() {
-    this.contractFolderService.getContractCreatedList('', this.status, this.p, 5).subscribe(data => {
-      this.contracts = data.entities;
-      this.pageTotal = data.total_elements;
-      if (this.pageTotal == 0) {
-        this.p = 0;
-        this.pageStart = 0;
-        this.pageEnd = 0;
-      } else {
-        this.setPage();
+      data: {
+        folderId: this.parentId
       }
     });
-    }
+  }
+
+  //api danh sách hợp đồng trong thư mục
+  getContractList() {
+    this.contractFolderService.getContractInFolder(this.parentId).subscribe((response: any) => {
+      this.contracts = response;
+    })
+
+  }
 
     sortParticipant(list: any) {
       return list.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);

@@ -706,7 +706,7 @@
   "folder.openDetail": "Xem chi tiết thư mục",
   "folder.search.name.placeholder": "Nhập tên thư mục để tìm kiếm",
   "confirm.folder.delete": "Bạn có chắc chắn muốn xóa thư mục này không?",
-  "folder.type.contract": "Loại hợp đồng",
+  "folder.type.contract": "Danh sách hợp đồng",
   "folder.partner.name": "Tên đối tác",
   "folder.add.success": "Thêm thư mục thành công",
   "folder.edit.success": "Sửa thư mục thành công",
@@ -742,5 +742,10 @@
   "error.contract-type.required":"Loại hợp đồng không được để trống",
   "error.upload.file.duplicate": "đã tồn tại, vui lòng chọn file khác",
   "success.upload.file.attach": "Upload file đính kèm thành công",
-  "error.upload.file.attach": "Upload file đính kèm thất bại"
+  "error.upload.file.attach": "Upload file đính kèm thất bại",
+  "role.contract-folder.edit":"Sửa thư mục",
+  "role.contract-folder.delete":"Xóa thư mục",
+  "role.contract-folder.detail":"Chi tiết thư mục",
+  "name.folder.invalid":"Tên thư mục không được để trống"
+
 }

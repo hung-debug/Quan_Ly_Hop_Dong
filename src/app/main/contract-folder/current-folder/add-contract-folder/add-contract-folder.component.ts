@@ -72,7 +72,6 @@ export class AddContractFolderComponent implements OnInit {
   ngOnInit() {
     this.title = 'add.contract.folder';
     this.contractTypes = this.translateOptions(this.contractTypes);
-
   }
 
   convertActionFolder(action: string){
@@ -88,117 +87,126 @@ export class AddContractFolderComponent implements OnInit {
   }
 }
 
-getContractList() {
-  if(this.parentId == 1)
-  this.contractFolderService.getContractCreatedList(this.filter_name, this.status.toString(), this.p, 4).subscribe(data => {
-    this.contracts = data.entities;
-    this.pageTotal = data.total_elements;
-    this.spinner.hide();
-    if (this.pageTotal == 0) {
-      this.p = 0;
-      this.pageStart = 0;
-      this.pageEnd = 0;
-    } else {
-      this.setPage();
-    }
-  }, error => {
-    this.spinner.hide();
-    this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-  });
+    getContractList() {
+      if(this.parentId == 1)
+        this.contractFolderService.getContractCreatedList(this.filter_name, this.status.toString(), this.p, 4).subscribe(data => {
+          this.contracts = data.entities;
+          this.pageTotal = data.total_elements;
+          this.spinner.hide();
+          if (this.pageTotal == 0) {
+            this.p = 0;
+            this.pageStart = 0;
+            this.pageEnd = 0;
+          } else {
+            this.setPage();
+          }
+        }, error => {
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
+        });
 
-  if(this.parentId == 2){
-    if(this.status == -1){
-      this.contractFolderService.getContractShareList(this.filter_name, this.p, 4).subscribe(data => {
-        this.contracts = data.entities;
-        this.pageTotal = data.total_elements;
-        this.spinner.hide();
-        if (this.pageTotal == 0) {
-          this.p = 0;
-          this.pageStart = 0;
-          this.pageEnd = 0;
+      if(this.parentId == 2){
+        if(this.status == -1){
+          this.contractFolderService.getContractShareList(this.filter_name, this.p, 4).subscribe(data => {
+            this.contracts = data.entities;
+            this.pageTotal = data.total_elements;
+            this.spinner.hide();
+            if (this.pageTotal == 0) {
+              this.p = 0;
+              this.pageStart = 0;
+              this.pageEnd = 0;
+            } else {
+              this.setPage();
+            }
+          }, error => {
+            this.spinner.hide();
+            this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
+          })
         } else {
-          this.setPage();
+          this.contractFolderService.getContractMyProcessList(this.filter_name, this.status, this.p, 4).subscribe(data => {
+            this.contracts = data.entities;
+            this.pageTotal = data.total_elements;
+            this.spinner.hide();
+            if (this.pageTotal == 0) {
+              this.p = 0;
+              this.pageStart = 0;
+              this.pageEnd = 0;
+            } else {
+              this.setPage();
+            }
+          }, error => {
+            this.spinner.hide();
+            this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
+          });
         }
-      }, error => {
-        this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-      })
-    } else {
-      this.contractFolderService.getContractMyProcessList(this.filter_name, this.status, this.p, 4).subscribe(data => {
-        this.contracts = data.entities;
-        this.pageTotal = data.total_elements;
-        this.spinner.hide();
-        if (this.pageTotal == 0) {
-          this.p = 0;
-          this.pageStart = 0;
-          this.pageEnd = 0;
-        } else {
-          this.setPage();
-        }
-      }, error => {
-        this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-      });
-    }
-  }
-  }
-
-  setPage() {
-    this.pageStart = (this.p - 1) * this.page + 1;
-    this.pageEnd = (this.p) * this.page;
-    if (this.pageTotal < this.pageEnd) {
-      this.pageEnd = this.pageTotal;
-    }
-  }
-
-  
-  getPageStartEnd() {
-    const temp: number = this.pageStart;
-    if(this.pageStart < 0) {
-      this.pageStart = 1;
-      this.pageEnd = Math.abs(temp) + 1;
-    }
-    if (this.pageTotal <= this.pageEnd && this.pageTotal > 0) {
-      this.pageEnd = this.pageTotal;
-    }
-    return this.pageStart + '-' + this.pageEnd;
-  }
-
-translateOptions(options: any[]): any[] {
-  return options.map(option => {
-    const translatedOption = { ...option };
-    translatedOption.label = this.translateService.instant(option.label);
-    
-    if (translatedOption.children) {
-      for(let i = 0; i < translatedOption.children.length; i++){
-      translatedOption.children[i].label = this.translateService.instant(option.children[i].label);
       }
     }
-    
-    console.log(translatedOption)
-    return translatedOption;
-  });
-}
 
-sortParticipant(item: any) {
-  console.log(item);
-  if(this.parentId == 1)
-  return item.participants.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
-  if(this.parentId == 2){
-    if(this.status != -1)
-    if (item.participant && item.participant.contract.participants && item.participant.contract.participants.length > 0) {
-      return item.participant.contract.participants.sort(
-        (beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type
-      );
+    setPage() {
+      this.pageStart = (this.p - 1) * this.page + 1;
+      this.pageEnd = (this.p) * this.page;
+      if (this.pageTotal < this.pageEnd) {
+        this.pageEnd = this.pageTotal;
+      }
     }
-    if(this.status == -1)
-    if (item.participants && item.participants.length > 0) {
-      return item.participants.sort(
-        (beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type
-      );
+
+    submit() {
+      const body = {
+        id: parseInt(this.data.folderId),
+        contracts: this.selectedContract
+      }
+
+      this.contractFolderService.addContractIntoFolder(body).subscribe((response: any) => {
+        console.log("res ", response);
+      })
     }
-  }
-}
+
+    getPageStartEnd() {
+      const temp: number = this.pageStart;
+      if(this.pageStart < 0) {
+        this.pageStart = 1;
+        this.pageEnd = Math.abs(temp) + 1;
+      }
+      if (this.pageTotal <= this.pageEnd && this.pageTotal > 0) {
+        this.pageEnd = this.pageTotal;
+      }
+      return this.pageStart + '-' + this.pageEnd;
+    }
+
+    translateOptions(options: any[]): any[] {
+      return options.map(option => {
+        const translatedOption = { ...option };
+        translatedOption.label = this.translateService.instant(option.label);
+        
+        if (translatedOption.children) {
+          for(let i = 0; i < translatedOption.children.length; i++){
+          translatedOption.children[i].label = this.translateService.instant(option.children[i].label);
+          }
+        }
+        
+        console.log(translatedOption)
+        return translatedOption;
+      });
+    }
+
+    sortParticipant(item: any) {
+      if(this.parentId == 1)
+      return item.participants.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
+      if(this.parentId == 2){
+        if(this.status != -1)
+        if (item.participant && item.participant.contract.participants && item.participant.contract.participants.length > 0) {
+          return item.participant.contract.participants.sort(
+            (beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type
+          );
+        }
+        if(this.status == -1)
+        if (item.participants && item.participants.length > 0) {
+          return item.participants.sort(
+            (beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type
+          );
+        }
+      }
+    }
 
 getCreatedDate(item: any){
   if(this.parentId == 1 || (this.parentId == 2 && this.status == -1))
