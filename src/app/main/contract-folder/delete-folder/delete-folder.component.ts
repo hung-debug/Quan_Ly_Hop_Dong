@@ -26,7 +26,7 @@ export class DeleteFolderComponent implements OnInit {
 
   onSubmit(){
     this.spinner.show();
-    this.contractFolderService.deleteContractFolder(this.data.folderId).subscribe(
+    this.contractFolderService.deleteContractFolder(this.data.folderId, this.data.contractId).subscribe(
       (data) => {
         this.spinner.hide();
         this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục thành công','',2000);

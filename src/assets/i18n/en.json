@@ -737,5 +737,7 @@
   "role.contract-folder.edit":"Edit folder",
   "role.contract-folder.delete":"Delete folder",
   "role.contract-folder.detail":"Detail folder",
-  "name.folder.invalid":"Folder name not blank"
+  "name.folder.invalid":"Folder name not blank",
+  "delete.contract.question.folder":"Are you sure want to delete the contract from this folder?",
+  "delete.contract-folder.success": "Deleted the contract from the folder successfully"
 }

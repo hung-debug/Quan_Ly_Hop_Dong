@@ -68,7 +68,7 @@
                 <div class="col-md-3 item_icon">
                     <div style="display: flex; justify-content: center;">
                         <div class="div_icon">
-                            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'contract.delete' | translate}}"/>
+                            <img src="../../assets/img/icon_delete.svg" class="img_icon" (click)="deleteContract(item.id)" ngbTooltip="{{'contract.delete' | translate}}"/>
                         </div>
                         <!-- 
                             <div class="div_icon" *ngIf="status == 'processing' || status == 'expire'">
