@@ -3,25 +3,25 @@
       <h3 class="label-header">{{this.datas.title | translate}}</h3>
     </div>
     <form (ngSubmit)="onSubmit()" [formGroup]="addForm" class="content">
-        
-        <div *ngIf=" this.enviroment.flag == 'NB' ? true : this.ceca" class="row">
+
+        <div *ngIf=" this.enviroment.flag == 'NB' ? true : this.ceca" class="row"style="padding-top: 10px;">
             <div class="col-md-12">
                 <div class="label text-color">{{'contract-type.ceca' | translate}}</div>
-                    <p-dropdown 
-                        [style]="{'width':'100%',' border':'1px solid #106DB6','border-radius': '5px'}" 
-                        panelStyleClass="font" 
+                    <p-dropdown
+                        [style]="{'width':'100%',' border':'1px solid #106DB6','border-radius': '5px'}"
+                        panelStyleClass="font"
                         optionLabel="name"
-                        optionValue="id" 
+                        optionValue="id"
                         [showClear]="true"
-                        [options]="optionsCeCa" 
+                        [options]="optionsCeCa"
                         [(ngModel)]="optionsCeCaValue"
                         formControlName="ceca_push"
                         >
                     </p-dropdown>
             </div>
         </div>
-       
-        <div class="row" style="padding-top: 10px;">
+
+        <div class="row" style="padding-top: 20px;">
             <div class="col-md-12">
                 <div class="label text-color">{{'contract-type.code' | translate}} <span class="required-title">*</span></div>
                 <div class="input-data">
@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <div class="row" style="padding-top: 10px;">
+        <div class="row" style="padding-top: 20px;">
             <div class="col-md-12">
                 <div class="label text-color">{{'contract-type.name' | translate}} <span class="required-title">*</span></div>
                 <div class="input-data">
@@ -47,7 +47,28 @@
             </div>
         </div>
 
-        <div class="row" style="justify-content: center;padding-top: 10px;">
+        <div *ngIf="site == 'NB'" class="row" style="padding-top: 20px;">
+          <div class="col-md-12">
+              <div class="label text-color">{{'contract.group' | translate}} <span class="required-title">*</span></div>
+                <p-dropdown
+                  [style]="{'width':'100%',' border':'1px solid #106DB6','border-radius': '5px'}"
+                  panelStyleClass="font"
+                  optionLabel="name"
+                  optionValue="id"
+                  [showClear]="true"
+                  [options]="optionsGroupContract"
+                  [(ngModel)]="groupContractId"
+                  formControlName="group_contract">
+                </p-dropdown>
+
+              <!-- <div *ngIf="submitted && f.name.errors" class="invalid">
+                  <div *ngIf="f.name.errors.required">{{'error.contract-type.name.required' | translate}}</div>
+                  <div *ngIf="f.name.errors.pattern">{{'Tên loại hợp đồng không được chứa ký tự đặc biệt' | translate}}</div>
+              </div> -->
+          </div>
+        </div>
+
+        <div class="row" style="justify-content: center;padding-top: 50px;">
             <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.cancel' | translate}}</button>
             <button class="save-button">{{'btn.save' | translate}}</button>
         </div>
@@ -57,4 +78,3 @@
   <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
     <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
   </ngx-spinner>
-  

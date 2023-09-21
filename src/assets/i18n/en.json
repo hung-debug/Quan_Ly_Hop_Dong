@@ -729,5 +729,6 @@
   "report.msale.search.failed": "Look up failed reports",
   "report.msale.download.failed": "Export failed report file",
   "download.success": "Downloaded successfully",
-  "contract.group": "Contract group"
+  "contract.group": "Contract group",
+  "error.contract-type.required":"Contract type cannot be left blank"
 }

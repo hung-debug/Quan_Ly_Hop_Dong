@@ -11,6 +11,7 @@ export interface ContractType {
   status: string,
   organization_id: string,
   ceca_push: any;
+  groupId:any;
 }
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,7 @@ export class ContractTypeService {
   getContractTypeByIdUrl: any = `${environment.apiUrl}/api/v1/contract-types/`;
   listContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types/organizations/`;
   listContractTypeV2Url: any = `${environment.apiUrl}/api/v1/contract-types/organizations-v2/`;
+  listGroupContract: any = `${environment.apiUrl}/api/v1/contracts-group`;
   checkCodeContractTypeUrl:any = `${environment.apiUrl}/api/v1/contract-types/check-code-unique`;
   checkNameContractTypeUrl:any = `${environment.apiUrl}/api/v1/contract-types/check-name-unique`;
 
@@ -45,14 +47,15 @@ export class ContractTypeService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    
+
     const body = JSON.stringify({
       name: datas.name,
       code: datas.code,
       ordering: 1,
       status: 1,
       organization_id: this.organization_id,
-      ceca_push: datas.ceca_push
+      ceca_push: datas.ceca_push,
+      groupId: datas.groupId
     });
     return this.http.post<ContractType>(this.addContractTypeUrl, body, {'headers': headers});
   }
@@ -68,7 +71,8 @@ export class ContractTypeService {
       ordering: 1,
       status: 1,
       organization_id: this.organization_id,
-      ceca_push: datas.ceca_push
+      ceca_push: datas.ceca_push,
+      groupId: datas.groupId
     });
     return this.http.put<ContractType>(this.updateContractTypeUrl + datas.id, body, {'headers': headers});
   }
@@ -78,8 +82,17 @@ export class ContractTypeService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-      
+
     return this.http.delete<any>(this.deleteContractTypeUrl + id, {'headers': headers});
+  }
+
+  getGroupContract(){
+    let contain_msale = false;
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<ContractType>(this.listGroupContract + '?contain-msale=' + contain_msale, {headers}).pipe();
   }
 
   getContractTypeById(id: any) {
@@ -98,7 +111,7 @@ export class ContractTypeService {
       listContractTypeUrl = this.listContractTypeUrl + idOrg + "?name=" + name.trim() + "&code=" + code.trim();
     }
 
-    
+
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<ContractType[]>(listContractTypeUrl, {headers}).pipe();
   }
@@ -111,7 +124,7 @@ export class ContractTypeService {
       listContractTypeV2Url = this.listContractTypeV2Url + idOrg + "?name=" + name.trim() + "&code=" + code.trim();
     }
 
-    
+
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<ContractType[]>(listContractTypeV2Url, {headers}).pipe();
   }

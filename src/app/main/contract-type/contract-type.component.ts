@@ -89,7 +89,7 @@ export class ContractTypeComponent implements OnInit {
 
   addContractType() {
     const data = {
-      title: 'contract-type.add'
+      title: 'contract-type.add',
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AddContractTypeComponent, {
