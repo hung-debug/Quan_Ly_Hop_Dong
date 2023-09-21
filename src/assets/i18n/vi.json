@@ -738,5 +738,6 @@
   "report.msale.search.failed": "Tra cứu báo cáo thất bại",
   "report.msale.download.failed": "Xuất file báo cáo thất bại",
   "download.success": "Tải xuống thành công",
-  "group.type.contract":"Nhóm hợp đồng"
+  "group.type.contract":"Nhóm hợp đồng",
+  "error.contract-type.required":"Loại hợp đồng không được để trống"
 }
