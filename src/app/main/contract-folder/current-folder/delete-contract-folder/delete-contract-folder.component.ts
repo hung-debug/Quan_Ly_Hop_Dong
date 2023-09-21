@@ -28,7 +28,7 @@ export class DeleteContractFolderComponent implements OnInit {
     this.contractFolderService.deleteContractFolder(this.data.folderId,this.data.contractId).subscribe((response: any) => {
       this.toastService.showSuccessHTMLWithTimeout("delete.contract-folder.success", "", 3000);
       this.dialogRef.close();
-      window.location.reload();
+      // window.location.reload();
     })
   }
 
