@@ -713,5 +713,9 @@
   "role.cerificate.add": "Add new digital certificate server",
   "role.cerificate.update": "Update information digital certificate server",
   "role.cerificate.detail": "View information digital certificate server",
-  "role.cerificate.filter": "Search digital certificate server"
+  "role.cerificate.filter": "Search digital certificate server",
+  "role.contract-folder.edit":"Edit folder",
+  "role.contract-folder.delete":"Delete folder",
+  "role.contract-folder.detail":"Detail folder",
+  "name.folder.invalid":"Folder name not blank"
 }

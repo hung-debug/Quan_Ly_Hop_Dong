@@ -7,21 +7,14 @@
             <div class="contract-type">
               <div class="label-input">{{'folder.type.contract' | translate}}&nbsp;<span style="color: red">*</span></div>
               <p-treeSelect class="md:w-20rem w-full" containerStyleClass="w-full" style="width: 100%!important" 
-              [(ngModel)]="selectedContractType" [options]="contractTypes" placeholder="Chọn loại hợp đồng" scrollHeight="200px" [showClear]="showClearValue" (ngModelChange)="chooseContractType()" selectionMode="single"
+              [(ngModel)]="selectedContractType" [options]="contractTypes" placeholder="Chọn hợp đồng" scrollHeight="200px" [showClear]="showClearValue" (ngModelChange)="chooseContractType()" selectionMode="single"
               >
               </p-treeSelect>
             </div>
-            <!-- <div class="contract-name">
-              <div class="label-input">{{'folder.name' | translate}}&nbsp;</div>
-              <div class="input-data-name"><input type="text border" [readonly]="this.action == 'openDetail'"></div>
-            </div>
-            <div class="contract-partner">
-              <div class="label-input">{{'folder.partner.name' | translate}}&nbsp;</div>
-              <div class="input-data-name"><input type="text border" [readonly]="this.action == 'openDetail'"></div>
-            </div> -->
+        
             <div class="contract-name">
                 <div class="label-input">Từ khóa tìm kiếm&nbsp;</div>
-                <div class="input-data-name"><input type="text border" [readonly]="this.action == 'openDetail'" [(ngModel)]="filter_name" placeholder="Nhập tên hợp đồng, đối tác cần tìm kiếm"></div>
+                <div class="input-data-name"><input type="text border" [readonly]="this.action == 'openDetail'" [(ngModel)]="filter_name" placeholder="Tìm kiếm"></div>
               </div>
             <div class="contract-button">
                 <div class="label-input">&nbsp;</div>
@@ -129,7 +122,7 @@
     <div class="footer" style="justify-content: center">
         <div style="display:flex; justify-content: center;">
             <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
-            <button class="save-button" (click)="dialog.closeAll()" type="button">{{'btn.save' | translate}}</button>
+            <button class="save-button" (click)="submit()" type="button">{{'btn.save' | translate}}</button>
         </div>
   </div>
   

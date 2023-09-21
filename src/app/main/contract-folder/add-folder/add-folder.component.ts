@@ -49,9 +49,16 @@ export class AddFolderComponent implements OnInit {
         return 'folder.openDetail';
       default:
         return ''
+    }
   }
-}
+
+  isSubmit: boolean = false;
   submit(){
+    this.isSubmit = true;
+    if(!this.valid()) {
+      return false;
+    }
+
     this.spinner.show();
     if(this.action=='add' && this.valid()){
       let folder: Folder = {
