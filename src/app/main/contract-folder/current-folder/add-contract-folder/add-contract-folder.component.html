@@ -41,8 +41,11 @@
                         <div class="row">
                             <div class="col-md-11">
                                 <div class="item_contract_name">
-                                    <a class="item_contract_name" style="text-decoration: none;">
+                                    <a *ngIf="!(this.parentId == 2 && this.status != -1)" class="item_contract_name" style="text-decoration: none;">
                                         {{item.name}}
+                                    </a>
+                                    <a *ngIf="(this.parentId == 2 && this.status != -1)" class="item_contract_name" style="text-decoration: none;">
+                                        {{item.participant.contract.name}}
                                     </a>
                                 </div>
     

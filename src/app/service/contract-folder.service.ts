@@ -54,13 +54,12 @@ export class ContractFolderService {
     return this.http.post<any>(this.addContractIntoFolderUrl, body, {headers}).pipe();
   }
 
-  deleteContractInFolder(contractId: number) {
+  deleteContractInFolder(folderId: number,contractId: number) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-
-    return this.http.delete<any>(this.deleteContractFolderUrl + contractId,{headers}).pipe();
+    return this.http.delete(this.deleteContractFolderUrl + folderId + "/" + contractId, {headers}).pipe();
   }
 
   getContractFoldersList() {    
@@ -93,12 +92,13 @@ export class ContractFolderService {
     return this.http.post(this.addContractFolderUrl, body, {headers}).pipe();
   }
 
-  deleteContractFolder(folderId: number,contractId: number){
-    this.getCurrentUser();
+  deleteContractFolder(contractId: number){
+       this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.delete(this.deleteContractFolderUrl + folderId + "/" + contractId, {headers}).pipe();
+
+    return this.http.delete<any>(this.deleteContractFolderUrl + contractId,{headers}).pipe();
   }
 
   editContractFolder(item: Folder){

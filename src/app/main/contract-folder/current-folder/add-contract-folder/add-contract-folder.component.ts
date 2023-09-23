@@ -89,7 +89,8 @@ export class AddContractFolderComponent implements OnInit {
 
     getContractList() {
       if(this.parentId == 1)
-        this.contractFolderService.getContractCreatedList(this.filter_name, this.status.toString(), this.p, 15).subscribe(data => {
+        //Danh sách hợp đồng tạo
+        this.contractFolderService.getContractCreatedList(this.filter_name, this.status.toString(), this.p, 4).subscribe(data => {
           this.contracts = data.entities;
           this.pageTotal = data.total_elements;
           this.spinner.hide();
@@ -107,7 +108,7 @@ export class AddContractFolderComponent implements OnInit {
 
       if(this.parentId == 2){
         if(this.status == -1){
-          this.contractFolderService.getContractShareList(this.filter_name, this.p, 15).subscribe(data => {
+          this.contractFolderService.getContractShareList(this.filter_name, this.p, 4).subscribe(data => {
             this.contracts = data.entities;
             this.pageTotal = data.total_elements;
             this.spinner.hide();
@@ -123,6 +124,7 @@ export class AddContractFolderComponent implements OnInit {
             this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
           })
         } else {
+          //Danh sách hợp đồng chờ xử lý
           this.contractFolderService.getContractMyProcessList(this.filter_name, this.status, this.p, 4).subscribe(data => {
             this.contracts = data.entities;
             this.pageTotal = data.total_elements;
@@ -151,6 +153,11 @@ export class AddContractFolderComponent implements OnInit {
     }
 
     submit() {
+      if(this.selectedContract.length == 0) {
+        this.toastService.showErrorHTMLWithTimeout('no.choose.contract','',3000);
+        return;
+      }
+
       const body = {
         id: parseInt(this.data.folderId),
         contracts: this.selectedContract
@@ -217,23 +224,25 @@ getCreatedDate(item: any){
   return item.participant.contract.created_time;
 }
 
-getSignTime(item: any){
-  if(this.parentId == 1 || (this.parentId == 2 && this.status == -1))
-  return item.sign_time;
-  if(this.parentId == 2 && this.status != -1)
-  return item.participant.contract.sign_time;
-}
+  getSignTime(item: any){
+    if(this.parentId == 1 || (this.parentId == 2 && this.status == -1))
+    return item.sign_time;
+    if(this.parentId == 2 && this.status != -1)
+    return item.participant.contract.sign_time;
+  }
 
-getNameOrganization(item: any, index: any) {
-  if(item.type == 3 && item.recipients.length > 0)
-    return sideList[index].name + " : " + item.recipients[0].name;
-  return sideList[index].name + " : " + item.name;
-}
+  getNameOrganization(item: any, index: any) {
+    if(!(this.parentId == 2 && this.status != -1)) {
+      if(item.type == 3 && item.recipients.length > 0)
+        return sideList[index].name + " : " + item.recipients[0].name;
+    } 
+    return sideList[index].name + " : " + item.name;   
+  }
 
-chooseContractType(){
-  console.log(this.selectedContractType);
+  chooseContractType(){
+    console.log(this.selectedContractType);
 
-}
+  }
 
 selectContract(id: any){
   console.log(id);
