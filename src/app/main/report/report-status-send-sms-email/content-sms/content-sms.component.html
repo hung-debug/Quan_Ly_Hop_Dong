@@ -5,10 +5,10 @@
 
     <div class="row">
         <div>
-            <textarea disabled="true" style="width: 100%;" [(ngModel)]="this.data.dataSendLog"></textarea>
+            <textarea disabled="true" style="width: 100%; height: 120px;" [(ngModel)]="this.data.dataSendLog"></textarea>
         </div>
     </div>
-    <div style="text-align: center;" >
+    <div style="text-align: center; padding-top: 10px;" >
         <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
     </div>
 </div>

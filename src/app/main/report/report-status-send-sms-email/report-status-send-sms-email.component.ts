@@ -1,6 +1,5 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
 import { ContractService } from 'src/app/service/contract.service';
@@ -11,7 +10,7 @@ import { ReportService } from '../report.service';
 import { Table } from 'primeng/table';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import * as moment from 'moment-timezone';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ContentSmsComponent } from './content-sms/content-sms.component';
 
 @Component({
