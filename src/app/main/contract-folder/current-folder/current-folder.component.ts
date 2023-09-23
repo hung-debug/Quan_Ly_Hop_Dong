@@ -53,11 +53,14 @@ export class CurrentFolderComponent implements OnInit {
   }
 
   openDetail(id: number) {
+    this.action = "folder";
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['/main/form-contract/detail/' + id],
       {
         queryParams: {
-          'action': this.action
+          'action': this.action,
+          'folderId': this.parentId,
+          'folderName': this.activatedRoute.snapshot.params['name']
         },
         skipLocationChange: false
       });
