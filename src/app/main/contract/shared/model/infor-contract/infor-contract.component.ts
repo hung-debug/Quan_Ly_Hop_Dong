@@ -374,10 +374,15 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.contractNameRequired();
     this.contractFileRequired();
     this.contractCeCaValid();
-    this.contractTypeValid();
-    if (!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid() || !this.contractCeCaValid() || !this.contractTypeValid()) {
-      // this.spinner.hide();
-      return false;
+    if (environment.flag == 'NB') {
+      this.contractTypeValid();
+      if (!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid() || !this.contractCeCaValid() || !this.contractTypeValid()) {
+        // this.spinner.hide();
+        return false;
+      }
+    } else if (environment.flag == 'KD' && 
+      (!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid() || !this.contractCeCaValid())) {
+        return false
     }
 
     let isDateSign = new Date(moment(this.sign_time).format('YYYY-MM-DD'));
@@ -763,7 +768,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       return;
     } else {
       this.spinner.show();
-
+    
       // set value to datas
       this.datas.name = this.name;
       this.datas.contract_no = this.contract_no;

@@ -17,9 +17,9 @@ import { parttern, parttern_input } from 'src/app/config/parttern';
 import { CheckSignDigitalService } from 'src/app/service/check-sign-digital.service';
 import Swal from 'sweetalert2';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
+import { environment } from 'src/environments/environment';
 export class ContractConnectArr {
   ref_id: number;
-
   constructor(ref_id: number) {
     this.ref_id = ref_id;
   }
@@ -88,6 +88,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   uploadFileAttachAgain: boolean = false;
   isFileAttachUploadNewEdit: any;
   checkView: boolean = false;
+  environment: any
 
   public subscription: Subscription;
 
@@ -113,7 +114,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   async ngOnInit(): Promise<void> {
     this.spinner.hide();
-
+    this.environment = environment
     let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
 
     this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract, true);
@@ -340,14 +341,23 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.contractFileValid();
     this.contractNumberValid();
     this.startTimeRequired();
-    this.contractTypeValid();
     this.endTimeValid();
-    if(!this.contractNameValid() || !this.contractFileValid()
-      || !this.contractNumberValid() || !this.startTimeRequired() || !this.endTimeValid() || !this.contractTypeValid()){
+    if (environment.flag == 'NB') {
+      this.contractTypeValid();
+      if(!this.contractNameValid() || !this.contractFileValid()
+        || !this.contractNumberValid() || !this.startTimeRequired() || !this.endTimeValid() || !this.contractTypeValid()){
+        //this.spinner.hide();
+        return false;
+      }
+      return true
+    } else if (environment.flag == 'KD') {
+      if(!this.contractNameValid() || !this.contractFileValid()
+      || !this.contractNumberValid() || !this.startTimeRequired() || !this.endTimeValid()){
       //this.spinner.hide();
       return false;
     }
     return true
+    }
   }
 
   async callAPI(action?: string) {

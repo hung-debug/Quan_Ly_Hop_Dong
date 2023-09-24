@@ -62,7 +62,7 @@
     <div class="col-md-5">
       <div class="form-group">
         <div class="label_item">{{'contract.type' | translate}}
-          <span class="require_star">*</span>
+          <span *ngIf="this.environment.flag =='NB'" class="require_star">*</span>
         </div>
         <div>
           <p-dropdown (onChange)="changeTypeContract()" panelStyleClass="font" [options]="typeList" [(ngModel)]="type_id" optionLabel="name"
@@ -70,7 +70,7 @@
           </p-dropdown>
         </div>
       </div>
-      <div class="form-group">
+      <div *ngIf="this.environment.flag == 'NB'" class="form-group">
         <div class="invalid" *ngIf="errorContractType != ''">
           {{errorContractType | translate}}
         </div>

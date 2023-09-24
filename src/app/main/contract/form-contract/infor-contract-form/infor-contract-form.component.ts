@@ -561,13 +561,15 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     }
 
     //Check khong có type_id và type_id đó không nằm trong typeList thì báo valid
-    if (!this.datasForm.type_id || !this.checkIdInTypeList()) {
-      this.toastService.showWarningHTMLWithTimeout(
-        this.translate.instant('error.contract-type.required'),
-        '',
-        3000
-      );
-      return false;
+    if (environment.flag == 'NB') {
+      if (!this.datasForm.type_id || !this.checkIdInTypeList()) {
+        this.toastService.showWarningHTMLWithTimeout(
+          this.translate.instant('error.contract-type.required'),
+          '',
+          3000
+        );
+        return false;
+      }
     }
 
     // if(!parttern_input.new_input_form.test(this.datasForm.name)) {

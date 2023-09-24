@@ -72,7 +72,7 @@
     <!--Loại hợp đồng-->
     <div class="form-group">
       <div class="label_item">{{'contract.type' | translate}}
-        <span class="require_star">*</span>
+        <span *ngIf="this.environment.flag == 'NB'" class="require_star">*</span>
       </div>
       <div>
         <p-dropdown (onChange)="changeTypeContract($event)" panelStyleClass="font" [options]="typeList" [(ngModel)]="datasForm.type_id" optionLabel="name"
