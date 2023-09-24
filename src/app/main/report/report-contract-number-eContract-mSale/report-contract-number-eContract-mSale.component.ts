@@ -220,6 +220,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
           let parentOrgIndex = newMsaleData.findIndex((item: any) => item.orgId == idOrg)
           newMsaleData = [newMsaleData[parentOrgIndex], ...newMsaleData.toSpliced(parentOrgIndex, 1)]
           this.list = newMsaleData
+          this.table.first = 0
         }, (err: any) => {
           this.spinner.hide()
           if (!flag) {
