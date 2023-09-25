@@ -1,7 +1,7 @@
 import { ToastService } from './../../../service/toast.service';
 import { Folder } from './../../../service/contract-folder.service';
 import { ContractFolderService } from 'src/app/service/contract-folder.service';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { parttern_input } from 'src/app/config/parttern';
@@ -11,12 +11,15 @@ import { parttern_input } from 'src/app/config/parttern';
   templateUrl: './add-folder.component.html',
   styleUrls: ['./add-folder.component.scss']
 })
-export class AddFolderComponent implements OnInit {
+export class AddFolderComponent implements OnInit, OnChanges {
   action: string;
   title: string ="";
   name: string = "";
   description: string = "";
   id: number;
+  isCheckPatternNameSpecial: boolean = false;
+  parttern_input = parttern_input;
+
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
@@ -24,8 +27,12 @@ export class AddFolderComponent implements OnInit {
     public dialog : MatDialog,
     private contractFolderService: ContractFolderService,
     private spinner: NgxSpinnerService,
-    private toastService: ToastService
+    private toastService: ToastService,
   ) { }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log("changes ", changes);
+  }
 
   ngOnInit() {
       this.action = this.data.action;
@@ -57,7 +64,7 @@ export class AddFolderComponent implements OnInit {
   submit(){
     this.isSubmit = true;
     if(!this.valid()) {
-      return false;
+      return;
     }
 
     this.spinner.show();
@@ -97,17 +104,16 @@ export class AddFolderComponent implements OnInit {
         }
       )
     }
-
-    }
+  }
   
-  isCheckPatternNameSpecial: boolean = false;
   valid(){
     if(!this.name.trim() || !parttern_input.new_input_form.test(this.name)){
-      if(!parttern_input.new_input_form.test(this.name)) this.isCheckPatternNameSpecial = true;
       return false;
     }
+    
     return true;
   }
+
 
   getStyleDetail(){
     if(this.action=='openDetail'){
