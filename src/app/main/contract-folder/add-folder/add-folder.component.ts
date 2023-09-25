@@ -102,7 +102,7 @@ export class AddFolderComponent implements OnInit {
   
   isCheckPatternNameSpecial: boolean = false;
   valid(){
-    if(this.name=='' || !parttern_input.new_input_form.test(this.name)){
+    if(!this.name.trim() || !parttern_input.new_input_form.test(this.name)){
       if(!parttern_input.new_input_form.test(this.name)) this.isCheckPatternNameSpecial = true;
       return false;
     }
