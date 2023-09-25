@@ -8,9 +8,9 @@
     <div style="color: red" *ngIf="!this.name.trim() && this.isSubmit">
         {{'name.folder.invalid' | translate}}
     </div>
-    <div style="color: red" *ngIf="this.name.trim() && this.isCheckPatternNameSpecial && this.isSubmit">
+    <div style="color: red" *ngIf="this.name.trim() && !parttern_input.new_input_form.test(this.name) && this.isSubmit">
       {{'name.folder.not.special.char' | translate}}
-  </div>
+    </div>
   </div>
   <div class="folder-name">
     <div class="label-input-description">{{'folder.description' | translate}}&nbsp;</div>
