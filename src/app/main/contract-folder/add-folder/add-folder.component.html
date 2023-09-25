@@ -5,10 +5,10 @@
   <div class="folder-name">
     <div class="label-input">{{'folder.name' | translate}}&nbsp;<span style="color: red; padding: 0">*</span></div>
     <div class="input-data-name" [ngStyle]="getStyleDetail()"><input type="text border" [readonly]="this.action == 'openDetail'" [ngStyle]="getStyleDetail()" [(ngModel)]="this.name"></div>
-    <div style="color: red" *ngIf="!this.name && this.isSubmit">
+    <div style="color: red" *ngIf="!this.name.trim() && this.isSubmit">
         {{'name.folder.invalid' | translate}}
     </div>
-    <div style="color: red" *ngIf="this.isCheckPatternNameSpecial && this.isSubmit">
+    <div style="color: red" *ngIf="this.name.trim() && this.isCheckPatternNameSpecial && this.isSubmit">
       {{'name.folder.not.special.char' | translate}}
   </div>
   </div>
