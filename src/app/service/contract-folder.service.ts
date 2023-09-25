@@ -150,10 +150,10 @@ export class ContractFolderService {
     return this.http.get<any[]>(shareListContractUrl, {headers}).pipe();
   }
 
-  getContractInFolder(parentId: any) {
+  getContractInFolder(parentId: any, name: string) {
     this.getCurrentUser();
     const headers = {'Authorization': 'Bearer ' + this.token};
-    return this.http.get<any>(this.contractInFolderUrl+ parentId,{headers}).pipe();
+    return this.http.get<any>(this.contractInFolderUrl+ parentId+'?name='+name,{headers}).pipe();
   }
 
 }
