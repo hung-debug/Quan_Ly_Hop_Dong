@@ -2,7 +2,7 @@
   <div class="col-md-12" style="padding-top: 20px;">
     <div class="input-line search" style="justify-content:left">
         <img src="../../assets/img/icon_search.svg" class="input-img" />
-        <input placeholder="{{'folder.search.name.placeholder' | translate}}" type="text" id="filter_name" class="input-text" style="width: 90%!important"
+        <input (keyup)="autoSearch($event)" placeholder="{{'folder.search.name.placeholder' | translate}}" type="text" id="filter_name" class="input-text" style="width: 90%!important"
         />
     </div>
   </div>
