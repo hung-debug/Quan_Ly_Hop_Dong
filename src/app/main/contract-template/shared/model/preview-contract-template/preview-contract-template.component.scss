@@ -6,8 +6,8 @@
     //position: relative;
     .sig-img-daky{
       position: absolute;
-      top: -11px;
-      right: -8px;
+      top: -20px;
+      right: -3px;
       //cursor: pointer;
     }
 
@@ -64,7 +64,7 @@
   //height: 32px;
   font-size: 12px;
   border-radius: 3px;
-  font-family: sans-serif;
+  // font-family: sans-serif;
   outline: none;
   touch-action: none;
   display: flex;
@@ -174,7 +174,7 @@ z-index: 9;
 //height: 32px;
 font-size: 12px;
 border-radius: 3px;
-font-family: sans-serif;
+// font-family: sans-serif;
 outline: none;
 touch-action: none;
 display: flex;
@@ -220,8 +220,8 @@ box-sizing: border-box;
   border-radius: 2px;
 }
 .ck-da-keo {
-border: 1px solid #106DB6;
-border-radius: 5px;
+  border: 1px solid #106DB6;
+  border-radius: 5px;
 }
 
 .footer-contract {
@@ -262,3 +262,11 @@ border-radius: 5px;
   cursor: pointer;
   margin: 5px 5px;
 }
+
+// .long-text-ellipsis {
+//   overflow: hidden;
+//   white-space: nowrap;
+//   width: inherit;
+//   text-overflow: ellipsis;
+//   max-width: -webkit-fill-available;
+// }

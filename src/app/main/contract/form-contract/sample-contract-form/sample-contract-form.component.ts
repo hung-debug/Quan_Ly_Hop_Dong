@@ -140,8 +140,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
 
-    console.log("user_sign 1 ", this.datasForm.contract_user_sign);
-
     this.onResize();
 
     if(this.datasForm.font) {
@@ -416,8 +414,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5)) ||
       (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)))||
       (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) ||
-        (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6)))
-        &&
+        (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6))) &&
       ((val.recipient ? (((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email) || val.email == data.email) :
       ((!val.name || (val.sign_unit == 'text' && !val.recipient_id)) || ((val.email && val.email == data.email) || !val.email))
       ))
@@ -657,12 +654,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         // lay doi tuong vua duoc keo moi vao hop dong
 
         if(this.isContractNoNameNull) {
-          console.log("vao day 1 ");
           this.signCurent = this.convertToSignConfig().filter((p: any) => (p.sign_unit != 'so_tai_lieu' && !p.name) && !p.position && !p.coordinate_x && !p.coordinate_y)[0];
         } else {
-          console.log("vao day 2 ");
           this.signCurent = this.convertToSignConfig().filter((p: any) => !p.position && !p.coordinate_x && !p.coordinate_y)[0];
-          console.log("sig ", this.signCurent);
         }
       } else {
         // doi tuong da duoc keo tha vao hop dong
@@ -795,8 +789,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                         element['height'] = '28';
                       }
                     } else {
-                      element['width'] = '135';
-                      element['height'] = '85';
+                      element['width'] = '140';
+                      element['height'] = '50';
                     }
                   }
 
@@ -938,7 +932,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     // // keep the dragged position in the data-x/data-y attributes
     var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
     var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
-    console.log(x, y);
     // // translate the element
     target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
     // // update the posiion attributes
@@ -1148,10 +1141,19 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any) {
-    let style: any = {
+    let style: any =
+    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
+    {
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
+    } :
+    {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#FFFFFF',
+      "border": "1px dashed #6B6B6B",
+      "border-radius": "6px"
     }
     if (d['width']) {
       style.width = parseInt(d['width']) + "px";
@@ -1559,7 +1561,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   }
 
   back(e: any, step?: any) {
-    console.log("abc ", this.datasForm.contract_no);
     this.contractNo = this.datasForm.contract_no;
     this.nextOrPreviousStep(step);
   }
@@ -1892,8 +1893,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     } catch (err) {
       this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng' + err, '', 3000);
     }
-        console.log("next step 2 ", this.datasForm.contract_user_sign);
-
         this.stepForm = variable.stepSampleContractForm.step4;
         this.datasForm.stepLast = this.stepForm
         this.nextOrPreviousStep(this.stepForm);
@@ -2156,10 +2155,22 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   }
 
   getName(data: any) {
+    let name = ''
+
     if (data.type_unit == 'organization') {
-      return 'Tổ chức của tôi - ' + data.name;
+      if (data.name.length>27) {
+        name = data.name.substring(0, 27) + ' ...'
+      } else {
+        name = data.name
+      }
+      return 'Tổ chức của tôi - ' + name;
     } else if (data.type_unit == 'partner') {
-      return 'Đối tác - ' + data.name;
+      if (data.name.length>35) {
+        name = data.name.substring(0, 35) + ' ...'
+      } else {
+        name = data.name
+      }
+      return 'Đối tác - ' + name;
     }
   }
 

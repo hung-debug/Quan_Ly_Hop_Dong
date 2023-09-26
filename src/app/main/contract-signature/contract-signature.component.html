@@ -49,15 +49,15 @@
     </div>
 
     <div style="margin-top: 18px;" class="row list_header" *ngIf="pageTotal > 0 || (this.typeDisplay == 'signMany' || this.typeDisplay == 'viewMany')">
-        <div 
-            *ngIf="this.typeDisplay === 'signMany' && this.contractsSignMany?.length == 50" 
+        <div
+            *ngIf="this.typeDisplay === 'signMany' && this.contractsSignMany?.length == 50"
             style="
             text-align: left;
             color: #027e21;
             font-size: 14px;
             margin-left: 9px;
             font-weight: bold;"
-        
+
         >
             {{'multi.sign.warning' | translate}}
         </div>
@@ -588,55 +588,56 @@
 
 <div class="skeleton-sign position-absolute opacity-0">
     <div class="signature-container" id="export-html" style="width: 155px;min-height: 80px; display: flex; font-size: 9px">
-      <img style="width: 30px" src="assets/img/tick_signature.svg" alt="duongdt.vn">
+      <!-- <img style="width: 30px" src="assets/img/tick_signature.svg" alt="duongdt.vn">
       <div class="signature-content"
           style="color: #6cc449; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
         <div style="z-index: 2;text-align: left;">{{'sign_by_token' | translate}}</div>
         <div style="z-index: 2;text-align: left;">{{'sign.by' | translate}}: {{nameCompany}}</div>
         <div style="z-index: 2;text-align: left;">{{'sign.day' | translate}}: {{isDateTime | date: 'dd/MM/YYYY HH:mm:ss'}}</div>
-      </div>
+      </div> -->
     </div>
 
     <div class="signature-container" id="export-html-image" style="width: 250px;min-height: 80px; display: flex; font-size: 9px;max-width: 300px">
         <div style="position: relative;">
             <img [src]="this.srcMark" style="width: 70%; height: 100%;z-index: 1; object-fit: contain">
         </div>
-        <div class="signature-content" style="color: #6cc449; background-size: 40px 40px; display: flex; justify-content: space-between;align-items: center; width: 100%;">
+        <!-- <div class="signature-content" style="color: #6cc449; background-size: 40px 40px; display: flex; justify-content: space-between;align-items: center; width: 100%;">
             <div style="width: 165px;">
                 <div style="z-index: 2;text-align: left;">{{'user.sign-type' | translate}}: {{ 'sign_by_token'| translate}}</div>
                 <div style="z-index: 2;text-align: left;">{{'sign.by' | translate}}: {{nameCompany}}</div>
                 <div style="z-index: 2;text-align: left;">{{'sign.day' | translate}}: {{isDateTime | date: 'dd/MM/YYYY HH:mm:ss'}}</div>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <div id="export-html-hsm"  style="min-height: 80px;display: flex; font-size: 9px">
-      <img style="width: 30px"  src="assets/img/tick_signature.svg" alt="duongdt.vn">
+      <!-- <img style="width: 30px"  src="assets/img/tick_signature.svg" alt="duongdt.vn">
       <div style="color: #6cc449; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
         <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'sign_by_hsm' | translate}}</span>
         <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'tax_code' | translate}}: {{nameCompany}}</span>
         <span style="text-align: left;white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'sign.day' | translate}}: {{isDateTime | date: 'dd/MM/YYYY HH:mm:ss'}}</span>
-      </div>
+      </div> -->
+      <div></div>
     </div>
 
     <div class="signature-container" id="export-html-hsm-image" style="width: 250px;min-height: 80px; display: flex; font-size: 9px;max-width: 300px">
         <div style="position: relative;">
             <img [src]="this.srcMark" style="width: 70%; height: 100%;z-index: 1;object-fit: contain;">
         </div>
-        <div class="signature-content" style="color: #6cc449; background-size: 40px 40px; display: flex; justify-content: space-between;align-items: center; width: 100%;">
+        <!-- <div class="signature-content" style="color: #6cc449; background-size: 40px 40px; display: flex; justify-content: space-between;align-items: center; width: 100%;">
             <div style="width: 165px;">
                 <div style="z-index: 2;text-align: left;">{{'user.sign-type' | translate}}: {{'sign_by_hsm' | translate}}</div>
                 <div style="z-index: 2;text-align: left;">{{'tax_code' | translate}}: {{nameCompany}}</div>
                 <div style="z-index: 2;text-align: left;">{{'sign.day' | translate}}: {{isDateTime | date: 'dd/MM/YYYY HH:mm:ss'}}</div>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <div class="signature-container" id="export-html-cert" style="min-height: 80px;display: flex; font-size: 9px">
       <img style="width: 30px" src="assets/img/tick_signature.svg" alt="duongdt.vn">
       <div style="color: #6cc449; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
           <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'user.sign-type' | translate}}: {{'sign_by_cert' | translate}}</span>
-          <!-- <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'signer' | translate}}: {{nameCompany}}</span> -->
+          <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'sign.by' | translate}}: {{nameCompany}}</span>
           <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'tax_code' | translate}}: {{cardId}}</span>
           <span style="text-align: left;white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'sign.day' | translate}}: {{isDateTime | date: 'dd/MM/YYYY HH:mm:ss'}}</span>
 
@@ -647,12 +648,13 @@
       <div style="position: relative;">
           <img [src]='this.srcMark' style="width: 70%; height: 100%;z-index: 1; object-fit: contain">
       </div>
-      <div class="signature-content" style="color: #6cc449; background-size: 40px 40px; display: flex; justify-content: space-between;align-items: center; width: 100%;">
+      <!-- <div class="signature-content" style="color: #6cc449; background-size: 40px 40px; display: flex; justify-content: space-between;align-items: center; width: 100%;">
           <div style="width: 165px;">
               <div style="z-index: 2;text-align: left;">{{'user.sign-type' | translate}}: {{'sign_by_cert' | translate}}</div>
+              <div style="z-index: 2;text-align: left;">{{'sign.by' | translate}}: {{nameCompany}}</div>
               <div style="z-index: 2;text-align: left;">{{'tax_code' | translate}}: {{cardId}}</div>
               <div style="z-index: 2;text-align: left;">{{'sign.day' | translate}}: {{isDateTime | date: 'dd/MM/YYYY HH:mm:ss'}}</div>
           </div>
-      </div>
+      </div> -->
     </div>
 </div>

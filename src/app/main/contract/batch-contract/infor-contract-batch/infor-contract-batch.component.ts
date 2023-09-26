@@ -12,6 +12,7 @@ import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
 import {TranslateService} from '@ngx-translate/core';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-infor-contract-batch',
   templateUrl: './infor-contract-batch.component.html',
@@ -68,10 +69,10 @@ export class InforContractBatchComponent implements OnInit {
   smsContractBuy: any;
 
   optionsCeCa: any;
-  optionsCeCaValue: any;
+  optionsCeCaValue: any = 0;
 
   ceca: boolean;
-
+  environment: any
   constructor(
     private uploadService: UploadService,
     private contractService: ContractService,
@@ -95,8 +96,9 @@ export class InforContractBatchComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.environment = environment
     this.optionsCeCa = optionsCeCa;
-    this.optionsCeCaValue = 0;
+    // this.optionsCeCaValue = 0;
     this.idContractTemplate = this.datasBatch.idContractTemplate
       ? this.datasBatch.idContractTemplate
       : '';
@@ -107,6 +109,9 @@ export class InforContractBatchComponent implements OnInit {
         this.ceca = false;
       } else if(response.ceca_push_mode == 'SELECTION') {
         this.ceca = true
+        if (environment.flag == 'NB') {
+          this.optionsCeCaValue = 1
+        } 
       }
     })
 
@@ -145,7 +150,6 @@ export class InforContractBatchComponent implements OnInit {
     });
 
     type_id = inforContractTemplate.type_id;
-
     if(type_id) {
       const informationContractType = await this.contractTypeService.getContractTypeById(type_id).toPromise();
 
@@ -162,7 +166,11 @@ export class InforContractBatchComponent implements OnInit {
         this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
       }
     } else {
-      this.optionsCeCaValue = 0;
+      if (environment.flag == 'NB') {
+        this.optionsCeCaValue = 1
+      } else {
+        this.optionsCeCaValue = 0
+      }
       this.optionsCeCa = optionsCeCa;
     }
   }
@@ -203,7 +211,7 @@ export class InforContractBatchComponent implements OnInit {
             // this.spinner.hide();
           },
           (error) => {
-            
+            this.toastService.showErrorHTMLWithTimeout('download.sample.file.fail','',3000)
             this.spinner.hide();
           },
           () => {

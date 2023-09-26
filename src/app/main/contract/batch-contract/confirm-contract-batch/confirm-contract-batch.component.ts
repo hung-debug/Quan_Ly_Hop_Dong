@@ -276,8 +276,8 @@ export class ConfirmContractBatchComponent
           const pdfC1 = this.datasBatch.i_data_file_contract.find(
             (p: any) => p.type == 1
           );
-          if (pdfC2) {
-            fileC = pdfC2.path;
+          if (pdfC2 && pdfC1) {
+            fileC = pdfC1.path;
           } else if (pdfC1) {
             fileC = pdfC1.path;
           } else {
@@ -558,13 +558,21 @@ export class ConfirmContractBatchComponent
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
-    let style: any = {
-      transform:
-        'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
-      position: 'absolute',
-      backgroundColor: '#EBF8FF',
-    };
-    style.backgroundColor = d.value ? '' : '#EBF8FF';
+    let style: any =
+    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
+    {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#EBF8FF'
+    } :
+    {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#FFFFFF',
+      "border": "1px dashed #6B6B6B",
+      "border-radius": "6px"
+    }
+    // style.backgroundColor = d.value ? '' : '#EBF8FF';
     if (d['width']) {
       style.width = parseInt(d['width']) + 'px';
     }
@@ -892,7 +900,7 @@ export class ConfirmContractBatchComponent
         .subscribe((response: any) => {
           if(response.errors?.length > 0) {
             if(response.errors[0].code == 1015) {
-              this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng vượt quá số lượng hợp đồng đã mua','',3000);
+              this.toastService.showErrorHTMLWithTimeout('Số lượng hợp đồng đã mua không còn đủ để tạo hợp đồng','',3000);
               this.spinner.hide();
               return;
             } else {

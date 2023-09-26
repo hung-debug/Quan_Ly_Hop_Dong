@@ -866,7 +866,6 @@ export class ConsiderContractComponent
     this.thePDF.getPage(pageNumber).then((page) => {
       let viewport = page.getViewport({ scale: this.scale });
 
-      console.log("rotate ",viewport.rotation);
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;
@@ -932,13 +931,24 @@ export class ConsiderContractComponent
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
-    let style: any = {
+    let style: any = 
+    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
+    {
       transform:
         'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       position: 'absolute',
-      backgroundColor: backgroundColor,
-    };
-    style.backgroundColor = d.valueSign ? '' : backgroundColor;
+      backgroundColor: d.valueSign ? '' : backgroundColor,
+      "justify-content": "left"
+    } :
+    {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": !d.valueSign ? '#FFFFFF' : '',
+      "border": !d.valueSign ? "1px dashed #6B6B6B" : '',
+      "border-radius": "6px"
+    }
+
+    // style.backgroundColor = d.valueSign ? '' : backgroundColor;
     style.display =
       (this.confirmConsider && this.confirmConsider == 1) ||
         (this.confirmSignature && this.confirmSignature == 1)
@@ -1791,7 +1801,6 @@ export class ConsiderContractComponent
             let fileC = await this.contractService.getFileContractPromise(this.idContract);
             const pdfC2 = fileC.find((p: any) => p.type == 2);
             const pdfC1 = fileC.find((p: any) => p.type == 1);
-
             if (pdfC2) {
               fileC = pdfC2.path;
             } else if (pdfC1) {
@@ -1854,8 +1863,10 @@ export class ConsiderContractComponent
                   imageRender = <HTMLElement>(document.getElementById('export-html-image'));
                   signUpdate.signDigitalWidth = signUpdate.signDigitalX + imageRender.offsetWidth;
                 } else {
-                  await of(null).pipe(delay(150)).toPromise();
-                  imageRender = <HTMLElement>(document.getElementById('export-html'));
+                  // await of(null).pipe(delay(150)).toPromise();
+                  // imageRender = <HTMLElement>(document.getElementById('export-html'));
+                  imageRender = null
+                  signI = null
                 }
 
                 if (imageRender) {
@@ -1867,14 +1878,25 @@ export class ConsiderContractComponent
 
                   }
                 }
+                try {
+                  const getSignatureInfoTokenV1Data: any = await this.contractService.getSignatureInfoTokenV1(
+                    this.signCertDigital.Base64, signI
+                  ).toPromise()
+                  signI = getSignatureInfoTokenV1Data.data
+                } catch (error) {
+                  this.spinner.hide()
+                  console.log(error);
+                }
               } else if (this.usbTokenVersion == 2) {
                 if (this.markImage) {
                   await of(null).pipe(delay(150)).toPromise();
                   imageRender = <HTMLElement>(document.getElementById('export-html2-image'));
                   signUpdate.signDigitalWidth = imageRender.offsetWidth;
                 } else {
-                  await of(null).pipe(delay(150)).toPromise();
-                  imageRender = <HTMLElement>(document.getElementById('export-html2'));
+                  // await of(null).pipe(delay(150)).toPromise();
+                  // imageRender = <HTMLElement>(document.getElementById('export-html2'));
+                  imageRender = null
+                  signI = null
                 }
 
                 if (imageRender) {
@@ -1888,6 +1910,7 @@ export class ConsiderContractComponent
             signDigital.Serial = this.signCertDigital.Serial;
 
             const base64String = await this.contractService.getDataFileUrlPromise(fileC);
+            
             signDigital.valueSignBase64 = encode(base64String);
 
             if (this.usbTokenVersion == 2) {
@@ -1927,6 +1950,7 @@ export class ConsiderContractComponent
                 );
 
               if (!dataSignMobi.data.FileDataSigned) {
+                this.spinner.hide()
                 this.toastService.showErrorHTMLWithTimeout(
                   'Lỗi ký USB Token',
                   '',
@@ -2031,6 +2055,7 @@ export class ConsiderContractComponent
         }
       }
     } else if (typeSignDigital == 4) {
+      // HSM SIGN
       for (const signUpdate of this.isDataObjectSignature) {
         if (
           signUpdate &&
@@ -2103,10 +2128,8 @@ export class ConsiderContractComponent
             } catch(err) {
               this.isDateTime = new Date();
             }
-
             if(!this.isDateTime) this.isDateTime = new Date();
             await of(null).pipe(delay(150)).toPromise();
-
             let imageRender: HTMLElement | null = null;
 
             //render khi role là 4 (văn thư) hoặc role khác (người ký)
@@ -2140,7 +2163,7 @@ export class ConsiderContractComponent
               username: this.dataHsm.username,
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
-              imageBase64: signI,
+              imageBase64: (!this.markImage && signUpdate.type==3) ? null : signI,
             };
           } else {
             this.dataHsm = {
@@ -2148,7 +2171,7 @@ export class ConsiderContractComponent
               username: this.dataHsm.username,
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
-              imageBase64: signI,
+              imageBase64: (!this.markImage && signUpdate.type==3) ? null : signI,
             };
           }
 
@@ -2157,7 +2180,8 @@ export class ConsiderContractComponent
               const checkSign = await this.contractService.signHsm(
                 this.dataHsm,
                 this.recipientId,
-                this.isTimestamp
+                this.isTimestamp,
+                signUpdate.type
               );
               if (!checkSign || (checkSign && !checkSign.success)) {
                 if (!checkSign.message) {
@@ -2250,7 +2274,8 @@ export class ConsiderContractComponent
           signUpdate &&
           (signUpdate.type == 1 ||
             signUpdate.type == 3 ||
-            signUpdate.type == 4) &&
+            signUpdate.type == 4 ||
+            signUpdate.type == 5)  &&
           [3, 4].includes(this.datas.roleContractReceived) &&
           signUpdate?.recipient?.email === this.currentUser.email &&
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
@@ -2287,9 +2312,8 @@ export class ConsiderContractComponent
           this.cardId = inforCert.mst;
           this.cccd = inforCert.cccd;
           this.cmnd = inforCert.cmnd;
-
           let signI = null;
-
+          // this.nameCompany = this.recipient.name;
           if (!this.mobile)
             this.convertXForHsm(signUpdate.page);
 
@@ -2300,7 +2324,7 @@ export class ConsiderContractComponent
             width: signUpdate.signDigitalWidth,
             height: signUpdate.signDigitalHeight,
           };
-          if (signUpdate.type == 1 || signUpdate.type == 4) {
+          if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
             this.textSign = signUpdate.valueSign;
 
             this.font = signUpdate.font;
@@ -2321,6 +2345,7 @@ export class ConsiderContractComponent
               signI = this.textSignBase64Gen = textSignB.split(',')[1];
             }
           } else if (signUpdate.type == 3) {
+            // this.nameCompany = this.recipient.name;
 
             this.widthSign = signUpdate.width;
             this.heightSign = signUpdate.height;
@@ -2338,7 +2363,7 @@ export class ConsiderContractComponent
               if (this.markImage) {
                 imageRender = <HTMLElement>(document.getElementById('export-html-cert-image'));
               } else {
-                imageRender = <HTMLElement>(document.getElementById('export-html-cert'));
+                imageRender = <HTMLElement>(document.getElementById('export-html-cert-image'));
               }
             } catch (error) {
             }
@@ -2376,6 +2401,7 @@ export class ConsiderContractComponent
               width: null,
               height: null,
               isTimestamp: this.isTimestamp,
+              type: signUpdate.type
             };
           } else {
 
@@ -2386,6 +2412,7 @@ export class ConsiderContractComponent
               width: null,
               height: null,
               isTimestamp: this.isTimestamp,
+              type: signUpdate.type
             };
 
           }
@@ -2422,7 +2449,7 @@ export class ConsiderContractComponent
                 }
               }
             } else {
-              const checkSign = await this.contractService.signCert(
+              const checkSign = await this.contractService.signCertMobile(
                 this.recipientId, this.dataCert
               );
 
@@ -2550,6 +2577,8 @@ export class ConsiderContractComponent
             name: 'image_' + new Date().getTime() + '.jpg',
             organizationId:
               this.data_contract?.is_data_contract?.organization_id,
+            ocrResponseName: signUpdate.recipient.name || '',
+            signType: 'eKYC'
           };
         }
       }
@@ -2987,7 +3016,8 @@ export class ConsiderContractComponent
   }
 
   async createEmptySignature(signUpdate: any, signDigital: any, image: any) {
-    const emptySignature = await this.contractService.createEmptySignature(this.recipientId, signUpdate, signDigital, image, this.certInfoBase64).toPromise();
+    let boxType = signDigital.type
+    const emptySignature = await this.contractService.createEmptySignature(this.recipientId, signUpdate, signDigital, image, this.certInfoBase64, boxType).toPromise();
 
     const base64TempData = emptySignature.base64TempData;
     const hexDigestTempFile = emptySignature.hexDigestTempFile;
@@ -3076,7 +3106,6 @@ export class ConsiderContractComponent
     let signUpdateTempN: any[] = [];
     if (signUpdatePayload) {
       signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
-
       if (notContainSignImage) {
         signDigitalStatus = await this.signDigitalDocument();
 
@@ -3124,12 +3153,20 @@ export class ConsiderContractComponent
             content: 'data:image/png;base64,' + valueBase64,
             organizationId:
               this.data_contract?.is_data_contract?.organization_id,
+            ocrResponseName: signUpdateTempN[0].name,
+            signType: 'eKYC'
+
           };
 
           this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseBase64) => {
             signUpdateTempN[0].value = responseBase64.file_object.file_path;
             signUpdateTempN[0].bucket = responseBase64.file_object.bucket;
             signUpdateTempN[0].processAt = this.isDateTime;
+
+            signUpdateTempN[0].signerType = 'eKYC'
+            signUpdateTempN[0].signerName = signUpdateTempN[0].name
+            signUpdateTempN[0].signerTaxCode = this.cardId
+
 
             this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
               async (result) => {
@@ -3347,6 +3384,8 @@ export class ConsiderContractComponent
           content:
             'data:image/png;base64,' + this.contractService.imageMobiBase64,
           organizationId: this.data_contract?.is_data_contract?.organization_id,
+          signType: '',
+          ocrResponseName: ''
         };
 
         signUploadObs$.push(
@@ -3431,6 +3470,8 @@ export class ConsiderContractComponent
           name: 'image_mobile' + new Date().getTime() + '.jpg',
           content: 'data:image/png;base64,' + valueBase64,
           organizationId: organization_id,
+          signType: '',
+          ocrResponseName: ''
         };
 
         this.contractService
@@ -3841,6 +3882,9 @@ export class ConsiderContractComponent
       if (result) {
         const uidCert = this.getValueByKey(result.certInformation, "UID")
         this.dataCardId = uidCert?.split(":")[1];
+        const certSignerName = this.getValueByKey(result.certInformation, "CN")
+        this.nameCompany = certSignerName;
+
         this.cert_id = result.id;
         await this.signContractSubmit();
       }

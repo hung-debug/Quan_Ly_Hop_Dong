@@ -49,7 +49,7 @@
       </div>
     </div>
 
-    <div *ngIf="this.ceca" class="form-group">
+    <div *ngIf=" environment.flag == 'NB' ? true : this.ceca" class="form-group">
       <div class="label_item">{{'contract-type.ceca' | translate}}<span class="require_star">*</span></div>
         <p-dropdown panelStyleClass="font" [options]="optionsCeCa" [(ngModel)]="optionsCeCaValue" optionLabel="name"
           optionValue="id" [showClear]="true">
@@ -71,7 +71,9 @@
 
     <!--Loại hợp đồng-->
     <div class="form-group">
-      <div class="label_item">{{'contract.type' | translate}}</div>
+      <div class="label_item">{{'contract.type' | translate}}
+        <span *ngIf="this.environment.flag == 'NB'" class="require_star">*</span>
+      </div>
       <div>
         <p-dropdown (onChange)="changeTypeContract($event)" panelStyleClass="font" [options]="typeList" [(ngModel)]="datasForm.type_id" optionLabel="name"
           optionValue="id" placeholder="{{'choose.contract.type' | translate}}" [filter]="true" filterBy="name" [showClear]="true"

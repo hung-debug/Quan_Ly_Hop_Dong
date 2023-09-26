@@ -23,6 +23,7 @@ import { ContractSignatureService } from '../../service/contract-signature.servi
 import { DatePipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { EditExpirationSigningTimeComponent } from './edit-expiration-signing-time/edit-expiration-signing-time.component';
+import { UploadAttachFilesComponent } from './dialog/upload-attach-files-dialog/upload-attach-files-dialog.component';
 
 @Component({
   selector: 'app-contract',
@@ -669,8 +670,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   openEditExpiration(item: any) {
 
-    console.log("item ", item);
-
     let title = this.translate.instant('edit.exp.sign.time')
     const data = {
       title: title,
@@ -895,4 +894,23 @@ export class ContractComponent implements OnInit, AfterViewInit {
     return "";
   }
 
+  uploadAttachFiles(contractData: any) {
+    const data = {
+      title: 'TẢI LÊN FILE ĐÍNH KÈM',
+      contractId: contractData.id,
+      contractName: contractData.name
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(UploadAttachFilesComponent, {
+      width: '519px',
+      height: '354px',
+      overflow: 'auto',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      let is_data = result
+    })
+  }
 }

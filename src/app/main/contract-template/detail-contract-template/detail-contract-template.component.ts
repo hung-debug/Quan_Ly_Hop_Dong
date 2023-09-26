@@ -293,7 +293,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
           const pdfC2 = this.datas.i_data_file_contract.find((p: any) => p.type == 2);
           const pdfC1 = this.datas.i_data_file_contract.find((p: any) => p.type == 1);
           if (pdfC2) {
-            fileC = pdfC2.path;
+            fileC = pdfC1.path;
           } else if (pdfC1) {
             fileC = pdfC1.path;
           } else {
@@ -520,12 +520,21 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
-    let style: any = {
+    let style: any = 
+    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
+    {
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
+    } :
+    {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#FFFFFF',
+      "border": "1px dashed #6B6B6B",
+      "border-radius": "6px"
     }
-    style.backgroundColor = '#EBF8FF';
+    // style.backgroundColor = '#EBF8FF';
     if (d['width']) {
       style.width = parseInt(d['width']) + "px";
     }

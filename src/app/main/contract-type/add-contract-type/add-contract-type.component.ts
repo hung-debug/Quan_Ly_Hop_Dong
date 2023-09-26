@@ -1,3 +1,4 @@
+import { map } from 'rxjs/operators';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -9,6 +10,7 @@ import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import {parttern_input} from "../../../config/parttern";
 import { parttern } from '../../../config/parttern';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-add-contract-type',
@@ -26,9 +28,15 @@ export class AddContractTypeComponent implements OnInit {
 
   optionsCeCa: Array<any> = [];
 
-  optionsCeCaValue: any;
+  optionsCeCaValue: any = 1;
 
+  optionsGroupContract: any;
+  groupContract: any;
+  site: string;
+  enviroment: any = ""
   ceca: boolean;
+  groupContractId: any
+
   get f() { return this.addForm.controls; }
 
   constructor(
@@ -42,29 +50,54 @@ export class AddContractTypeComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private contractService: ContractService
     ) {
-      this.addForm = this.fbd.group({
-        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
-        ceca_push: 0
-      });
+      // this.addForm = this.fbd.group({
+      //   name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
+      //   code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
+      //   ceca_push: 0,
+      //   group_contract: this.fbd.control(1, [Validators.required]),
+      // });
+
     }
 
   ngOnInit(): void {
+    this.enviroment = environment
     this.datas = this.data;
 
+    if (environment.flag == 'NB') {
+      this.site = 'NB';
+    } else if (environment.flag == 'KD') {
+      this.site = 'KD';
+    }
     this.optionsCeCa = optionsCeCa;
+
+    this.contractTypeService.getGroupContract().subscribe((response:any) =>{
+
+      this.optionsGroupContract = response;
+
+    })
+
+    this.addForm = this.fbd.group({
+      name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
+      code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
+      ceca_push: 0,
+      group_contract: this.fbd.control("", [Validators.required]),
+    });
 
     //lay du lieu form cap nhat
     if( this.data.id != null){
       this.contractTypeService.getContractTypeById(this.data.id).subscribe(
         data => {
+
           this.addForm = this.fbd.group({
             name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
             code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
-            ceca_push: this.convertCeCa(data.ceca_push)
+            ceca_push: this.convertCeCa(data.ceca_push),
+            // group_contract: this.groupContract
+            group_contract: this.fbd.control(data.groupId, [Validators.required]),
           });
           this.nameOld = data.name;
           this.codeOld = data.code;
+          // this.optionsGroupContractValue = data.groupId;
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
         }
@@ -73,16 +106,20 @@ export class AddContractTypeComponent implements OnInit {
       this.addForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
         code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
-        ceca_push: 0
+        ceca_push: 0,
+        group_contract: this.fbd.control(this.groupContract, [Validators.required]),
       });
     }
 
-    
+
     this.contractService.getDataNotifyOriganzation().subscribe((response) => {
       if(response.ceca_push_mode == 'NONE') {
         this.ceca = false;
       } else if(response.ceca_push_mode == 'SELECTION') {
         this.ceca = true
+        if (environment.flag == 'NB') {
+          this.optionsCeCaValue = 1;
+        }
       }
     })
   }
@@ -94,7 +131,7 @@ export class AddContractTypeComponent implements OnInit {
     } else {
       this.optionsCeCaValue = 0;
       return 0;
-    } 
+    }
   }
 
   checkName(data:any){
@@ -105,7 +142,7 @@ export class AddContractTypeComponent implements OnInit {
         dataByName => {
           //neu ten loai hop dong chua ton tai
           if(dataByName.success){
-            
+
             //call update
             this.update(data);
 
@@ -134,7 +171,7 @@ export class AddContractTypeComponent implements OnInit {
         this.dialogRef.close();
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
           this.router.navigate(['/main/contract-type']);
-        });    
+        });
         this.spinner.hide();
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
@@ -153,10 +190,12 @@ export class AddContractTypeComponent implements OnInit {
       id: this.data.id,
       name: this.addForm.value.name,
       code: this.addForm.value.code,
-      ceca_push: this.addForm.value.ceca_push
+      ceca_push: this.addForm.value.ceca_push,
+      groupId: this.addForm.value.group_contract,
     }
+
     this.spinner.show();
-    //ham sua
+    // ham sua
     if(this.data.id !=null){
 
       //neu thay doi ma thi can check lai
@@ -165,7 +204,7 @@ export class AddContractTypeComponent implements OnInit {
           dataByCode => {
             //neu ma loai hop dong chua ton tai
             if(dataByCode.success){
-              
+
               //call ham check ten
               this.checkName(data);
 
@@ -184,7 +223,7 @@ export class AddContractTypeComponent implements OnInit {
         //ham check ten
         this.checkName(data);
       }
-    
+
     //ham them moi
     }else{
       //kiem tra ma loai hop dong

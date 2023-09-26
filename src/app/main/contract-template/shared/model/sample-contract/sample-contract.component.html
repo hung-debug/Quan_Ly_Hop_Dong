@@ -121,13 +121,16 @@
         <div id="pdf-viewer-step-3">
             <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
                 <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
-                    <div *ngIf="d.sign_unit != 'text'" class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
-                    <div *ngIf="d.sign_unit == 'text'" class="name-sig-img-daky">{{d.text_attribute_name ? d.text_attribute_name  : ''}}</div>
+                    <div *ngIf="d.sign_unit != 'text'" class="name-sig-img-daky long-text-ellipsis">{{d.name ? d.name : ''}}</div>
+                    <div *ngIf="d.sign_unit == 'text'" class="name-sig-img-daky long-text-ellipsis">{{d.text_attribute_name ? d.text_attribute_name  : ''}}</div>
                     <div class="sig-img-daky" (click)="onCancel($event, d)">
-                        <img src="assets/img/clear.svg" alt="">
+                        <!-- <img src="assets/img/clear.svg" alt=""> -->
                         <img src="assets/img/border-clear.svg" alt="">
                     </div>
-                    <app-sign-contract-template [datas]="datas" [sign]="d"></app-sign-contract-template>
+                    <app-sign-contract-template 
+                    [ngClass]="(d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh') ? 'main-sign-box': ''"  
+                    [datas]="datas" 
+                    [sign]="d"></app-sign-contract-template>
                 </div>
             </div>
         </div>

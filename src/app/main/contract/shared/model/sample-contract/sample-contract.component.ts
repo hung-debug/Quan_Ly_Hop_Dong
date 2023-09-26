@@ -26,6 +26,10 @@ import { UserService } from 'src/app/service/user.service';
 import { CheckZoomService } from 'src/app/service/check-zoom.service';
 import { DetectCoordinateService } from 'src/app/service/detect-coordinate.service';
 
+interface DropdownOption {
+  value: number;
+  text: string;
+}
 @Component({
   selector: 'app-sample-contract',
   templateUrl: './sample-contract.component.html',
@@ -115,6 +119,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   imageSign: number = 2;
   digitalSign: number = 3;
   textUnit: number = 1;
+  isOnTheLeft: boolean = true
+  options: DropdownOption[] = [
+    { value: 1, text: 'Option 1 Option 1 Option 1 Option 1 Option 1 Option 1 Option 1 Option 1 ' },
+    { value: 2, text: 'Option 2' },
+    { value: 3, text: 'Option 3' },
+    // Add more options here
+  ];
+  
+  selectedOption: DropdownOption | undefined;
+  showDropdown: boolean = false;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -138,7 +152,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.spinner.hide();
 
     this.list_font = ["Arial", "Calibri", "Times New Roman"];
-    console.log("data",this.datas);
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
       // ham chuyen doi hinh thuc ky type => sign_unit
@@ -219,7 +232,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }),
         // minimum size
         interact.modifiers.restrictSize({
-          // min: { width: 100, height: 32 }
+          // min: { width: 180, height: 60 }
         })
       ],
       inertia: true,
@@ -274,6 +287,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.checkDifferent();
   }
 
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
+
+  selectOption(option: DropdownOption) {
+    this.selectedOption = option;
+    this.showDropdown = false;
+
+    // Perform any other actions based on the selected option
+  }
   setX(){
     this.datas.isFirstLoadDrag = true;
     let i = 0;
@@ -544,7 +567,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getListNameSign(data_user_sign: any) {
-    console.log('data_user_sign',data_user_sign);
     data_user_sign.forEach((element: any) => {
       if (element.type == 1 || element.type == 5) {
         element.recipients.forEach((item: any) => {
@@ -634,8 +656,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let signElement = <HTMLElement>document.getElementById(id);
       let rect_location = signElement.getBoundingClientRect();
 
-      console.log("signElement ", signElement);
-      console.log("rec ", rect_location);
 
       if (id.includes('chua-keo')) {  //Khi kéo vào trong hợp đồng thì sẽ thêm 1 object vào trong mảng sign_config
         event.target.style.webkitTransform = event.target.style.transform = 'none';// Đẩy chữ ký về vị trí cũ
@@ -798,8 +818,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                       element['height'] = '28';
                     }
                   } else {
-                    element['width'] = '135';
-                    element['height'] = '85';
+                    // set size ô ký
+                    // element['width'] = '135';
+                    // element['height'] = '85';
+                    element['width'] = '140';
+                    element['height'] = '50';
                   }
 
                   this.objSignInfo.width = element['height'];
@@ -1164,10 +1187,19 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any) {
-    let style: any = {
+    let style: any =
+    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
+    {
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
+    } :
+    {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#FFFFFF',
+      "border": "1px dashed #6B6B6B",
+      "border-radius": "6px"
     }
     if (d['width']) {
       style.width = parseInt(d['width']) + "px";
@@ -1179,6 +1211,27 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       style.padding = '6px';
     }
     return style;
+  }
+
+  changePositionSignature(d?: any, e?: any, sizeChange?: any) {
+      // new-signature-box-style-v2
+      let style: any = {
+        "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+        "position": "absolute",
+        "backgroundColor": '#FFFFFF',
+        "border": "1px dashed #6B6B6B",
+        "border-radius": "6px"
+      }
+      if (d['width']) {
+        style.width = parseInt(d['width']) + "px";
+      }
+      if (d['height']) {
+        style.height = parseInt(d['height']) + "px";
+      }
+      if (this.datas.contract_no && d.sign_unit == 'so_tai_lieu') {
+        style.padding = '6px';
+      }
+      return style
   }
 
   getAddSignUnit() {
@@ -2017,10 +2070,22 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getName(data: any) {
+    let name = ''
+
     if (data.type_unit == 'organization') {
-      return 'Tổ chức của tôi - ' + data.name;
+      if (data.name.length>27) {
+        name = data.name.substring(0, 27) + ' ...'
+      } else {
+        name = data.name
+      }
+      return 'Tổ chức của tôi - ' + name;
     } else if (data.type_unit == 'partner') {
-      return 'Đối tác - ' + data.name;
+      if (data.name.length>35) {
+        name = data.name.substring(0, 35) + ' ...'
+      } else {
+        name = data.name
+      }
+      return 'Đối tác - ' + name;
     }
   }
 
@@ -2121,5 +2186,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-
+  swapStampPosition() {
+    console.log('swapinnnn');
+    this.isOnTheLeft = !this.isOnTheLeft
+  }
 }

@@ -37,7 +37,7 @@ export class PreviewContractTemplateComponent implements OnInit {
         let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
         let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
         if (fileContract_2) {
-          this.pdfSrc = fileContract_2.path;
+          this.pdfSrc = fileContract_1.path;
         } else {
           this.pdfSrc = fileContract_1.path;
         }
@@ -56,10 +56,8 @@ export class PreviewContractTemplateComponent implements OnInit {
     let cloneUserSign = [...this.datas.contract_user_sign];
     if(this.datas.isFirstLoadPreview != true){
       this.datas.isFirstLoadPreview = true;
-      console.log(this.datas.isFirstLoadPreview);
       cloneUserSign.forEach((element: any) => {
         element.sign_config.forEach((item: any) => {
-        console.log(this.datas.arrDifPage[Number(element.page)-1] == 'max')
         if(this.datas.arrDifPage[Number(item.page)-1] == 'max'){
           item.coordinate_x = item.coordinate_x - this.datas.difX;
         }
@@ -104,7 +102,9 @@ export class PreviewContractTemplateComponent implements OnInit {
       style = {
         "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
         "position": "absolute",
-        "backgroundColor": '#EBF8FF'
+        "backgroundColor": '#FFFFFF',
+        "border": "1px dashed #6B6B6B",
+        "border-radius": "6px"
       }
     } else {
       const font_size = d.font_size ? d.font_size : 13;

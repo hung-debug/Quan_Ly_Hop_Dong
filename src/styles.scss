@@ -104,3 +104,14 @@ body { margin: 0; font-family: font_lexend_deca , Roboto, "Helvetica Neue", sans
     margin: 0 auto;
   }
 }
+
+.long-text-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  width: inherit;
+  text-overflow: ellipsis;
+  max-width: 113px;
+}
+
+
+

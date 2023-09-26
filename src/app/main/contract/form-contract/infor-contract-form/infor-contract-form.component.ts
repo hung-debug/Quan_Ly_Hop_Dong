@@ -24,6 +24,7 @@ import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 import { parttern, parttern_input } from 'src/app/config/parttern';
 import { NgxInputSearchModule } from "ngx-input-search";
+import { environment } from 'src/environments/environment';
 
 export class ContractConnectArr {
   ref_id: number;
@@ -76,11 +77,11 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
   optionsCeCa: any;
   optionsCeCaValue: any;
-
+  errorContractType: string = '';
   checkView: boolean = false;
 
   ceca: any;
-
+  environment: any = ''
   constructor(
     private contractService: ContractService,
     private contractTemplateService: ContractTemplateService,
@@ -96,6 +97,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    this.environment = environment
     this.spinner.hide();
 
     let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
@@ -128,7 +130,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
     if (this.datasForm.ceca_push != 0 && this.datasForm.ceca_push != 1)
       this.datasForm.ceca_push = this.optionsCeCaValue;
-    else 
+    else
       this.optionsCeCaValue = this.datasForm.ceca_push;
 
 
@@ -170,6 +172,9 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         this.ceca = false;
       } else if (response.ceca_push_mode == 'SELECTION') {
         this.ceca = true;
+        if (environment.flag == 'NB') {
+          this.optionsCeCaValue = 1
+        }
       }
 
       this.getContractTemplateForm(); // ham lay mau hop dong
@@ -183,12 +188,17 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     if(!e.value) {
 
       this.optionsCeCa = optionsCeCa;
-      this.datasForm.ceca_push = 0;
-      this.optionsCeCaValue = 0;
       this.datasForm.type_id = null;
-
       const e = {
         value: this.datasForm.template_contract_id
+      }
+
+      if (environment.flag == 'NB') {
+        this.datasForm.ceca_push = 1;
+        this.optionsCeCaValue = 1;
+      } else {
+        this.datasForm.ceca_push = 0;
+        this.optionsCeCaValue = 0;
       }
 
       // this.onChangeForm(e);
@@ -240,7 +250,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         this.checkCeCa(this.datasForm.type_id);
       },
       (error) => {
-        
+
       }
     );
   }
@@ -250,7 +260,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       const informationContractType = await this.contractTypeService
       .getContractTypeById(typeId)
       .toPromise();
-  
+
       if (informationContractType.ceca_push == 1) {
         this.optionsCeCa = optionsCeCa;
         this.optionsCeCaValue = 1;
@@ -418,12 +428,12 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   }
   convertFileName(str1: any) {
     let str = str1.normalize('NFC');
-    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a"); 
-    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e"); 
-    str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i"); 
-    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o"); 
-    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u"); 
-    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y"); 
+    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a");
+    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e");
+    str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i");
+    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o");
+    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u");
+    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y");
     str = str.replace(/đ/g,"d");
     str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
     str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
@@ -469,14 +479,14 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             if (this.listFileAttach.filter((p: any) => p.filename == file_name).length == 0) {
               this.listFileAttach.push(file);
             }
-    
+
             if (!this.datasForm.fileAttachForm.some((p: any) => file.name == p.filename || file.name == p.name)) {
               this.datasForm.fileAttachForm.push(file);
             }
           } else {
             this.toastService.showWarningHTMLWithTimeout("attach.file.valid", "", 3000);
           }
-        
+
         } else {
           this.datasForm.file_name_attach = '';
           this.datasForm.attachFile = '';
@@ -529,6 +539,14 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       );
     }
   }
+  checkIdInTypeList() {
+    for(let i = 0; i < this.typeList.length; i++) {
+      if(this.datasForm.type_id == this.typeList[i].id)
+        return true;
+    }
+    return false;
+  }
+
 
   validDataForm() {
     if (!this.datasForm.template_contract_id) {
@@ -540,6 +558,18 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     if (!this.datasForm.name) {
       this.toastService.showWarningHTMLWithTimeout(this.translate.instant('please.choose.contract.name'),'',3000);
       return false;
+    }
+
+    //Check khong có type_id và type_id đó không nằm trong typeList thì báo valid
+    if (environment.flag == 'NB') {
+      if (!this.datasForm.type_id || !this.checkIdInTypeList()) {
+        this.toastService.showWarningHTMLWithTimeout(
+          this.translate.instant('error.contract-type.required'),
+          '',
+          3000
+        );
+        return false;
+      }
     }
 
     // if(!parttern_input.new_input_form.test(this.datasForm.name)) {

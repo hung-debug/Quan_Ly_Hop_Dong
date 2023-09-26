@@ -199,7 +199,9 @@ export class ConfirmSignOtpComponent implements OnInit {
           const formData = {
             "name": "image_" + new Date().getTime() + ".jpg",
             "content": signUpdate.valueSign,
-            organizationId: this.datas?.is_data_contract?.organization_id
+            organizationId: this.datas?.is_data_contract?.organization_id,
+            signType: '',
+            ocrResponseName: ''
           }
           
           signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
@@ -217,7 +219,9 @@ export class ConfirmSignOtpComponent implements OnInit {
           const formData = {
             "name": "image_" + new Date().getTime() + ".jpg",
             "content": this.datas.is_data_object_signature.valueSign,
-            organizationId: this.datas?.is_data_contract?.organization_id
+            organizationId: this.datas?.is_data_contract?.organization_id,
+            signType: '',
+            ocrResponseName: ''
           }
 
   

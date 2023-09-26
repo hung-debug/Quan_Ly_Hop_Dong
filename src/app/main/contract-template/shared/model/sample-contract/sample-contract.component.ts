@@ -172,7 +172,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
         let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
         if (fileContract_2) {
-          this.pdfSrc = fileContract_2.path;
+
+          // fix lỗi set nhầm file hợp đồng hiển thị preview - edit mẫu HĐ
+          this.pdfSrc = fileContract_1.path;
         } else {
           this.pdfSrc = fileContract_1.path;
         }
@@ -777,8 +779,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     element['width'] = rect_location.width;
                     element['height'] = rect_location.height;
                   } else {
-                    element['width'] = '135';
-                    element['height'] = '85';
+                    element['width'] = '140';
+                    element['height'] = '50';
                   }
 
                   this.objSignInfo.width = element['height'];
@@ -1121,10 +1123,19 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any) {
-    let style: any = {
+    let style: any =
+    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
+    {
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
+    } :
+    {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#FFFFFF',
+      "border": "1px dashed #6B6B6B",
+      "border-radius": "6px"
     }
     if (d['width']) {
       style.width = parseInt(d['width']) + "px";
@@ -1992,10 +2003,22 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getName(data: any) {
+    let name = ''
+
     if (data.type_unit == 'organization') {
-      return 'Tổ chức của tôi - ' + data.name;
+      if (data.name.length>24) {
+        name = data.name.substring(0, 24) + ' ...'
+      } else {
+        name = data.name
+      }
+      return 'Tổ chức của tôi - ' + name;
     } else if (data.type_unit == 'partner') {
-      return data.org_name + ' - ' + data.name;
+      if (data.name.length>32) {
+        name = data.name.substring(0, 32) + ' ...'
+      } else {
+        name = data.name
+      }
+      return 'Đối tác - ' + name;
     }
   }
 

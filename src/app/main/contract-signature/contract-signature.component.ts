@@ -1328,8 +1328,9 @@ export class ContractSignatureComponent implements OnInit {
             username: resultHsm.username,
             password: resultHsm.password,
             password2: resultHsm.password2,
-            image_base64: signI,
-            processAt: this.isDateTime
+            image_base64:  result.mark ? signI : null,
+            processAt: this.isDateTime,
+            type: 3
           };
 
           this.spinner.show();
@@ -1419,9 +1420,10 @@ export class ContractSignatureComponent implements OnInit {
       );
       dialogRef.afterClosed().subscribe(async (resultCert: any) => {
         if (resultCert) {
-
           this.cert_id = resultCert.id;
           let countSuccess = 0;
+          const certSignerName = this.getValueByKey(resultCert.certInformation, "CN")
+          this.nameCompany = certSignerName;
           try {
             const inforCert = await this.contractServiceV1.certInfoCert(this.cert_id).toPromise();
             this.name = inforCert.name;
@@ -1430,6 +1432,7 @@ export class ContractSignatureComponent implements OnInit {
             this.cccd = inforCert.cccd;
             this.cmnd = inforCert.cmnd;
           } catch (err) {
+            console.log(err);
 
           }
 
@@ -1437,7 +1440,7 @@ export class ContractSignatureComponent implements OnInit {
           // const widthList = clusteredLists.map((list: any) => list.map((item: any) => item.fields[0].width));
 
           let isResult: boolean = true;
-
+          console.log("test1");
           // for(let i = 0; i < clusteredLists.length; i++) {
           // this.widthSign = widthList[i][0];
           await of(null).pipe(delay(150)).toPromise();
@@ -1457,18 +1460,17 @@ export class ContractSignatureComponent implements OnInit {
 
           this.spinner.show()
           const promises = [];
-
           for (let i = 0; i < contractsSignManyChecked.length; i++) {
             const signSlots = contractsSignManyChecked[i].fields;
-
             if (signSlots?.length > 0) {
               for (let y = 0; y < signSlots.length; y++) {
                 const signCertPayload = {
                   cert_id: this.cert_id,
-                  image_base64: signI,
+                  image_base64: this.srcMark ? signI : null ,
                   field: null,
                   width: signSlots[y].width,
-                  height: signSlots[y].height
+                  height: signSlots[y].height,
+                  type: signSlots[y]?.type == "DIGITAL_SIGN" ? 3 : null
                 };
 
                 promises.push(
@@ -1505,6 +1507,17 @@ export class ContractSignatureComponent implements OnInit {
         }
       })
     }
+  }
+
+  getValueByKey(inputString: string, key: string) {
+    const elements : any = inputString?.split(', ');
+    for (const element of elements) {
+      const [currentKey, value] = element.split('=');
+      if (currentKey === key) {
+        return value;
+      }
+    }
+    return null; // Return null if the key is not found
   }
 
   //Ký usb token v1
@@ -1587,7 +1600,7 @@ export class ContractSignatureComponent implements OnInit {
                 this.signCertDigital = data.data;
                 this.nameCompany = data.data.CN;
 
-                let signI = '';
+                let signI: any = '';
                 let imageRender = null;
 
                 try {
@@ -1602,12 +1615,24 @@ export class ContractSignatureComponent implements OnInit {
                 if (isMark) {
                   imageRender = <HTMLElement>(document.getElementById('export-html-image'));
                 } else {
-                  imageRender = <HTMLElement>(document.getElementById('export-html'));
+                  // imageRender = <HTMLElement>(document.getElementById('export-html'));
+                  imageRender = null
+                  signI = null
                 }
 
                 if (imageRender) {
                   const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
                   signI = textSignB.split(',')[1];
+                }
+
+                try {
+                  const getSignatureInfoTokenV1Data: any = await this.contractServiceV1.getSignatureInfoTokenV1(
+                    this.signCertDigital.Base64, signI
+                  ).toPromise()
+                  signI = getSignatureInfoTokenV1Data.data
+                } catch (error) {
+                  this.spinner.hide()
+                  console.log(error);
                 }
 
                 //Lấy chiều dài của các trang trong các hợp đồng ký
@@ -1779,6 +1804,9 @@ export class ContractSignatureComponent implements OnInit {
 
     let currentHeight: any = [];
 
+    // type o keo tha
+    let boxTypes: any = []
+
     //tao mang currentHeight toan so 0;
     for (let i = 0; i < fileC.length; i++) {
       currentHeight[i] = 0;
@@ -1793,7 +1821,6 @@ export class ContractSignatureComponent implements OnInit {
       const dataObjectSignature = await this.contractServiceV1
         .getDataObjectSignatureLoadChange(idContract[i])
         .toPromise();
-
       for (let j = 0; j < dataObjectSignature.length; j++) {
         if (dataObjectSignature[j].recipient) {
           if (recipientId[i] == dataObjectSignature[j].recipient.id) {
@@ -1804,6 +1831,7 @@ export class ContractSignatureComponent implements OnInit {
 
             //Lấy ra trang ký của từng file hợp đồng
             page.push(dataObjectSignature[j].page);
+            boxTypes.push(dataObjectSignature[j].type)
           }
         }
       }
@@ -1933,7 +1961,7 @@ export class ContractSignatureComponent implements OnInit {
           page: Number,
         };
 
-        let signI = '';
+        let signI: any = '';
 
         try {
           this.isDateTime = await this.timeService.getRealTime().toPromise();
@@ -1948,7 +1976,9 @@ export class ContractSignatureComponent implements OnInit {
         if (isMark) {
           imageRender = <HTMLElement>document.getElementById('export-html-image');
         } else {
-          imageRender = <HTMLElement>document.getElementById('export-html');
+          // imageRender = <HTMLElement>document.getElementById('export-html');
+          imageRender = null
+          signI = null
         }
 
         if (imageRender) {
@@ -1961,7 +1991,6 @@ export class ContractSignatureComponent implements OnInit {
 
         for (let i = 0; i < fileC.length; i++) {
           y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
-
           signUpdate.id = idSignMany[i];
           signDigital.signDigitalX = x[i];
           signDigital.signDigitalY = y[i];
@@ -1974,7 +2003,8 @@ export class ContractSignatureComponent implements OnInit {
               signUpdate,
               signDigital,
               signI,
-              certInfoBase64
+              certInfoBase64,
+              boxTypes[i]
             )
             .toPromise();
           const base64TempData = emptySignature.base64TempData;

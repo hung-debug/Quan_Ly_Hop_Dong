@@ -100,6 +100,9 @@ export class DigitalCertificateAddComponent implements OnInit {
 
       this.orgList = this.orgListTmp;
       this.convertData();
+      this.listOrgCombobox[0]?.children.forEach((element: any) => {
+        element.expanded = !element.expanded
+      });
       this.selectedNodeOrganization = this.listOrgCombobox.filter((p: any) => p.data == this.currentOrgId);
       this.getListAllEmailOnFillter(this.currentOrgId)
     }, error => {

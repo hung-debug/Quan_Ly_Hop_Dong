@@ -92,8 +92,7 @@ export class ConfirmContractFormComponent implements OnInit {
   conn: string;
   userSignType: any;
   ngOnInit(): void {
-    console.log("b4 1 ", this.datasForm.contract_user_sign);  
-    
+
     this.spinner.hide();
     this.data_organization = this.datasForm.is_determine_clone.filter(
       (p: any) => p.type == 1
@@ -116,7 +115,6 @@ export class ConfirmContractFormComponent implements OnInit {
       console.log("vao day ");
       if (this.datasForm.is_data_object_signature && this.datasForm.is_data_object_signature.length && this.datasForm.is_data_object_signature.length > 0) {
         this.datasForm.is_data_object_signature.forEach((res: any) => {
-          console.log("res ", res);
           res['id_have_data'] = res.id;
           if (res.type == 1) {
             res['sign_unit'] = 'text';
@@ -210,7 +208,6 @@ export class ConfirmContractFormComponent implements OnInit {
 
           this.spinner.hide();
 
-          console.log("data ", data);
         },
         (error) => {
           this.spinner.show();
@@ -400,10 +397,8 @@ export class ConfirmContractFormComponent implements OnInit {
   async getDefinddatasFormignEdit(datasFormignId: any,datasFormignNotId: any,action: any) {
     let datasFormample_contract: any[] = [];
     if (datasFormignId.length > 0) {
-      console.log("dsid ", datasFormignId);
       datasFormignId.forEach((res: any) => {
         this.arrVariableRemove.forEach((itemRemove: any) => {
-          console.log("itt ", itemRemove);
           if (itemRemove !== 'id_have_data') {
             delete res[itemRemove];
           }
