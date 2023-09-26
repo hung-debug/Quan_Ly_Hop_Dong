@@ -1861,7 +1861,7 @@ export class ConsiderContractComponent
                 if (this.markImage) {
                   await of(null).pipe(delay(150)).toPromise();
                   imageRender = <HTMLElement>(document.getElementById('export-html-image'));
-                  signUpdate.signDigitalWidth = signUpdate.signDigitalX + imageRender.offsetWidth;
+                  // signUpdate.signDigitalWidth = signUpdate.signDigitalX + imageRender.offsetWidth;
                 } else {
                   // await of(null).pipe(delay(150)).toPromise();
                   // imageRender = <HTMLElement>(document.getElementById('export-html'));
@@ -1942,7 +1942,7 @@ export class ConsiderContractComponent
                 return false;
               }
             } else if (this.usbTokenVersion == 1) {
-
+              console.log('signDigital',signDigital);
               const dataSignMobi: any =
                 await this.contractService.postSignDigitalMobi(
                   signDigital,
@@ -4069,7 +4069,7 @@ export class ConsiderContractComponent
     this.signContractSubmit();
   }
 
-  prepareInfoSignUsbTokenV1(page: any) {
+   prepareInfoSignUsbTokenV1(page: any) {
     const canvasPageSign: any = document.getElementById('canvas-step3-' + page);
     const heightPage = canvasPageSign.height;
 
