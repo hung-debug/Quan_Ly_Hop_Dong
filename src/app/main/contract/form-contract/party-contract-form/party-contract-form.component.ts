@@ -1147,7 +1147,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         for (let j = 0; j < element.length; j++) {
           if (element[j].phone) {
             let items = {
-              phone: element[j].login_by == 'email' ? null : element[j].phone,
+              phone: (environment.flag == 'KD' && element[j].login_by == 'email') ? null : element[j].phone,
               role: element[j].role,
               type: dataValid[i].type,
               ordering: dataValid[i].ordering
@@ -1180,7 +1180,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     } else {
       // valid email tổ chức của tôi
       for (let i = 0; i < dataValid.length; i++) {
-        if ((dataValid[i].login_by=='email' && dataValid[i].role == 3)){
+        if ((environment.flag == 'KD' && dataValid[i].login_by=='email' && dataValid[i].role == 3)){
           dataValid[i].phone = ''
         }
         if (dataValid[i].phone) {
