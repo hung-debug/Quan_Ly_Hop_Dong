@@ -34,6 +34,9 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
   organization_id_user_login: any;
   organization_id: any;
   lang: string;
+  optionsStatus: any = [];
+  contractStatus: any;
+
   constructor(
     private appService: AppService,
     private inputTreeService: InputTreeService,
@@ -57,7 +60,7 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
     let startDate = new Date();
     startDate.setDate(startDate.getDate() - 6);
     // Gán giá trị mặc định cho biến date
-    
+
     this.date = [startDate, endDate];
   }
 
@@ -67,11 +70,27 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
 
     this.appService.setTitle('role.report.history.send.sms');
 
+    this.optionsStatus = [
+      { id: 20, name: 'Đang xử lý' },
+      { id: 2, name: 'Quá hạn' },
+      { id: 31, name: 'Từ chối' },
+      { id: 32, name: 'Huỷ bỏ' },
+      { id: 30, name: 'Hoàn thành' },
+    ];
+
 
     if (sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     } else if (sessionStorage.getItem('lang') == 'en') {
       this.lang = 'en';
+
+      this.optionsStatus = [
+        { id: 20, name: 'Processing' },
+        { id: 2, name: 'Overdue' },
+        { id: 31, name: 'Reject' },
+        { id: 32, name: 'Cancel' },
+        { id: 30, name: 'Complete' },
+      ];
     }
 
     //lay id user
@@ -188,6 +207,10 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
       to_date = this.date[1]
     }
 
+    let contractStatus = this.contractStatus;
+
+    if (!contractStatus) contractStatus = -1;
+
     if (!to_date) to_date = from_date;
 
     // let params =
@@ -202,6 +225,7 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
       // "createDate": this.date,
       "startDate": from_date,
       "endDate": to_date,
+      "contractStatus": contractStatus
     }
 
     let params = `?pageNumber=0&pageSize=10000`

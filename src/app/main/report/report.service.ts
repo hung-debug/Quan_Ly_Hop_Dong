@@ -69,7 +69,8 @@ export class ReportService {
       contractInfo: data.contractInfo,
       // createDate: data.createDate
       startDate: data.startDate,
-      endDate: data.endDate
+      endDate: data.endDate,
+      contractStatus: data.contractStatus
     })
 
     if(isExport) {
