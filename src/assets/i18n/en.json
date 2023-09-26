@@ -727,8 +727,7 @@
   "role.contract-folder.detail":"Detail folder",
   "name.folder.invalid":"Folder name not blank",
   "delete.contract.question.folder":"Are you sure want to delete the contract from this folder?",
-  "delete.contract-folder.success": "Deleted the contract from the folder successfully"
-  "role.cerificate.filter": "Search digital certificate server",
+  "delete.contract-folder.success": "Deleted the contract from the folder successfully",
   "upload_attach_files": "Upload attachments",
   "time.send.date":"Date Sending",
   "report.status.contract": "Contract status",

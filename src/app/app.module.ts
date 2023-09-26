@@ -127,6 +127,7 @@ import {DigitalCertificateEditComponent} from './main/digital-certificate/digita
 import {ContentSmsComponent} from './main/report/report-status-send-sms-email/content-sms/content-sms.component';
 import { HeadersInterceptor } from './headers.interceptor';
 import { UploadAttachFilesComponent } from './main/contract/dialog/upload-attach-files-dialog/upload-attach-files-dialog.component';
+import { DeleteContractFolderComponent } from './main/contract-folder/current-folder/delete-contract-folder/delete-contract-folder.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -218,7 +219,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DeleteFolderComponent,
     CurrentFolderComponent,
     AddContractFolderComponent,
-    UploadAttachFilesComponent
+    UploadAttachFilesComponent,
+
+    DeleteContractFolderComponent
   ],
   imports: [
     TranslateModule,

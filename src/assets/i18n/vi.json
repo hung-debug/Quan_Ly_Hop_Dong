@@ -739,8 +739,7 @@
   "report.msale.download.failed": "Xuất file báo cáo thất bại",
   "download.success": "Tải xuống thành công",
   "contract.group": "Nhóm hợp đồng",
-  "error.contract-type.required":"Loại hợp đồng không được để trống"
-  "sign_cert_title": "Ký Chứng thư số server",
+  "error.contract-type.required":"Loại hợp đồng không được để trống",
   "role.contract-folder.edit":"Sửa thư mục",
   "role.contract-folder.delete":"Xóa thư mục",
   "role.contract-folder.detail":"Chi tiết thư mục",
