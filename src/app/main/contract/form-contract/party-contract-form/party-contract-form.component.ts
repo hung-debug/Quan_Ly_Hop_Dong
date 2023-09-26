@@ -1147,7 +1147,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         for (let j = 0; j < element.length; j++) {
           if (element[j].phone) {
             let items = {
-              phone: element[j].phone,
+              phone: element[j].login_by == 'email' ? null : element[j].phone,
               role: element[j].role,
               type: dataValid[i].type,
               ordering: dataValid[i].ordering
