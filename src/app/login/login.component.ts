@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     localStorage.removeItem('url');
     sessionStorage.removeItem('receivePageNum');
     sessionStorage.removeItem('createdPageNum');
-    
+
     if(!sessionStorage.getItem('lang')) {
       sessionStorage.setItem('lang','vi')
     }
@@ -86,7 +86,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     } else {
       if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
         this.type = 1;
-      } else 
+      } else
         this.type = 0;
 
         let urlLink = sessionStorage.getItem("url");
@@ -187,7 +187,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       },
       error => {
         this.countLoginFail++;
-        
+
         if(localStorage.getItem('checkUser') == 'error'){
           this.error = true;
           this.errorDetail = "error.username.password";
@@ -239,7 +239,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.error = false;
         if (this.type == 0) {
           this.router.navigate(['/main/dashboard']);
-         
+
         } else {
           this.router.navigate([localStorage.getItem('url')]);
         }
@@ -248,7 +248,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       this.error = false;
       if (this.type == 0) {
         this.router.navigate(['/main/dashboard']);
-       
+
       } else {
         this.router.navigate([localStorage.getItem('url')]);
       }
@@ -328,7 +328,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     if(Number(localStorage.getItem('fail')) >= 4) {
       this.captcha = true;
       this.generateCaptcha();
-    }    
+    }
 
     // this.generateCaptcha();
     if (sessionStorage.getItem('type')) {
@@ -346,6 +346,19 @@ export class LoginComponent implements OnInit, AfterViewInit {
       this.mobile = true;
     } else {
       this.mobile = false;
+    }
+
+    let storedUsername = sessionStorage.getItem("mail");
+
+    // Kiểm tra xem tên đăng nhập đã được lưu trong sessionStorage hay chưa
+    if (storedUsername) {
+    // Nếu có tên đăng nhập, điền nó vào trường nhập liệu
+      this.loginForm.setValue({
+        tax_code: '',
+        username: storedUsername,
+        password: '',
+        captchaName: ''
+      })
     }
   }
 
@@ -377,7 +390,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   onWindowResize(event: Event) {
     this.getStyleFooter();
   }
-  
+
   getStyleFooter() {
     let loginForm: HTMLElement | null = document.getElementById('login-form');
     let all: HTMLElement | null = document.getElementById('all');
@@ -402,7 +415,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.translate.use(lang);
     this.translate.currentLang = lang;
 
-    
+
     localStorage.setItem('lang', lang);
     sessionStorage.setItem('lang', lang);
   }
@@ -410,7 +423,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
 
-      
+
       // @ts-ignore
       const dialogRef = this.dialog.open(ActionDeviceComponent, {
         width: '580px',
@@ -419,7 +432,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         panelClass: 'custom-modalbox'
       })
       dialogRef.afterClosed().subscribe((result: any) => {
-        
+
         if (!this.router.url.endsWith('login')) {
           this.sub = this.route.params.subscribe(params => {
             this.type = params['loginType'];
@@ -427,7 +440,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         }
         // let is_data = result
       })
-    } 
+    }
   }
 
 }
