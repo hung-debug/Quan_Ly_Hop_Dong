@@ -739,5 +739,8 @@
   "report.msale.download.failed": "Xuất file báo cáo thất bại",
   "download.success": "Tải xuống thành công",
   "contract.group": "Nhóm hợp đồng",
-  "error.contract-type.required":"Loại hợp đồng không được để trống"
+  "error.contract-type.required":"Loại hợp đồng không được để trống",
+  "error.upload.file.duplicate": "đã tồn tại, vui lòng chọn file khác",
+  "success.upload.file.attach": "Upload file đính kèm thành công",
+  "error.upload.file.attach": "Upload file đính kèm thất bại"
 }
