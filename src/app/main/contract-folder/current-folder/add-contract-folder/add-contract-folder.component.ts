@@ -25,7 +25,7 @@ export class AddContractFolderComponent implements OnInit {
   public contracts: any[] = [];
 
   p: number = 1;
-  page: number = 4;
+  page: number = 5;
   pageStart: number = 0;
   pageEnd: number = 0;
   pageTotal: number = 0;
