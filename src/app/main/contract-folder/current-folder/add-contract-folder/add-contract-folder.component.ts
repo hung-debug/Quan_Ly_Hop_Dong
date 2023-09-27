@@ -24,7 +24,7 @@ export class AddContractFolderComponent implements OnInit {
   private sub: any;
   public contracts: any[] = [];
 
-  p: number = 1;
+  p: number = 0;
   page: number = 5;
   pageStart: number = 0;
   pageEnd: number = 0;
@@ -86,8 +86,8 @@ export class AddContractFolderComponent implements OnInit {
         return 'folder.openDetail';
       default:
         return ''
+    }
   }
-}
 
     getContractList() {
       if(this.parentId == 1)

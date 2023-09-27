@@ -1,11 +1,10 @@
 import { AddContractFolderComponent } from './add-contract-folder/add-contract-folder.component';
 import { AppService } from './../../../service/app.service';
 import { Component, OnInit } from '@angular/core';
-import { Router, Route, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ContractFolderService } from 'src/app/service/contract-folder.service';
 import { MatDialog } from '@angular/material/dialog';
 import { sideList } from 'src/app/config/variable';
-import { DeleteContractDialogComponent } from '../../contract/dialog/delete-contract-dialog/delete-contract-dialog.component';
 import { DeleteContractFolderComponent } from './delete-contract-folder/delete-contract-folder.component';
 
 @Component({
@@ -31,6 +30,8 @@ export class CurrentFolderComponent implements OnInit {
   parentId: number | undefined = undefined;
   keyword: string = '';
 
+  title: any;
+
   constructor(
     private router: Router,
     private contractFolderService : ContractFolderService,
@@ -42,15 +43,17 @@ export class CurrentFolderComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.route.queryParams.subscribe((params) => {
       this.parentId = params.id;
 
-      this.appService.setTitle(this.activatedRoute.snapshot.params['name'])
+      this.title = this.activatedRoute.snapshot.params['name'];
+      this.appService.setTitle(this.title)
       this.getContractList();
     });
+  }
 
-   
+  back() {
+    this.router.navigate(['/main/contract-folder'])
   }
 
   openDetail(id: number) {
@@ -87,7 +90,8 @@ export class CurrentFolderComponent implements OnInit {
 
   //api danh sách hợp đồng trong thư mục
   getContractList() {
-    this.contractFolderService.getContractInFolder(this.parentId,this.keyword).subscribe((response: any) => {
+    this.contractFolderService.getContractInFolder(this.parentId,this.keyword, this.p - 1, this.page).subscribe((response: any) => {
+      console.log("res ", response);
       this.contracts = response.entities;
       this.pageTotal = response.total_elements;
       if (this.pageTotal == 0) {
@@ -139,6 +143,9 @@ export class CurrentFolderComponent implements OnInit {
 
   autoSearch(event: any) {
     this.keyword= event.target.value;
+    this.p = 0;
+    this.pageStart = 0;
+    this.pageEnd = 0;
     this.getContractList();
   }
     

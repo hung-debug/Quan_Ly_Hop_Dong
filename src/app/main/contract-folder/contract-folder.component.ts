@@ -6,7 +6,6 @@ import { AppService } from 'src/app/service/app.service';
 import { Route, ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AddFolderComponent } from './add-folder/add-folder.component';
-import { event } from 'jquery';
 
 
 @Component({
@@ -14,8 +13,6 @@ import { event } from 'jquery';
   templateUrl: './contract-folder.component.html',
   styleUrls: ['./contract-folder.component.scss']
 })
-
-
 
 export class ContractFolderComponent implements OnInit {
 
@@ -31,7 +28,6 @@ export class ContractFolderComponent implements OnInit {
   constructor(
     private appService: AppService,
     private contractFolderService: ContractFolderService,
-    private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
     private spinner: NgxSpinnerService
