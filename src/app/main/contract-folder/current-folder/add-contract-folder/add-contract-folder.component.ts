@@ -259,13 +259,15 @@ selectContract(id: any){
 
 filterContract(){
   this.status = this.selectedContractType.status;
-  console.log(this.status);
-  console.log(typeof this.status);
   this.parentId = this.selectedContractType.parent.id;
   if(this.status == 999){
     this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn loại hợp đồng để tìm kiếm", "", 3000);
     return
   }
+  
+  this.p = 0;
+  this.pageStart = 0;
+  this.pageEnd = 0;
   this.getContractList();
 }
 
