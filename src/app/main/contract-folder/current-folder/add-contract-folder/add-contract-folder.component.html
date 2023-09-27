@@ -34,7 +34,7 @@
           </div>
           
           <div id="contract-list">
-            <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
+            <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p1, totalItems: pageTotal, id: 'p1'}">
                 <div class="row">
                     <!--Cột 1-->
                     <div class="col-md-5">
@@ -114,7 +114,7 @@
               <div class="footer_title">
               </div>
               <div class="footer_pagination">
-                  <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
+                  <pagination-controls id="p1" *ngIf="pageTotal > 0;" (pageChange)="p1=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
               </div>
               <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}} 
               </div>

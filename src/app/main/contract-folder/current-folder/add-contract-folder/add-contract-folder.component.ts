@@ -24,7 +24,7 @@ export class AddContractFolderComponent implements OnInit {
   private sub: any;
   public contracts: any[] = [];
 
-  p: number = 0;
+  p1: number = 0;
   page: number = 5;
   pageStart: number = 0;
   pageEnd: number = 0;
@@ -92,12 +92,12 @@ export class AddContractFolderComponent implements OnInit {
     getContractList() {
       if(this.parentId == 1)
         //Danh sách hợp đồng tạo
-        this.contractFolderService.getContractCreatedList(this.filter_name, this.status.toString(), this.p, this.defaultSize).subscribe(data => {
+        this.contractFolderService.getContractCreatedList(this.filter_name, this.status.toString(), this.p1, this.defaultSize).subscribe(data => {
           this.contracts = data.entities;
           this.pageTotal = data.total_elements;
           this.spinner.hide();
           if (this.pageTotal == 0) {
-            this.p = 0;
+            this.p1 = 0;
             this.pageStart = 0;
             this.pageEnd = 0;
           } else {
@@ -110,12 +110,12 @@ export class AddContractFolderComponent implements OnInit {
 
       if(this.parentId == 2){
         if(this.status == -1){
-          this.contractFolderService.getContractShareList(this.filter_name, this.p, this.defaultSize).subscribe(data => {
+          this.contractFolderService.getContractShareList(this.filter_name, this.p1, this.defaultSize).subscribe(data => {
             this.contracts = data.entities;
             this.pageTotal = data.total_elements;
             this.spinner.hide();
             if (this.pageTotal == 0) {
-              this.p = 0;
+              this.p1 = 0;
               this.pageStart = 0;
               this.pageEnd = 0;
             } else {
@@ -127,12 +127,12 @@ export class AddContractFolderComponent implements OnInit {
           })
         } else {
           //Danh sách hợp đồng chờ xử lý
-          this.contractFolderService.getContractMyProcessList(this.filter_name, this.status, this.p, this.defaultSize).subscribe(data => {
+          this.contractFolderService.getContractMyProcessList(this.filter_name, this.status, this.p1, this.defaultSize).subscribe(data => {
             this.contracts = data.entities;
             this.pageTotal = data.total_elements;
             this.spinner.hide();
             if (this.pageTotal == 0) {
-              this.p = 0;
+              this.p1 = 0;
               this.pageStart = 0;
               this.pageEnd = 0;
             } else {
@@ -147,8 +147,8 @@ export class AddContractFolderComponent implements OnInit {
     }
 
     setPage() {
-      this.pageStart = (this.p - 1) * this.page + 1;
-      this.pageEnd = (this.p) * this.page;
+      this.pageStart = (this.p1 - 1) * this.page + 1;
+      this.pageEnd = (this.p1) * this.page;
       if (this.pageTotal < this.pageEnd) {
         this.pageEnd = this.pageTotal;
       }
@@ -270,7 +270,7 @@ getCreatedDate(item: any){
       return
     }
     
-    this.p = 0;
+    this.p1 = 0;
     this.pageStart = 0;
     this.pageEnd = 0;
     this.getContractList();
