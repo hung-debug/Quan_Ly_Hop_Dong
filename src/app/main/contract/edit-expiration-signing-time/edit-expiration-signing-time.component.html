@@ -6,9 +6,9 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="label text-color">{{'expiration-date' | translate}}<span class="required-title">*</span></div>
-                <div #calendarContainer (click)="onContainerClick($event)">
-                    <p-calendar #inputElement [(ngModel)]="expirationSign" [showIcon]="true" [readonlyInput]="true"
-                     dateFormat="dd/mm/yy" appendTo="body" aria-placeholder="{{'choose.expire.date'| translate}}"
+                <div id="calendarContainer" #calendarContainer (click)="onContainerClick($event)">
+                    <p-calendar (click)="calendarClick()" appendTo="body" [style]="{ 'position': 'relative', 'z-index': '1000' }" #inputElement [(ngModel)]="expirationSign" [showIcon]="true" [readonlyInput]="true"
+                     dateFormat="dd/mm/yy" aria-placeholder="{{'choose.expire.date'| translate}}"
                      ></p-calendar>
                 </div>
             </div>
@@ -19,5 +19,5 @@
             <button class="save-button" (click)="save()">{{'btn.save' | translate}}</button>
         </div>
     </div>
-  </div>
+</div>
   

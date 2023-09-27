@@ -5,7 +5,7 @@
 </p-selectButton>
 
 <!--Truong hop dang xu ly va sap het han-->
-<div *ngIf="(this.filter_status == 20 || this.filter_status == 33) && this.isOrg == 'off'" class="col-md-4" class="container-fluid">
+<div #mydiv *ngIf="(this.filter_status == 20 || this.filter_status == 33) && this.isOrg == 'off'" class="col-md-4" class="container-fluid">
     <ng-template [ngIf]="!roleMess">
         <div class="col-md-12" style="padding-top: 20px;">
             <div class="input-line search">

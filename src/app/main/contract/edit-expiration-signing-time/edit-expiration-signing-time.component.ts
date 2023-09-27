@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -25,7 +26,7 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
     private toastService: ToastService,
     private datepipe: DatePipe,
     private spinner: NgxSpinnerService,
-    private router: Router,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit(): void {
@@ -35,6 +36,24 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
   ngAfterViewInit(): void {
     this.inputElement.showOnFocus = false;
   }
+
+  generateSafeStyle(style:string):SafeStyle{
+    return this.sanitizer.bypassSecurityTrustStyle(style);
+   }
+
+   isCalendarClick: number = 0;
+   calendarClick(){
+    const collection = document.getElementsByClassName("p-datepicker");
+    if (collection.length > 0) {
+      const element = collection[0] as HTMLElement; // Cast to HTMLElement
+      const currentTop = parseFloat(getComputedStyle(element).top);
+      if(this.isCalendarClick %2 == 0){
+        this.isCalendarClick = (this.isCalendarClick + 1) % 2;
+        element.style.top = (currentTop + this.data.scrollY) + "px";
+      }
+    }
+   }
+
 
   onContainerClick(event: MouseEvent) {
     if (this.calendarContainer.nativeElement.contains(event.target)) {
