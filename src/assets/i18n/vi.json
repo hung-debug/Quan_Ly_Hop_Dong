@@ -742,5 +742,6 @@
   "error.contract-type.required":"Loại hợp đồng không được để trống",
   "error.upload.file.duplicate": "đã tồn tại, vui lòng chọn file khác",
   "success.upload.file.attach": "Upload file đính kèm thành công",
-  "error.upload.file.attach": "Upload file đính kèm thất bại"
+  "error.upload.file.attach": "Upload file đính kèm thất bại",
+  "error.recognition.back.cccd": "Bạn đang chụp mặt trước CCCD. Vui lòng chụp lại mặt sau của CCCD"
 }

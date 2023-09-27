@@ -1,8 +1,6 @@
 import { Component, Inject, OnInit, Input } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { result } from 'lodash';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
@@ -77,12 +75,6 @@ export class EkycDialogSignComponent implements OnInit {
     if(this.width > 768){
       this.width = 0.5*window.innerWidth;
     }
-
-    console.log("inner width ", window.innerWidth);
-    console.log("inner height ", window.innerHeight);
-
-    console.log("width ", this.width*0.85);
-    console.log("height ", this.width*4/3*0.85);
 
     this.initWebcamImage = this.webcamImage;
 
@@ -251,7 +243,16 @@ export class EkycDialogSignComponent implements OnInit {
                 this.flagSuccess == false;
                 alert(this.translate.instant('invalid.infor'));
               }
-            } else {
+            } else if (this.data.id == 1 && response.result_code == 200 && !isNaN(response.id)) {
+              this.flagSuccess == false;
+              this.webcamImage = this.initWebcamImage
+              alert(this.translate.instant('error.recognition.back.cccd'));
+            } else if (this.data.id == 1 && response.result_code !== 200) {
+              this.flagSuccess == false;
+              this.webcamImage = this.initWebcamImage;
+              alert(this.translate.instant('Giấy tờ không hợp lệ. Vui lòng chụp lại mặt sau của CCCD'))
+            }
+            else {
               alert(this.translate.instant('confirm.success'));
               this.dialogRef.close(this.webcamImage.imageAsDataUrl);
             }
@@ -377,7 +378,6 @@ export class EkycDialogSignComponent implements OnInit {
   }
 
   public handleImage(webcamImage: WebcamImage): void {
-    console.info('received webcam image', webcamImage);
     this.webcamImage = webcamImage;
   }
 

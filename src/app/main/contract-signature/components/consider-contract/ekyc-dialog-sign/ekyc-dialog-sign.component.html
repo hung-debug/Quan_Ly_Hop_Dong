@@ -42,15 +42,15 @@
     <img class="webcam-image" [width]="this.width*0.85" [src]="webcamImage.imageAsDataUrl"/>
   </div>
   <div *ngIf="webcamImage && this.title!=1" class="button-camera">    
-    <img src="../../../../../../assets/img/check-circle.svg" (click)="confirmData();" class="icon-check" >
-    <img src="../../../../../../assets/img/cancel-circle.svg" (click)="this.webcamImage = this.initWebcamImage;" class="icon-cancel">
+    <img src="../../../../../../assets/img/gg_check-o.png" (click)="confirmData();" class="icon-check" >
+    <img src="../../../../../../assets/img/ic_outline-cancel.png" (click)="this.webcamImage = this.initWebcamImage;" class="icon-cancel">
   </div>
   <div  *ngIf="webcamImage && this.title==1" class="webcam-image-circle">
     <img class="img-face" [height]="this.width*0.7" [width]="this.width*0.7" [src]="webcamImage.imageAsDataUrl"/>
   </div>
   <div *ngIf="webcamImage && this.title==1" class="button-camera">    
-    <img src="../../../../../../assets/img/check-circle.svg" (click)="confirmData();" class="icon-check" >
-    <img src="../../../../../../assets/img/cancel-circle.svg" (click)="this.webcamImage = this.initWebcamImage;" class="icon-cancel">
+    <img src="../../../../../../assets/img/gg_check-o.png" (click)="confirmData();" class="icon-check" >
+    <img src="../../../../../../assets/img/ic_outline-cancel.png" (click)="this.webcamImage = this.initWebcamImage;" class="icon-cancel">
   </div>
 </div>
 

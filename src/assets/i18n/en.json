@@ -733,5 +733,6 @@
   "error.contract-type.required":"Contract type cannot be left blank",
   "error.upload.file.duplicate": "already exists, please select another file",
   "success.upload.file.attach": "Upload attached file successfully",
-  "error.upload.file.attach": "Uploading attachment failed"
+  "error.upload.file.attach": "Uploading attachment failed",
+  "error.recognition.back.cccd": "You are taking a photo of the front of the ID. Please take a photo of the back of your ID"
 }
