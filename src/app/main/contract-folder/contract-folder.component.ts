@@ -66,7 +66,7 @@ export class ContractFolderComponent implements OnInit {
   }
 
   autoSearch(event: any) {
-    this.folders = this.list.filter((item: any) => item.name.includes(event.target.value));
+    this.folders = this.list.filter((item: any) => item.name.toLowerCase().includes(event.target.value.toLowerCase()));
   }
 
   checkLastChildFolderBreadcrumber(folder: any, folders: any){

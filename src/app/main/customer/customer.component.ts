@@ -95,31 +95,28 @@ export class CustomerComponent implements OnInit {
 
   getCustomerList(){
     if(this.isOrgCustomer){
-    this.customerService.getCustomerList().subscribe((res: any) => {
-      // this.list = res.filter((item: any) => {
-      //     return item.type === "ORGANIZATION" && item.name.toLowerCase().includes(this.filter_name.toLowerCase());
-      // });
-      let filterList: any[] = [];
-      res.forEach((item: any) => {
-        if(item.type === "ORGANIZATION" && item.name.toLowerCase().includes(this.filter_name.toLowerCase())){
-          filterList.push(item);
-        }
-      });
+      this.customerService.getCustomerList().subscribe((res: any) => {
+        let filterList: any[] = [];
+        res.forEach((item: any) => {
+          if(item.type === "ORGANIZATION" && item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(this.filter_name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))){
+            filterList.push(item);
+          }
+        });
 
-      res.forEach((item: any) => {
-        if(item.type === "ORGANIZATION" && item.taxCode.includes(this.filter_name) && !filterList.includes(item)){
-          filterList.push(item);
-        }
+        res.forEach((item: any) => {
+          if(item.type === "ORGANIZATION" && item.taxCode.includes(this.filter_name) && !filterList.includes(item)){
+            filterList.push(item);
+          }
+        });
+        this.list = filterList.sort(
+          (a, b) => (a.id > b.id ? 1 : -1)
+        );
       });
-      this.list = filterList.sort(
-        (a, b) => (a.id > b.id ? 1 : -1)
-      );
-    });
-    }else if(!this.isOrgCustomer){
+    }else {
       this.customerService.getCustomerList().subscribe((res: any) => {
         let filterList: any[]=[];
         res.forEach((item: any) => {
-          if(item.type === "PERSONAL" && item.name.toLowerCase().includes(this.filter_name.toLowerCase())){
+          if(item.type === "PERSONAL" && item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(this.filter_name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))){
             filterList.push(item);
           }
         });
