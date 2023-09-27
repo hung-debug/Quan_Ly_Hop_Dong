@@ -155,6 +155,10 @@ export class AddContractFolderComponent implements OnInit {
     }
 
     submit() {
+      this.selectedContract = this.contracts.filter(
+        (opt) => opt.checked
+      ).map((item: any) => item.id);
+
       if(this.selectedContract.length == 0) {
         this.toastService.showErrorHTMLWithTimeout('no.choose.contract','',3000);
         return;
@@ -162,13 +166,22 @@ export class AddContractFolderComponent implements OnInit {
 
       const body = {
         id: parseInt(this.data.folderId),
-        contracts: this.selectedContract
+        contracts: [...new Set(this.selectedContract)]
       }
 
       this.contractFolderService.addContractIntoFolder(body).subscribe((response: any) => {
-        this.toastService.showSuccessHTMLWithTimeout("add.contract.in.folder.success","",3000);
-        this.dialogRef.close();
-        window.location.reload();
+        if(response.errors?.length > 0) {
+          if(response.errors[0].code == 1016) {
+            this.toastService.showErrorHTMLWithTimeout('contracts.existed.folder','',3000);
+          } else {
+            this.toastService.showErrorHTMLWithTimeout(response.errors[0].message,'',3000);
+          }
+        } else {
+          this.toastService.showSuccessHTMLWithTimeout("add.contract.in.folder.success","",3000);
+          this.dialogRef.close();
+          window.location.reload();
+        }
+       
       })
     }
 
@@ -243,33 +256,25 @@ getCreatedDate(item: any){
 
   chooseContractType(){
     console.log(this.selectedContractType);
-
   }
 
-selectContract(id: any){
-  console.log(id);
-  console.log(typeof id);
-  if(this.selectedContract.includes(id)){
-    this.selectedContract = this.selectedContract.filter(item => item != id);
-  } else {
-    this.selectedContract.push(id);
+  selectContract(item: any){
+ 
   }
-  console.log(this.selectedContract);
-}
 
-filterContract(){
-  this.status = this.selectedContractType.status;
-  this.parentId = this.selectedContractType.parent.id;
-  if(this.status == 999){
-    this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn loại hợp đồng để tìm kiếm", "", 3000);
-    return
+  filterContract(){
+    this.status = this.selectedContractType.status;
+    this.parentId = this.selectedContractType.parent.id;
+    if(this.status == 999){
+      this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn loại hợp đồng để tìm kiếm", "", 3000);
+      return
+    }
+    
+    this.p = 0;
+    this.pageStart = 0;
+    this.pageEnd = 0;
+    this.getContractList();
   }
-  
-  this.p = 0;
-  this.pageStart = 0;
-  this.pageEnd = 0;
-  this.getContractList();
-}
 
 getNameStatusCeca(status: any, ceca_push: any, ceca_status: any) {
   if (status == 30) {

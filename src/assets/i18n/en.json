@@ -736,5 +736,7 @@
   "report.msale.download.failed": "Export failed report file",
   "download.success": "Downloaded successfully",
   "contract.group": "Contract group",
-  "error.contract-type.required":"Contract type cannot be left blank"
+  "error.contract-type.required":"Contract type cannot be left blank",
+  "contracts.existed.folder":"The contracts existed in folder"
+
 }

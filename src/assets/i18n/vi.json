@@ -748,6 +748,7 @@
   "delete.contract-folder.success": "Xóa hợp đồng khỏi thư mục thành công",
   "add.contract.in.folder.success":"Thêm hợp đồng vào thư mục thành công",
   "no.choose.contract":"Bạn chưa chọn hợp đồng nào",
-  "name.folder.not.special.char":"Tên thư mục không được chứa ký tự đặc biệt"
+  "name.folder.not.special.char":"Tên thư mục không được chứa ký tự đặc biệt",
+  "contracts.existed.folder":"Hợp đồng đã tồn tại trong thư mục"
 
 }

@@ -126,6 +126,9 @@ export class CurrentFolderComponent implements OnInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
+      this.p = 0;
+      this.pageStart = 0;
+      this.pageEnd = 0;
       this.getContractList();
     })
   }

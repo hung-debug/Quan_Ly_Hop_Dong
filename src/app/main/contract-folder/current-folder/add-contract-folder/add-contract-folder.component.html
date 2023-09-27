@@ -85,7 +85,7 @@
                             <div class="div_icon">
                                 <div class="col-md-1 calendar_create">
                                     <div>
-                                        <input name="item" type="checkbox" value="{{item.contractId}}" (change)="selectContract(item.id)" />
+                                        <input [(ngModel)]="item.checked" name="item" type="checkbox" value="{{item.contractId}}" (change)="selectContract(item)" />
                                     </div>
                                 </div>
                             </div>
