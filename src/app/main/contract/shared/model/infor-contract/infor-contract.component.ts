@@ -239,11 +239,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   fileChanged(e: any) {
     this.spinner.show();
-    const file = e.target.files[0];
-    if (file) {
+    const file1 = e.target.files[0];
+    if (file1) {
+      let file = new File([file1], this.convertFileName(file1.name));
       // giới hạn file upload lên là 5mb
       if (e.target.files[0].size <= 5000000) {
-        const file_name = file.name;
+        const file_name = file.name
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
         if (extension && extension.toLowerCase() == 'pdf') {
