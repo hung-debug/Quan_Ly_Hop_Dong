@@ -70,7 +70,7 @@ export class ReportService {
       // createDate: data.createDate
       startDate: data.startDate,
       endDate: data.endDate,
-      contractStatus: data.contractStatus
+      // contractStatus: data.contractStatus
     })
 
     if(isExport) {

@@ -70,13 +70,13 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
 
     this.appService.setTitle('role.report.history.send.sms');
 
-    this.optionsStatus = [
-      { id: 20, name: 'Đang xử lý' },
-      { id: 2, name: 'Quá hạn' },
-      { id: 31, name: 'Từ chối' },
-      { id: 32, name: 'Huỷ bỏ' },
-      { id: 30, name: 'Hoàn thành' },
-    ];
+    // this.optionsStatus = [
+    //   { id: 20, name: 'Đang xử lý' },
+    //   { id: 2, name: 'Quá hạn' },
+    //   { id: 31, name: 'Từ chối' },
+    //   { id: 32, name: 'Huỷ bỏ' },
+    //   { id: 30, name: 'Hoàn thành' },
+    // ];
 
 
     if (sessionStorage.getItem('lang') == 'vi') {
@@ -84,13 +84,13 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
     } else if (sessionStorage.getItem('lang') == 'en') {
       this.lang = 'en';
 
-      this.optionsStatus = [
-        { id: 20, name: 'Processing' },
-        { id: 2, name: 'Overdue' },
-        { id: 31, name: 'Reject' },
-        { id: 32, name: 'Cancel' },
-        { id: 30, name: 'Complete' },
-      ];
+      // this.optionsStatus = [
+      //   { id: 20, name: 'Processing' },
+      //   { id: 2, name: 'Overdue' },
+      //   { id: 31, name: 'Reject' },
+      //   { id: 32, name: 'Cancel' },
+      //   { id: 30, name: 'Complete' },
+      // ];
     }
 
     //lay id user
@@ -189,6 +189,12 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
         colspan: 1,
         rowspan: 1,
       },
+      {
+        header: 'contract.status.v2',
+        style: 'text-align: left',
+        colspan: 1,
+        rowspan: 1,
+      },
     ];
   }
   async exportSmsReportCall(isExport: boolean) {
@@ -225,7 +231,7 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
       // "createDate": this.date,
       "startDate": from_date,
       "endDate": to_date,
-      "contractStatus": contractStatus
+      // "contractStatus": contractStatus
     }
 
     let params = `?pageNumber=0&pageSize=10000`
