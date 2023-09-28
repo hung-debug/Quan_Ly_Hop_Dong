@@ -191,7 +191,7 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
       },
       {
         header: 'contract.status.v2',
-        style: 'text-align: left',
+        style: 'text-align: center',
         colspan: 1,
         rowspan: 1,
       },
