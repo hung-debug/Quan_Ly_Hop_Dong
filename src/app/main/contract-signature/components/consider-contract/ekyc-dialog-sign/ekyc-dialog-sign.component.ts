@@ -247,16 +247,14 @@ export class EkycDialogSignComponent implements OnInit {
               this.flagSuccess == false;
               this.webcamImage = this.initWebcamImage
               alert(this.translate.instant('error.recognition.back.cccd'));
-            } else if (this.data.id == 1 && response.result_code !== 200) {
-              this.flagSuccess == false;
-              this.webcamImage = this.initWebcamImage;
-              alert(this.translate.instant('Giấy tờ không hợp lệ. Vui lòng chụp lại mặt sau của CCCD'))
-            }
-            else {
+            } else {
               alert(this.translate.instant('confirm.success'));
               this.dialogRef.close(this.webcamImage.imageAsDataUrl);
-            }
-             
+            }  
+          } else if (this.data.id == 1 && response.result_code == 403) {
+            this.flagSuccess == false;
+            this.webcamImage = this.initWebcamImage;
+            alert(this.translate.instant('Giấy tờ không hợp lệ. Vui lòng chụp lại mặt sau của CCCD'))
           } else {
             this.flagSuccess = false;
             this.webcamImage = this.initWebcamImage;
