@@ -13,6 +13,7 @@ import { UnitService } from 'src/app/service/unit.service';
 import {TranslateService} from '@ngx-translate/core';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { environment } from 'src/environments/environment';
+import * as moment from 'moment';
 @Component({
   selector: 'app-infor-contract-batch',
   templateUrl: './infor-contract-batch.component.html',
@@ -310,14 +311,19 @@ export class InforContractBatchComponent implements OnInit {
 
       let countSMS = 0;
       let countEkyc = 0;
-      this.contractService.uploadFileContractBatch(this.datasBatch.contractFile,this.datasBatch.idContractTemplate).subscribe((responseUpload: any) => {
-
-          if(!responseUpload.success) {
+      this.contractService.uploadFileContractBatch(this.datasBatch.contractFile,this.datasBatch.idContractTemplate).subscribe(  
+        (responseUpload: any) => {
+          this.spinner.hide()
+          if (responseUpload.status == 200){
+            this.spinner.hide()
+            this.toastService.showErrorHTMLWithTimeout('file.import.valid.result',"",3000);
+            this.downloadFile(responseUpload.body)
+          }
+          if (responseUpload?.message?.length > 0) {
             this.errorDetail = responseUpload.detail;
             this.toastService.showErrorHTMLWithTimeout('File mẫu không hợp lệ','',3000);
             this.spinner.hide();
-          }
-
+          } 
           this.contractService.getContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,this.optionsCeCaValue).subscribe((response: any) => {
               for (let i = 0;i < response[0].participants[0].recipients.length;i++) {
                 let recipients = response[0].participants[0].recipients;
@@ -389,7 +395,7 @@ export class InforContractBatchComponent implements OnInit {
                                     );
                                   } else {
                                     
-                                  if (responseUpload.success) {
+                                  if (responseUpload.status == 204) {
                                     //next step
                                     this.step = variable.stepSampleContractBatch.step2;
                                     this.datasBatch.stepLast = this.step;
@@ -453,4 +459,22 @@ export class InforContractBatchComponent implements OnInit {
     this.datasBatch.stepLast = step;
     this.stepChangeInfoContractBatch.emit(step);
   }
+
+  downloadFile(data: any) {
+    let currentDate = moment().format('DD:MM:YYY_HH:mm:ss')
+    const blob = new Blob([data], { type: 'application/vnd.openxmlformats-ficedocument.spreadsheetml.sheet' });
+    const url = window.URL.createObjectURL(blob);
+
+      // Create an anchor element for downloading the file
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Report_${currentDate}.xlsx`; // Specify the file name for the download
+
+    // Trigger a click event to initiate the download
+    a.click();
+
+    // Clean up by revoking the URL
+    window.URL.revokeObjectURL(url);
+  }
+
 }

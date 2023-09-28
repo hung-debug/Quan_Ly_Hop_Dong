@@ -1760,14 +1760,18 @@ export class ContractService {
       'Authorization',
       'Bearer ' + this.token
     );
-    return this.http.post<any>(
+    return this.http.post(
       this.uploadFileContractBatchUrl +
       idContractTemplate +
       '?organization_id=' +
       this.organization_id,
       formData,
-      { headers: headers }
-    );
+      {
+        headers: headers,
+        responseType: 'blob',
+        observe: 'response'
+      }
+    )
   }
 
   uploadFileUnit(file: any) {
