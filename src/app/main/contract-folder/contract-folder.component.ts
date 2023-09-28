@@ -62,7 +62,8 @@ export class ContractFolderComponent implements OnInit {
   }
 
   autoSearch(event: any) {
-    this.folders = this.list.filter((item: any) => item.name.toLowerCase().includes(event.target.value.toLowerCase()));
+    console.log("l ", this.list);
+    this.folders = this.list.filter((item: any) => item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(event.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
   }
 
   checkLastChildFolderBreadcrumber(folder: any, folders: any){
