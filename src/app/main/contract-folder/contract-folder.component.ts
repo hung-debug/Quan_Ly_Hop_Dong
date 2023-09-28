@@ -43,7 +43,7 @@ export class ContractFolderComponent implements OnInit {
         
     this.contractFolderService.getContractFoldersList().subscribe((data) => 
     {
-        this.list = data.filter((folder: any) => folder.parentId == 0).sort((a: any, b: any) => a.name.localeCompare(b.name));
+        this.list = data.filter((folder: any) => folder.parentId == 0);
         this.folders = this.list;
     })
   }
