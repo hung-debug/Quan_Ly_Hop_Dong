@@ -155,9 +155,16 @@ export class AddContractFolderComponent implements OnInit {
     }
 
     submit() {
-      this.selectedContract = this.contracts.filter(
-        (opt) => opt.checked
-      ).map((item: any) => item.id);
+      if(this.parentId == 1)
+        this.selectedContract = this.contracts.filter(
+          (opt) => opt.checked
+        ).map((item: any) => item.id);
+      else if(this.parentId == 2)
+        this.selectedContract = this.contracts.filter(
+          (opt) => opt.checked
+        ).map((item: any) => item.participant.contract.id);
+
+      
 
       if(this.selectedContract.length == 0) {
         this.toastService.showErrorHTMLWithTimeout('no.choose.contract','',3000);
@@ -181,7 +188,6 @@ export class AddContractFolderComponent implements OnInit {
           this.dialogRef.close();
           window.location.reload();
         }
-       
       })
     }
 

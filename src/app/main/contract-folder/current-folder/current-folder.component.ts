@@ -91,7 +91,6 @@ export class CurrentFolderComponent implements OnInit {
   //api danh sách hợp đồng trong thư mục
   getContractList() {
     this.contractFolderService.getContractInFolder(this.parentId,this.keyword, this.p - 1, this.page).subscribe((response: any) => {
-      console.log("res ", response);
       this.contracts = response.entities;
       this.pageTotal = response.total_elements;
       if (this.pageTotal == 0) {
