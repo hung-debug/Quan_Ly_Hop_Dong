@@ -44,11 +44,6 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    
-    
-    
-    
-
     if (environment.flag == 'NB') {
       this.site = 'NB';
     } else if (environment.flag == 'KD') {
@@ -149,9 +144,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       data.ordering = 1;
     }
     
-    
     this.orgCustomer.handlers?.push(data);
-    
   }
 
   onCancel(){
@@ -166,7 +159,6 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
   }
 
   onChangeValue(e: any, orering_data: string) {
-    // 
     if (!e.target.value) {
       let data_ordering = document.getElementById(orering_data);
       if (data_ordering)
@@ -180,7 +172,6 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
   }
 
   getDataSignUSBToken(data: any) {
-    
     return data.signType.filter((p: any) => p.id == 2);
   }
 
@@ -214,7 +205,6 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
     } else {
       return this.signTypeList;
     }
-    return this.signTypeList;
   }
 
   getNotificationValid(is_notify: string) {
@@ -235,11 +225,6 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
         let isPartnerSort = dataArrPartner.handlers
         for (let k = 0; k < isPartnerSort.length; k++) {
           //Tổ chức
-
-            
-            
-            
-            
             if (!dataArrPartner.name) {
               this.getNotificationValid("Vui lòng nhập tên tổ chức!")
               return false;
@@ -256,9 +241,18 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
             }
            
             if (!isPartnerSort[k].name) {
-              
               this.getNotificationValid("Vui lòng nhập tên " + this.getNameObjectValid(isPartnerSort[k].role) + " !")
               return false;
+            }
+
+            if (!isPartnerSort[k].email) {
+              if(isPartnerSort[k].login_by == 'email') {
+                this.getNotificationValid("Vui lòng nhập email " + this.getNameObjectValid(isPartnerSort[k].role) + " !")
+                return false;
+              } else if(isPartnerSort[k].login_by == 'phone') {
+                this.getNotificationValid("Vui lòng nhập SĐT " + this.getNameObjectValid(isPartnerSort[k].role) + " !")
+                return false;
+              }
             }
 
             if(!parttern_input.new_input_form.test(isPartnerSort[k].name)) {
@@ -266,7 +260,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
               return false;
             }
 
-            if (!isPartnerSort[k].signType && ((isPartnerSort[k].role == 'SIGNER') || (isPartnerSort[k].role == 'ARCHIVER'))) {
+            if (isPartnerSort[k]?.signType.length == 0 && ((isPartnerSort[k].role == 'SIGNER') || (isPartnerSort[k].role == 'ARCHIVER'))) {
               this.getNotificationValid("Vui lòng chọn loại ký " + this.getNameObjectValid(isPartnerSort[k].role) + "!")
               return false;
             } 
@@ -293,26 +287,6 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
                 }
               }
             }
-
-            // else if (isPartnerSort[k].signType.length > 0 && [3, 4].includes(isPartnerSort[k].role)) {
-            //   let isPartnerOriganzationDuplicate = [];
-            //   //check chu ky so
-            //   isPartnerOriganzationDuplicate = isPartnerSort.signType.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
-            //   if (isPartnerOriganzationDuplicate.length > 1) {
-            //     this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số " + this.getNameObjectValid(isPartnerSort[k].role) + "!")
-                
-            //     return false;
-            //   }
-            //   isPartnerOriganzationDuplicate = [];
-            //   //check chu ky anh
-            //   isPartnerOriganzationDuplicate = isPartnerSort.signType.filter((p: any) => p.id == 1 || p.id == 5);
-            //   if (isPartnerOriganzationDuplicate.length > 1) {
-            //     this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký ảnh hoặc eKYC " + this.getNameObjectValid(isPartnerSort[k].role) + "!")
-                
-            //     return false;
-            //   }
-            //   isPartnerOriganzationDuplicate = [];
-            // }
 
             if (!isPartnerSort[k].phone && isPartnerSort[k].login_by == 'phone') {
               this.getNotificationValid("Vui lòng nhập số điện thoại của " + this.getNameObjectValid(isPartnerSort[k].role) + "!")
@@ -365,17 +339,17 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
               return false;
             }
 
+            if (personalData.signType.length == 0) {
+              this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObjectValid('SIGNER') + " cá nhân!"
+              )
+              return false;
+            }
+
             if(personalData.login_by == 'phone' || personalData.signType[0].id == 1){
               if (!personalData.phone) {
                 this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObjectValid('SIGNER') + "  cá nhân!")
                 return false;
               }
-            }
-
-            if (personalData.signType.length == 0) {
-              this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObjectValid('SIGNER') + " cá nhân!"
-              )
-              return false;
             }
 
             if(this.personalCustomer.signType.length != 0){
@@ -406,20 +380,10 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
               this.getNotificationValid("Số điện thoại" + this.getNameObjectValid('SIGNER') + " cá nhân không hợp lệ!")
               return false;
             }
-
-
           }
           return true;
   }
 
-  onItemSelect(e: any){
-
-  }
-
-  deSelect(e: any){
-
-  }
-  
   getCheckDuplicateValue(valueType: string, dataValid: any){
     let checkDuplicate: any = [];
     if(valueType == 'phone'){

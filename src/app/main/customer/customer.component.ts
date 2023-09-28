@@ -68,19 +68,6 @@ export class CustomerComponent implements OnInit {
       this.isOrg = 'off';
     }
     this.appService.setTitle("customer.list");
-    // this.customerService.getCustomerList().subscribe((res: any) => {
-    //   this.list = res.filter((item: any) => {
-    //       return item.type === sessionStorage.getItem('partnerType'); 
-    //   });
-    //   this.spinner.hide();
-    // });
-    // this.cols = [
-    //   {header: 'organization.customer.name', style:'text-align: left;', class:'col-md-5' },
-    //   {header: 'tax.code', style:'text-align: left;', class:'col-md-5' },
-    //   {header: '', style:'text-align: center;',class:'col-md-2' },
-    // ];
-
-
   }
 
 
