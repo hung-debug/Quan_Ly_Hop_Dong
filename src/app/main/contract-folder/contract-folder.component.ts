@@ -62,7 +62,6 @@ export class ContractFolderComponent implements OnInit {
   }
 
   autoSearch(event: any) {
-    console.log("l ", this.list);
     this.folders = this.list.filter((item: any) => item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(event.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
   }
 
@@ -122,7 +121,7 @@ export class ContractFolderComponent implements OnInit {
   getFolderList(){
     this.contractFolderService.getContractFoldersList().subscribe((data) => 
     {
-        this.folders = data.filter((folder: any) => folder.parentId == 0).sort((a: any, b: any) => a.name.localeCompare(b.name));
+        this.folders = data.filter((folder: any) => folder.parentId == 0)
     })
   }
 
