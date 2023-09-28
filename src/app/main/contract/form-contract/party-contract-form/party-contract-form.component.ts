@@ -1181,7 +1181,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       // valid email tổ chức của tôi
       for (let i = 0; i < dataValid.length; i++) {
         if ((environment.flag == 'KD' && dataValid[i].login_by=='email' && dataValid[i].role == 3)){
-          dataValid[i].phone = ''
+          dataValid[i].phone = null
         }
         if (dataValid[i].phone) {
           arrCheckPhone.push(dataValid[i].phone);
@@ -1192,7 +1192,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     var valueSoFar = Object.create(null);
     for (var k = 0; k < arrCheckPhone.length; ++k) {
       var value: any = arrCheckPhone[k];
-      if (value in valueSoFar) {
+      if ( value && (value in valueSoFar)) {
         return true;
       }
       valueSoFar[value] = true;
