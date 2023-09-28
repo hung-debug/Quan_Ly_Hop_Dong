@@ -1,5 +1,5 @@
 import { UploadService } from 'src/app/service/upload.service';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from 'src/app/service/app.service';
 import { ContractService } from 'src/app/service/contract.service';
@@ -46,6 +46,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   statusPopup: number = 1;
   notificationPopup: string = '';
   pageOptions: any[] = [10, 20, 50, 100];
+  scrollY: any;
 
   title: any = "";
   id: any = "";
@@ -211,6 +212,14 @@ export class ContractComponent implements OnInit, AfterViewInit {
         )
       });
     });
+  }
+
+  
+  @HostListener('window:scroll', ['$event']) // for window scroll events
+  onScroll(event: any) {
+    if(window.scrollY>0){
+      this.scrollY = window.scrollY;
+    }
   }
 
   cancelMany() {
@@ -669,12 +678,12 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   openEditExpiration(item: any) {
-
     let title = this.translate.instant('edit.exp.sign.time')
     const data = {
       title: title,
       expirationSign: item.sign_time,
-      contractId: item.id
+      contractId: item.id,
+      scrollY: this.scrollY
     }
 
      // @ts-ignore

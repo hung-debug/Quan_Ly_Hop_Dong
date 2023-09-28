@@ -1,9 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Calendar } from 'primeng/calendar';
 import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 
@@ -25,7 +27,7 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
     private toastService: ToastService,
     private datepipe: DatePipe,
     private spinner: NgxSpinnerService,
-    private router: Router,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit(): void {
@@ -36,15 +38,37 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
     this.inputElement.showOnFocus = false;
   }
 
+  generateSafeStyle(style:string):SafeStyle{
+    return this.sanitizer.bypassSecurityTrustStyle(style);
+   }
+
+  isCalendarClick: number = 0;
+  top: number[] = [];
   onContainerClick(event: MouseEvent) {
     if (this.calendarContainer.nativeElement.contains(event.target)) {
       this.inputElement.showOnFocus = true;
 
       const inputElement = this.inputElement.inputfieldViewChild.nativeElement;
-      inputElement.click();
+      const collection = document.getElementsByClassName("p-datepicker");
+      const element = collection[0] as HTMLElement; // Cast to HTMLElement
+  
+      if(this.top.length > 0) {
+        element.style.top = (this.top[0] + this.data.scrollY) + "px";
+        this.top.splice(1);
+      } else {
+        if (collection.length > 0) {
+          const currentTop = parseFloat(getComputedStyle(element).top);
+          this.top.push(currentTop)
+  
+          element.style.top = (currentTop + this.data.scrollY) + "px";
+          this.isCalendarClick = 1;
+        }
+        inputElement.click();
+        this.isCalendarClick = 0;
+      }
     } else {
       this.inputElement.showOnFocus = false;
-   }
+    }
   }
 
   async save() {

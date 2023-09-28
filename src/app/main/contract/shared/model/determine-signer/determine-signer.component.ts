@@ -1813,7 +1813,8 @@ export class DetermineSignerComponent implements OnInit {
       data,
     })
     dialogRef.afterClosed().subscribe(
-      (data) => {if(data){
+      (data) => {
+        if(data){
         this.loadedMyPartner = true;
         if(data.type == "PERSONAL"){
           let data_partner_add ={
@@ -1904,6 +1905,8 @@ export class DetermineSignerComponent implements OnInit {
                 if(recipient.email = '' && recipient.phone &&
                 recipient.login_by == 'phone'){
                   recipient.email = recipient.phone;
+                } else {
+                  recipient.email = item.email;
                 }
                 break;
             }

@@ -15,7 +15,19 @@
       outline: 0 !important;
       box-shadow: none !important;
     }
+
+    .cdk-global-scrollblock {
+      position: initial;
+      width: initial;
+      overflow: hidden;
+      }
 }
+
+.cdk-global-scrollblock {
+  position: initial;
+  width: initial;
+  overflow: hidden;
+  }
 
 .cancel-button{
     border: 0px;

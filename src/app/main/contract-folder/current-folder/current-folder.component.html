@@ -1,4 +1,10 @@
 <div class="col-md-4" class="container-fluid">
+    <button class="icon-button" (click)="back()">
+        <i class="fa fa-home" aria-hidden="true"></i>
+    </button>
+    &nbsp;&nbsp;<span style="color: black;">></span>&nbsp;&nbsp;<span>{{this.title}}</span>
+</div>
+<div class="col-md-4" class="container-fluid">
     <ng-template [ngIf]="isOrg">
         <div class="col-md-12" style="padding-top: 20px;">
             <div class="input-line search">
@@ -21,7 +27,7 @@
             <div class="col-md-3">{{'action' | translate}}</div>
         </div>
 
-        <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
+        <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal, id: 'p'}">
             <div class="row">
                 <!--Cột 1-->
                 <div class="col-md-4">
@@ -89,7 +95,7 @@
         <div class="contract_footer">
             <div class="footer_title"></div>
             <div class="footer_pagination">
-                <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
+                <pagination-controls id="p" *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
             </div>
             <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}} 
             </div>

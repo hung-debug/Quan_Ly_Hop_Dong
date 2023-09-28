@@ -154,9 +154,12 @@ export class InforContractBatchComponent implements OnInit {
       const informationContractType = await this.contractTypeService.getContractTypeById(type_id).toPromise();
 
       if(informationContractType.ceca_push == 1) {
-        this.optionsCeCa = optionsCeCa;
-        this.optionsCeCaValue = 1;
-        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+        if(!isCheckPerson) {
+          this.optionsCeCa = optionsCeCa;
+          this.optionsCeCaValue = 1;
+          this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+        }
+       
       } else {
         this.optionsCeCa = optionsCeCa;
         this.optionsCeCaValue = 0;

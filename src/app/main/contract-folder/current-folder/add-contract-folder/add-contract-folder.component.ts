@@ -24,8 +24,8 @@ export class AddContractFolderComponent implements OnInit {
   private sub: any;
   public contracts: any[] = [];
 
-  p: number = 1;
-  page: number = 4;
+  p1: number = 0;
+  page: number = 5;
   pageStart: number = 0;
   pageEnd: number = 0;
   pageTotal: number = 0;
@@ -86,18 +86,18 @@ export class AddContractFolderComponent implements OnInit {
         return 'folder.openDetail';
       default:
         return ''
+    }
   }
-}
 
     getContractList() {
       if(this.parentId == 1)
         //Danh sách hợp đồng tạo
-        this.contractFolderService.getContractCreatedList(this.filter_name, this.status.toString(), this.p, this.defaultSize).subscribe(data => {
+        this.contractFolderService.getContractCreatedList(this.filter_name, this.status.toString(), this.p1, this.defaultSize).subscribe(data => {
           this.contracts = data.entities;
           this.pageTotal = data.total_elements;
           this.spinner.hide();
           if (this.pageTotal == 0) {
-            this.p = 0;
+            this.p1 = 0;
             this.pageStart = 0;
             this.pageEnd = 0;
           } else {
@@ -110,12 +110,12 @@ export class AddContractFolderComponent implements OnInit {
 
       if(this.parentId == 2){
         if(this.status == -1){
-          this.contractFolderService.getContractShareList(this.filter_name, this.p, this.defaultSize).subscribe(data => {
+          this.contractFolderService.getContractShareList(this.filter_name, this.p1, this.defaultSize).subscribe(data => {
             this.contracts = data.entities;
             this.pageTotal = data.total_elements;
             this.spinner.hide();
             if (this.pageTotal == 0) {
-              this.p = 0;
+              this.p1 = 0;
               this.pageStart = 0;
               this.pageEnd = 0;
             } else {
@@ -127,12 +127,12 @@ export class AddContractFolderComponent implements OnInit {
           })
         } else {
           //Danh sách hợp đồng chờ xử lý
-          this.contractFolderService.getContractMyProcessList(this.filter_name, this.status, this.p, this.defaultSize).subscribe(data => {
+          this.contractFolderService.getContractMyProcessList(this.filter_name, this.status, this.p1, this.defaultSize).subscribe(data => {
             this.contracts = data.entities;
             this.pageTotal = data.total_elements;
             this.spinner.hide();
             if (this.pageTotal == 0) {
-              this.p = 0;
+              this.p1 = 0;
               this.pageStart = 0;
               this.pageEnd = 0;
             } else {
@@ -147,14 +147,23 @@ export class AddContractFolderComponent implements OnInit {
     }
 
     setPage() {
-      this.pageStart = (this.p - 1) * this.page + 1;
-      this.pageEnd = (this.p) * this.page;
+      this.pageStart = (this.p1 - 1) * this.page + 1;
+      this.pageEnd = (this.p1) * this.page;
       if (this.pageTotal < this.pageEnd) {
         this.pageEnd = this.pageTotal;
       }
     }
 
     submit() {
+      if(this.parentId == 1)
+        this.selectedContract = this.contracts.filter(
+          (opt) => opt.checked
+        ).map((item: any) => item.id);
+      else if(this.parentId == 2)
+        this.selectedContract = this.contracts.filter(
+          (opt) => opt.checked
+        ).map((item: any) => item.participant.contract.id);
+
       if(this.selectedContract.length == 0) {
         this.toastService.showErrorHTMLWithTimeout('no.choose.contract','',3000);
         return;
@@ -162,13 +171,21 @@ export class AddContractFolderComponent implements OnInit {
 
       const body = {
         id: parseInt(this.data.folderId),
-        contracts: this.selectedContract
+        contracts: [...new Set(this.selectedContract)]
       }
 
       this.contractFolderService.addContractIntoFolder(body).subscribe((response: any) => {
-        this.toastService.showSuccessHTMLWithTimeout("add.contract.in.folder.success","",3000);
-        this.dialogRef.close();
-        window.location.reload();
+        if(response.errors?.length > 0) {
+          if(response.errors[0].code == 1016) {
+            this.toastService.showErrorHTMLWithTimeout('contracts.existed.folder','',3000);
+          } else {
+            this.toastService.showErrorHTMLWithTimeout(response.errors[0].message,'',3000);
+          }
+        } else {
+          this.toastService.showSuccessHTMLWithTimeout("add.contract.in.folder.success","",3000);
+          this.dialogRef.close();
+          window.location.reload();
+        }
       })
     }
 
@@ -243,31 +260,25 @@ getCreatedDate(item: any){
 
   chooseContractType(){
     console.log(this.selectedContractType);
-
   }
 
-selectContract(id: any){
-  console.log(id);
-  console.log(typeof id);
-  if(this.selectedContract.includes(id)){
-    this.selectedContract = this.selectedContract.filter(item => item != id);
-  } else {
-    this.selectedContract.push(id);
+  selectContract(item: any){
+ 
   }
-  console.log(this.selectedContract);
-}
 
-filterContract(){
-  this.status = this.selectedContractType.status;
-  console.log(this.status);
-  console.log(typeof this.status);
-  this.parentId = this.selectedContractType.parent.id;
-  if(this.status == 999){
-    this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn loại hợp đồng để tìm kiếm", "", 3000);
-    return
+  filterContract(){
+    this.status = this.selectedContractType.status;
+    this.parentId = this.selectedContractType.parent.id;
+    if(this.status == 999){
+      this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn loại hợp đồng để tìm kiếm", "", 3000);
+      return
+    }
+    
+    this.p1 = 0;
+    this.pageStart = 0;
+    this.pageEnd = 0;
+    this.getContractList();
   }
-  this.getContractList();
-}
 
 getNameStatusCeca(status: any, ceca_push: any, ceca_status: any) {
   if (status == 30) {

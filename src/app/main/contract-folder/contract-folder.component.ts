@@ -15,8 +15,6 @@ import { event } from 'jquery';
   styleUrls: ['./contract-folder.component.scss']
 })
 
-
-
 export class ContractFolderComponent implements OnInit {
 
   @Input() datas: any;
@@ -31,7 +29,6 @@ export class ContractFolderComponent implements OnInit {
   constructor(
     private appService: AppService,
     private contractFolderService: ContractFolderService,
-    private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
     private spinner: NgxSpinnerService
@@ -66,7 +63,7 @@ export class ContractFolderComponent implements OnInit {
   }
 
   autoSearch(event: any) {
-    this.folders = this.list.filter((item: any) => item.name.includes(event.target.value));
+    this.folders = this.list.filter((item: any) => item.name.toLowerCase().includes(event.target.value.toLowerCase()));
   }
 
   checkLastChildFolderBreadcrumber(folder: any, folders: any){

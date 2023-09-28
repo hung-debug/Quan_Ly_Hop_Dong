@@ -172,3 +172,16 @@
   .img_icon:hover{
     width: 30px;
   }
+
+  .icon-button {
+    // background-color: #007bff;
+    // color: white;
+    border: none;
+    // padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .icon-button:hover {
+    background-color: #0056b3;
+  }

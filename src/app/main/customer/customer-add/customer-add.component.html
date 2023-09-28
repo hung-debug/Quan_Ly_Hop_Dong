@@ -48,19 +48,6 @@
                             </div>
                         </div>
 
-                        <!-- <div class="participants--input">
-                            <div class="participants__name" style="width: 88%">
-                                <div class="label_detail text-color">{{'user.phone' | translate}} -&nbsp;
-                                    <div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div>
-                                </div>
-                                <div class="input-data">
-                                    <img class="input-img">
-                                    <input type="text" [(ngModel)]="d.phone" placeholder="{{'nhap_sdt' | translate}}" />
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-
                     <div *ngIf="this.site == 'NB'" class="participants--input" style="display: flex">
                         <div class="participants__name" style="width:80%; margin-right: -10%;">
                           <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;-&nbsp;<div
@@ -374,7 +361,6 @@
                             <!--Người ký đối tác tổ chức chọn loại ký-->
                             <ng-multiselect-dropdown [(ngModel)]="d.signType" placeholder="{{'choose' | translate }}"
                               [settings]="dropdownSignTypeSettings" [data]="this.isListSignNotPersonPartner.length ? this.isListSignNotPersonPartner : this.getListSignType('org')"
-                              (onSelect)="onItemSelect($event)" (onDeSelect)="deSelect($event)"
                               (ngModelChange)="selectWithOtp($event, d)">
                               <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                                 let-isSelected="isSelected">
@@ -670,7 +656,7 @@
                             <ng-multiselect-dropdown [(ngModel)]="d.signType" placeholder="{{'choose' | translate }}"
                               [settings]="dropdownSignTypeSettings" [data]="signType_doc"
                               (ngModelChange)="selectWithOtp($event, d)" 
-                              (onDeSelect)="deSelect($event)">
+                              >
                               <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                                 let-isSelected="isSelected">
                                 <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">

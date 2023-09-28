@@ -501,6 +501,34 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000)
           })
 
+          await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data: any) => {
+            this.datas.filePath = data?.file_object?.file_path;
+            this.datas.fileName = data?.file_object?.filename;
+            this.datas.fileBucket = data?.file_object?.bucket;
+            if (!data.success) {
+              this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
+              this.spinner.hide()
+              countSuccess++;
+            }
+          }, (error: HttpErrorResponse) => {
+            countSuccess++;
+            this.spinner.hide();
+            this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
+            // return;
+          })
+
+          data = {
+            name: this.datas.name,
+            type: 1,
+            path: this.datas.filePath ? this.datas.filePath : this.datas.pdfUrl,
+            filename: this.datas.fileName,
+            bucket: this.datas.fileBucket,
+            internal: 1,
+            ordering: 1,
+            status: 1,
+            contract_id: this.datas.id,
+          }
+
           let id_type_2 = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 2)[0].id;
           await this.contractService.updateFileAttach(id_type_2, data, 2).toPromise().then((respon: any) => {
             this.datas.document_id = respon?.id;
@@ -636,7 +664,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000)
         })
-        // let id_type_2 = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 2)[0].id;
+
         await this.contractService.updateFileAttach(this.datas.document_id_2.id, data, 2).toPromise().then((respon: any) => {
           this.datas.document_id_2.id = respon?.id;
           this.datas.document_id = respon?.id;
