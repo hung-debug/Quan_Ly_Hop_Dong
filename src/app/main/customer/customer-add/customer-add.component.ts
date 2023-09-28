@@ -474,7 +474,6 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       this.spinner.show();
       if(this.action == 'add'){
       if(this.isOrg){
-        
         this.customerService.addOrgCustomer(this.orgCustomer).subscribe((res: any) => {
           if(res.errors){
             this.spinner.hide();
@@ -492,9 +491,14 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       }
       if(!this.isOrg){
         this.customerService.addPersonalCustomer(this.personalCustomer).subscribe((res: any) => {
-          if(res.errors){
-            this.spinner.hide();
-            this.showError(res.errors[0].code, 'add', 'personal')
+          if(res.errors?.length > 0){
+            if(res.errors[0].code == 1015) {
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout('Đã có khách hàng với mã số thuế và loại ký như này?','',3000);
+            } else {
+              this.spinner.hide();
+              this.showError(res.errors[0].code, 'add', 'personal')
+            }
           } else {
             this.spinner.hide();
             this.toastService.showSuccessHTMLWithTimeout('Thêm khách hàng cá nhân thành công!',"", 2000);
@@ -528,9 +532,14 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
         if(!this.isOrg){
           this.personalCustomer.id = this.id;
           this.customerService.editPersonalCustomer(this.personalCustomer).subscribe((res: any) => {
-            if(res.errors){
-              this.spinner.hide();
-              this.showError(res.errors[0].code, 'edit', 'personal')
+            if(res.errors?.length > 0){
+              if(res.errors[0].code == 1015) {
+                this.spinner.hide();
+                this.toastService.showErrorHTMLWithTimeout('Đã có khách hàng với mã số thuế và loại ký như này?','',3000);
+              } else {
+                this.spinner.hide();
+                this.showError(res.errors[0].code, 'edit', 'personal')
+              }
             } else {
               this.spinner.hide();
               this.toastService.showSuccessHTMLWithTimeout('Sửa thông tin khách hàng thành công!',"", 2000);

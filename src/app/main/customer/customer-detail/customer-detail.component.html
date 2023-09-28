@@ -868,7 +868,7 @@
                         </div>
         
                         <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là usb token-->
-                        <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(this).length > 0">
+                        <div class="participants--input" style="display: flex">
                           <div class="participants__name" style="width: 88%">
                             <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
                               <div style="color: #ffc107;">({{'info.token' | translate}})</div>
@@ -881,7 +881,7 @@
                         </div>
 
                         <!--trường hiển thị khi văn thư đối tác của tổ chức chọn loại ký là hsm-->
-                        <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(this).length > 0">
+                        <!-- <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(this).length > 0">
                           <div class="participants__name" style="width: 88%">
                             <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;</div>
                             <div class="input-data">
@@ -889,7 +889,7 @@
                                 oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" readonly>
                             </div>
                           </div>
-                        </div>                          
+                        </div>                           -->
         
                         <!--KD-->
                         <div class="participants--input" style="display: flex"
