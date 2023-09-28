@@ -67,7 +67,7 @@ export class ContractFolderService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<Folder[]>(this.getContractFolderListUrl, {headers}).pipe();
+    return this.http.get<Folder[]>(this.getContractFolderListUrl+'?sort=createdAt,desc', {headers}).pipe();
   }
 
   getContractFolderName(){
