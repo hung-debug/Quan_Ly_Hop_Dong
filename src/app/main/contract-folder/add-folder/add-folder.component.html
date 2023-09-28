@@ -4,7 +4,7 @@
   </div>
   <div class="folder-name">
     <div class="label-input">{{'folder.name' | translate}}&nbsp;<span style="color: red; padding: 0">*</span></div>
-    <div class="input-data-name" [ngStyle]="getStyleDetail()"><input type="text border" [readonly]="this.action == 'openDetail'" [ngStyle]="getStyleDetail()" [(ngModel)]="this.name"></div>
+    <div class="input-data-name" [ngStyle]="getStyleDetail()"><input type="text border" [readonly]="this.action == 'openDetail'" [ngStyle]="getStyleDetail()" [(ngModel)]="this.name" maxlength="255"></div>
     <div style="color: red" *ngIf="!this.name.trim() && this.isSubmit">
         {{'name.folder.invalid' | translate}}
     </div>
@@ -14,7 +14,7 @@
   </div>
   <div class="folder-name">
     <div class="label-input-description">{{'folder.description' | translate}}&nbsp;</div>
-    <div class="input-data-description" [ngStyle]="getStyleDetail()"><textarea type="text border" [ngStyle]="getStyleDetail()" [readonly]="this.action == 'openDetail'" [(ngModel)]="this.description"></textarea></div>
+    <div class="input-data-description" [ngStyle]="getStyleDetail()"><textarea type="text border" [ngStyle]="getStyleDetail()" [readonly]="this.action == 'openDetail'" [(ngModel)]="this.description" maxlength="1000"></textarea></div>
   </div>
   <div class="row" style="justify-content: center;padding-top: 10px;">
     <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>

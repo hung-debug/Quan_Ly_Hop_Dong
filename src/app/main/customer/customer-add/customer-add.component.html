@@ -806,11 +806,7 @@
                 <div class="label">{{'user.sign' | translate}}</div>
             </div>
                 <div class="participants--content">
-                    <!-- <input [id]="'ordering-sign-'" class="col-md-1 contract-total" style="width: 25px; height: 25px"
-                        type="number" [disabled]="1"
-                        oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"> -->
                     <div class="col-md-10 participants__content--input">
-
                       <div class="participants--input" style="display: flex">
                         <div class="participants__name">
                           <div class="label_detail text-color">
@@ -1008,7 +1004,7 @@
                           </div>
           
                           <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là eKYC-->
-                          <div class="participants--input" style="display: flex" *ngIf="getDataSignEkyc(this.personalCustomer).length > 0">
+                          <!-- <div class="participants--input" style="display: flex" *ngIf="getDataSignEkyc(this.personalCustomer).length > 0">
                             <div class="participants__name" style="width: 88%">
                               <div class="label_detail text-color">{{'cardId' | translate}}&nbsp;<span
                                   class="required-title">*</span></div>
@@ -1017,14 +1013,14 @@
                                   oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                               </div>
                             </div>
-                          </div>
+                          </div> -->
           
                           <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là usb token-->
-                          <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(this.personalCustomer).length > 0">
+                          <div class="participants--input" style="display: flex">
                             <div class="participants__name" style="width: 88%">
                               <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span
                                   class="required-title">*</span>
-                                <div style="color: #ffc107;">({{'info.token' | translate}})</div>
+                                <!-- <div style="color: #ffc107;">({{'info.token' | translate}})</div> -->
                               </div>
                               <div class="input-data">
                                 <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="this.personalCustomer.card_id"
@@ -1034,7 +1030,7 @@
                           </div>
 
                           <!--trường hiển thị khi văn thư đối tác của tổ chức chọn loại ký là hsm-->
-                          <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(this.personalCustomer).length > 0">
+                          <!-- <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(this.personalCustomer).length > 0">
                             <div class="participants__name" style="width: 88%">
                               <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;<span
                                   class="required-title">*</span></div>
@@ -1043,7 +1039,7 @@
                                   oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                               </div>
                             </div>
-                          </div>                          
+                          </div>                           -->
           
                           <!--KD-->
                           <div class="participants--input" style="display: flex"

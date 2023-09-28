@@ -352,6 +352,11 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
               }
             }
 
+            if(!this.personalCustomer.card_id){
+              this.getNotificationValid("Vui lòng nhập mã số thuế/CMT/CCCD của " + this.getNameObjectValid('SIGNER') + "!")
+              return false;
+            }
+
             if(this.personalCustomer.signType.length != 0){
               if(this.personalCustomer.signType[0].id == 2){
                 if(!this.personalCustomer.card_id){
