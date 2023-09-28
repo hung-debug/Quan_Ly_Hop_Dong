@@ -578,8 +578,14 @@ export class DetermineSignerComponent implements OnInit {
         count++;
         break;
       }
-      if (!dataArr[i].card_id && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 5 || p.id == 4 || p.id == 6).length > 0) {
-        this.getNotificationValid("Vui lòng nhập CMT/CCCD của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
+      if (!dataArr[i].card_id && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 5 || p.id == 4 || p.id == 2 || p.id == 6).length > 0) {
+        this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
+        count++;
+        break;
+      }
+
+      if (!dataArr[i].card_id && dataArr[i].role == 4 && dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6).length > 0) {
+        this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
         count++;
         break;
       }
