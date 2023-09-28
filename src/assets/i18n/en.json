@@ -734,5 +734,11 @@
   "error.upload.file.duplicate": "already exists, please select another file",
   "success.upload.file.attach": "Upload attached file successfully",
   "error.upload.file.attach": "Uploading attachment failed",
-  "error.recognition.back.cccd": "You are taking a photo of the front of the ID. Please take a photo of the back of your ID"
+  "error.recognition.back.cccd": "You are taking a photo of the front of the ID. Please take a photo of the back of your ID",
+  "role.contract-folder.edit":"Edit folder",
+  "role.contract-folder.delete":"Delete folder",
+  "role.contract-folder.detail":"Detail folder",
+  "name.folder.invalid":"Folder name not blank",
+  "delete.contract.question.folder":"Are you sure want to delete the contract from this folder?",
+  "delete.contract-folder.success": "Deleted the contract from the folder successfully"
 }

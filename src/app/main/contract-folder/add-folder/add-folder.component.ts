@@ -1,21 +1,25 @@
 import { ToastService } from './../../../service/toast.service';
 import { Folder } from './../../../service/contract-folder.service';
 import { ContractFolderService } from 'src/app/service/contract-folder.service';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { parttern_input } from 'src/app/config/parttern';
 
 @Component({
   selector: 'app-add-folder',
   templateUrl: './add-folder.component.html',
   styleUrls: ['./add-folder.component.scss']
 })
-export class AddFolderComponent implements OnInit {
+export class AddFolderComponent implements OnInit, OnChanges {
   action: string;
   title: string ="";
   name: string = "";
   description: string = "";
   id: number;
+  isCheckPatternNameSpecial: boolean = false;
+  parttern_input = parttern_input;
+
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
@@ -23,8 +27,12 @@ export class AddFolderComponent implements OnInit {
     public dialog : MatDialog,
     private contractFolderService: ContractFolderService,
     private spinner: NgxSpinnerService,
-    private toastService: ToastService
+    private toastService: ToastService,
   ) { }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log("changes ", changes);
+  }
 
   ngOnInit() {
       this.action = this.data.action;
@@ -49,13 +57,20 @@ export class AddFolderComponent implements OnInit {
         return 'folder.openDetail';
       default:
         return ''
+    }
   }
-}
+
+  isSubmit: boolean = false;
   submit(){
+    this.isSubmit = true;
+    if(!this.valid()) {
+      return;
+    }
+
     this.spinner.show();
     if(this.action=='add' && this.valid()){
       let folder: Folder = {
-        name: this.name,
+        name: this.name.trim(),
         description: this.description,
       }
       this.contractFolderService.addContractFolder(folder).subscribe(
@@ -73,7 +88,7 @@ export class AddFolderComponent implements OnInit {
     } else if(this.action=='edit' && this.valid()){
       let folder: Folder = {
         id: this.id,
-        name: this.name,
+        name: this.name.trim(),
         description: this.description,
       }
       this.contractFolderService.editContractFolder(folder).subscribe(
@@ -89,16 +104,16 @@ export class AddFolderComponent implements OnInit {
         }
       )
     }
-
-    }
+  }
   
-
   valid(){
-    if(this.name==''){
+    if(!this.name.trim() || !parttern_input.new_input_form.test(this.name)){
       return false;
     }
+    
     return true;
   }
+
 
   getStyleDetail(){
     if(this.action=='openDetail'){

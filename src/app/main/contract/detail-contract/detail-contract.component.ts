@@ -150,6 +150,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   statusLink: any;
   signBefore: boolean = false;
+  folderId: any;
+  folderName: any;
 
   constructor(
     private contractService: ContractService,
@@ -221,14 +223,23 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       } else {
         this.isOrg = '';
       }
-      if (
-        typeof params.organization_id != 'undefined' &&
-        params.organization_id
+
+      if (typeof params.organization_id != 'undefined' && params.organization_id
       ) {
         this.organization_id = params.organization_id;
       } else {
         this.organization_id = '';
       }
+
+      if (typeof params.folderId != 'undefined' && params.folderId
+      ) {
+        this.folderId = params.folderId;
+      }
+
+      if(typeof params.folderName != 'undefined' && params.folderName) {
+        this.folderName = params.folderName;
+      }
+
 
       if (typeof params.status != 'undefined' && params.status) {
         this.statusLink = params.status;
@@ -1091,8 +1102,23 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         if (this.isOrg) {
           this._location.back();
         } else {
-          this.router.navigate(['/login']);
-          this.contractService.deleteToken().subscribe();
+          if(this.action == 'folder') {
+            // this.router.navigate(['/main/my-folder/'+this.folderName]);
+
+            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+              this.router.navigate(['/main/my-folder/'+this.folderName],
+              {
+                queryParams: {
+                  'id': this.folderId,
+                },
+                skipLocationChange: false
+              });
+            });
+          } else {
+            this.router.navigate(['/login']);
+            this.contractService.deleteToken().subscribe();
+          }
+        
         }
       }
     }

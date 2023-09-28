@@ -59,6 +59,8 @@ export class AddContractFolderComponent implements OnInit {
   checkedAll: boolean = false;
   typeDisplay: string = 'view';
 
+  defaultSize: number = 5;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
     public dialogRef: MatDialogRef<AddContractFolderComponent>,
@@ -72,7 +74,6 @@ export class AddContractFolderComponent implements OnInit {
   ngOnInit() {
     this.title = 'add.contract.folder';
     this.contractTypes = this.translateOptions(this.contractTypes);
-
   }
 
   convertActionFolder(action: string){
@@ -88,117 +89,135 @@ export class AddContractFolderComponent implements OnInit {
   }
 }
 
-getContractList() {
-  if(this.parentId == 1)
-  this.contractFolderService.getContractCreatedList(this.filter_name, this.status.toString(), this.p, 4).subscribe(data => {
-    this.contracts = data.entities;
-    this.pageTotal = data.total_elements;
-    this.spinner.hide();
-    if (this.pageTotal == 0) {
-      this.p = 0;
-      this.pageStart = 0;
-      this.pageEnd = 0;
-    } else {
-      this.setPage();
-    }
-  }, error => {
-    this.spinner.hide();
-    this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-  });
+    getContractList() {
+      if(this.parentId == 1)
+        //Danh sách hợp đồng tạo
+        this.contractFolderService.getContractCreatedList(this.filter_name, this.status.toString(), this.p, this.defaultSize).subscribe(data => {
+          this.contracts = data.entities;
+          this.pageTotal = data.total_elements;
+          this.spinner.hide();
+          if (this.pageTotal == 0) {
+            this.p = 0;
+            this.pageStart = 0;
+            this.pageEnd = 0;
+          } else {
+            this.setPage();
+          }
+        }, error => {
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
+        });
 
-  if(this.parentId == 2){
-    if(this.status == -1){
-      this.contractFolderService.getContractShareList(this.filter_name, this.p, 4).subscribe(data => {
-        this.contracts = data.entities;
-        this.pageTotal = data.total_elements;
-        this.spinner.hide();
-        if (this.pageTotal == 0) {
-          this.p = 0;
-          this.pageStart = 0;
-          this.pageEnd = 0;
+      if(this.parentId == 2){
+        if(this.status == -1){
+          this.contractFolderService.getContractShareList(this.filter_name, this.p, this.defaultSize).subscribe(data => {
+            this.contracts = data.entities;
+            this.pageTotal = data.total_elements;
+            this.spinner.hide();
+            if (this.pageTotal == 0) {
+              this.p = 0;
+              this.pageStart = 0;
+              this.pageEnd = 0;
+            } else {
+              this.setPage();
+            }
+          }, error => {
+            this.spinner.hide();
+            this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
+          })
         } else {
-          this.setPage();
+          //Danh sách hợp đồng chờ xử lý
+          this.contractFolderService.getContractMyProcessList(this.filter_name, this.status, this.p, this.defaultSize).subscribe(data => {
+            this.contracts = data.entities;
+            this.pageTotal = data.total_elements;
+            this.spinner.hide();
+            if (this.pageTotal == 0) {
+              this.p = 0;
+              this.pageStart = 0;
+              this.pageEnd = 0;
+            } else {
+              this.setPage();
+            }
+          }, error => {
+            this.spinner.hide();
+            this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
+          });
         }
-      }, error => {
-        this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-      })
-    } else {
-      this.contractFolderService.getContractMyProcessList(this.filter_name, this.status, this.p, 4).subscribe(data => {
-        this.contracts = data.entities;
-        this.pageTotal = data.total_elements;
-        this.spinner.hide();
-        if (this.pageTotal == 0) {
-          this.p = 0;
-          this.pageStart = 0;
-          this.pageEnd = 0;
-        } else {
-          this.setPage();
-        }
-      }, error => {
-        this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-      });
-    }
-  }
-  }
-
-  setPage() {
-    this.pageStart = (this.p - 1) * this.page + 1;
-    this.pageEnd = (this.p) * this.page;
-    if (this.pageTotal < this.pageEnd) {
-      this.pageEnd = this.pageTotal;
-    }
-  }
-
-  
-  getPageStartEnd() {
-    const temp: number = this.pageStart;
-    if(this.pageStart < 0) {
-      this.pageStart = 1;
-      this.pageEnd = Math.abs(temp) + 1;
-    }
-    if (this.pageTotal <= this.pageEnd && this.pageTotal > 0) {
-      this.pageEnd = this.pageTotal;
-    }
-    return this.pageStart + '-' + this.pageEnd;
-  }
-
-translateOptions(options: any[]): any[] {
-  return options.map(option => {
-    const translatedOption = { ...option };
-    translatedOption.label = this.translateService.instant(option.label);
-    
-    if (translatedOption.children) {
-      for(let i = 0; i < translatedOption.children.length; i++){
-      translatedOption.children[i].label = this.translateService.instant(option.children[i].label);
       }
     }
-    
-    console.log(translatedOption)
-    return translatedOption;
-  });
-}
 
-sortParticipant(item: any) {
-  console.log(item);
-  if(this.parentId == 1)
-  return item.participants.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
-  if(this.parentId == 2){
-    if(this.status != -1)
-    if (item.participant && item.participant.contract.participants && item.participant.contract.participants.length > 0) {
-      return item.participant.contract.participants.sort(
-        (beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type
-      );
+    setPage() {
+      this.pageStart = (this.p - 1) * this.page + 1;
+      this.pageEnd = (this.p) * this.page;
+      if (this.pageTotal < this.pageEnd) {
+        this.pageEnd = this.pageTotal;
+      }
     }
-    if(this.status == -1)
-    if (item.participants && item.participants.length > 0) {
-      return item.participants.sort(
-        (beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type
-      );
+
+    submit() {
+      if(this.selectedContract.length == 0) {
+        this.toastService.showErrorHTMLWithTimeout('no.choose.contract','',3000);
+        return;
+      }
+
+      const body = {
+        id: parseInt(this.data.folderId),
+        contracts: this.selectedContract
+      }
+
+      this.contractFolderService.addContractIntoFolder(body).subscribe((response: any) => {
+        this.toastService.showSuccessHTMLWithTimeout("add.contract.in.folder.success","",3000);
+        this.dialogRef.close();
+        window.location.reload();
+      })
     }
-  }
-}
+
+    getPageStartEnd() {
+      const temp: number = this.pageStart;
+      if(this.pageStart < 0) {
+        this.pageStart = 1;
+        this.pageEnd = Math.abs(temp) + 1;
+      }
+      if (this.pageTotal <= this.pageEnd && this.pageTotal > 0) {
+        this.pageEnd = this.pageTotal;
+      }
+      return this.pageStart + '-' + this.pageEnd;
+    }
+
+    translateOptions(options: any[]): any[] {
+      return options.map(option => {
+        const translatedOption = { ...option };
+        translatedOption.label = this.translateService.instant(option.label);
+        
+        if (translatedOption.children) {
+          for(let i = 0; i < translatedOption.children.length; i++){
+          translatedOption.children[i].label = this.translateService.instant(option.children[i].label);
+          }
+        }
+        
+        console.log(translatedOption)
+        return translatedOption;
+      });
+    }
+
+    sortParticipant(item: any) {
+      if(this.parentId == 1)
+      return item.participants.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
+      if(this.parentId == 2){
+        if(this.status != -1)
+        if (item.participant && item.participant.contract.participants && item.participant.contract.participants.length > 0) {
+          return item.participant.contract.participants.sort(
+            (beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type
+          );
+        }
+        if(this.status == -1)
+        if (item.participants && item.participants.length > 0) {
+          return item.participants.sort(
+            (beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type
+          );
+        }
+      }
+    }
 
 getCreatedDate(item: any){
   if(this.parentId == 1 || (this.parentId == 2 && this.status == -1))
@@ -207,23 +226,25 @@ getCreatedDate(item: any){
   return item.participant.contract.created_time;
 }
 
-getSignTime(item: any){
-  if(this.parentId == 1 || (this.parentId == 2 && this.status == -1))
-  return item.sign_time;
-  if(this.parentId == 2 && this.status != -1)
-  return item.participant.contract.sign_time;
-}
+  getSignTime(item: any){
+    if(this.parentId == 1 || (this.parentId == 2 && this.status == -1))
+    return item.sign_time;
+    if(this.parentId == 2 && this.status != -1)
+    return item.participant.contract.sign_time;
+  }
 
-getNameOrganization(item: any, index: any) {
-  if(item.type == 3 && item.recipients.length > 0)
-    return sideList[index].name + " : " + item.recipients[0].name;
-  return sideList[index].name + " : " + item.name;
-}
+  getNameOrganization(item: any, index: any) {
+    if(!(this.parentId == 2 && this.status != -1)) {
+      if(item.type == 3 && item.recipients.length > 0)
+        return sideList[index].name + " : " + item.recipients[0].name;
+    } 
+    return sideList[index].name + " : " + item.name;   
+  }
 
-chooseContractType(){
-  console.log(this.selectedContractType);
+  chooseContractType(){
+    console.log(this.selectedContractType);
 
-}
+  }
 
 selectContract(id: any){
   console.log(id);

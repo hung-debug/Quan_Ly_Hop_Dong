@@ -3,7 +3,7 @@
         <div class="col-md-12" style="padding-top: 20px;">
             <div class="input-line search">
                 <img src="../../assets/img/icon_search.svg" class="input-img" />
-                <input type="text" id="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" />
+                <input (keyup)="autoSearch($event)" type="text" id="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" />
             </div>
         </div>
 
@@ -42,7 +42,7 @@
 
                             <div class="row">
                                 <div class="item_contract_infor">{{'contract.status' | translate}}:
-                                    <span class="status_blue">{{item.filter_status | pipe | translate}}
+                                    <span style="color: #027E21" class="status_blue">{{item.status | pipe | translate}}
                                         {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
                                         translate}}</span>
                                 </div>
@@ -68,7 +68,7 @@
                 <div class="col-md-3 item_icon">
                     <div style="display: flex; justify-content: center;">
                         <div class="div_icon">
-                            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'contract.delete' | translate}}"/>
+                            <img src="../../assets/img/icon_delete.svg" class="img_icon" (click)="deleteContract(item.id)" ngbTooltip="{{'contract.delete' | translate}}"/>
                         </div>
                         <!-- 
                             <div class="div_icon" *ngIf="status == 'processing' || status == 'expire'">
@@ -91,7 +91,7 @@
             <div class="footer_pagination">
                 <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
             </div>
-            <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}
+            <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}} 
             </div>
         </div>
     </ng-template>

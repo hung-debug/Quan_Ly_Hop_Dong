@@ -6,6 +6,7 @@ import { AppService } from 'src/app/service/app.service';
 import { Route, ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AddFolderComponent } from './add-folder/add-folder.component';
+import { event } from 'jquery';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class ContractFolderComponent implements OnInit {
   parent_id_list_name: any[]=[];
   currentFolders: Folder[]=[];
   haveContract: boolean = false;
+  list: any[] = [];
 
   constructor(
     private appService: AppService,
@@ -45,38 +47,26 @@ export class ContractFolderComponent implements OnInit {
         
     this.contractFolderService.getContractFoldersList().subscribe((data) => 
     {
-        this.folders = data.filter((folder: any) => folder.parentId == 0).sort((a: any, b: any) => a.name.localeCompare(b.name));
+        this.list = data.filter((folder: any) => folder.parentId == 0).sort((a: any, b: any) => a.name.localeCompare(b.name));
+        this.folders = this.list;
     })
-    // this.folders = [
-    //   {
-    //     id: 3,
-    //     name: "Hợp đồng 2024",
-    //     contracts: [],
-    //     parentId: 0
-    //   },
-    //   {
-    //     id: 4,
-    //     name: "Tháng 1",
-    //     contracts: [
-    //       24194,
-    //       24183
-    //     ],
-    //     parentId: 0
-    //   },
-    //   {
-    //     id: 5,
-    //     name: "Hợp đồng 2023",
-    //     contracts: [],
-    //     parentId: 0
-    //   }
-    // ]
-
-
   }
   
 
-  openFolder(name: any){
-    this.router.navigate(['/main/my-folder', name]);
+  openFolder(item: any){
+    this.router.navigateByUrl('/', {skipLocationChange: false}).then(() => {
+      this.router.navigate(['/main/my-folder', item.name],
+      {
+        queryParams: {
+          id: item.id
+        },
+        skipLocationChange: false
+      });
+    });
+  }
+
+  autoSearch(event: any) {
+    this.folders = this.list.filter((item: any) => item.name.includes(event.target.value));
   }
 
   checkLastChildFolderBreadcrumber(folder: any, folders: any){

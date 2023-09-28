@@ -319,7 +319,7 @@
                   <!--Tổ chức của tôi chọn loại ký-->
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
                     [settings]="dropdownSignTypeSettings" [data]="d.isListSignNotPerson ? d.isListSignNotPerson : this.getListSignType('org')" (onSelect)="onItemSelect($event)"
-                    (onDeSelect)="deSelectOrg($event)" (ngModelChange)="selectWithOtp($event, d, 'organization')">
+                    (onDeSelect)="deSelectOrg($event)" (ngModelChange)="selectWithOtp($event, d, '1')">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
                         <label style="color: #333; font-weight: normal;"
@@ -590,7 +590,7 @@
                   <!--Văn thư tổ chức của tôi chọn loại ký-->
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{ 'choose' | translate }}"
                     [settings]="dropdownSignTypeSettings" [data]="signType_doc"
-                    (ngModelChange)="selectWithOtp($event, d, 'organization')">
+                    (ngModelChange)="selectWithOtp($event, d,'1')">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="
                           padding: 1px 10px;
@@ -1137,7 +1137,7 @@
 
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{ 'choose' | translate }}"
                       [settings]="dropdownSignTypeSettings" [data]="d.isListSignNotPersonPartner ? d.isListSignNotPersonPartner : this.getListSignType('partner')"
-                      (onSelect)="onItemSelect($event)" (ngModelChange)="selectWithOtp($event, d)">
+                      (onSelect)="onItemSelect($event)" (ngModelChange)="selectWithOtp($event, d, item.type)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
                         <div style="
@@ -1419,7 +1419,7 @@
                     </div>
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{ 'choose' | translate }}"
                       [settings]="dropdownSignTypeSettings" [data]="signType_doc"
-                      (ngModelChange)="selectWithOtp($event, d)">
+                      (ngModelChange)="selectWithOtp($event, d,item.type)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
                         <div style="
@@ -1632,7 +1632,7 @@
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{ 'choose' | translate }}"
                       [settings]="dropdownSignTypeSettings" [data]="d.isListSignPersonal ? d.isListSignPersonal : this.getListSignType('personal')"
                       (onSelect)="selectPartnerSign($event, id)" (onDeSelect)="deSelectPartnerSign($event, id)"
-                      (ngModelChange)="selectWithOtp($event, d, 'organization')">
+                      (ngModelChange)="selectWithOtp($event, d, item.type)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
                         <div style="

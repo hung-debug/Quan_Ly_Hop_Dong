@@ -1,17 +1,8 @@
 <div class="container-fluid">
-  <!-- <div class="col-md-6 breadcrumb-container">
-    <ul class="breadcrumb">
-      <li *ngFor="let d of this.currentFolders">
-        <a *ngIf="!checkLastChildFolderBreadcrumber(d, this.currentFolders)" (click)="openFolder(d.id)" style="cursor: pointer; color: rgba(16, 109, 182, 0.7)"
-        onmouseover="this.style.textDecoration='underline';" onmouseout="this.style.textDecoration='none';">{{ d.name }}</a>
-        <a *ngIf="checkLastChildFolderBreadcrumber(d, this.currentFolders)">{{ d.name }}</a>
-      </li>
-    </ul>
-  </div> -->
   <div class="col-md-12" style="padding-top: 20px;">
     <div class="input-line search" style="justify-content:left">
         <img src="../../assets/img/icon_search.svg" class="input-img" />
-        <input placeholder="{{'folder.search.name.placeholder' | translate}}" type="text" id="filter_name" class="input-text" style="width: 90%!important"
+        <input (keyup)="autoSearch($event)" placeholder="{{'folder.search.name.placeholder' | translate}}" type="text" id="filter_name" class="input-text" style="width: 90%!important"
         />
     </div>
   </div>
@@ -33,7 +24,7 @@
     <div class="row">
       <div class="col-md-4">
         <div class="row">
-          <div class="col-md-12 item_folder_name" (click)="openFolder(item.name)">
+          <div class="col-md-12 item_folder_name" (click)="openFolder(item)">
             <img src = "../../../assets/img/contract.svg" height="45px">
             <a>
             {{item.name}}
@@ -55,13 +46,13 @@
       <div class="col-md-2 item_icon">
         <div style="display: flex; justify-content: center;">
           <div class="div_icon">
-            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'role.contract-template.edit' | translate}}" (click)="editFolder(item.id)" />
+            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'role.contract-folder.edit' | translate}}" (click)="editFolder(item.id)" />
           </div>
           <div class="div_icon">
-            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'role.contract-template.delete' | translate}}" (click)="deleteFolder(item.id)" />
+            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'role.contract-folder.delete' | translate}}" (click)="deleteFolder(item.id)" />
           </div>
           <div class="div_icon">
-            <img src="../../../assets/img/view-folder.svg" class="img_icon" ngbTooltip="{{'role.contract-template.delete' | translate}}" (click)=" openDetailFolder(item.id)" />
+            <img src="../../../assets/img/view-folder.svg" class="img_icon" ngbTooltip="{{'role.contract-folder.detail' | translate}}" (click)=" openDetailFolder(item.id)" />
           </div>
         </div>
       </div>

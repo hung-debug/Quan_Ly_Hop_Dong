@@ -221,6 +221,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     } else {
       this.flagUsbToken[id] = false;
     }
+
+    this.onItemSelect(e);
   }
 
   deSelectPartnerSign(e: any, id: number) {
@@ -450,9 +452,12 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   onItemSelect(e: any) {
+    console.log("e ",e);
     var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
     var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
     // <==========>
+
+    console.log("1 ");
     if (isParnter.length > 0) {
       for (let i = 0; i < 2; i++) {
         this.getSetOrderingPersonal(isParnter, i);

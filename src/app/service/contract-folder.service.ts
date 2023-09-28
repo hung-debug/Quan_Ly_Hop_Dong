@@ -27,10 +27,9 @@ export class ContractFolderService {
   getContractCreatedListUrl = `${environment.apiUrl}/api/v1/contracts/my-contract?keyword=`;
   getContractShareListUrl: any = `${environment.apiUrl}/api/v1/shares`;
   getContractMyProcessListUrl: any = `${environment.apiUrl}/api/v1/contracts/my-process`;
-  // getContractFolderListUrl = `${environment.apiFolder}/contract-folder`;
-  // getContractFolderNameUrl = `${environment.apiFolder}/contract-folder`;
-  // getContractFolderListUrl = `${environment.apiUrl}`;
-  // getContractFolderNameUrl = `${environment.apiUrl}`;
+  contractInFolderUrl: any = `${environment.apiUrl}/api/v1/contracts/contract-folder/`;
+  addContractIntoFolderUrl: string = `${environment.apiUrl}/api/v1/contracts/contract-folder/add-contracts`
+
 
   token: any;
   customer_id:any;
@@ -45,6 +44,23 @@ export class ContractFolderService {
   }
 
   constructor(private http: HttpClient,) { }
+
+  addContractIntoFolder(body: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.post<any>(this.addContractIntoFolderUrl, body, {headers}).pipe();
+  }
+
+  deleteContractInFolder(folderId: number,contractId: number) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.delete(this.deleteContractFolderUrl + folderId + "/" + contractId, {headers}).pipe();
+  }
 
   getContractFoldersList() {    
     this.getCurrentUser();
@@ -76,12 +92,13 @@ export class ContractFolderService {
     return this.http.post(this.addContractFolderUrl, body, {headers}).pipe();
   }
 
-  deleteContractFolder(id: number){
-    this.getCurrentUser();
+  deleteContractFolder(contractId: number){
+       this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.delete(this.deleteContractFolderUrl + id, {headers}).pipe();
+
+    return this.http.delete<any>(this.deleteContractFolderUrl + contractId,{headers}).pipe();
   }
 
   editContractFolder(item: Folder){
@@ -131,6 +148,12 @@ export class ContractFolderService {
     let shareListContractUrl = this.getContractShareListUrl + '?keyword=' + filter_name.trim() + '&type=' + '&status=' + '&contract_no=' + "&from_date=" + "&to_date=" + "&page=" + page + "&size=" + size + "&contractStatus=";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any[]>(shareListContractUrl, {headers}).pipe();
+  }
+
+  getContractInFolder(parentId: any, name: string) {
+    this.getCurrentUser();
+    const headers = {'Authorization': 'Bearer ' + this.token};
+    return this.http.get<any>(this.contractInFolderUrl+ parentId+'?name='+name,{headers}).pipe();
   }
 
 }
