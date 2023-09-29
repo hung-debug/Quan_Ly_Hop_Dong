@@ -63,10 +63,10 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
         if(this.action == 'edit'){
           this.customerService.getCustomerList().subscribe((res: any) => {
             this.orgCustomer = res.filter((item: any) => {
-                 
+
                  return item.id.toString() === this.id;
              })[0]})
-        } 
+        }
       }
       else{
         if(type == 'personal'){
@@ -79,7 +79,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       else {
         this.customerService.getCustomerList().subscribe((res: any) => {
           this.personalCustomer = res.filter((item: any) => {
-               
+
                return item.id.toString() === this.id;
            })[0]})
       }
@@ -104,7 +104,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
     handlers = this.orgCustomer.handlers?.filter(
       (handler: any) => handler.role == role
     );
-    
+
     return handlers;
   }
 
@@ -118,7 +118,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
     const array_empty: any[] = [];
     let new_arr: any[] = [];
     arr_clone.forEach((handler: any, index: number) => {
-        if(index != i) 
+        if(index != i)
         array_empty.push(handler);
     })
     array_empty.forEach((handler: any, index: number) => {
@@ -143,7 +143,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
     else{
       data.ordering = 1;
     }
-    
+
     this.orgCustomer.handlers?.push(data);
   }
 
@@ -183,16 +183,20 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
     return data.signType.filter((p: any) => p.id == 4);
   }
 
+  getDataSignCert(data: any){
+    return data.signType.filter((p: any) => p.id == 6);
+  }
+
 
   selectWithOtp(e: any, data: any, type?: any){
       if (data.role == 'SIGNER') {
-        if (this.getDataSignHsm(data).length == 0 && this.getDataSignUSBToken(data).length == 0) {
+        if (this.getDataSignHsm(data).length == 0 && this.getDataSignUSBToken(data).length == 0 && this.getDataSignCert(data).length == 0) {
           data.card_id = "";
         }
       }
       //Nếu là văn thư
       else if (data.role == 'ARCHIVER') {
-        if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0) {
+        if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0 ) {
           data.card_id = "";
         }
       }
@@ -239,7 +243,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
               this.getNotificationValid("Mã số thuế của tổ chức không hợp lệ!")
               return false;
             }
-           
+
             if (!isPartnerSort[k].name) {
               this.getNotificationValid("Vui lòng nhập tên " + this.getNameObjectValid(isPartnerSort[k].role) + " !")
               return false;
@@ -263,10 +267,10 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
             if (isPartnerSort[k]?.signType.length == 0 && ((isPartnerSort[k].role == 'SIGNER') || (isPartnerSort[k].role == 'ARCHIVER'))) {
               this.getNotificationValid("Vui lòng chọn loại ký " + this.getNameObjectValid(isPartnerSort[k].role) + "!")
               return false;
-            } 
+            }
 
             if(isPartnerSort[k].signType.length != 0 && (isPartnerSort[k].role == 'SIGNER' || isPartnerSort[k].role == 'ARCHIVER')){
-              if(isPartnerSort[k].signType[0].id == 2){
+              if(isPartnerSort[k].signType[0].id == 2 || isPartnerSort[k].signType[0].id == 6){
                 if(!isPartnerSort[k].card_id){
                   this.getNotificationValid("Vui lòng nhập mã số thuế/CMT/CCCD của " + this.getNameObjectValid(isPartnerSort[k].role) + "!")
                   return false;
@@ -298,7 +302,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
               this.getNotificationValid("Số điện thoại " + this.getNameObjectValid(isPartnerSort[k].role) + " không hợp lệ!")
               return false;
             }
-            // check duplicate 
+            // check duplicate
             if (isPartnerSort[k].phone != '' && this.getCheckDuplicateValue('phone', dataArrPartner)) {
               this.getNotificationValid("Số điện thoại của tổ chức không được trùng nhau!")
               return false;
@@ -434,8 +438,8 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
   }
 
   changeTypeSign(d: any,index: any,id?: any,role?: any) {
-    
-    
+
+
     if (d.login_by == 'phone' || d.login_by == 'email') {
       d.email = '';
       d.phone = '';
@@ -446,7 +450,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
         if (d.login_by == 'phone') {
           this.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,2,5].includes(p.id));
         } else {
-          
+
           this.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,5].includes(p.id));
         }
     } else if(role == 'signer') {
@@ -469,7 +473,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       this.spinner.show();
       if(this.action == 'add'){
       if(this.isOrg){
-        
+
         this.customerService.addOrgCustomer(this.orgCustomer).subscribe((res: any) => {
           if(res.errors){
             this.spinner.hide();
@@ -543,7 +547,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
 }
   showError(code: number, action: string, type: string ){
     let actionError: string = '';
-    if(action == 'add') 
+    if(action == 'add')
       actionError = 'Thêm khách hàng ';
     else if(action == 'edit')
       actionError = 'Sửa thông tin khách hàng ';
@@ -569,6 +573,6 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
     }
   }
   ngOnDestroy(): void {
-      
+
   }
 }
