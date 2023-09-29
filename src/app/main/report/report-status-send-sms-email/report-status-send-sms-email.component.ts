@@ -36,7 +36,7 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
   lang: string;
   optionsStatus: any = [];
   contractStatus: any;
-
+  maxSelectableDate: Date;
   constructor(
     private appService: AppService,
     private inputTreeService: InputTreeService,
@@ -114,6 +114,17 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
     this.setColForTable();
 
     this.getTypeListContract(this.currentUser.organizationId);
+  }
+
+  onSelectDateRange(event: any) {
+    if (event[0]) {
+      this.maxSelectableDate = new Date()
+      this.maxSelectableDate.setDate(event[0].getDate() + 6)
+    }
+  }
+
+  onCloseCalendar() {
+    this.maxSelectableDate.setDate(this.date[0].getDate()+3000)
   }
 
   convertTime(time: any, code?: any) {

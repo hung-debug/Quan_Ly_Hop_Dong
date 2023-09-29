@@ -43,7 +43,10 @@
       </div>
       <div class="input-line">
         <p-calendar [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true" selectionMode="range"
-          dateFormat="dd/mm/yy"></p-calendar>
+        [maxDate]="this.maxSelectableDate"
+        (onSelect)="onSelectDateRange(date)"
+        (onClose)="onCloseCalendar()"
+        dateFormat="dd/mm/yy"></p-calendar>
       </div>
     </div>
 
