@@ -222,7 +222,8 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       // validate phía đối tác
       if (this.isOrg) {
         dataArrPartner = this.orgCustomer;
-        let isPartnerSort = dataArrPartner.handlers
+        let isPartnerSort = dataArrPartner.handlers;
+        console.log("is ", isPartnerSort.length);
         for (let k = 0; k < isPartnerSort.length; k++) {
           //Tổ chức
             if (!dataArrPartner.name) {
@@ -265,6 +266,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
               return false;
             } 
 
+            console.log("iss ", isPartnerSort[k]);
             if(isPartnerSort[k].signType.length != 0 && (isPartnerSort[k].role == 'SIGNER' || isPartnerSort[k].role == 'ARCHIVER')){
               if(isPartnerSort[k].signType[0].id == 2){
                 if(!isPartnerSort[k].card_id){
@@ -305,11 +307,11 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
             }
 
             if(this.getCheckDuplicateValue('email', dataArrPartner)){
-              this.getNotificationValid("valid.login.user")
+              this.getNotificationValid("valid.login.user.partner")
               return false;
             }
 
-            if(this.getCheckDuplicateValue('card_id', dataArrPartner)){
+            if(isPartnerSort[k].card_id && this.getCheckDuplicateValue('card_id', dataArrPartner)){
               this.getNotificationValid("Mã số thuế/CMT/CCCD của tổ chức không được trùng nhau!");
               return false;
             }
