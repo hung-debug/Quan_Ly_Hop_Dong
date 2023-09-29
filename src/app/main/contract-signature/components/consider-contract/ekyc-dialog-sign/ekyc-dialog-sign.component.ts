@@ -231,10 +231,15 @@ export class EkycDialogSignComponent implements OnInit {
                 alert(this.translate.instant('confirm.success'));
                 this.dialogRef.close(this.webcamImage.imageAsDataUrl);
               } else if(this.cardId != response.id){
-                this.flagSuccess == false;
-                this.webcamImage = this.initWebcamImage;
-                alert(this.translate.instant('card.id.not.match'));
-                // string.replace(/  +/g, ' ');
+                if (response.id_type == 1){
+                  this.flagSuccess == false;
+                  this.webcamImage = this.initWebcamImage
+                  alert(this.translate.instant('Bạn đang chụp mặt sau CCCD. Vui lòng chụp lại mặt trước của CCCD'));
+                } else {
+                  this.flagSuccess == false;
+                  this.webcamImage = this.initWebcamImage;
+                  alert(this.translate.instant('Giấy tờ không hợp lệ. Vui lòng chụp lại mặt trước của CCCD'));
+                }
               } else if(this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") != response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "")) {
                 this.flagSuccess == false;
                 this.webcamImage = this.initWebcamImage;
@@ -255,6 +260,10 @@ export class EkycDialogSignComponent implements OnInit {
             this.flagSuccess == false;
             this.webcamImage = this.initWebcamImage;
             alert(this.translate.instant('Giấy tờ không hợp lệ. Vui lòng chụp lại mặt sau của CCCD'))
+          } else if (this.data.id == 0 && response.result_code == 403) {
+            this.flagSuccess == false;
+            this.webcamImage = this.initWebcamImage;
+            alert(this.translate.instant('Giấy tờ không hợp lệ. Vui lòng chụp lại mặt trước của CCCD'))
           } else {
             this.flagSuccess = false;
             this.webcamImage = this.initWebcamImage;

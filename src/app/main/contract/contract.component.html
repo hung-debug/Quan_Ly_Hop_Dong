@@ -410,13 +410,9 @@
                         <div class="div_icon" *ngIf="status == 'complete'">
                             <img src="../../assets/img/upload_file.svg" class="img_icon" ngbTooltip="{{'upload_attach_files' | translate}}" (click)="uploadAttachFiles(item);" />
                         </div>
-                        <!-- <div class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'">
-                            <img src="../../../assets/img/contract-liquidation.svg" class="img_icon" ngbTooltip="{{'contract.liquidation' | translate}}" (click)="addContractLiquidationNew(item.id);" />
+                        <div class="div_icon" *ngIf="status == 'cancel'">
+                            <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" />
                         </div>
-                    </div>
-                    <div class="div_icon" *ngIf="status == 'cancel'">
-                        <!-- <img src="../../assets/img/view_reason_icon.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" /> -->
-                        <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" />
                     </div>
                 </div>
 
