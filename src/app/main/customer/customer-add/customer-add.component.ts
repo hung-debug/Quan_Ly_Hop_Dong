@@ -223,7 +223,6 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       if (this.isOrg) {
         dataArrPartner = this.orgCustomer;
         let isPartnerSort = dataArrPartner.handlers;
-        console.log("is ", isPartnerSort.length);
         for (let k = 0; k < isPartnerSort.length; k++) {
           //Tổ chức
             if (!dataArrPartner.name) {
@@ -251,8 +250,12 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
                 this.getNotificationValid("Vui lòng nhập email " + this.getNameObjectValid(isPartnerSort[k].role) + " !")
                 return false;
               } else if(isPartnerSort[k].login_by == 'phone') {
-                this.getNotificationValid("Vui lòng nhập SĐT " + this.getNameObjectValid(isPartnerSort[k].role) + " !")
-                return false;
+                if(!isPartnerSort[k].phone) {
+                  this.getNotificationValid("Vui lòng nhập SĐT " + this.getNameObjectValid(isPartnerSort[k].role) + " !")
+                  return false;
+                } else {
+                  isPartnerSort[k].email = isPartnerSort[k].phone;
+                }
               }
             }
 
