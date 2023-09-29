@@ -196,7 +196,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       }
       //Nếu là văn thư
       else if (data.role == 'ARCHIVER') {
-        if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0 ) {
+        if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0 && this.getDataSignCert(data).length == 0) {
           data.card_id = "";
         }
       }
