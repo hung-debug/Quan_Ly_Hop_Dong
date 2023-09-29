@@ -235,10 +235,10 @@ export class EkycDialogSignComponent implements OnInit {
                   this.flagSuccess == false;
                   this.webcamImage = this.initWebcamImage
                   alert(this.translate.instant('Bạn đang chụp mặt sau CCCD. Vui lòng chụp lại mặt trước của CCCD'));
-                } else {
+                } else if( this.data.id == 0 && (this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") != response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, ""))) {
                   this.flagSuccess == false;
                   this.webcamImage = this.initWebcamImage;
-                  alert(this.translate.instant('Giấy tờ không hợp lệ. Vui lòng chụp lại mặt trước của CCCD'));
+                  alert(this.translate.instant('name.not.match'));
                 }
               } else if(this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") != response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "")) {
                 this.flagSuccess == false;
@@ -246,6 +246,7 @@ export class EkycDialogSignComponent implements OnInit {
                 alert(this.translate.instant('name.not.match'));
               }else{
                 this.flagSuccess == false;
+                this.webcamImage = this.initWebcamImage;
                 alert(this.translate.instant('invalid.infor'));
               }
             } else if (this.data.id == 1 && response.result_code == 200 && !isNaN(response.id)) {
