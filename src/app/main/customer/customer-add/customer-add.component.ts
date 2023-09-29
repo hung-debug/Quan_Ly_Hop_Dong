@@ -245,6 +245,11 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
               return false;
             }
 
+            if(!isPartnerSort[k].phone) {
+              this.getNotificationValid("Vui lòng nhập SĐT " + this.getNameObjectValid(isPartnerSort[k].role) + " !")
+              return false;
+            }
+
             if (!isPartnerSort[k].email) {
               if(isPartnerSort[k].login_by == 'email') {
                 this.getNotificationValid("Vui lòng nhập email " + this.getNameObjectValid(isPartnerSort[k].role) + " !")
@@ -349,6 +354,11 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
               return false;
             }
 
+            if (!personalData.phone) {
+              this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObjectValid('SIGNER') + "  cá nhân!")
+              return false;
+            }
+
             if(personalData.login_by == 'phone' || personalData.signType[0].id == 1){
               if (!personalData.phone) {
                 this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObjectValid('SIGNER') + "  cá nhân!")
@@ -421,9 +431,10 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       }
     }
 
+    console.log("data ", dataValid);
     if(valueType =='card_id'){
       for(let i = 0; i< dataValid.handlers.length; i++){
-        if((dataValid.handlers[i].role == "ARCHIVER" || dataValid.handlers[i].role == "SIGNER") && checkDuplicate.includes(dataValid.handlers[i].card_id)){
+        if((dataValid.handlers[i].role == "ARCHIVER" || dataValid.handlers[i].role == "SIGNER") && dataValid.handler[i].card_id && checkDuplicate.includes(dataValid.handlers[i].card_id)){
           return true;
         } else {
           checkDuplicate.push(dataValid.handlers[i].card_id);
