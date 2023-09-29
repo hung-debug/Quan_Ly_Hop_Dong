@@ -226,7 +226,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       // validate phía đối tác
       if (this.isOrg) {
         dataArrPartner = this.orgCustomer;
-        let isPartnerSort = dataArrPartner.handlers
+        let isPartnerSort = dataArrPartner.handlers;
         for (let k = 0; k < isPartnerSort.length; k++) {
           //Tổ chức
             if (!dataArrPartner.name) {
@@ -254,8 +254,12 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
                 this.getNotificationValid("Vui lòng nhập email " + this.getNameObjectValid(isPartnerSort[k].role) + " !")
                 return false;
               } else if(isPartnerSort[k].login_by == 'phone') {
-                this.getNotificationValid("Vui lòng nhập SĐT " + this.getNameObjectValid(isPartnerSort[k].role) + " !")
-                return false;
+                if(!isPartnerSort[k].phone) {
+                  this.getNotificationValid("Vui lòng nhập SĐT " + this.getNameObjectValid(isPartnerSort[k].role) + " !")
+                  return false;
+                } else {
+                  isPartnerSort[k].email = isPartnerSort[k].phone;
+                }
               }
             }
 
@@ -309,11 +313,11 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
             }
 
             if(this.getCheckDuplicateValue('email', dataArrPartner)){
-              this.getNotificationValid("valid.login.user")
+              this.getNotificationValid("valid.login.user.partner")
               return false;
             }
 
-            if(this.getCheckDuplicateValue('card_id', dataArrPartner)){
+            if(isPartnerSort[k].card_id && this.getCheckDuplicateValue('card_id', dataArrPartner)){
               this.getNotificationValid("Mã số thuế/CMT/CCCD của tổ chức không được trùng nhau!");
               return false;
             }
@@ -354,6 +358,16 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
                 this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObjectValid('SIGNER') + "  cá nhân!")
                 return false;
               }
+            }
+
+            if(!this.personalCustomer.card_id){
+              this.getNotificationValid("Vui lòng nhập mã số thuế/CMT/CCCD của " + this.getNameObjectValid('SIGNER') + "!")
+              return false;
+            }
+            
+            if(!parttern.cardid.test(this.personalCustomer.card_id)){
+              this.getNotificationValid("Mã số thuế/CMT/CCCD của " + this.getNameObjectValid('SIGNER') + " không hợp lệ!")
+              return false;
             }
 
             if(this.personalCustomer.signType.length != 0){
@@ -473,7 +487,6 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       this.spinner.show();
       if(this.action == 'add'){
       if(this.isOrg){
-
         this.customerService.addOrgCustomer(this.orgCustomer).subscribe((res: any) => {
           if(res.errors){
             this.spinner.hide();
@@ -491,9 +504,14 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       }
       if(!this.isOrg){
         this.customerService.addPersonalCustomer(this.personalCustomer).subscribe((res: any) => {
-          if(res.errors){
-            this.spinner.hide();
-            this.showError(res.errors[0].code, 'add', 'personal')
+          if(res.errors?.length > 0){
+            if(res.errors[0].code == 1015) {
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout('Đã có khách hàng với mã số thuế và loại ký như này?','',3000);
+            } else {
+              this.spinner.hide();
+              this.showError(res.errors[0].code, 'add', 'personal')
+            }
           } else {
             this.spinner.hide();
             this.toastService.showSuccessHTMLWithTimeout('Thêm khách hàng cá nhân thành công!',"", 2000);
@@ -527,9 +545,14 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
         if(!this.isOrg){
           this.personalCustomer.id = this.id;
           this.customerService.editPersonalCustomer(this.personalCustomer).subscribe((res: any) => {
-            if(res.errors){
-              this.spinner.hide();
-              this.showError(res.errors[0].code, 'edit', 'personal')
+            if(res.errors?.length > 0){
+              if(res.errors[0].code == 1015) {
+                this.spinner.hide();
+                this.toastService.showErrorHTMLWithTimeout('Đã có khách hàng với mã số thuế và loại ký như này?','',3000);
+              } else {
+                this.spinner.hide();
+                this.showError(res.errors[0].code, 'edit', 'personal')
+              }
             } else {
               this.spinner.hide();
               this.toastService.showSuccessHTMLWithTimeout('Sửa thông tin khách hàng thành công!',"", 2000);

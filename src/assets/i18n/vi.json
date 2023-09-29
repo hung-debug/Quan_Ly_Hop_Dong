@@ -583,6 +583,7 @@
   "prepare_expires":"Sắp quá hạn",
   "total":"Tổng số",
   "valid.login.user":"Người tham gia trong luồng xử lý hợp đồng của đối tác không được trùng nhau",
+  "valid.login.user.partner":"Người tham gia trong luồng xử lý hợp đồng của tổ chức không được trùng nhau",
   "captcha.wrong":"Nhập sai captcha",
   "weak.pass":"Mật khẩu đang sử dụng không an toàn. Vui lòng đổi mật khẩu để bảo vệ tài khoản của bạn!",
   "error.update.handler": "Có lỗi cập nhật người xử lý",

@@ -44,7 +44,7 @@ export class ContractFolderComponent implements OnInit {
         
     this.contractFolderService.getContractFoldersList().subscribe((data) => 
     {
-        this.list = data.filter((folder: any) => folder.parentId == 0).sort((a: any, b: any) => a.name.localeCompare(b.name));
+        this.list = data.filter((folder: any) => folder.parentId == 0);
         this.folders = this.list;
     })
   }
@@ -63,7 +63,7 @@ export class ContractFolderComponent implements OnInit {
   }
 
   autoSearch(event: any) {
-    this.folders = this.list.filter((item: any) => item.name.toLowerCase().includes(event.target.value.toLowerCase()));
+    this.folders = this.list.filter((item: any) => item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(event.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
   }
 
   checkLastChildFolderBreadcrumber(folder: any, folders: any){
@@ -122,7 +122,7 @@ export class ContractFolderComponent implements OnInit {
   getFolderList(){
     this.contractFolderService.getContractFoldersList().subscribe((data) => 
     {
-        this.folders = data.filter((folder: any) => folder.parentId == 0).sort((a: any, b: any) => a.name.localeCompare(b.name));
+        this.folders = data.filter((folder: any) => folder.parentId == 0)
     })
   }
 
