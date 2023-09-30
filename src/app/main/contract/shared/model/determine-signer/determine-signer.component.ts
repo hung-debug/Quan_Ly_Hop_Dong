@@ -532,14 +532,21 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeTypeSign(d: any,index: any,id?: any,role?: any) {
+    console.log("d ", d);
 
-    if (d.login_by == 'phone' || d.login_by == 'email') {
-      d.email = '';
-      d.phone = '';
-    }
+    // if (d.login_by == 'phone' || d.login_by == 'email') {
+    //   d.email = '';
+    //   d.phone = '';
+    // }
 
     if(d.login_by == 'phone') {
       d.sign_type = d.sign_type.filter((p: any) => ![2].includes(p.id));
+      d.emailTemp = d.email;
+      d.email = d.phone;
+    }
+
+    if(d.login_by == 'email' && d.emailTemp) {
+      d.email = d.emailTemp;
     }
 
     if(role == 'sign_partner') {

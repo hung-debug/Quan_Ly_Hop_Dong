@@ -135,7 +135,7 @@ export class CustomerComponent implements OnInit {
       {header: 'personal.customer.name', style:'text-align: left;', class:'col-md-2' },
       {header: 'user.phone', style:'text-align: left;', class:'col-md-3' },
       {header: 'user.email', style:'text-align: left;', class:'col-md-3'},
-      {header: 'cardId', style:'text-align: left;', class:'col-md-2'},
+      {header: 'cardId1', style:'text-align: left;', class:'col-md-2'},
       {header: '', style:'text-align: center;', class:'col-md-2' },
     ]}
     else if(this.isOrgCustomer){

@@ -430,6 +430,7 @@
   "enter.tax.code":"Nhập mã số thuế",
   "enter.cardId":"Nhập CMT/CCCD",
   "cardId":"CMT/CCCD",
+  "cardId1":"MST/CMT/CCCD",
   "enter.note":"Nhập lời nhắn",
   "only.match.email.org":"Chỉ được trùng với email trong cùng tổ chức",
   "parent.unit":"Tổ chức cha",
