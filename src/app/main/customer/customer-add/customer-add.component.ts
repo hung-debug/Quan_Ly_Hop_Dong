@@ -435,10 +435,9 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.log("data ", dataValid);
     if(valueType =='card_id'){
       for(let i = 0; i< dataValid.handlers.length; i++){
-        if((dataValid.handlers[i].role == "ARCHIVER" || dataValid.handlers[i].role == "SIGNER") && dataValid.handler[i].card_id && checkDuplicate.includes(dataValid.handlers[i].card_id)){
+        if((dataValid.handlers[i].role == "ARCHIVER" || dataValid.handlers[i].role == "SIGNER") && dataValid.handlers[i].card_id && checkDuplicate.includes(dataValid.handlers[i].card_id)){
           return true;
         } else {
           checkDuplicate.push(dataValid.handlers[i].card_id);
@@ -518,7 +517,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
           if(res.errors?.length > 0){
             if(res.errors[0].code == 1015) {
               this.spinner.hide();
-              this.toastService.showErrorHTMLWithTimeout('Đã có khách hàng với mã số thuế và loại ký như này?','',3000);
+              this.toastService.showErrorHTMLWithTimeout('Mã số thuế/ CMT/ CCCD đã được khai báo với khách hàng khác trên hệ thống','',3000);
             } else {
               this.spinner.hide();
               this.showError(res.errors[0].code, 'add', 'personal')
