@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { UserService } from 'src/app/service/user.service';
 import { SendPasswordDialogComponent } from '../dialog/send-password-dialog/send-password-dialog.component';
 import { ToastService } from 'src/app/service/toast.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-forgot-password',
@@ -45,10 +46,10 @@ export class ForgotPasswordComponent implements OnInit {
   sendForgetPassword() {
     let email = this.forgotPasswordForm.value.email;
 
-    // if(email.includes('@mobifone.vn')) {
-    //   this.toastService.showErrorHTMLWithTimeout('mobifone.fail','',3000);
-    //   return;
-    // }
+    if(environment.flag == 'NB' && email.includes('@mobifone.vn')) {
+      this.toastService.showErrorHTMLWithTimeout('mobifone.fail','',3000);
+      return;
+    }
 
     if(email == ''){
       this.error = true;
