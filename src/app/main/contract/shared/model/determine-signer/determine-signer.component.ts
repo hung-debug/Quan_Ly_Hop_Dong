@@ -541,12 +541,15 @@ export class DetermineSignerComponent implements OnInit {
 
     if(d.login_by == 'phone') {
       d.sign_type = d.sign_type.filter((p: any) => ![2].includes(p.id));
+      console.log("email ", d.email);
       d.emailTemp = d.email;
       d.email = d.phone;
     }
 
     if(d.login_by == 'email' && d.emailTemp) {
       d.email = d.emailTemp;
+    } else {
+      d.email = '';
     }
 
     if(role == 'sign_partner') {

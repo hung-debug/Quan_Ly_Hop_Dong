@@ -558,7 +558,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
             if(res.errors?.length > 0){
               if(res.errors[0].code == 1015) {
                 this.spinner.hide();
-                this.toastService.showErrorHTMLWithTimeout('Đã có khách hàng với mã số thuế và loại ký như này?','',3000);
+                this.toastService.showErrorHTMLWithTimeout('Mã số thuế/ CMT/ CCCD đã được khai báo với khách hàng khác trên hệ thống','',3000);
               } else {
                 this.spinner.hide();
                 this.showError(res.errors[0].code, 'edit', 'personal')
