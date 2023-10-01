@@ -245,10 +245,10 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
               return false;
             }
 
-            if(!isPartnerSort[k].phone) {
-              this.getNotificationValid("Vui lòng nhập SĐT " + this.getNameObjectValid(isPartnerSort[k].role) + " !")
-              return false;
-            }
+            // if(!isPartnerSort[k].phone) {
+            //   this.getNotificationValid("Vui lòng nhập SĐT " + this.getNameObjectValid(isPartnerSort[k].role) + " !")
+            //   return false;
+            // }
 
             if (!isPartnerSort[k].email) {
               if(isPartnerSort[k].login_by == 'email') {
