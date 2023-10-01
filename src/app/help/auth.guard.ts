@@ -62,8 +62,8 @@ export class AuthGuard implements CanActivate {
         this.router.navigateByUrl(urlChange, { skipLocationChange: true });
       })
      }
-
     
+
     //console
     //@ts-ignore
     
@@ -71,7 +71,7 @@ export class AuthGuard implements CanActivate {
     if (state.url.search('type') > 0 && (next._urlSegment.segments.some((p: any) => p.path == this.contract_signatures) || next._urlSegment.segments.some((p: any) => p.path == 'contract-template') || next._urlSegment.segments.some((p: any) => p.path == 'form-contract'))) {
       if (!sessionStorage.getItem('url') && state.url.includes(this.kyTuCach+"mail")) {
         let isCheckUrl = state.url.split(this.kyTuCach+"mail=");
-        
+    
         sessionStorage.setItem('url', isCheckUrl[0]);
 
         sessionStorage.setItem('mail', isCheckUrl[isCheckUrl.length - 1]);
@@ -96,23 +96,23 @@ export class AuthGuard implements CanActivate {
         
         sessionStorage.setItem('type', lt ? lt : '');
         sessionStorage.setItem('mail', isEmail ? isEmail : '');
+  
 
-        
-        
 
-        if (next.queryParams.type && next.queryParams.type == 1) {
+
+          if (next.queryParams.type && next.queryParams.type == 1) {
           
-          this.router.navigate(['/login'],
+            this.router.navigate(['/login'],
             {
               queryParams: {'loginType': 1}
-            });
-        } else {
-          this.router.navigate(['/login'],
-            {
-              queryParams: {'loginType': 0}
-            });
-        }
-        return false;
+            }).then(() => window.location.reload())
+          } else {
+            this.router.navigate(['/login'],
+              {
+                queryParams: {'loginType': 0}
+              });
+          }
+          return false;
       } else return true;
     } else {
       if (localStorage.getItem('currentUser') != null) {
