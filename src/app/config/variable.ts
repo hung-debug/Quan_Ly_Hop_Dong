@@ -791,11 +791,11 @@ export const contractTypes = [
         label: 'contract.status.complete',
         status: 30
       },
-      // {
-      //   id: 8,
-      //   label: 'contract.status.liquidated',
-      //   status: 40
-      // }
+      {
+        id: 8,
+        label: 'contract.status.liquidated',
+        status: 40
+      }
     ]
   },
   {
