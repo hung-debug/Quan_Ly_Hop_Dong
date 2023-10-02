@@ -94,7 +94,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           name_company: element.participantName,
           emailRecipients: element.email,
           status: this.checkStatusUser(element.status, element.role),
-          typeOfSign: element.signType[0],
+          typeOfSign: (element.signType && element.signType.length > 0) ? element.signType[0] : null,
           process_at: element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null,
           reasonReject: element.reasonReject,
           type: element.participantType,
@@ -181,7 +181,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         res += 'Đã ';
       }
 
-      // if (!this.reasonCancel) {
       if (role == 1) {
         res += 'điều phối';
       } else if (role == 2) {
@@ -193,7 +192,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       } else
         if (!res.includes('Đã'))
           res = 'Đã huỷ'
-      // }
     } else if (this.lang == 'en') {
       if (status == 3) {
         return 'Rejected';
