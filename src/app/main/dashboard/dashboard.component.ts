@@ -51,6 +51,7 @@ export class DashboardComponent implements OnInit {
 
   selectedNodeOrganization: any;
   isQLHD_03: boolean | undefined;
+  isQLHD_04: boolean | undefined;
 
   constructor(
     private appService: AppService,
@@ -91,6 +92,8 @@ export class DashboardComponent implements OnInit {
             let listRole: any[];
             listRole = data.permissions;
             this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');        
+            this.isQLHD_04 = listRole.some(element => element.code == 'QLHD_04');        
+
         }, error => {
         });
     }, error => {
@@ -197,7 +200,6 @@ export class DashboardComponent implements OnInit {
     window.location.href = link.replace('&type=1', '').replace('&type=', '').replace('?id','?recipientId').replace('contract-signature','c').replace('signatures','s9').replace('consider','c9').replace('secretary','s8').replace('coordinates','c8');
 
     this.dashboardService.updateViewNotification(id).subscribe(data => {
-      
     });
   }
 
@@ -212,30 +214,31 @@ export class DashboardComponent implements OnInit {
       });
     }
     this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
-    this.dashboardService.countContractCreate(this.isOrg, this.organization_id, this.filter_from_date, this.filter_to_date).subscribe(data => {
-      let newData = Object.assign( {}, data)
-      newData.isOrg = this.isOrg;
-      newData.organization_id = this.organization_id;
-      newData.from_date = this.filter_from_date;
-      newData.to_date = this.filter_to_date;
-      
-      this.totalCreate = newData.total_process + newData.total_signed + newData.total_reject + newData.total_cancel + newData.total_expires;
 
-      let numContractHeight = document.getElementById('num-contract')?.offsetHeight || 0;
-      let numContractBodyHeight = document.getElementById('num-contract-body')?.offsetHeight || 0;
-      let notiHeight = document.getElementById('noti')?.offsetHeight || 450;
-      
-      
-      
-      this.chartHeight = numContractHeight + notiHeight + numContractBodyHeight - 37;
-      
-
-
-      if(localStorage.getItem('lang') == 'vi' || sessionStorage.getItem('lang') == 'vi')
-        this.createChart("Đang xử lý","Hoàn thành","Từ chối","Huỷ bỏ", "Quá hạn", "Số lượng", newData);
-      else if(localStorage.getItem('lang') == 'en' || sessionStorage.getItem('lang') == 'en')
-        this.createChart("Processing","Complete","Reject","Cancel","Out of date", "Number", newData);     
-    });
+    console.log("is ", this.isOrg);
+    if(this.isOrg == 'on' && !this.isQLHD_03 && !this.isQLHD_04) {
+    } else {
+      this.dashboardService.countContractCreate(this.isOrg, this.organization_id, this.filter_from_date, this.filter_to_date).subscribe(data => {
+        let newData = Object.assign( {}, data)
+        newData.isOrg = this.isOrg;
+        newData.organization_id = this.organization_id;
+        newData.from_date = this.filter_from_date;
+        newData.to_date = this.filter_to_date;
+        
+        this.totalCreate = newData.total_process + newData.total_signed + newData.total_reject + newData.total_cancel + newData.total_expires;
+  
+        let numContractHeight = document.getElementById('num-contract')?.offsetHeight || 0;
+        let numContractBodyHeight = document.getElementById('num-contract-body')?.offsetHeight || 0;
+        let notiHeight = document.getElementById('noti')?.offsetHeight || 450;
+        
+        this.chartHeight = numContractHeight + notiHeight + numContractBodyHeight - 37;
+        
+        if(localStorage.getItem('lang') == 'vi' || sessionStorage.getItem('lang') == 'vi')
+          this.createChart("Đang xử lý","Hoàn thành","Từ chối","Huỷ bỏ", "Quá hạn", "Số lượng", newData);
+        else if(localStorage.getItem('lang') == 'en' || sessionStorage.getItem('lang') == 'en')
+          this.createChart("Processing","Complete","Reject","Cancel","Out of date", "Number", newData);     
+      });
+    }
   }
 
   createChart(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string,so_luong: string, data: any) {

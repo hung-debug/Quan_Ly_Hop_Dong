@@ -57,21 +57,18 @@ export class FilterListDialogComponent implements OnInit {
     });
 
     let userId = this.userService.getAuthCurrentUser().id;
-        this.userService.getUserById(userId).subscribe(
+    this.userService.getUserById(userId).subscribe(
+      data => {
+        //lay id role
+        this.roleService.getRoleById(data?.role_id).subscribe(
           data => {
-            //lay id role
-            this.roleService.getRoleById(data?.role_id).subscribe(
-              data => {
-                let listRole: any[];
-                listRole = data.permissions;
-                this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');        
-                console.log("qlhd 03 ", this.isQLHD_03);
-              }, error => {
-              }
-            );
-          }, error => {
-          }
-        )
+            let listRole: any[];
+            listRole = data.permissions;
+            this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');        
+        }, error => {
+        });
+    }, error => {
+    })
 
     this.unitService.getUnitList('', '').subscribe(data => {
       if(this.data.filter_is_org_me_and_children){

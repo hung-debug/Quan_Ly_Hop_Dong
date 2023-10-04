@@ -751,6 +751,7 @@
   "add.contract.in.folder.success":"Thêm hợp đồng vào thư mục thành công",
   "no.choose.contract":"Bạn chưa chọn hợp đồng nào",
   "name.folder.not.special.char":"Tên thư mục không được chứa ký tự đặc biệt",
-  "contracts.existed.folder":"Hợp đồng đã tồn tại trong thư mục"
+  "contracts.existed.folder":"Hợp đồng đã tồn tại trong thư mục",
+  "list.org.not.permission":"Danh sách hợp đồng của tổ chức chưa được phân quyền"
 
 }

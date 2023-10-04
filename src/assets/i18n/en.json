@@ -738,6 +738,6 @@
   "download.success": "Downloaded successfully",
   "contract.group": "Contract group",
   "error.contract-type.required":"Contract type cannot be left blank",
-  "contracts.existed.folder":"The contracts existed in folder"
-
+  "contracts.existed.folder":"The contracts existed in folder",
+  "list.org.not.permission":"List of contracts of organizations that have not been decentralized"
 }
