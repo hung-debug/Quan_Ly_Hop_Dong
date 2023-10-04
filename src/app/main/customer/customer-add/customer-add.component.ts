@@ -458,13 +458,21 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
   }
 
   changeTypeSign(d: any,index: any,id?: any,role?: any) {
-    
-    
-    if (d.login_by == 'phone' || d.login_by == 'email') {
+    if(d.login_by == 'phone') {
+      d.signType = d.signType.filter((p: any) => ![2].includes(p.id));
+      d.emailTemp = d.email;
+      d.email = d.phone;
+    }
+
+    console.log("email temp ", d.emailTemp);
+
+    if(d.login_by == 'email' && d.emailTemp) {
+      d.email = d.emailTemp;
+      d.phone = '';
+    } else if(d.login_by == 'email') {
       d.email = '';
       d.phone = '';
     }
-
 
     if(role == 'sign_partner') {
         if (d.login_by == 'phone') {
