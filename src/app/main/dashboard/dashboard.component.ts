@@ -9,6 +9,7 @@ import {UserService} from 'src/app/service/user.service';
 import {Router} from '@angular/router';
 import {UnitService} from 'src/app/service/unit.service';
 import {DatePipe} from '@angular/common';
+import { RoleService } from 'src/app/service/role.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -49,6 +50,7 @@ export class DashboardComponent implements OnInit {
   organization_id: any = "";
 
   selectedNodeOrganization: any;
+  isQLHD_03: boolean | undefined;
 
   constructor(
     private appService: AppService,
@@ -58,7 +60,8 @@ export class DashboardComponent implements OnInit {
     private unitService: UnitService,
     private router: Router,
     public datepipe: DatePipe,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private roleService: RoleService
   ) {
     this.stateOptions = [
       {label: "my.contract", value: 'off'},
@@ -78,6 +81,20 @@ export class DashboardComponent implements OnInit {
     } else if(localStorage.getItem('lang') == 'en') {
       this.lang = 'en';
     }
+
+    let userId = this.userService.getAuthCurrentUser().id;
+    this.userService.getUserById(userId).subscribe(
+      data => {
+        //lay id role
+        this.roleService.getRoleById(data?.role_id).subscribe(
+          data => {
+            let listRole: any[];
+            listRole = data.permissions;
+            this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');        
+        }, error => {
+        });
+    }, error => {
+    })
 
     this.unitService.getUnitList('', '').subscribe(data => {
       if(localStorage.getItem('lang') == 'vi')
@@ -109,9 +126,7 @@ export class DashboardComponent implements OnInit {
       )
 
       this.orgList = this.orgListTmp;
-      
       this.convertData();
-      
     });
   }
 

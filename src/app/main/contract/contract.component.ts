@@ -715,7 +715,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
       title = "TÌM KIẾM HỢP ĐỒNG";
     }
 
-
     const data = {
       title: title,
       filter_type: this.filter_type,
