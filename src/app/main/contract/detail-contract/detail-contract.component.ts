@@ -49,6 +49,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   thePDF: any = null;
   pageNumber = 1;
   canvasWidth = 0;
+  canvasHeight = 0;
   arrPage: any = [];
   objDrag: any = {};
   scale: any;
@@ -152,7 +153,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   signBefore: boolean = false;
   folderId: any;
   folderName: any;
-  defaultValue: string = "100%";
+  defaultValue: number = 100;
 
   constructor(
     private contractService: ContractService,
@@ -597,18 +598,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     };
   }
 
-  // pdfSrc = 'url_to_your_pdf.pdf'; // Thay thế bằng URL thực sự của tệp PDF
-  pdfZoom = 1.0; // Zoom mặc định
-
-  zoomIn() {
-    this.pdfZoom += 0.1; // Tăng tỷ lệ zoom
-  }
-
-  zoomOut() {
-    this.pdfZoom -= 0.1; // Giảm tỷ lệ zoom
-  }
-
-
   // view pdf qua canvas
   async getPage() {
     // @ts-ignore
@@ -620,7 +609,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       .getDocument(this.pdfSrc)
       .promise.then((pdf: any) => {
         this.thePDF = pdf;
-        console.log("this.pdf",this.pdfSrc);
 
         this.pageNumber = pdf.numPages || pdf.pdfInfo.numPages;
         this.removePage();
@@ -712,6 +700,51 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     }
   }
 
+  updateCanvasSize() {
+    // @ts-ignore
+    // const pdfjs = await import('pdfjs-dist/build/pdf');
+    // @ts-ignore
+    // const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
+    // pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+    let canvas = document.createElement('canvas');
+    canvas.className = 'dropzone';
+    // canvas.id = 'canvas-step3-' + page;
+    const canvasList = document.querySelectorAll('.dropzone');
+    canvasList.forEach((canvas: any) => {
+      canvas.style.width = this.canvasWidth * this.scale + 'px';
+      console.log("canvas.style.width",canvas.style.width);
+      canvas.style.height = this.canvasHeight * this.scale + 'px';
+      console.log("anvas.style.height",canvas.style.height);
+    });
+  }
+
+  changeScale(values: any){
+    switch (values){
+      case "-":
+        if(this.scale > 0.25){
+          this.scale = this.scale - 0.25;
+          this.defaultValue = this.scale * 100
+          this.getPage()
+
+        }else{
+          break;
+        }
+        break;
+      case "+":
+        if(this.scale < 5){
+          this.scale = this.scale + 0.25;
+          this.defaultValue = this.scale * 100
+          this.getPage()
+
+        }else{
+          break;
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
     //This gives us the page's dimensions at full scale
@@ -719,13 +752,11 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     this.thePDF.getPage(pageNumber).then((page) => {
       // let viewport = page.getViewport(this.scale);
       let viewport = page.getViewport({ scale: this.scale });
-      console.log("getViewport",viewport);
 
-
-      console.log("rotate ",viewport.rotation);
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;
+      this.canvasHeight = viewport.height;
       canvas.height = viewport.height;
       canvas.width = viewport.width;
       let _objPage = this.objPdfProperties.pages.filter(

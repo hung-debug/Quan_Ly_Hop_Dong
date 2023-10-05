@@ -69,18 +69,10 @@
   <!--  width: 74.7%-->
   <div (scroll)="scroll($event)" id="pdf-full" *ngIf="!this.mobile" class="col-md-9 sample-contract__file viewer-pdf isDrag"
        style="background-color: #F2F2F2; position: relative;">
-       <div style="width: 100%;">
-        <img src="../../assets/img/icons8-plus.svg" style="margin-bottom:3px" (click)="zoomIn();" />
-        <!-- <button (click)="zoomIn()">+</button> -->
-        <input class="input-web" type="text" style="width: 50px;" [value]="defaultValue">
-        <img src="../../assets/img/minus-svgrepo-com.svg" style="margin-bottom:3px; height: 25px; width: 30px;" (click)="zoomOut();" />
-        <!-- <button (click)="zoomOut()">-</button> -->
-        <!-- <pdf-viewer
-          [src]="this.pdfSrc"
-          [render-text]="true"
-          [zoom]="pdfZoom"
-          style="display: block;"
-        ></pdf-viewer> -->
+       <div style="width: 100%; position: fixed; z-index: 1000; left: 870px;">
+        <img src="../../assets/img/plus.png" style="margin-bottom:3px;height: 30px; width: 30px;" (click)="changeScale('+')" />&nbsp;
+        <input class="input-web" type="text" style="width: 50px;height: 30px" [value]="defaultValue + '%'" disabled>&nbsp;
+        <img src="../../assets/img/minus.png" style="margin-bottom:3px; height: 30px; width: 30px;" (click)="changeScale('-')" />
       </div>
     <div id="pdf-viewer-step-3">
     </div>
