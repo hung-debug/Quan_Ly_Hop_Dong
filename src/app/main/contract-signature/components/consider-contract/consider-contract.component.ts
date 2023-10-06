@@ -50,6 +50,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DowloadPluginService } from 'src/app/service/dowload-plugin.service';
 import { DetectCoordinateService } from 'src/app/service/detect-coordinate.service';
 import { TimeService } from 'src/app/service/time.service';
+import { vgca_sign_issued } from 'src/assets/plugins/vgcaplugin';
 
 @Component({
   selector: 'app-consider-contract',
@@ -1382,7 +1383,7 @@ export class ConsiderContractComponent
             this.confirmSignature == 2) ||
           (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
         ) &&
-        this.ArrRecipientsNew.length > 0
+        this.ArrRecipientsNew.length > 0 
       ) {
         let swalfire = null;
 
@@ -1403,6 +1404,10 @@ export class ConsiderContractComponent
 
             let isInRecipient = false;
             const participants = this.datas?.is_data_contract?.participants;
+            if ((this.recipient.sign_type.some((item: any) => item.id == 7 ))) {
+              this.signBCY(this.pdfSrc, this.recipient.fields[0].id)
+              return
+            }
 
             for (const participant of participants) {
               for (const card of participant.recipients) {
@@ -1533,7 +1538,7 @@ export class ConsiderContractComponent
                           [2, 3, 4].includes(this.datas.roleContractReceived)
                         ) {
                           this.signContractSubmit();
-                        }
+                        } 
                       }
                     },
                     (error: HttpErrorResponse) => {
@@ -1710,7 +1715,7 @@ export class ConsiderContractComponent
   }
 
   getSwalFire(code: string) {
-    if (code == 'digital' && !this.mobile) {
+    if (code == 'digital' && !this.mobile && (this.recipient.sign_type.some((item: any) => item.id !== 7 ))) {
       return Swal.fire({
         title: this.getTextAlertConfirm(),
         icon: 'warning',
@@ -1942,7 +1947,6 @@ export class ConsiderContractComponent
                 return false;
               }
             } else if (this.usbTokenVersion == 1) {
-              console.log('signDigital',signDigital);
               const dataSignMobi: any =
                 await this.contractService.postSignDigitalMobi(
                   signDigital,
@@ -4196,5 +4200,65 @@ export class ConsiderContractComponent
   contractNoValueSign: string;
   contractNoValueChange($event: any) {
     this.contractNoValueSign = $event;
+  }
+
+  signBCY(pdfContractPath: any, fieldId: any){
+    let params = {
+      FileUploadHandler: `https://econtractdev.mobifone.ai/service/api/v1/processes/digital-sign-bcy?field_id=${fieldId}`,
+      SessionId: "",
+      FileName: pdfContractPath,
+      DocNumber: "",
+      IssuedDate: new Date()
+    }
+    return new Promise((resolve: any) => {
+      vgca_sign_issued(JSON.stringify(params), (res: any) => {
+        let response = JSON.parse(res)
+        if (response.Status == 0) {
+          let data: any = []
+          data[0] = {
+            "processAt": new Date()
+          };
+          this.contractService.updateInfoContractConsider(data, this.recipientId).subscribe(
+            (res) => {
+              this.router
+              .navigateByUrl('/', { skipLocationChange: true })
+              .then(() => {
+                this.router.navigate(
+                  ['/main/form-contract/detail/' + this.idContract],
+                  {
+                    queryParams: {
+                      recipientId: this.recipientId,
+                      consider: true,
+                      action: 'sign',
+                    },
+                    skipLocationChange: true,
+                  }
+                );
+              });
+    
+              setTimeout(() => {
+                if (!this.mobile) {
+                  this.toastService.showSuccessHTMLWithTimeout(
+                    [3, 4].includes(this.datas.roleContractReceived)
+                      ? 'Ký hợp đồng thành công'
+                      : 'Xem xét hợp đồng thành công',
+                    '',
+                    3000
+                  );
+                } else {
+                  if ([3, 4].includes(this.datas.roleContractReceived)) {
+                    alert('Ký hợp đồng thành công');
+                  } else {
+                    alert('Xem xét hợp đồng thành công');
+                  }
+                }
+    
+              }, 1000);
+            }
+          )
+        }
+        resolve()
+      })
+    })
   }
 }
