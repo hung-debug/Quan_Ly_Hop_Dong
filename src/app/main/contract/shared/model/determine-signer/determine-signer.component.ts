@@ -532,9 +532,13 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeTypeSign(d: any,index: any,id?: any,role?: any) {
+    // if (d.login_by == 'phone' || d.login_by == 'email') {
+    //   d.email = '';
+    //   d.phone = '';
+    // }
+
     if(d.login_by == 'phone') {
-      d.sign_type = d.sign_type.filter((p: any) => ![2].includes(p.id));
-      console.log("email ", d.email);
+      d.sign_type = d.sign_type.filter((p: any) => ![2,7].includes(p.id));
       d.emailTemp = d.email;
       d.email = d.phone;
     }
@@ -547,20 +551,20 @@ export class DetermineSignerComponent implements OnInit {
 
     if(role == 'sign_partner') {
         if (d.login_by == 'phone') {
-          d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,2,5].includes(p.id));
+          d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,2,5,7].includes(p.id));
         } else {
 
           d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,5].includes(p.id));
         }
     } else if(role == 'signer') {
       if (d.login_by == 'phone') {
-        this.isListSignNotPerson[index] = this.signTypeList.filter((p) => ![1, 2, 5].includes(p.id));
+        this.isListSignNotPerson[index] = this.signTypeList.filter((p) => ![1, 2, 5, 7].includes(p.id));
       } else {
         this.isListSignNotPerson[index] = this.signTypeList.filter((p) => ![1,5].includes(p.id));
       }
     } else if(role == 'personal') {
       if (d.login_by == 'phone') {
-        d.isListSignPersonal = this.signTypeList.filter((p) => ![2].includes(p.id));
+        d.isListSignPersonal = this.signTypeList.filter((p) => ![2,7].includes(p.id));
       } else {
         d.isListSignPersonal = this.signTypeList;
       }
@@ -689,7 +693,7 @@ export class DetermineSignerComponent implements OnInit {
       } else if (dataArr[i].sign_type.length > 0 && dataArr[i].role != 2) {
         let is_duplicate = [];
         //check chu ky so
-        is_duplicate = dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
+        is_duplicate = dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 7);
         if (is_duplicate.length > 1) {
           this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!")
           count++;
@@ -824,7 +828,7 @@ export class DetermineSignerComponent implements OnInit {
             } else if (isParterSort[k].sign_type.length > 0 && [3, 4].includes(isParterSort[k].role)) {
               let isPartnerOriganzationDuplicate = [];
               //check chu ky so
-              isPartnerOriganzationDuplicate = isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
+              isPartnerOriganzationDuplicate = isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 7);
               if (isPartnerOriganzationDuplicate.length > 1) {
                 this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số " + this.getNameObjectValid(isParterSort[k].role) + "của đối tác!")
                 count++;
@@ -954,7 +958,7 @@ export class DetermineSignerComponent implements OnInit {
             } else if (isParterSort[k].sign_type.length > 0 && [3, 4].includes(isParterSort[k].role) && isParterSort[k].role == 3) {
               let isPartnerCaNhanDuplicate = [];
               //check chu ky so
-              isPartnerCaNhanDuplicate = isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
+              isPartnerCaNhanDuplicate = isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 7);
               if (isPartnerCaNhanDuplicate.length > 1) {
                 this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác cá nhân!")
                 count++;
