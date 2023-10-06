@@ -32,6 +32,8 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
 
   ngOnInit(): void {
     this.expirationSign = moment(this.data.expirationSign).toDate();
+    const dialog = document.getElementById("edit-expiration-conainer");
+    console.log(Number(dialog?.offsetHeight) + Number(dialog?.offsetTop));
   }
 
   ngAfterViewInit(): void {
@@ -49,7 +51,8 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
       this.inputElement.showOnFocus = true;
 
       const inputElement = this.inputElement.inputfieldViewChild.nativeElement;
-      const collection = document.getElementsByClassName("p-datepicker");
+      let collection = document.getElementsByClassName("p-datepicker");
+
       const element = collection[0] as HTMLElement; // Cast to HTMLElement
   
       if(this.top.length > 0) {
@@ -69,6 +72,8 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
     } else {
       this.inputElement.showOnFocus = false;
     }
+
+    console.log("in ", this.inputElement.showOnFocus);
   }
 
   async save() {

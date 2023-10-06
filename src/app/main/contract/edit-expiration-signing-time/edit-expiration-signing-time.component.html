@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" id="edit-expiration-conainer">
     <div style="text-align: center; font-weight: bold">
       <h3 style="color: #106DB6; font-family: inherit;">{{this.data.title.toUpperCase()}}</h3>
     </div>
@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="label text-color">{{'expiration-date' | translate}}<span class="required-title">*</span></div>
-                <div id="calendarContainer" #calendarContainer (click)="onContainerClick($event)">
+                <div id="calendarContainer" #calendarContainer (click)="onContainerClick($event)" (click)="onContainerClick($event)">
                     <p-calendar #calendar appendTo="body" #inputElement [(ngModel)]="expirationSign" [showIcon]="true" [readonlyInput]="true"
                      dateFormat="dd/mm/yy" aria-placeholder="{{'choose.expire.date'| translate}}"
                      ></p-calendar>

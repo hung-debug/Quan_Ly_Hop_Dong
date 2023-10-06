@@ -336,9 +336,6 @@ export class ForwardContractComponent implements OnInit {
         })
 
         
-
-        
-
         if (coutError == 0) {
           //is_replace: false = giữ lại uỷ quyền
           const dataAuthorize = {
