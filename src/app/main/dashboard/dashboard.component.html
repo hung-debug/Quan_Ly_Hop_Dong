@@ -92,22 +92,10 @@
             <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy" (onSelect)="searchCountCreate()"></p-calendar>
           </div>
           
-          <div style="padding-top: 10px;" *ngIf="isOrg=='on'">
+          <div style="padding-top: 10px;" *ngIf="isOrg=='on' && this.isQLHD_03">
               <p-treeSelect [(ngModel)]="selectedNodeOrganization" [options]="list" placeholder="{{'all' | translate}}" [filter]="true" filterBy="name"  [droppable]="true" (onNodeSelect)="search()"></p-treeSelect>
           </div>
         </div>
-        <!-- <div class="row" style="margin: 0 1%">
-          <div class="col-md-6">
-          </div>
-          <div class="col-md-6" style="display: flex; justify-content: flex-end; flex-wrap: wrap; padding: 12px">
-            <div class="row" style="width: 100%; text-align: right;">
-              <span>SL hợp đồng đã sử dụng: 10000</span>
-            </div>
-            <div class="row" style="width: 100%; text-align: right">
-              <span>SL hợp đồng đã mua: 10000</span>
-            </div>
-          </div>
-        </div> -->
         
         <div class="row">
           <div class="col-md-12">
@@ -118,13 +106,16 @@
                 <div style="color: #94A7C6;">{{'no.data' | translate}}</div>
               </div>
             </div>
-            <div *ngIf="totalCreate > 0" >
+            <div *ngIf="totalCreate > 0  && (this.isOrg == 'off' || (this.isOrg == 'on' && (this.isQLHD_03 || this.isQLHD_04)))" >
               <div [chart]="chartCreated"></div>
               <div style="text-align: center;">{{'chart.contract.created' | translate}}</div>
             </div>
+
+            <div *ngIf="totalCreate > 0  && (this.isOrg == 'on' && !this.isQLHD_03 && !this.isQLHD_04)">
+              {{'list.org.not.permission' | translate}}
+            </div>
           </div>
         </div>
-
       </div>
     </div>
     <div class="col-md-6">
@@ -201,10 +192,7 @@
           </div>
         </div>
         <div class="second-col">
-
         </div>
-
-
       </div>
     </div>
   </div>

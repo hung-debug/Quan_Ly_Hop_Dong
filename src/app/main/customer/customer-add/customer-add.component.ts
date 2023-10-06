@@ -63,7 +63,6 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
         if(this.action == 'edit'){
           this.customerService.getCustomerList().subscribe((res: any) => {
             this.orgCustomer = res.filter((item: any) => {
-
                  return item.id.toString() === this.id;
              })[0]})
         }
@@ -462,19 +461,27 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
   }
 
   changeTypeSign(d: any,index: any,id?: any,role?: any) {
-
-
-    if (d.login_by == 'phone' || d.login_by == 'email') {
-      d.email = '';
-      d.phone = '';
+    if(d.login_by == 'phone') {
+      d.signType = d.signType.filter((p: any) => ![2].includes(p.id));
+      d.emailTemp = d.email;
+      d.phone = d.phoneTemp;
+      d.email = d.phone;
     }
 
+    if(d.login_by == 'email' && d.emailTemp) {
+      d.email = d.emailTemp;
+      d.phoneTemp = d.phone;
+      d.phone = '';
+    } else if(d.login_by == 'email') {
+      d.email = '';
+      d.phoneTemp = d.phone;
+      d.phone = '';
+    }
 
     if(role == 'sign_partner') {
         if (d.login_by == 'phone') {
           this.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,2,5].includes(p.id));
         } else {
-
           this.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,5].includes(p.id));
         }
     } else if(role == 'signer') {

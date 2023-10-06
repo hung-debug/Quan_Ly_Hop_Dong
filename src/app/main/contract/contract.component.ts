@@ -241,7 +241,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   dataReleaseChecked: any[] = [];
   toggleOneRelease(item: any){
-    
     let data = {
       id: item.participants[0]?.contract_id,
       selectedId: item.id
@@ -258,8 +257,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   dataChecked: any[] = [];
   toggleOneDownload(item: any){
-    
-    
     let data = {
       id: item.participants[0]?.contract_id,
       selectedId: item.id
@@ -276,8 +273,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
   toggleReleaseAll(checkedAll: boolean){
     this.dataReleaseChecked = [];
     if(checkedAll){
-      
-      
       for(let i = 0; i < this.contracts.length; i++){
         this.contracts[i].checked = false;
       }
@@ -297,8 +292,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.dataChecked = [];
     
     if(checkedAll){
-      
-      
       for(let i = 0; i < this.contracts.length; i++){
         this.contracts[i].checked = false;
       }
@@ -366,14 +359,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     this.typeDisplay = 'downloadMany';
     this.roleMess = "";
-    if (this.isOrg == 'off' && !this.isQLHD_05) {
-      this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
-
-    } else if (this.isOrg == 'on' && !this.isQLHD_04) {
-      this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
+    if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
+      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền";
     }
-    if (!this.roleMess) {
-      
+
+    if (!this.roleMess) {  
       let isOrg = this.isOrg;
 
       if(!this.isQLHD_03) {
@@ -402,7 +392,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
           this.contracts[i].checked = false;
         }
       }
-  
         this.spinner.hide();
       },
         (error) => {
@@ -421,12 +410,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     this.typeDisplay = 'release';
     this.roleMess = "";
-    if (this.isOrg == 'off' && !this.isQLHD_05) {
-      this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
 
-    } else if (this.isOrg == 'on' && !this.isQLHD_04) {
-      this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
+    if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
+      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền";
     }
+
     if (!this.roleMess) {
       
       let isOrg = this.isOrg;
@@ -501,14 +489,12 @@ export class ContractComponent implements OnInit, AfterViewInit {
       if(event='contract-signature')
       this.p = 1;
     })
-    if (this.isOrg == 'off' && !this.isQLHD_05) {
-      this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
 
-    } else if (this.isOrg == 'on' && !this.isQLHD_04) {
-      this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
+    if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
+      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền";
     }
+
     if (!this.roleMess) {
-      
       let isOrg = this.isOrg;
 
       if(!this.isQLHD_03) {
@@ -712,7 +698,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   searchContract() {
-
     let title: any = "";
 
     if (sessionStorage.getItem('lang') == 'en') {
@@ -720,7 +705,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
     } else if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       title = "TÌM KIẾM HỢP ĐỒNG";
     }
-
 
     const data = {
       title: title,
@@ -824,7 +808,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      
       let is_data = result
     })
   }
@@ -853,14 +836,12 @@ export class ContractComponent implements OnInit, AfterViewInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      
       let is_data = result
     })
   }
 
   downloadContract(id: any) {
     this.contractService.getFileZipContract(id).subscribe((data) => {
-      //
       this.uploadService.downloadFile(data.path).subscribe((response: any) => {
         let url = window.URL.createObjectURL(response);
         let a = document.createElement('a');

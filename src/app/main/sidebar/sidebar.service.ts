@@ -385,11 +385,11 @@ export class SidebarService {
           active: false,
           href: '/main/contract/create/complete',
         },
-        // {
-        //   title: 'contract.status.liquidated',
-        //   active: false,
-        //   href: '/main/contract/create/liquidated',
-        // }
+        {
+          title: 'contract.status.liquidated',
+          active: false,
+          href: '/main/contract/create/liquidated',
+        }
       );
 
       if (currentUserC.customer.info.organizationChange == 1) {
