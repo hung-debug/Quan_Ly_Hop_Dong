@@ -49,6 +49,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   thePDF: any = null;
   pageNumber = 1;
   canvasWidth = 0;
+  canvasHeight = 0;
   arrPage: any = [];
   objDrag: any = {};
   scale: any;
@@ -152,6 +153,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   signBefore: boolean = false;
   folderId: any;
   folderName: any;
+  defaultValue: number = 100;
 
   constructor(
     private contractService: ContractService,
@@ -403,7 +405,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           )
           .subscribe();
 
-        
+
 
         this.allFileAttachment = this.datas.i_data_file_contract.filter(
           (f: any) => f.type == 3
@@ -445,7 +447,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           this.contractService.getDataFormatContractUserSign();
 
         this.datas.contract_user_sign.forEach((element: any) => {
-          // 
+          //
           if (element.sign_unit == 'chu_ky_so') {
             Array.prototype.push.apply(
               element.sign_config,
@@ -698,6 +700,51 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     }
   }
 
+  updateCanvasSize() {
+    // @ts-ignore
+    // const pdfjs = await import('pdfjs-dist/build/pdf');
+    // @ts-ignore
+    // const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
+    // pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+    let canvas = document.createElement('canvas');
+    canvas.className = 'dropzone';
+    // canvas.id = 'canvas-step3-' + page;
+    const canvasList = document.querySelectorAll('.dropzone');
+    canvasList.forEach((canvas: any) => {
+      canvas.style.width = this.canvasWidth * this.scale + 'px';
+      console.log("canvas.style.width",canvas.style.width);
+      canvas.style.height = this.canvasHeight * this.scale + 'px';
+      console.log("anvas.style.height",canvas.style.height);
+    });
+  }
+
+  changeScale(values: any){
+    switch (values){
+      case "-":
+        if(this.scale > 0.25){
+          this.scale = this.scale - 0.25;
+          this.defaultValue = this.scale * 100
+          this.getPage()
+
+        }else{
+          break;
+        }
+        break;
+      case "+":
+        if(this.scale < 5){
+          this.scale = this.scale + 0.25;
+          this.defaultValue = this.scale * 100
+          this.getPage()
+
+        }else{
+          break;
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
     //This gives us the page's dimensions at full scale
@@ -706,10 +753,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       // let viewport = page.getViewport(this.scale);
       let viewport = page.getViewport({ scale: this.scale });
 
-      console.log("rotate ",viewport.rotation);
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;
+      this.canvasHeight = viewport.height;
       canvas.height = viewport.height;
       canvas.width = viewport.width;
       let _objPage = this.objPdfProperties.pages.filter(
@@ -838,7 +885,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         this.objSignInfo.offsetHeight = parseInt(d.offsetHeight);
         // this.signCurent.offsetWidth = d.offsetWidth;
         // this.signCurent.offsetHeight = d.offsetHeight;
-        // 
+        //
 
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
@@ -886,7 +933,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   processHandleContract() {
     // alert('Luồng xử lý hợp đồng!');
     const data = this.datas;
-    
+
     // @ts-ignore
     const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
       width: '1000px',
@@ -895,7 +942,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+
       // this.reLoadData();
       let is_data = result;
     });
@@ -920,7 +967,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   // edit location doi tuong ky
   changePositionSign(e: any, locationChange: any, property: any) {
-    // 
+    //
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter(
@@ -964,8 +1011,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
             );
           }
         }
-        // 
-        // 
+        //
+        //
       }
     }
   }
@@ -1118,7 +1165,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
             this.router.navigate(['/login']);
             this.contractService.deleteToken().subscribe();
           }
-        
+
         }
       }
     }
@@ -1167,7 +1214,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     dialogConfig.data = data;
     // const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
     // dialogRef.afterClosed().subscribe((result: any) => {
-    //   
+    //
     //   let is_data = result
     // })
   }
@@ -1184,7 +1231,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     dialogConfig.data = data;
     // const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
     // dialogRef.afterClosed().subscribe((result: any) => {
-    //   
+    //
     //   let is_data = result
     // })
   }
@@ -1377,13 +1424,13 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   t() {
-    
+
   }
 
   downloadContract(id: any) {
     if (this.isDataContract.status == 30) {
       this.contractService.getFileZipContract(id).subscribe((data) => {
-          
+
           this.uploadService
             .downloadFile(data.path)
             .subscribe((response: any) => {
@@ -1635,7 +1682,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       {
         queryParams: {
           'page': 1,
-          'filter_type': '', 
+          'filter_type': '',
           'filter_contract_no':'',
           'filter_from_date': '',
           'filter_to_date': '',
@@ -1654,7 +1701,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       {
         queryParams: {
           'page': 1,
-          'filter_type': '', 
+          'filter_type': '',
           'filter_contract_no':'',
           'filter_from_date': '',
           'filter_to_date': '',
