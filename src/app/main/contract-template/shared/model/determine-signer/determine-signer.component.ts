@@ -16,7 +16,6 @@ import { Router } from "@angular/router";
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ContractService } from 'src/app/service/contract.service';
-import { log } from 'console';
 import { UnitService } from 'src/app/service/unit.service';
 import {UserService} from "../../../../../service/user.service";
 
@@ -152,13 +151,13 @@ export class DetermineSignerComponent implements OnInit {
     }
 
     if(d.login_by == 'phone') {
-      d.sign_type = d.sign_type.filter((p: any) => ![2].includes(p.id));
+      d.sign_type = d.sign_type.filter((p: any) => ![2, 7].includes(p.id));
     }
 
     if(role == 'sign_partner') {
         if (d.login_by == 'phone') {
 
-          d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,2,5].includes(p.id));
+          d.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,2,5,7].includes(p.id));
 
 
         } else {
@@ -167,13 +166,13 @@ export class DetermineSignerComponent implements OnInit {
         }
     } else if(role == 'signer') {
       if (d.login_by == 'phone') {
-        d.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 2, 5].includes(p.id));
+        d.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 2, 5, 7].includes(p.id));
       } else {
         d.isListSignNotPerson = this.signTypeList.filter((p) => ![1,5].includes(p.id));
       }
     } else if(role == 'personal') {
       if (d.login_by == 'phone') {
-        d.isListSignPersonal = this.signTypeList.filter((p) => ![2].includes(p.id));
+        d.isListSignPersonal = this.signTypeList.filter((p) => ![2, 7].includes(p.id));
       } else {
         d.isListSignPersonal = this.signTypeList;
       }

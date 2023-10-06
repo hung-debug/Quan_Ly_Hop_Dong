@@ -272,7 +272,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       }
     }
 
-    console.log("clone ", this.datasForm.is_determine_clone);
 
     this.synchronized1(this.imageSign);
     this.synchronized1(this.digitalSign);
@@ -402,7 +401,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5)) ||
           (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) ||
           (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) ||
-          (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6))) &&
+          (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7))) &&
         ((val.recipient ? (((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email)) : ((
             !val.name ||
             (val.sign_unit == 'text' && !val.recipient_id)) && ((val.email && val.email == data.email) || !val.email)))
@@ -414,13 +413,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5)) ||
       (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)))||
       (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) ||
-        (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6))) &&
+        (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7))) &&
       ((val.recipient ? (((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email) || val.email == data.email) :
       ((!val.name || (val.sign_unit == 'text' && !val.recipient_id)) || ((val.email && val.email == data.email) || !val.email))
       ))
       ));
 
-    console.log("data ", dataContractUserSign);
 
     //
     // }
@@ -447,14 +445,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       })
     }
 
-    console.log("abc ", dataContractUserSign);
     this.datasForm.contract_user_sign.forEach((resForm: any) => {
       if (resForm.sign_config.length > 0 && resForm.sign_unit != 'so_tai_lieu') {
         let arrConfig = [];
         arrConfig = resForm.sign_config.filter((val: any) =>
           !val.recipient_id || dataContractUserSign.some((data) => data.sign_unit == val.sign_unit)
         )
-        console.log("arr config ",arrConfig);
         resForm.sign_config = arrConfig; // set data with object not change data
         resForm.sign_config.forEach((items: any) => {
           items.id = items.id + '1'; // tránh trùng với id cũ, gây ra lỗi
@@ -854,7 +850,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             if (isSignType == 'chu_ky_anh') {
               element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
             } else if (isSignType == 'chu_ky_so') {
-              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6) && element.role != 2);
+              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7) && element.role != 2);
             } else if (isSignType == 'text') {
               element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role == 4);
               // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4)); //disable van thu select text
@@ -881,7 +877,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   getConditionFiledSign(element: any, isSignType: string) {
     if ((element.fields && element.fields.length && element.fields.length > 0) &&
-      (element.sign_type.some((id: number) => id == 1 || id == 5) && isSignType == 'chu_ky_anh') || (element.sign_type.some((id: number) => [2, 3, 4].includes(id)) && isSignType == 'chu_ky_so') || (isSignType == 'text' && (element.sign_type.some((id: number) => id == 2) || element.role == 4) || (isSignType == 'so_tai_lieu' && (element.role != 4 || (this.datasForm.contract_no && element.role == 4))))) {
+      (element.sign_type.some((id: number) => id == 1 || id == 5) && isSignType == 'chu_ky_anh') || (element.sign_type.some((id: number) => [2, 3, 4, 7].includes(id)) && isSignType == 'chu_ky_so') || (isSignType == 'text' && (element.sign_type.some((id: number) => id == 2) || element.role == 4) || (isSignType == 'so_tai_lieu' && (element.role != 4 || (this.datasForm.contract_no && element.role == 4))))) {
       return true;
     } else return false;
   }
@@ -1567,7 +1563,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   isCheckRelease: boolean = false;
   async next(action: string) {
-    console.log("user_sign next ", this.datasForm.contract_user_sign);
     if (action == 'next_step' && !this.validData()) {
       if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
         this.save_draft_infor_form.close_header = false;
@@ -1704,7 +1699,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           }
         }
       } else if (action == 'next_step') {
-        console.log("next step ", this.datasForm.contract_user_sign);
         // let coutError = false;
         this.spinner.show();
         this.datasForm.contract_user_sign.forEach((res: any) => {
@@ -1715,7 +1709,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           })
         })
 
-        console.log("next step 1 ", this.datasForm.contract_user_sign);
 
         if(!this.datasForm.contract_no || !this.datasForm.code) {
           if(this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0]) {
@@ -2087,7 +2080,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         // valid ký kéo thiếu ô ký cho từng loại ký
         for (const element of data_organization) {
           if (element.sign_type.length > 0) {
-            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6) &&
+            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7) &&
             arrSign_organization.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
               error_organization++;
               nameSign_organization.name = element.name;
@@ -2120,7 +2113,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         // valid ký kéo thiếu ô ký cho từng loại ký
         for (const element of data_partner) {
           if (element.sign_type.length > 0) {
-            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6) && arrSign_partner.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
+            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7) && arrSign_partner.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
               countError_partner++;
               nameSign_partner.name = element.name;
               nameSign_partner.sign_type = 'chu_ky_so';
