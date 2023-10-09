@@ -136,13 +136,14 @@
         <tr *ngFor="let data of listDetail.data">
           <td class="row-word">{{data.name}}</td>
           <td class="row-word">{{data.typeName}}</td>
-          <td class="row-word" *ngIf="data.groupId == 1">Khác</td>
+          <td class="row-word" *ngIf="data.groupId == 1 || data.groupId == null">Khác</td>
           <td class="row-word" *ngIf="data.groupId == 2">Công nghệ thông tin</td>
+          <!-- <td class="row-word" *ngIf="data.groupId == ''"></td> -->
           <td class="row-word">{{data.contractNo}}</td>
           <td class="row-word">{{data.code}}</td>
           <td class="row-word">{{this.convertTime(data.createdAt)}}</td>
           <td class="row-word">{{this.convertTime(data.signTime)}}</td>
-          <td class="row-word">{{data.status}}</td>
+          <td class="row-word" *ngIf="data.status == 'SIGNED'">{{"contract.status.complete"| translate}}</td>
           <td class="row-word">{{data.organization}}</td>
           <td class="row-word">{{data.createdBy}}</td>
         </tr>
