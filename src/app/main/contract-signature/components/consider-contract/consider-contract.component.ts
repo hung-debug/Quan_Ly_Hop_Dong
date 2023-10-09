@@ -4210,10 +4210,10 @@ export class ConsiderContractComponent
       DocNumber: "",
       IssuedDate: new Date()
     }
-    return new Promise((resolve: any) => {
+    return new Promise((resolve: any, reject: any) => {
       vgca_sign_issued(JSON.stringify(params), (res: any) => {
         let response = JSON.parse(res)
-        if (response.Status == 0) {
+        if (response.Status == 0 && response.FileServer) {
           let data: any = []
           data[0] = {
             "processAt": new Date()
@@ -4256,8 +4256,10 @@ export class ConsiderContractComponent
               }, 1000);
             }
           )
+          resolve('success')       
+        } else  {
+          reject('false')
         }
-        resolve()
       })
     })
   }
