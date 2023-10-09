@@ -117,6 +117,33 @@ export class ReportService {
     // return this.http.get<any>(url,{headers: headers}).pipe();
   }
 
+  exportDetail(code: string, orgId: number, type:any, params: any, excel: boolean) {
+    this.getCurrentUser();
+    let prefix = this.reportUrl + code + '/' + orgId;
+    let headers = null;
+
+    if(excel) {
+      prefix = prefix + '/export';
+      headers = new HttpHeaders()
+      .append('Content-Type', 'application/x-binary')
+      .append('Authorization', 'Bearer ' + this.token);
+    } else {
+      headers = new HttpHeaders().append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    }
+
+    let url = prefix + '?group-ids=' + type + params;
+    //prefix = api/v1/contracts/rp-by-contract-type/226
+
+    if(excel) {
+      return this.http.get<any>(url, { headers: headers,responseType: 'blob' as 'json'}).pipe();
+    } else {
+      return this.http.get<any>(url,{headers: headers}).pipe();
+    }
+
+    // return this.http.get<any>(url,{headers: headers}).pipe();
+  }
+
   getContractGroup() {
     this.getCurrentUser();
     let headers = null;
