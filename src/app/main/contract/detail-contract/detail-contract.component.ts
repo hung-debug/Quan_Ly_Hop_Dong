@@ -724,7 +724,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         if(this.scale > 0.25){
           this.scale = this.scale - 0.25;
           this.defaultValue = this.scale * 100
-          this.getPage()
+          for (let page = 1; page <= this.pageNumber; page++) {
+            let canvas = document.getElementById('canvas-step3-' + page);
+            this.renderPageZoomInOut(page, canvas);
+          }
 
         }else{
           break;
@@ -734,7 +737,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         if(this.scale < 5){
           this.scale = this.scale + 0.25;
           this.defaultValue = this.scale * 100
-          this.getPage()
+          for (let page = 1; page <= this.pageNumber; page++) {
+            let canvas = document.getElementById('canvas-step3-' + page);
+            this.renderPageZoomInOut(page, canvas);
+          }
 
         }else{
           break;
@@ -782,6 +788,46 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         clearInterval(interval);
       }, 2000);
+
+      if (test) {
+        let paddingPdf =
+          (test.getBoundingClientRect().width - viewport.width) / 2;
+        $('.viewer-pdf').css('padding-left', paddingPdf + 'px');
+        $('.viewer-pdf').css('padding-right', paddingPdf + 'px');
+      }
+      this.activeScroll();
+    });
+  }
+
+  renderPageZoomInOut(pageNumber: any, canvas: any) {
+    //This gives us the page's dimensions at full scale
+    //@ts-ignore
+    this.thePDF.getPage(pageNumber).then((page) => {
+      // let viewport = page.getViewport(this.scale);
+      let viewport = page.getViewport({ scale: this.scale });
+
+      let test = document.querySelector('.viewer-pdf');
+
+      this.canvasWidth = viewport.width;
+      this.canvasHeight = viewport.height;
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+      let _objPage = this.objPdfProperties.pages.filter(
+        (p: any) => p.page_number == pageNumber
+      )[0];
+      if (!_objPage) {
+        this.objPdfProperties.pages.push({
+          page_number: pageNumber,
+          width: parseInt(viewport.width),
+          height: viewport.height,
+        });
+      }
+
+      var renderContext: any = {
+        canvasContext: canvas.getContext('2d'),
+        viewport: viewport,
+      };
+      page.render(renderContext);
 
       if (test) {
         let paddingPdf =
