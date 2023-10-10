@@ -758,7 +758,7 @@
   "contracts.existed.folder":"Hợp đồng đã tồn tại trong thư mục",
   "mobifone.fail":"Bạn không thể đổi mật khẩu với email thuộc mobifone",
   "list.org.not.permission":"Danh sách hợp đồng của tổ chức chưa được phân quyền",
-  "overview.report":"Báo cáo tổng quan eContract - msale",
+  "overview.report":"Báo cáo tổng quan eContract - mSale",
   "detail.report":"Báo cáo chi tiết eContract",
   "contract.create.unit":"Đơn vị tạo hợp đồng"
 }

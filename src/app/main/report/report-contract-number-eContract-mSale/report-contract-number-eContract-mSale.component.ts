@@ -39,7 +39,6 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
   page: number = 0;
   size: number = 5;
   totalRecords: number = 0;
-  totalRecordsDetail: number = 0;
   first: number = 0;
   stateOptions: any[];
   isReport: string = 'off';
