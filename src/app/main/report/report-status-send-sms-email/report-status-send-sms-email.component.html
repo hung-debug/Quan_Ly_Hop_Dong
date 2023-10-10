@@ -42,7 +42,7 @@
         <!-- <span style="color: red"> *</span> -->
       </div>
       <div class="input-line">
-        <p-calendar [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true" selectionMode="range"
+        <p-calendar [readonlyInput]="false" [(ngModel)]="date" [showIcon]="true" selectionMode="range"
         [maxDate]="this.maxSelectableDate"
         (onSelect)="onSelectDateRange(date)"
         (onClose)="onCloseCalendar()"
