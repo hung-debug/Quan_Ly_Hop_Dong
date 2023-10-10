@@ -19,11 +19,10 @@
 
     <!--Ngày hoàn thành hợp đồng-->
     <div class="col-md-2">
-      <div>{{'completed-date' | translate}} <span style="color: red"> *</span></div>
-      <div class="input-line">
-        <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true"
-          dateFormat="dd/mm/yy"></p-calendar>
-      </div>
+        <div>{{'completed-date' | translate}} <span style="color: red"> *</span></div>
+        <div class="input-line">
+            <p-calendar selectionMode="range" [readonlyInput]="false" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
+        </div>
     </div>
 
     <!--Loại hợp đồng-->
@@ -152,14 +151,14 @@
       <!-- new version pagination -->
 
       <ng-template pTemplate="paginatorleft" let-state>
-        <span style="color: white !important;">{{'chart.number' | translate}}: {{(state.totalRecordsDetail <= 0 || state.fisrt
-            <=0) ? 0 : state.first+1}} - {{(state.first+state.rows)> state.totalRecordsDetail ? state.totalRecordsDetail :
-            state.first+state.rows}} / {{state.totalRecordsDetail}}</span>
+        <span style="color: white !important;">{{'chart.number' | translate}}: {{(state.totalRecords <= 0 || state.fisrt
+            <=0) ? 0 : state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords :
+            state.first+state.rows}} / {{state.totalRecords}}</span>
       </ng-template>
       <ng-template pTemplate="paginatorright" let-state>
-        <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{(state.totalRecordsDetail <= 0 ||
-            state.fisrt <=0) ? 0 : state.first+1}} - {{(state.first+state.rows)> state.totalRecordsDetail ? state.totalRecordsDetail
-            : state.first+state.rows}} / {{state.totalRecordsDetail}}</span>
+        <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{(state.totalRecords <= 0 ||
+            state.fisrt <=0) ? 0 : state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords
+            : state.first+state.rows}} / {{state.totalRecords}}</span>
       </ng-template>
     </p-table>
   </div>

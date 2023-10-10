@@ -5,10 +5,10 @@
             <div>{{'organization' | translate}}</div>
             <div class="input-line">
             <p-treeSelect #nameContract
-                [(ngModel)]="selectedNodeOrganization" 
-                [filter]="true" 
-                filterBy="name"  
-                [droppable]="true" 
+                [(ngModel)]="selectedNodeOrganization"
+                [filter]="true"
+                filterBy="name"
+                [droppable]="true"
                 [options]="listOrgCombobox"
                 (onNodeSelect)="changeOrg()"
             >
@@ -20,8 +20,8 @@
         <div class="col-md-2">
             <div>{{ 'create-date.soon' | translate}} <span style="color: red"> *</span></div>
             <div class="input-line">
-                <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"
-                          
+                <p-calendar selectionMode="range" [readonlyInput]="false" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"
+
                 ></p-calendar>
             </div>
         </div>
@@ -30,13 +30,13 @@
         <!-- <div class="col-md-2">
             <div>{{'contract.status' | translate}}</div>
             <div class="input-line">
-                <p-dropdown 
+                <p-dropdown
                     panelStyleClass="font"
                     appendTo="body"
                     optionLabel="name"
-                    optionValue="id" 
-                    placeholder="{{'contract.status.v2' | translate}}" 
-                    [showClear]="true"  
+                    optionValue="id"
+                    placeholder="{{'contract.status.v2' | translate}}"
+                    [showClear]="true"
                     [options]="optionsStatus"
                     [(ngModel)] = "contractStatus"
                 ></p-dropdown>
