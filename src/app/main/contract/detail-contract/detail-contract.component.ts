@@ -724,10 +724,11 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         if(this.scale > 0.25){
           this.scale = this.scale - 0.25;
           this.defaultValue = this.scale * 100
-          for (let page = 1; page <= this.pageNumber; page++) {
-            let canvas = document.getElementById('canvas-step3-' + page);
-            this.renderPageZoomInOut(page, canvas);
-          }
+          // for (let page = 1; page <= this.pageNumber; page++) {
+          //   let canvas = document.getElementById('canvas-step3-' + page);
+          //   this.renderPageZoomInOut(page, canvas);
+          // }
+          this.getPage();
 
         }else{
           break;
@@ -737,11 +738,11 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         if(this.scale < 5){
           this.scale = this.scale + 0.25;
           this.defaultValue = this.scale * 100
-          for (let page = 1; page <= this.pageNumber; page++) {
-            let canvas = document.getElementById('canvas-step3-' + page);
-            this.renderPageZoomInOut(page, canvas);
-          }
-
+          // for (let page = 1; page <= this.pageNumber; page++) {
+          //   let canvas = document.getElementById('canvas-step3-' + page);
+          //   this.renderPageZoomInOut(page, canvas);
+          // }
+          this.getPage();
         }else{
           break;
         }
