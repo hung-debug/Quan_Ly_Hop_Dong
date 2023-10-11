@@ -785,8 +785,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                         element['height'] = '28';
                       }
                     } else {
-                      element['width'] = '140';
-                      element['height'] = '50';
+                      element['width'] = '180';
+                      element['height'] = '66';
                     }
                   }
 
