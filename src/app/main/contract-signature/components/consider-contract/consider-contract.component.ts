@@ -50,10 +50,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { DowloadPluginService } from 'src/app/service/dowload-plugin.service';
 import { DetectCoordinateService } from 'src/app/service/detect-coordinate.service';
 import { TimeService } from 'src/app/service/time.service';
-import { vgca_get_version, vgca_sign_issued } from 'src/assets/plugins/vgcaplugin';
-import { WebSocketSubject, webSocket } from "rxjs/webSocket";
+import { vgca_sign_issued } from 'src/assets/plugins/vgcaplugin';
+import { WebSocketSubject } from "rxjs/webSocket";
 import { WebsocketService } from 'src/app/service/websocket.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-consider-contract',
@@ -201,12 +200,7 @@ export class ConsiderContractComponent
   cmnd: string | null = null;
   cert_id: any;
   dataCardId: any;
-  message: string = 'hello';
-  messages: string[] = [];
-  hasBcyTools: boolean = true
-  isWebSocketConnected = false
   
-  private bcyWebSocket: WebSocketSubject<any>
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -237,16 +231,6 @@ export class ConsiderContractComponent
       localStorage.getItem('currentUser') || ''
     ).customer.type;
 
-
-    this.websocketService.getMessages().subscribe((data: any) => {
-      if (data.event === 'message') {
-        this.messages.push(data.data);
-
-      }
-    }, (err: any) => {
-      this.hasBcyTools = false
-      console.log('has tools? ',this.hasBcyTools);
-    });
   }
 
   pdfSrcMobile: any;
@@ -1426,20 +1410,26 @@ export class ConsiderContractComponent
               this.markImage = false;
             }
 
-            this.websocketService.connect()
-            if ((this.recipient.sign_type.some((item: any) => item.id == 7 ))){
-              if (!this.hasBcyTools) {
-                Swal.fire({
-                  html:
-                    'Vui lòng bật tool ký số hoặc tải ' +
-                    `<a href='/assets/upload/VGCAServices.zip' target='_blank'>Tại đây</a>  và refresh lại web sau khi bật/cài đặt`,
-                  icon: 'warning',
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#b0bec5',
-                  confirmButtonText: 'Xác nhận',
-                });
-                return
-              } 
+            let isConnect = false
+
+            if (this.recipient.sign_type.some((item: any) => item.id == 7 )) {
+              try {
+                isConnect = await this.websocketService.connect()
+              } catch (error) {
+                console.error(error)             
+              }
+              if (!isConnect){
+                  Swal.fire({
+                    html:
+                      'Vui lòng bật tool ký số hoặc tải ' +
+                      `<a href='/assets/upload/VGCAServices.zip' target='_blank'>Tại đây</a> và cài đặt`,
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#b0bec5',
+                    confirmButtonText: 'Xác nhận',
+                  });
+                  return
+              }
             }
             const determineCoordination = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
             let isInRecipient = false;
@@ -4252,9 +4242,6 @@ export class ConsiderContractComponent
       DocNumber: "",
       IssuedDate: new Date()
     }
-    let count = 0 
-    this.sendMessage()
-    this.isWebSocketConnected = this.websocketService.getConnectionStatus()
 
     return new Promise((resolve: any, reject: any) => {
       vgca_sign_issued(JSON.stringify(params), (res: any) => {
@@ -4310,8 +4297,4 @@ export class ConsiderContractComponent
     })
   }
 
-  sendMessage() {
-    this.websocketService.sendMessage(this.message)
-    this.message = '';
-  }
 }

@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError, timer } from 'rxjs';
-import { concatMap, retryWhen } from 'rxjs/operators';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 
 @Injectable({
@@ -8,45 +6,25 @@ import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 })
 export class WebsocketService {
   public socket$: WebSocketSubject<any>;
-  private isConnected = true;
-  private connectionStatus$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private isConnected = false;
   
   constructor() {
-    // Replace 'wss://your-websocket-server-url' with your WebSocket server's URL.
-    // this.socket$ = webSocket('wss://127.0.0.1:8987/GetVersion');
-    this.connect()
-    // console.log('this.socket$',this.socket$);
   }
-
-  connect() {
+  
+  connect(): Promise<boolean> {
     this.socket$ = webSocket('wss://127.0.0.1:8987/GetVersion');
-    this.socket$.subscribe(
-      () => {
-        this.isConnected = true
-        this.getConnectionStatus()
-      },
-      () => {
-        this.isConnected = false
-      }
-    );
-  }
-
-  async sendMessage(message: string): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      this.socket$.next({ event: 'message', data: message });
-      resolve();
-    });
-  }
-
-  getMessages() {
-    return this.socket$.asObservable();
-  }
-
-  getConnectionStatus() {
-    if (!this.isConnected) {
-      this.connect()
-    }
-    return this.isConnected
+    this.isConnected = false
+    return new Promise((resolve, reject) => {
+      this.socket$.subscribe({
+        next: msg => {
+          this.isConnected = true
+          resolve(true)
+        } , // Called whenever there is a message from the server.
+        error: err => reject(false), // Called if at any point WebSocket API signals some kind of error.
+        complete: () => console.log('complete') // Called when connection is closed (for whatever reason).
+      })
+      this.socket$.next({ message: 'get version' })
+    })
   }
   closeConnection(): void {
     if (this.socket$ && !this.socket$.closed) {
