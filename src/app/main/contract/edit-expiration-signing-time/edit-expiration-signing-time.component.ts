@@ -67,11 +67,9 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
         }
         inputElement.click();
         this.isCalendarClick = 0;
+
+        console.log("el ", element);
       }
-
-      element.style.top = this.top[0] + 'px';
-      console.log("element style top ", element?.style.top)
-
     } else {
       this.inputElement.showOnFocus = false;
     }

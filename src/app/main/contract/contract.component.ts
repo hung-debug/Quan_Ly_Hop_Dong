@@ -484,6 +484,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   getContractList() {
     this.pageTotal = 0;
+    this.scrollY = 0;
     this.roleMess = "";
     this.contractService.sidebarContractEvent.subscribe((event: any) => {
       if(event='contract-signature')
