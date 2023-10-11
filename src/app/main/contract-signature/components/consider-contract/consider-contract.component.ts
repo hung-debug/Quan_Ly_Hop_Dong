@@ -1427,18 +1427,20 @@ export class ConsiderContractComponent
             }
 
             this.websocketService.connect()
-            if (!this.hasBcyTools) {
-              Swal.fire({
-                html:
-                  'Vui lòng bật tool ký số hoặc tải ' +
-                  `<a href='/assets/upload/VGCAServices.zip' target='_blank'>Tại đây</a>  và refresh lại web sau khi bật/cài đặt`,
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#b0bec5',
-                confirmButtonText: 'Xác nhận',
-              });
-              return
-            } 
+            if ((this.recipient.sign_type.some((item: any) => item.id == 7 ))){
+              if (!this.hasBcyTools) {
+                Swal.fire({
+                  html:
+                    'Vui lòng bật tool ký số hoặc tải ' +
+                    `<a href='/assets/upload/VGCAServices.zip' target='_blank'>Tại đây</a>  và refresh lại web sau khi bật/cài đặt`,
+                  icon: 'warning',
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#b0bec5',
+                  confirmButtonText: 'Xác nhận',
+                });
+                return
+              } 
+            }
             const determineCoordination = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
             let isInRecipient = false;
             const participants = this.datas?.is_data_contract?.participants;
