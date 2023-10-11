@@ -152,39 +152,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   user: any;
   submit(action: string) {
     this.SaveContract(action);
-
-    // const data = {
-    //   title: 'YÊU CẦU XÁC NHẬN',
-    // };
-    // // @ts-ignore
-    // const dialogRef = this.dialog.open(ConfirmCecaContractComponent, {
-    //   width: '560px',
-    //   backdrop: 'static',
-    //   keyboard: false,
-    //   data,
-    //   autoFocus: false,
-    // });
-    // dialogRef.afterClosed().subscribe((isCeCA: any) => {
-    //   if (isCeCA == 1 || isCeCA == 0) {
-    //     this.spinner.show();
-    //     this.contractService
-    //       .updateContractIsPushCeCA(this.datas.id, isCeCA)
-    //       .subscribe(
-    //         (data) => {
-    //           this.SaveContract(action);
-    //         },
-    //         (error) => {
-    //           this.spinner.hide();
-    //           this.toastService.showErrorHTMLWithTimeout(
-    //             'Lỗi lưu thông tin xác nhận đẩy file hợp đồng lên Bộ Công Thương',
-    //             '',
-    //             3000
-    //           );
-    //         }
-    //       );
-    //     //this.SaveContract(action);
-    //   }
-    // });
   }
 
   async SaveContract(action: string) {
@@ -206,12 +173,14 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
             }
           }
 
+          console.log("el ", element)
           if (element.id_have_data) {
             isHaveFieldId.push(element);
           } else isNotFieldId.push(element);
         });
       });
 
+      console.log("is ", isHaveFieldId);
       this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId, action);
     } else {
       this.data_sample_contract = [];
@@ -364,11 +333,12 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           element.coordinate_x = element.coordinate_x - this.datas.difX;
         }
       })
+
+      console.log("data sign ", dataSignId);
       for (let i = 0; i < dataSignId.length; i++) {
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
 
-        // dataSignId[i].font_size = this.datas.size;
         await this.contractService.getContractSampleEdit(dataSignId[i], id).toPromise().then(
             (data: any) => {
               dataSample_contract.push(data);

@@ -361,6 +361,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let dataPosition: any[] = [];
     let dataNotPosition: any[] = [];
 
+    console.log("clone ", this.datas.is_determine_clone);
+
     this.datas.is_determine_clone.forEach((element: any) => {
       element.recipients.forEach((item: any) => {
         let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient_id == item.id)[0];
@@ -399,12 +401,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     // check data object have contract number (not assign object)
-    let is_obj_contract_number = this.datas.is_data_object_signature.filter((p: any) => !p.recipient_id && !p.recipient && p.type == 4 && this.datas.contract_no)[0];
+    let is_obj_contract_number = this.datas.is_data_object_signature.filter((p: any) => !p.recipient_id && !p.recipient && p.type == 4 && this.datas.contract_no);
+
     if (is_obj_contract_number) {
-      let item = _.cloneDeep(is_obj_contract_number);
-      item.is_type_party = is_obj_contract_number.type;
-      item.sign_unit = 'so_tai_lieu';
-      dataPosition.push(item);
+      for(let i = 0; i < is_obj_contract_number.length; i++) {
+        let item = _.cloneDeep(is_obj_contract_number[i]);
+        item.is_type_party = is_obj_contract_number[i].type;
+        item.sign_unit = 'so_tai_lieu';
+        item.id_have_data = is_obj_contract_number[i].id;
+        dataPosition.push(item);
+      }
     }
 
     this.dataSignPosition = [...dataPosition, ...dataNotPosition];
