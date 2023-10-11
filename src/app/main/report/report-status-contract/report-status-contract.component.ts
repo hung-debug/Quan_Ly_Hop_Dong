@@ -96,7 +96,7 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
     this.optionsStatus = [
       { id: 20, name: 'Đang thực hiện' },
       { id: 33, name: 'Sắp hết hạn' },
-      { id: 2, name: 'Quá hạn' },
+      { id: 34, name: 'Quá hạn' },
       { id: 31, name: 'Từ chối' },
       { id: 32, name: 'Huỷ bỏ' },
       { id: 30, name: 'Hoàn thành' },
@@ -110,7 +110,7 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
       this.optionsStatus = [
         { id: 20, name: 'Processing' },
         { id: 33, name: 'Expiration soon' },
-        { id: 2, name: 'Overdue' },
+        { id: 34, name: 'Overdue' },
         { id: 31, name: 'Reject' },
         { id: 32, name: 'Cancel' },
         { id: 30, name: 'Complete' },
