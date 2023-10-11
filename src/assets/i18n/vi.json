@@ -759,5 +759,6 @@
   "mobifone.fail":"Bạn không thể đổi mật khẩu với email thuộc mobifone",
   "overview.report":"Báo cáo tổng quan eContract - mSale",
   "detail.report":"Báo cáo chi tiết eContract",
-  "contract.create.unit":"Đơn vị tạo hợp đồng"
+  "contract.create.unit":"Đơn vị tạo hợp đồng",
+  "complete.time":"Thời gian hoàn thành"
 }

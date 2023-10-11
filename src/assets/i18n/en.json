@@ -745,6 +745,7 @@
   "contracts.existed.folder":"The contracts existed in folder",
   "overview.report":"Overview report",
   "detail.report":"Detail report",
-  "contract.create.unit":"Contract unit create"
+  "contract.create.unit":"Contract unit create",
+  "complete.time":"Completion time"
 
 }
