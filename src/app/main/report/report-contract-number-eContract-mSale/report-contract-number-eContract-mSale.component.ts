@@ -221,6 +221,12 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
         rowspan: 1,
       },
       {
+        header: 'complete.time',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
         header: 'contract.status.v2',
         style: 'text-align: left;',
         colspan: 1,

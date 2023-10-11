@@ -746,6 +746,7 @@
   "list.org.not.permission":"List of contracts of organizations that have not been decentralized",
   "overview.report":"Overview report",
   "detail.report":"Detail report",
-  "contract.create.unit":"Contract unit create"
+  "contract.create.unit":"Contract unit create",
+  "complete.time":"Completion time"
 
 }

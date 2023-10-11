@@ -143,6 +143,7 @@
           <td class="row-word">{{data.code}}</td>
           <td class="row-word">{{this.convertTime(data.createdAt)}}</td>
           <td class="row-word">{{this.convertTime(data.signTime)}}</td>
+          <td class="row-word">{{this.convertTime(data.completeDate)}}</td>
           <td class="row-word" *ngIf="data.status == 'SIGNED'">{{"contract.status.complete"| translate}}</td>
           <td class="row-word">{{data.organization}}</td>
           <td class="row-word">{{data.createdBy}}</td>
