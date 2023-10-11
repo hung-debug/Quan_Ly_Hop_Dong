@@ -24,7 +24,7 @@ import { ImageDialogSignComponent } from './image-dialog-sign/image-dialog-sign.
 import { PkiDialogSignComponent } from './pki-dialog-sign/pki-dialog-sign.component';
 import { HsmDialogSignComponent } from './hsm-dialog-sign/hsm-dialog-sign.component';
 import { CertDialogSignComponent } from './cert-dialog-sign/cert-dialog-sign.component';
-import { forkJoin, from, throwError, timer } from 'rxjs';
+import { Observable, forkJoin, from, throwError, timer } from 'rxjs';
 import { ToastService } from '../../../../service/toast.service';
 import { UploadService } from '../../../../service/upload.service';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -50,7 +50,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { DowloadPluginService } from 'src/app/service/dowload-plugin.service';
 import { DetectCoordinateService } from 'src/app/service/detect-coordinate.service';
 import { TimeService } from 'src/app/service/time.service';
-import { vgca_sign_issued } from 'src/assets/plugins/vgcaplugin';
+import { vgca_get_version, vgca_sign_issued } from 'src/assets/plugins/vgcaplugin';
+import { WebSocketSubject, webSocket } from "rxjs/webSocket";
+import { WebsocketService } from 'src/app/service/websocket.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-consider-contract',
@@ -198,7 +201,12 @@ export class ConsiderContractComponent
   cmnd: string | null = null;
   cert_id: any;
   dataCardId: any;
-
+  message: string = 'hello';
+  messages: string[] = [];
+  hasBcyTools: boolean = true
+  isWebSocketConnected = false
+  
+  private bcyWebSocket: WebSocketSubject<any>
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -217,7 +225,9 @@ export class ConsiderContractComponent
     public dialogRef: MatDialogRef<ConsiderContractComponent>,
     private downloadPluginService: DowloadPluginService,
     private detectCoordinateService: DetectCoordinateService,
-    private timeService: TimeService
+    private timeService: TimeService,
+    private websocketService: WebsocketService,
+
   ) {
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
@@ -226,6 +236,17 @@ export class ConsiderContractComponent
     this.loginType = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.type;
+
+
+    this.websocketService.getMessages().subscribe((data: any) => {
+      if (data.event === 'message') {
+        this.messages.push(data.data);
+
+      }
+    }, (err: any) => {
+      this.hasBcyTools = false
+      console.log('has tools? ',this.hasBcyTools);
+    });
   }
 
   pdfSrcMobile: any;
@@ -249,6 +270,7 @@ export class ConsiderContractComponent
     if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
       this.type = 1;
     } else this.type = 0;
+
   }
 
   firstPageMobile() {
@@ -1095,6 +1117,9 @@ export class ConsiderContractComponent
     interact('.resize-drag').unset();
     interact('.not-out-drop').unset();
     interact.removeDocument(document);
+
+    // Close the WebSocket connection when leaving the component
+    this.websocketService.closeConnection();
   }
 
   resizableListener = (event: any) => {
@@ -1400,8 +1425,21 @@ export class ConsiderContractComponent
             } else {
               this.markImage = false;
             }
-            const determineCoordination = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
 
+            this.websocketService.connect()
+            if (!this.hasBcyTools) {
+              Swal.fire({
+                html:
+                  'Vui lòng bật tool ký số hoặc tải ' +
+                  `<a href='/assets/upload/VGCAServices.zip' target='_blank'>Tại đây</a>  và refresh lại web sau khi bật/cài đặt`,
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#b0bec5',
+                confirmButtonText: 'Xác nhận',
+              });
+              return
+            } 
+            const determineCoordination = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
             let isInRecipient = false;
             const participants = this.datas?.is_data_contract?.participants;
             if ((this.recipient.sign_type.some((item: any) => item.id == 7 ))) {
@@ -1905,8 +1943,12 @@ export class ConsiderContractComponent
                 }
 
                 if (imageRender) {
-                  const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
-                  signI = textSignB.split(',')[1];
+                  if (signUpdate.type == 3) {
+                    signI = this.srcMark.split(',')[1]
+                  } else {
+                    const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
+                    signI = textSignB.split(',')[1];
+                  }
                 }
               }
             }
@@ -2100,8 +2142,8 @@ export class ConsiderContractComponent
           let fieldHsm = {
             coordinate_x: signUpdate.signDigitalX,
             coordinate_y: signUpdate.coordinate_y,
-            width: signUpdate.signDigitalWidth,
-            height: signUpdate.signDigitalHeight,
+            width: signUpdate.width ,
+            height: signUpdate.height,
             page: signUpdate.page,
           };
 
@@ -2117,9 +2159,6 @@ export class ConsiderContractComponent
             const imageRender = <HTMLElement>(
               document.getElementById('text-sign')
             );
-
-            fieldHsm.width = imageRender.clientWidth;
-            fieldHsm.height = imageRender.clientHeight;
 
             if (imageRender) {
               const textSignB = await domtoimage.toPng(imageRender);
@@ -2148,8 +2187,8 @@ export class ConsiderContractComponent
             }
 
             // fieldHsm.coordinate_y = fieldHsm.coordinate_y - 8;
-            fieldHsm.height = imageRender.offsetHeight / 1.5;
-            fieldHsm.width = imageRender.offsetWidth / 1.5;
+            // fieldHsm.height = imageRender.offsetHeight / 1.5;
+            // fieldHsm.width = imageRender.offsetWidth / 1.5;
 
             if (imageRender) {
               const textSignB = await domtoimage.toPng(
@@ -2159,7 +2198,6 @@ export class ConsiderContractComponent
               signI = textSignB.split(',')[1];
             }
           }
-
           if (!this.mobile) {
             this.dataHsm = {
               field: fieldHsm,
@@ -2167,7 +2205,8 @@ export class ConsiderContractComponent
               username: this.dataHsm.username,
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
-              imageBase64: (!this.markImage && signUpdate.type==3) ? null : signI,
+              imageBase64: (!this.markImage && signUpdate.type==3) ? null : 
+                            (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
           } else {
             this.dataHsm = {
@@ -2175,7 +2214,8 @@ export class ConsiderContractComponent
               username: this.dataHsm.username,
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
-              imageBase64: (!this.markImage && signUpdate.type==3) ? null : signI,
+              imageBase64: (!this.markImage && signUpdate.type==3) ? null : 
+              (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
           }
 
@@ -2400,7 +2440,7 @@ export class ConsiderContractComponent
           if (!this.mobile) {
             this.dataCert = {
               cert_id: this.cert_id,
-              image_base64: signI,
+              image_base64: (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
               field: fieldCert1,
               width: null,
               height: null,
@@ -2411,7 +2451,7 @@ export class ConsiderContractComponent
 
             this.dataCert = {
               cert_id: this.cert_id,
-              image_base64: signI,
+              image_base64: (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
               field: fieldCert1,
               width: null,
               height: null,
@@ -4202,7 +4242,7 @@ export class ConsiderContractComponent
     this.contractNoValueSign = $event;
   }
 
-  signBCY(pdfContractPath: any, fieldId: any){
+  async signBCY(pdfContractPath: any, fieldId: any){
     let params = {
       FileUploadHandler: `https://econtractdev.mobifone.ai/service/api/v1/processes/digital-sign-bcy?field_id=${fieldId}`,
       SessionId: "",
@@ -4210,6 +4250,10 @@ export class ConsiderContractComponent
       DocNumber: "",
       IssuedDate: new Date()
     }
+    let count = 0 
+    this.sendMessage()
+    this.isWebSocketConnected = this.websocketService.getConnectionStatus()
+
     return new Promise((resolve: any, reject: any) => {
       vgca_sign_issued(JSON.stringify(params), (res: any) => {
         let response = JSON.parse(res)
@@ -4262,5 +4306,10 @@ export class ConsiderContractComponent
         }
       })
     })
+  }
+
+  sendMessage() {
+    this.websocketService.sendMessage(this.message)
+    this.message = '';
   }
 }
