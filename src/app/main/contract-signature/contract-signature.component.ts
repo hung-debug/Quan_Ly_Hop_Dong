@@ -1316,10 +1316,10 @@ export class ContractSignatureComponent implements OnInit {
             imageRender = <HTMLElement>(document.getElementById('export-html-hsm'));
           }
 
-          let signI = '';
+          let signI = null;
 
-          if (imageRender) {
-            const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
+          if (result.mark) {
+            // const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
             // signI = textSignB.split(',')[1];
             signI = this.srcMark.split(',')[1];
           }
