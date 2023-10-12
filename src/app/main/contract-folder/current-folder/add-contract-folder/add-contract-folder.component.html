@@ -30,7 +30,10 @@
               <div class="col-md-5"></div>
               <div class="col-md-2">{{'create-date' | translate}}</div>
               <div class="col-md-2">{{'expiration-date' | translate}}</div>
-              <!-- <div class="col-md-3">{{'action' | translate}}</div> -->
+
+              <div class="col-md-2">
+                <input id="allDownload" name="allDownload" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleAll(checkedAll)"/>
+            </div>
           </div>
           
           <div id="contract-list">
