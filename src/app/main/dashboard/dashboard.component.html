@@ -116,6 +116,11 @@
             </div>
           </div>
         </div>
+
+        <div class="row" *ngIf="(this.isOrg == 'on' && (!this.isQLHD_03 && !this.isQLHD_04))">
+          <div style="margin-left: 20px;">{{'my.org.not.authen' | translate}}</div>
+        </div>
+
       </div>
     </div>
     <div class="col-md-6">
