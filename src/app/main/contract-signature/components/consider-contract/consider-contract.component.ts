@@ -1908,9 +1908,12 @@ export class ConsiderContractComponent
 
                 if (imageRender) {
                   try {
-                    const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
-
-                    signI = textSignB.split(',')[1];
+                    if (signUpdate.sign_type[0].id !== 3) {
+                      const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
+                      signI = textSignB.split(',')[1];
+                    } else {
+                      signI = this.srcMark.split(',')[1]
+                    }
                   } catch (err) {
 
                   }
