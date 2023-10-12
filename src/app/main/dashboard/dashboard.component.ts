@@ -9,6 +9,7 @@ import {UserService} from 'src/app/service/user.service';
 import {Router} from '@angular/router';
 import {UnitService} from 'src/app/service/unit.service';
 import {DatePipe} from '@angular/common';
+import { RoleService } from 'src/app/service/role.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -49,6 +50,8 @@ export class DashboardComponent implements OnInit {
   organization_id: any = "";
 
   selectedNodeOrganization: any;
+  isQLHD_03: boolean | undefined;
+  isQLHD_04: boolean | undefined;
 
   constructor(
     private appService: AppService,
@@ -58,7 +61,8 @@ export class DashboardComponent implements OnInit {
     private unitService: UnitService,
     private router: Router,
     public datepipe: DatePipe,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private roleService: RoleService
   ) {
     this.stateOptions = [
       {label: "my.contract", value: 'off'},
@@ -70,6 +74,21 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.appService.setTitle("menu.dashboard");
     this.search();
+    
+    let userId = this.userService.getAuthCurrentUser().id;
+    this.userService.getUserById(userId).subscribe(
+      data => {
+        //lay id role
+        this.roleService.getRoleById(data?.role_id).subscribe(
+          data => {
+            let listRole: any[];
+            listRole = data.permissions;
+            this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');
+            this.isQLHD_04 = listRole.some(element => element.code == 'QLHD_04');
+        }, error => {
+        });
+    }, error => {}
+    )
 
     this.user = this.userService.getInforUser();
 
@@ -210,12 +229,8 @@ export class DashboardComponent implements OnInit {
       let numContractBodyHeight = document.getElementById('num-contract-body')?.offsetHeight || 0;
       let notiHeight = document.getElementById('noti')?.offsetHeight || 450;
       
-      
-      
       this.chartHeight = numContractHeight + notiHeight + numContractBodyHeight - 37;
       
-
-
       if(localStorage.getItem('lang') == 'vi' || sessionStorage.getItem('lang') == 'vi')
         this.createChart("Đang xử lý","Hoàn thành","Từ chối","Huỷ bỏ", "Quá hạn", "Số lượng", newData);
       else if(localStorage.getItem('lang') == 'en' || sessionStorage.getItem('lang') == 'en')

@@ -366,14 +366,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     this.typeDisplay = 'downloadMany';
     this.roleMess = "";
-    if (this.isOrg == 'off' && !this.isQLHD_05) {
-      this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
-
-    } else if (this.isOrg == 'on' && !this.isQLHD_04) {
+    if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
       this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
     }
-    if (!this.roleMess) {
-      
+
+    if (!this.roleMess) { 
       let isOrg = this.isOrg;
 
       if(!this.isQLHD_03) {
@@ -421,12 +418,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     this.typeDisplay = 'release';
     this.roleMess = "";
-    if (this.isOrg == 'off' && !this.isQLHD_05) {
-      this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
-
-    } else if (this.isOrg == 'on' && !this.isQLHD_04) {
+    
+    if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
       this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
     }
+
     if (!this.roleMess) {
       
       let isOrg = this.isOrg;
@@ -502,14 +498,12 @@ export class ContractComponent implements OnInit, AfterViewInit {
       if(event='contract-signature')
       this.p = 1;
     })
-    if (this.isOrg == 'off' && !this.isQLHD_05) {
-      this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
-
-    } else if (this.isOrg == 'on' && !this.isQLHD_04) {
+    
+    if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
       this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
     }
+
     if (!this.roleMess) {
-      
       let isOrg = this.isOrg;
 
       if(!this.isQLHD_03) {
