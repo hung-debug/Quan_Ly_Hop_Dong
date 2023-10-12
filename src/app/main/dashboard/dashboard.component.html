@@ -97,7 +97,7 @@
           </div>
         </div>
         
-        <div class="row">
+        <div class="row" *ngIf="this.isOrg == 'off' || (this.isOrg == 'on' && (this.isQLHD_03 || this.isQLHD_04))">
           <div class="col-md-12">
             <div *ngIf="totalCreate == 0"
               style="height:500px;display: table;top: 0;left: 0;width: 100%;text-align: center;">
