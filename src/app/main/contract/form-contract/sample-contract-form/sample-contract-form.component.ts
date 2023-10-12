@@ -139,7 +139,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
     this.onResize();
 
     if(this.datasForm.font) {
@@ -271,7 +270,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         this.size = this.datasForm.size;
       }
     }
-
 
     this.synchronized1(this.imageSign);
     this.synchronized1(this.digitalSign);
@@ -615,6 +613,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
   showEventInfo = (event: any) => {
+    console.log("ev ", event);
     let canvasElement: HTMLElement | null;
 
     if (event.relatedTarget && event.relatedTarget.id) {
@@ -651,8 +650,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
         if(this.isContractNoNameNull) {
           this.signCurent = this.convertToSignConfig().filter((p: any) => (p.sign_unit != 'so_tai_lieu' && !p.name) && !p.position && !p.coordinate_x && !p.coordinate_y)[0];
+
         } else {
           this.signCurent = this.convertToSignConfig().filter((p: any) => !p.position && !p.coordinate_x && !p.coordinate_y)[0];
+
+          console.log("si ", this.signCurent);
+
         }
       } else {
         // doi tuong da duoc keo tha vao hop dong
@@ -1456,17 +1459,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             }
           });
         } else {
-
-
-
-
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
-
-
-
           if (data_name) {
-
-
             isObjSign.name = data_name.name;
             signElement.setAttribute("name", isObjSign.name);
 
@@ -1709,7 +1703,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           })
         })
 
-
         if(!this.datasForm.contract_no || !this.datasForm.code) {
           if(this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0]) {
             this.datasForm.contract_no = this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0].value;
@@ -1845,11 +1838,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     }
 
     if (isSuccess == 0) {
-      // if (action == 'next_step') {
-      //   this.step = variable.stepSampleContract.step4;
-      //   this.datasForm.stepLast = this.step
-      //   this.nextOrPreviousStep(this.step);
-      // } else
       if (action == 'save_draft') {
         // this.datasForm.save_draft.sample_contract = false;
         this.stepChangeSampleContractForm.emit('save_draft_sample_contract')

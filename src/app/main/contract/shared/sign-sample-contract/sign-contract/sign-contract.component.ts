@@ -34,6 +34,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   }
 
   getText(sign: any) {
+    console.log("1 ", this.signTemplate);
     if (sign.sign_unit == 'text') {
       if(sign.value) {
         if(sign.text_type == 'currency') {
@@ -47,9 +48,12 @@ export class SignContractComponent implements OnInit, AfterViewInit {
       }
     } else {
       if (this.datas.contract_no) {
+        console.log("11 ", this.datas.contract_no);
         this.contractNo = this.datas.contract_no;
         return this.contractNo
       } else if (sign.value) {
+        console.log("20 ", sign.value);
+
         this.contractNo = sign.value;
         return this.contractNo;
       } else return (this.translate.instant('contract.number'));
@@ -101,6 +105,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
 
     if (((!this.sign.is_have_text && this.sign.recipient_id) || (this.sign.value !== null && this.sign.value === undefined) || this.datas.contract_no ||
     (this.sign.sign_unit == 'so_tai_lieu' && this.sign.value)) || (this.sign.sign_unit == 'text' && this.sign.recipient_id)) {
+      console.log("111 ");
       return true;
     } else {
       return false;
