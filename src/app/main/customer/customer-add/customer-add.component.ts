@@ -478,6 +478,16 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       d.phone = '';
     }
 
+    if(d.login_by == 'email' && d.emailTemp) {
+      d.email = d.emailTemp;
+      d.phoneTemp = d.phone;
+      d.phone = '';
+    } else if(d.login_by == 'email') {
+      d.email = '';
+      d.phoneTemp = d.phone;
+      d.phone = '';
+    }
+
     if(role == 'sign_partner') {
         if (d.login_by == 'phone') {
           this.isListSignNotPersonPartner = this.signTypeList.filter((p) => ![1,2,5].includes(p.id));
