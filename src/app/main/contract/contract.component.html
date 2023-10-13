@@ -1,4 +1,4 @@
-<p-selectButton *ngIf="filter_status!=40" [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()">
+<p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()">
     <ng-template #options let-item>
         <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
     </ng-template>
