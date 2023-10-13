@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Calendar } from 'primeng/calendar';
+import { elementAt } from 'rxjs/operators';
 import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 
@@ -47,6 +48,7 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
   isCalendarClick: number = 0;
   top: number[] = [];
   onContainerClick(event: MouseEvent) {
+    console.log("y ", this.data.scrollY);
     if (this.calendarContainer.nativeElement.contains(event.target)) {
       this.inputElement.showOnFocus = true;
 
@@ -68,12 +70,13 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
         }
         inputElement.click();
         this.isCalendarClick = 0;
+
+        console.log("el ", element);
       }
     } else {
       this.inputElement.showOnFocus = false;
     }
 
-    console.log("in ", this.inputElement.showOnFocus);
   }
 
   async save() {

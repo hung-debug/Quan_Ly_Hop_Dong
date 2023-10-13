@@ -752,6 +752,6 @@
   "no.choose.contract":"Bạn chưa chọn hợp đồng nào",
   "name.folder.not.special.char":"Tên thư mục không được chứa ký tự đặc biệt",
   "contracts.existed.folder":"Hợp đồng đã tồn tại trong thư mục",
-  "list.org.not.permission":"Danh sách hợp đồng của tổ chức chưa được phân quyền"
+  "my.org.not.authen":"Danh sách hợp đồng tổ chức của tôi chưa được phân quyền"
 
 }

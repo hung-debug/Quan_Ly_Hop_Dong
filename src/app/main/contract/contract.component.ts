@@ -360,10 +360,10 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.typeDisplay = 'downloadMany';
     this.roleMess = "";
     if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
-      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền";
+      this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
     }
 
-    if (!this.roleMess) {  
+    if (!this.roleMess) { 
       let isOrg = this.isOrg;
 
       if(!this.isQLHD_03) {
@@ -410,9 +410,9 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     this.typeDisplay = 'release';
     this.roleMess = "";
-
+    
     if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
-      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền";
+      this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
     }
 
     if (!this.roleMess) {
@@ -484,14 +484,15 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   getContractList() {
     this.pageTotal = 0;
+    this.scrollY = 0;
     this.roleMess = "";
     this.contractService.sidebarContractEvent.subscribe((event: any) => {
       if(event='contract-signature')
       this.p = 1;
     })
-
+    
     if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
-      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền";
+      this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
     }
 
     if (!this.roleMess) {
