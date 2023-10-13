@@ -38,7 +38,7 @@
                             <div class="item_contract_name">
                                 <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                             'page': this.p,
-                                            'filter_type': this.filter_type, 
+                                            'filter_type': this.filter_type,
                                             'filter_contract_no': this.filter_contract_no,
                                             'filter_from_date': this.filter_from_date,
                                             'filter_to_date': this.filter_to_date,
@@ -97,7 +97,7 @@
                         <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12">
                             <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.view' | translate}}" (click)="contractConnect(item.id)" />
                         </div>
-                        <!-- 
+                        <!--
                             <div class="div_icon" *ngIf="status == 'processing' || status == 'expire'">
                                 <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnect(item.id)"/>
                             </div> -->
@@ -157,7 +157,7 @@
             <div class="footer_pagination">
                 <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
             </div>
-            <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}} 
+            <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}
             </div>
         </div>
     </ng-template>
@@ -175,16 +175,26 @@
                 <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
             </div>
         </div>
-
-        <div class="btn-size btn_search" style="padding-top: 10px;">
+        <div style="display: flex;">
+          <div class="btn-size btn_search" style="padding-top: 10px;">
             <button *ngIf="status == 'draft' && this.isOrg == 'off'" (click)="release()" class="btn btn-lg btn-block btn_submit">{{'release'|translate}}</button>
         </div>
+
+          <div class="btn-size btn_search" style="padding-top: 10px;margin-left: 1%">
+            <button *ngIf="status == 'draft' && this.isOrg == 'off'" (click)="multiDeleteDraft()" class="btn btn-lg btn-block btn_submit">{{'btn.delete'|translate}}</button>
+          </div>
+        </div>
+
 
         <div class="row list_header" *ngIf="pageTotal > 0;">
             <div class="col-md-4"></div>
             <div class="col-md-2">{{'create-date' | translate}}</div>
             <div class="col-md-2">{{'expiration-date' | translate}}</div>
             <div class="col-md-3">{{'action' | translate}}</div>
+
+            <div *ngIf="this.filter_status == 0" class="col-md-1">
+              <input style="margin-left: 4px;" id="allDeleteDraft" name="allDeleteDraft" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDeleteDraftAll(checkedAll)" />
+            </div>
         </div>
 
 
@@ -197,7 +207,7 @@
                             <div class="item_contract_name">
                                 <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                         'page': this.p,
-                                        'filter_type': this.filter_type, 
+                                        'filter_type': this.filter_type,
                                         'filter_contract_no': this.filter_contract_no,
                                         'filter_from_date': this.filter_from_date,
                                         'filter_to_date': this.filter_to_date,
@@ -277,6 +287,19 @@
                     </div>
                 </div>
 
+                <!--Cột 5: Input checkbox-->
+                <div class="col-md-1 item_icon" *ngIf="this.filter_status == 0">
+                    <div style="display: flex; justify-content: center;">
+                        <div class="div_icon">
+                            <div class="col-md-1 calendar_create">
+                                <div>
+                                    <input name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneDraft(item)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -339,7 +362,7 @@
                             <div class="item_contract_name">
                                 <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                         'page': this.p,
-                                        'filter_type': this.filter_type, 
+                                        'filter_type': this.filter_type,
                                         'filter_contract_no': this.filter_contract_no,
                                         'filter_from_date': this.filter_from_date,
                                         'filter_to_date': this.filter_to_date,
@@ -484,7 +507,7 @@
                                 <div class="item_contract_name">
                                     <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                             'page': this.p,
-                                            'filter_type': this.filter_type, 
+                                            'filter_type': this.filter_type,
                                             'filter_contract_no': this.filter_contract_no,
                                             'filter_from_date': this.filter_from_date,
                                             'filter_to_date': this.filter_to_date,
@@ -634,7 +657,7 @@
                                 <div class="item_contract_name">
                                     <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                             'page': this.p,
-                                            'filter_type': this.filter_type, 
+                                            'filter_type': this.filter_type,
                                             'filter_contract_no': this.filter_contract_no,
                                             'filter_from_date': this.filter_from_date,
                                             'filter_to_date': this.filter_to_date,
