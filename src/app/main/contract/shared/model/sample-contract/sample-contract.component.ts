@@ -203,6 +203,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     interact('.not-out-drop').on('dragend', this.showEventInfo).draggable({
+
+
+      // @ts-ignore
+      // styleCursor: true,
+
       listeners: { move: this.dragMoveListener, onend: this.showEventInfo },
       inertia: true,
 
@@ -395,27 +400,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
     })
 
-
     // check data object have contract number (not assign object)
     let is_obj_contract_number = this.datas.is_data_object_signature.filter((p: any) => !p.recipient_id && !p.recipient && p.type == 4 && this.datas.contract_no);
-<<<<<<< HEAD
-=======
 
->>>>>>> dungpt
     if (is_obj_contract_number) {
       for(let i = 0; i < is_obj_contract_number.length; i++) {
         let item = _.cloneDeep(is_obj_contract_number[i]);
         item.is_type_party = is_obj_contract_number[i].type;
         item.sign_unit = 'so_tai_lieu';
-<<<<<<< HEAD
-=======
         item.id_have_data = is_obj_contract_number[i].id;
->>>>>>> dungpt
         dataPosition.push(item);
       }
     }
-
-    console.log("da ", dataPosition);
 
     this.dataSignPosition = [...dataPosition, ...dataNotPosition];
     this.dataSignPosition.forEach((res: any) => {
@@ -1417,7 +1413,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   convertToSignConfig() {
     let arrSignConfig: any = [];
     let cloneUserSign = [...this.datas.contract_user_sign];
-
     cloneUserSign.forEach(element => {
       if (this.datas.is_action_contract_created) {
         if ((element.recipient && ![2, 3].includes(element.recipient.status)) || (!element.recipient && ![2, 3].includes(element.status))) {
@@ -1426,6 +1421,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       } else arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
 
+    //
     return arrSignConfig;
   }
 
