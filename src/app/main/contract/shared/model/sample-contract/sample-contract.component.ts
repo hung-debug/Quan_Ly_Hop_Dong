@@ -361,7 +361,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let dataPosition: any[] = [];
     let dataNotPosition: any[] = [];
 
-    console.log("clone ", this.datas.is_determine_clone);
 
     this.datas.is_determine_clone.forEach((element: any) => {
       element.recipients.forEach((item: any) => {
@@ -637,8 +636,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     var target = event.target
 
     // update the element's style
-    target.style.width = event.rect.width + 'px'
-    target.style.height = event.rect.height + 'px'
+      target.style.width = event.rect.width + 'px'
+      target.style.height = event.rect.height + 'px'
 
   }
 
@@ -1226,7 +1225,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         "position": "absolute",
         "backgroundColor": '#FFFFFF',
         "border": "1px dashed #6B6B6B",
-        "border-radius": "6px"
+        "border-radius": "6px",
+        "min-width": "140px",
+        "min-height": "50px"
       }
       if (d['width']) {
         style.width = parseInt(d['width']) + "px";
@@ -2193,7 +2194,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   swapStampPosition() {
-    console.log('swapinnnn');
     this.isOnTheLeft = !this.isOnTheLeft
   }
 }
