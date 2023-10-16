@@ -598,6 +598,7 @@
     </div>
 </div>
 
+<!--Phát hành hợp đồng-->
 <div *ngIf="(this.typeDisplay == 'release' && this.filter_status == 0)">
     <div class="container-fluid">
         <ng-template [ngIf]="!roleMess">
@@ -737,7 +738,7 @@
             <div class="contract_footer">
                 <div class="footer_title"></div>
                 <div class="footer_pagination">
-                    <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; downloadMany()" previousLabel="" nextLabel=""></pagination-controls>
+                    <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; release()" previousLabel="" nextLabel=""></pagination-controls>
                 </div>
                 <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}
                 </div>
