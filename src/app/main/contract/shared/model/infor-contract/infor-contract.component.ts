@@ -151,7 +151,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.optionsCeCaValue = this.datas.ceca_push;
 
     this.name = this.datas.name ? this.datas.name : null;
-    this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.contract_no;
+    this.contract_no = this.datas.contract_no ? this.datas.contract_no.trim() : this.datas.contract_no;
     this.type_id = this.datas.type_id ? this.datas.type_id : null;
 
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
@@ -800,7 +800,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     
       // set value to datas
       this.datas.name = this.name;
-      this.datas.contract_no = this.contract_no;
+      this.datas.contract_no = this.contract_no?.trim();
       this.datas.sign_time = this.sign_time;
       this.datas.notes = this.notes;
       this.datas.contract_expire_time = this.expire_time;
@@ -830,7 +830,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
       if (this.datas.contract_no) {
         //check so hop dong da ton tai hay chua
-        this.contractService.checkCodeUnique(this.datas.contract_no).subscribe(
+        this.contractService.checkCodeUnique(this.datas.contract_no?.trim()).subscribe(
           dataCode => {
             if (dataCode.success) {
               this.callAPI();
@@ -899,7 +899,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.spinner.show();
     // set value to datas
     this.datas.name = this.name;
-    this.datas.contract_no = this.contract_no;
+    this.datas.contract_no = this.contract_no?.trim();
     this.datas.sign_time = this.sign_time;
     this.datas.notes = this.notes;
 
@@ -933,7 +933,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
     if (this.datas.contract_no != null && this.datas.contract_no != '') {
       //check so hop dong da ton tai hay chua
-      this.contractService.checkCodeUnique(this.datas.contract_no).subscribe(
+      this.contractService.checkCodeUnique(this.datas.contract_no?.trim()).subscribe(
         dataCode => {
           if (dataCode.success) {
             if (this.datas.is_action_contract_created && this.router.url.includes("edit"))
