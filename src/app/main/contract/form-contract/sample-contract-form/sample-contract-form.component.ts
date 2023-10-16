@@ -649,16 +649,14 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             element['sign_config'].push(_obj);
           }
         })
-        // lay doi tuong vua duoc keo moi vao hop dong
 
+        // lay doi tuong vua duoc keo moi vao hop dong
         if(this.isContractNoNameNull) {
           this.signCurent = this.convertToSignConfig().filter((p: any) => (p.sign_unit != 'so_tai_lieu' && !p.name) && !p.position && !p.coordinate_x && !p.coordinate_y)[0];
 
+          if(!this.signCurent) this.signCurent = this.convertToSignConfig().filter((p: any) => !p.position && !p.coordinate_x && !p.coordinate_y)[0];
         } else {
           this.signCurent = this.convertToSignConfig().filter((p: any) => !p.position && !p.coordinate_x && !p.coordinate_y)[0];
-
-          console.log("si ", this.signCurent);
-
         }
       } else {
         // doi tuong da duoc keo tha vao hop dong
