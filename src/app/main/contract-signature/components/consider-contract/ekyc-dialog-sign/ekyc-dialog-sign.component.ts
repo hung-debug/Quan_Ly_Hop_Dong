@@ -260,11 +260,11 @@ export class EkycDialogSignComponent implements OnInit {
           } else if (this.data.id == 1 && response.result_code == 403) {
             this.flagSuccess == false;
             this.webcamImage = this.initWebcamImage;
-            alert(this.translate.instant('Giấy tờ không hợp lệ. Vui lòng chụp lại mặt sau của CCCD'))
+            alert(this.translate.instant('CMT/CCCD không hợp lệ. Vui lòng chụp lại mặt sau của CCCD'))
           } else if (this.data.id == 0 && response.result_code == 403) {
             this.flagSuccess == false;
             this.webcamImage = this.initWebcamImage;
-            alert(this.translate.instant('Giấy tờ không hợp lệ. Vui lòng chụp lại mặt trước của CCCD'))
+            alert(this.translate.instant('CMT/CCCD không hợp lệ. Vui lòng chụp lại mặt trước của CCCD'))
           } else {
             this.flagSuccess = false;
             this.webcamImage = this.initWebcamImage;
