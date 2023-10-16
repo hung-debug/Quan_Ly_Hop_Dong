@@ -58,7 +58,7 @@ export class CheckSignDigitalComponent implements OnInit {
               this.list = response;
 
               //kiem tra tinh nguyen ven cua noi dung van ban
-              this.isModified = this.list[this.list.length - 1].isModified;
+              this.isModified = this.list[this.list.length - 1]?.isModified;
               // this.isModified=false;
               // for(var i = 0; i < this.list.length; i++){
               //   if(this.list[i].isModified){

@@ -18,11 +18,10 @@
             <div *ngIf = "!this.reasonCancel" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
 
                 <div class="col-md-6" style="display: flex; flex-direction: column;text-align: left;">
-                    <div style="display: flex;">
-
+                    <div *ngIf="d.name" style="display: flex;">
                     <!--Tên người trong luồng hợp đồng-->
-                    <span>{{d.name}}</span>&nbsp;
-                    <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span>
+                        <span>{{d.name}}</span>&nbsp;
+                        <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span>
                     </div>
                     <span style="color: #8B8B8B" *ngIf="d.type != 3 && d.name_company">{{d.name_company}}</span>
                     <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'vi' || !this.lang">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name : ''}}</span>

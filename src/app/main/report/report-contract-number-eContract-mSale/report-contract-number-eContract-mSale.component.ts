@@ -26,16 +26,22 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
   organization_id: any;
   orgName: any;
   type_id: any = [];
+  type_id_detail: any= [];
   typeList: Array<any> = [];
+  typeListDetail: Array<any> = [];
   date: any;
   list: any[] = [];
+  listDetail: any[] = [];
   cols: any[];
+  colsDetail: any[];
   Arr = Array;
   site: string;
   page: number = 0;
   size: number = 5;
   totalRecords: number = 0;
   first: number = 0;
+  stateOptions: any[];
+  isReport: string = 'off';
 
   isBaoCaoHopDongEcontractMsale: boolean = true;
 
@@ -54,6 +60,11 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.info;
+
+    this.stateOptions = [
+      { label: 'overview.report', value: 'off' },
+      { label: 'detail.report', value: 'on' },
+    ];
   }
   async ngOnInit(): Promise<void> {
     // Tính toán ngày kết thúc (hiện tại)
@@ -98,6 +109,11 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
 
     this.setColForTable();
     this.getContractGroupList(this.currentUser.organizationId);
+    this.getContractGroupListDetail(this.currentUser.organizationId);
+  }
+
+  changeTab() {
+
   }
 
   changeOrg() {
@@ -118,6 +134,20 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       this.type_id.push(this.typeList[i].id)
     }
   }
+
+
+  async getContractGroupListDetail(typeIdDetail?: number) {
+    this.typeListDetail = []
+    this.type_id_detail = []
+    this.typeListDetail = [
+      { id: 1, name: 'Khác' },
+      { id: 2, name: 'Công nghệ thông tin' },
+    ];
+    for (let i = 0; i<this.typeListDetail?.length; i++){
+      this.type_id_detail.push(this.typeListDetail[i].id)
+    }
+  }
+
 
   convertTime(time: any, code?: any) {
     return moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") != 'Invalid date' ? moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") : "";
@@ -141,6 +171,75 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       },
       {
         header: 'chart.number',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+    ],
+
+    this.colsDetail = [
+      {
+        header: 'contract.name',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        header: 'contract.type',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        header: 'contract.group',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        header: 'contract.number',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        header: 'contract.uid',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        header: 'contract.time.create',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        header: 'expiration-date',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        header: 'complete.time',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        header: 'contract.status.v2',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        header: 'contract.create.unit',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
+        header: 'created.user',
         style: 'text-align: left;',
         colspan: 1,
         rowspan: 1,
@@ -169,7 +268,6 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
     }
 
-    // this.type_id = this.type_id ? this.type_id : '';
 
     if (!to_date) to_date = from_date;
 
@@ -190,7 +288,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
           this.spinner.hide();
           // this.toastService.showSuccessHTMLWithTimeout('Xuất file báo cáo thành công','',3000)
           this.exportToExcel(response)
-        }, 
+        },
         (err: any) => {
           this.spinner.hide()
           if (!flag) {
@@ -212,7 +310,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       this.reportService.exportMsale('rp-by-contract-type', idOrg, this.type_id.toString(), params, flag).subscribe(
         (response: any) => {
           this.spinner.hide();
-  
+
           let msaleData: any[] = this.convertObjDataToArr(response)
           let newMsaleData: any = msaleData.map((item: any) => ({
             ...item, orgName: this.getOrgNameFromString(item.key), orgId: this.getOrgIdFromString(item.key)
@@ -240,6 +338,93 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       });
     }
   }
+
+  exportDetail(flag: boolean) {
+    if (!this.validData()) {
+      return;
+    }
+    this.spinner.show();
+
+    this.selectedNodeOrganization = !this.selectedNodeOrganization.length
+      ? this.selectedNodeOrganization
+      : this.selectedNodeOrganization[0];
+
+    this.orgName = this.selectedNodeOrganization.label;
+    let idOrg = this.selectedNodeOrganization.data;
+
+    let from_date: any = '';
+    let to_date: any = '';
+
+    if (this.date && this.date.length > 0) {
+      from_date = this.datepipe.transform(this.date[0], 'yyyy-MM-dd');
+      to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
+    }
+
+    if (!to_date) to_date = from_date;
+
+    let params =
+      '&from_date=' +
+      from_date +
+      '&to_date=' +
+      to_date;
+
+    if (flag) {
+      this.reportService.exportMsale('rp-by-contract-type-detail', idOrg, this.type_id_detail.toString(), params, flag).subscribe(
+        (response: any) => {
+          this.spinner.hide();
+          this.exportToExcelDetail(response)
+        },
+        (err: any) => {
+          this.spinner.hide()
+          if (!flag) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'report.msale.search.failed',
+              '',
+              3000
+            )
+          } else {
+            if (flag) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'report.msale.download.failed',
+                '',
+                3000
+              )
+          }}
+      });
+    } else {
+      this.reportService.exportDetail('rp-by-contract-type-detail', idOrg, this.type_id_detail.toString(), params, flag).subscribe(
+        (response: any) => {
+          this.spinner.hide();
+
+          let msaleDataDetail: any[] = this.convertObjDataToArr(response)
+          let newMsaleDataDetail: any = msaleDataDetail.map((item: any) => ({
+            ...item, orgName: this.getOrgNameFromString(item.key), orgId: this.getOrgIdFromString(item.key)
+          }))
+          let parentOrgIndex = newMsaleDataDetail.findIndex((item: any) => item.orgId == idOrg)
+          newMsaleDataDetail = [newMsaleDataDetail[parentOrgIndex], ...newMsaleDataDetail.toSpliced(parentOrgIndex, 1)]
+          this.listDetail = newMsaleDataDetail
+
+          this.table.first = 0
+        }, (err: any) => {
+          this.spinner.hide()
+          if (!flag) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'report.msale.search.failed',
+              '',
+              3000
+            )
+          } else {
+            if (flag) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'report.msale.download.failed',
+                '',
+                3000
+              )
+          }}
+      });
+    }
+  }
+
   convertObjDataToArr(obj: any) {
     let newData: any[] = Object.keys(obj).map((item: any) => ({
       key: item, data: obj[item]
@@ -277,5 +462,23 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
           '',
           3000
         );
+  }
+
+  exportToExcelDetail(response: any) {
+    let url = window.URL.createObjectURL(response);
+      let a = document.createElement('a');
+      document.body.appendChild(a);
+      a.setAttribute('style', 'display: none');
+      a.href = url;
+      a.download = `BaoCaoChiTiet_HĐ_eContract_${new Date().getDate()}-${new Date().getMonth() + 1
+        }-${new Date().getFullYear()}.xlsx`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+      this.toastService.showSuccessHTMLWithTimeout(
+        'download.success',
+        '',
+        3000
+      );
   }
 }

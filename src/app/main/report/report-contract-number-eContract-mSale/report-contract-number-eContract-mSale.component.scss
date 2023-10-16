@@ -21,6 +21,10 @@
   font-size: 13px;
   margin: 0 10px;
 }
+.row-word {
+  width: 250px;
+  word-break:break-word
+}
 
 :host ::ng-deep {
 .p-treeselect, .p-dropdown {

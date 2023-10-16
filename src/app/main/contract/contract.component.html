@@ -413,6 +413,9 @@
                         <div class="div_icon" *ngIf="status == 'cancel'">
                             <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" />
                         </div>
+                        <div class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'">
+                            <img src="../../../assets/img/contract-liquidation.svg" class="img_icon" ngbTooltip="{{'contract.liquidation' | translate}}" (click)="addContractLiquidationNew(item.id);" />
+                        </div>
                     </div>
                 </div>
 
@@ -594,6 +597,7 @@
     </div>
 </div>
 
+<!--Phát hành hợp đồng-->
 <div *ngIf="(this.typeDisplay == 'release' && this.filter_status == 0)">
     <div class="container-fluid">
         <ng-template [ngIf]="!roleMess">
@@ -733,7 +737,7 @@
             <div class="contract_footer">
                 <div class="footer_title"></div>
                 <div class="footer_pagination">
-                    <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; downloadMany()" previousLabel="" nextLabel=""></pagination-controls>
+                    <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; release()" previousLabel="" nextLabel=""></pagination-controls>
                 </div>
                 <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}
                 </div>

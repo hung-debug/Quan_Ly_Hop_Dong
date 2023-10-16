@@ -116,12 +116,12 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
     this.getTypeListContract(this.currentUser.organizationId);
   }
 
-  onSelectDateRange(event: any) {
-    if (event[0]) {
-      this.maxSelectableDate = new Date(event[0])
-      this.maxSelectableDate.setDate(event[0].getDate() + 6)
-    }
-  }
+  // onSelectDateRange(event: any) {
+  //   if (event[0]) {
+  //     this.maxSelectableDate = new Date(event[0])
+  //     // this.maxSelectableDate.setDate(event[0].getDate() + 6)
+  //   }
+  // }
 
   onCloseCalendar() {
     this.maxSelectableDate.setDate(this.date[0].getDate()+3000)

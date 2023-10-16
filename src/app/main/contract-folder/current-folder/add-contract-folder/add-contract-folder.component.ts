@@ -89,8 +89,32 @@ export class AddContractFolderComponent implements OnInit {
     }
   }
 
-    getContractList() {
-      if(this.parentId == 1)
+  dataChecked: any[] = [];
+  toggleAll(checkedAll: boolean) {
+    this.dataChecked = [];
+    
+    if(checkedAll){
+      for(let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = false;
+      }
+    } else {
+      for (let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = true;
+        this.dataChecked.push({
+          id: this.contracts[i].participants[0]?.contract_id,
+          selectedId : this.contracts[i].id
+        })
+      }
+    }
+  }
+
+  getContractList() {
+    this.checkedAll = false;
+    for(let i = 0; i < this.contracts.length; i++){
+      this.contracts[i].checked = false;
+    }
+
+    if(this.parentId == 1)
         //Danh sách hợp đồng tạo
         this.contractFolderService.getContractCreatedList(this.filter_name, this.status.toString(), this.p1, this.defaultSize).subscribe(data => {
           this.contracts = data.entities;
@@ -108,7 +132,7 @@ export class AddContractFolderComponent implements OnInit {
           this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
         });
 
-      if(this.parentId == 2){
+    if(this.parentId == 2){
         if(this.status == -1){
           this.contractFolderService.getContractShareList(this.filter_name, this.p1, this.defaultSize).subscribe(data => {
             this.contracts = data.entities;

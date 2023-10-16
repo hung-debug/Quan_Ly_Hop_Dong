@@ -125,7 +125,7 @@
       <div class="form-group">
         <div class="label_item">{{'expiration-date' | translate}} <span class="require_star">*</span></div>
         <div>
-          <p-calendar [(ngModel)]="sign_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true"
+          <p-calendar [(ngModel)]="sign_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="false"
             dateFormat="dd/mm/yy"></p-calendar>
         </div>
       </div>
@@ -143,7 +143,7 @@
       <div class="form-group">
         <div class="label_item">{{'expire.date.contract' | translate}}</div>
         <div>
-          <p-calendar [(ngModel)]="expire_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true"
+          <p-calendar [(ngModel)]="expire_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="false"
             dateFormat="dd/mm/yy"></p-calendar>
         </div>
       </div>

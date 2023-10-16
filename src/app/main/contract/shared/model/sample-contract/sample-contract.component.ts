@@ -361,6 +361,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let dataPosition: any[] = [];
     let dataNotPosition: any[] = [];
 
+    console.log("clone ", this.datas.is_determine_clone);
+
     this.datas.is_determine_clone.forEach((element: any) => {
       element.recipients.forEach((item: any) => {
         let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient_id == item.id)[0];
@@ -399,12 +401,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     // check data object have contract number (not assign object)
-    let is_obj_contract_number = this.datas.is_data_object_signature.filter((p: any) => !p.recipient_id && !p.recipient && p.type == 4 && this.datas.contract_no)[0];
+    let is_obj_contract_number = this.datas.is_data_object_signature.filter((p: any) => !p.recipient_id && !p.recipient && p.type == 4 && this.datas.contract_no);
+
     if (is_obj_contract_number) {
-      let item = _.cloneDeep(is_obj_contract_number);
-      item.is_type_party = is_obj_contract_number.type;
-      item.sign_unit = 'so_tai_lieu';
-      dataPosition.push(item);
+      for(let i = 0; i < is_obj_contract_number.length; i++) {
+        let item = _.cloneDeep(is_obj_contract_number[i]);
+        item.is_type_party = is_obj_contract_number[i].type;
+        item.sign_unit = 'so_tai_lieu';
+        item.id_have_data = is_obj_contract_number[i].id;
+        dataPosition.push(item);
+      }
     }
 
     this.dataSignPosition = [...dataPosition, ...dataNotPosition];
@@ -471,7 +477,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (((d.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5)) ||
           (d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
           (d.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
-          (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6))) &&
+          (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7))) &&
           (((d.email ? d.email : d.recipient?.email) === data.email)) ||
           (!d.recipient && d.sign_unit == 'text') ||
           (!d.email && this.datas.contract_no && d.sign_unit == 'so_tai_lieu')) {
@@ -821,8 +827,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     // set size ô ký
                     // element['width'] = '135';
                     // element['height'] = '85';
-                    element['width'] = '140';
-                    element['height'] = '50';
+                    element['width'] = '180';
+                    element['height'] = '66';
                   }
 
                   this.objSignInfo.width = element['height'];
@@ -887,7 +893,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (isSignType == 'chu_ky_anh') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
         } else if (isSignType == 'chu_ky_so') {
-          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6) && element.role != 2);
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7) && element.role != 2);
         } else if (isSignType == 'text') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role == 4); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
 
@@ -2001,7 +2007,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // valid ký kéo thiếu ô ký cho từng loại ký
         for (const element of data_organization) {
           if (element.sign_type.length > 0) {
-            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6) && arrSign_organization.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
+            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7) && arrSign_organization.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
               error_organization++;
               nameSign_organization.name = element.name;
               nameSign_organization.sign_type = 'chu_ky_so';
@@ -2033,7 +2039,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // valid ký kéo thiếu ô ký cho từng loại ký
         for (const element of data_partner) {
           if (element.sign_type.length > 0) {
-            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6) && arrSign_partner.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
+            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7) && arrSign_partner.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
               countError_partner++;
               nameSign_partner.name = element.name;
               nameSign_partner.sign_type = 'chu_ky_so';

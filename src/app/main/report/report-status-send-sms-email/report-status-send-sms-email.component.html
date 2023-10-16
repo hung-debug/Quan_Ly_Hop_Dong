@@ -42,9 +42,8 @@
         <!-- <span style="color: red"> *</span> -->
       </div>
       <div class="input-line">
-        <p-calendar [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true" selectionMode="range"
+        <p-calendar [readonlyInput]="false" [(ngModel)]="date" [showIcon]="true" selectionMode="range"
         [maxDate]="this.maxSelectableDate"
-        (onSelect)="onSelectDateRange(date)"
         (onClose)="onCloseCalendar()"
         dateFormat="dd/mm/yy"></p-calendar>
       </div>
@@ -87,11 +86,7 @@
             <td>{{convertTime(list.createDate)}}</td> <!--Thời gian gửi-->
             <td [ngStyle]="{color: list.status == 'Thành công' ? 'green' : 'red'}" style="text-align: center; ">
               {{list.status}}</td> <!--Trạng thái gửi-->
-            <td *ngIf="list.contractStatus == 20" style="text-align: center;">{{'sys.processing' | translate}}</td>
-            <td *ngIf="list.contractStatus == 2" style="text-align: center;">{{'contract.status.overdue' | translate}}</td>
-            <td *ngIf="list.contractStatus == 31" style="text-align: center;">{{'contract.status.fail' | translate}}</td>
-            <td *ngIf="list.contractStatus == 32" style="text-align: center;">{{'contract.status.cancel' | translate}}</td>
-            <td *ngIf="list.contractStatus == 30" style="text-align: center;">{{'contract.status.complete' | translate}}</td>
+            <td style="text-align: center;">{{list.contractStatus}}</td>
           </ng-container>
         </tr>
       </ng-template>

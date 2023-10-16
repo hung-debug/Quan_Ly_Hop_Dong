@@ -18,7 +18,7 @@ export class ConvertStatusService {
       return this.translate.instant('contract.status.cancel');
     } else if (code == 'rejected') {
       return this.translate.instant('contract.status.fail');
-    } else if (code == 'expired') {
+    } else if (code == 'expired' || code == 'exprire') {
       return this.translate.instant('contract.status.overdue');
     } else if (code == 'prepare_expires') {
       return this.translate.instant('prepare_expires');

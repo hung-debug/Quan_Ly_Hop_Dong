@@ -742,6 +742,13 @@
   "success.upload.file.attach": "Upload attached file successfully",
   "error.upload.file.attach": "Uploading attachment failed",
   "error.recognition.back.cccd": "You are taking a photo of the front of the ID. Please take a photo of the back of your ID",
-  "contracts.existed.folder":"The contracts existed in folder"
-
+  "contracts.existed.folder":"The contracts existed in folder",
+  "list.org.not.permission":"List of contracts of organizations that have not been decentralized",
+  "overview.report":"Overview report",
+  "detail.report":"Detail report",
+  "contract.create.unit":"Contract unit create",
+  "complete.time":"Completion time",
+  "my.org.not.authen":"My organization's contract list is not yet authorized",
+  "create.contract.success":"Create contract successfully!",
+  "contract.no.existed":"The contract no is existed"
 }

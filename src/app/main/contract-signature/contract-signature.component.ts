@@ -1316,11 +1316,12 @@ export class ContractSignatureComponent implements OnInit {
             imageRender = <HTMLElement>(document.getElementById('export-html-hsm'));
           }
 
-          let signI = '';
+          let signI = null;
 
-          if (imageRender) {
-            const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
-            signI = textSignB.split(',')[1];
+          if (result.mark) {
+            // const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
+            // signI = textSignB.split(',')[1];
+            signI = this.srcMark.split(',')[1];
           }
 
           this.dataHsm = {
@@ -1440,7 +1441,6 @@ export class ContractSignatureComponent implements OnInit {
           // const widthList = clusteredLists.map((list: any) => list.map((item: any) => item.fields[0].width));
 
           let isResult: boolean = true;
-          console.log("test1");
           // for(let i = 0; i < clusteredLists.length; i++) {
           // this.widthSign = widthList[i][0];
           await of(null).pipe(delay(150)).toPromise();
@@ -1453,9 +1453,10 @@ export class ContractSignatureComponent implements OnInit {
           }
           let signI = '';
 
-          if (imageRender) {
+          if (this.srcMark) {
             const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
-            signI = textSignB.split(',')[1];
+            // signI = textSignB.split(',')[1];
+            signI = this.srcMark.split(',')[1];
           }
 
           this.spinner.show()
@@ -1619,12 +1620,12 @@ export class ContractSignatureComponent implements OnInit {
                   imageRender = null
                   signI = null
                 }
-
+                
                 if (imageRender) {
-                  const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
-                  signI = textSignB.split(',')[1];
+                  // const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
+                  // signI = textSignB.split(',')[1];
+                  signI = this.srcMark.split(',')[1]
                 }
-
                 try {
                   const getSignatureInfoTokenV1Data: any = await this.contractServiceV1.getSignatureInfoTokenV1(
                     this.signCertDigital.Base64, signI
@@ -1980,13 +1981,14 @@ export class ContractSignatureComponent implements OnInit {
           imageRender = null
           signI = null
         }
-
+              
         if (imageRender) {
           const textSignB = await domtoimage.toPng(
             imageRender,
             this.getOptions(imageRender)
           );
-          signI = textSignB.split(',')[1];
+          // signI = textSignB.split(',')[1];
+          signI = this.srcMark.split(',')[1];
         }
 
         for (let i = 0; i < fileC.length; i++) {

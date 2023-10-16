@@ -168,7 +168,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     }
 
     if(d.login_by == 'phone') {
-      d.sign_type = d.sign_type.filter((p: any) => ![2].includes(p.id));
+      d.sign_type = d.sign_type.filter((p: any) => ![2, 7].includes(p.id));
     }
 
     if(role == 'sign_partner') {
@@ -179,13 +179,13 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         }
     } else if(role == 'signer') {
       if (d.login_by == 'phone') {
-        d.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 2, 5].includes(p.id));
+        d.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 2, 5, 7].includes(p.id));
       } else {
         d.isListSignNotPerson = this.signTypeList.filter((p) => ![1,5].includes(p.id));
       }
     } else if(role == 'personal') {
       if (d.login_by == 'phone') {
-        d.isListSignPersonal = this.signTypeList.filter((p) => ![2].includes(p.id));
+        d.isListSignPersonal = this.signTypeList.filter((p) => ![2,7].includes(p.id));
       } else {
         d.isListSignPersonal = this.signTypeList;
       }
