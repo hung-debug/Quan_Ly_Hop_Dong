@@ -373,7 +373,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     if (!this.roleMess) { 
       let isOrg = this.isOrg;
 
-      if(!this.isQLHD_03) {
+      if(!this.isQLHD_03 && !this.isQLHD_04) {
         isOrg ='off';
       }
 
@@ -427,7 +427,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       
       let isOrg = this.isOrg;
 
-      if(!this.isQLHD_03) {
+      if(!this.isQLHD_03 && !this.isQLHD_04) {
         isOrg ='off';
       }
 
@@ -506,7 +506,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     if (!this.roleMess) {
       let isOrg = this.isOrg;
 
-      if(!this.isQLHD_03) {
+      if(!this.isQLHD_03 && !this.isQLHD_04) {
         isOrg ='off';
       }
 

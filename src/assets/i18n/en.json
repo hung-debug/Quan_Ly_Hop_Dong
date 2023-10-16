@@ -740,5 +740,6 @@
   "error.contract-type.required":"Contract type cannot be left blank",
   "contracts.existed.folder":"The contracts existed in folder",
   "my.org.not.authen":"My organization's contract list is not yet authorized",
-  "create.contract.success":"Create contract successfully!"
+  "create.contract.success":"Create contract successfully!",
+  "contract.no.existed":"The contract no is existed"
 }
