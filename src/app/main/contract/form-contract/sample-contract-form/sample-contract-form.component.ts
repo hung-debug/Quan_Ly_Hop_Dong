@@ -1569,8 +1569,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       return;
     } else {
       let coutError = false;
-      let contract_no = this.datasForm.contract_no;
-      let code = this.datasForm.code;
+      let contract_no = this.datasForm.contract_no?.trim();
+      let code = this.datasForm.code?.trim();
       if (this.isChangeNumberContract != this.datasForm.contract_no) {
         await this.contractService.checkCodeUnique(this.datasForm.contract_no).toPromise().then(
           dataCode => {
@@ -1598,8 +1598,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           }
       }
 
-      this.datasForm.contract_no = contract_no;
-      this.datasForm.code = code;
+      this.datasForm.contract_no = contract_no?.trim();
+      this.datasForm.code = code?.trim();
       if (coutError) return;
 
       if (action == 'save_draft') {
@@ -1710,8 +1710,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
         if(!this.datasForm.contract_no || !this.datasForm.code) {
           if(this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0]) {
-            this.datasForm.contract_no = this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0].value;
-            this.datasForm.code = this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0].value;
+            this.datasForm.contract_no = this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0].value?.trim();
+            this.datasForm.code = this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0].value?.trim();
           }
         }
         this.checkNumber(this.datasForm.ceca_push, this.convertToSignConfig().length)
