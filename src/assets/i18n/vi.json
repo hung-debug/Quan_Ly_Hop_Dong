@@ -753,6 +753,7 @@
   "name.folder.not.special.char":"Tên thư mục không được chứa ký tự đặc biệt",
   "contracts.existed.folder":"Hợp đồng đã tồn tại trong thư mục",
   "my.org.not.authen":"Danh sách hợp đồng tổ chức của tôi chưa được phân quyền",
-  "create.contract.success":"Tạo hợp đồng thành công!"
+  "create.contract.success":"Tạo hợp đồng thành công!",
+  "contract.no.existed":"Số hợp đồng đã tồn tại"
 
 }
