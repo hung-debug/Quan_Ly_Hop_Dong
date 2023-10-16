@@ -763,6 +763,7 @@
   "contract.create.unit":"Đơn vị tạo hợp đồng",
   "complete.time":"Thời gian hoàn thành",
   "my.org.not.authen":"Danh sách hợp đồng tổ chức của tôi chưa được phân quyền",
-  "create.contract.success":"Tạo hợp đồng thành công!"
+  "create.contract.success":"Tạo hợp đồng thành công!",
+  "contract.no.existed":"Số hợp đồng đã tồn tại"
 
 }

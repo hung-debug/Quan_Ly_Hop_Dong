@@ -186,7 +186,8 @@ export class ConfirmContractFormComponent implements OnInit {
         (data: any) => {
           if(data.errors?.length > 0) {
             if(data.errors[0].code == 1017) {
-              this.toastService
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout('contract.no.existed','',3000);
             }
           } else {
             this.router.navigate(['/main/contract/create/processing']);
