@@ -127,6 +127,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       (data: any) => {
         if(data.errors?.length > 0) {
           if(data.errors[0].code == 1017) {
+            this.spinner.hide();
             this.toastService.showErrorHTMLWithTimeout('contract.no.existed','',3000);
           }
         } else {
