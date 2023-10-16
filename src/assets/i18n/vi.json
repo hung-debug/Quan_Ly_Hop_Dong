@@ -761,5 +761,8 @@
   "overview.report":"Báo cáo tổng quan eContract - mSale",
   "detail.report":"Báo cáo chi tiết eContract",
   "contract.create.unit":"Đơn vị tạo hợp đồng",
-  "complete.time":"Thời gian hoàn thành"
+  "complete.time":"Thời gian hoàn thành",
+  "my.org.not.authen":"Danh sách hợp đồng tổ chức của tôi chưa được phân quyền",
+  "create.contract.success":"Tạo hợp đồng thành công!"
+
 }
