@@ -53,6 +53,7 @@ import { TimeService } from 'src/app/service/time.service';
 import { vgca_sign_issued } from 'src/assets/plugins/vgcaplugin';
 import { WebSocketSubject } from "rxjs/webSocket";
 import { WebsocketService } from 'src/app/service/websocket.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-consider-contract',
@@ -4241,7 +4242,7 @@ export class ConsiderContractComponent
 
   async signBCY(pdfContractPath: any, fieldId: any){
     let params = {
-      FileUploadHandler: `https://econtractdev.mobifone.ai/service/api/v1/processes/digital-sign-bcy?field_id=${fieldId}`,
+      FileUploadHandler: `${environment.apiUrl}/api/v1/processes/digital-sign-bcy?field_id=${fieldId}`,
       SessionId: "",
       FileName: pdfContractPath,
       DocNumber: "",
