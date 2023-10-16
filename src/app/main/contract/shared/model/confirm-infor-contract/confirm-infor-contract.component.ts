@@ -127,7 +127,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       (data: any) => {
         if(data.errors?.length > 0) {
           if(data.errors[0].code == 1017) {
-            this.toastService
+            this.toastService.showErrorHTMLWithTimeout('contract.no.existed','',3000);
           }
         } else {
           this.router.navigate(['/main/contract/create/processing']);
@@ -188,7 +188,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         });
       });
 
-      console.log("is ", isHaveFieldId);
       this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId, action);
     } else {
       this.data_sample_contract = [];
@@ -234,6 +233,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
                 if (!item.recipient_id) item.recipient_id = '';
 
                 if (!item.status) item.status = 0;
+
+                if(item.contract_no) item.contract_no = item.contract_no.trim();
               }
             } else if(item.sign_unit == 'text'){
               if(item.text_type == "currency"){
@@ -345,6 +346,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       for (let i = 0; i < dataSignId.length; i++) {
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
+        dataSignId[i].contract_no = dataSignId[i].contract_no?.trim();
 
         await this.contractService.getContractSampleEdit(dataSignId[i], id).toPromise().then(
             (data: any) => {
