@@ -742,6 +742,7 @@
   "success.upload.file.attach": "Upload attached file successfully",
   "error.upload.file.attach": "Uploading attachment failed",
   "error.recognition.back.cccd": "You are taking a photo of the front of the ID. Please take a photo of the back of your ID",
+  "error.recognition.front.cccd": "You are taking a photo of the back of the ID. Please take a photo of the front of your ID",
   "contracts.existed.folder":"The contracts existed in folder",
   "list.org.not.permission":"List of contracts of organizations that have not been decentralized",
   "overview.report":"Overview report",
