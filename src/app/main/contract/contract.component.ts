@@ -360,7 +360,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.typeDisplay = 'downloadMany';
     this.roleMess = "";
     if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
-      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền";
+      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền"; 
     }
 
     if (!this.roleMess) {  
