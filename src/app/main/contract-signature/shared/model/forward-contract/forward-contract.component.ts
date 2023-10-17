@@ -351,7 +351,7 @@ export class ForwardContractComponent implements OnInit {
             is_replace: false,
             login_by: this.login,
             locale: this.locale,
-            sign_type: this.myForm.value.dataSign
+            // sign_type: this.myForm.value.dataSign
           };
           
           if (this.login == 'phone') {
