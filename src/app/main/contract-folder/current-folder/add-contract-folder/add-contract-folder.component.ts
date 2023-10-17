@@ -289,7 +289,18 @@ getCreatedDate(item: any){
   }
 
   selectContract(item: any){
- 
+    if(!item.checked) this.checkedAll = false;
+    else {
+      let checked = true;
+      for (let i = 0; i < this.contracts.length; i++){
+        if(!this.contracts[i].checked) {
+          checked = false;
+          break;
+        }
+      }
+
+      this.checkedAll = checked;
+    }
   }
 
   filterContract(){
