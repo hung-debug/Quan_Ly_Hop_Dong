@@ -244,6 +244,7 @@ export class ContractService {
     size: any,
     issue?: any
   ): Observable<any> {
+    console.log("iss ", isOrg);
     this.getCurrentUser();
 
     if (filter_from_date != '') {

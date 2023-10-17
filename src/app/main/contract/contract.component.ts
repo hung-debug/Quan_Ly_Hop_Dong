@@ -366,7 +366,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     if (!this.roleMess) { 
       let isOrg = this.isOrg;
 
-      if(!this.isQLHD_03) {
+      if(!this.isQLHD_03 && !this.isQLHD_04) {
         isOrg ='off';
       }
 
@@ -419,7 +419,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       
       let isOrg = this.isOrg;
 
-      if(!this.isQLHD_03) {
+      if(!this.isQLHD_03 && !this.isQLHD_04) {
         isOrg ='off';
       }
 
@@ -486,6 +486,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.pageTotal = 0;
     this.scrollY = 0;
     this.roleMess = "";
+    this.typeDisplay="view";
     this.contractService.sidebarContractEvent.subscribe((event: any) => {
       if(event='contract-signature')
       this.p = 1;
@@ -498,7 +499,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     if (!this.roleMess) {
       let isOrg = this.isOrg;
 
-      if(!this.isQLHD_03) {
+      if(!this.isQLHD_03 && !this.isQLHD_04) {
         isOrg ='off';
       }
 
