@@ -31,12 +31,12 @@
               <div class="col-md-2">{{'create-date' | translate}}</div>
               <div class="col-md-2">{{'expiration-date' | translate}}</div>
 
-              <div class="col-md-2 item_icon">
+              <div class="col-md-2 item_icon" [style.margin-left.px]="scroll ? -10 : 0">
                 <input id="allDownload" name="allDownload" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleAll(checkedAll)"/>
             </div>
           </div>
           
-          <div id="contract-list">
+          <div id="contract-list" #scrollableDiv>
             <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p1, totalItems: pageTotal, id: 'p1'}">
                 <div class="row">
                     <!--Cột 1-->

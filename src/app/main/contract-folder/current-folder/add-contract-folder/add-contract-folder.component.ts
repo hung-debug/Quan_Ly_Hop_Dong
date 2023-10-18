@@ -1,6 +1,6 @@
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractFolderService } from 'src/app/service/contract-folder.service';
-import { Component, Inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { contractTypes, sideList } from 'src/app/config/variable';
@@ -12,6 +12,8 @@ import { ToastService } from 'src/app/service/toast.service';
   styleUrls: ['./add-contract-folder.component.scss']
 })
 export class AddContractFolderComponent implements OnInit {
+  @ViewChild('scrollableDiv') scrollableDiv: ElementRef;
+
   action: string;
   title: string ="";
   contractTypes: any[] = contractTypes;
@@ -68,7 +70,8 @@ export class AddContractFolderComponent implements OnInit {
     private translateService: TranslateService,
     private contractFolderService: ContractFolderService,
     private toastService: ToastService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private elementRef: ElementRef
   ) { }
 
   ngOnInit() {
@@ -110,7 +113,15 @@ export class AddContractFolderComponent implements OnInit {
     }
   }
 
+  scroll: boolean = false;
   getContractList() {
+    // Kiểm tra xem phần tử có thanh cuộn hay không
+    if (this.scrollableDiv.nativeElement.scrollHeight > 0) {
+      this.scroll = true;
+    } else {
+      console.log('Phần tử không có thanh cuộn.');
+    }
+
     this.checkedAll = false;
     for(let i = 0; i < this.contracts.length; i++){
       this.contracts[i].checked = false;
