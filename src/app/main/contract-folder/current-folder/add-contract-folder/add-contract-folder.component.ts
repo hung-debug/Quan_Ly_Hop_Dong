@@ -74,6 +74,7 @@ export class AddContractFolderComponent implements OnInit {
     private elementRef: ElementRef
   ) { }
 
+
   ngOnInit() {
     this.title = 'add.contract.folder';
     this.contractTypes = this.translateOptions(this.contractTypes);
@@ -116,7 +117,7 @@ export class AddContractFolderComponent implements OnInit {
   scroll: boolean = false;
   getContractList() {
     // Kiểm tra xem phần tử có thanh cuộn hay không
-    if (this.scrollableDiv.nativeElement.scrollHeight > 0) {
+    if (this.scrollableDiv.nativeElement.scrollHeight > 0 && !(this.scrollableDiv.nativeElement.scrollHeight > this.scrollableDiv.nativeElement.clientHeight)) {
       this.scroll = true;
     } else {
       this.scroll = false;
