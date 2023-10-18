@@ -119,7 +119,7 @@ export class AddContractFolderComponent implements OnInit {
     if (this.scrollableDiv.nativeElement.scrollHeight > 0) {
       this.scroll = true;
     } else {
-      console.log('Phần tử không có thanh cuộn.');
+      this.scroll = false;
     }
 
     this.checkedAll = false;
