@@ -42,6 +42,8 @@ export class DashboardService {
     this.getCurrentUser();
     
     let countContractCreateUrl = '';
+
+    console.log("iss org ", isOrg);
     
     if(isOrg != 'off'){
       if(organization_id == ""){

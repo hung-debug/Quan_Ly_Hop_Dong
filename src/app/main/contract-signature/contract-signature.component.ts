@@ -1453,7 +1453,7 @@ export class ContractSignatureComponent implements OnInit {
           }
           let signI = '';
 
-          if (imageRender) {
+          if (this.srcMark) {
             const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
             // signI = textSignB.split(',')[1];
             signI = this.srcMark.split(',')[1];

@@ -745,7 +745,8 @@
   "error.upload.file.duplicate": "đã tồn tại, vui lòng chọn file khác",
   "success.upload.file.attach": "Upload file đính kèm thành công",
   "error.upload.file.attach": "Upload file đính kèm thất bại",
-  "error.recognition.back.cccd": "Bạn đang chụp mặt trước CCCD. Vui lòng chụp lại mặt sau của CCCD",
+  "error.recognition.back.cccd": "Bạn đang chụp mặt trước CMT/CCCD. Vui lòng chụp lại mặt sau của CMT/CCCD",
+  "error.recognition.front.cccd": "Bạn đang chụp mặt trước CMT/CCCD. Vui lòng chụp lại mặt sau của CMT/CCCD",
   "role.contract-folder.edit":"Sửa thư mục",
   "role.contract-folder.delete":"Xóa thư mục",
   "role.contract-folder.detail":"Chi tiết thư mục",
@@ -761,5 +762,9 @@
   "overview.report":"Báo cáo tổng quan eContract - mSale",
   "detail.report":"Báo cáo chi tiết eContract",
   "contract.create.unit":"Đơn vị tạo hợp đồng",
-  "complete.time":"Thời gian hoàn thành"
+  "complete.time":"Thời gian hoàn thành",
+  "my.org.not.authen":"Danh sách hợp đồng tổ chức của tôi chưa được phân quyền",
+  "create.contract.success":"Tạo hợp đồng thành công!",
+  "contract.no.existed":"Số hợp đồng đã tồn tại"
+
 }

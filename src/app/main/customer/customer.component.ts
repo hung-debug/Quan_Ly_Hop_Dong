@@ -96,7 +96,6 @@ export class CustomerComponent implements OnInit {
           }
         });
         this.list = filterList.sort(
-          (a, b) => (a.id > b.id ? 1 : -1)
         );
       });
     }else {
@@ -122,7 +121,6 @@ export class CustomerComponent implements OnInit {
           }
         });
         this.list = filterList.sort(
-          (a, b) => (a.id > b.id ? 1 : -1)
         );
       });
     }

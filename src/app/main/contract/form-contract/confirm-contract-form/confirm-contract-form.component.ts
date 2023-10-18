@@ -112,7 +112,6 @@ export class ConfirmContractFormComponent implements OnInit {
     );
 
     if (!this.datasForm.contract_user_sign) {
-      console.log("vao day ");
       if (this.datasForm.is_data_object_signature && this.datasForm.is_data_object_signature.length && this.datasForm.is_data_object_signature.length > 0) {
         this.datasForm.is_data_object_signature.forEach((res: any) => {
           res['id_have_data'] = res.id;
@@ -135,9 +134,6 @@ export class ConfirmContractFormComponent implements OnInit {
         })
       }
     }
-
-    console.log("form 3 ", this.datasForm.contract_user_sign)
-
   }
 
   getPartnerCoordinationer(item: any) {
@@ -155,7 +151,6 @@ export class ConfirmContractFormComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("usss ", this.datasForm.contract_user_sign);
     if (
       this.save_draft_infor_form &&
       this.save_draft_infor_form.close_header &&
@@ -163,13 +158,9 @@ export class ConfirmContractFormComponent implements OnInit {
     ) {
       this.SaveContract('saveDraft_contract');
     }
-    console.log("usss 1 ", this.datasForm.contract_user_sign);
-
   }
 
   back(e: any, step?: any) {
-    console.log("back ", this.datasForm.contract_user_sign);
-
     this.nextOrPreviousStep(step);
   }
 
@@ -192,22 +183,28 @@ export class ConfirmContractFormComponent implements OnInit {
     //this.contractService.addConfirmContract(this.datasForm).subscribe((data) => {
     this.spinner.show();
     this.contractService.changeStatusContract(this.datasForm.id, 10, '').subscribe(
-        (data) => {
-          this.router.navigate(['/main/contract/create/processing']);
-          this.router
-            .navigateByUrl('/', { skipLocationChange: true })
-            .then(() => {
-              this.router.navigate(['/main/contract/create/processing']);
-            });
-          this.spinner.show();
-          this.toastService.showSuccessHTMLWithTimeout(
-            'Tạo hợp đồng thành công!',
-            '',
-            3000
-          );
-
-          this.spinner.hide();
-
+        (data: any) => {
+          if(data.errors?.length > 0) {
+            if(data.errors[0].code == 1017) {
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout('contract.no.existed','',3000);
+            }
+          } else {
+            this.router.navigate(['/main/contract/create/processing']);
+            this.router
+              .navigateByUrl('/', { skipLocationChange: true })
+              .then(() => {
+                this.router.navigate(['/main/contract/create/processing']);
+              });
+            this.spinner.show();
+            this.toastService.showSuccessHTMLWithTimeout(
+              'create.contract.success',
+              '',
+              3000
+            );
+  
+            this.spinner.hide();  
+          }
         },
         (error) => {
           this.spinner.show();
@@ -324,6 +321,8 @@ export class ConfirmContractFormComponent implements OnInit {
                 if (!item.recipient_id) item.recipient_id = '';
 
                 if (!item.status) item.status = 0;
+
+                if(item.contract_no) item.contract_no = item.contract_no.trim();
               }
             } else {
               item['type'] = 1;
@@ -418,6 +417,7 @@ export class ConfirmContractFormComponent implements OnInit {
       for (let i = 0; i < datasFormignId.length; i++) {
         let id = datasFormignId[i].id_have_data;
         delete datasFormignId[i].id_have_data;
+        datasFormignId[i].contract_no = datasFormignId[i].contract_no?.trim();
 
         await this.contractService.getContractSampleEdit(datasFormignId[i], id).toPromise().then((data: any) => {
               datasFormample_contract.push(data);
