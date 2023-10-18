@@ -765,6 +765,6 @@
   "complete.time":"Thời gian hoàn thành",
   "my.org.not.authen":"Danh sách hợp đồng tổ chức của tôi chưa được phân quyền",
   "create.contract.success":"Tạo hợp đồng thành công!",
-  "contract.no.existed":"Số hợp đồng đã tồn tại"
-
+  "contract.no.existed":"Số hợp đồng đã tồn tại",
+  "note.update.person.processing":"Lưu ý: Chỉ được cập nhật thông tin 1 lần/ người tham gia luồng xử lý"
 }
