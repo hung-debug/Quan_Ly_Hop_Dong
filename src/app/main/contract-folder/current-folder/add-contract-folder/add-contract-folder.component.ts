@@ -100,8 +100,10 @@ export class AddContractFolderComponent implements OnInit {
     } else {
       for (let i = 0; i < this.contracts.length; i++){
         this.contracts[i].checked = true;
+
+        //Chia 2 TH: Hợp đồng tạo - nhận
         this.dataChecked.push({
-          id: this.contracts[i].participants[0]?.contract_id,
+          id: this.contracts[i].contract_id,
           selectedId : this.contracts[i].id
         })
       }
