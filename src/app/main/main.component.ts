@@ -71,7 +71,7 @@ export class MainComponent implements OnInit {
 
     //update title by component
     this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('type')));
-   
+
     this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
 
     this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
@@ -82,6 +82,10 @@ export class MainComponent implements OnInit {
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
       this.numberNotification = data.total_elements;
     });
+  }
+
+  readAll(){
+
   }
 
   //apply change title
@@ -98,14 +102,14 @@ export class MainComponent implements OnInit {
   //click logout
   logout() {
      //call api delete token
-     this.contractService.deleteToken().subscribe((res:any) => { 
+     this.contractService.deleteToken().subscribe((res:any) => {
     })
 
     sessionStorage.clear();
     localStorage.removeItem('currentUser');
     localStorage.removeItem('myTaxCode');
     localStorage.removeItem('url');
-  
+
     this.router.navigate(['/login']);
   }
 
@@ -132,7 +136,7 @@ export class MainComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+
       let is_data = result
     })
   }
@@ -206,7 +210,7 @@ export class MainComponent implements OnInit {
   }
 
   getStyle() {
-    
+
     if (this.router.url.includes("contract-signature")) {
       return {
         'margin-top': '40px'
@@ -226,7 +230,7 @@ export class MainComponent implements OnInit {
   openLinkNotification(link:any, id:any) {
     window.location.href = link.replace('&type=', '').replace('&type=1', '').replace('?id','?recipientId').replace('contract-signature','c').replace('signatures','s9').replace('consider','c9').replace('secretary','s8').replace('coordinates','c8');
     this.dashboardService.updateViewNotification(id).subscribe(data => {
-      
+
     });
   }
 
@@ -234,7 +238,7 @@ export class MainComponent implements OnInit {
     this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
       //this.numberNotification = data.total_elements;
       this.listNotification = data.entities;
-      
+
     });
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
       this.numberNotification = data.total_elements;

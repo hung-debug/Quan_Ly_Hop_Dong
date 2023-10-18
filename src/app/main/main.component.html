@@ -8,7 +8,7 @@
 
       <div class="search-wrapper">
         <h3>{{title | translate}}</h3>
-      </div>  
+      </div>
       <div *ngIf="getShowHideSideBar()">
         <div *ngIf="!this.mobile" ngbDropdown class="d-inline-block">
           <div class="social-icons" ngbDropdownToggle (click)="loadDataNotification()">
@@ -18,7 +18,11 @@
           </div>
 
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu" style="width: 500px;overflow: hidden auto;max-height: 315px;">
-            <div class="title_notification">{{'no.list' | translate}}</div>
+            <div style="display: flex; justify-content: space-between;">
+              <div class="title_notification">{{'no.list' | translate}}</div>
+              <div class="title_notification" (click)="readAll()">{{'read.all.noti' | translate}}</div>
+            </div>
+
             <div class="drop_notification" *ngFor="let item of listNotification; let i = index" (click)="openLinkNotification(item.notice_url, item.id)" [style.background-color]="item.status==0 ? '#eaf4ff' : ''">
               <a href="{{item.notice_url}}" style="text-decoration: none">
               <div class="row">
@@ -102,7 +106,7 @@
                 <div>{{'user.information' | translate }}</div>
               </div>
             </a>
-          
+
             <button *ngIf="!checkMailMbf()" ngbDropdownItem class="drop" (click)="resetPassword()">
               <div style="display: flex; align-items: center;">
                 <div class="db_user">
