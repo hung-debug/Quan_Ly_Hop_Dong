@@ -747,6 +747,7 @@
   "overview.report":"Overview report",
   "detail.report":"Detail report",
   "contract.create.unit":"Contract unit create",
-  "complete.time":"Completion time"
+  "complete.time":"Completion time",
+  "note.update.person.processing":"Note: Information can only be updated once/ a participant in the processing flow"
 
 }
