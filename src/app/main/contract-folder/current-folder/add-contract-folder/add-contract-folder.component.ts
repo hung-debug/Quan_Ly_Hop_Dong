@@ -1,6 +1,6 @@
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractFolderService } from 'src/app/service/contract-folder.service';
-import { AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, NgZone, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { contractTypes, sideList } from 'src/app/config/variable';
@@ -13,6 +13,8 @@ import { ToastService } from 'src/app/service/toast.service';
 })
 export class AddContractFolderComponent implements OnInit {
   @ViewChild('scrollableDiv') scrollableDiv: ElementRef;
+  @ViewChild('parent') parent: ElementRef;
+
 
   action: string;
   title: string ="";
@@ -71,7 +73,7 @@ export class AddContractFolderComponent implements OnInit {
     private contractFolderService: ContractFolderService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private elementRef: ElementRef
+    private changeDetectorRef: ChangeDetectorRef
   ) { }
 
 
@@ -79,6 +81,7 @@ export class AddContractFolderComponent implements OnInit {
     this.title = 'add.contract.folder';
     this.contractTypes = this.translateOptions(this.contractTypes);
   }
+
 
   convertActionFolder(action: string){
     switch (action){
@@ -116,13 +119,6 @@ export class AddContractFolderComponent implements OnInit {
 
   scroll: boolean = false;
   getContractList() {
-    // Kiểm tra xem phần tử có thanh cuộn hay không
-    if (this.scrollableDiv.nativeElement.scrollHeight > 0 && !(this.scrollableDiv.nativeElement.scrollHeight > this.scrollableDiv.nativeElement.clientHeight)) {
-      this.scroll = true;
-    } else {
-      this.scroll = false;
-    }
-
     this.checkedAll = false;
     for(let i = 0; i < this.contracts.length; i++){
       this.contracts[i].checked = false;
@@ -190,6 +186,16 @@ export class AddContractFolderComponent implements OnInit {
       if (this.pageTotal < this.pageEnd) {
         this.pageEnd = this.pageTotal;
       }
+
+        // Kiểm tra xem phần tử có thanh cuộn hay không
+      this.changeDetectorRef.detectChanges();
+      if(this.scrollableDiv.nativeElement.scrollHeight > this.scrollableDiv.nativeElement.clientHeight) {
+        this.scroll = true
+      } else {
+        this.scroll = false;
+      }
+
+      this.changeDetectorRef.detectChanges();
     }
 
     submit() {
