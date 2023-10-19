@@ -487,6 +487,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           let change = dataDetermine.filter((data: any) => (element.recipient_id as any) == (data.id as any));
           change.forEach((item: any, index: number) => {
             element.name = item.name;
+            element.email = item.email
           })
         })
       })
