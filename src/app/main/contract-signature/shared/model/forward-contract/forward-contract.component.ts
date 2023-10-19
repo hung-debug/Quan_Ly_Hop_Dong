@@ -176,6 +176,11 @@ export class ForwardContractComponent implements OnInit {
   changeTypeSign(e: any,) {
     this.login = e.target.value;
     
+    if(this.login == 'phone') {
+      this.dataSign = this.dataSign.filter((item: any) => item.id != 2);
+    } else {
+      this.actionWithSignTypeForm();
+    }
   }
 
   setLocale(lang: string) {
