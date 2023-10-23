@@ -18,6 +18,7 @@ export class DashboardService {
   countContractReceivedUrl: any = `${environment.apiUrl}/api/v1/dashboard/my-process`;
   listNotificationUrl: any = `${environment.apiUrl}/api/v1/notification/my-notice`;
   updateViewNotificationUrl:any = `${environment.apiUrl}/api/v1/notification/viewed/`;
+  readAllViewNotificationUrl:any = `${environment.apiUrl}/api/v1/notification/view-all`;
 
   listUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
 
@@ -92,6 +93,17 @@ export class DashboardService {
     const body ="";
     // return this.http.post<any>(this.updateViewNotificationUrl + id, body, {headers}).pipe(catchError(this.handleError));
     return this.http.post<any>(this.updateViewNotificationUrl + id, body, {headers});
+
+  }
+
+  readAllViewNotification() {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    console.log("tken",this.token);
+    const body ="";
+    return this.http.put<any>(this.readAllViewNotificationUrl,"" , {headers});
 
   }
 

@@ -753,6 +753,7 @@
   "create.contract.success":"Create contract successfully!",
   "contract.no.existed":"The contract no is existed",
   "note.update.person.processing":"Note: Information can only be updated once/ a participant in the processing flow",
-  "read.all.noti": "Read all"
+  "read.all.noti": "Read all",
+  "read.all.success":"Read all notification successfully"
 
 }

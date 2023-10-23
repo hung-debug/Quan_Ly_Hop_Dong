@@ -47,6 +47,7 @@ export class MainComponent implements OnInit {
               private deviceService: DeviceDetectorService,
               private contractService: ContractService,
               private spinner: NgxSpinnerService,
+              private toastService: ToastService,
               ) {
     this.title = 'err';
     translate.addLangs(['en', 'vi']);
@@ -79,28 +80,24 @@ export class MainComponent implements OnInit {
 
     this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
       data => {
-        console.log("data",data);
-
         this.nameCurrentUser = data?.name;
       });
 
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
       this.numberNotification = data.total_elements;
-      console.log("this.numberNotification",this.numberNotification);
 
     });
   }
 
   readAll(){
-    this.spinner.show();
-    for(let i = 0; i < this.getAlllistNotification.length; i++){
-      this.dashboardService.updateViewNotification(this.getAlllistNotification[i].id).subscribe(data => {
-        console.log("this.listNotification[i].dataaaaa",data);
-        console.log("this.listNotification[i].id",this.getAlllistNotification[i].id);
-      });
-
-    }
-    this.spinner.hide();
+    this.dashboardService.readAllViewNotification().subscribe(readAll =>{
+      if(readAll.status == true){
+        this.toastService.showSuccessHTMLWithTimeout('read.all.success',"",3000)
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigate(['/main/dashboard']);
+        });
+      }
+    })
   }
 
   //apply change title
@@ -111,7 +108,6 @@ export class MainComponent implements OnInit {
   getScreenResolution(): void {
     let screenWidth = window.screen.width;
     let screenHeight = window.screen.height;
-    console.log(screenWidth, screenHeight);
   }
 
   //click logout

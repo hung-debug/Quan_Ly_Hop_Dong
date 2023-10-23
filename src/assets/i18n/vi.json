@@ -767,5 +767,6 @@
   "create.contract.success":"Tạo hợp đồng thành công!",
   "contract.no.existed":"Số hợp đồng đã tồn tại",
   "note.update.person.processing":"Lưu ý: Chỉ được cập nhật thông tin 1 lần/ người tham gia luồng xử lý",
-  "read.all.noti": "Đọc tất cả"
+  "read.all.noti": "Đọc tất cả",
+  "read.all.success":"Đọc tất cả thông báo thành công"
 }
