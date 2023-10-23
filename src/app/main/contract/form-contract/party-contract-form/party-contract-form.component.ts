@@ -523,7 +523,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       }
       //Nếu là văn thư
       else if (data.role == 4) {
-        if (this.getDataSignUSBToken(data).length == 0) {
+        if (this.getDataSignHsm(data).length == 0 && this.getDataSignUSBToken(data).length == 0 && this.getDataSignCert(data).length == 0) {
           data.card_id = "";
         }
       }
@@ -1374,7 +1374,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // tạo mảng đối tượng văn thư tổ chức của tôi
+  // tạo mảng đối tượng văn thư tổ chức của đối tác
   getPartnerDocument(item: any) {
     // return item.recipients.filter((p: any) => p.role == 4);
     return item.recipients.filter((p: any) => p.role == 4).map((x: any) => {
