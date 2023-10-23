@@ -20,11 +20,11 @@
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu" style="width: 500px;overflow: hidden auto;max-height: 315px;">
             <div style="display: flex; justify-content: space-between;">
               <div class="title_notification">{{'no.list' | translate}}</div>
-              <div class="title_notification" (click)="readAll()">{{'read.all.noti' | translate}}</div>
+              <div style="cursor: pointer;" class="title_notification"  (click)="readAll()">{{'read.all.noti' | translate}}</div>
             </div>
 
             <div class="drop_notification" *ngFor="let item of listNotification; let i = index" (click)="openLinkNotification(item.notice_url, item.id)" [style.background-color]="item.status==0 ? '#eaf4ff' : ''">
-              <a href="{{item.notice_url}}" style="text-decoration: none">
+              <!-- <a href="{{item.notice_url}}" style="text-decoration: none"> -->
               <div class="row">
                   <div *ngIf="this.lang == 'vi'" class="col-md-12 item_contract_name">{{item.notice_name}}</div>
                   <div *ngIf="this.lang == 'en'" class="col-md-12 item_contract_name">{{item.notice_name.replace("Ký HĐ","Sign contract").replace("Quá hạn","Overdue").replace("Hoàn thành","Completed")}}</div>
@@ -54,7 +54,7 @@
                     <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire'">{{'contract.status.expire' | translate}}</span>
                 </div>
               </div>
-              </a>
+              <!-- </a> -->
             </div>
             <div class="view_all" (click)="viewAllNotification()">
                 {{'view.all' | translate}}

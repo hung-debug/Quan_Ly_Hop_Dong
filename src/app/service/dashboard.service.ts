@@ -40,11 +40,11 @@ export class DashboardService {
 
   public countContractCreate(isOrg:any, organization_id:any, from_date: any, to_date: any): Observable<any> {
     this.getCurrentUser();
-    
+
     let countContractCreateUrl = '';
 
     console.log("iss org ", isOrg);
-    
+
     if(isOrg != 'off'){
       if(organization_id == ""){
         countContractCreateUrl = this.countContractOrgAllCreateUrl + '?organizationId=' + this.organization_id + '&from_date=' + from_date + '&to_date=' + to_date;
@@ -54,7 +54,7 @@ export class DashboardService {
     }else{
       countContractCreateUrl = this.countContractCreateUrl + '?from_date=' + from_date + '&to_date=' + to_date;
     }
-    
+
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any[]>(countContractCreateUrl, {headers}).pipe();
   }
@@ -78,7 +78,7 @@ export class DashboardService {
       page = page - 1;
     }
     let listNotificationUrl = this.listNotificationUrl + '?status=' + status + '&from_date=' + from_date + '&to_date=' + to_date + '&size=' + size + '&page=' + page;
-    
+
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any[]>(listNotificationUrl, {headers}).pipe(catchError(this.handleError));
   }
@@ -88,9 +88,11 @@ export class DashboardService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-      
+
     const body ="";
-    return this.http.post<any>(this.updateViewNotificationUrl + id, body, {headers}).pipe(catchError(this.handleError));
+    // return this.http.post<any>(this.updateViewNotificationUrl + id, body, {headers}).pipe(catchError(this.handleError));
+    return this.http.post<any>(this.updateViewNotificationUrl + id, body, {headers});
+
   }
 
 

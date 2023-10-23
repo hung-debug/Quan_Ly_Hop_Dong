@@ -13,6 +13,7 @@ import { UserService } from '../service/user.service';
 import {DeviceDetectorService} from "ngx-device-detector";
 import { ContractService } from '../service/contract.service';
 import { environment } from 'src/environments/environment';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ImageDialogSignComponent } from './contract-signature/components/consider-contract/image-dialog-sign/image-dialog-sign.component';
 @Component({
   selector: 'app-main',
@@ -33,6 +34,7 @@ export class MainComponent implements OnInit {
   urlLoginType: any;
   nameCurrentUser:any;
   listNotification: any[] = [];
+  getAlllistNotification: any[] = [];
 
   constructor(private router: Router,
               private appService: AppService,
@@ -44,18 +46,19 @@ export class MainComponent implements OnInit {
               private userService: UserService,
               private deviceService: DeviceDetectorService,
               private contractService: ContractService,
+              private spinner: NgxSpinnerService,
               ) {
     this.title = 'err';
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang(localStorage.getItem('lang') || 'vi');
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        const currentRoute = event.urlAfterRedirects;
-        if (currentRoute.includes('/main/contract/create/')) {
-          this.sidebarservice.triggerReloadSidebar();
-        }
-      }
-    });
+    // this.router.events.subscribe((event) => {
+    //   if (event instanceof NavigationEnd) {
+    //     const currentRoute = event.urlAfterRedirects;
+    //     if (currentRoute.includes('/main/contract/create/')) {
+    //       this.sidebarservice.triggerReloadSidebar();
+    //     }
+    //   }
+    // });
   }
 
   lang: any;
@@ -76,16 +79,28 @@ export class MainComponent implements OnInit {
 
     this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
       data => {
+        console.log("data",data);
+
         this.nameCurrentUser = data?.name;
       });
 
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
       this.numberNotification = data.total_elements;
+      console.log("this.numberNotification",this.numberNotification);
+
     });
   }
 
   readAll(){
+    this.spinner.show();
+    for(let i = 0; i < this.getAlllistNotification.length; i++){
+      this.dashboardService.updateViewNotification(this.getAlllistNotification[i].id).subscribe(data => {
+        console.log("this.listNotification[i].dataaaaa",data);
+        console.log("this.listNotification[i].id",this.getAlllistNotification[i].id);
+      });
 
+    }
+    this.spinner.hide();
   }
 
   //apply change title
@@ -243,6 +258,11 @@ export class MainComponent implements OnInit {
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
       this.numberNotification = data.total_elements;
       //this.listNotification = data.entities;
+    });
+
+    this.dashboardService.getNotification(0, '', '', 10, '').subscribe(data => {
+      //this.numberNotification = data.total_elements;
+     this.getAlllistNotification = data.entities
     });
   }
 
