@@ -302,8 +302,9 @@ export class ForwardContractComponent implements OnInit {
         return;
       }
 
-      if(this.dataSign.length > 0 && !this.myForm.value.sign_type) {
-        this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn loại ký cho người được uỷ quyền','',3000);
+      console.log("this ", this.myForm.value.sign_type)
+      if(this.dataSign.length > 0 && !this.myForm.value.dataSign) {
+        this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn loại ký cho người được uỷ quyền/chuyển tiếp','',3000);
         return;
       }
 
