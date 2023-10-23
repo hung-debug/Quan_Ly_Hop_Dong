@@ -883,6 +883,21 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
+  selectContract(item: any){
+    if(!item.checked) this.checkedAll = false;
+    else {
+      let checked = true;
+      for (let i = 0; i < this.contracts.length; i++){
+        if(!this.contracts[i].checked) {
+          checked = false;
+          break;
+        }
+      }
+
+      this.checkedAll = checked;
+    }
+  }
+
   toggleOneDownloadShare(item: any) {
     let data = {
       id: item.participants[0]?.contract_id,
@@ -1620,7 +1635,7 @@ export class ContractSignatureComponent implements OnInit {
                   imageRender = null
                   signI = null
                 }
-                
+
                 if (imageRender) {
                   // const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
                   // signI = textSignB.split(',')[1];
@@ -1981,7 +1996,7 @@ export class ContractSignatureComponent implements OnInit {
           imageRender = null
           signI = null
         }
-              
+
         if (imageRender) {
           const textSignB = await domtoimage.toPng(
             imageRender,
