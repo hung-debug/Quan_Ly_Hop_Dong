@@ -751,5 +751,7 @@
   "complete.time":"Completion time",
   "my.org.not.authen":"My organization's contract list is not yet authorized",
   "create.contract.success":"Create contract successfully!",
-  "contract.no.existed":"The contract no is existed"
+  "contract.no.existed":"The contract no is existed",
+  "note.update.person.processing":"Note: Information can only be updated once/ a participant in the processing flow"
+
 }

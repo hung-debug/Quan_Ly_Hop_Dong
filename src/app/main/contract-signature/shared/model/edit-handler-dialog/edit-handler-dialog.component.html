@@ -13,6 +13,10 @@
         oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
         [disabled]="getOriganzationSignature().length == 1"> -->
 
+        <div style="padding-top: 10px; margin-left: 33px;">
+          <span class="label_detail text-color">{{'note.update.person.processing' | translate}}</span>
+        </div>
+
         <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
           <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}}-->
