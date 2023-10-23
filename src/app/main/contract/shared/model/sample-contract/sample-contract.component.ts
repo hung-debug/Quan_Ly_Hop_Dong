@@ -626,10 +626,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.signCurent.width = event.rect.width;
       this.signCurent.height = event.rect.height;
       if (this.signCurent.sign_unit == 'chu_ky_so' || this.signCurent.sign_unit == 'chu_ky_anh'){
-        this.signCurent.width <= 140 ? this.signCurent.width = 140 : this.signCurent.width
-        this.signCurent.height <= 50 ? this.signCurent.height = 50 : this.signCurent.height
+        this.signCurent.width <= 140 ? this.signCurent.width = 140 : this.signCurent.width = event.rect.width;
+        this.signCurent.height <= 50 ? this.signCurent.height = 50 : this.signCurent.height = event.rect.height;
         this.objSignInfo.width = this.signCurent.height
         this.objSignInfo.height = this.signCurent.width
+      } else {
+        this.objSignInfo.width = event.rect.width;
+        this.objSignInfo.height = event.rect.height;
       }
       this.tinhToaDoSign("canvas-step3-" + this.signCurent.page, this.signCurent.width, this.signCurent.height, this.objSignInfo);
       let _array = Object.values(this.obj_toa_do);
@@ -825,8 +828,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                       element['width'] = rect_location.width;
                       element['height'] = rect_location.height;
                     } else {
-                      element['width'] = '135';
-                      element['height'] = '28';
+                      if (event.target.className.includes('da-keo')){
+                        element['width'] = event.target.offsetWidth;
+                        element['height'] = event.target.offsetHeight;
+                      } else {
+                        element['width'] = '135';
+                        element['height'] = '28';
+                      }
                     }
                   } else {
                     // set size ô ký
