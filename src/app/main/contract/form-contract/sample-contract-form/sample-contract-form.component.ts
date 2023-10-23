@@ -591,10 +591,20 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         this.objSignInfo.id = event.target.id;
         this.objSignInfo.traf_x = x;
         this.objSignInfo.traf_y = y;
-        this.objSignInfo.width = event.rect.width;
-        this.objSignInfo.height = event.rect.height;
         this.signCurent.width = event.rect.width;
         this.signCurent.height = event.rect.height;
+        if (this.signCurent.sign_unit == 'chu_ky_so' || this.signCurent.sign_unit == 'chu_ky_anh'){
+          this.signCurent.width <= 140 ? this.signCurent.width = 140 : this.signCurent.width = event.rect.width
+          this.signCurent.height <= 50 ? this.signCurent.height = 50 : this.signCurent.height = event.rect.height
+          this.objSignInfo.width = this.signCurent.height
+          this.objSignInfo.height = this.signCurent.width
+        } else {
+          this.objSignInfo.width = event.rect.width;
+          this.objSignInfo.height = event.rect.height;
+  
+          this.signCurent.width = event.rect.width;
+          this.signCurent.height = event.rect.height;
+        }
         this.tinhToaDoSign("canvas-step3-" + this.signCurent.page, this.signCurent.width, this.signCurent.height, this.objSignInfo);
         let _array = Object.values(this.obj_toa_do);
         this.signCurent.position = _array.join(",");
@@ -613,7 +623,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
   showEventInfo = (event: any) => {
-    console.log("ev ", event);
     let canvasElement: HTMLElement | null;
 
     if (event.relatedTarget && event.relatedTarget.id) {
