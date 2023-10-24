@@ -176,6 +176,11 @@ export class ForwardContractComponent implements OnInit {
   changeTypeSign(e: any,) {
     this.login = e.target.value;
     
+    if(this.login == 'phone') {
+      this.dataSign = this.dataSign.filter((item: any) => item.id != 2);
+    } else {
+      this.actionWithSignTypeForm();
+    }
   }
 
   setLocale(lang: string) {
@@ -294,6 +299,12 @@ export class ForwardContractComponent implements OnInit {
         return;
       } else if (this.isReqCardIdToken && this.myForm.value.card_id && (!String(this.myForm.value.card_id).toLowerCase().match(parttern_input.taxCode_form) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id9)) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id12)) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng mã số thuế/CMT/CCCD', '', 3000);
+        return;
+      }
+
+      console.log("this ", this.myForm.value.sign_type)
+      if(this.dataSign.length > 0 && !this.myForm.value.dataSign) {
+        this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn loại ký cho người được uỷ quyền/chuyển tiếp','',3000);
         return;
       }
 
