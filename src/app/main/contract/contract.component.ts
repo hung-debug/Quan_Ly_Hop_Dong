@@ -13,6 +13,7 @@ import { ContractConnectDialogComponent } from './dialog/contract-connect-dialog
 import { AddConnectDialogComponent } from './dialog/add-connect-dialog/add-connect-dialog.component';
 import { ShareContractDialogComponent } from './dialog/share-contract-dialog/share-contract-dialog.component';
 import { DeleteContractDialogComponent } from './dialog/delete-contract-dialog/delete-contract-dialog.component';
+import { DeleteMultiContractDialogComponent } from './dialog/delete-multi-contract-dialog/delete-multi-contract-dialog.component';
 import { NgxSpinnerService } from "ngx-spinner";
 import { Subscription } from "rxjs";
 import { UserService } from 'src/app/service/user.service';
@@ -257,6 +258,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   dataChecked: any[] = [];
   toggleOneDownload(item: any){
+
+
     let data = {
       id: item.participants[0]?.contract_id,
       selectedId: item.id
@@ -288,6 +291,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
   toggleReleaseAll(checkedAll: boolean){
     this.dataReleaseChecked = [];
     if(checkedAll){
+
+
       for(let i = 0; i < this.contracts.length; i++){
         this.contracts[i].checked = false;
       }
@@ -307,6 +312,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.dataChecked = [];
 
     if(checkedAll){
+
+
       for(let i = 0; i < this.contracts.length; i++){
         this.contracts[i].checked = false;
       }
@@ -475,6 +482,133 @@ export class ContractComponent implements OnInit, AfterViewInit {
     }
   }
 
+  multiDeleteDraft(){
+    this.spinner.show();
+    this.typeDisplay = 'multiDeleteDraft';
+    this.roleMess = "";
+    if (this.isOrg == 'off' && !this.isQLHD_05) {
+      this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
+
+    } else if (this.isOrg == 'on' && !this.isQLHD_04) {
+      this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
+    }
+    if (!this.roleMess) {
+
+      let isOrg = this.isOrg;
+
+      if(!this.isQLHD_03) {
+        isOrg ='off';
+      }
+
+    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, 20).subscribe(data => {
+      this.contracts = data.entities;
+      this.pageTotal = data.total_elements;
+      this.checkedAll = false;
+      this.dataChecked = [];
+      if (this.pageTotal == 0) {
+        this.p = 0;
+        this.pageStart = 0;
+        this.pageEnd = 0;
+      } else {
+        this.setPageDownload();
+      }
+      const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
+
+      for(let i = 0; i< this.contracts.length; i++){
+        let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
+        if(checkIf){
+          this.contracts[i].checked = true;
+        } else {
+          this.contracts[i].checked = false;
+        }
+      }
+
+        this.spinner.hide();
+      },
+        (error) => {
+          setTimeout(() => this.router.navigate(['/login']));
+          this.toastService.showErrorHTMLWithTimeout(
+            'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+            '',
+            3000
+          );
+        }
+      );
+    }
+  }
+
+  multiDeleteDraftMany(){
+    if(this.dataDeleteDraftChecked.length === 0){
+      this.toastService.showWarningHTMLWithTimeout('choose.contract.draft', '', 3000);
+      return;
+    }
+    let data: any = "";
+    let id: any;
+    if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
+      data = {
+        title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
+        id: id
+      };
+    } else if (sessionStorage.getItem('lang') == 'en') {
+      data = {
+        title: 'CONTRACT DELETE CONFIRMATION',
+        id: id
+      };
+    }
+
+    // @ts-ignore
+    const dialogRef = this.dialog.open(DeleteMultiContractDialogComponent, {
+      width: '500px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+
+      let is_data = result
+    })
+  }
+
+
+  toggleDeleteDraftAll(checkedAll: boolean){
+    this.dataDeleteDraftChecked = [];
+    console.log("contracts",this.contracts);
+
+    if(checkedAll){
+      for(let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = false;
+      }
+    } else {
+      for (let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = true;
+        this.dataDeleteDraftChecked.push({
+          id: this.contracts[i].participants[0]?.contract_id,
+          selectedId : this.contracts[i].id
+        })
+      }
+    }
+
+  }
+
+  dataDeleteDraftChecked: any[] = [];
+  toggleOneDraft(item: any){
+
+    let data = {
+      id: item.participants[0]?.contract_id,
+      selectedId: item.id
+    }
+    console.log("data",data);
+
+    if(this.dataDeleteDraftChecked.some(element => element.id === data.id)){
+      this.dataDeleteDraftChecked = this.dataDeleteDraftChecked.filter((item) => {
+        return item.id != data.id
+      })
+    } else {
+      this.dataDeleteDraftChecked.push(data);
+    }
+  }
+
   ngAfterViewInit(): void {
     this.spinner.hide();
   }
@@ -486,6 +620,12 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   cancelDownloadMany() {
+    this.typeDisplay = 'signOne';
+    this.spinner.show();
+    window.location.reload();
+  }
+
+  cancelDeleteDraftMany(){
     this.typeDisplay = 'signOne';
     this.spinner.show();
     window.location.reload();
@@ -522,6 +662,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
       this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
         this.contracts = data.entities;
         this.pageTotal = data.total_elements;
+        this.checkedAll = false;
+        this.dataChecked = [];
         if (this.pageTotal == 0) {
           this.p = 0;
           this.pageStart = 0;

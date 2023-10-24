@@ -768,5 +768,8 @@
   "contract.no.existed":"Số hợp đồng đã tồn tại",
   "note.update.person.processing":"Lưu ý: Chỉ được cập nhật thông tin 1 lần/ người tham gia luồng xử lý",
   "read.all.noti": "Đọc tất cả",
-  "read.all.success":"Đọc tất cả thông báo thành công"
+  "read.all.success":"Đọc tất cả thông báo thành công",
+  "multi.delete.draft.success": "Xóa nhiều hợp đồng bản nháp thành công",
+  "erorr.multi.delete.draft": "Xóa nhiều hợp đồng bản nháp thất bại",
+  "choose.contract.draft":"Vui lòng tích chọn hợp đồng bản nháp"
 }

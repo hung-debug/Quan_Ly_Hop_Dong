@@ -43,6 +43,7 @@ import {NgxInputSearchModule} from "ngx-input-search";
 import { AddConnectDialogComponent } from './dialog/add-connect-dialog/add-connect-dialog.component';
 import { ShareContractDialogComponent } from './dialog/share-contract-dialog/share-contract-dialog.component';
 import { DeleteContractDialogComponent } from './dialog/delete-contract-dialog/delete-contract-dialog.component';
+import { DeleteMultiContractDialogComponent } from './dialog/delete-multi-contract-dialog/delete-multi-contract-dialog.component';
 
 import { ConfirmContractFormComponent } from './form-contract/confirm-contract-form/confirm-contract-form.component';
 import { InforContractFormComponent } from './form-contract/infor-contract-form/infor-contract-form.component';
@@ -82,6 +83,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AddConnectDialogComponent,
     ShareContractDialogComponent,
     DeleteContractDialogComponent,
+    DeleteMultiContractDialogComponent,
     ConfirmContractFormComponent,
     InforContractFormComponent,
     PartyContractFormComponent,
