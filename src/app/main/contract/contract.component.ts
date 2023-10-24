@@ -52,7 +52,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   id: any = "";
   notification: any = "";
   isOrg: string = 'off';
-  
+
   stateOptions: any[];
   organization_id: any = "";
 
@@ -140,7 +140,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       } else {
         this.filter_to_date = "";
       }
-      
+
       if (typeof params.isOrg != 'undefined' && params.isOrg) {
         this.isOrg = params.isOrg;
       }
@@ -164,12 +164,12 @@ export class ContractComponent implements OnInit, AfterViewInit {
       this.sub = this.route.params.subscribe(params => {
         this.action = params['action'];
         this.status = params['status'];
-  
+
         //set status
         this.convertStatusStr();
-  
+
         this.appService.setTitle("contract.list.created");
-  
+
         //lay id user
         let userId = this.userService.getAuthCurrentUser().id;
         this.userService.getUserById(userId).subscribe(
@@ -192,10 +192,10 @@ export class ContractComponent implements OnInit, AfterViewInit {
                 this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
                 this.isQLHD_12 = listRole.some(element => element.code == 'QLHD_12');
                 this.isQLHD_13 = listRole.some(element => element.code == 'QLHD_13');
-  
+
                 //neu co quyen xem danh sach hop dong cua to chuc minh va to chuc con
                 this.filter_is_org_me_and_children = this.isQLHD_03;
-  
+
                 this.getContractList();
 
                 if(sessionStorage.getItem('createdPageNum')) this.page = Number(sessionStorage.getItem('createdPageNum'));
@@ -204,7 +204,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
                 this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
               }
             );
-  
+
           }, error => {
             setTimeout(() => this.router.navigate(['/login']));
             this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
@@ -214,7 +214,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     });
   }
 
-  
+
   @HostListener('window:scroll', ['$event']) // for window scroll events
   onScroll(event: any) {
     if(window.scrollY>0){
@@ -270,6 +270,21 @@ export class ContractComponent implements OnInit, AfterViewInit {
     }
   }
 
+  selectContract(item: any){
+    if(!item.checked) this.checkedAll = false;
+    else {
+      let checked = true;
+      for (let i = 0; i < this.contracts.length; i++){
+        if(!this.contracts[i].checked) {
+          checked = false;
+          break;
+        }
+      }
+
+      this.checkedAll = checked;
+    }
+  }
+
   toggleReleaseAll(checkedAll: boolean){
     this.dataReleaseChecked = [];
     if(checkedAll){
@@ -285,12 +300,12 @@ export class ContractComponent implements OnInit, AfterViewInit {
         })
       }
     }
-    
+
   }
 
   toggleDownload(checkedAll: boolean){
     this.dataChecked = [];
-    
+
     if(checkedAll){
       for(let i = 0; i < this.contracts.length; i++){
         this.contracts[i].checked = false;
@@ -333,7 +348,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     const myDate = new Date();
     // Replace 'yyyy-MM-dd' with your desired date format
-    const formattedDate = this.datePipe.transform(myDate, 'ddMMyyyy'); 
+    const formattedDate = this.datePipe.transform(myDate, 'ddMMyyyy');
     const ids = this.dataChecked.map(el => el.id).toString();
     this.ContractSignatureService.getContractMyProcessListDownloadMany(ids).subscribe(
       (data) => {
@@ -363,7 +378,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền"; 
     }
 
-    if (!this.roleMess) {  
+    if (!this.roleMess) {
       let isOrg = this.isOrg;
 
       if(!this.isQLHD_03 && !this.isQLHD_04) {
@@ -383,7 +398,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         this.setPageDownload();
       }
       const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
-      
+
       for(let i = 0; i< this.contracts.length; i++){
         let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
         if(checkIf){
@@ -416,7 +431,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     }
 
     if (!this.roleMess) {
-      
+
       let isOrg = this.isOrg;
 
       if(!this.isQLHD_03 && !this.isQLHD_04) {
@@ -436,7 +451,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         this.setPageDownload();
       }
       const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
-      
+
       for(let i = 0; i< this.contracts.length; i++){
         let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
         if(checkIf){
@@ -445,7 +460,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
           this.contracts[i].checked = false;
         }
       }
-  
+
         this.spinner.hide();
       },
         (error) => {
@@ -516,7 +531,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         }
         this.spinner.hide();
         const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
-        
+
         for(let i = 0; i< this.contracts.length; i++){
           let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
           if(checkIf){
@@ -577,7 +592,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   setPageDownload() {
     this.pageStart = (this.p - 1) * 20 + 1;
     this.pageEnd = this.p * 20;
-    
+
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
     }
@@ -610,7 +625,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+
       let is_data = result
     })
   }
@@ -628,7 +643,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       {
         queryParams: {
           'page': this.p,
-          'filter_type': this.filter_type, 
+          'filter_type': this.filter_type,
           'filter_contract_no': this.filter_contract_no,
           'filter_from_date': this.filter_from_date,
           'filter_to_date': this.filter_to_date,
@@ -646,7 +661,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     if (this.status != 'complete') {
       this.spinner.show();
       this.contractService.getContractCopy(id).subscribe((res: any) => {
-        // 
+        //
         this.toastService.showSuccessHTMLWithTimeout(`Sao chép hợp đồng ${res.name} thành công!`, "", 3000)
         this.getContractList();
 
@@ -772,7 +787,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+
       let is_data = result
     })
   }
@@ -791,7 +806,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+
       let is_data = result
     })
   }

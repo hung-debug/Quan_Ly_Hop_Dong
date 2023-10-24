@@ -698,7 +698,7 @@
                             <div class="div_icon">
                                 <div class="col-md-1 calendar_create">
                                     <div>
-                                        <input name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneDownload(item)" />
+                                        <input name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneDownload(item)"(change)="selectContract(item)" />
                                     </div>
                                 </div>
                             </div>
