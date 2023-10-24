@@ -61,6 +61,7 @@ export class EkycDialogSignComponent implements OnInit {
   contractId: number;
   organizationId: any;
   type: any = 0;
+  ekycDocType: any = ''
   public ngOnInit(): void {
     if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
       this.type = 1;
@@ -91,6 +92,7 @@ export class EkycDialogSignComponent implements OnInit {
       .then((mediaDevices: MediaDeviceInfo[]) => {
         this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
       });
+    this.ekycDocType = sessionStorage.getItem('ekycDocType')
   }
 
   cardId: any;
@@ -225,6 +227,9 @@ export class EkycDialogSignComponent implements OnInit {
         this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl, this.data.contractId, this.data.recipientId,img,this.deviceSerce).subscribe((response) => {
           this.spinner.hide();
           if(response.result_code == 200 && (response.action == 'pass' || (response.action == 'manualReview' && this.checkWarning(response.warning)))) {
+            if (response.document && response.id_type == 0 && this.data.id == 0){
+              this.ekycDocType = sessionStorage.setItem('ekycDocType',response.document)
+            } 
             if(this.cardId) {
               if(this.cardId == response.id && this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") == response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "")) {
                 this.flagSuccess == true;
@@ -235,10 +240,16 @@ export class EkycDialogSignComponent implements OnInit {
                   this.flagSuccess == false;
                   this.webcamImage = this.initWebcamImage
                   alert(this.translate.instant('error.recognition.front.cccd'));
-                } else if( this.data.id == 0 && (this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") != response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, ""))) {
-                  this.flagSuccess == false;
-                  this.webcamImage = this.initWebcamImage;
-                  alert(this.translate.instant('name.not.match'));
+                } else if( this.data.id == 0 ) {
+                  if(this.ekycDocType == response.document && this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") != response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "")) {
+                    this.flagSuccess == false;
+                    this.webcamImage = this.initWebcamImage;
+                    alert(this.translate.instant('name.not.match'));
+                  } else {
+                    this.flagSuccess == false
+                    this.webcamImage = this.initWebcamImage
+                    alert(this.translate.instant('card.id.not.match'));
+                  }
                 }
               } else if(this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") != response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "")) {
                 this.flagSuccess == false;
@@ -253,6 +264,10 @@ export class EkycDialogSignComponent implements OnInit {
               this.flagSuccess == false;
               this.webcamImage = this.initWebcamImage
               alert(this.translate.instant('error.recognition.back.cccd'));
+            } else if (this.ekycDocType && response.document && this.ekycDocType !== response.document){
+              this.flagSuccess == false
+              this.webcamImage = this.initWebcamImage
+              alert(this.translate.instant('CMT/CCCD mặt trước và mặt sau không cùng loại'));
             } else {
               alert(this.translate.instant('confirm.success'));
               this.dialogRef.close(this.webcamImage.imageAsDataUrl);
