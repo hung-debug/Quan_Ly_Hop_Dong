@@ -45,6 +45,7 @@ export class ForwardContractComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private translate: TranslateService
   ) {
+   
   }
 
 
@@ -106,6 +107,7 @@ export class ForwardContractComponent implements OnInit {
     this.actionWithSignTypeForm()
   }
 
+
   actionWithSignTypeForm() {
     this.dropdownSignTypeSettings = {
       singleSelection: false,
@@ -129,14 +131,16 @@ export class ForwardContractComponent implements OnInit {
         this.dataSign = this.signTypeList.filter((p: any) => p.id == 3);
       }
 
+      console.log("dataSign ", this.myForm?.get("dataSign"))
       this.myForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required]),
         email: this.fbd.control("", [Validators.required]),
         phone: "",
         card_id: "",
-        dataSign: this.fbd.control(this.signTypeList.filter((p: any) => p.id == currentRecipientData.sign_type[0].id),[Validators.required])
+        dataSign: this.fbd.control(this.dataSign.filter((p: any) => p.id == currentRecipientData.sign_type[0].id),[Validators.required])
       });
     } else {
+      console.log("not data sign ");
       this.myForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required]),
         email: this.fbd.control("", [Validators.required]),
@@ -181,13 +185,46 @@ export class ForwardContractComponent implements OnInit {
     }
   }
 
+  dataSignModel: any;
   changeTypeSign(e: any,) {
     this.login = e.target.value;
     
     if(this.login == 'phone') {
       this.dataSign = this.dataSign.filter((item: any) => item.id != 2);
+
+      if(this.myForm.get('dataSign')?.value && this.myForm.get('dataSign')?.value.length > 0) {
+        if(this.myForm.get('dataSign')?.value[0].id == 2) {
+          this.myForm.patchValue({
+            dataSign: this.dataSign.filter((item: any) => item.id == 4)
+          })
+          this.isReqCardIdToken = false;
+          this.isReqCardIdHsm = true;
+        }
+      }
+
     } else {
-      this.actionWithSignTypeForm();
+      const currentRecipientData = this.getTargetRecipientData(this.datas?.recipientId);
+
+      if(currentRecipientData.sign_type.length > 0) {
+        if(currentRecipientData.sign_type[0].id == 2 || currentRecipientData.sign_type[0].id == 4) {
+          this.dataSign = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 4);
+          if(currentRecipientData.sign_type[0].id == 2 ) {
+            this.isReqCardIdToken = true;
+            this.isReqCardIdHsm = false;
+          } else {
+            this.isReqCardIdToken = false;
+            this.isReqCardIdHsm = true;
+          }
+        } else if(currentRecipientData.sign_type[0].id == 1 ||  currentRecipientData.sign_type[0].id == 5) {
+          this.dataSign = this.signTypeList.filter((p: any) => p.id == 1 || p.id == 5);
+        } else if(currentRecipientData.sign_type[0].id == 3) {
+          this.dataSign = this.signTypeList.filter((p: any) => p.id == 3);
+        }
+      }
+
+      this.myForm.patchValue({
+        dataSign: this.dataSign.filter((p: any) => p.id == currentRecipientData.sign_type[0].id)
+      })
     }
   }
 
