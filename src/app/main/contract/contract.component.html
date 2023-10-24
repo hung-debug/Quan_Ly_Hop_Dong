@@ -410,7 +410,7 @@
                         <div class="div_icon" *ngIf="status == 'complete'">
                             <img src="../../assets/img/upload_file.svg" class="img_icon" ngbTooltip="{{'upload_attach_files' | translate}}" (click)="uploadAttachFiles(item);" />
                         </div>
-                        <div class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'">
+                        <div class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off' && item.liquidationContractId == null && item.originalContractId == null ">
                             <img src="../../../assets/img/contract-liquidation.svg" class="img_icon" ngbTooltip="{{'contract.liquidation' | translate}}" (click)="addContractLiquidationNew(item.id);" />
                         </div>
                     </div>
