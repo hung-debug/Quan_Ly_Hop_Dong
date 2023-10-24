@@ -157,6 +157,14 @@ export class ForwardContractComponent implements OnInit {
     } else if(event.id == 5) {
       this.isReqPhone = false;
       this.isReqCardId = true;
+    } else if(event.id == 4) {
+      //Ký hsm
+      this.isReqCardIdHsm = true;
+      this.isReqCardIdToken = false;
+    } else if(event.id == 2) {
+      //Ký token
+      this.isReqCardIdHsm = false;
+      this.isReqCardIdToken = true;
     }
   }
 
