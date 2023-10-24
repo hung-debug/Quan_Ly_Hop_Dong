@@ -742,6 +742,8 @@
   "success.upload.file.attach": "Upload attached file successfully",
   "error.upload.file.attach": "Uploading attachment failed",
   "error.recognition.back.cccd": "You are taking a photo of the front of the ID. Please take a photo of the back of your ID",
-  "contracts.existed.folder":"The contracts existed in folder"
-
+  "contracts.existed.folder":"The contracts existed in folder",
+  "multi.delete.draft.success": "Delete multi draft contract successfully",
+  "erorr.multi.delete.draft": "Delete multi draft contract fail",
+  "choose.contract.draft":"Please choose the draft contract"
 }

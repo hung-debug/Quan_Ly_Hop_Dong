@@ -756,5 +756,8 @@
   "no.choose.contract":"Bạn chưa chọn hợp đồng nào",
   "name.folder.not.special.char":"Tên thư mục không được chứa ký tự đặc biệt",
   "contracts.existed.folder":"Hợp đồng đã tồn tại trong thư mục",
-  "mobifone.fail":"Bạn không thể đổi mật khẩu với email thuộc mobifone"
+  "mobifone.fail":"Bạn không thể đổi mật khẩu với email thuộc mobifone",
+  "multi.delete.draft.success": "Xóa nhiều hợp đồng bản nháp thành công",
+  "erorr.multi.delete.draft": "Xóa nhiều hợp đồng bản nháp thất bại",
+  "choose.contract.draft":"Vui lòng tích chọn hợp đồng bản nháp"
 }
