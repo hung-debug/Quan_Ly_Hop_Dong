@@ -131,7 +131,6 @@ export class ForwardContractComponent implements OnInit {
         this.dataSign = this.signTypeList.filter((p: any) => p.id == 3);
       }
 
-      console.log("dataSign ", this.myForm?.get("dataSign"))
       this.myForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required]),
         email: this.fbd.control("", [Validators.required]),
@@ -140,7 +139,6 @@ export class ForwardContractComponent implements OnInit {
         dataSign: this.fbd.control(this.dataSign.filter((p: any) => p.id == currentRecipientData.sign_type[0].id),[Validators.required])
       });
     } else {
-      console.log("not data sign ");
       this.myForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required]),
         email: this.fbd.control("", [Validators.required]),
@@ -316,6 +314,12 @@ export class ForwardContractComponent implements OnInit {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng email', '', 3000);
         return;
       }
+
+      if(this.login == 'phone' && !String(this.myForm.value.email)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập SĐT người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+        return;
+      }
+
       if (this.isReqPhone && !String(this.myForm.value.phone)) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập số điện thoại người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
         return;
