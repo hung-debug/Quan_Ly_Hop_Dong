@@ -271,6 +271,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       }
 
       for(let i = 0; i < this.datasForm.is_determine_clone[index].recipients.length; i++) {
+        this.datasForm.is_determine_clone[index].recipients[i].name = this.datasForm.is_determine_clone[index].recipients[i].name.trim();
         this.datasForm.is_determine_clone[index].recipients[i].email = this.datasForm.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
         if(this.datasForm.is_determine_clone[index].recipients[i].login_by == "phone") {
           this.datasForm.is_determine_clone[index].recipients[i].phone = this.datasForm.is_determine_clone[index].recipients[i].email.trim().toLowerCase();

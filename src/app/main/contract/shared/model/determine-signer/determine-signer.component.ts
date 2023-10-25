@@ -228,6 +228,7 @@ export class DetermineSignerComponent implements OnInit {
       }
 
       for (let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
+        this.datas.is_determine_clone[index].recipients[i].name = this.datas.is_determine_clone[index].recipients[i].name.trim();
         this.datas.is_determine_clone[index].recipients[i].email = this.datas.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
         if (this.datas.is_determine_clone[index].recipients[i].login_by == "phone") {
           this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
