@@ -123,12 +123,12 @@ export class ForwardContractComponent implements OnInit {
     const currentRecipientData = this.getTargetRecipientData(this.datas?.recipientId);
 
     if(currentRecipientData.sign_type.length > 0) {
-      if(currentRecipientData.sign_type[0].id == 2 || currentRecipientData.sign_type[0].id == 4) {
-        this.dataSign = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 4);
+      if(currentRecipientData.sign_type[0].id == 2 || currentRecipientData.sign_type[0].id == 4 || currentRecipientData.sign_type[0].id == 6) {
+        this.dataSign = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6);
       } else if(currentRecipientData.sign_type[0].id == 1 ||  currentRecipientData.sign_type[0].id == 5) {
         this.dataSign = this.signTypeList.filter((p: any) => p.id == 1 || p.id == 5);
-      } else if(currentRecipientData.sign_type[0].id == 3) {
-        this.dataSign = this.signTypeList.filter((p: any) => p.id == 3);
+      } else if(currentRecipientData.sign_type[0].id == 3 || currentRecipientData.sign_type[0].id == 7) {
+        this.dataSign = this.signTypeList.filter((p: any) => p.id == 3 || p.id == 7);
       }
 
       console.log("dataSign ", this.myForm?.get("dataSign"))
@@ -190,7 +190,7 @@ export class ForwardContractComponent implements OnInit {
     this.login = e.target.value;
     
     if(this.login == 'phone') {
-      this.dataSign = this.dataSign.filter((item: any) => item.id != 2);
+      this.dataSign = this.dataSign.filter((item: any) => item.id != 2 && item.id != 7);
 
       if(this.myForm.get('dataSign')?.value && this.myForm.get('dataSign')?.value.length > 0) {
         if(this.myForm.get('dataSign')?.value[0].id == 2) {
@@ -199,6 +199,10 @@ export class ForwardContractComponent implements OnInit {
           })
           this.isReqCardIdToken = false;
           this.isReqCardIdHsm = true;
+        } else if (this.myForm.get('dataSign')?.value[0].id == 7) {
+          this.myForm.patchValue({
+            dataSign: this.dataSign.filter((item : any) => item.id == 3)
+          })
         }
       }
 
@@ -206,8 +210,8 @@ export class ForwardContractComponent implements OnInit {
       const currentRecipientData = this.getTargetRecipientData(this.datas?.recipientId);
 
       if(currentRecipientData.sign_type.length > 0) {
-        if(currentRecipientData.sign_type[0].id == 2 || currentRecipientData.sign_type[0].id == 4) {
-          this.dataSign = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 4);
+        if(currentRecipientData.sign_type[0].id == 2 || currentRecipientData.sign_type[0].id == 4 || currentRecipientData.sign_type[0].id == 6) {
+          this.dataSign = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6);
           if(currentRecipientData.sign_type[0].id == 2 ) {
             this.isReqCardIdToken = true;
             this.isReqCardIdHsm = false;
@@ -217,8 +221,8 @@ export class ForwardContractComponent implements OnInit {
           }
         } else if(currentRecipientData.sign_type[0].id == 1 ||  currentRecipientData.sign_type[0].id == 5) {
           this.dataSign = this.signTypeList.filter((p: any) => p.id == 1 || p.id == 5);
-        } else if(currentRecipientData.sign_type[0].id == 3) {
-          this.dataSign = this.signTypeList.filter((p: any) => p.id == 3);
+        } else if(currentRecipientData.sign_type[0].id == 3 || currentRecipientData.sign_type[0].id == 7) {
+          this.dataSign = this.signTypeList.filter((p: any) => p.id == 3 || p.id == 7);
         }
       }
 

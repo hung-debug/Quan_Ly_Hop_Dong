@@ -531,7 +531,7 @@ export class FooterSignatureComponent implements OnInit {
       }
     }
     const data = {
-      title: this.translate.instant('processing.auth'),
+      title: this.translate.instant('processing.auth').toUpperCase(),
       is_content: 'processing_author',
       dataContract: this.datas,
       recipientId: this.recipientId
