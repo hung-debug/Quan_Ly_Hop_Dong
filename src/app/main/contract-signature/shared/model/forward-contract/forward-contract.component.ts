@@ -315,7 +315,7 @@ export class ForwardContractComponent implements OnInit {
         return;
       }
 
-      if(this.login == 'phone' && !String(this.myForm.value.email)) {
+      if(this.login == 'phone' && !String(this.myForm.value.phone)) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập SĐT người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
         return;
       }
