@@ -257,7 +257,7 @@
                 <div class="col-md-3 item_icon">
                     <div style="display: flex; justify-content: center;">
                         <!-- <div *ngIf="this.isOrg == 'off'"> -->
-                        <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08 && this.isOrg == 'off'">
+                        <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue' || status == 'cancel') && isQLHD_08 && this.isOrg == 'off'">
                             <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'contract.copy' | translate}}" (click)="openCopy(item.id)" />
                         </div>
                         <div class="div_icon" *ngIf="status == 'draft' && isQLHD_02 && this.isOrg == 'off'">
@@ -281,10 +281,10 @@
                         <div class="div_icon" *ngIf="status == 'complete' && isQLHD_13 && this.isOrg == 'off'">
                             <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}" (click)="shareContract(item.id);" />
                         </div>
-                    </div>
-                    <div class="div_icon" *ngIf="status == 'cancel'">
-                        <!-- <img src="../../assets/img/view_reason_icon.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" /> -->
-                        <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" />
+                        <div class="div_icon" *ngIf="status == 'cancel'">
+                            <!-- <img src="../../assets/img/view_reason_icon.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" /> -->
+                            <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" />
+                        </div>
                     </div>
                 </div>
 
@@ -443,6 +443,7 @@
     <div>{{roleMess | translate}}</div>
 </div>
 
+<!-- HD Hoàn thành -->
 <div *ngIf="(this.filter_status == 30 && this.isOrg == 'off' && this.typeDisplay === 'view')" class="container-fluid">
     <ng-template [ngIf]="!roleMess">
         <div class="col-md-12" style="padding-top: 20px;">
@@ -517,7 +518,7 @@
                 <div class="col-md-3 item_icon">
                     <div style="display: flex; justify-content: center;">
                         <!-- <div *ngIf="this.isOrg == 'off'"> -->
-                        <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08 && this.isOrg == 'off'">
+                        <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue' || status == 'complete') && isQLHD_08 && this.isOrg == 'off'">
                             <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'contract.copy' | translate}}" (click)="openCopy(item.id)" />
                         </div>
                         <div class="div_icon" *ngIf="status == 'draft' && isQLHD_02 && this.isOrg == 'off'">

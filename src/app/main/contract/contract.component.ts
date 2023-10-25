@@ -800,20 +800,18 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   openCopy(id: number) {
-    if (this.status != 'complete') {
-      this.spinner.show();
-      this.contractService.getContractCopy(id).subscribe((res: any) => {
-        //
-        this.toastService.showSuccessHTMLWithTimeout(`Sao chép hợp đồng ${res.name} thành công!`, "", 3000)
-        this.getContractList();
+    this.spinner.show();
+    this.contractService.getContractCopy(id).subscribe((res: any) => {
+      //
+      this.toastService.showSuccessHTMLWithTimeout(`Sao chép hợp đồng ${res.name} thành công!`, "", 3000)
+      this.getContractList();
 
-      }, (error: HttpErrorResponse) => {
-        this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000)
-        this.spinner.hide();
-      }, () => {
-        this.spinner.hide();
-      })
-    }
+    }, (error: HttpErrorResponse) => {
+      this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000)
+      this.spinner.hide();
+    }, () => {
+      this.spinner.hide();
+    })
   }
 
   openEdit(id: number) {
