@@ -110,6 +110,9 @@
       </div>
     </div>
 
+    <div class="name-item" *ngIf="this.dataSign.length == 1" style="height:10px">
+    </div>
+
     <div class="name-item" *ngIf="isReqCardId">
       <div class="label_item">{{'cardId' | translate}} <span class="require_star">*</span></div>
       <div class="input-data">
