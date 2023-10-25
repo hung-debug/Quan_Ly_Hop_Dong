@@ -546,8 +546,6 @@ export class DetermineSignerComponent implements OnInit {
 
     if(d.login_by == 'email' && d.emailTemp) {
       d.email = d.emailTemp;
-    } else {
-      d.email = '';
     }
 
     if(role == 'sign_partner') {
@@ -943,7 +941,8 @@ export class DetermineSignerComponent implements OnInit {
             }
 
             if (isParterSort[k].login_by=="email" && !isParterSort[k].email) {
-              this.getNotificationValid("Vui lòng nhập email" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác cá nhân!")
+              isParterSort[k].phone = null;
+              this.getNotificationValid("Vui lòng nhập email" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác cá nhân!");
               count++;
               break;
             } else if ((isParterSort[k].login_by=="phone" || isParterSort[k].sign_type.filter((p: any) => p.id == 1).length>0) && !isParterSort[k].phone ) {
