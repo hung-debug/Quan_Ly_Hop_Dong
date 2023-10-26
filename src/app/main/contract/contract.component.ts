@@ -543,16 +543,16 @@ export class ContractComponent implements OnInit, AfterViewInit {
       return;
     }
     let data: any = "";
-    let id: any;
+    let selectedContracts = this.dataDeleteDraftChecked.map((item: any) => item.selectedId)
     if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       data = {
         title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
-        id: id
+        contractIds: selectedContracts
       };
     } else if (sessionStorage.getItem('lang') == 'en') {
       data = {
         title: 'CONTRACT DELETE CONFIRMATION',
-        id: id
+        contractIds: selectedContracts
       };
     }
 
@@ -573,7 +573,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   toggleDeleteDraftAll(checkedAll: boolean){
     this.dataDeleteDraftChecked = [];
-    console.log("contracts",this.contracts);
 
     if(checkedAll){
       for(let i = 0; i < this.contracts.length; i++){
@@ -598,7 +597,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
       id: item.participants[0]?.contract_id,
       selectedId: item.id
     }
-    console.log("data",data);
 
     if(this.dataDeleteDraftChecked.some(element => element.id === data.id)){
       this.dataDeleteDraftChecked = this.dataDeleteDraftChecked.filter((item) => {
