@@ -231,7 +231,10 @@ export class EkycDialogSignComponent implements OnInit {
               this.ekycDocType = sessionStorage.setItem('ekycDocType',response.document)
             } 
             if(this.cardId) {
-              if(this.cardId == response.id && this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") == response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "")) {
+              if(this.cardId == response.id && 
+                this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") == response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") &&
+                (!response.reason_for_action.includes('slow id_confidence') && !response.reason_for_action.includes('slow name_confidence'))
+                ) {
                 this.flagSuccess == true;
                 alert(this.translate.instant('confirm.success'));
                 this.dialogRef.close(this.webcamImage.imageAsDataUrl);
@@ -275,17 +278,17 @@ export class EkycDialogSignComponent implements OnInit {
           } else if (this.data.id == 1 && response.result_code == 403) {
             this.flagSuccess == false;
             this.webcamImage = this.initWebcamImage;
-            alert(this.translate.instant('CMT/CCCD không hợp lệ. Vui lòng chụp lại mặt sau của CCCD'))
+            alert(this.translate.instant('CMT/CCCD không hợp lệ. Vui lòng chụp lại mặt sau của CMT/CCCD'))
           } else if (this.data.id == 0 && response.result_code == 403) {
             this.flagSuccess == false;
             this.webcamImage = this.initWebcamImage;
-            alert(this.translate.instant('CMT/CCCD không hợp lệ. Vui lòng chụp lại mặt trước của CCCD'))
+            alert(this.translate.instant('CMT/CCCD không hợp lệ. Vui lòng chụp lại mặt trước của CMT/CCCD'))
           } else {
             this.flagSuccess = false;
             this.webcamImage = this.initWebcamImage;
             
             if(response.warning_msg?.length > 0)
-              alert(this.translate.instant('confirm.fail')+ response.warning_msg[0]);
+              alert(this.translate.instant('confirm.fail')+' '+response.warning_msg[0].replace('giấy tờ','CMT/CCCD'));
             else if(response.reason_for_action?.length > 0)
               alert(this.translate.instant('image.not.clear'));
             else

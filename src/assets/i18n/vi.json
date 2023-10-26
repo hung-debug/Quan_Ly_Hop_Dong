@@ -606,7 +606,7 @@
   "captcha.fail":"Nhập sai captcha",
   "captcha.not.blank":"Bạn chưa nhập captcha",
   "confirm.fail":"Xác thực thất bại",
-  "image.not.clear":"Ảnh chụp không rõ thông tin. Vui lòng chụp lại để xác thực!",
+  "image.not.clear":"Ảnh CMT/CCCD chụp không rõ thông tin. Vui lòng chụp lại để xác thực!",
   "confirm.success":"Nhận dạng thành công",
   "face.fail":"Hình ảnh khuôn mặt được chụp từ màn hình/hình ảnh/...",
   "card.id.not.match":"Mã CMT/CCCD không trùng khớp",
