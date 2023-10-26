@@ -27,32 +27,26 @@ export class DeleteMultiContractDialogComponent implements OnInit {
   }
 
   onSubmit(){
-    // this.spinner.show();
-    //thay api xóa nhiều vào là được
+    this.spinner.show();
 
-    // this.contractService.deleteContract(this.data.id).subscribe((data) => {
+    this.contractService.deleteMultiContract(this.data.contractIds).subscribe((data) => {
 
-    //   if(data.success){
-    //     this.toastService.showSuccessHTMLWithTimeout('multi.delete.draft.success', "", 3000);
-    //     this.dialogRef.close();
-    //     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-    //       this.router.navigate(['/main/contract/create/draft']);
-    //     });
-    //   }else{
-    //     if(data.message == 'E02'){
-    //       this.toastService.showErrorHTMLWithTimeout("Hợp đồng không phải bản nháp!", "", 3000);
-    //     }else{
-    //       this.toastService.showErrorHTMLWithTimeout('erorr.multi.delete.draft', "", 3000);
-    //     }
-
-    //     this.dialogRef.close();
-    //   }
-    // },
-    // error => {
-    //   this.toastService.showErrorHTMLWithTimeout('erorr.multi.delete.draft', "", 3000);
-    //   this.dialogRef.close();
-    // }
-    // );
+      if(data.success){
+        this.toastService.showSuccessHTMLWithTimeout('multi.delete.draft.success', "", 3000);
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigate(['/main/contract/create/draft']);
+        });
+      }else{
+        this.spinner.hide()
+        this.toastService.showErrorHTMLWithTimeout('error.multi.delete.draft', "", 3000);
+      }
+      this.dialogRef.close();
+    },
+    (error: any) => {
+      this.spinner.hide()
+      this.toastService.showErrorHTMLWithTimeout('error.multi.delete.draft', "", 3000);
+      this.dialogRef.close();
+    });
   }
 
 }

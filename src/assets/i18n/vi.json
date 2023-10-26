@@ -318,6 +318,7 @@
   "btn.not.accept": "Không đồng ý",
   "btn.share": "Chia sẻ",
   "btn.delete": "Xóa",
+  "btn.multi.delete": "Xóa nhiều",
   "btn.done": "Hoàn thành",
   "btn.add.user.view": "Thêm người xem xét",
   "btn.add.user.sign": "Thêm người ký",
@@ -770,6 +771,6 @@
   "read.all.noti": "Đọc tất cả",
   "read.all.success":"Đọc tất cả thông báo thành công",
   "multi.delete.draft.success": "Xóa nhiều hợp đồng bản nháp thành công",
-  "erorr.multi.delete.draft": "Xóa nhiều hợp đồng bản nháp thất bại",
+  "error.multi.delete.draft": "Xóa nhiều hợp đồng bản nháp thất bại",
   "choose.contract.draft":"Vui lòng tích chọn hợp đồng bản nháp"
 }

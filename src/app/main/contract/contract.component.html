@@ -185,7 +185,7 @@
         </div>
 
           <div class="btn-size btn_search" style="padding-top: 10px;margin-left: 1%">
-            <button *ngIf="status == 'draft' && this.isOrg == 'off'" (click)="multiDeleteDraft()" class="btn btn-lg btn-block btn_submit">{{'btn.delete'|translate}}</button>
+            <button *ngIf="status == 'draft' && this.isOrg == 'off'" (click)="multiDeleteDraft()" class="btn btn-lg btn-block btn_submit">{{'btn.multi.delete'|translate}}</button>
           </div>
         </div>
 
@@ -889,6 +889,7 @@
     </div>
 </div>
 
+<!-- Xóa nhiều bản nháp -->
 <div *ngIf="(this.typeDisplay == 'multiDeleteDraft' && this.filter_status == 0)">
   <div class="container-fluid">
       <ng-template [ngIf]="!roleMess">
@@ -1028,7 +1029,7 @@
           <div class="contract_footer">
               <div class="footer_title"></div>
               <div class="footer_pagination">
-                  <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; downloadMany()" previousLabel="" nextLabel=""></pagination-controls>
+                  <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; multiDeleteDraft()" previousLabel="" nextLabel=""></pagination-controls>
               </div>
               <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}
               </div>
