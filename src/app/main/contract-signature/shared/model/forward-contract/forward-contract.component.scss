@@ -10,13 +10,13 @@
     border: 1px solid #106DB6 !important;
     border-radius: 5px;
     height: 38px;
-    white-space: nowrap;
+    // white-space: nowrap;
   }
 }
 
 ::ng-deep .multiselect-dropdown .dropdown-btn .selected-item-container .selected-item {
   /* ... */
-  max-width: 200px !important; /* Xóa hoặc thay đổi giá trị max-width */
+  max-width: 390px !important; /* Xóa hoặc thay đổi giá trị max-width */
 }
 
 .content {
