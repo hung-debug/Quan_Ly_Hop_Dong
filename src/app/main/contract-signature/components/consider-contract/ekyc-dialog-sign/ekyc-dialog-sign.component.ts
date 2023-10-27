@@ -288,7 +288,7 @@ export class EkycDialogSignComponent implements OnInit {
             this.webcamImage = this.initWebcamImage;
             
             if(response.warning_msg?.length > 0)
-              alert(this.translate.instant('confirm.fail')+' '+response.warning_msg[0].replace('giấy tờ','CMT/CCCD'));
+              alert(this.translate.instant('confirm.fail')+' '+response.warning_msg[0].replace('giấy tờ' || 'Chứng minh nhân dân','CMT/CCCD'));
             else if(response.reason_for_action?.length > 0)
               alert(this.translate.instant('image.not.clear'));
             else
