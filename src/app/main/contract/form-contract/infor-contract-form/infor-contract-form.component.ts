@@ -470,7 +470,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         let file = new File([file1], this.convertFileName(file1.name));
         const extension: any = file.name.split('.').pop();
 
-        if (file.size <= 5000000) {
+        if (file.size <= 10*(Math.pow(1024, 2))) {
 
           if (extension && extension.toLowerCase() == 'pdf' || extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx' || extension.toLowerCase() == 'png'
           || extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'jpeg' || extension.toLowerCase() == 'zip' || extension.toLowerCase() == 'rar'
@@ -490,7 +490,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         } else {
           this.datasForm.file_name_attach = '';
           this.datasForm.attachFile = '';
-          this.toastService.showWarningHTMLWithTimeout('File đính kèm yêu cầu có dung lượng nhỏ hơn 5MB','',3000);
+          this.toastService.showWarningHTMLWithTimeout('File đính kèm yêu cầu có dung lượng nhỏ hơn 10MB','',3000);
           break;
         }
       }
