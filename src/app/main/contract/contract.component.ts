@@ -90,6 +90,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   isQLHD_11: boolean = true;  //tao hop dong lien quan
   isQLHD_12: boolean = true;  //xem hop dong lien quan
   isQLHD_13: boolean = true;  //chia se hop dong
+  isQLHD_14: boolean = true;  //thanh lý hợp đồng
 
 
   constructor(private appService: AppService,
@@ -192,6 +193,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
                 this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
                 this.isQLHD_12 = listRole.some(element => element.code == 'QLHD_12');
                 this.isQLHD_13 = listRole.some(element => element.code == 'QLHD_13');
+                this.isQLHD_14 = listRole.some(element => element.code == 'QLHD_14');
   
                 //neu co quyen xem danh sach hop dong cua to chuc minh va to chuc con
                 this.filter_is_org_me_and_children = this.isQLHD_03;
