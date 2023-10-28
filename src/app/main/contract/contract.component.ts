@@ -535,6 +535,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         }
       );
     }
+    this.dataDeleteDraftChecked = []
   }
 
   multiDeleteDraftMany(){
