@@ -151,7 +151,7 @@ export class DashboardComponent implements OnInit {
       this.array_empty.push(data);
       //this.removeElementFromStringArray(element.id);
     })
-    this.list = this.array_empty;
+    this.list = this.array_empty
   }
 
   findChildren(element:any){
@@ -165,7 +165,7 @@ export class DashboardComponent implements OnInit {
       {
         label: elementCon.name,
         data: elementCon.id,
-        expanded: true,
+        expanded: false,
         children: this.findChildren(elementCon)
       });
       this.removeElementFromStringArray(elementCon.id);
