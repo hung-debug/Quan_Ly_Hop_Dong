@@ -305,6 +305,7 @@
   "btn.not.accept": "Not accept",
   "btn.share": "Share",
   "btn.delete": "Delete",
+  "btn.multi.delete": "Multi delete",
   "btn.done": "Done",
   "btn.add.user.view": "Add viewer",
   "btn.add.user.sign": "Add signer",
@@ -751,5 +752,12 @@
   "complete.time":"Completion time",
   "my.org.not.authen":"My organization's contract list is not yet authorized",
   "create.contract.success":"Create contract successfully!",
-  "contract.no.existed":"The contract no is existed"
+  "contract.no.existed":"The contract no is existed",
+  "note.update.person.processing":"Note: Information can only be updated once/ a participant in the processing flow",
+  "read.all.noti": "Read all",
+  "read.all.success":"Read all notification successfully",
+  "multi.delete.draft.success": "Delete multi draft contract successfully",
+  "error.multi.delete.draft": "Delete multi draft contract fail",
+  "choose.contract.draft":"Please choose the draft contract",
+  "expire.status":"Expire"
 }

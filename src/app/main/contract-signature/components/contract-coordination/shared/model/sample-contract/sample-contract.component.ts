@@ -987,7 +987,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       "position": "absolute",
       "backgroundColor": '#FFFFFF',
       "border": "1px dashed #6B6B6B",
-      "border-radius": "6px"
+      "border-radius": "6px",
+      "min-width": "140px",
+      "min-height": "50px"
     }
 
     if (d['width']) {

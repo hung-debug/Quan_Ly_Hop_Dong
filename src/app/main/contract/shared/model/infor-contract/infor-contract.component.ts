@@ -243,7 +243,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     if (file1) {
       let file = new File([file1], this.convertFileName(file1.name));
       // giới hạn file upload lên là 5mb
-      if (e.target.files[0].size <= 5000000) {
+      if (e.target.files[0].size <= 10*(Math.pow(1024, 2))) {
         const file_name = file.name
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
@@ -299,7 +299,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         }
       } else {
         this.spinner.hide()
-        this.toastService.showWarningHTMLWithTimeout("File hợp đồng yêu cầu nhỏ hơn 5MB", "", 3000);
+        this.toastService.showWarningHTMLWithTimeout("File hợp đồng yêu cầu tối đa 10MB", "", 3000);
       }
     }
   }
@@ -315,7 +315,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       let file1 = e.target.files[i];
       if (file1) {
         let file = new File([file1], this.convertFileName(file1.name));
-        if (file.size <= 5000000) {
+        if (file.size <= 10*(Math.pow(1024, 2))) {
           const file_name = file.name;
           const extension = file.name.split('.').pop();
 
@@ -346,7 +346,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         } else {
           this.datas.file_name_attach = '';
           this.datas.attachFile = '';
-          this.toastService.showWarningHTMLWithTimeout("File đính kèm yêu cầu nhỏ hơn 5MB", "", 3000);
+          this.toastService.showWarningHTMLWithTimeout("File đính kèm yêu cầu tối đa 10MB", "", 3000);
           break;
         }
       }

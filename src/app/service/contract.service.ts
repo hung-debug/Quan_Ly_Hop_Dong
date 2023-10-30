@@ -85,6 +85,7 @@ export class ContractService {
   checkCodeUniqueUrl: any = `${environment.apiUrl}/api/v1/contracts/check-code-unique`;
   getCopyContract: any = `${environment.apiUrl}/api/v1/contracts/clone/`;
   deleteContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
+  deleteMultiContractUrl: any = `${environment.apiUrl}/api/v1/contracts/multi`;
   private getDetailFormContract = `${environment.apiUrl}/api/v1/documents/template/by-contract/`;
   private getSaveContractFormInfo = `${environment.apiUrl}/api/v1/contracts/template`;
   getObjectSignature: any = `${environment.apiUrl}/api/v1/fields/template/by-contract/`;
@@ -1736,6 +1737,20 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.delete<any>(this.deleteContractUrl + id, {
       headers: headers,
+    });
+  }
+
+  deleteMultiContract(contractIds: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = {
+      ids: contractIds
+    }
+    return this.http.delete<any>(this.deleteMultiContractUrl, {
+      headers: headers,
+      body: body
     });
   }
 

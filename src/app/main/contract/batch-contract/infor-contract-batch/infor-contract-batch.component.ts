@@ -230,7 +230,7 @@ export class InforContractBatchComponent implements OnInit {
     const file = e.target.files[0];
     if (file) {
       // giới hạn file upload lên là 5mb
-      if (e.target.files[0].size <= 5000000) {
+      if (e.target.files[0].size <= 10*(Math.pow(1024, 2))) {
         const file_name = file.name;
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
@@ -253,7 +253,7 @@ export class InforContractBatchComponent implements OnInit {
         }
       } else {
         this.toastService.showErrorHTMLWithTimeout(
-          'Yêu cầu file nhỏ hơn 5MB',
+          'Yêu cầu file tối đa 10MB',
           '',
           3000
         );

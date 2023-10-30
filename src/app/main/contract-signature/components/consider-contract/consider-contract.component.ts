@@ -201,7 +201,7 @@ export class ConsiderContractComponent
   cmnd: string | null = null;
   cert_id: any;
   dataCardId: any;
-  
+  ekycDocType: string = ''
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -3794,7 +3794,7 @@ export class ConsiderContractComponent
                   );
                 } else {
                   this.eKYC = true;
-                  this.eKYCStart();
+                  this.eKYCStart(this.ekycDocType);
                   return;
                 }
               },
@@ -3817,13 +3817,14 @@ export class ConsiderContractComponent
       );
   }
 
-  eKYCStart() {
+  eKYCStart(ekycDocType: string) {
     const data = {
       id: 0,
       title: 'Xác thực CMT/CCCD mặt trước',
       noti: 'Vui lòng đưa CMT/CCCD mặt trước vào gần khung hình',
       recipientId: this.recipientId,
       contractId: this.idContract,
+      ekycDocType: ekycDocType
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -3833,7 +3834,6 @@ export class ConsiderContractComponent
     // dialogConfig.width = '100000000000000000000000000000px';
 
     const dialogRef = this.dialog.open(EkycDialogSignComponent, dialogConfig);
-
     dialogRef.afterClosed().subscribe((result) => {
       this.cccdFront = result;
 

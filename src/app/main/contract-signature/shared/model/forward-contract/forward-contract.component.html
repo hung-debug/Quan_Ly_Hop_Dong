@@ -6,7 +6,7 @@
 
 
     <!--Đăng nhập bằng email/sđt-->
-    <div *ngIf="!isReqCardIdToken && datas.role_coordination != 1" class="row">
+    <div *ngIf="datas.role_coordination != 1" class="row">
       <div class="col">
         <input type="radio" (change)="changeTypeSign($event)" value="email" name="login" [checked]="true" />{{''}}{{'typeOfSignEmail' | translate}}
       </div>
@@ -91,7 +91,6 @@
           </div>
         </div>
         <!-- </div> -->
-
       </div>
     </div>
 
@@ -104,11 +103,14 @@
       </div>
     </div> -->
 
-    <div class="name-item" *ngIf="isReqPhone">
+    <div class="name-item" *ngIf="isReqPhone && this.login == 'email'">
       <div class="label_item">{{'user.phone' | translate}} <span class="require_star">*</span></div>
       <div class="input-data">
         <input style="width: 88%" autocomplete="off" type="text" formControlName="phone" class="input-text">
       </div>
+    </div>
+
+    <div class="name-item" *ngIf="this.dataSign?.length == 1" style="height:10px">
     </div>
 
     <div class="name-item" *ngIf="isReqCardId">
@@ -127,7 +129,7 @@
       </div>
     </div>
 
-    <div class="name-item" *ngIf="isReqCardIdHsm">
+    <div class="name-item" *ngIf="isReqCardIdHsm || isReqCardIdCts">
       <div class="label_item">{{'tax_code' | translate}} <span class="require_star">*</span></div>
       <div class="input-data">
         <input style="width: 88%" autocomplete="off" type="text" formControlName="card_id" class="input-text">

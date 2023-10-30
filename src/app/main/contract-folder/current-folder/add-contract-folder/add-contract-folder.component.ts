@@ -1,6 +1,6 @@
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractFolderService } from 'src/app/service/contract-folder.service';
-import { Component, Inject, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, NgZone, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { contractTypes, sideList } from 'src/app/config/variable';
@@ -12,6 +12,10 @@ import { ToastService } from 'src/app/service/toast.service';
   styleUrls: ['./add-contract-folder.component.scss']
 })
 export class AddContractFolderComponent implements OnInit {
+  @ViewChild('scrollableDiv') scrollableDiv: ElementRef;
+  @ViewChild('parent') parent: ElementRef;
+
+
   action: string;
   title: string ="";
   contractTypes: any[] = contractTypes;
@@ -68,13 +72,16 @@ export class AddContractFolderComponent implements OnInit {
     private translateService: TranslateService,
     private contractFolderService: ContractFolderService,
     private toastService: ToastService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private changeDetectorRef: ChangeDetectorRef
   ) { }
+
 
   ngOnInit() {
     this.title = 'add.contract.folder';
     this.contractTypes = this.translateOptions(this.contractTypes);
   }
+
 
   convertActionFolder(action: string){
     switch (action){
@@ -100,14 +107,17 @@ export class AddContractFolderComponent implements OnInit {
     } else {
       for (let i = 0; i < this.contracts.length; i++){
         this.contracts[i].checked = true;
+
+        //Chia 2 TH: Hợp đồng tạo - nhận
         this.dataChecked.push({
-          id: this.contracts[i].participants[0]?.contract_id,
+          id: this.contracts[i].contract_id,
           selectedId : this.contracts[i].id
         })
       }
     }
   }
 
+  scroll: boolean = false;
   getContractList() {
     this.checkedAll = false;
     for(let i = 0; i < this.contracts.length; i++){
@@ -176,6 +186,16 @@ export class AddContractFolderComponent implements OnInit {
       if (this.pageTotal < this.pageEnd) {
         this.pageEnd = this.pageTotal;
       }
+
+        // Kiểm tra xem phần tử có thanh cuộn hay không
+      this.changeDetectorRef.detectChanges();
+      if(this.scrollableDiv.nativeElement.scrollHeight > this.scrollableDiv.nativeElement.clientHeight) {
+        this.scroll = true
+      } else {
+        this.scroll = false;
+      }
+
+      this.changeDetectorRef.detectChanges();
     }
 
     submit() {
@@ -289,7 +309,18 @@ getCreatedDate(item: any){
   }
 
   selectContract(item: any){
- 
+    if(!item.checked) this.checkedAll = false;
+    else {
+      let checked = true;
+      for (let i = 0; i < this.contracts.length; i++){
+        if(!this.contracts[i].checked) {
+          checked = false;
+          break;
+        }
+      }
+
+      this.checkedAll = checked;
+    }
   }
 
   filterContract(){

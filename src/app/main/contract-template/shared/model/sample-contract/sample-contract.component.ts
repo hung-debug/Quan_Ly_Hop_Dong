@@ -487,6 +487,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           let change = dataDetermine.filter((data: any) => (element.recipient_id as any) == (data.id as any));
           change.forEach((item: any, index: number) => {
             element.name = item.name;
+            element.email = item.email
           })
         })
       })
@@ -557,11 +558,20 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.objSignInfo.id = event.target.id;
       this.objSignInfo.traf_x = x;
       this.objSignInfo.traf_y = y;
-      this.objSignInfo.width = event.rect.width;
-      this.objSignInfo.height = event.rect.height;
-
       this.signCurent.width = event.rect.width;
       this.signCurent.height = event.rect.height;
+      if (this.signCurent.sign_unit == 'chu_ky_so' || this.signCurent.sign_unit == 'chu_ky_anh'){
+        this.signCurent.width <= 140 ? this.signCurent.width = 140 : this.signCurent.width = event.rect.width
+        this.signCurent.height <= 50 ? this.signCurent.height = 50 : this.signCurent.height = event.rect.height
+        this.objSignInfo.width = this.signCurent.height
+        this.objSignInfo.height = this.signCurent.width
+      } else {
+        this.objSignInfo.width = event.rect.width;
+        this.objSignInfo.height = event.rect.height;
+
+        this.signCurent.width = event.rect.width;
+        this.signCurent.height = event.rect.height;
+      }
       this.tinhToaDoSign("canvas-step3-" + this.signCurent.page, this.signCurent.width, this.signCurent.height, this.objSignInfo);
       let _array = Object.values(this.obj_toa_do);
       this.signCurent.position = _array.join(",");
@@ -779,8 +789,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     element['width'] = rect_location.width;
                     element['height'] = rect_location.height;
                   } else {
-                    element['width'] = '180';
-                    element['height'] = '66';
+                    if (event.target.className.includes('da-keo')){
+                      element['width'] = event.target.offsetWidth;
+                      element['height'] = event.target.offsetHeight;
+                    } else {
+                      element['width'] = '180';
+                      element['height'] = '66';
+                    }
                   }
 
                   this.objSignInfo.width = element['height'];
@@ -1135,7 +1150,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       "position": "absolute",
       "backgroundColor": '#FFFFFF',
       "border": "1px dashed #6B6B6B",
-      "border-radius": "6px"
+      "border-radius": "6px",
+      "min-width": "140px",
+      "min-height": "50px"
     }
     if (d['width']) {
       style.width = parseInt(d['width']) + "px";

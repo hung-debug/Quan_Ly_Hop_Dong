@@ -74,15 +74,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.appService.setTitle("menu.dashboard");
     this.search();
-
-    this.user = this.userService.getInforUser();
-
-    if(localStorage.getItem('lang') == 'vi') {
-      this.lang = 'vi';
-    } else if(localStorage.getItem('lang') == 'en') {
-      this.lang = 'en';
-    }
-
+    
     let userId = this.userService.getAuthCurrentUser().id;
     this.userService.getUserById(userId).subscribe(
       data => {
@@ -91,13 +83,20 @@ export class DashboardComponent implements OnInit {
           data => {
             let listRole: any[];
             listRole = data.permissions;
-            this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');        
-            this.isQLHD_04 = listRole.some(element => element.code == 'QLHD_04');        
-
+            this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');
+            this.isQLHD_04 = listRole.some(element => element.code == 'QLHD_04');
         }, error => {
         });
-    }, error => {
-    })
+    }, error => {}
+    )
+
+    this.user = this.userService.getInforUser();
+
+    if(localStorage.getItem('lang') == 'vi') {
+      this.lang = 'vi';
+    } else if(localStorage.getItem('lang') == 'en') {
+      this.lang = 'en';
+    }
 
     this.unitService.getUnitList('', '').subscribe(data => {
       if(localStorage.getItem('lang') == 'vi')
@@ -152,7 +151,7 @@ export class DashboardComponent implements OnInit {
       this.array_empty.push(data);
       //this.removeElementFromStringArray(element.id);
     })
-    this.list = this.array_empty;
+    this.list = this.array_empty
   }
 
   findChildren(element:any){
@@ -166,7 +165,7 @@ export class DashboardComponent implements OnInit {
       {
         label: elementCon.name,
         data: elementCon.id,
-        expanded: true,
+        expanded: false,
         children: this.findChildren(elementCon)
       });
       this.removeElementFromStringArray(elementCon.id);
@@ -214,31 +213,26 @@ export class DashboardComponent implements OnInit {
       });
     }
     this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
+    this.dashboardService.countContractCreate(this.isOrg, this.organization_id, this.filter_from_date, this.filter_to_date).subscribe(data => {
+      let newData = Object.assign( {}, data)
+      newData.isOrg = this.isOrg;
+      newData.organization_id = this.organization_id;
+      newData.from_date = this.filter_from_date;
+      newData.to_date = this.filter_to_date;
+      
+      this.totalCreate = newData.total_process + newData.total_signed + newData.total_reject + newData.total_cancel + newData.total_expires;
 
-    console.log("is ", this.isOrg);
-    if(this.isOrg == 'on' && !this.isQLHD_03 && !this.isQLHD_04) {
-    } else {
-      this.dashboardService.countContractCreate(this.isOrg, this.organization_id, this.filter_from_date, this.filter_to_date).subscribe(data => {
-        let newData = Object.assign( {}, data)
-        newData.isOrg = this.isOrg;
-        newData.organization_id = this.organization_id;
-        newData.from_date = this.filter_from_date;
-        newData.to_date = this.filter_to_date;
-        
-        this.totalCreate = newData.total_process + newData.total_signed + newData.total_reject + newData.total_cancel + newData.total_expires;
-  
-        let numContractHeight = document.getElementById('num-contract')?.offsetHeight || 0;
-        let numContractBodyHeight = document.getElementById('num-contract-body')?.offsetHeight || 0;
-        let notiHeight = document.getElementById('noti')?.offsetHeight || 450;
-        
-        this.chartHeight = numContractHeight + notiHeight + numContractBodyHeight - 37;
-        
-        if(localStorage.getItem('lang') == 'vi' || sessionStorage.getItem('lang') == 'vi')
-          this.createChart("Đang xử lý","Hoàn thành","Từ chối","Huỷ bỏ", "Quá hạn", "Số lượng", newData);
-        else if(localStorage.getItem('lang') == 'en' || sessionStorage.getItem('lang') == 'en')
-          this.createChart("Processing","Complete","Reject","Cancel","Out of date", "Number", newData);     
-      });
-    }
+      let numContractHeight = document.getElementById('num-contract')?.offsetHeight || 0;
+      let numContractBodyHeight = document.getElementById('num-contract-body')?.offsetHeight || 0;
+      let notiHeight = document.getElementById('noti')?.offsetHeight || 450;
+      
+      this.chartHeight = numContractHeight + notiHeight + numContractBodyHeight - 37;
+      
+      if(localStorage.getItem('lang') == 'vi' || sessionStorage.getItem('lang') == 'vi')
+        this.createChart("Đang xử lý","Hoàn thành","Từ chối","Huỷ bỏ", "Quá hạn", "Số lượng", newData);
+      else if(localStorage.getItem('lang') == 'en' || sessionStorage.getItem('lang') == 'en')
+        this.createChart("Processing","Complete","Reject","Cancel","Out of date", "Number", newData);     
+    });
   }
 
   createChart(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string,so_luong: string, data: any) {

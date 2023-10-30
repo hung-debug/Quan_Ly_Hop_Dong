@@ -32,8 +32,7 @@ export class FilterListDialogComponent implements OnInit {
   isOrg:any="";
   organization_id:any;
   selectedNodeOrganization:any;
-
-  isQLHD_03: boolean | undefined;  //xem danh sach hop dong cua to chuc toi va to chuc con
+  isQLHD_03: boolean | undefined;
 
   get f() { return this.addForm.controls; }
 
@@ -51,10 +50,6 @@ export class FilterListDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.organization_id = Number(this.data.organization_id);
-    //lay danh sach to chuc
-    this.contractTypeService.getContractTypeList("", "").subscribe(data => {
-      this.contractTypeList = data;
-    });
 
     let userId = this.userService.getAuthCurrentUser().id;
     this.userService.getUserById(userId).subscribe(
@@ -64,11 +59,16 @@ export class FilterListDialogComponent implements OnInit {
           data => {
             let listRole: any[];
             listRole = data.permissions;
-            this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');        
+            this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');
         }, error => {
         });
-    }, error => {
-    })
+    }, error => {}
+    )
+
+    //lay danh sach to chuc
+    this.contractTypeService.getContractTypeList("", "").subscribe(data => {
+      this.contractTypeList = data;
+    });
 
     this.unitService.getUnitList('', '').subscribe(data => {
       if(this.data.filter_is_org_me_and_children){
@@ -162,7 +162,7 @@ export class FilterListDialogComponent implements OnInit {
       {
         label: elementCon.name, 
         data: elementCon.id,
-        expanded: true,
+        expanded: false,
         children: this.findChildren(elementCon)
       });
       this.removeElementFromStringArray(elementCon.id);

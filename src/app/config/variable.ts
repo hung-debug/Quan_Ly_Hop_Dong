@@ -352,6 +352,8 @@ export var roleList =
       { label: 'contract.connect.view', value: 'QLHD_12' },
       //Chia sẻ hợp đồng
       { label: 'contract.share', value: 'QLHD_13' },
+      //Thanh lý hợp đồng,
+      { label: 'contract.liquidation', value: 'QLHD_16'}
     ],
   },
   {

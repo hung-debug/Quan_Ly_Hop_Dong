@@ -13,6 +13,7 @@ import { UserService } from '../service/user.service';
 import {DeviceDetectorService} from "ngx-device-detector";
 import { ContractService } from '../service/contract.service';
 import { environment } from 'src/environments/environment';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ImageDialogSignComponent } from './contract-signature/components/consider-contract/image-dialog-sign/image-dialog-sign.component';
 @Component({
   selector: 'app-main',
@@ -33,6 +34,7 @@ export class MainComponent implements OnInit {
   urlLoginType: any;
   nameCurrentUser:any;
   listNotification: any[] = [];
+  getAlllistNotification: any[] = [];
 
   constructor(private router: Router,
               private appService: AppService,
@@ -44,18 +46,20 @@ export class MainComponent implements OnInit {
               private userService: UserService,
               private deviceService: DeviceDetectorService,
               private contractService: ContractService,
+              private spinner: NgxSpinnerService,
+              private toastService: ToastService,
               ) {
     this.title = 'err';
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang(localStorage.getItem('lang') || 'vi');
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        const currentRoute = event.urlAfterRedirects;
-        if (currentRoute.includes('/main/contract/create/')) {
-          this.sidebarservice.triggerReloadSidebar();
-        }
-      }
-    });
+    // this.router.events.subscribe((event) => {
+    //   if (event instanceof NavigationEnd) {
+    //     const currentRoute = event.urlAfterRedirects;
+    //     if (currentRoute.includes('/main/contract/create/')) {
+    //       this.sidebarservice.triggerReloadSidebar();
+    //     }
+    //   }
+    // });
   }
 
   lang: any;
@@ -71,7 +75,7 @@ export class MainComponent implements OnInit {
 
     //update title by component
     this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('type')));
-   
+
     this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
 
     this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
@@ -81,7 +85,19 @@ export class MainComponent implements OnInit {
 
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
       this.numberNotification = data.total_elements;
+
     });
+  }
+
+  readAll(){
+    this.dashboardService.readAllViewNotification().subscribe(readAll =>{
+      if(readAll.status == true){
+        this.toastService.showSuccessHTMLWithTimeout('read.all.success',"",3000)
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigate(['/main/dashboard']);
+        });
+      }
+    })
   }
 
   //apply change title
@@ -92,20 +108,19 @@ export class MainComponent implements OnInit {
   getScreenResolution(): void {
     let screenWidth = window.screen.width;
     let screenHeight = window.screen.height;
-    console.log(screenWidth, screenHeight);
   }
 
   //click logout
   logout() {
      //call api delete token
-     this.contractService.deleteToken().subscribe((res:any) => { 
+     this.contractService.deleteToken().subscribe((res:any) => {
     })
 
     sessionStorage.clear();
     localStorage.removeItem('currentUser');
     localStorage.removeItem('myTaxCode');
     localStorage.removeItem('url');
-  
+
     this.router.navigate(['/login']);
   }
 
@@ -132,7 +147,7 @@ export class MainComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+
       let is_data = result
     })
   }
@@ -206,7 +221,7 @@ export class MainComponent implements OnInit {
   }
 
   getStyle() {
-    
+
     if (this.router.url.includes("contract-signature")) {
       return {
         'margin-top': '40px'
@@ -226,7 +241,7 @@ export class MainComponent implements OnInit {
   openLinkNotification(link:any, id:any) {
     window.location.href = link.replace('&type=', '').replace('&type=1', '').replace('?id','?recipientId').replace('contract-signature','c').replace('signatures','s9').replace('consider','c9').replace('secretary','s8').replace('coordinates','c8');
     this.dashboardService.updateViewNotification(id).subscribe(data => {
-      
+
     });
   }
 
@@ -234,11 +249,16 @@ export class MainComponent implements OnInit {
     this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
       //this.numberNotification = data.total_elements;
       this.listNotification = data.entities;
-      
+
     });
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
       this.numberNotification = data.total_elements;
       //this.listNotification = data.entities;
+    });
+
+    this.dashboardService.getNotification(0, '', '', 10, '').subscribe(data => {
+      //this.numberNotification = data.total_elements;
+     this.getAlllistNotification = data.entities
     });
   }
 

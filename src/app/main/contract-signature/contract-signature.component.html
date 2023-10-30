@@ -311,7 +311,7 @@
                             </div>
 
                             <div class="div_icon" *ngIf="this.typeDisplay == 'downloadMany'">
-                                <input id="all" name="all" type="checkbox" (click)="toggleOneDownload(item, index1)" [(ngModel)]="item.checked"/>
+                                <input id="all" name="all" type="checkbox" (click)="toggleOneDownload(item, index1)" [(ngModel)]="item.checked" (change)="selectContract(item)"/>
                             </div>
                         </div>
                     </div>
