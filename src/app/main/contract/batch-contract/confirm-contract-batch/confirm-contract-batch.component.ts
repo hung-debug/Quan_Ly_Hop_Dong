@@ -894,41 +894,38 @@ export class ConfirmContractBatchComponent
   async next(isCeCA: any) {
     const isAllow = await this.checkNumber(this.datasBatch.ceca_push, this.convertToSignConfig().length);
     if (isAllow) {
-      this.spinner.show();
+      try {
+        this.spinner.show();
+        const confirmContractBatchCall = await this.contractService.confirmContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,isCeCA).toPromise()
+        let response = confirmContractBatchCall
 
-      this.contractService.confirmContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,isCeCA)
-        .subscribe((response: any) => {
-          if(response.errors?.length > 0) {
-            if(response.errors[0].code == 1015) {
-              this.toastService.showErrorHTMLWithTimeout('Số lượng hợp đồng đã mua không còn đủ để tạo hợp đồng','',3000);
-              this.spinner.hide();
-              return;
-            } else {
-              this.toastService.showErrorHTMLWithTimeout('Tạo hợp đồng theo lô thất bại','',3000);
-              this.spinner.hide();
-              return;
-            }
-          } else {
-            this.router
-            .navigateByUrl('/', { skipLocationChange: true })
-            .then(() => {
-              this.router.navigate(['/main/contract/create/processing']);
-            });
+        if(response.errors?.length > 0) {
+          if(response.errors[0].code == 1015) {
+            this.toastService.showErrorHTMLWithTimeout('Số lượng hợp đồng đã mua không còn đủ để tạo hợp đồng','',3000);
             this.spinner.hide();
-            this.toastService.showSuccessHTMLWithTimeout(
-              'Tạo hợp đồng theo lô thành công',
-              '',
-              3000
-            );
+            return;
+          } else {
+            this.toastService.showErrorHTMLWithTimeout('Tạo hợp đồng theo lô thất bại','',3000);
+            this.spinner.hide();
+            return;
           }
-         
-        }),
-        (error: any) =>
-          this.toastService.showErrorHTMLWithTimeout(
-            'Tạo hợp đồng theo lô thất bại',
+        } else {
+          this.router
+          .navigateByUrl('/', { skipLocationChange: true })
+          .then(() => {
+            this.router.navigate(['/main/contract/create/processing']);
+          });
+          this.spinner.hide();
+          this.toastService.showSuccessHTMLWithTimeout(
+            'Tạo hợp đồng theo lô thành công',
             '',
             3000
           );
+        }
+      } catch (error: any) {
+        this.spinner.hide()
+        this.toastService.showErrorHTMLWithTimeout(error.error.message,'',3000);
+      }
     }
   }
 
