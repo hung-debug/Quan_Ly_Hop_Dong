@@ -167,7 +167,7 @@ export class UserComponent implements OnInit {
       {
         label: elementCon.name,
         data: elementCon.id,
-        expanded: true,
+        expanded: false,
         children: this.findChildren(elementCon)
       });
       this.removeElementFromStringArray(elementCon.id);
