@@ -149,7 +149,7 @@ export class InforContractComponent implements OnInit {
           alert('Chỉ hỗ trợ file có định dạng PDF')
         }
       } else {
-        alert('Yêu cầu file nhỏ hơn 10MB');
+        alert('Yêu cầu file tối đa 10MB');
       }
     }
   }
@@ -177,7 +177,7 @@ export class InforContractComponent implements OnInit {
         } else {
           this.datas.file_name_attach = '';
           this.datas.attachFile = '';
-          alert('Yêu cầu file nhỏ hơn 10MB');
+          alert('Yêu cầu file tối đa 10MB');
           break;
         }
       }

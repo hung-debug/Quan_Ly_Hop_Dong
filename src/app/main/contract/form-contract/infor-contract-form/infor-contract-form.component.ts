@@ -490,7 +490,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         } else {
           this.datasForm.file_name_attach = '';
           this.datasForm.attachFile = '';
-          this.toastService.showWarningHTMLWithTimeout('File đính kèm yêu cầu có dung lượng nhỏ hơn 10MB','',3000);
+          this.toastService.showWarningHTMLWithTimeout('File đính kèm yêu cầu có dung lượng tối đa 10MB','',3000);
           break;
         }
       }

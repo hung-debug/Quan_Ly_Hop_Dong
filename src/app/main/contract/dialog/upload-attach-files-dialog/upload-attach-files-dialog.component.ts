@@ -314,7 +314,7 @@ export class UploadAttachFilesComponent implements OnInit {
         } else {
           this.datas.file_name_attach = '';
           this.datas.attachFile = '';
-          this.toastService.showWarningHTMLWithTimeout("File đính kèm yêu cầu nhỏ hơn 10MB", "", 3000);
+          this.toastService.showWarningHTMLWithTimeout("File đính kèm yêu cầu tối đa 10MB", "", 3000);
           break;
         }
       }

@@ -253,7 +253,7 @@ export class InforContractBatchComponent implements OnInit {
         }
       } else {
         this.toastService.showErrorHTMLWithTimeout(
-          'Yêu cầu file nhỏ hơn 10MB',
+          'Yêu cầu file tối đa 10MB',
           '',
           3000
         );
