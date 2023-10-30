@@ -484,7 +484,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     }
   }
 
-  multiDeleteDraft(){
+  multiDeleteDraft(action: string){
     this.spinner.show();
     this.typeDisplay = 'multiDeleteDraft';
     this.roleMess = "";
@@ -501,6 +501,9 @@ export class ContractComponent implements OnInit, AfterViewInit {
       if(!this.isQLHD_03) {
         isOrg ='off';
       }
+    if (action == 'multiDelete') {
+      this.p = 0
+    }
 
     this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, 20).subscribe(data => {
       this.contracts = data.entities;
