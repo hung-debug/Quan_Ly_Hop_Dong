@@ -772,5 +772,6 @@
   "read.all.success":"Đọc tất cả thông báo thành công",
   "multi.delete.draft.success": "Xóa nhiều hợp đồng bản nháp thành công",
   "error.multi.delete.draft": "Xóa nhiều hợp đồng bản nháp thất bại",
-  "choose.contract.draft":"Vui lòng tích chọn hợp đồng bản nháp"
+  "choose.contract.draft":"Vui lòng tích chọn hợp đồng bản nháp",
+  "expire.status":"Hết hiệu lực"
 }
