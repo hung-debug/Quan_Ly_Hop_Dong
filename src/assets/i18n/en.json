@@ -758,5 +758,6 @@
   "read.all.success":"Read all notification successfully",
   "multi.delete.draft.success": "Delete multi draft contract successfully",
   "error.multi.delete.draft": "Delete multi draft contract fail",
-  "choose.contract.draft":"Please choose the draft contract"
+  "choose.contract.draft":"Please choose the draft contract",
+  "expire.status":"Expire"
 }
