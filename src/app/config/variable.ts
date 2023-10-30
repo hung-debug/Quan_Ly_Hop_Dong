@@ -338,7 +338,7 @@ export var roleList =
       //Chia sẻ hợp đồng
       { label: 'contract.share', value: 'QLHD_13' },
       //Thanh lý hợp đồng,
-      { label: 'contract.liquidation', value: 'QLHD_14'}
+      { label: 'contract.liquidation', value: 'QLHD_16'}
     ],
   },
   {
