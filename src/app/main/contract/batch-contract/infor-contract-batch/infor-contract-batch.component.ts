@@ -293,7 +293,7 @@ export class InforContractBatchComponent implements OnInit {
   }
 
   // --next step 2
-  next() {
+  async next() {
     if (!this.validData()) return;
     else {
       this.spinner.show();
@@ -311,145 +311,158 @@ export class InforContractBatchComponent implements OnInit {
 
       let countSMS = 0;
       let countEkyc = 0;
-      this.contractService.uploadFileContractBatch(this.datasBatch.contractFile,this.datasBatch.idContractTemplate).subscribe(  
-        (responseUpload: any) => {
+      try {
+        let responseUpload: any = await this.contractService.uploadFileContractBatch(this.datasBatch.contractFile,this.datasBatch.idContractTemplate).toPromise()
+        this.spinner.hide()
+        if (responseUpload.status == 200){
           this.spinner.hide()
-          if (responseUpload.status == 200){
-            this.spinner.hide()
-            this.toastService.showErrorHTMLWithTimeout('file.import.valid.result',"",3000);
-            this.downloadFile(responseUpload.body)
-          }
-          if (responseUpload?.message?.length > 0) {
-            this.errorDetail = responseUpload.detail;
-            this.toastService.showErrorHTMLWithTimeout('File mẫu không hợp lệ','',3000);
-            this.spinner.hide();
-          } 
-          this.contractService.getContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,this.optionsCeCaValue).subscribe((response: any) => {
-              for (let i = 0;i < response[0].participants[0].recipients.length;i++) {
-                let recipients = response[0].participants[0].recipients;
+          this.toastService.showErrorHTMLWithTimeout('file.import.valid.result',"",3000);
+          this.downloadFile(responseUpload.body)
+        }
+        if (responseUpload?.message?.length > 0) {
+          this.errorDetail = responseUpload.detail;
+          this.toastService.showErrorHTMLWithTimeout('File mẫu không hợp lệ','',3000);
+          this.spinner.hide();
+        } 
+        this.contractService.getContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,this.optionsCeCaValue).subscribe((response: any) => {
+          for (let i = 0;i < response[0].participants[0].recipients.length;i++) {
+            let recipients = response[0].participants[0].recipients;
 
-                for(let j = 0; j < recipients.length; j++) {
-                  if(recipients[j].sign_type.length > 0) {
-                    if (recipients[j].sign_type[0].id == 1) {
-                      //Thêm điều kiện đăng nhập bằng email hoặc số điện thoại
-                      countSMS++;
-                    } else if (recipients[j].sign_type[0].id == 5) {
-                      countEkyc++;
-                    }
-                  }
-                    
+            for(let j = 0; j < recipients.length; j++) {
+              if(recipients[j].sign_type.length > 0) {
+                if (recipients[j].sign_type[0].id == 1) {
+                  //Thêm điều kiện đăng nhập bằng email hoặc số điện thoại
+                  countSMS++;
+                } else if (recipients[j].sign_type[0].id == 5) {
+                  countEkyc++;
                 }
               }
+                
+            }
+          }
 
-              if (countSMS > 0) {
-                countSMS = countSMS * response.length;
-              } else if (countEkyc > 0) {
-                countEkyc = countEkyc * response.length;
-              }
+          if (countSMS > 0) {
+            countSMS = countSMS * response.length;
+          } else if (countEkyc > 0) {
+            countEkyc = countEkyc * response.length;
+          }
 
-              this.orgId = this.userService.getInforUser().organization_id;
+          this.orgId = this.userService.getInforUser().organization_id;
 
-              this.unitService
-                .getUnitById(this.orgId)
-                .toPromise()
-                .then(
-                  (data) => {
-                    //chi lay so luong hop dong khi chon to chuc cha to nhat
-                      //lay so luong hop dong da dung
-                      this.unitService
-                        .getNumberContractUseOriganzation(this.orgId)
-                        .toPromise()
-                        .then(
-                          (data) => {
-                            this.numContractUse = data.contract;
-                            this.eKYCContractUse = data.ekyc;
-                            this.smsContractUse = data.sms;
+          this.unitService
+            .getUnitById(this.orgId)
+            .toPromise()
+            .then(
+              (data) => {
+                //chi lay so luong hop dong khi chon to chuc cha to nhat
+                  //lay so luong hop dong da dung
+                  this.unitService
+                    .getNumberContractUseOriganzation(this.orgId)
+                    .toPromise()
+                    .then(
+                      (data) => {
+                        this.numContractUse = data.contract;
+                        this.eKYCContractUse = data.ekyc;
+                        this.smsContractUse = data.sms;
 
-                            //lay so luong hop dong da mua
-                            this.unitService
-                              .getNumberContractBuyOriganzation(this.orgId)
-                              .toPromise()
-                              .then(
-                                (data) => {
-                                  this.numContractBuy = data.contract;
-                                  this.eKYCContractBuy = data.ekyc;
-                                  this.smsContractBuy = data.sms;
+                        //lay so luong hop dong da mua
+                        this.unitService
+                          .getNumberContractBuyOriganzation(this.orgId)
+                          .toPromise()
+                          .then(
+                            (data) => {
+                              this.numContractBuy = data.contract;
+                              this.eKYCContractBuy = data.ekyc;
+                              this.smsContractBuy = data.sms;
 
-                                  if (
-                                    Number(this.eKYCContractUse) +
-                                      Number(countEkyc) >
-                                    Number(this.eKYCContractBuy)
-                                  ) {
-                                    this.toastService.showErrorHTMLWithTimeout(
-                                      'Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ',
-                                      '',
-                                      3000
-                                    );
-                                  } else if (
-                                    Number(this.smsContractUse) +
-                                      Number(countSMS) >
-                                    Number(this.smsContractBuy)
-                                  ) {
-                                    this.toastService.showErrorHTMLWithTimeout(
-                                      'Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000
-                                    );
-                                  } else {
-                                    
-                                  if (responseUpload.status == 204) {
-                                    //next step
-                                    this.step = variable.stepSampleContractBatch.step2;
-                                    this.datasBatch.stepLast = this.step;
-                                    this.nextOrPreviousStep(this.step);
-                                    
-                                    this.spinner.hide();
-                                  }
-                                  }
+                              if (
+                                Number(this.eKYCContractUse) +
+                                  Number(countEkyc) >
+                                Number(this.eKYCContractBuy)
+                              ) {
+                                this.toastService.showErrorHTMLWithTimeout(
+                                  'Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ',
+                                  '',
+                                  3000
+                                );
+                              } else if (
+                                Number(this.smsContractUse) +
+                                  Number(countSMS) >
+                                Number(this.smsContractBuy)
+                              ) {
+                                this.toastService.showErrorHTMLWithTimeout(
+                                  'Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000
+                                );
+                              } else {
+                                
+                              if (responseUpload.status == 204) {
+                                //next step
+                                this.step = variable.stepSampleContractBatch.step2;
+                                this.datasBatch.stepLast = this.step;
+                                this.nextOrPreviousStep(this.step);
+                                
+                                this.spinner.hide();
+                              }
+                              }
 
-                                },
-                                (error) => {
-                                  this.toastService.showErrorHTMLWithTimeout(
-                                    'Lỗi lấy số lượng hợp đồng đã mua',
-                                    '',
-                                    3000
-                                  );
-                                }
+                            },
+                            (error) => {
+                              this.toastService.showErrorHTMLWithTimeout(
+                                'Lỗi lấy số lượng hợp đồng đã mua',
+                                '',
+                                3000
                               );
-                          },
-                          (error) => {
-                            this.toastService.showErrorHTMLWithTimeout(
-                              'Lỗi lấy số lượng hợp đồng đã dùng',
-                              '',
-                              3000
-                            );
-                          }
+                            }
+                          );
+                      },
+                      (error) => {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'Lỗi lấy số lượng hợp đồng đã dùng',
+                          '',
+                          3000
                         );
-                  },
-                  (error) => {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Lỗi lấy thông tin tổ chức',
-                      '',
-                      3000
+                      }
                     );
-                  }
+              },
+              (error) => {
+                this.toastService.showErrorHTMLWithTimeout(
+                  'Lỗi lấy thông tin tổ chức',
+                  '',
+                  3000
                 );
-            }),
-            (error: any) => {
-              this.toastService.showErrorHTMLWithTimeout(
-                'no.contract.download.file.error',
-                '',
-                3000
-              );
-              this.spinner.hide();
-            };
+              }
+            );
         }),
         (error: any) => {
+          this.toastService.showErrorHTMLWithTimeout(
+            'no.contract.download.file.error',
+            '',
+            3000
+          );
           this.spinner.hide();
+        };
+      } catch (error: any) {
+        this.spinner.hide()
+        let jsonResponseErr: any = null
+        const reader = new FileReader();
+        if (error.error) {
+          reader?.readAsText(error.error)
+          reader.onload = () => {
+            jsonResponseErr = JSON.parse(reader.result as string);
+            if (jsonResponseErr.message == 'OLD_FILE') {
+              this.toastService.showErrorHTMLWithTimeout(jsonResponseErr?.detail[0],'',3000)
+            } else {
+              this.toastService.showErrorHTMLWithTimeout(jsonResponseErr?.detail[0],'',3000)
+            }
+          };
+        } else {
           this.toastService.showErrorHTMLWithTimeout(
             'Lấy thông tin hợp đồng thất bại',
             '',
             3000
           );
-        };
+        }      
+      }
     }
   }
 
