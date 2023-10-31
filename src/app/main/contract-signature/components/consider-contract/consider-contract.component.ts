@@ -2208,17 +2208,18 @@ export class ConsiderContractComponent
             };
           } else {
             this.dataHsm = {
+              field: fieldHsm,
               ma_dvcs: this.dataHsm.ma_dvcs,
               username: this.dataHsm.username,
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
               imageBase64: (!this.markImage && signUpdate.type==3) ? null : 
-              (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
+                            (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
           }
 
           if (fileC && objSign.length) {
-            if (!this.mobile) {
+            if (!this.mobile || this.mobile) {
               const checkSign = await this.contractService.signHsm(
                 this.dataHsm,
                 this.recipientId,
