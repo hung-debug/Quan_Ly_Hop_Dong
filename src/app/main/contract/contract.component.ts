@@ -76,6 +76,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   roleMess: any = "";
   checkedAll: boolean = false;
   typeDisplay: string = 'view';
+  dataDeleteDraftChecked: any[] = [];
 
   //phan quyen
   isQLHD_01: boolean = true;  //them moi hop dong
@@ -596,11 +597,10 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   }
 
-  dataDeleteDraftChecked: any[] = [];
   toggleOneDraft(item: any){
 
     let data = {
-      id: item.participants[0]?.contract_id,
+      id: item.id,
       selectedId: item.id
     }
 
