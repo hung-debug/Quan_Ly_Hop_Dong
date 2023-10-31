@@ -4,8 +4,8 @@
         <div *ngFor="let item of listNotification| paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}" style="padding: 4px;"
         [style.background-color]="item.status==0 ? '#eaf4ff' : ''" class="item_contract">
           <div class="row">
-            <div *ngIf="this.lang == 'vi' || item.notice_name" class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name}}</div>
-            <div *ngIf="this.lang == 'en' || item.notice_name" class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name.replace("Ký HĐ","Sign contract").replace("Quá hạn","Overdue").replace("Hoàn thành","Completed")}}</div>
+            <div class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name}}</div>
+            <!-- <div *ngIf="this.lang == 'en'" class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name.replace("Ký HĐ","Sign contract").replace("Quá hạn","Overdue").replace("Hoàn thành","Completed")}}</div> -->
           </div>
           <div class="row" *ngFor="let s of item.notice_content.split('<br/>')">
             <div *ngIf="!s.includes('\nBên B: #PARTICIPANT_2#')" class="col-md-12 item_contract_infor">
