@@ -382,7 +382,7 @@ export class ForwardContractComponent implements OnInit {
       }
 
    
-      if(this.dataSign.length > 0 && (!this.myForm.value.dataSign || this.myForm.value.dataSign.length == 0)) {
+      if(this.dataSign && this.dataSign.length > 0 && (!this.myForm.value.dataSign || this.myForm.value.dataSign.length == 0)) {
         this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn loại ký cho người được uỷ quyền/chuyển tiếp','',3000);
         return;
       }
@@ -438,7 +438,7 @@ export class ForwardContractComponent implements OnInit {
             is_replace: false,
             login_by: this.login,
             locale: this.locale,
-            // sign_type: this.myForm.value.dataSign
+            sign_type: this.myForm.value.dataSign
           };
           
           if (this.login == 'phone') {
