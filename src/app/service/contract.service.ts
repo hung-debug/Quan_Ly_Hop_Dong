@@ -405,7 +405,7 @@ export class ContractService {
       is_template: type_form ? true : false,
       template_contract_id: type_form ? datas.template_contract_id : null,
       contract_expire_time: this.datepipe.transform(
-        datas.expire_time,
+        datas.contract_expire_time,
         "yyyy-MM-dd'T'HH:mm:ss'Z'"
       )?.slice(0, 11).concat("00:00:00Z"),
       ceca_push: datas.ceca_push,

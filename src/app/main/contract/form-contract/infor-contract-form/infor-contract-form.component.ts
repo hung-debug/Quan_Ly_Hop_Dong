@@ -143,11 +143,16 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         dataRouter.unsubscribe;
       }
     );
-
     this.datasForm.sign_time = this.datasForm.sign_time
       ? moment(this.datasForm.sign_time).toDate()
       : moment(new Date()).add(30, 'day').toDate();
-
+    
+    if (this.action == 'edit' && this.datasForm.contract_expire_time !== null) {
+      this.datasForm.contract_expire_time = moment(this.datasForm.contract_expire_time).toDate()
+    } else {
+      this.datasForm.contract_expire_time ? moment(this.datasForm.contract_expire_time).toDate() : null
+    }
+    
     // this.datasForm.type_id = this.datasForm.type_id ? this.datasForm.type_id : null;
     this.contractConnect = this.datasForm.contractConnect
       ? this.datasForm.contractConnect
