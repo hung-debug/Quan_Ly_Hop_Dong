@@ -231,7 +231,10 @@ export class DetermineSignerComponent implements OnInit {
         this.datas.is_determine_clone[index].recipients[i].name = this.datas.is_determine_clone[index].recipients[i].name.trim();
         this.datas.is_determine_clone[index].recipients[i].email = this.datas.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
         if (this.datas.is_determine_clone[index].recipients[i].login_by == "phone") {
-          this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
+          // this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
+          this.datas.is_determine_clone[index].recipients[i].email = ''
+        } else if (this.datas.is_determine_clone[index].recipients[i].sign_type.includes((type: any) => type.id !==1)) {
+          this.datas.is_determine_clone[index].recipients[i].phone = ''
         }
       }
     })
@@ -284,7 +287,6 @@ export class DetermineSignerComponent implements OnInit {
         this.getApiDetermine(is_save);
       }
     }
-
 
   }
   switchLang(locale: string, d: any) {
@@ -526,7 +528,7 @@ export class DetermineSignerComponent implements OnInit {
 
       //Nếu cá nhân chọn loại ký là otp và ký bằng SĐT
       if (data.typeSign == 1 && this.getDataSignCka(data).length > 0) {
-        data.phone = data.email;
+        data.phone = data.phone;
       }
     }
 
@@ -540,12 +542,6 @@ export class DetermineSignerComponent implements OnInit {
 
     if(d.login_by == 'phone') {
       d.sign_type = d.sign_type.filter((p: any) => ![2,7].includes(p.id));
-      d.emailTemp = d.email;
-      d.email = d.phone;
-    }
-
-    if(d.login_by == 'email' && d.emailTemp) {
-      d.email = d.emailTemp;
     }
 
     if(role == 'sign_partner') {
@@ -941,7 +937,7 @@ export class DetermineSignerComponent implements OnInit {
             }
 
             if (isParterSort[k].login_by=="email" && !isParterSort[k].email) {
-              isParterSort[k].phone = null;
+              // isParterSort[k].phone = null;
               this.getNotificationValid("Vui lòng nhập email" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác cá nhân!");
               count++;
               break;
@@ -1898,7 +1894,7 @@ export class DetermineSignerComponent implements OnInit {
                 recipient.card_id= item.card_id;
                 if(recipient.email == '' && recipient.phone &&
                 recipient.login_by == 'phone'){
-                  recipient.email = recipient.phone;
+                  recipient.phone = recipient.phone;
                 }
 
                 break;
@@ -1911,7 +1907,7 @@ export class DetermineSignerComponent implements OnInit {
                 recipient.card_id= item.card_id;
                 if(recipient.email = '' && recipient.phone &&
                 recipient.login_by == 'phone'){
-                  recipient.email = recipient.phone;
+                  recipient.phone = recipient.phone;
                 } else {
                   recipient.email = item.email;
                 }
