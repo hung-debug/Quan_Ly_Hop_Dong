@@ -103,7 +103,7 @@
       </div>
     </div>
 
-    <div class="name-item" *ngIf="isReqPhone && this.login == 'email'">
+    <div class="name-item" *ngIf="isReqPhone && this.login == 'email' && this.site == 'KD'">
       <div class="label_item">{{'user.phone' | translate}} <span class="require_star">*</span></div>
       <div class="input-data">
         <input style="width: 88%" autocomplete="off" type="text" formControlName="phone" class="input-text">
