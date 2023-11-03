@@ -233,7 +233,7 @@ export class DetermineSignerComponent implements OnInit {
         if (this.datas.is_determine_clone[index].recipients[i].login_by == "phone") {
           // this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
           this.datas.is_determine_clone[index].recipients[i].email = ''
-        } else if (this.datas.is_determine_clone[index].recipients[i].sign_type.includes((type: any) => type.id !==1)) {
+        } else if (this.datas.is_determine_clone[index].recipients[i].sign_type.filter((type: any) => type.id == 1).length == 0) {
           this.datas.is_determine_clone[index].recipients[i].phone = ''
         }
       }
@@ -725,7 +725,7 @@ export class DetermineSignerComponent implements OnInit {
           break;
         }
       } else if (dataArr[i].login_by == 'phone') {
-        if (dataArr[i].email.trim() && !this.pattern.phone.test(dataArr[i].email.trim())) {
+        if (dataArr[i].phone.trim() && !this.pattern.phone.test(dataArr[i].phone)) {
           this.getNotificationValid("SĐT của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
           count++;
           break;
@@ -734,11 +734,11 @@ export class DetermineSignerComponent implements OnInit {
 
 
       // valid phone number
-      if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone.trim())) {
-        this.getNotificationValid("SĐT của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
-        count++;
-        break;
-      }
+      // if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone.trim())) {
+      //   this.getNotificationValid("SĐT của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
+      //   count++;
+      //   break;
+      // }
 
       // valid cccd number
       if (dataArr[i].card_id.trim() && !this.pattern.card_id9.test(dataArr[i].card_id.trim()) &&
