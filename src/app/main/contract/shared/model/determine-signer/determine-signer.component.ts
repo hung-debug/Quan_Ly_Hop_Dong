@@ -233,7 +233,9 @@ export class DetermineSignerComponent implements OnInit {
         if (this.datas.is_determine_clone[index].recipients[i].login_by == "phone") {
           // this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
           this.datas.is_determine_clone[index].recipients[i].email = ''
-        } else if (this.datas.is_determine_clone[index].recipients[i].sign_type.filter((type: any) => type.id == 1).length == 0) {
+        } else if (this.datas.is_determine_clone[index].recipients[i].sign_type.filter((type: any) => type.id == 1).length == 0 &&
+                  this.site == 'KD'
+        ) {
           this.datas.is_determine_clone[index].recipients[i].phone = ''
         }
       }
@@ -718,9 +720,13 @@ export class DetermineSignerComponent implements OnInit {
         break;
       }
 
-      if (dataArr[i].login_by == 'email' && dataArr[i].email) {
-        if (dataArr[i].email.trim() && !this.pattern.email.test(dataArr[i].email.trim())) {
+      if (dataArr[i].login_by == 'email') {
+        if (dataArr[i].email && dataArr[i].email.trim() && !this.pattern.email.test(dataArr[i].email.trim())) {
           this.getNotificationValid("Email của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
+          count++;
+          break;
+        } else if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone)) {
+          this.getNotificationValid("SĐT của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
           count++;
           break;
         }
@@ -1343,7 +1349,7 @@ export class DetermineSignerComponent implements OnInit {
 
       if (arrPhone.some((p: any) => p.role == 1) && arrPhone.some((p: any) => p.role == 3)) {
         if (isParty == 'only_party_partner') {
-          arrPhone = arrPhone.filter((p: any) => p.role != 1);
+          // arrPhone = arrPhone.filter((p: any) => p.role != 1);
         } else {
           let duplicatePhone: any[] = [];
           let countCheck_duplicate = true;
