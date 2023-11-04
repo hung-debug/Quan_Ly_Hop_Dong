@@ -162,10 +162,10 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   changeTypeSign(d: any,index?: any,id?: any,role?: any) {
-    if (d.login_by == 'phone' || d.login_by == 'email') {
-      d.email = '';
-      d.phone = '';
-    }
+    // if (d.login_by == 'phone' || d.login_by == 'email') {
+    //   d.email = '';
+    //   d.phone = '';
+    // }
 
     if(d.login_by == 'phone') {
       d.sign_type = d.sign_type.filter((p: any) => ![2, 7].includes(p.id));
@@ -273,8 +273,12 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       for(let i = 0; i < this.datasForm.is_determine_clone[index].recipients.length; i++) {
         this.datasForm.is_determine_clone[index].recipients[i].name = this.datasForm.is_determine_clone[index].recipients[i].name.trim();
         this.datasForm.is_determine_clone[index].recipients[i].email = this.datasForm.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
-        if(this.datasForm.is_determine_clone[index].recipients[i].login_by == "phone") {
-          this.datasForm.is_determine_clone[index].recipients[i].phone = this.datasForm.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
+        if (this.datasForm.is_determine_clone[index].recipients[i].login_by == "phone") {
+          this.datasForm.is_determine_clone[index].recipients[i].email = ''
+        } else if (this.datasForm.is_determine_clone[index].recipients[i].sign_type.filter((type: any) => type.id == 1).length == 0 &&
+                  this.site == 'KD'
+        ) {
+          this.datasForm.is_determine_clone[index].recipients[i].phone = ''
         }
       }
     })
@@ -535,7 +539,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
       //Nếu cá nhân chọn loại ký là otp và ký bằng số điện thoại
       if (data.typeSign == 1 && this.getDataSignCka(data).length > 0) {
-        data.phone = data.email;
+        data.phone = data.phone;
       }
     }
 
@@ -638,7 +642,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     let count = 0;
     let dataArr = [];
     dataArr = (this.data_organization.recipients).sort((beforeItemRole: any, afterItemRole: any) => beforeItemRole.role - afterItemRole.role);
-
     for (let i = 0; i < dataArr.length; i++) {
       if (!dataArr[i].name) {
         this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!");
@@ -652,7 +655,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         break;
       }
 
-      if (!dataArr[i].email) {
+      if (dataArr[i].login_by=="email" && !dataArr[i].email) {
         this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
         count++;
         break;
@@ -682,7 +685,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         is_duplicate = [];
       }
 
-      if (!dataArr[i].phone && dataArr[i].sign_type.filter((p: any) => p.id == 1).length > 0) {
+      if (!dataArr[i].phone && dataArr[i].sign_type.filter((p: any) => p.id == 1).length > 0 ||
+        (dataArr[i].login_by=="phone" && !dataArr[i].phone)
+      ) {
         this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
         count++;
         break;
@@ -696,13 +701,13 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
       if(dataArr[i].login_by == 'email') {
         if (dataArr[i].email.trim() && !this.pattern.email.test(dataArr[i].email.trim())) {
-          this.getNotificationValid("Email của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
+          this.getNotificationValid("Email của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
           count++;
           break;
         }
       } else if(dataArr[i].login_by == 'phone') {
         if (dataArr[i].email.trim() && !this.pattern.phone.test(dataArr[i].email.trim())) {
-          this.getNotificationValid("SĐT của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
+          this.getNotificationValid("SĐT của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
           count++;
           break;
         }
@@ -780,7 +785,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               break;
             }
 
-            if (!isParterSort[k].email) {
+            if ((isParterSort[k].login_by == "email"  && !isParterSort[k].email) || (!isParterSort[k].email && isParterSort[k].role == 1)) {
               this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(isParterSort[k].role) + " của đối tác!")
               count++;
               break;
@@ -809,8 +814,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               }
               isPartnerOriganzationDuplicate = [];
             }
-
-            if (!isParterSort[k].phone && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
+            console.log('isParterSort',isParterSort[k]);
+            if (!isParterSort[k].phone && (isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0 || isParterSort[k].login_by == "phone")) {
               this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(isParterSort[k].role) + "của đối tác!")
               count++;
               break;
@@ -821,28 +826,34 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               count++;
               break;
             }
-
-            if(isParterSort.login_by == 'email') {
+            if(isParterSort[k].login_by == 'email') {
               if (isParterSort[k].email.trim() && !this.pattern.email.test(isParterSort[k].email.trim())) {
+                console.log('check user 831',isParterSort[k]);
                 this.getNotificationValid("Email của" + this.getNameObject(isParterSort[k].role) + "của đối tác không hợp lệ!")
                 count++;
                 break;
               }
-            } else if(isParterSort.login_by == 'phone') {
-              if (isParterSort[k].email && !this.pattern.phone.test(isParterSort[k].email.trim())) {
-                this.getNotificationValid("Email của" + this.getNameObject(isParterSort[k].role) + "của đối tác không hợp lệ!")
+            } else if (isParterSort[k].email.trim() && !this.pattern.email.test(isParterSort[k].email.trim())) {
+              console.log('check user 836',isParterSort[k]);
+              this.getNotificationValid("Email của" + this.getNameObject(isParterSort[k].role) + "của đối tác không hợp lệ!")
+              count++;
+              break;
+            }
+            
+            if((isParterSort[k].login_by == "phone" || isParterSort[k].login_by == "email") && (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone.trim()))
+            ) {
+                this.getNotificationValid("Số điện thoại của" + this.getNameObject(isParterSort[k].role) + "của đối tác không hợp lệ!")
                 count++;
                 break;
-              }
             }
 
 
             // valid phone number
-            if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone.trim())) {
-              this.getNotificationValid("Số điện thoại" + this.getNameObject(isParterSort[k].role) + "của đối tác không hợp lệ!")
-              count++;
-              break;
-            }
+            // if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone.trim())) {
+            //   this.getNotificationValid("Số điện thoại" + this.getNameObject(isParterSort[k].role) + "của đối tác không hợp lệ!")
+            //   count++;
+            //   break;
+            // }
 
             // valid cccd number
             if (isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
@@ -889,18 +900,21 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               break;
             }
 
-            if (!isParterSort[k].email && isParterSort[k].role == 3) {
-              if(isParterSort[k].login_by == 'email') {
+            if (isParterSort[k].role == 3) {
+              if(!isParterSort[k].email && isParterSort[k].login_by == 'email') {
                 this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân!")
-                count++;
-                break;
-              } else if(isParterSort[k].login_by == 'phone') {
-                this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân!")
                 count++;
                 break;
               }
 
+              if(!isParterSort[k].phone && isParterSort[k].login_by == 'phone') {
+                this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân!")
+                count++;
+                break;
+              }
             }
+
+
 
             if (isParterSort[k].sign_type.length == 0 && [3, 4].includes(isParterSort[k].role) && isParterSort[k].role == 3) {
               this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân!")
@@ -1153,7 +1167,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         for (let j = 0; j < element.length; j++) {
           if (element[j].phone) {
             let items = {
-              phone: (environment.flag == 'KD' && element[j].login_by == 'email') ? null : element[j].phone,
+              // phone: (environment.flag == 'KD' && element[j].login_by == 'email') ? null : element[j].phone,
+              phone: element[j].phone,
               role: element[j].role,
               type: dataValid[i].type,
               ordering: dataValid[i].ordering
@@ -1186,9 +1201,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     } else {
       // valid email tổ chức của tôi
       for (let i = 0; i < dataValid.length; i++) {
-        if ((environment.flag == 'KD' && dataValid[i].login_by=='email' && dataValid[i].role == 3)){
-          dataValid[i].phone = null
-        }
+        // if ((environment.flag == 'KD' && dataValid[i].login_by=='email' && dataValid[i].role == 3)){
+        //   dataValid[i].phone = null
+        // }
         if (dataValid[i].phone) {
           arrCheckPhone.push(dataValid[i].phone);
         }
