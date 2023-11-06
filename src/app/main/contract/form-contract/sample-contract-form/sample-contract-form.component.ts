@@ -439,6 +439,10 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           /*
           end
           */
+          res.sign_config = res.sign_config.filter((val: any) =>
+          dataContractUserSign.some((data: any) =>
+            (val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email as any : data.email as any) &&
+            val.sign_unit == data.sign_unit));
         }
       })
     }
@@ -449,7 +453,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         arrConfig = resForm.sign_config.filter((val: any) =>
           !val.recipient_id || dataContractUserSign.some((data) => data.sign_unit == val.sign_unit)
         )
-        resForm.sign_config = arrConfig; // set data with object not change data
+        // resForm.sign_config = arrConfig // set data with object not change data
         resForm.sign_config.forEach((items: any) => {
           items.id = items.id + '1'; // tránh trùng với id cũ, gây ra lỗi
           let data: any = {};
