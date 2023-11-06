@@ -779,12 +779,12 @@ export class DetermineSignerComponent implements OnInit {
       const onlyPartOrg = 'only_party_origanzation';
 
       if (this.getCheckDuplicateEmail(onlyPartOrg, dataArr)) {
-        this.getNotificationValid("Email/SĐT tổ chức của tôi không được trùng nhau!");
+        this.getNotificationValid("Email tổ chức của tôi không được trùng nhau!");
         return false
       }
 
       if (this.getCheckDuplicatePhone(onlyPartOrg, dataArr)) {
-        this.getNotificationValid("Email/SĐT tổ chức của tôi không được trùng nhau!");
+        this.getNotificationValid("SĐT tổ chức của tôi không được trùng nhau!");
         return false
       }
 
@@ -862,7 +862,7 @@ export class DetermineSignerComponent implements OnInit {
             }
             
             if (!isParterSort[k].card_id.trim() && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
-              this.getNotificationValid("Vui lòng CMT/CCCD của " + this.getNameObjectValid(3) + "tổ chức của đối tác!")
+              this.getNotificationValid("Vui lòng nhập CMT/CCCD của " + this.getNameObjectValid(3) + "tổ chức của đối tác!")
               count++;
               break;
             }
@@ -906,17 +906,17 @@ export class DetermineSignerComponent implements OnInit {
 
             if (isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
               !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
-              !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
-              this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của tôi không hợp lệ!");
+              !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) && isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6).length > 0) {
+              this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
               count++;
               break;
             }
 
-            if (!isParterSort[k].card_id.trim() && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
-              this.getNotificationValid("Vui lòng nhập mã số thuế của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của đối tác");
-              count++;
-              break;
-            }
+            // if (!isParterSort[k].card_id.trim() && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
+            //   this.getNotificationValid("Vui lòng nhập mã số thuế của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của đối tác");
+            //   count++;
+            //   break;
+            // }
 
             if (isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
             !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
