@@ -209,16 +209,16 @@ export class DetermineSignerComponent implements OnInit {
         this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
 
         //Cá nhân không ký số không đẩy lên bộ công thương(thông báo với loại hợp đồng ceca_push = 1)
-        items.recipients.forEach((ele: any) => {
-          if(this.datas.ceca_push == 1 && ele.sign_type.length > 0) {
-            if(this.datas.ceca_push == 1 && (ele.sign_type[0].id == 1 || ele.sign_type[0].id == 5)) {
-              this.toastService.showWarningHTMLWithTimeout('ceca.reason','',3000)
-              return;
-            }
-          }
-        })
+        // items.recipients.forEach((ele: any) => {
+        //   if(this.datas.ceca_push == 1 && ele.sign_type.length > 0) {
+        //     if(this.datas.ceca_push == 1 && (ele.sign_type[0].id == 1 || ele.sign_type[0].id == 5)) {
+        //       this.toastService.showWarningHTMLWithTimeout('ceca.reason','',3000)
+        //       return;
+        //     }
+        //   }
+        // })
       } else if(this.datas.is_determine_clone.length == 1 && this.datas.is_determine_clone[index].length == 1) {
-        this.toastService.showWarningHTMLWithTimeout('ceca.reason.one.person','',3000)
+        // this.toastService.showWarningHTMLWithTimeout('ceca.reason.one.person','',3000)
       }
 
       for (let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {

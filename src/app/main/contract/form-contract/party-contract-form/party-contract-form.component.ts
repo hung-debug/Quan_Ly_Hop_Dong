@@ -256,18 +256,18 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
 
         //Cá nhân không ký số không đẩy lên bộ công thương(thông báo với loại hợp đồng ceca_push = 1)
-        items.recipients.forEach((ele: any) => {
-          if(this.datasForm.ceca_push == 1 && ele.sign_type.length > 0) {
-            if(this.datasForm.ceca_push == 1 && ele.sign_type[0].id == 1 || ele.sign_type[0].id == 5) {
-              this.isCeCaPushNo = true;
-              this.toastService.showWarningHTMLWithTimeout('ceca.reason','',3000)
-              return;
-            }
-          }
-        })
+        // items.recipients.forEach((ele: any) => {
+        //   if(this.datasForm.ceca_push == 1 && ele.sign_type.length > 0) {
+        //     if(this.datasForm.ceca_push == 1 && ele.sign_type[0].id == 1 || ele.sign_type[0].id == 5) {
+        //       this.isCeCaPushNo = true;
+        //       this.toastService.showWarningHTMLWithTimeout('ceca.reason','',3000)
+        //       return;
+        //     }
+        //   }
+        // })
       } else if(this.datasForm.is_determine_clone.length == 1 && this.datasForm.is_determine_clone[index].length == 1) {
-        this.isCeCaPushNo = true;
-        this.toastService.showWarningHTMLWithTimeout('ceca.reason.one.person','',3000)
+        // this.isCeCaPushNo = true;
+        // this.toastService.showWarningHTMLWithTimeout('ceca.reason.one.person','',3000)
       }
 
       for(let i = 0; i < this.datasForm.is_determine_clone[index].recipients.length; i++) {
@@ -283,11 +283,11 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       }
     })
 
-    if(this.isCeCaPushNo) {
-      //chuyển ceca_push thành 0
-      this.datasForm.ceca_push = 0;
-      this.contractService.addContractStep1(this.datasForm, this.datasForm.contract_id).subscribe();
-    }
+    // if(this.isCeCaPushNo) {
+    //   //chuyển ceca_push thành 0
+    //   this.datasForm.ceca_push = 0;
+    //   this.contractService.addContractStep1(this.datasForm, this.datasForm.contract_id).subscribe();
+    // }
 
     this.submitted = true;
     if (action == 'save-step' && !this.validData()) {
