@@ -25,6 +25,7 @@ import { DatePipe } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { EditExpirationSigningTimeComponent } from './edit-expiration-signing-time/edit-expiration-signing-time.component';
 import { UploadAttachFilesComponent } from './dialog/upload-attach-files-dialog/upload-attach-files-dialog.component';
+import { ProcessingHandleEcontractComponent } from '../contract-signature/shared/model/processing-handle-econtract/processing-handle-econtract.component';
 
 @Component({
   selector: 'app-contract',
@@ -32,6 +33,9 @@ import { UploadAttachFilesComponent } from './dialog/upload-attach-files-dialog/
   styleUrls: ['./contract.component.scss']
 })
 export class ContractComponent implements OnInit, AfterViewInit {
+  datas: any;
+  data_contract: any;
+  idContract: any;
   action: string;
   status: string;
   type: string;
@@ -107,7 +111,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private roleService: RoleService,
     private datePipe: DatePipe,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private activeRoute: ActivatedRoute,
   ) {
 
     this.stateOptions = [
@@ -196,7 +201,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
                 this.isQLHD_12 = listRole.some(element => element.code == 'QLHD_12');
                 this.isQLHD_13 = listRole.some(element => element.code == 'QLHD_13');
                 this.isQLHD_16 = listRole.some(element => element.code == 'QLHD_16');
-  
+
                 //neu co quyen xem danh sach hop dong cua to chuc minh va to chuc con
                 this.filter_is_org_me_and_children = this.isQLHD_03;
 
@@ -385,7 +390,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.typeDisplay = 'downloadMany';
     this.roleMess = "";
     if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
-      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền"; 
+      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền";
     }
 
     if (!this.roleMess) {
@@ -639,6 +644,30 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     this.typeDisplay = 'signOne';
     window.location.reload();
+  }
+
+
+
+  processHandleContract(contractId: any) {
+    let processData: any = {
+      is_data_contract: {
+        id: null
+      },
+      content: null,
+    }
+
+    processData.is_data_contract.id = contractId
+
+    // @ts-ignore
+    const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
+      width: '1000px',
+      backdrop: 'static',
+      keyboard: true,
+      data: processData
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      let is_data = result;
+    });
   }
 
   getContractList() {

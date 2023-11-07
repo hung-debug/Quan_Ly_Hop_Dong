@@ -133,6 +133,12 @@
                                         <span *ngIf="item.sign_type.length == 0 && item.role == 1" class="status_blue">{{'contract.lead' | translate}}</span>
                                     </div>
                                 </div>
+
+                                <div class="row">
+                                  <div class="item_contract_infor">
+                                    <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.contractId)">{{'contract_processing_flow' | translate}}</u>
+                                  </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -186,6 +192,11 @@
                             <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
                                 <span class="status_blue">{{'contract.status.complete' | translate}} {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) | translate}}</span>
                             </div>
+                        </div>
+                        <div class="row">
+                          <div class="item_contract_infor">
+                            <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
+                          </div>
                         </div>
                     </div>
                     <div class="col-md-2 calendar_create">
@@ -282,6 +293,12 @@
                                         <span class="status_blue">{{item.sign_type[0].name}}</span>
                                     </div>
                                 </div>
+
+                                <div class="row">
+                                  <div class="item_contract_infor">
+                                    <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.contractId)">{{'contract_processing_flow' | translate}}</u>
+                                  </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -366,6 +383,12 @@
                                         <span class="status_blue">{{item.sign_type[0].name}}</span>
                                     </div>
                                 </div>
+
+                                <div class="row">
+                                  <div class="item_contract_infor">
+                                    <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.contractId)">{{'contract_processing_flow' | translate}}</u>
+                                  </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -415,6 +438,11 @@
                             <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
                                 <span class="status_blue">{{'contract.status.complete' | translate}} {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) | translate}}</span>
                             </div>
+                        </div>
+                        <div class="row">
+                          <div class="item_contract_infor">
+                            <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
+                          </div>
                         </div>
                     </div>
                     <div class="col-md-2 calendar_create">
@@ -517,6 +545,12 @@
                                         <span class="status_blue" *ngIf="item.status == 3 && item.role == 3">{{'contract.sign-refused' | translate}}</span>
                                         <span class="status_blue" *ngIf="item.status == 3 && item.role == 4">{{'contract.document-refused' | translate}}</span>
                                     </div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="item_contract_infor">
+                                    <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.contractId)">{{'contract_processing_flow' | translate}}</u>
+                                  </div>
                                 </div>
                             </div>
                         </div>

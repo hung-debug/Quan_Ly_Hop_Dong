@@ -395,7 +395,7 @@
   "contract_number_already_exist": "Số hợp đồng đã tồn tại!",
   "notify_have_not_sign_acc": "Bạn chưa có ảnh ký từ tài khoản!",
   "notify_have_not_sign_mark_acc": "Bạn chưa có ảnh con dấu từ tài khoản!",
-  "contract_processing_flow": "LUỒNG XỬ LÝ HỢP ĐỒNG",
+  "contract_processing_flow": "Luồng xử lý hợp đồng",
   "not_search_file_attach": "Không tìm thấy file đính kèm, vui lòng kiểm tra lại!",
   "typeOfSignEmail":"Đăng nhập bằng email",
   "email.valid":"Địa chỉ email không hợp lệ",

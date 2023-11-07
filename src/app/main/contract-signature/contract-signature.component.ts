@@ -28,6 +28,7 @@ import { UserService } from 'src/app/service/user.service';
 import { DowloadPluginService } from 'src/app/service/dowload-plugin.service';
 import { CertDialogSignComponent } from './components/consider-contract/cert-dialog-sign/cert-dialog-sign.component';
 import { TimeService } from 'src/app/service/time.service';
+import { ProcessingHandleEcontractComponent } from '../contract-signature/shared/model/processing-handle-econtract/processing-handle-econtract.component';
 // import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
@@ -927,6 +928,28 @@ export class ContractSignatureComponent implements OnInit {
         })
       }
     }
+  }
+
+  processHandleContract(contractId: any) {
+    let processData: any = {
+      is_data_contract: {
+        id: null
+      },
+      content: null,
+    }
+
+    processData.is_data_contract.id = contractId
+
+    // @ts-ignore
+    const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
+      width: '1000px',
+      backdrop: 'static',
+      keyboard: true,
+      data: processData
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      let is_data = result;
+    });
   }
 
   private convertStatusStr() {
