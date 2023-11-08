@@ -2028,10 +2028,6 @@ export class ContractSignatureComponent implements OnInit {
           // signI = textSignB.split(',')[1];
           signI = this.srcMark.split(',')[1];
         }
-        let emptySignatures: any = []
-        let mergeTimeStampData: any = []
-
-        console.log('emptySignatures 1',emptySignatures);
 
         for (let i = 0; i < fileC.length; i++) {
           y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
@@ -2041,34 +2037,19 @@ export class ContractSignatureComponent implements OnInit {
           signDigital.signDigitalWidth = w[i];
           signDigital.signDigitalHeight = h[i];
           signDigital.page = page[i];
-          console.log('emptySignatures',emptySignatures);
-
-          emptySignatures.push({
-            recipientId: recipientId[i],
-            fieldId: signUpdate.id,
-            image: signI,
-            cert: certInfoBase64,
-            page: signDigital.page,
-            x: Math.floor(signDigital.signDigitalX as any),
-            y: Math.floor(signDigital.signDigitalY as any),
-            width: Math.floor(signDigital.signDigitalWidth as any),
-            height: Math.floor(signDigital.signDigitalHeight as any),
-            type: boxTypes[i]
-          })
-        }
-        const emptySignature = await this.contractServiceV1
-        .createEmptySignatureMulti(
-          emptySignatures
-        )
-        .toPromise();
-
-        let mergeTimeStamp: any
-        for (let i = 0; i < fileC.length; i++) {
-          y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
-
-          const base64TempData = emptySignature[i].base64TempData;
-          const fieldName = emptySignature[i].fieldName;
-          const hexDigestTempFile = emptySignature[i].hexDigestTempFile;
+          const emptySignature = await this.contractServiceV1
+            .createEmptySignature(
+              recipientId[i],
+              signUpdate,
+              signDigital,
+              signI,
+              certInfoBase64,
+              boxTypes[i]
+            )
+            .toPromise();
+          const base64TempData = emptySignature.base64TempData;
+          const fieldName = emptySignature.fieldName;
+          const hexDigestTempFile = emptySignature.hexDigestTempFile;
 
           var json_req = JSON.stringify({
             OperationId: 5,
@@ -2091,19 +2072,20 @@ export class ContractSignatureComponent implements OnInit {
             );
 
             const signatureToken = dataSignatureToken.Signature;
-            mergeTimeStamp = await this.contractServiceV1
-            .meregeTimeStamp(                
-              recipientId[i],
-              idContract[i],
-              signatureToken,
-              fieldName,
-              certInfoBase64,
-              hexDigestTempFile,
-              ceca_push[i])
-            .toPromise();
 
-            // continues... merTimeStamp + signing
+            const mergeTimeStamp = await this.contractServiceV1
+              .meregeTimeStamp(
+                recipientId[i],
+                idContract[i],
+                signatureToken,
+                fieldName,
+                certInfoBase64,
+                hexDigestTempFile,
+                ceca_push[i]
+              )
+              .toPromise();
             const filePdfSigned = mergeTimeStamp.base64Data;
+
 
             const sign = await this.contractServiceV1.updateDigitalSignatured(
               idSignMany[i],
@@ -2149,8 +2131,6 @@ export class ContractSignatureComponent implements OnInit {
                   this.router.navigate(['main/c/receive/processed']);
                 });
             }
-            
-
           } catch (err) {
             this.spinner.hide()
             this.toastService.showErrorHTMLWithTimeout(
@@ -2161,77 +2141,6 @@ export class ContractSignatureComponent implements OnInit {
             return;
           }
         }
-
-        // mergeTimeStamp = await this.contractServiceV1
-        //   .meregeTimeStampMulti(mergeTimeStampData)
-        //   .toPromise();
-
-        // for (let i = 0; i < fileC.length; i++) {
-      
-
-        //   try {
-        //     // continues...
-            
-        //     const filePdfSigned = mergeTimeStamp[i].base64Data;
-
-        //     const sign = await this.contractServiceV1.updateDigitalSignatured(
-        //       idSignMany[i],
-        //       filePdfSigned
-        //     );
-
-        //     if (!sign.recipient_id) {
-        //       this.toastService.showErrorHTMLWithTimeout(
-        //         'Lỗi ký usb token không cập nhật được recipient id',
-        //         '',
-        //         3000
-        //       );
-        //       return false;
-        //     }
-
-        //     const updateInfo =
-        //       await this.contractServiceV1.updateInfoContractConsiderPromise(
-        //         [{
-        //           processAt: this.isDateTime
-        //         }],
-        //         recipientId[i]
-        //       );
-
-        //     if (!updateInfo.id) {
-        //       this.toastService.showErrorHTMLWithTimeout(
-        //         'Lỗi cập nhật trạng thái hợp đồng ',
-        //         '',
-        //         3000
-        //       );
-        //     }
-
-        //     if (i == fileC.length - 1) {
-        //       this.spinner.hide();
-        //       this.toastService.showSuccessHTMLWithTimeout(
-        //         'sign.success',
-        //         '',
-        //         3000
-        //       );
-
-        //       this.router
-        //         .navigateByUrl('/', { skipLocationChange: true })
-        //         .then(() => {
-        //           this.router.navigate(['main/c/receive/processed']);
-        //         });
-        //     }
-
-
-        //   } catch (err) {
-        //     this.spinner.hide()
-        //     this.toastService.showErrorHTMLWithTimeout(
-        //       'Lỗi ký usb token ',
-        //       '',
-        //       3000
-        //     );
-        //     return;
-        //   }
-        // }
-
-
       } else {
         this.spinner.hide();
         Swal.fire({

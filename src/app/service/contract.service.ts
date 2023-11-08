@@ -649,34 +649,6 @@ export class ContractService {
     });
   }
 
-  // ký nhiều token v2 ==================================
-  createEmptySignatureMulti(data: any) {
-    this.getCurrentUser();
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);
-
-    const body = JSON.stringify(data)
-
-    return this.http.post<any>(this.emptySignatureUrl + '/create-empty-token', body, {
-      headers: headers,
-    });
-  }
-
-  meregeTimeStampMulti(mergeTimeStampData: any) {
-    this.getCurrentUser();
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);
-
-    const body = JSON.stringify(mergeTimeStampData)
-
-    return this.http.post<any>(this.mergeTimeStampUrl + 'merge-time-stamp', body, {
-      headers: headers,
-    });
-  }
-  // ký nhiều token v2 ==================================
-
   cancelManyContrcacts(data: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
