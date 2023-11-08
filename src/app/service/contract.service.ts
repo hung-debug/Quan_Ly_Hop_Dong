@@ -506,17 +506,7 @@ export class ContractService {
       return this.http.post<any>(this.detectFaceUrlNB, body, { headers });
     } else if (environment.apiUrl == 'https://mobifone-econtract.vn/service') {
       return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
-    } else if(environment.apiUrl == 'http://10.111.125.86/service') {
-      //server uat vinmec
-      return this.http.post<any>('http://10.111.125.86/eKYC/verification', body ,{headers})
-    } else if(environment.apiUrl == 'http://10.111.130.27/service') {
-      //server prod vinmec
-      return this.http.post<any>('http://10.111.130.27/eKYC/verification', body ,{headers})
-    }  {
-      // return this.http.post<any>(this.detectFaceUrl, body, { headers });
-      return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
-    }
-    // return this.http.post<any>(this.newEkycVerification, body, { headers });
+    } else return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
   }
 
   getContractSample(data_sample_contract: any) {
