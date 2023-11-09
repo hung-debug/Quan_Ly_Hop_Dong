@@ -59,7 +59,7 @@
   "contract.organization": "Hợp đồng của tổ chức",
   "contract.wait-for-me": "Hợp đồng cần xử lý",
   "contract.share-for-me": "Hợp đồng được chia sẻ",
-  "contract.search.name.placeholder": "Nhập từ khóa tìm kiếm theo tên hợp đồng, tên đối tác",
+  "contract.search.name.placeholder": "Nhập từ khóa tìm kiếm theo tên hợp đồng, mã hợp đồng, tên đối tác",
   "contract.search": "Tìm kiếm hợp đồng",
   "contract.name": "Tên hợp đồng",
   "contract.file": "File hợp đồng",
