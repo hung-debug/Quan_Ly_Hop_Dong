@@ -131,13 +131,13 @@ export class DetailUnitComponent implements OnInit {
         this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
       }
     )
-    await this.unitService.getNumberContractCreateOriganzation(this.data.id).toPromise().then(
-      data => {
-        this.numContractCreate = data.total;
-      }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã tạo', "", 3000);
-      }
-    )
+    // await this.unitService.getNumberContractCreateOriganzation(this.data.id).toPromise().then(
+    //   data => {
+    //     this.numContractCreate = data.total;
+    //   }, error => {
+    //     this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã tạo', "", 3000);
+    //   }
+    // )
 
   }
   convert(ceca_push_mode: any): any {
