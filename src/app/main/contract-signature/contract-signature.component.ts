@@ -1851,7 +1851,61 @@ export class ContractSignatureComponent implements OnInit {
       currentHeight[i] = 0;
     }
 
-    for (let i = 0; i < fileC.length; i++) {
+    // token v2 - prepare info - old
+    // for (let i = 0; i < fileC.length; i++) {
+    //   const base64StringPdf = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
+
+    //   base64String.push(encode(base64StringPdf));
+
+    //   //Lấy toạ độ ô ký của từng hợp đồng
+    //   const dataObjectSignature = await this.contractServiceV1
+    //     .getDataObjectSignatureLoadChange(idContract[i])
+    //     .toPromise();
+    //   for (let j = 0; j < dataObjectSignature.length; j++) {
+    //     if (dataObjectSignature[j].recipient) {
+    //       if (recipientId[i] == dataObjectSignature[j].recipient.id) {
+    //         x.push(dataObjectSignature[j].coordinate_x);
+    //         y.push(dataObjectSignature[j].coordinate_y);
+    //         h.push(dataObjectSignature[j].height);
+    //         w.push(dataObjectSignature[j].width);
+
+    //         //Lấy ra trang ký của từng file hợp đồng
+    //         page.push(dataObjectSignature[j].page);
+    //         boxTypes.push(dataObjectSignature[j].type)
+    //       }
+    //     }
+    //   }
+
+    //   //Lấy thông tin page của hợp đồng
+    //   const infoPage = await this.contractServiceV1
+    //     .getInfoPage(documentId[i])
+    //     .toPromise();
+
+    //   for (let j = 0; j < infoPage.length; j++) {
+    //     if (infoPage[j].page < page[i]) {
+    //       currentHeight[i] += infoPage[j].height;
+    //     } else if (infoPage[j].page == page[i]) {
+    //       currentHeight[i] += 0;
+    //       heightPage[i] = infoPage[j].height;
+    //       break;
+    //     }
+    //   }
+
+    //   //Lấy trạng thái ceca của từng hợp đồng
+    //   const cecaContract = await this.contractServiceV1
+    //     .getListDataCoordination(idContract[i])
+    //     .toPromise();
+
+    //   if (cecaContract.ceca_push == 1) {
+    //     ceca_push.push(true);
+    //   } else {
+    //     ceca_push.push(false);
+    //   }
+    // }
+    // token v2 - prepare info - old
+
+    // token v2 - prepare info - optimizing
+    let preparePromises = fileC.map( async (_: any, i: any) => {
       const base64StringPdf = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
 
       base64String.push(encode(base64StringPdf));
@@ -1900,7 +1954,9 @@ export class ContractSignatureComponent implements OnInit {
       } else {
         ceca_push.push(false);
       }
-    }
+    })
+    await Promise.all(preparePromises)
+    // token v2 - prepare info - optimizing
 
     //Lay thong tin cua usb token
     var LibList_MACOS = ['nca_v6.dylib'];
@@ -2029,7 +2085,123 @@ export class ContractSignatureComponent implements OnInit {
           signI = this.srcMark.split(',')[1];
         }
 
-        for (let i = 0; i < fileC.length; i++) {
+      // token v2 - old 
+      // for (let i = 0; i < fileC.length; i++) {
+      //   y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
+      //   signUpdate.id = idSignMany[i];
+      //   signDigital.signDigitalX = x[i];
+      //   signDigital.signDigitalY = y[i];
+      //   signDigital.signDigitalWidth = w[i];
+      //   signDigital.signDigitalHeight = h[i];
+      //   signDigital.page = page[i];
+      //   const emptySignature = await this.contractServiceV1
+      //     .createEmptySignature(
+      //       recipientId[i],
+      //       signUpdate,
+      //       signDigital,
+      //       signI,
+      //       certInfoBase64,
+      //       boxTypes[i]
+      //     )
+      //     .toPromise();
+      //   const base64TempData = emptySignature.base64TempData;
+      //   const fieldName = emptySignature.fieldName;
+      //   const hexDigestTempFile = emptySignature.hexDigestTempFile;
+
+      //   var json_req = JSON.stringify({
+      //     OperationId: 5,
+      //     SessionId: sessionId,
+      //     DataToBeSign: base64TempData,
+      //     checkOCSP: 0,
+      //     reqDigest: 0,
+      //     algDigest: 'SHA_256',
+      //   });
+
+      //   json_req = window.btoa(json_req);
+
+      //   try {
+      //     const callServiceDCSigner = await this.contractServiceV1.signUsbToken(
+      //       'request=' + json_req
+      //     );
+
+      //     const dataSignatureToken = JSON.parse(
+      //       window.atob(callServiceDCSigner.data)
+      //     );
+
+      //     const signatureToken = dataSignatureToken.Signature;
+
+      //     const mergeTimeStamp = await this.contractServiceV1
+      //       .meregeTimeStamp(
+      //         recipientId[i],
+      //         idContract[i],
+      //         signatureToken,
+      //         fieldName,
+      //         certInfoBase64,
+      //         hexDigestTempFile,
+      //         ceca_push[i]
+      //       )
+      //       .toPromise();
+      //     const filePdfSigned = mergeTimeStamp.base64Data;
+
+
+      //     const sign = await this.contractServiceV1.updateDigitalSignatured(
+      //       idSignMany[i],
+      //       filePdfSigned
+      //     );
+
+      //     if (!sign.recipient_id) {
+      //       this.toastService.showErrorHTMLWithTimeout(
+      //         'Lỗi ký usb token không cập nhật được recipient id',
+      //         '',
+      //         3000
+      //       );
+      //       return false;
+      //     }
+
+      //     const updateInfo =
+      //       await this.contractServiceV1.updateInfoContractConsiderPromise(
+      //         [{
+      //           processAt: this.isDateTime
+      //         }],
+      //         recipientId[i]
+      //       );
+
+      //     if (!updateInfo.id) {
+      //       this.toastService.showErrorHTMLWithTimeout(
+      //         'Lỗi cập nhật trạng thái hợp đồng ',
+      //         '',
+      //         3000
+      //       );
+      //     }
+
+      //     if (i == fileC.length - 1) {
+      //       this.spinner.hide();
+      //       this.toastService.showSuccessHTMLWithTimeout(
+      //         'sign.success',
+      //         '',
+      //         3000
+      //       );
+
+      //       this.router
+      //         .navigateByUrl('/', { skipLocationChange: true })
+      //         .then(() => {
+      //           this.router.navigate(['main/c/receive/processed']);
+      //         });
+      //     }
+      //   } catch (err) {
+      //     this.spinner.hide()
+      //     this.toastService.showErrorHTMLWithTimeout(
+      //       'Lỗi ký usb token ',
+      //       '',
+      //       3000
+      //     );
+      //     return;
+      //   }
+      // }
+      // token - old - old
+
+      // token v2 - optimizing
+      let promises = fileC.map(async (_: any, i: any) => {
           y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
           signUpdate.id = idSignMany[i];
           signDigital.signDigitalX = x[i];
@@ -2140,7 +2312,9 @@ export class ContractSignatureComponent implements OnInit {
             );
             return;
           }
-        }
+      })
+      await Promise.all(promises)
+      // token v2 - optimizing
       } else {
         this.spinner.hide();
         Swal.fire({
