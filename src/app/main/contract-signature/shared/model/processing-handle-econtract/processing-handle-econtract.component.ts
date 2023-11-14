@@ -85,13 +85,13 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       } else {
         this.isHiddenButton = false;
       }
-
+      console.log('response',response.recipients);
       response.recipients.forEach((element: any) => {
         let data = {
           id: element.id,
           name: element.name,
           name_company: element.participantName,
-          emailRecipients: element.email,
+          emailRecipients: element.email ? element.email : element.phone,
           status: this.checkStatusUser(element.status, element.role),
           typeOfSign: (element.signType && element.signType.length > 0) ? element.signType[0] : null,
           process_at: element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null,
