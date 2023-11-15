@@ -307,8 +307,10 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
         for(let k = 0; k < clone.recipients.length; k++) {
           if(clone.recipients[k].id == signImage.recipient_id) {
-             this.datasForm.contract_user_sign[numberSign].sign_config[j].email = clone.recipients[k].email;
-             this.datasForm.contract_user_sign[numberSign].sign_config[j].recipient.email = clone.recipients[k].email;
+             this.datasForm.contract_user_sign[numberSign].sign_config[j].email = clone.recipients[k]?.email;
+             this.datasForm.contract_user_sign[numberSign].sign_config[j].recipient.email = clone.recipients[k]?.email;
+             this.datasForm.contract_user_sign[numberSign].sign_config[j].phone = clone.recipients[k]?.phone;
+             this.datasForm.contract_user_sign[numberSign].sign_config[j].recipient.phone = clone.recipients[k]?.phone;
              this.datasForm.contract_user_sign[numberSign].sign_config[j].name = clone.recipients[k].name;
           }
         }
@@ -374,6 +376,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           sign_type: element.sign_type,
           name: element.name,
           email: element.email,
+          phone: element.phone,
           is_type_party: res.type,
           role: element.role,
         }
@@ -402,8 +405,13 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7))) &&
         ((val.recipient ? (((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email)) : ((
             !val.name ||
-            (val.sign_unit == 'text' && !val.recipient_id)) && ((val.email && val.email == data.email) || !val.email)))
-        )));
+            (val.sign_unit == 'text' && !val.recipient_id)) && ((val.email && val.email == data.email) || !val.email))) ||
+
+            (val.recipient ? (((val.recipient.phone && val.recipient.phone == data.phone) || !val.recipient.phone)) : 
+            ((!val.name ||
+              (val.sign_unit == 'text' && !val.recipient_id)) && ((val.phone && val.phone == data.phone) || !val.phone)))
+        )
+        ));
     }
 
     // Get data no change of signature object
@@ -412,9 +420,13 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)))||
       (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) ||
         (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7))) &&
-      ((val.recipient ? (((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email) || val.email == data.email) :
-      ((!val.name || (val.sign_unit == 'text' && !val.recipient_id)) || ((val.email && val.email == data.email) || !val.email))
-      ))
+      (
+        (val.recipient ? (((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email) || val.email == data.email) :
+        ((!val.name || (val.sign_unit == 'text' && !val.recipient_id)) || ((val.email && val.email == data.email) || !val.email))) ||
+
+        (val.recipient ? (((val.recipient.phone && val.recipient.phone == data.phone) || !val.recipient.phone) || val.phone == data.phone) :
+        ((!val.name || (val.sign_unit == 'text' && !val.recipient_id)) || ((val.phone && val.phone == data.phone) || !val.phone)))
+      )
       ));
 
 
@@ -441,12 +453,14 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           */
           res.sign_config = res.sign_config.filter((val: any) =>
           dataContractUserSign.some((data: any) =>
-            (val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email as any : data.email as any) &&
+            (
+              ((val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email as any : data.email as any)) ||
+              ((val.recipient ? val.recipient.phone as any : val.phone as any) === (data.recipient ? data.recipient.phone as any : data.phone as any)) 
+            ) &&
             val.sign_unit == data.sign_unit));
         }
       })
     }
-
     this.datasForm.contract_user_sign.forEach((resForm: any) => {
       if (resForm.sign_config.length > 0 && resForm.sign_unit != 'so_tai_lieu') {
         let arrConfig = [];
@@ -459,7 +473,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           let data: any = {};
           data = dataDetermine.filter((data: any) =>
             items.recipient_id == data.template_recipient_id ||
-            data.email == (items.recipient ? items.recipient.email : items.email))[0];
+            (data.email !== "" && data.email == (items.recipient ? items.recipient.email : items.email)) ||
+            (data.phone !== "" && data.phone == (items.recipient ? items.recipient.phone : items.phone)))[0]
           if (data) {
             items.is_type_party = data.is_type_party;
           }
@@ -479,16 +494,20 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         if (dataForm.sign_config.length > 0) {
           for (let i = 0; i < dataForm.sign_config.length; i++) {
             let dataObj = dataNoEmail.filter((p: any) => p.template_recipient_id && p.template_recipient_id == dataForm.sign_config[i].recipient_id)[0];
-            if (!dataForm.sign_config[i].email && dataObj) {
+            if ((!dataForm.sign_config[i].email && !dataForm.sign_config[i].phone) && dataObj) {
               if (dataForm.sign_unit != 'so_tai_lieu' || (dataForm.sign_unit == 'so_tai_lieu' && !this.datasForm.contract_no)) {
                 if (dataForm.sign_unit == 'text') {
                   dataForm.sign_config[i].text_attribute_name = dataForm.sign_config[i].name;
                 }
                 dataForm.sign_config[i].email = dataObj.email;
+                dataForm.sign_config[i].phone = dataObj.phone;
                 dataForm.sign_config[i].name = dataObj.recipient ? dataObj.recipient.name : dataObj.name;
                 dataForm.sign_config[i].recipient_id = dataObj.id;
                 if (dataForm.sign_config[i].recipient && !dataForm.sign_config[i].recipient.email) {
                   dataForm.sign_config[i].recipient.email = dataObj.email;
+                }
+                if (dataForm.sign_config[i].recipient && !dataForm.sign_config[i].recipient.phone) {
+                  dataForm.sign_config[i].recipient.phone = dataObj.phone;
                 }
               } else {
                 if (dataForm.sign_unit == 'text') {
@@ -497,6 +516,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                 dataForm.sign_config[i].recipient_id = "";
                 dataForm.sign_config[i].name = "";
                 dataForm.sign_config[i].email = "";
+                dataForm.sign_config[i].phone = "";
                 if (dataForm.sign_unit == 'so_tai_lieu' && this.datasForm.contract_no) {
                   dataForm.sign_config[i].value = this.datasForm.contract_no;
                 }
@@ -525,6 +545,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               item.name = "";
               item.recipient_id = "";
               item.email = "";
+              item.phone = "";
             }
           }
         }
@@ -747,6 +768,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                     element.status = this.soHopDong.status;
                     element.type = this.soHopDong.type;
                     element.email = this.soHopDong.email;
+                    element.phone = this.soHopDong.phone;
                   } else if(res.sign_config.length > 0)  {
                     this.soHopDong = {
 
@@ -762,6 +784,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                         this.soHopDong.status = element1.status;
                         this.soHopDong.type = element1.type;
                         this.soHopDong.email = element1.email;
+                        this.soHopDong.phone = element1.phone;
                         break;
                       }
                     }
@@ -774,6 +797,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                       element.status = this.soHopDong.status;
                       element.type = this.soHopDong.type;
                       element.email = this.soHopDong.email;
+                      element.phone = this.soHopDong.phone;
                     }
                   }
                   this.isChangeText = true;
@@ -852,7 +876,10 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       if (isSignType == 'text' && value) {
         element.is_disable = true;
       } else {
-          if (this.convertToSignConfig().some((p: any) => (p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType)) {
+          if (this.convertToSignConfig().some((p: any) => (
+            element.login_by == 'phone' ? (p.recipient ? p.recipient.phone : p.phone) == element.phone :
+            (p.recipient ? p.recipient.email : p.email) == element.email
+          ) && (p.sign_unit == isSignType))) {
             if (isSignType != 'text') {
               if(isSignType == 'so_tai_lieu') {
                 element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
@@ -1492,6 +1519,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             isObjSign.email = data_name.email;
             signElement.setAttribute("email", isObjSign.email);
 
+            isObjSign.phone = data_name.phone;
+            signElement.setAttribute("phone", isObjSign.phone);
+
             if (!isObjSign.height) {
               isObjSign.height = ['so_tai_lieu', 'text'].includes(isObjSign.sign_unit) ? 28 : 85;
               signElement.setAttribute("height", isObjSign.height);
@@ -1520,6 +1550,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                       element.status = data_name.status;
                       element.type = data_name.type;
                       element.email = data_name.email;
+                      element.phone = data_name.phone;
                     })
                   }
                 }
@@ -1916,6 +1947,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       let width: number [] = [];
       let height: number [] = [];
       let boxElements = []
+      let currentElement: any
       for (let i = 0; i < this.datasForm.contract_user_sign.length; i++) {
         if (this.datasForm.contract_user_sign[i].sign_config.length > 0) {
           for (let j = 0; j < this.datasForm.contract_user_sign[i].sign_config.length; j++) {
@@ -1924,28 +1956,30 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             if(isSaveDraft && element.sign_unit == 'text'){
               if(element.recipient_id == null && !element.value)
               count++;
+              currentElement = element
               break;
             }
             if (!element.name && !element.recipient && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') {
               count++;
               break
             } else if (element.sign_unit == 'so_tai_lieu') {
-              if (element.length > 1) {
+              if (!element.name) {
                 count_number++;
+                currentElement = element
                 break;
-              } else if(!element.name && !element.value && !this.datasForm.contract_no) {
-                count_text_number++;
-                break;
-              }
+              } 
             } else if (element.sign_unit == 'text') {
-              if (!element.text_attribute_name && !element.is_have_text) {
+              if (!element.text_attribute_name && !element.is_have_text && element.text_type == 'default') {
                 count_text++;
+                currentElement = element
                 break
-              } else if (element.is_have_text && !element.value ) {
+              } else if (!element.text_attribute_name && element.text_type == 'currency') {
                 count_text_number++;
+                currentElement = element
                 break;
               } else if(!element.name && !element.value) {
                 count++;
+                currentElement = element
                 break;
               }
             } else {
@@ -1961,12 +1995,25 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                 if (element.signature_party == "organization" || element.is_type_party == 1)
                   arrSign_organization.push(data_sign);
                 else arrSign_partner.push(data_sign);
-              } else {
+              } else if(element.phone != undefined) {
+                let data_sign = {
+                  name: element.name,
+                  signature_party: element.signature_party,
+                  recipient_id: element.recipient_id,
+                  phone: element.recipient ? element.recipient.phone : element.phone,
+                  sign_unit: element.sign_unit
+                }
+                if (element.signature_party == "organization" || element.is_type_party == 1)
+                  arrSign_organization.push(data_sign);
+                else arrSign_partner.push(data_sign);
+              }               
+              else {
                 let data_sign = {
                   name: element.name,
                   signature_party: element.signature_party,
                   recipient_id: element.recipient_id,
                   email: element.recipient ? element.recipient.email : element.email,
+                  phone: element.recipient ? element.recipient.phone : element.phone,
                   sign_unit: element.sign_unit
                 }
                 if (element.signature_party == "organization" || element.is_type_party == 1)
@@ -1984,7 +2031,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             }
 
           }
-          if (count > 0 || count_number > 0 || count_text > 0) {
+          if (count > 0 || count_number > 0 || count_text > 0 || count_text_number > 0) {
             break;
           }
         }
@@ -2243,19 +2290,19 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       if (count > 0) {
         // alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
         this.spinner.hide();
-        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout("select.signer.obj", "", 3000);
+        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng chọn người ký cho đối tượng đã kéo thả! (trang ${currentElement.page})`, "", 3000);
         return false;
-      } else if (count_number > 1) {
+      } else if (count_number > 0) {
         this.spinner.hide();
-        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout("select.signer.obj", "", 3000);
+        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng chọn người ký cho đối tượng đã kéo thả! (trang ${currentElement.page})`, "", 3000);
         return false;
       } else if (count_text > 0) {
         this.spinner.hide();
-        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout("Bạn chưa nhập tên trường cho đối tượng Text!", "", 3000);
+        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Bạn chưa nhập tên trường cho đối tượng Text! (trang ${currentElement.page})`, "", 3000);
         return false;
       } else if (count_text_number > 0) {
         this.spinner.hide();
-        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout("please_input_text_number_contract", "", 3000);
+        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Bạn chưa nhập tên trường cho đối tượng Số tiền! (trang ${currentElement.page})`, "", 3000);
         return false;
       } else {
         // valid đối tượng ký của tổ chức
@@ -2269,7 +2316,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         for (const element of data_organization) {
           if (element.sign_type.length > 0) {
             if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7) &&
-            arrSign_organization.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
+            arrSign_organization.filter((item: any) => (item.email == element.email || item.phone == element.phone) && item.sign_unit == 'chu_ky_so').length == 0) {
               error_organization++;
               nameSign_organization.name = element.name;
               nameSign_organization.sign_type = 'chu_ky_so';
@@ -2301,13 +2348,13 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         // valid ký kéo thiếu ô ký cho từng loại ký
         for (const element of data_partner) {
           if (element.sign_type.length > 0) {
-            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7) && arrSign_partner.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
+            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7) && arrSign_partner.filter((item: any) => (item.email == element.email || item.phone == element.phone) && item.sign_unit == 'chu_ky_so').length == 0) {
               countError_partner++;
               nameSign_partner.name = element.name;
               nameSign_partner.sign_type = 'chu_ky_so';
               break
             }
-            if (element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && arrSign_partner.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_anh').length == 0) {
+            if (element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && arrSign_partner.filter((item: any) => (item.email == element.email || item.phone == element.phone) && item.sign_unit == 'chu_ky_anh').length == 0) {
               countError_partner++;
               nameSign_partner.name = element.name;
               nameSign_partner.sign_type = 'chu_ky_anh';
