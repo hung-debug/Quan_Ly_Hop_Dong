@@ -1938,7 +1938,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       let count_text = 0;
       let count_number = 0;
       let count_text_number = 0;
-
+      let count_null_input = 0
       let arrSign_organization: any[] = [];
       let arrSign_partner: any[] = [];
 
@@ -1963,23 +1963,35 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               count++;
               break
             } else if (element.sign_unit == 'so_tai_lieu') {
-              if (!element.name) {
+              if (element.length > 1) {
                 count_number++;
                 currentElement = element
                 break;
-              } 
+              } else if(!element.name && !element.value && !this.datasForm.contract_no) {
+                count_text_number++;
+                currentElement = element
+                break;
+              }
             } else if (element.sign_unit == 'text') {
               if (!element.text_attribute_name && !element.is_have_text && element.text_type == 'default') {
                 count_text++;
                 currentElement = element
                 break
-              } else if (!element.text_attribute_name && element.text_type == 'currency') {
+              } else if (!element.text_attribute_name && !element.is_have_text && element.text_type == 'currency') {
                 count_text_number++;
                 currentElement = element
                 break;
-              } else if(!element.name && !element.value) {
+              } else if (element.is_have_text && !element.value ) {
+                count_text_number++;
+                currentElement = element
+                break;
+              }
+              else if(!element.name && !element.value) {
                 count++;
                 currentElement = element
+                break;
+              } else if (element.is_have_text && !element.value ) {
+                count_null_input++;
                 break;
               }
             } else {
@@ -2031,7 +2043,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             }
 
           }
-          if (count > 0 || count_number > 0 || count_text > 0 || count_text_number > 0) {
+          if (count > 0 || count_number > 0 || count_text > 0 || count_text_number > 0 || count_null_input > 0) {
             break;
           }
         }
@@ -2283,18 +2295,18 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       }
 
       if (this.onContentTextEvent()) {
-        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout("Trùng tên trường ô text. Vui lòng kiểm tra lại!", "", 3000);
+        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Trùng tên trường ô text. Vui lòng kiểm tra lại! (trang ${currentElement.page})`, "", 3000);
         return false;
       }
 
       if (count > 0) {
         // alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
         this.spinner.hide();
-        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng chọn người ký cho đối tượng đã kéo thả! (trang ${currentElement.page})`, "", 3000);
+        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng chọn người ký cho đối tượng đã kéo thả!`, "", 3000);
         return false;
       } else if (count_number > 0) {
         this.spinner.hide();
-        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng chọn người ký cho đối tượng đã kéo thả! (trang ${currentElement.page})`, "", 3000);
+        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng chọn người ký cho đối tượng đã kéo thả!`, "", 3000);
         return false;
       } else if (count_text > 0) {
         this.spinner.hide();
@@ -2302,9 +2314,13 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         return false;
       } else if (count_text_number > 0) {
         this.spinner.hide();
-        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Bạn chưa nhập tên trường cho đối tượng Số tiền! (trang ${currentElement.page})`, "", 3000);
+        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng nhập nội dung ô ${currentElement.type == 1 ? 'Text' : currentElement.type == 4 ? 'Số hợp đồng' : 'Số tiền'} (trang ${currentElement.page})`, "", 3000);
         return false;
-      } else {
+      } else if (count_null_input > 0) {
+        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng nhập nội dung ô text/số hợp đồng! (trang ${currentElement.page})`, "", 3000);
+        return false;
+      }
+      else {
         // valid đối tượng ký của tổ chức
         let data_organization = this.list_sign_name.filter((p: any) => p.type_unit == "organization" && p.role != 2);
         let error_organization = 0;
