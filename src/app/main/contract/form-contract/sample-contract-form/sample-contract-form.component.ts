@@ -1407,16 +1407,20 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     interact.removeDocument(document);
   }
 
-
+  dataTextDuplicate: any = []
   onContentTextEvent() {
     let arrCheckTextContent = [];
+    this.dataTextDuplicate = []
     let dataTextDuplicate = this.datasForm.contract_user_sign.filter((p: any) => p.sign_unit == "text")[0];
     for (let i = 0; i < dataTextDuplicate.sign_config.length; i++) {
       if (dataTextDuplicate.sign_config[i].text_attribute_name) {
         arrCheckTextContent.push(dataTextDuplicate.sign_config[i].text_attribute_name);
+        this.dataTextDuplicate.push(dataTextDuplicate.sign_config[i].page)
       }
     }
 
+    this.dataTextDuplicate = [...new Set(this.dataTextDuplicate)]
+    // this.dataTextDuplicate = dataTextDuplicate.sign_config[0]
     var valueSoFar = Object.create(null);
     for (var k = 0; k < arrCheckTextContent.length; ++k) {
       var value: any = arrCheckTextContent[k];
@@ -1938,6 +1942,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       let count_text = 0;
       let count_number = 0;
       let count_text_number = 0;
+      let count_text_number_null = 0;
       let count_null_input = 0
       let arrSign_organization: any[] = [];
       let arrSign_partner: any[] = [];
@@ -1961,14 +1966,19 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             }
             if (!element.name && !element.recipient && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') {
               count++;
+              currentElement = element
               break
             } else if (element.sign_unit == 'so_tai_lieu') {
               if (element.length > 1) {
                 count_number++;
                 currentElement = element
                 break;
-              } else if(!element.name && !element.value && !this.datasForm.contract_no) {
-                count_text_number++;
+              } else if(!element.id_have_data && !element.name && !element.value && !this.datasForm.contract_no) {
+                count++;
+                currentElement = element
+                break;
+              } else if (element.id_have_data && !element.name && !element.value){
+                count_null_input++
                 currentElement = element
                 break;
               }
@@ -2043,7 +2053,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             }
 
           }
-          if (count > 0 || count_number > 0 || count_text > 0 || count_text_number > 0 || count_null_input > 0) {
+          if (count > 0 || count_number > 0 || count_text > 0 || count_text_number > 0 || count_null_input > 0 || count_text_number_null > 0) {
             break;
           }
         }
@@ -2295,18 +2305,18 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       }
 
       if (this.onContentTextEvent()) {
-        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Trùng tên trường ô text. Vui lòng kiểm tra lại! (trang ${currentElement.page})`, "", 3000);
+        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Trùng tên trường ô text. Vui lòng kiểm tra lại! (trang ${this.dataTextDuplicate.toString()})`, "", 3000);
         return false;
       }
 
       if (count > 0) {
         // alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
         this.spinner.hide();
-        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng chọn người ký cho đối tượng đã kéo thả!`, "", 3000);
+        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng chọn người ký cho đối tượng đã kéo thả! (trang ${currentElement.page})`, "", 3000);    
         return false;
       } else if (count_number > 0) {
         this.spinner.hide();
-        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng chọn người ký cho đối tượng đã kéo thả!`, "", 3000);
+        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng chọn người ký cho đối tượng đã kéo thả! (trang ${currentElement.page})`, "", 3000);
         return false;
       } else if (count_text > 0) {
         this.spinner.hide();
@@ -2314,7 +2324,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         return false;
       } else if (count_text_number > 0) {
         this.spinner.hide();
-        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng nhập nội dung ô ${currentElement.type == 1 ? 'Text' : currentElement.type == 4 ? 'Số hợp đồng' : 'Số tiền'} (trang ${currentElement.page})`, "", 3000);
+        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng nhập nội dung ô ${currentElement.type == 1 ? 'Text' : currentElement.type == 4 ? 'Số hợp đồng' : currentElement.type == 5 ? 'Số tiền' : 'đã kéo thả'} (trang ${currentElement.page})`, "", 3000);
         return false;
       } else if (count_null_input > 0) {
         if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng nhập nội dung ô text/số hợp đồng! (trang ${currentElement.page})`, "", 3000);
