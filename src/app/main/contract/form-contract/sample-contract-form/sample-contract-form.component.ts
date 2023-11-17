@@ -1411,20 +1411,24 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   onContentTextEvent() {
     let arrCheckTextContent = [];
     this.dataTextDuplicate = []
-    let dataTextDuplicate = this.datasForm.contract_user_sign.filter((p: any) => p.sign_unit == "text")[0];
+    let dataTextDuplicate = []
+    dataTextDuplicate = this.datasForm.contract_user_sign.filter((p: any) => p.sign_unit == "text")[0];
     for (let i = 0; i < dataTextDuplicate.sign_config.length; i++) {
       if (dataTextDuplicate.sign_config[i].text_attribute_name) {
-        arrCheckTextContent.push(dataTextDuplicate.sign_config[i].text_attribute_name);
-        this.dataTextDuplicate.push(dataTextDuplicate.sign_config[i].page)
+        arrCheckTextContent.push({
+          value: dataTextDuplicate.sign_config[i].text_attribute_name,
+          page:  dataTextDuplicate.sign_config[i].page,
+        });
       }
     }
-
-    this.dataTextDuplicate = [...new Set(this.dataTextDuplicate)]
-    // this.dataTextDuplicate = dataTextDuplicate.sign_config[0]
     var valueSoFar = Object.create(null);
     for (var k = 0; k < arrCheckTextContent.length; ++k) {
-      var value: any = arrCheckTextContent[k];
+      var value: any = arrCheckTextContent[k].value;
       if (value in valueSoFar) {
+        arrCheckTextContent.filter((item: any) => value == item.value).forEach((element: any) => {
+          this.dataTextDuplicate.push(element.page)
+        })
+        this.dataTextDuplicate = [...new Set(this.dataTextDuplicate)]
         return true;
       }
       valueSoFar[value] = true;
