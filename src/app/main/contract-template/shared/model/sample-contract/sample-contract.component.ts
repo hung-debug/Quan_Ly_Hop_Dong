@@ -1776,7 +1776,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.datas.stepLast = step;
     this.stepChangeSampleContract.emit(step);
   }
-
+  dataTextDuplicate: any = []
   getCheckDuplicateNameText() {
     let arrCheckName = [];
     for (let i = 0; i < this.datas.contract_user_sign.length; i++) {
@@ -1787,6 +1787,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           //form them moi: xet name null, form sua: xet recipient_id null
           if (element.sign_unit == 'text' && (!element.recipient_id || !element.name)) {
             arrCheckName.push(element.text_attribute_name);
+            this.dataTextDuplicate.push({
+              value: element.text_attribute_name,
+              page: element.page
+            })
           }
         }
       }
@@ -1795,6 +1799,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     for (var k = 0; k < arrCheckName.length; ++k) {
       var value: any = arrCheckName[k];
       if (value in valueSoFar) {
+        this.dataTextDuplicate = this.dataTextDuplicate.filter((val: any) => val.value == value).map((item: any) => item.page)
+        this.dataTextDuplicate = [...new Set(this.dataTextDuplicate)]
         return true;
       }
       valueSoFar[value] = true;
@@ -1821,17 +1827,20 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let coordinate_y: number[] = [];
       let width: number[] = [];
       let height: number[] = [];
+      let currentElement: any
 
       for (let i = 0; i < this.datas.contract_user_sign.length; i++) {
         if (this.datas.contract_user_sign[i].sign_config.length > 0) {
           for (let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
             let element = this.datas.contract_user_sign[i].sign_config[j];
             if (!element.name && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') { // element.sign_unit != 'so_tai_lieu'
+              currentElement = element
               count++;
               break
             } else if (element.sign_unit == 'so_tai_lieu') {
 
             } else if (element.sign_unit == 'text' && !element.text_attribute_name) {
+              currentElement = element
               count_text++;
               break
             } else {
@@ -1926,7 +1935,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       } else if (count_text > 0) {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Thiếu tên trường cho đối tượng nhập Text!", "", 3000);
+        this.toastService.showErrorHTMLWithTimeout(`Thiếu tên trường cho đối tượng nhập Text! (trang ${currentElement.page})`, "", 3000);
         return false;
       } else if (count_text_type > 0) {
         // this.spinner.hide();
@@ -1934,7 +1943,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // return false;
       } else if (this.getCheckDuplicateNameText()) {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Tên trường nhập text không được trùng nhau!", "", 3000);
+        this.toastService.showErrorHTMLWithTimeout(`Trùng tên trường ô text. Vui lòng kiểm tra lại! (trang ${this.dataTextDuplicate.toString()})`, "", 3000);
         return false;
       } else {
         // valid đối tượng ký của tổ chức
