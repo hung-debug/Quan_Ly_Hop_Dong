@@ -1194,6 +1194,7 @@ export class ConsiderContractComponent
   ArrRecipientsNew: any;
   markImage: boolean = false;
   srcMark: any;
+  currentNullValuePages: any;
 
   async checkDifferentName() {
     const nameUpdate = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
@@ -1304,7 +1305,7 @@ export class ConsiderContractComponent
       ) {
         if (!this.mobile) {
           this.toastService.showErrorHTMLWithTimeout(
-            'Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc',
+            `Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc (trang ${this.currentNullValuePages})`,
             '',
             3000
           );
@@ -3670,6 +3671,7 @@ export class ConsiderContractComponent
         !item.valueSign &&
         item.type != 3
     );
+    this.currentNullValuePages = validSign.map((item: any) => item.page)
 
     return validSign.length == 0;
   }
