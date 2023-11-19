@@ -330,7 +330,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
              this.datas.contract_user_sign[numberSign].sign_config[j].phone = clone.recipients[k].phone;
              if(this.datas.contract_user_sign[numberSign].sign_config[j].recipient)
              this.datas.contract_user_sign[numberSign].sign_config[j].recipient.email = clone.recipients[k].email;
-             this.datas.contract_user_sign[numberSign].sign_config[j].recipient.phone = clone.recipients[k].phone;
+             this.datas.contract_user_sign[numberSign].sign_config[j].recipient.phone = clone?.recipients[k]?.phone;
              this.datas.contract_user_sign[numberSign].sign_config[j].name = clone.recipients[k].name;
           }
         }
@@ -1884,6 +1884,35 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // }
   }
 
+  dataTextDuplicate: any = []
+  onContentTextEvent() {
+    let arrCheckTextContent = [];
+    this.dataTextDuplicate = []
+    let dataTextDuplicate = []
+    dataTextDuplicate = this.datas.contract_user_sign.filter((p: any) => p.sign_unit == "text")[0];
+    for (let i = 0; i < dataTextDuplicate.sign_config.length; i++) {
+      if (dataTextDuplicate.sign_config[i].text_attribute_name) {
+        arrCheckTextContent.push({
+          value: dataTextDuplicate.sign_config[i].text_attribute_name,
+          page:  dataTextDuplicate.sign_config[i].page,
+        });
+      }
+    }
+    var valueSoFar = Object.create(null);
+    for (var k = 0; k < arrCheckTextContent.length; ++k) {
+      var value: any = arrCheckTextContent[k].value;
+      if (value in valueSoFar) {
+        arrCheckTextContent.filter((item: any) => value == item.value).forEach((element: any) => {
+          this.dataTextDuplicate.push(element.page)
+        })
+        this.dataTextDuplicate = [...new Set(this.dataTextDuplicate)]
+        return true;
+      }
+      valueSoFar[value] = true;
+    }
+    return false;
+  }
+
   validData(isSaveDraft?: any) {
     let data_not_drag = this.datas.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
     if (!data_not_drag) {
@@ -1896,6 +1925,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let count_text = 0;
       let count_type_text = 0;
       let count_number = 0;
+      let count_text_number = 0;
       let arrSign_organization: any[] = [];
       let arrSign_partner: any[] = [];
 
@@ -1903,32 +1933,43 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let coordinate_y: number[] = [];
       let width: number[] = [];
       let height: number[] = [];
-
+      let currentElement: any
       for (let i = 0; i < this.datas.contract_user_sign.length; i++) {
         if (this.datas.contract_user_sign[i].sign_config.length > 0) {
           for (let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
             let element = this.datas.contract_user_sign[i].sign_config[j];
-
-
             if (!element.name && element.sign_unit != 'so_tai_lieu') { // element.sign_unit != 'so_tai_lieu'
               if(isSaveDraft && element.sign_unit == 'text'){
                 break;
               }
+              currentElement = element
               count++;
               break
             } else if (element.sign_unit == 'so_tai_lieu' && element.length > 1) {
               count_number++;
+              currentElement = element
               break;
             } else if (element.sign_unit == 'so_tai_lieu' && !this.datas.contract_no && (!element.email && !element.phone)) {
               count++;
+              currentElement = element
               break
             } else if (element.sign_unit == 'text' && !element.text_attribute_name && !isSaveDraft) {
-              count_text++;
-              break
-            } else if (element.sign_unit == 'text' && !element.text_type  && !isSaveDraft){
-              count_type_text++;
-              break
-            } else {
+              if (element.text_type == 'currency') {
+                count_text++;
+                currentElement = element
+                break;
+              } else {
+                count_text++;
+                currentElement = element
+                break
+              }
+            } 
+            // else if (element.sign_unit == 'text' && !element.text_type  && !isSaveDraft){
+            //   count_type_text++;
+            //   currentElement = element
+            //   break
+            // }
+             else {
               let data_sign = {
                 name: element.name,
                 signature_party: element.signature_party,
@@ -1949,12 +1990,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               width.push(Number(element.width));
               height.push(Number(element.height));
             }
-
           }
-          if (count > 0 || count_text > 0) break
+          if (count > 0 || count_text > 0 || count_number > 0) break
         }
       }
-
       //Trường hợp 1: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2 thuộc (y1 đến y1+h) = góc phải dưới
       for (let i = 0; i < coordinate_x.length; i++) {
         for (let j = i + 1; j < coordinate_x.length; j++) {
@@ -2018,6 +2057,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       }
 
+      if (this.onContentTextEvent()) {
+        if(!isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Trùng tên trường ô text. Vui lòng kiểm tra lại! (trang ${this.dataTextDuplicate.toString()})`, "", 3000);
+        return false;
+      }
+
       if (count > 0) {
         if(!isSaveDraft)
         this.toastService.showWarningHTMLWithTimeout("select.signer.obj", "", 3000);
@@ -2028,7 +2072,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         return false;
       } else if (count_text > 0) {
         if(!isSaveDraft)
-        this.toastService.showWarningHTMLWithTimeout("Thiếu tên trường cho đối tượng nhập Text!", "", 3000);
+        this.toastService.showWarningHTMLWithTimeout(`Thiếu tên trường cho đối tượng nhập Text! (trang ${currentElement.page})`, "", 3000);
         return false;
       } else {
         let data_organization = this.list_sign_name.filter((p: any) => p.type_unit == "organization" && p.role != 2);
