@@ -3672,7 +3672,7 @@ export class ConsiderContractComponent
         item.type != 3
     );
     this.currentNullValuePages = validSign.map((item: any) => item.page)
-
+    this.currentNullValuePages = [...new Set(this.currentNullValuePages)]
     return validSign.length == 0;
   }
 
