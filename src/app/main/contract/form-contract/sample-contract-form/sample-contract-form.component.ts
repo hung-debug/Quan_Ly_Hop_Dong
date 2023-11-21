@@ -2328,7 +2328,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         return false;
       } else if (count_text_number > 0) {
         this.spinner.hide();
-        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng nhập nội dung ô ${currentElement.type == 1 ? 'Text' : currentElement.type == 4 ? 'Số hợp đồng' : currentElement.type == 5 ? 'Số tiền' : 'đã kéo thả'} (trang ${currentElement.page})`, "", 3000);
+        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng nhập nội dung ô: ${currentElement.text_attribute_name} (trang ${currentElement.page})`, "", 3000);
         return false;
       } else if (count_null_input > 0) {
         if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng nhập nội dung ô text/số hợp đồng! (trang ${currentElement.page})`, "", 3000);
