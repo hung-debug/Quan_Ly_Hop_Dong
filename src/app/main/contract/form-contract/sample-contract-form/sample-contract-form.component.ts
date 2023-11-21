@@ -1426,7 +1426,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       var value: any = arrCheckTextContent[k].value;
       if (value in valueSoFar) {
         arrCheckTextContent.filter((item: any) => value == item.value).forEach((element: any) => {
-          this.dataTextDuplicate.push(element.page)
+          this.dataTextDuplicate.push(element.page.toString())
         })
         this.dataTextDuplicate = [...new Set(this.dataTextDuplicate)]
         return true;
@@ -2324,7 +2324,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         return false;
       } else if (count_text > 0) {
         this.spinner.hide();
-        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Bạn chưa nhập tên trường cho đối tượng Text! (trang ${currentElement.page})`, "", 3000);
+        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Thiếu tên trường cho đối tượng nhập Text! (trang ${currentElement.page})`, "", 3000);
         return false;
       } else if (count_text_number > 0) {
         this.spinner.hide();
