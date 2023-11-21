@@ -1195,6 +1195,7 @@ export class ConsiderContractComponent
   markImage: boolean = false;
   srcMark: any;
   currentNullValuePages: any;
+  currentNullElement: any
 
   async checkDifferentName() {
     const nameUpdate = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
@@ -1304,12 +1305,26 @@ export class ConsiderContractComponent
         )
       ) {
         if (!this.mobile) {
-          this.toastService.showErrorHTMLWithTimeout(
-            `Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc (trang ${this.currentNullValuePages})`,
-            '',
-            3000
-          );
-          return;
+          for (let item of this.currentNullElement) {
+            if (!item.value && item.type !== 4 && item.type !== 2) {
+              this.toastService.showErrorHTMLWithTimeout(
+                `Vui lòng nhập nội dung ô: ${item.name} (trang ${item.page})`,
+                '',
+                3000
+              );
+              return;
+            } else if (item.type == 4) {
+                this.toastService.showErrorHTMLWithTimeout(
+                  `Vui lòng nhập nội dung ô: Số hợp đồng (trang ${item.page})`,
+                  '',
+                  3000
+                );
+                return;
+            } else {
+              this.toastService.showErrorHTMLWithTimeout(`Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc (trang ${item.page})`, '', 3000);
+              return;
+            }
+          }
         } else {
           if (this.confirmSignature == 2) {
             this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 3000);
@@ -3671,8 +3686,9 @@ export class ConsiderContractComponent
         !item.valueSign &&
         item.type != 3
     );
-    this.currentNullValuePages = validSign.map((item: any) => item.page)
+    this.currentNullValuePages = validSign.map((item: any) => item.page.toString())
     this.currentNullValuePages = [...new Set(this.currentNullValuePages)]
+    this.currentNullElement = validSign
     return validSign.length == 0;
   }
 
