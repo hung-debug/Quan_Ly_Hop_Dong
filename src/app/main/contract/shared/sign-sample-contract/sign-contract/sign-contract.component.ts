@@ -22,7 +22,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   ) {
 
   }
-
+// non template
   ngOnInit(): void {
     if (this.sign.sign_unit == 'text') {
       if(this.sign.value) {

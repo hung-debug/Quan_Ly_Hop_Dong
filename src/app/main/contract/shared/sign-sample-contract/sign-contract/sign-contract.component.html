@@ -21,7 +21,13 @@
 <div [ngStyle]="getStyleText(sign)" class="text-sign" *ngIf="(sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu') && signTemplate">
   <span *ngIf="getStyleText(sign)" class="font-style" id="input-text">{{getText(sign)}}</span>
 
-  <input *ngIf="sign.sign_unit == 'text' && sign.is_have_text" id="input-text-value" placeholder="Nhập nội dung Text.."
+  <!-- o text -->
+  <input *ngIf="sign.sign_unit == 'text' && sign.is_have_text && !sign.text_type" id="input-text-value" placeholder="Nhập nội dung Text.."
+    [(ngModel)]="sign.value" type="text" (click)="reverseInput($event, sign)" (blur)="changeInput($event, sign)" (ngxInputSearch)="doTheSearch($event,'text')" style="white-space: nowrap;">
+
+  <!-- o so -->
+  <input *ngIf="sign.sign_unit == 'text' && sign.is_have_text && sign.text_type=='currency'" id="input-text-value" placeholder="Nhập nội dung Số.."
+    oninput="value = value.replace(/\D/g, '');"
     [(ngModel)]="sign.value" type="text" (click)="reverseInput($event, sign)" (blur)="changeInput($event, sign)" (ngxInputSearch)="doTheSearch($event,'text')" style="white-space: nowrap;">
 
   <input *ngIf="getNotSpecifiedYetHandle() && sign.sign_unit == 'so_tai_lieu'" id="input-number-value"
