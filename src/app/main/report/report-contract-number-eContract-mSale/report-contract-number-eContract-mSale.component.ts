@@ -403,6 +403,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
           let parentOrgIndex = newMsaleDataDetail.findIndex((item: any) => item.orgId == idOrg)
           newMsaleDataDetail = [newMsaleDataDetail[parentOrgIndex], ...newMsaleDataDetail.toSpliced(parentOrgIndex, 1)]
           this.listDetail = newMsaleDataDetail
+          this.contractsSum = 0
           this.listDetail.forEach(element => {
             this.contractsSum += element.data.length
           });
