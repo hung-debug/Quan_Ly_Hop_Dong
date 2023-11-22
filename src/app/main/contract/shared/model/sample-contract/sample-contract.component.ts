@@ -1665,6 +1665,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               if (element.id_have_data) {
                 isHaveFieldId.push(element)
               } else isNotFieldId.push(element);
+              if (element.name && element.text_attribute_name) {
+                element.name = element.text_attribute_name
+              }
             })
           })
           this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId, action);
