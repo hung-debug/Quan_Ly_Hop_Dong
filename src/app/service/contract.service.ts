@@ -405,7 +405,7 @@ export class ContractService {
       is_template: type_form ? true : false,
       template_contract_id: type_form ? datas.template_contract_id : null,
       contract_expire_time: this.datepipe.transform(
-        datas.expire_time,
+        datas.contract_expire_time,
         "yyyy-MM-dd'T'HH:mm:ss'Z'"
       )?.slice(0, 11).concat("00:00:00Z"),
       ceca_push: datas.ceca_push,
@@ -506,17 +506,7 @@ export class ContractService {
       return this.http.post<any>(this.detectFaceUrlNB, body, { headers });
     } else if (environment.apiUrl == 'https://mobifone-econtract.vn/service') {
       return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
-    } else if(environment.apiUrl == 'http://10.111.125.86/service') {
-      //server uat vinmec
-      return this.http.post<any>('http://10.111.125.86/eKYC/verification', body ,{headers})
-    } else if(environment.apiUrl == 'http://10.111.130.27/service') {
-      //server prod vinmec
-      return this.http.post<any>('http://10.111.130.27/eKYC/verification', body ,{headers})
-    }  {
-      // return this.http.post<any>(this.detectFaceUrl, body, { headers });
-      return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
-    }
-    // return this.http.post<any>(this.newEkycVerification, body, { headers });
+    } else return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
   }
 
   getContractSample(data_sample_contract: any) {

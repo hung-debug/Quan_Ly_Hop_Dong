@@ -213,34 +213,39 @@ export class DetermineSignerComponent implements OnInit {
         this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
 
         //Cá nhân không ký số không đẩy lên bộ công thương
-        items.recipients.forEach((ele: any) => {
-          if(ele.sign_type.length > 0) {
-            if(this.datas.ceca_push == 1 && (ele.sign_type[0].id == 1 || ele.sign_type[0].id == 5)) {
-              this.isCeCaPushNo = true;
-              this.toastService.showWarningHTMLWithTimeout('ceca.reason','',3000)
-              return;
-            }
-          }
-        })
+        // items.recipients.forEach((ele: any) => {
+        //   if(ele.sign_type.length > 0) {
+        //     if(this.datas.ceca_push == 1 && (ele.sign_type[0].id == 1 || ele.sign_type[0].id == 5)) {
+        //       this.isCeCaPushNo = true;
+        //       this.toastService.showWarningHTMLWithTimeout('ceca.reason','',3000)
+        //       return;
+        //     }
+        //   }
+        // })
       } else if(this.datas.is_determine_clone.length == 1 && this.datas.is_determine_clone[index].length == 1) {
-        this.isCeCaPushNo = true;
-        this.toastService.showWarningHTMLWithTimeout('ceca.reason.one.person','',3000)
+        // this.isCeCaPushNo = true;
+        // this.toastService.showWarningHTMLWithTimeout('ceca.reason.one.person','',3000)
       }
 
       for (let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
         this.datas.is_determine_clone[index].recipients[i].name = this.datas.is_determine_clone[index].recipients[i].name.trim();
         this.datas.is_determine_clone[index].recipients[i].email = this.datas.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
         if (this.datas.is_determine_clone[index].recipients[i].login_by == "phone") {
-          this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
+          // this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
+          this.datas.is_determine_clone[index].recipients[i].email = ''
+        } else if (this.datas.is_determine_clone[index].recipients[i].sign_type.filter((type: any) => type.id == 1).length == 0 &&
+                  this.site == 'KD'
+        ) {
+          this.datas.is_determine_clone[index].recipients[i].phone = ''
         }
       }
     })
 
-    if(this.isCeCaPushNo) {
-      //chuyển ceca_push thành 0+
-      this.datas.ceca_push = 0;
-      this.contractService.addContractStep1(this.datas, this.datas.contract_id).subscribe();
-    }
+    // if(this.isCeCaPushNo) {
+    //   //chuyển ceca_push thành 0+
+    //   this.datas.ceca_push = 0;
+    //   this.contractService.addContractStep1(this.datas, this.datas.contract_id).subscribe();
+    // }
 
     this.submitted = true;
     if (action == 'save-step' && !this.validData()) {
@@ -284,7 +289,6 @@ export class DetermineSignerComponent implements OnInit {
         this.getApiDetermine(is_save);
       }
     }
-
 
   }
   switchLang(locale: string, d: any) {
@@ -526,7 +530,7 @@ export class DetermineSignerComponent implements OnInit {
 
       //Nếu cá nhân chọn loại ký là otp và ký bằng SĐT
       if (data.typeSign == 1 && this.getDataSignCka(data).length > 0) {
-        data.phone = data.email;
+        data.phone = data.phone;
       }
     }
 
@@ -540,12 +544,6 @@ export class DetermineSignerComponent implements OnInit {
 
     if(d.login_by == 'phone') {
       d.sign_type = d.sign_type.filter((p: any) => ![2,7].includes(p.id));
-      d.emailTemp = d.email;
-      d.email = d.phone;
-    }
-
-    if(d.login_by == 'email' && d.emailTemp) {
-      d.email = d.emailTemp;
     }
 
     if(role == 'sign_partner') {
@@ -722,14 +720,18 @@ export class DetermineSignerComponent implements OnInit {
         break;
       }
 
-      if (dataArr[i].login_by == 'email' && dataArr[i].email) {
-        if (dataArr[i].email.trim() && !this.pattern.email.test(dataArr[i].email.trim())) {
+      if (dataArr[i].login_by == 'email') {
+        if (dataArr[i].email && dataArr[i].email.trim() && !this.pattern.email.test(dataArr[i].email.trim())) {
           this.getNotificationValid("Email của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
+          count++;
+          break;
+        } else if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone)) {
+          this.getNotificationValid("SĐT của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
           count++;
           break;
         }
       } else if (dataArr[i].login_by == 'phone') {
-        if (dataArr[i].email.trim() && !this.pattern.phone.test(dataArr[i].email.trim())) {
+        if (dataArr[i].phone.trim() && !this.pattern.phone.test(dataArr[i].phone)) {
           this.getNotificationValid("SĐT của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
           count++;
           break;
@@ -738,11 +740,11 @@ export class DetermineSignerComponent implements OnInit {
 
 
       // valid phone number
-      if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone.trim())) {
-        this.getNotificationValid("SĐT của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
-        count++;
-        break;
-      }
+      // if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone.trim())) {
+      //   this.getNotificationValid("SĐT của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
+      //   count++;
+      //   break;
+      // }
 
       // valid cccd number
       if (dataArr[i].card_id.trim() && !this.pattern.card_id9.test(dataArr[i].card_id.trim()) &&
@@ -777,12 +779,12 @@ export class DetermineSignerComponent implements OnInit {
       const onlyPartOrg = 'only_party_origanzation';
 
       if (this.getCheckDuplicateEmail(onlyPartOrg, dataArr)) {
-        this.getNotificationValid("Email/SĐT tổ chức của tôi không được trùng nhau!");
+        this.getNotificationValid("Email tổ chức của tôi không được trùng nhau!");
         return false
       }
 
       if (this.getCheckDuplicatePhone(onlyPartOrg, dataArr)) {
-        this.getNotificationValid("Email/SĐT tổ chức của tôi không được trùng nhau!");
+        this.getNotificationValid("SĐT tổ chức của tôi không được trùng nhau!");
         return false
       }
 
@@ -860,7 +862,7 @@ export class DetermineSignerComponent implements OnInit {
             }
             
             if (!isParterSort[k].card_id.trim() && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
-              this.getNotificationValid("Vui lòng CMT/CCCD của " + this.getNameObjectValid(3) + "tổ chức của đối tác!")
+              this.getNotificationValid("Vui lòng nhập CMT/CCCD của " + this.getNameObjectValid(3) + "tổ chức của đối tác!")
               count++;
               break;
             }
@@ -904,17 +906,17 @@ export class DetermineSignerComponent implements OnInit {
 
             if (isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
               !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
-              !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
-              this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của tôi không hợp lệ!");
+              !this.pattern_input.taxCode_form.test(isParterSort[k].card_id.trim()) && isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6).length > 0) {
+              this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
               count++;
               break;
             }
 
-            if (!isParterSort[k].card_id.trim() && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
-              this.getNotificationValid("Vui lòng nhập mã số thuế của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của đối tác");
-              count++;
-              break;
-            }
+            // if (!isParterSort[k].card_id.trim() && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
+            //   this.getNotificationValid("Vui lòng nhập mã số thuế của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của đối tác");
+            //   count++;
+            //   break;
+            // }
 
             if (isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
             !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
@@ -941,7 +943,7 @@ export class DetermineSignerComponent implements OnInit {
             }
 
             if (isParterSort[k].login_by=="email" && !isParterSort[k].email) {
-              isParterSort[k].phone = null;
+              // isParterSort[k].phone = null;
               this.getNotificationValid("Vui lòng nhập email" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác cá nhân!");
               count++;
               break;
@@ -1347,7 +1349,7 @@ export class DetermineSignerComponent implements OnInit {
 
       if (arrPhone.some((p: any) => p.role == 1) && arrPhone.some((p: any) => p.role == 3)) {
         if (isParty == 'only_party_partner') {
-          arrPhone = arrPhone.filter((p: any) => p.role != 1);
+          // arrPhone = arrPhone.filter((p: any) => p.role != 1);
         } else {
           let duplicatePhone: any[] = [];
           let countCheck_duplicate = true;
@@ -1898,7 +1900,7 @@ export class DetermineSignerComponent implements OnInit {
                 recipient.card_id= item.card_id;
                 if(recipient.email == '' && recipient.phone &&
                 recipient.login_by == 'phone'){
-                  recipient.email = recipient.phone;
+                  recipient.phone = recipient.phone;
                 }
 
                 break;
@@ -1911,7 +1913,7 @@ export class DetermineSignerComponent implements OnInit {
                 recipient.card_id= item.card_id;
                 if(recipient.email = '' && recipient.phone &&
                 recipient.login_by == 'phone'){
-                  recipient.email = recipient.phone;
+                  recipient.phone = recipient.phone;
                 } else {
                   recipient.email = item.email;
                 }

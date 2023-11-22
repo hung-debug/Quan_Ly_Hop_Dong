@@ -29,6 +29,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   cancelDate: any;
   isEndDate: boolean;
   staus: number;
+  card_id : any;
 
   status: any = [
     {
@@ -62,8 +63,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     } else if (sessionStorage.getItem('lang') == 'en') {
       this.lang = 'en';
     }
-  
-
     const detailContract = await this.contractService.getDetailContract(this.data.is_data_contract.id).toPromise();
     this.endDate = moment(detailContract[0].sign_time, "YYYY/MM/DD").format("YYYY/MM/DD")
     let timeNow = moment(new Date(), "YYYY/MM/DD").format("YYYY/MM/DD")
@@ -86,13 +85,13 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       } else {
         this.isHiddenButton = false;
       }
-
-      response.recipients.forEach((element: any) => {        
+      console.log('response',response.recipients);
+      response.recipients.forEach((element: any) => {
         let data = {
           id: element.id,
           name: element.name,
           name_company: element.participantName,
-          emailRecipients: element.email,
+          emailRecipients: element.email ? element.email : element.phone,
           status: this.checkStatusUser(element.status, element.role),
           typeOfSign: (element.signType && element.signType.length > 0) ? element.signType[0] : null,
           process_at: element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null,
@@ -100,7 +99,8 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           type: element.participantType,
           statusNumber: element.status,
           phone: element.phone,
-          change_num: this.checkChangeNum(participants, element.id)
+          change_num: this.checkChangeNum(participants, element.id),
+          card_id: element.cardId
         }
 
         this.is_list_name.push(data);
@@ -142,7 +142,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       participants.map((item: any) => {
         item.recipients.map((y: any) => {
           if(x.id === y.id) {
-            
+
             change_num = y.change_num;
             return;
           }
@@ -249,7 +249,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+
     })
   }
 
@@ -271,8 +271,8 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       let data: any;
       data = response;
       data["contract_id"] = this.data.is_data_contract.id
-      
-      
+
+
       const dialogRef = this.dialog.open(EditHandlerComponent, {
         width: '1000px',
         data,

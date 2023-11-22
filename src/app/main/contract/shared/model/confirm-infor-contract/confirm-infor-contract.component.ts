@@ -182,10 +182,12 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
               element.type = 1;
             }
           }
-
           if (element.id_have_data) {
             isHaveFieldId.push(element);
           } else isNotFieldId.push(element);
+          if (element.name && element.text_attribute_name) {
+            element.name = element.text_attribute_name
+          }
         });
       });
 

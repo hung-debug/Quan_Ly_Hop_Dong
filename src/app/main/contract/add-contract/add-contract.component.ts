@@ -307,6 +307,7 @@ export class AddContractComponent implements OnInit {
         this.datasForm.contractConnect = data.is_data_contract.refs;
         this.datasForm.contract_no = data.is_data_contract.contract_no;
         this.datasForm.sign_time = data.is_data_contract.sign_time;
+        this.datasForm.contract_expire_time = data.is_data_contract.contract_expire_time;
         this.datasForm.notes = data.is_data_contract.notes;
         this.datasForm.type_id = data.is_data_contract.type_id;
         this.datasForm.is_determine_clone = data.is_data_contract.participants;

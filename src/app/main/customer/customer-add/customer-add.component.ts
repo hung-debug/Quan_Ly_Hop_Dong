@@ -56,11 +56,12 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       this.id = params['id'];
       if(type == 'organization'){
         this.isOrg = true;
-        this.appService.setTitle("organization.customer.add");
         sessionStorage.setItem('partnerType', 'ORGANIZATION');
         if(this.action == 'add')
+        this.appService.setTitle("organization.customer.add");
         this.orgCustomer= JSON.parse(JSON.stringify(org_customer_clone));
         if(this.action == 'edit'){
+          this.appService.setTitle("organization.customer.edit");
           this.customerService.getCustomerList().subscribe((res: any) => {
             this.orgCustomer = res.filter((item: any) => {
                  return item.id.toString() === this.id;
@@ -70,12 +71,13 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       else{
         if(type == 'personal'){
         this.isOrg = false;
-        this.appService.setTitle("personal.customer.add");
         sessionStorage.setItem('partnerType', 'PERSONAL');
       }
-      if(this.action == 'add')
-      this.personalCustomer = JSON.parse(JSON.stringify(personal_customer_clone));
-      else {
+      if(this.action == 'add'){
+        this.appService.setTitle("personal.customer.add");
+        this.personalCustomer = JSON.parse(JSON.stringify(personal_customer_clone));
+      } else {
+        this.appService.setTitle("personal.customer.edit");
         this.customerService.getCustomerList().subscribe((res: any) => {
           this.personalCustomer = res.filter((item: any) => {
 
@@ -373,7 +375,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
               this.getNotificationValid("Vui lòng nhập mã số thuế/CMT/CCCD của " + this.getNameObjectValid('SIGNER') + "!")
               return false;
             }
-            
+
             if(!parttern.cardid.test(this.personalCustomer.card_id)){
               this.getNotificationValid("Mã số thuế/CMT/CCCD của " + this.getNameObjectValid('SIGNER') + " không hợp lệ!")
               return false;

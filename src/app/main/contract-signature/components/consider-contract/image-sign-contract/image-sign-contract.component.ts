@@ -252,8 +252,8 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
         return sign.valueSign;
       } else if(this.contractNoValueSign) {
         
-        // sign.valueSign= this.convertCurrency(sign.valueSign);
         this.count++;
+        sign.valueSign= this.contractNoValueSign
         return sign.valueSign;
 
       }
