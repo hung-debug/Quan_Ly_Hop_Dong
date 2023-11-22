@@ -121,6 +121,11 @@
       <ng-template pTemplate="header">
         <!--header 1-->
         <tr>
+          <th style="background-color: white;">
+            <span style="color: #495057; font-weight: 500;">Tổng: </span>{{ contractsSum  }}
+          </th>
+        </tr>
+        <tr>
           <th *ngFor="let col of colsDetail" [style]='col.style' [colSpan]="col.colspan" [rowSpan]="col.rowspan">
             {{col.header | translate}}
           </th>

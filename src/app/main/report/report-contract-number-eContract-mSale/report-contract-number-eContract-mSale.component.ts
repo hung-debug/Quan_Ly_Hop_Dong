@@ -42,7 +42,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
   first: number = 0;
   stateOptions: any[];
   isReport: string = 'off';
-
+  contractsSum: number = 0
   isBaoCaoHopDongEcontractMsale: boolean = true;
 
   constructor(
@@ -403,7 +403,9 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
           let parentOrgIndex = newMsaleDataDetail.findIndex((item: any) => item.orgId == idOrg)
           newMsaleDataDetail = [newMsaleDataDetail[parentOrgIndex], ...newMsaleDataDetail.toSpliced(parentOrgIndex, 1)]
           this.listDetail = newMsaleDataDetail
-
+          this.listDetail.forEach(element => {
+            this.contractsSum += element.data.length
+          });
           this.table.first = 0
         }, (err: any) => {
           this.spinner.hide()
