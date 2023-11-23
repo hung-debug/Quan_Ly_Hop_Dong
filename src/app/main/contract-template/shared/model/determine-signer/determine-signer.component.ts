@@ -276,7 +276,8 @@ export class DetermineSignerComponent implements OnInit {
 
           if (element.id && element.fields) {
             if (element.fields.length > 0)
-              element.fields[0].recipient.sign_type = element.sign_type;
+              // @ts-ignore
+              element.fields[0]?.recipient?.sign_type = element.sign_type;
           }
         })
 
