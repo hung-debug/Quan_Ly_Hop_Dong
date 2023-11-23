@@ -34,7 +34,7 @@ export class ForwardContractComponent implements OnInit {
   dropdownSignTypeSettings: any = {};
   dataSign: any;
   signTypeList: Array<any> = type_signature;
-
+  currentSignType: any = null
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -181,6 +181,7 @@ export class ForwardContractComponent implements OnInit {
       this.isReqCardIdHsm = false;
       this.isReqCardIdToken = false;
     }
+    this.currentSignType = event.id
   }
 
   getTargetRecipientData(targetId : number){
@@ -244,7 +245,7 @@ export class ForwardContractComponent implements OnInit {
       }
 
       this.myForm.patchValue({
-        dataSign: this.dataSign.filter((p: any) => p.id == currentRecipientData.sign_type[0].id)
+        dataSign: this.dataSign.filter((p: any) => p.id == (this.currentSignType ? this.currentSignType :  currentRecipientData.sign_type[0].id))
       })
     }
   }
