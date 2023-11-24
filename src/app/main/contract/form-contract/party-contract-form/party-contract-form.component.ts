@@ -462,29 +462,29 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
     // <==========>
 
-    if (isParnter.length > 0) {
-      for (let i = 0; i < 2; i++) {
-        this.getSetOrderingPersonal(isParnter, i);
-      }
-    }
+    // if (isParnter.length > 0) {
+    //   for (let i = 0; i < 2; i++) {
+    //     this.getSetOrderingPersonal(isParnter, i);
+    //   }
+    // }
     // for loop check change ordering with parnter origanization
-    this.getSetOrderingParnterOrganization(isOrganization);
+    // this.getSetOrderingParnterOrganization(isOrganization);
     // set again ordering data not option eKYC/img/otp => order
     // var setOrderingOrganization =
     var setOrdering = this.dataParnterOrganization().filter((p: any) => p.type == 2 || p.type == 3 && (p.recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3) || p.recipients[0].sign_type.length == 0));
     var setOrderingParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3 && p.recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5));
     // if (setOrderingParnter.length > 0) {
-    if (setOrderingParnter.length == 0) {
-      this.data_organization.ordering = 1;
-      setOrdering.forEach((val: any, index: number) => {
-        val.ordering = index + 2; // + 2 (1: index & 1 index tổ chức của tôi) vì sẽ luôn luôn order sau tổ chức của tôi nếu trong các bên ko có dữ liệu ký eKYC/Image/OTP.
-      })
-    } else {
-      this.data_organization.ordering = setOrderingParnter.length + 1;
-      setOrdering.forEach((val: any, index: number) => {
-        val.ordering = this.data_organization.ordering + index + 1; // tăng lên 1 ordering sau tổ chức của tôi
-      })
-    }
+    // if (setOrderingParnter.length == 0) {
+    //   this.data_organization.ordering = 1;
+    //   setOrdering.forEach((val: any, index: number) => {
+    //     val.ordering = index + 2; // + 2 (1: index & 1 index tổ chức của tôi) vì sẽ luôn luôn order sau tổ chức của tôi nếu trong các bên ko có dữ liệu ký eKYC/Image/OTP.
+    //   })
+    // } else {
+    //   this.data_organization.ordering = setOrderingParnter.length + 1;
+    //   setOrdering.forEach((val: any, index: number) => {
+    //     val.ordering = this.data_organization.ordering + index + 1; // tăng lên 1 ordering sau tổ chức của tôi
+    //   })
+    // }
 
     // }
     //
