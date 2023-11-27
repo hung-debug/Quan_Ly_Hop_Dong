@@ -54,6 +54,7 @@ import { vgca_sign_issued } from 'src/assets/plugins/vgcaplugin';
 import { WebSocketSubject } from "rxjs/webSocket";
 import { WebsocketService } from 'src/app/service/websocket.service';
 import { environment } from 'src/environments/environment';
+import { RemoteDialogSignComponent } from './remote-dialog-sign/remote-dialog-sign.component';
 
 @Component({
   selector: 'app-consider-contract',
@@ -1224,6 +1225,7 @@ export class ConsiderContractComponent
     let haveSignImage = false;
     let haveSignCert = false;
     let haveSignHsm = false;
+    let haveSignRemote = false;
 
     let typeSignDigital: any = null;
     let typeSignImage: any = null;
@@ -1391,6 +1393,17 @@ export class ConsiderContractComponent
             height: '',
             isTimestamp: '',
           }
+        } else if (typeSignDigital && typeSignDigital == 8) {
+          haveSignRemote = true;
+
+          this.dataHsm = {
+            ma_dvcs: '',
+            username: '',
+            password: '',
+            password2: '',
+            imageBase64: '',
+          };
+
         }
 
         if (typeSignImage && typeSignImage == 1) {
@@ -1584,6 +1597,20 @@ export class ConsiderContractComponent
                           }
                           this.spinner.hide();
                         } else if (
+                          [2, 3, 4].includes(this.datas.roleContractReceived) &&
+                          haveSignRemote
+                        ) {
+                          if (this.markImage) {
+                            this.openMarkSign('remote');
+
+                          } else {
+                            this.remoteDialogSignOpen(this.recipientId);
+                            this.spinner.hide();
+                          }
+                          this.spinner.hide();
+                        } 
+                        
+                        else if (
                           [2, 3, 4].includes(this.datas.roleContractReceived)
                         ) {
                           this.signContractSubmit();
@@ -1759,6 +1786,8 @@ export class ConsiderContractComponent
           this.signTokenVersion1(signUpdatePayload, notContainSignImage);
         else if (code == 'usb2')
           this.getSessionId(this.taxCodePartnerStep2, signUpdatePayload, notContainSignImage);
+        else if (code == 'remote')
+          this.remoteDialogSignOpen(this.recipientId);
       }
     });
   }
@@ -4225,6 +4254,109 @@ export class ConsiderContractComponent
       dialogConfig.panelClass = 'custom-dialog-container';
 
       const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
+
+      dialogRef.afterClosed().subscribe(async (result: any) => {
+        let signI = null;
+        let imageRender = null;
+
+        this.cardId = result.ma_dvcs.trim();
+
+        if (result) {
+          this.dataHsm.ma_dvcs = result.ma_dvcs;
+          this.dataHsm.username = result.username;
+          this.dataHsm.password = result.password;
+          this.dataHsm.password2 = result.password2;
+
+          await this.signContractSubmit();
+        }
+      });
+    })
+  }
+
+  async remoteDialogSignOpen(recipientId: number) {
+    this.spinner.hide();
+    const data = {
+      title: 'CHỮ KÝ REMOTE SIGNING',
+      is_content: 'forward_contract',
+      recipientId: recipientId,
+      dataContract: this.recipient,
+    };
+    const determineCoordination = await this.contractService.getDetermineCoordination(recipientId).toPromise();
+
+    let isInRecipient = false;
+    const participants = this.datas?.is_data_contract?.participants;
+
+    for (const participant of participants) {
+      for (const card of participant.recipients) {
+        for (const item of determineCoordination.recipients) {
+          if (item.card_id == card.card_id) {
+
+
+            isInRecipient = true;
+          }
+        }
+      }
+    }
+    if (!isInRecipient) {
+
+      this.toastService.showErrorHTMLWithTimeout(
+        'Bạn không có quyền xử lý hợp đồng này!',
+        '',
+        3000
+      );
+      if (this.type == 1) {
+        this.router.navigate(['/login']);
+        this.dialogRef.close();
+        this.spinner.hide();
+        return
+      } else {
+        this.router.navigate(['/main/dashboard']);
+        this.dialogRef.close();
+        this.spinner.hide();
+        return
+      }
+    }
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
+      const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+
+
+      let ArrRecipientsNew = false
+      ArrRecipients.map((item: any) => {
+        if (item.email === this.currentUser.email) {
+          ArrRecipientsNew = true
+          return
+        }
+      });
+
+
+      if (!ArrRecipientsNew) {
+
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        }
+      };
+
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = '497px';
+      dialogConfig.hasBackdrop = true;
+      dialogConfig.data = data;
+      dialogConfig.panelClass = 'custom-dialog-container';
+
+      const dialogRef = this.dialog.open(RemoteDialogSignComponent, dialogConfig);
 
       dialogRef.afterClosed().subscribe(async (result: any) => {
         let signI = null;

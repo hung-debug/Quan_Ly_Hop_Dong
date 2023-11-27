@@ -59,7 +59,8 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { DialogReasonRejectedComponent } from './shared/model/dialog-reason-rejected/dialog-reason-rejected.component';
 import { DialogReasonCancelComponent } from './shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
 import { EditHandlerComponent } from './shared/model/edit-handler-dialog/edit-handler-dialog.component';
-import { MultiSignListComponent } from './components/multi-sign-list/multi-sign-list.component'
+import { MultiSignListComponent } from './components/multi-sign-list/multi-sign-list.component';
+import { RemoteDialogSignComponent } from './components/consider-contract/remote-dialog-sign/remote-dialog-sign.component'
 
 const signatures = "s9";
 const consider = "c9";
@@ -122,7 +123,8 @@ export const contractSignatureRoutes1: Routes = [
     DialogReasonRejectedComponent,
     DialogReasonCancelComponent,
     EditHandlerComponent,
-    MultiSignListComponent
+    MultiSignListComponent,
+    RemoteDialogSignComponent
     // AddContractComponent
   ],
   imports: [
