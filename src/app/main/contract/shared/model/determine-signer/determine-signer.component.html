@@ -517,8 +517,8 @@
                 </div>
               </div>
 
-              <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là chứng thư số-->
-              <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+              <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là chứng thư số/ Remote Signing-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0 || getDataSignRemote(d).length > 0">
                 <div class="participants__name" style="width: 91%">
                   <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
                     <span class="required-title">*</span>
@@ -703,7 +703,7 @@
               </div>
 
               <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là chứng thư số-->
-              <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0 || getDataSignRemote(d).length > 0">
                 <div class="participants__name" style="width: 91%">
                   <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
                     <span class="required-title">*</span>
@@ -1323,7 +1323,7 @@
                 </div>
 
                 <!--trường hiển thị khi người ký đối tác chọn loại ký là chứng thư số-->
-                <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0 || getDataSignRemote(d).length > 0">
                   <div class="participants__name" style="width: 91%">
                     <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
                       <span class="required-title">*</span>
@@ -1499,7 +1499,7 @@
                 </div>
 
                 <!--trường hiển thị khi văn thư đối tác chọn loại ký là chứng thư số-->
-                <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0 || getDataSignRemote(d).length > 0">
                   <div class="participants__name" style="width: 91%">
                     <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
                       <span class="required-title">*</span>
@@ -1780,7 +1780,7 @@
                 </div>
 
                 <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là chứng thư số-->
-                <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0 || getDataSignRemote(d).length > 0">
                   <div class="participants__name" style="width: 91%">
                     <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
                       <span class="required-title">*</span>

@@ -2542,6 +2542,195 @@ export class ConsiderContractComponent
         }
       }
       return true;
+    } else if (typeSignDigital == 8) {
+      // HSM SIGN
+      for (const signUpdate of this.isDataObjectSignature) {
+        if (
+          signUpdate &&
+          (signUpdate.type == 1 ||
+            signUpdate.type == 3 ||
+            signUpdate.type == 4 || signUpdate.type == 5) &&
+          [3, 4].includes(this.datas.roleContractReceived) &&
+          signUpdate?.recipient?.email === this.currentUser.email &&
+          signUpdate?.recipient?.role === this.datas?.roleContractReceived
+        ) {
+          const objSign = this.isDataObjectSignature.filter(
+            (signUpdate: any) =>
+              signUpdate &&
+              signUpdate.type == 3 &&
+              [3, 4].includes(this.datas.roleContractReceived) &&
+              signUpdate?.recipient?.email === this.currentUser.email &&
+              signUpdate?.recipient?.role === this.datas?.roleContractReceived
+          );
+
+          let fileC = await this.contractService.getFileContractPromise(
+            this.idContract
+          );
+
+          const pdfC2 = fileC.find((p: any) => p.type == 2);
+          const pdfC1 = fileC.find((p: any) => p.type == 1);
+          if (pdfC2) {
+            fileC = pdfC2.path;
+          } else if (pdfC1) {
+            fileC = pdfC1.path;
+          } else {
+            return;
+          }
+
+          let signI = null;
+
+          if (!this.mobile)
+            this.convertXForHsm(signUpdate.page);
+          let fieldHsm = {
+            coordinate_x: signUpdate.signDigitalX,
+            coordinate_y: signUpdate.coordinate_y,
+            width: signUpdate.width ,
+            height: signUpdate.height,
+            page: signUpdate.page,
+          };
+
+          if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
+            this.textSign = signUpdate.valueSign;
+
+            this.font = signUpdate.font;
+            this.font_size = signUpdate.font_size;
+
+            this.width = signUpdate.width;
+
+            await of(null).pipe(delay(120)).toPromise();
+            const imageRender = <HTMLElement>(
+              document.getElementById('text-sign')
+            );
+
+            if (imageRender) {
+              const textSignB = await domtoimage.toPng(imageRender);
+              signI = this.textSignBase64Gen = textSignB.split(',')[1];
+            }
+          } else if (signUpdate.type == 3) {
+
+            try {
+              this.isDateTime = await this.timeService.getRealTime().toPromise();
+            } catch(err) {
+              this.isDateTime = new Date();
+            }
+            if(!this.isDateTime) this.isDateTime = new Date();
+            await of(null).pipe(delay(150)).toPromise();
+            let imageRender: HTMLElement | null = null;
+
+            //render khi role là 4 (văn thư) hoặc role khác (người ký)
+            if (this.markImage) {
+              imageRender = <HTMLElement>(
+                document.getElementById('export-html-hsm1-image')
+              );
+            } else {
+              imageRender = <HTMLElement>(
+                document.getElementById('export-html-hsm1')
+              );
+            }
+
+            // fieldHsm.coordinate_y = fieldHsm.coordinate_y - 8;
+            // fieldHsm.height = imageRender.offsetHeight / 1.5;
+            // fieldHsm.width = imageRender.offsetWidth / 1.5;
+
+            if (imageRender) {
+              const textSignB = await domtoimage.toPng(
+                imageRender,
+                this.getOptions(imageRender)
+              );
+              signI = textSignB.split(',')[1];
+            }
+          }
+          if (!this.mobile) {
+            this.dataHsm = {
+              field: fieldHsm,
+              ma_dvcs: this.dataHsm.ma_dvcs,
+              username: this.dataHsm.username,
+              password: this.dataHsm.password,
+              password2: this.dataHsm.password2,
+              imageBase64: (!this.markImage && signUpdate.type==3) ? null : 
+                            (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
+            };
+          } else {
+            this.dataHsm = {
+              field: fieldHsm,
+              ma_dvcs: this.dataHsm.ma_dvcs,
+              username: this.dataHsm.username,
+              password: this.dataHsm.password,
+              password2: this.dataHsm.password2,
+              imageBase64: (!this.markImage && signUpdate.type==3) ? null : 
+                            (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
+            };
+          }
+
+          if (fileC && objSign.length) {
+            if (!this.mobile || this.mobile) {
+              const checkSign = await this.contractService.signHsm(
+                this.dataHsm,
+                this.recipientId,
+                this.isTimestamp,
+                signUpdate.type
+              );
+              if (!checkSign || (checkSign && !checkSign.success)) {
+                if (!checkSign.message) {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    'Đăng nhập không thành công',
+                    '',
+                    3000
+                  );
+                } else if (checkSign.message) {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    checkSign.message,
+                    '',
+                    3000
+                  );
+                }
+
+                return false;
+              } else {
+                if (checkSign.success === true) {
+                  if (pdfC2) {
+                    fileC = pdfC2.path;
+                  } else if (pdfC1) {
+                    fileC = pdfC1.path;
+                  }
+                }
+              }
+            } else {
+              const checkSign = await this.contractService.signHsmOld(
+                this.dataHsm,
+                this.recipientId
+              );
+
+              if (!checkSign || (checkSign && !checkSign.success)) {
+                if (!checkSign.message) {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    'Đăng nhập không thành công',
+                    '',
+                    3000
+                  );
+                } else if (checkSign.message) {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    checkSign.message,
+                    '',
+                    3000
+                  );
+                }
+
+                return false;
+              } else {
+                if (checkSign.success === true) {
+                  if (pdfC2) {
+                    fileC = pdfC2.path;
+                  } else if (pdfC1) {
+                    fileC = pdfC1.path;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      return true;
     }
   }
 
