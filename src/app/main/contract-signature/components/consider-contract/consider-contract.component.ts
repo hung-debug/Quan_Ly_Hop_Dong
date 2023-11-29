@@ -1396,13 +1396,14 @@ export class ConsiderContractComponent
         } else if (typeSignDigital && typeSignDigital == 8) {
           haveSignRemote = true;
 
-          this.dataHsm = {
-            ma_dvcs: '',
-            username: '',
-            password: '',
-            password2: '',
-            imageBase64: '',
-          };
+          this.dataCert = {
+            cert_id: '',
+            image_base64: '',
+            field: '',
+            width: '',
+            height: '',
+            isTimestamp: '',
+          }
 
         }
 
@@ -1872,6 +1873,7 @@ export class ConsiderContractComponent
   width: any;
   font: any;
   font_size: any;
+  currentBoxSignType: any
   async signDigitalDocument() {
     let typeSignDigital = this.typeSignDigital;
 
@@ -2572,7 +2574,19 @@ export class ConsiderContractComponent
       }
       return true;
     } else if (typeSignDigital == 8) {
-      // HSM SIGN
+      this.currentBoxSignType = typeSignDigital
+      // REMOTE SIGNING
+      let boxSign: any
+
+      for (let i = 0; i < this.isDataObjectSignature.length; i++) {
+        if (this.isDataObjectSignature[i].type == 3) {
+          boxSign = this.isDataObjectSignature[i]
+          boxSign.index = i
+          break
+        }
+      }
+      boxSign = this.isDataObjectSignature.splice(boxSign.index, 1)[0]
+      this.isDataObjectSignature.push(boxSign)
       for (const signUpdate of this.isDataObjectSignature) {
         if (
           signUpdate &&
@@ -2610,7 +2624,7 @@ export class ConsiderContractComponent
 
           if (!this.mobile)
             this.convertXForHsm(signUpdate.page);
-          let fieldHsm = {
+          let fieldRemoteSigning = {
             coordinate_x: signUpdate.signDigitalX,
             coordinate_y: signUpdate.coordinate_y,
             width: signUpdate.width ,
@@ -2649,12 +2663,10 @@ export class ConsiderContractComponent
             //render khi role là 4 (văn thư) hoặc role khác (người ký)
             if (this.markImage) {
               imageRender = <HTMLElement>(
-                document.getElementById('export-html-hsm1-image')
+                document.getElementById('export-remote-signing-remote-image')
               );
             } else {
-              imageRender = <HTMLElement>(
-                document.getElementById('export-html-hsm1')
-              );
+              imageRender = null
             }
 
             // fieldHsm.coordinate_y = fieldHsm.coordinate_y - 8;
@@ -2669,32 +2681,16 @@ export class ConsiderContractComponent
               signI = textSignB.split(',')[1];
             }
           }
-          if (!this.mobile) {
-            this.dataHsm = {
-              field: fieldHsm,
-              ma_dvcs: this.dataHsm.ma_dvcs,
-              username: this.dataHsm.username,
-              password: this.dataHsm.password,
-              password2: this.dataHsm.password2,
-              imageBase64: (!this.markImage && signUpdate.type==3) ? null : 
-                            (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
-            };
-          } else {
-            this.dataHsm = {
-              field: fieldHsm,
-              ma_dvcs: this.dataHsm.ma_dvcs,
-              username: this.dataHsm.username,
-              password: this.dataHsm.password,
-              password2: this.dataHsm.password2,
-              imageBase64: (!this.markImage && signUpdate.type==3) ? null : 
-                            (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
-            };
-          }
+          this.dataCert = {
+            field: fieldRemoteSigning,
+            cert_id: this.dataCert.cert_id,
+            imageBase64: (!this.markImage && signUpdate.type==3) ? null : 
+                          (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
+          };
 
           if (fileC && objSign.length) {
-            if (!this.mobile || this.mobile) {
-              const checkSign = await this.contractService.signHsm(
-                this.dataHsm,
+              const checkSign = await this.contractService.signRemote(
+                this.dataCert,
                 this.recipientId,
                 this.isTimestamp,
                 signUpdate.type
@@ -2724,38 +2720,6 @@ export class ConsiderContractComponent
                   }
                 }
               }
-            } else {
-              const checkSign = await this.contractService.signHsmOld(
-                this.dataHsm,
-                this.recipientId
-              );
-
-              if (!checkSign || (checkSign && !checkSign.success)) {
-                if (!checkSign.message) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'Đăng nhập không thành công',
-                    '',
-                    3000
-                  );
-                } else if (checkSign.message) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    checkSign.message,
-                    '',
-                    3000
-                  );
-                }
-
-                return false;
-              } else {
-                if (checkSign.success === true) {
-                  if (pdfC2) {
-                    fileC = pdfC2.path;
-                  } else if (pdfC1) {
-                    fileC = pdfC1.path;
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -3002,7 +2966,7 @@ export class ConsiderContractComponent
     }
 
     //Check ký usb token
-    if (typeSignDigital && typeSignDigital == 2) {
+    if (typeSignDigital && typeSignDigital == 2) { 
       const determineCoordination = await this.contractService
         .getDetermineCoordination(this.recipientId)
         .toPromise();
@@ -3508,7 +3472,7 @@ export class ConsiderContractComponent
       return;
     }
 
-    if (notContainSignImage && this.eKYC == false) {
+    if (notContainSignImage && this.eKYC == false && this.currentBoxSignType !== 8) {
       signUpdateTempN[0] = {
         "processAt": this.isDateTime
       };
@@ -3563,7 +3527,7 @@ export class ConsiderContractComponent
         }
       );
     } else {
-      if (this.eKYC == false) {
+      if (this.eKYC == false && this.currentBoxSignType !== 8) {
         this.contractService.updateInfoContractConsiderImg(signUpdateTempN, this.recipientId).subscribe(
           async (result) => {
             if (result?.success == false) {
@@ -3640,6 +3604,17 @@ export class ConsiderContractComponent
             this.spinner.hide();
           }
         );
+      }
+      if (this.currentBoxSignType == 8) {
+        // checking here 1
+        this.spinner.hide()
+        this.remoteDialogSuccessOpen().then(result => {
+          if (result.isDismissed) {
+            this.router.navigate([
+              'main/form-contract/detail/' + this.idContract,
+            ]);
+          }
+        })
       }
     }
   }
@@ -4365,10 +4340,7 @@ export class ConsiderContractComponent
         this.cardId = result.ma_dvcs.trim();
 
         if (result) {
-          this.dataHsm.ma_dvcs = result.ma_dvcs;
-          this.dataHsm.username = result.username;
-          this.dataHsm.password = result.password;
-          this.dataHsm.password2 = result.password2;
+          this.dataCert.cert_id = result.ma_dvcs;
 
           await this.signContractSubmit();
         }
@@ -4643,4 +4615,18 @@ export class ConsiderContractComponent
     })
   }
 
+  remoteDialogSuccessOpen() {
+    return Swal.fire({
+      title: "THÔNG BÁO",
+      text: "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký hợp đồng!",
+      icon: 'info',
+      showCancelButton: true,
+      showConfirmButton: false,
+      cancelButtonColor: '#b0bec5',
+      cancelButtonText: "Thoát",
+      customClass: {
+        title: 'my-custom-title-class',
+      },
+    });
+  }
 }

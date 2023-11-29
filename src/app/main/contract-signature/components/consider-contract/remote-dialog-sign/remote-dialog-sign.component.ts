@@ -42,9 +42,6 @@ export class RemoteDialogSignComponent implements OnInit {
         // Validators.pattern(parttern.card_id9) ||
         // Validators.pattern(parttern.card_id12)
       ]),
-      username: this.fbd.control("", [Validators.required]),
-      pass1: this.fbd.control("", [Validators.required]),
-      pass2: this.fbd.control("", [Validators.required])
     });
   }
 
@@ -70,14 +67,7 @@ export class RemoteDialogSignComponent implements OnInit {
           taxCode: this.fbd.control(response.tax_code, [
             Validators.required,
             Validators.pattern(parttern.cardid)
-            // Validators.pattern(parttern_input.taxCode_form) ||
-            // Validators.pattern(parttern.card_id9) ||
-            // Validators.pattern(parttern.card_id12)
-          ],
-          ),
-          username: this.fbd.control(response.hsm_name, [Validators.required]),
-          pass1: this.fbd.control(response.hsm_pass, [Validators.required]),
-          pass2: this.fbd.control("", [Validators.required])
+          ]),
         });
       })
 
@@ -95,13 +85,7 @@ export class RemoteDialogSignComponent implements OnInit {
               taxCode: this.fbd.control(taxCodePartnerStep2, 
                 [Validators.required, 
                   Validators.pattern(parttern.cardid)
-                // Validators.pattern(parttern_input.taxCode_form) ||
-                // Validators.pattern(parttern.card_id9) ||
-                // Validators.pattern(parttern.card_id12)
               ]),
-              username: this.fbd.control("", [Validators.required]),
-              pass1: this.fbd.control("", [Validators.required]),
-              pass2: this.fbd.control("", [Validators.required])
             })
 
             break;
@@ -227,9 +211,6 @@ export class RemoteDialogSignComponent implements OnInit {
   
         const data = {
           ma_dvcs: this.myForm.value.taxCode,
-          username: this.myForm.value.username,
-          password: this.myForm.value.pass1,
-          password2: this.myForm.value.pass2
         };
   
         
@@ -252,9 +233,6 @@ export class RemoteDialogSignComponent implements OnInit {
     } else {
       const data = {
         ma_dvcs: this.myForm.value.taxCode,
-        username: this.myForm.value.username,
-        password: this.myForm.value.pass1,
-        password2: this.myForm.value.pass2
       };
 
       this.dialogRef.close(data);
