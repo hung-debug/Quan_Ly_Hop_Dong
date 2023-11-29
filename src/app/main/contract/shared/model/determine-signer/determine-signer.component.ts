@@ -232,7 +232,7 @@ export class DetermineSignerComponent implements OnInit {
         this.datas.is_determine_clone[index].recipients[i].email = this.datas.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
         if (this.datas.is_determine_clone[index].recipients[i].login_by == "phone") {
           // this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
-          this.datas.is_determine_clone[index].recipients[i].email = ''
+          this.datas.is_determine_clone[index].recipients[i].email = this.datas.is_determine_clone[index].recipients[i].phone
         } else if (this.datas.is_determine_clone[index].recipients[i].sign_type.filter((type: any) => type.id == 1).length == 0 &&
                   this.site == 'KD'
         ) {
@@ -537,10 +537,10 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeTypeSign(d: any,index: any,id?: any,role?: any) {
-    // if (d.login_by == 'phone' || d.login_by == 'email') {
-    //   d.email = '';
-    //   d.phone = '';
-    // }
+    if (d.login_by == 'phone' || d.login_by == 'email') {
+      d.email = '';
+      d.phone = '';
+    }
 
     if(d.login_by == 'phone') {
       d.sign_type = d.sign_type.filter((p: any) => ![2,7].includes(p.id));

@@ -162,10 +162,10 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   changeTypeSign(d: any,index?: any,id?: any,role?: any) {
-    // if (d.login_by == 'phone' || d.login_by == 'email') {
-    //   d.email = '';
-    //   d.phone = '';
-    // }
+    if (d.login_by == 'phone' || d.login_by == 'email') {
+      d.email = '';
+      d.phone = '';
+    }
 
     if(d.login_by == 'phone') {
       d.sign_type = d.sign_type.filter((p: any) => ![2, 7].includes(p.id));
@@ -274,7 +274,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         this.datasForm.is_determine_clone[index].recipients[i].name = this.datasForm.is_determine_clone[index].recipients[i].name.trim();
         this.datasForm.is_determine_clone[index].recipients[i].email = this.datasForm.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
         if (this.datasForm.is_determine_clone[index].recipients[i].login_by == "phone") {
-          this.datasForm.is_determine_clone[index].recipients[i].email = ''
+          this.datasForm.is_determine_clone[index].recipients[i].email = this.datasForm.is_determine_clone[index].recipients[i].phone
         } else if (this.datasForm.is_determine_clone[index].recipients[i].sign_type.filter((type: any) => type.id == 1).length == 0 &&
                   this.site == 'KD'
         ) {
