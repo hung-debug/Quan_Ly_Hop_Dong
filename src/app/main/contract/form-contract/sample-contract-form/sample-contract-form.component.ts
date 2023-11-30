@@ -435,7 +435,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
     // xoa nhung du lieu doi tuong thay doi khi sua, remove element when change data step 2
 
-    if (dataDiffirent.length > 0 && this.router.url.includes('edit')) {
+    if ((dataDiffirent.length > 0 && this.router.url.includes('edit')) || (dataDiffirent.length > 0)) {
       this.datasForm.contract_user_sign.forEach((res: any) => {
         if (res.sign_config.length > 0) {
           /*
