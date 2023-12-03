@@ -165,6 +165,7 @@ export class ContractService {
   // detect Face
   newEkycVerification: any = `${environment.apiUrl}/api/v1/tp/contracts/ekyc/verification`;
   getSignatureInfoTokenV1Url: any = `${environment.apiUrl}/api/v1/sign/token/genImage`;
+  getRemoteSigningCurrentStatusUrl: any = `${environment.apiUrl}/api/v1/sign/status/remoteSigning`
 
   token: any;
   customer_id: any;
@@ -1945,6 +1946,17 @@ export class ContractService {
         body,
         { headers }
       );
+  }
+
+  getRemoteSigningCurrentStatus(recipientId: string) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http
+      .get<any>(this.getRemoteSigningCurrentStatusUrl + '?recipientId=' + recipientId, { headers: headers })
+      .pipe();
   }
 
   objDefaultSampleContract() {
