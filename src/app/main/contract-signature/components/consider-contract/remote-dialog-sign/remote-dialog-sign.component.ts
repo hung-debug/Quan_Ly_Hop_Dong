@@ -61,7 +61,13 @@ export class RemoteDialogSignComponent implements OnInit {
       this.type = 0;
 
 
-    if (this.user.organization_id != 0) {
+    this.myForm = this.fbd.group({
+      taxCode: this.fbd.control(this.datas.dataContract.card_id, [
+        Validators.required,
+        Validators.pattern(parttern.cardid)
+      ]),
+    });
+      if (this.user.organization_id != 0) {
       // this.userService.getUserById(this.id).subscribe((response) => {
       //   this.myForm = this.fbd.group({
       //     taxCode: this.fbd.control(response.tax_code, [
