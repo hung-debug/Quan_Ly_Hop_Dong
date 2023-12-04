@@ -265,7 +265,7 @@
 
 
         <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là chứng thứ số-->
-        <div class="participants--input" style="display: flex" *ngIf="id_sign_type == 6">
+        <div class="participants--input" style="display: flex" *ngIf="id_sign_type == 6 || id_sign_type == 8">
           <div class="participants__name" style="width: 93%">
             <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
               <span class="required-title">*</span>

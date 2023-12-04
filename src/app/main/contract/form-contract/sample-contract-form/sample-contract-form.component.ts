@@ -399,10 +399,10 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     let dataDiffirent: any[] = [];
     if (dataDetermine.length > 0) {
       dataDiffirent = dataContractUserSign.filter((val: any) => !dataDetermine.some((data: any) =>
-        ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5)) ||
-          (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) ||
-          (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) ||
-          (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7))) &&
+        ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && val.name == data.name) ||
+          (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8))) ||
+          (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8))) ||
+          (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && val.name == data.name)) &&
         ((val.recipient ? (((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email)) : ((
             !val.name ||
             (val.sign_unit == 'text' && !val.recipient_id)) && ((val.email && val.email == data.email) || !val.email))) ||
@@ -416,10 +416,10 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
     // Get data no change of signature object
     dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
-      ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5)) ||
-      (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)))||
-      (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) ||
-        (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7))) &&
+      ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && val.name == data.name) ||
+      (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8)))||
+      (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8))) ||
+        (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && val.name == data.name)) &&
       (
         (val.recipient ? (((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email) || val.email == data.email) :
         ((!val.name || (val.sign_unit == 'text' && !val.recipient_id)) || ((val.email && val.email == data.email) || !val.email))) ||
@@ -435,7 +435,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
     // xoa nhung du lieu doi tuong thay doi khi sua, remove element when change data step 2
 
-    if (dataDiffirent.length > 0 && this.router.url.includes('edit')) {
+    if ((dataDiffirent.length > 0 && this.router.url.includes('edit')) || (dataDiffirent.length > 0)) {
       this.datasForm.contract_user_sign.forEach((res: any) => {
         if (res.sign_config.length > 0) {
           /*
@@ -457,7 +457,10 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               ((val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email as any : data.email as any)) ||
               ((val.recipient ? val.recipient.phone as any : val.phone as any) === (data.recipient ? data.recipient.phone as any : data.phone as any)) 
             ) &&
-            val.sign_unit == data.sign_unit));
+            val.sign_unit == data.sign_unit &&
+            val.name == data.name &&
+            val.type == data.type
+          ));
         }
       })
     }
@@ -891,16 +894,16 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             if (isSignType == 'chu_ky_anh') {
               element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
             } else if (isSignType == 'chu_ky_so') {
-              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7) && element.role != 2);
+              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && element.role != 2);
             } else if (isSignType == 'text') {
-              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role == 4);
+              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8) || element.role == 4);
               // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4)); //disable van thu select text
 
             } else {
               if(this.datasForm.contract_no) {
                 element.is_disable = true;
               } else {
-                element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role == 4 )
+                element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8) || element.role == 4 )
                 // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4)) //disable van thu select o^ so^'
 
               }
@@ -2345,7 +2348,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         // valid ký kéo thiếu ô ký cho từng loại ký
         for (const element of data_organization) {
           if (element.sign_type.length > 0) {
-            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7) &&
+            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) &&
             arrSign_organization.filter((item: any) => (item.email == element.email || item.phone == element.phone) && item.sign_unit == 'chu_ky_so').length == 0) {
               error_organization++;
               nameSign_organization.name = element.name;
@@ -2378,7 +2381,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         // valid ký kéo thiếu ô ký cho từng loại ký
         for (const element of data_partner) {
           if (element.sign_type.length > 0) {
-            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7) && arrSign_partner.filter((item: any) => (item.email == element.email || item.phone == element.phone) && item.sign_unit == 'chu_ky_so').length == 0) {
+            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && arrSign_partner.filter((item: any) => (item.email == element.email || item.phone == element.phone) && item.sign_unit == 'chu_ky_so').length == 0) {
               countError_partner++;
               nameSign_partner.name = element.name;
               nameSign_partner.sign_type = 'chu_ky_so';

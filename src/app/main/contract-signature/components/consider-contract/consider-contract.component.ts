@@ -54,6 +54,7 @@ import { vgca_sign_issued } from 'src/assets/plugins/vgcaplugin';
 import { WebSocketSubject } from "rxjs/webSocket";
 import { WebsocketService } from 'src/app/service/websocket.service';
 import { environment } from 'src/environments/environment';
+import { RemoteDialogSignComponent } from './remote-dialog-sign/remote-dialog-sign.component';
 
 @Component({
   selector: 'app-consider-contract',
@@ -256,6 +257,9 @@ export class ConsiderContractComponent
       this.type = 1;
     } else this.type = 0;
 
+    let recipientIdParam: any 
+    this.activeRoute.queryParams.subscribe((param: any) => recipientIdParam = param.recipientId)
+    await this.getRemoteSigningCurrentStatusCall(recipientIdParam)
   }
 
   firstPageMobile() {
@@ -961,7 +965,8 @@ export class ConsiderContractComponent
     // style.backgroundColor = d.valueSign ? '' : backgroundColor;
     style.display =
       (this.confirmConsider && this.confirmConsider == 1) ||
-        (this.confirmSignature && this.confirmSignature == 1)
+        (this.confirmSignature && this.confirmSignature == 1 && !this.isRemoteSigningType) ||
+        (this.confirmSignature == 1 && this.isRemoteSigningType && !this.isRemoteSigningExpired && !this.isRemoteSigningProcessing)
         ? ''
         : 'none';
     if (d['width']) {
@@ -1196,6 +1201,10 @@ export class ConsiderContractComponent
   srcMark: any;
   currentNullValuePages: any;
   currentNullElement: any
+  isRemoteSigningExpired: boolean = false
+  isRemoteSigningProcessing: boolean = false
+
+  isRemoteSigningType: boolean = false
 
   async checkDifferentName() {
     const nameUpdate = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
@@ -1224,278 +1233,32 @@ export class ConsiderContractComponent
     let haveSignImage = false;
     let haveSignCert = false;
     let haveSignHsm = false;
+    let haveSignRemote = false;
 
     let typeSignDigital: any = null;
     let typeSignImage: any = null;
-
+    let isRemoteSigning: boolean = false
     const counteKYC = this.recipient?.sign_type.filter(
       (p: any) => p.id == 5
     ).length;
-
-
+    isRemoteSigning = this.recipient.sign_type.some((item: any) => item.id == 8)
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.info;
 
-    this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
-      this.ArrRecipientsNew = response.recipients.filter(
-        (x: any) => x.email === this.currentUser.email
-      );
-
-      if (this.ArrRecipientsNew.length === 0) {
-        this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
-          '',
-          3000
-        );
-        if (this.type == 1) {
-          this.router.navigate(['/login']);
-          this.dialog.closeAll();
-          return;
-        } else {
-          this.router.navigate(['/main/dashboard']);
-          this.dialog.closeAll();
-          return;
-        }
-      }
-
-      if (counteKYC > 0) {
-        if (this.mobile) {
-          if (this.confirmSignature == 1) {
-            this.eKYC = true;
-            this.eKYCSignOpen();
-            return;
-          } else if (this.confirmSignature == 2) {
-            this.rejectContract();
-            return;
-          }
-        } else {
-          if (this.confirmSignature == 1) {
-            this.toastService.showErrorHTMLWithTimeout(
-              'Vui lòng ký eKYC trên ứng dụng điện thoại',
-              '',
-              3000
-            );
-            return;
-          } else if (this.confirmSignature == 2) {
-            this.rejectContract();
-            return;
-          }
-        }
-      }
-      if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
-        this.toastService.showErrorHTMLWithTimeout(
-          'Vui lòng chọn đồng ý hoặc từ chối hợp đồng',
-          '',
-          3000
-        );
-        return;
-      }
-      if (
-        e &&
-        e == 1 &&
-        !this.validateSignature() &&
-        !(
-          (this.datas.roleContractReceived == 2 &&
-            this.confirmConsider == 2 &&
-            counteKYC <= 0) ||
-          (this.datas.roleContractReceived == 3 &&
-            this.confirmSignature == 2) ||
-          (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
-        )
-      ) {
-        if (!this.mobile) {
-          for (let item of this.currentNullElement) {
-            if (!item.value && item.type !== 4 && item.type !== 2) {
-              this.toastService.showErrorHTMLWithTimeout(
-                `Vui lòng nhập nội dung ô: ${item.name} (trang ${item.page})`,
-                '',
-                3000
-              );
-              return;
-            } else if (item.type == 4) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  `Vui lòng nhập nội dung ô: Số hợp đồng (trang ${item.page})`,
-                  '',
-                  3000
-                );
-                return;
-            } else {
-              this.toastService.showErrorHTMLWithTimeout(`Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc (trang ${item.page})`, '', 3000);
-              return;
-            }
-          }
-        } else {
-          if (this.confirmSignature == 2) {
-            this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 3000);
-            return;
+      this.contractService.getRemoteSigningCurrentStatus(this.recipientId).subscribe(
+        (res) => {
+          if (res.isPresent && res.status == "DANG_XU_LY") {
+            // this.toastService.showWarningHTMLWithTimeout("Hợp đồng đang được xử lý, vui lòng ký hợp đồng trên App và reload lại trang!","",3000)
+            this.remoteSigningProcessingStatusSwalfire(res.status)
+            return
+            // this.toastService.showWarningHTMLWithTimeout("Vui lòng ký hợp đồng trên App và reload lại trang!","",3000)
           } else {
-            this.imageDialogSignOpen(e, haveSignImage);
-            return;
-          }
-        }
-      } else if (
-        e &&
-        e == 1 &&
-        !(
-          (this.datas.roleContractReceived == 2 &&
-            this.confirmConsider == 2) ||
-          (this.datas.roleContractReceived == 3 &&
-            this.confirmSignature == 2) ||
-          (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
-        )
-      ) {
-        // let typeSignDigital = null;
-        // let typeSignImage = null;
-        if (this.recipient?.sign_type) {
-          const typeSD = this.recipient?.sign_type.find(
-            (t: any) => t.id != 1
-          );
-
-          const typeSImage = this.recipient?.sign_type.find(
-            (t: any) => t.id == 1
-          );
-          if (typeSD) {
-            typeSignDigital = typeSD.id;
-          }
-          if (typeSImage) {
-            typeSignImage = typeSImage.id;
-          }
-        }
-
-        if (typeSignDigital && typeSignDigital == 3) {
-          haveSignPKI = true;
-          this.dataNetworkPKI = {
-            networkCode: this.signInfoPKIU.networkCode,
-            phone: this.signInfoPKIU.phone,
-          };
-        } else if (typeSignDigital && typeSignDigital == 4) {
-          haveSignHsm = true;
-
-          this.dataHsm = {
-            ma_dvcs: '',
-            username: '',
-            password: '',
-            password2: '',
-            imageBase64: '',
-          };
-
-        } else if (typeSignDigital == 6) {
-          haveSignCert = true;
-
-          this.dataCert = {
-            cert_id: '',
-            image_base64: '',
-            field: '',
-            width: '',
-            height: '',
-            isTimestamp: '',
-          }
-        }
-
-        if (typeSignImage && typeSignImage == 1) {
-          haveSignImage = true;
-        }
-
-        if (typeSignImage && typeSignImage == 4) {
-          haveSignImage = true;
-        }
-      }
-      if (
-        e &&
-        e == 1 &&
-        !(
-          (this.datas.roleContractReceived == 2 &&
-            this.confirmConsider == 2) ||
-          (this.datas.roleContractReceived == 3 &&
-            this.confirmSignature == 2) ||
-          (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
-        ) &&
-        this.ArrRecipientsNew.length > 0 
-      ) {
-        let swalfire = null;
-
-        if (typeSignDigital && typeSignDigital != 3) {
-          swalfire = this.getSwalFire('digital');
-        } else {
-          swalfire = this.getSwalFire('image');
-        }
-
-        swalfire.then(async (result) => {
-          if (result.isConfirmed) {
-            if (result.value == 'yes') {
-              this.markImage = true;
-            } else {
-              this.markImage = false;
-            }
-
-            let isConnect = false
-
-            if (this.recipient.sign_type.some((item: any) => item.id == 7 )) {
-              try {
-                isConnect = await this.websocketService.connect()
-              } catch (error) {
-                console.error(error)             
-              }
-              if (!isConnect){
-                  Swal.fire({
-                    html:
-                      'Vui lòng bật tool ký số hoặc tải ' +
-                      `<a href='/assets/upload/VGCAServices.zip' target='_blank'>Tại đây</a> và cài đặt`,
-                    icon: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#b0bec5',
-                    confirmButtonText: 'Xác nhận',
-                  });
-                  return
-              }
-            }
-            const determineCoordination = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
-            let isInRecipient = false;
-            const participants = this.datas?.is_data_contract?.participants;
-            if ((this.recipient.sign_type.some((item: any) => item.id == 7 ))) {
-              this.signBCY(this.pdfSrc, this.recipient.fields[0].id)
-              return
-            }
-
-            for (const participant of participants) {
-              for (const card of participant.recipients) {
-                for (const item of determineCoordination.recipients) {
-                  if (item.card_id == card.card_id) {
-                    isInRecipient = true;
-                  }
-                }
-              }
-            }
-            if (!isInRecipient) {
-
-              this.toastService.showErrorHTMLWithTimeout(
-                'Bạn không có quyền xử lý hợp đồng này!',
-                '',
-                3000
-              );
-              if (this.type == 1) {
-                this.router.navigate(['/login']);
-                this.dialogRef.close();
-                this.spinner.hide();
-                return
-              } else {
-                this.router.navigate(['/main/dashboard']);
-                this.dialogRef.close();
-                this.spinner.hide();
-                return
-              }
-            }
-            this.currentUser = JSON.parse(
-              localStorage.getItem('currentUser') || ''
-            ).customer.info;
-
             this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
-              //  = response.recipients[0].email
               this.ArrRecipientsNew = response.recipients.filter(
                 (x: any) => x.email === this.currentUser.email
               );
-
+        
               if (this.ArrRecipientsNew.length === 0) {
                 this.toastService.showErrorHTMLWithTimeout(
                   'Bạn không có quyền xử lý hợp đồng này!',
@@ -1512,125 +1275,412 @@ export class ConsiderContractComponent
                   return;
                 }
               }
-
-
-              // Kiểm tra ô ký đã ký chưa (status = 2)
-              this.spinner.show();
-              let id_recipient_signature: any = null;
-              let phone_recipient_signature: any = null;
-              //
-              for (const d of this.datas.is_data_contract.participants) {
-                for (const q of d.recipients) {
-                  if (q.email == this.currentUser.email && q.status == 1) {
-                    id_recipient_signature = q.id;
-                    this.phoneOtp = phone_recipient_signature = q.phone;
-                    this.userOtp = q.name;
-                    break;
+        
+              if (counteKYC > 0) {
+                if (this.mobile) {
+                  if (this.confirmSignature == 1) {
+                    this.eKYC = true;
+                    this.eKYCSignOpen();
+                    return;
+                  } else if (this.confirmSignature == 2) {
+                    this.rejectContract();
+                    return;
+                  }
+                } else {
+                  if (this.confirmSignature == 1) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Vui lòng ký eKYC trên ứng dụng điện thoại',
+                      '',
+                      3000
+                    );
+                    return;
+                  } else if (this.confirmSignature == 2) {
+                    this.rejectContract();
+                    return;
                   }
                 }
-                if (id_recipient_signature) break;
               }
-
-              //neu co id nguoi xu ly thi moi kiem tra
-              if (id_recipient_signature) {
-                this.contractService
-                  .getCheckSignatured(id_recipient_signature)
-                  .subscribe(
-                    (res: any) => {
-                      if (res && res.status == 2) {
-                        this.spinner.hide();
+        
+              if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
+                this.toastService.showErrorHTMLWithTimeout(
+                  'Vui lòng chọn đồng ý hoặc từ chối hợp đồng',
+                  '',
+                  3000
+                );
+                return;
+              } 
+              if (isRemoteSigning && res.status == "QUA_THOI_GIAN_KY") {
+                this.validateSignature = () => true
+              }
+              if (
+                (e &&
+                e == 1 &&
+                !this.validateSignature() &&
+                !(
+                  (this.datas.roleContractReceived == 2 &&
+                    this.confirmConsider == 2 &&
+                    counteKYC <= 0) ||
+                  (this.datas.roleContractReceived == 3 &&
+                    this.confirmSignature == 2) ||
+                  (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
+                ))
+              ) {
+                if (!this.mobile) {
+                  for (let item of this.currentNullElement) {
+                    if (!item.value && item.type !== 4 && item.type !== 2) {
+                      this.toastService.showErrorHTMLWithTimeout(
+                        `Vui lòng nhập nội dung ô: ${item.name} (trang ${item.page})`,
+                        '',
+                        3000
+                      );
+                      return;
+                    } else if (item.type == 4) {
                         this.toastService.showErrorHTMLWithTimeout(
-                          'contract_signature_success',
+                          `Vui lòng nhập nội dung ô: Số hợp đồng (trang ${item.page})`,
                           '',
                           3000
                         );
+                        return;
+                    } else {
+                      this.toastService.showErrorHTMLWithTimeout(`Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc (trang ${item.page})`, '', 3000);
+                      return;
+                    }
+                  }
+                } else {
+                  if (this.confirmSignature == 2) {
+                    this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 3000);
+                    return;
+                  } else {
+                    this.imageDialogSignOpen(e, haveSignImage);
+                    return;
+                  }
+                }
+              } else if (
+                e &&
+                e == 1 &&
+                !(
+                  (this.datas.roleContractReceived == 2 &&
+                    this.confirmConsider == 2) ||
+                  (this.datas.roleContractReceived == 3 &&
+                    this.confirmSignature == 2) ||
+                  (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
+                )
+              ) {
+                // let typeSignDigital = null;
+                // let typeSignImage = null;
+                if (this.recipient?.sign_type) {
+                  const typeSD = this.recipient?.sign_type.find(
+                    (t: any) => t.id != 1
+                  );
+        
+                  const typeSImage = this.recipient?.sign_type.find(
+                    (t: any) => t.id == 1
+                  );
+                  if (typeSD) {
+                    typeSignDigital = typeSD.id;
+                  }
+                  if (typeSImage) {
+                    typeSignImage = typeSImage.id;
+                  }
+                }
+        
+                if (typeSignDigital && typeSignDigital == 3) {
+                  haveSignPKI = true;
+                  this.dataNetworkPKI = {
+                    networkCode: this.signInfoPKIU.networkCode,
+                    phone: this.signInfoPKIU.phone,
+                  };
+                } else if (typeSignDigital && typeSignDigital == 4) {
+                  haveSignHsm = true;
+        
+                  this.dataHsm = {
+                    ma_dvcs: '',
+                    username: '',
+                    password: '',
+                    password2: '',
+                    imageBase64: '',
+                  };
+        
+                } else if (typeSignDigital == 6) {
+                  haveSignCert = true;
+        
+                  this.dataCert = {
+                    cert_id: '',
+                    image_base64: '',
+                    field: '',
+                    width: '',
+                    height: '',
+                    isTimestamp: '',
+                  }
+                } else if (typeSignDigital && typeSignDigital == 8) {
+                  haveSignRemote = true;
+        
+                  this.dataCert = {
+                    cert_id: '',
+                    image_base64: '',
+                    field: '',
+                    width: '',
+                    height: '',
+                    isTimestamp: '',
+                  }
+        
+                }
+        
+                if (typeSignImage && typeSignImage == 1) {
+                  haveSignImage = true;
+                }
+        
+                if (typeSignImage && typeSignImage == 4) {
+                  haveSignImage = true;
+                }
+              }
+              if (
+                e &&
+                e == 1 &&
+                !(
+                  (this.datas.roleContractReceived == 2 &&
+                    this.confirmConsider == 2) ||
+                  (this.datas.roleContractReceived == 3 &&
+                    this.confirmSignature == 2) ||
+                  (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
+                ) &&
+                this.ArrRecipientsNew.length > 0 
+              ) {
+                let swalfire = null;
+        
+                if (typeSignDigital && typeSignDigital != 3) {
+                  swalfire = this.getSwalFire('digital');
+                } else {
+                  swalfire = this.getSwalFire('image');
+                }
+        
+                swalfire.then(async (result) => {
+                  if (result.isConfirmed) {
+                    if (result.value == 'yes') {
+                      this.markImage = true;
+                    } else {
+                      this.markImage = false;
+                    }
+        
+                    let isConnect = false
+        
+                    if (this.recipient.sign_type.some((item: any) => item.id == 7 )) {
+                      try {
+                        isConnect = await this.websocketService.connect()
+                      } catch (error) {
+                        console.error(error)             
+                      }
+                      if (!isConnect){
+                          Swal.fire({
+                            html:
+                              'Vui lòng bật tool ký số hoặc tải ' +
+                              `<a href='/assets/upload/VGCAServices.zip' target='_blank'>Tại đây</a> và cài đặt`,
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#b0bec5',
+                            confirmButtonText: 'Xác nhận',
+                          });
+                          return
+                      }
+                    }
+                    const determineCoordination = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
+                    let isInRecipient = false;
+                    const participants = this.datas?.is_data_contract?.participants;
+                    if ((this.recipient.sign_type.some((item: any) => item.id == 7 ))) {
+                      this.signBCY(this.pdfSrc, this.recipient.fields[0].id)
+                      return
+                    }
+        
+                    for (const participant of participants) {
+                      for (const card of participant.recipients) {
+                        for (const item of determineCoordination.recipients) {
+                          if (item.card_id == card.card_id) {
+                            isInRecipient = true;
+                          }
+                        }
+                      }
+                    }
+                    if (!isInRecipient) {
+        
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Bạn không có quyền xử lý hợp đồng này!',
+                        '',
+                        3000
+                      );
+                      if (this.type == 1) {
+                        this.router.navigate(['/login']);
+                        this.dialogRef.close();
+                        this.spinner.hide();
+                        return
+                      } else {
+                        this.router.navigate(['/main/dashboard']);
+                        this.dialogRef.close();
+                        this.spinner.hide();
+                        return
+                      }
+                    }
+                    this.currentUser = JSON.parse(
+                      localStorage.getItem('currentUser') || ''
+                    ).customer.info;
+        
+                    this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
+                      //  = response.recipients[0].email
+                      this.ArrRecipientsNew = response.recipients.filter(
+                        (x: any) => x.email === this.currentUser.email
+                      );
+        
+                      if (this.ArrRecipientsNew.length === 0) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'Bạn không có quyền xử lý hợp đồng này!',
+                          '',
+                          3000
+                        );
+                        if (this.type == 1) {
+                          this.router.navigate(['/login']);
+                          this.dialog.closeAll();
+                          return;
+                        } else {
+                          this.router.navigate(['/main/dashboard']);
+                          this.dialog.closeAll();
+                          return;
+                        }
+                      }
+        
+        
+                      // Kiểm tra ô ký đã ký chưa (status = 2)
+                      this.spinner.show();
+                      let id_recipient_signature: any = null;
+                      let phone_recipient_signature: any = null;
+                      //
+                      for (const d of this.datas.is_data_contract.participants) {
+                        for (const q of d.recipients) {
+                          if (q.email == this.currentUser.email && q.status == 1) {
+                            id_recipient_signature = q.id;
+                            this.phoneOtp = phone_recipient_signature = q.phone;
+                            this.userOtp = q.name;
+                            break;
+                          }
+                        }
+                        if (id_recipient_signature) break;
+                      }
+        
+                      //neu co id nguoi xu ly thi moi kiem tra
+                      if (id_recipient_signature) {
+                        this.contractService
+                          .getCheckSignatured(id_recipient_signature)
+                          .subscribe(
+                            (res: any) => {
+                              if (res && res.status == 2) {
+                                this.spinner.hide();
+                                this.toastService.showErrorHTMLWithTimeout(
+                                  'contract_signature_success',
+                                  '',
+                                  3000
+                                );
+                              } else {
+                                if (
+                                  [2, 3, 4].includes(this.datas.roleContractReceived) &&
+                                  haveSignImage
+                                ) {
+                                  this.confirmOtpSignContract(
+                                    id_recipient_signature,
+                                    phone_recipient_signature
+                                  );
+                                  this.spinner.hide();
+                                } else if (
+                                  [2, 3, 4].includes(this.datas.roleContractReceived) &&
+                                  haveSignPKI
+                                ) {
+                                  this.pkiDialogSignOpen();
+                                  this.spinner.hide();
+                                } else if (
+                                  [2, 3, 4].includes(this.datas.roleContractReceived) &&
+                                  haveSignHsm
+                                ) {
+                                  if (this.markImage) {
+                                    this.openMarkSign('hsm');
+        
+                                  } else {
+                                    this.hsmDialogSignOpen(this.recipientId);
+                                    this.spinner.hide();
+                                  }
+                                  this.spinner.hide();
+                                } else if (
+                                  [2, 3, 4].includes(this.datas.roleContractReceived) &&
+                                  haveSignCert
+                                ) {
+                                  if (this.markImage) {
+                                    this.openMarkSign('cert');
+                                  } else {
+                                    this.certDialogSignOpen(this.recipientId);
+                                    this.spinner.hide();
+                                  }
+                                  this.spinner.hide();
+                                } else if (
+                                  [2, 3, 4].includes(this.datas.roleContractReceived) &&
+                                  haveSignRemote
+                                ) {
+                                  if (this.markImage) {
+                                    this.openMarkSign('remote');
+        
+                                  } else {
+                                    this.remoteDialogSignOpen(this.recipientId);
+                                    this.spinner.hide();
+                                  }
+                                  this.spinner.hide();
+                                } 
+                                
+                                else if (
+                                  [2, 3, 4].includes(this.datas.roleContractReceived)
+                                ) {
+                                  this.signContractSubmit();
+                                } 
+                              }
+                            },
+                            (error: HttpErrorResponse) => {
+                              this.spinner.hide();
+                              this.toastService.showErrorHTMLWithTimeout(
+                                'error_check_signature',
+                                '',
+                                3000
+                              );
+                            }
+                          );
                       } else {
                         if (
-                          [2, 3, 4].includes(this.datas.roleContractReceived) &&
-                          haveSignImage
-                        ) {
-                          this.confirmOtpSignContract(
-                            id_recipient_signature,
-                            phone_recipient_signature
-                          );
-                          this.spinner.hide();
-                        } else if (
                           [2, 3, 4].includes(this.datas.roleContractReceived) &&
                           haveSignPKI
                         ) {
                           this.pkiDialogSignOpen();
                           this.spinner.hide();
                         } else if (
-                          [2, 3, 4].includes(this.datas.roleContractReceived) &&
-                          haveSignHsm
-                        ) {
-                          if (this.markImage) {
-                            this.openMarkSign('hsm');
-
-                          } else {
-                            this.hsmDialogSignOpen(this.recipientId);
-                            this.spinner.hide();
-                          }
-                          this.spinner.hide();
-                        } else if (
-                          [2, 3, 4].includes(this.datas.roleContractReceived) &&
-                          haveSignCert
-                        ) {
-                          if (this.markImage) {
-                            this.openMarkSign('cert');
-                          } else {
-                            this.certDialogSignOpen(this.recipientId);
-                            this.spinner.hide();
-                          }
-                          this.spinner.hide();
-                        } else if (
                           [2, 3, 4].includes(this.datas.roleContractReceived)
                         ) {
                           this.signContractSubmit();
-                        } 
+                        }
                       }
-                    },
-                    (error: HttpErrorResponse) => {
-                      this.spinner.hide();
-                      this.toastService.showErrorHTMLWithTimeout(
-                        'error_check_signature',
-                        '',
-                        3000
-                      );
-                    }
-                  );
-              } else {
-                if (
-                  [2, 3, 4].includes(this.datas.roleContractReceived) &&
-                  haveSignPKI
-                ) {
-                  this.pkiDialogSignOpen();
-                  this.spinner.hide();
-                } else if (
-                  [2, 3, 4].includes(this.datas.roleContractReceived)
-                ) {
-                  this.signContractSubmit();
-                }
+                    });
+                  }
+                });
+              } else if (
+                e &&
+                e == 1 &&
+                ((this.datas.roleContractReceived == 2 &&
+                  this.confirmConsider == 2) ||
+                  (this.datas.roleContractReceived == 3 &&
+                    this.confirmSignature == 2) ||
+                  (this.datas.roleContractReceived == 4 &&
+                    this.confirmSignature == 2))
+              ) {
+                await this.rejectContract();
+              }
+              if (e && e == 2) {
+                this.downloadContract(this.idContract);
               }
             });
           }
-        });
-      } else if (
-        e &&
-        e == 1 &&
-        ((this.datas.roleContractReceived == 2 &&
-          this.confirmConsider == 2) ||
-          (this.datas.roleContractReceived == 3 &&
-            this.confirmSignature == 2) ||
-          (this.datas.roleContractReceived == 4 &&
-            this.confirmSignature == 2))
-      ) {
-        await this.rejectContract();
-      }
-      if (e && e == 2) {
-        this.downloadContract(this.idContract);
-      }
-    });
+      })
+
   }
 
   imageDialogSignOpen(e: any, haveSignImage: boolean) {
@@ -1759,6 +1809,8 @@ export class ConsiderContractComponent
           this.signTokenVersion1(signUpdatePayload, notContainSignImage);
         else if (code == 'usb2')
           this.getSessionId(this.taxCodePartnerStep2, signUpdatePayload, notContainSignImage);
+        else if (code == 'remote')
+          this.remoteDialogSignOpen(this.recipientId);
       }
     });
   }
@@ -1843,6 +1895,7 @@ export class ConsiderContractComponent
   width: any;
   font: any;
   font_size: any;
+  currentBoxSignType: any
   async signDigitalDocument() {
     let typeSignDigital = this.typeSignDigital;
 
@@ -2542,6 +2595,204 @@ export class ConsiderContractComponent
         }
       }
       return true;
+    } else if (typeSignDigital == 8) {
+      this.currentBoxSignType = typeSignDigital
+      // REMOTE SIGNING
+      let boxSign: any
+
+      for (let i = 0; i < this.isDataObjectSignature.length; i++) {
+        if (this.isDataObjectSignature[i].type == 3) {
+          boxSign = this.isDataObjectSignature[i]
+          boxSign.index = i
+          break
+        }
+      }
+      boxSign = this.isDataObjectSignature.splice(boxSign.index, 1)[0]
+      this.isDataObjectSignature.push(boxSign)
+      for (const signUpdate of this.isDataObjectSignature) {
+        if (
+          signUpdate &&
+          (signUpdate.type == 1 ||
+            signUpdate.type == 3 ||
+            signUpdate.type == 4 || signUpdate.type == 5) &&
+          [3, 4].includes(this.datas.roleContractReceived) &&
+          signUpdate?.recipient?.email === this.currentUser.email &&
+          signUpdate?.recipient?.role === this.datas?.roleContractReceived
+        ) {
+          const objSign = this.isDataObjectSignature.filter(
+            (signUpdate: any) =>
+              signUpdate &&
+              signUpdate.type == 3 &&
+              [3, 4].includes(this.datas.roleContractReceived) &&
+              signUpdate?.recipient?.email === this.currentUser.email &&
+              signUpdate?.recipient?.role === this.datas?.roleContractReceived
+          );
+
+          let fileC = await this.contractService.getFileContractPromise(
+            this.idContract
+          );
+
+          const pdfC2 = fileC.find((p: any) => p.type == 2);
+          const pdfC1 = fileC.find((p: any) => p.type == 1);
+          if (pdfC2) {
+            fileC = pdfC2.path;
+          } else if (pdfC1) {
+            fileC = pdfC1.path;
+          } else {
+            return;
+          }
+
+          let signI = null;
+
+          if (!this.mobile)
+            this.convertXForHsm(signUpdate.page);
+          let fieldRemoteSigning = {
+            coordinate_x: signUpdate.signDigitalX,
+            coordinate_y: signUpdate.coordinate_y,
+            width: signUpdate.width ,
+            height: signUpdate.height,
+            page: signUpdate.page,
+          };
+
+          if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
+            this.textSign = signUpdate.valueSign;
+
+            this.font = signUpdate.font;
+            this.font_size = signUpdate.font_size;
+
+            this.width = signUpdate.width;
+
+            await of(null).pipe(delay(120)).toPromise();
+            const imageRender = <HTMLElement>(
+              document.getElementById('text-sign')
+            );
+
+            if (imageRender) {
+              const textSignB = await domtoimage.toPng(imageRender);
+              signI = this.textSignBase64Gen = textSignB.split(',')[1];
+            }
+          } else if (signUpdate.type == 3) {
+
+            try {
+              this.isDateTime = await this.timeService.getRealTime().toPromise();
+            } catch(err) {
+              this.isDateTime = new Date();
+            }
+            if(!this.isDateTime) this.isDateTime = new Date();
+            await of(null).pipe(delay(150)).toPromise();
+            let imageRender: HTMLElement | null = null;
+
+            //render khi role là 4 (văn thư) hoặc role khác (người ký)
+            if (this.markImage) {
+              imageRender = <HTMLElement>(
+                document.getElementById('export-remote-signing-remote-image')
+              );
+            } else {
+              imageRender = null
+            }
+
+            // fieldHsm.coordinate_y = fieldHsm.coordinate_y - 8;
+            // fieldHsm.height = imageRender.offsetHeight / 1.5;
+            // fieldHsm.width = imageRender.offsetWidth / 1.5;
+
+            if (imageRender) {
+              const textSignB = await domtoimage.toPng(
+                imageRender,
+                this.getOptions(imageRender)
+              );
+              signI = textSignB.split(',')[1];
+            }
+          }
+
+          if (!this.isRemoteSigningExpired) {
+            this.dataCert = {
+              field: fieldRemoteSigning,
+              cert_id: this.dataCert.cert_id,
+              imageBase64: (!this.markImage && signUpdate.type==3) ? null : 
+                            (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
+            };
+  
+            if (fileC && objSign.length) {
+                const checkSign = await this.contractService.signRemote(
+                  this.dataCert,
+                  this.recipientId,
+                  this.isTimestamp,
+                  signUpdate.type
+                );
+                if (!checkSign || (checkSign && !checkSign.success)) {
+                  if (!checkSign.message) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Đăng nhập không thành công',
+                      '',
+                      3000
+                    );
+                  } else if (checkSign.message) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      checkSign.message,
+                      '',
+                      3000
+                    );
+                  }
+  
+                  return false;
+                } else {
+                  if (checkSign.success === true) {
+                    if (pdfC2) {
+                      fileC = pdfC2.path;
+                    } else if (pdfC1) {
+                      fileC = pdfC1.path;
+                    }
+                  }
+                }
+            }
+          } else {
+            // truong hop qua han ky remote signing
+            if (signUpdate.type == 3) {
+              this.dataCert = {
+                field: fieldRemoteSigning,
+                cert_id: this.dataCert.cert_id,
+                imageBase64: (!this.markImage && signUpdate.type==3) ? null : 
+                              (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
+              };
+    
+              if (fileC && objSign.length) {
+                  const checkSign = await this.contractService.signRemote(
+                    this.dataCert,
+                    this.recipientId,
+                    this.isTimestamp,
+                    signUpdate.type
+                  );
+                  if (!checkSign || (checkSign && !checkSign.success)) {
+                    if (!checkSign.message) {
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Đăng nhập không thành công',
+                        '',
+                        3000
+                      );
+                    } else if (checkSign.message) {
+                      this.toastService.showErrorHTMLWithTimeout(
+                        checkSign.message,
+                        '',
+                        3000
+                      );
+                    }
+    
+                    return false;
+                  } else {
+                    if (checkSign.success === true) {
+                      if (pdfC2) {
+                        fileC = pdfC2.path;
+                      } else if (pdfC1) {
+                        fileC = pdfC1.path;
+                      }
+                    }
+                  }
+              }
+            }
+          }
+        }
+      }
+      return true;
     }
   }
 
@@ -2784,7 +3035,7 @@ export class ConsiderContractComponent
     }
 
     //Check ký usb token
-    if (typeSignDigital && typeSignDigital == 2) {
+    if (typeSignDigital && typeSignDigital == 2) { 
       const determineCoordination = await this.contractService
         .getDetermineCoordination(this.recipientId)
         .toPromise();
@@ -3290,7 +3541,7 @@ export class ConsiderContractComponent
       return;
     }
 
-    if (notContainSignImage && this.eKYC == false) {
+    if (notContainSignImage && this.eKYC == false && this.currentBoxSignType !== 8) {
       signUpdateTempN[0] = {
         "processAt": this.isDateTime
       };
@@ -3345,7 +3596,7 @@ export class ConsiderContractComponent
         }
       );
     } else {
-      if (this.eKYC == false) {
+      if (this.eKYC == false && this.currentBoxSignType !== 8) {
         this.contractService.updateInfoContractConsiderImg(signUpdateTempN, this.recipientId).subscribe(
           async (result) => {
             if (result?.success == false) {
@@ -3422,6 +3673,17 @@ export class ConsiderContractComponent
             this.spinner.hide();
           }
         );
+      }
+      if (this.currentBoxSignType == 8) {
+        // checking here 1
+        this.spinner.hide()
+        this.remoteDialogSuccessOpen().then(result => {
+          if (result.isDismissed) {
+            this.router.navigate([
+              'main/form-contract/detail/' + this.idContract,
+            ]);
+          }
+        })
       }
     }
   }
@@ -3743,6 +4005,7 @@ export class ConsiderContractComponent
         for (const recipient of participant.recipients) {
           if (this.recipientId == recipient.id) {
             this.recipient = recipient;
+            this.isRemoteSigningType = recipient.sign_type.some((item: any) => item.id == 8)
             if (this.currentUser?.email != this.recipient?.email) {
               this.router.navigate([
                 'main/form-contract/detail/' + this.idContract,
@@ -4055,6 +4318,106 @@ export class ConsiderContractComponent
     })
   }
 
+  async remoteDialogSignOpen(recipientId: number) {
+    this.spinner.hide();
+    const data = {
+      title: 'CHỮ KÝ REMOTE SIGNING',
+      is_content: 'forward_contract',
+      recipientId: recipientId,
+      dataContract: this.recipient,
+    };
+    const determineCoordination = await this.contractService.getDetermineCoordination(recipientId).toPromise();
+
+    let isInRecipient = false;
+    const participants = this.datas?.is_data_contract?.participants;
+
+    for (const participant of participants) {
+      for (const card of participant.recipients) {
+        for (const item of determineCoordination.recipients) {
+          if (item.card_id == card.card_id) {
+
+
+            isInRecipient = true;
+          }
+        }
+      }
+    }
+    if (!isInRecipient) {
+
+      this.toastService.showErrorHTMLWithTimeout(
+        'Bạn không có quyền xử lý hợp đồng này!',
+        '',
+        3000
+      );
+      if (this.type == 1) {
+        this.router.navigate(['/login']);
+        this.dialogRef.close();
+        this.spinner.hide();
+        return
+      } else {
+        this.router.navigate(['/main/dashboard']);
+        this.dialogRef.close();
+        this.spinner.hide();
+        return
+      }
+    }
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
+      const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+
+
+      let ArrRecipientsNew = false
+      ArrRecipients.map((item: any) => {
+        if (item.email === this.currentUser.email) {
+          ArrRecipientsNew = true
+          return
+        }
+      });
+
+
+      if (!ArrRecipientsNew) {
+
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        }
+      };
+
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = '497px';
+      dialogConfig.hasBackdrop = true;
+      dialogConfig.data = data;
+      dialogConfig.panelClass = 'custom-dialog-container';
+
+      const dialogRef = this.dialog.open(RemoteDialogSignComponent, dialogConfig);
+
+      dialogRef.afterClosed().subscribe(async (result: any) => {
+        let signI = null;
+        let imageRender = null;
+
+        this.cardId = result.ma_dvcs.trim();
+
+        if (result) {
+          this.dataCert.cert_id = result.ma_dvcs;
+
+          await this.signContractSubmit();
+        }
+      });
+    })
+  }
+
   pkiDialogSignOpen() {
     const data = {
       title: 'CHỮ KÝ PKI',
@@ -4322,4 +4685,56 @@ export class ConsiderContractComponent
     })
   }
 
+  remoteDialogSuccessOpen() {
+    return Swal.fire({
+      title: "THÔNG BÁO",
+      text: "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký hợp đồng!",
+      icon: 'info',
+      showCancelButton: true,
+      showConfirmButton: false,
+      cancelButtonColor: '#b0bec5',
+      cancelButtonText: "Thoát",
+      customClass: {
+        title: 'my-custom-title-class',
+      },
+    });
+  }
+
+  async getRemoteSigningCurrentStatusCall(recipId: any) {
+    this.contractService.getRemoteSigningCurrentStatus(recipId).subscribe(
+      (res: any) => {
+        if (res?.status == "QUA_THOI_GIAN_KY") {
+          this.isRemoteSigningExpired = true
+        }
+
+        if (res?.status == "DANG_XU_LY") {
+          this.isRemoteSigningProcessing = true
+        }
+        if (res?.status == "QUA_THOI_GIAN_KY" || res?.status == "DANG_XU_LY") {
+          this.remoteSigningProcessingStatusSwalfire(res?.status)
+        }
+      }
+    )
+  }
+
+  remoteSigningProcessingStatusSwalfire(code: string) {
+    return Swal.fire({
+      title: this.getTextAlertRemoteSigningProcess(code),
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#b0bec5',
+      confirmButtonText: this.translate.instant('confirm'),
+      cancelButtonText: this.translate.instant('contract.status.canceled'),
+    });
+  }
+
+  getTextAlertRemoteSigningProcess(code: any) {
+    switch (code) {
+      case "QUA_THOI_GIAN_KY":
+        return "Hợp đồng đã quá thời gian ký, vui lòng thực hiện ký lại trên web!"
+      case 'DANG_XU_LY':
+        return "Hợp đồng đang được xử lý, vui lòng thực hiện ký trên App và reload lại trang!"
+    }
+  }
 }

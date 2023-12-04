@@ -142,6 +142,10 @@ export class DetermineSignerComponent implements OnInit {
   // }
 
   changeTypeSign(d: any,index?: any,id?: any,role?: any) {
+    if (d.login_by == 'phone' || d.login_by == 'email') {
+      d.email = '';
+      d.phone = '';
+    }
 
     if(d.login_by == 'phone') {
       d.sign_type = d.sign_type.filter((p: any) => ![2, 7].includes(p.id));
@@ -225,7 +229,7 @@ export class DetermineSignerComponent implements OnInit {
         this.datas.is_determine_clone[index].recipients[i].name = this.datas.is_determine_clone[index].recipients[i].name.trim();
         this.datas.is_determine_clone[index].recipients[i].email = this.datas.is_determine_clone[index].recipients[i].email.trim();
         if (this.datas.is_determine_clone[index].recipients[i].login_by == "phone") {
-          this.datas.is_determine_clone[index].recipients[i].email = ''
+          this.datas.is_determine_clone[index].recipients[i].email = this.datas.is_determine_clone[index].recipients[i].phone
         } else if (this.datas.is_determine_clone[index].recipients[i].sign_type.filter((type: any) => type.id == 1).length == 0 &&
                   this.site == 'KD'
         ) {
@@ -527,7 +531,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   getDataSignCert(data: any){
-    return data.sign_type.filter((p: any) => p.id == 6);
+    return data.sign_type.filter((p: any) => p.id == 6 || p.id == 8);
   }
 
   // valid data step 2
@@ -578,13 +582,13 @@ export class DetermineSignerComponent implements OnInit {
         count++;
         break;
       }
-      if (!dataArr[i].card_id && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 5 || p.id == 4 || p.id == 2 || p.id == 6).length > 0) {
+      if (!dataArr[i].card_id && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 5 || p.id == 4 || p.id == 2 || p.id == 6 || p.id == 8).length > 0) {
         this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
         count++;
         break;
       }
 
-      if (!dataArr[i].card_id && dataArr[i].role == 4 && dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6).length > 0) {
+      if (!dataArr[i].card_id && dataArr[i].role == 4 && dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8).length > 0) {
         this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
         count++;
         break;

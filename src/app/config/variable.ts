@@ -61,6 +61,11 @@ export const type_signature = [
     id: 7,
     name: 'Ký số bằng USB token Ban Cơ Yếu',
     is_otp: false
+  },
+  {
+    id: 8,
+    name: 'Ký số Remote Signing',
+    is_otp: false
   }
 ];
 
@@ -98,6 +103,11 @@ export const type_signature_en = [
   {
     id: 7,
     name: 'Signed by USB token Ban Cơ Yếu',
+    is_otp: false
+  },
+  {
+    id: 8,
+    name: 'Signed by Remote Signing',
     is_otp: false
   }
 
@@ -145,6 +155,11 @@ export const type_signature_doc = [
   {
     id: 7,
     name: 'Ký số bằng USB token Ban Cơ Yếu',
+    is_otp: false
+  },
+  {
+    id: 8,
+    name: 'Ký số Remote Signing',
     is_otp: false
   }
 ];
