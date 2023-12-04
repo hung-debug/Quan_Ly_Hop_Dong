@@ -72,7 +72,8 @@ export class SidebarService {
   isBaoCaoSoLuongLoai: boolean = true; // báo cáo số lượng hợp đồng theo loại
   isBaoCaoHopDongNhan: boolean = true; //báo cáo hợp đồng nhận
   isBaoCaoHopDongEcontractMsale: boolean = true; // báo cáo hợp đồng số lượng hợp đồng eContract-mSale
-  isBaoCaoTrangThaiGuiSms: boolean = true; //báo cáo trạng thái gửi Sms/Email
+  isBaoCaoTrangThaiGuiSms: boolean = true; //báo cáo trạng thái gửi Sms
+  isBaoCaoTrangThaiGuiEmail: boolean = true; //báo cáo trạng thái gửi Email
 
   isConfigSms: boolean = true; //cấu hình sms
   isConfigSoonExpireDay: boolean = true;
@@ -290,6 +291,10 @@ export class SidebarService {
 
             this.isBaoCaoTrangThaiGuiSms = listRole.some(
               (element) => element.code == 'BAOCAO_TRANGTHAIGUI_SMS'
+            )
+
+            this.isBaoCaoTrangThaiGuiEmail = listRole.some(
+              (element) => element.code == 'BAOCAO_TRANGTHAIGUI_EMAIL'
             )
 
             this.isBaoCaoSoLuongLoai = listRole.some((element) => element.code == 'BAOCAO_SOLUONG_LOAIHOPDONG');
@@ -582,7 +587,7 @@ export class SidebarService {
         href: '/main/report/contract-number-econtract-mSale',
       })
     }
-    
+
     if(this.isBaoCaoTrangThaiGuiSms) {
       submenusReport.push({
         title: 'report.status.send.sms',
@@ -591,8 +596,16 @@ export class SidebarService {
       })
     }
 
+    if(this.isBaoCaoTrangThaiGuiEmail) {
+      submenusReport.push({
+        title: 'report.contract.send.email',
+        active: false,
+        href: '/main/report/status-send-email'
+      })
+    }
 
-    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai || this.isBaoCaoHopDongNhan || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiGuiSms) {
+
+    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai || this.isBaoCaoHopDongNhan || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiGuiSms || this.isBaoCaoTrangThaiGuiEmail) {
       this.menus.push({
         title: 'report',
         icon: '/assets/img/analytics1.svg',

@@ -40,6 +40,7 @@ import { ReportDetailComponent } from './main/report/report-detail/report-detail
 import { ReportStatusContractComponent } from './main/report/report-status-contract/report-status-contract.component';
 import { ReportSoonExpireComponent } from './main/report/report-soon-expire/report-soon-expire.component';
 import { ReportStatusSendSmsEmailComponent } from './main/report/report-status-send-sms-email/report-status-send-sms-email.component';
+import { ReportStatusSendEmailComponent } from './main/report/report-contract-send-email/report-contract-send-email.component';
 import { ReportContractNumberFollowStatusComponent } from './main/report/report-contract-number-follow-status/report-contract-number-follow-status.component';
 import { ReportContractNumberEcontractMsaleComponent } from './main/report/report-contract-number-eContract-mSale/report-contract-number-eContract-mSale.component';
 import { ContractNumberFollowTypeComponent } from './main/report/contract-number-follow-type/contract-number-follow-type.component';
@@ -219,10 +220,14 @@ const routes: Routes = [
             path: 'contract-number-econtract-mSale',
             component: environment.flag == 'NB'? ReportContractNumberEcontractMsaleComponent: PageNotFoundComponent
           },
-          //Báo cáo trạng thái gửi Sms/Email
+          //Báo cáo trạng thái gửi Sms
           {
             path: 'status-send-sms',
             component: ReportStatusSendSmsEmailComponent
+          },
+          {
+            path: 'status-send-email',
+            component: ReportStatusSendEmailComponent
           }
         ]
       },
