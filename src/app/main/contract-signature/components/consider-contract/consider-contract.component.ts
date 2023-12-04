@@ -1253,7 +1253,14 @@ export class ConsiderContractComponent
             this.remoteSigningProcessingStatusSwalfire(res.status)
             return
             // this.toastService.showWarningHTMLWithTimeout("Vui lòng ký hợp đồng trên App và reload lại trang!","",3000)
-          } else {
+          } else if (res.status == "HOAN_THANH") {
+            this.remoteSigningProcessingStatusSwalfire(res.status).then(res => {
+              if (res.isConfirmed) {
+                window.location.reload()
+              }
+            })
+          }
+          else {
             this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
               this.ArrRecipientsNew = response.recipients.filter(
                 (x: any) => x.email === this.currentUser.email
@@ -1309,7 +1316,7 @@ export class ConsiderContractComponent
                 );
                 return;
               } 
-              if (isRemoteSigning && res.status == "QUA_THOI_GIAN_KY") {
+              if (isRemoteSigning && (res.status == "QUA_THOI_GIAN_KY" || res.status == "THAT_BAI" || res.status == "TU_CHOI")) {
                 this.validateSignature = () => true
               }
               if (
@@ -3679,9 +3686,9 @@ export class ConsiderContractComponent
         this.spinner.hide()
         this.remoteDialogSuccessOpen().then(result => {
           if (result.isDismissed) {
-            this.router.navigate([
-              'main/form-contract/detail/' + this.idContract,
-            ]);
+            // this.router.navigate([
+            //   'main/form-contract/detail/' + this.idContract,
+            // ]);
           }
         })
       }
@@ -4703,14 +4710,14 @@ export class ConsiderContractComponent
   async getRemoteSigningCurrentStatusCall(recipId: any) {
     this.contractService.getRemoteSigningCurrentStatus(recipId).subscribe(
       (res: any) => {
-        if (res?.status == "QUA_THOI_GIAN_KY") {
+        if (res?.status == "QUA_THOI_GIAN_KY" || res?.status == "TU_CHOI" || res.status == "THAT_BAI") {
           this.isRemoteSigningExpired = true
         }
 
         if (res?.status == "DANG_XU_LY") {
           this.isRemoteSigningProcessing = true
         }
-        if (res?.status == "QUA_THOI_GIAN_KY" || res?.status == "DANG_XU_LY") {
+        if (res?.status == "QUA_THOI_GIAN_KY" || res?.status == "DANG_XU_LY" || res?.status == "TU_CHOI") {
           this.remoteSigningProcessingStatusSwalfire(res?.status)
         }
       }
@@ -4720,21 +4727,25 @@ export class ConsiderContractComponent
   remoteSigningProcessingStatusSwalfire(code: string) {
     return Swal.fire({
       title: this.getTextAlertRemoteSigningProcess(code),
-      icon: 'warning',
-      showCancelButton: true,
+      icon: code == 'HOAN_THANH' ? 'success' : 'warning',
+      showCancelButton: false,
       confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#b0bec5',
+      // cancelButtonColor: '#b0bec5',
       confirmButtonText: this.translate.instant('confirm'),
-      cancelButtonText: this.translate.instant('contract.status.canceled'),
+      // cancelButtonText: this.translate.instant('contract.status.canceled'),
     });
   }
 
   getTextAlertRemoteSigningProcess(code: any) {
     switch (code) {
       case "QUA_THOI_GIAN_KY":
-        return "Hợp đồng đã quá thời gian ký, vui lòng thực hiện ký lại trên web!"
-      case 'DANG_XU_LY':
-        return "Hợp đồng đang được xử lý, vui lòng thực hiện ký trên App và reload lại trang!"
+        return "Hợp đồng đã quá thời gian ký trên app, vui lòng thực hiện ký lại trên web!"
+      case "DANG_XU_LY":
+        return "Hợp đồng đang được xử lý, vui lòng thực hiện ký trên app và reload lại trang!"
+      case "HOAN_THANH":
+        return "Hợp đồng đã ký thành công!"
+      case "TU_CHOI":
+        return "Ký số không thành công, vui lòng thực hiện ký lại trên web!" 
     }
   }
 }
