@@ -182,12 +182,13 @@ export class EditHandlerComponent implements OnInit {
     };
 
     if (!this.validData()) {
-
+      this.spinner.hide();
       return;
     }
     else {
       if (this.name !== "") {
         if (JSON.stringify(this.data) === JSON.stringify(dataUpdate)) {
+          this.spinner.hide();
           return;
         }
         this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
