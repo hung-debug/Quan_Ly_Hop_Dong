@@ -1205,6 +1205,7 @@ export class ConsiderContractComponent
   isRemoteSigningProcessing: boolean = false
 
   isRemoteSigningType: boolean = false
+  countReject: number = 0
 
   async checkDifferentName() {
     const nameUpdate = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
@@ -1245,22 +1246,27 @@ export class ConsiderContractComponent
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.info;
-
-      this.contractService.getRemoteSigningCurrentStatus(this.recipientId).subscribe(
-        (res) => {
-          if (res.isPresent && res.status == "DANG_XU_LY") {
-            // this.toastService.showWarningHTMLWithTimeout("Hợp đồng đang được xử lý, vui lòng ký hợp đồng trên App và reload lại trang!","",3000)
+    
+    this.contractService.getRemoteSigningCurrentStatus(this.recipientId).subscribe(
+      (res) => {
+        if (res.isPresent && res.status == "DANG_XU_LY") {
+          // this.toastService.showWarningHTMLWithTimeout("Hợp đồng đang được xử lý, vui lòng ký hợp đồng trên app CA2 RS và reload lại trang!","",3000)
+          this.remoteSigningProcessingStatusSwalfire(res.status)
+          return
+          // this.toastService.showWarningHTMLWithTimeout("Vui lòng ký hợp đồng trên app CA2 RS và reload lại trang!","",3000)
+        } else if (res.status == "HOAN_THANH") {
+          this.remoteSigningProcessingStatusSwalfire(res.status).then(res => {
+            if (res.isConfirmed) {
+              window.location.reload()
+            }
+          })
+        }
+        else {
+          if (res.status == "TU_CHOI" && this.countReject == 0) {
+            console.log('this.countReject',this.countReject);
             this.remoteSigningProcessingStatusSwalfire(res.status)
-            return
-            // this.toastService.showWarningHTMLWithTimeout("Vui lòng ký hợp đồng trên App và reload lại trang!","",3000)
-          } else if (res.status == "HOAN_THANH") {
-            this.remoteSigningProcessingStatusSwalfire(res.status).then(res => {
-              if (res.isConfirmed) {
-                window.location.reload()
-              }
-            })
-          }
-          else {
+            this.countReject++
+          } else {
             this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
               this.ArrRecipientsNew = response.recipients.filter(
                 (x: any) => x.email === this.currentUser.email
@@ -1686,7 +1692,8 @@ export class ConsiderContractComponent
               }
             });
           }
-      })
+        }
+    })
 
   }
 
@@ -4712,6 +4719,7 @@ export class ConsiderContractComponent
       (res: any) => {
         if (res?.status == "QUA_THOI_GIAN_KY" || res?.status == "TU_CHOI" || res.status == "THAT_BAI") {
           this.isRemoteSigningExpired = true
+          if (res.status == "TU_CHOI") this.countReject++
         }
 
         if (res?.status == "DANG_XU_LY") {
@@ -4739,13 +4747,13 @@ export class ConsiderContractComponent
   getTextAlertRemoteSigningProcess(code: any) {
     switch (code) {
       case "QUA_THOI_GIAN_KY":
-        return "Hợp đồng đã quá thời gian ký trên app, vui lòng thực hiện ký lại trên web!"
+        return "Hợp đồng đã quá thời gian ký trên app CA2 RS, vui lòng thực hiện ký lại trên web!"
       case "DANG_XU_LY":
-        return "Hợp đồng đang được xử lý, vui lòng thực hiện ký trên app và reload lại trang!"
+        return "Hợp đồng đang được xử lý, vui lòng thực hiện ký trên app CA2 RS và reload lại trang!"
       case "HOAN_THANH":
         return "Hợp đồng đã ký thành công!"
       case "TU_CHOI":
-        return "Ký số không thành công, vui lòng thực hiện ký lại trên web!" 
+        return "Đã từ chối ký hợp đồng trên app CA2 RS, vui lòng thực hiện ký lại trên web!" 
     }
   }
 }
