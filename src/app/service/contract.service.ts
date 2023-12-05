@@ -112,6 +112,7 @@ export class ContractService {
   signHsmOldUrl: any = `${environment.apiUrl}/api/v1/sign/old-hsm/`
 
   signRemoteUrl: any = `${environment.apiUrl}/api/v1/sign/remote-signing/`;
+  signManyRemoteUrl: any = `${environment.apiUrl}/api/v1/sign/multi/remoteSigning`;
 
   getFilePdfForMobileUrl: any = `${environment.apiUrl}/api/v1/contracts/review/`;
 
@@ -1288,6 +1289,26 @@ export class ContractService {
 
     return this.http
       .post<any>(this.signRemoteUrl + recipientId, body, { headers: headers })
+      .toPromise();
+  }
+
+  signRemoteMulti(datas: any, recipientIds: [], isTimestamp: any, boxType: any) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    const body = JSON.stringify({
+      userCode: datas.cert_id,
+      image_base64: datas.imageBase64,
+      isTimestamp: false,
+      type: boxType,
+      field: datas.field,
+    });
+
+    return this.http
+      .post<any>(this.signManyRemoteUrl + "?id=" + recipientIds, body, { headers: headers })
       .toPromise();
   }
 

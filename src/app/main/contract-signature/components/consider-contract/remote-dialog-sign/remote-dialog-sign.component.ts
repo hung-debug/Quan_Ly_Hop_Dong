@@ -62,7 +62,7 @@ export class RemoteDialogSignComponent implements OnInit {
 
 
     this.myForm = this.fbd.group({
-      taxCode: this.fbd.control(this.datas.dataContract.card_id, [
+      taxCode: this.fbd.control(this.datas?.dataContract?.card_id ? this.datas?.dataContract?.card_id : this.data.userCode, [
         Validators.required,
         Validators.pattern(parttern.cardid)
       ]),

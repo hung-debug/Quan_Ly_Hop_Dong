@@ -29,6 +29,7 @@ import { DowloadPluginService } from 'src/app/service/dowload-plugin.service';
 import { CertDialogSignComponent } from './components/consider-contract/cert-dialog-sign/cert-dialog-sign.component';
 import { TimeService } from 'src/app/service/time.service';
 import { ProcessingHandleEcontractComponent } from '../contract-signature/shared/model/processing-handle-econtract/processing-handle-econtract.component';
+import { RemoteDialogSignComponent } from './components/consider-contract/remote-dialog-sign/remote-dialog-sign.component';
 // import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
@@ -1192,6 +1193,22 @@ export class ContractSignatureComponent implements OnInit {
             });
           });
       }
+    } else if (signId == 8) {
+      recipientId = contractsSignManyChecked
+        .filter((opt) => opt.checked)
+        .map((opt) => opt.id);
+
+      for (let i = 0; i < recipientId.length; i++) {
+        this.contractServiceV1
+          .getDetermineCoordination(recipientId[i])
+          .subscribe((response) => {
+            response.recipients.forEach((item: any) => {
+              if (item.id == recipientId[i]) {
+                taxCode.push(item.fields[0].recipient.cardId);
+              }
+            });
+          });
+      }
     }
 
     this.openDialogSignManyComponent(recipientId, taxCode, idSignMany, signId);
@@ -1545,7 +1562,143 @@ export class ContractSignatureComponent implements OnInit {
           this.spinner.hide()
         }
       })
+    } else if (signId == 8) {
+      //Ký nhiều remote signing
+      //Mở popup ký remote signing
+      let contractsSignManyChecked = this.contractsSignMany.filter(
+        (opt) => opt.checked
+      );
+      const data = {
+        id: 1,
+        title: 'CHỮ KÝ REMOTE SIGNING',
+        is_content: 'forward_contract',
+        userCode: taxCode[0]
+      };
+
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = '497px';
+      dialogConfig.hasBackdrop = true;
+      dialogConfig.data = data;
+
+      const dialogRef = this.dialog.open(
+        RemoteDialogSignComponent,
+        dialogConfig
+      );
+
+      dialogRef.afterClosed().subscribe(async (result: any) => {
+        if (result) {
+          this.nameCompany = result.ma_dvcs;
+
+          try {
+            this.isDateTime = await this.timeService.getRealTime().toPromise();
+          } catch(err) {
+            this.isDateTime = new Date();
+          }
+
+          if(!this.isDateTime) this.isDateTime = new Date();
+          await of(null).pipe(delay(100)).toPromise();
+
+
+          let signI = null;
+
+          if (result.mark) {
+            signI = this.srcMark.split(',')[1];
+          }
+
+          let manyRemoteSignData = {
+            cert_id: result.ma_dvcs,
+            imageBase64: result.mark ? signI : null,
+          }
+
+          this.spinner.show();
+          let recipientIds: any = contractsSignManyChecked.map(item => item.id)
+          //Call api ký nhiều remote signing
+          await this.contractServiceV1.signRemoteMulti(
+            manyRemoteSignData,
+            recipientIds,
+            null,
+            3
+          ).then(
+            (res: any) => {
+              this.spinner.hide();
+
+              let countSuccess = 0;
+              let checkSign = res
+              for (let i = 0; i < checkSign.length; i++) {
+                if (checkSign[i].result.success == false) {
+                  this.spinner.hide();
+    
+                  if (checkSign[i].result.message == 'Tax code do not match!') {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'taxcode.not.match',
+                      '',
+                      3000
+                    );
+                  } else if (
+                    checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
+                  ) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Mật khẩu cấp 2 không đúng',
+                      '',
+                      3000
+                    );
+                  } else if (
+                    checkSign[i].result.message == 'License ky so het han!'
+                  ) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'License ký số hết hạn!',
+                      '',
+                      3000
+                    );
+                  } else {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      checkSign[i].result.message,
+                      '',
+                      3000
+                    );
+                  }
+                  return;
+                } else {
+                  countSuccess++;
+                }
+              }
+
+              if (countSuccess == checkSign.length) {
+                this.spinner.hide();
+                this.remoteDialogSuccessOpen().then((res) => {
+                  if (res.isDismissed) {
+                    this.router
+                      .navigateByUrl('/', { skipLocationChange: true })
+                      .then(() => {
+                        this.router.navigate(['main/c/receive/processed']);
+                      });
+                  }
+                })
+              }
+            },
+            (err: any) => {
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout('Lỗi ký số','',3000)
+            }
+          )
+        }
+      });
     }
+  }
+
+  remoteDialogSuccessOpen() {
+    return Swal.fire({
+      title: "THÔNG BÁO",
+      text: "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký hợp đồng!",
+      icon: 'info',
+      showCancelButton: true,
+      showConfirmButton: false,
+      cancelButtonColor: '#b0bec5',
+      cancelButtonText: "Thoát",
+      customClass: {
+        title: 'my-custom-title-class',
+      },
+    });
   }
 
   getValueByKey(inputString: string, key: string) {
