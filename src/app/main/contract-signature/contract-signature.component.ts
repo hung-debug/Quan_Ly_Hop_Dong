@@ -1585,9 +1585,9 @@ export class ContractSignatureComponent implements OnInit {
         dialogConfig
       );
 
-      dialogRef.afterClosed().subscribe(async (result: any) => {
-        if (result) {
-          this.nameCompany = result.ma_dvcs;
+      dialogRef.afterClosed().subscribe(async (resultRS: any) => {
+        if (resultRS) {
+          this.nameCompany = resultRS.ma_dvcs;
 
           try {
             this.isDateTime = await this.timeService.getRealTime().toPromise();
@@ -1606,7 +1606,7 @@ export class ContractSignatureComponent implements OnInit {
           }
 
           let manyRemoteSignData = {
-            cert_id: result.ma_dvcs,
+            cert_id: resultRS.ma_dvcs,
             imageBase64: result.mark ? signI : null,
           }
 
