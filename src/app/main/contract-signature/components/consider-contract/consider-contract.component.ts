@@ -1255,11 +1255,13 @@ export class ConsiderContractComponent
           return
           // this.toastService.showWarningHTMLWithTimeout("Vui lòng ký hợp đồng trên app CA2 RS và reload lại trang!","",3000)
         } else if (res.status == "HOAN_THANH") {
-          this.remoteSigningProcessingStatusSwalfire(res.status).then(res => {
-            if (res.isConfirmed) {
-              window.location.reload()
-            }
-          })
+          // this.remoteSigningProcessingStatusSwalfire(res.status).then(res => {
+          //   if (res.isConfirmed) {
+          //     window.location.reload()
+          //   }
+          // })
+          this.toastService.showSuccessHTMLWithTimeout('success_sign','',3000)
+          window.location.reload()
         }
         else {
           if (res.status == "TU_CHOI" && this.countReject == 0) {
