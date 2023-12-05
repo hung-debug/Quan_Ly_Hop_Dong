@@ -70,10 +70,11 @@
     position: relative;
 
     .sidebar-header {
-      padding: 10px 20px;
       display: flex;
       align-items: center;
-      // height: 59px;
+      justify-content: center;
+      text-align: center;
+      height: 59px;
 
       >a {
         text-transform: uppercase;
