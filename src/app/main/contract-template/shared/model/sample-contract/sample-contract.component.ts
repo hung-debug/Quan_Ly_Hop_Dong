@@ -417,23 +417,27 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // loc du lieu khong trung nhau
     // lay du lieu trung ten, trung email (doi voi ky so + ky text da gan nguoi xu ly) + trung ten (doi voi ky text chua co nguoi xu ly)
     // (val.recipient_id as any) == (data.id as any) &&
-    dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
-    (
-      (val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && (val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any))
-      || (val.sign_unit == 'text' && (!val.recipient_id || ((val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any))))
-      || (val.sign_unit == 'so_tai_lieu' && (!val.recipient_id || ((val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any))))
-      || (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && (val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any))
-    )
 
-    ));
+    // dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
+    // (
+    //   (val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && (val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any))
+    //   || (val.sign_unit == 'text' && (!val.recipient_id || ((val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any))))
+    //   || (val.sign_unit == 'so_tai_lieu' && (!val.recipient_id || ((val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any))))
+    //   || (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && (val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any))
+    // )
+
+    // ));
 
     // Get những dữ liệu còn lại khi thay đổi
     let dataDiffirent: any[] = [];
     if (dataContractUserSign.length > 0 && dataDetermine.length > 0) {
-      dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) => !data.id_have_data &&
-        (val.sign_unit == "chu_ky_anh" && data.sign_type.some((p: any) => p.id == 1 || p.id == 5)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
-        (val.sign_unit == "chu_ky_so" && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8))) ||
-        val.name == data.name || (val.recipient ? val.recipient_id as any : val.email as any) == (val.recipient ? data.id as any : data.email as any)));
+      dataDiffirent = dataContractUserSign.filter(val => !dataDetermine.some((data: any) => 
+        (val.sign_unit == "chu_ky_anh" && data.sign_type.some((p: any) => p.id == 1 || p.id == 5) && val.recipient_id == data.id) || 
+        (val.sign_unit == 'text') || 
+        (val.sign_unit == 'so_tai_lieu') ||
+        (val.sign_unit == "chu_ky_so" && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8)) && val.recipient_id == data.id) 
+        // || ((val.recipient ? val.recipient_id as any : val.email as any) == (val.recipient ? data.id as any : data.email as any))
+      ));
     }
     // xoa nhung du lieu doi tuong bi thay doi
     if (dataDiffirent.length > 0) {
@@ -444,20 +448,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           */
           res.sign_config.forEach((element: any) => {
             //chi remove neu da duoc gan nguoi xu ly
-            if (!element.email || (element.id_have_data && dataDiffirent.some((p: any) => p.id_have_data == element.id_have_data))) {
-
-            } else {
-              if (element.id_have_data) {
-                this.removeDataSignChange(element.id_have_data);
-              }
-            }
+            if ((element.id_have_data && dataDiffirent.some((p: any) => p.id_have_data == element.id_have_data))) {
+              this.removeDataSignChange(element.id_have_data);
+            } 
           })
           /*
           end
           */
           //giu lai cac ban ghi chua gan nguoi xu ly + o so tai lieu chua gan nguoi xu ly + o text da co ten chua gan nguoi xu ly + da gan nguoi xu ly va nguoi xu ly con ton tai
           //!(val.recipient ? val.recipient : val.name) ||
-          res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) => !(val.recipient ? val.recipient : val.name) ||
+          res.sign_config = res.sign_config.filter((val: any) => !dataDiffirent.some((data: any) => !(val.recipient ? val.recipient : val.name) ||
             (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'so_tai_lieu')
             || (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'text' && val.text_attribute_name)
             || (
