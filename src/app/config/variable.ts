@@ -481,8 +481,12 @@ export var roleList =
 
       //Báo cáo hợp đồng nhận
       {label: 'role.contract.receive', value:'BAOCAO_HOPDONG_NHAN'},
-      //Báo cáo trạng thái gửi Sms/Email
-      {label: 'role.report.history.send.sms', value:'BAOCAO_TRANGTHAIGUI_SMS'}
+
+      //Báo cáo trạng thái gửi Sms
+      {label: 'role.report.history.send.sms', value:'BAOCAO_TRANGTHAIGUI_SMS'},
+
+      //Báo cáo trạng thái gửi Email
+      {label: 'role.report.history.send.email', value:'BAOCAO_TRANGTHAIGUI_EMAIL'}
     ]
 
   },
@@ -675,8 +679,10 @@ export var roleListNB =
 
       //Báo cáo số lượng hợp đồng econtract-mSale
       {label: 'role.number.contract.econtract.msale', value:'BAOCAO_SOLUONG_HOPDONG_ECONTRACT_MSALE'},
-      //Báo cáo trạng thái gửi Sms/Email
-      {label: 'role.report.history.send.sms', value:'BAOCAO_TRANGTHAIGUI_SMS'}
+      //Báo cáo trạng thái gửi Sms
+      {label: 'role.report.history.send.sms', value:'BAOCAO_TRANGTHAIGUI_SMS'},
+      //Báo cáo trạng thái gửi Email
+      {label: 'role.report.history.send.email', value:'BAOCAO_TRANGTHAIGUI_EMAIL'}
     ]
 
   },

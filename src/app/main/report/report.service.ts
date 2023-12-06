@@ -16,7 +16,9 @@ export class ReportService {
   exportReportSmsUrl: any = `${environment.apiUrl}/api/v1/contracts/rp-by-sms-log/export`
   contractGroupUrl: any = `${environment.apiUrl}/api/v1/contracts-group`
   msaleReportUrl: any = `${environment.apiUrl}/api/v1/contracts/rp-by-contract-type/`
-
+  reportEmailUrl: any = `${environment.apiUrl}/api/v1/contracts/email-report`
+  exportReportEmailUrl: any = `${environment.apiUrl}/api/v1/contracts/rp-by-email-log/export`
+  detailReportEmail: any = `${environment.apiUrl}/api/v1/notification/email-detail/`
 
   constructor(
     private http: HttpClient
@@ -88,6 +90,43 @@ export class ReportService {
       return this.http.post<any>(this.reportSmsUrl + params, body, {headers: headers});
     }
 
+  }
+
+  exportEmailReport(params: any, data: any, isExport: boolean) {
+    this.getCurrentUser();
+
+    let headers = null;
+
+    const body = JSON.stringify({
+      orgId: data.orgId,
+      startDate: data.startDate,
+      endDate: data.endDate,
+    })
+
+    if(isExport) {
+      headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    } else {
+      headers = new HttpHeaders().append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    }
+
+    if (isExport) {
+      return this.http.post<any>(this.exportReportEmailUrl + params, body, { headers: headers,responseType: 'blob' as 'json'}).pipe();
+    } else {
+      return this.http.post<any>(this.reportEmailUrl + params, body, {headers: headers});
+    }
+
+  }
+
+  detailContentEmailReport(id: any){
+    this.getCurrentUser();
+    let headers = null;
+    headers = new HttpHeaders()
+    .append('Content-Type', 'text/html')
+    .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.detailReportEmail + id,{headers: headers, responseType: 'text' as any}).pipe();
   }
 
   exportMsale(code: string, orgId: number, type:any, params: any, excel: boolean) {

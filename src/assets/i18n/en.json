@@ -559,6 +559,7 @@
   "report.number.contracts.type.sign.full":"Report the number of contracts in the type of sign",
   "report.number.econtract.msale":"Report the number of contracts eContract - mSale",
   "report.status.send.sms": "Report SMS sending status",
+  "report.contract.send.email": "Report history send email",
   "include.org1":"Including sub-organizations (Sub-organizations include only tier-one sub-organizations)",
   "contract.time.create": "Time create",
   "signing.expiration.date":"Sign expiration time",
@@ -656,6 +657,7 @@
   "role.contract.receive":"Report contract receive",
   "role.number.contract.econtract.msale":"Report quantity of contracts eContract - mSale ",
   "role.report.history.send.sms":"Report SMS sending history",
+  "role.report.history.send.email":"Report EMAIL sending history",
   "currency": "Currency",
   "default": "Default",
   "customer.delete": "Delete partner",
@@ -761,5 +763,7 @@
   "multi.delete.draft.success": "Delete multi draft contract successfully",
   "error.multi.delete.draft": "Delete multi draft contract fail",
   "choose.contract.draft":"Please choose the draft contract",
-  "expire.status":"Expire"
+  "expire.status":"Expire",
+  "report.email": "EMAIL",
+  "content.email": "CONTENT EMAIL"
 }
