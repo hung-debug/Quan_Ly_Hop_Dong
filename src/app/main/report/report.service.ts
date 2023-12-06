@@ -99,6 +99,7 @@ export class ReportService {
 
     const body = JSON.stringify({
       orgId: data.orgId,
+      contractInfo: data.contractInfo,
       startDate: data.startDate,
       endDate: data.endDate,
     })
