@@ -65,7 +65,7 @@
               <img ngbTooltip="{{'content' | translate}}" src="../../../assets/img/icon_file_sms.svg" width="20px"
                 (click)="contentEmail(list.id)" style="cursor: pointer;" />
             </td>
-            <td>{{convertTime(list.createDate)}}</td> <!--Thời gian gửi-->
+            <td>{{this.convertTime(list.createAt)}}</td> <!--Thời gian gửi-->
             <td style="text-align: center;">{{list.contractStatus}}</td>
           </ng-container>
         </tr>
