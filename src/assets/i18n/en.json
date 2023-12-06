@@ -764,5 +764,6 @@
   "error.multi.delete.draft": "Delete multi draft contract fail",
   "choose.contract.draft":"Please choose the draft contract",
   "expire.status":"Expire",
-  "report.email": "EMAIL"
+  "report.email": "EMAIL",
+  "content.email": "CONTENT EMAIL"
 }

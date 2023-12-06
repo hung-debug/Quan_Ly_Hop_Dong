@@ -742,6 +742,7 @@
   "phone": "SĐT",
   "content":"Nội dung",
   "content.sms": "NỘI DUNG GỬI SMS",
+  "content.email": "NỘI DUNG GỬI EMAIL",
   "report.msale.search.failed": "Tra cứu báo cáo thất bại",
   "report.msale.download.failed": "Xuất file báo cáo thất bại",
   "download.success": "Tải xuống thành công",

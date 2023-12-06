@@ -11,7 +11,7 @@ import { Table } from 'primeng/table';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import * as moment from 'moment-timezone';
 import { MatDialog } from '@angular/material/dialog';
-import { ContentSmsComponent } from '../report-status-send-sms-email/content-sms/content-sms.component';
+import { ContentEmailComponent } from '../report-contract-send-email/content-email/content-email.component';
 
 @Component({
   selector: 'app-report-status-send-email',
@@ -118,13 +118,14 @@ export class ReportStatusSendEmailComponent implements OnInit {
     this.typeList = inforType;
   }
 
-  contentSMS(dataSendLog: any) {
+  contentEmail(id: any) {
     const data = {
-      title: 'content.sms',
-      dataSendLog: dataSendLog,
+      title: 'content.email',
+      id: id,
     };
-    const dialogRef = this.dialog.open(ContentSmsComponent, {
-      width: '600px',
+    const dialogRef = this.dialog.open(ContentEmailComponent, {
+      width: '900px',
+      height: '700px',
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
@@ -200,7 +201,6 @@ export class ReportStatusSendEmailComponent implements OnInit {
 
     let payloadData = {
       "orgId": idOrg,
-      "contractInfo": this.contractInfo,
       "startDate": from_date,
       "endDate": to_date,
     }
@@ -209,7 +209,7 @@ export class ReportStatusSendEmailComponent implements OnInit {
     try {
       if (!isExport) {
         this.spinner.show()
-        await this.reportService.exportSmsReport(params, payloadData, false).toPromise().then(
+        await this.reportService.exportEmailReport(params, payloadData, false).toPromise().then(
           (res: any) => {
             this.table.first = 0
             this.list = [];
@@ -219,7 +219,7 @@ export class ReportStatusSendEmailComponent implements OnInit {
         )
       } else {
         this.spinner.show()
-        await this.reportService.exportSmsReport(params, payloadData, true).toPromise().then(
+        await this.reportService.exportEmailReport(params, payloadData, true).toPromise().then(
           (res: any) => {
             // this.list = [];
             this.spinner.hide()
@@ -246,7 +246,7 @@ export class ReportStatusSendEmailComponent implements OnInit {
     // Create an anchor element for downloading the file
     const a = document.createElement('a');
     a.href = url;
-    a.download = `Sms_Report_${selectedStartDate + '_' + selectedEndDate}.xlsx`; // Specify the file name for the download
+    a.download = `Email_Report_${selectedStartDate + '_' + selectedEndDate}.xlsx`; // Specify the file name for the download
 
     // Trigger a click event to initiate the download
     a.click();

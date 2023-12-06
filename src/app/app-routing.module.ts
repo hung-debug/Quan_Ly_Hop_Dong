@@ -53,6 +53,7 @@ import {DigitalCertificateAddComponent} from './main/digital-certificate/digital
 import {DigitalCertificateDetailComponent} from './main/digital-certificate/digital-certificate-detail/digital-certificate-detail.component';
 import {DigitalCertificateEditComponent} from './main/digital-certificate/digital-certificate-edit/digital-certificate-edit.component';
 import {ContentSmsComponent} from './main/report/report-status-send-sms-email/content-sms/content-sms.component';
+import {ContentEmailComponent} from './main/report/report-contract-send-email/content-email/content-email.component';
 import { ReportContractReceiveComponent } from './main/report/report-contract-receive/report-contract-receive.component';
 import { environment } from 'src/environments/environment';
 
