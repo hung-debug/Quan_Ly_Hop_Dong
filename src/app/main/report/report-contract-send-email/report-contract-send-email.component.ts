@@ -155,7 +155,7 @@ export class ReportStatusSendEmailComponent implements OnInit {
       },
       {
         header: 'report.email',
-        style: 'text-align: center;',
+        style: 'text-align: left;',
         colspan: 1,
         rowspan: 1,
       },
@@ -201,6 +201,7 @@ export class ReportStatusSendEmailComponent implements OnInit {
 
     let payloadData = {
       "orgId": idOrg,
+      "contractInfo": this.contractInfo,
       "startDate": from_date,
       "endDate": to_date,
     }
