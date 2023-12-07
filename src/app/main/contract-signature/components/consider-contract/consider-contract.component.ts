@@ -2064,6 +2064,7 @@ export class ConsiderContractComponent
                 this.base64Data
               );
               if (!sign.recipient_id) {
+                this.spinner.hide()
                 this.toastService.showErrorHTMLWithTimeout(
                   'Lỗi ký USB Token',
                   '',
@@ -3379,7 +3380,7 @@ export class ConsiderContractComponent
       );
 
       if (dataSignatureToken.ResponseCode != 0) {
-
+        this.spinner.hide()
         this.toastService.showErrorHTMLWithTimeout(
           'Lỗi ký usb token ' + dataSignatureToken.ResponseMsg,
           '',
@@ -3396,9 +3397,10 @@ export class ConsiderContractComponent
         fieldName,
         hexDigestTempFile
       );
-    } catch (err) {
+    } catch (err: any) {
+      this.spinner.hide()
       this.toastService.showErrorHTMLWithTimeout(
-        'Lỗi ký usb token ' + err,
+        `Lỗi ký usb token (${err ? err.statusText : 'error'})` ,
         '',
         3000
       );
