@@ -328,9 +328,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           if(clone.recipients[k].id == signImage.recipient_id) {
              this.datas.contract_user_sign[numberSign].sign_config[j].email = clone.recipients[k].email;
              this.datas.contract_user_sign[numberSign].sign_config[j].phone = clone.recipients[k].phone;
-             if(this.datas.contract_user_sign[numberSign].sign_config[j].recipient)
-             this.datas.contract_user_sign[numberSign].sign_config[j].recipient.email = clone.recipients[k].email;
-             this.datas.contract_user_sign[numberSign].sign_config[j].recipient.phone = clone?.recipients[k]?.phone;
+             if(this.datas.contract_user_sign[numberSign].sign_config[j].recipient) {
+               this.datas.contract_user_sign[numberSign].sign_config[j].recipient.email = clone.recipients[k].email;
+               this.datas.contract_user_sign[numberSign].sign_config[j].recipient.phone = clone?.recipients[k]?.phone;
+             }
              this.datas.contract_user_sign[numberSign].sign_config[j].name = clone.recipients[k].name;
           }
         }
@@ -478,10 +479,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     for (const d of dataContractUserSign) {
       for (const data of dataDetermine) {
-        if (((d.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5)) ||
+        if (((d.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && d.recipient_id == data.id) ||
           (d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
           (d.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
-          (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8))) &&
+          (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && d.recipient_id == data.id)) &&
           (((d.email ? d.email : d.recipient?.email) === data.email) || ((d.phone ? d.phone : d.recipient?.phone) == data.phone)) ||
           (!d.recipient && d.sign_unit == 'text') ||
           ((!d.email || !d.phone) && this.datas.contract_no && d.sign_unit == 'so_tai_lieu')) {
@@ -526,7 +527,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             isContractSign.some((data: any) =>
               ((val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email as any : data.email as any) ||
               (val.recipient ? val.recipient.phone as any : val.phone as any) === (data.recipient ? data.recipient.phone as any : data.phone as any)) &&
-              val.sign_unit == data.sign_unit));
+              val.sign_unit == data.sign_unit &&
+              val.recipient_id == data.recipient_id
+            ));
           // res.sign_config = isContractSign;
           res.sign_config.forEach((items: any) => {
             items.id = items.id + '1';
