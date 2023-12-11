@@ -87,6 +87,8 @@ export class ForwardContractComponent implements OnInit {
           //Chữ ký CTS
           let data_sign_cts = q.sign_type.filter((p: any) => p.id == 6)[0];
 
+          let data_sign_rs = q.sign_type.filter((p: any) => p.id == 8)[0];
+
           if (data_sign_cka) {
             this.isReqPhone = true;
           }
@@ -101,7 +103,7 @@ export class ForwardContractComponent implements OnInit {
           if (data_sign_cardIdToken) {
             this.isReqCardIdToken = true;
           }
-          if (data_sign_cts) {
+          if (data_sign_cts || data_sign_rs) {
             this.isReqCardIdCts = true;
           }
 
@@ -130,8 +132,8 @@ export class ForwardContractComponent implements OnInit {
     const currentRecipientData = this.getTargetRecipientData(this.datas?.recipientId);
 
     if(currentRecipientData.sign_type.length > 0) {
-      if(currentRecipientData.sign_type[0].id == 2 || currentRecipientData.sign_type[0].id == 4 || currentRecipientData.sign_type[0].id == 6) {
-        this.dataSign = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6);
+      if(currentRecipientData.sign_type[0].id == 2 || currentRecipientData.sign_type[0].id == 4 || currentRecipientData.sign_type[0].id == 6 || currentRecipientData.sign_type[0].id == 8) {
+        this.dataSign = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8);
       } else if(currentRecipientData.sign_type[0].id == 1 ||  currentRecipientData.sign_type[0].id == 5) {
         this.dataSign = this.signTypeList.filter((p: any) => p.id == 1 || p.id == 5);
       } else if(currentRecipientData.sign_type[0].id == 3 || currentRecipientData.sign_type[0].id == 7) {
@@ -180,7 +182,12 @@ export class ForwardContractComponent implements OnInit {
       this.isReqCardIdCts = true;
       this.isReqCardIdHsm = false;
       this.isReqCardIdToken = false;
-    }
+    } else if(event.id == 8){
+      this.isReqCardIdCts = true;
+      this.isReqCardIdHsm = false;
+      this.isReqCardIdToken = false;
+      this.isReqPhone = false;
+    } 
     this.currentSignType = event.id
   }
 
@@ -222,8 +229,8 @@ export class ForwardContractComponent implements OnInit {
       const currentRecipientData = this.getTargetRecipientData(this.datas?.recipientId);
 
       if(currentRecipientData.sign_type.length > 0) {
-        if(currentRecipientData.sign_type[0].id == 2 || currentRecipientData.sign_type[0].id == 4 || currentRecipientData.sign_type[0].id == 6) {
-          this.dataSign = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6);
+        if(currentRecipientData.sign_type[0].id == 2 || currentRecipientData.sign_type[0].id == 4 || currentRecipientData.sign_type[0].id == 6 || currentRecipientData.sign_type[0].id == 8) {
+          this.dataSign = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8);
           if(currentRecipientData.sign_type[0].id == 2 ) {
             this.isReqCardIdToken = true;
             this.isReqCardIdHsm = false;
@@ -232,11 +239,11 @@ export class ForwardContractComponent implements OnInit {
             this.isReqCardIdToken = false;
             this.isReqCardIdHsm = true;
             this.isReqCardIdCts = false;
-          } else {
+          } else if (currentRecipientData.sign_type[0].id == 6 || currentRecipientData.sign_type[0].id == 8) {
             this.isReqCardIdCts = true;
             this.isReqCardIdToken = false;
             this.isReqCardIdHsm = false;
-          }
+          } 
         } else if(currentRecipientData.sign_type[0].id == 1 ||  currentRecipientData.sign_type[0].id == 5) {
           this.dataSign = this.signTypeList.filter((p: any) => p.id == 1 || p.id == 5);
         } else if(currentRecipientData.sign_type[0].id == 3 || currentRecipientData.sign_type[0].id == 7) {
