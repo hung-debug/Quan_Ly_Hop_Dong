@@ -8,6 +8,7 @@ import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgxSpinnerService } from "ngx-spinner";
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-remote-dialog-sign',
@@ -23,6 +24,7 @@ export class RemoteDialogSignComponent implements OnInit {
   submitted = false;
   currentUser: any;
   taxCode: any;
+  mobile: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -34,6 +36,8 @@ export class RemoteDialogSignComponent implements OnInit {
     private toastService: ToastService,
     public dialogRef: MatDialogRef<RemoteDialogSignComponent>,
     private spinner: NgxSpinnerService,
+    private deviceService: DeviceDetectorService,
+
   ) {
     this.myForm = this.fbd.group({
       taxCode: this.fbd.control("", [Validators.required,
@@ -115,6 +119,16 @@ export class RemoteDialogSignComponent implements OnInit {
           }
         }
       })
+  
+    this.getDeviceApp()
+  }
+
+  getDeviceApp() {
+    if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
+      this.mobile = true;
+    } else {
+      this.mobile = false;
+    }
   }
 
   fieldTextType1: boolean = false;

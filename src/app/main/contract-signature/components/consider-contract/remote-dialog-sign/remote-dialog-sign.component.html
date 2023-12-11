@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div *ngIf="!this.mobile" class="container-fluid">
   <div class="header">
     <h3 class="label-header">{{this.datas.title | translate}}</h3>
   </div>
@@ -16,6 +16,30 @@
           </div>
       </div> 
       <div class="row" style="justify-content: center;padding-top: 10px;">
+          <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'exit' | translate}}</button>
+          <button class="save-button" (click)="onSubmit()">{{'confirm' | translate}}</button>
+      </div>
+  </form>
+</div>
+
+<div *ngIf="this.mobile" class="container-fluid" style="padding-top: 1.25em;">
+  <div class="header">
+    <h3 class="label-header">{{this.datas.title | translate}}</h3>
+  </div>
+  <form [formGroup]="myForm" class="content">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="label text-color">{{'tax_code.cardId' | translate}} <span class="required-title">*</span></div>
+              <div class="input-data">
+                  <input type="text" formControlName="taxCode" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" autofocus>
+              </div>
+              <div *ngIf="submitted && f.taxCode.errors" class="invalid">
+                <div *ngIf="f.taxCode.errors.required">{{'taxcode.blank' | translate}}</div>
+                <div *ngIf="f.taxCode.errors.pattern">{{'taxcode.format' | translate}}</div>
+              </div>
+          </div>
+      </div> 
+      <div class="row" style="justify-content: center;padding-top: 10px; padding-bottom: 1.25em;">
           <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'exit' | translate}}</button>
           <button class="save-button" (click)="onSubmit()">{{'confirm' | translate}}</button>
       </div>
