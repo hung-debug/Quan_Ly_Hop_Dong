@@ -248,6 +248,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       this.error = false;
       if (this.type == 0) {
         this.router.navigate(['/main/dashboard']);
+        localStorage.setItem("countNoti","0")
 
       } else {
         this.router.navigate([localStorage.getItem('url')]);
