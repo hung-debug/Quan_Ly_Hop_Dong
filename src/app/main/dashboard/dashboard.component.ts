@@ -52,7 +52,12 @@ export class DashboardComponent implements OnInit {
   selectedNodeOrganization: any;
   isQLHD_03: boolean | undefined;
   isQLHD_04: boolean | undefined;
-
+  currentDate: Date;
+  daysRemaining: number;
+  formattedEndDate: string;
+  message: string;
+  endLicense: any;
+  countNoti: any = 0;
   constructor(
     private appService: AppService,
     private dashboardService: DashboardService,
@@ -74,10 +79,59 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.appService.setTitle("menu.dashboard");
     this.search();
-    
+    let count = localStorage.getItem('countNoti')
     let userId = this.userService.getAuthCurrentUser().id;
     this.userService.getUserById(userId).subscribe(
       data => {
+        let countNotiWarning: number = localStorage.getItem('countNoti') as any
+        countNotiWarning++;
+        localStorage.setItem("countNoti",countNotiWarning.toString())
+
+        if(count == '0'){
+          countNotiWarning++;
+          localStorage.setItem("countNoti",countNotiWarning.toString())
+          this.currentDate = new Date();
+
+          this.endLicense = new Date(data.organization.endLicense);
+          this.daysRemaining = Math.floor((new Date(this.endLicense).getTime() - this.currentDate.getTime()) / (1000 * 60 * 60 * 24));
+
+          if(this.daysRemaining < 60 && this.currentDate < this.endLicense){
+            this.message = `Thời gian sử dụng dịch vụ sẽ hết hạn vào ngày ${data.organization.endLicense}`;
+            this.toastService.showWarningHTMLWithTimeout(this.message, "", 3000);
+          } else if(this.currentDate > this.endLicense){
+            this.toastService.showErrorHTMLWithTimeout('Thời gian sử dụng dịch vụ đã hết', "", 3000);
+          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfSms < 30 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfCeca){
+            this.toastService.showWarningHTMLWithTimeout('Số lượng Hợp đồng/SMS/eKYC/Xác thực CeCA sắp hết', "", 3000);
+          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfSms < 30 && data.organization.numberOfContractsCanCreate < 30){
+            this.toastService.showWarningHTMLWithTimeout('Số lượng Hợp đồng/SMS/eKYC', "", 3000);
+          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfSms < 30 && data.organization.numberOfCeca < 30){
+            this.toastService.showWarningHTMLWithTimeout('Số lượng SMS/eKYC/Xác thực CeCA sắp hết', "", 3000);
+          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfCeca < 30){
+            this.toastService.showWarningHTMLWithTimeout('Số lượng Hợp đồng/eKYC/Xác thực CeCA sắp hết', "", 3000);
+          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfCeca < 30){
+            this.toastService.showWarningHTMLWithTimeout('Số lượng Hợp đồng/SMS/Xác thực CeCA sắp hết', "", 3000);
+          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfCeca < 30){
+            this.toastService.showWarningHTMLWithTimeout('Số lượng Hợp đồng/Xác thực CeCA sắp hết', "", 3000);
+          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfSms < 30){
+            this.toastService.showWarningHTMLWithTimeout('Số lượng Hợp đồng/SMS sắp hết', "", 3000);
+          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfEkyc < 30){
+            this.toastService.showWarningHTMLWithTimeout('Số lượng Hợp đồng/eKYC sắp hết', "", 3000);
+          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfEkyc < 30){
+            this.toastService.showWarningHTMLWithTimeout('Số lượng SMS/eKYC sắp hết', "", 3000);
+          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfCeca < 30){
+            this.toastService.showWarningHTMLWithTimeout('Số lượng SMS/Xác thực CeCA sắp hết', "", 3000);
+          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfCeca < 30){
+            this.toastService.showWarningHTMLWithTimeout('Số lượng eKYC/Xác thực CeCA sắp hết', "", 3000);
+          } else if (data.organization.numberOfSms < 30){
+            this.toastService.showWarningHTMLWithTimeout('Số lượng SMS sắp hết', "", 3000);
+          } else if (data.organization.numberOfEkyc < 30) {
+            this.toastService.showWarningHTMLWithTimeout('Số lượng eKYC sắp hết', "", 3000);
+          } else if (data.organization.numberOfContractsCanCreate < 30) {
+            this.toastService.showWarningHTMLWithTimeout('Số lượng Hợp đồng sắp hết', "", 3000);
+          } else if (data.organization.numberOfCeca < 30) {
+            this.toastService.showWarningHTMLWithTimeout('Số lượng Xác thực CeCA sắp hết', "", 3000);
+          }
+        }
         //lay id role
         this.roleService.getRoleById(data?.role_id).subscribe(
           data => {
@@ -219,19 +273,19 @@ export class DashboardComponent implements OnInit {
       newData.organization_id = this.organization_id;
       newData.from_date = this.filter_from_date;
       newData.to_date = this.filter_to_date;
-      
+
       this.totalCreate = newData.total_process + newData.total_signed + newData.total_reject + newData.total_cancel + newData.total_expires;
 
       let numContractHeight = document.getElementById('num-contract')?.offsetHeight || 0;
       let numContractBodyHeight = document.getElementById('num-contract-body')?.offsetHeight || 0;
       let notiHeight = document.getElementById('noti')?.offsetHeight || 450;
-      
+
       this.chartHeight = numContractHeight + notiHeight + numContractBodyHeight - 37;
-      
+
       if(localStorage.getItem('lang') == 'vi' || sessionStorage.getItem('lang') == 'vi')
         this.createChart("Đang xử lý","Hoàn thành","Từ chối","Huỷ bỏ", "Quá hạn", "Số lượng", newData);
       else if(localStorage.getItem('lang') == 'en' || sessionStorage.getItem('lang') == 'en')
-        this.createChart("Processing","Complete","Reject","Cancel","Out of date", "Number", newData);     
+        this.createChart("Processing","Complete","Reject","Cancel","Out of date", "Number", newData);
     });
   }
 
@@ -324,7 +378,7 @@ export class DashboardComponent implements OnInit {
           },
         }
       },
-      
+
 
       series: [
         {
@@ -347,7 +401,7 @@ export class DashboardComponent implements OnInit {
     let numContractBodyHeight = document.getElementById('num-contract-body')?.offsetHeight || 450;
     let numContractHeight = document.getElementById('num-contract')?.offsetHeight || 0;
     let notiHeight = chartHeight - numContractBodyHeight - numContractHeight;
-    
+
     return {
       'height': notiHeight + 'px',
       'overflow': 'auto'
@@ -358,7 +412,7 @@ export class DashboardComponent implements OnInit {
     this.searchCountCreate();
 
     this.dashboardService.countContractReceived("", "").subscribe(data => {
-      
+
       this.numberWaitProcess = data.processing;
       this.numberComplete = data.processed;
       this.numberExpire = data.prepare_expires;
@@ -367,7 +421,7 @@ export class DashboardComponent implements OnInit {
 
     this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
       this.listNotification = data.entities;
-      
+
     });
   }
 }
