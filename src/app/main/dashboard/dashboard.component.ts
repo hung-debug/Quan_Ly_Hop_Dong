@@ -10,6 +10,7 @@ import {Router} from '@angular/router';
 import {UnitService} from 'src/app/service/unit.service';
 import {DatePipe} from '@angular/common';
 import { RoleService } from 'src/app/service/role.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-dashboard',
@@ -59,6 +60,14 @@ export class DashboardComponent implements OnInit {
   messageExpired: string;
   endLicense: any;
   countNoti: any = 0;
+  notiExpried: any;
+  isSoonExp: boolean = false;
+  isExp: boolean = false;
+  isEkycExp: boolean = false;
+  isSmsExp: boolean = false;
+  isCecaExp: boolean = false;
+  isContractExp: boolean = false;
+
   constructor(
     private appService: AppService,
     private dashboardService: DashboardService,
@@ -92,77 +101,11 @@ export class DashboardComponent implements OnInit {
           countNotiWarning++;
           localStorage.setItem("countNoti",countNotiWarning.toString())
           this.currentDate = new Date();
-
-          this.endLicense = new Date(data.organization.endLicense);
+          this.endLicense = moment(new Date(data.organization.endLicense), "YYYY/MM/DD").format("YYYY/MM/DD");
           this.daysRemaining = Math.floor((new Date(this.endLicense).getTime() - this.currentDate.getTime()) / (1000 * 60 * 60 * 24));
-          this.message = `Thời gian sử dụng dịch vụ sẽ hết hạn vào ngày ${data.organization.endLicense}. `;
-          this.messageExpired = `Thời gian sử dụng dịch vụ đã hết. `;
+          this.daysRemaining = Math.abs(this.daysRemaining)
 
-          if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate < this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Hợp đồng/SMS/eKYC/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate > this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Hợp đồng/SMS/eKYC/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && this.currentDate < this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Hợp đồng/SMS/eKYC', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && this.currentDate > this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Hợp đồng/SMS/eKYC', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate < this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng SMS/eKYC/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate > this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng SMS/eKYC/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate < this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Hợp đồng/eKYC/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate > this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Hợp đồng/eKYC/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate < this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Hợp đồng/SMS/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate > this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Hợp đồng/SMS/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate < this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Hợp đồng/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate > this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Hợp đồng/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && this.currentDate < this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Hợp đồng/SMS sắp hết', "", 9000);
-          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && this.currentDate > this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Hợp đồng/SMS sắp hết', "", 9000);
-          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && this.currentDate < this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Hợp đồng/eKYC sắp hết', "", 9000);
-          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && this.currentDate > this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Hợp đồng/eKYC sắp hết', "", 9000);
-          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && this.currentDate < this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng SMS/eKYC sắp hết', "", 9000);
-          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && this.currentDate > this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng SMS/eKYC sắp hết', "", 9000);
-          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate < this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng SMS/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate > this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng SMS/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate < this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng eKYC/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate > this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng eKYC/Xác thực CeCA sắp hết', "", 9000);
-          } else if (data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && this.currentDate < this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng SMS sắp hết', "", 9000);
-          } else if (data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && this.currentDate > this.endLicense){
-            this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng SMS sắp hết', "", 9000);
-          } else if (data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && this.currentDate < this.endLicense) {
-            this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng eKYC sắp hết', "", 9000);
-          } else if (data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && this.currentDate > this.endLicense) {
-            this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng eKYC sắp hết', "", 9000);
-          } else if (data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && this.currentDate < this.endLicense) {
-            this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Hợp đồng sắp hết', "", 9000);
-          } else if (data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && this.currentDate > this.endLicense) {
-            this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Hợp đồng sắp hết', "", 9000);
-          } else if (data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate < this.endLicense) {
-            this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Xác thực CeCA sắp hết', "", 9000);
-          } else if (data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate > this.endLicense) {
-            this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Xác thực CeCA sắp hết', "", 9000);
-          } else if(this.daysRemaining < 60 && this.currentDate < this.endLicense ){
-            this.toastService.showWarningHTMLWithTimeout(this.message, "", 9000);
-          } else if(this.currentDate > this.endLicense){
-            this.toastService.showErrorHTMLWithTimeout(this.messageExpired, "", 9000);
-          }
+          this.validateExpDateAndPackageNumber(data.organization.numberOfEkyc, data.organization.numberOfSms, data.organization.numberOfContractsCanCreate, data.organization.numberOfCeca, this.daysRemaining, this.currentDate, data.organization.endLicense)
         }
         //lay id role
         this.roleService.getRoleById(data?.role_id).subscribe(
@@ -216,6 +159,64 @@ export class DashboardComponent implements OnInit {
       this.orgList = this.orgListTmp;
       this.convertData();
     });
+  }
+
+  getNotiMessage(isSoonExp: boolean, isExp: boolean, isEkycExp: boolean, isSmsExp: boolean, isCecaExp: boolean, isContractExp: boolean){
+    let messageSoonExp = ""
+    let messageExp = ""
+    let messageEkycExp = ""
+    let messageCecaExp = ""
+    let messageSmsExp = ""
+    let messageContractExp = ""
+    let numberExpMessage = ""
+    let numberExpArr = []
+    if (isSoonExp){
+      messageSoonExp = `Thời gian sử dụng dịch vụ sẽ hết hạn vào ngày ${this.endLicense}. `
+    }
+    if (isExp){
+      messageExp = `Thời gian sử dụng dịch vụ đã hết. `
+    }
+    if (isContractExp){
+      messageContractExp = "Hợp đồng"
+      numberExpArr.push(messageContractExp)
+    }
+    if (isEkycExp){
+      messageEkycExp = "eKYC"
+      numberExpArr.push(messageEkycExp)
+    }
+    if (isSmsExp){
+      messageSmsExp = "SMS"
+      numberExpArr.push(messageSmsExp)
+    }
+    if (isCecaExp){
+      messageCecaExp = "Xác thực CeCA"
+      numberExpArr.push(messageCecaExp)
+    }
+
+    numberExpMessage = (isEkycExp || isSmsExp || isCecaExp || isContractExp) ? "Số lượng " + numberExpArr.toString().replaceAll(",","/") + " sắp hết": ""
+    return this.toastService.showWarningHTMLWithTimeout((messageSoonExp ? messageSoonExp :  messageExp) + numberExpMessage,"",9000)
+  }
+
+  validateExpDateAndPackageNumber(numberOfEkyc: any, numberOfSms: any, numberOfContractsCanCreate: any, numberOfCeca: any, daysRemaining: any, currentDate: any, endLicense: any){
+    if (daysRemaining < 60){
+      this.isSoonExp = true
+    }
+    if (new Date(currentDate) > new Date(endLicense)){
+      this.isExp = true
+    }
+    if (numberOfEkyc < 30 && numberOfEkyc > 0){
+      this.isEkycExp = true
+    }
+    if (numberOfSms < 30 && numberOfSms > 0) {
+      this.isSmsExp = true
+    }
+    if (numberOfContractsCanCreate < 30 && numberOfContractsCanCreate > 0) {
+      this.isContractExp = true
+    }
+    if (numberOfCeca < 30 && numberOfCeca > 0) {
+      this.isCecaExp = true
+    }
+    this.getNotiMessage(this.isSoonExp, this.isExp, this.isEkycExp, this.isSmsExp, this.isCecaExp, this.isContractExp)
   }
 
   array_empty: any = [];
