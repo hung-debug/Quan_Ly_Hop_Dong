@@ -98,65 +98,65 @@ export class DashboardComponent implements OnInit {
           this.message = `Thời gian sử dụng dịch vụ sẽ hết hạn vào ngày ${data.organization.endLicense}. `;
           this.messageExpired = `Thời gian sử dụng dịch vụ đã hết. `;
 
-          if(data.organization.numberOfEkyc < 30 && data.organization.numberOfSms < 30 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfCeca && this.currentDate < this.endLicense){
+          if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate < this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Hợp đồng/SMS/eKYC/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfSms < 30 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfCeca && this.currentDate > this.endLicense){
+          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate > this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Hợp đồng/SMS/eKYC/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfSms < 30 && data.organization.numberOfContractsCanCreate < 30 && this.currentDate < this.endLicense){
+          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && this.currentDate < this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Hợp đồng/SMS/eKYC', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfSms < 30 && data.organization.numberOfContractsCanCreate < 30 && this.currentDate > this.endLicense){
+          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && this.currentDate > this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Hợp đồng/SMS/eKYC', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfSms < 30 && data.organization.numberOfCeca < 30 && this.currentDate < this.endLicense){
+          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate < this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng SMS/eKYC/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfSms < 30 && data.organization.numberOfCeca < 30 && this.currentDate > this.endLicense){
+          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate > this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng SMS/eKYC/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfCeca < 30 && this.currentDate < this.endLicense){
+          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate < this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Hợp đồng/eKYC/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfCeca < 30 && this.currentDate > this.endLicense){
+          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate > this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Hợp đồng/eKYC/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfCeca < 30 && this.currentDate < this.endLicense){
+          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate < this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Hợp đồng/SMS/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfCeca < 30 && this.currentDate > this.endLicense){
+          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate > this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Hợp đồng/SMS/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfCeca < 30 && this.currentDate < this.endLicense){
+          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate < this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Hợp đồng/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfCeca < 30 && this.currentDate > this.endLicense){
+          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate > this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Hợp đồng/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfSms < 30 && this.currentDate < this.endLicense){
+          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && this.currentDate < this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Hợp đồng/SMS sắp hết', "", 9000);
-          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfSms < 30 && this.currentDate > this.endLicense){
+          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && this.currentDate > this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Hợp đồng/SMS sắp hết', "", 9000);
-          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfEkyc < 30 && this.currentDate < this.endLicense){
+          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && this.currentDate < this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Hợp đồng/eKYC sắp hết', "", 9000);
-          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfEkyc < 30 && this.currentDate > this.endLicense){
+          } else if(data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && this.currentDate > this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Hợp đồng/eKYC sắp hết', "", 9000);
-          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfEkyc < 30 && this.currentDate < this.endLicense){
+          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && this.currentDate < this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng SMS/eKYC sắp hết', "", 9000);
-          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfEkyc < 30 && this.currentDate > this.endLicense){
+          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && this.currentDate > this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng SMS/eKYC sắp hết', "", 9000);
-          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfCeca < 30 && this.currentDate < this.endLicense){
+          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate < this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng SMS/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfCeca < 30 && this.currentDate > this.endLicense){
+          } else if(data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate > this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng SMS/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfCeca < 30 && this.currentDate < this.endLicense){
+          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate < this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng eKYC/Xác thực CeCA sắp hết', "", 9000);
-          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfCeca < 30 && this.currentDate > this.endLicense){
+          } else if(data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate > this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng eKYC/Xác thực CeCA sắp hết', "", 9000);
-          } else if (data.organization.numberOfSms < 30 && this.currentDate < this.endLicense){
+          } else if (data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && this.currentDate < this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng SMS sắp hết', "", 9000);
-          } else if (data.organization.numberOfSms < 30 && this.currentDate > this.endLicense){
+          } else if (data.organization.numberOfSms < 30 && data.organization.numberOfSms > 0 && this.currentDate > this.endLicense){
             this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng SMS sắp hết', "", 9000);
-          } else if (data.organization.numberOfEkyc < 30 && this.currentDate < this.endLicense) {
+          } else if (data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && this.currentDate < this.endLicense) {
             this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng eKYC sắp hết', "", 9000);
-          } else if (data.organization.numberOfEkyc < 30 && this.currentDate > this.endLicense) {
+          } else if (data.organization.numberOfEkyc < 30 && data.organization.numberOfEkyc > 0 && this.currentDate > this.endLicense) {
             this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng eKYC sắp hết', "", 9000);
-          } else if (data.organization.numberOfContractsCanCreate < 30 && this.currentDate < this.endLicense) {
+          } else if (data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && this.currentDate < this.endLicense) {
             this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Hợp đồng sắp hết', "", 9000);
-          } else if (data.organization.numberOfContractsCanCreate < 30 && this.currentDate > this.endLicense) {
+          } else if (data.organization.numberOfContractsCanCreate < 30 && data.organization.numberOfContractsCanCreate > 0 && this.currentDate > this.endLicense) {
             this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Hợp đồng sắp hết', "", 9000);
-          } else if (data.organization.numberOfCeca < 30 && this.currentDate < this.endLicense) {
+          } else if (data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate < this.endLicense) {
             this.toastService.showWarningHTMLWithTimeout(this.message + 'Số lượng Xác thực CeCA sắp hết', "", 9000);
-          } else if (data.organization.numberOfCeca < 30 && this.currentDate > this.endLicense) {
+          } else if (data.organization.numberOfCeca < 30 && data.organization.numberOfCeca > 0 && this.currentDate > this.endLicense) {
             this.toastService.showWarningHTMLWithTimeout(this.messageExpired + 'Số lượng Xác thực CeCA sắp hết', "", 9000);
           } else if(this.daysRemaining < 60 && this.currentDate < this.endLicense ){
             this.toastService.showWarningHTMLWithTimeout(this.message, "", 9000);
