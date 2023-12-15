@@ -101,11 +101,12 @@ export class DashboardComponent implements OnInit {
           countNotiWarning++;
           localStorage.setItem("countNoti",countNotiWarning.toString())
           this.currentDate = new Date();
-          this.endLicense = moment(new Date(data.organization.endLicense), "YYYY/MM/DD").format("YYYY/MM/DD");
+          this.endLicense = new Date(data.organization.endLicense);
+
           this.daysRemaining = Math.floor((new Date(this.endLicense).getTime() - this.currentDate.getTime()) / (1000 * 60 * 60 * 24));
           this.daysRemaining = Math.abs(this.daysRemaining)
 
-          this.validateExpDateAndPackageNumber(data.organization.numberOfEkyc, data.organization.numberOfSms, data.organization.numberOfContractsCanCreate, data.organization.numberOfCeca, this.daysRemaining, this.currentDate, data.organization.endLicense)
+          this.validateExpDateAndPackageNumber(data.organization.numberOfEkyc, data.organization.numberOfSms, data.organization.numberOfContractsCanCreate, data.organization.numberOfCeca, this.daysRemaining, this.currentDate, this.endLicense)
         }
         //lay id role
         this.roleService.getRoleById(data?.role_id).subscribe(
@@ -171,7 +172,7 @@ export class DashboardComponent implements OnInit {
     let numberExpMessage = ""
     let numberExpArr = []
     if (isSoonExp){
-      messageSoonExp = `Thời gian sử dụng dịch vụ sẽ hết hạn vào ngày ${this.endLicense}. `
+      messageSoonExp = `Thời gian sử dụng dịch vụ sẽ hết hạn vào ngày ${moment(this.endLicense).format("DD/MM/YYYY")}. `
     }
     if (isExp){
       messageExp = `Thời gian sử dụng dịch vụ đã hết. `
@@ -193,7 +194,7 @@ export class DashboardComponent implements OnInit {
       numberExpArr.push(messageCecaExp)
     }
 
-    numberExpMessage = (isEkycExp || isSmsExp || isCecaExp || isContractExp) ? "Số lượng " + numberExpArr.toString().replaceAll(",","/") + " sắp hết": ""
+    numberExpMessage = (isEkycExp || isSmsExp || isCecaExp || isContractExp) ? "<br>Số lượng " + numberExpArr.toString().replaceAll(",","/") + " sắp hết": ""
     return this.toastService.showWarningHTMLWithTimeout((messageSoonExp ? messageSoonExp :  messageExp) + numberExpMessage,"",9000)
   }
 
