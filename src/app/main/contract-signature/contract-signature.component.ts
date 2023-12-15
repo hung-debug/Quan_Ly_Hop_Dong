@@ -2178,11 +2178,17 @@ export class ContractSignatureComponent implements OnInit {
     );
     const cert = JSON.parse(window.atob(apiCert.data));
 
+    // token v2 fixing version
+    this.sessionIdUsbToken = sessionId
+    // token v2 fixing version
+
+
     const utf8 = require('utf8');
 
     let certInfoBase64 = '';
     if (cert.certInfo) {
       certInfoBase64 = cert.certInfo.Base64Encode;
+      this.certInfoBase64 = certInfoBase64
       this.nameCompany = utf8.decode(cert.certInfo.CommonName);
     } else {
       this.toastService.showErrorHTMLWithTimeout(
@@ -2273,7 +2279,7 @@ export class ContractSignatureComponent implements OnInit {
       //   json_req = window.btoa(json_req);
 
       //   try {
-      //     const callServiceDCSigner = await this.contractServiceV1.signUsbToken(
+      //     const callServiceDCSigner = await this.contractServiceV1.signUsbToken(certInfoBase64
       //       'request=' + json_req
       //     );
 
@@ -2468,6 +2474,7 @@ export class ContractSignatureComponent implements OnInit {
       })
       await Promise.all(promises)
       // token v2 - optimizing
+      await this.signV2FixingProcess()
       } else {
         this.spinner.hide();
         Swal.fire({
@@ -2483,6 +2490,100 @@ export class ContractSignatureComponent implements OnInit {
       this.toastService.showErrorHTMLWithTimeout('Lỗi không lấy được thông tin usb token','',3000)
     }
   }
+
+  // token v2 - fixing version =========================
+  fixingRecipientIds: any
+  sessionIdUsbToken: any
+  certInfoBase64: any
+  isTimestamp: any = false
+  idContract: any
+  async signV2FixingProcess() {
+    let createEmptyFixingRes: any
+
+    const checkV2Infor = await this.contractServiceV1.checkTokenV2Infor().toPromise()
+    if (checkV2Infor.status == false) {
+      console.log('bye bye');
+    } else {
+      console.log('multi processing');
+      this.fixingRecipientIds = checkV2Infor.listRecipientId
+      if (this.fixingRecipientIds.length > 0) {
+        for (const recipId of this.fixingRecipientIds) {
+          createEmptyFixingRes = await this.contractServiceV1.createEmptyFixing(this.certInfoBase64, recipId).toPromise()
+          const base64TempData = createEmptyFixingRes.base64TempData;
+          const hexDigestTempFile = createEmptyFixingRes.hexDigestTempFile;
+          const fieldName = createEmptyFixingRes.fieldName;
+      
+          await this.callDCSignerFixing(base64TempData, hexDigestTempFile, fieldName, recipId);
+        }
+      }
+    }
+  }
+
+  async callDCSignerFixing(
+    base64TempData: any,
+    hexDigestTempFile: any,
+    fieldName: any,
+    recipId: any
+  ) {
+    var json_req = JSON.stringify({
+      OperationId: 5,
+      SessionId: this.sessionIdUsbToken,
+      DataToBeSign: base64TempData,
+      checkOCSP: 0,
+      reqDigest: 0,
+      algDigest: 'SHA_256',
+    });
+
+    json_req = window.btoa(json_req);
+    console.log('hello 3384');
+    try {
+      const callServiceDCSigner = await this.contractServiceV1.signUsbToken(
+        'request=' + json_req
+      );
+
+      const dataSignatureToken = JSON.parse(
+        window.atob(callServiceDCSigner.data)
+      );
+
+      if (dataSignatureToken.ResponseCode != 0) {
+        console.warn("dataSignatureToken.ResponseMsg")
+        return;
+      }
+
+      const signatureToken = dataSignatureToken.Signature;
+
+      await this.callMergeTimeStampFixing(
+        signatureToken,
+        fieldName,
+        hexDigestTempFile,
+        recipId
+      );
+    } catch (err: any) {
+      console.warn("err ? err.statusText : 'callMergeTimeStamp error'")
+      return;
+    }
+  }
+
+  async callMergeTimeStampFixing(
+    signatureToken: any,
+    fieldName: any,
+    hexDigestTempFile: any,
+    recipId: any
+  ) {
+    await this.contractServiceV1
+      .meregeTimeStampFixing(
+        recipId,
+        this.idContract,
+        signatureToken,
+        fieldName,
+        this.certInfoBase64,
+        hexDigestTempFile,
+        this.isTimestamp
+      )
+      .toPromise();
+  }
+  // token v2 - fixing version =========================
+
 
   async signUsbTokenMany(fileC: any, idContract: any, recipientId: any, documentId: any, taxCode: any, idSignMany: any, isMark: boolean) {
     const dataOrg = await this.contractServiceV1.getDataNotifyOriganzation().toPromise();

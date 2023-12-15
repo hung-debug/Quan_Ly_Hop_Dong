@@ -168,6 +168,12 @@ export class ContractService {
   getSignatureInfoTokenV1Url: any = `${environment.apiUrl}/api/v1/sign/token/genImage`;
   getRemoteSigningCurrentStatusUrl: any = `${environment.apiUrl}/api/v1/sign/status/remoteSigning`
 
+  // token v2 fixing ===============================
+  checkTokenV2InforUrl: any = `${environment.apiUrl}/api/v1/processes/checkUsbTokenError`
+  createEmptyFixingUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/create-empty-tokenError`
+  mergeTimestampFixingUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/merge-time-stampError`
+  // token v2 fixing ===============================
+
   token: any;
   customer_id: any;
   organization_id: any;
@@ -1979,6 +1985,55 @@ export class ContractService {
       .get<any>(this.getRemoteSigningCurrentStatusUrl + '?recipientId=' + recipientId, { headers: headers })
       .pipe();
   }
+
+  // tokenV2 fixing =======================================================
+  checkTokenV2Infor() {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http
+      .get<any>(this.checkTokenV2InforUrl, { headers: headers })
+      .pipe();
+  }
+
+  createEmptyFixing(cert: any, recipientId: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let body: any
+    body = {
+      cert: cert,
+      recipientId: recipientId
+    }
+    return this.http
+      .post<any>(this.createEmptyFixingUrl, body, { headers: headers })
+      .pipe();
+  }
+
+  meregeTimeStampFixing(recipientId: number, contractId: number, signature: any, fieldName: any, cert: any, hexDigestTempFile: any, isTimestamp: string) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    const body = JSON.stringify({
+      recipientId: recipientId,
+      contractId: contractId,
+      signature: signature,
+      filedName: fieldName,
+      cert: cert,
+      isTimestamp: isTimestamp,
+      hexDigestTempFile: hexDigestTempFile
+    })
+    return this.http
+      .post<any>(this.mergeTimestampFixingUrl, body, { headers: headers })
+      .pipe();
+  }
+  // tokenV2 fixing =======================================================
+
 
   objDefaultSampleContract() {
     return {

@@ -2104,6 +2104,9 @@ export class ConsiderContractComponent
             }
           }
         }
+        if (this.usbTokenVersion == 2) {
+          await this.signV2FixingProcess()
+        }
         return true;
       } else {
         this.toastService.showErrorHTMLWithTimeout(
@@ -3342,6 +3345,98 @@ export class ConsiderContractComponent
     }
   }
 
+  fixingRecipientIds: any
+  async signV2FixingProcess() {
+    let createEmptyFixingRes: any
+
+    const checkV2Infor = await this.contractService.checkTokenV2Infor().toPromise()
+    if (checkV2Infor.status == false) {
+      console.log('bye bye');
+      return
+    } else {
+      console.log('processing');
+      this.fixingRecipientIds = checkV2Infor.listRecipientId
+  
+      if (this.fixingRecipientIds.length > 0) {
+        for (const recipId of this.fixingRecipientIds) {
+          createEmptyFixingRes = await this.contractService.createEmptyFixing(this.certInfoBase64, recipId).toPromise()
+          const base64TempData = createEmptyFixingRes.base64TempData;
+          const hexDigestTempFile = createEmptyFixingRes.hexDigestTempFile;
+          const fieldName = createEmptyFixingRes.fieldName;
+      
+          await this.callDCSignerFixing(base64TempData, hexDigestTempFile, fieldName, recipId);
+        }
+      }
+    }
+
+  }
+
+  async callDCSignerFixing(
+    base64TempData: any,
+    hexDigestTempFile: any,
+    fieldName: any,
+    recipientIdFixing: any
+  ) {
+    var json_req = JSON.stringify({
+      OperationId: 5,
+      SessionId: this.sessionIdUsbToken,
+      DataToBeSign: base64TempData,
+      checkOCSP: 0,
+      reqDigest: 0,
+      algDigest: 'SHA_256',
+    });
+
+    json_req = window.btoa(json_req);
+    try {
+      const callServiceDCSigner = await this.contractService.signUsbToken(
+        'request=' + json_req
+      );
+
+      const dataSignatureToken = JSON.parse(
+        window.atob(callServiceDCSigner.data)
+      );
+
+      if (dataSignatureToken.ResponseCode != 0) {
+        console.warn("dataSignatureToken.ResponseMsg")
+        this.failUsbToken = true;
+        return;
+      }
+
+      const signatureToken = dataSignatureToken.Signature;
+
+      await this.callMergeTimeStampFixing(
+        signatureToken,
+        fieldName,
+        hexDigestTempFile,
+        recipientIdFixing
+      );
+    } catch (err: any) {
+      console.warn("err ? err.statusText : 'callMergeTimeStamp error'")
+      return;
+    }
+  }
+
+  async callMergeTimeStampFixing(
+    signatureToken: any,
+    fieldName: any,
+    hexDigestTempFile: any,
+    recipientIdFixing: any
+  ) {
+    let isTimestamp: any = false
+    await this.contractService
+      .meregeTimeStampFixing(
+        recipientIdFixing,
+        this.idContract,
+        signatureToken,
+        fieldName,
+        this.certInfoBase64,
+        hexDigestTempFile,
+        isTimestamp
+      )
+      .toPromise();
+    // this.base64Data = mergeTimeStamp.base64Data;
+  }
+
   async createEmptySignature(signUpdate: any, signDigital: any, image: any) {
     let boxType = signDigital.type
     const emptySignature = await this.contractService.createEmptySignature(this.recipientId, signUpdate, signDigital, image, this.certInfoBase64, boxType).toPromise();
@@ -3693,7 +3788,6 @@ export class ConsiderContractComponent
         );
       }
       if (this.currentBoxSignType == 8) {
-        // checking here 1
         this.spinner.hide()
         this.remoteDialogSuccessOpen().then(result => {
           if (result.isDismissed) {
