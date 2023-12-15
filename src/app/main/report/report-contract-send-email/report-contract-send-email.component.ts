@@ -125,7 +125,7 @@ export class ReportStatusSendEmailComponent implements OnInit {
     };
     const dialogRef = this.dialog.open(ContentEmailComponent, {
       width: '900px',
-      height: '700px',
+      height: '750px',
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {

@@ -34,7 +34,7 @@ export class ContentEmailComponent implements OnInit {
       (res: any) => {
         this.htmlContent = this.sanitizer.bypassSecurityTrustHtml(res);
         setTimeout(() => {
-          this.removeAnchorTags();
+          // this.removeAnchorTags();
         });
       },
       error => {
@@ -43,17 +43,17 @@ export class ContentEmailComponent implements OnInit {
     )
   }
 
-  private removeAnchorTags() {
-    // Sử dụng Renderer2 để thao tác với DOM an toàn
-    const element = this.el.nativeElement;
+  // private removeAnchorTags() {
+  //   // Sử dụng Renderer2 để thao tác với DOM an toàn
+  //   const element = this.el.nativeElement;
 
-    // Tìm tất cả thẻ anchor trong nội dung HTML
-    const anchorTags = element.querySelectorAll('a');
+  //   // Tìm tất cả thẻ anchor trong nội dung HTML
+  //   const anchorTags = element.querySelectorAll('a');
 
-    // Xóa mỗi thẻ anchor
-    anchorTags.forEach((anchorTag :any) => {
-      this.renderer.removeChild(anchorTag.parentNode, anchorTag);
-    });
-  }
+  //   // Xóa mỗi thẻ anchor
+  //   anchorTags.forEach((anchorTag :any) => {
+  //     this.renderer.removeChild(anchorTag.parentNode, anchorTag);
+  //   });
+  // }
 
 }
