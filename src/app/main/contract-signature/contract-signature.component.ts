@@ -2499,24 +2499,28 @@ export class ContractSignatureComponent implements OnInit {
   idContract: any
   async signV2FixingProcess() {
     let createEmptyFixingRes: any
-
-    const checkV2Infor = await this.contractServiceV1.checkTokenV2Infor().toPromise()
-    if (checkV2Infor.status == false) {
-      console.log('bye bye');
-    } else {
-      console.log('multi processing');
-      this.fixingRecipientIds = checkV2Infor.listRecipientId
-      if (this.fixingRecipientIds.length > 0) {
-        for (const recipId of this.fixingRecipientIds) {
-          createEmptyFixingRes = await this.contractServiceV1.createEmptyFixing(this.certInfoBase64, recipId).toPromise()
-          const base64TempData = createEmptyFixingRes.base64TempData;
-          const hexDigestTempFile = createEmptyFixingRes.hexDigestTempFile;
-          const fieldName = createEmptyFixingRes.fieldName;
-      
-          await this.callDCSignerFixing(base64TempData, hexDigestTempFile, fieldName, recipId);
+    try {
+      const checkV2Infor = await this.contractServiceV1.checkTokenV2Infor().toPromise()
+      if (checkV2Infor.status == false) {
+        console.log('bye bye');
+      } else {
+        console.log('multi processing');
+        this.fixingRecipientIds = checkV2Infor.listRecipientId
+        if (this.fixingRecipientIds.length > 0) {
+          for (const recipId of this.fixingRecipientIds) {
+            createEmptyFixingRes = await this.contractServiceV1.createEmptyFixing(this.certInfoBase64, recipId).toPromise()
+            const base64TempData = createEmptyFixingRes.base64TempData;
+            const hexDigestTempFile = createEmptyFixingRes.hexDigestTempFile;
+            const fieldName = createEmptyFixingRes.fieldName;
+        
+            await this.callDCSignerFixing(base64TempData, hexDigestTempFile, fieldName, recipId);
+          }
         }
       }
+    } catch (error) {
+      return console.log("signV2FixingProcess error")
     }
+
   }
 
   async callDCSignerFixing(
