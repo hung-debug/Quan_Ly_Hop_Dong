@@ -123,7 +123,7 @@ export class UnitComponent implements OnInit {
       this.listData = response.entities;
       this.total = this.listData.length;
 
-      this.listData = this.listData.sort((a,b) => (a.id - b.id || a.parent_id - b.parent_id || a.name.toString().localeCompare(b.name.toString())));
+      this.listData = this.listData.sort((a,b) => a.path.toString().localeCompare(b.path.toString()));
 
       let data:any="";
 
@@ -158,24 +158,23 @@ export class UnitComponent implements OnInit {
         this.array_empty.push(data);
         // this.removeElementFromStringArray(element.id);
       })
-
-      const maxLength = Math.max(...this.array_empty.map((subArray:any) => subArray.children.length));
-
-      if(!this.code && !this.name) {
-        // Lọc ra mảng con có độ dài lớn nhất
-        const longestArrays = this.array_empty.filter((subArray:any) => subArray.children.length === maxLength);
-
-        if(this.array_empty.length > 1){
-          this.list = longestArrays
-          this.list[0].children.forEach((element: any) => 
-            element.expanded = !element.expanded
-          )
-        }
-        else
-          this.list = this.array_empty;
-      } else {
-        this.list = this.array_empty;
-      }
+      // const maxLength = Math.max(...this.array_empty.map((subArray:any) => subArray.children.length));
+      // if(!this.code && !this.name) {
+      //   // Lọc ra mảng con có độ dài lớn nhất
+      //   const longestArrays = this.array_empty.filter((subArray:any) => subArray.children.length === maxLength);
+      //   console.log('longestArrays',longestArrays);
+      //   if(this.array_empty.length > 1){
+      //     this.list = longestArrays
+      //     this.list[0].children.forEach((element: any) => 
+      //       element.expanded = !element.expanded
+      //     )
+      //   }
+      //   else
+      //     this.list = this.array_empty;
+      // } else {
+      //   this.list = this.array_empty;
+      // }
+      this.list = this.array_empty
     });
   }
 
@@ -202,7 +201,7 @@ export class UnitComponent implements OnInit {
           parent_id: elementCon.parent_id,
           is_edit: is_edit
         },
-        expanded: true,
+        expanded: false,
         children: this.findChildren(elementCon)
       });
 
@@ -214,11 +213,11 @@ export class UnitComponent implements OnInit {
   }
 
   removeElementFromStringArray(element: string) {
-    // this.listData.forEach((value,index)=>{
-    //     if(value.id==element){
-    //       this.listData.splice(index,1);
-    //     }
-    // });
+    this.listData.forEach((value,index)=>{
+        if(value.id==element){
+          this.listData.splice(index,1);
+        }
+    });
   }
 
   //Thêm mới tổ chức
