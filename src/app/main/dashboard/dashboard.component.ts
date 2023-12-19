@@ -93,21 +93,6 @@ export class DashboardComponent implements OnInit {
     let userId = this.userService.getAuthCurrentUser().id;
     this.userService.getUserById(userId).subscribe(
       data => {
-        let countNotiWarning: number = localStorage.getItem('countNoti') as any
-        countNotiWarning++;
-        localStorage.setItem("countNoti",countNotiWarning.toString())
-
-        if(count == '0'){
-          countNotiWarning++;
-          localStorage.setItem("countNoti",countNotiWarning.toString())
-          this.currentDate = new Date();
-          this.endLicense = new Date(data.organization.endLicense);
-
-          this.daysRemaining = Math.floor((new Date(this.endLicense).getTime() - this.currentDate.getTime()) / (1000 * 60 * 60 * 24));
-          this.daysRemaining = Math.abs(this.daysRemaining)
-
-          this.validateExpDateAndPackageNumber(data.organization.numberOfEkyc, data.organization.numberOfSms, data.organization.numberOfContractsCanCreate, data.organization.numberOfCeca, this.daysRemaining, this.currentDate, this.endLicense)
-        }
         //lay id role
         this.roleService.getRoleById(data?.role_id).subscribe(
           data => {
@@ -117,6 +102,25 @@ export class DashboardComponent implements OnInit {
             this.isQLHD_04 = listRole.some(element => element.code == 'QLHD_04');
         }, error => {
         });
+
+        if (data.organization.parent_id) {
+          return 
+        } else {
+          let countNotiWarning: number = localStorage.getItem('countNoti') as any
+          countNotiWarning++;
+          localStorage.setItem("countNoti",countNotiWarning.toString())
+          if(count == '0'){
+            countNotiWarning++;
+            localStorage.setItem("countNoti",countNotiWarning.toString())
+            this.currentDate = new Date();
+            this.endLicense = new Date(data.organization.endLicense);
+
+            this.daysRemaining = Math.floor((new Date(this.endLicense).getTime() - this.currentDate.getTime()) / (1000 * 60 * 60 * 24));
+            this.daysRemaining = Math.abs(this.daysRemaining)
+
+            this.validateExpDateAndPackageNumber(data.organization.numberOfEkyc, data.organization.numberOfSms, data.organization.numberOfContractsCanCreate, data.organization.numberOfCeca, this.daysRemaining, this.currentDate, this.endLicense)
+          }
+        }
     }, error => {}
     )
 
