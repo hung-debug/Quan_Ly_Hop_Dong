@@ -111,7 +111,8 @@ export class ContractSignatureComponent implements OnInit {
   signImage: string | null = null;
   position: string | null = null;
   contractSelected: boolean = false;
-
+  currentDate: Date;
+  endDate: any;
 
   constructor(
     private appService: AppService,
@@ -1475,6 +1476,8 @@ export class ContractSignatureComponent implements OnInit {
         dialogConfig
       );
       dialogRef.afterClosed().subscribe(async (resultCert: any) => {
+        this.currentDate = new Date();
+        this.endDate = new Date(resultCert.keystoreDateEnd)
         if (resultCert) {
           this.cert_id = resultCert.id;
           let countSuccess = 0;
@@ -1544,7 +1547,7 @@ export class ContractSignatureComponent implements OnInit {
               countSuccess += checkSign.length;
             }
 
-            if (countSuccess === promises.length) {
+            if (countSuccess === promises.length && this.currentDate < this.endDate) {
               this.toastService.showSuccessHTMLWithTimeout(
                 'sign.multi.success',
                 '',
@@ -1553,6 +1556,12 @@ export class ContractSignatureComponent implements OnInit {
 
               await this.router.navigateByUrl('/', { skipLocationChange: true });
               await this.router.navigate(['main/c/receive/processed']);
+            } else {
+              this.toastService.showErrorHTMLWithTimeout(
+                checkSignResults[0][0].result.message,
+                '',
+                3000
+              );
             }
           } catch (err) {
             // Handle errors
@@ -1627,7 +1636,7 @@ export class ContractSignatureComponent implements OnInit {
               for (let i = 0; i < checkSign.length; i++) {
                 if (checkSign[i].result.success == false) {
                   this.spinner.hide();
-    
+
                   if (checkSign[i].result.message == 'Tax code do not match!') {
                     this.toastService.showErrorHTMLWithTimeout(
                       'taxcode.not.match',
@@ -2244,7 +2253,7 @@ export class ContractSignatureComponent implements OnInit {
           signI = this.srcMark.split(',')[1];
         }
 
-      // token v2 - old 
+      // token v2 - old
       // for (let i = 0; i < fileC.length; i++) {
       //   y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
       //   signUpdate.id = idSignMany[i];
@@ -2512,7 +2521,7 @@ export class ContractSignatureComponent implements OnInit {
             const base64TempData = createEmptyFixingRes.base64TempData;
             const hexDigestTempFile = createEmptyFixingRes.hexDigestTempFile;
             const fieldName = createEmptyFixingRes.fieldName;
-        
+
             await this.callDCSignerFixing(base64TempData, hexDigestTempFile, fieldName, recipId);
           }
         }
