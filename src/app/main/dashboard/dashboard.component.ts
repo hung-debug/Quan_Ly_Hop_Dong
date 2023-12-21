@@ -67,7 +67,7 @@ export class DashboardComponent implements OnInit {
   isSmsExp: boolean = false;
   isCecaExp: boolean = false;
   isContractExp: boolean = false;
-
+  OrgId: any;
   constructor(
     private appService: AppService,
     private dashboardService: DashboardService,
@@ -102,10 +102,8 @@ export class DashboardComponent implements OnInit {
             this.isQLHD_04 = listRole.some(element => element.code == 'QLHD_04');
         }, error => {
         });
-
-        if (data.organization.parent_id) {
-          return 
-        } else {
+        this.OrgId = data.organization.id;
+        this.userService.getOrgIdChildren(this.OrgId).subscribe(dataOrg => {
           let countNotiWarning: number = localStorage.getItem('countNoti') as any
           countNotiWarning++;
           localStorage.setItem("countNoti",countNotiWarning.toString())
@@ -113,14 +111,16 @@ export class DashboardComponent implements OnInit {
             countNotiWarning++;
             localStorage.setItem("countNoti",countNotiWarning.toString())
             this.currentDate = new Date();
-            this.endLicense = new Date(data.organization.endLicense);
+            this.endLicense = new Date(dataOrg.endLicense);
 
             this.daysRemaining = Math.floor((new Date(this.endLicense).getTime() - this.currentDate.getTime()) / (1000 * 60 * 60 * 24));
             this.daysRemaining = Math.abs(this.daysRemaining)
 
-            this.validateExpDateAndPackageNumber(data.organization.numberOfEkyc, data.organization.numberOfSms, data.organization.numberOfContractsCanCreate, data.organization.numberOfCeca, this.daysRemaining, this.currentDate, this.endLicense)
+            this.validateExpDateAndPackageNumber(dataOrg.numberOfEkyc, dataOrg.numberOfSms, dataOrg.numberOfContractsCanCreate, dataOrg.numberOfCeca, this.daysRemaining, this.currentDate, this.endLicense)
+
           }
-        }
+        })
+
     }, error => {}
     )
 
