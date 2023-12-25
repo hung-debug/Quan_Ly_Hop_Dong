@@ -89,10 +89,12 @@
               <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span
                   class="required-title">*</span></div>
 
-              <div class="input-data" style="background-color: #EFF2F5;">
-                <input type="text" value="{{sign_type}}" disabled>
-              </div>
-
+                  <div class="custom-multiselect">
+                    <ng-multiselect-dropdown placeholder="{{'choose' | translate }}" [settings]="dropdownSignTypeSettings" [data]="this.signTypeList" [(ngModel)]="dataSign"
+                    (onSelect)="onItemSelect($event)">
+                    </ng-multiselect-dropdown>
+                  </div>
+                  <div style="color: #ffc107;">({{'Ký USB Token Ban cơ yếu, Sim PKI và Remote Signing không hỗ trợ nhập ô text/số hợp đồng' | translate}})</div>
             </div>
           </div>
         </div>

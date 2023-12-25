@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment';
 import { parttern, parttern_input } from "../../../../../config/parttern";
 import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-edit-handler-dialog',
   templateUrl: './edit-handler-dialog.component.html',
@@ -61,6 +62,13 @@ export class EditHandlerComponent implements OnInit {
   //dropdown
   signTypeList: Array<any> = type_signature;
   checkCount = 1;
+  dataSign: any;
+  isReqPhone: boolean = false;
+  isReqCardId: boolean = false;
+  isReqCardIdToken: boolean = false;
+  isReqCardIdHsm: boolean = false;
+  isReqCardIdCts: boolean = false;
+  hasText: boolean = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private spinner: NgxSpinnerService,
@@ -92,16 +100,6 @@ export class EditHandlerComponent implements OnInit {
       this.signTypeList = type_signature;
     }
 
-    // this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
-    //
-    // this.datas.is_handler = [...this.contractService.getDataDetermineInitialization()];
-    //
-
-
-
-
-
-
     this.name = this.data.name;
     this.login_by = this.data.login_by;
     // voi case email duoc luu theo so phone thi khoi tao se clear rong
@@ -125,6 +123,7 @@ export class EditHandlerComponent implements OnInit {
       limitSelection: 1,
       disabledField: 'item_disable',
     };
+    this.actionWithSignTypeForm()
 
   }
   //dropdown contract type
@@ -177,7 +176,8 @@ export class EditHandlerComponent implements OnInit {
       email: login_by === 'email' ? this.email.toLowerCase() : login_by === 'phone' ? this.phone : '',
       phone: this.phone,
       login_by: login_by,
-      card_id: this.card_id,
+      card_id: [2,4,6,8].includes(this.dataSign[0].id) ? this.card_id : null,
+      sign_type: this.dataSign
       // locale: this.locale,
     };
 
@@ -292,14 +292,6 @@ export class EditHandlerComponent implements OnInit {
     }
   }
 
-  onItemSelect(e: any, data: any) {
-
-    //
-    this.checkCount = 1; // gan lai de lan sau ko bi tang index
-  }
-  // dataParnterOrganization() {
-  //   return this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
-  // }
   addOriganzationSignature() {
     let data_determine_add = [];
     data_determine_add = [...this.contractService.getDataDetermine()];
@@ -436,5 +428,86 @@ export class EditHandlerComponent implements OnInit {
         data_ordering.focus();
       this.toastService.showWarningHTMLWithTimeout("Bạn chưa nhập thứ tự ký!", "", 3000);
     }
+  }
+
+  async actionWithSignTypeForm() {
+    const contractFieldsDetail = await this.contractService.getDataObjectSignatureLoadChange(this.data.contract_id).toPromise();
+    this.hasText = contractFieldsDetail.some((data: any) => data.type !== 2 && data.type !== 3)
+    this.dataSign = this.data.sign_type
+    let currentSignType = this.data.sign_type[0]
+    if(currentSignType.id == 2 || currentSignType.id == 3 || currentSignType.id == 4 || currentSignType.id == 6 || currentSignType.id == 7 || currentSignType.id == 8) {
+      this.signTypeList = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8);
+    } else if(currentSignType.id == 1 ||  currentSignType.id == 5) {
+      this.signTypeList = this.signTypeList.filter((p: any) => p.id == 1 || p.id == 5);
+    }
+ 
+  }
+
+  getTargetRecipientData(targetId : number){
+    if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
+      const participants = this.datas?.dataContract?.is_data_contract?.participants;
+      for (const participant of participants) {
+        for (const recipient of participant.recipients) {
+          if (targetId == recipient.id) {
+            return recipient;
+          }
+        }
+      }
+    }
+  }
+
+  onItemSelect(event: any) {
+    // 1: Ký ảnh
+    // 5: Ký ekyc
+    if(event.id == 1) {
+      this.isReqPhone = true;
+      this.isReqCardId = false;
+    } else if(event.id == 5) {
+      this.isReqCardId = true;
+    } else if(event.id == 4) {
+      //Ký hsm
+      this.isReqCardIdHsm = true;
+      this.isReqCardIdToken = false;
+      this.isReqCardIdCts = false;
+    } else if(event.id == 2) {
+      //Ký token
+      this.isReqCardIdHsm = false;
+      this.isReqCardIdToken = true;
+      this.isReqCardIdCts = false;
+    } else if(event.id == 6){
+      this.isReqCardIdCts = true;
+      this.isReqCardIdHsm = false;
+      this.isReqCardIdToken = false;
+    } else if(event.id == 8){
+      this.isReqCardIdCts = true;
+      this.isReqCardIdHsm = false;
+      this.isReqCardIdToken = false;
+    } else if(event.id == 7){
+      this.isReqCardIdCts = false;
+      this.isReqCardIdHsm = false;
+      this.isReqCardIdToken = false;
+      this.isReqPhone = false;
+    } else if(event.id == 3){
+      this.isReqCardIdCts = false;
+      this.isReqCardIdHsm = false;
+      this.isReqCardIdToken = false;
+    }
+    if (![2,4,6].includes(event.id) && this.hasText) {
+      this.checkContractTextFieldsSwalfire()
+    }
+    this.dataSign = this.signTypeList.filter(signType => signType.id == event.id) 
+    this.id_sign_type = this.dataSign[0].id
+  }
+
+  checkContractTextFieldsSwalfire() {
+    return Swal.fire({
+      title: `Người ký ${this.data.name} đang có ô text/số hợp đồng cần xử lý, bạn có chắc muốn chuyển sang hình thức ký <b>KHÔNG</b> hỗ trợ <b>nhập ô text/số hợp đồng</b> không?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#b0bec5',
+      confirmButtonText: this.translate.instant('confirm'),
+      cancelButtonText: this.translate.instant('contract.status.canceled'),
+    });
   }
 }
