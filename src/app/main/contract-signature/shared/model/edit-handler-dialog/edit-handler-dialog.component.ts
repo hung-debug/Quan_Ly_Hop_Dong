@@ -438,9 +438,11 @@ export class EditHandlerComponent implements OnInit {
   async actionWithSignTypeForm() {
     const contractFieldsDetail = await this.contractService.getDetailInforContract(this.data.contract_id).toPromise();
     contractFieldsDetail.participants.forEach((element: any) => {
-      if (element.recipients[0].id == this.recipientId) {
-        this.hasText = element.recipients[0].fields.some((data: any) => data.type !== 2 && data.type !== 3)
-      }
+      element.recipients.forEach((recip: any) => {
+        if (recip.id == this.recipientId) {
+          this.hasText = recip.fields.some((data: any) => data.type !== 2 && data.type !== 3)
+        }
+      }) 
     })
     this.dataSign = this.data.sign_type
     let currentSignType = this.data.sign_type[0]
