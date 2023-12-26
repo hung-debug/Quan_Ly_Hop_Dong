@@ -275,6 +275,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
       const dialogRef = this.dialog.open(EditHandlerComponent, {
         width: '1000px',
+        disableClose: true,
         data,
       })
 
