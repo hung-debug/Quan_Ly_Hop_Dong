@@ -176,7 +176,7 @@ export class EditHandlerComponent implements OnInit {
       email: login_by === 'email' ? this.email.toLowerCase() : login_by === 'phone' ? this.phone : '',
       phone: this.phone,
       login_by: login_by,
-      card_id: [2,4,6,8].includes(this.dataSign[0].id) ? this.card_id : null,
+      card_id: [2,4,5,6,8].includes(this.dataSign[0].id) ? this.card_id : null,
       sign_type: this.dataSign
       // locale: this.locale,
     };
@@ -225,18 +225,19 @@ export class EditHandlerComponent implements OnInit {
   }
   validData() {
     this.clearError();
-    if (!!this.isCheckRadio && (!this.validateName(this.name) || !this.validateEmail(this.email))) {
+    if (!!this.isCheckRadio && (!this.validateName() || !this.validateEmail())) {
       // this.spinner.hide();
       return false;
-    } else if (!this.isCheckRadio && (!this.validateName(this.name) || !this.validatePhoneNumber(this.phone))) {
+    } else if (!this.isCheckRadio && (!this.validateName() || !this.validatePhoneNumber()) || (this.id_sign_type === 1 && !this.validatePhoneNumber())) {
       return false;
     }
-    if ((this.id_sign_type === 4 || this.id_sign_type === 2)) {
-      return this.validateCardId(this.card_id);
+    if ((this.id_sign_type === 4 || this.id_sign_type === 2 || this.id_sign_type === 5 || this.id_sign_type == 6)) {
+      return this.validateCardId();
     }
     return true
   }
-  validateName(testInput: string) {
+  validateName() {
+    let testInput = this.name
     this.errorName = "";
     if (testInput == "") {
       this.errorName = "error.name.required";
@@ -244,19 +245,21 @@ export class EditHandlerComponent implements OnInit {
     }
     return true;
   }
-  validatePhoneNumber(testInput: string) {
+  validatePhoneNumber() {
+    let testInput = this.phone
     this.errorPhone = "";
     if (testInput && !this.pattern.phone.test(testInput)) {
       this.errorPhone = "error.user.phone.format";
       return false;
     }
-    else if (!testInput && !this.isCheckRadio) {
+    else if (!testInput && !this.isCheckRadio || (this.id_sign_type === 1 && !testInput)) {
       this.errorPhone = "error.phone.required";
       return false;
     }
     return true;
   }
-  validateCardId(testInput: string) {
+  validateCardId() {
+    let testInput = this.card_id
     this.errorCardid = "";
     if (testInput == "") {
       this.errorCardid = "error.card.required";
@@ -269,7 +272,8 @@ export class EditHandlerComponent implements OnInit {
     return true;
 
   }
-  validateEmail(testInput: string) {
+  validateEmail() {
+    let testInput = this.email
     this.errorEmail = "";
     if (!this.pattern.email.test(testInput)) {
       this.errorEmail = "error.user.email.format";
