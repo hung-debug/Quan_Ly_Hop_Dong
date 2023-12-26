@@ -285,7 +285,9 @@ export class ProcessingHandleEcontractComponent implements OnInit {
               ...x, name: result.name,
               emailRecipients: result.email,
               phone: result.phone,
-              change_num: result.change_num
+              change_num: result.change_num,
+              typeOfSign: result.sign_type[0],
+              card_id: result.card_id
             }
           }
           return x
