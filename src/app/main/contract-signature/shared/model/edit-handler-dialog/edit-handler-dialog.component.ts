@@ -43,7 +43,7 @@ export class EditHandlerComponent implements OnInit {
   isCheckRadio = this.data.login_by === "phone" ? false : true;
   is_handler: any;
   name: any;
-  recipient_id: any;
+  recipientId: any;
   sign_type: any;
   id_sign_type: any;
   id: any;
@@ -111,6 +111,7 @@ export class EditHandlerComponent implements OnInit {
     this.id = this.data.id;
     this.role = this.data.role;
     this.status = this.data.status;
+    this.recipientId = this.data.id
     // this.contractid = this.data.is_data_contract.id;
 
     this.dropdownSignTypeSettings = {
@@ -435,8 +436,12 @@ export class EditHandlerComponent implements OnInit {
   }
 
   async actionWithSignTypeForm() {
-    const contractFieldsDetail = await this.contractService.getDataObjectSignatureLoadChange(this.data.contract_id).toPromise();
-    this.hasText = contractFieldsDetail.some((data: any) => data.type !== 2 && data.type !== 3)
+    const contractFieldsDetail = await this.contractService.getDetailInforContract(this.data.contract_id).toPromise();
+    contractFieldsDetail.participants.forEach((element: any) => {
+      if (element.recipients[0].id == this.recipientId) {
+        this.hasText = element.recipients[0].fields.some((data: any) => data.type !== 2 && data.type !== 3)
+      }
+    })
     this.dataSign = this.data.sign_type
     let currentSignType = this.data.sign_type[0]
     if(currentSignType.id == 2 || currentSignType.id == 3 || currentSignType.id == 4 || currentSignType.id == 6 || currentSignType.id == 7 || currentSignType.id == 8) {
