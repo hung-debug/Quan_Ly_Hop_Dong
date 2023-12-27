@@ -410,13 +410,14 @@ export class ConsiderContractComponent
   timerId: any;
   typeSignDigital: any;
   isTimestamp: string = 'false';
+  isNotTextSupport: boolean = false;
   getDataContractSignature() {
     this.contractService.getDetailContract(this.idContract).subscribe(
       async (rs) => {
         this.isDataContract = rs[0];
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
-
+        this.checkNotSupportText(rs[2])
         //Hợp đồng huỷ status = 32 => link 404 đối với những người xử lý trong hợp đồng đó trừ người tạo
         if (this.isDataContract.status == 32) {
           //lấy người tạo
@@ -697,6 +698,15 @@ export class ConsiderContractComponent
     );
   }
 
+  checkNotSupportText(signData: any) {
+    signData = signData.filter((item: any) => item.recipient_id == this.recipientId)
+    signData.forEach((element: any) => {
+      if ([3,7,8].includes(element.recipient.sign_type[0].id) && signData.some((p: any) => p.type !== 3)) this.isNotTextSupport = true
+    })
+    if (this.isNotTextSupport) {
+      this.containNotSupportTextSwalfire()
+    }
+  }
   // Error handling
   handleError(error: any) {
     let errorMessage = '';
@@ -1324,7 +1334,9 @@ export class ConsiderContractComponent
                 );
                 return;
               } 
-              if (isRemoteSigning && (res.status == "QUA_THOI_GIAN_KY" || res.status == "THAT_BAI" || res.status == "TU_CHOI")) {
+              if (isRemoteSigning && (res.status == "QUA_THOI_GIAN_KY" || res.status == "THAT_BAI" || res.status == "TU_CHOI") ||
+                this.isNotTextSupport
+              ) {
                 this.validateSignature = () => true
               }
               if (
@@ -4856,5 +4868,18 @@ export class ConsiderContractComponent
       case "TU_CHOI":
         return "Đã từ chối ký hợp đồng trên app CA2 RS, vui lòng thực hiện ký lại trên web!" 
     }
+  }
+
+  containNotSupportTextSwalfire() {
+    return Swal.fire({
+      title: "Hệ thống <b>không hỗ trợ</b> loại ký của bạn <b>nhập ô text/số hợp đồng</b>. Nếu đồng ý với điều khoản hợp đồng, bấm <b>Đồng ý</b>, <b>bỏ qua ô text/số hợp đồng</b> và bấm <b>Xác nhận</b> với điều khoản.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      // cancelButtonColor: '#b0bec5',
+      confirmButtonText: this.translate.instant('Đồng ý'),
+      cancelButtonText: this.translate.instant('contract.status.canceled'),
+      allowOutsideClick: false
+    });
   }
 }
