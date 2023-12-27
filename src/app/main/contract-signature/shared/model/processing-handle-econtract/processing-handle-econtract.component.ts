@@ -85,7 +85,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       } else {
         this.isHiddenButton = false;
       }
-      console.log('response',response.recipients);
       response.recipients.forEach((element: any) => {
         let data = {
           id: element.id,
@@ -106,24 +105,15 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         this.is_list_name.push(data);
       })
 
-      // this.is_list_name.map((x: any) => {
-      //   this.data.is_data_contract.participants.map((item: any) => {
-      //     item.recipients.map((y: any) => {
-      //       if (x.id === y.id) {
-      //         x["change_num"] = y.change_num
-      //       }
-      //     })
-      //   })
-      // })
-      // this.is_list_name.map((x: any) => {
-      //   this.data.is_data_contract.participants.map((item: any) => {
-      //     item.recipients.map((y: any) => {
-      //       if (x.id === y.id) {
-      //         x["change_num"] = y.change_num
-      //       }
-      //     })
-      //   })
-      // })
+      this.is_list_name.map((x: any) => {
+        participants.map((item: any) => {
+          item.recipients.map((y: any) => {
+            if (x.id === y.id) {
+              x.change_num = y.change_num
+            }
+          })
+        })
+      })
 
       this.listCheckSmsEmail = true
 
