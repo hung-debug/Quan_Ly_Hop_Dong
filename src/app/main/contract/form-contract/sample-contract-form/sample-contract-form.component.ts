@@ -402,7 +402,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký"))) ||
           (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8))) ||
           (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8))) ||
-          (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký")))) 
+          (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký"))))
         ));
     }
 
@@ -411,7 +411,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký"))) ||
           (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8))) ||
           (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8))) ||
-          (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký")))) 
+          (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký"))))
         ));
 
 
@@ -440,7 +440,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           dataContractUserSign.some((data: any) =>
             (
               ((val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email as any : data.email as any)) ||
-              ((val.recipient ? val.recipient.phone as any : val.phone as any) === (data.recipient ? data.recipient.phone as any : data.phone as any)) 
+              ((val.recipient ? val.recipient.phone as any : val.phone as any) === (data.recipient ? data.recipient.phone as any : data.phone as any))
             ) &&
             val.sign_unit == data.sign_unit &&
             val.name == data.name &&
@@ -614,7 +614,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         } else {
           this.objSignInfo.width = event.rect.width;
           this.objSignInfo.height = event.rect.height;
-  
+
           this.signCurent.width = event.rect.width;
           this.signCurent.height = event.rect.height;
         }
@@ -881,14 +881,14 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             } else if (isSignType == 'chu_ky_so') {
               element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && element.role != 2);
             } else if (isSignType == 'text') {
-              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8) || element.role == 4);
+              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || (element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3)));
               // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4)); //disable van thu select text
 
             } else {
               if(this.datasForm.contract_no) {
                 element.is_disable = true;
               } else {
-                element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8) || element.role == 4 )
+                element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || (element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3)))
                 // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4)) //disable van thu select o^ so^'
 
               }
@@ -2020,7 +2020,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                 if (element.signature_party == "organization" || element.is_type_party == 1)
                   arrSign_organization.push(data_sign);
                 else arrSign_partner.push(data_sign);
-              }               
+              }
               else {
                 let data_sign = {
                   name: element.name,
@@ -2063,7 +2063,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             if(!this.isCheckRelease && !isSaveDraft) {
               if (boxElements[i].sign_unit.includes('chu_ky') && boxElements[j].sign_unit.includes('chu_ky')) {
                 this.toastService.showErrorHTMLWithTimeout("Vị trí các ô ký không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-              } 
+              }
               if (boxElements[i].sign_unit == boxElements[j].sign_unit && boxElements[i].sign_unit == "text" ) {
                 if ((boxElements[i].text_type == "default" && boxElements[i].text_type == boxElements[j].text_type) ||
                   (boxElements[i].type == boxElements[j].type && boxElements[i].type == 1) ||
@@ -2071,37 +2071,37 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                 ) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí các ô text không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
                 } else if ((boxElements[i].text_type == "currency" && boxElements[j].text_type == "currency") ||
-                          (boxElements[j].text_type == "currency" && boxElements[i].text_type == "currency") || 
-                          (boxElements[i].type == boxElements[j].type && boxElements[i].type == 5))  
+                          (boxElements[j].text_type == "currency" && boxElements[i].text_type == "currency") ||
+                          (boxElements[i].type == boxElements[j].type && boxElements[i].type == 5))
                 {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí các ô số không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
-              } 
+              }
               if (boxElements[i].sign_unit == boxElements[j].sign_unit && boxElements[i].sign_unit == "so_tai_lieu") {
                 this.toastService.showErrorHTMLWithTimeout("Vị trí các ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-              }  
-              
+              }
+
               if ((boxElements[i].sign_unit.includes('chu_ky') && ((boxElements[j].sign_unit == "text" && boxElements[j].text_type == "default") || boxElements[j].type == 1)) ||
                   (boxElements[j].sign_unit.includes('chu_ky') && ((boxElements[i].sign_unit == "text" && boxElements[i].text_type == "default") || boxElements[i].type == 1))) {
                 this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô text hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
               }
-              if ((boxElements[i].sign_unit.includes('chu_ky') && boxElements[j].sign_unit == "so_tai_lieu") || 
+              if ((boxElements[i].sign_unit.includes('chu_ky') && boxElements[j].sign_unit == "so_tai_lieu") ||
                   (boxElements[j].sign_unit.includes('chu_ky') && boxElements[i].sign_unit == "so_tai_lieu"))  {
                 this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số hợp đồng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
               }
               if ((boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky')) ||
-                  (boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky'))) { 
+                  (boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky'))) {
                 this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-              } 
+              }
 
               if ((((boxElements[i].text_type == "default" && boxElements[i].sign_unit == "text") || boxElements[i].type == 1)  && boxElements[j].sign_unit == "so_tai_lieu") ||
                   (((boxElements[j].text_type == "default" && boxElements[j].sign_unit == "text") || boxElements[j].type == 1) && boxElements[i].sign_unit == "so_tai_lieu")) {
                 this.toastService.showErrorHTMLWithTimeout("Vị trí ô text và ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-              } 
+              }
               if ((((boxElements[i].text_type == "default" && boxElements[i].sign_unit == "text") || boxElements[i].type == 1) && boxElements[j].text_type == "currency") ||
               (((boxElements[j].text_type == "default" && boxElements[j].sign_unit == "text") || boxElements[j].type == 1) && boxElements[i].text_type == "currency")) {
                 this.toastService.showErrorHTMLWithTimeout("Vị trí ô text và ô số không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-              } 
+              }
               if ((boxElements[i].sign_unit == "so_tai_lieu" && boxElements[j].text_type == "currency") ||
                   (boxElements[j].sign_unit == "so_tai_lieu" && boxElements[i].text_type == "currency")) {
                 this.toastService.showErrorHTMLWithTimeout("Vị trí ô số và ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
@@ -2124,7 +2124,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               if(!this.isCheckRelease && !isSaveDraft) {
                 if (boxElements[i].sign_unit.includes('chu_ky') && boxElements[j].sign_unit.includes('chu_ky')) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí các ô ký không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-                } 
+                }
                 if (boxElements[i].sign_unit == boxElements[j].sign_unit && boxElements[i].sign_unit == "text" ) {
                   if ((boxElements[i].text_type == "default" && boxElements[i].text_type == boxElements[j].text_type) ||
                     (boxElements[i].type == boxElements[j].type && boxElements[i].type == 1) ||
@@ -2132,43 +2132,43 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                   ) {
                     this.toastService.showErrorHTMLWithTimeout("Vị trí các ô text không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
                   } else if ((boxElements[i].text_type == "currency" && boxElements[j].text_type == "currency") ||
-                            (boxElements[j].text_type == "currency" && boxElements[i].text_type == "currency") || 
-                            (boxElements[i].type == boxElements[j].type && boxElements[i].type == 5))  
+                            (boxElements[j].text_type == "currency" && boxElements[i].text_type == "currency") ||
+                            (boxElements[i].type == boxElements[j].type && boxElements[i].type == 5))
                   {
                     this.toastService.showErrorHTMLWithTimeout("Vị trí các ô số không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                   }
-                } 
+                }
                 if (boxElements[i].sign_unit == boxElements[j].sign_unit && boxElements[i].sign_unit == "so_tai_lieu") {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí các ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-                }  
-                
+                }
+
                 if ((boxElements[i].sign_unit.includes('chu_ky') && ((boxElements[j].sign_unit == "text" && boxElements[j].text_type == "default") || boxElements[j].type == 1)) ||
                     (boxElements[j].sign_unit.includes('chu_ky') && ((boxElements[i].sign_unit == "text" && boxElements[i].text_type == "default") || boxElements[i].type == 1))) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô text hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
                 }
-                if ((boxElements[i].sign_unit.includes('chu_ky') && boxElements[j].sign_unit == "so_tai_lieu") || 
+                if ((boxElements[i].sign_unit.includes('chu_ky') && boxElements[j].sign_unit == "so_tai_lieu") ||
                     (boxElements[j].sign_unit.includes('chu_ky') && boxElements[i].sign_unit == "so_tai_lieu"))  {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số hợp đồng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
                 }
                 if ((boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky')) ||
-                    (boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky'))) { 
+                    (boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky'))) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-                } 
-  
+                }
+
                 if ((((boxElements[i].text_type == "default" && boxElements[i].sign_unit == "text") || boxElements[i].type == 1)  && boxElements[j].sign_unit == "so_tai_lieu") ||
                     (((boxElements[j].text_type == "default" && boxElements[j].sign_unit == "text") || boxElements[j].type == 1) && boxElements[i].sign_unit == "so_tai_lieu")) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô text và ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-                } 
+                }
                 if ((((boxElements[i].text_type == "default" && boxElements[i].sign_unit == "text") || boxElements[i].type == 1) && boxElements[j].text_type == "currency") ||
                 (((boxElements[j].text_type == "default" && boxElements[j].sign_unit == "text") || boxElements[j].type == 1) && boxElements[i].text_type == "currency")) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô text và ô số không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-                } 
+                }
                 if ((boxElements[i].sign_unit == "so_tai_lieu" && boxElements[j].text_type == "currency") ||
                     (boxElements[j].sign_unit == "so_tai_lieu" && boxElements[i].text_type == "currency")) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô số và ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
               }
-              
+
               return false;
             }
           }
@@ -2185,7 +2185,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             if(!this.isCheckRelease && !isSaveDraft) {
               if (boxElements[i].sign_unit.includes('chu_ky') && boxElements[j].sign_unit.includes('chu_ky')) {
                 this.toastService.showErrorHTMLWithTimeout("Vị trí các ô ký không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-              } 
+              }
               if (boxElements[i].sign_unit == boxElements[j].sign_unit && boxElements[i].sign_unit == "text" ) {
                 if ((boxElements[i].text_type == "default" && boxElements[i].text_type == boxElements[j].text_type) ||
                   (boxElements[i].type == boxElements[j].type && boxElements[i].type == 1) ||
@@ -2193,47 +2193,47 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                 ) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí các ô text không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
                 } else if ((boxElements[i].text_type == "currency" && boxElements[j].text_type == "currency") ||
-                          (boxElements[j].text_type == "currency" && boxElements[i].text_type == "currency") || 
-                          (boxElements[i].type == boxElements[j].type && boxElements[i].type == 5))  
+                          (boxElements[j].text_type == "currency" && boxElements[i].text_type == "currency") ||
+                          (boxElements[i].type == boxElements[j].type && boxElements[i].type == 5))
                 {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí các ô số không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
-              } 
+              }
               if (boxElements[i].sign_unit == boxElements[j].sign_unit && boxElements[i].sign_unit == "so_tai_lieu") {
                 this.toastService.showErrorHTMLWithTimeout("Vị trí các ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-              }  
-              
+              }
+
               if ((boxElements[i].sign_unit.includes('chu_ky') && ((boxElements[j].sign_unit == "text" && boxElements[j].text_type == "default") || boxElements[j].type == 1)) ||
                   (boxElements[j].sign_unit.includes('chu_ky') && ((boxElements[i].sign_unit == "text" && boxElements[i].text_type == "default") || boxElements[i].type == 1))) {
                 this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô text hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
               }
-              if ((boxElements[i].sign_unit.includes('chu_ky') && boxElements[j].sign_unit == "so_tai_lieu") || 
+              if ((boxElements[i].sign_unit.includes('chu_ky') && boxElements[j].sign_unit == "so_tai_lieu") ||
                   (boxElements[j].sign_unit.includes('chu_ky') && boxElements[i].sign_unit == "so_tai_lieu"))  {
                 this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số hợp đồng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
               }
               if ((boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky')) ||
-                  (boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky'))) { 
+                  (boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky'))) {
                 this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-              } 
+              }
 
               if ((((boxElements[i].text_type == "default" && boxElements[i].sign_unit == "text") || boxElements[i].type == 1)  && boxElements[j].sign_unit == "so_tai_lieu") ||
                   (((boxElements[j].text_type == "default" && boxElements[j].sign_unit == "text") || boxElements[j].type == 1) && boxElements[i].sign_unit == "so_tai_lieu")) {
                 this.toastService.showErrorHTMLWithTimeout("Vị trí ô text và ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-              } 
+              }
               if ((((boxElements[i].text_type == "default" && boxElements[i].sign_unit == "text") || boxElements[i].type == 1) && boxElements[j].text_type == "currency") ||
               (((boxElements[j].text_type == "default" && boxElements[j].sign_unit == "text") || boxElements[j].type == 1) && boxElements[i].text_type == "currency")) {
                 this.toastService.showErrorHTMLWithTimeout("Vị trí ô text và ô số không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-              } 
+              }
               if ((boxElements[i].sign_unit == "so_tai_lieu" && boxElements[j].text_type == "currency") ||
                   (boxElements[j].sign_unit == "so_tai_lieu" && boxElements[i].text_type == "currency")) {
                 this.toastService.showErrorHTMLWithTimeout("Vị trí ô số và ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
               }
             }
-            
+
             return false;
           }
         }
-      } 
+      }
 
        //Trường hợp 4: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc phải trên
        for(let i = 0; i < coordinate_x.length; i++) {
@@ -2247,7 +2247,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               if(!this.isCheckRelease && !isSaveDraft) {
                 if (boxElements[i].sign_unit.includes('chu_ky') && boxElements[j].sign_unit.includes('chu_ky')) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí các ô ký không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-                } 
+                }
                 if (boxElements[i].sign_unit == boxElements[j].sign_unit && boxElements[i].sign_unit == "text" ) {
                   if ((boxElements[i].text_type == "default" && boxElements[i].text_type == boxElements[j].text_type) ||
                     (boxElements[i].type == boxElements[j].type && boxElements[i].type == 1) ||
@@ -2255,37 +2255,37 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                   ) {
                     this.toastService.showErrorHTMLWithTimeout("Vị trí các ô text không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
                   } else if ((boxElements[i].text_type == "currency" && boxElements[j].text_type == "currency") ||
-                            (boxElements[j].text_type == "currency" && boxElements[i].text_type == "currency") || 
-                            (boxElements[i].type == boxElements[j].type && boxElements[i].type == 5))  
+                            (boxElements[j].text_type == "currency" && boxElements[i].text_type == "currency") ||
+                            (boxElements[i].type == boxElements[j].type && boxElements[i].type == 5))
                   {
                     this.toastService.showErrorHTMLWithTimeout("Vị trí các ô số không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                   }
-                } 
+                }
                 if (boxElements[i].sign_unit == boxElements[j].sign_unit && boxElements[i].sign_unit == "so_tai_lieu") {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí các ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-                }  
-                
+                }
+
                 if ((boxElements[i].sign_unit.includes('chu_ky') && ((boxElements[j].sign_unit == "text" && boxElements[j].text_type == "default") || boxElements[j].type == 1)) ||
                     (boxElements[j].sign_unit.includes('chu_ky') && ((boxElements[i].sign_unit == "text" && boxElements[i].text_type == "default") || boxElements[i].type == 1))) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô text hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
                 }
-                if ((boxElements[i].sign_unit.includes('chu_ky') && boxElements[j].sign_unit == "so_tai_lieu") || 
+                if ((boxElements[i].sign_unit.includes('chu_ky') && boxElements[j].sign_unit == "so_tai_lieu") ||
                     (boxElements[j].sign_unit.includes('chu_ky') && boxElements[i].sign_unit == "so_tai_lieu"))  {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số hợp đồng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
                 }
                 if ((boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky')) ||
-                    (boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky'))) { 
+                    (boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky'))) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-                } 
-  
+                }
+
                 if ((((boxElements[i].text_type == "default" && boxElements[i].sign_unit == "text") || boxElements[i].type == 1)  && boxElements[j].sign_unit == "so_tai_lieu") ||
                     (((boxElements[j].text_type == "default" && boxElements[j].sign_unit == "text") || boxElements[j].type == 1) && boxElements[i].sign_unit == "so_tai_lieu")) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô text và ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-                } 
+                }
                 if ((((boxElements[i].text_type == "default" && boxElements[i].sign_unit == "text") || boxElements[i].type == 1) && boxElements[j].text_type == "currency") ||
                 (((boxElements[j].text_type == "default" && boxElements[j].sign_unit == "text") || boxElements[j].type == 1) && boxElements[i].text_type == "currency")) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô text và ô số không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
-                } 
+                }
                 if ((boxElements[i].sign_unit == "so_tai_lieu" && boxElements[j].text_type == "currency") ||
                     (boxElements[j].sign_unit == "so_tai_lieu" && boxElements[i].text_type == "currency")) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô số và ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
@@ -2304,7 +2304,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       if (count > 0) {
         // alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
         this.spinner.hide();
-        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng chọn người ký cho đối tượng đã kéo thả! (trang ${currentElement.page})`, "", 3000);    
+        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng chọn người ký cho đối tượng đã kéo thả! (trang ${currentElement.page})`, "", 3000);
         return false;
       } else if (count_number > 0) {
         this.spinner.hide();
