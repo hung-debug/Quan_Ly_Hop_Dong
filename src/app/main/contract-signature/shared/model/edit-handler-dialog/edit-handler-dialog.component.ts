@@ -167,6 +167,10 @@ export class EditHandlerComponent implements OnInit {
     }
   }
   UpdateHandler() {
+    if (!this.validData()) {
+      this.spinner.hide();
+      return;
+    }
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
 
     const login_by = this.isCheckRadio ? "email" : "phone"
@@ -182,45 +186,40 @@ export class EditHandlerComponent implements OnInit {
       // locale: this.locale,
     };
 
-    if (!this.validData()) {
-      this.spinner.hide();
-      return;
-    }
-    else {
-      if (this.name !== "") {
-        if (JSON.stringify(this.data) === JSON.stringify(dataUpdate)) {
-          this.spinner.hide();
-          return;
-        }
-        this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
-          (res: any) => {
-            this.spinner.hide();
-            if (!res.success) {
-              switch (res.message) {
-                case "E01": {
-                  this.toastService.showErrorHTMLWithTimeout(this.translate.instant('email.already.exist'), "", 3000);
-                  break
-                }
-                case "E02": {
-                  this.toastService.showErrorHTMLWithTimeout(this.translate.instant('phone.already.exist'), "", 3000);
-                  break
-                }
-                case "E03": {
-                  this.toastService.showErrorHTMLWithTimeout(this.translate.instant('cardid.already.exist'), "", 3000);
-                  break
-                } default: this.toastService.showErrorHTMLWithTimeout(this.translate.instant('error.update.handler'), "", 3000);
-              }
-            } else {
-              this.toastService.showSuccessHTMLWithTimeout(this.translate.instant('update.success'), "", 3000);
-              dataUpdate = { ...dataUpdate, "change_num": this.data.change_num + 1 }
-              this.dialogRef.close(dataUpdate);
-              // this.router.navigate(['/main/form-contract/detail/' + this.id]);
-            }
-          }
-        )
-      } else {
-        this.toastService.showWarningHTMLWithTimeout("Tên người xử lý không được bỏ trống", "", 3000);
+    if (this.name !== "") {
+      if (JSON.stringify(this.data) === JSON.stringify(dataUpdate)) {
+        this.spinner.hide();
+        return;
       }
+      this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
+        (res: any) => {
+          this.spinner.hide();
+          if (!res.success) {
+            switch (res.message) {
+              case "E01": {
+                this.toastService.showErrorHTMLWithTimeout(this.translate.instant('email.already.exist'), "", 3000);
+                break
+              }
+              case "E02": {
+                this.toastService.showErrorHTMLWithTimeout(this.translate.instant('phone.already.exist'), "", 3000);
+                break
+              }
+              case "E03": {
+                this.toastService.showErrorHTMLWithTimeout(this.translate.instant('cardid.already.exist'), "", 3000);
+                break
+              } default: this.toastService.showErrorHTMLWithTimeout(this.translate.instant('error.update.handler'), "", 3000);
+            }
+          } else {
+            this.toastService.showSuccessHTMLWithTimeout(this.translate.instant('update.success'), "", 3000);
+            dataUpdate = { ...dataUpdate, "change_num": this.data.change_num + 1 }
+            this.dialogRef.close(dataUpdate);
+            // this.router.navigate(['/main/form-contract/detail/' + this.id]);
+          }
+        }
+      )
+    } else {
+      this.spinner.hide()
+      this.toastService.showWarningHTMLWithTimeout("Tên người xử lý không được bỏ trống", "", 3000);
     }
 
   }
@@ -234,6 +233,10 @@ export class EditHandlerComponent implements OnInit {
     }
     if ((this.id_sign_type === 4 || this.id_sign_type === 2 || this.id_sign_type === 5 || this.id_sign_type == 6)) {
       return this.validateCardId();
+    }
+    if (this.dataSign.length == 0) {
+      this.toastService.showErrorHTMLWithTimeout("Loại ký không được để trống!","",3000)
+      return false
     }
     return true
   }
