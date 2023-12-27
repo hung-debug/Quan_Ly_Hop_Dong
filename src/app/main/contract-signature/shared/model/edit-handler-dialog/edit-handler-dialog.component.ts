@@ -514,7 +514,7 @@ export class EditHandlerComponent implements OnInit {
     return Swal.fire({
       title: `Người ký <b>${this.data.name}</b> đang có ô text/số hợp đồng cần xử lý, bạn có chắc muốn chuyển sang hình thức ký <b>KHÔNG</b> hỗ trợ <b>nhập ô text/số hợp đồng</b> không?`,
       icon: 'warning',
-      showCancelButton: true,
+      showCancelButton: false,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#b0bec5',
       confirmButtonText: this.translate.instant('confirm'),
