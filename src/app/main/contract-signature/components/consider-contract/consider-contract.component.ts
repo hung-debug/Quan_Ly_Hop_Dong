@@ -971,6 +971,10 @@ export class ConsiderContractComponent
       "border": !d.valueSign ? "1px dashed #6B6B6B" : '',
       "border-radius": "6px"
     }
+    if (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so' && this.isNotTextSupport) {
+      style.backgroundColor = "#eff2f5"
+      style.cursor = "not-allowed"
+    } 
 
     // style.backgroundColor = d.valueSign ? '' : backgroundColor;
     style.display =

@@ -110,7 +110,9 @@
             (checkedChange)="switchesValueChange($event)" 
             *ngIf="![2,3].includes(recipient.status)" 
             [datas]="datas" [view]="[2,3].includes(recipient.status)" 
-            [sign]="d">
+            [sign]="d"
+            [isNotTextSupport]="isNotTextSupport"
+          >
           </app-image-sign-contract>
           <div *ngIf="this.flagFocus && d.sign_unit == 'text'" class="name-sig-img-daky long-text-ellipsis">{{(d.recipient && !d.valueSign) ? d.recipient.name : ''}}</div>
           <div *ngIf="d.sign_unit != 'text' && !this.flagFocus" class="name-sig-img-daky long-text-ellipsis">{{(d.recipient && !d.valueSign) ? d.recipient.name : ''}}</div>

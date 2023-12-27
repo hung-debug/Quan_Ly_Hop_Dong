@@ -21,7 +21,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   @Input() view: any;
   @Input() contractNoValue: boolean;
   @Input() contractNoValueSign: string;
-
+  @Input() isNotTextSupport: boolean
   @ViewChild('inputEditText') inputEditText: ElementRef;
   @ViewChild('inputEditContractNo') inputEditContractNo: ElementRef;
 
@@ -205,7 +205,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doEditText() {
-    
+    if (this.isNotTextSupport) return
     if(this.sign.valueSign != undefined)
     this.sign.valueSign = this.contractService.removePeriodsFromCurrencyValue(this.sign.valueSign);
 
@@ -221,6 +221,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doEditContractNo() {
+    if (this.isNotTextSupport) return
     this.contractNoValue = !this.contractNoValue;
 
     setTimeout(()=>{
