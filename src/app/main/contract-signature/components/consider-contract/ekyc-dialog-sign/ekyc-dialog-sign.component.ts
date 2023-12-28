@@ -106,9 +106,13 @@ export class EkycDialogSignComponent implements OnInit {
     this.spinner.show();
 
     if(this.data.recipientId) {
-      const determineCoordination = await this.contractService.getDetermineCoordination(this.data.recipientId).toPromise();
-      this.cardId = determineCoordination.recipients[0].card_id;
-      this.name = determineCoordination.recipients[0].name;
+      let determineCoordination = await this.contractService.getDetermineCoordination(this.data.recipientId).toPromise();
+      determineCoordination.recipients.forEach((element: any) => {
+        if (element.status == 1) {
+          this.cardId = element.card_id;
+          this.name = element.name;
+        }
+      })
     }
  
     // this.contractService.getDataCoordination(this.data.contractId).subscribe(async (response) => {
