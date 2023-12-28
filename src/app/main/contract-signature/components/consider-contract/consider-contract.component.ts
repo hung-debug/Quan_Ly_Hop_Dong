@@ -2691,22 +2691,22 @@ export class ConsiderContractComponent
           };
 
           if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
-            this.textSign = signUpdate.valueSign;
+            // this.textSign = signUpdate.valueSign;
 
-            this.font = signUpdate.font;
-            this.font_size = signUpdate.font_size;
+            // this.font = signUpdate.font;
+            // this.font_size = signUpdate.font_size;
 
-            this.width = signUpdate.width;
+            // this.width = signUpdate.width;
 
-            await of(null).pipe(delay(120)).toPromise();
-            const imageRender = <HTMLElement>(
-              document.getElementById('text-sign')
-            );
+            // await of(null).pipe(delay(120)).toPromise();
+            // const imageRender = <HTMLElement>(
+            //   document.getElementById('text-sign')
+            // );
 
-            if (imageRender) {
-              const textSignB = await domtoimage.toPng(imageRender);
-              signI = this.textSignBase64Gen = textSignB.split(',')[1];
-            }
+            // if (imageRender) {
+            //   const textSignB = await domtoimage.toPng(imageRender);
+            //   signI = this.textSignBase64Gen = textSignB.split(',')[1];
+            // }
           } else if (signUpdate.type == 3) {
 
             try {
@@ -2740,7 +2740,7 @@ export class ConsiderContractComponent
             }
           }
 
-          if (!this.isRemoteSigningExpired) {
+          if (!this.isRemoteSigningExpired && signUpdate.type == 3 ) {
             this.dataCert = {
               field: fieldRemoteSigning,
               cert_id: this.dataCert.cert_id,
