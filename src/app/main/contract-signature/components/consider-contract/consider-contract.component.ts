@@ -1275,9 +1275,20 @@ export class ConsiderContractComponent
           //   }
           // })
           this.toastService.showSuccessHTMLWithTimeout('success_sign','',3000)
-            this.router.navigate([
-              'main/form-contract/detail/' + this.idContract,
-            ]);
+          this.router.navigateByUrl('/', { skipLocationChange: true })
+            .then(() => {
+              this.router.navigate(
+                ['/main/form-contract/detail/' + this.idContract],
+                {
+                  queryParams: {
+                    recipientId: this.recipientId,
+                    consider: true,
+                    action: 'sign',
+                  },
+                  skipLocationChange: true,
+                }
+              );
+            });
         }
         else {
           if (res.status == "TU_CHOI" && this.countReject == 0) {
