@@ -37,6 +37,7 @@ export class UserService {
 
   updateUserUrl: any = `${environment.apiUrl}/api/v1/customers/`;
   getUserByIdUrl: any = `${environment.apiUrl}/api/v1/customers/`;
+  getOrgChildren: any = `${environment.apiUrl}/api/v1/organizations/getParent`;
   listUserUrl: any = `${environment.apiUrl}/api/v1/customers/search`;
   getUserByEmailUrl: any = `${environment.apiUrl}/api/v1/customers/get-by-email`;
   checkPhoneUrl: any = `${environment.apiUrl}/api/v1/customers/check-phone-unique`;
@@ -93,7 +94,7 @@ export class UserService {
 
     const headers = new HttpHeaders()
       .append('Authorization', 'Bearer ' + this.token)
-          
+
       return this.http.post(
         this.uploadFileUserUrl,
         formData,
@@ -135,7 +136,7 @@ export class UserService {
       'application/json'
     );
 
-    
+
     return this.http.get<any>(this.checkTokenDateUrl + "?token=" + token, { headers: headers});
   }
 
@@ -149,7 +150,7 @@ export class UserService {
       .post<User>(this.resetPasswordUrl, body, { headers: headers })
       .pipe(
         map((user) => {
-          
+
           if (JSON.parse(JSON.stringify(user)).status == 0) {
             return user;
           } else {
@@ -194,7 +195,7 @@ export class UserService {
       .post<User>(this.resetPasswordTokenUrl, body, { headers: headers })
       .pipe(
         map((user) => {
-          
+
           if (JSON.parse(JSON.stringify(user)).status == 0) {
             return user;
           } else {
@@ -232,8 +233,8 @@ export class UserService {
       tax_code: datas.taxCodeHsm,
       hsm_pass: datas.password1Hsm,
     });
-    
-    
+
+
     return this.http.post<User>(this.addUserUrl, body, { headers: headers });
   }
 
@@ -281,6 +282,14 @@ export class UserService {
     return this.http.get<any>(this.getUserByIdUrl + id, { headers: headers},);
   }
 
+  getOrgIdChildren(orgId: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.getOrgChildren + '?orgId='+ orgId, { headers: headers},);
+  }
+
   async getUserById1(id: any) {
     this.getCurrentUser();
     let response = await fetch(this.getUserByIdUrl + id, {
@@ -311,7 +320,7 @@ export class UserService {
     const body = JSON.stringify({
       email: email,
     });
-    
+
     return this.http.post<User>(this.getUserByEmailUrl, body, {
       headers: headers,
     });
@@ -420,7 +429,7 @@ export class UserService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    
+
     return this.http.get<any>(this.getCheckContractUserUrl + '?id=' + id, {
       headers: headers,
     });
@@ -431,7 +440,7 @@ export class UserService {
     const headers = new HttpHeaders()
     .append('Content-Type', 'application/json')
     .append('Authorization', 'Bearer ' + this.token);
-    
+
     return this.http.get<any>(this.checkServiceStatusUrl, {headers}).pipe();
 
   }

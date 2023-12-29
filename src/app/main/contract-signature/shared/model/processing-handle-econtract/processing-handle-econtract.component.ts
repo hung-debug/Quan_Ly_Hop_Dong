@@ -85,7 +85,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       } else {
         this.isHiddenButton = false;
       }
-      console.log('response',response.recipients);
       response.recipients.forEach((element: any) => {
         let data = {
           id: element.id,
@@ -106,24 +105,15 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         this.is_list_name.push(data);
       })
 
-      // this.is_list_name.map((x: any) => {
-      //   this.data.is_data_contract.participants.map((item: any) => {
-      //     item.recipients.map((y: any) => {
-      //       if (x.id === y.id) {
-      //         x["change_num"] = y.change_num
-      //       }
-      //     })
-      //   })
-      // })
-      // this.is_list_name.map((x: any) => {
-      //   this.data.is_data_contract.participants.map((item: any) => {
-      //     item.recipients.map((y: any) => {
-      //       if (x.id === y.id) {
-      //         x["change_num"] = y.change_num
-      //       }
-      //     })
-      //   })
-      // })
+      this.is_list_name.map((x: any) => {
+        participants.map((item: any) => {
+          item.recipients.map((y: any) => {
+            if (x.id === y.id) {
+              x.change_num = y.change_num
+            }
+          })
+        })
+      })
 
       this.listCheckSmsEmail = true
 
@@ -275,6 +265,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
       const dialogRef = this.dialog.open(EditHandlerComponent, {
         width: '1000px',
+        disableClose: true,
         data,
       })
 
@@ -285,7 +276,9 @@ export class ProcessingHandleEcontractComponent implements OnInit {
               ...x, name: result.name,
               emailRecipients: result.email,
               phone: result.phone,
-              change_num: result.change_num
+              change_num: result.change_num,
+              typeOfSign: result.sign_type[0],
+              card_id: result.card_id
             }
           }
           return x

@@ -765,5 +765,6 @@
   "choose.contract.draft":"Please choose the draft contract",
   "expire.status":"Expire",
   "report.email": "EMAIL",
-  "content.email": "CONTENT EMAIL"
+  "content.email": "CONTENT EMAIL",
+  "not.process.contract": "You do not have permission to view your organization's canceled contracts"
 }

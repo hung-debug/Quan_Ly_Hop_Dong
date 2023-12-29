@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment';
 import { parttern, parttern_input } from "../../../../../config/parttern";
 import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-edit-handler-dialog',
   templateUrl: './edit-handler-dialog.component.html',
@@ -42,7 +43,7 @@ export class EditHandlerComponent implements OnInit {
   isCheckRadio = this.data.login_by === "phone" ? false : true;
   is_handler: any;
   name: any;
-  recipient_id: any;
+  recipientId: any;
   sign_type: any;
   id_sign_type: any;
   id: any;
@@ -61,6 +62,13 @@ export class EditHandlerComponent implements OnInit {
   //dropdown
   signTypeList: Array<any> = type_signature;
   checkCount = 1;
+  dataSign: any;
+  isReqPhone: boolean = false;
+  isReqCardId: boolean = false;
+  isReqCardIdToken: boolean = false;
+  isReqCardIdHsm: boolean = false;
+  isReqCardIdCts: boolean = false;
+  hasText: boolean = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private spinner: NgxSpinnerService,
@@ -92,16 +100,6 @@ export class EditHandlerComponent implements OnInit {
       this.signTypeList = type_signature;
     }
 
-    // this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
-    //
-    // this.datas.is_handler = [...this.contractService.getDataDetermineInitialization()];
-    //
-
-
-
-
-
-
     this.name = this.data.name;
     this.login_by = this.data.login_by;
     // voi case email duoc luu theo so phone thi khoi tao se clear rong
@@ -113,6 +111,7 @@ export class EditHandlerComponent implements OnInit {
     this.id = this.data.id;
     this.role = this.data.role;
     this.status = this.data.status;
+    this.recipientId = this.data.id
     // this.contractid = this.data.is_data_contract.id;
 
     this.dropdownSignTypeSettings = {
@@ -125,6 +124,7 @@ export class EditHandlerComponent implements OnInit {
       limitSelection: 1,
       disabledField: 'item_disable',
     };
+    this.actionWithSignTypeForm()
 
   }
   //dropdown contract type
@@ -167,6 +167,10 @@ export class EditHandlerComponent implements OnInit {
     }
   }
   UpdateHandler() {
+    if (!this.validData()) {
+      this.spinner.hide();
+      return;
+    }
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
 
     const login_by = this.isCheckRadio ? "email" : "phone"
@@ -177,66 +181,67 @@ export class EditHandlerComponent implements OnInit {
       email: login_by === 'email' ? this.email.toLowerCase() : login_by === 'phone' ? this.phone : '',
       phone: this.phone,
       login_by: login_by,
-      card_id: this.card_id,
+      card_id: [2,4,5,6,8].includes(this.dataSign[0].id) ? this.card_id : null,
+      sign_type: this.dataSign
       // locale: this.locale,
     };
 
-    if (!this.validData()) {
-      this.spinner.hide();
-      return;
-    }
-    else {
-      if (this.name !== "") {
-        if (JSON.stringify(this.data) === JSON.stringify(dataUpdate)) {
-          this.spinner.hide();
-          return;
-        }
-        this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
-          (res: any) => {
-            this.spinner.hide();
-            if (!res.success) {
-              switch (res.message) {
-                case "E01": {
-                  this.toastService.showErrorHTMLWithTimeout(this.translate.instant('email.already.exist'), "", 3000);
-                  break
-                }
-                case "E02": {
-                  this.toastService.showErrorHTMLWithTimeout(this.translate.instant('phone.already.exist'), "", 3000);
-                  break
-                }
-                case "E03": {
-                  this.toastService.showErrorHTMLWithTimeout(this.translate.instant('cardid.already.exist'), "", 3000);
-                  break
-                } default: this.toastService.showErrorHTMLWithTimeout(this.translate.instant('error.update.handler'), "", 3000);
-              }
-            } else {
-              this.toastService.showSuccessHTMLWithTimeout(this.translate.instant('update.success'), "", 3000);
-              dataUpdate = { ...dataUpdate, "change_num": this.data.change_num + 1 }
-              this.dialogRef.close(dataUpdate);
-              // this.router.navigate(['/main/form-contract/detail/' + this.id]);
-            }
-          }
-        )
-      } else {
-        this.toastService.showWarningHTMLWithTimeout("Tên người xử lý không được bỏ trống", "", 3000);
+    if (this.name !== "") {
+      if (JSON.stringify(this.data) === JSON.stringify(dataUpdate)) {
+        this.spinner.hide();
+        return;
       }
+      this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
+        (res: any) => {
+          this.spinner.hide();
+          if (!res.success) {
+            switch (res.message) {
+              case "E01": {
+                this.toastService.showErrorHTMLWithTimeout(this.translate.instant('email.already.exist'), "", 3000);
+                break
+              }
+              case "E02": {
+                this.toastService.showErrorHTMLWithTimeout(this.translate.instant('phone.already.exist'), "", 3000);
+                break
+              }
+              case "E03": {
+                this.toastService.showErrorHTMLWithTimeout(this.translate.instant('cardid.already.exist'), "", 3000);
+                break
+              } default: this.toastService.showErrorHTMLWithTimeout(this.translate.instant('error.update.handler'), "", 3000);
+            }
+          } else {
+            this.toastService.showSuccessHTMLWithTimeout(this.translate.instant('update.success'), "", 3000);
+            dataUpdate = { ...dataUpdate, "change_num": this.data.change_num + 1 }
+            this.dialogRef.close(dataUpdate);
+            // this.router.navigate(['/main/form-contract/detail/' + this.id]);
+          }
+        }
+      )
+    } else {
+      this.spinner.hide()
+      this.toastService.showWarningHTMLWithTimeout("Tên người xử lý không được bỏ trống", "", 3000);
     }
 
   }
   validData() {
     this.clearError();
-    if (!!this.isCheckRadio && (!this.validateName(this.name) || !this.validateEmail(this.email))) {
+    if (!!this.isCheckRadio && (!this.validateName() || !this.validateEmail())) {
       // this.spinner.hide();
       return false;
-    } else if (!this.isCheckRadio && (!this.validateName(this.name) || !this.validatePhoneNumber(this.phone))) {
+    } else if (!this.isCheckRadio && (!this.validateName() || !this.validatePhoneNumber()) || (this.id_sign_type === 1 && !this.validatePhoneNumber())) {
       return false;
     }
-    if ((this.id_sign_type === 4 || this.id_sign_type === 2)) {
-      return this.validateCardId(this.card_id);
+    if ((this.id_sign_type === 4 || this.id_sign_type === 2 || this.id_sign_type === 5 || this.id_sign_type == 6)) {
+      return this.validateCardId();
+    }
+    if (this.dataSign.length == 0) {
+      this.toastService.showErrorHTMLWithTimeout("Loại ký không được để trống!","",3000)
+      return false
     }
     return true
   }
-  validateName(testInput: string) {
+  validateName() {
+    let testInput = this.name
     this.errorName = "";
     if (testInput == "") {
       this.errorName = "error.name.required";
@@ -244,19 +249,21 @@ export class EditHandlerComponent implements OnInit {
     }
     return true;
   }
-  validatePhoneNumber(testInput: string) {
+  validatePhoneNumber() {
+    let testInput = this.phone
     this.errorPhone = "";
     if (testInput && !this.pattern.phone.test(testInput)) {
       this.errorPhone = "error.user.phone.format";
       return false;
     }
-    else if (!testInput && !this.isCheckRadio) {
+    else if (!testInput && !this.isCheckRadio || (this.id_sign_type === 1 && !testInput)) {
       this.errorPhone = "error.phone.required";
       return false;
     }
     return true;
   }
-  validateCardId(testInput: string) {
+  validateCardId() {
+    let testInput = this.card_id
     this.errorCardid = "";
     if (testInput == "") {
       this.errorCardid = "error.card.required";
@@ -269,7 +276,8 @@ export class EditHandlerComponent implements OnInit {
     return true;
 
   }
-  validateEmail(testInput: string) {
+  validateEmail() {
+    let testInput = this.email
     this.errorEmail = "";
     if (!this.pattern.email.test(testInput)) {
       this.errorEmail = "error.user.email.format";
@@ -292,14 +300,6 @@ export class EditHandlerComponent implements OnInit {
     }
   }
 
-  onItemSelect(e: any, data: any) {
-
-    //
-    this.checkCount = 1; // gan lai de lan sau ko bi tang index
-  }
-  // dataParnterOrganization() {
-  //   return this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
-  // }
   addOriganzationSignature() {
     let data_determine_add = [];
     data_determine_add = [...this.contractService.getDataDetermine()];
@@ -436,5 +436,93 @@ export class EditHandlerComponent implements OnInit {
         data_ordering.focus();
       this.toastService.showWarningHTMLWithTimeout("Bạn chưa nhập thứ tự ký!", "", 3000);
     }
+  }
+
+  async actionWithSignTypeForm() {
+    const contractFieldsDetail = await this.contractService.getDetailInforContract(this.data.contract_id).toPromise();
+    contractFieldsDetail.participants.forEach((element: any) => {
+      element.recipients.forEach((recip: any) => {
+        if (recip.id == this.recipientId) {
+          this.hasText = recip.fields.some((data: any) => data.type !== 2 && data.type !== 3)
+        }
+      }) 
+    })
+    this.dataSign = this.data.sign_type
+    let currentSignType = this.data.sign_type[0]
+    if(currentSignType.id == 2 || currentSignType.id == 3 || currentSignType.id == 4 || currentSignType.id == 6 || currentSignType.id == 7 || currentSignType.id == 8) {
+      this.signTypeList = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8);
+    } else if(currentSignType.id == 1 ||  currentSignType.id == 5) {
+      this.signTypeList = this.signTypeList.filter((p: any) => p.id == 1 || p.id == 5);
+    }
+ 
+  }
+
+  getTargetRecipientData(targetId : number){
+    if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
+      const participants = this.datas?.dataContract?.is_data_contract?.participants;
+      for (const participant of participants) {
+        for (const recipient of participant.recipients) {
+          if (targetId == recipient.id) {
+            return recipient;
+          }
+        }
+      }
+    }
+  }
+
+  onItemSelect(event: any) {
+    // 1: Ký ảnh
+    // 5: Ký ekyc
+    if(event.id == 1) {
+      this.isReqPhone = true;
+      this.isReqCardId = false;
+    } else if(event.id == 5) {
+      this.isReqCardId = true;
+    } else if(event.id == 4) {
+      //Ký hsm
+      this.isReqCardIdHsm = true;
+      this.isReqCardIdToken = false;
+      this.isReqCardIdCts = false;
+    } else if(event.id == 2) {
+      //Ký token
+      this.isReqCardIdHsm = false;
+      this.isReqCardIdToken = true;
+      this.isReqCardIdCts = false;
+    } else if(event.id == 6){
+      this.isReqCardIdCts = true;
+      this.isReqCardIdHsm = false;
+      this.isReqCardIdToken = false;
+    } else if(event.id == 8){
+      this.isReqCardIdCts = true;
+      this.isReqCardIdHsm = false;
+      this.isReqCardIdToken = false;
+    } else if(event.id == 7){
+      this.isReqCardIdCts = false;
+      this.isReqCardIdHsm = false;
+      this.isReqCardIdToken = false;
+      this.isReqPhone = false;
+    } else if(event.id == 3){
+      this.isReqCardIdCts = false;
+      this.isReqCardIdHsm = false;
+      this.isReqCardIdToken = false;
+    }
+    if (![2,4,6].includes(event.id) && this.hasText) {
+      this.checkContractTextFieldsSwalfire()
+    }
+    this.dataSign = this.signTypeList.filter(signType => signType.id == event.id) 
+    this.id_sign_type = this.dataSign[0].id
+  }
+
+  checkContractTextFieldsSwalfire() {
+    return Swal.fire({
+      title: `Người ký <b>${this.data.name}</b> đang có ô text/số hợp đồng cần xử lý, bạn có chắc muốn chuyển sang hình thức ký <b>KHÔNG</b> hỗ trợ <b>nhập ô text/số hợp đồng</b> không?`,
+      icon: 'warning',
+      showCancelButton: false,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#b0bec5',
+      confirmButtonText: this.translate.instant('confirm'),
+      cancelButtonText: this.translate.instant('contract.status.canceled'),
+      allowOutsideClick: false
+    });
   }
 }
