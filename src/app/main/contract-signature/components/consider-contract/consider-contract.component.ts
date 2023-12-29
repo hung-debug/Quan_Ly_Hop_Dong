@@ -1275,7 +1275,9 @@ export class ConsiderContractComponent
           //   }
           // })
           this.toastService.showSuccessHTMLWithTimeout('success_sign','',3000)
-          window.location.reload()
+            this.router.navigate([
+              'main/form-contract/detail/' + this.idContract,
+            ]);
         }
         else {
           if (res.status == "TU_CHOI" && this.countReject == 0) {
