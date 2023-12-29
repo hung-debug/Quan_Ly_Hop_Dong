@@ -905,7 +905,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.list_sign_name.forEach((element: any) => {
       if (this.convertToSignConfig().some((p: any) => (
         (element.login_by == 'phone' ? (p.recipient ? p.recipient.phone : p.phone) == element.phone :
-        (p.recipient ? p.recipient.email : p.email) == element.email) && p.sign_unit == isSignType) ||
+        ((p.recipient ? p.recipient.email : p.email) == element.email)) && p.sign_unit == isSignType) ||
         (isSignType == 'so_tai_lieu' && (p.recipient ? p?.recipient?.email : p.email ? p?.recipient?.phone : p.phone) && p.sign_unit == 'so_tai_lieu'))) {
         if (isSignType != 'text') {
           if (isSignType == 'so_tai_lieu') {
@@ -918,6 +918,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           } else {
             element.is_disable = true
           }
+        } else if (isSignType == 'text') {
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 ) || (element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3))); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
         }
       } else {
         if (isSignType == 'chu_ky_anh') {
