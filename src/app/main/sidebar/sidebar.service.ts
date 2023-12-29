@@ -458,7 +458,7 @@ export class SidebarService {
       this.isQLMHD_08
     ) {
       this.menus.push({
-        title: 'menu.contract.template.list',
+        title: 'menu.contract.template',
         icon: '/assets/img/db_processing.svg',
         active: false,
         type: 'simple',
@@ -467,67 +467,135 @@ export class SidebarService {
       });
     }
 
-    if (this.isQLTC_01 || this.isQLTC_02 || this.isQLTC_03 || this.isQLTC_04) {
-      this.menus.push({
-        title: 'menu.organization.list',
-        icon: '/assets/img/db_user_group.svg',
-        active: false,
-        type: 'simple',
-        href: '/main/unit',
-        id: 5,
-      });
-    }
-    if (this.isQLND_01 || this.isQLND_02 || this.isQLND_03 || this.isQLND_04) {
-      this.menus.push({
-        title: 'menu.user.list',
-        icon: '/assets/img/db_user.svg',
-        active: false,
-        type: 'simple',
-        href: '/main/user',
-        id: 6,
-      });
-    }
-    if (
-      this.isQLVT_01 ||
-      this.isQLVT_02 ||
-      this.isQLVT_03 ||
-      this.isQLVT_04 ||
-      this.isQLVT_05
-    ) {
-      this.menus.push({
-        title: 'menu.role.list',
-        icon: '/assets/img/db_role.svg',
-        active: false,
-        type: 'simple',
-        href: '/main/role',
-        id: 7,
-      });
-    }
-    if (
-      this.isQLLHD_01 ||
-      this.isQLLHD_02 ||
-      this.isQLLHD_03 ||
-      this.isQLLHD_04 ||
-      this.isQLLHD_05
-    ) {
-      this.menus.push({
-        title: 'menu.contract.type.list',
-        icon: '/assets/img/db_contract_type.svg',
-        active: false,
-        type: 'simple',
-        href: '/main/contract-type',
-        id: 8,
-      });
-    }
+    if(this.isQLTC_01 || this.isQLTC_02 || this.isQLTC_03 || this.isQLTC_04 ||
+      this.isQLND_01 || this.isQLND_02 || this.isQLND_03 || this.isQLND_04 ||
+      this.isQLVT_01 || this.isQLVT_02 || this.isQLVT_03 || this.isQLVT_04 || this.isQLVT_05)
+      {
+        let submenusUserManage: any[] = [];
+        submenusUserManage.push(
+          {
+            title: 'menu.organization.list',
+            active: false,
+            href: '/main/unit',
+          },
+          {
+            title: 'menu.user.list',
+            active: false,
+            href: '/main/user',
+          },
+          {
+            title: 'menu.role.list',
+            active: false,
+            href: '/main/role',
+          }
+        )
+        this.menus.push({
+          title: 'menu.manager.user',
+          icon: '/assets/img/db_processing.svg',
+          active: false,
+          activeDrop: false,
+          type: 'dropdown',
+          href: '#',
+          submenus: submenusUserManage,
+          id: 5,
+        });
+      }
+
+    // if (this.isQLTC_01 || this.isQLTC_02 || this.isQLTC_03 || this.isQLTC_04) {
+    //   this.menus.push({
+    //     title: 'menu.organization.list',
+    //     icon: '/assets/img/db_user_group.svg',
+    //     active: false,
+    //     type: 'simple',
+    //     href: '/main/unit',
+    //     id: 5,
+    //   });
+    // }
+    // if (this.isQLND_01 || this.isQLND_02 || this.isQLND_03 || this.isQLND_04) {
+    //   this.menus.push({
+    //     title: 'menu.user.list',
+    //     icon: '/assets/img/db_user.svg',
+    //     active: false,
+    //     type: 'simple',
+    //     href: '/main/user',
+    //     id: 6,
+    //   });
+    // }
+    // if (this.isQLVT_01 || this.isQLVT_02 || this.isQLVT_03 || this.isQLVT_04 || this.isQLVT_05) {
+    //   this.menus.push({
+    //     title: 'menu.role.list',
+    //     icon: '/assets/img/db_role.svg',
+    //     active: false,
+    //     type: 'simple',
+    //     href: '/main/role',
+    //     id: 7,
+    //   });
+    // }
 
     this.menus.push({
-      title: 'menu.check.sign.digital',
-      icon: '/assets/img/check_sign_digital.svg',
+      title: 'customer.list',
+      icon: '/assets/img/customer_list.svg',
       active: false,
       type: 'simple',
-      href: '/main/check-sign-digital',
-      id: 9,
-    });
+      href: '/main/customer',
+      id: 11,
+    })
+
+    if(this.isQLLHD_01 || this.isQLLHD_02 || this.isQLLHD_03 || this.isQLLHD_04 || this.isQLLHD_05 ||
+      this.isConfigSms || this.isConfigSoonExpireDay ||
+      this.QLDSCTS_01 || this.QLDSCTS_02 || this.QLDSCTS_03 || this.QLDSCTS_04)
+      {
+        let submenusConfig: any[] = [];
+        submenusConfig.push(
+          {
+            title: 'menu.contract.type.list',
+            active: false,
+            href: '/main/contract-type',
+          },
+          {
+            title: 'menu.config-sms-email',
+            active: false,
+            href: '/main/config-sms-email',
+          },
+          {
+            title: 'certificate.list',
+            active: false,
+            href: '/main/digital-certificate',
+          }
+        )
+        this.menus.push({
+          title: 'menu.config',
+          icon: '/assets/img/email-sms.svg',
+          active: false,
+          activeDrop: false,
+          type: 'dropdown',
+          href: '#',
+          submenus: submenusConfig,
+          id: 6,
+        });
+      }
+
+      this.menus.push({
+        title: 'contract.folder',
+        icon: '/assets/img/contract.svg',
+        active: false,
+        type: 'simple',
+        href: '/main/contract-folder',
+        id: 12,
+      })
+
+    // if (this.isQLLHD_01 || this.isQLLHD_02 || this.isQLLHD_03 || this.isQLLHD_04 || this.isQLLHD_05)
+    // {
+    //   this.menus.push({
+    //     title: 'menu.contract.type.list',
+    //     icon: '/assets/img/db_contract_type.svg',
+    //     active: false,
+    //     type: 'simple',
+    //     href: '/main/contract-type',
+    //     id: 8,
+    //   });
+    // }
+
 
     let submenusReport: any[] = [];
 
@@ -617,45 +685,36 @@ export class SidebarService {
         id: 10,
       })
     }
-    if (this.QLDSCTS_01 || this.QLDSCTS_02 || this.QLDSCTS_03 || this.QLDSCTS_04) {
-      this.menus.push({
-        title: 'certificate.list',
-        icon: '/assets/img/icon-document.svg',
-        active: false,
-        type: 'simple',
-        href: '/main/digital-certificate',
-        id: 6,
-      });
-    }
 
     this.menus.push({
-      title: 'customer.list',
-      icon: '/assets/img/customer_list.svg',
+      title: 'menu.check.sign.digital',
+      icon: '/assets/img/check_sign_digital.svg',
       active: false,
       type: 'simple',
-      href: '/main/customer',
-      id: 11,
-    })
+      href: '/main/check-sign-digital',
+      id: 9,
+    });
+    // if (this.QLDSCTS_01 || this.QLDSCTS_02 || this.QLDSCTS_03 || this.QLDSCTS_04) {
+    //   this.menus.push({
+    //     title: 'certificate.list',
+    //     icon: '/assets/img/icon-document.svg',
+    //     active: false,
+    //     type: 'simple',
+    //     href: '/main/digital-certificate',
+    //     id: 6,
+    //   });
+    // }
 
-    this.menus.push({
-      title: 'contract.folder',
-      icon: '/assets/img/contract.svg',
-      active: false,
-      type: 'simple',
-      href: '/main/contract-folder',
-      id: 12,
-    })
-
-    if(this.isConfigSms || this.isConfigSoonExpireDay) {
-      this.menus.push({
-        title: 'menu.config-sms-email',
-        icon: '/assets/img/email-sms.svg',
-        active: false,
-        type: 'simple',
-        href: '/main/config-sms-email',
-        id: 9,
-      })
-    }
+    // if(this.isConfigSms || this.isConfigSoonExpireDay) {
+    //   this.menus.push({
+    //     title: 'menu.config-sms-email',
+    //     icon: '/assets/img/email-sms.svg',
+    //     active: false,
+    //     type: 'simple',
+    //     href: '/main/config-sms-email',
+    //     id: 9,
+    //   })
+    // }
 
 
     //xu ly highlight
