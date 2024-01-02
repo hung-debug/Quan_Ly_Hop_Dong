@@ -112,9 +112,8 @@ export class DashboardComponent implements OnInit {
             localStorage.setItem("countNoti",countNotiWarning.toString())
             this.currentDate = new Date();
             this.endLicense = new Date(dataOrg.endLicense);
-
             this.daysRemaining = Math.floor((new Date(this.endLicense).getTime() - this.currentDate.getTime()) / (1000 * 60 * 60 * 24));
-            this.daysRemaining = Math.abs(this.daysRemaining)
+            // this.daysRemaining = Math.abs(this.daysRemaining)
 
             this.validateExpDateAndPackageNumber(dataOrg.numberOfEkyc, dataOrg.numberOfSms, dataOrg.numberOfContractsCanCreate, dataOrg.numberOfCeca, this.daysRemaining, this.currentDate, this.endLicense)
 
@@ -203,7 +202,7 @@ export class DashboardComponent implements OnInit {
   }
 
   validateExpDateAndPackageNumber(numberOfEkyc: any, numberOfSms: any, numberOfContractsCanCreate: any, numberOfCeca: any, daysRemaining: any, currentDate: any, endLicense: any){
-    if (daysRemaining < 60){
+    if (daysRemaining < 60 && daysRemaining > 0){
       this.isSoonExp = true
     }
     if (new Date(currentDate) > new Date(endLicense)){
