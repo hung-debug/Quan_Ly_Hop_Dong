@@ -181,7 +181,7 @@ export class EditHandlerComponent implements OnInit {
       email: login_by === 'email' ? this.email.toLowerCase() : login_by === 'phone' ? this.phone : '',
       phone: this.phone,
       login_by: login_by,
-      card_id: [2,4,5,6,8].includes(this.dataSign[0].id) ? this.card_id : null,
+      card_id: [2,4,5,6,8].includes(this.dataSign[0].id) ? this.card_id : "",
       sign_type: this.dataSign
       // locale: this.locale,
     };
