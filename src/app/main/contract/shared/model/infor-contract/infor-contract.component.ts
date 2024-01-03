@@ -381,7 +381,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         // this.spinner.hide();
         return false;
       }
-    } else if (environment.flag == 'KD' && 
+    } else if (environment.flag == 'KD' &&
       (!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid() || !this.contractCeCaValid())) {
         return false
     }
@@ -462,6 +462,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       if (countSuccess == 0 && this.uploadFileContractAgain) {
         //
         await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data: any) => {
+          this.datas.isUploadNewFile = true;
           this.datas.filePath = data?.file_object?.file_path;
           this.datas.fileName = data?.file_object?.filename;
           this.datas.fileBucket = data?.file_object?.bucket;
@@ -502,6 +503,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           })
 
           await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data: any) => {
+            this.datas.isUploadNewFile = true;
             this.datas.filePath = data?.file_object?.file_path;
             this.datas.fileName = data?.file_object?.filename;
             this.datas.fileBucket = data?.file_object?.bucket;
@@ -797,7 +799,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       return;
     } else {
       this.spinner.show();
-    
+
       // set value to datas
       this.datas.name = this.name;
       this.datas.contract_no = this.contract_no?.trim();
