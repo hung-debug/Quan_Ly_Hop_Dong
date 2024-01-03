@@ -480,12 +480,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     for (const d of dataContractUserSign) {
       for (const data of dataDetermine) {
         if (((d.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && d.recipient_id == data.id) ||
-          (d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
-          (d.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
-          (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && d.recipient_id == data.id)) &&
-          (((d.email ? d.email : d.recipient?.email) === data.email) || ((d.phone ? d.phone : d.recipient?.phone) == data.phone)) ||
-          (!d.recipient && d.sign_unit == 'text') ||
-          ((!d.email || !d.phone) && this.datas.contract_no && d.sign_unit == 'so_tai_lieu')) {
+          ((d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && d.recipient_id == data.id) ||
+          ((d.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && d.recipient_id == data.id) ||
+          (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && d.recipient_id == data.id))) {
 
           isContractSign.push(d); // mảng get dữ liệu không bị thay đổi
         }
@@ -494,15 +491,21 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     // Get những dữ liệu bị thay đổi
     let dataDiffirent: any[] = [];
-    if (isContractSign.length > 0 && dataDetermine.length > 0) {
-      //
-      for (const d of dataContractUserSign) {
-        let dataNotLocation = isContractSign.filter((p: any) => (d.recipient_id && p.recipient_id == d.recipient_id) || (!d.recipient_id && d.sign_unit == 'so_tai_lieu' && this.datas.contract_no))[0];
-        if (!dataNotLocation) {
-          dataDiffirent.push(d); // mảng chứa dữ liệu bị thay đổi giá trị (name, email, sign_type)
-        }
-      }
-    }
+    // if (isContractSign.length > 0 && dataDetermine.length > 0) {
+    //   //
+    //   for (const d of dataContractUserSign) {
+    //     let dataNotLocation = isContractSign.filter((p: any) => (d.recipient_id && p.recipient_id == d.recipient_id) || (!d.recipient_id && d.sign_unit == 'so_tai_lieu' && this.datas.contract_no))[0];
+    //     if (!dataNotLocation) {
+    //       dataDiffirent.push(d); // mảng chứa dữ liệu bị thay đổi giá trị (name, email, sign_type)
+    //     }
+    //   }
+    // }
+    dataDiffirent = dataContractUserSign.filter((d: any) => !dataDetermine.some((data: any) => 
+      (((d.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && d.recipient_id == data.id) ||
+      ((d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && d.recipient_id == data.id) ||
+      ((d.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && d.recipient_id == data.id) ||
+      (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && d.recipient_id == data.id)) 
+    )))
 
     // xoa nhung du lieu doi tuong bi thay doi
     if (dataDiffirent.length > 0) {
@@ -512,10 +515,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           * begin xóa đối tượng ký đã bị thay đổi dữ liệu
           */
           res.sign_config.forEach((element: any) => {
-            if (element.id_have_data && isContractSign.some((p: any) => p.id_have_data == element.id_have_data)) {
-
-            } else {
-              if (element.id_have_data) {
+            if (dataDiffirent.some((p: any) => p.id == element.id && p.recipient_id == element.recipient_id && p.id_have_data == element.id_have_data)) {
+              if (dataDetermine.some((p: any) => p.id == element.recipient_id)) {
                 this.removeDataSignChange(element.id_have_data);
               }
             }
