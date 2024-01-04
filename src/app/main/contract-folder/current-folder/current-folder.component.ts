@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { sideList } from 'src/app/config/variable';
 import { DeleteContractDialogComponent } from '../../contract/dialog/delete-contract-dialog/delete-contract-dialog.component';
 import { DeleteContractFolderComponent } from './delete-contract-folder/delete-contract-folder.component';
+import { UploadContractFileComponent } from './upload-contract-file/upload-contract-file.component';
 
 @Component({
   selector: 'app-current-folder',
@@ -186,6 +187,14 @@ export class CurrentFolderComponent implements OnInit {
       return "[Không xác định]";
     }
     return "";
+  }
+
+  uploadContract() {
+    let data
+    this.dialog.open(UploadContractFileComponent, {
+      width: '580px',
+      data: data,
+    })
   }
 
 }
