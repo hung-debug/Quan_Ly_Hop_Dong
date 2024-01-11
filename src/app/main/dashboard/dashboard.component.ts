@@ -11,6 +11,7 @@ import {UnitService} from 'src/app/service/unit.service';
 import {DatePipe} from '@angular/common';
 import { RoleService } from 'src/app/service/role.service';
 import * as moment from 'moment';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-dashboard',
@@ -68,6 +69,9 @@ export class DashboardComponent implements OnInit {
   isCecaExp: boolean = false;
   isContractExp: boolean = false;
   OrgId: any;
+  enviroment: any = "";
+  site: string;
+
   constructor(
     private appService: AppService,
     private dashboardService: DashboardService,
@@ -87,6 +91,14 @@ export class DashboardComponent implements OnInit {
 
   lang: any;
   ngOnInit(): void {
+
+    this.enviroment = environment;
+    if (environment.flag == 'NB') {
+      this.site = 'NB';
+    } else if (environment.flag == 'KD') {
+      this.site = 'KD';
+    }
+
     this.appService.setTitle("menu.dashboard");
     this.search();
     let count = localStorage.getItem('countNoti')
@@ -202,25 +214,27 @@ export class DashboardComponent implements OnInit {
   }
 
   validateExpDateAndPackageNumber(numberOfEkyc: any, numberOfSms: any, numberOfContractsCanCreate: any, numberOfCeca: any, daysRemaining: any, currentDate: any, endLicense: any){
-    if (daysRemaining < 60 && daysRemaining > 0){
-      this.isSoonExp = true
+    if(environment.flag == 'KD'){
+      if (daysRemaining < 60 && daysRemaining > 0){
+        this.isSoonExp = true
+      }
+      if (new Date(currentDate) > new Date(endLicense)){
+        this.isExp = true
+      }
+      if (numberOfEkyc < 30 && numberOfEkyc > 0){
+        this.isEkycExp = true
+      }
+      if (numberOfSms < 30 && numberOfSms > 0) {
+        this.isSmsExp = true
+      }
+      if (numberOfContractsCanCreate < 30 && numberOfContractsCanCreate > 0) {
+        this.isContractExp = true
+      }
+      if (numberOfCeca < 30 && numberOfCeca > 0) {
+        this.isCecaExp = true
+      }
+      this.getNotiMessage(this.isSoonExp, this.isExp, this.isEkycExp, this.isSmsExp, this.isCecaExp, this.isContractExp)
     }
-    if (new Date(currentDate) > new Date(endLicense)){
-      this.isExp = true
-    }
-    if (numberOfEkyc < 30 && numberOfEkyc > 0){
-      this.isEkycExp = true
-    }
-    if (numberOfSms < 30 && numberOfSms > 0) {
-      this.isSmsExp = true
-    }
-    if (numberOfContractsCanCreate < 30 && numberOfContractsCanCreate > 0) {
-      this.isContractExp = true
-    }
-    if (numberOfCeca < 30 && numberOfCeca > 0) {
-      this.isCecaExp = true
-    }
-    this.getNotiMessage(this.isSoonExp, this.isExp, this.isEkycExp, this.isSmsExp, this.isCecaExp, this.isContractExp)
   }
 
   array_empty: any = [];
