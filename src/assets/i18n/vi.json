@@ -783,5 +783,7 @@
   "my.org.not.authen":"Danh sách hợp đồng tổ chức của tôi chưa được phân quyền",
   "expire.status":"Hết hiệu lực",
   "report.email": "EMAIL",
-  "not.process.contract": "Bạn không có quyền xem hợp đồng đã hủy của tổ chức"
+  "not.process.contract": "Bạn không có quyền xem hợp đồng đã hủy của tổ chức",
+  "get.contract.data.err": "Không lấy được dữ liệu file hợp đồng",
+  "get.cert.data.err": "Không lấy được thông tin chứng thư số"
 }

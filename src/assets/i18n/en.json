@@ -769,5 +769,7 @@
   "expire.status":"Expire",
   "report.email": "EMAIL",
   "content.email": "CONTENT EMAIL",
-  "not.process.contract": "You do not have permission to view your organization's canceled contracts"
+  "not.process.contract": "You do not have permission to view your organization's canceled contracts",
+  "get.contract.data.err": "Unable to retrieve contract file data",
+  "get.cert.data.err": "Unable to get digital certificate information"
 }

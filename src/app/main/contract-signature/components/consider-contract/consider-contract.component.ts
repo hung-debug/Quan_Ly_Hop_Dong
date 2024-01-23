@@ -1950,7 +1950,14 @@ export class ConsiderContractComponent
         for (const signUpdate of this.isDataObjectSignature) {
           if (signUpdate && (signUpdate.type == 1 || signUpdate.type == 3 || signUpdate.type == 4 || signUpdate.type == 5) && [3, 4].includes(this.datas.roleContractReceived) &&
             signUpdate?.recipient?.email === this.currentUser.email && signUpdate?.recipient?.role === this.datas?.roleContractReceived) {
-            let fileC = await this.contractService.getFileContractPromise(this.idContract);
+            let fileC: any
+            try {
+              fileC = await this.contractService.getFileContractPromise(
+                this.idContract
+              );
+            } catch (error) {
+              return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
+            }
             const pdfC2 = fileC.find((p: any) => p.type == 2);
             const pdfC1 = fileC.find((p: any) => p.type == 1);
             if (pdfC2) {
@@ -2068,7 +2075,12 @@ export class ConsiderContractComponent
             const signDigital = JSON.parse(JSON.stringify(signUpdate));
             signDigital.Serial = this.signCertDigital.Serial;
 
-            const base64String = await this.contractService.getDataFileUrlPromise(fileC);
+            let base64String: any
+            try {
+              base64String = await this.contractService.getDataFileUrlPromise(fileC);
+            } catch (error) {
+              return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
+            }
             
             signDigital.valueSignBase64 = encode(base64String);
 
@@ -2154,9 +2166,14 @@ export class ConsiderContractComponent
           signUpdate?.recipient?.email === this.currentUser.email &&
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
       );
-      let fileC = await this.contractService.getFileContractPromise(
-        this.idContract
-      );
+      let fileC: any
+      try {
+        fileC = await this.contractService.getFileContractPromise(
+          this.idContract
+        );
+      } catch (error) {
+        return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
+      }
       const pdfC2 = fileC.find((p: any) => p.type == 2);
       const pdfC1 = fileC.find((p: any) => p.type == 1);
       if (pdfC2) {
@@ -2237,9 +2254,14 @@ export class ConsiderContractComponent
               signUpdate?.recipient?.role === this.datas?.roleContractReceived
           );
 
-          let fileC = await this.contractService.getFileContractPromise(
-            this.idContract
-          );
+          let fileC: any
+          try {
+            fileC = await this.contractService.getFileContractPromise(
+              this.idContract
+            );
+          } catch (error) {
+            return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
+          }
 
           const pdfC2 = fileC.find((p: any) => p.type == 2);
           const pdfC1 = fileC.find((p: any) => p.type == 1);
@@ -2415,9 +2437,14 @@ export class ConsiderContractComponent
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
       );
 
-      let fileC = await this.contractService.getFileContractPromise(
-        this.idContract
-      );
+      let fileC: any
+      try {
+        fileC = await this.contractService.getFileContractPromise(
+          this.idContract
+        );
+      } catch (error) {
+        return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
+      }
       const pdfC2 = fileC.find((p: any) => p.type == 2);
       const pdfC1 = fileC.find((p: any) => p.type == 1);
       if (pdfC2) {
@@ -2450,9 +2477,14 @@ export class ConsiderContractComponent
               signUpdate?.recipient?.role === this.datas?.roleContractReceived
           );
 
-          let fileC = await this.contractService.getFileContractPromise(
-            this.idContract
-          );
+          let fileC: any
+          try {
+            fileC = await this.contractService.getFileContractPromise(
+              this.idContract
+            );
+          } catch (error) {
+            return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
+          }
 
           const pdfC2 = fileC.find((p: any) => p.type == 2);
           const pdfC1 = fileC.find((p: any) => p.type == 1);
@@ -2465,9 +2497,14 @@ export class ConsiderContractComponent
           }
 
           //for test
-          const inforCert = await this.contractService
-            .certInfoCert(this.cert_id)
-            .toPromise();
+          let inforCert: any
+          try {
+            inforCert = await this.contractService
+              .certInfoCert(this.cert_id)
+              .toPromise();
+          } catch (error) {
+            return this.toastService.showErrorHTMLWithTimeout("get.cert.data.err","",3000)
+          }
           this.name = inforCert.name;
           this.company = inforCert.company;
           this.cardId = inforCert.mst;
@@ -2677,9 +2714,14 @@ export class ConsiderContractComponent
               signUpdate?.recipient?.role === this.datas?.roleContractReceived
           );
 
-          let fileC = await this.contractService.getFileContractPromise(
-            this.idContract
-          );
+          let fileC: any
+          try {
+            fileC = await this.contractService.getFileContractPromise(
+              this.idContract
+            );
+          } catch (error) {
+            return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
+          }
 
           const pdfC2 = fileC.find((p: any) => p.type == 2);
           const pdfC1 = fileC.find((p: any) => p.type == 1);
