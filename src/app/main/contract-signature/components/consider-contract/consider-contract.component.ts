@@ -330,7 +330,7 @@ export class ConsiderContractComponent
           }
         },
         (error) => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi', '', 3000);
+          return this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
         }
       );
     });
@@ -1527,7 +1527,12 @@ export class ConsiderContractComponent
                           return
                       }
                     }
-                    const determineCoordination = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
+                    let determineCoordination: any
+                    try {
+                      determineCoordination = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
+                    } catch (error) {
+                      return this.toastService.showErrorHTMLWithTimeout("Lỗi lấy thông tin người ký","",3000)
+                    }
                     let isInRecipient = false;
                     const participants = this.datas?.is_data_contract?.participants;
                     if ((this.recipient.sign_type.some((item: any) => item.id == 7 ))) {
@@ -2617,64 +2622,73 @@ export class ConsiderContractComponent
 
           if (fileC && objSign.length) {
             if (!this.mobile) {
-              const checkSign = await this.contractService.signCert(
-                this.recipientId, this.dataCert
-              );
+              try {
+                const checkSign = await this.contractService.signCert(
+                  this.recipientId, this.dataCert
+                );
 
-              if (!checkSign || (checkSign && !checkSign.success)) {
-                if (!checkSign.message) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'Đăng nhập không thành công',
-                    '',
-                    3000
-                  );
-                } else if (checkSign.message) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    checkSign.message,
-                    '',
-                    3000
-                  );
-                }
+                if (!checkSign || (checkSign && !checkSign.success)) {
+                  if (!checkSign.message) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Đăng nhập không thành công',
+                      '',
+                      3000
+                    );
+                  } else if (checkSign.message) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      checkSign.message,
+                      '',
+                      3000
+                    );
+                  }
 
-                return false;
-              } else {
-                if (checkSign.success === true) {
-                  if (pdfC2) {
-                    fileC = pdfC2.path;
-                  } else if (pdfC1) {
-                    fileC = pdfC1.path;
+                  return false;
+                } else {
+                  if (checkSign.success === true) {
+                    if (pdfC2) {
+                      fileC = pdfC2.path;
+                    } else if (pdfC1) {
+                      fileC = pdfC1.path;
+                    }
                   }
                 }
+              } catch (error) {
+                this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
+                return false
               }
             } else {
-              const checkSign = await this.contractService.signCertMobile(
-                this.recipientId, this.dataCert
-              );
+              try {
+                const checkSign = await this.contractService.signCertMobile(
+                  this.recipientId, this.dataCert
+                );
 
-              if (!checkSign || (checkSign && !checkSign.success)) {
-                if (!checkSign.message) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'Đăng nhập không thành công',
-                    '',
-                    3000
-                  );
-                } else if (checkSign.message) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    checkSign.message,
-                    '',
-                    3000
-                  );
-                }
-
-                return false;
-              } else {
-                if (checkSign.success === true) {
-                  if (pdfC2) {
-                    fileC = pdfC2.path;
-                  } else if (pdfC1) {
-                    fileC = pdfC1.path;
+                if (!checkSign || (checkSign && !checkSign.success)) {
+                  if (!checkSign.message) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Đăng nhập không thành công',
+                      '',
+                      3000
+                    );
+                  } else if (checkSign.message) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      checkSign.message,
+                      '',
+                      3000
+                    );
+                  }
+                  return false;
+                } else {
+                  if (checkSign.success === true) {
+                    if (pdfC2) {
+                      fileC = pdfC2.path;
+                    } else if (pdfC1) {
+                      fileC = pdfC1.path;
+                    }
                   }
                 }
+              } catch (error) {
+                this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
+                return false
               }
             }
           }
@@ -2804,6 +2818,7 @@ export class ConsiderContractComponent
             };
   
             if (fileC && objSign.length) {
+              try {
                 const checkSign = await this.contractService.signRemote(
                   this.dataCert,
                   this.recipientId,
@@ -2835,6 +2850,10 @@ export class ConsiderContractComponent
                     }
                   }
                 }
+              } catch (error) {
+                return this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
+              }
+                
             }
           } else {
             // truong hop qua han ky remote signing
@@ -2847,6 +2866,7 @@ export class ConsiderContractComponent
               };
     
               if (fileC && objSign.length) {
+                try {
                   const checkSign = await this.contractService.signRemote(
                     this.dataCert,
                     this.recipientId,
@@ -2878,6 +2898,9 @@ export class ConsiderContractComponent
                       }
                     }
                   }
+                } catch (error) {
+                  return this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
+                }
               }
             }
           }
