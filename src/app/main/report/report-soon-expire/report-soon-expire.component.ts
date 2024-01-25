@@ -45,6 +45,7 @@ export class ReportSoonExpireComponent implements OnInit {
   type_id: any;
   typeList: Array<any> = [];
   currentUser: any;
+  contractInfo: string;
 
   constructor(
     private appService: AppService,
@@ -222,7 +223,7 @@ export class ReportSoonExpireComponent implements OnInit {
       '&to_date=' +
       to_date +
       '&type=' +
-      this.type_id;
+      this.type_id +'&textSearch='+this.contractInfo;
     this.reportService
       .export('rp-by-effective-date', idOrg, params, flag)
       .subscribe((response: any) => {

@@ -68,6 +68,7 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
   type_id: any;
 
   typeList: Array<any> = [];
+  contractInfo: string;
 
   @ViewChild('typeContract') typeContract: any;
   constructor(
@@ -243,7 +244,7 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
       '&fetchChildData=' +
       this.fetchChildData +
       '&type=' +
-      this.type_id;
+      this.type_id +'&textSearch='+this.contractInfo;
 
     if (!this.type_id) {
       params =
@@ -252,7 +253,7 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
         '&to_date=' +
         to_date +
         '&status=' +
-        contractStatus;
+        contractStatus +'&textSearch='+this.contractInfo;
     }
 
     this.reportService
