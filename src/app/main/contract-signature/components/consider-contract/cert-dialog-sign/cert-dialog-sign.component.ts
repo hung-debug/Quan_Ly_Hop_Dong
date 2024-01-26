@@ -8,7 +8,7 @@ import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgxSpinnerService } from "ngx-spinner";
-import {DeviceDetectorService} from "ngx-device-detector";
+import { DeviceDetectorService } from "ngx-device-detector";
 import { DigitalCertificateService } from 'src/app/service/digital-certificate.service';
 import { ConsiderContractComponent } from "src/app/main/contract-signature/components/consider-contract/consider-contract.component";
 import { log } from 'console';
@@ -91,6 +91,8 @@ export class CertDialogSignComponent implements OnInit {
     this.DigitalCertificateService.dataSignCert().subscribe(response => {
       this.spinner.hide();
       this.list = response.certificates;
+      console.log("this.list", this.list);
+
     })
   }
   getValueByKey(inputString: string, key: string) {
@@ -104,7 +106,7 @@ export class CertDialogSignComponent implements OnInit {
     return null; // Return null if the key is not found
   }
 
-  getValue(inputString:string , key:string) {
+  getValue(inputString: string, key: string) {
     const elements = inputString.split(', ');
     for (const element of elements) {
       const [currentKey, value] = element.split('=');
@@ -124,58 +126,57 @@ export class CertDialogSignComponent implements OnInit {
   }
 
   signCert() {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    const uidCert = this.getValueByKey(this.selectedCert.certInformation, "UID")
-    this.dataCardId = uidCert?.split(":")[1];
-
-    if (!this.selectedCert.id) {
+    
+    if (this.selectedCert == "undefined" || this.selectedCert == null) {
       this.toastService.showErrorHTMLWithTimeout(
         'Cần chọn chứng thư số trước khi ký',
         '',
         3000
       )
-    } else {
-      if (!this.data.id) {
-        //trường hợp ký đơn
-        for (const signUpdate of this.data.isDataObjectSignature) {
-          if (signUpdate?.recipient?.email === this.currentUser.email &&
-            this.dataCardId === signUpdate?.recipient?.cardId && signUpdate?.recipient?.status === 1) {
-            this.dialogRef.close(this.selectedCert);
-            return;
-          }
-          else {
-            if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
-              this.toastService.showErrorHTMLWithTimeout(
-                'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng',
-                '',
-                3000
-              );
-              return;
-            }
-          }
+    }
+    console.log("selectedCert", this.selectedCert);
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    const uidCert = this.getValueByKey(this.selectedCert.certInformation, "UID")
+    this.dataCardId = uidCert?.split(":")[1];
+
+    if (!this.data.id) {
+      //trường hợp ký đơn
+      for (const signUpdate of this.data.isDataObjectSignature) {
+        if (signUpdate?.recipient?.email === this.currentUser.email &&
+          this.dataCardId === signUpdate?.recipient?.cardId && signUpdate?.recipient?.status === 1) {
+          this.dialogRef.close(this.selectedCert);
+          return;
         }
-      } else if (this.data.id == 1) {
-        //trường hợp ký nhiều
-        for (const signUpdate of this.data.isDataObjectSignature) {
-          if (signUpdate?.email === this.currentUser.email &&
-            this.dataCardId === signUpdate?.cardId && signUpdate?.status === 1) {
-            this.dialogRef.close(this.selectedCert);
+        else {
+          if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng',
+              '',
+              3000
+            );
             return;
-          }
-          else {
-            if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
-              this.toastService.showErrorHTMLWithTimeout(
-                'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng',
-                '',
-                3000
-              );
-              return;
-            }
           }
         }
       }
-
-
+    } else if (this.data.id == 1) {
+      //trường hợp ký nhiều
+      for (const signUpdate of this.data.isDataObjectSignature) {
+        if (signUpdate?.email === this.currentUser.email &&
+          this.dataCardId === signUpdate?.cardId && signUpdate?.status === 1) {
+          this.dialogRef.close(this.selectedCert);
+          return;
+        }
+        else {
+          if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng',
+              '',
+              3000
+            );
+            return;
+          }
+        }
+      }
     }
   }
 }

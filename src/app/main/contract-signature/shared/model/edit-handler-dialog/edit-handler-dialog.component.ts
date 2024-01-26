@@ -194,7 +194,7 @@ export class EditHandlerComponent implements OnInit {
       this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
         (res: any) => {
           this.spinner.hide();
-          if (!res.success) {
+          if (!res.success && this.status != 4) {
             switch (res.message) {
               case "E01": {
                 this.toastService.showErrorHTMLWithTimeout(this.translate.instant('email.already.exist'), "", 3000);
