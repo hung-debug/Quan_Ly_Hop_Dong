@@ -771,5 +771,7 @@
   "content.email": "CONTENT EMAIL",
   "not.process.contract": "You do not have permission to view your organization's canceled contracts",
   "get.contract.data.err": "Unable to retrieve contract file data",
-  "get.cert.data.err": "Unable to get digital certificate information"
+  "get.cert.data.err": "Unable to get digital certificate information",
+  "get.org.data.err": "Error retrieving organizational data",
+  "sign.token.err": "Error signing USB Token"
 }

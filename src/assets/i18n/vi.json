@@ -785,5 +785,7 @@
   "report.email": "EMAIL",
   "not.process.contract": "Bạn không có quyền xem hợp đồng đã hủy của tổ chức",
   "get.contract.data.err": "Không lấy được dữ liệu file hợp đồng",
-  "get.cert.data.err": "Không lấy được thông tin chứng thư số"
+  "get.cert.data.err": "Không lấy được thông tin chứng thư số",
+  "get.org.data.err": "Lỗi lấy dữ liệu tổ chức",
+  "sign.token.err": "Lỗi ký USB Token"
 }
