@@ -1394,67 +1394,79 @@ export class ContractSignatureComponent implements OnInit {
 
           this.spinner.show();
 
-          //Call api ký nhiều hsm
-          const checkSign = await this.contractServiceV1.signHsmMulti(
-            this.dataHsm,
-            idSignMany
-          );
-
-          let countSuccess = 0;
-
-          for (let i = 0; i < checkSign.length; i++) {
-            if (checkSign[i].result.success == false) {
-              this.spinner.hide();
-
-              if (checkSign[i].result.message == 'Tax code do not match!') {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'taxcode.not.match',
-                  '',
-                  3000
-                );
-              } else if (
-                checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
-              ) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Mật khẩu cấp 2 không đúng',
-                  '',
-                  3000
-                );
-              } else if (
-                checkSign[i].result.message == 'License ky so HSM het han!'
-              ) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'License ký số HSM hết hạn!',
-                  '',
-                  3000
-                );
-              } else {
-                this.toastService.showErrorHTMLWithTimeout(
-                  checkSign[i].result.message,
-                  '',
-                  3000
-                );
-              }
-              return;
-            } else {
-              countSuccess++;
-            }
-          }
-
-          if (countSuccess == checkSign.length) {
-            this.spinner.hide();
-            this.toastService.showSuccessHTMLWithTimeout(
-              'sign.success',
-              '',
-              3000
+          try {
+            const checkSign = await this.contractServiceV1.signHsmMulti(
+              this.dataHsm,
+              idSignMany
             );
-
-            this.router
-              .navigateByUrl('/', { skipLocationChange: true })
-              .then(() => {
-                this.router.navigate(['main/c/receive/processed']);
-              });
+  
+            let countSuccess = 0;
+  
+            for (let i = 0; i < checkSign.length; i++) {
+              if (checkSign[i].result.success == false) {
+                this.spinner.hide();
+  
+                if (checkSign[i].result.message == 'Tax code do not match!') {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    'taxcode.not.match',
+                    '',
+                    3000
+                  );
+                } else if (
+                  checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
+                ) {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    'Mật khẩu cấp 2 không đúng',
+                    '',
+                    3000
+                  );
+                } else if (
+                  checkSign[i].result.message == 'License ky so HSM het han!'
+                ) {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    'License ký số HSM hết hạn!',
+                    '',
+                    3000
+                  );
+                } else if (checkSign[i].result.message == "false") {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    "Lỗi ký HSM",
+                    '',
+                    3000
+                  );
+                } else {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    checkSign[i].result.message,
+                    '',
+                    3000
+                  );
+                }
+                return;
+              } else {
+                countSuccess++;
+              }
+            }
+  
+            if (countSuccess == checkSign.length) {
+              this.spinner.hide();
+              this.toastService.showSuccessHTMLWithTimeout(
+                'sign.success',
+                '',
+                3000
+              );
+  
+              this.router
+                .navigateByUrl('/', { skipLocationChange: true })
+                .then(() => {
+                  this.router.navigate(['main/c/receive/processed']);
+                });
+            }
+            
+          } catch (error) {
+            this.spinner.hide()
+            return this.toastService.showErrorHTMLWithTimeout("Lỗi ký HSM","",3000)
           }
+          //Call api ký nhiều hsm
         }
       });
     } else if (signId == 6) {
