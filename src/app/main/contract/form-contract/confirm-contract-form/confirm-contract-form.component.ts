@@ -207,7 +207,7 @@ export class ConfirmContractFormComponent implements OnInit {
           }
         },
         (error) => {
-          this.spinner.show();
+          this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout(
             'no.push.information.contract.error',
             '',
