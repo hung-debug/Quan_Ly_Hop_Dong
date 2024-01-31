@@ -91,6 +91,9 @@ export class CertDialogSignComponent implements OnInit {
     this.DigitalCertificateService.dataSignCert().subscribe(response => {
       this.spinner.hide();
       this.list = response.certificates;
+    }, (err) => {
+      this.spinner.hide()
+      return this.toastService.showErrorHTMLWithTimeout("get.cert.data.err","",3000)
     })
   }
   getValueByKey(inputString: string, key: string) {

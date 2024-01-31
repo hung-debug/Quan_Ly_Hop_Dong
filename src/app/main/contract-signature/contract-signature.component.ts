@@ -1505,8 +1505,8 @@ export class ContractSignatureComponent implements OnInit {
             this.cccd = inforCert.cccd;
             this.cmnd = inforCert.cmnd;
           } catch (err) {
-            console.log(err);
-
+            this.spinner.hide()
+            return this.toastService.showErrorHTMLWithTimeout("get.cert.data.err","",3000)
           }
 
           // const idList = clusteredLists.map((list: any) => list.map((item: any) => item.id));
@@ -1556,6 +1556,10 @@ export class ContractSignatureComponent implements OnInit {
           try {
             const checkSignResults = await Promise.all(promises);
             // Count successful responses
+            if (checkSignResults[0][0]?.result?.success == false) {
+              this.spinner.hide()
+              return this.toastService.showErrorHTMLWithTimeout("sign.cert.err","",3000)
+            }
             let countSuccess = 0;
             for (const checkSign of checkSignResults) {
               countSuccess += checkSign.length;
@@ -1579,7 +1583,8 @@ export class ContractSignatureComponent implements OnInit {
             }
           } catch (err) {
             // Handle errors
-            // this.toastService.showErrorHTMLWithTimeout(err,'',3000);
+            this.spinner.hide()
+            return this.toastService.showErrorHTMLWithTimeout("sign.cert.err",'',3000);
           }
 
           this.spinner.hide()
