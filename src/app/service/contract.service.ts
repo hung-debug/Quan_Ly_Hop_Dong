@@ -907,19 +907,16 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.get<any>(this.configSmsUrl + this.organization_id, { headers }).pipe();
+    return this.http.get<any>(this.configSmsUrl + "config/" + this.organization_id, { headers }).pipe();
   }
 
-  updateConfigSmsOrg(smsTypeIdList: number[]) {
+  updateConfigSmsOrg(smsTypeIdList: any[]) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    const body = JSON.stringify({
-      orgId: this.organization_id,
-      smsTypeIdList: smsTypeIdList
-    })
+    const body = smsTypeIdList
 
     return this.http.post<any>(this.configSmsUrl, body, {
       headers: headers,
