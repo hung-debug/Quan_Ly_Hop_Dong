@@ -166,16 +166,17 @@ export class UploadContractFileComponent implements OnInit {
     }
     this.spinner.show()
     try {
-      this.spinner.hide()
       if (this.isCreate) {
         let res = await this.uploadService.uploadCompleteContractFile(this.contractFile, this.contractName, this.data.folderId).toPromise()
         if (res) {
+          this.spinner.hide()
           this.toastService.showSuccessHTMLWithTimeout("upload.contract.file.success","",3000)
           this.dialogRef.close("created");
         } 
       } else {
-        let res = await this.uploadService.editCompleteContractFile(this.contractFile, this.contractName, this.data.folderId, this.data.dataShare.id).toPromise()
+        let res = await this.uploadService.editCompleteContractFile(this.contractFile ?? new File([],this.data.dataShare.filename), this.contractName, this.data.folderId, this.data.dataShare.id).toPromise()
         if (res) {
+          this.spinner.hide()
           this.toastService.showSuccessHTMLWithTimeout("upload.contract.file.success","",3000)
           this.dialogRef.close("edit");
         } 
