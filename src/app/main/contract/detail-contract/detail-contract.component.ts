@@ -410,6 +410,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         this.allFileAttachment = this.datas.i_data_file_contract.filter(
           (f: any) => f.type == 3
         );
+        this.allFileAttachment = this.allFileAttachment.map((item: any) => ({...item, path: item.path.replace("/tmp/","/tmp/v2/")}))
         this.checkIsViewContract();
         this.datas.is_data_object_signature.forEach((element: any) => {
           // 1: van ban, 2: ky anh, 3: ky so
@@ -1759,5 +1760,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         skipLocationChange: false
       });
     });
+  }
+
+  openPreviewTab(value: any) {
+    console.log(this)
+    console.log(value)
   }
 }
