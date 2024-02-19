@@ -43,7 +43,7 @@ export class ConfigSmsEmailComponent implements OnInit {
   notiStatus3: number = 1;
   notiStatus4: number = 1;
   orgId: any;
-
+  dataConfig: any = [];
   myForm = new FormGroup({
     items: new FormArray([]),
   });
@@ -103,7 +103,6 @@ export class ConfigSmsEmailComponent implements OnInit {
     // this.spinner.show();
     this.isRoleConfigSms = listRole.some((element: any) => element.code == 'CAUHINH_SMS');
     this.isRoleConfigExpirationDay = listRole.some((element: any) => element.code == 'CAUHINH_NGAYSAPHETHAN');
-    this.mapData(this.dataBody)
 
 
     //gọi api thông tin cấu hình sms của tổ chức
@@ -156,6 +155,8 @@ export class ConfigSmsEmailComponent implements OnInit {
 
   infoConfigSms() {
     this.contractService.getConfigSmsOrg().subscribe((response: any) => {
+      this.dataConfig = response;
+      this.mapData(this.dataConfig);
       response.forEach((element: any) => {
         this.smsConfig = element.smsConfig;
         this.emailConfig = element.emailConfig;
@@ -252,48 +253,5 @@ export class ConfigSmsEmailComponent implements OnInit {
     }
   }
 
-  dataBody = [
-    {
-      "userSendNotification": 1,
-      "emailConfig": true,
-      "smsTypeId": 1,
-      "organizationId": 226,
-      "smsConfig": true
-    },
-    {
-      "userSendNotification": 2,
-      "emailConfig": true,
-      "smsTypeId": 2,
-      "organizationId": 226,
-      "smsConfig": true
-    },
-    {
-      "userSendNotification": 1,
-      "emailConfig": true,
-      "smsTypeId": 3,
-      "organizationId": 226,
-      "smsConfig": true
-    },
-    {
-      "userSendNotification": 1,
-      "emailConfig": true,
-      "smsTypeId": 4,
-      "organizationId": 226,
-      "smsConfig": true
-    },
-    {
-      "userSendNotification": 1,
-      "emailConfig": true,
-      "smsTypeId": 5,
-      "organizationId": 226,
-      "smsConfig": true
-    }, {
-      "userSendNotification": 0,
-      "emailConfig": true,
-      "smsTypeId": 6,
-      "organizationId": 226,
-      "smsConfig": true
-    }
-  ]
 
 }
