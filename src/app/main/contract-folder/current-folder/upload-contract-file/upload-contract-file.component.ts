@@ -36,7 +36,9 @@ export class UploadContractFileComponent implements OnInit {
   attachFileArr: any = []
   contractFile: any = null;
   contractName: string = "";
-
+  setTitle: string = "";
+  contractFileName: string = ""
+  isCreate: boolean = false
   get f() { return this.addForm.controls; }
 
   constructor(
@@ -59,10 +61,14 @@ export class UploadContractFileComponent implements OnInit {
     }
 
   ngOnInit(): void {
-  }
-
-
-  onSubmit() {
+    if (this.data.action == "create") {
+      this.isCreate = true
+      this.setTitle = "Tải lên file hợp đồng lưu trữ"
+    } else {
+      this.setTitle = "Sửa file hợp đồng lưu trữ"
+      this.contractName = this.data.dataShare.name
+      this.contractFileName = this.data.dataShare.filename  
+    }
   }
 
   addFile() {
@@ -161,11 +167,19 @@ export class UploadContractFileComponent implements OnInit {
     this.spinner.show()
     try {
       this.spinner.hide()
-      let res = await this.uploadService.uploadCompleteContractFile(this.contractFile, this.contractName, this.data).toPromise()
-      if (res) {
-        this.toastService.showSuccessHTMLWithTimeout("upload.contract.file.success","",3000)
-        this.dialogRef.close();
-      } 
+      if (this.isCreate) {
+        let res = await this.uploadService.uploadCompleteContractFile(this.contractFile, this.contractName, this.data.folderId).toPromise()
+        if (res) {
+          this.toastService.showSuccessHTMLWithTimeout("upload.contract.file.success","",3000)
+          this.dialogRef.close("created");
+        } 
+      } else {
+        let res = await this.uploadService.editCompleteContractFile(this.contractFile, this.contractName, this.data.folderId, this.data.dataShare.id).toPromise()
+        if (res) {
+          this.toastService.showSuccessHTMLWithTimeout("upload.contract.file.success","",3000)
+          this.dialogRef.close("edit");
+        } 
+      }
     } catch (error) {
       this.spinner.hide()
       this.toastService.showErrorHTMLWithTimeout("upload.contract.file.err","",3000)
@@ -194,7 +208,7 @@ export class UploadContractFileComponent implements OnInit {
 
   validContractFile() {
     this.errContractFileMess = ""
-    if (!this.contractFile) {
+    if (!this.contractFile && !this.contractFileName) {
       this.errContractFileMess = "File hợp đồng không được để trống" 
       return false
     }

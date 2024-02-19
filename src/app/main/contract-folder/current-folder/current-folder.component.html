@@ -69,7 +69,7 @@
 
                 <!--Cột 3: Ngày hết hạn ký-->
                 <div class="col-md-2 calendar_deadline">
-                    <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date:
+                    <div *ngIf="item.status !== 35"><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date:
                             'dd/MM/yyyy'}}</span></div>
                 </div>
 
@@ -79,10 +79,9 @@
                         <div class="div_icon">
                             <img src="../../assets/img/icon_delete.svg" class="img_icon" (click)="deleteContract(item.id)" ngbTooltip="{{'contract.delete' | translate}}"/>
                         </div>
-                        <!-- 
-                            <div class="div_icon" *ngIf="status == 'processing' || status == 'expire'">
-                                <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnect(item.id)"/>
-                            </div> -->
+                        <div class="div_icon" *ngIf="item.status == 35">
+                            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="editContractData(item)"/>
+                        </div>
                     </div>
                 </div>
             </div>

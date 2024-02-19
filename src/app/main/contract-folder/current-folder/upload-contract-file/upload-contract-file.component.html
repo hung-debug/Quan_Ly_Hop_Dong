@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="header">
-      <h3 class="label-header">{{"Tải lên file hợp đồng Scan" | translate}}</h3>
+      <h3 class="label-header">{{setTitle}}</h3>
     </div>
     <div>
       <div class="label_item">
@@ -18,7 +18,7 @@
           <div class="file-contract" (click)="addContractFile()">
             <img src="assets/img/upload_file.svg" alt="mobifone.contract">
             <div style="padding-top: 7px;"><span style="color: #798693"
-            *ngIf="!this.contractFile"  >{{'choose.contract.file' | translate }}</span>{{this.contractFile?.name}}
+            *ngIf="!this.contractFile && !this.contractFileName"  >{{'choose.contract.file' | translate }}</span>{{this.contractFile?.name ?? this.contractFileName}}
             </div>
           </div>
           <div class="invalid" *ngIf="errContractFileMess">
@@ -28,7 +28,7 @@
     </div>
 
 
-    <form (ngSubmit)="onSubmit()" [formGroup]="addForm" class="content">
+    <form [formGroup]="addForm" class="content">
         <div class="row" style="justify-content: center;padding-top: 10px;">
             <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.cancel' | translate}}</button>
             <button class="save-button" (click)="uploadingAttachFiles()" >{{'btn.save' | translate}}</button>
