@@ -178,20 +178,24 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         height: 0
       }
     }
-    if (this.datas.is_action_contract_created) {
-      if (this.datas.uploadFileContractAgain) {
-        this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
-      } else {
-        let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
-        let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
-        if (fileContract_2) {
-          this.pdfSrc = fileContract_2.path;
+    if (!this.datas.isDocx) {
+      if (this.datas.is_action_contract_created) {
+        if (this.datas.uploadFileContractAgain) {
+          this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
         } else {
-          this.pdfSrc = fileContract_1.path;
+          let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
+          let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
+          if (fileContract_2) {
+            this.pdfSrc = fileContract_2.path;
+          } else {
+            this.pdfSrc = fileContract_1.path;
+          }
         }
+      } else {
+        this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
       }
     } else {
-      this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
+      this.pdfSrc = this.datas.convertedContractFileUrl
     }
     this.getPage();
 

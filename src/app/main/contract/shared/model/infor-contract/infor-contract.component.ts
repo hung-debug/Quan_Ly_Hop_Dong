@@ -107,7 +107,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   public subscription: Subscription;
   minDate: Date = moment().toDate();
   public messageForSibling: string;
-  attachFilesList: any[] = []
+  attachFilesList: any[] = [];
+  isDocx: boolean = false;
   constructor(
     private uploadService: UploadService,
     private contractService: ContractService,
@@ -247,8 +248,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         const file_name = file.name
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
-        if (extension && extension.toLowerCase() == 'pdf') {
+        if (extension && (['pdf','docx'].includes(extension.toLowerCase()))) {
           try {
+            this.datas.isDocx = true
             //Check file hợp đồng đã có chữ ký số hay chưa
             this.checkSignDigitalService.getList(file).subscribe((response) => {
               this.spinner.hide();
@@ -290,12 +292,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           } catch (error) {
             this.spinner.hide()
           }
-        } else if (extension && (extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx')) {
-          this.spinner.hide()
-          this.toastService.showWarningHTMLWithTimeout("File hợp đồng chưa hỗ trợ định dạng DOC, DOCX", "", 3000);
         } else {
           this.spinner.hide()
-          this.toastService.showWarningHTMLWithTimeout("File hợp đồng yêu cầu định dạng PDF", "", 3000);
+          this.toastService.showWarningHTMLWithTimeout("File hợp đồng yêu cầu định dạng PDF, docx", "", 3000);
         }
       } else {
         this.spinner.hide()
@@ -777,9 +776,14 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           return false;
         })
       }
-
     }
+    await this.getConvertedContractFileUrl()
 
+  }
+
+  async getConvertedContractFileUrl() {
+    let contractData = await this.contractService.getFileContract(this.datas.contract_id).toPromise()
+    this.datas.convertedContractFileUrl = contractData.filter((item: any) => item.type == 2 && item.status == 1)[0]?.path
   }
 
   getErrorFile() {

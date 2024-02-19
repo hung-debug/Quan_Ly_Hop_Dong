@@ -36,6 +36,7 @@ export class UploadService {
     this.getCurrentUser();
     let formData = new FormData();
     formData.append('file', file);
+    formData.append('fileContract', 'true');
 
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
