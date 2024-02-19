@@ -24,6 +24,7 @@ export class UploadService {
 
   uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`;
   checkFileDuplicateUrl:any = `${environment.apiUrl}/api/v1/documents/checkFile`;
+  uploadCompleteContractFileUrl: any = `${environment.apiUrl}/api/v1/contracts/upload/file-contact-sign`
   constructor(private http: HttpClient) { }
 
   getCurrentUser(){
@@ -84,5 +85,22 @@ export class UploadService {
       body,
       { headers: headers }
     );
+  }
+
+  uploadCompleteContractFile(file: any, contractName: string, folderId: string) {
+    this.getCurrentUser();
+    let formData = new FormData();
+    formData.append('file', file);
+    formData.append('fileName', contractName);
+    formData.append('folderId', folderId);
+
+    const headers = new HttpHeaders().append(
+      'Authorization',
+      'Bearer ' + this.token
+    );
+
+    return this.http.post<any>(this.uploadCompleteContractFileUrl, formData, {
+      headers: headers,
+    });
   }
 }

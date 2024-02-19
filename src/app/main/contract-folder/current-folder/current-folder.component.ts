@@ -193,7 +193,7 @@ export class CurrentFolderComponent implements OnInit {
     let data
     this.dialog.open(UploadContractFileComponent, {
       width: '580px',
-      data: data,
+      data: this.parentId,
     })
   }
 

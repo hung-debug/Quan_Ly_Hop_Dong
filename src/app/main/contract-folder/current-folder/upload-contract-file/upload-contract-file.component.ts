@@ -49,7 +49,7 @@ export class UploadContractFileComponent implements OnInit {
     public dialog: MatDialog,
     private spinner: NgxSpinnerService,
     private contractService: ContractService,
-    private translate: TranslateService
+    private uploadService: UploadService
     ) {
       this.addForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
@@ -59,186 +59,10 @@ export class UploadContractFileComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    this.datas = this.data;
-    this.optionsCeCa = optionsCeCa;
-
-    //lay du lieu form cap nhat
-    if( this.data.id != null){
-      this.contractTypeService.getContractTypeById(this.data.id).subscribe(
-        data => {
-          this.addForm = this.fbd.group({
-            name: this.fbd.control(data?.name, [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
-            code: this.fbd.control(data?.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
-            ceca_push: this.convertCeCa(data?.ceca_push)
-          });
-          this.nameOld = data?.name;
-          this.codeOld = data?.code;
-        }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-        }
-      )
-    }else{
-      this.addForm = this.fbd.group({
-        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
-        ceca_push: 0
-      });
-    }
-
-    
-    this.contractService.getDataNotifyOriganzation().subscribe((response) => {
-      if(response.ceca_push_mode == 'NONE') {
-        this.ceca = false;
-      } else if(response.ceca_push_mode == 'SELECTION') {
-        this.ceca = true
-      }
-    })
   }
 
-  convertCeCa(ceca_push: any) {
-    if(ceca_push == 1) {
-      this.optionsCeCaValue = 1;
-      return 1;
-    } else {
-      this.optionsCeCaValue = 0;
-      return 0;
-    } 
-  }
-
-  checkName(data:any){
-    //neu thay doi ten thi can check lai
-    if(data.name != this.nameOld){
-      //kiem tra ten
-      this.contractTypeService.checkNameContractType(data.name).subscribe(
-        dataByName => {
-          //neu ten loai hop dong chua ton tai
-          if(dataByName.success){
-            
-            //call update
-            this.update(data);
-
-          //neu ten loai hop dong da ton tai
-          }else{
-            this.toastService.showErrorHTMLWithTimeout('Tên loại hợp đồng đã tồn tại', "", 3000);
-            this.spinner.hide();
-          }
-        }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-          this.spinner.hide();
-        }
-      )
-
-    //neu khong thay doi ten thi bo qua check ten
-    }else{
-      //call update
-      this.update(data);
-    }
-  }
-
-  update(data:any){
-    this.contractTypeService.updateContractType(data).subscribe(
-      data => {
-        this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
-        this.dialogRef.close();
-        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-          this.router.navigate(['/main/contract-type']);
-        });    
-        this.spinner.hide();
-      }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-        this.spinner.hide();
-      }
-    )
-  }
 
   onSubmit() {
-    this.submitted = true;
-    // stop here if form is invalid
-    if (this.addForm.invalid) {
-      return;
-    }
-    const data = {
-      id: this.data.id,
-      name: this.addForm.value.name,
-      code: this.addForm.value.code,
-      ceca_push: this.addForm.value.ceca_push
-    }
-    this.spinner.show();
-    //ham sua
-    if(this.data.id !=null){
-
-      //neu thay doi ma thi can check lai
-      if(data.code != this.codeOld){
-        this.contractTypeService.checkCodeContractType(data.code).subscribe(
-          dataByCode => {
-            //neu ma loai hop dong chua ton tai
-            if(dataByCode.success){
-              
-              //call ham check ten
-              this.checkName(data);
-
-            //neu ma loai hop dong da ton tai
-            }else{
-              this.toastService.showErrorHTMLWithTimeout('Mã loại hợp đồng đã tồn tại', "", 3000);
-              this.spinner.hide();
-            }
-          }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-            this.spinner.hide();
-          }
-        )
-      //neu khong thay doi ma thi bo qua check ma
-      }else{
-        //ham check ten
-        this.checkName(data);
-      }
-    
-    //ham them moi
-    }else{
-      //kiem tra ma loai hop dong
-      this.contractTypeService.checkCodeContractType(data.code).subscribe(
-        dataByCode => {
-          //neu ma loai hop dong chua ton tai
-          if(dataByCode.success){
-            //kiem tra ten loai hop dong
-            this.contractTypeService.checkNameContractType(data.name).subscribe(
-              dataByName => {
-                //neu ten loai hop dong chua ton tai
-                if(dataByName.success){
-                  this.contractTypeService.addContractType(data).subscribe(
-                    data => {
-                      this.toastService.showSuccessHTMLWithTimeout('Thêm mới loại hợp đồng thành công!', "", 3000);
-                      this.dialogRef.close();
-                      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                        this.router.navigate(['/main/contract-type']);
-                      });
-                      this.spinner.hide();
-                    }, error => {
-                      this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-                      this.spinner.hide();
-                    }
-                  )
-                //neu ten loai hop dong da ton tai
-                }else{
-                  this.toastService.showErrorHTMLWithTimeout('Tên loại hợp đồng đã tồn tại', "", 3000);
-                  this.spinner.hide();
-                }
-              }, error => {
-                this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-                this.spinner.hide();
-              }
-            )
-          //neu ma loai hop dong da ton tai
-          }else{
-            this.toastService.showErrorHTMLWithTimeout('Mã loại hợp đồng đã tồn tại', "", 3000);
-            this.spinner.hide();
-          }
-        }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-          this.spinner.hide();
-        }
-      )
-    }
   }
 
   addFile() {
@@ -246,30 +70,6 @@ export class UploadContractFileComponent implements OnInit {
     document.getElementById('file-input').click();
   }
 
-
-  deleteFileAttach(item: any, index_dlt: number) {
-    if (item.id) {
-      this.spinner.show();
-      let data = this.attachFileArr?.filter((p: any) => p.id == item.id)[0]
-      if (data) data.status = 0;
-      this.contractService.updateFileAttach(item.id, data).subscribe((res: any) => {
-        this.datas.attachFileNameArr.splice(index_dlt, 1);
-        this.attachFileNameArr.splice(index_dlt, 1);
-        this.attachFileArr.splice(index_dlt, 1)
-        //this.datas.attachFileArr.splice(index_dlt, 1);
-      }, error => {
-        this.toastService.showErrorHTMLWithTimeout("Lỗi xoá file đính kèm!", "", 3000);
-        this.spinner.hide();
-      }, () => {
-        this.spinner.hide();
-      })
-    } else {
-      this.datas.attachFileNameArr.splice(index_dlt, 1);
-      this.attachFileNameArr.splice(index_dlt, 1);
-      this.datas.attachFileArr.splice(index_dlt, 1);
-      this.attachFileArr.splice(index_dlt, 1)
-    }
-  }
 
   addFileAttach() {
     // @ts-ignore
@@ -358,64 +158,18 @@ export class UploadContractFileComponent implements OnInit {
     if (!this.validUpdateValues()) {
       return
     }
-
-    // if (this.attachFileArr.length == 0) return
-    // let fileNameArr: any = []
-    // this.attachFileArr.forEach((item: any) => {
-    //   fileNameArr.push({
-    //     contractId: this.data.contractId,
-    //     fileName: item.name
-    //   })
-    // })
-    // let count: number = 0
-    // await this.uploadService.checkDuplicateFileUploaded(fileNameArr).toPromise().then(
-    //   (res) => {
-    //     let fileNameArrDupplicate: any = []
-    //     let listFileDupplicate = res.filter((item: any) => item.status == false)
-    //     listFileDupplicate.forEach((item: any) => {
-    //       fileNameArrDupplicate.push(item.fileName)
-    //     })
-    //     count = listFileDupplicate.length
-    //     if (count > 0) {
-    //       this.toastService.showErrorHTMLWithTimeout(`File ${fileNameArrDupplicate.toString().replace(',',', ')} ${this.translate.instant('error.upload.file.duplicate')}`,'',3000)
-    //     } else {
-    //       let addDocsPayload: any = []
-    //       // step1 - upload to org
-    //       try {
-    //         this.spinner.show()
-    //         this.uploadService.uploadMultiFileToOrg(this.attachFileArr).subscribe(
-    //           (res: any) => {
-    //             this.spinner.hide()
-    //             for (let i = 0; i < res.length; i++){
-    //               addDocsPayload[i] = {
-    //                 id: this.data.contractId,
-    //                 name: this.data.contractName,
-    //                 filePath: res[i]?.file_object?.file_path,
-    //                 fileName: res[i]?.file_object?.filename,
-    //                 fileBucket: res[i]?.file_object?.bucket,
-    //               }
-    //             }
-    //             for (let i = 0; i < addDocsPayload.length; i++){
-    //               this.contractService.addDocument(addDocsPayload[i], 3).toPromise().then(
-    //                 (res: any) => {
-    //                   this.spinner.hide()
-    //                 }
-    //               )
-    //             }
-    //             this.toastService.showSuccessHTMLWithTimeout('success.upload.file.attach','',3000)
-    //             this.dialog.closeAll()
-    //           }
-    //         )
-    //       } catch (error) {
-    //         this.spinner.hide()
-    //         this.toastService.showErrorHTMLWithTimeout('error.upload.file.attach','',3000)
-    //       }
-    //     }
-    //   }, (err: any) => {
-    //     this.spinner.hide()
-    //     this.toastService.showErrorHTMLWithTimeout('error.upload.file.attach','',3000)
-    //   }
-    // )
+    this.spinner.show()
+    try {
+      this.spinner.hide()
+      let res = await this.uploadService.uploadCompleteContractFile(this.contractFile, this.contractName, this.data).toPromise()
+      if (res) {
+        this.toastService.showSuccessHTMLWithTimeout("upload.contract.file.success","",3000)
+        this.dialogRef.close();
+      } 
+    } catch (error) {
+      this.spinner.hide()
+      this.toastService.showErrorHTMLWithTimeout("upload.contract.file.err","",3000)
+    }
   }
 
   uploadContracFile(event: any) {
