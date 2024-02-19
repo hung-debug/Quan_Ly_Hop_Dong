@@ -227,7 +227,8 @@ export class ConfigSmsEmailComponent implements OnInit {
   }
 
 
-  mapData(dataBody: any) {
+  mapData(dataBody: any) { 
+    this.groupArray.clear();
     let dataId = [6, 1, 2, 3, 4, 5]
     dataId.forEach((value: any, index: any) => {
       let data = dataBody.filter((item: any) =>

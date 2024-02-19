@@ -152,7 +152,7 @@ export class ContractService {
 
   deleteTokenUrl: any = `${environment.apiUrl}/api/v1/auth/logout`;
 
-  configSmsUrl: any = `${environment.apiUrl}/api/v1/notification/sms-types/`;
+  configSmsUrl: any = `${environment.apiUrl}/api/v1/notification/sms-types`;
 
   configExpirationDateUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
   certInfoCertUrl: any = `${environment.apiUrl}/api/v1/sign/cert-information`;
@@ -907,7 +907,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.get<any>(this.configSmsUrl + "config/" + this.organization_id, { headers }).pipe();
+    return this.http.get<any>(this.configSmsUrl + "/config/" + this.organization_id, { headers }).pipe();
   }
 
   updateConfigSmsOrg(smsTypeIdList: any[]) {
