@@ -130,6 +130,7 @@ import {ContentEmailComponent} from './main/report/report-contract-send-email/co
 import { HeadersInterceptor } from './headers.interceptor';
 import { UploadAttachFilesComponent } from './main/contract/dialog/upload-attach-files-dialog/upload-attach-files-dialog.component';
 import { DeleteContractFolderComponent } from './main/contract-folder/current-folder/delete-contract-folder/delete-contract-folder.component';
+import { UploadContractFileComponent } from './main/contract-folder/current-folder/upload-contract-file/upload-contract-file.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -224,7 +225,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CurrentFolderComponent,
     AddContractFolderComponent,
     UploadAttachFilesComponent,
-    DeleteContractFolderComponent
+    DeleteContractFolderComponent,
+    UploadContractFileComponent
   ],
   imports: [
     TranslateModule,

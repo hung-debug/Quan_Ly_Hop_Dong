@@ -7,6 +7,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { sideList } from 'src/app/config/variable';
 import { DeleteContractDialogComponent } from '../../contract/dialog/delete-contract-dialog/delete-contract-dialog.component';
 import { DeleteContractFolderComponent } from './delete-contract-folder/delete-contract-folder.component';
+import { UploadContractFileComponent } from './upload-contract-file/upload-contract-file.component';
+import { ContractService } from 'src/app/service/contract.service';
+import { ToastService } from 'src/app/service/toast.service';
 
 @Component({
   selector: 'app-current-folder',
@@ -39,7 +42,8 @@ export class CurrentFolderComponent implements OnInit {
     private appService: AppService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
-    
+    private contractService: ContractService,
+    private toastService : ToastService,
   ) { }
 
   ngOnInit(): void {
@@ -188,5 +192,50 @@ export class CurrentFolderComponent implements OnInit {
     return "";
   }
 
+  uploadContract() {
+    let dataShare = {
+      folderId: this.parentId,
+      action: "create"
+    }
+    let dialogRef = this.dialog.open(UploadContractFileComponent, {
+      width: '580px',
+      data: dataShare,
+    })
+    dialogRef.afterClosed().subscribe(
+      res => {
+        if (['created','edit'].includes(res))
+        this.getContractList();
+      }
+    )
+  }
+
+  editContractData(data?: any) {
+    this.contractService.getFileContract(data.id).subscribe(
+      res => {
+          data.filename = res.filter(
+            (p: any) => p.type == 2 && p.status == 1
+          )[0].filename;
+          let dataShare: any = {
+            folderId: this.parentId,
+            dataShare: data
+          }
+          dataShare.action = "edit"
+          let dialogRef = this.dialog.open(UploadContractFileComponent, {
+            width: '580px',
+            data: dataShare,
+          })
+
+          dialogRef.afterClosed().subscribe(
+            res => {
+              if (['created','edit'].includes(res))
+              this.getContractList();
+            }
+          )
+      },
+      err => {
+        this.toastService.showErrorHTMLWithTimeout("Lấy dữ liệu file hợp đồng lỗi","",3000)
+      }
+    )
+  }
 }
 

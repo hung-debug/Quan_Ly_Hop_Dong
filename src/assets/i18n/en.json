@@ -58,6 +58,7 @@
   "contract.status.create.complete": "Complete creating",
   "contract.status.wait-response": "Wait response",
   "contract.status.undefined": "Undefined",
+  "contract.status.stored": "Storage",
   "contract.me": "My contract",
   "contract.organization": "Organizational contract",
   "contract.wait-for-me": "Contract to be handled",
@@ -774,5 +775,7 @@
   "get.cert.data.err": "Unable to get digital certificate information",
   "get.org.data.err": "Error retrieving organizational data",
   "sign.token.err": "Error signing USB Token",
-  "sign.cert.err": "Error signing server digital certificate"
+  "sign.cert.err": "Error signing server digital certificate",
+  "upload.contract.file.err": "Uploading contract file failed",
+  "upload.contract.file.success": "Uploaded contract file successfully"
 }

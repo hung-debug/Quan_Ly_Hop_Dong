@@ -58,6 +58,7 @@
   "contract.status.wait-response": "Chờ phản hồi",
   "contract.status.create.complete": "Hoàn thành tạo hợp đồng",
   "contract.status.undefined": "Chưa xác định",
+  "contract.status.stored": "Lưu trữ",
   "contract.me": "Hợp đồng của tôi",
   "contract.organization": "Hợp đồng của tổ chức",
   "contract.wait-for-me": "Hợp đồng cần xử lý",
@@ -788,5 +789,7 @@
   "get.cert.data.err": "Lỗi lấy thông tin chứng thư số server",
   "get.org.data.err": "Lỗi lấy dữ liệu tổ chức",
   "sign.token.err": "Lỗi ký USB Token",
-  "sign.cert.err": "Lỗi ký chứng thư số server"
+  "sign.cert.err": "Lỗi ký chứng thư số server",
+  "upload.contract.file.err": "Upload file hợp đồng thất bại",
+  "upload.contract.file.success": "Upload file hợp đồng thành công"
 }
