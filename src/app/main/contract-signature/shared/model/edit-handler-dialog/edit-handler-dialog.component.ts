@@ -181,10 +181,10 @@ export class EditHandlerComponent implements OnInit {
       email: login_by === 'email' ? this.email.toLowerCase() : login_by === 'phone' ? this.phone : '',
       phone: this.phone,
       login_by: login_by,
-      card_id: [2,4,5,6,8].includes(this.dataSign[0].id) ? this.card_id : "",
+      card_id: [2,4,5,6,8].includes(this.dataSign[0]?.id) ? this.card_id : "",
       sign_type: this.dataSign
       // locale: this.locale,
-    };
+    }; 
 
     if (this.name !== "") {
       if (JSON.stringify(this.data) === JSON.stringify(dataUpdate)) {
@@ -234,7 +234,7 @@ export class EditHandlerComponent implements OnInit {
     if ((this.id_sign_type === 4 || this.id_sign_type === 2 || this.id_sign_type === 5 || this.id_sign_type == 6)) {
       return this.validateCardId();
     }
-    if (this.dataSign.length == 0) {
+    if (this.dataSign.length == 0 && this.data.role != 2) {
       this.toastService.showErrorHTMLWithTimeout("Loại ký không được để trống!","",3000)
       return false
     }

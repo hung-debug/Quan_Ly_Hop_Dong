@@ -15,6 +15,13 @@
           </p-treeSelect>
             </div>
         </div>
+        
+        <div class="col-md-2">
+          <div>{{'contract.information' | translate}}</div>
+          <div class="input-line">
+            <input type="text" [(ngModel)]="contractInfo" class="input_text" placeholder="Tìm kiếm theo Mã HĐ, Số HĐ, Tên HĐ" />
+          </div>
+        </div>
 
         <!--Ngày tạo hợp đồng-->
         <div class="col-md-2">
@@ -54,7 +61,7 @@
         </div>
 
         <!--Button-->
-        <div class="col-md-4 btn_search">
+        <div class="col-md-2 btn_search">
             <button class="btn btn-lg btn-block btn_submit" (click)="export(false)">{{'btn.report' | translate }}</button>
             <button class="btn btn-lg btn-block btn_submit" (click)="export(true)">Export</button>
         </div>
