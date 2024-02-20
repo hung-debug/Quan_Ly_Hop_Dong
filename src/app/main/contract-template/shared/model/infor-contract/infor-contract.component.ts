@@ -124,6 +124,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     } else {
       this.router.navigate(['/page-not-found']);
     }
+    this.datas.isDocx = false
   }
 
   actionSuccess() {
@@ -188,8 +189,13 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
         const file_name = file.name;
         const extension = file.name.split('.').pop();
+        if (extension?.toLocaleLowerCase() == 'docx') {
+          this.datas.isDocx = true
+        } else {
+          this.datas.isDocx = false
+        }
         // tslint:disable-next-line:triple-equals
-        if (extension && extension.toLowerCase() == 'pdf') {
+        if (extension && ['pdf','docx'].includes(extension.toLowerCase())) {
           this.checkSignDigitalService.getList(file).subscribe((response) => {
             this.spinner.hide();
             if(response.length == 0) {
@@ -227,12 +233,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             this.toastService.showErrorHTMLWithTimeout('error.contract.file.type','','3000')
           }
           )
-        } else if (extension && (extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx')) {
-          this.spinner.hide()
-          this.toastService.showErrorHTMLWithTimeout("File hợp đồng chưa hỗ trợ định dạng DOC, DOCX", "", 3000);
         } else {
           this.spinner.hide()
-          this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng PDF", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng PDF, DOCX", "", 3000);
         }
       } else {
         this.spinner.hide()
@@ -382,14 +385,14 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
       if (countSuccess == 0 && this.uploadFileContractAgain) {
         await this.uploadService.uploadFile(this.datas.contractFile, true).toPromise().then((data: any) => {
-          this.datas.filePath = data?.file_object?.file_path;
-          this.datas.fileName = data?.file_object?.filename;
-          this.datas.fileBucket = data?.file_object?.bucket;
           if (!data.success) {
             this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
             this.spinner.hide()
-            countSuccess++;
+            return countSuccess++;
           }
+          this.datas.filePath = data?.file_object?.file_path;
+          this.datas.fileName = data?.file_object?.filename;
+          this.datas.fileBucket = data?.file_object?.bucket;
         }, (error: HttpErrorResponse) => {
           countSuccess++;
           this.spinner.hide();
@@ -435,6 +438,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             //neu chua co id hoac id khong con hoat dong
             if(!this.attachFileArr[i].id || !id_type){
               await this.uploadService.uploadFile(this.attachFileArr[i], false).toPromise().then((data) => {
+                  if (!data.success) {
+                    this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 3000);
+                    this.spinner.hide()
+                    return false
+                  }
                 //if (!this.datas.attachFileArr[i].id) {
                   this.datas.filePathAttach = data.file_object.file_path;
                   this.datas.fileNameAttach = data.file_object.filename;
@@ -481,6 +489,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       if (countSuccess == 0) {
         //day file
         await this.uploadService.uploadFile(this.datas.contractFile, true).toPromise().then((data: any) => {
+          if (!data.success) {
+            this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
+            this.spinner.hide()
+            return countSuccess++;
+          }
           this.datas.filePath = data.file_object.file_path;
           this.datas.fileName = data.file_object.filename;
           this.datas.fileBucket = data.file_object.bucket;
@@ -518,6 +531,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           for (var i = 0; i < this.datas.attachFileArr.length; i++) {
             //day file
             await this.uploadService.uploadFile(this.datas.attachFileArr[i], false).toPromise().then((dataUpload) => {
+              if (!dataUpload.success) {
+                this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 3000);
+                this.spinner.hide()
+                return countSuccess++;
+              }
               this.datas.filePathAttach = dataUpload.file_object.file_path;
               this.datas.fileNameAttach = dataUpload.file_object.filename;
               this.datas.fileBucketAttach = dataUpload.file_object.bucket;
@@ -552,7 +570,14 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         this.spinner.hide();
       }
     }
+    if (this.datas.isDocx) {
+      this.getConvertedContractFileUrl(this.datas.contract_id)
+    }
+  }
 
+  async getConvertedContractFileUrl(contractId: string) {
+    let contractData = await this.contractTemplateService.getContractFilePath(contractId).toPromise()
+    this.datas.convertedContractFileUrl = contractData.filter((item: any) => item.type == 1 && item.status == 1)[0]?.path ?? contractData.filter((item: any) => item.type == 2 && item.status == 1)[0]?.path
   }
 
   // --next step 2
