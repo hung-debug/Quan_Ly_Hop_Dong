@@ -273,8 +273,13 @@ export class ReportContractReceiveComponent implements OnInit {
 
     if(!to_date)
       to_date = from_date
+    
+    let payload = ""
+    if(this.contractInfo){
+      payload ='&textSearch=' + this.contractInfo
+    }
 
-    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData+'&textSearch='+this.contractInfo;
+    let params = '?from_date='+from_date+'&to_date='+to_date+'&status=' + contractStatus + '&fetchChildData='+ this.fetchChildData + payload;
     this.reportService.export('rp-my-process',idOrg,params, flag).subscribe((response: any) => {
         this.spinner.hide();
         if(flag) {

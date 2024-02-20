@@ -234,7 +234,7 @@ export class EditHandlerComponent implements OnInit {
     if ((this.id_sign_type === 4 || this.id_sign_type === 2 || this.id_sign_type === 5 || this.id_sign_type == 6)) {
       return this.validateCardId();
     }
-    if (this.dataSign.length == 0 && this.data.role != 2) {
+    if (this.dataSign.length == 0 && this.data.role != 2 && this.data.role != 1) {
       this.toastService.showErrorHTMLWithTimeout("Loại ký không được để trống!","",3000)
       return false
     }
