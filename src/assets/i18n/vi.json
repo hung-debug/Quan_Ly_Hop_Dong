@@ -796,5 +796,7 @@
   "sign.token.err": "Lỗi ký USB Token",
   "sign.cert.err": "Lỗi ký chứng thư số server",
   "upload.contract.file.err": "Upload file hợp đồng thất bại",
-  "upload.contract.file.success": "Upload file hợp đồng thành công"
+  "upload.contract.file.success": "Upload file hợp đồng thành công",
+  "select.contract.file": "Chọn file hợp đồng (PDF, DOC, DOCX, PNG, JPG, JPEG, ZIP, RAR, TXT, XLS, XLSX)"
+
 }

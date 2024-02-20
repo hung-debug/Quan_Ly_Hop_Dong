@@ -14,11 +14,11 @@
     <div class="file-approve">
         <div class="form-group">
           <div class="label_item">{{ "contract.file" | translate }} <span class="require_star">*</span></div>
-          <input type="file" id="file-input" accept=".pdf" (change)="uploadContracFile($event)">
+          <input type="file" id="file-input" accept=".pdf, .doc, .docx, .png, .jpg, .jpeg, .zip, .rar, .txt, .xls, .xlsx" (change)="uploadContracFile($event)">
           <div class="file-contract" (click)="addContractFile()">
             <img src="assets/img/upload_file.svg" alt="mobifone.contract">
             <div style="padding-top: 7px;"><span style="color: #798693"
-            *ngIf="!this.contractFile && !this.contractFileName"  >{{'choose.contract.file' | translate }}</span>{{this.contractFile?.name ?? this.contractFileName}}
+            *ngIf="!this.contractFile && !this.contractFileName"  >{{'select.contract.file' | translate }}</span>{{this.contractFile?.name ?? this.contractFileName}}
             </div>
           </div>
           <div class="invalid" *ngIf="errContractFileMess">

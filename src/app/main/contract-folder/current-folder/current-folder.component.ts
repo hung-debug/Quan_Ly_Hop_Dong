@@ -60,19 +60,33 @@ export class CurrentFolderComponent implements OnInit {
     this.router.navigate(['/main/contract-folder'])
   }
 
-  openDetail(id: number) {
-    this.action = "folder";
-    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-      this.router.navigate(['/main/form-contract/detail/' + id],
-      {
-        queryParams: {
-          'action': this.action,
-          'folderId': this.parentId,
-          'folderName': this.activatedRoute.snapshot.params['name']
-        },
-        skipLocationChange: false
+  openDetail(item: any) {
+    let currentUrl: string = ""
+    if (item.status == 35) {
+      this.contractService.getFileContract(item.id).subscribe(
+        res => {
+          currentUrl = res.filter(
+            (p: any) => p.type == 2 && p.status == 1
+          )[0]?.path ?? res.filter(
+            (p: any) => p.type == 1 && p.status == 1
+          )[0]?.path
+          window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
+        }
+      )
+    } else {
+      this.action = "folder";
+      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate(['/main/form-contract/detail/' + item.id],
+        {
+          queryParams: {
+            'action': this.action,
+            'folderId': this.parentId,
+            'folderName': this.activatedRoute.snapshot.params['name']
+          },
+          skipLocationChange: false
+        });
       });
-    });
+    }
   }
 
   setPage() {
@@ -198,7 +212,7 @@ export class CurrentFolderComponent implements OnInit {
       action: "create"
     }
     let dialogRef = this.dialog.open(UploadContractFileComponent, {
-      width: '580px',
+      width: '620px',
       data: dataShare,
     })
     dialogRef.afterClosed().subscribe(
@@ -214,14 +228,14 @@ export class CurrentFolderComponent implements OnInit {
       res => {
           data.filename = res.filter(
             (p: any) => p.type == 2 && p.status == 1
-          )[0].filename;
+          )[0]?.filename;
           let dataShare: any = {
             folderId: this.parentId,
             dataShare: data
           }
           dataShare.action = "edit"
           let dialogRef = this.dialog.open(UploadContractFileComponent, {
-            width: '580px',
+            width: '620px',
             data: dataShare,
           })
 

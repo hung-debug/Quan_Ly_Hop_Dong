@@ -37,9 +37,7 @@
                     <div class="row">
                         <div class="col-md-11">
                             <div class="item_contract_name">
-                                <a class="item_contract_name" style="text-decoration: none;" (click)="openDetail(item.id)" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
-                                            'action': 'view'
-                                          }">
+                                <a class="item_contract_name" style="text-decoration: none;" (click)="openDetail(item)">
                                     {{item.name}}
                                 </a>
                             </div>
@@ -81,7 +79,7 @@
                             <img src="../../assets/img/icon_delete.svg" class="img_icon" (click)="deleteContract(item.id)" ngbTooltip="{{'contract.delete' | translate}}"/>
                         </div>
                         <div class="div_icon" *ngIf="item.status == 35">
-                            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="editContractData(item)"/>
+                            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.edit' | translate}}" (click)="editContractData(item)"/>
                         </div>
                     </div>
                 </div>

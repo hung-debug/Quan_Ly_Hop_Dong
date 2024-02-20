@@ -39,6 +39,7 @@ export class UploadContractFileComponent implements OnInit {
   setTitle: string = "";
   contractFileName: string = ""
   isCreate: boolean = false
+  listSupportFiles = ["pdf", "doc", "docx", "png", "jpg", "jpeg", "zip", "rar", "txt", "xls", "xlsx"]
   get f() { return this.addForm.controls; }
 
   constructor(
@@ -190,6 +191,7 @@ export class UploadContractFileComponent implements OnInit {
   uploadContracFile(event: any) {
     this.contractFile = event.target.files[0]
     this.validContractFile()
+    this.validContractFileType()
   }
 
   addContractFile() {
@@ -198,6 +200,7 @@ export class UploadContractFileComponent implements OnInit {
 
   errContractNameMess: string = ""
   errContractFileMess: string = ""
+  errContractFileSize: boolean = false
 
   validContractName() {
     this.errContractNameMess = ""
@@ -212,13 +215,29 @@ export class UploadContractFileComponent implements OnInit {
     if (!this.contractFile && !this.contractFileName) {
       this.errContractFileMess = "File hợp đồng không được để trống" 
       return false
+    } else if (this.contractFile && this.contractFile.size > 10*(Math.pow(1024, 2))) {
+      this.errContractFileSize = true
+      this.toastService.showWarningHTMLWithTimeout("File hợp đồng yêu cầu tối đa 10MB", "", 3000);
+      return false
+    } else {
+      this.errContractFileSize = false
+    }
+  }
+
+  validContractFileType() {
+    let extension: any = this.contractFile.name.split('.').pop()
+    if (this.listSupportFiles.includes(extension?.toLocaleLowerCase())) {
+      return true
+    } else {
+      this.toastService.showErrorHTMLWithTimeout("Chỉ hỗ trợ file có định dạng: PDF, DOC, DOCX, PNG, JPG, JPEG, ZIP, RAR, TXT, XLS, XLSX","",3000)
+      return false
     }
   }
 
   validUpdateValues() {
     this.validContractName()
     this.validContractFile()
-    if (this.errContractFileMess || this.errContractNameMess) {
+    if (this.errContractFileMess || this.errContractNameMess || this.errContractFileSize || !this.validContractFileType()) {
       return false
     }
     return true
