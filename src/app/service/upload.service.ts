@@ -32,11 +32,13 @@ export class UploadService {
     this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId;
   }
 
-  uploadFile(file: any) {
+  uploadFile(file: any, isFileContract?: boolean) {
     this.getCurrentUser();
     let formData = new FormData();
     formData.append('file', file);
-    formData.append('fileContract', 'true');
+    if (isFileContract) {
+      formData.append('fileContract', isFileContract.toString());
+    }
 
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
