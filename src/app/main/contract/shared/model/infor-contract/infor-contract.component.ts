@@ -141,6 +141,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
     if(this.type_id)
       this.changeTypeContract();
+
+    this.datas.isDocx = false
   }
 
   actionSuccess() {
@@ -248,9 +250,13 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         const file_name = file.name
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
+        if (extension?.toLocaleLowerCase() == 'docx') {
+          this.datas.isDocx = true
+        } else {
+          this.datas.isDocx = false
+        }
         if (extension && (['pdf','docx'].includes(extension.toLowerCase()))) {
           try {
-            this.datas.isDocx = true
             //Check file hợp đồng đã có chữ ký số hay chưa
             this.checkSignDigitalService.getList(file).subscribe((response) => {
               this.spinner.hide();
@@ -777,7 +783,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         })
       }
     }
-    await this.getConvertedContractFileUrl()
+    if (this.datas.isDocx) {
+      this.getConvertedContractFileUrl()
+    }
 
   }
 
