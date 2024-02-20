@@ -460,7 +460,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
       if (countSuccess == 0 && this.uploadFileContractAgain) {
         //
-        await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data: any) => {
+        await this.uploadService.uploadFile(this.datas.contractFile, true).toPromise().then((data: any) => {
           this.datas.filePath = data?.file_object?.file_path;
           this.datas.fileName = data?.file_object?.filename;
           this.datas.fileBucket = data?.file_object?.bucket;
@@ -500,7 +500,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000)
           })
 
-          await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data: any) => {
+          await this.uploadService.uploadFile(this.datas.contractFile, true).toPromise().then((data: any) => {
             this.datas.filePath = data?.file_object?.file_path;
             this.datas.fileName = data?.file_object?.filename;
             this.datas.fileBucket = data?.file_object?.bucket;
@@ -546,7 +546,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           // this.datas.attachFile
           if (this.datas.attachFileArr != null) {
             for (var i = 0; i < this.datas.attachFileArr.length; i++) {
-              await this.uploadService.uploadFile(this.datas.attachFileArr[i]).toPromise().then(async (data) => {
+              await this.uploadService.uploadFile(this.datas.attachFileArr[i], false).toPromise().then(async (data) => {
                   if (!this.datas.attachFileArr[i].id) {
                     this.datas.filePathAttach = data.file_object.file_path;
                     this.datas.fileNameAttach = data.file_object.filename;
@@ -632,7 +632,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       }
 
       if (!error_api) {
-        await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data) => {
+        await this.uploadService.uploadFile(this.datas.contractFile, true).toPromise().then((data) => {
           this.datas.filePath = data?.file_object?.file_path;
           this.datas.fileName = data?.file_object?.filename;
           this.datas.fileBucket = data?.file_object?.bucket;
@@ -683,7 +683,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         }
 
         if (!error_api) {
-          await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data) => {
+          await this.uploadService.uploadFile(this.datas.contractFile, true).toPromise().then((data) => {
             this.datas.filePathDone = data.file_object.file_path;
             this.datas.fileNameDone = data.file_object.filename;
             this.datas.fileBucketDone = data.file_object.bucket;
@@ -711,7 +711,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           if (this.datas.attachFileArr != null) {
             for (var i = 0; i < this.datas.attachFileArr.length; i++) {
               if(!this.datas.attachFileArr[i].id) {
-                await this.uploadService.uploadFile(this.datas.attachFileArr[i]).toPromise().then(async (data) => {
+                await this.uploadService.uploadFile(this.datas.attachFileArr[i], false).toPromise().then(async (data) => {
                   this.datas.filePathAttach = data.file_object.file_path;
                   this.datas.fileNameAttach = data.file_object.filename;
                   this.datas.fileBucketAttach = data.file_object.bucket;
@@ -966,13 +966,13 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         this.datas.id = data?.id;
         this.datas.contract_id = data?.id;
         if (this.datas.contractFile) {
-          this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
+          this.uploadService.uploadFile(this.datas.contractFile, true).subscribe((data) => {
               this.datas.filePath = data.file_object.file_path;
               this.datas.fileName = data.file_object.filename;
               this.datas.fileBucket = data.file_object.bucket;
               this.contractService.addDocument(this.datas).subscribe((data) => {
                   //upload file hop dong lan 2
-                  this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
+                  this.uploadService.uploadFile(this.datas.contractFile, true).subscribe((data) => {
                       this.datas.filePathDone = data.file_object.file_path;
                       this.datas.fileNameDone = data.file_object.filename;
                       this.datas.fileBucketDone = data.file_object.bucket;
@@ -983,7 +983,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                           if (this.datas.attachFileArr != null) {
                             for (var i = 0; i < this.datas.attachFileArr.length; i++) {
 
-                              this.uploadService.uploadFile(this.datas.attachFileArr[i]).subscribe((data) => {
+                              this.uploadService.uploadFile(this.datas.attachFileArr[i], false).subscribe((data) => {
                                   this.datas.filePathAttach = data.file_object.file_path;
                                   this.datas.fileNameAttach = data.file_object.filename;
                                   this.datas.fileBucketAttach = data.file_object.bucket;
