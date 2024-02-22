@@ -203,6 +203,8 @@ export class ConsiderContractComponent
   cert_id: any;
   dataCardId: any;
   ekycDocType: string = ''
+  isContainSignField: boolean = true;
+  isNB: boolean = false;
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -238,6 +240,11 @@ export class ConsiderContractComponent
   pdfSrcMobile: any;
 
   async ngOnInit(): Promise<void> {
+    if (environment.flag == "NB") {
+      this.isNB = true
+    } else {
+      this.isNB = false
+    }
     this.getDeviceApp();
 
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
@@ -260,6 +267,14 @@ export class ConsiderContractComponent
     let recipientIdParam: any 
     this.activeRoute.queryParams.subscribe((param: any) => recipientIdParam = param.recipientId)
     await this.getRemoteSigningCurrentStatusCall(recipientIdParam)
+    await this.getCurrentFieldsData()
+  }
+
+  async getCurrentFieldsData() {
+    let res = await this.contractService.getDetermineCoordination(this.recipientId).toPromise()
+    let recipData: any = []
+    recipData = res?.recipients.filter((item: any) => item.email == this.currentUser.email)
+    this.isContainSignField = recipData[0]?.fields.some((ele: any) => ele.type == 3)
   }
 
   firstPageMobile() {
@@ -582,7 +597,7 @@ export class ConsiderContractComponent
         this.datas.roleContractReceived = this.recipient.role;
 
         for (const signUpdate of this.isDataObjectSignature) {
-          if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 2) &&
+          if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 2 || ((signUpdate.recipient.role == 4 && this.isNB) && this.isNB)) &&
             [3, 4].includes(this.datas.roleContractReceived) &&
             signUpdate?.recipient?.email === this.currentUser.email &&
             signUpdate?.recipient?.role === this.datas?.roleContractReceived
@@ -1866,7 +1881,7 @@ export class ConsiderContractComponent
   }
 
   getSwalFire(code: string) {
-    if (code == 'digital' && !this.mobile && (this.recipient.sign_type.some((item: any) => item.id !== 7 ))) {
+    if ((code == 'digital' && !this.mobile && this.recipient.sign_type.some((item: any) => item.id !== 7) && this.isContainSignField)) {
       return Swal.fire({
         title: this.getTextAlertConfirm(),
         icon: 'warning',
@@ -1912,11 +1927,11 @@ export class ConsiderContractComponent
         return 'Bạn có chắc chắn từ chối hợp đồng này?';
       }
     } else if ([3, 4].includes(this.datas.roleContractReceived)) {
-      if (this.confirmSignature == 1 && this.datas.roleContractReceived == 3) {
+      if (this.confirmSignature == 1 && (this.datas.roleContractReceived == 3 || (!this.isContainSignField && this.datas.roleContractReceived == 4))) {
         return 'Bạn có đồng ý với nội dung của hợp đồng và xác nhận ký?';
       } else if (
         this.confirmSignature == 1 &&
-        this.datas.roleContractReceived == 4
+        this.datas.roleContractReceived == 4 && this.isContainSignField
       ) {
         return 'Bạn có đồng ý với nội dung của hợp đồng và xác nhận đóng dấu?';
       } else if (this.confirmSignature == 2) {
@@ -2009,7 +2024,7 @@ export class ConsiderContractComponent
                 const textSignB = await domtoimage.toPng(imageRender);
                 signI = this.textSignBase64Gen = textSignB.split(',')[1];
               }
-            } else if (signUpdate.type == 3) {
+            } else if (signUpdate.type == 3 || ((signUpdate.recipient.role == 4 && this.isNB) && this.isNB)) {
               //lấy ảnh chữ ký usb token
               let imageRender: any = '';
 
@@ -2067,7 +2082,7 @@ export class ConsiderContractComponent
                 }
 
                 if (imageRender) {
-                  if (signUpdate.type == 3) {
+                  if (signUpdate.type == 3 || ((signUpdate.recipient.role == 4 && this.isNB) && this.isNB)) {
                     signI = this.srcMark.split(',')[1]
                   } else {
                     const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
@@ -2253,7 +2268,7 @@ export class ConsiderContractComponent
           const objSign = this.isDataObjectSignature.filter(
             (signUpdate: any) =>
               signUpdate &&
-              signUpdate.type == 3 &&
+              (signUpdate.type == 3 || ((signUpdate.recipient.role == 4 && this.isNB) && this.isNB)) &&
               [3, 4].includes(this.datas.roleContractReceived) &&
               signUpdate?.recipient?.email === this.currentUser.email &&
               signUpdate?.recipient?.role === this.datas?.roleContractReceived
@@ -2307,7 +2322,7 @@ export class ConsiderContractComponent
               const textSignB = await domtoimage.toPng(imageRender);
               signI = this.textSignBase64Gen = textSignB.split(',')[1];
             }
-          } else if (signUpdate.type == 3) {
+          } else if (signUpdate.type == 3 || ((signUpdate.recipient.role == 4 && this.isNB) && this.isNB)) {
 
             try {
               this.isDateTime = await this.timeService.getRealTime().toPromise();
@@ -2476,7 +2491,7 @@ export class ConsiderContractComponent
           const objSign = this.isDataObjectSignature.filter(
             (signUpdate: any) =>
               signUpdate &&
-              signUpdate.type == 3 &&
+              (signUpdate.type == 3 || ((signUpdate.recipient.role == 4 && this.isNB) && this.isNB)) &&
               [3, 4].includes(this.datas.roleContractReceived) &&
               signUpdate?.recipient?.email === this.currentUser.email &&
               signUpdate?.recipient?.role === this.datas?.roleContractReceived
@@ -2547,7 +2562,7 @@ export class ConsiderContractComponent
               const textSignB = await domtoimage.toPng(imageRender);
               signI = this.textSignBase64Gen = textSignB.split(',')[1];
             }
-          } else if (signUpdate.type == 3) {
+          } else if (signUpdate.type == 3 || ((signUpdate.recipient.role == 4 && this.isNB) && this.isNB)) {
             // this.nameCompany = this.recipient.name;
 
             this.widthSign = signUpdate.width;
@@ -3131,7 +3146,7 @@ export class ConsiderContractComponent
     for (const signUpdate of this.isDataObjectSignature) {
       if (
         signUpdate &&
-        signUpdate.type == 3 &&
+        (signUpdate.type == 3 || ((signUpdate.recipient.role == 4 && this.isNB) && this.isNB)) &&
         [3, 4].includes(this.datas.roleContractReceived) &&
         signUpdate?.recipient?.email === this.currentUser.email &&
         signUpdate?.recipient?.role === this.datas?.roleContractReceived
