@@ -125,7 +125,7 @@
   "contract-template.add": "Add contract template",
   "file.document": "File",
   "choose": "Choose",
-  "choose.contract.file": "Choose file contract (PDF, DOC, DOCX)",
+  "choose.contract.file": "Choose file contract (PDF, DOCX)",
   "choose.contract.file.attach": "Choose file attach (PDF, DOC, DOCX, PNG, JPG, JPEG, ZIP, RAR, TXT)",
   "choose.document.file.excel": "Choose file (XLS, XLSX)",
   "choose.sign.file.image": "Select a signature image file from your computer",
