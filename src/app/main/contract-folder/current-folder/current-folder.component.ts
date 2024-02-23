@@ -65,12 +65,22 @@ export class CurrentFolderComponent implements OnInit {
     if (item.status == 35) {
       this.contractService.getFileContract(item.id).subscribe(
         res => {
+          let fileName = res.filter(
+            (p: any) => p.type == 2 && p.status == 1
+          )[0]?.path ?? res.filter(
+            (p: any) => p.type == 1 && p.status == 1
+          )[0].filename
+          const extension = fileName.split(".").pop()
           currentUrl = res.filter(
             (p: any) => p.type == 2 && p.status == 1
           )[0]?.path ?? res.filter(
             (p: any) => p.type == 1 && p.status == 1
           )[0]?.path
-          window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
+          if (extension?.toLowerCase() == "txt") {
+            window.open(currentUrl)
+          } else {
+            window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
+          }
         }
       )
     } else {
