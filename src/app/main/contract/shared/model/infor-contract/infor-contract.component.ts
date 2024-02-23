@@ -142,7 +142,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     if(this.type_id)
       this.changeTypeContract();
 
-    this.datas.isDocx = false
   }
 
   actionSuccess() {
@@ -250,11 +249,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         const file_name = file.name
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
-        if (extension?.toLocaleLowerCase() == 'docx') {
-          this.datas.isDocx = true
-        } else {
-          this.datas.isDocx = false
-        }
         if (extension && (['pdf','docx'].includes(extension.toLowerCase()))) {
           try {
             //Check file hợp đồng đã có chữ ký số hay chưa
@@ -291,6 +285,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
                 this.datas.flagDigitalSign = true;
               }
+              this.setFileTypeDocx(this.datas.file_name.split(".").pop())
             }, (error: any) => {
               this.spinner.hide()
               this.toastService.showErrorHTMLWithTimeout('error.contract.file.type','','3000')
@@ -306,6 +301,14 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         this.spinner.hide()
         this.toastService.showWarningHTMLWithTimeout("File hợp đồng yêu cầu tối đa 10MB", "", 3000);
       }
+    }
+  }
+
+  setFileTypeDocx(extension: string) {
+    if (extension?.toLocaleLowerCase() == 'docx') {
+      this.datas.isDocx = true
+    } else {
+      this.datas.isDocx = false
     }
   }
 
