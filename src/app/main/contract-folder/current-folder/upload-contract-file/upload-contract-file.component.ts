@@ -207,6 +207,9 @@ export class UploadContractFileComponent implements OnInit {
     if (!this.contractName) {
       this.errContractNameMess = "Tên hợp đồng không được để trống"
       return false
+    } else if (this.contractName.length > 100) {
+      this.errContractNameMess = "Tên hợp đồng tối đa 100 ký tự"
+      return false
     }
   }
 
@@ -237,7 +240,7 @@ export class UploadContractFileComponent implements OnInit {
   validUpdateValues() {
     this.validContractName()
     this.validContractFile()
-    if (this.errContractFileMess || this.errContractNameMess || this.errContractFileSize || !this.validContractFileType()) {
+    if (this.errContractFileMess || this.errContractNameMess || this.errContractFileSize || (this.contractFile && !this.validContractFileType())) {
       return false
     }
     return true
