@@ -1047,7 +1047,7 @@ export class ContractService {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);
+      .append('Authorization', 'Bearer ' + this.token);    
     const body = JSON.stringify({
       name: datas.name,
       type: is_type ? is_type : 1,
@@ -1058,7 +1058,7 @@ export class ContractService {
       ordering: 1,
       status: is_status ? is_status : 1,
       contract_id: datas.id,
-    });
+    });  
     return this.http.post<Contract>(this.documentUrl, body, {
       headers: headers,
     });

@@ -474,23 +474,24 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       }
     })
-
     let isContractSign: any[] = [];
-
-    for (const d of dataContractUserSign) {
-      for (const data of dataDetermine) {
-        if ((((d.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && d.recipient_id == data.id) ||
-          (d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
-          (d.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
-          (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && d.recipient_id == data.id)) &&
-          (((d.email ? d.email : d.recipient?.email) === data.email) || ((d.phone ? d.phone : d.recipient?.phone) == data.phone)) ||
-          (!d.recipient && d.sign_unit == 'text') ||
-          ((!d.email || !d.phone) && this.datas.contract_no && d.sign_unit == 'so_tai_lieu')) && this.datas.isUploadNewFile == false) {
-
-          isContractSign.push(d); // mảng get dữ liệu không bị thay đổi
+    if(!this.datas.isDeleteField){
+      for (const d of dataContractUserSign) {
+        for (const data of dataDetermine) {
+          if ((((d.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && d.recipient_id == data.id) ||
+            (d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
+            (d.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
+            (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && d.recipient_id == data.id)) &&
+            (((d.email ? d.email : d.recipient?.email) === data.email) || ((d.phone ? d.phone : d.recipient?.phone) == data.phone)) ||
+            (!d.recipient && d.sign_unit == 'text') ||
+            ((!d.email || !d.phone) && this.datas.contract_no && d.sign_unit == 'so_tai_lieu')) && this.datas.isUploadNewFile == false) {
+  
+            isContractSign.push(d); // mảng get dữ liệu không bị thay đổi
+          }
         }
       }
     }
+
 
     // Get những dữ liệu bị thay đổi
     let dataDiffirent: any[] = [];
@@ -505,7 +506,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     // xoa nhung du lieu doi tuong bi thay doi
-    if (dataDiffirent.length > 0) {
+    if (dataDiffirent.length > 0) {      
       this.datas.contract_user_sign.forEach((res: any) => {
         if (res.sign_config.length > 0) {
           /*
@@ -515,7 +516,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (element.id_have_data && isContractSign.some((p: any) => p.id_have_data == element.id_have_data)) {
 
             } else {
-              if (element.id_have_data) {
+              if (element.id_have_data) {             
                 this.removeDataSignChange(element.id_have_data);
               }
             }
@@ -536,7 +537,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           })
         }
       })
-    } else if (isContractSign.length == 0) {
+    } else if (isContractSign.length == 0 && this.datas.isDeleteField) {     
       this.datas.contract_user_sign.forEach((res: any) => {
         if (res.sign_config.length > 0) {
           res.sign_config.forEach((element: any) => {
@@ -549,20 +550,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
     }
 
-    if(this.datas.isUploadNewFile){
-      this.datas.contract_user_sign.forEach((res: any) => {
-        if (res.sign_config.length > 0) {
-          /*
-          * begin xóa đối tượng ký đã bị thay đổi dữ liệu
-          */
-          res.sign_config.forEach((element: any) => {
-            this.removeDataSignChange(element.id_have_data);
-
-          })
-        }
-      })
-
-    }
 
     if (this.datas.contract_no) {
       this.datas.contract_user_sign.forEach((res: any) => {
@@ -620,6 +607,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       }
     })
+    if(this.datas.isDeleteField){
+      this.list_sign_name.forEach((res: any) => {
+        res.fields = [];
+      })
+    }
   }
 
   getListSignName(listSignForm: any = []) {
@@ -1487,6 +1479,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     interact('.resize-drag').unset();
     interact('.not-out-drop').unset();
     interact.removeDocument(document);
+    if(this.datas.isDeleteField){
+      this.datas.isDeleteField = false;
+    }
   }
 
   // edit location doi tuong ky

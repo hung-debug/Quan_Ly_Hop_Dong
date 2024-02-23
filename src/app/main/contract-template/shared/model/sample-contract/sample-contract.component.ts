@@ -413,7 +413,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       }
     })
-
+    
     // loc du lieu khong trung nhau
     // lay du lieu trung ten, trung email (doi voi ky so + ky text da gan nguoi xu ly) + trung ten (doi voi ky text chua co nguoi xu ly)
     // (val.recipient_id as any) == (data.id as any) &&
@@ -440,40 +440,51 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       ));
     }
     // xoa nhung du lieu doi tuong bi thay doi
-    if (dataDiffirent.length > 0) {
+    if(!this.datas.isDeleteField){
+      if (dataDiffirent.length > 0) {
+        this.datas.contract_user_sign.forEach((res: any) => {
+          if (res.sign_config.length > 0) {
+            /*
+            * begin xóa đối tượng ký đã bị thay đổi dữ liệu
+            */
+            res.sign_config.forEach((element: any) => {
+              //chi remove neu da duoc gan nguoi xu ly
+              if ((element.id_have_data && dataDiffirent.some((p: any) => p.id_have_data == element.id_have_data))) {
+                this.removeDataSignChange(element.id_have_data);
+              } 
+            })
+            /*
+            end
+            */
+            //giu lai cac ban ghi chua gan nguoi xu ly + o so tai lieu chua gan nguoi xu ly + o text da co ten chua gan nguoi xu ly + da gan nguoi xu ly va nguoi xu ly con ton tai
+            //!(val.recipient ? val.recipient : val.name) ||
+            res.sign_config = res.sign_config.filter((val: any) => !dataDiffirent.some((data: any) => !(val.recipient ? val.recipient : val.name) ||
+              (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'so_tai_lieu')
+              || (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'text' && val.text_attribute_name)
+              || (
+                (val.name as any) == (data.name as any)
+                && (val.type as any) == (data.type as any)
+                && (val.recipient_id ? val.recipient_id as any : val.email as any) === (val.recipient_id ? data.recipient_id as any : data.email as any)
+                && val.sign_unit == data.sign_unit)));
+            res.sign_config.forEach((items: any) => {
+              items.id = items.id + '1';
+            })
+          }
+        })
+      }
+    }else{
       this.datas.contract_user_sign.forEach((res: any) => {
         if (res.sign_config.length > 0) {
-          /*
-          * begin xóa đối tượng ký đã bị thay đổi dữ liệu
-          */
           res.sign_config.forEach((element: any) => {
-            //chi remove neu da duoc gan nguoi xu ly
-            if ((element.id_have_data && dataDiffirent.some((p: any) => p.id_have_data == element.id_have_data))) {
-              this.removeDataSignChange(element.id_have_data);
-            } 
+            if (element.id_have_data) {
+              this.removeDataSignChange(element.id_have_data).then();              
+            }
           })
-          /*
-          end
-          */
-          //giu lai cac ban ghi chua gan nguoi xu ly + o so tai lieu chua gan nguoi xu ly + o text da co ten chua gan nguoi xu ly + da gan nguoi xu ly va nguoi xu ly con ton tai
-          //!(val.recipient ? val.recipient : val.name) ||
-          res.sign_config = res.sign_config.filter((val: any) => !dataDiffirent.some((data: any) => !(val.recipient ? val.recipient : val.name) ||
-            (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'so_tai_lieu')
-            || (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'text' && val.text_attribute_name)
-            || (
-              (val.name as any) == (data.name as any)
-              && (val.type as any) == (data.type as any)
-              && (val.recipient_id ? val.recipient_id as any : val.email as any) === (val.recipient_id ? data.recipient_id as any : data.email as any)
-              && val.sign_unit == data.sign_unit)));
-          res.sign_config.forEach((items: any) => {
-            items.id = items.id + '1';
-          })
-
-
+          res.sign_config = [];
         }
       })
-
     }
+
 
     //lay danh sach username co ten thay doi
     let dataChangeName: any[] = [];
@@ -534,6 +545,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       }
     })
+    if(this.datas.isDeleteField){
+      this.list_sign_name.forEach((res: any) => {
+        res.fields = [];
+      })
+    }
   }
 
   getListSignName(listSignForm: any = []) {
@@ -844,7 +860,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       if (isSignType != 'text' && (element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
         let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
 
-        if (data.length >= 0) {
+        if (data.length >= 0) {      
           element.is_disable = true;
         } else {
           element.is_disable = false;
@@ -1395,6 +1411,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     interact('.resize-drag').unset();
     interact('.not-out-drop').unset();
     interact.removeDocument(document);
+    if(this.datas.isDeleteField){
+      this.datas.isDeleteField = false;
+    }
   }
 
   clearSign() {

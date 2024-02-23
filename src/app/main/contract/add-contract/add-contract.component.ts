@@ -95,6 +95,7 @@ export class AddContractComponent implements OnInit {
     },
     flagDigitalSign: false,
     isUploadNewFile: false,
+    countUploadContractFile : 0,
   };
 
   datasForm: any = {

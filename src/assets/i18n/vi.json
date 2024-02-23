@@ -782,5 +782,6 @@
   "choose.contract.draft":"Vui lòng tích chọn hợp đồng bản nháp",
   "my.org.not.authen":"Danh sách hợp đồng tổ chức của tôi chưa được phân quyền",
   "expire.status":"Hết hiệu lực",
-  "report.email": "EMAIL"
+  "report.email": "EMAIL",
+  "confirm.clear.text.sign": "Bạn có muốn xóa toàn bộ text, ô ký đã gán cho file hợp đồng cũ không?"
 }
