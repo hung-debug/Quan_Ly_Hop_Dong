@@ -189,7 +189,8 @@ export class UploadContractFileComponent implements OnInit {
   }
 
   uploadContracFile(event: any) {
-    this.contractFile = event.target.files[0]
+    this.contractFile = new File([event.target.files], this.convertFileName(event.target.files[0].name))
+    this.contractFileName = event.target.files[0].name
     this.validContractFile()
     this.validContractFileType()
   }
@@ -206,9 +207,6 @@ export class UploadContractFileComponent implements OnInit {
     this.errContractNameMess = ""
     if (!this.contractName) {
       this.errContractNameMess = "Tên hợp đồng không được để trống"
-      return false
-    } else if (this.contractName.length > 100) {
-      this.errContractNameMess = "Tên hợp đồng tối đa 100 ký tự"
       return false
     }
   }

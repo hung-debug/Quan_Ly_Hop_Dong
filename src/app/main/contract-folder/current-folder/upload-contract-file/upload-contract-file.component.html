@@ -6,7 +6,7 @@
       <div class="label_item">
         Tên hợp đồng <span class="require_star">*</span>
       </div>
-      <input [(ngModel)]="contractName" class="input_text" (keyup)="this.validContractName()" maxlength="101">
+      <input [(ngModel)]="contractName" class="input_text" (keyup)="this.validContractName()" maxlength="100">
       <div class="invalid" *ngIf="errContractNameMess">
         {{ errContractNameMess | translate }}
       </div>
@@ -17,7 +17,7 @@
           <input type="file" id="file-input" accept=".pdf, .doc, .docx, .png, .jpg, .jpeg, .zip, .rar, .txt, .xls, .xlsx" (change)="uploadContracFile($event)">
           <div class="file-contract" (click)="addContractFile()">
             <img src="assets/img/upload_file.svg" alt="mobifone.contract">
-            <div style="padding-top: 7px;"><span style="color: #798693"
+            <div style="padding-top: 7px;" class="name-ellipsis" ngbTooltip="{{this.contractFileName}}"><span style="color: #798693"
             *ngIf="!this.contractFile && !this.contractFileName"  >{{'select.contract.file' | translate }}</span>{{this.contractFile?.name ?? this.contractFileName}}
             </div>
           </div>
