@@ -236,7 +236,7 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
     
     let payload = ""
     if(this.contractInfo){
-       payload ='&textSearch=' + this.contractInfo
+       payload ='&textSearch=' + this.contractInfo.trim()
     }
 
     let params =

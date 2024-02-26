@@ -278,7 +278,7 @@ export class ReportDetailComponent implements OnInit {
     
     let payload = ""
     if(this.contractInfo){
-       payload ='&textSearch=' + this.contractInfo
+       payload ='&textSearch=' + this.contractInfo.trim()
     }
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData + payload;
     this.reportService.export('rp-detail',idOrg,params, flag).subscribe((response: any) => {
