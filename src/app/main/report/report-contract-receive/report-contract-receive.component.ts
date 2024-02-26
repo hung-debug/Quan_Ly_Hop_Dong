@@ -276,7 +276,7 @@ export class ReportContractReceiveComponent implements OnInit {
     
     let payload = ""
     if(this.contractInfo){
-      payload ='&textSearch=' + this.contractInfo
+      payload ='&textSearch=' + this.contractInfo.trim()
     }
 
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status=' + contractStatus + '&fetchChildData='+ this.fetchChildData + payload;

@@ -219,7 +219,7 @@ export class ReportSoonExpireComponent implements OnInit {
     
     let payload = ""
     if(this.contractInfo){
-       payload ='&textSearch=' + this.contractInfo
+       payload ='&textSearch=' + this.contractInfo.trim()
     }
     
     let params =
