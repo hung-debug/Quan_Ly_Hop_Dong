@@ -94,6 +94,8 @@ export class AddContractComponent implements OnInit {
       confirm_infor_contract: false,
     },
     flagDigitalSign: false,
+    isUploadNewFile: false,
+    countUploadContractFile : 0,
   };
 
   datasForm: any = {
@@ -151,7 +153,7 @@ export class AddContractComponent implements OnInit {
   isQLHD_11: boolean = true;
 
   ngOnInit() {
-    
+
     this.userService.checkServiceStatus().subscribe((response) => {
 
       if (response.status == 'Using' || environment.flag == 'NB') {
@@ -166,17 +168,17 @@ export class AddContractComponent implements OnInit {
               //lay id role
               this.roleService.getRoleById(data?.role_id).subscribe(
                 (data) => {
-                  
+
                   let listRole: any[];
                   listRole = data.permissions;
                   this.isQLHD_01 = listRole.some((element) => element.code == 'QLHD_01');
-                  
+
 
                   this.isQLHD_14 = listRole.some((element) => element.code == 'QLHD_14');
-                  
+
 
                   this.isQLHD_15 = listRole.some((element) => element.code == 'QLHD_15');
-                  
+
 
                   // this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
                   // this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
@@ -448,7 +450,7 @@ export class AddContractComponent implements OnInit {
   }
 
   t() {
-    
+
   }
 
   getDataContractForm(idContractTemplate: any) {

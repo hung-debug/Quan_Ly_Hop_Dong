@@ -18,6 +18,10 @@ import { CheckSignDigitalService } from 'src/app/service/check-sign-digital.serv
 import Swal from 'sweetalert2';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 import { environment } from 'src/environments/environment';
+import { ConfirmUploadNewFileDialogComponent } from './../../../../contract/shared/model/dialog/confirm-upload-new-file-dialog.component';
+import * as pdfjsLib from 'pdfjs-dist';
+import { MatDialog } from '@angular/material/dialog';
+import {ContractService} from 'src/app/service/contract.service';
 export class ContractConnectArr {
   ref_id: number;
   constructor(ref_id: number) {
@@ -88,7 +92,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   uploadFileAttachAgain: boolean = false;
   isFileAttachUploadNewEdit: any;
   checkView: boolean = false;
-  environment: any
+  environment: any;
+  isCloseDialog : boolean = false;
+  pagePdfFileNew: any = 0;
+  pagePdfFileOld: any = 0;
+  oldFile: any;
+  currentFile: any;
 
   public subscription: Subscription;
 
@@ -108,6 +117,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     private checkSignDigitalService: CheckSignDigitalService,
     private checkViewContractService: CheckViewContractService,
     private activeRoute: ActivatedRoute,
+    private dialog: MatDialog,
+    private contractService: ContractService,
   ) {
     this.step = variable.stepSampleContract.step1;
   }
@@ -123,6 +134,17 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.actionSuccess();
     } else {
       this.router.navigate(['/page-not-found']);
+    }
+    
+    // await this.convertUrltoFile(this.datas.contractFile)
+    if(this.router.url.includes("edit") && !this.datas.isUploadNewFile && this.datas.countUploadContractFile == 0){
+      let file = await this.convertUrltoFile(this.datas.contractFile)
+    }
+  }
+  
+  ngOnDestroy() {
+    if(this.datas.isUploadNewFile){
+      this.datas.isUploadNewFile = false;
     }
   }
 
@@ -178,10 +200,15 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     }
   }
 
-  fileChanged(e: any) {
+  async fileChanged(e: any) {
     const file1 = e.target.files[0];
     if (file1) {
-      let file = new File([file1], this.convertFileName(file1.name))
+      let file = new File([file1], this.convertFileName(file1.name));
+      this.currentFile = file;
+      if (this.datas.countUploadContractFile >= 1) {
+        this.datas.pagePdfFileOld = this.datas.pagePdfFileNew;
+      }
+      this.datas.pagePdfFileNew = await this.getInforFile(file);
       // giới hạn file upload lên là 5mb
       if (e.target.files[0].size <= 10*(Math.pow(1024, 2))) {
         this.spinner.show();
@@ -189,6 +216,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
         if (extension && ['pdf','docx'].includes(extension.toLowerCase())) {
+          this.datas.isUploadNewFile = true;
           this.checkSignDigitalService.getList(file).subscribe((response) => {
             this.spinner.hide();
             if(response.length == 0) {
@@ -235,6 +263,24 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         this.spinner.hide()
         this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu tối đa 10MB", "", 3000);
       }
+    }
+  }
+  
+  async getInforFile(file:any){
+    let response = await this.checkSignDigitalService.getPagePdfOld(file).toPromise()
+    return response.pageSize;
+  }
+  
+  async convertUrltoFile(url: any){
+    // let oldFile: any;
+    if(url){
+      this.contractService.getDataFileUrl(url).subscribe( async (response: any) =>{
+        const blob = new Blob([response], { type: 'application/octet-stream' });
+        // Tạo một đối tượng File từ blob
+        this.oldFile = new File([blob], "abc");
+        this.datas.pagePdfFileOld = await this.getInforFile(this.oldFile)
+      })
+      return this.oldFile;  
     }
   }
 
@@ -584,58 +630,125 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   // --next step 2
   async next() {
-    if (!this.validData()) {
+    if (!this.validData() || this.validateContractNo()) {
       return;
     } else {
-      this.spinner.show();
+      // this.spinner.show();
+      if(this.datas.isUploadNewFile){
+        this.datas.countUploadContractFile ++;
+      }   
       // set value to datas
       this.datas.name = this.name;
       this.datas.contract_no = this.contract_no;
       this.datas.notes = this.notes;
       this.defineData(this.datas);
-      const fileReader = new FileReader();
-      if (this.datas.is_action_contract_created) {
-        // file hợp đồng chính không thay đổi => convert url sang dạng blob
-        if (!this.uploadFileContractAgain && this.datas.contractFile && (typeof this.datas.contractFile == 'string')) {
-        } else if (this.uploadFileContractAgain && this.datas.contractFile) { // dữ liệu file hợp đồng chính bị thay đổi
-          fileReader.readAsDataURL(this.datas.contractFile);
-          fileReader.onload = (e) => {
-            if (fileReader.result)
-              this.datas.file_content = fileReader.result.toString().split(',')[1];
-            this.datas.uploadFileContractAgain = true;
-          };
-        }
-      } else {
+      this.convertUrltoBlob();
+      // this.pagePdfFileOld = await this.getInforFile(this.oldFile);
+      if((this.router.url.includes("edit") && this.datas.countUploadContractFile > 0) || (this.datas.isUploadNewFile && this.datas.contract_user_sign && this.datas.countUploadContractFile > 1)){
+        await this.openDialogClearField();
+      }else{
+        this.callAPI();
+      }
+    }
+  }
+  
+  convertUrltoBlob(){
+    const fileReader = new FileReader();
+    if (this.datas.is_action_contract_created) {
+      // file hợp đồng chính không thay đổi => convert url sang dạng blob
+      if (!this.uploadFileContractAgain && this.datas.contractFile && (typeof this.datas.contractFile == 'string')) {
+      } else if (this.uploadFileContractAgain && this.datas.contractFile) { // dữ liệu file hợp đồng chính bị thay đổi
         fileReader.readAsDataURL(this.datas.contractFile);
         fileReader.onload = (e) => {
           if (fileReader.result)
             this.datas.file_content = fileReader.result.toString().split(',')[1];
+          this.datas.uploadFileContractAgain = true;
         };
       }
-
-      if (this.datas.contract_no && (this.datas.contract_no != this.contract_no_old || this.datas.start_time != this.start_time_old || this.datas.end_time != this.end_time_old)) {
-        //check so hop dong da ton tai hay chua
-        this.contractTemplateService.checkCodeUnique(this.datas.contract_no, this.datas.start_time, this.datas.end_time, this.datas.id).subscribe(
-          dataCode => {
-            if (dataCode.success) {
-              this.callAPI();
-            } else {
-              if(dataCode.message == this.userService.getAuthCurrentUser().email){
-                this.toastService.showErrorHTMLWithTimeout('Mã mẫu hợp đồng đã tồn tại với mẫu hợp đồng đã tạo trước đó', "", 3000);
-              }else{
-                this.toastService.showErrorHTMLWithTimeout('Mã mẫu hợp đồng đã tồn tại với người dùng ' + dataCode.message, "", 3000);
-              }
-              this.spinner.hide();
-            }
-          }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra mã mẫu hợp đồng', "", 3000);
+    } else {
+      fileReader.readAsDataURL(this.datas.contractFile);
+      fileReader.onload = (e) => {
+        if (fileReader.result)
+          this.datas.file_content = fileReader.result.toString().split(',')[1];
+      };
+    }
+  }
+  
+  validateContractNo(){
+    this.datas.contract_no = this.contract_no?.trim();
+    
+    if (this.datas.contract_no && (this.datas.contract_no != this.contract_no_old || this.datas.start_time != this.start_time_old || this.datas.end_time != this.end_time_old)) {
+      //check so hop dong da ton tai hay chua
+      this.contractTemplateService.checkCodeUnique(this.datas.contract_no, this.datas.start_time, this.datas.end_time, this.datas.id).subscribe(
+        dataCode => {
+          if (dataCode.success) {
+            // this.callAPI();
             this.spinner.hide();
+            return true;
+          } else {
+            if(dataCode.message == this.userService.getAuthCurrentUser().email){
+              this.toastService.showErrorHTMLWithTimeout('Mã mẫu hợp đồng đã tồn tại với mẫu hợp đồng đã tạo trước đó', "", 3000);
+              this.spinner.hide();
+              return false;
+            }else{
+              this.toastService.showErrorHTMLWithTimeout('Mã mẫu hợp đồng đã tồn tại với người dùng ' + dataCode.message, "", 3000);
+              this.spinner.hide();
+              return false;
+            }
+            // this.spinner.hide();
           }
-        )
-      } else {
-        this.callAPI();
-      }
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra mã mẫu hợp đồng', "", 3000);
+          this.spinner.hide();
+          return false;
+        }
+      )
+    } else {
+      // this.callAPI();
+      return true;
+    }
+  }
+  
+  async openDialogClearField(){
+    let sumFields = 0;
+    
+    if(this.datas.contract_user_sign){
+      this.datas.contract_user_sign.forEach((item: any)=>{
+        sumFields = sumFields + item.sign_config.length
+      })
+    }
 
+    if((this.datas.isUploadNewFile == true && this.datas.is_data_object_signature) || (this.datas.isUploadNewFile == true && sumFields > 0)){
+      const data = {
+        title: 'THÔNG BÁO',
+        countTextSign: this.datas?.is_data_object_signature?.length > sumFields? this.datas?.is_data_object_signature?.length : sumFields,
+        isConfirmDelete: this.datas.isUploadNewFile,
+        isPagePdfNew: this.datas.pagePdfFileNew,
+        isPagePdfOld: this.datas.pagePdfFileOld,
+      };
+      this.convertUrltoBlob();
+      // @ts-ignore
+      const dialogRef = this.dialog.open(ConfirmUploadNewFileDialogComponent, {
+        width: '720px',
+        backdrop: 'static',
+        keyboard: false,
+        data,
+        autoFocus: false,
+        disableClose: true,
+      })
+      dialogRef.afterClosed().subscribe((result: any) => {
+        this.isCloseDialog = true;
+        let is_data = result;
+        if(result == "ok"){
+          this.datas.isDeleteField = true;
+        }else{
+          this.datas.isDeleteField = false;
+        }   
+        this.callAPI();
+      })
+    }else{
+
+      this.callAPI();
     }
   }
 
@@ -828,6 +941,4 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     }
     return true;
   }
-
-
 }

@@ -40,7 +40,9 @@ export class AddContractTemplateComponent implements OnInit {
       'sample_contract': false,
       'confirm_infor_contract': false
     },
-    flagDigitalSign: false
+    flagDigitalSign: false,
+    isUploadNewFile: false,
+    countUploadContractFile : 0,
   }
   personalDetails!: FormGroup;
   addressDetails!: FormGroup;
