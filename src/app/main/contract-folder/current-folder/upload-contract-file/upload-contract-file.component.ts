@@ -189,7 +189,7 @@ export class UploadContractFileComponent implements OnInit {
   }
 
   uploadContracFile(event: any) {
-    this.contractFile = new File([event.target.files], this.convertFileName(event.target.files[0].name))
+    this.contractFile = new File([event.target.files[0]], this.convertFileName(event.target.files[0].name))
     this.contractFileName = event.target.files[0].name
     this.validContractFile()
     this.validContractFileType()
