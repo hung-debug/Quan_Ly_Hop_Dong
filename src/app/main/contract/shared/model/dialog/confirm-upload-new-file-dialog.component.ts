@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { Router } from '@angular/router';
 import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-add-connect-dialog',
@@ -23,6 +24,7 @@ export class ConfirmUploadNewFileDialogComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog,
     private contractService : ContractService,
+    private spinner: NgxSpinnerService,
     private changeDetector : ChangeDetectorRef) { 
       
     }
@@ -32,6 +34,7 @@ export class ConfirmUploadNewFileDialogComponent implements OnInit {
   }
   
   onSubmit(){
+    this.spinner.show();
     this.data.isConfirmDelete = true;
     this.dialogRef.close("ok");
   }
