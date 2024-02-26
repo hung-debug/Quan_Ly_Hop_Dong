@@ -153,11 +153,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         
     if(this.router.url.includes("edit") && !this.datas.isUploadNewFile && this.datas.countUploadContractFile == 0){
       let file = await this.convertUrltoFile(this.datas.contractFile)
-      // this.datas.pagePdfFileOld = await this.getInforFile(this.oldFile)    
-    }
-    
-    if (this.datas.countUploadContractFile > 1) {
-      // this.datas.pagePdfFileOld = this.datas.pagePdfFileNew
     }
   }
   
@@ -267,9 +262,10 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     if (file1) {
       let file = new File([file1], this.convertFileName(file1.name));
       this.currentFile = file;
-      // if((this.router.url.includes("edit")) || (this.datas.isUploadNewFile && this.datas.contract_user_sign && this.datas.countUploadContractFile > 1) ){
-      this.datas.pagePdfFileNew = await this.getInforFile(file)
-      // }
+      if (this.datas.countUploadContractFile >= 1) {
+        this.datas.pagePdfFileOld = this.datas.pagePdfFileNew;
+      }
+      this.datas.pagePdfFileNew = await this.getInforFile(file);
       // giới hạn file upload lên là 5mb
       if (e.target.files[0].size <= 10*(Math.pow(1024, 2))) {
         const file_name = file.name
@@ -350,7 +346,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         this.datas.pagePdfFileOld = await this.getInforFile(this.oldFile)
       })
       return this.oldFile;  
-  }
+    }
   }
 
   addFile() {
@@ -860,8 +856,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
       this.defineData(this.datas);
       this.convertUrltoBlob();
-      if((this.router.url.includes("edit") && this.datas.countUploadContractFile > 0) || (this.datas.isUploadNewFile && this.datas.contract_user_sign && this.datas.countUploadContractFile > 1) ){      
-        // this.datas.pagePdfFileOld = await this.getInforFile(this.currentFile ?? this.oldFile ?? this.datas.contractFile);
+      if((this.router.url.includes("edit") && this.datas.countUploadContractFile > 0) || (this.datas.isUploadNewFile && this.datas.contract_user_sign && this.datas.countUploadContractFile > 1) ){
         await this.openDialogClearField();
       }else{
         this.callAPI();
@@ -933,7 +928,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     if((this.datas.isUploadNewFile == true && this.datas.is_data_object_signature) || (this.datas.isUploadNewFile == true && sumFields > 0)){
       const data = {
         title: 'THÔNG BÁO',
-        countTextSign: this.datas?.is_data_object_signature?.length || sumFields,
+        countTextSign: this.datas?.is_data_object_signature?.length > sumFields? this.datas?.is_data_object_signature?.length : sumFields,
         isConfirmDelete: this.datas.isUploadNewFile,
         isPagePdfNew: this.datas.pagePdfFileNew,
         isPagePdfOld: this.datas.pagePdfFileOld,

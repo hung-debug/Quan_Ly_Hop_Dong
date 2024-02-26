@@ -97,6 +97,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   pagePdfFileNew: any = 0;
   pagePdfFileOld: any = 0;
   oldFile: any;
+  currentFile: any;
 
   public subscription: Subscription;
 
@@ -135,7 +136,10 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.router.navigate(['/page-not-found']);
     }
     
-    await this.convertUrltoFile(this.datas.contractFile)
+    // await this.convertUrltoFile(this.datas.contractFile)
+    if(this.router.url.includes("edit") && !this.datas.isUploadNewFile && this.datas.countUploadContractFile == 0){
+      let file = await this.convertUrltoFile(this.datas.contractFile)
+    }
   }
   
   ngOnDestroy() {
@@ -200,8 +204,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.spinner.show();
     const file1 = e.target.files[0];
     if (file1) {
-      let file = new File([file1], this.convertFileName(file1.name))
-      this.pagePdfFileNew = await this.getInforFile(file)
+      let file = new File([file1], this.convertFileName(file1.name));
+      this.currentFile = file;
+      if (this.datas.countUploadContractFile >= 1) {
+        this.datas.pagePdfFileOld = this.datas.pagePdfFileNew;
+      }
+      this.datas.pagePdfFileNew = await this.getInforFile(file);
       // giới hạn file upload lên là 5mb
       if (e.target.files[0].size <= 10*(Math.pow(1024, 2))) {
 
@@ -269,12 +277,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   async convertUrltoFile(url: any){
     // let oldFile: any;
     if(url){
-      this.contractService.getDataFileUrl(url).subscribe((response: any) =>{
+      this.contractService.getDataFileUrl(url).subscribe( async (response: any) =>{
         const blob = new Blob([response], { type: 'application/octet-stream' });
         // Tạo một đối tượng File từ blob
         this.oldFile = new File([blob], "abc");
-        this.getInforFile(this.oldFile) 
-         
+        this.datas.pagePdfFileOld = await this.getInforFile(this.oldFile)
       })
       return this.oldFile;  
     }
@@ -609,8 +616,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.datas.notes = this.notes;
       this.defineData(this.datas);
       this.convertUrltoBlob();
-      this.pagePdfFileOld = await this.getInforFile(this.oldFile);
-      if(this.router.url.includes("edit") || (this.datas.isUploadNewFile && this.datas.contract_user_sign && this.datas.countUploadContractFile > 1)){
+      // this.pagePdfFileOld = await this.getInforFile(this.oldFile);
+      if((this.router.url.includes("edit") && this.datas.countUploadContractFile > 0) || (this.datas.isUploadNewFile && this.datas.contract_user_sign && this.datas.countUploadContractFile > 1)){
         await this.openDialogClearField();
       }else{
         this.callAPI();
@@ -687,10 +694,10 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     if((this.datas.isUploadNewFile == true && this.datas.is_data_object_signature) || (this.datas.isUploadNewFile == true && sumFields > 0)){
       const data = {
         title: 'THÔNG BÁO',
-        countTextSign: this.datas?.is_data_object_signature?.length || sumFields,
+        countTextSign: this.datas?.is_data_object_signature?.length > sumFields? this.datas?.is_data_object_signature?.length : sumFields,
         isConfirmDelete: this.datas.isUploadNewFile,
-        isPagePdfNew: this.pagePdfFileNew,
-        isPagePdfOld: this.pagePdfFileOld,
+        isPagePdfNew: this.datas.pagePdfFileNew,
+        isPagePdfOld: this.datas.pagePdfFileOld,
       };
       this.convertUrltoBlob();
       // @ts-ignore
