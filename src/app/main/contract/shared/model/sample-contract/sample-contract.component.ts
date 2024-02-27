@@ -546,6 +546,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           res.sign_config = [];
         }
       })
+      this.datas.is_data_object_signature = [];
     }
 
 

@@ -208,7 +208,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       if (this.datas.countUploadContractFile >= 1) {
         this.datas.pagePdfFileOld = this.datas.pagePdfFileNew;
       }
-      this.datas.pagePdfFileNew = await this.getInforFile(file);
+      
       // giới hạn file upload lên là 5mb
       if (e.target.files[0].size <= 10*(Math.pow(1024, 2))) {
         this.spinner.show();
@@ -216,6 +216,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
         if (extension && ['pdf','docx'].includes(extension.toLowerCase())) {
+          this.datas.pagePdfFileNew = await this.getInforFile(file);
           this.datas.isUploadNewFile = true;
           this.checkSignDigitalService.getList(file).subscribe((response) => {
             this.spinner.hide();
