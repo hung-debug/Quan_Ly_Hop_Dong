@@ -133,7 +133,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
 
-  async ngOnInit(): Promise<void> {
+  async ngOnInit(): Promise<void> {  
     this.environment = environment
     this.spinner.hide();
 
@@ -264,15 +264,15 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.currentFile = file;
       if (this.datas.countUploadContractFile >= 1) {
         this.datas.pagePdfFileOld = this.datas.pagePdfFileNew;
-      }
-      this.datas.pagePdfFileNew = await this.getInforFile(file);
-      // giới hạn file upload lên là 5mb
+      }   
+      // giới hạn file upload lên là 5mb     
       if (e.target.files[0].size <= 10*(Math.pow(1024, 2))) {
         this.spinner.show();
         const file_name = file.name
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
         if (extension && (['pdf','docx'].includes(extension.toLowerCase()))) {
+          this.datas.pagePdfFileNew = await this.getInforFile(file);
           this.datas.isUploadNewFile = true;
           try {
             //Check file hợp đồng đã có chữ ký số hay chưa
