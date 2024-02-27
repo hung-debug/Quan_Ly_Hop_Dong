@@ -214,7 +214,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
         this.datas = this.data_contract;
 
         this.allFileAttachment = this.datas.i_data_file_contract.filter((f: any) => f.type == 3);
-        this.allFileAttachment = this.allFileAttachment.map((item: any) => ({...item, path: item.path.replace("/tmp/","/tmp/v2/")}))
+        this.allFileAttachment = this.allFileAttachment.map((item: any) => ({...item, path: item.path.includes('.txt') ? item.path : item.path.replace("/tmp/","/tmp/v2/")}))
         this.checkIsViewContract();
 
         if(this.datas.is_data_contract?.created_by == userLogin.id){
