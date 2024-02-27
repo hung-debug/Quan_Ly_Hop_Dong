@@ -1995,7 +1995,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               break;
             }
             else {
-
+              let myOrgArr = this.list_sign_name.filter((p: any) => p.type_unit == "organization" && p.role != 2)
               if(element.email != undefined) {
                 let data_sign = {
                   name: element.name,
@@ -2004,7 +2004,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                   email: element.recipient ? element.recipient.email : element.email,
                   sign_unit: element.sign_unit
                 }
-                if (element.signature_party == "organization" || element.is_type_party == 1)
+                if (element.signature_party == "organization" || element.is_type_party == 1 || myOrgArr.findIndex((item: any) => item.email == element.email && item.type_unit == "organization") !== -1)
                   arrSign_organization.push(data_sign);
                 else arrSign_partner.push(data_sign);
               } else if(element.phone != undefined) {
