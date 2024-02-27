@@ -1862,7 +1862,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               currentElement = element
               count++;
               break
-            } else if (element.sign_unit == 'so_tai_lieu') {
+            } else if (element.sign_unit == 'so_tai_lieu' && !element.email && !element.name) {
 
             } else if (element.sign_unit == 'text' && !element.text_attribute_name) {
               currentElement = element
@@ -2304,7 +2304,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   validateVanThuData(arrOrg: any[], dataOrg: any[]) {
     let count: number = 0
     dataOrg.forEach(element => {
-       if (arrOrg.findIndex(item => item.email == element.email) == - 1) count++
+       if (arrOrg.findIndex(item => (item.email && item.email == element.email) || (item.name && item.name == element.name)) == - 1) count++
     })
     if (count == 0) return true
     else return false
