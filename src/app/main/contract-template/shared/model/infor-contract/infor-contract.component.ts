@@ -415,6 +415,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   async callAPI(action?: string) {
     //call API step 1
+    this.spinner.show();
     let countSuccess = 0;
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
       if (this.datas.contractConnect && this.datas.contractConnect.length && this.datas.contractConnect.length > 0) {
@@ -634,7 +635,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     if (!this.validData() || this.validateContractNo()) {
       return;
     } else {
-      // this.spinner.show();
       if(this.datas.isUploadNewFile){
         this.datas.countUploadContractFile ++;
       }   
@@ -646,6 +646,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.convertUrltoBlob();
       // this.pagePdfFileOld = await this.getInforFile(this.oldFile);
       if((this.router.url.includes("edit") && this.datas.countUploadContractFile > 0) || (this.datas.isUploadNewFile && this.datas.contract_user_sign && this.datas.countUploadContractFile > 1)){
+        // this.spinner.hide()
         await this.openDialogClearField();
       }else{
         this.callAPI();
@@ -684,7 +685,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         dataCode => {
           if (dataCode.success) {
             // this.callAPI();
-            this.spinner.hide();
             return true;
           } else {
             if(dataCode.message == this.userService.getAuthCurrentUser().email){
@@ -696,7 +696,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               this.spinner.hide();
               return false;
             }
-            // this.spinner.hide();
           }
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra mã mẫu hợp đồng', "", 3000);

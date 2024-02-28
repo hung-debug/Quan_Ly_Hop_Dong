@@ -856,6 +856,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     if (!this.validData() || !this.validateContractNo()) {
       return;
     } else {
+      this.spinner.show()
       if(this.datas.isUploadNewFile){
         this.datas.countUploadContractFile ++;
       }
@@ -870,6 +871,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.defineData(this.datas);
       this.convertUrltoBlob();
       if((this.router.url.includes("edit") && this.datas.countUploadContractFile > 0) || (this.datas.isUploadNewFile && this.datas.contract_user_sign && this.datas.countUploadContractFile > 1) ){
+        this.spinner.hide()
         await this.openDialogClearField();
       }else{
         this.callAPI();
