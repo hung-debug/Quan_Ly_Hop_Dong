@@ -233,21 +233,21 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               this.datas.flagDigitalSign = false;
             } else if(response.length > 0) {
               Swal.fire({
-                html: "File hợp đồng đã chứa chữ ký số; chỉ có thể ký bằng hình thức ký số với hợp đồng này",
+                html: "File hợp đồng đã chứa chữ ký số; Vui lòng tải lên file hợp đồng chưa được ký số để thực hiện ký hợp đồng",
                 icon: 'warning',
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#b0bec5',
                 confirmButtonText: 'Xác nhận'
               });
 
-              const fileInput: any = document.getElementById('file-input');
-              fileInput.value = '';
-              this.datas.file_name = file_name;
-              this.datas.contractFile = file;
-              this.contractFileRequired();
-              if (this.datas.is_action_contract_created) {
-                this.uploadFileContractAgain = true;
-              }
+              // const fileInput: any = document.getElementById('file-input');
+              // fileInput.value = '';
+              // this.datas.file_name = file_name;
+              // this.datas.contractFile = file;
+              // this.contractFileRequired();
+              // if (this.datas.is_action_contract_created) {
+              //   this.uploadFileContractAgain = true;
+              // }
               this.datas.flagDigitalSign = true;
             }
             this.setFileTypeDocx(this.datas.file_name.split(".").pop())
