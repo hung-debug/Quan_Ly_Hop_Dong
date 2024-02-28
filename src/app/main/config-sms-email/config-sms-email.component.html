@@ -23,9 +23,9 @@
                   <td class="col-md-3">{{rowData.value.nameConfig}}</td>
                   <td class="col-md-3"><input name="item" type="checkbox" formControlName="smsConfig" /></td>
                   <td class="col-md-3"><input name="item" type="checkbox" formControlName="emailConfig" /></td>
-                  <td class="col-md-3">
+                  <td class="col-md-2">
                     <p-dropdown panelStyleClass="font" appendTo="body" optionLabel="name" optionValue="id"
-                      placeholder="{{'all' | translate}}" [options]="listStatus"
+                      [options]="[6,1,2,5].includes(rowData.value.smsTypeId) ? listStatus : listStatus1"
                       (onChange)="selectConfigDropDown($event,listConfig)" formControlName="userSendNotification"
                       [autoDisplayFirst]="false"></p-dropdown>
                   </td>
@@ -51,11 +51,6 @@
         <input [(ngModel)]="this.soonExpireDay" type="number" class="input-expiration-date" min="0" oninput="this.value = 
                 !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" />
       </div>
-
-      <!-- <div style="justify-content: center;padding-top: 20px;">
-                <button class="cancel-button" (click)="resetSoonExpireDay()" type="button">{{'contract.status.canceled' | translate}}</button>
-                <button class="save-button" (click)="updateSoonExpireDay()">{{'btn.update' | translate}}</button>
-            </div> -->
     </div>
   </div>
 

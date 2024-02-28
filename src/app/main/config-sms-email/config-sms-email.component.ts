@@ -37,6 +37,7 @@ export class ConfigSmsEmailComponent implements OnInit {
   lang: string;
   cols: any[];
   listStatus: any = [];
+  listStatus1: any = [];
   notiStatus0: number = 1;
   notiStatus1: number = 1;
   notiStatus2: number = 1;
@@ -84,7 +85,12 @@ export class ConfigSmsEmailComponent implements OnInit {
     this.listStatus = [
       { id: 0, name: 'Người tạo' },
       { id: 1, name: 'Người tạo và những người đã xử lý' },
-      { id: 2, name: 'Người tạo và người đang xử lý' },
+      // { id: 2, name: 'Người tạo và người đang xử lý' },
+    ]
+    
+    this.listStatus1 = [
+      { id: 0, name: 'Người tạo' },
+      { id: 2, name: 'Người tạo và những người đang xử lý' },
     ]
 
     this.cols = [
