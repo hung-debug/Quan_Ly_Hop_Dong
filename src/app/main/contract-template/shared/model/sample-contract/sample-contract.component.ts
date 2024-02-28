@@ -1854,39 +1854,79 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let currentElement: any
       let boxElements: any = []
 
-      for (let i = 0; i < this.datas.contract_user_sign.length; i++) {
-        if (this.datas.contract_user_sign[i].sign_config.length > 0) {
-          for (let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
-            let element = this.datas.contract_user_sign[i].sign_config[j];
-            if (!element.name && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') { // element.sign_unit != 'so_tai_lieu'
-              currentElement = element
-              count++;
-              break
-            } else if (element.sign_unit == 'so_tai_lieu' && !element.email && !element.name) {
-
-            } else if (element.sign_unit == 'text' && !element.text_attribute_name) {
-              currentElement = element
-              count_text++;
-              break
-            } else {
-              let data_sign = {
-                name: element.name,
-                signature_party: element.signature_party,
-                recipient_id: element.recipient_id,
-                email: element.email,
-                sign_unit: element.sign_unit
+      if (environment.flag == 'KD') {
+        for (let i = 0; i < this.datas.contract_user_sign.length; i++) {
+          if (this.datas.contract_user_sign[i].sign_config.length > 0) {
+            for (let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
+              let element = this.datas.contract_user_sign[i].sign_config[j];
+              if (!element.name && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') { // element.sign_unit != 'so_tai_lieu'
+                currentElement = element
+                count++;
+                break
+              } else if (element.sign_unit == 'so_tai_lieu') {
+  
+              } else if (element.sign_unit == 'text' && !element.text_attribute_name) {
+                currentElement = element
+                count_text++;
+                break
+              } else {
+                let data_sign = {
+                  name: element.name,
+                  signature_party: element.signature_party,
+                  recipient_id: element.recipient_id,
+                  email: element.email,
+                  sign_unit: element.sign_unit
+                }
+                if (element.signature_party == "organization" || element.is_type_party == 1)
+                  arrSign_organization.push(data_sign);
+                else arrSign_partner.push(data_sign);
               }
-              if (element.signature_party == "organization" || element.is_type_party == 1)
-                arrSign_organization.push(data_sign);
-              else arrSign_partner.push(data_sign);
+  
+              if (element.coordinate_x) {
+                coordinate_x.push(Number(element.coordinate_x));
+                coordinate_y.push(Number(element.coordinate_y));
+                width.push(Number(element.width));
+                height.push(Number(element.height));
+                boxElements.push(element)
+              }
             }
-
-            if (element.coordinate_x) {
-              coordinate_x.push(Number(element.coordinate_x));
-              coordinate_y.push(Number(element.coordinate_y));
-              width.push(Number(element.width));
-              height.push(Number(element.height));
-              boxElements.push(element)
+          }
+        }
+      } else {
+        for (let i = 0; i < this.datas.contract_user_sign.length; i++) {
+          if (this.datas.contract_user_sign[i].sign_config.length > 0) {
+            for (let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
+              let element = this.datas.contract_user_sign[i].sign_config[j];
+              if (!element.name && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') { // element.sign_unit != 'so_tai_lieu'
+                currentElement = element
+                count++;
+                break
+              } else if (element.sign_unit == 'so_tai_lieu' && !element.email && !element.name) {
+  
+              } else if (element.sign_unit == 'text' && !element.text_attribute_name) {
+                currentElement = element
+                count_text++;
+                break
+              } else {
+                let data_sign = {
+                  name: element.name,
+                  signature_party: element.signature_party,
+                  recipient_id: element.recipient_id,
+                  email: element.email,
+                  sign_unit: element.sign_unit
+                }
+                if (element.signature_party == "organization" || element.is_type_party == 1)
+                  arrSign_organization.push(data_sign);
+                else arrSign_partner.push(data_sign);
+              }
+  
+              if (element.coordinate_x) {
+                coordinate_x.push(Number(element.coordinate_x));
+                coordinate_y.push(Number(element.coordinate_y));
+                width.push(Number(element.width));
+                height.push(Number(element.height));
+                boxElements.push(element)
+              }
             }
           }
         }
