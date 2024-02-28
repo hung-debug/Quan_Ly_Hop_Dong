@@ -257,15 +257,15 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     return str;
   }
 
-  async fileChanged(e: any) {
-    const file1 = e.target.files[0];
+  async fileChanged(e: any) { 
+    const file1 = e.target.files[0];  
     if (file1) {
       let file = new File([file1], this.convertFileName(file1.name));
       this.currentFile = file;
       if (this.datas.countUploadContractFile >= 1) {
         this.datas.pagePdfFileOld = this.datas.pagePdfFileNew;
       }   
-      // giới hạn file upload lên là 5mb     
+      // giới hạn file upload lên là 10mb     
       if (e.target.files[0].size <= 10*(Math.pow(1024, 2))) {
         this.spinner.show();
         const file_name = file.name
@@ -276,7 +276,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           this.datas.isUploadNewFile = true;
           try {
             //Check file hợp đồng đã có chữ ký số hay chưa
-            this.checkSignDigitalService.getList(file).subscribe((response) => {
+            this.checkSignDigitalService.getList(file).subscribe((response) => {            
               this.spinner.hide();
               if(response.length == 0) {
                 const fileInput: any = document.getElementById('file-input');
@@ -291,21 +291,21 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                 this.datas.flagDigitalSign = false;
               } else if(response.length > 0) {
                 Swal.fire({
-                  html: "File hợp đồng đã chứa chữ ký số; chỉ có thể ký bằng hình thức ký số với hợp đồng này",
+                  html: "File hợp đồng đã chứa chữ ký số; Vui lòng tải lên file hợp đồng chưa được ký số để thực hiện ký hợp đồng",
                   icon: 'warning',
                   confirmButtonColor: '#3085d6',
                   cancelButtonColor: '#b0bec5',
                   confirmButtonText: 'Xác nhận'
                 });
 
-                const fileInput: any = document.getElementById('file-input');
-                fileInput.value = '';
-                this.datas.file_name = file_name;
-                this.datas.contractFile = file;
-                this.contractFileRequired();
-                if (this.datas.is_action_contract_created) {
-                  this.uploadFileContractAgain = true;
-                }
+                // const fileInput: any = document.getElementById('file-input');
+                // fileInput.value = '';
+                // this.datas.file_name = file_name;
+                // this.datas.contractFile = file;
+                // this.contractFileRequired();
+                // if (this.datas.is_action_contract_created) {
+                //   this.uploadFileContractAgain = true;
+                // }
 
                 this.datas.flagDigitalSign = true;
               }
