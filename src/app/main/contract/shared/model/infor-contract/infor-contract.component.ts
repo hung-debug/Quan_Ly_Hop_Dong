@@ -959,7 +959,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       })
       dialogRef.afterClosed().subscribe((result: any) => {
         this.isCloseDialog = true;
-        let is_data = result;
+        this.spinner.show()
         if(result == "ok"){
           this.datas.isDeleteField = true;
         }else{
