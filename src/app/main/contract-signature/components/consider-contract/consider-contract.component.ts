@@ -597,7 +597,7 @@ export class ConsiderContractComponent
         this.datas.roleContractReceived = this.recipient.role;
 
         for (const signUpdate of this.isDataObjectSignature) {
-          if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 2 || ((signUpdate.recipient.role == 4 && this.isNB) && this.isNB)) &&
+          if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 2 || ((signUpdate.recipient.role == 4 && this.isNB))) &&
             [3, 4].includes(this.datas.roleContractReceived) &&
             signUpdate?.recipient?.email === this.currentUser.email &&
             signUpdate?.recipient?.role === this.datas?.roleContractReceived
