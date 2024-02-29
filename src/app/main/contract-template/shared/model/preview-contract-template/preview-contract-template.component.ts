@@ -30,20 +30,24 @@ export class PreviewContractTemplateComponent implements OnInit {
   ngOnInit(): void {
     this.datas = this.data;
 
-    if (this.datas.is_action_contract_created) {
-      if (this.datas.uploadFileContractAgain) {
-        this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
-      } else {
-        let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
-        let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
-        if (fileContract_2) {
-          this.pdfSrc = fileContract_1.path;
-        } else {
-          this.pdfSrc = fileContract_1.path;
-        }
-      }
+    if (this.data.isDocx) {
+      this.pdfSrc = this.data.convertedContractFileUrl
     } else {
-      this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
+      if (this.datas.is_action_contract_created) {
+        if (this.datas.uploadFileContractAgain) {
+          this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
+        } else {
+          let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
+          let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
+          if (fileContract_2) {
+            this.pdfSrc = fileContract_1.path;
+          } else {
+            this.pdfSrc = fileContract_1.path;
+          }
+        }
+      } else {
+        this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
+      }
     }
 
     this.getPage();

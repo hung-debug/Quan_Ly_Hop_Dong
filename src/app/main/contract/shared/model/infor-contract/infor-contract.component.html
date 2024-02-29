@@ -23,7 +23,7 @@
       <!--upload file hợp đồng-->
       <div class="form-group">
         <div class="label_item">{{'contract.file' | translate}} <span class="require_star">*</span></div>
-        <input id="file-input" type="file" accept=".pdf" (change)="fileChanged($event)" style="display: none;" />
+        <input id="file-input" type="file" accept=".pdf,.docx" (change)="fileChanged($event)" style="display: none;" />
         <div class="file-contract" (click)="addFile()">
           <img src="assets/img/upload_file.svg" alt="mobifone.contract">
           <div style="padding-top: 7px;"><span style="color: #798693"

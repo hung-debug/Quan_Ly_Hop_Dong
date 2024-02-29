@@ -25,6 +25,7 @@ import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { CheckZoomService } from 'src/app/service/check-zoom.service';
 import { DetectCoordinateService } from 'src/app/service/detect-coordinate.service';
+import { environment } from 'src/environments/environment';
 
 interface DropdownOption {
   value: number;
@@ -178,20 +179,24 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         height: 0
       }
     }
-    if (this.datas.is_action_contract_created) {
-      if (this.datas.uploadFileContractAgain) {
-        this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
-      } else {
-        let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
-        let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
-        if (fileContract_2) {
-          this.pdfSrc = fileContract_2.path;
+    if (!this.datas.isDocx) {
+      if (this.datas.is_action_contract_created) {
+        if (this.datas.uploadFileContractAgain) {
+          this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
         } else {
-          this.pdfSrc = fileContract_1.path;
+          let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
+          let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
+          if (fileContract_2) {
+            this.pdfSrc = fileContract_2.path;
+          } else {
+            this.pdfSrc = fileContract_1.path;
+          }
         }
+      } else {
+        this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
       }
     } else {
-      this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
+      this.pdfSrc = this.datas.convertedContractFileUrl
     }
     this.getPage();
 
@@ -474,32 +479,25 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       }
     })
-
     let isContractSign: any[] = [];
-
-    for (const d of dataContractUserSign) {
-      for (const data of dataDetermine) {
-        if (((d.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && d.recipient_id == data.id) ||
-          ((d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && d.recipient_id == data.id) ||
-          ((d.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && d.recipient_id == data.id) ||
-          (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && d.recipient_id == data.id))) {
-
-          isContractSign.push(d); // mảng get dữ liệu không bị thay đổi
+    if(!this.datas.isDeleteField){
+      for (const d of dataContractUserSign) {
+        for (const data of dataDetermine) {
+          if (((d.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && d.recipient_id == data.id) ||
+            ((d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && d.recipient_id == data.id) ||
+            ((d.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && d.recipient_id == data.id) ||
+            (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && d.recipient_id == data.id)) && 
+            this.datas.isUploadNewFile == false) {
+            isContractSign.push(d); // mảng get dữ liệu không bị thay đổi
+          }
         }
       }
     }
 
+
     // Get những dữ liệu bị thay đổi
     let dataDiffirent: any[] = [];
-    // if (isContractSign.length > 0 && dataDetermine.length > 0) {
-    //   //
-    //   for (const d of dataContractUserSign) {
-    //     let dataNotLocation = isContractSign.filter((p: any) => (d.recipient_id && p.recipient_id == d.recipient_id) || (!d.recipient_id && d.sign_unit == 'so_tai_lieu' && this.datas.contract_no))[0];
-    //     if (!dataNotLocation) {
-    //       dataDiffirent.push(d); // mảng chứa dữ liệu bị thay đổi giá trị (name, email, sign_type)
-    //     }
-    //   }
-    // }
+
     dataDiffirent = dataContractUserSign.filter((d: any) => !dataDetermine.some((data: any) => 
       (((d.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && d.recipient_id == data.id) ||
       ((d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && d.recipient_id == data.id) ||
@@ -508,7 +506,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     )))
 
     // xoa nhung du lieu doi tuong bi thay doi
-    if (dataDiffirent.length > 0) {
+    if (dataDiffirent.length > 0) {      
       this.datas.contract_user_sign.forEach((res: any) => {
         if (res.sign_config.length > 0) {
           /*
@@ -537,7 +535,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           })
         }
       })
-    } else if (isContractSign.length == 0) {
+    } else if (isContractSign.length == 0 && this.datas.isDeleteField) {     
       this.datas.contract_user_sign.forEach((res: any) => {
         if (res.sign_config.length > 0) {
           res.sign_config.forEach((element: any) => {
@@ -548,7 +546,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           res.sign_config = [];
         }
       })
+      this.datas.is_data_object_signature = [];
     }
+
 
     if (this.datas.contract_no) {
       this.datas.contract_user_sign.forEach((res: any) => {
@@ -606,6 +606,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       }
     })
+    if(this.datas.isDeleteField){
+      this.list_sign_name.forEach((res: any) => {
+        res.fields = [];
+      })
+    }
   }
 
   getListSignName(listSignForm: any = []) {
@@ -920,7 +925,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             element.is_disable = true
           }
         } else if (isSignType == 'text') {
-          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 ) || (element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3))); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 ) || (element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3 && p.id != 7))); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
         }
       } else {
         if (isSignType == 'chu_ky_anh') {
@@ -928,14 +933,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         } else if (isSignType == 'chu_ky_so') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && element.role != 2);
         } else if (isSignType == 'text') {
-          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 ) || (element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3))); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 ) || (element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3 && p.id != 7))); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
 
           // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4)); // disable van thu chon. nguoi nhap.
         } else {
           if (this.datas.contract_no) {
             element.is_disable = true;
           } else {
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || (element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3)))
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || (element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3 && p.id != 7)))
             // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4))
           }
         }
@@ -1475,6 +1480,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     interact('.resize-drag').unset();
     interact('.not-out-drop').unset();
     interact.removeDocument(document);
+    if(this.datas.isDeleteField){
+      this.datas.isDeleteField = false;
+    }
   }
 
   // edit location doi tuong ky
@@ -2261,76 +2269,159 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           name: '',
           sign_type: ''
         };
-        // valid ký kéo thiếu ô ký cho từng loại ký
-        for (const element of data_organization) {
-          if (element.sign_type.length > 0) {
-            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && arrSign_organization.filter((item: any) => (item.email == element.email || item.phone == element.phone) && item.sign_unit == 'chu_ky_so').length == 0) {
-              error_organization++;
-              nameSign_organization.name = element.name;
-              nameSign_organization.sign_type = 'chu_ky_so';
-              break
+
+        if (environment.flag == "KD") {
+          // valid ký kéo thiếu ô ký cho từng loại ký
+          console.log("data_organization",data_organization);
+          for (const element of data_organization) {
+            if (element.sign_type.length > 0) {
+              if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && arrSign_organization.filter((item: any) => ((item.email && item.email == element.email) || (item.phone && item.phone == element.phone)) && item.sign_unit == 'chu_ky_so').length == 0) {
+                error_organization++;
+                nameSign_organization.name = element.name;
+                nameSign_organization.sign_type = 'chu_ky_so';
+                break
+              }
             }
           }
-        }
-        if (error_organization > 0) {
-          this.spinner.hide();
-          if(!isSaveDraft)
-          this.toastService.showWarningHTMLWithTimeout((this.translate.instant('miss.digital.sig')) + " " + `${nameSign_organization.name}` + " " + (this.translate.instant('off.org.please')), "", 3000);
-          return false;
-        }
-        // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.off.org.please
-        if (arrSign_organization.length < data_organization.length) {
-          this.spinner.hide();
-          if(!isSaveDraft)
-          this.toastService.showWarningHTMLWithTimeout("Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!", "", 3000);
-          return false;
-        }
-
-        // valid đối tượng ký của đối tác
-        let data_partner = this.list_sign_name.filter((p: any) => p.type_unit == "partner" && p.role != 2);
-        let countError_partner = 0;
-        let nameSign_partner = {
-          name: '',
-          sign_type: ''
-        };
-        // valid ký kéo thiếu ô ký cho từng loại ký
-        for (const element of data_partner) {
-          if (element.sign_type.length > 0) {
-            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && arrSign_partner.filter((item: any) => (item.email == element.email || item.phone == element.phone) && item.sign_unit == 'chu_ky_so').length == 0) {
-              countError_partner++;
-              nameSign_partner.name = element.name;
-              nameSign_partner.sign_type = 'chu_ky_so';
-              break
-            }
-            if (element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && arrSign_partner.filter((item: any) => (item.email == element.email || item.phone == element.phone) && item.sign_unit == 'chu_ky_anh').length == 0) {
-              countError_partner++;
-              nameSign_partner.name = element.name;
-              nameSign_partner.sign_type = 'chu_ky_anh';
-              break
+          if (error_organization > 0) {
+            this.spinner.hide();
+            if(!isSaveDraft)
+            this.toastService.showWarningHTMLWithTimeout((this.translate.instant('miss.digital.sig')) + " " + `${nameSign_organization.name}` + " " + (this.translate.instant('off.org.please')), "", 3000);
+            return false;
+          }
+          // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.off.org.please
+          if (arrSign_organization.length < data_organization.length) {
+            this.spinner.hide();
+            if(!isSaveDraft)
+            this.toastService.showWarningHTMLWithTimeout("Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!", "", 3000);
+            return false;
+          }
+  
+          // valid đối tượng ký của đối tác
+          let data_partner = this.list_sign_name.filter((p: any) => p.type_unit == "partner" && p.role != 2);
+          let countError_partner = 0;
+          let nameSign_partner = {
+            name: '',
+            sign_type: ''
+          };
+          // valid ký kéo thiếu ô ký cho từng loại ký
+          for (const element of data_partner) {
+            if (element.sign_type.length > 0) {
+              if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && arrSign_partner.filter((item: any) => (item.email == element.email || item.phone == element.phone) && item.sign_unit == 'chu_ky_so').length == 0) {
+                countError_partner++;
+                nameSign_partner.name = element.name;
+                nameSign_partner.sign_type = 'chu_ky_so';
+                break
+              }
+              if (element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && arrSign_partner.filter((item: any) => (item.email == element.email || item.phone == element.phone) && item.sign_unit == 'chu_ky_anh').length == 0) {
+                countError_partner++;
+                nameSign_partner.name = element.name;
+                nameSign_partner.sign_type = 'chu_ky_anh';
+                break
+              }
             }
           }
-        }
-
-        if (countError_partner > 0) {
-          this.spinner.hide();
-          if(!isSaveDraft)
-          this.toastService.showWarningHTMLWithTimeout(`Thiếu đối tượng ${nameSign_partner.sign_type == 'chu_ky_so' ? 'ký số' : 'ký ảnh hoặc eKYC'} của đối tác ${nameSign_partner.name}, vui lòng chọn đủ người ký!`, "", 3000);
-          return false;
-        }
-
-
-        // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
-        if (arrSign_partner.length < data_partner.length) {
-          // alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!');
-          this.spinner.hide();
-
-          if(!isSaveDraft)
-          this.toastService.showWarningHTMLWithTimeout("Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!", "", 3000);
-          return false;
+  
+          if (countError_partner > 0) {
+            this.spinner.hide();
+            if(!isSaveDraft)
+            this.toastService.showWarningHTMLWithTimeout(`Thiếu đối tượng ${nameSign_partner.sign_type == 'chu_ky_so' ? 'ký số' : 'ký ảnh hoặc eKYC'} của đối tác ${nameSign_partner.name}, vui lòng chọn đủ người ký!`, "", 3000);
+            return false;
+          }
+  
+          // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
+          if (arrSign_partner.length < data_partner.length) {
+            // alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!');
+            this.spinner.hide();
+  
+            if(!isSaveDraft)
+            this.toastService.showWarningHTMLWithTimeout("Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!", "", 3000);
+            return false;
+          }
+        } else {
+          // valid ký kéo thiếu ô ký cho từng loại ký
+          for (const element of data_organization) {
+            if (element.sign_type.length > 0) {
+              if (element.sign_type.some((p: any) => [3,7,8].includes(p.id) || ([2,4,6].includes(p.id) && element.role !==4)) && 
+              arrSign_organization.filter((item: any) => ((item.email && item.email == element.email) || (item.phone && item.phone == element.phone)) 
+              && item.sign_unit == 'chu_ky_so').length == 0) {
+                error_organization++;
+                nameSign_organization.name = element.name;
+                nameSign_organization.sign_type = 'chu_ky_so';
+                break
+              }
+            }
+          }
+          if (error_organization > 0) {
+            this.spinner.hide();
+            if(!isSaveDraft)
+            this.toastService.showWarningHTMLWithTimeout((this.translate.instant('miss.digital.sig')) + " " + `${nameSign_organization.name}` + " " + (this.translate.instant('off.org.please')), "", 3000);
+            return false;
+          }
+          // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.off.org.please
+  
+          if (arrSign_organization.length < data_organization.length || !this.validateVanThuData(arrSign_organization, data_organization)) {
+            this.spinner.hide();
+            if(!isSaveDraft)
+            this.toastService.showWarningHTMLWithTimeout("Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!", "", 3000);
+            return false;
+          }
+  
+          // valid đối tượng ký của đối tác
+          let data_partner = this.list_sign_name.filter((p: any) => p.type_unit == "partner" && p.role != 2);
+          let countError_partner = 0;
+          let nameSign_partner = {
+            name: '',
+            sign_type: ''
+          };
+          // valid ký kéo thiếu ô ký cho từng loại ký
+          for (const element of data_partner) {
+            if (element.sign_type.length > 0) {
+              if (element.sign_type.some((p: any) => [3,7,8].includes(p.id) || ([2,4,6].includes(p.id) && element.role !==4)) && arrSign_partner.filter((item: any) => ((element.email && item.email == element.email) || (element.phone && item.phone == element.phone)) && item.sign_unit == 'chu_ky_so').length == 0) {
+                countError_partner++;
+                nameSign_partner.name = element.name;
+                nameSign_partner.sign_type = 'chu_ky_so';
+                break
+              }
+              if (element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && arrSign_partner.filter((item: any) => (item.email == element.email || item.phone == element.phone) && item.sign_unit == 'chu_ky_anh').length == 0) {
+                countError_partner++;
+                nameSign_partner.name = element.name;
+                nameSign_partner.sign_type = 'chu_ky_anh';
+                break
+              }
+            }
+          }
+  
+          if (countError_partner > 0) {
+            this.spinner.hide();
+            if(!isSaveDraft)
+            this.toastService.showWarningHTMLWithTimeout(`Thiếu đối tượng ${nameSign_partner.sign_type == 'chu_ky_so' ? 'ký số' : 'ký ảnh hoặc eKYC'} của đối tác ${nameSign_partner.name}, vui lòng chọn đủ người ký!`, "", 3000);
+            return false;
+          }
+  
+  
+          // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
+          if (arrSign_partner.length < data_partner.length || !this.validateVanThuData(arrSign_partner, data_partner)) {
+            // alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!');
+            this.spinner.hide();
+  
+            if(!isSaveDraft)
+            this.toastService.showWarningHTMLWithTimeout("Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!", "", 3000);
+            return false;
+          }
         }
       }
     }
     return true;
+  }
+
+  validateVanThuData(arrOrg: any[], dataOrg: any[]) {
+    let count: number = 0
+    dataOrg.forEach(element => {
+       if (arrOrg.findIndex(item => item.email == element.email) == - 1) count++
+    })
+    if (count == 0) return true
+    else return false
   }
 
   getName(data: any) {

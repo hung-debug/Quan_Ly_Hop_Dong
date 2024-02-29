@@ -82,8 +82,8 @@
           </div>
 
           <div class="participants--input"
-            [ngStyle]="{'display':'flex', 'justify-content': (role === 2) ? 'left' : 'space-around' }">
-            <div class="participants__name" [ngStyle]="{'margin-left': (role === 2) ? '4%' : null }">
+            [ngStyle]="{'display':'flex', 'justify-content': (role === 2 || role === 1) ? 'left' : 'space-around' }">
+            <div class="participants__name" [ngStyle]="{'margin-left': (role === 2 || role === 1) ? '4%' : null }">
               <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span
                   class="required-title">*</span></div>
               <!--Trường nhập họ và tên cho người ký tổ chức của tôi-->
@@ -96,7 +96,7 @@
               </div>
             </div>
 
-            <div class="participants__name" *ngIf="role !== 2">
+            <div class="participants__name" *ngIf="role !== 2 && role !== 1 ">
               <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span
                   class="required-title">*</span></div>
 

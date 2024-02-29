@@ -56,6 +56,7 @@ export class ReportDetailComponent implements OnInit {
   Arr = Array;
 
   orgName: any;
+  contractInfo: string;
 
   constructor(
     private appService: AppService,
@@ -274,8 +275,12 @@ export class ReportDetailComponent implements OnInit {
 
     if(!to_date)
       to_date = from_date
-
-    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
+    
+    let payload = ""
+    if(this.contractInfo){
+       payload ='&textSearch=' + this.contractInfo.trim()
+    }
+    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData + payload;
     this.reportService.export('rp-detail',idOrg,params, flag).subscribe((response: any) => {
         this.spinner.hide();
         if(flag) {

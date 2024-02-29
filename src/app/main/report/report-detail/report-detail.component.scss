@@ -205,3 +205,7 @@ input[type="checkbox"]:checked + label:before {
   width: 250px;
   word-break:break-word
 }
+
+#table td {
+  white-space: pre-wrap;
+}

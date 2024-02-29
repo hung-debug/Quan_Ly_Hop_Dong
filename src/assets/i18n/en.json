@@ -58,6 +58,7 @@
   "contract.status.create.complete": "Complete creating",
   "contract.status.wait-response": "Wait response",
   "contract.status.undefined": "Undefined",
+  "contract.status.stored": "Storage",
   "contract.me": "My contract",
   "contract.organization": "Organizational contract",
   "contract.wait-for-me": "Contract to be handled",
@@ -124,7 +125,7 @@
   "contract-template.add": "Add contract template",
   "file.document": "File",
   "choose": "Choose",
-  "choose.contract.file": "Choose file contract (PDF, DOC, DOCX)",
+  "choose.contract.file": "Choose file contract (PDF, DOCX)",
   "choose.contract.file.attach": "Choose file attach (PDF, DOC, DOCX, PNG, JPG, JPEG, ZIP, RAR, TXT)",
   "choose.document.file.excel": "Choose file (XLS, XLSX)",
   "choose.sign.file.image": "Select a signature image file from your computer",
@@ -671,6 +672,11 @@
   "choose.font": "Choose font",
   "reject.question": "Are you sure you want to reject this contract? Please enter the reason for rejection",
   "config.sms":"Config SMS",
+  "config.sms.email":"Config status send SMS/EMAIL",
+  "config.type": "Type config",
+  "noti.sms": "Notification via sms",
+  "noti.email": "Notification via email",
+  "sub.send.noti": "Person send notification",
   "refuse.contract":"Refuse contract",
   "contract.about.expire":"Contract is about to expire",
   "contract.expired":"Contract expired",
@@ -774,5 +780,8 @@
   "get.cert.data.err": "Unable to get digital certificate information",
   "get.org.data.err": "Error retrieving organizational data",
   "sign.token.err": "Error signing USB Token",
-  "sign.cert.err": "Error signing server digital certificate"
+  "sign.cert.err": "Error signing server digital certificate",
+  "upload.contract.file.err": "Uploading contract file failed",
+  "upload.contract.file.success": "Uploaded contract file successfully",
+  "select.contract.file": "Select contract file (PDF, DOC, DOCX, PNG, JPG, JPEG, ZIP, RAR, TXT, XLS, XLSX)"
 }

@@ -152,7 +152,7 @@ export class ContractService {
 
   deleteTokenUrl: any = `${environment.apiUrl}/api/v1/auth/logout`;
 
-  configSmsUrl: any = `${environment.apiUrl}/api/v1/notification/sms-types/`;
+  configSmsUrl: any = `${environment.apiUrl}/api/v1/notification/sms-types`;
 
   configExpirationDateUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
   certInfoCertUrl: any = `${environment.apiUrl}/api/v1/sign/cert-information`;
@@ -907,19 +907,16 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.get<any>(this.configSmsUrl + this.organization_id, { headers }).pipe();
+    return this.http.get<any>(this.configSmsUrl + "/config/" + this.organization_id, { headers }).pipe();
   }
 
-  updateConfigSmsOrg(smsTypeIdList: number[]) {
+  updateConfigSmsOrg(smsTypeIdList: any[]) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    const body = JSON.stringify({
-      orgId: this.organization_id,
-      smsTypeIdList: smsTypeIdList
-    })
+    const body = smsTypeIdList
 
     return this.http.post<any>(this.configSmsUrl, body, {
       headers: headers,
@@ -1047,7 +1044,7 @@ export class ContractService {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);
+      .append('Authorization', 'Bearer ' + this.token);    
     const body = JSON.stringify({
       name: datas.name,
       type: is_type ? is_type : 1,
@@ -1058,7 +1055,7 @@ export class ContractService {
       ordering: 1,
       status: is_status ? is_status : 1,
       contract_id: datas.id,
-    });
+    });  
     return this.http.post<Contract>(this.documentUrl, body, {
       headers: headers,
     });

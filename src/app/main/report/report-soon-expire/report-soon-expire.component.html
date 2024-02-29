@@ -15,6 +15,13 @@
           </p-treeSelect>
             </div>
         </div>
+        
+        <div class="col-md-2">
+          <div>{{'contract.information' | translate}}</div>
+          <div class="input-line">
+            <input type="text" [(ngModel)]="contractInfo" class="input_text" placeholder="Tìm kiếm theo Mã HĐ, Số HĐ, Tên HĐ" />
+          </div>
+        </div>
 
         <!--Ngày tạo hợp đồng-->
         <div class="col-md-2">

@@ -1,74 +1,68 @@
 <div class="horizontal-container">
-    <div *ngIf="isRoleConfigSms" style="margin-right: 10px;">
-        <div class="sms-header">
-            {{'config.sms' | translate}}
-        </div>
-
-        <!-- Cấu hình sms -->
-        <div class="border-table-sms" style="text-align: center;">
-            <table style="margin: 0 auto; margin-top: 5px;">
-                <tr>
-                    <th></th>
-                    <th>{{'yes' | translate}}</th>
-                    <th>{{'no' | translate}}</th>
-                </tr>
-                <tr>
-                    <td class="sms-content">{{'role.contract.cancel' | translate}}</td>
-                    <td><input type="radio" name="cancel" [value]="true" [(ngModel)]="cancelContract"></td>
-                    <td><input type="radio" name="cancel" [value]="false" [(ngModel)]="cancelContract"></td>
-                </tr>
-                <tr>
-                    <td class="sms-content">{{'refuse.contract' | translate}}</td>
-                    <td><input type="radio" name="reject" [value]="true" [(ngModel)]="rejectContract"></td>
-                    <td><input type="radio" name="reject" [value]="false" [(ngModel)]="rejectContract"></td>
-                </tr>
-                <tr>
-                    <td class="sms-content">{{'contract.about.expire' | translate}}</td>
-                    <td><input type="radio" name="expired" [value]="true" [(ngModel)]="aboutExpiredContract"></td>
-                    <td><input type="radio" name="expired" [value]="false" [(ngModel)]="aboutExpiredContract"></td>
-                </tr>
-                <tr>
-                    <td class="sms-content">{{'contract.expired' | translate}}</td>
-                    <td><input type="radio" name="outOfDate" [value]="true" [(ngModel)]="outOfDateContarct"></td>
-                    <td><input type="radio" name="outOfDate" [value]="false" [(ngModel)]="outOfDateContarct"></td>
-                </tr>
-                <tr>
-                    <td class="sms-content">{{'contract.completed' | translate}}</td>
-                    <td><input type="radio" name="completed" [value]="true" [(ngModel)]="completedContract"></td>
-                    <td><input type="radio" name="completed" [value]="false" [(ngModel)]="completedContract"></td>
-                </tr>
-            </table>
-
-            <div style="justify-content: center;padding-top: 20px;">
-                <button class="cancel-button" (click)="resetConfig()" type="button">{{'contract.status.canceled' | translate}}</button>
-                <button class="save-button" (click)="updateSms()">{{'btn.update' | translate}}</button>
-            </div>
-        </div>
+  <div *ngIf="isRoleConfigSms" style="margin-right: 10px;">
+    <div class="sms-header">
+      {{'config.sms.email' | translate}}
     </div>
 
-    <!--Lệnh if để ẩn-->
-    <div *ngIf="isRoleConfigExpirationDay">
-        <div class="sms-header">
-            {{'config.day.expiration' | translate}}
-        </div>
-
-        <!-- Cấu hình ngày sắp hết hạn -->
-        <div class="border-table-email" style="text-align: center;">
-            <div style="justify-content: center;padding-top: 20px;">
-                <input [(ngModel)]="this.soonExpireDay" type="number" class="input-expiration-date" min="0" oninput="this.value = 
-                !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null"/>
-            </div>
-
-            <div style="justify-content: center;padding-top: 20px;">
-                <button class="cancel-button" (click)="resetSoonExpireDay()" type="button">{{'contract.status.canceled' | translate}}</button>
-                <button class="save-button" (click)="updateSoonExpireDay()">{{'btn.update' | translate}}</button>
-            </div>
-        </div>
+    <!-- Cấu hình sms -->
+    <div class="row" style="padding-top: 20px;">
+      <form [formGroup]="myForm">
+        <p-table [value]="groupArray.controls" id="table" [autoLayout]="true" >
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th *ngFor="let col of cols" [style]='col.style'>
+                {{col.header | translate}}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-container formArrayName="items">
+            <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-i="rowIndex" >
+              <!-- <ng-container > -->
+              <ng-container [formGroupName]="i">
+                <tr>
+                  <td class="col-md-3">{{rowData.value.nameConfig}}</td>
+                  <td class="col-md-3"><input name="item" type="checkbox" formControlName="smsConfig" /></td>
+                  <td class="col-md-3"><input name="item" type="checkbox" formControlName="emailConfig" /></td>
+                  <td class="col-md-2">
+                    <p-dropdown panelStyleClass="font" appendTo="body" optionLabel="name" optionValue="id"
+                      [options]="[6,1,2,5].includes(rowData.value.smsTypeId) ? listStatus : listStatus1"
+                      (onChange)="selectConfigDropDown($event,listConfig)" formControlName="userSendNotification"
+                      [autoDisplayFirst]="false"></p-dropdown>
+                  </td>
+                </tr>
+            </ng-container>
+            <!-- </ng-container> -->
+          </ng-template>
+          </ng-container>
+        </p-table>
+      </form>
     </div>
+  </div>
+
+  <!--Lệnh if để ẩn-->
+  <div *ngIf="isRoleConfigExpirationDay" style="padding-top: 20px;">
+    <div class="sms-header">
+      {{'config.day.expiration' | translate}}
+    </div>
+
+    <!-- Cấu hình ngày sắp hết hạn -->
+    <div class="border-table-email" style="text-align: center;">
+      <div style="justify-content: center;padding-top: 20px;">
+        <input [(ngModel)]="this.soonExpireDay" type="number" class="input-expiration-date" min="0" oninput="this.value = 
+                !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" />
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div style="justify-content: center;padding-top: 20px;">
+      <button class="save-button" (click)="onSubmit()">{{'btn.save' | translate}}</button>
+    </div>
+  </div>
 </div>
 
 
 
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
-    <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+  <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
 </ngx-spinner>

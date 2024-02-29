@@ -1,0 +1,42 @@
+<div class="container-fluid">
+    <div class="header">
+      <h3 class="label-header">{{setTitle}}</h3>
+    </div>
+    <div>
+      <div class="label_item">
+        Tên hợp đồng <span class="require_star">*</span>
+      </div>
+      <input [(ngModel)]="contractName" class="input_text" (keyup)="this.validContractName()" maxlength="100">
+      <div class="invalid" *ngIf="errContractNameMess">
+        {{ errContractNameMess | translate }}
+      </div>
+    </div>
+    <div class="file-approve">
+        <div class="form-group">
+          <div class="label_item">{{ "contract.file" | translate }} <span class="require_star">*</span></div>
+          <input type="file" id="file-input" accept=".pdf, .doc, .docx, .png, .jpg, .jpeg, .zip, .rar, .txt, .xls, .xlsx" (change)="uploadContracFile($event)">
+          <div class="file-contract" (click)="addContractFile()">
+            <img src="assets/img/upload_file.svg" alt="mobifone.contract">
+            <div style="padding-top: 7px;" class="name-ellipsis" ngbTooltip="{{this.contractFileName}}"><span style="color: #798693"
+            *ngIf="!this.contractFile && !this.contractFileName"  >{{'select.contract.file' | translate }}</span>{{this.contractFile?.name ?? this.contractFileName}}
+            </div>
+          </div>
+          <div class="invalid" *ngIf="errContractFileMess">
+            {{ errContractFileMess | translate }}
+          </div>
+        </div>
+    </div>
+
+
+    <form [formGroup]="addForm" class="content">
+        <div class="row" style="justify-content: center;padding-top: 10px;">
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.cancel' | translate}}</button>
+            <button class="save-button" (click)="uploadingAttachFiles()" >{{'btn.save' | translate}}</button>
+        </div>
+    </form>
+  </div>
+
+  <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+    <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+  </ngx-spinner>
+  

@@ -24,6 +24,40 @@ th:nth-child(3) {
     padding-left: 10px;
 }
 
+#table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+  font-family: font_lexend_deca;
+  }
+  #table td, #table th {
+  //border: 1px solid #ddd;
+  padding: 8px;
+  }
+  
+  #table tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #table tr:hover {background-color: #ddd;}
+  
+  #table th {
+  //text-align: center;
+  background-color: #E2ECF6;
+  color: #106DB6;
+  }
+  
+  #table tr:last-child th:first-child {
+  border-top-left-radius: 10px;
+  }
+  #table tr:last-child th:last-child {
+  border-top-right-radius: 10px;
+  }
+  #table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+  }
+  #table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+  }
+
 .sms-header {
     font-family: 'Roboto';
     font-style: normal;
@@ -32,9 +66,10 @@ th:nth-child(3) {
     line-height: 16px;
     display: flex;
     align-items: center;
-    text-transform: uppercase;
-
-    color: #106DB6;
+    font-weight: bold; 
+    font-size: 15px;
+    // text-transform: uppercase;
+    // color: #106DB6;
 }
 
 .sms-content {
@@ -59,14 +94,14 @@ th:nth-child(3) {
     height: 242px;
 }
 
-.border-table-email {
-    box-sizing: border-box;
-    border: 1px solid #87CAFF;
-    border-radius: 5px;
-    padding-top: 2px;
-    width: 361px;
-    height: 120px;
-}
+// .border-table-email {
+//     box-sizing: border-box;
+//     border: 1px solid #87CAFF;
+//     border-radius: 5px;
+//     padding-top: 2px;
+//     width: 361px;
+//     height: 120px;
+// }
 
 .footer-btn{
     display: flex;
@@ -100,7 +135,7 @@ th:nth-child(3) {
     color: white;
     background-color: #106DB6;
     font-size: 13px;
-    margin: 0 10px;
+    // margin: 0 10px;
 }
 
 input[type="checkbox"] {
@@ -110,12 +145,13 @@ input[type="checkbox"] {
     border-radius: 5px;
     width: 15px;
     height: 15px;
+    margin-left: 15%;
 }
 
-.horizontal-container {
-    display: flex;
-    flex-direction: row;
-}
+// .horizontal-container {
+//     display: flex;
+//     flex-direction: row;
+// }
 
 .input-expiration-date {
     box-sizing: border-box;
@@ -124,5 +160,20 @@ input[type="checkbox"] {
     border-radius: 5px;
     width: 229px;
     height: 33px;
+    margin-right: 87%;
+}
+
+:host ::ng-deep {
+  .p-treeselect, .p-dropdown {
+      border: 1px solid #106DB6;
+      border-radius: 5px;
+      height: 33px;
+      width: 100%;
+      outline: 0;
+      color: black !important;
+  }
+  .p-treeselect-label, .p-dropdown-label {
+      padding: 5px 5px 5px 15px;
+  }
 }
   
