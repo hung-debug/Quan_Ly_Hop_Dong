@@ -126,7 +126,6 @@ export class DashboardComponent implements OnInit {
             this.endLicense = new Date(dataOrg.endLicense);
             this.daysRemaining = Math.floor((new Date(this.endLicense).getTime() - this.currentDate.getTime()) / (1000 * 60 * 60 * 24));
             // this.daysRemaining = Math.abs(this.daysRemaining)
-
             this.validateExpDateAndPackageNumber(dataOrg.numberOfEkyc, dataOrg.numberOfSms, dataOrg.numberOfContractsCanCreate, dataOrg.numberOfCeca, this.daysRemaining, this.currentDate, this.endLicense)
 
           }
@@ -187,10 +186,12 @@ export class DashboardComponent implements OnInit {
     let numberExpMessage = ""
     let numberExpArr = []
     if (isSoonExp){
-      messageSoonExp = `Thời gian sử dụng dịch vụ sẽ hết hạn vào ngày ${moment(this.endLicense).format("DD/MM/YYYY")}. `
+      messageSoonExp = `Thời gian sử dụng dịch vụ sẽ hết hạn vào ngày ${moment(this.endLicense).format("DD/MM/YYYY")}, 
+      Quý khách vui lòng đóng phí duy trì dịch vụ hàng năm để tiếp tục sử dụng sau ngày ${moment(this.endLicense).format("DD/MM/YYYY")}. Trân trọng cảm ơn!`
     }
     if (isExp){
-      messageExp = `Thời gian sử dụng dịch vụ đã hết. `
+      messageExp = `Thời gian sử dụng dịch vụ đã hết. 
+      Quý khách vui lòng đóng phí duy trì dịch vụ hàng năm để tiếp tục sử dụng sau ngày ${moment(this.endLicense).format("DD/MM/YYYY")}. Trân trọng cảm ơn!`
     }
     if (isContractExp){
       messageContractExp = "Hợp đồng"
@@ -209,8 +210,8 @@ export class DashboardComponent implements OnInit {
       numberExpArr.push(messageCecaExp)
     }
 
-    numberExpMessage = (isEkycExp || isSmsExp || isCecaExp || isContractExp) ? "<br>Số lượng " + numberExpArr.toString().replaceAll(",","/") + " sắp hết": ""
-    return this.toastService.showWarningHTMLWithTimeout((messageSoonExp ? messageSoonExp :  messageExp) + numberExpMessage,"",9000)
+    numberExpMessage = (isEkycExp || isSmsExp || isCecaExp || isContractExp) ? "Số lượng " + numberExpArr.toString().replaceAll(",","/") + " sắp hết.<br>": ""
+    return this.toastService.showWarningHTMLWithTimeout(numberExpMessage + (messageSoonExp ? messageSoonExp :  messageExp),"",9000)
   }
 
   validateExpDateAndPackageNumber(numberOfEkyc: any, numberOfSms: any, numberOfContractsCanCreate: any, numberOfCeca: any, daysRemaining: any, currentDate: any, endLicense: any){
