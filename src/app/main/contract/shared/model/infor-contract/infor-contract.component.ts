@@ -902,27 +902,26 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     }
   }
 
-  validateContractNo(){
+  async validateContractNo(){
     this.datas.contract_no = this.contract_no?.trim();
 
     if (this.datas.contract_no) {
       //check so hop dong da ton tai hay chua
-      this.contractService.checkCodeUnique(this.datas.contract_no?.trim()).subscribe(
-        dataCode => {
-          if (dataCode.success) {
-            this.spinner.hide();
-            return true;
-          } else {
-            this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
-            this.spinner.hide();
-            return false;
-          }
-        }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số hợp đồng', "", 3000);
+      try {
+        let res = await this.contractService.checkCodeUnique(this.datas.contract_no?.trim()).toPromise()
+        if (res.success) {
+          this.spinner.hide();
+          return true;
+        } else {
+          this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
           this.spinner.hide();
           return false;
         }
-      )
+      } catch (error) {
+        this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số hợp đồng', "", 3000);
+        this.spinner.hide();
+        return false;
+      }
     } else {
       return true;
     }
