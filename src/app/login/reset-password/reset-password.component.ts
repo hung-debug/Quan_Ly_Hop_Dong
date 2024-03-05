@@ -39,6 +39,9 @@ export class ResetPasswordComponent implements OnInit {
   switchLang(lang: string) {
     this.translate.use(lang);
     this.translate.currentLang = lang;
+
+    localStorage.setItem('lang', lang);
+    sessionStorage.setItem('lang', lang);
   }
 
   initResetPasswordgForm() {
