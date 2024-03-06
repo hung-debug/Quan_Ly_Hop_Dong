@@ -30,6 +30,7 @@ export class AddUnitComponent implements OnInit {
   orgList: Array<any> = [];
   submitted = false;
   get f() { return this.addForm.controls; }
+  fieldTextType: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -55,6 +56,9 @@ export class AddUnitComponent implements OnInit {
         parent_id: this.fbd.control("", [Validators.required]),
         taxCode: this.fbd.control("",Validators.pattern(parttern.cardid)),
         idOrg: this.fbd.control(""),
+        brandName: this.fbd.control("", [Validators.required]),
+        smsUser: this.fbd.control("", [Validators.required]),
+        smsPass: this.fbd.control("", [Validators.required]),
       });
     }
 
@@ -73,6 +77,8 @@ export class AddUnitComponent implements OnInit {
       });
       this.unitService.getUnitById(this.data.id).subscribe(
         data => {
+          console.log("data",data);
+          
           this.addForm = this.fbd.group({
             nameOrg: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.contract_name_valid)]),
             short_name: this.fbd.control(data.short_name, [Validators.pattern(parttern_input.new_input_form)]),
@@ -85,6 +91,9 @@ export class AddUnitComponent implements OnInit {
             path: this.fbd.control(data.path),
             taxCode: this.fbd.control(data.tax_code,Validators.pattern(parttern.cardid)),
             idOrg: this.fbd.control(data.id),
+            brandName: this.fbd.control(data.brandName, [Validators.required]),
+            smsUser: this.fbd.control(data.smsUser, [Validators.required]),
+            smsPass: this.fbd.control(data.smsPass, [Validators.required]),
           });
           this.nameOld = data.name;
           this.codeOld = data.code;
@@ -122,8 +131,15 @@ export class AddUnitComponent implements OnInit {
         status: 1,
         parent_id: this.fbd.control(orgId, [Validators.required]),
         taxCode: this.fbd.control("",[Validators.pattern(parttern.cardid)]),
+        brandName: this.fbd.control("", [Validators.required]),
+        smsUser: this.fbd.control("", [Validators.required]),
+        smsPass: this.fbd.control("", [Validators.required]),
       });
     }
+  }
+  
+  toggleFieldTextType() {
+    this.fieldTextType = !this.fieldTextType;
   }
 
   convertFileCeCa(ceCAPushMode: any): any {
@@ -311,7 +327,10 @@ export class AddUnitComponent implements OnInit {
       status: this.addForm.value.status,
       parent_id: this.addForm.value.parent_id,
       path: this.addForm.value.path,
-      tax_code: this.addForm.value.taxCode
+      tax_code: this.addForm.value.taxCode,
+      brandName: this.addForm.value.brandName,
+      smsUser: this.addForm.value.smsUser,
+      smsPass: this.addForm.value.smsPass,
     }
 
     this.spinner.show();

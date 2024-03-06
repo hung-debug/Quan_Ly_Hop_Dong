@@ -784,5 +784,12 @@
   "upload.contract.file.err": "Uploading contract file failed",
   "upload.contract.file.success": "Uploaded contract file successfully",
   "select.contract.file": "Select contract file (PDF, DOC, DOCX, PNG, JPG, JPEG, ZIP, RAR, TXT, XLS, XLSX)",
-  "confirm.public.phone.pki": "Allow display pki phone number on the signature"
+  "confirm.public.phone.pki": "Allow display pki phone number on the signature",
+  "config.brandname.sms": "Config brandname send sms",
+  "error.unit.brandname.required": "Brandname is required",
+  "error.unit.username.required": "Username is required",
+  "error.unit.password.required": "Password is required",
+  "error.valid.brandname": "Brandname cannot exceed 100 characters.",
+  "error.valid.username": "Username cannot exceed 100 characters.",
+  "error.valid.password": "Password cannot exceed 100 characters."
 }

@@ -112,6 +112,67 @@
                 </div>
             </div>
         </div>
+        
+        <div style="padding-top: 10px;">
+          {{'config.brandname.sms' | translate}}
+        </div>
+        
+        <!--Hàng 5-->
+        <div class="row" style="padding-top: 10px; border: 1px solid gray; padding: 10px">
+            <div class="col-md-4">
+                <div class="label text-color">Brandname 
+                  <span class="required-title">*</span>
+                </div>
+                <div class="input-data">
+                  <input type="text" formControlName="brandName">
+                </div>
+                <div *ngIf="submitted && f.brandName.errors" class="invalid">
+                  <div *ngIf="f.brandName.errors.required">{{'error.unit.brandname.required' | translate}}</div>
+                  <div *ngIf="f.brandName.errors.maxlength">{{'error.valid.brandname' | translate}}</div>
+                </div>
+                <!-- <div *ngIf="this.data.id==null">
+                    <p-dropdown panelStyleClass="font" appendTo="body" [options]="orgList" formControlName="parent_id" optionLabel="name" optionValue="id" placeholder="Chọn tổ chức" [filter]="true" filterBy="name" [showClear]="true" [showClear]="true" dropdownIcon="pi pi-chevron-down"></p-dropdown>
+                </div> -->
+                <!-- <div *ngIf="this.data.id != null" class="input-data hidden-color">
+                    <div class="hidden-color">{{parentName}}</div>
+                </div>
+                <div *ngIf="this.data.id == null && submitted && f.parent_id.errors" class="invalid">
+                    <div *ngIf="f.parent_id.errors.required">{{'error.unit.parent.required' | translate}}</div>
+                </div> -->
+            </div>
+
+            <div class="col-md-4">
+                <div class="label text-color">Username</div>
+                <div class="input-data">
+                    <input type="text" formControlName="smsUser">
+                </div>
+                <div *ngIf="submitted && f.smsUser.errors" class="invalid">
+                  <div *ngIf="f.smsUser.errors.required">{{'error.unit.username.required' | translate}}</div>
+                  <div *ngIf="f.smsUser.errors.maxlength">{{'error.valid.username' | translate}}</div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+              <div class="label text-color">Passwword</div>
+              <div class="input-data">
+                  <input type="text" formControlName="smsPass" [type]="fieldTextType ? 'text' : 'password'">
+                  <div class="icon-password">
+                    <i class="fa" [ngClass]="{
+                        'fa-eye-slash': !fieldTextType,
+                        'fa-eye': fieldTextType
+                      }"
+                      (click)="toggleFieldTextType()"
+                      style="color: #106db6"
+                    ></i>
+                  </div>
+              </div>
+              <div *ngIf="submitted && f.smsPass.errors" class="invalid">
+                <div *ngIf="f.smsPass.errors.required">{{'error.unit.password.required' | translate}}</div>
+                <div *ngIf="f.smsPass.errors.maxlength">{{'error.valid.password' | translate}}</div>
+              </div>
+          </div>
+          
+        </div>
 
 
 
