@@ -564,6 +564,7 @@
   "report.number.econtract.msale":"Report the number of contracts eContract - mSale",
   "report.status.send.sms": "Report SMS sending status",
   "report.contract.send.email": "Report history send email",
+  "report.ekyc":"Report accuracy eKYC",
   "include.org1":"Including sub-organizations (Sub-organizations include only tier-one sub-organizations)",
   "contract.time.create": "Time create",
   "signing.expiration.date":"Sign expiration time",
@@ -791,5 +792,8 @@
   "error.unit.password.required": "Password is required",
   "error.valid.brandname": "Brandname cannot exceed 100 characters.",
   "error.valid.username": "Username cannot exceed 100 characters.",
-  "error.valid.password": "Password cannot exceed 100 characters."
+  "error.valid.password": "Password cannot exceed 100 characters.",
+  "time.authen": "Time accuracy",
+  "name.contract": "Name Contract",
+  "number.contract": "Number contract"
 }

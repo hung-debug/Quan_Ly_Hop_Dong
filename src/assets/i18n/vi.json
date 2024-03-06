@@ -574,6 +574,7 @@
   "report.number.contracts.type.sign.full":"Báo cáo số lượng hợp đồng theo hình thức ký",
   "report.status.send.sms": "Lịch sử gửi SMS",
   "report.contract.send.email": "Lịch sử gửi Email",
+  "report.ekyc":"Báo cáo xác thực eKYC",
   "include.org1":"Bao gồm cả tổ chức con (Tổ chức con chỉ bao gồm tổ chức con cấp một)",
   "report.number.econtract.msale":"SL HĐ eContract - mSale",
   "contract.time.create": "Thời gian tạo",
@@ -806,5 +807,8 @@
   "error.unit.password.required": "Password không được để trống",
   "error.valid.brandname": "Brandname không được vượt quá 100 ký tự.",
   "error.valid.username": "Username không được vượt quá 100 ký tự.",
-  "error.valid.password": "Password không được vượt quá 100 ký tự."
+  "error.valid.password": "Password không được vượt quá 100 ký tự.",
+  "time.authen": "Thời gian xác thực",
+  "name.contract": "Tên HĐ",
+  "number.contract": "Mã HĐ"
 }
