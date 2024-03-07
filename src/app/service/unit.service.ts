@@ -85,9 +85,9 @@ export class UnitService {
       status: datas.status,
       parent_id: datas.parent_id,
       tax_code: datas.tax_code,
-      brandName: datas.brandName,
-      smsUser: datas.smsUser,
-      smsPass: datas.smsPass,
+      // brandName: datas.brandName,
+      // smsUser: datas.smsUser,
+      // smsPass: datas.smsPass,
     });
 
     return this.http.post<any>(this.addUnitUrl, body, {'headers': headers});
@@ -130,9 +130,9 @@ export class UnitService {
       parent_id: datas.parent_id,
       path: datas.path,
       tax_code: datas.tax_code,
-      brandName: datas.brandName,
-      smsUser: datas.smsUser,
-      smsPass: datas.smsPass,
+      // brandName: datas.brandName,
+      // smsUser: datas.smsUser,
+      // smsPass: datas.smsPass,
     });
     return this.http.put<any>(this.updateUnitUrl + datas.id, body, {'headers': headers});
   }

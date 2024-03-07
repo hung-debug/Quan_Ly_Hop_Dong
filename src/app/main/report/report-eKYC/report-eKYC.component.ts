@@ -144,7 +144,7 @@ export class ReportEKYCComponent implements OnInit {
       },
       {
         header: 'code.contract',
-        style: 'text-align: center',
+        style: 'text-align: left',
         colspan: 1,
         rowspan: 1,
       },
@@ -176,5 +176,74 @@ export class ReportEKYCComponent implements OnInit {
       from_date = this.date[0]
       to_date = this.date[1]
     }
+    
+    let contractStatus = this.contractStatus;
+
+    if (!contractStatus) contractStatus = -1;
+
+    if (!to_date) to_date = from_date;
+    
+    let payloadData = {
+      "orgId": idOrg,
+      "keyword": this.contractInfo,
+      "processIdStart": from_date,
+      "processIdEnd": to_date,
+    }
+
+    let params = `?pageNumber=0&pageSize=10000`
+    
+    try {
+      if (!isExport) {
+        this.spinner.show()
+        await this.reportService.exportEkycReport(params, payloadData, false).toPromise().then(
+          (res: any) => {
+            this.table.first = 0
+            this.list = [];
+            this.spinner.hide()
+            // this.list = res.content.filter((item: any) => !item.emailOrPhone.includes('@'))
+            this.list = res.content
+          }
+        )
+      } else {
+        // if (!this.date) {
+        //   this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn thời gian gửi!','',3000)
+        //   return
+        // }
+        this.spinner.show()
+        await this.reportService.exportEkycReport(params, payloadData, true).toPromise().then(
+          (res: any) => {
+            // this.list = [];
+            this.spinner.hide()
+            if (res) {
+              this.toastService.showSuccessHTMLWithTimeout('Xuất file báo cáo thành công','',3000)
+              this.downloadFile(res)
+            }
+            // this.list = res.content.filter((item: any) => !item.emailOrPhone.includes('@'))
+          }
+        )
+      }
+    } catch (error) {
+      this.spinner.hide()
+      this.toastService.showErrorHTMLWithTimeout('error.get.contract.list.report','',3000)
+    }
+  }
+  
+  downloadFile(data: any) {
+    let currentDate = moment().format('HH:mm:ss')
+    let selectedStartDate = moment(this.date[0]).format('DD-MM-YYYY')
+    let selectedEndDate = moment(this.date[1]).format('DD-MM-YYYY')
+    const blob = new Blob([data], { type: 'application/x-binary' });
+    const url = window.URL.createObjectURL(blob);
+
+      // Create an anchor element for downloading the file
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `eKYC_Report_${selectedStartDate + '_' + selectedEndDate}.xlsx`; // Specify the file name for the download
+
+    // Trigger a click event to initiate the download
+    a.click();
+
+    // Clean up by revoking the URL
+    window.URL.revokeObjectURL(url);
   }
 }

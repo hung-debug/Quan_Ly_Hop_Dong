@@ -810,5 +810,5 @@
   "error.valid.password": "Password không được vượt quá 100 ký tự.",
   "time.authen": "Thời gian xác thực",
   "name.contract": "Tên HĐ",
-  "number.contract": "Mã HĐ"
+  "number.contract": "Số HĐ"
 }
