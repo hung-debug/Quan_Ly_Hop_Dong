@@ -853,7 +853,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   async next() {
     this.nextStep1 = true;
 
-    if (!this.validData() || !this.validateContractNo()) {
+    if (!this.validData() || !(await this.validateContractNo())) {
       return;
     } else {
       this.spinner.show()
@@ -908,7 +908,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     if (this.datas.contract_no) {
       //check so hop dong da ton tai hay chua
       try {
-        let res = await this.contractService.checkCodeUnique(this.datas.contract_no?.trim()).toPromise()
+        let res: any = await this.contractService.checkCodeUnique(this.datas.contract_no?.trim()).toPromise()
         if (res.success) {
           this.spinner.hide();
           return true;
