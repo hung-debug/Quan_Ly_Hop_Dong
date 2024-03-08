@@ -2239,7 +2239,8 @@ export class ConsiderContractComponent
           this.recipientId,
           this.datas.is_data_contract.name,
           image_base64,
-          this.isTimestamp
+          this.isTimestamp,
+          this.dataNetworkPKI.hidden_phone ? false : true,
         );
         // await this.signContractSimKPI();
         if (!checkSign || (checkSign && !checkSign.success)) {
@@ -4644,7 +4645,7 @@ export class ConsiderContractComponent
 
   pkiDialogSignOpen() {
     const data = {
-      title: 'CHỮ KÝ PKI',
+      title: 'CHỮ KÝ PKI2',
       type: 3,
       sign: this.signInfoPKIU,
       data: this.datas,
@@ -4659,16 +4660,18 @@ export class ConsiderContractComponent
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(async (result: any) => {
-      if (result && result.phone && result.networkCode) {
+      if (result && result.phone && result.networkCode) {        
         this.loadingText =
           'Yêu cầu ký đã được gửi tới số điện thoại của bạn.\n Vui lòng Xác nhận để thực hiện dịch vụ';
         this.signInfoPKIU.phone = result.phone;
         this.signInfoPKIU.phone_tel = result.phone_tel;
         this.signInfoPKIU.networkCode = result.networkCode;
+        this.signInfoPKIU.hidden_phone = result.hidden_phone;
         if (result.phone && result.phone_tel && result.networkCode) {
           this.dataNetworkPKI = {
             networkCode: this.signInfoPKIU.networkCode,
             phone: this.signInfoPKIU.phone,
+            hidden_phone: this.signInfoPKIU.hidden_phone,
           };
 
           await this.signContractSubmit();

@@ -1123,7 +1123,7 @@ export class ContractService {
     });
   }
 
-  signPkiDigital(phone: any, networkCode: any, recipientId: any, nameContract: any, image_base64: any, isTimestamp: any) {
+  signPkiDigital(phone: any, networkCode: any, recipientId: any, nameContract: any, image_base64: any, isTimestamp: any, hidden_phone: boolean) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -1135,7 +1135,8 @@ export class ContractService {
       prompt: `Bạn có yêu cầu ký số hợp đồng ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
       reason: 'reason',
       image_base64: image_base64,
-      isTimestamp: isTimestamp
+      isTimestamp: isTimestamp,
+      hidden_phone: hidden_phone,
     };
     return this.http
       .post<any>(this.signFilePKI + recipientId, body, { headers: headers })
