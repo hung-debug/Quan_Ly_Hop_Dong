@@ -1,0 +1,95 @@
+<div>
+  <div class="row">
+    <!--Tổ chức-->
+    <div class="col-md-2">
+      <div>{{'organization' | translate}}</div>
+      <div class="input-line">
+        <p-treeSelect #nameContract [(ngModel)]="selectedNodeOrganization" [filter]="true" filterBy="name"
+          [droppable]="true" [options]="listOrgCombobox" (onNodeSelect)="changeOrg()">
+        </p-treeSelect>
+      </div>
+    </div>
+    
+    <!--Thời gian gửi-->
+    <div class="col-md-2">
+      <div>{{ 'time.authen' | translate}}
+        <!-- <span style="color: red"> *</span> -->
+      </div>
+      <div class="input-line">
+        <p-calendar [readonlyInput]="false" [(ngModel)]="date" [showIcon]="true" selectionMode="range"
+        [maxDate]="this.maxSelectableDate"
+        (onClose)="onCloseCalendar()"
+        dateFormat="dd/mm/yy"></p-calendar>
+      </div>
+    </div>
+
+    <!-- Thông tin hợp đồng -->
+    <div class="col-md-2">
+      <div>{{'contract.information' | translate}}</div>
+      <div class="input-line">
+        <input type="text" [(ngModel)]="contractInfo" class="input_text" placeholder="Tìm kiếm theo Mã HĐ, Số HĐ, Tên HĐ" />
+      </div>
+    </div>
+
+
+    <!--Button-->
+    <div class="col-md-4 btn_search">
+      <button class="btn btn-lg btn-block btn_submit" (click)="exportEKYCReportCall(false)">{{'btn.report' | translate
+        }}</button>
+      <button class="btn btn-lg btn-block btn_submit" (click)="exportEKYCReportCall(true)">Export</button>
+    </div>
+  </div>
+
+
+  <!--Bảng dữ liệu-->
+  <div class="row" style="padding-top: 30px;">
+    <p-table #dt [value]="list" [paginator]="true" [rows]="10" id="table" [autoLayout]="true">
+
+      <!--header-->
+      <ng-template pTemplate="header">
+        <tr>
+          <th *ngFor="let col of cols" [style]='col.style' [colSpan]="col.colspan" [rowSpan]="col.rowspan">
+            {{col.header | translate}}
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-list let-row="rowIndex">
+        <tr>
+          <ng-container *ngIf="row >= 0">
+            <td>{{list.name}}</td>
+            <td>{{list.cardId}}</td> 
+            <td>{{this.convertTime(list.processAt)}}</td> 
+            <td>{{list.contractName}}</td> 
+            <td>{{list.contractNo}}</td> 
+            <td>{{list.contractCode}}</td>  
+            <td style="text-align: center;" *ngIf="list.status == 20">{{'contract.status.processing' | translate}}</td>
+            <td style="text-align: center;" *ngIf="list.status == 30">{{'contract.status.complete' | translate}}</td>
+            <td style="text-align: center;" *ngIf="list.status == 34">{{'contract.status.overdue' | translate}}</td>
+            <td style="text-align: center;" *ngIf="list.status == 31">{{'contract.status.fail' | translate}}</td>
+            <td style="text-align: center;" *ngIf="list.status == 32">{{'contract.status.cancel' | translate}}</td>
+          </ng-container>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="paginatorleft" let-state>
+        <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords
+            <=1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ? (state.totalRecords > 0 ?
+            state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 :
+            0}}</span>
+      </ng-template>
+      <ng-template pTemplate="paginatorright" let-state>
+        <span style="color: #0160AE !important;">
+          {{'chart.number' | translate}}:
+          {{state.first <= 0 && state.totalRecords <=1? 0:state.first + 1}} - {{(state.first+state.rows)>
+            state.totalRecords ?(state.totalRecords > 0 ? state.totalRecords : 0) : state.first+state.rows}} /
+            {{state.totalRecords > 0 ? state.totalRecords : 0}}
+        </span>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+  <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+</ngx-spinner>
