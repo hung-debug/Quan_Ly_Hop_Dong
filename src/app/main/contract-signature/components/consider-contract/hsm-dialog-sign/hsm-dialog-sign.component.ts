@@ -23,6 +23,17 @@ export class HsmDialogSignComponent implements OnInit {
   submitted = false;
   currentUser: any;
   taxCode: any;
+  hsmSupplier: any;
+  suppliers: any[] = [
+    {
+      id: 'mobifone',
+      name: 'MobiFone'
+    },
+    {
+      id: 'icorp',
+      name: 'ICORP'
+    }
+  ];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -36,6 +47,7 @@ export class HsmDialogSignComponent implements OnInit {
     private spinner: NgxSpinnerService,
   ) {
     this.myForm = this.fbd.group({
+      hsmSupplier: this.fbd.control("", [Validators.required]),
       taxCode: this.fbd.control("", [Validators.required,
       Validators.pattern(parttern.cardid)
         // Validators.pattern(parttern_input.taxCode_form) ||
@@ -67,6 +79,7 @@ export class HsmDialogSignComponent implements OnInit {
     if (this.user.organization_id != 0) {
       this.userService.getUserById(this.id).subscribe((response) => {
         this.myForm = this.fbd.group({
+          hsmSupplier: this.fbd.control('mobifone', [Validators.required]),
           taxCode: this.fbd.control(response.tax_code, [
             Validators.required,
             Validators.pattern(parttern.cardid)
@@ -92,6 +105,7 @@ export class HsmDialogSignComponent implements OnInit {
             let taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
 
             this.myForm = this.fbd.group({
+              hsmSupplier: this.fbd.control('mobifone', [Validators.required]),
               taxCode: this.fbd.control(taxCodePartnerStep2, 
                 [Validators.required, 
                   Validators.pattern(parttern.cardid)
@@ -226,6 +240,7 @@ export class HsmDialogSignComponent implements OnInit {
           })
   
         const data = {
+          supplier: this.myForm.value.hsmSupplier,
           ma_dvcs: this.myForm.value.taxCode,
           username: this.myForm.value.username,
           password: this.myForm.value.pass1,
@@ -251,6 +266,7 @@ export class HsmDialogSignComponent implements OnInit {
       })
     } else {
       const data = {
+        supplier: this.myForm.value.hsmSupplier,
         ma_dvcs: this.myForm.value.taxCode,
         username: this.myForm.value.username,
         password: this.myForm.value.pass1,
