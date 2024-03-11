@@ -131,16 +131,29 @@ export class ConfigSmsEmailComponent implements OnInit {
   }
 
   addFormGroup(value: any) {
-    const newGroup = this.fb.group({
-      smsTypeId: new FormControl(value.smsTypeId),
-      smsConfig: new FormControl(value.smsConfig),
-      emailConfig: new FormControl(value.emailConfig),
-      userSendNotification: new FormControl(value.userSendNotification),
-      organizationId: new FormControl(value.organizationId),
-      nameConfig: new FormControl(value.name),
-    });
+    if(value.smsTypeId == 1 ){
+      const newGroup = this.fb.group({
+        smsTypeId: new FormControl(value.smsTypeId),
+        smsConfig: new FormControl(value.smsConfig),
+        emailConfig: new FormControl(value.emailConfig),
+        userSendNotification: new FormControl(3),
+        organizationId: new FormControl(value.organizationId),
+        nameConfig: new FormControl(value.name),
+      });      
+      this.groupArray.push(newGroup);
+      
+    }else{
+      const newGroup = this.fb.group({
+        smsTypeId: new FormControl(value.smsTypeId),
+        smsConfig: new FormControl(value.smsConfig),
+        emailConfig: new FormControl(value.emailConfig),
+        userSendNotification: new FormControl(value.userSendNotification),
+        organizationId: new FormControl(value.organizationId),
+        nameConfig: new FormControl(value.name),
+      });
+      this.groupArray.push(newGroup);
 
-    this.groupArray.push(newGroup);
+    }
 
   }
 
