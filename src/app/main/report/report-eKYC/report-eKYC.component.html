@@ -81,7 +81,7 @@
       <ng-template pTemplate="paginatorright" let-state>
         <span style="color: #0160AE !important;">
           {{'chart.number' | translate}}:
-          {{state.first <= 0 && state.totalRecords <=1? 0:state.first + 1}} - {{(state.first+state.rows)>
+          {{state.first <= 0 && state.totalRecords <=0? 0:state.first + 1}} - {{(state.first+state.rows)>
             state.totalRecords ?(state.totalRecords > 0 ? state.totalRecords : 0) : state.first+state.rows}} /
             {{state.totalRecords > 0 ? state.totalRecords : 0}}
         </span>
