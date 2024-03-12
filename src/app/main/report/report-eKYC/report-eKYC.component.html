@@ -61,8 +61,8 @@
             <td>{{list.cardId}}</td> 
             <td>{{this.convertTime(list.processAt)}}</td> 
             <td>{{list.contractName}}</td> 
-            <td>{{list.contractNo}}</td> 
-            <td>{{list.contractCode}}</td>  
+            <td>{{list.contractCode}}</td> 
+            <td>{{list.contractNo}}</td>  
             <td style="text-align: center;" *ngIf="list.status == 20">{{'contract.status.processing' | translate}}</td>
             <td style="text-align: center;" *ngIf="list.status == 30">{{'contract.status.complete' | translate}}</td>
             <td style="text-align: center;" *ngIf="list.status == 34">{{'contract.status.overdue' | translate}}</td>
