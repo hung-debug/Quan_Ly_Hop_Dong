@@ -137,7 +137,7 @@ export class ReportEKYCComponent implements OnInit {
         rowspan: 1,
       },
       {
-        header: 'name.contract',
+      header: 'name.contract',
         style: 'text-align: left;',
         colspan: 1,
         rowspan: 1,
@@ -185,7 +185,7 @@ export class ReportEKYCComponent implements OnInit {
     
     let payloadData = {
       "orgId": idOrg,
-      "keyword": this.contractInfo,
+      "keyword": this.contractInfo?.trim(),
       "processIdStart": from_date,
       "processIdEnd": to_date,
     }
