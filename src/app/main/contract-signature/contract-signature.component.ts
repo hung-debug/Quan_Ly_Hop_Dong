@@ -1389,6 +1389,7 @@ export class ContractSignatureComponent implements OnInit {
             password2: resultHsm.password2,
             image_base64:  result.mark ? signI : null,
             processAt: this.isDateTime,
+            supplier: resultHsm.supplier,
             type: 3
           };
 
