@@ -1453,6 +1453,7 @@ export class ConsiderContractComponent
                   haveSignHsm = true;
         
                   this.dataHsm = {
+                    supplier: '',
                     ma_dvcs: '',
                     username: '',
                     password: '',
@@ -2360,6 +2361,7 @@ export class ConsiderContractComponent
           if (!this.mobile) {
             this.dataHsm = {
               field: fieldHsm,
+              supplier: this.dataHsm.supplier,
               ma_dvcs: this.dataHsm.ma_dvcs,
               username: this.dataHsm.username,
               password: this.dataHsm.password,
@@ -2370,6 +2372,7 @@ export class ConsiderContractComponent
           } else {
             this.dataHsm = {
               field: fieldHsm,
+              supplier: this.dataHsm.supplier,
               ma_dvcs: this.dataHsm.ma_dvcs,
               username: this.dataHsm.username,
               password: this.dataHsm.password,
@@ -2378,7 +2381,7 @@ export class ConsiderContractComponent
                             (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
           }
-
+          console.log("dataHsm",this.dataHsm);
           if (fileC && objSign.length) {
             if (!this.mobile || this.mobile) {
               const checkSign = await this.contractService.signHsm(
@@ -4522,6 +4525,7 @@ export class ConsiderContractComponent
       dialogConfig.hasBackdrop = true;
       dialogConfig.data = data;
       dialogConfig.panelClass = 'custom-dialog-container';
+      dialogConfig.autoFocus = false
 
       const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
 
@@ -4532,6 +4536,7 @@ export class ConsiderContractComponent
         this.cardId = result.ma_dvcs.trim();
 
         if (result) {
+          this.dataHsm.supplier = result.supplier
           this.dataHsm.ma_dvcs = result.ma_dvcs;
           this.dataHsm.username = result.username;
           this.dataHsm.password = result.password;

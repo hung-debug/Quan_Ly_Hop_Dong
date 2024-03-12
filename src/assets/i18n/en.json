@@ -795,5 +795,6 @@
   "error.valid.password": "Password cannot exceed 100 characters.",
   "time.authen": "Time accuracy",
   "name.contract": "Name Contract",
-  "number.contract": "Number contract"
+  "number.contract": "Number contract",
+  "hsm.dialog.supplier": "Supplier"
 }
