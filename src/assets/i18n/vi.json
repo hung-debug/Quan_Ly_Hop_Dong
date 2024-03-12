@@ -806,5 +806,8 @@
   "error.unit.password.required": "Password không được để trống",
   "error.valid.brandname": "Brandname không được vượt quá 100 ký tự.",
   "error.valid.username": "Username không được vượt quá 100 ký tự.",
-  "error.valid.password": "Password không được vượt quá 100 ký tự."
+  "error.valid.password": "Password không được vượt quá 100 ký tự.",
+  "config.brandname": "Cấu hình brandname",
+  "check.brandname": "Kiểm tra brandname",
+  "check.button": "Kiểm tra"
 }

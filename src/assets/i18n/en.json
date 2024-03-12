@@ -791,5 +791,8 @@
   "error.unit.password.required": "Password is required",
   "error.valid.brandname": "Brandname cannot exceed 100 characters.",
   "error.valid.username": "Username cannot exceed 100 characters.",
-  "error.valid.password": "Password cannot exceed 100 characters."
+  "error.valid.password": "Password cannot exceed 100 characters.",
+  "config.brandname": "Config brandname",
+  "check.brandname": "Checking brandname",
+  "check.button": "Checking"
 }
