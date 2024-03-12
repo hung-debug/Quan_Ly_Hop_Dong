@@ -748,7 +748,7 @@
   "time.send.date":"Thời gian gửi",
   "report.status.contract": "Trạng thái HĐ",
   "status.sms.email":"Trạng thái gửi",
-  "code.contract": "Mã HĐ",
+  "code.contract": "Mã hợp đồng",
   "phone": "SĐT",
   "content":"Nội dung",
   "content.sms": "NỘI DUNG GỬI SMS",
@@ -809,6 +809,6 @@
   "error.valid.username": "Username không được vượt quá 100 ký tự.",
   "error.valid.password": "Password không được vượt quá 100 ký tự.",
   "time.authen": "Thời gian xác thực",
-  "name.contract": "Tên HĐ",
-  "number.contract": "Số HĐ"
+  "name.contract": "Tên hợp đồng",
+  "number.contract": "Số hợp đồng"
 }
