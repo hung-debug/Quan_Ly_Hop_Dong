@@ -56,9 +56,9 @@ export class AddUnitComponent implements OnInit {
         parent_id: this.fbd.control("", [Validators.required]),
         taxCode: this.fbd.control("",Validators.pattern(parttern.cardid)),
         idOrg: this.fbd.control(""),
-        brandName: this.fbd.control("", [Validators.required]),
-        smsUser: this.fbd.control("", [Validators.required]),
-        smsPass: this.fbd.control("", [Validators.required]),
+        // brandName: this.fbd.control("", [Validators.required]),
+        // smsUser: this.fbd.control("", [Validators.required]),
+        // smsPass: this.fbd.control("", [Validators.required]),
       });
     }
 
@@ -91,9 +91,9 @@ export class AddUnitComponent implements OnInit {
             path: this.fbd.control(data.path),
             taxCode: this.fbd.control(data.tax_code,Validators.pattern(parttern.cardid)),
             idOrg: this.fbd.control(data.id),
-            brandName: this.fbd.control(data.brandName, [Validators.required]),
-            smsUser: this.fbd.control(data.smsUser, [Validators.required]),
-            smsPass: this.fbd.control(data.smsPass, [Validators.required]),
+            // brandName: this.fbd.control(data.brandName, [Validators.required]),
+            // smsUser: this.fbd.control(data.smsUser, [Validators.required]),
+            // smsPass: this.fbd.control(data.smsPass, [Validators.required]),
           });
           this.nameOld = data.name;
           this.codeOld = data.code;
@@ -131,9 +131,9 @@ export class AddUnitComponent implements OnInit {
         status: 1,
         parent_id: this.fbd.control(orgId, [Validators.required]),
         taxCode: this.fbd.control("",[Validators.pattern(parttern.cardid)]),
-        brandName: this.fbd.control("", [Validators.required]),
-        smsUser: this.fbd.control("", [Validators.required]),
-        smsPass: this.fbd.control("", [Validators.required]),
+        // brandName: this.fbd.control("", [Validators.required]),
+        // smsUser: this.fbd.control("", [Validators.required]),
+        // smsPass: this.fbd.control("", [Validators.required]),
       });
     }
   }
@@ -328,9 +328,9 @@ export class AddUnitComponent implements OnInit {
       parent_id: this.addForm.value.parent_id,
       path: this.addForm.value.path,
       tax_code: this.addForm.value.taxCode,
-      brandName: this.addForm.value.brandName,
-      smsUser: this.addForm.value.smsUser,
-      smsPass: this.addForm.value.smsPass,
+      // brandName: this.addForm.value.brandName,
+      // smsUser: this.addForm.value.smsUser,
+      // smsPass: this.addForm.value.smsPass,
     }
 
     this.spinner.show();

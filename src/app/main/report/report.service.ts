@@ -19,6 +19,8 @@ export class ReportService {
   reportEmailUrl: any = `${environment.apiUrl}/api/v1/contracts/email-report`
   exportReportEmailUrl: any = `${environment.apiUrl}/api/v1/contracts/rp-by-email-log/export`
   detailReportEmail: any = `${environment.apiUrl}/api/v1/notification/email-detail/`
+  reportEkycUrl: any = `${environment.apiUrl}/api/v1/contracts/eykc-report`
+  exportReportEkycUrl: any = `${environment.apiUrl}/api/v1/contracts/rp-by-eykc/export`
 
   constructor(
     private http: HttpClient
@@ -117,6 +119,35 @@ export class ReportService {
       return this.http.post<any>(this.exportReportEmailUrl + params, body, { headers: headers,responseType: 'blob' as 'json'}).pipe();
     } else {
       return this.http.post<any>(this.reportEmailUrl + params, body, {headers: headers});
+    }
+
+  }
+  
+  exportEkycReport(params: any, data: any, isExport: boolean) {
+    this.getCurrentUser();
+
+    let headers = null;
+
+    const body = JSON.stringify(data
+      // orgId: data.orgId,
+      // keyword: data.contractInfo,
+      // processIdStart: data.startDate,
+      // processIdEnd: data.endDate,
+    )
+
+    if(isExport) {
+      headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    } else {
+      headers = new HttpHeaders().append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    }
+
+    if (isExport) {
+      return this.http.post<any>(this.exportReportEkycUrl + params, body, { headers: headers,responseType: 'blob' as 'json'}).pipe();
+    } else {
+      return this.http.post<any>(this.reportEkycUrl + params, body, {headers: headers});
     }
 
   }

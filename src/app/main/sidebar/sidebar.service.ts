@@ -74,6 +74,7 @@ export class SidebarService {
   isBaoCaoHopDongEcontractMsale: boolean = true; // báo cáo hợp đồng số lượng hợp đồng eContract-mSale
   isBaoCaoTrangThaiGuiSms: boolean = true; //báo cáo trạng thái gửi Sms
   isBaoCaoTrangThaiGuiEmail: boolean = true; //báo cáo trạng thái gửi Email
+  isBaoCaoEKYC: boolean = true; // báo cáo xác thực ekyc
 
   isConfigSms: boolean = true; //cấu hình sms
   isConfigSoonExpireDay: boolean = true;
@@ -295,6 +296,10 @@ export class SidebarService {
 
             this.isBaoCaoTrangThaiGuiEmail = listRole.some(
               (element) => element.code == 'BAOCAO_TRANGTHAIGUI_EMAIL'
+            )
+            
+            this.isBaoCaoEKYC = listRole.some(
+              (element) => element.code == 'BAOCAO_EKYC'
             )
 
             this.isBaoCaoSoLuongLoai = listRole.some((element) => element.code == 'BAOCAO_SOLUONG_LOAIHOPDONG');
@@ -671,9 +676,17 @@ export class SidebarService {
         href: '/main/report/status-send-email'
       })
     }
+    
+    if(this.isBaoCaoEKYC) {
+      submenusReport.push({
+        title: 'report.ekyc',
+        active: false,
+        href: '/main/report/status-ekyc'
+      })
+    }
 
 
-    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai || this.isBaoCaoHopDongNhan || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiGuiSms || this.isBaoCaoTrangThaiGuiEmail) {
+    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai || this.isBaoCaoHopDongNhan || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiGuiSms || this.isBaoCaoTrangThaiGuiEmail || this.isBaoCaoEKYC) {
       this.menus.push({
         title: 'report',
         icon: '/assets/img/analytics1.svg',

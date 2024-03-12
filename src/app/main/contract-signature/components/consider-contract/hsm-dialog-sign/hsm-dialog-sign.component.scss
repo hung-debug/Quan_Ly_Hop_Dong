@@ -85,3 +85,12 @@ input.pw {
   border-radius: 0 5px 5px 0;
 }
 
+::ng-deep {
+  .p-dropdown.p-component {
+    border: 1px solid #106DB6;
+    border-radius: 5px;
+    height: 33px;
+    display: flex;
+    align-items: center;
+  }
+}

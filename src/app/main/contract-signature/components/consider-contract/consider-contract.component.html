@@ -26,7 +26,7 @@
           <span class="title-contract">{{'file.attach' | translate}}:</span>
           <span *ngFor="let d of allFileAttachment;let i = index">
             <span *ngIf="i != 0">, </span>
-            <a rel="noopener noreferrer" style="color: #106DB6" rel="stylesheet" [href]="d.path" target="_blank">{{d.filename}}</a>
+            <a rel="noopener noreferrer" style="color: #106DB6" rel="stylesheet" [href]="d.path.includes('.txt') ? d.path : d.path.replace('/tmp/','/tmp/v2/')" target="_blank">{{d.filename}}</a>
           </span>
         </div>
         <div>

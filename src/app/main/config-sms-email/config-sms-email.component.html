@@ -25,7 +25,7 @@
                   <td class="col-md-3"><input name="item" type="checkbox" formControlName="emailConfig" /></td>
                   <td class="col-md-2">
                     <p-dropdown panelStyleClass="font" appendTo="body" optionLabel="name" optionValue="id"
-                      [options]="[6,1,2,5].includes(rowData.value.smsTypeId) ? listStatus : listStatus1"
+                      [options]="[6,2,5].includes(rowData.value.smsTypeId) ? listStatus : rowData.value.smsTypeId == 1 ? listStatus2 : listStatus1"
                       (onChange)="selectConfigDropDown($event,listConfig)" formControlName="userSendNotification"
                       [autoDisplayFirst]="false"></p-dropdown>
                   </td>

@@ -40,6 +40,7 @@ export class ConfigSmsEmailComponent implements OnInit {
   cols: any[];
   listStatus: any = [];
   listStatus1: any = [];
+  listStatus2: any = [];
   notiStatus0: number = 1;
   notiStatus1: number = 1;
   notiStatus2: number = 1;
@@ -86,7 +87,7 @@ export class ConfigSmsEmailComponent implements OnInit {
     
     this.listConfig = [
       { smsTypeId: 6, name: 'Chuyển xử lý hợp đồng', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 0, },
-      { smsTypeId: 1, name: 'Hủy hợp đồng', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 1 },
+      { smsTypeId: 1, name: 'Hủy hợp đồng', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 3 },
       { smsTypeId: 2, name: 'Từ chối hợp đồng', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 1 },
       { smsTypeId: 3, name: 'Hợp đồng sắp hết hạn', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 2 },
       { smsTypeId: 4, name: 'Hợp đồng quá hạn', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 2 },
@@ -101,12 +102,15 @@ export class ConfigSmsEmailComponent implements OnInit {
     this.listStatus = [
       { id: 0, name: 'Người tạo' },
       { id: 1, name: 'Người tạo và những người đã xử lý' },
-      // { id: 2, name: 'Người tạo và người đang xử lý' },
     ]
     
     this.listStatus1 = [
       { id: 0, name: 'Người tạo' },
       { id: 2, name: 'Người tạo và những người đang xử lý' },
+    ]
+    
+    this.listStatus2 = [
+      { id: 3, name: 'Người đang xử lý và những người đã xử lý' },
     ]
 
     this.cols = [
@@ -148,16 +152,29 @@ export class ConfigSmsEmailComponent implements OnInit {
   }
 
   addFormGroup(value: any) {
-    const newGroup = this.fb.group({
-      smsTypeId: new FormControl(value.smsTypeId),
-      smsConfig: new FormControl(value.smsConfig),
-      emailConfig: new FormControl(value.emailConfig),
-      userSendNotification: new FormControl(value.userSendNotification),
-      organizationId: new FormControl(value.organizationId),
-      nameConfig: new FormControl(value.name),
-    });
+    if(value.smsTypeId == 1 ){
+      const newGroup = this.fb.group({
+        smsTypeId: new FormControl(value.smsTypeId),
+        smsConfig: new FormControl(value.smsConfig),
+        emailConfig: new FormControl(value.emailConfig),
+        userSendNotification: new FormControl(3),
+        organizationId: new FormControl(value.organizationId),
+        nameConfig: new FormControl(value.name),
+      });      
+      this.groupArray.push(newGroup);
+      
+    }else{
+      const newGroup = this.fb.group({
+        smsTypeId: new FormControl(value.smsTypeId),
+        smsConfig: new FormControl(value.smsConfig),
+        emailConfig: new FormControl(value.emailConfig),
+        userSendNotification: new FormControl(value.userSendNotification),
+        organizationId: new FormControl(value.organizationId),
+        nameConfig: new FormControl(value.name),
+      });
+      this.groupArray.push(newGroup);
 
-    this.groupArray.push(newGroup);
+    }
 
   }
 

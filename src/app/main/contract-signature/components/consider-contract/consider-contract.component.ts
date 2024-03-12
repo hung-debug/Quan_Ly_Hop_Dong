@@ -597,7 +597,7 @@ export class ConsiderContractComponent
         this.datas.roleContractReceived = this.recipient.role;
 
         for (const signUpdate of this.isDataObjectSignature) {
-          if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 2 || ((signUpdate.recipient.role == 4 && this.isNB))) &&
+          if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 2 || ((signUpdate?.recipient?.role == 4 && this.isNB))) &&
             [3, 4].includes(this.datas.roleContractReceived) &&
             signUpdate?.recipient?.email === this.currentUser.email &&
             signUpdate?.recipient?.role === this.datas?.roleContractReceived
@@ -1453,6 +1453,7 @@ export class ConsiderContractComponent
                   haveSignHsm = true;
         
                   this.dataHsm = {
+                    supplier: '',
                     ma_dvcs: '',
                     username: '',
                     password: '',
@@ -2024,7 +2025,7 @@ export class ConsiderContractComponent
                 const textSignB = await domtoimage.toPng(imageRender);
                 signI = this.textSignBase64Gen = textSignB.split(',')[1];
               }
-            } else if (signUpdate.type == 3 || ((signUpdate.recipient.role == 4 && this.isNB) && this.isNB)) {
+            } else if (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) {
               //lấy ảnh chữ ký usb token
               let imageRender: any = '';
 
@@ -2082,7 +2083,7 @@ export class ConsiderContractComponent
                 }
 
                 if (imageRender) {
-                  if (signUpdate.type == 3 || ((signUpdate.recipient.role == 4 && this.isNB) && this.isNB)) {
+                  if (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) {
                     signI = this.srcMark.split(',')[1]
                   } else {
                     const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
@@ -2269,7 +2270,7 @@ export class ConsiderContractComponent
           const objSign = this.isDataObjectSignature.filter(
             (signUpdate: any) =>
               signUpdate &&
-              (signUpdate.type == 3 || ((signUpdate.recipient.role == 4 && this.isNB) && this.isNB)) &&
+              (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) &&
               [3, 4].includes(this.datas.roleContractReceived) &&
               signUpdate?.recipient?.email === this.currentUser.email &&
               signUpdate?.recipient?.role === this.datas?.roleContractReceived
@@ -2323,7 +2324,7 @@ export class ConsiderContractComponent
               const textSignB = await domtoimage.toPng(imageRender);
               signI = this.textSignBase64Gen = textSignB.split(',')[1];
             }
-          } else if (signUpdate.type == 3 || ((signUpdate.recipient.role == 4 && this.isNB) && this.isNB)) {
+          } else if (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) {
 
             try {
               this.isDateTime = await this.timeService.getRealTime().toPromise();
@@ -2360,6 +2361,7 @@ export class ConsiderContractComponent
           if (!this.mobile) {
             this.dataHsm = {
               field: fieldHsm,
+              supplier: this.dataHsm.supplier,
               ma_dvcs: this.dataHsm.ma_dvcs,
               username: this.dataHsm.username,
               password: this.dataHsm.password,
@@ -2370,6 +2372,7 @@ export class ConsiderContractComponent
           } else {
             this.dataHsm = {
               field: fieldHsm,
+              supplier: this.dataHsm.supplier,
               ma_dvcs: this.dataHsm.ma_dvcs,
               username: this.dataHsm.username,
               password: this.dataHsm.password,
@@ -2378,7 +2381,7 @@ export class ConsiderContractComponent
                             (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
           }
-
+          console.log("dataHsm",this.dataHsm);
           if (fileC && objSign.length) {
             if (!this.mobile || this.mobile) {
               const checkSign = await this.contractService.signHsm(
@@ -2492,7 +2495,7 @@ export class ConsiderContractComponent
           const objSign = this.isDataObjectSignature.filter(
             (signUpdate: any) =>
               signUpdate &&
-              (signUpdate.type == 3 || ((signUpdate.recipient.role == 4 && this.isNB) && this.isNB)) &&
+              (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) &&
               [3, 4].includes(this.datas.roleContractReceived) &&
               signUpdate?.recipient?.email === this.currentUser.email &&
               signUpdate?.recipient?.role === this.datas?.roleContractReceived
@@ -2563,7 +2566,7 @@ export class ConsiderContractComponent
               const textSignB = await domtoimage.toPng(imageRender);
               signI = this.textSignBase64Gen = textSignB.split(',')[1];
             }
-          } else if (signUpdate.type == 3 || ((signUpdate.recipient.role == 4 && this.isNB) && this.isNB)) {
+          } else if (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) {
             // this.nameCompany = this.recipient.name;
 
             this.widthSign = signUpdate.width;
@@ -3147,7 +3150,7 @@ export class ConsiderContractComponent
     for (const signUpdate of this.isDataObjectSignature) {
       if (
         signUpdate &&
-        (signUpdate.type == 3 || ((signUpdate.recipient.role == 4 && this.isNB) && this.isNB)) &&
+        (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) &&
         [3, 4].includes(this.datas.roleContractReceived) &&
         signUpdate?.recipient?.email === this.currentUser.email &&
         signUpdate?.recipient?.role === this.datas?.roleContractReceived
@@ -4522,6 +4525,7 @@ export class ConsiderContractComponent
       dialogConfig.hasBackdrop = true;
       dialogConfig.data = data;
       dialogConfig.panelClass = 'custom-dialog-container';
+      dialogConfig.autoFocus = false
 
       const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
 
@@ -4532,6 +4536,7 @@ export class ConsiderContractComponent
         this.cardId = result.ma_dvcs.trim();
 
         if (result) {
+          this.dataHsm.supplier = result.supplier
           this.dataHsm.ma_dvcs = result.ma_dvcs;
           this.dataHsm.username = result.username;
           this.dataHsm.password = result.password;

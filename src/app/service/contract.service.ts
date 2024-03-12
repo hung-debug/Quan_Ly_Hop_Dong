@@ -1158,7 +1158,8 @@ export class ContractService {
       image_base64: datas.imageBase64,
       // isTimestamp: isTimestamp
       field: datas.field,
-      type: boxType
+      type: boxType,
+      supplier: datas.supplier
     });
 
     return this.http
