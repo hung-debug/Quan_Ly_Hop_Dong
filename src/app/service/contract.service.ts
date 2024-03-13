@@ -345,7 +345,7 @@ export class ContractService {
           '&size=' +
           size;
       } else {
-        listContractUrl = this.listContractOrgUrl + '?organization_id=' + organization_id + '&keyword=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' +
+        listContractUrl = this.listContractOrgUrl + '?organization_id=' + organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' +
           filter_contract_no.trim() + '&from_date=' + filter_from_date + '&to_date=' + filter_to_date + '&status=' + filter_status + '&remain_day=' + remain_day +
           '&page=' + page + '&size=' + size;
       }
