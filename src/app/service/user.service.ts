@@ -50,7 +50,7 @@ export class UserService {
   checkServiceStatusUrl: any = `${environment.apiUrl}/api/v1/customers/check-service-status`;
 
   checkTokenDateUrl: any = `${environment.apiUrl}/api/v1/customers/password/recover/valid`
-
+  checkBrandnameUrl: any = `${environment.apiUrl}/api/v1/notification/checkBranchName`
   token: any;
   customer_id: any;
   organization_id: any;
@@ -443,6 +443,24 @@ export class UserService {
 
     return this.http.get<any>(this.checkServiceStatusUrl, {headers}).pipe();
 
+  }
+
+  checkBrandname(data: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      brandName: data.brandName,
+      supplier: data.supplier,
+      user: data.user,
+      password: data.password,
+      phone: data.phone,
+      message: data.message
+    });
+
+    return this.http.post<User>(this.checkBrandnameUrl, body, {
+      headers: headers,
+    });
   }
 
 

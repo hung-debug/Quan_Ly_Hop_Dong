@@ -155,12 +155,13 @@ input[type="checkbox"] {
 
 .input-expiration-date {
     box-sizing: border-box;
-    background: #FFFFFF;
+    background: #F3F6FA;
     border: 1px solid #67B6F4;
     border-radius: 5px;
     width: 229px;
     height: 33px;
     margin-right: 87%;
+    text-align: center;
 }
 
 :host ::ng-deep {
@@ -175,5 +176,34 @@ input[type="checkbox"] {
   .p-treeselect-label, .p-dropdown-label {
       padding: 5px 5px 5px 15px;
   }
+}
+.input-data {
+  border: 1px solid #106DB6;
+  border-radius: 5px;
+  min-height: 33px;
+  display: flex;
+  align-items: center;
+
+  > input, div {
+      border: none;
+      outline: none;
+      padding-left: 15px;
+      width: 100%;
+      border-radius: 5px;
+  }
+  > div{
+      padding: 5px 15px;
+  }
+}
+.required-title {
+  color: red;
+}
+.icon-password{
+  left: 96%;
+  position: absolute;
+}
+
+.invalid {
+  color: red;
 }
   

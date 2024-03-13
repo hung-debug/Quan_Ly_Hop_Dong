@@ -127,6 +127,7 @@ import {DigitalCertificateAddComponent} from './main/digital-certificate/digital
 import {DigitalCertificateDetailComponent} from './main/digital-certificate/digital-certificate-detail/digital-certificate-detail.component';
 import {DigitalCertificateEditComponent} from './main/digital-certificate/digital-certificate-edit/digital-certificate-edit.component';
 import {ContentSmsComponent} from './main/report/report-status-send-sms-email/content-sms/content-sms.component';
+import { ConfigBrandnameDialogComponent } from './main/config-sms-email/config-check-brandname-dialog/config-check-brandname-dialog.component';
 import {ContentEmailComponent} from './main/report/report-contract-send-email/content-email/content-email.component';
 import { HeadersInterceptor } from './headers.interceptor';
 import { UploadAttachFilesComponent } from './main/contract/dialog/upload-attach-files-dialog/upload-attach-files-dialog.component';
@@ -147,6 +148,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DigitalCertificateDetailComponent,
     DigitalCertificateEditComponent,
     ContentSmsComponent,
+    ConfigBrandnameDialogComponent,
     ContentEmailComponent,
     ContractComponent,
     ContractSignatureComponent,

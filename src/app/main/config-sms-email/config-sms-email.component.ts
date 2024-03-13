@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { log } from 'console';
 import { forEach } from 'lodash';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -9,6 +9,8 @@ import { Contract, ContractService } from 'src/app/service/contract.service';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfigBrandnameDialogComponent} from './config-check-brandname-dialog/config-check-brandname-dialog.component';
 
 @Component({
   selector: 'app-config-sms-email',
@@ -49,6 +51,14 @@ export class ConfigSmsEmailComponent implements OnInit {
   myForm = new FormGroup({
     items: new FormArray([]),
   });
+  fieldTextType: boolean = false;
+  optionsSupplier: any;
+  submitted = false;
+  contractSupplier: number;
+  brandnameForm: FormGroup;
+  isDisable: boolean = true;
+
+  get f() { return this.brandnameForm.controls; }
 
   constructor(
     private appService: AppService,
@@ -57,8 +67,17 @@ export class ConfigSmsEmailComponent implements OnInit {
     private toastService: ToastService,
     private userService: UserService,
     private roleService: RoleService,
-    private fb: FormBuilder
-  ) { }
+    private fb: FormBuilder,
+    private fbd: FormBuilder,
+    public dialog: MatDialog,
+  ) {
+    this.brandnameForm = this.fbd.group({
+      brandName: this.fbd.control("mContract", [Validators.required]),
+      smsUser: this.fbd.control("", [Validators.required]),
+      smsPass: this.fbd.control("", [Validators.required]),
+      contractSupplier: this.fbd.control("MOBIFONE", [Validators.required]),
+    });
+   }
 
   async ngOnInit(): Promise<void> {
           
@@ -102,6 +121,11 @@ export class ConfigSmsEmailComponent implements OnInit {
       { header: 'noti.sms', style: 'text-align: left;' },
       { header: 'noti.email', style: 'text-align: left;' },
       { header: 'sub.send.noti', style: 'text-align: left;' },
+    ];
+    
+    this.optionsSupplier = [
+      { id: 'MOBIFONE', name: 'MobiFone' },
+      { id: 'VNPT', name: 'VNPT' },
     ];
 
     if (sessionStorage.getItem('lang') == 'vi') {
@@ -276,6 +300,46 @@ export class ConfigSmsEmailComponent implements OnInit {
 
     }
   }
+  
+  toggleFieldTextType() {
+    this.fieldTextType = !this.fieldTextType;
+  }
 
+  configBrandname(){
+    if (this.brandnameForm.invalid) {
+      return;
+    }
+    // const data = {
+    //   brandName: this.brandnameForm.value.brandName,
+    //   smsUser: this.brandnameForm.value.smsUser,
+    //   smsPass: this.brandnameForm.value.smsPass,
+    // }
 
+    console.log("this.brandnameForm",this.brandnameForm.invalid);
+    
+    const data = {
+      title: 'check.brandname',
+      brandNameData: this.brandnameForm.value
+    };
+    const dialogRef = this.dialog.open(ConfigBrandnameDialogComponent, {
+      width: '600px',
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log("resultt",result);
+      let brandNameData = {
+        brandName: 'mContract',
+        supplier: 'MOBIFONE',
+        user: 'mContract',
+        password: '123456a@',
+        phone: result.phone,
+        message: result.message
+      }
+      this.userService.checkBrandname(brandNameData).subscribe(
+        (res: any) => {
+          console.log("checkeddd",res);
+        }
+      )
+    })
+  }
 }
