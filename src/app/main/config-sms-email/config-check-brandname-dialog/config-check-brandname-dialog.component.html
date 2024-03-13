@@ -11,11 +11,11 @@
           <span class="required-title">*</span>
         </div>
         <div class="input-data">
-          <input type="text" formControlName="smsUser" [disabled]="false" placeholder="Nhập số điện thoại">
+          <input type="text" formControlName="phone" [disabled]="false" placeholder="Nhập số điện thoại">
         </div>
-        <div *ngIf="submitted && f.smsUser.errors" class="invalid">
-          <div *ngIf="f.smsUser.errors.required">{{'error.unit.username.required' | translate}}</div>
-          <div *ngIf="f.smsUser.errors.maxlength">{{'error.valid.username' | translate}}</div>
+        <div *ngIf="submitted && f.smsUser?.errors?.required" class="invalid">
+          <div *ngIf="f.smsUser?.errors?.required">{{'error.unit.username.required' | translate}}</div>
+          <!-- <div *ngIf="f.smsUser?.errors?.maxlength">{{'error.valid.username' | translate}}</div> -->
         </div>
       </div>
       
@@ -23,11 +23,11 @@
         <div class="label text-color">Nội dung SMS
           <span class="required-title">*</span>
         </div>
-        <textarea disabled="true" style="width: 100%; height: 120px;"></textarea>
+        <textarea formControlName="message" [disabled]="true" style="width: 100%; height: 120px;"></textarea>
       </div>
     </form>
   </div>
   <div style="text-align: center; padding-top: 10px;">
-    <button class="check-button" (click)="dialog.closeAll()" type="button">{{'check.button' | translate}}</button>
+    <button class="check-button" (click)="onCheck()" type="button">{{'check.button' | translate}}</button>
   </div>
 </div>

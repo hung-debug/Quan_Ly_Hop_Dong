@@ -13,20 +13,28 @@ export class ConfigBrandnameDialogComponent implements OnInit {
   currentOrgId: string = "";
   datas: any;
   submitted = false;
-  dataSendLog: any;
   checkBrandnameForm: FormGroup;
-  get f() { return this.checkBrandnameForm.controls; }
   
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private fbd: FormBuilder,
     public dialogRef: MatDialogRef<ConfigBrandnameDialogComponent>,
     public dialog: MatDialog,
   ) {
-
+    this.checkBrandnameForm = this.fbd.group({
+      phone: this.fbd.control("", [Validators.required]),
+      message: this.fbd.control("", [Validators.required]),
+    })
   }
 
   async ngOnInit(): Promise<void> {
     // this.currentOrgId = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId.toString()
   }
+
+  onCheck() {
+    this.dialogRef.close(this.checkBrandnameForm.value)
+  }
+
+  get f() { return this.checkBrandnameForm.controls; }
 
 }

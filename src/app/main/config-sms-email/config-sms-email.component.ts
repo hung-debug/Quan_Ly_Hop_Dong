@@ -56,6 +56,8 @@ export class ConfigSmsEmailComponent implements OnInit {
   submitted = false;
   contractSupplier: number;
   brandnameForm: FormGroup;
+  isDisable: boolean = true;
+
   get f() { return this.brandnameForm.controls; }
 
   constructor(
@@ -70,9 +72,10 @@ export class ConfigSmsEmailComponent implements OnInit {
     public dialog: MatDialog,
   ) {
     this.brandnameForm = this.fbd.group({
-      brandName: this.fbd.control("", [Validators.required]),
+      brandName: this.fbd.control("mContract", [Validators.required]),
       smsUser: this.fbd.control("", [Validators.required]),
       smsPass: this.fbd.control("", [Validators.required]),
+      contractSupplier: this.fbd.control("MOBIFONE", [Validators.required]),
     });
    }
 
@@ -121,8 +124,8 @@ export class ConfigSmsEmailComponent implements OnInit {
     ];
     
     this.optionsSupplier = [
-      { id: 1, name: 'Mobifone' },
-      { id: 2, name: 'VNPT' },
+      { id: 'MOBIFONE', name: 'MobiFone' },
+      { id: 'VNPT', name: 'VNPT' },
     ];
 
     if (sessionStorage.getItem('lang') == 'vi') {
@@ -303,28 +306,40 @@ export class ConfigSmsEmailComponent implements OnInit {
   }
 
   configBrandname(){
-    // this.submitted = true;
-    
-    // if (this.brandnameForm.invalid) {
-      
-    //   return;
-    // }
+    if (this.brandnameForm.invalid) {
+      return;
+    }
     // const data = {
     //   brandName: this.brandnameForm.value.brandName,
     //   smsUser: this.brandnameForm.value.smsUser,
     //   smsPass: this.brandnameForm.value.smsPass,
     // }
+
+    console.log("this.brandnameForm",this.brandnameForm.invalid);
     
     const data = {
       title: 'check.brandname',
-      // dataSendLog: dataSendLog,
+      brandNameData: this.brandnameForm.value
     };
     const dialogRef = this.dialog.open(ConfigBrandnameDialogComponent, {
       width: '600px',
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      let is_data = result
+      console.log("resultt",result);
+      let brandNameData = {
+        brandName: 'mContract',
+        supplier: 'MOBIFONE',
+        user: 'mContract',
+        password: '123456a@',
+        phone: result.phone,
+        message: result.message
+      }
+      this.userService.checkBrandname(brandNameData).subscribe(
+        (res: any) => {
+          console.log("checkeddd",res);
+        }
+      )
     })
   }
 }
