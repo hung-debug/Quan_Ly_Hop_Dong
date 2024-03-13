@@ -372,6 +372,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
         this.signCurent.width = event.rect.width;
         this.signCurent.height = event.rect.height;
+        // giu nguyen w+h o ky khi resize ve min
+        if (this.signCurent.sign_unit == 'chu_ky_so' || this.signCurent.sign_unit == 'chu_ky_anh'){
+          this.signCurent.width <= 140 ? this.signCurent.width = 140 : this.signCurent.width = event.rect.width;
+          this.signCurent.height <= 50 ? this.signCurent.height = 50 : this.signCurent.height = event.rect.height;
+          this.objSignInfo.width = this.signCurent.height
+          this.objSignInfo.height = this.signCurent.width
+        } else {
+          this.objSignInfo.width = event.rect.width;
+          this.objSignInfo.height = event.rect.height;
+        }
         this.tinhToaDoSign("canvas-step3-" + this.signCurent.page, this.signCurent.width, this.signCurent.height, this.objSignInfo);
         let _array = Object.values(this.obj_toa_do);
         this.signCurent.position = _array.join(",");
@@ -549,8 +559,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                       element['height'] = '28';
                     }
                   } else {
-                    element['width'] = '135';
-                    element['height'] = '85';
+                    // set size ô ký
+                    if (event.target.className.includes('da-keo')){
+                      element['width'] = event.target.offsetWidth;
+                      element['height'] = event.target.offsetHeight;
+                    } else {
+                      element['width'] = '180';
+                      element['height'] = '66';
+                    }
                   }
 
                   this.objSignInfo.width = element['width'];
@@ -1149,7 +1165,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           if(isSignType == 'so_tai_lieu') {
             // element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4));
 
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
+            element.is_disable = !(element.sign_type.some((p: any) => [2,4,6].includes(p.id)) || element.role == 4)
           } else {
             element.is_disable = true
           }
@@ -1158,9 +1174,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (isSignType == 'chu_ky_anh') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
         } else if (isSignType == 'chu_ky_so') {
-          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
+          element.is_disable = !(element.sign_type.some((p: any) => [2,3,4,6,8].includes(p.id)) && element.role != 2);
         } else if (isSignType == 'text') {
-          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
+          element.is_disable = !(element.sign_type.some((p: any) => [2,4,6].includes(p.id)) || element.role == 4); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
         } else 
           // element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4)); 
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)

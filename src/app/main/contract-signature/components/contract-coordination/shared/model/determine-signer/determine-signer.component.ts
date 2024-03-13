@@ -4,7 +4,8 @@ import {
   type_signature_template,
   type_signature_doc_template,
   type_signature_personal_party_template,
-  variable
+  variable,
+  type_signature_doc
 } from "../../../../../../../config/variable";
 import { Helper } from "../../../../../../../core/Helper";
 import { ContractService } from "../../../../../../../service/contract.service";
@@ -46,9 +47,9 @@ export class DetermineSignerComponent implements OnInit {
   toppings = new FormControl();
 
   //dropdown
-  signTypeList: Array<any> = type_signature_template;
+  signTypeList: Array<any> = type_signature_doc;
   signTypeList_personal_partner: Array<any> = type_signature_personal_party_template;
-  signType_doc: Array<any> = type_signature_doc_template;
+  signType_doc: Array<any> = type_signature_doc;
 
   dropdownSignTypeSettings: any = {};
   getNameIndividual: string = "";
@@ -122,7 +123,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   getDataSignHsm(data: any) {
-    return data.sign_type.filter((p: any) => p.id == 4);
+    return data.sign_type.filter((p: any) => [4,6,8].includes(p.id));
   }
 
   getApiDetermine() {
@@ -168,7 +169,7 @@ export class DetermineSignerComponent implements OnInit {
     dataArrPartner.forEach((element: any) => {
       element.recipients.forEach((eleRecipient: any) => {
         if(eleRecipient.sign_type.length > 0) {
-          if(eleRecipient.sign_type[0].id != 4 && eleRecipient.sign_type[0].id != 2) {
+          if(![2,4,6,8].includes(eleRecipient?.sign_type[0]?.id)) {
             eleRecipient.card_id = '';
           }
         }
