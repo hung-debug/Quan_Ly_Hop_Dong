@@ -912,6 +912,20 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       });
     }
+
+    if (this.getCurrentSignConfigs().length > 0) {
+      this.getCurrentSignConfigs().forEach((element: any) => {
+        let a = document.getElementById(element.id);
+        if (a) {
+          // chỉ lấy đối tượng ký của bên đối tác
+          if ((!element.is_type_party || (element.is_type_party && element.is_type_party != 1)) && element['coordinate_x'] && element['coordinate_y']) { // @ts-ignore
+            a.style["z-index"] = '1';
+          }
+          a.setAttribute("data-x", element['coordinate_x']);
+          a.setAttribute("data-y", element['coordinate_y']);
+        }
+      });
+    }
   }
 
   removePage() {
@@ -1127,6 +1141,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   convertToSignConfig() {
     let arrSignConfig: any = [];
     let cloneUserSign = [...this.datas.contract_user_sign];
+    cloneUserSign.forEach(element => {
+      arrSignConfig = arrSignConfig.concat(element.sign_config);
+    })
+
+    return arrSignConfig;
+  }
+
+  getCurrentSignConfigs() {
+    let arrSignConfig: any = [];
+    let cloneUserSign = [...this.datas.contract_user_sign_index];
     cloneUserSign.forEach(element => {
       arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
