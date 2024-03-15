@@ -2381,7 +2381,6 @@ export class ConsiderContractComponent
                             (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
           }
-          console.log("dataHsm",this.dataHsm);
           if (fileC && objSign.length) {
             if (!this.mobile || this.mobile) {
               const checkSign = await this.contractService.signHsm(
@@ -2398,11 +2397,25 @@ export class ConsiderContractComponent
                     3000
                   );
                 } else if (checkSign.message) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    checkSign.message,
-                    '',
-                    3000
-                  );
+                  if (checkSign.message.includes('Cannot authenticate hsm')) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Không thể xác thực hsm',
+                      '',
+                      3000
+                    );
+                  } else if (checkSign.message.includes('Tax code do not match')) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'taxcode.not.match',
+                      '',
+                      3000
+                    );
+                  } else {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      checkSign.message,
+                      '',
+                      3000
+                    );
+                  }
                 }
 
                 return false;

@@ -1429,7 +1429,14 @@ export class ContractSignatureComponent implements OnInit {
                     '',
                     3000
                   );
-                } else if (checkSign[i].result.message == "false") {
+                } else if (checkSign.message.includes('Cannot authenticate hsm')) {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    'Không thể xác thực hsm',
+                    '',
+                    3000
+                  );
+                } 
+                else if (checkSign[i].result.message == "false") {
                   this.toastService.showErrorHTMLWithTimeout(
                     "Lỗi ký HSM",
                     '',
