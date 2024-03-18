@@ -820,5 +820,6 @@
   "content.sms.brandname":"[Thong Bao] MobiFone eContract thong bao ket noi voi SMS Brandname da hoan tat. Tran trong cam on!",
   "validate.regex.brandname":"Brandname không đúng định dạng",
   "validate.regex.phone":"Số điện thoại không đúng, vui lòng kiểm tra lại",
-  "content.sms.brand": "Nội dung SMS"
+  "content.sms.brand": "Nội dung SMS",
+  "password.blank":"Mật khẩu không được để trống"
 }
