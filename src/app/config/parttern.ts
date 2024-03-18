@@ -3,6 +3,8 @@ export const parttern = {
   
   phone: /^[+]*[0-9]{10,11}$/,
   
+  brandname: /^[\w\s.-]{1,11}$/,
+  
   //cmt-can cuoc cong dan
   card_id9: /^[0-9]{9}$/,
 

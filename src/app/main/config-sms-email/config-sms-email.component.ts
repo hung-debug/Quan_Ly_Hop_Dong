@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, AfterContentInit, AfterViewChecked } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { log } from 'console';
+import { log, count } from 'console';
 import { forEach } from 'lodash';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
@@ -11,6 +11,8 @@ import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfigBrandnameDialogComponent} from './config-check-brandname-dialog/config-check-brandname-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
+import {parttern, parttern_input} from "src/app/config/parttern";
 
 @Component({
   selector: 'app-config-sms-email',
@@ -56,7 +58,13 @@ export class ConfigSmsEmailComponent implements OnInit {
   submitted = false;
   contractSupplier: number;
   brandnameForm: FormGroup;
-  isDisable: boolean = true;
+  isDisable: boolean = true; //auto = true
+  isDisableSoonExpireDay: boolean = true;
+  isDisableConfigSmsEmail: boolean = true;
+  listConfigBrandname:  any ;
+  brandname: any = 'mContract';
+  pattern = parttern;
+  count : any = 0;
 
   get f() { return this.brandnameForm.controls; }
 
@@ -70,9 +78,10 @@ export class ConfigSmsEmailComponent implements OnInit {
     private fb: FormBuilder,
     private fbd: FormBuilder,
     public dialog: MatDialog,
+    public translate: TranslateService,
   ) {
     this.brandnameForm = this.fbd.group({
-      brandName: this.fbd.control("mContract", [Validators.required]),
+      brandName: this.fbd.control(this.brandname, [Validators.required, Validators.pattern(parttern.brandname)]),
       smsUser: this.fbd.control("", [Validators.required]),
       smsPass: this.fbd.control("", [Validators.required]),
       contractSupplier: this.fbd.control("MOBIFONE", [Validators.required]),
@@ -84,6 +93,16 @@ export class ConfigSmsEmailComponent implements OnInit {
     let userId = this.userService.getAuthCurrentUser().id;
 
     const infoUser = await this.userService.getUserById(userId).toPromise();    
+    
+    this.listConfigBrandname = infoUser.organization;
+
+    this.brandnameForm.patchValue({
+      brandName: !infoUser.organization.brandName && infoUser.organization.smsSendMethor == "API" ? this.brandname : infoUser.organization.brandName, // Cập nhật giá trị cho brandName
+      contractSupplier: infoUser.organization.smsSendMethor == "API" ? "MOBIFONE" : "VNPT", // Cập nhật giá trị contractSupplier
+      smsUser: infoUser.organization.smsUser, // Cập nhật giá trị cho smsUser
+      smsPass: infoUser.organization.smsPass, // Cập nhật giá trị cho smsPass
+    });
+    this.ValidConfigBrandName()
     this.orgId = infoUser.organization.id;
     const inforRole = await this.roleService.getRoleById(infoUser.role_id).toPromise();
     const listRole = inforRole.permissions;
@@ -144,6 +163,7 @@ export class ConfigSmsEmailComponent implements OnInit {
 
     //gọi api cấu hình ngày sắp hết hạn
     this.infoDayExpiration();
+    this.ValidConfigSmsEmail();
   }
 
   get groupArray() {
@@ -180,6 +200,15 @@ export class ConfigSmsEmailComponent implements OnInit {
     }
 
   }
+  
+  ValidConfigSmsEmail(): void{  
+    this.infoConfigSms().then(() =>{
+      this.isDisableConfigSmsEmail = true;
+        this.myForm.valueChanges.subscribe(value => { 
+          this.isDisableConfigSmsEmail = false;
+        })
+    })
+  }
 
   selectConfigDropDown(event: any, data: any) {
   }
@@ -191,8 +220,6 @@ export class ConfigSmsEmailComponent implements OnInit {
         this.soonExpireDay = response[0].value;
         this.idExpireDay = response[0].id;
         this.isSoonExpireDay = true;
-
-
       } else {
         this.soonExpireDay = 5;
         this.isSoonExpireDay = false;
@@ -200,15 +227,22 @@ export class ConfigSmsEmailComponent implements OnInit {
     })
   }
 
-  infoConfigSms() {
-    this.contractService.getConfigSmsOrg().subscribe((response: any) => {
+  async infoConfigSms(): Promise<void> {
+    return new Promise<void>(async(resolve, reject) => {
+      let response = await this.contractService.getConfigSmsOrg().toPromise()
       this.dataConfig = response;
       this.mapData(this.dataConfig);
       response.forEach((element: any) => {
         this.smsConfig = element.smsConfig;
         this.emailConfig = element.emailConfig;
       });;
-    })
+      resolve(); // Khi functionA thực hiện xong, gọi resolve()
+    });
+  }
+  
+  onSoonExpireDayChange(value: any){
+    this.soonExpireDay = value
+    this.isDisableSoonExpireDay = false;   
   }
 
   updateSoonExpireDay() {
@@ -239,13 +273,14 @@ export class ConfigSmsEmailComponent implements OnInit {
       })
     }
   }
-
+  
   updateSmsEmail() {
     this.contractService.updateConfigSmsOrg(this.groupArray.value).subscribe((response: any) => {   
       if (response.status == 200) {
-        this.infoConfigSms();
+        // this.infoConfigSms();
         this.toastService.showSuccessHTMLWithTimeout('update.success', '', 3000);
         this.spinner.hide();
+        this.isDisableConfigSmsEmail = true;
         return;
       }
     })
@@ -305,17 +340,46 @@ export class ConfigSmsEmailComponent implements OnInit {
     this.fieldTextType = !this.fieldTextType;
   }
 
+  
+  ValidConfigBrandName(){
+    if(this.brandnameForm.value.brandName == this.brandname && this.brandnameForm.value.contractSupplier == "MOBIFONE"){
+      this.brandnameForm?.get('smsUser')?.disable();
+      this.brandnameForm?.get('smsPass')?.disable();
+      this.isDisable = true;
+    } else{
+      this.brandnameForm?.get('smsUser')?.enable();
+      this.brandnameForm?.get('smsPass')?.enable();
+      this.isDisable = false;
+    }
+    this.brandnameForm?.get('brandName')?.valueChanges.subscribe(brandName => {    
+      if (brandName === this.brandname) {
+        this.brandnameForm.get('smsUser')?.disable();
+        this.brandnameForm?.get('smsPass')?.disable();
+        this.isDisable = true;
+      } else {
+        this.brandnameForm.get('smsUser')?.enable();
+        this.brandnameForm?.get('smsPass')?.enable();
+        this.isDisable = false;
+      }
+    });
+    
+    this.brandnameForm?.get('contractSupplier')?.valueChanges.subscribe(contractSupplier => {
+      if (contractSupplier === "MOBIFONE") {
+        this.brandnameForm.get('smsUser')?.disable();
+        this.brandnameForm?.get('smsPass')?.disable();
+        this.isDisable = true;
+      } else {
+        this.brandnameForm.get('smsUser')?.enable();
+        this.brandnameForm?.get('smsPass')?.enable();
+        this.isDisable = false;
+      }
+    });
+  }
+  
   configBrandname(){
     if (this.brandnameForm.invalid) {
       return;
     }
-    // const data = {
-    //   brandName: this.brandnameForm.value.brandName,
-    //   smsUser: this.brandnameForm.value.smsUser,
-    //   smsPass: this.brandnameForm.value.smsPass,
-    // }
-
-    console.log("this.brandnameForm",this.brandnameForm.invalid);
     
     const data = {
       title: 'check.brandname',
@@ -326,18 +390,23 @@ export class ConfigSmsEmailComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log("resultt",result);
       let brandNameData = {
-        brandName: 'mContract',
-        supplier: 'MOBIFONE',
-        user: 'mContract',
-        password: '123456a@',
+        brandName: this.brandnameForm.value.brandName,
+        supplier: this.brandnameForm.value.contractSupplier,
+        user: this.brandnameForm.value.smsUser,
+        password: this.brandnameForm.value.smsPass,
         phone: result.phone,
-        message: result.message
-      }
+        message: this.translate.instant('content.sms.brandname')
+      }    
       this.userService.checkBrandname(brandNameData).subscribe(
         (res: any) => {
-          console.log("checkeddd",res);
+          if(res.status == true){           
+            this.userService.updateConfigBrandname(this.brandnameForm.value,this.orgId).subscribe((res: any) =>{        
+            })
+            this.toastService.showSuccessHTMLWithTimeout('test.brandname.infor.success', '', 3000);
+          } else{
+            this.toastService.showErrorHTMLWithTimeout('test.brandname.infor', '', 3000);
+          }
         }
       )
     })
