@@ -79,7 +79,7 @@
                 <span class="required-title">*</span>
               </div>
               <div class="input-data">
-                <input type="text" formControlName="brandName" placeholder="Nhập Brandname">
+                <input style="width: 100%;" type="text" formControlName="brandName" placeholder="Nhập Brandname">
               </div>
               <div *ngIf="f.brandName.errors" class="invalid">
                 <div *ngIf="f.brandName?.errors?.required">{{'error.unit.brandname.required' | translate}}</div>
@@ -103,7 +103,7 @@
                 <span class="required-title">*</span>
               </div>
               <div class="input-data">
-                <input type="text" formControlName="smsUser" maxlength = '100' style="width: 100%;">
+                <input type="text" formControlName="smsUser" maxlength = '100' style="width: 90%;">
               </div>
               <div *ngIf="f.smsUser?.errors" class="invalid">
                 <div *ngIf="f.smsUser?.errors?.required">{{'error.unit.username.required' | translate}}</div>
@@ -117,7 +117,7 @@
               </div>
               <div class="input-data">
                 <input type="text" formControlName="smsPass" [type]="fieldTextType ? 'text' : 'password'"
-                 maxlength = '100' style="width: 100%;">
+                 maxlength = '100' style="width: 90%;">
                 <div class="icon-password">
                   <i class="fa" [ngClass]="{
                     'fa-eye-slash': !fieldTextType,
