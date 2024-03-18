@@ -799,5 +799,10 @@
   "time.authen": "Time accuracy",
   "name.contract": "Name Contract",
   "number.contract": "Number contract",
-  "hsm.dialog.supplier": "Supplier"
+  "hsm.dialog.supplier": "Supplier",
+  "test.brandname.infor":"Connect brandname fail. Please checked information",
+  "content.sms.brandname":"[Notification] MobiFone eContract announces that the connection with the SMS Brandname has been completed. Thank you!",
+  "validate.regex.brandname":"Brandname is not correct format",
+  "validate.regex.phone":"Phone number is incorrect, please check again",
+  "content.sms.brand": "Content SMS"
 }

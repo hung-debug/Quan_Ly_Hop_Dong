@@ -49,8 +49,9 @@ export class UserService {
 
   checkServiceStatusUrl: any = `${environment.apiUrl}/api/v1/customers/check-service-status`;
 
-  checkTokenDateUrl: any = `${environment.apiUrl}/api/v1/customers/password/recover/valid`
-  checkBrandnameUrl: any = `${environment.apiUrl}/api/v1/notification/checkBranchName`
+  checkTokenDateUrl: any = `${environment.apiUrl}/api/v1/customers/password/recover/valid`;
+  checkBrandnameUrl: any = `${environment.apiUrl}/api/v1/notification/checkBranchName`;
+  updateConfigBrandName: any = `${environment.apiUrl}/api/v1/organizations/branchName/`;
   token: any;
   customer_id: any;
   organization_id: any;
@@ -459,6 +460,23 @@ export class UserService {
     });
 
     return this.http.post<User>(this.checkBrandnameUrl, body, {
+      headers: headers,
+    });
+  }
+  
+  
+  updateConfigBrandname(data: any, orgId: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      brandName: data.brandName,
+      supplier: data.contractSupplier,
+      user: data.smsUser,
+      password: data.smsPass,
+    });
+
+    return this.http.put<User>(this.updateConfigBrandName + orgId, body, {
       headers: headers,
     });
   }

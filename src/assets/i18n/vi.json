@@ -803,8 +803,8 @@
   "confirm.public.phone.pki": "Cho phép hiển thị thông tin SĐT lên chữ ký",
   "config.brandname.sms": "Cấu hình Brandname gửi SMS",
   "error.unit.brandname.required": "Brandname không được để trống",
-  "error.unit.username.required": "Username không được để trống",
-  "error.unit.password.required": "Password không được để trống",
+  "error.unit.username.required": "Tên người dùng không được để trống",
+  "error.unit.password.required": "Mật khẩu không được để trống",
   "error.valid.brandname": "Brandname không được vượt quá 100 ký tự.",
   "error.valid.username": "Username không được vượt quá 100 ký tự.",
   "error.valid.password": "Password không được vượt quá 100 ký tự.",
@@ -814,5 +814,11 @@
   "time.authen": "Thời gian xác thực",
   "name.contract": "Tên hợp đồng",
   "number.contract": "Số hợp đồng",
-  "hsm.dialog.supplier": "Nhà cung cấp"
+  "hsm.dialog.supplier": "Nhà cung cấp",
+  "test.brandname.infor":"Kết nối brandname thất bại. Vui lòng kiểm tra lại thông tin",
+  "test.brandname.infor.success":"Kết nối thành công. Thông tin brandname đã được lưu lại",
+  "content.sms.brandname":"[Thong Bao] MobiFone eContract thong bao ket noi voi SMS Brandname da hoan tat. Tran trong cam on!",
+  "validate.regex.brandname":"Brandname không đúng định dạng",
+  "validate.regex.phone":"Số điện thoại không đúng, vui lòng kiểm tra lại",
+  "content.sms.brand": "Nội dung SMS"
 }

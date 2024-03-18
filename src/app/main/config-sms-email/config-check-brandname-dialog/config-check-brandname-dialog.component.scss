@@ -36,16 +36,17 @@ textarea {
   }
 }
 
-.check-button{
+.disable-button{
   border: 0px;
   border-radius: 5px;
   height: 33px;
   width: 100px;
   box-sizing: border-box;
   color: white;
-  background-color: #8B8B8B;
+  background-color: #8E9AB0;
   font-size: 13px;
   margin: 0 10px;
+  cursor: not-allowed;
 }
 .save-button{
   border: 0px;
