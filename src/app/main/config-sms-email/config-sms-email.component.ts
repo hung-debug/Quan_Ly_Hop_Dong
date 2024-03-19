@@ -99,8 +99,8 @@ export class ConfigSmsEmailComponent implements OnInit {
     this.brandnameForm.patchValue({
       brandName: !infoUser.organization.brandName && infoUser.organization.smsSendMethor == "API" ? this.brandname : infoUser.organization.brandName, // Cập nhật giá trị cho brandName
       contractSupplier: infoUser.organization.smsSendMethor == "API" ? "MOBIFONE" : "VNPT", // Cập nhật giá trị contractSupplier
-      smsUser: infoUser.organization.smsUser, // Cập nhật giá trị cho smsUser
-      smsPass: infoUser.organization.smsPass, // Cập nhật giá trị cho smsPass
+      smsUser: this.brandnameForm.value.brandName == this.brandname ? "" : infoUser.organization.smsUser, // Cập nhật giá trị cho smsUser
+      smsPass: this.brandnameForm.value.brandName == this.brandname ? "" : infoUser.organization.smsPass, // Cập nhật giá trị cho smsPass
     });
     this.ValidConfigBrandName()
     this.orgId = infoUser.organization.id;
@@ -254,8 +254,9 @@ export class ConfigSmsEmailComponent implements OnInit {
         value: this.soonExpireDay
       }]
 
-      this.contractService.editConfigExpirationDate(body).subscribe((response: any) => {
+      this.contractService.editConfigExpirationDate(body).subscribe((response: any) => {      
         this.spinner.hide();
+        this.toastService.showSuccessHTMLWithTimeout('update.success', '', 3000);
       })
     } else {
       //call api put khong truyen id
@@ -270,12 +271,13 @@ export class ConfigSmsEmailComponent implements OnInit {
         this.spinner.hide();
         this.isSoonExpireDay = true;
         this.idExpireDay = response[0].id;
+        this.toastService.showSuccessHTMLWithTimeout('update.success', '', 3000);
       })
     }
   }
   
   updateSmsEmail() {
-    this.contractService.updateConfigSmsOrg(this.groupArray.value).subscribe((response: any) => {   
+    this.contractService.updateConfigSmsOrg(this.groupArray.value).subscribe((response: any) => { 
       if (response.status == 200) {
         // this.infoConfigSms();
         this.toastService.showSuccessHTMLWithTimeout('update.success', '', 3000);
@@ -381,34 +383,34 @@ export class ConfigSmsEmailComponent implements OnInit {
       return;
     }
     
-    const data = {
-      title: 'check.brandname',
-      brandNameData: this.brandnameForm.value
-    };
-    const dialogRef = this.dialog.open(ConfigBrandnameDialogComponent, {
-      width: '600px',
-      data
-    })
-    dialogRef.afterClosed().subscribe((result: any) => {
-      let brandNameData = {
-        brandName: this.brandnameForm.value.brandName,
-        supplier: this.brandnameForm.value.contractSupplier,
-        user: this.brandnameForm.value.smsUser,
-        password: this.brandnameForm.value.smsPass,
-        phone: result.phone,
-        message: this.translate.instant('content.sms.brandname')
-      }    
-      this.userService.checkBrandname(brandNameData).subscribe(
-        (res: any) => {
-          if(res.status == true){           
+    // const data = {
+    //   title: 'check.brandname',
+    //   brandNameData: this.brandnameForm.value
+    // };
+    // const dialogRef = this.dialog.open(ConfigBrandnameDialogComponent, {
+    //   width: '600px',
+    //   data
+    // })
+    // dialogRef.afterClosed().subscribe((result: any) => {
+      // let brandNameData = {
+      //   brandName: this.brandnameForm.value.brandName,
+      //   supplier: this.brandnameForm.value.contractSupplier,
+      //   user: this.brandnameForm.value.smsUser,
+      //   password: this.brandnameForm.value.smsPass,
+      //   phone: result.phone,
+      //   message: this.translate.instant('content.sms.brandname')
+      // }    
+      // this.userService.checkBrandname(brandNameData).subscribe(
+      //   (res: any) => {
+          // if(res.status == true){           
             this.userService.updateConfigBrandname(this.brandnameForm.value,this.orgId).subscribe((res: any) =>{        
             })
             this.toastService.showSuccessHTMLWithTimeout('test.brandname.infor.success', '', 3000);
-          } else{
-            this.toastService.showErrorHTMLWithTimeout('test.brandname.infor', '', 3000);
-          }
-        }
-      )
-    })
+          // } else{
+          //   this.toastService.showErrorHTMLWithTimeout('test.brandname.infor', '', 3000);
+          // }
+      //   }
+      // )
+    // })
   }
 }

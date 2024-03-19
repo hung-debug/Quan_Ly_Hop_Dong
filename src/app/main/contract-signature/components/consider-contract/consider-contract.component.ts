@@ -4663,7 +4663,7 @@ export class ConsiderContractComponent
 
   pkiDialogSignOpen() {
     const data = {
-      title: 'CHỮ KÝ PKI2',
+      title: 'CHỮ KÝ PKI',
       type: 3,
       sign: this.signInfoPKIU,
       data: this.datas,
