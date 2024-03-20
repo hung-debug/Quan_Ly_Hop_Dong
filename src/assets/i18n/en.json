@@ -790,6 +790,7 @@
   "error.unit.brandname.required": "Brandname is required",
   "error.unit.username.required": "Username is required",
   "error.unit.password.required": "Password is required",
+  "error.supplier.required": "Supplier is required",
   "error.valid.brandname": "Brandname cannot exceed 100 characters.",
   "error.valid.username": "Username cannot exceed 100 characters.",
   "error.valid.password": "Password cannot exceed 100 characters.",
@@ -805,5 +806,7 @@
   "validate.regex.brandname":"Brandname is not correct format",
   "validate.regex.phone":"Phone number is incorrect, please check again",
   "content.sms.brand": "Content SMS",
-  "password.blank": "Password cannot be blank"
+  "password.blank": "Password cannot be blank",
+  "enter.supplier": "Choose supplier",
+  "check.config.brandname": "Please check the connection before saving the configuration"
 }

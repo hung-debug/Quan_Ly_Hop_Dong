@@ -805,6 +805,7 @@
   "error.unit.brandname.required": "Brandname không được để trống",
   "error.unit.username.required": "Tên người dùng không được để trống",
   "error.unit.password.required": "Mật khẩu không được để trống",
+  "error.supplier.required": "Nhà cung cấp không được để trống",
   "error.valid.brandname": "Brandname không được vượt quá 100 ký tự.",
   "error.valid.username": "Username không được vượt quá 100 ký tự.",
   "error.valid.password": "Password không được vượt quá 100 ký tự.",
@@ -821,5 +822,7 @@
   "validate.regex.brandname":"Brandname không đúng định dạng",
   "validate.regex.phone":"Số điện thoại không đúng, vui lòng kiểm tra lại",
   "content.sms.brand": "Nội dung SMS",
-  "password.blank":"Mật khẩu không được để trống"
+  "password.blank":"Mật khẩu không được để trống",
+  "enter.supplier": "Chọn nhà cung cấp",
+  "check.config.brandname": "Vui lòng kiểm tra kết nối trước khi thực hiện lưu cấu hình"
 }

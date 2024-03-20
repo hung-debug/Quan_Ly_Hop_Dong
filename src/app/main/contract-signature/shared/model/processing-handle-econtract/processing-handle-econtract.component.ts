@@ -68,7 +68,8 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     let timeNow = moment(new Date(), "YYYY/MM/DD").format("YYYY/MM/DD")
     this.isEndDate = this.endDate >= timeNow ? true : false;
     let participants = detailContract[0].participants;
-
+    console.log("participants",participants);
+    
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
       this.personCreate = response.createdBy.name;
 
@@ -99,10 +100,13 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           statusNumber: element.status,
           phone: element.phone,
           change_num: this.checkChangeNum(participants, element.id),
-          card_id: element.cardId
+          card_id: element.cardId,
+          user_in_organization: element.user_in_organization
         }
 
         this.is_list_name.push(data);
+        console.log("this.list.name",this.is_list_name);
+        
       })
 
       this.is_list_name.map((x: any) => {
