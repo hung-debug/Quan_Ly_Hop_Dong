@@ -462,10 +462,11 @@ export class FooterSignatureComponent implements OnInit {
 
   endContract() {
     if(this.type == 0) {
+      this.router.navigate(['/main/c/receive/wait-processing']);
+    } else {
+      // this.router.navigate(['/main/c/receive/wait-processing']);
       this.router.navigate(['/login']);
       this.contractService.deleteToken().subscribe();
-    } else {
-      this.router.navigate(['/main/c/receive/wait-processing']);
     }
   }
 

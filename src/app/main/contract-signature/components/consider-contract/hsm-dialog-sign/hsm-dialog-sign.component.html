@@ -43,7 +43,7 @@
 
       <div class="row" style="padding-top: 10px;">
         <div class="col-md-12">
-            <div class="label text-color">{{'password.level1' | translate}} <span class="required-title">*</span></div>
+            <div class="label text-color">{{(isHsmIcorp ? 'login.password' : 'password.level1') | translate}} <span class="required-title">*</span></div>
             <div class="input-line">
               <input class="input-text pw" *ngIf="this.fieldTextType1 === false" type="text" formControlName="pass1" id="pass1">
               <input class="input-text" *ngIf="this.fieldTextType1 === true" type="text" formControlName="pass1" id="pass1"/>
@@ -59,12 +59,12 @@
                 </div>
             </div>
             <div *ngIf="submitted && f.pass1.errors" class="invalid">
-              <div *ngIf="f.pass1.errors.required">{{'password.level1.blank' | translate}}</div>
+              <div *ngIf="f.pass1.errors.required">{{(isHsmIcorp ? 'password.blank' : 'password.level1.blank') | translate}}</div>
             </div>
         </div>
       </div>
 
-      <div class="row" style="padding-top: 10px;">
+      <div *ngIf="!isHsmIcorp" class="row" style="padding-top: 10px;">
         <div class="col-md-12">
             <div class="label text-color">{{'password.level2' | translate}} <span class="required-title">*</span></div>
             <div class="input-line">

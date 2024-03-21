@@ -1407,9 +1407,9 @@ export class ContractSignatureComponent implements OnInit {
               if (checkSign[i].result.success == false) {
                 this.spinner.hide();
   
-                if (checkSign[i].result.message == 'Tax code do not match!') {
+                if (checkSign[i].result.message == 'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng') {
                   this.toastService.showErrorHTMLWithTimeout(
-                    'taxcode.not.match',
+                    'taxcode.not.match.hsm',
                     '',
                     3000
                   );
@@ -1438,7 +1438,7 @@ export class ContractSignatureComponent implements OnInit {
                 } 
                 else if (checkSign[i].result.message == "false") {
                   this.toastService.showErrorHTMLWithTimeout(
-                    "Lỗi ký HSM",
+                    "Lấy thông tin chứng thư số thất bại",
                     '',
                     3000
                   );
@@ -1472,7 +1472,7 @@ export class ContractSignatureComponent implements OnInit {
             
           } catch (error) {
             this.spinner.hide()
-            return this.toastService.showErrorHTMLWithTimeout("Lỗi ký HSM","",3000)
+            return this.toastService.showErrorHTMLWithTimeout("Lấy thông tin chứng thư số thất bại","",3000)
           }
           //Call api ký nhiều hsm
         }

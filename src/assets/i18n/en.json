@@ -249,9 +249,9 @@
   "error.username.required": "Username is required",
   "error.password.required": "Password is required",
   "error.username.password": "Username or password is incorrect",
-  "error.password-new.required": "Password new is required",
-  "error.confirm-password-new.required": "Confirm password new is required",
-  "error.confirm-password-new.incorrect": "Confirm password new is incorrect",
+  "error.password-new.required": "New password is required",
+  "error.confirm-password-new.required": "Confirm new password is required",
+  "error.confirm-password-new.incorrect": "Confirm new password is incorrect",
   "error.contract.name.required": "Contract name is required",
   "error.name.required":"Name is required",
   "error.phone.required":"Phone is required",
@@ -807,5 +807,7 @@
   "validate.regex.phone":"Phone number is incorrect, please check again",
   "content.sms.brand": "Content SMS",
   "enter.supplier": "Choose supplier",
-  "check.config.brandname": "Please check the connection before saving the configuration"
+  "check.config.brandname": "Please check the connection before saving the configuration",
+  "password.blank": "Password cannot be blank",
+  "taxcode.not.match.hsm":"Tax code/CMT/CCCD does not match contract signing information"
 }
