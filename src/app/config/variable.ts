@@ -525,7 +525,10 @@ export var roleList =
         {label:'config.sms',value:'CAUHINH_SMS'},
 
         //Cấu hình ngày sắp hết hạn
-        {label:'config.day.expiration',value:'CAUHINH_NGAYSAPHETHAN'}
+        {label:'config.day.expiration',value:'CAUHINH_NGAYSAPHETHAN'},
+        
+        //Cấu hình brandname
+        {label:'config.brandname.role',value:'CAUHINH_BRANDNAME'},
 
     ]
   }
@@ -723,7 +726,10 @@ export var roleListNB =
         {label:'config.sms',value:'CAUHINH_SMS'},
 
         //Cấu hình ngày sắp hết hạn
-        {label:'config.day.expiration',value:'CAUHINH_NGAYSAPHETHAN'}
+        {label:'config.day.expiration',value:'CAUHINH_NGAYSAPHETHAN'},
+        
+        //Cấu hình brandname
+        {label:'config.brandname.role',value:'CAUHINH_BRANDNAME'},
 
     ]
   }

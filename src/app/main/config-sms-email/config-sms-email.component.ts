@@ -37,6 +37,7 @@ export class ConfigSmsEmailComponent implements OnInit {
 
   isRoleConfigSms: boolean = false;
   isRoleConfigExpirationDay: boolean = false;
+  isRoleConfigBrandname: boolean = false; // cấu hình brandname
   listConfig: any = [];
   lang: string;
   cols: any[];
@@ -95,13 +96,29 @@ export class ConfigSmsEmailComponent implements OnInit {
     const infoUser = await this.userService.getUserById(userId).toPromise();    
     
     this.listConfigBrandname = infoUser.organization;
-
+    if(this.listConfigBrandname.smsSendMethor == 'API'){
+      this.listConfigBrandname.contractSupplier = 'MOBIFONE'
+    } else{
+      this.listConfigBrandname.contractSupplier = 'VNPT'
+    }   
+    
     this.brandnameForm.patchValue({
       brandName: !infoUser.organization.brandName && infoUser.organization.smsSendMethor == "API" ? this.brandname : infoUser.organization.brandName, // Cập nhật giá trị cho brandName
       contractSupplier: infoUser.organization.smsSendMethor == "API" ? "MOBIFONE" : "VNPT", // Cập nhật giá trị contractSupplier
-      smsUser: this.brandnameForm.value.brandName == this.brandname ? "" : infoUser.organization.smsUser, // Cập nhật giá trị cho smsUser
-      smsPass: this.brandnameForm.value.brandName == this.brandname ? "" : infoUser.organization.smsPass, // Cập nhật giá trị cho smsPass
+      smsUser:  infoUser.organization.smsUser, // Cập nhật giá trị cho smsUser
+      smsPass:  infoUser.organization.smsPass, // Cập nhật giá trị cho smsPass
     });
+    
+    if(this.brandnameForm.value.brandName === this.brandname && this.brandnameForm.value.contractSupplier == "MOBIFONE"){
+      this.brandnameForm.get('smsUser')?.disable();
+      this.brandnameForm?.get('smsPass')?.disable();
+      
+      this.brandnameForm.patchValue({
+        smsUser:  "", // Cập nhật giá trị cho smsUser
+        smsPass:  "", // Cập nhật giá trị cho smsPass
+      });
+    }
+    
     this.ValidConfigBrandName()
     this.orgId = infoUser.organization.id;
     const inforRole = await this.roleService.getRoleById(infoUser.role_id).toPromise();
@@ -156,7 +173,7 @@ export class ConfigSmsEmailComponent implements OnInit {
     // this.spinner.show();
     this.isRoleConfigSms = listRole.some((element: any) => element.code == 'CAUHINH_SMS');
     this.isRoleConfigExpirationDay = listRole.some((element: any) => element.code == 'CAUHINH_NGAYSAPHETHAN');
-
+    this.isRoleConfigBrandname = listRole.some((element: any) => element.code == 'CAUHINH_BRANDNAME');
 
     //gọi api thông tin cấu hình sms của tổ chức
     this.infoConfigSms();
@@ -341,76 +358,51 @@ export class ConfigSmsEmailComponent implements OnInit {
   toggleFieldTextType() {
     this.fieldTextType = !this.fieldTextType;
   }
+  
+  onChangeBrandname(){
+    if(this.brandnameForm.value.brandName == this.brandname && this.brandnameForm.value.contractSupplier == "MOBIFONE"){
+      this.brandnameForm?.get('smsUser')?.disable();    
+      this.brandnameForm?.get('smsPass')?.disable();
+    }else{
+      this.brandnameForm?.get('smsUser')?.enable();    
+      this.brandnameForm?.get('smsPass')?.enable();
+    }
+  }
+  
+  onChangeSupplier(){
+    if(this.brandnameForm.value.brandName == this.brandname && this.brandnameForm.value.contractSupplier == "MOBIFONE"){
+      this.brandnameForm?.get('smsUser')?.disable();    
+      this.brandnameForm?.get('smsPass')?.disable();
+    }else{
+      this.brandnameForm?.get('smsUser')?.enable();    
+      this.brandnameForm?.get('smsPass')?.enable();
+    }
+  }
 
   
   ValidConfigBrandName(){
-    if(this.brandnameForm.value.brandName == this.brandname && this.brandnameForm.value.contractSupplier == "MOBIFONE"){
-      this.brandnameForm?.get('smsUser')?.disable();
-      this.brandnameForm?.get('smsPass')?.disable();
-      this.isDisable = true;
-    } else{
-      this.brandnameForm?.get('smsUser')?.enable();
-      this.brandnameForm?.get('smsPass')?.enable();
+    this.brandnameForm.valueChanges.subscribe(value => { 
       this.isDisable = false;
-    }
-    this.brandnameForm?.get('brandName')?.valueChanges.subscribe(brandName => {    
-      if (brandName === this.brandname) {
-        this.brandnameForm.get('smsUser')?.disable();
-        this.brandnameForm?.get('smsPass')?.disable();
+      if(this.listConfigBrandname.brandName == value.brandName && this.brandnameForm.value.contractSupplier == this.listConfigBrandname.contractSupplier){
         this.isDisable = true;
-      } else {
-        this.brandnameForm.get('smsUser')?.enable();
-        this.brandnameForm?.get('smsPass')?.enable();
-        this.isDisable = false;
+      } 
+      if(this.brandnameForm.value.brandName === this.brandname && this.brandnameForm.value.contractSupplier == "MOBIFONE"){
+        this.brandnameForm.patchValue({
+          smsUser:  "", // Cập nhật giá trị cho smsUser
+          smsPass:  "", // Cập nhật giá trị cho smsPass
+        });
       }
-    });
-    
-    this.brandnameForm?.get('contractSupplier')?.valueChanges.subscribe(contractSupplier => {
-      if (contractSupplier === "MOBIFONE") {
-        this.brandnameForm.get('smsUser')?.disable();
-        this.brandnameForm?.get('smsPass')?.disable();
-        this.isDisable = true;
-      } else {
-        this.brandnameForm.get('smsUser')?.enable();
-        this.brandnameForm?.get('smsPass')?.enable();
-        this.isDisable = false;
-      }
-    });
+    })
   }
   
   configBrandname(){
     if (this.brandnameForm.invalid) {
       return;
     }
-    
-    // const data = {
-    //   title: 'check.brandname',
-    //   brandNameData: this.brandnameForm.value
-    // };
-    // const dialogRef = this.dialog.open(ConfigBrandnameDialogComponent, {
-    //   width: '600px',
-    //   data
-    // })
-    // dialogRef.afterClosed().subscribe((result: any) => {
-      // let brandNameData = {
-      //   brandName: this.brandnameForm.value.brandName,
-      //   supplier: this.brandnameForm.value.contractSupplier,
-      //   user: this.brandnameForm.value.smsUser,
-      //   password: this.brandnameForm.value.smsPass,
-      //   phone: result.phone,
-      //   message: this.translate.instant('content.sms.brandname')
-      // }    
-      // this.userService.checkBrandname(brandNameData).subscribe(
-      //   (res: any) => {
-          // if(res.status == true){           
-            this.userService.updateConfigBrandname(this.brandnameForm.value,this.orgId).subscribe((res: any) =>{        
-            })
-            this.toastService.showSuccessHTMLWithTimeout('test.brandname.infor.success', '', 3000);
-          // } else{
-          //   this.toastService.showErrorHTMLWithTimeout('test.brandname.infor', '', 3000);
-          // }
-      //   }
-      // )
-    // })
+         
+    this.userService.updateConfigBrandname(this.brandnameForm.value,this.orgId).subscribe((res: any) =>{    
+      this.isDisable = true;   
+      this.toastService.showSuccessHTMLWithTimeout('test.brandname.infor.success', '', 3000); 
+    })
   }
 }
