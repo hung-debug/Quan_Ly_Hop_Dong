@@ -701,6 +701,7 @@
   "contract.expired":"Hợp đồng quá hạn",
   "contract.completed":"Hợp đồng hoàn thành",
   "config.day.expiration":"Cấu hình ngày sắp hết hạn",
+  "config.brandname.role":"Cấu hình brandname",
   "role.config.sms.email":"Nhóm chức năng cấu hình SMS/Email",
   "find.partner.personal": "Tìm kiếm đối tác cá nhân",
   "find.partner.organization": "Tìm kiếm đối tác tổ chức",
