@@ -119,7 +119,7 @@ export class ConfigSmsEmailComponent implements OnInit {
       });
     }
     
-    this.ValidConfigBrandName()
+    this.ValidConfigBrandName();
     this.orgId = infoUser.organization.id;
     const inforRole = await this.roleService.getRoleById(infoUser.role_id).toPromise();
     const listRole = inforRole.permissions;
@@ -363,6 +363,8 @@ export class ConfigSmsEmailComponent implements OnInit {
     if(this.brandnameForm.value.brandName == this.brandname && this.brandnameForm.value.contractSupplier == "MOBIFONE"){
       this.brandnameForm?.get('smsUser')?.disable();    
       this.brandnameForm?.get('smsPass')?.disable();
+      this.brandnameForm.controls['smsUser'].setValue("");
+      this.brandnameForm.controls['smsPass'].setValue("");
     }else{
       this.brandnameForm?.get('smsUser')?.enable();    
       this.brandnameForm?.get('smsPass')?.enable();
@@ -373,6 +375,8 @@ export class ConfigSmsEmailComponent implements OnInit {
     if(this.brandnameForm.value.brandName == this.brandname && this.brandnameForm.value.contractSupplier == "MOBIFONE"){
       this.brandnameForm?.get('smsUser')?.disable();    
       this.brandnameForm?.get('smsPass')?.disable();
+      this.brandnameForm.controls['smsUser'].setValue("");
+      this.brandnameForm.controls['smsPass'].setValue("");
     }else{
       this.brandnameForm?.get('smsUser')?.enable();    
       this.brandnameForm?.get('smsPass')?.enable();
@@ -380,17 +384,11 @@ export class ConfigSmsEmailComponent implements OnInit {
   }
 
   ValidConfigBrandName(){
-    this.brandnameForm.valueChanges.subscribe(value => { 
+    this.brandnameForm.valueChanges.subscribe(value => {    
       this.isDisable = false;
       if((this.listConfigBrandname.brandName == value.brandName && this.brandnameForm.value.contractSupplier == this.listConfigBrandname.contractSupplier && this.listConfigBrandname.smsUser == value.smsUser && this.listConfigBrandname.smsPass == value.smsPass)){
         this.isDisable = true;
-      } 
-      if(this.brandnameForm.value.brandName === this.brandname && this.brandnameForm.value.contractSupplier == "MOBIFONE"){
-        this.brandnameForm.patchValue({
-          smsUser:  "", // Cập nhật giá trị cho smsUser
-          smsPass:  "", // Cập nhật giá trị cho smsPass
-        });
-      }
+      }      
     })
   }
   

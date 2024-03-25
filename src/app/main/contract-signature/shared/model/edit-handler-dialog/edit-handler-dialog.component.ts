@@ -45,6 +45,7 @@ export class EditHandlerComponent implements OnInit {
   name: any;
   recipientId: any;
   sign_type: any;
+  user_in_organization: any;
   id_sign_type: any;
   id: any;
   card_id: any;
@@ -86,8 +87,7 @@ export class EditHandlerComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
-
+  ngOnInit(): void {  
     if (environment.flag == 'NB') {
       this.site = 'NB';
     } else if (environment.flag == 'KD') {
@@ -111,7 +111,8 @@ export class EditHandlerComponent implements OnInit {
     this.id = this.data.id;
     this.role = this.data.role;
     this.status = this.data.status;
-    this.recipientId = this.data.id
+    this.recipientId = this.data.id;
+    this.user_in_organization = this.data.user_in_organization;
     // this.contractid = this.data.is_data_contract.id;
 
     this.dropdownSignTypeSettings = {
@@ -182,7 +183,8 @@ export class EditHandlerComponent implements OnInit {
       phone: this.phone,
       login_by: login_by,
       card_id: [2,4,5,6,8].includes(this.dataSign[0]?.id) ? this.card_id : "",
-      sign_type: this.dataSign
+      sign_type: this.dataSign,
+      user_in_organization: this.user_in_organization
       // locale: this.locale,
     }; 
 
@@ -211,10 +213,20 @@ export class EditHandlerComponent implements OnInit {
             }
           } else {
             this.toastService.showSuccessHTMLWithTimeout(this.translate.instant('update.success'), "", 3000);
-            dataUpdate = { ...dataUpdate, "change_num": this.data.change_num + 1 }
-            this.dialogRef.close(dataUpdate);
+
             // this.router.navigate(['/main/form-contract/detail/' + this.id]);
+            let dataOrg : any = ""
+            this.contractService.viewFlowContract(this.data.contract_id).subscribe(response =>{
+              response.recipients.forEach((element: any) => {     
+                if(element.id == this.data.id){
+                 dataOrg = element.user_in_organization
+                 dataUpdate = { ...dataUpdate, "change_num": this.data.change_num + 1, user_in_organization: dataOrg }
+                 this.dialogRef.close(dataUpdate);
+                }
+              })
+            })
           }
+          
         }
       )
     } else {

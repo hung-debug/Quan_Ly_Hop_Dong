@@ -790,6 +790,8 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   dataParnterOrganization() {
+    let determineClone = this.is_determine_clone.filter((p: any) => (p.type == 2 || p.type == 3) && p.recipients.some((q: any) => q.status == 1 && q.email == this.emailUser))
+    this.datas.is_data_object_signature = determineClone[0]?.recipients.filter((item: any) => item.role !== 1)
     return this.is_determine_clone.filter((p: any) => (p.type == 2 || p.type == 3) && p.recipients.some((q: any) => q.status == 1 && q.email == this.emailUser));
   }
 
