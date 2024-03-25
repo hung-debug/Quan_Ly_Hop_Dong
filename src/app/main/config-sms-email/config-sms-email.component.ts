@@ -379,11 +379,10 @@ export class ConfigSmsEmailComponent implements OnInit {
     }
   }
 
-  
   ValidConfigBrandName(){
     this.brandnameForm.valueChanges.subscribe(value => { 
       this.isDisable = false;
-      if(this.listConfigBrandname.brandName == value.brandName && this.brandnameForm.value.contractSupplier == this.listConfigBrandname.contractSupplier){
+      if((this.listConfigBrandname.brandName == value.brandName && this.brandnameForm.value.contractSupplier == this.listConfigBrandname.contractSupplier && this.listConfigBrandname.smsUser == value.smsUser && this.listConfigBrandname.smsPass == value.smsPass)){
         this.isDisable = true;
       } 
       if(this.brandnameForm.value.brandName === this.brandname && this.brandnameForm.value.contractSupplier == "MOBIFONE"){
