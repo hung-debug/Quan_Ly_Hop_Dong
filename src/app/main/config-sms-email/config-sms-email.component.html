@@ -38,7 +38,7 @@
       </form>
 
       <div>
-        <div style="justify-content: center;padding-top: 20px; margin-left: 95%;">
+        <div class="save-btn">
           <button [class]="isDisableConfigSmsEmail? 'disable-button' : 'save-button'" [disabled]="isDisableConfigSmsEmail" (click)="updateSmsEmail()">{{'btn.save' | translate}}</button>
         </div>
       </div>
@@ -133,7 +133,7 @@
             </div>
           </div>
         </form>
-        <div style="justify-content: center;padding-top: 20px; margin-left: 94%; margin-bottom: 20px;">
+        <div class="save-btn">
           <button [class]="isDisable? 'disable-button' : 'save-button'" [disabled]="isDisable" (click)="configBrandname()" >{{'btn.save' | translate}}</button>
         </div>
       </div>
