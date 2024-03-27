@@ -120,12 +120,12 @@
                 </button>
               </div>
 
-              <div class="form-group sign-up">
+              <!-- <div class="form-group sign-up">
                 <b>{{ "signup.not_account" | translate }}?</b>&nbsp;<a
                   href="/signup"
                   >{{ "signup" | translate }}</a
                 >
-              </div>
+              </div> -->
             </form>
           </div>
         </div>
@@ -229,11 +229,11 @@
               </div>
             </div>
 
-            <div class="form-group forgot-password">
+            <!-- <div class="form-group forgot-password">
               <a href="/forgot-password"
                 >{{ "login.forgot_password" | translate }}?
               </a>
-            </div>
+            </div> -->
 
             <div class="form-group">
               <p class="alert alert-danger" role="alert" *ngIf="error" style="text-align: center">
@@ -247,12 +247,18 @@
               </button>
             </div>
 
-            <div class="form-group sign-up">
+            <div class="form-group sub-login">
+              <button class="btn btn-lg btn-block" style="background-color: #ed1c24;" (click)="loginSSO()">
+                {{ "Đăng nhập SSO" | translate }}
+              </button>
+            </div>
+
+            <!-- <div class="form-group sign-up">
               <b>{{ "signup.not_account" | translate }}?</b>&nbsp;<a
                 href="/signup"
                 >{{ "signup" | translate }}</a
               >
-            </div>
+            </div> -->
           </form>
         </div>
 
