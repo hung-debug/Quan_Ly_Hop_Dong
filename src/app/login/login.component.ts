@@ -342,27 +342,79 @@ export class LoginComponent implements OnInit, AfterViewInit {
       this.mobile = false;
     }
     const ssoToken: any = JSON.parse(JSON.stringify(localStorage.getItem('sso_token')) || '') ?? ''
-    if (this.keycloakService.getKeycloakInstance().authenticated || ssoToken) {
+    if ((this.keycloakService.getKeycloakInstance().authenticated || ssoToken) && (window.location.href.includes('realms/sso-mobifone') || window.localStorage.href.includes('/login?type=mobifone-sso')) ) {
       this.isSSOlogin = true
       try {
         let accessToken: any = this.keycloakService.getKeycloakInstance().token
         let ssoIdToken: any = this.keycloakService.getKeycloakInstance().idToken
         let res: any = await this.authService.getAuthencationToken(accessToken, ssoIdToken,0)
-        try {
-          if (res.code == "00") {
+        switch(res.code) {
+          case '00':
+            this.toastService.showSuccessHTMLWithTimeout('Đăng nhập thành công, mở sang trang chủ hệ thống eContract.','',3000)
             setTimeout(() => {
               this.router.navigate(['/main/dashboard'])
               this.isSSOlogin = false
             }, 1000);
-          }
-        } catch (error) {
-          this.isSSOlogin = false
-          this.toastService.showErrorHTMLWithTimeout("Đăng nhập SSO thất bại","",3000)
-          this.router.navigate(['/login'])
+            break;
+          case '01':
+            this.toastService.showErrorHTMLWithTimeout('Tài khoản không hoạt động','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '02':
+            this.toastService.showErrorHTMLWithTimeout('Tổ chức không hoạt động','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '03':
+            this.toastService.showErrorHTMLWithTimeout('Tên đăng nhập hoặc mật khẩu không đúng','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '04':
+            this.toastService.showErrorHTMLWithTimeout('Token đăng nhập bằng SSO không đúng','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '05':
+            this.toastService.showErrorHTMLWithTimeout('Tên đăng nhập hoặc mật khẩu không được phép để trống','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '06':
+            this.toastService.showErrorHTMLWithTimeout('Lấy thông tin tài khoản trên SSO thất bại','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '07':
+            this.toastService.showErrorHTMLWithTimeout('Bạn chưa được SSO cấp quyền đăng nhập vào hệ thống eContract','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '08':
+            this.toastService.showErrorHTMLWithTimeout('Tài khoản không tồn tại trong hệ thống eContract','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '09':
+            this.toastService.showErrorHTMLWithTimeout('Lấy thông tin từ SSO thất bại','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '100':
+            this.toastService.showErrorHTMLWithTimeout('Lỗi hệ thống','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '101':
+            this.toastService.showErrorHTMLWithTimeout('Kết nối SSO thất bại','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
         }
       } catch (error) {
         this.isSSOlogin = false
-        this.toastService.showErrorHTMLWithTimeout("Đăng nhập SSO thất bại 401","",3000)
+        this.toastService.showErrorHTMLWithTimeout("Đăng nhập SSO thất bại","",3000)
         this.router.navigate(['/login'])
       }
     } else { 

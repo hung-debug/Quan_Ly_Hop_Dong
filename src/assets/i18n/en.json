@@ -783,5 +783,6 @@
   "sign.cert.err": "Error signing server digital certificate",
   "upload.contract.file.err": "Uploading contract file failed",
   "upload.contract.file.success": "Uploaded contract file successfully",
-  "select.contract.file": "Select contract file (PDF, DOC, DOCX, PNG, JPG, JPEG, ZIP, RAR, TXT, XLS, XLSX)"
+  "select.contract.file": "Select contract file (PDF, DOC, DOCX, PNG, JPG, JPEG, ZIP, RAR, TXT, XLS, XLSX)",
+  "btn.sso.login": "SSO login"
 }
