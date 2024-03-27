@@ -20,7 +20,10 @@ export interface Unit {
   status: string,
   short_name: string,
   parent_id: string,
-  ceca_push_mode: any
+  ceca_push_mode: any,
+  brandName: any,
+  smsUser: any,
+  smsPass: any,
 }
 @Injectable({
   providedIn: 'root'
@@ -81,7 +84,10 @@ export class UnitService {
       fax: datas.fax,
       status: datas.status,
       parent_id: datas.parent_id,
-      tax_code: datas.tax_code
+      tax_code: datas.tax_code,
+      // brandName: datas.brandName,
+      // smsUser: datas.smsUser,
+      // smsPass: datas.smsPass,
     });
 
     return this.http.post<any>(this.addUnitUrl, body, {'headers': headers});
@@ -123,7 +129,10 @@ export class UnitService {
       status: datas.status,
       parent_id: datas.parent_id,
       path: datas.path,
-      tax_code: datas.tax_code
+      tax_code: datas.tax_code,
+      // brandName: datas.brandName,
+      // smsUser: datas.smsUser,
+      // smsPass: datas.smsPass,
     });
     return this.http.put<any>(this.updateUnitUrl + datas.id, body, {'headers': headers});
   }

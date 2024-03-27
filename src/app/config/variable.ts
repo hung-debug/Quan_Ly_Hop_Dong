@@ -491,7 +491,10 @@ export var roleList =
       {label: 'role.report.history.send.sms', value:'BAOCAO_TRANGTHAIGUI_SMS'},
 
       //Báo cáo trạng thái gửi Email
-      {label: 'role.report.history.send.email', value:'BAOCAO_TRANGTHAIGUI_EMAIL'}
+      {label: 'role.report.history.send.email', value:'BAOCAO_TRANGTHAIGUI_EMAIL'},
+      
+      //Báo cáo xác thực eKYC
+      {label: 'report.ekyc', value:'BAOCAO_EKYC'}
     ]
 
   },
@@ -522,7 +525,10 @@ export var roleList =
         {label:'config.sms',value:'CAUHINH_SMS'},
 
         //Cấu hình ngày sắp hết hạn
-        {label:'config.day.expiration',value:'CAUHINH_NGAYSAPHETHAN'}
+        {label:'config.day.expiration',value:'CAUHINH_NGAYSAPHETHAN'},
+        
+        //Cấu hình brandname
+        {label:'config.brandname.role',value:'CAUHINH_BRANDNAME'},
 
     ]
   }
@@ -687,7 +693,9 @@ export var roleListNB =
       //Báo cáo trạng thái gửi Sms
       {label: 'role.report.history.send.sms', value:'BAOCAO_TRANGTHAIGUI_SMS'},
       //Báo cáo trạng thái gửi Email
-      {label: 'role.report.history.send.email', value:'BAOCAO_TRANGTHAIGUI_EMAIL'}
+      {label: 'role.report.history.send.email', value:'BAOCAO_TRANGTHAIGUI_EMAIL'},
+      //Báo cáo xác thực eKYC
+      {label: 'report.ekyc', value:'BAOCAO_EKYC'}
     ]
 
   },
@@ -718,7 +726,10 @@ export var roleListNB =
         {label:'config.sms',value:'CAUHINH_SMS'},
 
         //Cấu hình ngày sắp hết hạn
-        {label:'config.day.expiration',value:'CAUHINH_NGAYSAPHETHAN'}
+        {label:'config.day.expiration',value:'CAUHINH_NGAYSAPHETHAN'},
+        
+        //Cấu hình brandname
+        {label:'config.brandname.role',value:'CAUHINH_BRANDNAME'},
 
     ]
   }

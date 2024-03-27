@@ -345,7 +345,7 @@ export class ContractService {
           '&size=' +
           size;
       } else {
-        listContractUrl = this.listContractOrgUrl + '?organization_id=' + organization_id + '&keyword=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' +
+        listContractUrl = this.listContractOrgUrl + '?organization_id=' + organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' +
           filter_contract_no.trim() + '&from_date=' + filter_from_date + '&to_date=' + filter_to_date + '&status=' + filter_status + '&remain_day=' + remain_day +
           '&page=' + page + '&size=' + size;
       }
@@ -1123,7 +1123,7 @@ export class ContractService {
     });
   }
 
-  signPkiDigital(phone: any, networkCode: any, recipientId: any, nameContract: any, image_base64: any, isTimestamp: any) {
+  signPkiDigital(phone: any, networkCode: any, recipientId: any, nameContract: any, image_base64: any, isTimestamp: any, hidden_phone: boolean) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -1135,7 +1135,8 @@ export class ContractService {
       prompt: `Bạn có yêu cầu ký số hợp đồng ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
       reason: 'reason',
       image_base64: image_base64,
-      isTimestamp: isTimestamp
+      isTimestamp: isTimestamp,
+      hidden_phone: hidden_phone,
     };
     return this.http
       .post<any>(this.signFilePKI + recipientId, body, { headers: headers })
@@ -1157,7 +1158,8 @@ export class ContractService {
       image_base64: datas.imageBase64,
       // isTimestamp: isTimestamp
       field: datas.field,
-      type: boxType
+      type: boxType,
+      supplier: datas.supplier
     });
 
     return this.http

@@ -23,7 +23,18 @@ export class HsmDialogSignComponent implements OnInit {
   submitted = false;
   currentUser: any;
   taxCode: any;
-
+  hsmSupplier: any;
+  suppliers: any[] = [
+    {
+      id: 'mobifone',
+      name: 'MobiFone'
+    },
+    {
+      id: 'icorp',
+      name: 'ICORP'
+    }
+  ];
+  isHsmIcorp: boolean = false
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -36,6 +47,7 @@ export class HsmDialogSignComponent implements OnInit {
     private spinner: NgxSpinnerService,
   ) {
     this.myForm = this.fbd.group({
+      hsmSupplier: this.fbd.control("", [Validators.required]),
       taxCode: this.fbd.control("", [Validators.required,
       Validators.pattern(parttern.cardid)
         // Validators.pattern(parttern_input.taxCode_form) ||
@@ -48,13 +60,9 @@ export class HsmDialogSignComponent implements OnInit {
     });
   }
 
-
-
   ngOnInit(): void {
     this.datas = this.data;
     
-
-
     this.user = this.userService.getInforUser();
 
     this.id = this.user.customer_id;
@@ -67,6 +75,7 @@ export class HsmDialogSignComponent implements OnInit {
     if (this.user.organization_id != 0) {
       this.userService.getUserById(this.id).subscribe((response) => {
         this.myForm = this.fbd.group({
+          hsmSupplier: this.fbd.control('mobifone', [Validators.required]),
           taxCode: this.fbd.control(response.tax_code, [
             Validators.required,
             Validators.pattern(parttern.cardid)
@@ -79,6 +88,7 @@ export class HsmDialogSignComponent implements OnInit {
           pass1: this.fbd.control(response.hsm_pass, [Validators.required]),
           pass2: this.fbd.control("", [Validators.required])
         });
+        this.setHsmDialogFormBySupplier()
       })
 
     } else {
@@ -92,6 +102,7 @@ export class HsmDialogSignComponent implements OnInit {
             let taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
 
             this.myForm = this.fbd.group({
+              hsmSupplier: this.fbd.control('mobifone', [Validators.required]),
               taxCode: this.fbd.control(taxCodePartnerStep2, 
                 [Validators.required, 
                   Validators.pattern(parttern.cardid)
@@ -103,13 +114,12 @@ export class HsmDialogSignComponent implements OnInit {
               pass1: this.fbd.control("", [Validators.required]),
               pass2: this.fbd.control("", [Validators.required])
             })
-
             break;
           }
         }
+        this.setHsmDialogFormBySupplier()
       })
     }
-
     if (!this.data.id)
       this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe((response) => {
         const lengthRes = response.recipients.length;
@@ -127,6 +137,26 @@ export class HsmDialogSignComponent implements OnInit {
       })
   }
 
+  removePass2FormControl() {
+    this.myForm.removeControl('pass2');
+  }
+
+  addPass2FormControl() {
+    this.myForm.addControl('pass2', this.fbd.control("",[Validators.required]));
+  }
+
+  setHsmDialogFormBySupplier() {
+    this.myForm?.get("hsmSupplier")?.valueChanges.subscribe(value => {
+      if (value == "icorp") {
+        this.isHsmIcorp = true
+        this.removePass2FormControl()
+      } else {
+        this.isHsmIcorp = false
+        this.addPass2FormControl()
+      }
+    })
+  }
+
   fieldTextType1: boolean = false;
   toggleFieldTextType1() {
     this.fieldTextType1 = !this.fieldTextType1;
@@ -139,7 +169,6 @@ export class HsmDialogSignComponent implements OnInit {
   cardId: any;
   async onSubmit() {
     this.submitted = true;
-
     if (this.myForm.invalid) {
       return;
     }
@@ -225,14 +254,15 @@ export class HsmDialogSignComponent implements OnInit {
             this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
           })
   
-        const data = {
+        const data: any = {
+          supplier: this.myForm.value.hsmSupplier,
           ma_dvcs: this.myForm.value.taxCode,
           username: this.myForm.value.username,
           password: this.myForm.value.pass1,
-          password2: this.myForm.value.pass2
         };
-  
-        
+        if (!this.isHsmIcorp) {
+          data["password2"] = this.myForm.value.pass2
+        }
   
         if (!this.data.id) {
           //Trường hợp không phải ký nhiều
@@ -250,12 +280,17 @@ export class HsmDialogSignComponent implements OnInit {
         }
       })
     } else {
-      const data = {
+      const data: any = {
+        supplier: this.myForm.value.hsmSupplier,
         ma_dvcs: this.myForm.value.taxCode,
         username: this.myForm.value.username,
         password: this.myForm.value.pass1,
-        password2: this.myForm.value.pass2
+        // password2: this.myForm.value.pass2
       };
+
+      if (!this.isHsmIcorp) {
+        data["password2"] = this.myForm.value.pass2
+      }
 
       this.dialogRef.close(data);
     }

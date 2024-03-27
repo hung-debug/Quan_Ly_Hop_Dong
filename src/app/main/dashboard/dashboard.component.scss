@@ -124,3 +124,7 @@ h3{
     height: 90%!important;
   }
 }
+
+::ng-deep #toast-container > div {
+  width: 490px;
+}

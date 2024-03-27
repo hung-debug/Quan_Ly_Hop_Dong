@@ -30,6 +30,7 @@ export class AddUnitComponent implements OnInit {
   orgList: Array<any> = [];
   submitted = false;
   get f() { return this.addForm.controls; }
+  fieldTextType: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -73,6 +74,7 @@ export class AddUnitComponent implements OnInit {
       });
       this.unitService.getUnitById(this.data.id).subscribe(
         data => {
+          
           this.addForm = this.fbd.group({
             nameOrg: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.contract_name_valid)]),
             short_name: this.fbd.control(data.short_name, [Validators.pattern(parttern_input.new_input_form)]),
@@ -124,6 +126,10 @@ export class AddUnitComponent implements OnInit {
         taxCode: this.fbd.control("",[Validators.pattern(parttern.cardid)]),
       });
     }
+  }
+  
+  toggleFieldTextType() {
+    this.fieldTextType = !this.fieldTextType;
   }
 
   convertFileCeCa(ceCAPushMode: any): any {
@@ -311,7 +317,7 @@ export class AddUnitComponent implements OnInit {
       status: this.addForm.value.status,
       parent_id: this.addForm.value.parent_id,
       path: this.addForm.value.path,
-      tax_code: this.addForm.value.taxCode
+      tax_code: this.addForm.value.taxCode,
     }
 
     this.spinner.show();
