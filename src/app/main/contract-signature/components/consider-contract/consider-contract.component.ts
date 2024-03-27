@@ -1453,6 +1453,7 @@ export class ConsiderContractComponent
                   haveSignHsm = true;
         
                   this.dataHsm = {
+                    supplier: '',
                     ma_dvcs: '',
                     username: '',
                     password: '',
@@ -2239,7 +2240,8 @@ export class ConsiderContractComponent
           this.recipientId,
           this.datas.is_data_contract.name,
           image_base64,
-          this.isTimestamp
+          this.isTimestamp,
+          this.dataNetworkPKI.hidden_phone ? false : true,
         );
         // await this.signContractSimKPI();
         if (!checkSign || (checkSign && !checkSign.success)) {
@@ -2359,6 +2361,7 @@ export class ConsiderContractComponent
           if (!this.mobile) {
             this.dataHsm = {
               field: fieldHsm,
+              supplier: this.dataHsm.supplier,
               ma_dvcs: this.dataHsm.ma_dvcs,
               username: this.dataHsm.username,
               password: this.dataHsm.password,
@@ -2369,6 +2372,7 @@ export class ConsiderContractComponent
           } else {
             this.dataHsm = {
               field: fieldHsm,
+              supplier: this.dataHsm.supplier,
               ma_dvcs: this.dataHsm.ma_dvcs,
               username: this.dataHsm.username,
               password: this.dataHsm.password,
@@ -2377,7 +2381,6 @@ export class ConsiderContractComponent
                             (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
           }
-
           if (fileC && objSign.length) {
             if (!this.mobile || this.mobile) {
               const checkSign = await this.contractService.signHsm(
@@ -2394,11 +2397,25 @@ export class ConsiderContractComponent
                     3000
                   );
                 } else if (checkSign.message) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    checkSign.message,
-                    '',
-                    3000
-                  );
+                  if (checkSign.message.includes('Cannot authenticate hsm')) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Không thể xác thực hsm',
+                      '',
+                      3000
+                    );
+                  } else if (checkSign.message.includes('Tax code do not match')) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'taxcode.not.match',
+                      '',
+                      3000
+                    );
+                  } else {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      checkSign.message,
+                      '',
+                      3000
+                    );
+                  }
                 }
 
                 return false;
@@ -4521,6 +4538,7 @@ export class ConsiderContractComponent
       dialogConfig.hasBackdrop = true;
       dialogConfig.data = data;
       dialogConfig.panelClass = 'custom-dialog-container';
+      dialogConfig.autoFocus = false
 
       const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
 
@@ -4531,6 +4549,7 @@ export class ConsiderContractComponent
         this.cardId = result.ma_dvcs.trim();
 
         if (result) {
+          this.dataHsm.supplier = result.supplier
           this.dataHsm.ma_dvcs = result.ma_dvcs;
           this.dataHsm.username = result.username;
           this.dataHsm.password = result.password;
@@ -4659,16 +4678,18 @@ export class ConsiderContractComponent
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(async (result: any) => {
-      if (result && result.phone && result.networkCode) {
+      if (result && result.phone && result.networkCode) {        
         this.loadingText =
           'Yêu cầu ký đã được gửi tới số điện thoại của bạn.\n Vui lòng Xác nhận để thực hiện dịch vụ';
         this.signInfoPKIU.phone = result.phone;
         this.signInfoPKIU.phone_tel = result.phone_tel;
         this.signInfoPKIU.networkCode = result.networkCode;
+        this.signInfoPKIU.hidden_phone = result.hidden_phone;
         if (result.phone && result.phone_tel && result.networkCode) {
           this.dataNetworkPKI = {
             networkCode: this.signInfoPKIU.networkCode,
             phone: this.signInfoPKIU.phone,
+            hidden_phone: this.signInfoPKIU.hidden_phone,
           };
 
           await this.signContractSubmit();

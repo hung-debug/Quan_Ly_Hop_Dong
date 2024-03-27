@@ -6,6 +6,7 @@ import { networkList } from 'src/app/config/variable';
 import { ContractService } from 'src/app/service/contract.service';
 import {ToastService} from "../../../../../service/toast.service";
 import { NgxSpinnerService } from "ngx-spinner";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-pki-dialog-sign',
@@ -24,6 +25,9 @@ export class PkiDialogSignComponent implements OnInit {
   networkCompany: any = 0;
   phoneNum: any;
   type: any = 0;
+  hidden_phone: boolean = true;
+  environment: any = '';
+  
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -35,6 +39,7 @@ export class PkiDialogSignComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.environment = environment
     this.nl = networkList;
     this.datas = this.data;
     this.phoneNum = this.datas?.sign?.phone;
@@ -128,6 +133,7 @@ export class PkiDialogSignComponent implements OnInit {
       phone: resPhone,
       networkCode: this.networkCompany,
       phone_tel: this.networkCode,
+      hidden_phone: this.hidden_phone,
     };
 
     

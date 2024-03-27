@@ -7,7 +7,6 @@ import { ContractService } from 'src/app/service/contract.service';
 import { DialogReasonRejectedComponent } from '../dialog-reason-rejected/dialog-reason-rejected.component';
 import { EditHandlerComponent } from '../edit-handler-dialog/edit-handler-dialog.component';
 import { ToastService } from 'src/app/service/toast.service';
-import { log } from 'console';
 @Component({
   selector: 'app-processing-handle-econtract',
   templateUrl: './processing-handle-econtract.component.html',
@@ -68,7 +67,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     let timeNow = moment(new Date(), "YYYY/MM/DD").format("YYYY/MM/DD")
     this.isEndDate = this.endDate >= timeNow ? true : false;
     let participants = detailContract[0].participants;
-
+    
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
       this.personCreate = response.createdBy.name;
 
@@ -99,10 +98,12 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           statusNumber: element.status,
           phone: element.phone,
           change_num: this.checkChangeNum(participants, element.id),
-          card_id: element.cardId
+          card_id: element.cardId,
+          user_in_organization: element.user_in_organization
         }
 
         this.is_list_name.push(data);
+        
       })
 
       this.is_list_name.map((x: any) => {
@@ -256,8 +257,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   openEdit(recipient: any) {
-    this.contractService.getInforPersonProcess(recipient).subscribe((response) => {
-
+    this.contractService.getInforPersonProcess(recipient).subscribe((response) => {    
       let data: any;
       data = response;
       data["contract_id"] = this.data.is_data_contract.id
@@ -269,20 +269,21 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         data,
       })
 
-      dialogRef.afterClosed().subscribe((result: any) => {
+      dialogRef.afterClosed().subscribe((result: any) => {  
         this.is_list_name = this.is_list_name.map((x: any) => {
-          if (x.id === result.id) {
+          if (x?.id === result?.id) {
             return {
               ...x, name: result.name,
               emailRecipients: result.email,
               phone: result.phone,
               change_num: result.change_num,
               typeOfSign: result.sign_type[0],
-              card_id: result.card_id
+              card_id: result.card_id,
+              user_in_organization: result.user_in_organization
             }
           }
           return x
-        })
+        })  
       })
     })
   }

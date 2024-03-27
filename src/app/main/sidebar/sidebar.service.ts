@@ -74,9 +74,11 @@ export class SidebarService {
   isBaoCaoHopDongEcontractMsale: boolean = true; // báo cáo hợp đồng số lượng hợp đồng eContract-mSale
   isBaoCaoTrangThaiGuiSms: boolean = true; //báo cáo trạng thái gửi Sms
   isBaoCaoTrangThaiGuiEmail: boolean = true; //báo cáo trạng thái gửi Email
+  isBaoCaoEKYC: boolean = true; // báo cáo xác thực ekyc
 
   isConfigSms: boolean = true; //cấu hình sms
-  isConfigSoonExpireDay: boolean = true;
+  isConfigSoonExpireDay: boolean = true; // cấu hình ngày sắp hết hạn
+  isConfigBrandname: boolean = true; // cấu hình brandname
 
   toggled = false;
   _hasBackgroundImage = true;
@@ -296,6 +298,10 @@ export class SidebarService {
             this.isBaoCaoTrangThaiGuiEmail = listRole.some(
               (element) => element.code == 'BAOCAO_TRANGTHAIGUI_EMAIL'
             )
+            
+            this.isBaoCaoEKYC = listRole.some(
+              (element) => element.code == 'BAOCAO_EKYC'
+            )
 
             this.isBaoCaoSoLuongLoai = listRole.some((element) => element.code == 'BAOCAO_SOLUONG_LOAIHOPDONG');
 
@@ -303,7 +309,9 @@ export class SidebarService {
 
             this.isConfigSms = listRole.some((element) => element.code == 'CAUHINH_SMS');
 
-            this.isConfigSoonExpireDay = listRole.some((element) => element.code == 'CAUHINH_NGAYSAPHETHAN')
+            this.isConfigSoonExpireDay = listRole.some((element) => element.code == 'CAUHINH_NGAYSAPHETHAN');
+            
+            this.isConfigBrandname = listRole.some((element) => element.code == 'CAUHINH_BRANDNAME');
 
             this.buildMenu(currentUserC);
           },
@@ -542,7 +550,7 @@ export class SidebarService {
     })
 
     if(this.isQLLHD_01 || this.isQLLHD_02 || this.isQLLHD_03 || this.isQLLHD_04 || this.isQLLHD_05 ||
-      this.isConfigSms || this.isConfigSoonExpireDay ||
+      this.isConfigSms || this.isConfigSoonExpireDay || this.isConfigBrandname ||
       this.QLDSCTS_01 || this.QLDSCTS_02 || this.QLDSCTS_03 || this.QLDSCTS_04)
       {
         let submenusConfig: any[] = [];
@@ -671,9 +679,17 @@ export class SidebarService {
         href: '/main/report/status-send-email'
       })
     }
+    
+    if(this.isBaoCaoEKYC) {
+      submenusReport.push({
+        title: 'report.ekyc',
+        active: false,
+        href: '/main/report/status-ekyc'
+      })
+    }
 
 
-    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai || this.isBaoCaoHopDongNhan || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiGuiSms || this.isBaoCaoTrangThaiGuiEmail) {
+    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai || this.isBaoCaoHopDongNhan || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiGuiSms || this.isBaoCaoTrangThaiGuiEmail || this.isBaoCaoEKYC) {
       this.menus.push({
         title: 'report',
         icon: '/assets/img/analytics1.svg',

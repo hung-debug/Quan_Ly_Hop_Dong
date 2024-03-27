@@ -1389,6 +1389,7 @@ export class ContractSignatureComponent implements OnInit {
             password2: resultHsm.password2,
             image_base64:  result.mark ? signI : null,
             processAt: this.isDateTime,
+            supplier: resultHsm.supplier,
             type: 3
           };
 
@@ -1406,9 +1407,9 @@ export class ContractSignatureComponent implements OnInit {
               if (checkSign[i].result.success == false) {
                 this.spinner.hide();
   
-                if (checkSign[i].result.message == 'Tax code do not match!') {
+                if (checkSign[i].result.message == 'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng') {
                   this.toastService.showErrorHTMLWithTimeout(
-                    'taxcode.not.match',
+                    'taxcode.not.match.hsm',
                     '',
                     3000
                   );
@@ -1428,9 +1429,16 @@ export class ContractSignatureComponent implements OnInit {
                     '',
                     3000
                   );
-                } else if (checkSign[i].result.message == "false") {
+                } else if (checkSign.message.includes('Cannot authenticate hsm')) {
                   this.toastService.showErrorHTMLWithTimeout(
-                    "Lỗi ký HSM",
+                    'Không thể xác thực hsm',
+                    '',
+                    3000
+                  );
+                } 
+                else if (checkSign[i].result.message == "false") {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    "Lấy thông tin chứng thư số thất bại",
                     '',
                     3000
                   );
@@ -1464,7 +1472,7 @@ export class ContractSignatureComponent implements OnInit {
             
           } catch (error) {
             this.spinner.hide()
-            return this.toastService.showErrorHTMLWithTimeout("Lỗi ký HSM","",3000)
+            return this.toastService.showErrorHTMLWithTimeout("Lấy thông tin chứng thư số thất bại","",3000)
           }
           //Call api ký nhiều hsm
         }

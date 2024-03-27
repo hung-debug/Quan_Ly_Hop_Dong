@@ -7,7 +7,7 @@
     <!-- Cấu hình sms -->
     <div class="row" style="padding-top: 20px;">
       <form [formGroup]="myForm">
-        <p-table [value]="groupArray.controls" id="table" [autoLayout]="true" >
+        <p-table [value]="groupArray.controls" id="table" [autoLayout]="true">
           <ng-template pTemplate="header" let-columns>
             <tr>
               <th *ngFor="let col of cols" [style]='col.style'>
@@ -16,7 +16,7 @@
             </tr>
           </ng-template>
           <ng-container formArrayName="items">
-            <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-i="rowIndex" >
+            <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-i="rowIndex">
               <!-- <ng-container > -->
               <ng-container [formGroupName]="i">
                 <tr>
@@ -30,34 +30,120 @@
                       [autoDisplayFirst]="false"></p-dropdown>
                   </td>
                 </tr>
-            </ng-container>
-            <!-- </ng-container> -->
-          </ng-template>
+              </ng-container>
+              <!-- </ng-container> -->
+            </ng-template>
           </ng-container>
         </p-table>
       </form>
+
+      <div>
+        <div style="justify-content: center;padding-top: 20px; margin-left: 95%;">
+          <button [class]="isDisableConfigSmsEmail? 'disable-button' : 'save-button'" [disabled]="isDisableConfigSmsEmail" (click)="updateSmsEmail()">{{'btn.save' | translate}}</button>
+        </div>
+      </div>
     </div>
   </div>
 
   <!--Lệnh if để ẩn-->
-  <div *ngIf="isRoleConfigExpirationDay" style="padding-top: 20px;">
-    <div class="sms-header">
-      {{'config.day.expiration' | translate}}
+  <div class="row" style="padding-top: 20px; flex-wrap: nowrap;">
+    <div *ngIf="isRoleConfigExpirationDay" class="col-md-2" style="border: 1px solid #e6e7ec; border-radius: 8px; margin-left: 1%;">
+      <div style="margin-top: 20px;">
+        <div class="sms-header">
+          {{'config.day.expiration' | translate}}
+        </div>
+        <!-- Cấu hình ngày sắp hết hạn -->
+        <div class="border-table-email" style="text-align: center;">
+          <div style="justify-content: center; padding-top: 20px; ">
+            <input [(ngModel)]="this.soonExpireDay" type="number" class="input-expiration-date" min="0" 
+            oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null"
+            (ngModelChange)="onSoonExpireDayChange($event)" />
+          </div>
+        </div>
+        <div style="justify-content: center;padding-top: 20px; text-align: center; margin-bottom: 20px;">
+          <button [class]="isDisableSoonExpireDay? 'disable-button' : 'save-button'" [disabled]="isDisableSoonExpireDay" (click)="updateSoonExpireDay()">{{'btn.save' | translate}}</button>
+        </div>
+      </div>
     </div>
 
-    <!-- Cấu hình ngày sắp hết hạn -->
-    <div class="border-table-email" style="text-align: center;">
-      <div style="justify-content: center;padding-top: 20px;">
-        <input [(ngModel)]="this.soonExpireDay" type="number" class="input-expiration-date" min="0" oninput="this.value = 
-                !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" />
+    <div *ngIf="isRoleConfigBrandname" class="col-md-9" style="border: 1px solid #e6e7ec; border-radius: 8px; margin-left: 6%;">
+      <div style="margin-top: 20px;">
+        <div class="sms-header">
+          {{'config.brandname' | translate}}
+        </div>
+        <!-- Cấu hình ngày sắp hết hạn -->
+        <form [formGroup]="brandnameForm" class="content">
+          <div class="row" style="margin-top: 10px;">
+            <div class="col-md-3">
+              <div class="label text-color">Brandname
+                <span class="required-title">*</span>
+              </div>
+              <div class="input-data">
+                <input style="width: 100%;" type="text" formControlName="brandName" placeholder="Nhập Brandname" (keyup)="onChangeBrandname()">
+              </div>
+              <div *ngIf="f.brandName.errors" class="invalid">
+                <div *ngIf="f.brandName?.errors?.required">{{'error.unit.brandname.required' | translate}}</div>
+                <div *ngIf="f.brandName?.errors?.pattern">{{'validate.regex.brandname' | translate}}</div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div>{{'hsm.dialog.supplier' | translate}}
+                <span class="required-title">*</span>
+              </div>
+              <div class="input-line">
+                <p-dropdown panelStyleClass="font" appendTo="body" optionLabel="name" optionValue="id"
+                  [showClear]="true" [options]="optionsSupplier"
+                  formControlName="contractSupplier" [autoDisplayFirst]="false" placeholder="{{'enter.supplier' | translate}}" (onChange)="onChangeSupplier()"></p-dropdown>
+              </div>
+              <div *ngIf="f.contractSupplier?.errors" class="invalid">
+                <div *ngIf="f.contractSupplier?.errors?.required">{{'error.supplier.required' | translate}}</div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="label text-color">{{'username' | translate}}
+                <span class="required-title">*</span>
+              </div>
+              <div class="input-data">
+                <input type="text" formControlName="smsUser" maxlength = '100' style="width: 100%;" placeholder="{{'username.enter' | translate}}">
+              </div>
+              <div *ngIf="f.smsUser?.errors" class="invalid">
+                <div *ngIf="f.smsUser?.errors?.required">{{'error.unit.username.required' | translate}}</div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="label text-color">{{'login.password' | translate}}
+                <span class="required-title">*</span>
+              </div>
+              <div class="input-data">
+                <input type="text" formControlName="smsPass" [type]="fieldTextType ? 'text' : 'password'"
+                 maxlength = '100' style="width: 90%;" placeholder="{{'password.enter' | translate}}">
+                <div class="icon-password">
+                  <i class="fa" [ngClass]="{
+                    'fa-eye-slash': !fieldTextType,
+                    'fa-eye': fieldTextType
+                  }" (click)="toggleFieldTextType()" style="color: #106db6; float: right;"></i>
+                </div>
+              </div>
+              <div *ngIf="f.smsPass?.errors" class="invalid">
+                <div *ngIf="f.smsPass?.errors?.required">{{'error.unit.password.required' | translate}}</div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div style="justify-content: center;padding-top: 20px; margin-left: 94%; margin-bottom: 20px;">
+          <button [class]="isDisable? 'disable-button' : 'save-button'" [disabled]="isDisable" (click)="configBrandname()" >{{'btn.save' | translate}}</button>
+        </div>
       </div>
     </div>
   </div>
 
   <div>
-    <div style="justify-content: center;padding-top: 20px;">
+    <!-- <div style="justify-content: center;padding-top: 20px;">
       <button class="save-button" (click)="onSubmit()">{{'btn.save' | translate}}</button>
-    </div>
+    </div> -->
   </div>
 </div>
 

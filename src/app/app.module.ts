@@ -107,6 +107,7 @@ import { ReportStatusContractComponent } from './main/report/report-status-contr
 import { ReportSoonExpireComponent } from './main/report/report-soon-expire/report-soon-expire.component';
 import { ReportStatusSendSmsEmailComponent } from './main/report/report-status-send-sms-email/report-status-send-sms-email.component';
 import { ReportStatusSendEmailComponent } from './main/report/report-contract-send-email/report-contract-send-email.component';
+import { ReportEKYCComponent } from './main/report/report-eKYC/report-eKYC.component';
 import { ReportContractNumberFollowStatusComponent } from './main/report/report-contract-number-follow-status/report-contract-number-follow-status.component';
 import { ReportContractNumberEcontractMsaleComponent } from './main/report/report-contract-number-eContract-mSale/report-contract-number-eContract-mSale.component';
 import { ContractNumberFollowSignComponent } from './main/report/contract-number-follow-sign/contract-number-follow-sign.component';
@@ -126,6 +127,7 @@ import {DigitalCertificateAddComponent} from './main/digital-certificate/digital
 import {DigitalCertificateDetailComponent} from './main/digital-certificate/digital-certificate-detail/digital-certificate-detail.component';
 import {DigitalCertificateEditComponent} from './main/digital-certificate/digital-certificate-edit/digital-certificate-edit.component';
 import {ContentSmsComponent} from './main/report/report-status-send-sms-email/content-sms/content-sms.component';
+import { ConfigBrandnameDialogComponent } from './main/config-sms-email/config-check-brandname-dialog/config-check-brandname-dialog.component';
 import {ContentEmailComponent} from './main/report/report-contract-send-email/content-email/content-email.component';
 import { HeadersInterceptor } from './headers.interceptor';
 import { UploadAttachFilesComponent } from './main/contract/dialog/upload-attach-files-dialog/upload-attach-files-dialog.component';
@@ -146,6 +148,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DigitalCertificateDetailComponent,
     DigitalCertificateEditComponent,
     ContentSmsComponent,
+    ConfigBrandnameDialogComponent,
     ContentEmailComponent,
     ContractComponent,
     ContractSignatureComponent,
@@ -208,6 +211,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ReportSoonExpireComponent,
     ReportStatusSendSmsEmailComponent,
     ReportStatusSendEmailComponent,
+    ReportEKYCComponent,
     ReportContractNumberFollowStatusComponent,
     ReportContractNumberEcontractMsaleComponent,
     ContractNumberFollowSignComponent,
