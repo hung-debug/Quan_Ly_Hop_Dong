@@ -177,7 +177,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.countLoginFail++;
         this.error = true;
         this.errorDetail = "Tổ chức không hoạt động";
-      }else {
+      } else if (data?.code == '10') {
+        this.countLoginFail++;
+        this.error = true;
+        this.errorDetail = "Tài khoản của bạn chỉ hỗ trợ đăng nhập bằng SSO, vui lòng đăng nhập bằng SSO để sử dụng hệ thống";
+      }
+      else {
         this.countLoginFail++;
         this.error = true;
 
