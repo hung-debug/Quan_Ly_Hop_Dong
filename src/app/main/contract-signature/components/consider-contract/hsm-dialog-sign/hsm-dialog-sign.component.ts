@@ -31,7 +31,7 @@ export class HsmDialogSignComponent implements OnInit {
     },
     {
       id: 'icorp',
-      name: 'ICORP'
+      name: 'I-CA'
     }
   ];
   isHsmIcorp: boolean = false
