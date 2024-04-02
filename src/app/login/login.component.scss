@@ -245,3 +245,60 @@
   color: #106DB6;
   font-weight: bold;
 }
+
+.login_methods__title::before {
+  content: "";
+  height: 1px;
+  background-color: #C6D2EA;
+  display: inline-block;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 10px;
+}
+
+.login_methods__title {
+  text-align: center;
+  position: relative;
+
+  span {
+    background-color: #fff;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: relative;
+    // font-size: 13px;
+    font-weight: 400;
+    text-align: center;
+    color: #A8B5CE;
+  }
+}
+
+.login_methods__list {
+  text-align: center;
+}
+
+.login-methods__item {
+  display: inline-block;
+  width: 80px;
+  color: #C6D2EA;
+}
+
+.login-methods__item:hover {
+  cursor: pointer;
+  color: #106DB6;
+  .login-methods__icon {
+    border-color: #106db657;
+    // background-color: rgba(82,82,128,.09); 
+    box-shadow: 0 0 6px 0 #106DB6;
+  }
+}
+
+.login-methods__icon {
+  display: block;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #C6D2EA;
+  border-radius: 22px;
+  padding: 9px;
+  margin: auto;
+}

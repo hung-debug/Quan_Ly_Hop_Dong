@@ -133,7 +133,8 @@ import { HeadersInterceptor } from './headers.interceptor';
 import { UploadAttachFilesComponent } from './main/contract/dialog/upload-attach-files-dialog/upload-attach-files-dialog.component';
 import { DeleteContractFolderComponent } from './main/contract-folder/current-folder/delete-contract-folder/delete-contract-folder.component';
 import { UploadContractFileComponent } from './main/contract-folder/current-folder/upload-contract-file/upload-contract-file.component';
-import { OAuthModule } from 'angular-oauth2-oidc';
+import { AccountLinkDialogComponent } from './main/dialog/account-link-dialog/account-link-dialog.component';
+import { NgOtpInputModule } from  'ng-otp-input';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -266,7 +267,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     AddContractFolderComponent,
     UploadAttachFilesComponent,
     DeleteContractFolderComponent,
-    UploadContractFileComponent
+    UploadContractFileComponent,
+    AccountLinkDialogComponent
   ],
   imports: [
     TranslateModule,
@@ -324,7 +326,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     WebcamModule,
     PdfViewerModule,
     KeycloakAngularModule,
-    OAuthModule.forRoot()
+    NgOtpInputModule
   ],
   providers: [ AppService, DatePipe,CurrencyPipe,KeycloakAngularModule, KeycloakService,
     {

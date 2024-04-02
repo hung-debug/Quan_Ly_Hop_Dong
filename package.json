@@ -52,6 +52,7 @@
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.34",
     "ng-multiselect-dropdown": "^0.3.4",
+    "ng-otp-input": "^1.8.1",
     "ng2-datepicker": "^12.0.0",
     "ng2-pdf-viewer": "^9.1.1",
     "ngx-bootstrap": "^7.1.0",

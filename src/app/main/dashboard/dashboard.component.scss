@@ -128,3 +128,9 @@ h3{
 ::ng-deep #toast-container > div {
   width: 490px;
 }
+
+::ng-deep {
+  .mat-dialog-container {
+    border-radius: 12px !important;
+  }
+}
