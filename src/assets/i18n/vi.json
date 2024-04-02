@@ -801,6 +801,7 @@
   "upload.contract.file.success": "Upload file hợp đồng thành công",
   "select.contract.file": "Chọn file hợp đồng (PDF, DOC, DOCX, PNG, JPG, JPEG, ZIP, RAR, TXT, XLS, XLSX)",
   "confirm.clear.text.sign": "Bạn có muốn xóa toàn bộ text, ô ký đã gán cho file hợp đồng cũ không?",
+  "btn.sso.login": "Đăng nhập SSO",
   "confirm.public.phone.pki": "Cho phép hiển thị thông tin SĐT lên chữ ký",
   "config.brandname.sms": "Cấu hình Brandname gửi SMS",
   "error.unit.brandname.required": "Brandname không được để trống",
@@ -826,5 +827,6 @@
   "enter.supplier": "Chọn nhà cung cấp",
   "check.config.brandname": "Vui lòng kiểm tra kết nối trước khi thực hiện lưu cấu hình",
   "password.blank":"Mật khẩu không được để trống",
-  "taxcode.not.match.hsm":"Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng"
+  "taxcode.not.match.hsm":"Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng",
+  "login.method.title": "Hoặc đăng nhập bằng"
 }

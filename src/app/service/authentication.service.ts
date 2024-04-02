@@ -30,12 +30,24 @@ export interface User {
 export class AuthenticationService {
 
   loginUrl:any = `${environment.apiUrl}/api/v1/auth`;
+  getAuthenTokenUrl:any = `${environment.apiUrl}/api/v1/auth/login-sso`;
+
   errorData:any = {};
   redirectUrl: string = '';
-
+  logoutSsoUrl: string = `${environment.apiUrl}/api/v1/auth/logoutV2`
+  ssoAccessToken: any;
+  ssoIdToken: any;
+  token: any;
   constructor(private http: HttpClient) { }
 
+  async getCurrentUser() {
+    this.token = await JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).access_token;
 
+    this.ssoAccessToken = localStorage.getItem('sso_token') || '';
+    this.ssoIdToken = localStorage.getItem('sso_id_token') || '';
+  }
   loginAuthencation(username: string, password: string, type: number, isContractId: number | null) {
     const headers = new HttpHeaders().append('Content-Type', 'application/json');
     let body = JSON.stringify({email: username.trim().toLowerCase(), password: password, type: type});
@@ -108,5 +120,49 @@ export class AuthenticationService {
       localStorage.setItem('checkUser', "");
     }
     return throwError(this.errorData);
+  }
+
+  async getAuthencationToken(token: any, ssoIdToken: any, userType: any) {
+    const headers = new HttpHeaders().append('Content-Type', 'application/json');
+    let body = JSON.stringify({
+      type: userType,
+      access_token: token,
+      id_token: ssoIdToken
+    });
+
+    return this.http.post<User>(this.getAuthenTokenUrl, body, {'headers':headers})
+      .pipe(
+        map((user) => {
+          if (JSON.parse(JSON.stringify(user)) != null) {
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            return user;
+          }else{
+            return null;
+          }
+        }),
+        catchError(this.loginError)
+      ).toPromise();
+  }
+
+  async logoutSso(ssoIdToken: any) {
+    await this.getCurrentUser()
+    const headers = new HttpHeaders().append(
+      'Content-Type', 'application/json' 
+    ).append('Authorization', 'Bearer ' + this.token);
+    let body = {
+      id_token: ssoIdToken,
+      access_token: this.ssoAccessToken
+    }
+    return this.http.post<any>(this.logoutSsoUrl, body ,{'headers': headers}).toPromise()
+  }
+
+  deleteAllCookies() {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const eqPos = cookie.indexOf('=');
+      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+    }
   }
 }

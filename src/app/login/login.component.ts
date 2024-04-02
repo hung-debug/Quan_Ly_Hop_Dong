@@ -1,18 +1,16 @@
-import {AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {AuthenticationService} from '../service/authentication.service';
 import {DeviceDetectorService} from "ngx-device-detector";
 import {ActionDeviceComponent} from "../action-device/action-device.component";
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { parttern_input } from '../config/parttern';
 import { ResetPasswordDialogComponent } from '../main/dialog/reset-password-dialog/reset-password-dialog.component';
 import { ToastService } from '../service/toast.service';
-import domtoimage from 'dom-to-image';
-import { delay } from 'rxjs/operators';
-import { of } from 'rxjs/internal/observable/of';
 import * as moment from 'moment';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-login',
@@ -34,6 +32,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   consider: any = "c9";
   secretary: any = "s8";
   coordinates: any = "c8";
+  isSSOlogin: boolean = false;
 
   @ViewChild('previewCaptcha') previewCaptcha: ElementRef;
 
@@ -45,7 +44,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private changeDetector : ChangeDetectorRef,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private keycloakService: KeycloakService,
   ) {
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang('vi');
@@ -177,7 +177,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.countLoginFail++;
         this.error = true;
         this.errorDetail = "Tổ chức không hoạt động";
-      }else {
+      } else if (data?.code == '10') {
+        this.countLoginFail++;
+        this.error = true;
+        this.errorDetail = "Tài khoản của bạn chỉ hỗ trợ đăng nhập bằng SSO, vui lòng đăng nhập bằng SSO để sử dụng hệ thống";
+      }
+      else {
         this.countLoginFail++;
         this.error = true;
 
@@ -325,13 +330,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
 
-  ngOnInit(): void {
-    if(Number(localStorage.getItem('fail')) >= 4) {
-      this.captcha = true;
-      this.generateCaptcha();
-    }
-
-    // this.generateCaptcha();
+  async ngOnInit() {
     if (sessionStorage.getItem('type')) {
       this.type = 1;
     } else this.type = 0;
@@ -339,7 +338,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
     if ((this.deviceService.isMobile() || this.deviceService.isTablet())) {
 
       if(localStorage.getItem('sign_type') == '5') {
-        console.log("vao day ");
         this.checkBrowser();
       }
       this.getDeviceApp();
@@ -348,18 +346,102 @@ export class LoginComponent implements OnInit, AfterViewInit {
     } else {
       this.mobile = false;
     }
-
-    let storedUsername = sessionStorage.getItem("mail");
-
-    // Kiểm tra xem tên đăng nhập đã được lưu trong sessionStorage hay chưa
-    if (storedUsername) {
-    // Nếu có tên đăng nhập, điền nó vào trường nhập liệu
-      this.loginForm.setValue({
-        tax_code: '',
-        username: storedUsername,
-        password: '',
-        captchaName: ''
-      })
+    const ssoToken: any = JSON.parse(JSON.stringify(localStorage.getItem('sso_token')) || '') ?? ''
+    if ((this.keycloakService.getKeycloakInstance().authenticated || ssoToken) && (window.location.href.includes('realms/sso-mobifone') || window.localStorage.href.includes('/login?type=mobifone-sso')) ) {
+      this.isSSOlogin = true
+      try {
+        let accessToken: any = this.keycloakService.getKeycloakInstance().token
+        let ssoIdToken: any = this.keycloakService.getKeycloakInstance().idToken
+        let res: any = await this.authService.getAuthencationToken(accessToken, ssoIdToken,0)
+        switch(res.code) {
+          case '00':
+            this.toastService.showSuccessHTMLWithTimeout('Đăng nhập thành công, mở sang trang chủ hệ thống eContract.','',3000)
+            setTimeout(() => {
+              this.router.navigate(['/main/dashboard'])
+              this.isSSOlogin = false
+            }, 1000);
+            break;
+          case '01':
+            this.toastService.showErrorHTMLWithTimeout('Tài khoản không hoạt động','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '02':
+            this.toastService.showErrorHTMLWithTimeout('Tổ chức không hoạt động','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '03':
+            this.toastService.showErrorHTMLWithTimeout('Tên đăng nhập hoặc mật khẩu không đúng','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '04':
+            this.toastService.showErrorHTMLWithTimeout('Token đăng nhập bằng SSO không đúng','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '05':
+            this.toastService.showErrorHTMLWithTimeout('Tên đăng nhập hoặc mật khẩu không được phép để trống','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '06':
+            this.toastService.showErrorHTMLWithTimeout('Lấy thông tin tài khoản trên SSO thất bại','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '07':
+            this.toastService.showErrorHTMLWithTimeout('Bạn chưa được SSO cấp quyền đăng nhập vào hệ thống eContract','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '08':
+            this.toastService.showErrorHTMLWithTimeout('Tài khoản không tồn tại trong hệ thống eContract','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '09':
+            this.toastService.showErrorHTMLWithTimeout('Lấy thông tin từ SSO thất bại','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '100':
+            this.toastService.showErrorHTMLWithTimeout('Lỗi hệ thống','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+          case '101':
+            this.toastService.showErrorHTMLWithTimeout('Kết nối SSO thất bại','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
+        }
+      } catch (error) {
+        this.isSSOlogin = false
+        this.toastService.showErrorHTMLWithTimeout("Đăng nhập SSO thất bại","",3000)
+        this.router.navigate(['/login'])
+      }
+    } else { 
+      if(Number(localStorage.getItem('fail')) >= 4) {
+        this.captcha = true;
+        this.generateCaptcha();
+      }
+  
+      // this.generateCaptcha();
+  
+      let storedUsername = sessionStorage.getItem("mail");
+  
+      // Kiểm tra xem tên đăng nhập đã được lưu trong sessionStorage hay chưa
+      if (storedUsername) {
+      // Nếu có tên đăng nhập, điền nó vào trường nhập liệu
+        this.loginForm.setValue({
+          tax_code: '',
+          username: storedUsername,
+          password: '',
+          captchaName: ''
+        })
+      }
     }
   }
 
@@ -442,6 +524,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
         // let is_data = result
       })
     }
-  }
+  } 
 
+  async loginSSO() {
+    await this.keycloakService.login()
+  }
 }

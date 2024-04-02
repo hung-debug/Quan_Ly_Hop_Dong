@@ -786,6 +786,7 @@
   "upload.contract.file.err": "Uploading contract file failed",
   "upload.contract.file.success": "Uploaded contract file successfully",
   "select.contract.file": "Select contract file (PDF, DOC, DOCX, PNG, JPG, JPEG, ZIP, RAR, TXT, XLS, XLSX)",
+  "btn.sso.login": "SSO login",
   "confirm.public.phone.pki": "Allow display pki phone number on the signature",
   "config.brandname.sms": "Config brandname send sms",
   "error.unit.brandname.required": "Brandname is required",
@@ -810,5 +811,6 @@
   "enter.supplier": "Choose supplier",
   "check.config.brandname": "Please check the connection before saving the configuration",
   "password.blank": "Password cannot be blank",
-  "taxcode.not.match.hsm":"Tax code/CMT/CCCD does not match contract signing information"
+  "taxcode.not.match.hsm":"Tax code/CMT/CCCD does not match contract signing information",
+  "login.method.title": "Or sign in with"
 }

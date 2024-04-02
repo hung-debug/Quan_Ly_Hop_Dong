@@ -117,9 +117,24 @@
                 <div class="db_user">
                   <div class="db_password"></div>
                 </div>
-                <div>{{'login.reset_password_new' | translate }}</div>
+                <div>{{'login.reset_password_new' | translate }}
+                  <a href="https://auth-sso.mobifone.vn/vn/profile-information" ></a
+                >
+                </div>
               </div>
             </button>
+
+            <!-- <button *ngIf="!checkMailMbf()" ngbDropdownItem class="drop">
+              <div style="display: flex; align-items: center;">
+                <div class="db_user">
+                  <div class="db_password"></div>
+                </div>
+                <div>
+                  <a href="https://auth-sso.mobifone.vn/vn/profile-information" 
+                  >{{'login.reset_password_new' | translate }}</a>
+                </div>
+              </div>
+            </button> -->
 
             <button ngbDropdownItem class="drop_red" routerLink="/login" (click)="logout()">
               <div style="display: flex; align-items: center;">
