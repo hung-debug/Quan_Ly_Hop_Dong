@@ -109,7 +109,7 @@ export class DashboardComponent implements OnInit {
     this.userService.getUserById(userId).subscribe(
       data => {
         //lay id role
-        if (!data.is_request_sso) {
+        if (!data.is_required_sso) {
           this.openAccountLinkDialog(data)
         }
         this.roleService.getRoleById(data?.role_id).subscribe(
@@ -490,7 +490,8 @@ export class DashboardComponent implements OnInit {
     // @ts-ignore
       backdrop: 'static',
       data: userData,
-      disableClose: true
+      disableClose: true,
+      autoFocus: false
     })
   }
 }

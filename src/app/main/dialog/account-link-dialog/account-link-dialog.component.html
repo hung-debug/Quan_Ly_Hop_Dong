@@ -8,24 +8,29 @@
       <p>Chúng tôi đã gửi mã OTP về số điện thoại <b style="color: #106DB6;">{{this.datasOtp.phone}}</b>.<br>
         Vui lòng nhập mã và tiếp tục thực hiện.</p>
     </div> -->
-    <div class="link_sso__warning" [innerHTML]="this.warningLinkSsoMsg" style="white-space: pre-wrap !important;">
-      <!-- Kính gửi Quý khách hàng,
-      Nhằm nâng cao chất lượng dịch vụ, MobiFone tiến hành nâng cấp hệ thống Quản lý tài khoản tập trung (SSO) cho các khách hàng sử dụng hệ sinh thái giải pháp số của MobiFone.
-      Sau khi hoàn thành liên kết, Quý khách có thể đăng nhập toàn bộ các hệ thống thuộc hệ sinh thái giải pháp của MobiFone bằng một tài khoản duy nhất. -->
+    <div class="link_sso__warning">
+      <span style="font-weight: bold;">Kính gửi Quý khách hàng,</span><br><br>
+      Nhằm nâng cao chất lượng dịch vụ, MobiFone tiến hành nâng cấp hệ thống Quản lý tài khoản tập trung (SSO) cho các khách hàng sử dụng hệ sinh thái giải pháp số của MobiFone. <br>
+      <br>
+      <span style="color: #106DB6; font-weight: bold;">Sau khi hoàn thành liên kết, Quý khách có thể đăng nhập toàn bộ các hệ thống thuộc hệ sinh thái giải pháp của MobiFone bằng một tài khoản duy nhất.</span><br>
+      <br>
+      Thời gian liên kết từ ngày ... đến ngày ...
     </div>
+    <div style="color: #106DB6; font-style: italic; text-decoration: underline; cursor: pointer;" class="link_sso__warning" (click)="openTutorialLink($event)">Xem hướng dẫn chi tiết tại đây</div>
+    <div style="font-weight: bold;" class="link_sso__warning">Trân trọng cảm ơn Quý Khách hàng!</div>
 
     <div class="link_sso__input-title">
       <span id = "title">
         Email <span class="invalid">*</span>
       </span>
-      <input autofocus type="text" [(ngModel)]="ssoEmail">
+      <input disabled class="field-disabled" type="text" [(ngModel)]="ssoEmail">
     </div>
 
     <div *ngIf="isNextStep" class="link_sso__input-title">
       <span id = "title">
         Nhập OTP <span class="invalid">*</span>
       </span>
-      <ng-otp-input (onInputChange)="onOtpChange($event)"  [config]="{length:6}"></ng-otp-input>
+      <ng-otp-input class="otp-input-item" (onInputChange)="onOtpChange($event)"  [config]="{length:6}"></ng-otp-input>
       <div style="display: block;">
         <div class="label-input-otp-sent" *ngIf="this.count > 0">Mã OTP hết hạn sau <span style="color: #0041C4; font-weight: bold
         ;">{{counter$ | async }}s.</span></div>

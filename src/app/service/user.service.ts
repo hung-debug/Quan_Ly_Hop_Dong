@@ -485,6 +485,7 @@ export class UserService {
   }
 
   getSsoLinkOtp(email: string) {
+    this.getCurrentUser()
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);

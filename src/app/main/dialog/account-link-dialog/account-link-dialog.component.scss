@@ -23,7 +23,7 @@
       width: 104px;
       height: 38px;
       border-radius: 6px;
-      border: none;
+      border: none !important;
       color: #0041C4;
       background-color: #E6EDFA;
       margin: 5px;
@@ -35,6 +35,10 @@
       background-color: #106DB6;
       color: #FFFFFF;
       margin: 5px;
+    }
+
+    .link_sso__cancel-btn {
+      border: none !important;
     }
   }
 }
@@ -105,7 +109,7 @@
 .link_sso__warning {
   font-weight: 400;
   line-height: 18px;
-  letter-spacing: -0.0375em;
+  // letter-spacing: -0.0375em;
   text-align: left;
   color: #677694;
   width: 420px;
@@ -113,7 +117,7 @@
 }
 
 .link_sso__input-title {
-  width: 85%;
+  width: 93%;
   margin-left: auto;
   margin-right: auto;
   margin-top: 12px;
@@ -126,7 +130,7 @@
     height: 48px;
     padding: 16px;
     border-radius: 8px;
-    background-color: #E6EDFA;
+    background-color: #F7FAFD;
     border: 1px solid #E6EDFA;
     outline: none;
     margin-top: 6px;
@@ -137,7 +141,26 @@
   margin-right: 16px !important;
 }
 
+::ng-deep .wrapper .otp-input {
+  background-color: #F7FAFD;
+  border: 1px solid #E6EDFA;
+  border-radius: 8px;
+}
+
 .btn-disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+.field-disabled {
+  cursor: not-allowed;
+}
+
+.otp-input-item ::ng-deep {
+  .otp-input {
+    background-color: #F7FAFD;
+    border: 1px solid #E6EDFA;
+    border-radius: 8px;
+    font-size: 16px;
+  }
 }

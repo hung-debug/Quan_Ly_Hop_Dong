@@ -11,6 +11,7 @@ import { ResetPasswordDialogComponent } from '../main/dialog/reset-password-dial
 import { ToastService } from '../service/toast.service';
 import * as moment from 'moment';
 import { KeycloakService } from 'keycloak-angular';
+import { AccountLinkDialogComponent } from '../main/dialog/account-link-dialog/account-link-dialog.component';
 
 @Component({
   selector: 'app-login',
@@ -181,6 +182,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.countLoginFail++;
         this.error = true;
         this.errorDetail = "Tài khoản của bạn chỉ hỗ trợ đăng nhập bằng SSO, vui lòng đăng nhập bằng SSO để sử dụng hệ thống";
+      } else if (data?.code == '11') {
+        this.openAccountLinkDialog(data?.customer?.info)
       }
       else {
         this.countLoginFail++;
@@ -512,7 +515,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         width: '580px',
         backdrop: 'static',
         keyboard: false,
-        panelClass: 'custom-modalbox'
+        panelClass: 'custom-modalbox',
       })
       dialogRef.afterClosed().subscribe((result: any) => {
 
@@ -528,5 +531,17 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   async loginSSO() {
     await this.keycloakService.login()
+  }
+
+  openAccountLinkDialog(userData: any) {
+    // @ts-ignore
+    const dialogRef: any = this.dialog.open(AccountLinkDialogComponent, {
+      width: '498px',
+    // @ts-ignore
+      // backdrop: 'static',
+      data: userData,
+      disableClose: true,
+      autoFocus: false
+    })
   }
 }

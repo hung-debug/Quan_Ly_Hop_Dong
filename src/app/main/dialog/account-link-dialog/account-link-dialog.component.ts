@@ -31,7 +31,7 @@ export class AccountLinkDialogComponent implements OnInit {
   datas: any;
   c:any;
   counter$: any;
-  count = 60;
+  count = 180;
   isSentOpt = false;
   submitted = false;
 
@@ -42,11 +42,11 @@ export class AccountLinkDialogComponent implements OnInit {
   smsContractBuy: any;
   ssoEmail: any = "";
   ssoOTP: any = "";
-  COUNT_TIME: number = 60;
+  COUNT_TIME: number = 180;
   isDisableSendOtp: boolean = false;
   isNextStep: boolean = false;
   warningLinkSsoMsg: string = 'Kính gửi Quý khách hàng,\nNhằm nâng cao chất lượng dịch vụ, MobiFone tiến hành nâng cấp hệ thống Quản lý tài khoản tập trung (SSO) cho các khách hàng sử dụng hệ sinh thái giải pháp số của MobiFone.\nSau khi hoàn thành liên kết, Quý khách có thể đăng nhập toàn bộ các hệ thống thuộc hệ sinh thái giải pháp của MobiFone bằng một tài khoản duy nhất.\n<b>Thời gian liên kết từ ngày....đến ngày...</b>'
-
+  ssoSyncingTutorialLink: string = 'https://drive.google.com/drive/folders/13dy_0jrWMUAfwSYAHDtC4A8BQT6cd22n'
   @Output() confirmOtpForm = new EventEmitter();
 
   get f() { return this.addForm.controls; }
@@ -122,32 +122,6 @@ export class AccountLinkDialogComponent implements OnInit {
           } else {
             this.toastService.showErrorHTMLWithTimeout('Gửi OTP thất bại','',3000)
           }
-          // switch (res.code) {
-          //   case '00':
-          //     this.toastService.showSuccessHTMLWithTimeout('Đã gửi OTP đến địa chỉ email: ' + this.ssoEmail, '', 3000)
-          //     this.isNextStep = true
-          //     break;
-          //   case '01':
-          //     this.toastService.showErrorHTMLWithTimeout('Đồng bộ tài khoản SSO thất bại','',3000)
-          //     break;
-          //   case '02':
-          //     this.toastService.showErrorHTMLWithTimeout('OTP đã nhập không trùng khớp!','',3000)
-          //     break;
-          //   case '03':
-          //     this.toastService.showErrorHTMLWithTimeout('Tài khoản eContract không tồn tại','',3000)
-          //     break;
-          //   case '04':
-          //     this.toastService.showErrorHTMLWithTimeout('Gửi OTP thất bại','',3000)
-          //     this.router.navigate(['/'])
-          //     break;
-          //   case '05':
-          //     this.toastService.showErrorHTMLWithTimeout('Tên đăng nhập hoặc mật khẩu không được phép để trống','',3000)
-          //     break;
-          //   case '06':
-          //     this.toastService.showErrorHTMLWithTimeout('Lấy thông tin tài khoản trên SSO thất bại','',3000)
-          //     this.router.navigate(['/'])
-          //     break;
-          // }
         }, (err: any) => {
           this.toastService.showErrorHTMLWithTimeout('Gửi OTP thất bại','',3000)
           console.log(err)
@@ -203,7 +177,8 @@ export class AccountLinkDialogComponent implements OnInit {
 
   transform(value: number): string {
     const minutes: number = Math.floor(value / 60);
-    return (value - minutes * 60).toString().padStart(2, '0');
+    return minutes.toString().padStart(2, '0') + ':' + 
+    (value - minutes * 60).toString().padStart(2, '0');
   }
 
   sendOtpAgain(contract_id:any, recipient_id?:any, phone?:any) {
@@ -520,5 +495,9 @@ export class AccountLinkDialogComponent implements OnInit {
   onOtpChange(event: any) {
     this.ssoOTP = event
     console.log()
+  }
+
+  openTutorialLink(event: any) {
+    window.open(this.ssoSyncingTutorialLink)
   }
 }
