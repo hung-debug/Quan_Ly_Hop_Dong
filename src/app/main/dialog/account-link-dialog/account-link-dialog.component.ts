@@ -123,7 +123,7 @@ export class AccountLinkDialogComponent implements OnInit {
           (res: any) => {
             if (res.code == '00') {
               this.currentStep = 'sync'
-              this.toastService.showSuccessHTMLWithTimeout('Đã gửi OTP đến địa chỉ email: ' + this.ssoEmail, '', 3000)
+              this.toastService.showSuccessHTMLWithTimeout('Hệ thống đã gửi OTP đến địa chỉ email: ' + this.ssoEmail, '', 3000)
               this.isNextStep = true
             } else {
               this.toastService.showErrorHTMLWithTimeout('Gửi OTP thất bại','',3000)
@@ -136,32 +136,37 @@ export class AccountLinkDialogComponent implements OnInit {
       } else {
         this.userService.syncAccountSso(this.ssoEmail, this.ssoOTP).subscribe(
           (res: any) => {
-            // this.toastService.showSuccessHTMLWithTimeout('Liên kết tài khoản SSO thành công','',3000)
   
             switch (res.code) {
               case '00':
-                this.toastService.showSuccessHTMLWithTimeout('Đồng bộ tài khoản SSO thành công, mật khẩu mới của bạn đã được gửi đến địa chỉ email: ' + this.ssoEmail, '', 3000)
+                this.toastService.showSuccessHTMLWithTimeout('Liên kết tài khoản SSO thành công, vui lòng kiểm tra email để xem chi tiết thông tin.','', 3000)
                 this.isNextStep = true
                 this.dialogRef.close()
                 this.router.navigate(['/login']);
                 break;
               case '01':
-                this.toastService.showErrorHTMLWithTimeout('OTP đã nhập không trùng khớp!','',3000)
+                this.toastService.showErrorHTMLWithTimeout('OTP đã nhập không chính xác','',3000)
                 break;
               case '02':
-                this.toastService.showErrorHTMLWithTimeout('Đồng bộ tài khoản SSO thất bại','',3000)
+                this.toastService.showErrorHTMLWithTimeout('Liên kết tài khoản SSO thất bại','',3000)
                 break;
               case '03':
-                this.toastService.showErrorHTMLWithTimeout('Tài khoản eContract không tồn tại','',3000)
+                this.toastService.showErrorHTMLWithTimeout('Thông tin tài khoản được liên kết không đúng','',3000)
                 break;
               case '04':
                 this.toastService.showErrorHTMLWithTimeout('Gửi OTP thất bại','',3000)
                 break;
               case '05':
-                this.toastService.showErrorHTMLWithTimeout('Tên đăng nhập hoặc mật khẩu không được phép để trống','',3000)
+                this.toastService.showErrorHTMLWithTimeout('Tài khoản đã được liên kết SSO','',3000)
                 break;
               case '06':
-                this.toastService.showErrorHTMLWithTimeout('Lấy thông tin tài khoản trên SSO thất bại','',3000)
+                this.toastService.showErrorHTMLWithTimeout('Gửi thông báo về tài khoản qua email thất bại','',3000)
+                break;
+              case '100':
+                this.toastService.showErrorHTMLWithTimeout('Lỗi hệ thống','',3000)
+                break;
+              case '101':
+                this.toastService.showErrorHTMLWithTimeout('Kết nối SSO thất bại','',3000)
                 break;
             }
           }, (err: any) => {
