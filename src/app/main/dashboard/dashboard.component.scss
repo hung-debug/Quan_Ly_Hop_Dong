@@ -125,9 +125,9 @@ h3{
   }
 }
 
-::ng-deep #toast-container > div {
-  width: 490px;
-}
+// ::ng-deep #toast-container > div {
+//   width: 490px !important;
+// }
 
 ::ng-deep {
   .mat-dialog-container {

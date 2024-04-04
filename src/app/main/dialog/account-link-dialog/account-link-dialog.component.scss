@@ -24,21 +24,18 @@
       height: 38px;
       border-radius: 6px;
       border: none !important;
-      color: #0041C4;
-      background-color: #E6EDFA;
-      margin: 5px;
-    }
-    button:nth-last-child(1) {
-      // width: 104px;
-      // height: 38px;
-      // border-radius: 6px;
-      background-color: #106DB6;
-      color: #FFFFFF;
       margin: 5px;
     }
 
     .link_sso__cancel-btn {
       border: none !important;
+      color: #0041C4;
+      background-color: #E6EDFA;
+    }
+
+    .link_sso__otp-btn {
+      color: #FFFFFF;
+      background-color: #0041C4 !important;
     }
   }
 }
@@ -108,7 +105,7 @@
 
 .link_sso__warning {
   font-weight: 400;
-  line-height: 18px;
+  // line-height: 18px;
   // letter-spacing: -0.0375em;
   text-align: left;
   color: #677694;
@@ -138,7 +135,7 @@
 }
 
 ::ng-deep .wrapper .otp-input:not(:last-child){
-  margin-right: 16px !important;
+  margin-right: 23px !important;
 }
 
 ::ng-deep .wrapper .otp-input {
@@ -163,4 +160,32 @@
     border-radius: 8px;
     font-size: 16px;
   }
+}
+
+.sso-warning-time {
+  color: #E05050; 
+  font-weight: bold;
+}
+
+.link_sso__guide-btn {
+  margin-bottom: -10px;
+  span {
+    color: #286CF5;
+    font-weight: bold;
+  }
+  img {
+    width: 24px;
+    height: 24px;
+    padding: 3px 4px 2.42px 4px;
+  }
+  .back-btn {
+    color: #286CF5;
+    font-weight: bold;
+    // font-size: 14px;
+    cursor: pointer;
+  }
+}
+
+.row.link_sso__guide-btn > div:first-child {
+  cursor: pointer;
 }

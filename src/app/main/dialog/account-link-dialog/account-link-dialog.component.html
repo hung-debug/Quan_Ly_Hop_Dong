@@ -8,18 +8,20 @@
       <p>Chúng tôi đã gửi mã OTP về số điện thoại <b style="color: #106DB6;">{{this.datasOtp.phone}}</b>.<br>
         Vui lòng nhập mã và tiếp tục thực hiện.</p>
     </div> -->
-    <div class="link_sso__warning">
-      <span style="font-weight: bold;">Kính gửi Quý khách hàng,</span><br><br>
-      Nhằm nâng cao chất lượng dịch vụ, MobiFone tiến hành nâng cấp hệ thống Quản lý tài khoản tập trung (SSO) cho các khách hàng sử dụng hệ sinh thái giải pháp số của MobiFone. <br>
+    <div *ngIf="this.currentStep == 'infor'">
+      <div class="link_sso__warning">
+        <span style="font-weight: bold;">Kính gửi Quý khách hàng!</span><br><br>
+        <div style="text-align: justify;">
+          Nhằm nâng cao chất lượng dịch vụ, MobiFone tiến hành nâng cấp hệ thống Quản lý tài khoản tập trung (SSO) cho các khách hàng sử dụng hệ sinh thái giải pháp số của MobiFone.
+          <br>Sau khi hoàn thành liên kết, Quý khách có thể đăng nhập toàn bộ các hệ thống thuộc hệ sinh thái giải pháp của MobiFone bằng một tài khoản duy nhất.
+        </div>
+        Thời gian liên kết từ ngày <span class="sso-warning-time">01/04/2024</span> đến ngày <span class="sso-warning-time">30/04/2024</span>
+      </div>
       <br>
-      <span style="color: #106DB6; font-weight: bold;">Sau khi hoàn thành liên kết, Quý khách có thể đăng nhập toàn bộ các hệ thống thuộc hệ sinh thái giải pháp của MobiFone bằng một tài khoản duy nhất.</span><br>
-      <br>
-      Thời gian liên kết từ ngày ... đến ngày ...
+      <div style="font-weight: bold;" class="link_sso__warning">Trân trọng cảm ơn Quý Khách hàng!</div>
     </div>
-    <div style="color: #106DB6; font-style: italic; text-decoration: underline; cursor: pointer;" class="link_sso__warning" (click)="openTutorialLink($event)">Xem hướng dẫn chi tiết tại đây</div>
-    <div style="font-weight: bold;" class="link_sso__warning">Trân trọng cảm ơn Quý Khách hàng!</div>
 
-    <div class="link_sso__input-title">
+    <div *ngIf="this.currentStep !== 'infor'" class="link_sso__input-title">
       <span id = "title">
         Email <span class="invalid">*</span>
       </span>
@@ -53,9 +55,20 @@
     <div class="row select-option">
       <!-- <button class="dx-button-form dx-button-close dx-button-90" [ngStyle]="getStyleReset()" (click)="this.count == 0?sendOtpAgain(this.datasOtp.contract_id, this.datasOtp.recipient_id, this.datasOtp.phone):''" type="button">Gửi lại OTP</button>
       <button class="dx-button-form dx-button-close dx-button-90" (click)="onSubmit()" type="button">{{'confirm' | translate}}</button> -->
-      <button class="link_sso__cancel-btn" (click)="this.dialogRef.close()" type="button">Hủy</button>
-      <button *ngIf="!isNextStep" class="link_sso__otp-btn" [ngClass]="{'btn-disabled': this.count == 0}" (click)="onSubmit()" type="button">{{'Nhận OTP' | translate}}</button>
-      <button *ngIf="isNextStep" class="link_sso__otp-btn" [ngClass]="{'btn-disabled': this.count == 0 || this.ssoOTP.length < 6}" (click)="onSubmit()" type="button">{{'Liên kết' | translate}}</button>
+      <button *ngIf="this.currentStep !== 'infor'"class="link_sso__cancel-btn" (click)="this.dialogRef.close()" type="button">Hủy</button>
+      <button *ngIf="this.currentStep == 'infor'" class="link_sso__otp-btn" style="background-color: #0041C4 !important; margin-bottom: 20px;" (click)="onSubmit('infor')">Liên kết</button>
+      <button *ngIf="this.currentStep == 'otp'" class="link_sso__otp-btn" [ngClass]="{'btn-disabled': this.count == 0}" (click)="onSubmit('otp')" type="button">{{'Nhận OTP' | translate}}</button>
+      <button *ngIf="isNextStep" class="link_sso__otp-btn" [ngClass]="{'btn-disabled': this.count == 0 || this.ssoOTP.length < 6}" (click)="onSubmit('sync')" type="button">{{'Liên kết' | translate}}</button>
+    </div>
+    <div *ngIf="this.currentStep == 'infor'" class="row link_sso__guide-btn">
+      <div class="col-4" (click)="openTutorialLink()">
+        <img src="../../../../assets/img/guide_icon.svg">
+        <span>Xem hướng dẫn</span>
+      </div>
+      <div class="col-4"></div>
+      <div class="back-btn col-4 text-right" (click)="dialogRef.close()">
+        Để sau
+      </div>
     </div>
   </div>
 </div>
