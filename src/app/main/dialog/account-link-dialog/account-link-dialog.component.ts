@@ -31,7 +31,7 @@ export class AccountLinkDialogComponent implements OnInit {
   datas: any;
   c:any;
   counter$: any;
-  count = 60;
+  count = 180;
   isSentOpt = false;
   submitted = false;
 
@@ -42,7 +42,7 @@ export class AccountLinkDialogComponent implements OnInit {
   smsContractBuy: any;
   ssoEmail: any = "";
   ssoOTP: any = "";
-  COUNT_TIME: number = 60;
+  COUNT_TIME: number = 180;
   isDisableSendOtp: boolean = false;
   isNextStep: boolean = false;
   currentStep: 'infor' | 'otp' | 'sync' = 'infor';
