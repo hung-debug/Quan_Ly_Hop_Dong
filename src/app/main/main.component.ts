@@ -32,6 +32,7 @@ export class MainComponent implements OnInit {
 
   urlLoginType: any;
   nameCurrentUser:any;
+  phoneCurrentUser: any;
   listNotification: any[] = [];
   getAlllistNotification: any[] = [];
 
@@ -81,7 +82,10 @@ export class MainComponent implements OnInit {
 
     this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
       data => {
+        console.log("data",data);
+        
         this.nameCurrentUser = data?.name;
+        this.phoneCurrentUser = data?.phone;
       });
 
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {

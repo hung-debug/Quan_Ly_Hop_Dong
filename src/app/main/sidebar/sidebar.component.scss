@@ -75,6 +75,7 @@
       justify-content: center;
       text-align: center;
       height: 59px;
+      background-color: #FFFFFF;
 
       >a {
         text-transform: uppercase;
@@ -147,6 +148,13 @@
 
     .sidebar-menu {
       padding-bottom: 10px;
+      //styleName: Content/12 Medium;
+      font-family: "Roboto";
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 18px;
+      text-align: left;
+
 
       .header-menu span {
         font-weight: bold;
@@ -166,7 +174,7 @@
           width: 100%;
           text-decoration: none;
           position: relative;
-          padding: 8px 30px 8px 20px;
+          padding: 8px 38px 8px 20px;
           cursor: pointer;
 
           img {
@@ -182,6 +190,7 @@
           &:hover>i::before {
             display: inline-block;
             animation: swing ease-in-out .5s 1 alternate;
+            color: #0041C4;
           }
 
           span.label,
@@ -197,7 +206,8 @@
         >a:after {
           font-family: 'FontAwesome';
           font-weight: 900;
-          content: "\f105";
+          // content: "\f105";
+          content: url("../../../assets/img/arrow-right.svg");
           display: inline-block;
           font-style: normal;
           font-variant: normal;
@@ -207,8 +217,8 @@
           text-align: center;
           background: 0 0;
           position: absolute;
-          right: 15px;
-          top: 14px;
+          right: 10px;
+          top: 10px;
           transition: transform .3s ease;
 
         }
@@ -420,7 +430,7 @@
 $bg-sidebar-wrapper : #F9FDFF;
 $border-color : #2b2b2b;
 $footer-top-border-color :#3a3a3a;
-$color:#106DB6;
+$color:#001A4D;
 $header-menu-color :#6c7b88;
 $hover-color:#f70707;
 $shadow-color:#131212;
@@ -469,8 +479,8 @@ $img-shadow-color:rgba(0, 0, 0, 0.5);
   .sidebar-footer>div>a:hover i,
   #close-sidebar:hover {
     //color: $hover-color !important;
-    background-color: #c5ebff;
-    font-weight: 500;
+    background-color: #FFFFFF;
+    font-weight: 800;
   }
 
   // ul li:hover a i,
@@ -564,12 +574,12 @@ $img-shadow-color:rgba(0, 0, 0, 0.5);
 
 .btn_add_contract{
   border: 0px;
-  border-radius: 12px;
-  width: 150px;
-  height: 33px;
+  border-radius: 6px;
+  width: 180px;
+  height: 38px;
   box-sizing: border-box;
   color: white;
-  background-color: #1487E1;
+  background-color: #0041C4;
   font-size: 13px;
 }
 .sub_title{
@@ -580,8 +590,9 @@ $img-shadow-color:rgba(0, 0, 0, 0.5);
   display: inline-block;
   width: 100%;
   position: relative;
-  padding: 10px;
+  padding: 0px;
   text-align: center;
+  margin-bottom: 10%;
 }
 .icon_add{
   padding-right: 5px;

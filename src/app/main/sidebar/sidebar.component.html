@@ -3,7 +3,7 @@
     <perfect-scrollbar>
       <div class="sidebar-header">
         <a (click)="openDashboard()">
-          <img src="assets/img/EC_new_logo_v3.png" alt="Logo" class="img-responsive" width="168px" height="auto" />
+          <img src="assets/img/logo_eContract_db.svg" alt="Logo" class="img-responsive" width="150px" height="auto" />
         </a>
       </div>
 
@@ -25,8 +25,11 @@
             </a>
             <span *ngIf="menu.type === 'button'" (click)="clickLink(menu)" class="sub_title_add">
               <a style="color: white" [routerLink]="menu.href">
-              <button class="btn_add_contract">
-                <span class="fa fa-plus icon_add"></span>{{menu.title | translate}}
+              <button class="btn_add_contract">{{menu.title | translate}}
+                <img src="../../assets/img/add-square.svg"/>
+                <!-- <span class="icon_add">
+                  
+                </span> -->
               </button>
             </a>
             </span>

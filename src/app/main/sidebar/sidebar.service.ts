@@ -112,16 +112,26 @@ export class SidebarService {
   menus: any[] = [];
   getMenuList() {
     this.menus = [];
-    this.menus = [
+    
+    if (this.isQLHD_01 || this.isQLHD_14 || this.isQLHD_15) {
+      this.menus.push({
+        title: 'menu.contract.add',
+        active: false,
+        type: 'button',
+        href: '/main/form-contract/add',
+        id: 0,
+      });
+    }
+    this.menus.push(
       {
         title: 'menu.dashboard',
-        icon: '/assets/img/db_home.svg',
+        icon: '/assets/img/home_icon.svg',
         active: false,
         type: 'simple',
         href: '/main/dashboard',
-        id: 0,
+        id: 1,
       },
-    ];
+    );
 
     const currentUserC = JSON.parse(localStorage.getItem('currentUser') || '');
 
@@ -338,15 +348,7 @@ export class SidebarService {
   }
 
   buildMenu(currentUserC: any) {
-    if (this.isQLHD_01 || this.isQLHD_14 || this.isQLHD_15) {
-      this.menus.push({
-        title: 'menu.contract.add',
-        active: false,
-        type: 'button',
-        href: '/main/form-contract/add',
-        id: 1,
-      });
-    }
+
 
     if (
       this.isQLHD_02 ||
@@ -415,7 +417,7 @@ export class SidebarService {
 
       this.menus.push({
         title: 'menu.contract.create.list',
-        icon: '/assets/img/db_processing.svg',
+        icon: '/assets/img/processing_icon.svg',
         active: false,
         activeDrop: false,
         type: 'dropdown',
@@ -446,7 +448,7 @@ export class SidebarService {
 
     this.menus.push({
       title: 'menu.contract.receive.list',
-      icon: '/assets/img/db_processing.svg',
+      icon: '/assets/img/document-download.svg',
       active: false,
       activeDrop: false,
       type: 'dropdown',
@@ -467,7 +469,7 @@ export class SidebarService {
     ) {
       this.menus.push({
         title: 'menu.contract.template',
-        icon: '/assets/img/db_processing.svg',
+        icon: '/assets/img/document-normal.svg',
         active: false,
         type: 'simple',
         href: '/main/contract-template',
@@ -499,7 +501,7 @@ export class SidebarService {
         )
         this.menus.push({
           title: 'menu.manager.user',
-          icon: '/assets/img/db_processing.svg',
+          icon: '/assets/img/user-tag.svg',
           active: false,
           activeDrop: false,
           type: 'dropdown',
@@ -541,8 +543,8 @@ export class SidebarService {
     // }
 
     this.menus.push({
-      title: 'customer.list',
-      icon: '/assets/img/customer_list.svg',
+      title: 'menu.customer.list',
+      icon: '/assets/img/profile-2user.svg',
       active: false,
       type: 'simple',
       href: '/main/customer',
@@ -573,7 +575,7 @@ export class SidebarService {
         )
         this.menus.push({
           title: 'menu.config',
-          icon: '/assets/img/email-sms.svg',
+          icon: '/assets/img/setting-3.svg',
           active: false,
           activeDrop: false,
           type: 'dropdown',
@@ -585,7 +587,7 @@ export class SidebarService {
 
       this.menus.push({
         title: 'contract.folder',
-        icon: '/assets/img/contract.svg',
+        icon: '/assets/img/folder-2.svg',
         active: false,
         type: 'simple',
         href: '/main/contract-folder',
@@ -692,7 +694,7 @@ export class SidebarService {
     if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai || this.isBaoCaoHopDongNhan || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiGuiSms || this.isBaoCaoTrangThaiGuiEmail || this.isBaoCaoEKYC) {
       this.menus.push({
         title: 'report',
-        icon: '/assets/img/analytics1.svg',
+        icon: '/assets/img/status-up.svg',
         active: false,
         activeDrop: false,
         type: 'dropdown',
@@ -704,7 +706,7 @@ export class SidebarService {
 
     this.menus.push({
       title: 'menu.check.sign.digital',
-      icon: '/assets/img/check_sign_digital.svg',
+      icon: '/assets/img/check.svg',
       active: false,
       type: 'simple',
       href: '/main/check-sign-digital',
