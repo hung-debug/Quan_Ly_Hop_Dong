@@ -921,6 +921,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             } else {
               element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
             }
+          }else if (isSignType == 'chu_ky_so') {
+            element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
           } else {
             element.is_disable = true
           }

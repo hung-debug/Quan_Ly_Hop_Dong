@@ -2300,6 +2300,7 @@ export class ConsiderContractComponent
           if (!this.mobile)
             this.convertXForHsm(signUpdate.page);
           let fieldHsm = {
+            id: signUpdate.id,
             coordinate_x: signUpdate.signDigitalX,
             coordinate_y: signUpdate.coordinate_y,
             width: signUpdate.width ,
@@ -2621,6 +2622,7 @@ export class ConsiderContractComponent
 
           }
           let fieldCert1 = {
+            id: signUpdate.id,
             page: signUpdate.page,
             coordinate_x: signUpdate.signDigitalX,
             coordinate_y: signUpdate.coordinate_y,
@@ -2784,6 +2786,7 @@ export class ConsiderContractComponent
           if (!this.mobile)
             this.convertXForHsm(signUpdate.page);
           let fieldRemoteSigning = {
+            id: signUpdate.id,
             coordinate_x: signUpdate.signDigitalX,
             coordinate_y: signUpdate.coordinate_y,
             width: signUpdate.width ,
