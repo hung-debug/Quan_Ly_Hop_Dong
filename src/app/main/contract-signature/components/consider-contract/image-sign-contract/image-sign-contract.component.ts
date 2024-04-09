@@ -22,9 +22,9 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   @Input() contractNoValue: boolean;
   @Input() contractNoValueSign: string;
   @Input() isNotTextSupport: boolean
+  @Input() otpValueSign: any;
   @ViewChild('inputEditText') inputEditText: ElementRef;
   @ViewChild('inputEditContractNo') inputEditContractNo: ElementRef;
-
 
   @Output('checkedChange') newItemEvent = new EventEmitter<string>();
   @Output('contractNoValue') contractNoValueEvent = new EventEmitter<string>();
@@ -35,7 +35,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   typeSignDigital: any;
 
   contractNo: boolean = false;
-
+  countOtpBox: number = 0;
   constructor(
     private dialog: MatDialog,
     private toastService: ToastService,
@@ -123,8 +123,9 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+      this.countOtpBox++
       this.sign.valueSign = result;
+      this.contractNoValueEvent.emit(this.sign.valueSign);
     })
   }
 
@@ -243,22 +244,29 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       } else {
       return 'Text';}
     } else {
-      if (sign.value) {
-        // sign.value= this.convertCurrency(sign.value);
-        
-        return sign.value;
-      } else if(sign.valueSign) {
-        // sign.valueSign= this.convertCurrency(sign.valueSign);
-        
-        return sign.valueSign;
-      } else if(this.contractNoValueSign) {
-        
-        this.count++;
-        sign.valueSign= this.contractNoValueSign
-        return sign.valueSign;
+      if (sign.sign_unit == 'so_tai_lieu') {
+        if (sign.value) {
+          // sign.value= this.convertCurrency(sign.value);
+          
+          return sign.value;
+        } else if(sign.valueSign) {
+          // sign.valueSign= this.convertCurrency(sign.valueSign);
+          
+          return sign.valueSign;
+        } else if(this.contractNoValueSign) {
+          
+          this.count++;
+          sign.valueSign= this.contractNoValueSign
+          return sign.valueSign;
 
+        }
+        return 'Số hợp đồng';
+      } else if (sign.sign_unit == 'chu_ky_anh') {
+        if(this.contractNoValueSign) {
+          sign.valueSign= this.contractNoValueSign
+          return sign.valueSign;
+        }
       }
-      return 'Số hợp đồng';
     }
   }
 

@@ -24,7 +24,7 @@ import { ImageDialogSignComponent } from './image-dialog-sign/image-dialog-sign.
 import { PkiDialogSignComponent } from './pki-dialog-sign/pki-dialog-sign.component';
 import { HsmDialogSignComponent } from './hsm-dialog-sign/hsm-dialog-sign.component';
 import { CertDialogSignComponent } from './cert-dialog-sign/cert-dialog-sign.component';
-import { Observable, forkJoin, from, throwError, timer } from 'rxjs';
+import { forkJoin, from, throwError, timer } from 'rxjs';
 import { ToastService } from '../../../../service/toast.service';
 import { UploadService } from '../../../../service/upload.service';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -32,7 +32,7 @@ import { encode } from 'base64-arraybuffer';
 import { UserService } from '../../../../service/user.service';
 // @ts-ignore
 import domtoimage from 'dom-to-image';
-import { concatMap, delay, map, tap } from 'rxjs/operators';
+import { concatMap, delay, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import {
   networkList,
@@ -983,7 +983,7 @@ export class ConsiderContractComponent
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
       "backgroundColor": !d.valueSign ? '#FFFFFF' : '',
-      "border": !d.valueSign ? "1px dashed #6B6B6B" : '',
+      "border": !this.otpValueSign ? "1px dashed #6B6B6B" : (this.otpValueSign) ? 'none' : '',
       "border-radius": "6px"
     }
     if (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so' && this.isNotTextSupport) {
@@ -4189,7 +4189,7 @@ export class ConsiderContractComponent
         item?.recipient?.email === this.currentUser.email &&
         item?.recipient?.role === this.datas?.roleContractReceived &&
         item.required &&
-        !item.valueSign &&
+        (!item.valueSign && !this.otpValueSign) &&
         item.type != 3
     );
     this.currentNullValuePages = validSign.map((item: any) => item.page.toString())
@@ -4722,6 +4722,7 @@ export class ConsiderContractComponent
       datas: this.datas,
       currentUser: this.currentUser,
       orgId: this.orgId,
+      otpValueSign: this.otpValueSign
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -4866,8 +4867,10 @@ export class ConsiderContractComponent
 
   contractNoValue: boolean = false;
   contractNoValueSign: string;
+  otpValueSign: any = "";
   contractNoValueChange($event: any) {
     this.contractNoValueSign = $event;
+    this.otpValueSign = $event;
   }
 
   async signBCY(pdfContractPath: any, fieldId: any){

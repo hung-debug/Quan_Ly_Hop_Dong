@@ -198,7 +198,7 @@ export class ConfirmSignOtpComponent implements OnInit {
     
           const formData = {
             "name": "image_" + new Date().getTime() + ".jpg",
-            "content": signUpdate.valueSign,
+            "content": signUpdate.valueSign ? signUpdate.valueSign : this.data.otpValueSign,
             organizationId: this.datas?.is_data_contract?.organization_id,
             signType: '',
             ocrResponseName: ''
@@ -266,7 +266,7 @@ export class ConfirmSignOtpComponent implements OnInit {
 
   async signContract(notContainSignImage?: boolean,bucket?: string) {
     const signUpdateTemp = JSON.parse(JSON.stringify(this.datas.is_data_object_signature));
-    let signUpdatePayload = "";
+    let signUpdatePayload: any = "";
     //neu khong chua chu ky anh
     if (notContainSignImage) {
       signUpdatePayload = signUpdateTemp.filter(
@@ -318,7 +318,12 @@ export class ConfirmSignOtpComponent implements OnInit {
           }
         });
       if(signUpdatePayload){
-        signUpdatePayload = signUpdatePayload[0];
+        signUpdatePayload = {
+          otp: signUpdatePayload[0]?.otp,
+          signInfo: signUpdatePayload[0]?.signInfo,
+          processAt: signUpdatePayload[0]?.processAt,
+          fields: signUpdatePayload.map((item: any) => item.fields[0])
+        };
       }
     }
     
