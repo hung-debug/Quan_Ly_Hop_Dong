@@ -167,7 +167,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
           this.error = true;
           this.errorDetail = "error.username.password";
         }
-      }else if(data?.code == '01'){
+      }else if(data?.code == '13'){
         this.countLoginFail++;
         this.error = true;
 
@@ -184,6 +184,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.errorDetail = "Tài khoản của bạn chỉ hỗ trợ đăng nhập bằng SSO, vui lòng đăng nhập bằng SSO để sử dụng hệ thống";
       } else if (data?.code == '11') {
         this.openAccountLinkDialog(data?.customer?.info)
+      } else if (data?.code == '01') {
+        this.countLoginFail++;
+        this.error = true;
+        this.errorDetail = "Tài khoản không hoạt động";
       }
       else {
         this.countLoginFail++;
