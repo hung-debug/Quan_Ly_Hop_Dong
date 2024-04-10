@@ -380,6 +380,7 @@ export class DetermineSignerComponent implements OnInit {
     this.stepChangeDetermineSigner.emit(step);
   }
 
+  isEditOrdering: boolean = false;
   onItemSelect(e: any, data: any) {
     var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
     var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
@@ -1814,6 +1815,17 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   dataParnterOrganization() {
+    let count: number = 0
+    this.datas.is_determine_clone.forEach((item: any) => {
+      if (item.type == 2 || item.type == 1) {
+        if (item.ordering == 1) {
+          count++
+        }
+      }
+    })
+    if (count > 1) {
+      this.isEditOrdering = true
+    } else this.isEditOrdering = false
     return this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
