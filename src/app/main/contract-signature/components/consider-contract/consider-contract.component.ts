@@ -674,12 +674,16 @@ export class ConsiderContractComponent
               const recipient = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
 
               let fieldRecipientId: any = null;
+              let countNotBoxSign: number = 0
               recipient.recipients.forEach((ele: any) => {
                 if (ele.id == this.recipientId) {
                   fieldRecipientId = ele.fields;
+                  ele.fields.forEach((item: any) => {
+                    if (item.type !== 2) countNotBoxSign++
+                  })
                 }
               });
-              if (fieldRecipientId.length == 1 && this.recipient.sign_type[0].id !== 7) {
+              if ((fieldRecipientId?.length == 1 || countNotBoxSign == 0) && this.recipient.sign_type[0].id !== 7) {
                 const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, image_base64).toPromise();
                 this.pdfSrcMobile = pdfMobile.filePath;
               } else if (fieldRecipientId.length > 1) {
@@ -3714,14 +3718,21 @@ export class ConsiderContractComponent
           };
 
           this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseBase64) => {
-            signUpdateTempN[0].value = responseBase64.file_object.file_path;
-            signUpdateTempN[0].bucket = responseBase64.file_object.bucket;
-            signUpdateTempN[0].processAt = this.isDateTime;
+            // signUpdateTempN[0].value = responseBase64.file_object.file_path;
+            // signUpdateTempN[0].bucket = responseBase64.file_object.bucket;
+            // signUpdateTempN[0].processAt = this.isDateTime;
 
-            signUpdateTempN[0].signerType = 'eKYC'
-            signUpdateTempN[0].signerName = signUpdateTempN[0].name
-            signUpdateTempN[0].signerTaxCode = this.cardId
-
+            // signUpdateTempN[0].signerType = 'eKYC'
+            // signUpdateTempN[0].signerName = signUpdateTempN[0].name
+            // signUpdateTempN[0].signerTaxCode = this.cardId
+            signUpdateTempN.forEach((item: any) => {
+              item.value = responseBase64.file_object.file_path;
+              item.bucket = responseBase64.file_object.bucket;
+              item.processAt = this.isDateTime;
+              item.signerType = 'eKYC'
+              item.signerName = signUpdateTempN[0].name
+              item.signerTaxCode = this.cardId
+            })
 
             this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
               async (result) => {
