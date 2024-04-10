@@ -1661,7 +1661,19 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     item.recipients = new_arr;
   }
 
+  isEditOrdering: boolean = false;
   dataParnterOrganization() {
+    let count: number = 0
+    this.datasForm.is_determine_clone.forEach((item: any) => {
+      if (item.type == 2 || item.type == 1) {
+        if (item.ordering == 1) {
+          count++
+        }
+      }
+    })
+    if (count > 1) {
+      this.isEditOrdering = true
+    } else this.isEditOrdering = false
     return this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
