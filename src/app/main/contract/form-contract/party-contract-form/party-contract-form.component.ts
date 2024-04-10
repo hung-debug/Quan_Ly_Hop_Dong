@@ -1663,20 +1663,28 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   isEditOrdering: boolean = false;
   dataParnterOrganization() {
-    let count: number = 0
+    let ordersArr: any = [];
     this.datasForm.is_determine_clone.forEach((item: any) => {
       if (item.type == 2 || item.type == 1) {
-        if (item.ordering == 1) {
-          count++
-        }
+        ordersArr.push(item.ordering)
       }
     })
-    if (count > 1) {
+    if (this.checkOrgsHaveSameOrder(ordersArr)) {
       this.isEditOrdering = true
     } else this.isEditOrdering = false
     return this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
+  checkOrgsHaveSameOrder(arr: any[]) {
+    let seen: any = {}
+    for (let i = 0; i<arr.length; i++) {
+      if (seen[arr[i]]) return true
+      else {
+        seen[arr[i]] = true
+      }
+    }
+    return false;
+  }
   // thêm đối tác
   addPartner() {
     let data_partner_add = {};
