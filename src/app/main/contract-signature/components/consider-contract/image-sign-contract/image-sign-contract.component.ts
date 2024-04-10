@@ -123,9 +123,11 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
-      this.countOtpBox++
-      this.sign.valueSign = result;
-      this.contractNoValueEvent.emit(this.sign.valueSign);
+      if (result) {
+        this.countOtpBox++
+        this.sign.valueSign = result;
+        this.contractNoValueEvent.emit(this.sign.valueSign);
+      }
     })
   }
 
