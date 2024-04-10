@@ -198,7 +198,7 @@ export class ConfirmSignOtpComponent implements OnInit {
     
           const formData = {
             "name": "image_" + new Date().getTime() + ".jpg",
-            "content": signUpdate.valueSign ? signUpdate.valueSign : this.data.otpValueSign,
+            "content": this.data.otpValueSign,
             organizationId: this.datas?.is_data_contract?.organization_id,
             signType: '',
             ocrResponseName: ''
@@ -218,7 +218,7 @@ export class ConfirmSignOtpComponent implements OnInit {
         ) {
           const formData = {
             "name": "image_" + new Date().getTime() + ".jpg",
-            "content": this.datas.is_data_object_signature.valueSign,
+            "content": this.data.otpValueSign,
             organizationId: this.datas?.is_data_contract?.organization_id,
             signType: '',
             ocrResponseName: ''
