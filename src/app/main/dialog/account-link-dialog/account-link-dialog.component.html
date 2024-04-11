@@ -58,7 +58,7 @@
       <button *ngIf="this.currentStep !== 'infor'"class="link_sso__cancel-btn" (click)="this.dialogRef.close()" type="button">Hủy</button>
       <button *ngIf="this.currentStep == 'infor'" class="link_sso__otp-btn" style="background-color: #0041C4 !important; margin-bottom: 20px;" (click)="onSubmit('infor')">Liên kết</button>
       <button *ngIf="this.currentStep == 'otp'" class="link_sso__otp-btn" [ngClass]="{'btn-disabled': this.count == 0}" (click)="onSubmit('otp')" type="button">{{'Nhận OTP' | translate}}</button>
-      <button *ngIf="isNextStep" class="link_sso__otp-btn" [ngClass]="{'btn-disabled': this.count == 0 || this.ssoOTP.length < 6}" (click)="onSubmit('sync')" type="button">{{'Liên kết' | translate}}</button>
+      <button *ngIf="isNextStep" class="link_sso__otp-btn" [ngClass]="{'btn-disabled': this.count == 0 || this.ssoOTP.length < 6 || isDisable}" (click)="onSubmit('sync')" type="button" [disabled]="isDisable">{{'Liên kết' | translate}}</button>
     </div>
     <div *ngIf="this.currentStep == 'infor'" class="row link_sso__guide-btn">
       <div class="col-4" (click)="openTutorialLink()">

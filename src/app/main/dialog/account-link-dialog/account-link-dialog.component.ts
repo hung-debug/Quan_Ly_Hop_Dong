@@ -48,6 +48,7 @@ export class AccountLinkDialogComponent implements OnInit {
   currentStep: 'infor' | 'otp' | 'sync' = 'infor';
   warningLinkSsoMsg: string = 'Kính gửi Quý khách hàng,\nNhằm nâng cao chất lượng dịch vụ, MobiFone tiến hành nâng cấp hệ thống Quản lý tài khoản tập trung (SSO) cho các khách hàng sử dụng hệ sinh thái giải pháp số của MobiFone.\nSau khi hoàn thành liên kết, Quý khách có thể đăng nhập toàn bộ các hệ thống thuộc hệ sinh thái giải pháp của MobiFone bằng một tài khoản duy nhất.\n<b>Thời gian liên kết từ ngày....đến ngày...</b>'
   ssoSyncingTutorialLink: string = 'https://drive.google.com/drive/folders/13dy_0jrWMUAfwSYAHDtC4A8BQT6cd22n'
+  isDisable: boolean = false;
   @Output() confirmOtpForm = new EventEmitter();
 
   get f() { return this.addForm.controls; }
@@ -134,13 +135,14 @@ export class AccountLinkDialogComponent implements OnInit {
           }
         )
       } else {
+        this.isDisable = true;
         this.userService.syncAccountSso(this.ssoEmail, this.ssoOTP).subscribe(
           (res: any) => {
-  
             switch (res.code) {
               case '00':
                 this.toastService.showSuccessHTMLWithTimeout('Liên kết tài khoản SSO thành công, vui lòng kiểm tra email để xem chi tiết thông tin.','', 3000)
                 this.isNextStep = true
+                this.isDisable = true;
                 this.dialogRef.close()
                 this.router.navigate(['/login']);
                 break;
@@ -169,8 +171,10 @@ export class AccountLinkDialogComponent implements OnInit {
                 this.toastService.showErrorHTMLWithTimeout('Kết nối SSO thất bại','',3000)
                 break;
             }
+            this.isDisable = false;
           }, (err: any) => {
             this.toastService.showErrorHTMLWithTimeout('Liên kết tài khoản SSO thất bại','',3000)
+            this.isDisable = false;
             console.log(err)
           }
         )
