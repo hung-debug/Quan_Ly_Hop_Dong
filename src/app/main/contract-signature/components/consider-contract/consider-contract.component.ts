@@ -205,6 +205,8 @@ export class ConsiderContractComponent
   ekycDocType: string = ''
   isContainSignField: boolean = true;
   isNB: boolean = false;
+  signBoxData: any = {};
+
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -652,10 +654,16 @@ export class ConsiderContractComponent
           let image_base64 = '';
 
           let arr = this.convertToSignConfig();
+          this.signBoxData['coordinateY'] = []
+          this.signBoxData.idElement = []
 
           arr.forEach((items: any) => {
             this.coordinateY.push(items.coordinate_y);
             this.idElement.push(items.id);
+            if (items.type == 2 || items.type == 3) {
+              this.signBoxData.coordinateY.push(items.coordinate_y)
+              this.signBoxData.idElement.push(items.id)
+            }
           });
 
           this.coordinateY.sort();
