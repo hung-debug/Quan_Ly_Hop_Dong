@@ -34,6 +34,7 @@ export class MainComponent implements OnInit {
   nameCurrentUser:any;
   listNotification: any[] = [];
   getAlllistNotification: any[] = [];
+  ssoExpireDate = environment.ssoExpireDate
 
   constructor(private router: Router,
               private appService: AppService,

@@ -13,7 +13,7 @@ export const environment = {
   // apiUrl: 'http://192.168.1.14:8762',
   // flag: 'NB',
   flag: 'KD',
-
+  ssoExpireDate: '30/04/2024 - 30/05/2024',
   //NB
   // apiUrl: 'https://econtract.mobifone.vn/service',
   // flag: 'NB',
