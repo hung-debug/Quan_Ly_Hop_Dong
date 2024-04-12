@@ -658,11 +658,12 @@ export class ConsiderContractComponent
           this.signBoxData.idElement = []
 
           arr.forEach((items: any) => {
-            this.coordinateY.push(items.coordinate_y);
-            this.idElement.push(items.id);
             if (items.type == 2 || items.type == 3) {
               this.signBoxData.coordinateY.push(items.coordinate_y)
               this.signBoxData.idElement.push(items.id)
+            } else {
+              this.coordinateY.push(items.coordinate_y);
+              this.idElement.push(items.id);
             }
           });
 
