@@ -67,7 +67,11 @@ export class ForgotPasswordComponent implements OnInit {
           if(data.status == 0){
             this.sendPassword('Chúng tôi đã gửi thông tin về địa chỉ email '+ email +'<br>Vui lòng truy cập email để tiếp tục!');
           }else{
-            this.sendPassword(this.translate.instant('email.valid'));
+            if (!data.message) {
+              this.sendPassword(this.translate.instant('email.valid'));
+            } else if (data.message) {
+              this.sendPassword(this.translate.instant(data.message));
+            }
           }
           
         },
