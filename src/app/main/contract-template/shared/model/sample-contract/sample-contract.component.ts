@@ -865,7 +865,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       if (isSignType != 'text' && (element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
         let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
 
-        if (data.length >= 0) {
+        if (data.length >= 0 && !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) && isSignType !== 'chu_ky_anh') {
           element.is_disable = true;
         } else {
           element.is_disable = false;
