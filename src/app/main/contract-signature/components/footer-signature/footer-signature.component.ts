@@ -132,7 +132,6 @@ export class FooterSignatureComponent implements OnInit {
 
       }
     }
-    this.inforBoxes = this.currentRecipient?.fields?.length
     this.getNumberOfSigningObj(this.currentRecipient?.fields)
   }
 
@@ -166,7 +165,6 @@ export class FooterSignatureComponent implements OnInit {
 
   indexY: number = 0;
   autoScroll() {
-
     this.coordinateY = this.coordinateY.sort(function (a: number, b: number) {
       return a - b;
     });
@@ -174,7 +172,6 @@ export class FooterSignatureComponent implements OnInit {
     this.idElement = this.idElement.sort(function (a: number, b: number) {
       return a - b;
     });
-
     let pdffull: any = document.getElementById('pdf-full');
 
     if (this.confirmSignature == 1 || this.confirmSignature == 3) {
@@ -206,11 +203,9 @@ export class FooterSignatureComponent implements OnInit {
     this.signBoxData.coordinateY = this.signBoxData.coordinateY.sort(function (a: number, b: number) {
       return a - b;
     });
-    console.log("signBoxData.coordinateY",this.signBoxData.coordinateY);
     this.signBoxData.idElement = this.signBoxData.idElement.sort(function (a: number, b: number) {
       return a - b;
     });
-    console.log("signBoxData.idElement",this.signBoxData.idElement);
     let pdffull: any = document.getElementById('pdf-full');
 
     if (this.confirmSignature == 1 || this.confirmSignature == 3) {
@@ -225,7 +220,6 @@ export class FooterSignatureComponent implements OnInit {
         if (this.signBoxData.idElement[i] != this.signBoxData.idElement[this.indexY]) {
           let elemet: any = document.getElementById(this.signBoxData.idElement[i]);
           elemet.style.backgroundColor = '#EBF8FF';
-          console.log("elemet",elemet);
         }
       }
     }
@@ -739,5 +733,6 @@ export class FooterSignatureComponent implements OnInit {
         this.signBoxes++
       }
     })
+    this.inforBoxes = this.currentRecipient?.fields?.length - this.signBoxes
   }
 }
