@@ -413,6 +413,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
             this.router.navigate(['/'])
             this.isSSOlogin = false
             break;
+          case '14':
+            this.toastService.showErrorHTMLWithTimeout('Tài khoản chưa được đồng bộ SSO','',3000)
+            this.router.navigate(['/'])
+            this.isSSOlogin = false
+            break;
           case '100':
             this.toastService.showErrorHTMLWithTimeout('Lỗi hệ thống','',3000)
             this.router.navigate(['/'])
