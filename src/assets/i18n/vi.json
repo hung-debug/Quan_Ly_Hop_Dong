@@ -27,7 +27,7 @@
   "document.user.use": "Hướng dẫn sử dụng",
   "document.plugin.pki": "Plugin ký Token",
   "menu.dashboard": "Trang chủ",
-  "menu.contract.add": "Tạo mới",
+  "menu.contract.add": "Tạo ngay",
   "menu.contract.create.list": "Hợp đồng tạo",
   "menu.contract.receive.list": "Hợp đồng nhận",
   "menu.contract.template.list": "Mẫu hợp đồng",
@@ -831,5 +831,10 @@
   "password.blank":"Mật khẩu không được để trống",
   "taxcode.not.match.hsm":"Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng",
   "login.method.title": "Hoặc đăng nhập bằng",
-  "footer_text":"Bản quyền thuộc về Trung tâm Công nghệ thông tin MobiFone thuộc TCT Viễn thông MobiFone"
+  "footer_text":"Bản quyền thuộc về Trung tâm Công nghệ thông tin MobiFone thuộc TCT Viễn thông MobiFone",
+  "text.dashboard.theme": "Hợp đồng điện tử eContract đã giúp kết nối hơn 50.000 doanh nghiệp và cá nhân mỗi năm!",
+  "request.process":"Yêu cầu cần xử lý",
+  "package.document":"Gói tài liệu",
+  "package.used": "Đã dùng",
+  "package.unused":"Chưa dùng"
 }

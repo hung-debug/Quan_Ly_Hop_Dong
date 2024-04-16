@@ -14,6 +14,7 @@ import * as moment from 'moment';
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { AccountLinkDialogComponent } from '../dialog/account-link-dialog/account-link-dialog.component';
+import { ContractSignatureService } from 'src/app/service/contract-signature.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,6 +25,7 @@ export class DashboardComponent implements OnInit {
 
   translations: any;
   chartCreated: any;
+  chartPieCreated: any;
   chartReceived: any;
 
   menuDashboard: string;
@@ -49,6 +51,9 @@ export class DashboardComponent implements OnInit {
   stateOptions: any[];
 
   listNotification: any[] = [];
+  contractConnectList: any[] = [];
+  contractRequestList: any[] = [];
+  contractRecipienteList: any[] = [];
   orgList: any[] = [];
   orgListTmp: any[] = [];
   organization_id: any = "";
@@ -73,6 +78,9 @@ export class DashboardComponent implements OnInit {
   OrgId: any;
   enviroment: any = "";
   site: string;
+  currentName: any;
+  loadData1: boolean = false;
+  loadData2: boolean = false;
 
   constructor(
     private appService: AppService,
@@ -85,6 +93,8 @@ export class DashboardComponent implements OnInit {
     private toastService: ToastService,
     private roleService: RoleService,
     private dialog: MatDialog,
+    private contractService : ContractService,
+    private contractSignature: ContractSignatureService,
   ) {
     this.stateOptions = [
       {label: "my.contract", value: 'off'},
@@ -108,6 +118,7 @@ export class DashboardComponent implements OnInit {
     let userId = this.userService.getAuthCurrentUser().id;
     this.userService.getUserById(userId).subscribe(
       data => {
+        this.currentName = data.name
         //lay id role
         if (!data.is_request_sso) {
           this.openAccountLinkDialog(data)
@@ -162,7 +173,10 @@ export class DashboardComponent implements OnInit {
 
       this.unitService.getNumberContractUseOriganzation(this.userService.getInforUser().organization_id).toPromise().then(
         data => {
+          console.log("dataaaaaanumContractUse",data);
+          this.search()
           this.numContractUse = data.contract;
+          this.loadData1 = true;
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
         }
@@ -171,7 +185,10 @@ export class DashboardComponent implements OnInit {
       //lay so luong hop dong da mua
       this.unitService.getNumberContractBuyOriganzation(this.userService.getInforUser().organization_id).toPromise().then(
         data => {
+          console.log("dataaaaaanumContractBuy",data);
           this.numContractBuy = data.contract;
+          this.loadData2 = true;
+          this.search()
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
         }
@@ -179,6 +196,7 @@ export class DashboardComponent implements OnInit {
 
       this.orgList = this.orgListTmp;
       this.convertData();
+      this.getDataPieChart();
     });
   }
 
@@ -327,6 +345,8 @@ export class DashboardComponent implements OnInit {
     this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
     this.dashboardService.countContractCreate(this.isOrg, this.organization_id, this.filter_from_date, this.filter_to_date).subscribe(data => {
       let newData = Object.assign( {}, data)
+      // console.log("newData",newData);
+      
       newData.isOrg = this.isOrg;
       newData.organization_id = this.organization_id;
       newData.from_date = this.filter_from_date;
@@ -344,12 +364,19 @@ export class DashboardComponent implements OnInit {
         this.createChart("Đang xử lý","Hoàn thành","Từ chối","Huỷ bỏ", "Quá hạn", "Số lượng", newData);
       else if(localStorage.getItem('lang') == 'en' || sessionStorage.getItem('lang') == 'en')
         this.createChart("Processing","Complete","Reject","Cancel","Out of date", "Number", newData);
+        console.log("this.numContractUse", this.numContractUse);
+        console.log("numContractUnUsed",this.numContractBuy - this.numContractUse);
+      // if(this.numContractBuy > 0 && this.numContractBuy - this.numContractUse > 0 )
+      // console.log("loadd ",this.loadData1, this.loadData2);
+      if (this.loadData1 &&  this.loadData2) {
+        this.createPieChart(this.numContractUse, this.numContractBuy - this.numContractUse)
+      }
     });
   }
 
   createChart(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string,so_luong: string, data: any) {
     this.chartCreated = new Chart({
-      colors: ['#4B71F0', '#58A55C', '#ED1C24', '#717070', '#FF710B'],
+      colors: ['#639AED', '#FAC485', '#F56B6E', '#50E0AC', '#8B8B8B'],
       chart: {
         type: 'column',
         style: {
@@ -434,7 +461,7 @@ export class DashboardComponent implements OnInit {
               }
             }
           },
-        }
+        }    
       },
 
 
@@ -453,6 +480,74 @@ export class DashboardComponent implements OnInit {
         }]
     });
   }
+  
+  getDataPieChart(){
+    
+    let numContractHeight = document.getElementById('num-contract')?.offsetHeight || 0;
+    let numContractBodyHeight = document.getElementById('num-contract-body')?.offsetHeight || 0;
+    let notiHeight = document.getElementById('noti')?.offsetHeight || 450;
+    this.chartHeight = numContractHeight + notiHeight + numContractBodyHeight - 37;
+    let numContractUnUsed = this.numContractBuy - this.numContractUse
+
+    
+    // this.createPieChart(this.numContractUse, numContractUnUsed);
+
+  }
+  
+  
+  // 
+  createPieChart(numContractUse: any, numContractUnUsed: any) {
+    this.chartPieCreated = new Chart({
+      colors: ['#CED3FF', '#4495F5'],
+      chart: {
+        type: 'pie',
+        style: {
+          fontFamily: 'Roboto'
+        },
+        height: 500
+      },
+      title: {
+        text: this.chartContractCreated,
+        style: {
+          fontSize: '16px',
+          fontWeight: '500',
+        },
+        verticalAlign: 'bottom',
+      },
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: false
+      },
+      // plotOptions: {
+      //   pie: {
+      //     point: {
+      //       events: {
+      //         mouseOver: function () {
+      //           let chart = this.series.chart;
+      //           chart.title.attr({
+      //             text: `<span style="color:#e43761;" class="dealer-title" data-oa-qa="donut-total-count-text">Total<br/><b>${this.y}</b></span>`,
+      //           });
+      //         },
+      //       }
+      //     }
+      //   }
+
+      // },
+      series: [
+        {
+          type: 'pie',
+          innerSize: '80%',
+          name: this.translate.instant('contract.number'),
+          data: [
+            [this.translate.instant('package.unused'), numContractUnUsed],
+            [this.translate.instant('package.used'), numContractUse],
+          ]
+        }]
+    })
+  }
+  
 
   getNumberContractBoxHeight(){
     let chartHeight = document.getElementById('chart-column')?.offsetHeight || 0;
@@ -479,8 +574,32 @@ export class DashboardComponent implements OnInit {
 
     this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
       this.listNotification = data.entities;
-
+      // console.log("this.listNotification",data);
     });
+    
+    this.dashboardService.getNotification(0, '', '', 1, '').subscribe(data => {
+      this.contractConnectList = data.entities;
+      // console.log("this.contractConnectList",data);
+      
+    });
+    this.contractSignature.getContractMyProcessList('','','','','',1,'',2,'').subscribe(data => {
+     
+      this.contractRequestList = data.entities;
+      // console.log("this.contractRequestList",this.contractRequestList);
+      // this.contractRecipienteList = data.entities.participant;
+      this.contractRecipienteList.forEach((item: any) => {
+        // console.log("item",item);
+        
+      })
+      // console.log("this.contractRecipienteList",this.contractRecipienteList);
+      
+    })
+  }
+  
+  clickAddContract(){
+    this.router.navigate([
+      '/main/form-contract/add',
+    ]);
   }
 
   openAccountLinkDialog(userData: any) {

@@ -57,7 +57,9 @@ header {
   top: 0;
   z-index: 100;
   //width: calc(100% - 220px);
-  background: #fff;
+  background: url('../../assets/img/Header.svg');
+  // width: 100%;
+  background-size: cover;
   height: 60px;
   padding: 0 1rem;
   display: flex;

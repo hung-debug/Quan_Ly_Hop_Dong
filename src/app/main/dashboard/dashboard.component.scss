@@ -24,12 +24,23 @@
     box-shadow: none !important;
     height: 33px;
     width: 50%;
+    font-weight: 700;
+  }
+  .p-selectbutton .p-button.p-highlight {
+    background: #F6F6F6;
+    border-color: #F6F6F6;
+    color: #8E9AB0;
+    font-weight: 700;
   }
 }
-.item_contract_name {
-  font-weight: 500;
-  font-size: 15px;
-  color: #106DB6;
+
+.container-fluid{
+  background-color: #F5F5F5;
+}
+.item_contract_name1 {
+  font-weight: 700;
+  font-size: 14px;
+  color: #001A4D;
   cursor: pointer;
 }
 
@@ -49,32 +60,39 @@
   font-weight: 500;
 }
 .header_card{
-  border-radius: 30px; 
-  color: white;
+  border-radius: 8px; 
+  border: 0.5px solid #1487E14D
 }
 .header_card:hover{
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   cursor: pointer;
 }
 .header_card_1{
-  background-color: #99E6FC;
+  background-color: #FFFFFF;
+  width: 45%;
 }
 .header_card_2{
-  background-color: #EF854B;
+  background-color: #FFFFFF;
+  width: 45%;
 }
 .header_card_3{
-  background-color: #4B71F0;
+  background-color: #FFFFFF;
+  width: 45%;
 }
 .header_card_4{
-  background-color: #00D0C2;
+  background-color: #FFFFFF;
+  width: 45%;
 }
 .text_header_card{
   padding: 27px;
   text-align: center;
+  font-weight: 700;
 }
 .number_header_card{
   font-size: 30px;
-  padding-top: 10px;
+  // padding-top: 10px;
+  color: #001A4D;
+  padding-bottom: 10px;
 }
 .img_header_card{
   padding: 20px;
@@ -86,6 +104,25 @@
   border-radius: 30px;
   border: 1px solid #C7D0E9;
 }
+
+highcharts-chart {
+  display: block;
+  width: 100%;
+}
+
+.body-chart{
+  padding: 10px;
+}
+
+.body-pie-chart{
+  padding: 10px;
+}
+.body_row_1{
+  padding: 10px;
+  background-color: white;
+  width: 100%;
+}
+
 h3{
   color: #106DB6;
   text-transform: uppercase;
@@ -106,7 +143,56 @@ h3{
   }
   .p-treeselect-label, .p-dropdown-label {
       padding: 5px 5px 5px 15px;
+      font-weight: 700;
   }
+}
+
+.add-contract-theme{
+  background: url("../../../assets/img/frame_db.svg");
+  background-size: cover;
+  width: 100%;
+  height: 160px;
+  color: #FFFFFF;
+  border-radius: 18px;
+  padding: 20px;
+  // display: flex;
+}
+
+.contract-processing{
+  background-color: #FFFFFF;
+  border-radius: 18px;
+  padding: 15px;
+}
+
+.contract-request{
+  background-color: #FFFFFF;
+  border-radius: 18px;
+  padding: 15px;
+  height: 100%;
+}
+
+.row_text_1{
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.row_text_2{
+  display: flex;
+  background-color: #F7FAFD;
+  border: 0.5px solid #0041C41A;
+  border-radius: 8px;
+}
+
+.btn_add_contract{
+  border: 0px;
+  border-radius: 6px;
+  width: 180px;
+  height: 38px;
+  box-sizing: border-box;
+  color: #001A4D;
+  background: #FFFFFF;
+  font-size: 13px;
 }
 
 @media only screen and (max-width: 768px) {

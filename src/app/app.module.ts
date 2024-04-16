@@ -135,6 +135,8 @@ import { DeleteContractFolderComponent } from './main/contract-folder/current-fo
 import { UploadContractFileComponent } from './main/contract-folder/current-folder/upload-contract-file/upload-contract-file.component';
 import { AccountLinkDialogComponent } from './main/dialog/account-link-dialog/account-link-dialog.component';
 import { NgOtpInputModule } from  'ng-otp-input';
+import { HighchartsChartModule } from 'highcharts-angular';
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -272,7 +274,6 @@ function initializeKeycloak(keycloak: KeycloakService) {
   ],
   imports: [
     TranslateModule,
-
     BrowserModule,
     AppRoutingModule,
     NgxChartsModule,
@@ -326,7 +327,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     WebcamModule,
     PdfViewerModule,
     KeycloakAngularModule,
-    NgOtpInputModule
+    NgOtpInputModule,
+    HighchartsChartModule
   ],
   providers: [ AppService, DatePipe,CurrencyPipe,KeycloakAngularModule, KeycloakService,
     {
