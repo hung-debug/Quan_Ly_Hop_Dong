@@ -4,7 +4,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ChartModule } from 'angular-highcharts';
 import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA, Pipe } from '@angular/core';
+import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA, Pipe } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -16,7 +16,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CommonModule, CurrencyPipe, DatePipe} from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
-
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { DatepickerModule } from 'ng2-datepicker';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -133,10 +133,47 @@ import { HeadersInterceptor } from './headers.interceptor';
 import { UploadAttachFilesComponent } from './main/contract/dialog/upload-attach-files-dialog/upload-attach-files-dialog.component';
 import { DeleteContractFolderComponent } from './main/contract-folder/current-folder/delete-contract-folder/delete-contract-folder.component';
 import { UploadContractFileComponent } from './main/contract-folder/current-folder/upload-contract-file/upload-contract-file.component';
+import { AccountLinkDialogComponent } from './main/dialog/account-link-dialog/account-link-dialog.component';
+import { NgOtpInputModule } from  'ng-otp-input';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
+
+function initializeKeycloak(keycloak: KeycloakService) {
+  // const fullUrl = window.location.href
+  // if (!fullUrl.includes('/login?type=mobifone-sso'))
+  return () =>
+    keycloak.init({
+      config: {
+        url: 'https://auth-sso.mobifone.vn:8080/oauth',
+        realm: 'sso-mobifone',
+        clientId: 'TTCNTT-ECONTRACT',
+      },
+      initOptions: {
+        checkLoginIframe: false,
+        // pkceMethod: "S256",
+        // onLoad: 'check-sso',
+      },
+      enableBearerInterceptor: false,
+    })
+    .then(
+      (authenticated: any) => {
+        const idToken: any = keycloak.getKeycloakInstance().idToken;
+        const ssoToken: any = keycloak.getKeycloakInstance().token;
+        localStorage.setItem('sso_id_token',idToken ?? '')
+        localStorage.setItem('sso_token',ssoToken ?? '')
+        if (!authenticated) {
+          const fullUrl = window.location.href
+          if (fullUrl.includes('/login?type=mobifone-sso')) {
+            keycloak.login()
+          }
+        } 
+      }, (err: any) => {
+      }
+    );
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -230,7 +267,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AddContractFolderComponent,
     UploadAttachFilesComponent,
     DeleteContractFolderComponent,
-    UploadContractFileComponent
+    UploadContractFileComponent,
+    AccountLinkDialogComponent
   ],
   imports: [
     TranslateModule,
@@ -287,9 +325,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TreeSelectModule,
     WebcamModule,
     PdfViewerModule,
-
+    KeycloakAngularModule,
+    NgOtpInputModule
   ],
-  providers: [ AppService, DatePipe,CurrencyPipe,
+  providers: [ AppService, DatePipe,CurrencyPipe,KeycloakAngularModule, KeycloakService,
     {
     provide: PERFECT_SCROLLBAR_CONFIG,
     useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
@@ -298,6 +337,12 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
       provide: HTTP_INTERCEPTORS,
       useClass: HeadersInterceptor,
       multi: true
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService]
     }
   ],
   bootstrap: [AppComponent],

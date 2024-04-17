@@ -52,6 +52,9 @@ export class UserService {
   checkTokenDateUrl: any = `${environment.apiUrl}/api/v1/customers/password/recover/valid`;
   checkBrandnameUrl: any = `${environment.apiUrl}/api/v1/notification/checkBranchName`;
   updateConfigBrandName: any = `${environment.apiUrl}/api/v1/organizations/branchName/`;
+  getSsoLinkOtpUrl: any = `${environment.apiUrl}/api/v1/customers/sendEmailOTP`;
+  syncAccountSsoUrl: any = `${environment.apiUrl}/api/v1/customers/syncUserSSO`;
+
   token: any;
   customer_id: any;
   organization_id: any;
@@ -477,6 +480,32 @@ export class UserService {
     });
 
     return this.http.put<User>(this.updateConfigBrandName + orgId, body, {
+      headers: headers,
+    });
+  }
+
+  getSsoLinkOtp(email: string) {
+    this.getCurrentUser()
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.post<User>(this.getSsoLinkOtpUrl + `?email=${email}`, '', {
+      headers: headers,
+    });
+  }
+
+  syncAccountSso(email: string, otp: string) {
+    this.getCurrentUser()
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = {
+      customer_id: this.customer_id,
+      email: email,
+      otp: otp
+    }
+    return this.http.post<User>(this.syncAccountSsoUrl, body, {
       headers: headers,
     });
   }

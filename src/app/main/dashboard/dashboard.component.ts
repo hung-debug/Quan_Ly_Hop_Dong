@@ -12,6 +12,8 @@ import {DatePipe} from '@angular/common';
 import { RoleService } from 'src/app/service/role.service';
 import * as moment from 'moment';
 import { environment } from 'src/environments/environment';
+import { MatDialog } from '@angular/material/dialog';
+import { AccountLinkDialogComponent } from '../dialog/account-link-dialog/account-link-dialog.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -81,7 +83,8 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     public datepipe: DatePipe,
     private toastService: ToastService,
-    private roleService: RoleService
+    private roleService: RoleService,
+    private dialog: MatDialog,
   ) {
     this.stateOptions = [
       {label: "my.contract", value: 'off'},
@@ -106,6 +109,9 @@ export class DashboardComponent implements OnInit {
     this.userService.getUserById(userId).subscribe(
       data => {
         //lay id role
+        if (!data.is_required_sso) {
+          this.openAccountLinkDialog(data)
+        }
         this.roleService.getRoleById(data?.role_id).subscribe(
           data => {
             let listRole: any[];
@@ -475,5 +481,17 @@ export class DashboardComponent implements OnInit {
       this.listNotification = data.entities;
 
     });
+  }
+
+  openAccountLinkDialog(userData: any) {
+    // @ts-ignore
+    const dialogRef: any = this.dialog.open(AccountLinkDialogComponent, {
+      width: '498px',
+    // @ts-ignore
+      backdrop: 'static',
+      data: userData,
+      disableClose: true,
+      autoFocus: false
+    })
   }
 }

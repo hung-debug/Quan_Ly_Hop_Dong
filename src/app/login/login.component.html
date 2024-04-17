@@ -1,6 +1,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-<div id="all" *ngIf="this.mobile == false" class="all">
+<div id="all" *ngIf="this.mobile == false && !isSSOlogin" class="all">
 
   <div class="full-height d-flex flex-row">
     <div class="left-background"></div>
@@ -97,7 +97,7 @@
               </div>
 
               <div *ngIf="this.type != 1" class="form-group forgot-password">
-                <a href="/forgot-password"
+                <a href="/forgot-password" 
                   >{{ "login.forgot_password" | translate }}?</a
                 >
               </div>
@@ -114,13 +114,36 @@
                 </button>
               </div>
 
-              <div class="form-group sign-up">
+              <!-- <div class="form-group sub-login">
+                <button class="btn btn-lg btn-block sso-btn" (click)="loginSSO()">
+                  {{ "btn.sso.login" | translate }}
+                </button>
+              </div> -->
+
+              <!-- <div class="form-group sign-up">
                 <b>{{ "signup.not_account" | translate }}?</b>&nbsp;<a
                   href="/signup"
                   >{{ "signup" | translate }}</a
                 >
-              </div>
+              </div> -->
             </form>
+            <div class="form-signin">
+              <div class="form-group">
+                <p class="login_methods__title">
+                  <span>
+                    {{ 'login.method.title' | translate }}
+                  </span>
+                </p>
+                <div class="login_methods__list">
+                  <div class="login-methods__item" (click)="loginSSO()">
+                    <span class="login-methods__icon">
+                      <img src="../../assets/img/login_method_sso.svg">
+                    </span>
+                    SSO
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -132,7 +155,7 @@
   </div>
 </div>
 
-<div *ngIf="this.mobile == true" class="all">
+<div *ngIf="this.mobile == true && !isSSOlogin" class="all">
   <div>
     <div class="left-background-mobile"></div>
     <div class="right-panel-mobile">
@@ -241,12 +264,18 @@
               </button>
             </div>
 
-            <div class="form-group sign-up">
+            <!-- <div class="form-group sub-login">
+              <button class="btn btn-lg btn-block sso-btn" (click)="loginSSO()">
+                {{ "btn.sso.login" | translate }}
+              </button>
+            </div> -->
+
+            <!-- <div class="form-group sign-up">
               <b>{{ "signup.not_account" | translate }}?</b>&nbsp;<a
                 href="/signup"
                 >{{ "signup" | translate }}</a
               >
-            </div>
+            </div> -->
           </form>
         </div>
 
@@ -256,4 +285,12 @@
       </div>
     </div>
   </div>
+</div>
+ 
+<div *ngIf="isSSOlogin">
+  <h2>Đang tải dữ liệu...</h2>
+  <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+    <p style="font-size: 18px; color: white">{{'Đang tải dữ liệu' | translate}}...</p>
+  </ngx-spinner>
+  <html><body><script>parent.postMessage(location.href, location.origin)</script></body></html>
 </div>

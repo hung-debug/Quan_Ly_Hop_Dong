@@ -65,6 +65,7 @@ header {
   justify-content: space-between;
   border-bottom: 1px solid #e6e7ec;
   transition: left 500ms;
+  white-space: nowrap;
 }
 .search-wrapper {
   display: flex;
@@ -319,4 +320,30 @@ h3{
 .pi-bell{
   font-size: 20px;
   color:#106db6
+}
+
+.warning-container {
+  overflow: hidden;
+  display: flex;
+  // width: 66%;
+  margin-left: 10px;
+}
+
+.warning-scroll {
+  white-space: nowrap;
+}
+
+.RightToLeft {
+  animation: RightToLeft 40s infinite linear;
+  color: red;
+  font-size: 14px
+}
+
+@keyframes RightToLeft {
+  from {
+    transform: translateX(50%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 }

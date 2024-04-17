@@ -1,20 +1,19 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {NavigationEnd, Router} from '@angular/router';
-import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Router} from '@angular/router';
 import {AppService} from '../service/app.service';
 import {SidebarService} from './sidebar/sidebar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ToastService} from '../service/toast.service';
 import{ ResetPasswordDialogComponent } from '../../app/main/dialog/reset-password-dialog/reset-password-dialog.component'
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { DashboardService } from '../service/dashboard.service';
 import { UserService } from '../service/user.service';
 import {DeviceDetectorService} from "ngx-device-detector";
 import { ContractService } from '../service/contract.service';
 import { environment } from 'src/environments/environment';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ImageDialogSignComponent } from './contract-signature/components/consider-contract/image-dialog-sign/image-dialog-sign.component';
+import { KeycloakService } from 'keycloak-angular';
+import { AuthenticationService } from '../service/authentication.service';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -35,6 +34,7 @@ export class MainComponent implements OnInit {
   nameCurrentUser:any;
   listNotification: any[] = [];
   getAlllistNotification: any[] = [];
+  ssoExpireDate = environment.ssoExpireDate
 
   constructor(private router: Router,
               private appService: AppService,
@@ -48,6 +48,8 @@ export class MainComponent implements OnInit {
               private contractService: ContractService,
               private spinner: NgxSpinnerService,
               private toastService: ToastService,
+              private keycloakService: KeycloakService,
+              private authenticationService: AuthenticationService
               ) {
     this.title = 'err';
     translate.addLangs(['en', 'vi']);
@@ -63,7 +65,7 @@ export class MainComponent implements OnInit {
   }
 
   lang: any;
-  ngOnInit() {
+  async ngOnInit() {
     if(localStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     } else if(localStorage.getItem('lang') == 'en') {
@@ -87,6 +89,14 @@ export class MainComponent implements OnInit {
       this.numberNotification = data.total_elements;
 
     });
+
+    if (await this.keycloakService.isLoggedIn()) {
+      let accessToken: any = this.keycloakService.getKeycloakInstance().token
+      let ssoIdToken: any = this.keycloakService.getKeycloakInstance().idToken
+      localStorage.setItem('sso_id_token',ssoIdToken ?? '')
+      localStorage.setItem('sso_token',accessToken ?? '')
+    }
+
   }
 
   readAll(){
@@ -111,17 +121,22 @@ export class MainComponent implements OnInit {
   }
 
   //click logout
-  logout() {
+  async logout() {
      //call api delete token
-     this.contractService.deleteToken().subscribe((res:any) => {
-    })
-
-    sessionStorage.clear();
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('myTaxCode');
-    localStorage.removeItem('url');
-
-    this.router.navigate(['/login']);
+    let ssoIdToken: any = localStorage.getItem('sso_id_token') || ''
+    if (localStorage.getItem('sso_token')) {
+      await this.authenticationService.logoutSso(ssoIdToken)
+      localStorage.removeItem('sso_token');
+      localStorage.clear()
+      sessionStorage.clear();
+      this.authenticationService.deleteAllCookies()
+      this.router.navigate(['/login']);
+    } else {
+      localStorage.removeItem('sso_token');
+      localStorage.clear()
+      sessionStorage.clear()
+      this.router.navigate(['/login']);
+    }
   }
 
   email: string;
@@ -135,21 +150,23 @@ export class MainComponent implements OnInit {
   }
 
   resetPassword(){
-    const data = {
-      title: 'ĐỔI MẬT KHẨU',
-      weakPass: false
-    };
-    // @ts-ignore
-    const dialogRef = this.dialog.open(ResetPasswordDialogComponent, {
-      width: '420px',
-      backdrop: 'static',
-      keyboard: false,
-      data
-    })
-    dialogRef.afterClosed().subscribe((result: any) => {
+    // const data = {
+    //   title: 'ĐỔI MẬT KHẨU',
+    //   weakPass: false
+    // };
+    // // @ts-ignore
+    // const dialogRef = this.dialog.open(ResetPasswordDialogComponent, {
+    //   width: '420px',
+    //   backdrop: 'static',
+    //   keyboard: false,
+    //   data
+    // })
+    // dialogRef.afterClosed().subscribe((result: any) => {
 
-      let is_data = result
-    })
+    //   let is_data = result
+    // })
+
+    window.open('https://auth-sso.mobifone.vn/vn/profile-information')
   }
 
   //side bar menu
