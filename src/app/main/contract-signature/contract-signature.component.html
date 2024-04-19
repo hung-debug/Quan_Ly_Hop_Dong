@@ -1,54 +1,69 @@
 <div class="container-fluid">
 
     <div style="margin-top: 60px;" class="header">
-        <div class="col-md-12" style="padding-top: 10px" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
+      <div class="row" style="padding-bottom: 20px;">
+        <div class="col-md-10" style="padding-top: 10px" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
             <div class="input-line search">
-                <img src="../../assets/img/icon_search.svg" class="input-img" />
+                <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
                 <input #myInputRef [value]="filter_name" type="text" id="search"  class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
-                <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
+                <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
             </div>
+        </div>
+        
+        <div class="col-md-2 btn_search" >
+          <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
+            {{'btn.advance' | translate}}
+            <img src="../../assets/img/vector_advance.svg" class="input-img" />
+          </button>
         </div>
 
         <!--Header danh sách ký 1-->
         <div *ngIf="filter_status == 1">
             <div style="display: flex;">
-                <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
+                <!-- <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
                     <button (click)="signMany()" class="btn btn-lg btn-block btn_submit">{{'sign.multi'| translate}}</button>
-                    <!-- <button (click)="watchMany()" class="btn btn-lg btn-block btn_submit">{{'sign.multi'| translate}}</button> -->
                 </div>
                 <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search" style="margin-left: 10px;">
                     <button (click)="viewMany()" class="btn btn-lg btn-block btn_submit">{{'contract.views'| translate}}</button>
+                </div> -->
+                <div class="col-md-1 btn_search" *ngIf="this.typeDisplay === 'signOne'" >
+                  <button (click)="viewMany()" class="btn btn-lg btn-block btn_consider">{{'contract.views'| translate}}</button>
+                </div>
+                
+                <div class="col-md-1 btn_search" *ngIf="this.typeDisplay === 'signOne'" style="margin-left: 10px;">
+                  <button (click)="signMany()" class="btn btn-lg btn-block btn_sign">{{'sign.multi'| translate}}</button>
                 </div>
             </div>
 
 
             <div *ngIf="this.typeDisplay === 'signMany'" style="padding-top: 10px;">
-                <button class="btn_submit" (click)="signManyContract()">{{'contract.sign'| translate}}</button>
+                <button class="col-md-1 btn_sign" (click)="signManyContract()">{{'contract.sign'| translate}}</button>
 
-                <button class="btn_submit" (click)="cancelSignMany()">{{'cancel'| translate}}</button>
+                <button class="col-md-1 btn_sign" (click)="cancelSignMany()">{{'cancel'| translate}}</button>
             </div>
             <div *ngIf="this.typeDisplay === 'viewMany'" style="padding-top: 10px;">
-                <button class="btn_submit" (click)="viewManyContract()">{{'contract.view'| translate}}</button>
+                <button class="col-md-1 btn_consider" (click)="viewManyContract()">{{'contract.view'| translate}}</button>
 
-                <button class="btn_submit" (click)="cancelViewMany()">{{'cancel'| translate}}</button>
+                <button class="col-md-1 btn_consider" (click)="cancelViewMany()">{{'cancel'| translate}}</button>
             </div>
 
         </div>
 
         <div *ngIf="filter_status == 4">
             <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
-                <button (click)="downloadMany()" class="btn btn-lg btn-block btn_submit">{{'download.multi'| translate}}</button>
+                <button (click)="downloadMany()" class="btn btn-lg btn-block btn_sign">{{'download.multi'| translate}}</button>
             </div>
 
             <div *ngIf="this.typeDisplay === 'downloadMany'" style="padding-top: 10px;">
-                <button class="btn_submit" (click)="downloadManyContract()">{{'contract.down'| translate}}</button>
+                <button class="btn_sign" (click)="downloadManyContract()">{{'contract.down'| translate}}</button>
 
-                <button class="btn_submit" (click)="cancelDownloadMany()">{{'cancel'| translate}}</button>
+                <button class="btn_sign" (click)="cancelDownloadMany()">{{'cancel'| translate}}</button>
             </div>
         </div>
+      </div>
     </div>
-
-    <div style="margin-top: 18px;" class="row list_header" *ngIf="pageTotal > 0 || (this.typeDisplay == 'signMany' || this.typeDisplay == 'viewMany')">
+    <div style="margin-top: 5px; margin-bottom: 25px; padding-bottom: 35px;" class="row list_header" *ngIf="pageTotal > 0 || (this.typeDisplay == 'signMany' || this.typeDisplay == 'viewMany')">
+      <!-- <div class="row-header"> -->
         <div
             *ngIf="this.typeDisplay === 'signMany' && this.contractsSignMany?.length == 50"
             style="
@@ -61,23 +76,35 @@
         >
             {{'multi.sign.warning' | translate}}
         </div>
-        <div class="col-md-5"></div>
-        <div class="col-md-2">{{'create-date' | translate}}</div>
-        <div class="col-md-2">{{'expiration-date' | translate}}</div>
-        <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-3">{{'action' | translate}}</div>
-
+        
+          
         <!--Nút tick all-->
-        <div *ngIf="this.typeDisplay === 'signMany'" class="col-md-3">
-            <input id="all" name="all" type="checkbox" (click)="toggle()" />
+        <div *ngIf="this.typeDisplay === 'signMany'" class="col-md-1" style="text-align: left;">
+          <!-- <input id="all" name="all" type="checkbox" (click)="toggle()" style="width: 20px; height: 20px;"/> -->
         </div>
-        <div *ngIf="this.typeDisplay === 'viewMany'" class="col-md-3">
-            <input id="allView" name="allView" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleView(checkedAll)" />
-        </div>
-
-        <div *ngIf="this.typeDisplay === 'downloadMany'" class="col-md-3">
-            <input id="all" name="all" type="checkbox" (click)="toggleDownload(checkedAll)" [(ngModel)]="checkedAll" />
+        <div *ngIf="this.typeDisplay === 'viewMany'" class="col-md-1" style="text-align: left;">
+          <input id="allView" name="allView" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleView(checkedAll)" style="width: 20px; height: 20px;" />
         </div>
 
+        <div *ngIf="this.typeDisplay === 'downloadMany'" class="col-md-1" style="text-align: left;">
+          <input id="all" name="all" type="checkbox" (click)="toggleDownload(checkedAll)" [(ngModel)]="checkedAll" style="width: 20px; height: 20px;"/>
+        </div>
+        
+        <div *ngIf="!(this.typeDisplay === 'signMany' || this.typeDisplay === 'viewMany' || this.typeDisplay === 'downloadMany')" class="col-md-1"></div>
+        <div class="col-md-4" style="text-align: left !important;">{{'contract.process' | translate}}</div>
+        <div class="col-md-2">{{'report.status.contract' | translate}}
+          <img src="../../assets/img/sort.svg"/>
+        </div>
+        <div class="col-md-2">{{'create-date' | translate}}
+          <img src="../../assets/img/sort.svg"/>
+        </div>
+        <div class="col-md-2">{{'day.update' | translate}}
+          <img src="../../assets/img/sort.svg"/>
+        </div>
+        <!-- <div class="col-md-2">{{'expiration-date' | translate}}</div> -->
+        <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1"></div>
+
+      <!-- </div> -->
     </div>
 
     <!--Danh sách tất cả hợp đồng cần ký trường hợp ký một-->
@@ -85,25 +112,48 @@
         <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
             <div *ngIf="filter_status == 1 || filter_status == 4">
                 <div class="row">
-                    <div class="col-md-5">
+                    <!--Cột 1-->
+                    <div class="col-md-1 item_icon">
+                      <div style="display: flex;">
+                          <div class="col-md-1 calendar_create" style="display: flex;">
+                            <div>
+                              <!-- <input class="input-checkbox" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked"/> -->
+                            </div>
+                          </div>
+                          <div class="col-md-1">
+                            <div style="margin-left: 30px;">
+                              <img src="../../assets/img/frame_contract.svg">
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
                         <div class="row">
                             <div class="col-md-11">
                                 <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
-
-                                <!--Cac ben ky-->
-                                <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
-                                    <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index, item)}}</div>
+                                
+                                <div class="row">
+                                  <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}}</div>
+                                  <div>
+                                    <img src="../../../assets/img/path.svg"/>
+                                    <span *ngIf="item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
+                                  </div>
                                 </div>
 
+                                <!--Cac ben ky-->
+                                <!-- <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
+                                    <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index, item)}}</div>
+                                </div> -->
+
                                 <!--Trang thai hop dong-->
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="item_contract_infor">{{'contract.status.v2' | translate}}:
                                         <span class="status_blue">{{item.contractStatus | pipe | translate}} {{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <!--Trạng thái-->
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="item_contract_infor">{{'contract.status' | translate}}:
                                         <span class="status_blue" *ngIf="item.status == 1 && item.role == 1">{{'contract.wait-lead' | translate}}</span>
                                         <span class="status_blue" *ngIf="item.status == 1 && item.role == 2">{{'contract.wait-view' | translate}}</span>
@@ -118,10 +168,10 @@
                                         <span class="status_blue" *ngIf="item.status == 3 && item.role == 3">{{'contract.sign-refused' | translate}}</span>
                                         <span class="status_blue" *ngIf="item.status == 3 && item.role == 4">{{'contract.document-refused' | translate}}</span>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <!--user.sign-type-->
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div *ngIf="this.filter_status === 1 && item.role != 2" class="col-md-11 item_contract_infor">{{'user.sign-type' | translate}}:
                                         <span *ngIf="item.sign_type.length > 0 && item.sign_type[0].id == 1" class="status_blue">{{'sign_by_otp' | translate}}</span>
                                         <span *ngIf="item.sign_type.length > 0 && item.sign_type[0].id == 2" class="status_blue">{{'sign_by_token' | translate}}</span>
@@ -133,7 +183,7 @@
                                         <span *ngIf="item.sign_type.length > 0 && item.sign_type[0].id == 8" class="status_blue">Ký số Remote Signing</span>
                                         <span *ngIf="item.sign_type.length == 0 && item.role == 1" class="status_blue">{{'contract.lead' | translate}}</span>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="row">
                                   <div class="item_contract_infor">
@@ -143,16 +193,27 @@
                             </div>
                         </div>
                     </div>
-
+                    
+                    <!--Trang thai hop dong-->
                     <div class="col-md-2 calendar_create">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractCreateTime | date: 'dd/MM/yyyy HH:mm'}}</span></div>
+                      <div class="item_contract_infor">
+                        <!-- <span class="status_blue">{{this.filter_status | pipe | translate}}
+                          {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
+                          translate}}</span> -->
+                        <span class="status_blue">{{item.contractStatus | pipe | translate}}</span>
+                      </div>
+                    </div>
+                    
+                    
+                    <div class="col-md-2 calendar_create">
+                      <div><i class="fa fa_icon"></i><span class="item_date">{{item.contractCreateTime | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
                     <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractSignTime | date: 'dd/MM/yyyy'}}</span></div>
+                        <div><i class="fa fa_icon"></i><span class="item_date">{{item.contractSignTime | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
-                    <div class="col-md-3 item_icon">
+                    <div class="col-md-1 item_icon">
                         <div style="display: flex; justify-content: center;">
                             <div class="div_icon" *ngIf="item.status == 1 && item.role == 1 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                                 <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item)">{{'contract.lead' | translate}}</button>
@@ -182,33 +243,66 @@
 
             <div *ngIf="filter_status == -1">
                 <div class="row">
-                    <div class="col-md-5">
+                    <!--Cột 1-->
+                    <div class="col-md-1 item_icon">
+                      <div style="display: flex;">
+                          <div class="col-md-1 calendar_create" style="display: flex;">
+                            <div>
+                              <!-- <input class="input-checkbox" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked"/> -->
+                            </div>
+                          </div>
+                          <div class="col-md-1">
+                            <div style="margin-left: 30px;">
+                              <img src="../../assets/img/frame_contract.svg">
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
                         <div class="row">
                             <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
+                            <div class="item_contract_infor">{{'created.user' | translate}}: {{item.nameUserCreate}}</div>
+                            <!-- <div>
+                              <img src="../../../assets/img/path.svg"/>
+                              <span *ngIf="item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.recipients[0].sign_type[0]?.name}}</span>
+                            </div> -->
                         </div>
-                        <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
+                        <!-- <div class="row">
+
+                        </div> -->
+                        <!-- <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
                             <div class="col-md-12 item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
-                        </div>
-                        <div class="row">
+                        </div> -->
+                        <!-- <div class="row">
                             <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
                                 <span class="status_blue">{{'contract.status.complete' | translate}} {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) | translate}}</span>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row">
                           <div class="item_contract_infor">
                             <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
                           </div>
                         </div>
                     </div>
+                    
+                    <!--Trang thai hop dong-->
                     <div class="col-md-2 calendar_create">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span></div>
+                      <div class="item_contract_infor">
+                        <!-- <span class="status_blue">{{this.filter_status | pipe | translate}}
+                          {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
+                          translate}}</span> -->
+                        <span class="status_blue">{{item.status | pipe | translate}}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-2 calendar_create">
+                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
                     <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy'}}</span></div>
+                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
-                    <div class="col-md-3 item_icon">
+                    <div class="col-md-1 item_icon">
                         <div style="display: flex; justify-content: center;">
                             <div class="div_icon">
                                 <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
@@ -253,25 +347,40 @@
         <div class="item_contract" *ngFor="let item of contractDownloadList | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}; let index1 = index">
             <div *ngIf="filter_status == 4">
                 <div class="row">
-                    <div class="col-md-5">
+                    <!--Cột 1-->
+                    <div class="col-md-1 item_icon">
+                      <div style="display: flex;">
+                          <div class="col-md-1 calendar_create" style="display: flex;">
+                            <div>
+                              <input style="width: 20px; height: 20px;" id="all" name="all" type="checkbox" (click)="toggleOneDownload(item, index1)" [(ngModel)]="item.checked" (change)="selectContract(item)"/>
+                            </div>
+                          </div>
+                          <div class="col-md-1">
+                            <div style="margin-left: 30px;">
+                              <img src="../../assets/img/frame_contract.svg">
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
                         <div class="row">
                             <div class="col-md-11">
                                 <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
 
                                 <!--Cac ben ky-->
-                                <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
+                                <!-- <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
                                     <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
-                                </div>
+                                </div> -->
 
                                 <!--Trang thai hop dong-->
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="item_contract_infor">{{'contract.status.v2' | translate}}:
                                         <span class="status_blue">{{item.contractStatus | pipe | translate}} {{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <!--Trạng thái-->
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="item_contract_infor">{{'contract.status' | translate}}:
                                         <span class="status_blue" *ngIf="item.status == 1 && item.role == 1">{{'contract.wait-lead' | translate}}</span>
                                         <span class="status_blue" *ngIf="item.status == 1 && item.role == 2">{{'contract.wait-view' | translate}}</span>
@@ -286,14 +395,14 @@
                                         <span class="status_blue" *ngIf="item.status == 3 && item.role == 3">{{'contract.sign-refused' | translate}}</span>
                                         <span class="status_blue" *ngIf="item.status == 3 && item.role == 4">{{'contract.document-refused' | translate}}</span>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <!--user.sign-type-->
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div *ngIf="this.filter_status === 1" class="col-md-11 item_contract_infor">{{'user.sign-type' | translate}}:
                                         <span class="status_blue">{{item.sign_type[0].name}}</span>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="row">
                                   <div class="item_contract_infor">
@@ -303,16 +412,26 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!--Trang thai hop dong-->
+                    <div class="col-md-2 calendar_create">
+                      <div class="item_contract_infor">
+                        <!-- <span class="status_blue">{{this.filter_status | pipe | translate}}
+                          {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
+                          translate}}</span> -->
+                        <span class="status_blue">{{item.participant.contract.status| pipe | translate}}</span>
+                      </div>
+                    </div>
 
                     <div class="col-md-2 calendar_create">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractCreateTime | date: 'dd/MM/yyyy HH:mm'}}</span></div>
+                        <div><i class="fa fa_icon"></i><span class="item_date">{{item.contractCreateTime | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
                     <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractSignTime | date: 'dd/MM/yyyy'}}</span></div>
+                        <div><i class="fa fa_icon"></i><span class="item_date">{{item.contractSignTime | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
-                    <div class="col-md-3 item_icon">
+                    <div class="col-md-1 item_icon">
                         <div style="display: flex; justify-content: center;">
                             <div class="div_icon" *ngIf="item.status == 1 && item.role == 1 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                                 <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item)">{{'contract.lead' | translate}}</button>
@@ -328,9 +447,9 @@
                                 </div>
                             </div>
 
-                            <div class="div_icon" *ngIf="this.typeDisplay == 'downloadMany'">
+                            <!-- <div class="div_icon" *ngIf="this.typeDisplay == 'downloadMany'">
                                 <input id="all" name="all" type="checkbox" (click)="toggleOneDownload(item, index1)" [(ngModel)]="item.checked" (change)="selectContract(item)"/>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -343,25 +462,46 @@
         <div class="item_contract" *ngFor="let item of contractsSignMany; let index1 = index">
             <div *ngIf="filter_status == 1 || filter_status == 4">
                 <div class="row">
-                    <div class="col-md-5">
+                    <!--Cột 1-->
+                    <div class="col-md-1 item_icon" *ngIf="item.status == 1 && (item.role == 3 || item.role == 4) && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
+                      <div style="display: flex;">
+                          <div class="col-md-1 calendar_create" style="display: flex;">
+                            <div>
+                              <input style="width: 20px; height: 20px;" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" />
+                            </div>
+                          </div>
+                          <div class="col-md-1">
+                            <div style="margin-left: 30px;">
+                              <img src="../../assets/img/frame_contract.svg">
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
                         <div class="row">
                             <div class="col-md-11">
                                 <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
-
-                                <!--Cac ben ky-->
-                                <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
-                                    <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
+                                <div class="row">
+                                  <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}}</div>
+                                  <div>
+                                    <img src="../../../assets/img/path.svg"/>
+                                    <span *ngIf="item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
+                                  </div>
                                 </div>
+                                <!--Cac ben ky-->
+                                <!-- <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
+                                    <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
+                                </div> -->
 
                                 <!--Trang thai hop dong-->
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="item_contract_infor">{{'contract.status.v2' | translate}}:
                                         <span class="status_blue">{{item.contractStatus | pipe | translate}} {{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <!--Trạng thái-->
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="item_contract_infor">{{'contract.status' | translate}}:
                                         <span class="status_blue" *ngIf="item.status == 1 && item.role == 1">{{'contract.wait-lead' | translate}}</span>
                                         <span class="status_blue" *ngIf="item.status == 1 && item.role == 2">{{'contract.wait-view' | translate}}</span>
@@ -376,14 +516,14 @@
                                         <span class="status_blue" *ngIf="item.status == 3 && item.role == 3">{{'contract.sign-refused' | translate}}</span>
                                         <span class="status_blue" *ngIf="item.status == 3 && item.role == 4">{{'contract.document-refused' | translate}}</span>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <!--user.sign-type-->
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div *ngIf="this.filter_status === 1" class="col-md-11 item_contract_infor">{{'user.sign-type' | translate}}:
                                         <span class="status_blue">{{item.sign_type[0].name}}</span>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="row">
                                   <div class="item_contract_infor">
@@ -393,16 +533,26 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!--Trang thai hop dong-->
+                    <div class="col-md-2 calendar_create">
+                      <div class="item_contract_infor">
+                        <!-- <span class="status_blue">{{this.filter_status | pipe | translate}}
+                          {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
+                          translate}}</span> -->
+                        <span class="status_blue">{{item.participant.contract.status| pipe | translate}}</span>
+                      </div>
+                    </div>
 
                     <div class="col-md-2 calendar_create">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractCreateTime | date: 'dd/MM/yyyy HH:mm'}}</span></div>
+                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractCreateTime | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
                     <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractSignTime | date: 'dd/MM/yyyy'}}</span></div>
+                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractSignTime | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
-                    <div style="cursor: pointer;" class="col-md-3 item_icon" (click)="toggleOne(item, index1)">
+                    <div style="cursor: pointer;" class="col-md-1 item_icon" (click)="toggleOne(item, index1)">
                         <div style="display: flex; justify-content: center;">
                             <div class="div_icon" *ngIf="item.status == 1 && item.role == 1 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                                 <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item)">{{'contract.lead' | translate}}</button>
@@ -410,13 +560,13 @@
 
                             <!--Checkbox-->
                             <!--role = 3: ký, role = 4: đóng dấu-->
-                            <div class="div_icon" *ngIf="item.status == 1 && (item.role == 3 || item.role == 4) && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
+                            <!-- <div class="div_icon" *ngIf="item.status == 1 && (item.role == 3 || item.role == 4) && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                                 <div class="col-md-1 calendar_create">
                                     <div>
                                         <input name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" />
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <div class="div_icon" *ngIf="item.contractStatus == 30">
                                 <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.contractId);" />
@@ -498,7 +648,22 @@
         <div class="item_contract" *ngFor="let item of contractViewList | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}; let index1 = index">
             <div *ngIf="filter_status == 1">
                 <div class="row">
-                    <div class="col-md-5">
+                    <!--Cột 1-->
+                    <div class="col-md-1 item_icon" *ngIf="this.typeDisplay == 'viewMany'">
+                      <div style="display: flex;">
+                          <div class="col-md-1 calendar_create" style="display: flex;">
+                            <div>
+                              <input style="width: 20px; height: 20px;" id="allView" name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneView(item, index1)" />
+                            </div>
+                          </div>
+                          <div class="col-md-1">
+                            <div style="margin-left: 30px;">
+                              <img src="../../assets/img/frame_contract.svg">
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
                         <div class="row">
                             <div class="col-md-11">
                                 <div class="item_contract_name">
@@ -519,19 +684,19 @@
                                 </div>
 
                                 <!--Cac ben ky-->
-                                <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
+                                <!-- <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
                                     <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
-                                </div>
+                                </div> -->
 
                                 <!--Trang thai hop dong-->
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="item_contract_infor">{{'contract.status.v2' | translate}}:
                                         <span class="status_blue">{{item.contractStatus | pipe | translate}} {{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <!--Trạng thái-->
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="item_contract_infor">{{'contract.status' | translate}}:
                                         <span class="status_blue" *ngIf="item.status == 1 && item.role == 1">{{'contract.wait-lead' | translate}}</span>
                                         <span class="status_blue" *ngIf="item.status == 1 && item.role == 2">{{'contract.wait-view' | translate}}</span>
@@ -546,7 +711,7 @@
                                         <span class="status_blue" *ngIf="item.status == 3 && item.role == 3">{{'contract.sign-refused' | translate}}</span>
                                         <span class="status_blue" *ngIf="item.status == 3 && item.role == 4">{{'contract.document-refused' | translate}}</span>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="row">
                                   <div class="item_contract_infor">
@@ -556,16 +721,26 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!--Trang thai hop dong-->
+                    <div class="col-md-2 calendar_create">
+                      <div class="item_contract_infor">
+                        <!-- <span class="status_blue">{{this.filter_status | pipe | translate}}
+                          {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
+                          translate}}</span> -->
+                        <span class="status_blue">{{item.participant.contract.status| pipe | translate}}</span>
+                      </div>
+                    </div>
 
                     <div class="col-md-2 calendar_create">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractCreateTime | date: 'dd/MM/yyyy HH:mm'}}</span></div>
+                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractCreateTime | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
                     <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractSignTime | date: 'dd/MM/yyyy'}}</span></div>
+                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractSignTime | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
-                    <div class="col-md-3 item_icon">
+                    <div class="col-md-1 item_icon">
                         <div style="display: flex; justify-content: center;">
                             <div class="div_icon" *ngIf="item.status == 1 && item.role == 1 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                                 <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item)">{{'contract.lead' | translate}}</button>
@@ -581,9 +756,9 @@
                                 </div>
                             </div>
 
-                            <div class="div_icon" *ngIf="this.typeDisplay == 'viewMany'">
+                            <!-- <div class="div_icon" *ngIf="this.typeDisplay == 'viewMany'">
                                 <input id="allView" name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneView(item, index1)" />
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

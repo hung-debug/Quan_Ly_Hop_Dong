@@ -136,6 +136,8 @@ import { UploadContractFileComponent } from './main/contract-folder/current-fold
 import { AccountLinkDialogComponent } from './main/dialog/account-link-dialog/account-link-dialog.component';
 import { NgOtpInputModule } from  'ng-otp-input';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { MatMenuModule } from '@angular/material/menu';
+
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -298,6 +300,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     // ContractSignatureModule,
     MatDialogModule,
     NgxSelectModule,
+    MatMenuModule,
     SweetAlert2Module.forRoot(
       {
         provideSwal: () => import('sweetalert2').then(({ default: swal }) => swal.mixin({

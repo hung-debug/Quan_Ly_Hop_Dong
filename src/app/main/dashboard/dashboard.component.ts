@@ -504,7 +504,48 @@ export class DashboardComponent implements OnInit {
         style: {
           fontFamily: 'Roboto'
         },
-        height: 500
+        height: 500,
+        events: {
+          // load: this.addCenterText.bind(this)
+          render: function(this: any) {
+            const chart = this;
+            const textX = chart.plotLeft + (chart.series[0].center[0]);
+            const textY = chart.plotTop + (chart.series[0].center[1]);
+    
+            chart.centerText = chart.renderer.text(numContractUse, textX, textY)
+              .css({
+                fill: '#001A4D',
+                // @ts-ignore
+                fontSize: 24,
+                fontWeight: 'bold',
+                fontFamily: "ROBOTO",
+                // color: '#001A4D',
+              })
+              .add()
+    
+              chart.centerText.attr({
+              x: textX - chart.centerText.getBBox().width / 2,
+            })
+            
+            
+            const numberContract = numContractUse + numContractUnUsed
+            const secondTextY = textY + 30;
+            const numContract = this.renderer.text('TỔNG '+ numberContract,textX, secondTextY)
+            .css({
+              fill: '#001A4D',
+              // @ts-ignore
+              fontSize: 18,
+              fontWeight: 'bold',
+              fontFamily: "ROBOTO",
+              // color: '#001A4D',
+            })
+            .add()
+  
+            numContract.attr({
+            x: textX - numContract.getBBox().width / 2,
+          })
+          }
+        }
       },
       title: {
         text: this.chartContractCreated,
@@ -611,5 +652,21 @@ export class DashboardComponent implements OnInit {
       data: userData,
       disableClose: true
     })
+  }
+  
+  addCenterText() {
+    const series = this.chartPieCreated.series[0];
+    const centerX = series.center[0];
+    const centerY = series.center[1];
+
+    this.chartPieCreated.renderer.text('Center Text', centerX, centerY)
+      .css({
+        color: '#000', // Change color as needed
+        fontSize: '16px' // Change font size as needed
+      })
+      .attr({
+        zIndex: 5
+      })
+      .add();
   }
 }

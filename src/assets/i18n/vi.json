@@ -413,6 +413,8 @@
   "choose.contract.type":"Chọn loại hợp đồng",
   "side":"Bên",
   "cancel":"Huỷ",
+  "cancel.multi":"Huỷ nhiều",
+  "btn.advance": "Nâng cao",
   "type_of_sign":"Loại ký",
   "sign_by_token":"Ký số bằng Token",
   "sign_by_pki":"Ký số bằng PKI",
@@ -712,7 +714,7 @@
   "num.contract": "Số lượng hợp đồng",
   "release": "Phát hành",
   "display": "Hiển thị ",
-  "contracts.per.page": " hợp đồng/trang",
+  "contracts.per.page": " trên trang",
   "continue.using.web": "Tiếp tục sử dụng trên web",
   "contract.liquidation": "Thanh lý hợp đồng",
   "contract.status.liquidated": "Đã thanh lý",
@@ -836,5 +838,10 @@
   "request.process":"Yêu cầu cần xử lý",
   "package.document":"Gói tài liệu",
   "package.used": "Đã dùng",
-  "package.unused":"Chưa dùng"
+  "package.unused":"Chưa dùng",
+  "contract.process": "Hợp đồng",
+  "day.update":"Ngày cập nhật",
+  "view.processing.flow":"Xem luồng ký",
+  "edit.sign.time":"Gia hạn ký",
+  "status.ceca": "Trạng thái BCT"
 }
