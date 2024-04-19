@@ -399,7 +399,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
             this.isSSOlogin = false
             break;
           case '07':
-            this.toastService.showErrorHTMLWithTimeout('Bạn chưa được SSO cấp quyền đăng nhập vào hệ thống eContract','',3000)
+            this.toastService.showErrorHTMLWithTimeout('Bạn chưa được cấp quyền đăng nhập vào hệ thống eContract','',3000)
             this.router.navigate(['/'])
             this.isSSOlogin = false
             break;
