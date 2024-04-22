@@ -34,7 +34,7 @@ export class MainComponent implements OnInit {
   nameCurrentUser:any;
   listNotification: any[] = [];
   getAlllistNotification: any[] = [];
-
+  isSsoSync: boolean = false;
   constructor(private router: Router,
               private appService: AppService,
               public sidebarservice: SidebarService,
@@ -81,6 +81,11 @@ export class MainComponent implements OnInit {
 
     this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
       data => {
+        if (data.is_required_sso) {
+          this.isSsoSync = true
+        } else {
+          this.isSsoSync = false
+        }
         this.nameCurrentUser = data?.name;
       });
 
@@ -149,23 +154,26 @@ export class MainComponent implements OnInit {
   }
 
   resetPassword(){
-    // const data = {
-    //   title: 'ĐỔI MẬT KHẨU',
-    //   weakPass: false
-    // };
-    // // @ts-ignore
-    // const dialogRef = this.dialog.open(ResetPasswordDialogComponent, {
-    //   width: '420px',
-    //   backdrop: 'static',
-    //   keyboard: false,
-    //   data
-    // })
-    // dialogRef.afterClosed().subscribe((result: any) => {
-
-    //   let is_data = result
-    // })
-
-    window.open('https://auth-sso.mobifone.vn/vn/profile-information')
+    if (!this.isSsoSync) {
+      const data = {
+        title: 'ĐỔI MẬT KHẨU',
+        weakPass: false
+      };
+      // @ts-ignore
+      const dialogRef = this.dialog.open(ResetPasswordDialogComponent, {
+        width: '420px',
+        backdrop: 'static',
+        keyboard: false,
+        data
+      })
+      dialogRef.afterClosed().subscribe((result: any) => {
+  
+        let is_data = result
+      })
+    } else {
+      window.open('https://auth-sso.mobifone.vn/vn/profile-information')
+    }
+    
   }
 
   //side bar menu
