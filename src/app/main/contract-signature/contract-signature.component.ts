@@ -1783,19 +1783,18 @@ export class ContractSignatureComponent implements OnInit {
     let heightPage: any = [];
 
     let currentHeight: any = [];
-
+    let dataObjectSignature: any = [];
     //tao mang currentHeight toan so 0;
     for (let i = 0; i < fileC.length; i++) {
       currentHeight[i] = 0;
     }
-
     for (let i = 0; i < fileC.length; i++) {
       const base64StringPdf = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
 
       base64String.push(encode(base64StringPdf));
 
       //Lấy toạ độ ô ký của từng hợp đồng
-      const dataObjectSignature = await this.contractServiceV1
+      dataObjectSignature = await this.contractServiceV1
         .getDataObjectSignatureLoadChange(idContract[i])
         .toPromise();
 
@@ -1815,7 +1814,6 @@ export class ContractSignatureComponent implements OnInit {
 
       //Lấy thông tin page của hợp đồng
       const infoPage = await this.contractServiceV1.getInfoPage(documentId[i]).toPromise();
-
       for (let j = 0; j < infoPage.length; j++) {
         if (infoPage[j].page < page[i]) {
           currentHeight[i] += infoPage[j].height;
@@ -2065,6 +2063,7 @@ export class ContractSignatureComponent implements OnInit {
     }
 
     // token v2 - prepare info - optimizing
+    let dataObjectSignature: any;
     try {
       let preparePromises = fileC.map( async (_: any, i: any) => {
         const base64StringPdf = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
@@ -2072,7 +2071,7 @@ export class ContractSignatureComponent implements OnInit {
         base64String.push(encode(base64StringPdf));
 
         //Lấy toạ độ ô ký của từng hợp đồng
-        const dataObjectSignature = await this.contractServiceV1
+        dataObjectSignature = await this.contractServiceV1
           .getDataObjectSignatureLoadChange(idContract[i])
           .toPromise();
         for (let j = 0; j < dataObjectSignature.length; j++) {
@@ -2256,14 +2255,17 @@ export class ContractSignatureComponent implements OnInit {
         }
       // token v2 - optimizing
       let promises = fileC.map(async (_: any, i: any) => {
-          y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
-          signUpdate.id = idSignMany[i];
-          signDigital.signDigitalX = x[i];
-          signDigital.signDigitalY = y[i];
-          signDigital.signDigitalWidth = w[i];
-          signDigital.signDigitalHeight = h[i];
-          signDigital.page = page[i];
-          const emptySignature = await this.contractServiceV1
+        signDigital.page = page[i];
+        let emptySignature: any;
+
+        for (let j = 0; j< dataObjectSignature.length; j++) {
+          signUpdate.id = dataObjectSignature[j].id;
+          y[j] = heightPage[j] - (y[j] - currentHeight[j]) - h[j];
+          signDigital.signDigitalX = x[j];
+          signDigital.signDigitalY = y[j];
+          signDigital.signDigitalWidth = w[j];
+          signDigital.signDigitalHeight = h[j];
+          emptySignature = await this.contractServiceV1
             .createEmptySignature(
               recipientId[i],
               signUpdate,
@@ -2343,20 +2345,7 @@ export class ContractSignatureComponent implements OnInit {
               );
             }
 
-            if (i == fileC.length - 1) {
-              this.spinner.hide();
-              this.toastService.showSuccessHTMLWithTimeout(
-                'sign.success',
-                '',
-                3000
-              );
 
-              this.router
-                .navigateByUrl('/', { skipLocationChange: true })
-                .then(() => {
-                  this.router.navigate(['main/c/receive/processed']);
-                });
-            }
           } catch (err) {
             this.spinner.hide()
             this.toastService.showErrorHTMLWithTimeout(
@@ -2366,8 +2355,119 @@ export class ContractSignatureComponent implements OnInit {
             );
             return;
           }
+        }
+
+        // refactoring ========================
+        // const base64TempData = emptySignature.base64TempData;
+        // const fieldName = emptySignature.fieldName;
+        // const hexDigestTempFile = emptySignature.hexDigestTempFile;
+
+        // var json_req = JSON.stringify({
+        //   OperationId: 5,
+        //   SessionId: sessionId,
+        //   DataToBeSign: base64TempData,
+        //   checkOCSP: 0,
+        //   reqDigest: 0,
+        //   algDigest: 'SHA_256',
+        // });
+
+        // json_req = window.btoa(json_req);
+
+        // try {
+        //   const callServiceDCSigner = await this.contractServiceV1.signUsbToken(
+        //     'request=' + json_req
+        //   );
+
+        //   const dataSignatureToken = JSON.parse(
+        //     window.atob(callServiceDCSigner.data)
+        //   );
+
+        //   const signatureToken = dataSignatureToken.Signature;
+
+        //   const mergeTimeStamp = await this.contractServiceV1
+        //     .meregeTimeStamp(
+        //       recipientId[i],
+        //       idContract[i],
+        //       signatureToken,
+        //       fieldName,
+        //       certInfoBase64,
+        //       hexDigestTempFile,
+        //       ceca_push[i]
+        //     )
+        //     .toPromise();
+        //   const filePdfSigned = mergeTimeStamp.base64Data;
+
+
+        //   const sign = await this.contractServiceV1.updateDigitalSignatured(
+        //     idSignMany[i],
+        //     filePdfSigned
+        //   );
+
+        //   if (!sign.recipient_id) {
+        //     this.toastService.showErrorHTMLWithTimeout(
+        //       'Lỗi ký usb token không cập nhật được recipient id',
+        //       '',
+        //       3000
+        //     );
+        //     return false;
+        //   }
+
+        //   const updateInfo =
+        //     await this.contractServiceV1.updateInfoContractConsiderPromise(
+        //       [{
+        //         processAt: this.isDateTime
+        //       }],
+        //       recipientId[i]
+        //     );
+
+        //   if (!updateInfo.id) {
+        //     this.toastService.showErrorHTMLWithTimeout(
+        //       'Lỗi cập nhật trạng thái hợp đồng ',
+        //       '',
+        //       3000
+        //     );
+        //   }
+
+        //   if (i == fileC.length - 1) {
+        //     this.spinner.hide();
+        //     this.toastService.showSuccessHTMLWithTimeout(
+        //       'sign.success',
+        //       '',
+        //       3000
+        //     );
+
+        //     this.router
+        //       .navigateByUrl('/', { skipLocationChange: true })
+        //       .then(() => {
+        //         this.router.navigate(['main/c/receive/processed']);
+        //       });
+        //   }
+        // } catch (err) {
+        //   this.spinner.hide()
+        //   this.toastService.showErrorHTMLWithTimeout(
+        //     'Lỗi ký usb token ',
+        //     '',
+        //     3000
+        //   );
+        //   return;
+        // }
+        // refactoring ========================
+
       })
-      await Promise.all(promises)
+      await Promise.all(promises).then((results: any) => {
+        this.spinner.hide();
+        this.toastService.showSuccessHTMLWithTimeout(
+          'sign.success',
+          '',
+          3000
+        );
+
+        this.router
+          .navigateByUrl('/', { skipLocationChange: true })
+          .then(() => {
+            this.router.navigate(['main/c/receive/processed']);
+          });
+      })
       // token v2 - optimizing
       await this.signV2FixingProcess()
       } else {
