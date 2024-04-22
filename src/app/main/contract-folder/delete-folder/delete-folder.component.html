@@ -2,8 +2,15 @@
   <div class="header">
     <h3 class="label-header">{{'folder.delete' | translate}}</h3>
   </div>
-  <div style="font-weight: bold; display: flex; justify-content: center;">
-      <h3 style="font-family: inherit;">{{'confirm.folder.delete' | translate}}</h3>
+  <div style="display: flex; justify-content: center;">
+      <div>Bạn có chắc chắn muốn xóa 
+        <span *ngIf="countFolders > 0" style="font-weight: bold;">
+          {{countFolders}} thư mục 
+        </span>
+        <span *ngIf="countFolders > 0 && countContracts > 0"> và</span> 
+        <span *ngIf="countContracts > 0" style="font-weight: bold;">
+          {{countContracts}} hợp đồng
+        </span> không?</div>
   </div>
   <div class="row" style="display: flex; justify-content: center;padding-top: 10px;">
       <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.cancel' | translate}}</button>
