@@ -22,7 +22,7 @@ export class AddFolderComponent implements OnInit, OnChanges {
 
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private data: any,
+    @Inject(MAT_DIALOG_DATA) private dialogData: any,
     public dialogRef: MatDialogRef<AddFolderComponent>,
     public dialog : MatDialog,
     private contractFolderService: ContractFolderService,
@@ -31,19 +31,21 @@ export class AddFolderComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("changes ", changes);
   }
 
   ngOnInit() {
-      this.action = this.data.action;
+      this.action = this.dialogData.action;
       this.title=this.convertActionFolder(this.action);
       if(this.action == 'edit' || this.action == 'openDetail'){
-        this.contractFolderService.getContractFoldersList().subscribe((item) => {
-          let folder = item.filter((folder: any) => folder.id == this.data.folderId)[0];
-          this.name = folder.name;
-          this.description = folder.description;
-          this.id = folder.id ? folder.id : 0;
-        })
+        // this.contractFolderService.getContractFoldersList().subscribe((item) => {
+        //   let folder = item.filter((folder: any) => folder.id == this.dialogData.data.folderId)[0];
+        //   this.name = folder.name;
+        //   this.description = folder.description;
+        //   this.id = folder.id ? folder.id : 0;
+        // })
+        this.name = this.dialogData.data.name
+        this.description = this.dialogData.data.description
+        this.id = this.dialogData.data.id
       }
   }
 
@@ -72,6 +74,7 @@ export class AddFolderComponent implements OnInit, OnChanges {
       let folder: Folder = {
         name: this.name.trim(),
         description: this.description,
+        parentId: this.dialogData.data.id
       }
       this.contractFolderService.addContractFolder(folder).subscribe(
         (data: any) => {
@@ -81,7 +84,7 @@ export class AddFolderComponent implements OnInit, OnChanges {
             this.toastService.showErrorHTMLWithTimeout('folder.name.exist', '', 2000);
             return;
           }
-          this.dialogRef.close();
+          this.dialogRef.close({name: this.name, description: this.description});
           this.toastService.showSuccessHTMLWithTimeout('folder.add.success', '', 2000);
         }
       )
@@ -100,7 +103,7 @@ export class AddFolderComponent implements OnInit, OnChanges {
             return;
           }
           this.toastService.showSuccessHTMLWithTimeout('folder.edit.success', '', 2000);
-          this.dialogRef.close();
+          this.dialogRef.close('edited');
         }
       )
     }

@@ -220,7 +220,8 @@ export class AddContractFolderComponent implements OnInit {
         contracts: [...new Set(this.selectedContract)]
       }
 
-      this.contractFolderService.addContractIntoFolder(body).subscribe((response: any) => {
+      this.contractFolderService.addContractIntoFolder(body).subscribe(
+        (response: any) => {
         if(response.errors?.length > 0) {
           if(response.errors[0].code == 1016) {
             this.toastService.showErrorHTMLWithTimeout('contracts.existed.folder','',3000);
@@ -229,9 +230,11 @@ export class AddContractFolderComponent implements OnInit {
           }
         } else {
           this.toastService.showSuccessHTMLWithTimeout("add.contract.in.folder.success","",3000);
-          this.dialogRef.close();
-          window.location.reload();
+          this.dialogRef.close(response);
+          // window.location.reload();
         }
+      }, (err: any) => {
+        this.toastService.showErrorHTMLWithTimeout("Thêm hợp đồng thất bại","",3000)
       })
     }
 
