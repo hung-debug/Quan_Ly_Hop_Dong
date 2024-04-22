@@ -29,7 +29,8 @@ export interface User {
 })
 export class AuthenticationService {
 
-  loginUrl:any = `${environment.apiUrl}/api/v1/auth`;
+  // loginUrl:any = `${environment.apiUrl}/api/v1/auth`;
+  loginUrl:any = `${environment.apiUrl}/api/v1/auth/login/web_app`;
   getAuthenTokenUrl:any = `${environment.apiUrl}/api/v1/auth/login-sso`;
 
   errorData:any = {};
