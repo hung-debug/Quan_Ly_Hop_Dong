@@ -15,6 +15,7 @@ import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { AccountLinkDialogComponent } from '../dialog/account-link-dialog/account-link-dialog.component';
 import { ContractSignatureService } from 'src/app/service/contract-signature.service';
+import { sideList } from 'src/app/config/variable';
 
 @Component({
   selector: 'app-dashboard',
@@ -321,7 +322,7 @@ export class DashboardComponent implements OnInit {
 
   detailContract(id: any) {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-      this.router.navigate(['/main/contract/create/processing']);
+      this.router.navigate(['/main/form-contract/detail/' + id]);
     });
   }
 
@@ -601,6 +602,16 @@ export class DashboardComponent implements OnInit {
       'overflow': 'auto'
     };
   }
+  sortParticipant(list: any) {
+    // return list.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
+    return list;
+  }
+
+  getNameOrganization(item: any, index: any) {
+    if(item.type == 3 && item.recipients.length > 0)
+      return sideList[index].name + " : " + item.recipients[0].name;
+    return sideList[index].name + " : " + item.name;
+  }
 
   search() {
     this.searchCountCreate();
@@ -619,10 +630,14 @@ export class DashboardComponent implements OnInit {
     });
     
     this.dashboardService.getNotification(0, '', '', 1, '').subscribe(data => {
-      this.contractConnectList = data.entities;
-      // console.log("this.contractConnectList",data);
+      // this.contractConnectList = data.entities;
+     
       
     });
+    this.contractService.getContractList('off','','','','','','',0,'',1,'').subscribe(data => {
+      console.log("this.contractConnectListlllllll",data);
+      this.contractConnectList = data.entities;
+    })
     this.contractSignature.getContractMyProcessList('','','','','',1,'',2,'').subscribe(data => {
      
       this.contractRequestList = data.entities;

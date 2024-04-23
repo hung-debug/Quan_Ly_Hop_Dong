@@ -1,9 +1,10 @@
 <div class="container-fluid">
-  <div class="row" style="padding-top: 20px;">
+  <div class="row">
     <!-- <div class="col-md-12">
       <h3>{{'dashboard.contract.received' | translate}}</h3>
     </div> -->
-    <div class="col-md-6">
+    <div class="row">
+    <div class="col-md-6" style="padding: 0 !important;">
       <div class="add-contract-theme">
         <div style="max-width: 450px;">
           <span style="font-size: 18px;">Xin chào, {{this.currentName}}</span>
@@ -17,7 +18,9 @@
       </div>
     </div>
     
+    
     <div class="col-md-6">
+      
       <div class="contract-processing">
         <div class="row_text_1">
           <span style="color: #286CF5;">Bạn có tài liệu đang soạn chưa hoàn thành!</span>
@@ -30,20 +33,24 @@
           </div>
           <!-- chưa xử lý logic mới chỉ để tạm giao diện -->
           <div class="body_row_1"  id="noti" > 
-            <div *ngFor="let item of contractConnectList; let i = index" [style.border-bottom]="i != listNotification.length-1 ? '1px solid #C7D0E9' : ''" style="padding: 4px;">
-              <a href="{{item.notice_url}}" style="text-decoration: none;">
+            <div *ngFor="let item of contractConnectList; let i = index"  style="padding: 4px;">
+              <a (click)="detailContract(item.id)" style="text-decoration: none;">
               <div class="row">
-                <div *ngIf="this.lang == 'vi'" class="col-md-12 item_contract_name1" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name}}</div>
-                <div *ngIf="this.lang == 'en'" class="col-md-12 item_contract_name1" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name.replace("Ký HĐ","Sign contract").replace("Quá hạn","Overdue").replace("Hoàn thành","Completed")}}</div>
+                <div *ngIf="this.lang == 'vi'" class="col-md-12 item_contract_name1">{{item.name}}</div>
+                <!-- <div *ngIf="this.lang == 'en'" class="col-md-12 item_contract_name1" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name.replace("Ký HĐ","Sign contract").replace("Quá hạn","Overdue").replace("Hoàn thành","Completed")}}</div> -->
               </div>
   
-                <div class="row" *ngFor="let s of item.notice_content.split('<br/>')">
+                <!-- <div class="row" *ngFor="let s of item.notice_content.split('<br/>')">
                   <div *ngIf="!s.includes('\nBên B: #PARTICIPANT_2#')" class="col-md-12 item_contract_infor">
                     <img src="../../../assets/img/user_icon.svg" width="12px"/>
                       <span *ngIf="this.lang == 'vi' || !this.lang"> {{s.replace("Bên B: #PARTICIPANT_2#","")}}</span>
                       <span *ngIf="this.lang == 'en'"> {{s.replace("Bên B: #PARTICIPANT_2#","").replace("Bên","Side")}}</span>
                   </div>
-                </div>
+                </div> -->
+                <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
+                  <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                  </div>
+              </div>
               </a>
           </div>
         </div>
@@ -51,12 +58,15 @@
       </div>
     </div>
   </div>
+</div>
   
-  <div class="row" style="padding-top: 20px;">
+  <div class="row" style="padding-top: 12px;">
     <div class="col-md-6" style="background-color: #FFFFFF; border-radius: 12px; padding: 15px">
       <span style="font-size: 16px; font-weight: 700;">{{'menu.contract.receive.list' | translate}}</span>
-      <div class="row" style="display: flex; padding-top: 10px; margin-bottom: 10px; justify-content: space-around;">
-          <div class="header_card header_card_1" (click)="openLink('/main/c/receive/wait-processing-dashboard')">
+      <div class="container overflow-hidden">
+        <div class="row gy">
+          <div class="col-6">
+           <div class="p-1 border header_card header_card_1" (click)="openLink('/main/c/receive/wait-processing-dashboard')">
             <a [routerLink] = "['/main/c/receive/wait-processing-dashboard']" style="text-decoration: none;">
               <div class="text_header_card">
                 <div class="number_header_card">{{numberWaitProcess}}</div>
@@ -67,42 +77,48 @@
 
               </div>
             </a>
+           </div>
           </div>
-          <div class="header_card header_card_2"  (click)="openLink('/main/c/receive/wait-processing-prepare-expires-dashboard')">
-            <a [routerLink]="['/main/c/receive/wait-processing-prepare-expires-dashboard']" style="color: white; text-decoration: none;">
-              <div class="text_header_card">
-                <div class="number_header_card">{{numberExpire}}</div>
-                <div style="justify-content: center; display: flex;">
-                  <img src="../../../assets/img/Ellipse_yellow.svg" width="12px"/>
-                  <div style="color: #A5AEC0; margin-left: 2%;">{{'contract.status.expire' | translate}}</div>
+          <div class="col-6">
+            <div class="p-1 border header_card header_card_2" (click)="openLink('/main/c/receive/wait-processing-prepare-expires-dashboard')">
+              <a [routerLink]="['/main/c/receive/wait-processing-prepare-expires-dashboard']" style="color: white; text-decoration: none;">
+                <div class="text_header_card">
+                  <div class="number_header_card">{{numberExpire}}</div>
+                  <div style="justify-content: center; display: flex;">
+                    <img src="../../../assets/img/Ellipse_yellow.svg" width="12px"/>
+                    <div style="color: #A5AEC0; margin-left: 2%;">{{'contract.status.expire' | translate}}</div>
+                  </div>
                 </div>
-              </div>
-          </a>
+              </a>
+            </div>
           </div>
-      </div>
-      <div class="row" style="display: flex; padding-top: 10px; margin-top: 10px; justify-content: space-around;">
-          <div class="header_card header_card_3" (click)="openLink('/main/c/receive/processed-waiting-dashboard')">
-            <a [routerLink]="['/main/c/receive/processed-waiting-dashboard']" style="color: white; text-decoration: none;">
-              <div class="text_header_card">
-                <div class="number_header_card">{{numberWaitComplete}}</div>
-                <div style="justify-content: center; display: flex;">
-                  <img src="../../../assets/img/Ellipse_orange.svg" width="12px"/>
-                  <div style="color: #A5AEC0; margin-left: 2%;">{{'contract.status.wait-response' | translate}}</div>
+          <div class="col-6">
+            <div class="p-1 border header_card header_card_3" (click)="openLink('/main/c/receive/processed-waiting-dashboard')">
+              <a [routerLink]="['/main/c/receive/wait-processing-prepare-expires-dashboard']" style="color: white; text-decoration: none;">
+                <div class="text_header_card">
+                  <div class="number_header_card">{{numberExpire}}</div>
+                  <div style="justify-content: center; display: flex;">
+                    <img src="../../../assets/img/Ellipse_yellow.svg" width="12px"/>
+                    <div style="color: #A5AEC0; margin-left: 2%;">{{'contract.status.expire' | translate}}</div>
+                  </div>
                 </div>
-              </div>
-            </a>
+              </a>
+            </div>
           </div>
-          <div class="header_card header_card_4" (click)="openLink('/main/c/receive/processed-complete-dashboard')">
-            <a [routerLink]="['/main/c/receive/processed-complete-dashboard']" style="color: white; text-decoration: none;">
-              <div class="text_header_card">
-                <div class="number_header_card">{{numberComplete}}</div>
-                <div style="justify-content: center; display: flex;">
-                  <img src="../../../assets/img/Ellipse_green.svg" width="12px"/>
-                  <div style="color: #A5AEC0; margin-left: 2%;">{{'contract.status.complete' | translate}}</div>
+          <div class="col-6">
+            <div class="p-1 border header_card header_card_4" (click)="openLink('/main/c/receive/processed-complete-dashboard')">
+              <a [routerLink]="['/main/c/receive/processed-complete-dashboard']" style="color: white; text-decoration: none;">
+                <div class="text_header_card">
+                  <div class="number_header_card">{{numberComplete}}</div>
+                  <div style="justify-content: center; display: flex;">
+                    <img src="../../../assets/img/Ellipse_green.svg" width="12px"/>
+                    <div style="color: #A5AEC0; margin-left: 2%;">{{'contract.status.complete' | translate}}</div>
+                  </div>
                 </div>
-              </div>
-            </a>
+              </a>
+            </div>
           </div>
+        </div>
       </div>
     </div>
 
@@ -113,7 +129,7 @@
           <span style="color: #0041C4; cursor: pointer;"><b (click)="openLink('/main/c/receive/wait-processing')">Xem tất cả</b></span>
         </div>
         <br>
-        <div class="row_text_2" *ngFor="let item of contractRequestList; let i = index" [style.border-bottom]="i != listNotification.length-1 ? '1px solid #C7D0E9' : ''" style="padding: 4px; margin-bottom: 15px;">
+        <div class="row_text_2" *ngFor="let item of contractRequestList; let i = index" [style.border-bottom]="i != listNotification.length-1 ? '1px solid #C7D0E9' : ''" style="padding: 4px; margin: 13px;">
           <div>
             <img src="../../assets/img/frame_contract.svg">
           </div>
@@ -147,7 +163,7 @@
 
   </div>
 
-  <div class="row" style="padding-top: 20px;">
+  <div class="row" style="padding-top: 12px;">
 
     <div class="col-md-6" style="background-color: #FFFFFF; border-radius: 12px; padding: 15px">
       <div class="row">

@@ -9,10 +9,10 @@
 @import '~material-icons/iconfont/material-icons.css';
 
 html, body { height: 100%; }
-body { margin: 0; font-family: font_lexend_deca , Roboto, "Helvetica Neue", sans-serif !important; font-size: 13px !important;}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif !important; font-size: 13px !important; background-color: var(--BG, #F3F6FA);}
 
 @font-face {
-  font-family: font_lexend_deca;
+  font-family: Roboto;
   src:url('assets/scss/font/LexendDeca-VariableFont_wght.ttf') format("opentype");
   font-weight:normal;
   font-style:normal;
@@ -55,7 +55,7 @@ body { margin: 0; font-family: font_lexend_deca , Roboto, "Helvetica Neue", sans
 
 .font, .p-inputtext, .p-component, .p-chips-input-token input{
   font-size: 13px !important;
-  font-family: font_lexend_deca !important;
+  font-family: Roboto !important;
 }
 .p-dropdown-filter, .p-dropdown-label, .p-dropdown-panel,
 .p-multiselect-label, .p-multiselect-token-label {
@@ -115,6 +115,10 @@ body { margin: 0; font-family: font_lexend_deca , Roboto, "Helvetica Neue", sans
 
 .my-custom-title-class {
   color: #3085d6 !important;
+}
+.p-datatable-table, .p-datatable-table .ng-star-inserted, .p-paginator-pages .ng-star-inserted{
+  font-size: 13px;
+  font-family: 'Roboto' !important;
 }
 
 
