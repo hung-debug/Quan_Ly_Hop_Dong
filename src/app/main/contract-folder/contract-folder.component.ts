@@ -88,11 +88,16 @@ export class ContractFolderComponent implements OnInit {
       this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate(['/main/form-contract/detail/' + item.id],
         {
-          // queryParams: {
-          //   // 'action': this.action,
-          //   'folderId': this.parentId,
-          //   'folderName': this.activatedRoute.snapshot.params['name']
-          // },
+          queryParams: {
+            'page': 1,
+            'filter_type': '',
+            'filter_contract_no':'',
+            'filter_from_date': '',
+            'filter_to_date': '',
+            'isOrg': 'off',
+            'organization_id': '',
+            'status': ''
+          },
           skipLocationChange: false
         });
       });
