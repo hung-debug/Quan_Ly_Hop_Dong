@@ -826,5 +826,6 @@
   "enter.supplier": "Chọn nhà cung cấp",
   "check.config.brandname": "Vui lòng kiểm tra kết nối trước khi thực hiện lưu cấu hình",
   "password.blank":"Mật khẩu không được để trống",
-  "taxcode.not.match.hsm":"Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng"
+  "taxcode.not.match.hsm":"Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng",
+  "folder.search.placeholder": "Tìm kiếm theo tên thư mục, tên hợp đồng, mã hợp đồng, tên đối tác"
 }

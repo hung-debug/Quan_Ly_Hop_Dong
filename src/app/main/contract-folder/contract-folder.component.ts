@@ -77,12 +77,48 @@ export class ContractFolderComponent implements OnInit {
   
 
   openFolder(item: any){
-    this.p = 1
-    this.searchName = ""
-    this.pagination.pageNumber = 0
-    this.folderNameInput = ""
-    this.currentParentId = item.id
-    this.getContractList(item.id)
+    if (item.type == '0') {
+      this.p = 1
+      this.searchName = ""
+      this.pagination.pageNumber = 0
+      this.folderNameInput = ""
+      this.currentParentId = item.id
+      this.getContractList(item.id)
+    } else if (item.type == '1') {
+      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate(['/main/form-contract/detail/' + item.id],
+        {
+          // queryParams: {
+          //   // 'action': this.action,
+          //   'folderId': this.parentId,
+          //   'folderName': this.activatedRoute.snapshot.params['name']
+          // },
+          skipLocationChange: false
+        });
+      });
+    } else {
+      let currentUrl: string = ""
+      this.contractService.getFileContract(item.id).subscribe(
+        res => {
+          let fileName = res.filter(
+            (p: any) => p.type == 2 && p.status == 1
+          )[0]?.path ?? res.filter(
+            (p: any) => p.type == 1 && p.status == 1
+          )[0].filename
+          const extension = fileName.split(".").pop()
+          currentUrl = res.filter(
+            (p: any) => p.type == 2 && p.status == 1
+          )[0]?.path ?? res.filter(
+            (p: any) => p.type == 1 && p.status == 1
+          )[0]?.path
+          if (extension?.toLowerCase() == "txt") {
+            window.open(currentUrl)
+          } else {
+            window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
+          }
+        }
+      )
+    }
   }
 
   autoSearch(event: any) {
@@ -213,10 +249,9 @@ export class ContractFolderComponent implements OnInit {
     if (this.p < 1) {
       this. p = 1
     }
-    console.log("folderidd",this.currentParentId);
     if (folderId) this.currentParentId = folderId
     this.checkedAll = false;
-    this.contractFolderService.getContractInFolder(folderId, this.searchName, this.p - 1, this.page).subscribe((response: any) => {
+    this.contractFolderService.getContractInFolder(folderId, this.searchName?.trim(), this.p - 1, this.page).subscribe((response: any) => {
       this.getCurrentPathData(response)
       if (folderId == 0) {
         this.isViewFolder = true
@@ -418,7 +453,11 @@ export class ContractFolderComponent implements OnInit {
       this.isMultiDelete = true
       this.deleteFolder(this.selectedItems)
     } else {
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng chọn thư mục/hợp đồng cần xóa','',3000)
+      if (this.currentParentId == 0) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng chọn thư mục cần xóa','',3000)
+      } else {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng chọn thư mục/hợp đồng cần xóa','',3000)
+      }
     }
   }
 
@@ -440,9 +479,18 @@ export class ContractFolderComponent implements OnInit {
     }
   }
 
+  count: number = 0
   selectItem(item: any) {
     if (item.checked == true) {
+      this.count++
+    } else {
+      this.count--
+    }
 
+    if (this.count == this.foldersData.length) {
+      this.checkedAll = true
+    } else {
+      this.checkedAll = false
     }
   }
 
