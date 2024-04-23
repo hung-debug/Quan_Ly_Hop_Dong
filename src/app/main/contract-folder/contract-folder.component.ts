@@ -271,6 +271,7 @@ export class ContractFolderComponent implements OnInit {
           item.isFolder = true
         } else if (item.type == 1) {
           item.isContract = true
+          this.getContractStatus(item.contract)
         } else if (item.type == 2) {
           item.isManualContract = true
           item.isContract = true
@@ -504,6 +505,20 @@ export class ContractFolderComponent implements OnInit {
     this.pageEnd = (this.p) * this.page;
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
+    }
+  }
+
+  getContractStatus(contractData: any) {
+    const oneDay = 24*60*60*1000
+    let currentDate: any = new Date()
+    contractData.sign_time = new Date(contractData.sign_time)
+    let countDays = Math.abs(contractData.sign_time - currentDate)/oneDay
+    if (contractData.status == 20) {
+      if (contractData.sign_time > currentDate && countDays <= 5) {
+          contractData.status = 33
+      } else if (contractData.sign_time < currentDate) {
+        contractData.status = 34
+      }
     }
   }
 }

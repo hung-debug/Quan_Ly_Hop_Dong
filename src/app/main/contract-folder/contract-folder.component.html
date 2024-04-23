@@ -178,7 +178,7 @@
               </div>
             </div>
             <div class="col-md-1 item_icon">
-              <input type="checkbox" [(ngModel)]="item.checked" />
+              <input type="checkbox" [(ngModel)]="item.checked" (change)="selectItem(item)"/>
             </div>
           </div>
         </div>
@@ -222,8 +222,8 @@
 
             <!--Cột 3: Ngày hết hạn ký-->
             <div class="col-md-3 calendar_last_updated">
-                <div *ngIf="item?.contract?.status !== 35"><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.updatedAt | date:
-                        'dd/MM/yyyy'}}</span></div>
+                <div *ngIf="item?.contract?.status !== 35 && item.type !== 1"><i class="fa fa-calendar fa_icon"></i><span class="item_date">
+                  {{item.updatedAt | date: 'dd/MM/yyyy HH:mm'}}</span></div>
             </div>
 
             <!--Cột 4: Thao tác-->
