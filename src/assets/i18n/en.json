@@ -810,5 +810,6 @@
   "enter.supplier": "Choose supplier",
   "check.config.brandname": "Please check the connection before saving the configuration",
   "password.blank": "Password cannot be blank",
-  "taxcode.not.match.hsm":"Tax code/CMT/CCCD does not match contract signing information"
+  "taxcode.not.match.hsm":"Tax code/CMT/CCCD does not match contract signing information",
+  "folder.search.placeholder": "Search by folder name, contract name, contract code, partner name"
 }
