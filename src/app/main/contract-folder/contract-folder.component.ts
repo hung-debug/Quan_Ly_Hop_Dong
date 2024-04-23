@@ -519,6 +519,8 @@ export class ContractFolderComponent implements OnInit {
       } else if (contractData.sign_time < currentDate) {
         contractData.status = 34
       }
+    } else if (contractData.liquidationContractId) {
+      contractData.status = 40
     }
   }
 }
