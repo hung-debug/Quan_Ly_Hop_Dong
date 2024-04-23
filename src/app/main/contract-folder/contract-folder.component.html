@@ -222,7 +222,7 @@
 
             <!--Cột 3: Ngày hết hạn ký-->
             <div class="col-md-3 calendar_last_updated">
-                <div *ngIf="item?.contract?.status !== 35 && item.type !== 1"><i class="fa fa-calendar fa_icon"></i><span class="item_date">
+                <div *ngIf="item.type !== 1"><i class="fa fa-calendar fa_icon"></i><span class="item_date">
                   {{item.updatedAt | date: 'dd/MM/yyyy HH:mm'}}</span></div>
             </div>
 
