@@ -476,6 +476,19 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             })
           }
         })
+      } else if (this.datas?.storedFields?.length > 0 || this.datas.pagePdfFileNew < this.datas.pagePdfFileOld) {
+        this.datas.contract_user_sign.forEach((res: any) => {
+          if (res.sign_config.length > 0) {
+            res.sign_config.forEach((element: any) => {
+              if (element.id_have_data && element.page > this.datas.pagePdfFileNew) {
+                this.removeDataSignChange(element.id_have_data);
+                res.sign_config = res.sign_config.filter((item: any) => item.page <= this.datas.pagePdfFileNew)
+              } else if (element.page > this.datas.pagePdfFileNew) {
+                res.sign_config = res.sign_config.filter((item: any) => item.page <= this.datas.pagePdfFileNew)
+              } 
+            })
+          }
+        })
       }
     }else{
       this.datas.contract_user_sign.forEach((res: any) => {
