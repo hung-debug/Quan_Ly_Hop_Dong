@@ -5,7 +5,7 @@
       <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">{{'contract.detail' | translate}}</div>
       <div style="line-height: 25px">
         <div>
-          <span class="title-contract">{{'contract.uid' | translate}}:</span>
+          <span class="title-contract">{{'contract.uid1' | translate}}:</span>
           <span>{{datas?.is_data_contract?.contract_uid}}</span>
         </div>
         <div>
@@ -27,13 +27,13 @@
             <a style="color: #106DB6" rel="stylesheet" [href]="d.path" target="_blank">{{d.filename}}</a>
           </span>
         </div>
-        <div *ngIf="datas.is_data_contract.status == 30 && datas.is_data_contract.originalContractId">
+        <div *ngIf="datas.is_data_contract.originalContractId">
           <span class="title-contract">{{'contract.original' | translate}}:</span>
           <span style="cursor: pointer; color:#106DB6" (click)="openDetailOriginalContract(this.datas.is_data_contract)">
             {{datas.is_data_contract.original_contract_name}}
           </span>
         </div>
-        <div *ngIf="datas.is_data_contract.liquidationContractId">
+        <div *ngIf="(datas.is_data_contract.status == 40 || datas.is_data_contract.status == 30) && datas.is_data_contract.liquidationContractId">
           <span class="title-contract">{{'contract.liquidated' | translate}}:</span>
           <span style="cursor: pointer; color:#106DB6" (click)="openDetailLiquidatedContract(this.datas.is_data_contract)">
             {{datas.is_data_contract.liquidation_contract_name}}

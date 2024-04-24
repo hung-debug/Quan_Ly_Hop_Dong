@@ -380,3 +380,67 @@
   width: inherit;
   max-width: 106px;
 }
+
+.rotate{
+  left: 1480px;
+  position: fixed;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.input-web {
+  box-sizing: border-box;
+  text-align: center;
+  width: 40px;
+  height: 22px;
+  background: #FFFFFF;
+  border: 1px solid #87CAFF;
+  border-radius: 5px;
+}
+
+.zoom-in-out{
+  width: 100%;
+  position: fixed;
+  z-index: 1000;
+  left: 340px;
+}
+@media screen and (max-width:1440px){
+  .zoom-in-out{
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
+    left: 250px;
+  }
+}
+@media screen and (max-width:1366px){
+  .zoom-in-out{
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
+    left: 255px;
+  }
+}
+@media screen and (max-width:1600px){
+  .zoom-in-out{
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
+    left: 280px;
+  }
+}
+@media screen and (max-width:1280px){
+  .zoom-in-out{
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
+    left: 230px;
+  }
+}
+@media screen and (max-width:1920px){
+  .zoom-in-out{
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
+    left: 330px;
+  }
+}

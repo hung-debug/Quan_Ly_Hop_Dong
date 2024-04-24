@@ -79,6 +79,7 @@ export class ConsiderContractComponent
   arrPage: any = [];
   objDrag: any = {};
   scale: any;
+  defaultScale: any = 1.0;
   objPdfProperties: any = {
     pages: [],
   };
@@ -205,6 +206,9 @@ export class ConsiderContractComponent
   ekycDocType: string = ''
   isContainSignField: boolean = true;
   isNB: boolean = false;
+  defaultValue: number = 100;
+  
+  
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -349,6 +353,44 @@ export class ConsiderContractComponent
         }
       );
     });
+  }
+  
+  changeScale(values: any){
+    switch (values){
+      case "-":
+        if(this.scale > 0.25){
+          this.scale = this.scale - 0.25;
+          this.defaultValue = this.scale * 100
+          // for (let page = 1; page <= this.pageNumber; page++) {
+          //   let canvas = document.getElementById('canvas-step3-' + page);
+          //   this.renderPageZoomInOut(page, canvas);
+          // }
+          this.getPage();
+
+        }else{
+          break;
+        }
+        break;
+      case "+":
+        if(this.scale < 5){
+          this.scale = this.scale + 0.25;
+          this.defaultValue = this.scale * 100
+          // for (let page = 1; page <= this.pageNumber; page++) {
+          //   let canvas = document.getElementById('canvas-step3-' + page);
+          //   this.renderPageZoomInOut(page, canvas);
+          // }
+          this.getPage();
+        }else{
+          break;
+        }
+        break;
+      default:
+        break;
+    }
+  }
+  
+  changeRotate(values: any){
+    
   }
 
   page1: boolean = false;
@@ -944,6 +986,20 @@ export class ConsiderContractComponent
       this.activeScroll();
     });
   }
+  
+  resetToDefault(){
+    this.scale = this.defaultScale;
+    this.defaultValue = this.scale * 100
+    this.getPage();
+  }
+  
+  // rotateCanvas() {
+  //   const canvas = this.pdfCanvas.nativeElement;
+  //   const context = canvas.getContext('2d');
+  //   context.translate(canvas.width / 2, canvas.height / 2);
+  //   context.rotate(this.rotationAngle * Math.PI / 180);
+  //   context.translate(-canvas.width / 2, -canvas.height / 2);
+  // }
 
   activeScroll() {
     document
