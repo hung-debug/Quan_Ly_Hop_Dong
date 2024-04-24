@@ -35,7 +35,13 @@ export class DeleteFolderComponent implements OnInit {
     this.contractFolderService.deleteFolderItem(this.data).subscribe(
       (data) => {
         this.spinner.hide();
-        this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục thành công','',3000);
+        if (this.countFolders > 0 && this.countContracts == 0) {
+          this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục thành công','',3000);
+        } else if (this.countFolders == 0 && this.countContracts > 0) {
+          this.toastService.showSuccessHTMLWithTimeout('Xóa hợp đồng thành công','',3000);
+        } else {
+          this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục/hợp đồng thành công','',3000);
+        }
         this.dialogRef.close('deleted');
 
         // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
@@ -44,7 +50,13 @@ export class DeleteFolderComponent implements OnInit {
       },
       (error) => {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout('Xóa thư mục thất bại', '', 2000);
+        if (this.countFolders > 0 && this.countContracts == 0) {
+          this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục thất bại','',3000);
+        } else if (this.countFolders == 0 && this.countContracts > 0) {
+          this.toastService.showSuccessHTMLWithTimeout('Xóa hợp đồng thất bại','',3000);
+        } else {
+          this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục/hợp đồng thất bại','',3000);
+        }
       }
     )
     
