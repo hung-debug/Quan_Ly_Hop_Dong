@@ -9,9 +9,13 @@
     <h4>File hợp đồng mới có <span style="font-weight: bold;">{{this.data.isPagePdfNew}} trang</span></h4>
       
     <h4 style="color: crimson;">{{'confirm.clear.text.sign' | translate}}</h4>
+    
+    <h4>- Nếu <b>Đồng ý</b>, hệ thống sẽ xóa toàn bộ các ô text, ô ký đã gán cho file hợp đồng cũ.</h4>
+    
+    <h4>- Nếu <b>Từ chối</b>, hệ thống sẽ xóa các ô text, ô ký nằm ngoài hợp đồng.</h4>
   </div>
   <div class="row" style="justify-content: center;padding-top: 10px;">
-      <button class="cancel-button" (click)="onClose()"  type="button">{{'btn.cancel' | translate}}</button>
+      <button class="cancel-button" (click)="onClose()"  type="button">{{'contract.status.fail' | translate}}</button>
       <button class="save-button" (click)="onSubmit()">{{'btn.accept' | translate}}</button>
   </div>
 </div>
