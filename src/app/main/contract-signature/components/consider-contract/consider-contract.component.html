@@ -7,7 +7,7 @@
       <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label">{{'contract.detail' | translate}}</div>
       <div style="line-height: 25px">
         <div>
-          <span class="title-contract">{{'contract.uiddd' | translate}}:</span>
+          <span class="title-contract">{{'contract.uid' | translate}}:</span>
           <span>{{datas?.is_data_contract?.contract_uid}}</span>
         </div>
         <div>
@@ -64,7 +64,7 @@
           <div class="confirm-radio d-flex justify-content-between mx-4">
             <div class="radio-confirm">
               <input id="radio-confirm-consider" type="radio" name="confirm-radio-consider" [value]="1" [(ngModel)]="confirmConsider">
-              <label for="radio-confirm-consider" class="ms-2">{{'btn.accept1' | translate}}</label>
+              <label for="radio-confirm-consider" class="ms-2">{{'btn.accept' | translate}}</label>
             </div>
             <div class="radio-refuse">
               <input id="radio-refuse-consider" type="radio" name='confirm-radio-consider' [value]="2" [(ngModel)]="confirmConsider">
@@ -191,7 +191,7 @@
         <div class="confirm-radio d-flex justify-content-between mx-4">
           <div class="radio-confirm">
             <input id="radio-confirm-consider" type="radio" name="confirm-radio-consider" [value]="1" [(ngModel)]="confirmConsider">
-            <label for="radio-confirm-consider" class="ms-2">{{'btn.accept3' | translate}}</label>
+            <label for="radio-confirm-consider" class="ms-2">{{'btn.accept' | translate}}</label>
           </div>
           <div class="radio-refuse">
             <input id="radio-refuse-consider" type="radio" name='confirm-radio-consider' [value]="2" [(ngModel)]="confirmConsider">
@@ -205,7 +205,7 @@
         <div class="confirm-radio d-flex justify-content-between mx-4">
           <div class="radio-confirm">
             <input id="radio-confirm-secretary" type="radio" name="confirm-radio-secretary" [value]="1" [(ngModel)]='confirmSignature'>
-            <label for="radio-confirm-secretary" class="ms-2">{{'btn.accept4' | translate}}</label>
+            <label for="radio-confirm-secretary" class="ms-2">{{'btn.accept' | translate}}</label>
           </div>
           <div class="radio-refuse">
             <input id="radio-refuse-secretary" type="radio" name='confirm-radio-secretary' [value]="2" [(ngModel)]='confirmSignature'>
