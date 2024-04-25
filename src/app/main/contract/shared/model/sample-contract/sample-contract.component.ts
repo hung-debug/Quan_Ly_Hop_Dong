@@ -551,10 +551,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.datas.contract_user_sign.forEach((item: any, index: number) => {
         if (item.sign_config.length > 0) {
           item.sign_config.forEach((element: any) => {
-            if (element.page > this.datas.pagePdfFileNew) item.sign_config = item.sign_config.splice(index, 1)
-            if (element.id_have_data) {
+            if (element.id_have_data && element.page > this.datas.pagePdfFileNew) {
               this.removeDataSignChange(element.id_have_data).then();
-            }
+              item.sign_config = item.sign_config.filter((item: any) => item.page <= this.datas.pagePdfFileNew)
+            } else if (element.page > this.datas.pagePdfFileNew) {
+              item.sign_config = item.sign_config.filter((item: any) => item.page <= this.datas.pagePdfFileNew)
+            } 
           })
         }
       })
