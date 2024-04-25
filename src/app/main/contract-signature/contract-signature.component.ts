@@ -1782,47 +1782,52 @@ export class ContractSignatureComponent implements OnInit {
     //Chieu dai cau page can ky
     let heightPage: any = [];
 
-    let currentHeight: any = [];
+    let currentHeight: any[] = [];
     let dataObjectSignature: any = [];
     //tao mang currentHeight toan so 0;
-    for (let i = 0; i < fileC.length; i++) {
-      currentHeight[i] = 0;
-    }
+    // for (let i = 0; i < fileC.length; i++) {
+    //   currentHeight[i] = 0;
+    // }
     for (let i = 0; i < fileC.length; i++) {
       const base64StringPdf = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
 
       base64String.push(encode(base64StringPdf));
 
       //Lấy toạ độ ô ký của từng hợp đồng
-      dataObjectSignature = await this.contractServiceV1
-        .getDataObjectSignatureLoadChange(idContract[i])
-        .toPromise();
+      // dataObjectSignature = await this.contractServiceV1
+      //   .getDataObjectSignatureLoadChange(idContract[i])
+      //   .toPromise();
+      // console.log("dataObjectSignature",dataObjectSignature);
+      // for (let j = 0; j < dataObjectSignature.length; j++) {
+      //   if (dataObjectSignature[j].recipient) {
+      //     if (recipientId[i] == dataObjectSignature[j].recipient.id) {
+      //       x.push(dataObjectSignature[j].coordinate_x);
+      //       y.push(dataObjectSignature[j].coordinate_y);
+      //       h.push(dataObjectSignature[j].height);
+      //       w.push(dataObjectSignature[j].width);
 
-      for (let j = 0; j < dataObjectSignature.length; j++) {
-        if (dataObjectSignature[j].recipient) {
-          if (recipientId[i] == dataObjectSignature[j].recipient.id) {
-            x.push(dataObjectSignature[j].coordinate_x);
-            y.push(dataObjectSignature[j].coordinate_y);
-            h.push(dataObjectSignature[j].height);
-            w.push(dataObjectSignature[j].width);
+      //       //Lấy ra trang ký của từng file hợp đồng
+      //       page.push(dataObjectSignature[j].page);
+      //       currentHeight[j] = 0
+      //     }
+      //   }
+      // }
 
-            //Lấy ra trang ký của từng file hợp đồng
-            page.push(dataObjectSignature[j].page);
-          }
-        }
-      }
-
+      
       //Lấy thông tin page của hợp đồng
-      const infoPage = await this.contractServiceV1.getInfoPage(documentId[i]).toPromise();
-      for (let j = 0; j < infoPage.length; j++) {
-        if (infoPage[j].page < page[i]) {
-          currentHeight[i] += infoPage[j].height;
-        } else if (infoPage[j].page == page[i]) {
-          currentHeight[i] += 0;
-          heightPage[i] = infoPage[j].height;
-          break;
-        }
-      }
+      // const infoPage = await this.contractServiceV1.getInfoPage(documentId[i]).toPromise();
+      // console.log("infoPage",infoPage);
+      // this.getNewCoordinateTokenV1(infoPage[0]?.height, dataObjectSignature)
+      // // page = page.sort((a:number, b: number) => b - a)
+      // console.log("page",page);
+      // console.log("dataObjectSignature new",dataObjectSignature);
+      // for (let j = 0; j < infoPage.length; j++) {
+      //   if (infoPage[j].page < page[i]) {
+      //   } else if (infoPage[j].page == page[i]) {
+      //     heightPage[i] = infoPage[j].height;
+      //     break;
+      //   }
+      // }
     }
 
     //Lay thong tin cua usb token
@@ -1875,90 +1880,130 @@ export class ContractSignatureComponent implements OnInit {
 
                 //Lấy chiều dài của các trang trong các hợp đồng ký
                 //Gọi api ký usb token nhiều lần
+                let dataSignMobi: any = null;
                 for (let i = 0; i < fileC.length; i++) {
-                  w[i] = x[i] + w[i];
-
-                  // //Tính lại h, y theo chiều dài của các trang trong hợp đồng ký
-                  y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
-
-                  h[i] = y[i] + h[i];
-
-                  let dataSignMobi: any = null;
-                  try {
-                    dataSignMobi =
-                      await this.contractServiceV1.postSignDigitalMobiMulti(this.signCertDigital.Serial, base64String[i], signI, page[i], h[i], w[i], x[i], y[i]);
-                  } catch (err) {
-                    this.spinner.hide()
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Lỗi call api ký USB Token ',
-                      '',
-                      3000
-                    );
-                    return false;
+                  dataObjectSignature = await this.contractServiceV1
+                    .getDataObjectSignatureLoadChange(idContract[i])
+                    .toPromise();
+                  for (let j = 0; j < dataObjectSignature.length; j++) {
+                    if (dataObjectSignature[j].recipient) {
+                      if (recipientId[i] == dataObjectSignature[j].recipient.id) {
+                        // x.push(dataObjectSignature[j].coordinate_x);
+                        // y.push(dataObjectSignature[j].coordinate_y);
+                        // h.push(dataObjectSignature[j].height);
+                        // w.push(dataObjectSignature[j].width);
+                        //Lấy ra trang ký của từng file hợp đồng
+                        page.push(dataObjectSignature[j].page);
+                      }
+                    }
                   }
 
-                  if (!dataSignMobi.data.FileDataSigned || !dataSignMobi) {
-                    this.spinner.hide()
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Lỗi ký USB Token ' + dataSignMobi.data.ErrorDetail,
-                      '',
-                      3000
-                    );
-                    return false;
+                  const infoPage = await this.contractServiceV1.getInfoPage(documentId[i]).toPromise();
+                  this.getNewCoordinateTokenV1(infoPage[0]?.height, dataObjectSignature)
+                  for (let j = 0; j < infoPage.length; j++) {
+                    if (infoPage[j].page < page[i]) {
+                    } else if (infoPage[j].page == page[i]) {
+                      heightPage[i] = infoPage[j].height;
+                      break;
+                    }
                   }
+                  for (let j = 0; j < dataObjectSignature.length; j++) {
+                    try {
+                      // w[j] = x[j] + w[j];
+  
+                      // // //Tính lại h, y theo chiều dài của các trang trong hợp đồng ký
+                      // y[j] = heightPage[i] - (y[j] - dataObjectSignature[j].currentHeight) - h[j];
+    
+                      // h[j] = y[j] + h[j];
 
-                  let sign: any = null;
-                  try {
-                    sign = await this.contractServiceV1.updateDigitalSignatured(
-                      idSignMany[i],
-                      dataSignMobi.data.FileDataSigned
-                    );
+                      // calculate new coordinates
+                      w[j] = dataObjectSignature[j].width
+                      x[j] = dataObjectSignature[j].coordinate_x
+                      y[j] = dataObjectSignature[j].coordinate_y
+                      h[j] = dataObjectSignature[j].height
 
-                  } catch (err) {
-                    this.spinner.hide()
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Lỗi  đẩy file sau khi ký USB Token ',
-                      '',
-                      3000
-                    );
-                    return false;
+                      w[j] = x[j] + w[j];
+  
+                      // //Tính lại h, y theo chiều dài của các trang trong hợp đồng ký
+                      y[j] = heightPage[i] - (y[j] - dataObjectSignature[j].currentHeight) - h[j] + dataObjectSignature[j].page*5;
+    
+                      h[j] = y[j] + h[j];
+                      // calculate new coordinates
+                      dataSignMobi =
+                        await this.contractServiceV1.postSignDigitalMobiMulti(this.signCertDigital.Serial, base64String[i], signI, page[j], h[j], w[j], x[j], y[j]);
+                      base64String[i] = dataSignMobi.data.FileDataSigned
+                    } catch (err) {
+                      this.spinner.hide()
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Lỗi call api ký USB Token ',
+                        '',
+                        3000
+                      );
+                      return false;
+                    }
+
+                    if (!dataSignMobi.data.FileDataSigned || !dataSignMobi) {
+                      this.spinner.hide()
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Lỗi ký USB Token ' + dataSignMobi.data.ErrorDetail,
+                        '',
+                        3000
+                      );
+                      return false;
+                    }
+
+                    let sign: any = null;
+                    try {
+                      sign = await this.contractServiceV1.updateDigitalSignatured(
+                        idSignMany[i],
+                        dataSignMobi.data.FileDataSigned
+                      );
+
+                    } catch (err) {
+                      this.spinner.hide()
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Lỗi  đẩy file sau khi ký USB Token ',
+                        '',
+                        3000
+                      );
+                      return false;
+                    }
+                    
+                    if (!sign.recipient_id || !sign) {
+                      this.spinner.hide()
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Lỗi đẩy file sau khi ký USB Token ',
+                        '',
+                        3000
+                      );
+                      return false;
+                    }
+
+                    let updateInfo: any = null;
+                    try {
+                      updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([{
+                        processAt: this.isDateTime
+                      }],recipientId[i]);
+                    } catch (err) {
+                      this.spinner.hide()
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Lỗi cập nhật trạng thái hợp đồng ',
+                        '',
+                        3000
+                      );
+                      return false;
+                    }
+
+                    if (!updateInfo.id || !updateInfo) {
+                      this.spinner.hide()
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Lỗi cập nhật trạng thái hợp đồng ',
+                        '',
+                        3000
+                      );
+                      return false;
+                    }
                   }
-
-                  if (!sign.recipient_id || !sign) {
-                    this.spinner.hide()
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Lỗi đẩy file sau khi ký USB Token ',
-                      '',
-                      3000
-                    );
-                    return false;
-                  }
-
-                  let updateInfo: any = null;
-                  try {
-                    updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([{
-                      processAt: this.isDateTime
-                    }],recipientId[i]);
-                  } catch (err) {
-                    this.spinner.hide()
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Lỗi cập nhật trạng thái hợp đồng ',
-                      '',
-                      3000
-                    );
-                    return false;
-                  }
-
-                  if (!updateInfo.id || !updateInfo) {
-                    this.spinner.hide()
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Lỗi cập nhật trạng thái hợp đồng ',
-                      '',
-                      3000
-                    );
-                    return false;
-                  }
-
                   if (i == fileC.length - 1) {
                     this.spinner.hide();
                     this.toastService.showSuccessHTMLWithTimeout(
@@ -2837,5 +2882,14 @@ export class ContractSignatureComponent implements OnInit {
       return '[Không xác định]';
     }
     return '';
+  }
+
+  getNewCoordinateTokenV1(heightPage: number, fields: any[]) {
+    fields.forEach((field: any) => {
+      field.currentHeight = 0
+      for (let i = 1 ; i < field.page; i++) {
+        field.currentHeight += heightPage
+      }
+    })
   }
 }
