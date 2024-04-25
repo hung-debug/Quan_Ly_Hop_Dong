@@ -988,9 +988,12 @@ export class ConsiderContractComponent
   }
   
   resetToDefault(){
-    this.scale = this.defaultScale;
-    this.defaultValue = this.scale * 100
-    this.getPage();
+    if(this.scale != 1){
+      this.scale = this.defaultScale;
+      this.defaultValue = this.scale * 100
+      this.getPage();
+    }
+    
   }
   
   // rotateCanvas() {

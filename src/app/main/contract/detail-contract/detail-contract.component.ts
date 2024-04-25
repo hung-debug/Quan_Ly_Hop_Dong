@@ -361,15 +361,20 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         };
 
         this.datas = this.data_contract;
-
+        console.log("tjhiss.datas",this.datas);
+        
         if(this.datas.is_data_contract.originalContractId)
         this.contractService.getDataCoordination(this.datas.is_data_contract.originalContractId).subscribe((item) =>{
+      console.log("a");
+      
           this.datas.is_data_contract.original_contract_name =  item.name;
         })
 
         if(this.datas.is_data_contract.liquidationContractId)
         this.contractService.getDataCoordination(this.datas.is_data_contract.liquidationContractId).subscribe((item) =>{
+          console.log("b");
           this.datas.is_data_contract.liquidation_contract_name =  item.name;
+          // this.datas.is_data_contract
         })
 
         let email = JSON.parse(localStorage.getItem('currentUser') || '')
