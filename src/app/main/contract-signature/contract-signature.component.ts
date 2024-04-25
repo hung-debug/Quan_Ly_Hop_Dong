@@ -1793,41 +1793,6 @@ export class ContractSignatureComponent implements OnInit {
 
       base64String.push(encode(base64StringPdf));
 
-      //Lấy toạ độ ô ký của từng hợp đồng
-      // dataObjectSignature = await this.contractServiceV1
-      //   .getDataObjectSignatureLoadChange(idContract[i])
-      //   .toPromise();
-      // console.log("dataObjectSignature",dataObjectSignature);
-      // for (let j = 0; j < dataObjectSignature.length; j++) {
-      //   if (dataObjectSignature[j].recipient) {
-      //     if (recipientId[i] == dataObjectSignature[j].recipient.id) {
-      //       x.push(dataObjectSignature[j].coordinate_x);
-      //       y.push(dataObjectSignature[j].coordinate_y);
-      //       h.push(dataObjectSignature[j].height);
-      //       w.push(dataObjectSignature[j].width);
-
-      //       //Lấy ra trang ký của từng file hợp đồng
-      //       page.push(dataObjectSignature[j].page);
-      //       currentHeight[j] = 0
-      //     }
-      //   }
-      // }
-
-      
-      //Lấy thông tin page của hợp đồng
-      // const infoPage = await this.contractServiceV1.getInfoPage(documentId[i]).toPromise();
-      // console.log("infoPage",infoPage);
-      // this.getNewCoordinateTokenV1(infoPage[0]?.height, dataObjectSignature)
-      // // page = page.sort((a:number, b: number) => b - a)
-      // console.log("page",page);
-      // console.log("dataObjectSignature new",dataObjectSignature);
-      // for (let j = 0; j < infoPage.length; j++) {
-      //   if (infoPage[j].page < page[i]) {
-      //   } else if (infoPage[j].page == page[i]) {
-      //     heightPage[i] = infoPage[j].height;
-      //     break;
-      //   }
-      // }
     }
 
     //Lay thong tin cua usb token
@@ -1897,16 +1862,14 @@ export class ContractSignatureComponent implements OnInit {
                       }
                     }
                   }
-
-                  const infoPage = await this.contractServiceV1.getInfoPage(documentId[i]).toPromise();
-                  this.getNewCoordinateTokenV1(infoPage[0]?.height, dataObjectSignature)
-                  for (let j = 0; j < infoPage.length; j++) {
-                    if (infoPage[j].page < page[i]) {
-                    } else if (infoPage[j].page == page[i]) {
-                      heightPage[i] = infoPage[j].height;
-                      break;
-                    }
-                  }
+                  let infoPage = await this.contractServiceV1.getInfoPage(documentId[i]).toPromise();
+                  infoPage = infoPage.sort((a: any, b: any) => a.page - b.page)
+                  dataObjectSignature = dataObjectSignature.sort((a: any, b: any) => a.page - b.page)
+                  dataObjectSignature.forEach((item: any) => {
+                    let pageData = infoPage.filter((ele: any) => ele.page == item.page)
+                    item.heightPage = pageData[0].height
+                  })
+                  this.getNewCoordinateTokenV1(infoPage, dataObjectSignature)
                   for (let j = 0; j < dataObjectSignature.length; j++) {
                     try {
                       // w[j] = x[j] + w[j];
@@ -1915,6 +1878,10 @@ export class ContractSignatureComponent implements OnInit {
                       // y[j] = heightPage[i] - (y[j] - dataObjectSignature[j].currentHeight) - h[j];
     
                       // h[j] = y[j] + h[j];
+                      w[j] = 0
+                      x[j] = 0
+                      y[j] = 0
+                      h[j] = 0
 
                       // calculate new coordinates
                       w[j] = dataObjectSignature[j].width
@@ -1925,12 +1892,12 @@ export class ContractSignatureComponent implements OnInit {
                       w[j] = x[j] + w[j];
   
                       // //Tính lại h, y theo chiều dài của các trang trong hợp đồng ký
-                      y[j] = heightPage[i] - (y[j] - dataObjectSignature[j].currentHeight) - h[j] + dataObjectSignature[j].page*5;
+                      y[j] = dataObjectSignature[j].heightPage - (y[j] - dataObjectSignature[j].currentHeight) - h[j] + dataObjectSignature[j].page*5;
     
                       h[j] = y[j] + h[j];
                       // calculate new coordinates
                       dataSignMobi =
-                        await this.contractServiceV1.postSignDigitalMobiMulti(this.signCertDigital.Serial, base64String[i], signI, page[j], h[j], w[j], x[j], y[j]);
+                        await this.contractServiceV1.postSignDigitalMobiMulti(this.signCertDigital.Serial, base64String[i], signI, dataObjectSignature[j].page, h[j], w[j], x[j], y[j]);
                       base64String[i] = dataSignMobi.data.FileDataSigned
                     } catch (err) {
                       this.spinner.hide()
@@ -2884,11 +2851,11 @@ export class ContractSignatureComponent implements OnInit {
     return '';
   }
 
-  getNewCoordinateTokenV1(heightPage: number, fields: any[]) {
+  getNewCoordinateTokenV1(heightPages: any, fields: any[]) {
     fields.forEach((field: any) => {
       field.currentHeight = 0
       for (let i = 1 ; i < field.page; i++) {
-        field.currentHeight += heightPage
+        field.currentHeight += heightPages[i-1].height
       }
     })
   }
