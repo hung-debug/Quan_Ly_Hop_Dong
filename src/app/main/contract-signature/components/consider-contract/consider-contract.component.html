@@ -77,7 +77,7 @@
           <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
           <div class="confirm-radio d-flex justify-content-between mx-4">
             <div class="radio-confirm">
-              <input id="radio-confirm-secretary" type="radio" name="confirm-radio-secretary" [value]="1" [(ngModel)]='confirmSignature'>
+              <input id="radio-confirm-secretary" type="radio" name="confirm-radio-secretary" [value]="1" [(ngModel)]='confirmSignature' (click)="resetToDefault()">
               <label for="radio-confirm-secretary" class="ms-2">{{'btn.accept' | translate}}</label>
             </div>
             <div class="radio-refuse">
@@ -92,6 +92,15 @@
 
   <div (scroll)="scroll($event)" id="pdf-full" class="col-md-9 sample-contract__file viewer-pdf isDrag"
        style="background-color: #F2F2F2; position: relative">
+    <div class="zoom-in-out" *ngIf="confirmSignature !== 1">
+        <img src="../../assets/img/minus.png" style="margin-bottom:3px;height: 30px; width: 30px;" (click)="changeScale('-')" />&nbsp;
+        <input class="input-web" type="text" style="width: 50px;height: 30px" [value]="defaultValue + '%'" disabled>&nbsp;
+        <img src="../../assets/img/plus.png" style="margin-bottom:3px; height: 30px; width: 30px;" (click)="changeScale('+')" />
+    </div>
+    <!-- <div class="rotate" *ngIf="confirmSignature === 1">
+      <img src="../../assets/img/rotate-left.svg" style="margin-bottom:3px;height: 30px; width: 30px;" (click)="changeRotate('-')"/>&nbsp;
+      <img src="../../assets/img/rotate-right.svg" style="margin-bottom:3px; height: 30px; width: 30px;" (click)="changeRotate('+')" />
+    </div> -->
     <div id="pdf-viewer-step-3">
       <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
         <div class="resize-drag not-out-drop" *ngIf="![2,3].includes(recipient.status)"
@@ -107,6 +116,7 @@
             (contractNoValue)="contractNoValueChange($event)" 
             [contractNoValue]="contractNoValue"
             [contractNoValueSign]="contractNoValueSign"
+            [otpValueSign]="otpValueSign"
             (checkedChange)="switchesValueChange($event)" 
             *ngIf="![2,3].includes(recipient.status)" 
             [datas]="datas" [view]="[2,3].includes(recipient.status)" 
@@ -115,7 +125,7 @@
           >
           </app-image-sign-contract>
           <div *ngIf="this.flagFocus && d.sign_unit == 'text'" class="name-sig-img-daky long-text-ellipsis">{{(d.recipient && !d.valueSign) ? d.recipient.name : ''}}</div>
-          <div *ngIf="d.sign_unit != 'text' && !this.flagFocus" class="name-sig-img-daky long-text-ellipsis">{{(d.recipient && !d.valueSign) ? d.recipient.name : ''}}</div>
+          <div *ngIf="d.sign_unit != 'text' && !this.flagFocus && !this.otpValueSign" class="name-sig-img-daky long-text-ellipsis">{{(d.recipient && !d.valueSign) ? d.recipient.name : ''}}</div>
         </div>
       </div>
       <div class="skeleton-sign position-absolute opacity-0">
@@ -216,6 +226,7 @@
   [idElement]="idElement" 
   [coordinateY]="coordinateY" 
   [confirmSignature]="confirmSignature" 
+  [signBoxData]="signBoxData"
   [datas]="datas" 
   [view]="[2,3].includes(recipient.status)" 
   [recipientId]="recipientId" 

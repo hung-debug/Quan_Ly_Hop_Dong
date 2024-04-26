@@ -116,6 +116,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   public messageForSibling: string;
   attachFilesList: any[] = [];
   isDocx: boolean = false;
+  contractId: any;
   constructor(
     private uploadService: UploadService,
     private contractService: ContractService,
@@ -138,7 +139,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.spinner.hide();
 
     let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
-
+    this.contractId = idContract
     this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract, false);
 
     if(!idContract || this.checkView) {
@@ -963,6 +964,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           this.datas.isDeleteField = true;
         }else{
           this.datas.isDeleteField = false;
+          if (this.datas.pagePdfFileNew < this.pagePdfFileOld && this.router.url.includes('edit')) {
+            this.getDataObjectSignatureLoadChangeCall()
+          }
         }   
         this.callAPI();
       })
@@ -1320,4 +1324,18 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     // e.target.value = this.removePeriodsFromCurrencyValue(e.target.value);
   }
 
+  getDataObjectSignatureLoadChangeCall() {
+    this.datas.storedFields = []
+    this.contractService.getDataObjectSignatureLoadChange(this.contractId).subscribe(
+      (res: any) => {
+        if (res.length > 0) {
+          res.forEach((item: any) => {
+            if (item.page > this.datas.pagePdfFileNew) {
+              this.datas.storedFields.push(item)
+            }
+          })
+        }
+      }
+    )
+  }
 }

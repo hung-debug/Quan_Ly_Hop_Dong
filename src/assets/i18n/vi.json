@@ -63,7 +63,7 @@
   "contract.organization": "Hợp đồng của tổ chức",
   "contract.wait-for-me": "Hợp đồng cần xử lý",
   "contract.share-for-me": "Hợp đồng được chia sẻ",
-  "contract.search.name.placeholder": "Nhập từ khóa tìm kiếm theo tên hợp đồng, mã hợp đồng, tên đối tác",
+  "contract.search.name.placeholder": "Nhập từ khóa tìm kiếm theo tên hợp đồng, mã hợp đồng, số hợp đồng, tên đối tác",
   "contract.search": "Tìm kiếm hợp đồng",
   "contract.name": "Tên hợp đồng",
   "contract.file": "File hợp đồng",
@@ -512,7 +512,7 @@
   "sign.image.otp":"Ký ảnh và OTP",
   "sign.image.ekyc":"Chữ ký ảnh hoặc eKYC",
   "sign.digital":"Chữ ký số",
-  "auto.scroll":"Tìm vị trí",
+  "auto.scroll":"Tìm ô thông tin",
   "preview":"Xem trước",
   "contract": "HỢP ĐỒNG",
   "partner": "ĐỐI TÁC",
@@ -828,5 +828,6 @@
   "check.config.brandname": "Vui lòng kiểm tra kết nối trước khi thực hiện lưu cấu hình",
   "password.blank":"Mật khẩu không được để trống",
   "taxcode.not.match.hsm":"Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng",
-  "login.method.title": "Hoặc đăng nhập bằng"
+  "login.method.title": "Hoặc đăng nhập bằng",
+  "folder.search.placeholder": "Tìm kiếm theo tên thư mục, tên hợp đồng, mã hợp đồng, tên đối tác"
 }

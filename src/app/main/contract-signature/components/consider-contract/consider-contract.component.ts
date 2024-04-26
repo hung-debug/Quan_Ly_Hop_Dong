@@ -24,7 +24,7 @@ import { ImageDialogSignComponent } from './image-dialog-sign/image-dialog-sign.
 import { PkiDialogSignComponent } from './pki-dialog-sign/pki-dialog-sign.component';
 import { HsmDialogSignComponent } from './hsm-dialog-sign/hsm-dialog-sign.component';
 import { CertDialogSignComponent } from './cert-dialog-sign/cert-dialog-sign.component';
-import { Observable, forkJoin, from, throwError, timer } from 'rxjs';
+import { forkJoin, from, throwError, timer } from 'rxjs';
 import { ToastService } from '../../../../service/toast.service';
 import { UploadService } from '../../../../service/upload.service';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -32,7 +32,7 @@ import { encode } from 'base64-arraybuffer';
 import { UserService } from '../../../../service/user.service';
 // @ts-ignore
 import domtoimage from 'dom-to-image';
-import { concatMap, delay, map, tap } from 'rxjs/operators';
+import { concatMap, delay, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import {
   networkList,
@@ -79,6 +79,7 @@ export class ConsiderContractComponent
   arrPage: any = [];
   objDrag: any = {};
   scale: any;
+  defaultScale: any = 1.0;
   objPdfProperties: any = {
     pages: [],
   };
@@ -205,6 +206,11 @@ export class ConsiderContractComponent
   ekycDocType: string = ''
   isContainSignField: boolean = true;
   isNB: boolean = false;
+  signBoxData: any = {};
+
+  defaultValue: number = 100;
+  
+  
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -349,6 +355,44 @@ export class ConsiderContractComponent
         }
       );
     });
+  }
+  
+  changeScale(values: any){
+    switch (values){
+      case "-":
+        if(this.scale > 0.25){
+          this.scale = this.scale - 0.25;
+          this.defaultValue = this.scale * 100
+          // for (let page = 1; page <= this.pageNumber; page++) {
+          //   let canvas = document.getElementById('canvas-step3-' + page);
+          //   this.renderPageZoomInOut(page, canvas);
+          // }
+          this.getPage();
+
+        }else{
+          break;
+        }
+        break;
+      case "+":
+        if(this.scale < 5){
+          this.scale = this.scale + 0.25;
+          this.defaultValue = this.scale * 100
+          // for (let page = 1; page <= this.pageNumber; page++) {
+          //   let canvas = document.getElementById('canvas-step3-' + page);
+          //   this.renderPageZoomInOut(page, canvas);
+          // }
+          this.getPage();
+        }else{
+          break;
+        }
+        break;
+      default:
+        break;
+    }
+  }
+  
+  changeRotate(values: any){
+    
   }
 
   page1: boolean = false;
@@ -652,10 +696,17 @@ export class ConsiderContractComponent
           let image_base64 = '';
 
           let arr = this.convertToSignConfig();
+          this.signBoxData['coordinateY'] = []
+          this.signBoxData.idElement = []
 
           arr.forEach((items: any) => {
-            this.coordinateY.push(items.coordinate_y);
-            this.idElement.push(items.id);
+            if (items.type == 2 || items.type == 3) {
+              this.signBoxData.coordinateY.push(items.coordinate_y)
+              this.signBoxData.idElement.push(items.id)
+            } else {
+              this.coordinateY.push(items.coordinate_y);
+              this.idElement.push(items.id);
+            }
           });
 
           this.coordinateY.sort();
@@ -674,12 +725,16 @@ export class ConsiderContractComponent
               const recipient = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
 
               let fieldRecipientId: any = null;
+              let countNotBoxSign: number = 0
               recipient.recipients.forEach((ele: any) => {
                 if (ele.id == this.recipientId) {
                   fieldRecipientId = ele.fields;
+                  ele.fields.forEach((item: any) => {
+                    if (item.type !== 2) countNotBoxSign++
+                  })
                 }
               });
-              if (fieldRecipientId.length == 1 && this.recipient.sign_type[0].id !== 7) {
+              if ((fieldRecipientId?.length == 1 || countNotBoxSign == 0) && this.recipient.sign_type[0].id !== 7) {
                 const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, image_base64).toPromise();
                 this.pdfSrcMobile = pdfMobile.filePath;
               } else if (fieldRecipientId.length > 1) {
@@ -944,6 +999,23 @@ export class ConsiderContractComponent
       this.activeScroll();
     });
   }
+  
+  resetToDefault(){
+    if(this.scale != 1){
+      this.scale = this.defaultScale;
+      this.defaultValue = this.scale * 100
+      this.getPage();
+    }
+    
+  }
+  
+  // rotateCanvas() {
+  //   const canvas = this.pdfCanvas.nativeElement;
+  //   const context = canvas.getContext('2d');
+  //   context.translate(canvas.width / 2, canvas.height / 2);
+  //   context.rotate(this.rotationAngle * Math.PI / 180);
+  //   context.translate(-canvas.width / 2, -canvas.height / 2);
+  // }
 
   activeScroll() {
     document
@@ -983,7 +1055,7 @@ export class ConsiderContractComponent
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
       "backgroundColor": !d.valueSign ? '#FFFFFF' : '',
-      "border": !d.valueSign ? "1px dashed #6B6B6B" : '',
+      "border": !this.otpValueSign ? "1px dashed #6B6B6B" : (this.otpValueSign) ? 'none' : '',
       "border-radius": "6px"
     }
     if (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so' && this.isNotTextSupport) {
@@ -2300,6 +2372,7 @@ export class ConsiderContractComponent
           if (!this.mobile)
             this.convertXForHsm(signUpdate.page);
           let fieldHsm = {
+            id: signUpdate.id,
             coordinate_x: signUpdate.signDigitalX,
             coordinate_y: signUpdate.coordinate_y,
             width: signUpdate.width ,
@@ -2621,6 +2694,7 @@ export class ConsiderContractComponent
 
           }
           let fieldCert1 = {
+            id: signUpdate.id,
             page: signUpdate.page,
             coordinate_x: signUpdate.signDigitalX,
             coordinate_y: signUpdate.coordinate_y,
@@ -2784,6 +2858,7 @@ export class ConsiderContractComponent
           if (!this.mobile)
             this.convertXForHsm(signUpdate.page);
           let fieldRemoteSigning = {
+            id: signUpdate.id,
             coordinate_x: signUpdate.signDigitalX,
             coordinate_y: signUpdate.coordinate_y,
             width: signUpdate.width ,
@@ -3711,14 +3786,21 @@ export class ConsiderContractComponent
           };
 
           this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseBase64) => {
-            signUpdateTempN[0].value = responseBase64.file_object.file_path;
-            signUpdateTempN[0].bucket = responseBase64.file_object.bucket;
-            signUpdateTempN[0].processAt = this.isDateTime;
+            // signUpdateTempN[0].value = responseBase64.file_object.file_path;
+            // signUpdateTempN[0].bucket = responseBase64.file_object.bucket;
+            // signUpdateTempN[0].processAt = this.isDateTime;
 
-            signUpdateTempN[0].signerType = 'eKYC'
-            signUpdateTempN[0].signerName = signUpdateTempN[0].name
-            signUpdateTempN[0].signerTaxCode = this.cardId
-
+            // signUpdateTempN[0].signerType = 'eKYC'
+            // signUpdateTempN[0].signerName = signUpdateTempN[0].name
+            // signUpdateTempN[0].signerTaxCode = this.cardId
+            signUpdateTempN.forEach((item: any) => {
+              item.value = responseBase64.file_object.file_path;
+              item.bucket = responseBase64.file_object.bucket;
+              item.processAt = this.isDateTime;
+              item.signerType = 'eKYC'
+              item.signerName = signUpdateTempN[0].name
+              item.signerTaxCode = this.cardId
+            })
 
             this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
               async (result) => {
@@ -4186,7 +4268,7 @@ export class ConsiderContractComponent
         item?.recipient?.email === this.currentUser.email &&
         item?.recipient?.role === this.datas?.roleContractReceived &&
         item.required &&
-        !item.valueSign &&
+        (!item.valueSign && !this.otpValueSign) &&
         item.type != 3
     );
     this.currentNullValuePages = validSign.map((item: any) => item.page.toString())
@@ -4719,6 +4801,7 @@ export class ConsiderContractComponent
       datas: this.datas,
       currentUser: this.currentUser,
       orgId: this.orgId,
+      otpValueSign: this.otpValueSign
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -4863,8 +4946,10 @@ export class ConsiderContractComponent
 
   contractNoValue: boolean = false;
   contractNoValueSign: string;
+  otpValueSign: any = "";
   contractNoValueChange($event: any) {
     this.contractNoValueSign = $event;
+    this.otpValueSign = $event;
   }
 
   async signBCY(pdfContractPath: any, fieldId: any){

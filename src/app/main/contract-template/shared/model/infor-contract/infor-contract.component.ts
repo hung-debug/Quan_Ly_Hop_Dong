@@ -743,6 +743,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           this.datas.isDeleteField = true;
         }else{
           this.datas.isDeleteField = false;
+          if (this.datas?.storedFields?.length > 0) {
+            this.getFieldsOutsideContract()
+          }
         }   
         this.callAPI();
       })
@@ -940,5 +943,15 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       return false;
     }
     return true;
+  }
+
+  getFieldsOutsideContract() {
+    if (this.datas.storedFields.length > 0) {
+      this.datas.storedFields.forEach((item: any) => {
+        if (item.page > this.datas.pagePdfFileNew) {
+          this.datas.storedFields.push(item)
+        }
+      })
+    }
   }
 }

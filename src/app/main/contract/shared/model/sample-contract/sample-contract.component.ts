@@ -547,6 +547,19 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       })
       this.datas.is_data_object_signature = [];
+    } else if (this.datas.pagePdfFileNew < this.datas.pagePdfFileOld && !this.datas.isDeleteField) {
+      this.datas.contract_user_sign.forEach((item: any, index: number) => {
+        if (item.sign_config.length > 0) {
+          item.sign_config.forEach((element: any) => {
+            if (element.id_have_data && element.page > this.datas.pagePdfFileNew) {
+              this.removeDataSignChange(element.id_have_data).then();
+              item.sign_config = item.sign_config.filter((item: any) => item.page <= this.datas.pagePdfFileNew)
+            } else if (element.page > this.datas.pagePdfFileNew) {
+              item.sign_config = item.sign_config.filter((item: any) => item.page <= this.datas.pagePdfFileNew)
+            } 
+          })
+        }
+      })
     }
 
 
@@ -921,6 +934,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             } else {
               element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
             }
+          }else if (isSignType == 'chu_ky_so') {
+            element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
+          } else if (isSignType == 'chu_ky_anh') {
+            element.is_disable = false
           } else {
             element.is_disable = true
           }

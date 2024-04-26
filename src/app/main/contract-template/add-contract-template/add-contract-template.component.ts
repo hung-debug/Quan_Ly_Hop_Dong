@@ -133,6 +133,7 @@ export class AddContractTemplateComponent implements OnInit {
             i_data_file_contract: rs[1],
             is_data_object_signature: rs[2]
           }
+          this.datas.storedFields = rs[2]
           // this.contractService.changeMessage(data_api);
           this.getDataContractCreated(data_api);
         }, () => {

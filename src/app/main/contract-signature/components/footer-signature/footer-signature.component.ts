@@ -34,7 +34,7 @@ export class FooterSignatureComponent implements OnInit {
   @Input() pageBefore: number;
 
   @Input() status: any;
-
+  @Input() signBoxData: any;
   is_show_coordination: boolean = false;
   is_data_coordination: any;
   orgId: any;
@@ -54,7 +54,7 @@ export class FooterSignatureComponent implements OnInit {
 
   email: string = "email";
   phone: string = "phone";
-
+  currentRecipient: any;
   type: any = 0;
   constructor(
     private dialog: MatDialog,
@@ -92,6 +92,7 @@ export class FooterSignatureComponent implements OnInit {
       for (let j = 0; j < data_coordination[i].recipients.length; j++) {
         if (data_coordination[i].recipients[j].email == emailCurrent) {
           this.is_data_coordination = data_coordination[i];
+          this.currentRecipient = data_coordination[i].recipients[j]
           isBreak = true;
           break;
         }
@@ -131,6 +132,7 @@ export class FooterSignatureComponent implements OnInit {
 
       }
     }
+    this.getNumberOfSigningObj(this.currentRecipient?.fields)
   }
 
   mobile: boolean = false;
@@ -163,7 +165,6 @@ export class FooterSignatureComponent implements OnInit {
 
   indexY: number = 0;
   autoScroll() {
-
     this.coordinateY = this.coordinateY.sort(function (a: number, b: number) {
       return a - b;
     });
@@ -171,7 +172,6 @@ export class FooterSignatureComponent implements OnInit {
     this.idElement = this.idElement.sort(function (a: number, b: number) {
       return a - b;
     });
-
     let pdffull: any = document.getElementById('pdf-full');
 
     if (this.confirmSignature == 1 || this.confirmSignature == 3) {
@@ -191,6 +191,40 @@ export class FooterSignatureComponent implements OnInit {
     }
 
     if (this.indexY <= this.coordinateY.length - 1) {
+      this.indexY++;
+    } else {
+      this.indexY = 0;
+      pdffull.scrollTo(0, 0);
+    }
+  }
+
+  findSignBox() {
+
+    this.signBoxData.coordinateY = this.signBoxData.coordinateY.sort(function (a: number, b: number) {
+      return a - b;
+    });
+    this.signBoxData.idElement = this.signBoxData.idElement.sort(function (a: number, b: number) {
+      return a - b;
+    });
+    let pdffull: any = document.getElementById('pdf-full');
+
+    if (this.confirmSignature == 1 || this.confirmSignature == 3) {
+      pdffull.scrollTo(0, this.signBoxData.coordinateY[this.indexY]);
+
+      let id: any = document.getElementById(this.signBoxData.idElement[this.indexY]);
+
+      if (id) {
+        id.style.backgroundColor = 'yellow';
+      }
+      for (let i = 0; i < this.signBoxData.idElement.length; i++) {
+        if (this.signBoxData.idElement[i] != this.signBoxData.idElement[this.indexY]) {
+          let elemet: any = document.getElementById(this.signBoxData.idElement[i]);
+          elemet.style.backgroundColor = '#EBF8FF';
+        }
+      }
+    }
+
+    if (this.indexY <= this.signBoxData.coordinateY.length - 1) {
       this.indexY++;
     } else {
       this.indexY = 0;
@@ -689,5 +723,16 @@ export class FooterSignatureComponent implements OnInit {
       })
     }
     )
+  }
+
+  signBoxes: number = 0;
+  inforBoxes: number = 0;
+  getNumberOfSigningObj(arr: any[]) {
+    arr.forEach((item: any) => {
+      if (item.type == 3 || item.type == 2) {
+        this.signBoxes++
+      }
+    })
+    this.inforBoxes = this.currentRecipient?.fields?.length - this.signBoxes
   }
 }

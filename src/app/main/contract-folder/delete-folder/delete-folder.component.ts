@@ -12,33 +12,51 @@ import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./delete-folder.component.scss']
 })
 export class DeleteFolderComponent implements OnInit {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-  private toastService : ToastService,
-  public dialogRef: MatDialogRef<DeleteFolderComponent>,
-  public router: Router,
-  public dialog: MatDialog,
-  private contractFolderService: ContractFolderService,
-  private spinner: NgxSpinnerService
-) { }
+  countFolders: number = 0;
+  countContracts: number = 0;
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private toastService : ToastService,
+    public dialogRef: MatDialogRef<DeleteFolderComponent>,
+    public router: Router,
+    public dialog: MatDialog,
+    private contractFolderService: ContractFolderService,
+    private spinner: NgxSpinnerService
+  ) { }
 
   ngOnInit(): void {
+    this.countFolders = this.data.folder_or_contract.filter((item: any) => item.type == 0).length
+    this.countContracts = this.data.folder_or_contract.filter((item: any) => item.type !== 0).length
   }
 
   onSubmit(){
     this.spinner.show();
-    this.contractFolderService.deleteContractFolder(this.data.folderId).subscribe(
+    this.contractFolderService.deleteFolderItem(this.data).subscribe(
       (data) => {
         this.spinner.hide();
-        this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục thành công','',2000);
-        this.dialogRef.close();
+        if (this.countFolders > 0 && this.countContracts == 0) {
+          this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục thành công','',3000);
+        } else if (this.countFolders == 0 && this.countContracts > 0) {
+          this.toastService.showSuccessHTMLWithTimeout('Xóa hợp đồng thành công','',3000);
+        } else {
+          this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục/hợp đồng thành công','',3000);
+        }
+        this.dialogRef.close('deleted');
 
-        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-          this.router.navigate(['/main/contract-folder']);
-        });
+        // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        //   this.router.navigate(['/main/contract-folder']);
+        // });
       },
       (error) => {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout('Xóa thư mục thất bại', '', 2000);
+        if (this.countFolders > 0 && this.countContracts == 0) {
+          this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục thất bại','',3000);
+        } else if (this.countFolders == 0 && this.countContracts > 0) {
+          this.toastService.showSuccessHTMLWithTimeout('Xóa hợp đồng thất bại','',3000);
+        } else {
+          this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục/hợp đồng thất bại','',3000);
+        }
       }
     )
     

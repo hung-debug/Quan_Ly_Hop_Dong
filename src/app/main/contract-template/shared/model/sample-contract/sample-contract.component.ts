@@ -476,6 +476,19 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             })
           }
         })
+      } else if (this.datas?.storedFields?.length > 0 || this.datas.pagePdfFileNew < this.datas.pagePdfFileOld) {
+        this.datas.contract_user_sign.forEach((res: any) => {
+          if (res.sign_config.length > 0) {
+            res.sign_config.forEach((element: any) => {
+              if (element.id_have_data && element.page > this.datas.pagePdfFileNew) {
+                this.removeDataSignChange(element.id_have_data);
+                res.sign_config = res.sign_config.filter((item: any) => item.page <= this.datas.pagePdfFileNew)
+              } else if (element.page > this.datas.pagePdfFileNew) {
+                res.sign_config = res.sign_config.filter((item: any) => item.page <= this.datas.pagePdfFileNew)
+              } 
+            })
+          }
+        })
       }
     }else{
       this.datas.contract_user_sign.forEach((res: any) => {
@@ -865,7 +878,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       if (isSignType != 'text' && (element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
         let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
 
-        if (data.length >= 0) {
+        if (data.length >= 0 && !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) && isSignType !== 'chu_ky_anh') {
           element.is_disable = true;
         } else {
           element.is_disable = false;
@@ -874,6 +887,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (isSignType != 'text' && this.convertToSignConfig().some((p: any) => ((element.email && p.email == element.email) || (element.id && p.recipient_id == element.id)) && p.sign_unit == isSignType)) {
           if (isSignType == 'so_tai_lieu') {
             element.is_disable = false;
+          } else if (isSignType == 'chu_ky_so') {
+            element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
+          } else if (isSignType == 'chu_ky_anh') {
+            element.is_disable = false
           } else {
             element.is_disable = true
           }
