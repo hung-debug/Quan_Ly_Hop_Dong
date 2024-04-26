@@ -207,8 +207,8 @@ export class ConsiderContractComponent
   isContainSignField: boolean = true;
   isNB: boolean = false;
   defaultValue: number = 100;
-  
-  
+
+
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -795,6 +795,8 @@ export class ConsiderContractComponent
   }
 
   // view pdf qua canvas
+  count: number = 0;
+  coorX: any;
   async getPage() {
     // @ts-ignore
     const pdfjs = await import('pdfjs-dist/build/pdf');
@@ -861,8 +863,10 @@ export class ConsiderContractComponent
             else
               this.arrDifPage.push('max');
           }
-
-          this.setX();
+          if(this.count == 0){
+            this.setX();
+            this.count ++;
+          }
         }, 100);
       });
   }
@@ -1366,7 +1370,6 @@ export class ConsiderContractComponent
         }
         else {
           if (res.status == "TU_CHOI" && this.countReject == 0) {
-            console.log('this.countReject',this.countReject);
             this.remoteSigningProcessingStatusSwalfire(res.status)
             this.countReject++
           } else {
@@ -1374,7 +1377,7 @@ export class ConsiderContractComponent
               this.ArrRecipientsNew = response.recipients.filter(
                 (x: any) => x.email === this.currentUser.email
               );
-        
+
               if (this.ArrRecipientsNew.length === 0) {
                 this.toastService.showErrorHTMLWithTimeout(
                   'Bạn không có quyền xử lý hợp đồng này!',
@@ -1391,7 +1394,7 @@ export class ConsiderContractComponent
                   return;
                 }
               }
-        
+
               if (counteKYC > 0) {
                 if (this.mobile) {
                   if (this.confirmSignature == 1) {
@@ -1416,7 +1419,7 @@ export class ConsiderContractComponent
                   }
                 }
               }
-        
+
               if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
                 this.toastService.showErrorHTMLWithTimeout(
                   'Vui lòng chọn đồng ý hoặc từ chối hợp đồng',
@@ -1424,7 +1427,7 @@ export class ConsiderContractComponent
                   3000
                 );
                 return;
-              } 
+              }
               if (isRemoteSigning && (res.status == "QUA_THOI_GIAN_KY" || res.status == "THAT_BAI" || res.status == "TU_CHOI") ||
                 this.isNotTextSupport
               ) {
@@ -1490,7 +1493,7 @@ export class ConsiderContractComponent
                   const typeSD = this.recipient?.sign_type.find(
                     (t: any) => t.id != 1
                   );
-        
+
                   const typeSImage = this.recipient?.sign_type.find(
                     (t: any) => t.id == 1
                   );
@@ -1501,7 +1504,7 @@ export class ConsiderContractComponent
                     typeSignImage = typeSImage.id;
                   }
                 }
-        
+
                 if (typeSignDigital && typeSignDigital == 3) {
                   haveSignPKI = true;
                   this.dataNetworkPKI = {
@@ -1510,7 +1513,7 @@ export class ConsiderContractComponent
                   };
                 } else if (typeSignDigital && typeSignDigital == 4) {
                   haveSignHsm = true;
-        
+
                   this.dataHsm = {
                     supplier: '',
                     ma_dvcs: '',
@@ -1519,10 +1522,10 @@ export class ConsiderContractComponent
                     password2: '',
                     imageBase64: '',
                   };
-        
+
                 } else if (typeSignDigital == 6) {
                   haveSignCert = true;
-        
+
                   this.dataCert = {
                     cert_id: '',
                     image_base64: '',
@@ -1533,7 +1536,7 @@ export class ConsiderContractComponent
                   }
                 } else if (typeSignDigital && typeSignDigital == 8) {
                   haveSignRemote = true;
-        
+
                   this.dataCert = {
                     cert_id: '',
                     image_base64: '',
@@ -1542,7 +1545,7 @@ export class ConsiderContractComponent
                     height: '',
                     isTimestamp: '',
                   }
-        
+
                 }
         
                 if (typeSignImage && typeSignImage == 1) {
@@ -1580,14 +1583,14 @@ export class ConsiderContractComponent
                     } else {
                       this.markImage = false;
                     }
-        
+
                     let isConnect = false
-        
+
                     if (this.recipient.sign_type.some((item: any) => item.id == 7 )) {
                       try {
                         isConnect = await this.websocketService.connect()
                       } catch (error) {
-                        console.error(error)             
+                        console.error(error)
                       }
                       if (!isConnect){
                           Swal.fire({
@@ -1614,7 +1617,7 @@ export class ConsiderContractComponent
                       this.signBCY(this.pdfSrc, this.recipient.fields[0].id)
                       return
                     }
-        
+
                     for (const participant of participants) {
                       for (const card of participant.recipients) {
                         for (const item of determineCoordination.recipients) {
@@ -1625,7 +1628,7 @@ export class ConsiderContractComponent
                       }
                     }
                     if (!isInRecipient) {
-        
+
                       this.toastService.showErrorHTMLWithTimeout(
                         'Bạn không có quyền xử lý hợp đồng này!',
                         '',
@@ -1646,13 +1649,13 @@ export class ConsiderContractComponent
                     this.currentUser = JSON.parse(
                       localStorage.getItem('currentUser') || ''
                     ).customer.info;
-        
+
                     this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
                       //  = response.recipients[0].email
                       this.ArrRecipientsNew = response.recipients.filter(
                         (x: any) => x.email === this.currentUser.email
                       );
-        
+
                       if (this.ArrRecipientsNew.length === 0) {
                         this.toastService.showErrorHTMLWithTimeout(
                           'Bạn không có quyền xử lý hợp đồng này!',
@@ -1669,8 +1672,8 @@ export class ConsiderContractComponent
                           return;
                         }
                       }
-        
-        
+
+
                       // Kiểm tra ô ký đã ký chưa (status = 2)
                       this.spinner.show();
                       let id_recipient_signature: any = null;
@@ -1687,7 +1690,7 @@ export class ConsiderContractComponent
                         }
                         if (id_recipient_signature) break;
                       }
-        
+
                       //neu co id nguoi xu ly thi moi kiem tra
                       if (id_recipient_signature) {
                         this.contractService
@@ -1723,7 +1726,7 @@ export class ConsiderContractComponent
                                 ) {
                                   if (this.markImage) {
                                     this.openMarkSign('hsm');
-        
+
                                   } else {
                                     this.hsmDialogSignOpen(this.recipientId);
                                     this.spinner.hide();
@@ -1746,19 +1749,19 @@ export class ConsiderContractComponent
                                 ) {
                                   if (this.markImage) {
                                     this.openMarkSign('remote');
-        
+
                                   } else {
                                     this.remoteDialogSignOpen(this.recipientId);
                                     this.spinner.hide();
                                   }
                                   this.spinner.hide();
-                                } 
-                                
+                                }
+
                                 else if (
                                   [2, 3, 4].includes(this.datas.roleContractReceived)
                                 ) {
                                   this.signContractSubmit();
-                                } 
+                                }
                               }
                             },
                             (error: HttpErrorResponse) => {
@@ -2161,7 +2164,7 @@ export class ConsiderContractComponent
             } catch (error) {
               return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
             }
-            
+
             signDigital.valueSignBase64 = encode(base64String);
 
             if (this.usbTokenVersion == 2) {
@@ -2425,7 +2428,7 @@ export class ConsiderContractComponent
               username: this.dataHsm.username,
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
-              imageBase64: (!this.markImage && signUpdate.type==3) ? null : 
+              imageBase64: (!this.markImage && signUpdate.type==3) ? null :
                             (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
           } else {
@@ -2436,7 +2439,7 @@ export class ConsiderContractComponent
               username: this.dataHsm.username,
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
-              imageBase64: (!this.markImage && signUpdate.type==3) ? null : 
+              imageBase64: (!this.markImage && signUpdate.type==3) ? null :
                             (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
           }
@@ -2904,10 +2907,10 @@ export class ConsiderContractComponent
             this.dataCert = {
               field: fieldRemoteSigning,
               cert_id: this.dataCert.cert_id,
-              imageBase64: (!this.markImage && signUpdate.type==3) ? null : 
+              imageBase64: (!this.markImage && signUpdate.type==3) ? null :
                             (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
-  
+
             if (fileC && objSign.length) {
               try {
                 const checkSign = await this.contractService.signRemote(
@@ -2930,7 +2933,7 @@ export class ConsiderContractComponent
                       3000
                     );
                   }
-  
+
                   return false;
                 } else {
                   if (checkSign.success === true) {
@@ -2944,7 +2947,7 @@ export class ConsiderContractComponent
               } catch (error) {
                 return this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
               }
-                
+
             }
           } else {
             // truong hop qua han ky remote signing
@@ -2952,10 +2955,10 @@ export class ConsiderContractComponent
               this.dataCert = {
                 field: fieldRemoteSigning,
                 cert_id: this.dataCert.cert_id,
-                imageBase64: (!this.markImage && signUpdate.type==3) ? null : 
+                imageBase64: (!this.markImage && signUpdate.type==3) ? null :
                               (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
               };
-    
+
               if (fileC && objSign.length) {
                 try {
                   const checkSign = await this.contractService.signRemote(
@@ -2978,7 +2981,7 @@ export class ConsiderContractComponent
                         3000
                       );
                     }
-    
+
                     return false;
                   } else {
                     if (checkSign.success === true) {
@@ -3240,7 +3243,7 @@ export class ConsiderContractComponent
     }
 
     //Check ký usb token
-    if (typeSignDigital && typeSignDigital == 2) { 
+    if (typeSignDigital && typeSignDigital == 2) {
       const determineCoordination = await this.contractService
         .getDetermineCoordination(this.recipientId)
         .toPromise();
@@ -3541,14 +3544,14 @@ export class ConsiderContractComponent
       } else {
         console.log('processing');
         this.fixingRecipientIds = checkV2Infor.listRecipientId
-    
+
         if (this.fixingRecipientIds.length > 0) {
           for (const recipId of this.fixingRecipientIds) {
             createEmptyFixingRes = await this.contractService.createEmptyFixing(this.certInfoBase64, recipId).toPromise()
             const base64TempData = createEmptyFixingRes.base64TempData;
             const hexDigestTempFile = createEmptyFixingRes.hexDigestTempFile;
             const fieldName = createEmptyFixingRes.fieldName;
-        
+
             await this.callDCSignerFixing(base64TempData, hexDigestTempFile, fieldName, recipId);
           }
         }
@@ -4737,7 +4740,7 @@ export class ConsiderContractComponent
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(async (result: any) => {
-      if (result && result.phone && result.networkCode) {        
+      if (result && result.phone && result.networkCode) {
         this.loadingText =
           'Yêu cầu ký đã được gửi tới số điện thoại của bạn.\n Vui lòng Xác nhận để thực hiện dịch vụ';
         this.signInfoPKIU.phone = result.phone;
@@ -4960,7 +4963,7 @@ export class ConsiderContractComponent
                   }
                 );
               });
-    
+
               setTimeout(() => {
                 if (!this.mobile) {
                   this.toastService.showSuccessHTMLWithTimeout(
@@ -4977,11 +4980,11 @@ export class ConsiderContractComponent
                     alert('Xem xét hợp đồng thành công');
                   }
                 }
-    
+
               }, 1000);
             }
           )
-          resolve('success')       
+          resolve('success')
         } else  {
           reject('false')
         }
@@ -5043,7 +5046,7 @@ export class ConsiderContractComponent
       case "HOAN_THANH":
         return "Hợp đồng đã ký thành công!"
       case "TU_CHOI":
-        return "Đã từ chối ký hợp đồng trên app CA2 RS, vui lòng thực hiện ký lại trên web!" 
+        return "Đã từ chối ký hợp đồng trên app CA2 RS, vui lòng thực hiện ký lại trên web!"
     }
   }
 
