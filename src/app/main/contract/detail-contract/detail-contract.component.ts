@@ -154,7 +154,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   folderId: any;
   folderName: any;
   defaultValue: number = 100;
-
+  liquidationContractData: any;
   constructor(
     private contractService: ContractService,
     private checkViewContractService: CheckViewContractService,
@@ -361,19 +361,17 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         };
 
         this.datas = this.data_contract;
-        console.log("tjhiss.datas",this.datas);
         
         if(this.datas.is_data_contract.originalContractId)
         this.contractService.getDataCoordination(this.datas.is_data_contract.originalContractId).subscribe((item) =>{
-      console.log("a");
       
           this.datas.is_data_contract.original_contract_name =  item.name;
         })
 
         if(this.datas.is_data_contract.liquidationContractId)
         this.contractService.getDataCoordination(this.datas.is_data_contract.liquidationContractId).subscribe((item) =>{
-          console.log("b");
           this.datas.is_data_contract.liquidation_contract_name =  item.name;
+          this.liquidationContractData = item
           // this.datas.is_data_contract
         })
 
@@ -718,9 +716,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     const canvasList = document.querySelectorAll('.dropzone');
     canvasList.forEach((canvas: any) => {
       canvas.style.width = this.canvasWidth * this.scale + 'px';
-      console.log("canvas.style.width",canvas.style.width);
       canvas.style.height = this.canvasHeight * this.scale + 'px';
-      console.log("anvas.style.height",canvas.style.height);
     });
   }
 
@@ -1765,10 +1761,5 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         skipLocationChange: false
       });
     });
-  }
-
-  openPreviewTab(value: any) {
-    console.log(this)
-    console.log(value)
   }
 }
