@@ -114,6 +114,7 @@
             [ngClass]="(d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh') ? 'main-sign-box': ''"  
             id="image-sign-contract" 
             (contractNoValue)="contractNoValueChange($event)" 
+            (otpValueChange)="otpValueChange($event)" 
             [contractNoValue]="contractNoValue"
             [contractNoValueSign]="contractNoValueSign"
             [otpValueSign]="otpValueSign"

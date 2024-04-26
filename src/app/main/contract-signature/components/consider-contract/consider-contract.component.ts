@@ -4952,6 +4952,9 @@ export class ConsiderContractComponent
   otpValueSign: any = "";
   contractNoValueChange($event: any) {
     this.contractNoValueSign = $event;
+  }
+
+  otpValueChange($event: any) {
     this.otpValueSign = $event;
   }
 

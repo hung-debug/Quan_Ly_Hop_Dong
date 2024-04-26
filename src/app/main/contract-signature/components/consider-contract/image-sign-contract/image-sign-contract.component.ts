@@ -28,6 +28,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   @Output('checkedChange') newItemEvent = new EventEmitter<string>();
   @Output('contractNoValue') contractNoValueEvent = new EventEmitter<string>();
+  @Output('otpValueChange') otpValueChangeEvent = new EventEmitter<string>();
 
   checkShowEdit = false;
   currentUser: any;
@@ -126,7 +127,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       if (result) {
         this.countOtpBox++
         this.sign.valueSign = result;
-        this.contractNoValueEvent.emit(this.sign.valueSign);
+        this.otpValueChangeEvent.emit(this.sign.valueSign)
       }
     })
   }
@@ -264,8 +265,8 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
         }
         return 'Số hợp đồng';
       } else if (sign.sign_unit == 'chu_ky_anh') {
-        if(this.contractNoValueSign) {
-          sign.valueSign= this.contractNoValueSign
+        if(this.otpValueSign) {
+          sign.valueSign= this.otpValueSign
           return sign.valueSign;
         }
       }
