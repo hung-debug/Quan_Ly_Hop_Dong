@@ -135,6 +135,7 @@ import { DeleteContractFolderComponent } from './main/contract-folder/current-fo
 import { UploadContractFileComponent } from './main/contract-folder/current-folder/upload-contract-file/upload-contract-file.component';
 import { AccountLinkDialogComponent } from './main/dialog/account-link-dialog/account-link-dialog.component';
 import { NgOtpInputModule } from  'ng-otp-input';
+import { environment } from 'src/environments/environment';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -143,35 +144,37 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 function initializeKeycloak(keycloak: KeycloakService) {
   // const fullUrl = window.location.href
   // if (!fullUrl.includes('/login?type=mobifone-sso'))
-  return () =>
-    keycloak.init({
-      config: {
-        url: 'https://auth-sso.mobifone.vn:8080/oauth',
-        realm: 'sso-mobifone',
-        clientId: 'TTCNTT-ECONTRACT',
-      },
-      initOptions: {
-        checkLoginIframe: false,
-        // pkceMethod: "S256",
-        // onLoad: 'check-sso',
-      },
-      enableBearerInterceptor: false,
-    })
-    .then(
-      (authenticated: any) => {
-        const idToken: any = keycloak.getKeycloakInstance().idToken;
-        const ssoToken: any = keycloak.getKeycloakInstance().token;
-        localStorage.setItem('sso_id_token',idToken ?? '')
-        localStorage.setItem('sso_token',ssoToken ?? '')
-        if (!authenticated) {
-          const fullUrl = window.location.href
-          if (fullUrl.includes('/login?type=mobifone-sso')) {
-            keycloak.login()
-          }
-        } 
-      }, (err: any) => {
-      }
-    );
+  if (environment.flag == 'KD') {
+    return () =>
+      keycloak.init({
+        config: {
+          url: 'https://auth-sso.mobifone.vn:8080/oauth',
+          realm: 'sso-mobifone',
+          clientId: 'TTCNTT-ECONTRACT',
+        },
+        initOptions: {
+          checkLoginIframe: false,
+          // pkceMethod: "S256",
+          // onLoad: 'check-sso',
+        },
+        enableBearerInterceptor: false,
+      })
+      .then(
+        (authenticated: any) => {
+          const idToken: any = keycloak.getKeycloakInstance().idToken;
+          const ssoToken: any = keycloak.getKeycloakInstance().token;
+          localStorage.setItem('sso_id_token',idToken ?? '')
+          localStorage.setItem('sso_token',ssoToken ?? '')
+          if (!authenticated) {
+            const fullUrl = window.location.href
+            if (fullUrl.includes('/login?type=mobifone-sso')) {
+              keycloak.login()
+            }
+          } 
+        }, (err: any) => {
+        }
+      );
+  } else return () => {}
 }
 
 @NgModule({

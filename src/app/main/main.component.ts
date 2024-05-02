@@ -81,7 +81,7 @@ export class MainComponent implements OnInit {
 
     this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
       data => {
-        if (data.is_required_sso) {
+        if (environment.flag == 'KD' && data.is_required_sso) {
           this.isSsoSync = true
         } else {
           this.isSsoSync = false
@@ -94,7 +94,7 @@ export class MainComponent implements OnInit {
 
     });
 
-    if (await this.keycloakService.isLoggedIn()) {
+    if (environment.flag == 'KD' && await this.keycloakService.isLoggedIn()) {
       let accessToken: any = this.keycloakService.getKeycloakInstance().token
       let ssoIdToken: any = this.keycloakService.getKeycloakInstance().idToken
       localStorage.setItem('sso_id_token',ssoIdToken ?? '')
@@ -127,20 +127,32 @@ export class MainComponent implements OnInit {
   //click logout
   async logout() {
      //call api delete token
-    let ssoIdToken: any = localStorage.getItem('sso_id_token') || ''
-    if (localStorage.getItem('sso_token')) {
-      await this.authenticationService.logoutSso(ssoIdToken)
-      localStorage.removeItem('sso_token');
-      localStorage.clear()
+     if (environment.flag == 'KD') {
+       this.contractService.deleteToken().subscribe((res:any) => {
+      })
+  
       sessionStorage.clear();
-      this.authenticationService.deleteAllCookies()
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('myTaxCode');
+      localStorage.removeItem('url');
+  
       this.router.navigate(['/login']);
-    } else {
-      localStorage.removeItem('sso_token');
-      localStorage.clear()
-      sessionStorage.clear()
-      this.router.navigate(['/login']);
-    }
+     } else {
+      let ssoIdToken: any = localStorage.getItem('sso_id_token') || ''
+      if (localStorage.getItem('sso_token')) {
+        await this.authenticationService.logoutSso(ssoIdToken)
+        localStorage.removeItem('sso_token');
+        localStorage.clear()
+        sessionStorage.clear();
+        this.authenticationService.deleteAllCookies()
+        this.router.navigate(['/login']);
+      } else {
+        localStorage.removeItem('sso_token');
+        localStorage.clear()
+        sessionStorage.clear()
+        this.router.navigate(['/login']);
+      }
+     }
   }
 
   email: string;
@@ -154,7 +166,7 @@ export class MainComponent implements OnInit {
   }
 
   resetPassword(){
-    if (!this.isSsoSync) {
+    if ((environment.flag == 'KD' && !this.isSsoSync) || environment.flag == 'NB') {
       const data = {
         title: 'ĐỔI MẬT KHẨU',
         weakPass: false
