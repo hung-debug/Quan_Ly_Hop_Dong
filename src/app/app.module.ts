@@ -148,9 +148,9 @@ function initializeKeycloak(keycloak: KeycloakService) {
     return () =>
       keycloak.init({
         config: {
-          url: 'https://auth-sso.mobifone.vn:8080/oauth',
-          realm: 'sso-mobifone',
-          clientId: 'TTCNTT-ECONTRACT',
+          url: environment.SSO_URL,
+          realm: environment.SSO_REALM,
+          clientId: environment.SSO_CLIENTID,
         },
         initOptions: {
           checkLoginIframe: false,
