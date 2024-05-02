@@ -1840,7 +1840,7 @@ export class ConsiderContractComponent
     dialogRef.afterClosed().subscribe(async (result: any) => {
 
       let is_data = result;
-
+      this.otpValueSign = result
       this.datas.is_data_object_signature.valueSign = result;
       if (result) {
         if (

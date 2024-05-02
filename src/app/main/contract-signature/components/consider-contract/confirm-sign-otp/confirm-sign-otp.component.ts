@@ -188,7 +188,7 @@ export class ConfirmSignOtpComponent implements OnInit {
     let indexSignUpload: any[] = [];
     let iu = 0;
 
-    if(!this.mobile) {
+    if(!this.mobile || this.mobile) {
       for (const signUpdate of this.datas.is_data_object_signature) {
         
         if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived)

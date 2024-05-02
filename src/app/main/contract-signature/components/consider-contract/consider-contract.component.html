@@ -57,7 +57,7 @@
       </div>
       <hr>
 
-      <div class="flex-column" *ngIf="![2,3].includes(recipient.status)">
+      <div class="flex-column" *ngIf="![2,3].includes(recipient?.status)">
         <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2 && this.isDataContract.release_state== 'CON_HIEU_LUC'">
           <p class="d-flex justify-content-center mb-4">XEM XÉT HỢP ĐỒNG</p>
           <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
@@ -103,7 +103,7 @@
     </div> -->
     <div id="pdf-viewer-step-3">
       <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-        <div class="resize-drag not-out-drop" *ngIf="![2,3].includes(recipient.status)"
+        <div class="resize-drag not-out-drop" *ngIf="![2,3].includes(recipient?.status)"
              [id]="d.id"
              style="z-index: -1;"
              #itemElement
@@ -119,14 +119,14 @@
             [contractNoValueSign]="contractNoValueSign"
             [otpValueSign]="otpValueSign"
             (checkedChange)="switchesValueChange($event)" 
-            *ngIf="![2,3].includes(recipient.status)" 
-            [datas]="datas" [view]="[2,3].includes(recipient.status)" 
+            *ngIf="![2,3].includes(recipient?.status)" 
+            [datas]="datas" [view]="[2,3].includes(recipient?.status)" 
             [sign]="d"
             [isNotTextSupport]="isNotTextSupport"
           >
           </app-image-sign-contract>
-          <div *ngIf="this.flagFocus && d.sign_unit == 'text'" class="name-sig-img-daky long-text-ellipsis">{{(d.recipient && !d.valueSign) ? d.recipient.name : ''}}</div>
-          <div *ngIf="d.sign_unit != 'text' && !this.flagFocus && !this.otpValueSign" class="name-sig-img-daky long-text-ellipsis">{{(d.recipient && !d.valueSign) ? d.recipient.name : ''}}</div>
+          <div *ngIf="this.flagFocus && d.sign_unit == 'text'" class="name-sig-img-daky long-text-ellipsis">{{(d.recipient && !d.valueSign) ? d.recipient?.name : ''}}</div>
+          <div *ngIf="d.sign_unit != 'text' && !this.flagFocus && !this.otpValueSign" class="name-sig-img-daky long-text-ellipsis">{{(d.recipient && !d.valueSign) ? d.recipient?.name : ''}}</div>
         </div>
       </div>
       <div class="skeleton-sign position-absolute opacity-0">
@@ -142,7 +142,7 @@
 <div *ngIf="this.mobile && !this.multiSignInPdf">
 
       <div style="margin:auto;padding: 10px">
-        <pdf-viewer *ngIf="![2,3].includes(recipient.status)" [src]="pdfSrcMobile"
+        <pdf-viewer *ngIf="![2,3].includes(recipient?.status)" [src]="pdfSrcMobile"
         [render-text]="true"
         style="width: 95%; height: calc(70vh); border: 1px;"
         [fit-to-page]="true"
@@ -179,14 +179,22 @@
     </div>
 
     <div style="display: none;" *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-      <app-image-sign-contract id="image-sign-contract-mobile" *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
+      <app-image-sign-contract 
+        *ngIf="![2,3].includes(recipient?.status)" 
+        id="image-sign-contract-mobile" 
+        [datas]="datas" 
+        [view]="[2,3].includes(recipient?.status)"
+        (otpValueChange)="otpValueChange($event)" 
+        [otpValueSign]="otpValueSign"
+        (checkedChange)="switchesValueChange($event)" 
+        [sign]="d"></app-image-sign-contract>
     </div>
 
     <div style="position: absolute;top: -1000px">
       <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId" [phonePKI]="phonePKI" [srcMark]="srcMark" [isDateTime]="isDateTime"></app-display-digital-signature>
     </div>
 
-    <div class="flex-column" *ngIf="![2,3].includes(recipient.status)" style="margin-top: 5px">
+    <div class="flex-column" *ngIf="![2,3].includes(recipient?.status)" style="margin-top: 5px">
       <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2 && this.isDataContract.release_state == 'CON_HIEU_LUC'">
         <p class="d-flex justify-content-center mb-4">{{'contract.review' | translate}}</p>
         <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
@@ -229,7 +237,7 @@
   [confirmSignature]="confirmSignature" 
   [signBoxData]="signBoxData"
   [datas]="datas" 
-  [view]="[2,3].includes(recipient.status)" 
+  [view]="[2,3].includes(recipient?.status)" 
   [recipientId]="recipientId" 
   [pageBefore]="pageBefore"
   [status]="status"
