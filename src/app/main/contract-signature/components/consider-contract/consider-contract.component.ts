@@ -724,17 +724,17 @@ export class ConsiderContractComponent
             if (image_base64) {
               const recipient = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
 
-              let fieldRecipientId: any = null;
+              let fieldRecipientId: any = [];
               let countNotBoxSign: number = 0
               recipient.recipients.forEach((ele: any) => {
                 if (ele.id == this.recipientId) {
-                  fieldRecipientId = ele.fields;
+                  fieldRecipientId = ele.fields.filter((item: any) => item.type !== 3 && item.type !== 2);
                   ele.fields.forEach((item: any) => {
-                    if (item.type !== 2) countNotBoxSign++
+                    if (item.type !== 2 && item.type !== 3) countNotBoxSign++
                   })
                 }
               });
-              if ((fieldRecipientId?.length == 1 || countNotBoxSign == 0) && this.recipient.sign_type[0].id !== 7) {
+              if ((fieldRecipientId?.length == 0 || countNotBoxSign == 0) && this.recipient.sign_type[0].id !== 7) {
                 const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, image_base64).toPromise();
                 this.pdfSrcMobile = pdfMobile.filePath;
               } else if (fieldRecipientId.length > 1) {
@@ -2376,7 +2376,7 @@ export class ConsiderContractComponent
             this.convertXForHsm(signUpdate.page);
           let fieldHsm = {
             id: signUpdate.id,
-            coordinate_x: signUpdate.signDigitalX,
+            coordinate_x: signUpdate.signDigitalX ?? signUpdate.coordinate_x,
             coordinate_y: signUpdate.coordinate_y,
             width: signUpdate.width ,
             height: signUpdate.height,
@@ -2434,7 +2434,7 @@ export class ConsiderContractComponent
               signI = textSignB.split(',')[1];
             }
           }
-          if (!this.mobile) {
+          if (!this.mobile || this.mobile) {
             this.dataHsm = {
               field: fieldHsm,
               supplier: this.dataHsm.supplier,
@@ -2630,7 +2630,7 @@ export class ConsiderContractComponent
 
           let fieldCert = {
             page: signUpdate.page,
-            coordinate_x: signUpdate.signDigitalX,
+            coordinate_x: signUpdate.signDigitalX ?? signUpdate.coordinate_x,
             coordinate_y: signUpdate.coordinate_y,
             width: signUpdate.signDigitalWidth,
             height: signUpdate.signDigitalHeight,
@@ -2699,13 +2699,13 @@ export class ConsiderContractComponent
           let fieldCert1 = {
             id: signUpdate.id,
             page: signUpdate.page,
-            coordinate_x: signUpdate.signDigitalX,
+            coordinate_x: signUpdate.signDigitalX ?? signUpdate.coordinate_x,
             coordinate_y: signUpdate.coordinate_y,
             width: signUpdate.width,
             height: signUpdate.height,
           };
 
-          if (!this.mobile) {
+          if (!this.mobile || this.mobile) {
             this.dataCert = {
               cert_id: this.cert_id,
               image_base64: (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
