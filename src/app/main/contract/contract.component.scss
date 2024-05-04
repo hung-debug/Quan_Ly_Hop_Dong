@@ -1,6 +1,10 @@
+.container-fluid{
+  background-color: #FFFFFF;
+}
+
 .item_contract {
   // border: 1px solid #106DB6;
-  // border-radius: 10px;
+  border-radius: 8px;
   padding: 8px;
   margin-top: 5px;
   line-height: 24px;
@@ -91,11 +95,11 @@
 }
 .calendar_create{
   text-align: center;
-  color:#106DB6
+  color: #8E9AB0;
 }
 .calendar_deadline{
   text-align: center;
-  color:red
+  color: #8E9AB0;
 }
 .item_date{
   padding-left: 3px;

@@ -1,12 +1,16 @@
 .item_contract {
-  border: 1px solid #106DB6;
-  border-radius: 10px;
+  // border: 1px solid #106DB6;
+  border-radius: 8px;
   padding: 8px;
   margin-top: 5px;
   line-height: 24px;
+  // border-bottom: 1px solid rgb(199, 208, 233);
+  // border: 0.5px solid #0041C41A;
 }
 
-
+.container-fluid{
+  background-color: #FFFFFF;
+}
 .item_contract:hover{
   background-color: rgb(255, 254, 254);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -93,11 +97,11 @@
 }
 .calendar_create{
   text-align: center;
-  color:#106DB6
+  color: #8E9AB0;
 }
 .calendar_deadline{
   text-align: center;
-  color:red
+  color: #8E9AB0;
 }
 .item_date{
   padding-left: 3px;

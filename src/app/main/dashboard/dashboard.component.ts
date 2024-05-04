@@ -16,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AccountLinkDialogComponent } from '../dialog/account-link-dialog/account-link-dialog.component';
 import { ContractSignatureService } from 'src/app/service/contract-signature.service';
 import { sideList } from 'src/app/config/variable';
+import { DeleteContractDialogComponent } from './../contract/dialog/delete-contract-dialog/delete-contract-dialog.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -639,7 +640,7 @@ export class DashboardComponent implements OnInit {
       this.contractConnectList = data.entities;
     })
     this.contractSignature.getContractMyProcessList('','','','','',1,'',2,'').subscribe(data => {
-     
+      console.log("this.contractRequestList",data);
       this.contractRequestList = data.entities;
       // console.log("this.contractRequestList",this.contractRequestList);
       // this.contractRecipienteList = data.entities.participant;
@@ -656,6 +657,40 @@ export class DashboardComponent implements OnInit {
     this.router.navigate([
       '/main/form-contract/add',
     ]);
+  }
+  
+  openEdit(id: number) {
+    setTimeout(() => {
+      void this.router.navigate(['main/form-contract/edit/' + id]);
+    }, 100)
+  }
+  
+  deleteContract(id: any) {
+    let data: any = "";
+
+    if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
+      data = {
+        title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
+        id: id
+      };
+    } else if (sessionStorage.getItem('lang') == 'en') {
+      data = {
+        title: 'CONTRACT DELETE CONFIRMATION',
+        id: id
+      };
+    }
+
+    // @ts-ignore
+    const dialogRef = this.dialog.open(DeleteContractDialogComponent, {
+      width: '480px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      let is_data = result
+    })
   }
 
   openAccountLinkDialog(userData: any) {

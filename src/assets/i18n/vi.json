@@ -843,5 +843,8 @@
   "day.update":"Ngày cập nhật",
   "view.processing.flow":"Xem luồng ký",
   "edit.sign.time":"Gia hạn ký",
-  "status.ceca": "Trạng thái BCT"
+  "status.ceca": "Trạng thái BCT",
+  "create.contract.no.template":"Đơn lẻ không theo mẫu",
+  "create.contract.batch": "Tạo theo lô",
+  "create.contract.template": "Đơn lẻ theo mẫu"
 }

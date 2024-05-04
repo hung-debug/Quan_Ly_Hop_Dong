@@ -137,6 +137,8 @@
                                   <div>
                                     <img src="../../../assets/img/path.svg"/>
                                     <span *ngIf="item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
+                                    <span *ngIf="item.role == 1" style="color: #EE7200; padding: 5px;">{{'Đang điều phối' | translate}}</span>
+                                    <span *ngIf="item.role == 2" style="color: #EE7200; padding: 5px;">{{'Đang xem xét' | translate}}</span>
                                   </div>
                                 </div>
 
@@ -486,6 +488,8 @@
                                   <div>
                                     <img src="../../../assets/img/path.svg"/>
                                     <span *ngIf="item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
+                                    <span *ngIf="item.role == 1" style="color: #EE7200; padding: 5px;">{{'Đang điều phối' | translate}}</span>
+                                    <span *ngIf="item.role == 2" style="color: #EE7200; padding: 5px;">{{'Đang xem xét' | translate}}</span>
                                   </div>
                                 </div>
                                 <!--Cac ben ky-->
@@ -712,7 +716,12 @@
                                         <span class="status_blue" *ngIf="item.status == 3 && item.role == 4">{{'contract.document-refused' | translate}}</span>
                                     </div>
                                 </div> -->
-
+                                <div class="row">
+                                  <div>
+                                    <img src="../../../assets/img/path.svg"/>
+                                    <span *ngIf="item.role == 2" style="color: #EE7200; padding: 5px;">{{'Đang xem xét' | translate}}</span>
+                                  </div>
+                                </div>
                                 <div class="row">
                                   <div class="item_contract_infor">
                                     <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.contractId)">{{'contract_processing_flow' | translate}}</u>
