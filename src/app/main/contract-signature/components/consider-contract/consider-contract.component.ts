@@ -4847,7 +4847,7 @@ export class ConsiderContractComponent
         sign?.page == page
       ) {
         sign.signDigitalX = sign.coordinate_x - (canvasPageSignLeft - minCanvas) /* * this.ratioPDF*/;
-        sign.signDigitalY = heightPage - (sign.coordinate_y - currentHeight) - sign.height + sign.page * 5.86 /* * this.ratioPDF*/;
+        sign.signDigitalY = heightPage - (sign.coordinate_y - currentHeight) - sign.height + sign.page * 5 /* * this.ratioPDF*/;
 
         sign.signDigitalHeight =
           sign.signDigitalY + sign.height /* * this.ratioPDF*/;
