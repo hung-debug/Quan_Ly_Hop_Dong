@@ -282,3 +282,7 @@
     overflow-x: hidden;
     max-width: 1200px;
   }
+
+::ng-deep .mat-dialog-container {
+  height: auto;
+}
