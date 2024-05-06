@@ -29,6 +29,15 @@
             <a rel="noopener noreferrer" style="color: #106DB6" rel="stylesheet" [href]="d.path.includes('.txt') ? d.path : d.path.replace('/tmp/','/tmp/v2/')" target="_blank">{{d.filename}}</a>
           </span>
         </div>
+
+        <!-- HD GỐC -->
+        <div *ngIf="originalContractName">
+          <span class="title-contract">{{'contract.original' | translate}}:</span>
+          <span style="cursor: pointer; color:#106DB6" (click)="openDetailOriginalContract(this.datas.is_data_contract)">
+            {{originalContractName}}
+          </span>
+        </div>
+        <!-- HD GỐC -->
         <div>
           <span class="title-contract">{{'contract.connect' | translate}}:
           </span>

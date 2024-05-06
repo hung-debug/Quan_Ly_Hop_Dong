@@ -470,6 +470,7 @@ export class ConsiderContractComponent
   typeSignDigital: any;
   isTimestamp: string = 'false';
   isNotTextSupport: boolean = false;
+  originalContractName: string = "";
   getDataContractSignature() {
     this.contractService.getDetailContract(this.idContract).subscribe(
       async (rs) => {
@@ -477,6 +478,13 @@ export class ConsiderContractComponent
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
         this.checkNotSupportText(rs[2])
+        this.contractService.getDetailInforContract(this.isDataContract?.originalContractId).subscribe(
+          (res: any) => {
+            this.originalContractName = res?.name
+          }, (err: any) => {
+          }
+        )
+        // this.contractService.getDetailContract()
         //Hợp đồng huỷ status = 32 => link 404 đối với những người xử lý trong hợp đồng đó trừ người tạo
         if (this.isDataContract.status == 32) {
           //lấy người tạo
@@ -5091,4 +5099,24 @@ export class ConsiderContractComponent
       allowOutsideClick: false
     });
   }
+
+  openDetailOriginalContract(data: any){
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/main/form-contract/detail/' +data.originalContractId],
+      {
+        queryParams: {
+          'page': 1,
+          'filter_type': '',
+          'filter_contract_no':'',
+          'filter_from_date': '',
+          'filter_to_date': '',
+          'isOrg': 'off',
+          'organization_id': '',
+          'status': 'complete'
+        },
+        skipLocationChange: false
+      });
+    });
+  }
+
 }
