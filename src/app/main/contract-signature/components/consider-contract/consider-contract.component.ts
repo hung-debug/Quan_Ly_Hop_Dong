@@ -478,12 +478,14 @@ export class ConsiderContractComponent
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
         this.checkNotSupportText(rs[2])
-        this.contractService.getDetailInforContract(this.isDataContract?.originalContractId).subscribe(
-          (res: any) => {
-            this.originalContractName = res?.name
-          }, (err: any) => {
-          }
-        )
+        if (this.isDataContract?.originalContractId) {
+          this.contractService.getDetailInforContract(this.isDataContract?.originalContractId).subscribe(
+            (res: any) => {
+              this.originalContractName = res?.name
+            }, (err: any) => {
+            }
+          )
+        }
         // this.contractService.getDetailContract()
         //Hợp đồng huỷ status = 32 => link 404 đối với những người xử lý trong hợp đồng đó trừ người tạo
         if (this.isDataContract.status == 32) {
