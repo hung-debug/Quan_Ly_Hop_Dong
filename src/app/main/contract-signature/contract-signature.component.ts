@@ -1850,6 +1850,7 @@ export class ContractSignatureComponent implements OnInit {
                   dataObjectSignature = await this.contractServiceV1
                     .getDataObjectSignatureLoadChange(idContract[i])
                     .toPromise();
+                  dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3)
                   for (let j = 0; j < dataObjectSignature.length; j++) {
                     if (dataObjectSignature[j].recipient) {
                       if (recipientId[i] == dataObjectSignature[j].recipient.id) {
@@ -2086,6 +2087,7 @@ export class ContractSignatureComponent implements OnInit {
         dataObjectSignature = await this.contractServiceV1
           .getDataObjectSignatureLoadChange(idContract[i])
           .toPromise();
+        dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3)
         for (let j = 0; j < dataObjectSignature.length; j++) {
           if (dataObjectSignature[j].recipient) {
             if (recipientId[i] == dataObjectSignature[j].recipient.id) {
