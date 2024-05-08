@@ -871,7 +871,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           ) && (p.sign_unit == isSignType))) {
             if (isSignType != 'text') {
               if(isSignType == 'so_tai_lieu') {
-                element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
+                element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role == 4)
               } else if (isSignType == 'chu_ky_so') {
                 element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
               } else if (isSignType == 'chu_ky_anh') {
@@ -1532,8 +1532,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               isObjSign.width = 135;
               signElement.setAttribute("height", isObjSign.width);
             }
+            let idTypeSign = data_name.sign_type[0].id;
 
-            if(data_name.role == 4 && this.isChangeText) {
+            if(data_name.role == 4 && this.isChangeText || (idTypeSign == 2 || idTypeSign == 4 || idTypeSign == 6)) {
               this.soHopDong = data_name;
 
               //Gán lại tất cả số hợp đồng cho một người ký

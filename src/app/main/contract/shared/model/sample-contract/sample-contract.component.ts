@@ -932,7 +932,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (this.datas.contract_no) {
               element.is_disable = true;
             } else {
-              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
+              element.is_disable = !(element.sign_type.some((p: any) => [2,4,6].includes(p.id)) || element.role == 4)
             }
           }else if (isSignType == 'chu_ky_so') {
             element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
@@ -1623,7 +1623,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
           let idTypeSign = data_name.sign_type[0].id;
 
-          if ((data_name.role == 4 || (idTypeSign == 2 || idTypeSign == 4)) && this.isChangeText) {
+          if ((data_name.role == 4 || (idTypeSign == 2 || idTypeSign == 4 || idTypeSign == 6)) && this.isChangeText) {
             //
 
             this.soHopDong = data_name;

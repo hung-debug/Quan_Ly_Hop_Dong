@@ -1557,7 +1557,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             this.showSignClear = true;
             let idTypeSign = data_name.sign_type[0].id;
 
-            if ((data_name.role == 4 || ((idTypeSign == 2 || idTypeSign == 4))) && this.isChangeText) {
+            if ((data_name.role == 4 || ((idTypeSign == 2 || idTypeSign == 4 || idTypeSign == 6))) && this.isChangeText) {
               this.soHopDong = data_name;
 
               //Gán lại tất cả số hợp đồng cho một người ký
