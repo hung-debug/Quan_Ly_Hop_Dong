@@ -529,6 +529,9 @@ export var roleList =
         
         //Cấu hình brandname
         {label:'config.brandname.role',value:'CAUHINH_BRANDNAME'},
+        
+        // Cấu hình mail server
+        {label:'config.email.server.role', value: 'CAUHINH_MAILSERVER'},
 
     ]
   }
@@ -730,6 +733,9 @@ export var roleListNB =
         
         //Cấu hình brandname
         {label:'config.brandname.role',value:'CAUHINH_BRANDNAME'},
+        
+        // Cấu hình mail server
+        {label:'config.email.server.role', value: 'CAUHINH_MAILSERVER'},
 
     ]
   }

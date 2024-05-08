@@ -33,7 +33,7 @@
             {{datas.is_data_contract.original_contract_name}}
           </span>
         </div>
-        <div *ngIf="(datas.is_data_contract.status == 40 || datas.is_data_contract.status == 30) && (this.liquidationContractData?.status == 30) && ((datas.is_data_contract.liquidationContractId && datas.is_data_contract.liquidation_contract_name) || datas.is_data_contract.originalContractId)">
+        <div *ngIf="(datas.is_data_contract.status == 40 || datas.is_data_contract.status == 30) && (this.liquidationContractData?.status == 30 || this.liquidationContractData?.status == 20) && ((datas.is_data_contract.liquidationContractId && datas.is_data_contract.liquidation_contract_name) || datas.is_data_contract.originalContractId)">
           <span class="title-contract">{{'contract.liquidated' | translate}}:</span>
           <span style="cursor: pointer; color:#106DB6" (click)="openDetailLiquidatedContract(this.datas.is_data_contract)">
             {{datas.is_data_contract.liquidation_contract_name}}

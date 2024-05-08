@@ -38,6 +38,7 @@ export class ConfigSmsEmailComponent implements OnInit {
   isRoleConfigSms: boolean = false;
   isRoleConfigExpirationDay: boolean = false;
   isRoleConfigBrandname: boolean = false; // cấu hình brandname
+  isRoleConfigEmailServer: boolean = false; // cấu hình email server
   listConfig: any = [];
   lang: string;
   cols: any[];
@@ -59,16 +60,21 @@ export class ConfigSmsEmailComponent implements OnInit {
   submitted = false;
   contractSupplier: number;
   brandnameForm: FormGroup;
+  ConfigEmailServerForm: FormGroup;
   isDisable: boolean = true; //auto = true
   isDisableSoonExpireDay: boolean = true;
   isDisableConfigSmsEmail: boolean = true;
+  isDisableConfigEmailServer: boolean = true;
   listConfigBrandname:  any ;
+  listConfigEmailServer: any;
   brandname: any = 'mContract';
+  userNameMailServer: any = "econtract@mobifone.vn";
+  aliasMailServer: any = "eContract";
   pattern = parttern;
   count : any = 0;
 
   get f() { return this.brandnameForm.controls; }
-
+  get e() { return this.ConfigEmailServerForm.controls; }
   constructor(
     private appService: AppService,
     private contractService: ContractService,
@@ -87,14 +93,24 @@ export class ConfigSmsEmailComponent implements OnInit {
       smsPass: this.fbd.control("", [Validators.required]),
       contractSupplier: this.fbd.control("MOBIFONE", [Validators.required]),
     });
+    
+    this.ConfigEmailServerForm = this.fbd.group({
+      userNameMailServer: this.fbd.control(this.userNameMailServer, [Validators.required, Validators.pattern(parttern.email)]),
+      aliasMailServer: this.fbd.control(this.aliasMailServer, [Validators.required]),
+      passwordMailServer: this.fbd.control("", [Validators.required]),
+      hostMailServer: this.fbd.control("", [Validators.required, Validators.pattern(parttern.hostMailServer)]),
+      portMailServer: this.fbd.control("", [Validators.required, Validators.pattern(parttern.portMailServer)]),
+    });
    }
 
   async ngOnInit(): Promise<void> {
           
     let userId = this.userService.getAuthCurrentUser().id;
 
-    const infoUser = await this.userService.getUserById(userId).toPromise();    
-    
+    const infoUser = await this.userService.getUserById(userId).toPromise();   
+    console.log("infoUser",infoUser);
+     
+    this.listConfigEmailServer = infoUser.organization;
     this.listConfigBrandname = infoUser.organization;
     if(this.listConfigBrandname.smsSendMethor == 'API'){
       this.listConfigBrandname.contractSupplier = 'MOBIFONE'
@@ -120,6 +136,30 @@ export class ConfigSmsEmailComponent implements OnInit {
     }
     
     this.ValidConfigBrandName();
+    console.log("this.ConfigEmailServerForm.patchValue",this.ConfigEmailServerForm);
+    
+    this.ConfigEmailServerForm.patchValue({
+      userNameMailServer: !infoUser.organization.userNameMailServer ? this.userNameMailServer : infoUser.organization.userNameMailServer, // Cập nhật giá trị userNameMailServer
+      aliasMailServer: !infoUser.organization.aliasMailServer ? this.aliasMailServer : infoUser.organization.aliasMailServer, // Cập nhật giá trị aliasMailServer
+      passwordMailServer: infoUser.organization.passwordMailServer, // Cập nhật giá trị cho passwordMailServer
+      hostMailServer: infoUser.organization.hostMailServer, // Cập nhật giá trị cho hostMailServer
+      portMailServer: infoUser.organization.portMailServer, // Cập nhật giá trị cho portMailServer
+    });
+    
+    if(this.ConfigEmailServerForm.value.userNameMailServer === this.userNameMailServer){
+      this.ConfigEmailServerForm?.get('aliasMailServer')?.disable();
+      this.ConfigEmailServerForm?.get('passwordMailServer')?.disable();
+      this.ConfigEmailServerForm?.get('hostMailServer')?.disable();
+      this.ConfigEmailServerForm?.get('portMailServer')?.disable();
+      
+      this.ConfigEmailServerForm.patchValue({
+        passwordMailServer:  "", // Cập nhật giá trị cho passwordMailServer
+        hostMailServer:  "", // Cập nhật giá trị cho hostMailServer
+        portMailServer: "", // Cập nhật giá trị cho portMailServer
+      });
+    }
+    
+    this.ValidConfigEmailServer();
     this.orgId = infoUser.organization.id;
     const inforRole = await this.roleService.getRoleById(infoUser.role_id).toPromise();
     const listRole = inforRole.permissions;
@@ -174,7 +214,8 @@ export class ConfigSmsEmailComponent implements OnInit {
     this.isRoleConfigSms = listRole.some((element: any) => element.code == 'CAUHINH_SMS');
     this.isRoleConfigExpirationDay = listRole.some((element: any) => element.code == 'CAUHINH_NGAYSAPHETHAN');
     this.isRoleConfigBrandname = listRole.some((element: any) => element.code == 'CAUHINH_BRANDNAME');
-
+    this.isRoleConfigEmailServer = listRole.some((element: any) => element.code == 'CAUHINH_MAILSERVER');
+    
     //gọi api thông tin cấu hình sms của tổ chức
     this.infoConfigSms();
 
@@ -382,6 +423,23 @@ export class ConfigSmsEmailComponent implements OnInit {
       this.brandnameForm?.get('smsPass')?.enable();
     }
   }
+  
+  onChangeEmailServer(){
+    if(this.ConfigEmailServerForm.value.userNameMailServer == this.userNameMailServer){
+      this.ConfigEmailServerForm?.get('aliasMailServer')?.disable();
+      this.ConfigEmailServerForm?.get('passwordMailServer')?.disable();    
+      this.ConfigEmailServerForm?.get('hostMailServer')?.disable();
+      this.ConfigEmailServerForm?.get('portMailServer')?.disable();
+      this.ConfigEmailServerForm.controls['passwordMailServer'].setValue("");
+      this.ConfigEmailServerForm.controls['hostMailServer'].setValue("");
+      this.ConfigEmailServerForm.controls['portMailServer'].setValue("");
+    }else{
+      this.ConfigEmailServerForm?.get('aliasMailServer')?.enable();
+      this.ConfigEmailServerForm?.get('passwordMailServer')?.enable();    
+      this.ConfigEmailServerForm?.get('hostMailServer')?.enable();
+      this.ConfigEmailServerForm?.get('portMailServer')?.enable();
+    }
+  }
 
   ValidConfigBrandName(){
     this.brandnameForm.valueChanges.subscribe(value => {    
@@ -399,7 +457,27 @@ export class ConfigSmsEmailComponent implements OnInit {
          
     this.userService.updateConfigBrandname(this.brandnameForm.value,this.orgId).subscribe((res: any) =>{    
       this.isDisable = true;   
-      this.toastService.showSuccessHTMLWithTimeout('test.brandname.infor.success', '', 3000); 
+      this.toastService.showSuccessHTMLWithTimeout('update.success', '', 3000); 
+    })
+  }
+  
+  ValidConfigEmailServer(){
+    this.ConfigEmailServerForm.valueChanges.subscribe(value => {
+      this.isDisableConfigEmailServer = false;
+      if(this.listConfigEmailServer.userNameMailServer == value.userNameMailServer && this.listConfigEmailServer.aliasMailServer == value.aliasMailServer && this.listConfigEmailServer.passwordMailServer == value.passwordMailServer && this.listConfigEmailServer.hostMailServer == value.hostMailServer && this.listConfigEmailServer.portMailServer == value.portMailServer){
+        this.isDisable = true;
+      }
+    })
+  }
+  
+  configEmailServer(){
+    if (this.ConfigEmailServerForm.invalid) {
+      return;
+    }
+    
+    this.userService.updateConfigEmailServer(this.ConfigEmailServerForm.value, this.orgId).subscribe((res: any) => {
+      this.isDisableConfigEmailServer = true;
+      this.toastService.showSuccessHTMLWithTimeout('update.success', '', 3000);
     })
   }
 }
