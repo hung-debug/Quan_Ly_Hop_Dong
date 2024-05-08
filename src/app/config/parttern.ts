@@ -5,6 +5,9 @@ export const parttern = {
   
   brandname: /^[\w\s.-]{1,11}$/,
   
+  portMailServer: /^[0-9]{1,5}$/,
+  hostMailServer: /^[0-9.]{1,20}$/,
+  
   //cmt-can cuoc cong dan
   card_id9: /^[0-9]{9}$/,
 

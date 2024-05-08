@@ -79,6 +79,7 @@ export class SidebarService {
   isConfigSms: boolean = true; //cấu hình sms
   isConfigSoonExpireDay: boolean = true; // cấu hình ngày sắp hết hạn
   isConfigBrandname: boolean = true; // cấu hình brandname
+  isConfigMailServer: boolean = true; //cấu hình mail server
 
   toggled = false;
   _hasBackgroundImage = true;
@@ -312,6 +313,8 @@ export class SidebarService {
             this.isConfigSoonExpireDay = listRole.some((element) => element.code == 'CAUHINH_NGAYSAPHETHAN');
             
             this.isConfigBrandname = listRole.some((element) => element.code == 'CAUHINH_BRANDNAME');
+            
+            this.isConfigMailServer = listRole.some((element) => element.code == 'CAUHINH_MAILSERVER');
 
             this.buildMenu(currentUserC);
           },
@@ -550,7 +553,7 @@ export class SidebarService {
     })
 
     if(this.isQLLHD_01 || this.isQLLHD_02 || this.isQLLHD_03 || this.isQLLHD_04 || this.isQLLHD_05 ||
-      this.isConfigSms || this.isConfigSoonExpireDay || this.isConfigBrandname ||
+      this.isConfigSms || this.isConfigSoonExpireDay || this.isConfigBrandname || this.isConfigMailServer ||
       this.QLDSCTS_01 || this.QLDSCTS_02 || this.QLDSCTS_03 || this.QLDSCTS_04)
       {
         let submenusConfig: any[] = [];

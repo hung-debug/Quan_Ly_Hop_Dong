@@ -813,5 +813,14 @@
   "password.blank": "Password cannot be blank",
   "taxcode.not.match.hsm":"Tax code/CMT/CCCD does not match contract signing information",
   "login.method.title": "Or sign in with",
-  "folder.search.placeholder": "Search by folder name, contract name, contract code, partner name"
+  "folder.search.placeholder": "Search by folder name, contract name, contract code, partner name",
+  "config.email.server": "Config mail server",
+  "aliases": "aliases",
+  "error.aliases.required": "Aliases is required",
+  "error.smtpServer.required": "SMTP Server is required",
+  "error.smtpPort.required": "SMTP Port is required",
+  "error.smtpServer.format": "Invalid SMTP Server",
+  "error.smtpPort.format": "Invalid SMTP Port",
+  "config.email.server.role": "Config eMail Server",
+  "mail.server.infor.success": "Config mail server success"
 }

@@ -52,6 +52,7 @@ export class UserService {
   checkTokenDateUrl: any = `${environment.apiUrl}/api/v1/customers/password/recover/valid`;
   checkBrandnameUrl: any = `${environment.apiUrl}/api/v1/notification/checkBranchName`;
   updateConfigBrandName: any = `${environment.apiUrl}/api/v1/organizations/branchName/`;
+  updateConfigMailServer: any = `${environment.apiUrl}/api/v1/organizations/configMailServer/`;
   getSsoLinkOtpUrl: any = `${environment.apiUrl}/api/v1/customers/sendEmailOTP`;
   syncAccountSsoUrl: any = `${environment.apiUrl}/api/v1/customers/syncUserSSO`;
 
@@ -482,6 +483,25 @@ export class UserService {
     return this.http.put<User>(this.updateConfigBrandName + orgId, body, {
       headers: headers,
     });
+  }
+  
+  updateConfigEmailServer(data: any, orgId: any) {
+    const headers = new HttpHeaders()
+    .append('Content-Type', 'application/json')
+    .append('Authorization', 'Bearer ' + this.token);
+    console.log("data",data);
+    
+  const body = JSON.stringify({
+    userNameMailServer: data.userNameMailServer,
+    aliasMailServer: data.aliasMailServer,
+    passwordMailServer: data.passwordMailServer,
+    hostMailServer: data.hostMailServer,
+    portMailServer: data.portMailServer,
+  });
+
+  return this.http.put<User>(this.updateConfigMailServer + orgId, body, {
+    headers: headers,
+  });
   }
 
   getSsoLinkOtp(email: string) {
