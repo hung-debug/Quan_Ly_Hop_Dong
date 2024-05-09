@@ -1243,7 +1243,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             // element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4));
 
             element.is_disable = !(element.sign_type.some((p: any) => [2,4,6].includes(p.id)) || element.role == 4)
-          } else {
+          } else if (isSignType == 'chu_ky_so') {
+            element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
+          } else if (isSignType == 'chu_ky_anh') {
+            element.is_disable = false
+          }  else {
             element.is_disable = true
           }
         } 
@@ -1251,7 +1255,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (isSignType == 'chu_ky_anh') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
         } else if (isSignType == 'chu_ky_so') {
-          element.is_disable = !(element.sign_type.some((p: any) => [2,3,4,6,7,8].includes(p.id)) && element.role != 2);
+          element.is_disable = !(element.sign_type.some((p: any) => [2,4,6].includes(p.id)) && element.role != 2);
         } else if (isSignType == 'text') {
           element.is_disable = !(element.sign_type.some((p: any) => [2,4,6].includes(p.id)) || (element.role == 4 && !element.sign_type.some((p: any) => [3,7,8].includes(p.id)))); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
         } else {
