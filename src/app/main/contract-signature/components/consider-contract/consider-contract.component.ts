@@ -2083,7 +2083,7 @@ export class ConsiderContractComponent
             if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
               let imageRender = null;
 
-              this.textSign = signUpdate.valueSign;
+              this.textSign = this.contractNoValueSign
               this.width = signUpdate.width;
 
               await of(null).pipe(delay(150)).toPromise();
@@ -2394,7 +2394,7 @@ export class ConsiderContractComponent
           };
 
           if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
-            this.textSign = signUpdate.valueSign;
+            this.textSign = this.contractNoValueSign;
 
             this.font = signUpdate.font;
             this.font_size = signUpdate.font_size;
@@ -2646,7 +2646,7 @@ export class ConsiderContractComponent
             height: signUpdate.signDigitalHeight,
           };
           if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
-            this.textSign = signUpdate.valueSign;
+            this.textSign = this.contractNoValueSign
 
             this.font = signUpdate.font;
             this.font_size = signUpdate.font_size;
@@ -2880,7 +2880,7 @@ export class ConsiderContractComponent
           };
 
           if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
-            // this.textSign = signUpdate.valueSign;
+            // this.textSign = this.contractNoValueSign
 
             // this.font = signUpdate.font;
             // this.font_size = signUpdate.font_size;
@@ -4962,6 +4962,7 @@ export class ConsiderContractComponent
   otpValueSign: any = "";
   contractNoValueChange($event: any) {
     this.contractNoValueSign = $event;
+    console.log("this.contractNoValueSign",this.contractNoValueSign);
   }
 
   otpValueChange($event: any) {
