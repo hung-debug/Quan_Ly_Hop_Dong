@@ -2082,8 +2082,11 @@ export class ConsiderContractComponent
 
             if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
               let imageRender = null;
-
-              this.textSign = this.contractNoValueSign
+              if (this.type == 4) {
+                this.textSign = this.contractNoValueSign
+              } else {
+                this.textSign = signUpdate.valueSign
+              }
               this.width = signUpdate.width;
 
               await of(null).pipe(delay(150)).toPromise();
@@ -2394,7 +2397,11 @@ export class ConsiderContractComponent
           };
 
           if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
-            this.textSign = this.contractNoValueSign;
+            if (this.type == 4) {
+              this.textSign = this.contractNoValueSign
+            } else {
+              this.textSign = signUpdate.valueSign
+            }
 
             this.font = signUpdate.font;
             this.font_size = signUpdate.font_size;
@@ -2646,7 +2653,11 @@ export class ConsiderContractComponent
             height: signUpdate.signDigitalHeight,
           };
           if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
-            this.textSign = this.contractNoValueSign
+            if (this.type == 4) {
+              this.textSign = this.contractNoValueSign
+            } else {
+              this.textSign = signUpdate.valueSign
+            }
 
             this.font = signUpdate.font;
             this.font_size = signUpdate.font_size;
