@@ -830,13 +830,13 @@
   "taxcode.not.match.hsm":"Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng",
   "login.method.title": "Hoặc đăng nhập bằng",
   "folder.search.placeholder": "Tìm kiếm theo tên thư mục, tên hợp đồng, mã hợp đồng, tên đối tác",
-  "config.email.server": "Cấu hình mail server",
+  "config.email.server": "Cấu hình Email server",
   "aliases": "Bí danh",
   "error.aliases.required": "Bí danh không được để trống",
   "error.smtpServer.required": "SMTP Server không được để trống",
   "error.smtpPort.required": "SMTP Port không được để trống",
   "error.smtpServer.format": "SMTP Server sai định dạng",
   "error.smtpPort.format": "SMTP Port sai định dạng",
-  "config.email.server.role": "Cấu hình eMail Server",
+  "config.email.server.role": "Cấu hình Email Server",
   "mail.server.infor.success": "Cấu hình mail server thành công"
 }
