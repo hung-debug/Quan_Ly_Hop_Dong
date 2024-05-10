@@ -1,5 +1,10 @@
+def pathInServer = "/u01/app/test"
 pipeline {
     agent any
+     environment {
+         ACCOUNT_SSH = credentials('eContract_FE_dev_user_pass')
+         SSH_HOST = credentials('eContract_FE_dev_host')
+     }
     tools {nodejs "node_14_21_3"}
     stages {
         stage("Build"){
@@ -34,6 +39,29 @@ pipeline {
                     }
                 }
                 echo '----------------------Build done----------------------'
+            }
+        }
+        stage("Deploy"){
+            steps{
+                script{
+                    def remote = [:]
+                    remote.name = 'eContract_FE_dev'
+                    remote.host = SSH_HOST
+                    remote.allowAnyHosts = true
+                    remote.user = ACCOUNT_SSH_USR
+                    remote.password = ACCOUNT_SSH_PSW
+                    echo "-------------------Start deploy-------------------"
+
+                    echo "-------------------Start run backup.sh-------------------"
+                    sshCommand remote: remote, command: "cd ${pathInServer} ; ./backup.sh"
+                    echo "-------------------Run backup.sh done-------------------"
+
+                    echo "-------------------Start push file to server-------------------"
+                    sshPut remote: remote, from: 'builds/', into: "${pathInServer}/"
+                    echo "-------------------Push file to server done-------------------"
+
+                    echo "-------------------Deploy done-------------------"
+                }
             }
         }
     }
