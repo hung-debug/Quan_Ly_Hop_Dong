@@ -147,9 +147,13 @@
       <div class="sms-header">
         {{'config.email.server' | translate}}
       </div>
-      <form [formGroup]="ConfigEmailServerForm" class="content cod-md-12">
-        <div class="row" style="margin-top: 10px;">
-          <div class="col-md-3">
+      <form [formGroup]="ConfigEmailServerForm" class="content">
+        <div style="align-items: center; display: flex;"> <br>
+          <input type="checkbox" style="margin: 0;" formControlName="tlsMailServer">
+          <span style="padding: 15px;"> TLS/SSL</span>
+        </div>
+        <div class="row" style="margin-top: 10px;display: grid;grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px;">
+          <div >
             <div class="label text-color">Email
               <span class="required-title">*</span>
             </div>
@@ -162,19 +166,19 @@
             </div>
           </div>
           
-          <div class="col-md-2">
+          <div >
             <div class="label text-color">{{'aliases' | translate}}
               <span class="required-title">*</span>
             </div>
             <div class="input-data">
-              <input style="width: 100%;" type="text" maxlength = '100' formControlName="aliasMailServer" placeholder="Nhập Bí danh">
+              <input style="width: 100%;" type="text" maxlength = '100' formControlName="aliasMailServer" placeholder="Nhập bí danh">
             </div>
             <div *ngIf="e.aliasMailServer.errors" class="invalid">
               <div *ngIf="e.aliasMailServer?.errors?.required">{{'error.aliases.required' | translate}}</div>
             </div>
           </div>
           
-          <div class="col-md-3">
+          <div >
             <div class="label text-color">{{'login.password' | translate}}
               <span class="required-title">*</span>
             </div>
@@ -193,12 +197,12 @@
             </div>
           </div>
           
-          <div class="col-md-2">
+          <div >
             <div class="label text-color">SMTP Server
               <span class="required-title">*</span>
             </div>
             <div class="input-data">
-              <input style="width: 100%;" type="text" maxlength = '100' formControlName="hostMailServer" placeholder="Nhập SMTP Server">
+              <input style="width: 100%;" type="text" maxlength = '20' formControlName="hostMailServer" placeholder="Nhập SMTP Server">
             </div>
             <div *ngIf="e.hostMailServer.errors" class="invalid">
               <div *ngIf="e.hostMailServer?.errors?.required">{{'error.smtpServer.required' | translate}}</div>
@@ -206,12 +210,12 @@
             </div>
           </div>
           
-          <div class="col-md-2">
+          <div >
             <div class="label text-color">SMTP Port
               <span class="required-title">*</span>
             </div>
             <div class="input-data">
-              <input style="width: 100%;" type="text" maxlength = '100' formControlName="portMailServer" placeholder="Nhập SMTP Server">
+              <input style="width: 100%;" type="text" maxlength = '5' formControlName="portMailServer" placeholder="Nhập SMTP Server">
             </div>
             <div *ngIf="e.portMailServer.errors" class="invalid">
               <div *ngIf="e.portMailServer?.errors?.required">{{'error.smtpPort.required' | translate}}</div>
