@@ -20,6 +20,7 @@ pipeline {
                                    message += "${entry.msg} \n"
                                }
                            }
+                           echo "===================message: ${message}====================="
 
                            sh '''
                               echo "===================message: ${message}====================="
