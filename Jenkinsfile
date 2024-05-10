@@ -20,10 +20,9 @@ pipeline {
                                    message += "${entry.msg} \n"
                                }
                            }
-                           echo "===================message: ${message}====================="
 
                            sh """
-                              echo "===================message: ${message}====================="
+                              curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"receivers": [{"email": "quyen.nguyenhuu@mobifone.vn"},{"email": "dat.trinhtien10@mobifone.vn"}],"announcement": "${message}"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement
                            """
                     }
               }
