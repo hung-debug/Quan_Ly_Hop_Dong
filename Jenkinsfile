@@ -1,5 +1,5 @@
 def pathInServer = "/u01/app"
-def message = "*[Start build eContract FE dev]*"
+def message = "*Start build eContract FE dev*"
 pipeline {
     agent any
      environment {
