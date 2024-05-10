@@ -80,7 +80,7 @@ pipeline {
                     echo "-------------------Push file to server done-------------------"
 
                     sh """
-                      curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["${groupEChatWorkId}"],"announcement": "Build eContract FE dev done"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement/group
+                      curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["${groupEChatWorkId}"],"announcement": "Hoàn thành deploy Front-end eContract Dev. Truy cập link https://econtractdev.mobifone.ai để test"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement/group
 
                     """
                     echo "-------------------Deploy done-------------------"
