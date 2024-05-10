@@ -497,6 +497,7 @@ export class UserService {
     passwordMailServer: data.passwordMailServer,
     hostMailServer: data.hostMailServer,
     portMailServer: data.portMailServer,
+    tlsMailServer: data.tlsMailServer,
   });
 
   return this.http.put<User>(this.updateConfigMailServer + orgId, body, {

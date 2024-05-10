@@ -30,7 +30,7 @@ export class ConfigSmsEmailComponent implements OnInit {
 
   emailConfig: boolean = false;
   smsConfig: boolean = false;
-
+  tlsMailServer: boolean = false;
   soonExpireDay: number
   isSoonExpireDay: boolean = false;
   idExpireDay: number;
@@ -100,6 +100,7 @@ export class ConfigSmsEmailComponent implements OnInit {
       passwordMailServer: this.fbd.control("", [Validators.required]),
       hostMailServer: this.fbd.control("", [Validators.required, Validators.pattern(parttern.hostMailServer)]),
       portMailServer: this.fbd.control("", [Validators.required, Validators.pattern(parttern.portMailServer)]),
+      tlsMailServer: this.fbd.control("", [Validators.required]),
     });
    }
 
@@ -144,6 +145,7 @@ export class ConfigSmsEmailComponent implements OnInit {
       passwordMailServer: infoUser.organization.passwordMailServer, // Cập nhật giá trị cho passwordMailServer
       hostMailServer: infoUser.organization.hostMailServer, // Cập nhật giá trị cho hostMailServer
       portMailServer: infoUser.organization.portMailServer, // Cập nhật giá trị cho portMailServer
+      tlsMailServer: infoUser.organization.tlsMailServer, // Cập nhật giá trị cho tlsMailServer
     });
     
     if(this.ConfigEmailServerForm.value.userNameMailServer === this.userNameMailServer){
@@ -464,7 +466,7 @@ export class ConfigSmsEmailComponent implements OnInit {
   ValidConfigEmailServer(){
     this.ConfigEmailServerForm.valueChanges.subscribe(value => {
       this.isDisableConfigEmailServer = false;
-      if(this.listConfigEmailServer.userNameMailServer == value.userNameMailServer && this.listConfigEmailServer.aliasMailServer == value.aliasMailServer && this.listConfigEmailServer.passwordMailServer == value.passwordMailServer && this.listConfigEmailServer.hostMailServer == value.hostMailServer && this.listConfigEmailServer.portMailServer == value.portMailServer){
+      if(this.listConfigEmailServer.userNameMailServer == value.userNameMailServer && this.listConfigEmailServer.aliasMailServer == value.aliasMailServer && this.listConfigEmailServer.passwordMailServer == value.passwordMailServer && this.listConfigEmailServer.hostMailServer == value.hostMailServer && this.listConfigEmailServer.portMailServer == value.portMailServer ){
         this.isDisable = true;
       }
     })
