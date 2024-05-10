@@ -16,13 +16,12 @@ pipeline {
                                def entries = changeLogSets[i].items
                                for (int j = 0; j < entries.length; j++) {
                                    def entry = entries[j]
-                                   echo "\\n-${entry.msg}"
-                                   message += "\\n-${entry.msg}"
+                                   message += "\\n- ${entry.msg}"
                                }
                            }
 
                            sh """
-                              curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"receivers": [{"email": "quyen.nguyenhuu@mobifone.vn"},{"email": "dat.trinhtien10@mobifone.vn"}],"announcement": "${message}"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement
+                              curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["test_econtract"],"announcement": "${message}"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement
                            """
                     }
               }
