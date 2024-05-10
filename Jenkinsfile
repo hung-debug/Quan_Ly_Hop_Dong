@@ -53,7 +53,7 @@ pipeline {
                     echo "-------------------Start deploy-------------------"
 
                     echo "-------------------Start run backup.sh-------------------"
-                    sshCommand remote: remote, command: "cd ${pathInServer}/eContract-web ; ./backup.sh"
+                    sshCommand remote: remote, command: "cd ${pathInServer}/script_deploy ; ./backup.sh"
                     echo "-------------------Run backup.sh done-------------------"
 
                     echo "-------------------Start push file to server-------------------"
