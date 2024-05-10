@@ -172,6 +172,7 @@ export class ContractService {
   checkTokenV2InforUrl: any = `${environment.apiUrl}/api/v1/processes/checkUsbTokenError`
   createEmptyFixingUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/create-empty-tokenError`
   mergeTimestampFixingUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/merge-time-stampError`
+  checkCurrentSigningUrl: any = `${environment.apiUrl}/api/v1/sign/check-process-is-sign`
   // token v2 fixing ===============================
 
   token: any;
@@ -2033,6 +2034,16 @@ export class ContractService {
   }
   // tokenV2 fixing =======================================================
 
+  checkCurrentSigning(recipientId: string) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http
+      .get<any>(this.checkCurrentSigningUrl + `/${recipientId}`, { headers: headers })
+      .pipe();
+  }
 
   objDefaultSampleContract() {
     return {
