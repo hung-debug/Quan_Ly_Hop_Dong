@@ -8,8 +8,9 @@
   // border: 0.5px solid #0041C41A;
 }
 
-.container-fluid{
+.container-fluid-bg{
   background-color: #FFFFFF;
+  width: 100%;
 }
 .item_contract:hover{
   background-color: rgb(255, 254, 254);
@@ -44,6 +45,7 @@
   height: 35px;
   display: inline-block;
   border-radius: 4px;
+  font-weight: 700;
 }
 
 .header {
@@ -57,7 +59,7 @@
 .list_header{
   color:#898989;
   text-align: center;
-  padding: 90px 12px 12px 0;
+  padding: 12px 12px 0;
   font-weight: 500;
   font-weight: 500;
   background-color: #EBF2FB;
@@ -148,7 +150,7 @@
 }
 .search{
   border: 1px solid #106DB6;
-  border-radius: 15px;
+  border-radius: 8px;
   height: 38px;
 }
 .input-line {
@@ -167,9 +169,12 @@
 }
 .input-text {
   border: 0;
-  padding: 10px;
+  margin: 2px;
   width: 100%;
   outline:0px;
+  background-color: #F1F5FE;
+  padding: 10px 16px 10px 16px;
+  opacity: 0px;
 }
 
 :host ::ng-deep {
@@ -344,4 +349,25 @@
   font-weight: 700;
   box-shadow: 0px 3px 12px 0px #1055E11A;
   border: 1px solid #001A4D1A
+}
+
+.btn-multi{
+  border: 0px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  background-color: #0041C4;
+  font-size: 13px;
+  // margin: 0 10px;
+  font-weight: 700;
+  box-shadow: 0px 3px 12px 0px #1055E11A;
+  border: 1px solid #001A4D1A
+}
+
+.three_dot{
+  cursor: pointer;
+}
+
+.three_dot_text{
+  margin: 10px;
 }

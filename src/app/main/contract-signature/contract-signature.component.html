@@ -1,12 +1,10 @@
-<div class="container-fluid">
+<!-- <div class="container-fluid"> -->
 
-    <div style="margin-top: 60px;" class="header">
+    <!-- <div style="margin-top: 60px;" class="header">
       <div class="row" style="padding-bottom: 20px;">
         <div class="col-md-10" style="padding-top: 10px" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
             <div class="input-line search">
-                <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
                 <input #myInputRef [value]="filter_name" type="text" id="search"  class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
-                <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
             </div>
         </div>
         
@@ -17,15 +15,9 @@
           </button>
         </div>
 
-        <!--Header danh sách ký 1-->
+        
         <div *ngIf="filter_status == 1">
             <div style="display: flex;">
-                <!-- <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
-                    <button (click)="signMany()" class="btn btn-lg btn-block btn_submit">{{'sign.multi'| translate}}</button>
-                </div>
-                <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search" style="margin-left: 10px;">
-                    <button (click)="viewMany()" class="btn btn-lg btn-block btn_submit">{{'contract.views'| translate}}</button>
-                </div> -->
                 <div class="col-md-1 btn_search" *ngIf="this.typeDisplay === 'signOne'" >
                   <button (click)="viewMany()" class="btn btn-lg btn-block btn_consider">{{'contract.views'| translate}}</button>
                 </div>
@@ -61,9 +53,8 @@
             </div>
         </div>
       </div>
-    </div>
-    <div style="margin-top: 5px; margin-bottom: 25px; padding-bottom: 35px;" class="row list_header" *ngIf="pageTotal > 0 || (this.typeDisplay == 'signMany' || this.typeDisplay == 'viewMany')">
-      <!-- <div class="row-header"> -->
+    </div> -->
+    <!-- <div style="margin-top: 5px; margin-bottom: 25px; padding-bottom: 35px;" class="row list_header" *ngIf="pageTotal > 0 || (this.typeDisplay == 'signMany' || this.typeDisplay == 'viewMany')">
         <div
             *ngIf="this.typeDisplay === 'signMany' && this.contractsSignMany?.length == 50"
             style="
@@ -77,10 +68,8 @@
             {{'multi.sign.warning' | translate}}
         </div>
         
-          
-        <!--Nút tick all-->
+    
         <div *ngIf="this.typeDisplay === 'signMany'" class="col-md-1" style="text-align: left;">
-          <!-- <input id="all" name="all" type="checkbox" (click)="toggle()" style="width: 20px; height: 20px;"/> -->
         </div>
         <div *ngIf="this.typeDisplay === 'viewMany'" class="col-md-1" style="text-align: left;">
           <input id="allView" name="allView" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleView(checkedAll)" style="width: 20px; height: 20px;" />
@@ -101,14 +90,55 @@
         <div class="col-md-2">{{'day.update' | translate}}
           <img src="../../assets/img/sort.svg"/>
         </div>
-        <!-- <div class="col-md-2">{{'expiration-date' | translate}}</div> -->
         <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1"></div>
-
-      <!-- </div> -->
-    </div>
+    </div> -->
 
     <!--Danh sách tất cả hợp đồng cần ký trường hợp ký một-->
+    
     <div *ngIf="this.typeDisplay === 'signOne'">
+      <div class="row container-fluid-bg">
+        <div class="row" style="padding-bottom: 20px;">
+          <div class="col-md-10" style="padding-top: 10px" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
+            <div class="input-line search">
+                <input #myInputRef [value]="filter_name" type="text" id="search"  class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+            </div>
+          </div>
+          
+          <div class="col-md-2 btn_search" >
+            <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
+              {{'btn.advance' | translate}}
+              <img src="../../assets/img/vector_advance.svg" class="input-img" />
+            </button>
+          </div>
+          
+          <div *ngIf="this.typeDisplay === 'signOne' && filter_status == 1" class="col-md-2 btn_search" style="width: 12%;">
+            <button (click)="viewMany()" class="btn btn-lg btn-block btn_consider">{{'contract.views'| translate}}</button>
+          </div>
+          
+          <div *ngIf="this.typeDisplay === 'signOne' && filter_status == 1" class="col-md-1 btn_search" style="width: 12%;">
+            <button (click)="signMany()" class="btn btn-lg btn-block btn-multi">{{'sign.multi'| translate}}</button>
+          </div>
+          
+          <div *ngIf="this.typeDisplay === 'signOne' && filter_status == 4" class="col-md-1 btn_search" style="width: 12%;">
+            <button (click)="downloadMany()" class="btn btn-lg btn-block btn-multi">{{'download.multi'| translate}}</button>
+          </div>
+        </div>
+        <div class="row list_header" *ngIf="pageTotal > 0">
+          
+          <div class="col-md-1"></div>
+          <div class="col-md-4" style="text-align: left !important;">{{'contract.process' | translate}}</div>
+          <div class="col-md-2">{{'report.status.contract' | translate}}
+            <!-- <img src="../../assets/img/sort.svg"/> -->
+          </div>
+          <div class="col-md-2">{{'create-date' | translate}}
+            <!-- <img src="../../assets/img/sort.svg"/> -->
+          </div>
+          <div class="col-md-2">{{'day.update' | translate}}
+            <!-- <img src="../../assets/img/sort.svg"/> -->
+          </div>
+          <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1"></div>
+        </div>
+        <div style="min-height: 66vh">
         <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
             <div *ngIf="filter_status == 1 || filter_status == 4">
                 <div class="row">
@@ -187,7 +217,7 @@
                                     </div>
                                 </div> -->
 
-                                <div class="row">
+                                <div class="row" *ngIf="filter_status == 1">
                                   <div class="item_contract_infor">
                                     <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.contractId)">{{'contract_processing_flow' | translate}}</u>
                                   </div>
@@ -216,29 +246,48 @@
                     </div>
 
                     <div class="col-md-1 item_icon">
-                        <div style="display: flex; justify-content: center;">
-                            <div class="div_icon" *ngIf="item.status == 1 && item.role == 1 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
-                                <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item)">{{'contract.lead' | translate}}</button>
-                            </div>
-                            <div class="div_icon" *ngIf="item.status == 1 && item.role == 2 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
-                                <button type="button" class="btn btn-outline-dark btn_submit" (click)="openConsiderContract(item)">{{'contract.view' | translate}}</button>
-                            </div>
+                      <div class="three_dot" style="display: flex; justify-content: center;" *ngIf="filter_status == 4">
+                        <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
+                          <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                          <button mat-menu-item class="div_icon" *ngIf="item.contractStatus == 30" (click)="downloadContract(item.contractId);">
+                            <mat-icon><img src="../../assets/img/icon_download.svg" class="img_icon"/></mat-icon>
+                            <span class="three_dot_text">{{'contract.download' | translate}}</span>
+                          </button>
+                          <button mat-menu-item class="div_icon" *ngIf="item.contractStatus == 32" (click)="ViewReasonCancel(item.contractId);">
+                            <mat-icon><img src="../../assets/img/cancel_notes.svg" class="img_icon"/></mat-icon>
+                            <span class="three_dot_text">{{'reasson.cancel.contract' | translate}}</span>
+                          </button>
+                          <button mat-menu-item class="div_icon" (click)="processHandleContract(item.id)">
+                            <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon"/></mat-icon>
+                            <span class="three_dot_text">{{'view.processing.flow' | translate}}</span>
+                          </button>
+                        </mat-menu>
+                      </div>
+                      <div style="display: flex; justify-content: center;">
+                          <div class="div_icon" *ngIf="item.status == 1 && item.role == 1 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
+                              <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item)">{{'contract.lead' | translate}}</button>
+                          </div>
+                          <div class="div_icon" *ngIf="item.status == 1 && item.role == 2 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
+                              <button type="button" class="btn btn-outline-dark btn_submit" (click)="openConsiderContract(item)">{{'contract.view' | translate}}</button>
+                          </div>
 
-                            <!--Button ký-->
-                            <div class="div_icon" *ngIf="item.status == 1 && item.role == 3 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
-                                <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSignatureContract(item)">{{'contract.sign' | translate}}</button>
-                            </div>
+                          <!--Button ký-->
+                          <div class="div_icon" *ngIf="item.status == 1 && item.role == 3 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
+                              <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSignatureContract(item)">{{'contract.sign' | translate}}</button>
+                          </div>
 
-                            <div class="div_icon" *ngIf="item.status == 1 && item.role == 4 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
-                                <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSecretaryContract(item)">{{'contract.document' | translate}}</button>
-                            </div>
-                            <div class="div_icon" *ngIf="item.contractStatus == 30">
-                                <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.contractId);" />
-                            </div>
-                            <div class="div_icon" *ngIf="item.contractStatus == 32">
-                                <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{ 'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.contractId)" />
-                            </div>
-                        </div>
+                          <div class="div_icon" *ngIf="item.status == 1 && item.role == 4 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
+                              <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSecretaryContract(item)">{{'contract.document' | translate}}</button>
+                          </div>
+                          <!-- <div class="div_icon" *ngIf="item.contractStatus == 30">
+                              <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.contractId);" />
+                          </div>
+                          <div class="div_icon" *ngIf="item.contractStatus == 32">
+                              <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{ 'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.contractId)" />
+                          </div> -->
+                      </div>
                     </div>
                 </div>
             </div>
@@ -343,22 +392,66 @@
                 </div>
             </div>
         </div>
+      </div>
+      </div>
     </div>
      <!--Danh sách tất cả hợp đồng có thể download.multi -->
      <div *ngIf="this.typeDisplay === 'downloadMany'">
-        <div class="item_contract" *ngFor="let item of contractDownloadList | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}; let index1 = index">
+      <div class="row container-fluid-bg">
+        <div class="row" style="padding-bottom: 20px;">
+          <div class="col-md-10" style="padding-top: 10px" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
+            <div class="input-line search">
+                <input #myInputRef [value]="filter_name" type="text" id="search"  class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+            </div>
+          </div>
+          
+          <div class="col-md-2 btn_search" >
+            <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
+              {{'btn.advance' | translate}}
+              <img src="../../assets/img/vector_advance.svg" class="input-img" />
+            </button>
+          </div>
+          
+          <div *ngIf="this.typeDisplay === 'downloadMany' && filter_status == 4" style="padding-top: 10px;">
+            <button class="col-md-1 btn_sign" (click)="downloadManyContract()">{{'contract.down'| translate}}</button>
+
+            <button class="col-md-1 btn_sign" (click)="cancelDownloadMany()">{{'cancel'| translate}}</button>
+          </div>
+        
+        </div>
+        
+        <div class="row list_header" *ngIf="pageTotal > 0">       
+          <div *ngIf="this.typeDisplay === 'downloadMany'" class="col-md-1" style="text-align: left;">
+            <input id="all" name="all" type="checkbox" (click)="toggleDownload(checkedAll)" [(ngModel)]="checkedAll" style="width: 20px; height: 20px; margin: -2px;"/>
+          </div>
+          
+          <div *ngIf="!(this.typeDisplay === 'downloadMany')" class="col-md-1"></div>
+          <div class="col-md-4" style="text-align: left !important;">{{'contract.process' | translate}}</div>
+          <div class="col-md-2">{{'report.status.contract' | translate}}
+            <!-- <img src="../../assets/img/sort.svg"/> -->
+          </div>
+          <div class="col-md-2">{{'create-date' | translate}}
+            <!-- <img src="../../assets/img/sort.svg"/> -->
+          </div>
+          <div class="col-md-2">{{'day.update' | translate}}
+            <!-- <img src="../../assets/img/sort.svg"/> -->
+          </div>
+        </div>
+        
+        <div style="min-height: 66vh">
+          <div class="item_contract" *ngFor="let item of contractDownloadList | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}; let index1 = index">
             <div *ngIf="filter_status == 4">
                 <div class="row">
                     <!--Cột 1-->
                     <div class="col-md-1 item_icon">
-                      <div style="display: flex;">
-                          <div class="col-md-1 calendar_create" style="display: flex;">
+                      <div style="display: flex; align-items: center;">
+                          <!-- <div class="col-md-1 calendar_create" style="display: flex;"> -->
                             <div>
                               <input style="width: 20px; height: 20px;" id="all" name="all" type="checkbox" (click)="toggleOneDownload(item, index1)" [(ngModel)]="item.checked" (change)="selectContract(item)"/>
                             </div>
-                          </div>
+                          <!-- </div> -->
                           <div class="col-md-1">
-                            <div style="margin-left: 30px;">
+                            <div style="margin-left: 20px;">
                               <img src="../../assets/img/frame_contract.svg">
                             </div>
                           </div>
@@ -457,23 +550,72 @@
                 </div>
             </div>
         </div>
+        </div>
+      </div>
      </div>
 
     <!--Danh sách tất cả hợp đồng có thể sign.multi -->
     <div *ngIf="this.typeDisplay === 'signMany'">
-        <div class="item_contract" *ngFor="let item of contractsSignMany; let index1 = index">
+      <div class="row container-fluid-bg">
+        <div class="row" style="padding-bottom: 20px;">
+          <div class="col-md-10" style="padding-top: 10px" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
+            <div class="input-line search">
+                <input #myInputRef [value]="filter_name" type="text" id="search"  class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+            </div>
+          </div>
+          
+          <div class="col-md-2 btn_search" >
+            <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
+              {{'btn.advance' | translate}}
+              <img src="../../assets/img/vector_advance.svg" class="input-img" />
+            </button>
+          </div>
+          
+          <div *ngIf="this.typeDisplay === 'signMany' && filter_status == 1" style="padding-top: 10px;">
+            <button class="col-md-1 btn_sign" (click)="signManyContract()">{{'contract.sign'| translate}}</button>
+
+            <button class="col-md-1 btn_sign" (click)="cancelSignMany()">{{'cancel'| translate}}</button>
+          </div>
+        
+        </div>
+        
+        <div class="row list_header" *ngIf="pageTotal > 0"> 
+          <div
+            *ngIf="this.typeDisplay === 'signMany' && this.contractsSignMany?.length == 50"
+            style="text-align: left; color: #027e21; font-size: 14px; margin-left: 9px; font-weight: bold;">
+            {{'multi.sign.warning' | translate}}
+          </div>      
+          <div *ngIf="this.typeDisplay === 'signMany'" class="col-md-1" style="text-align: left;">
+            <input id="all" name="all" type="checkbox" (click)="toggle()" style="width: 20px; height: 20px; margin: -2px;"/>
+          </div>
+          
+          <div *ngIf="!(this.typeDisplay === 'signMany' )" class="col-md-1"></div>
+          <div class="col-md-4" style="text-align: left !important;">{{'contract.process' | translate}}</div>
+          <div class="col-md-2">{{'report.status.contract' | translate}}
+            <!-- <img src="../../assets/img/sort.svg"/> -->
+          </div>
+          <div class="col-md-2">{{'create-date' | translate}}
+            <!-- <img src="../../assets/img/sort.svg"/> -->
+          </div>
+          <div class="col-md-2">{{'day.update' | translate}}
+            <!-- <img src="../../assets/img/sort.svg"/> -->
+          </div>
+        </div>
+        
+        <div style="min-height: 66vh">
+          <div class="item_contract" *ngFor="let item of contractsSignMany; let index1 = index">
             <div *ngIf="filter_status == 1 || filter_status == 4">
                 <div class="row">
                     <!--Cột 1-->
                     <div class="col-md-1 item_icon" *ngIf="item.status == 1 && (item.role == 3 || item.role == 4) && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
-                      <div style="display: flex;">
-                          <div class="col-md-1 calendar_create" style="display: flex;">
+                      <div style="display: flex; align-items: center;">
+                          <!-- <div class="col-md-1 calendar_create" style="display: flex;"> -->
                             <div>
                               <input style="width: 20px; height: 20px;" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" />
                             </div>
-                          </div>
+                          <!-- </div> -->
                           <div class="col-md-1">
-                            <div style="margin-left: 30px;">
+                            <div style="margin-left: 20px;">
                               <img src="../../assets/img/frame_contract.svg">
                             </div>
                           </div>
@@ -646,22 +788,66 @@
                     </div>
                 </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
     <div *ngIf="this.typeDisplay === 'viewMany'">
-        <div class="item_contract" *ngFor="let item of contractViewList | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}; let index1 = index">
+      <div class="row container-fluid-bg">
+        <div class="row" style="padding-bottom: 20px;">
+          <div class="col-md-10" style="padding-top: 10px" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
+            <div class="input-line search">
+                <input #myInputRef [value]="filter_name" type="text" id="search"  class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+            </div>
+          </div>
+          
+          <div class="col-md-2 btn_search" >
+            <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
+              {{'btn.advance' | translate}}
+              <img src="../../assets/img/vector_advance.svg" class="input-img" />
+            </button>
+          </div>
+          
+          <div *ngIf="this.typeDisplay === 'viewMany' && filter_status == 1" style="padding-top: 10px;">
+            <button class="col-md-1 btn_consider" (click)="viewManyContract()">{{'contract.view'| translate}}</button>
+
+            <button class="col-md-1 btn_consider" (click)="cancelViewMany()">{{'cancel'| translate}}</button>
+          </div>
+  
+        </div>
+        
+        <div class="row list_header" *ngIf="pageTotal > 0"> 
+          <div *ngIf="this.typeDisplay === 'viewMany'" class="col-md-1" style="text-align: left;">
+            <input id="allView" name="allView" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleView(checkedAll)" style="width: 20px; height: 20px;" />
+          </div>
+          
+          <div *ngIf="!(this.typeDisplay === 'viewMany' )" class="col-md-1"></div>
+          <div class="col-md-4" style="text-align: left !important;">{{'contract.process' | translate}}</div>
+          <div class="col-md-2">{{'report.status.contract' | translate}}
+            <!-- <img src="../../assets/img/sort.svg"/> -->
+          </div>
+          <div class="col-md-2">{{'create-date' | translate}}
+            <!-- <img src="../../assets/img/sort.svg"/> -->
+          </div>
+          <div class="col-md-2">{{'day.update' | translate}}
+            <!-- <img src="../../assets/img/sort.svg"/> -->
+          </div>
+        </div>
+        
+        <div style="min-height: 66vh">
+          <div class="item_contract" *ngFor="let item of contractViewList | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}; let index1 = index">
             <div *ngIf="filter_status == 1">
                 <div class="row">
                     <!--Cột 1-->
                     <div class="col-md-1 item_icon" *ngIf="this.typeDisplay == 'viewMany'">
-                      <div style="display: flex;">
-                          <div class="col-md-1 calendar_create" style="display: flex;">
+                      <div style="display: flex; align-items: center;">
+                          <!-- <div class="col-md-1 calendar_create" style="display: flex;"> -->
                             <div>
                               <input style="width: 20px; height: 20px;" id="allView" name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneView(item, index1)" />
                             </div>
-                          </div>
+                          <!-- </div> -->
                           <div class="col-md-1">
-                            <div style="margin-left: 30px;">
+                            <div style="margin-left: 20px;">
                               <img src="../../assets/img/frame_contract.svg">
                             </div>
                           </div>
@@ -773,6 +959,8 @@
                 </div>
             </div>
         </div>
+        </div>
+      </div>
     </div>
 
     <div *ngIf="pageTotal == 0 && !(this.typeDisplay == 'signMany' || this.typeDisplay == 'viewMany')" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 90px">
@@ -798,7 +986,7 @@
         <div class="footer_page_number">{{'chart.number' | translate}}: {{getPageStartEnd()}} / {{pageTotal}}</div>
     </div>
 
-</div>
+<!-- </div> -->
 
 
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
@@ -806,37 +994,17 @@
 </ngx-spinner>
 
 
-<div class="skeleton-sign position-absolute opacity-0">
+<!-- <div class="skeleton-sign position-absolute opacity-0">
     <div class="signature-container" id="export-html" style="width: 155px;min-height: 80px; display: flex; font-size: 9px">
-      <!-- <img style="width: 30px" src="assets/img/tick_signature.svg" alt="duongdt.vn">
-      <div class="signature-content"
-          style="color: #6cc449; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
-        <div style="z-index: 2;text-align: left;">{{'sign_by_token' | translate}}</div>
-        <div style="z-index: 2;text-align: left;">{{'sign.by' | translate}}: {{nameCompany}}</div>
-        <div style="z-index: 2;text-align: left;">{{'sign.day' | translate}}: {{isDateTime | date: 'dd/MM/YYYY HH:mm:ss'}}</div>
-      </div> -->
     </div>
 
     <div class="signature-container" id="export-html-image" style="width: 250px;min-height: 80px; display: flex; font-size: 9px;max-width: 300px">
         <div style="position: relative;">
             <img [src]="this.srcMark" style="width: 70%; height: 100%;z-index: 1; object-fit: contain">
         </div>
-        <!-- <div class="signature-content" style="color: #6cc449; background-size: 40px 40px; display: flex; justify-content: space-between;align-items: center; width: 100%;">
-            <div style="width: 165px;">
-                <div style="z-index: 2;text-align: left;">{{'user.sign-type' | translate}}: {{ 'sign_by_token'| translate}}</div>
-                <div style="z-index: 2;text-align: left;">{{'sign.by' | translate}}: {{nameCompany}}</div>
-                <div style="z-index: 2;text-align: left;">{{'sign.day' | translate}}: {{isDateTime | date: 'dd/MM/YYYY HH:mm:ss'}}</div>
-            </div>
-        </div> -->
     </div>
 
     <div id="export-html-hsm"  style="min-height: 80px;display: flex; font-size: 9px">
-      <!-- <img style="width: 30px"  src="assets/img/tick_signature.svg" alt="duongdt.vn">
-      <div style="color: #6cc449; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
-        <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'sign_by_hsm' | translate}}</span>
-        <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'tax_code' | translate}}: {{nameCompany}}</span>
-        <span style="text-align: left;white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">{{'sign.day' | translate}}: {{isDateTime | date: 'dd/MM/YYYY HH:mm:ss'}}</span>
-      </div> -->
       <div></div>
     </div>
 
@@ -844,13 +1012,6 @@
         <div style="position: relative;">
             <img [src]="this.srcMark" style="width: 70%; height: 100%;z-index: 1;object-fit: contain;">
         </div>
-        <!-- <div class="signature-content" style="color: #6cc449; background-size: 40px 40px; display: flex; justify-content: space-between;align-items: center; width: 100%;">
-            <div style="width: 165px;">
-                <div style="z-index: 2;text-align: left;">{{'user.sign-type' | translate}}: {{'sign_by_hsm' | translate}}</div>
-                <div style="z-index: 2;text-align: left;">{{'tax_code' | translate}}: {{nameCompany}}</div>
-                <div style="z-index: 2;text-align: left;">{{'sign.day' | translate}}: {{isDateTime | date: 'dd/MM/YYYY HH:mm:ss'}}</div>
-            </div>
-        </div> -->
     </div>
 
     <div class="signature-container" id="export-html-cert" style="min-height: 80px;display: flex; font-size: 9px">
@@ -868,13 +1029,5 @@
       <div style="position: relative;">
           <img [src]='this.srcMark' style="width: 70%; height: 100%;z-index: 1; object-fit: contain">
       </div>
-      <!-- <div class="signature-content" style="color: #6cc449; background-size: 40px 40px; display: flex; justify-content: space-between;align-items: center; width: 100%;">
-          <div style="width: 165px;">
-              <div style="z-index: 2;text-align: left;">{{'user.sign-type' | translate}}: {{'sign_by_cert' | translate}}</div>
-              <div style="z-index: 2;text-align: left;">{{'sign.by' | translate}}: {{nameCompany}}</div>
-              <div style="z-index: 2;text-align: left;">{{'tax_code' | translate}}: {{cardId}}</div>
-              <div style="z-index: 2;text-align: left;">{{'sign.day' | translate}}: {{isDateTime | date: 'dd/MM/YYYY HH:mm:ss'}}</div>
-          </div>
-      </div> -->
     </div>
-</div>
+</div> -->
