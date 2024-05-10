@@ -479,6 +479,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       }
     })
+    // xoa fields khi chuyen sang loai ky ko support gan nhieu o ky
+    dataDetermine.forEach((data: any) => {
+      dataContractUserSign.forEach((element: any) => {
+        if (element.recipient_id == data.id ) {
+          if (dataContractUserSign.filter((item: any) => element.sign_unit == 'chu_ky_so' &&  ![2,4,6].includes(data?.sign_type[0]?.id))?.length > 1) {
+            element.isSupportMultiSignatureBox = false;
+          } 
+        }
+      })
+    })
+    // xoa fields khi chuyen sang loai ky ko support gan nhieu o ky
     let isContractSign: any[] = [];
     if(!this.datas.isDeleteField){
       for (const d of dataContractUserSign) {
@@ -487,7 +498,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             ((d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && d.recipient_id == data.id) ||
             ((d.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && d.recipient_id == data.id) ||
             (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && d.recipient_id == data.id)) && 
-            this.datas.isUploadNewFile == false) {
+             this.datas.isUploadNewFile == false) {
             isContractSign.push(d); // mảng get dữ liệu không bị thay đổi
           }
         }
@@ -503,8 +514,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       ((d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && d.recipient_id == data.id) ||
       ((d.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && d.recipient_id == data.id) ||
       (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && d.recipient_id == data.id)) 
-    )))
-
+    )) 
+    || dataDetermine.some((data: any) => d.sign_unit == 'chu_ky_so' && d.isSupportMultiSignatureBox == false && d.recipient_id == data.id)
+    )
     // xoa nhung du lieu doi tuong bi thay doi
     if (dataDiffirent.length > 0) {      
       this.datas.contract_user_sign.forEach((res: any) => {
@@ -513,11 +525,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           * begin xóa đối tượng ký đã bị thay đổi dữ liệu
           */
           res.sign_config.forEach((element: any) => {
-            if (dataDiffirent.some((p: any) => p.id == element.id && p.recipient_id == element.recipient_id && p.id_have_data == element.id_have_data)) {
+            if (dataDiffirent.some((p: any) => p.id == element.id && p.recipient_id == element.recipient_id && p.id_have_data && p.id_have_data == element.id_have_data)) {
               if (dataDetermine.some((p: any) => p.id == element.recipient_id)) {
                 this.removeDataSignChange(element.id_have_data);
               }
             }
+            res.sign_config = []
           })
           /*
           end
