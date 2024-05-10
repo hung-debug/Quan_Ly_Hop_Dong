@@ -16,8 +16,8 @@ pipeline {
                                def entries = changeLogSets[i].items
                                for (int j = 0; j < entries.length; j++) {
                                    def entry = entries[j]
-                                   echo "${entry.msg} \n"
-                                   message += "${entry.msg} \n"
+                                   echo "${entry.msg} \\n"
+                                   message += "${entry.msg} \\n"
                                }
                            }
 
