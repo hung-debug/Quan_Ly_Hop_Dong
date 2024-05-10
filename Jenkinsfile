@@ -19,16 +19,15 @@ pipeline {
                                    message += "\\n- ${entry.msg}"
                                }
                            }
-
-                           sh """
-                              curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["test_econtract"],"announcement": "${message}"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement
-                           """
                     }
               }
         }
         stage("Build"){
             steps {
                 echo '----------------------Start build----------------------'
+                sh """
+                    curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["test_econtract"],"announcement": "${message}"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement
+                """
                 sh 'pwd'
                 sh 'ls -l'
                 sh 'test -d "builds/" && echo "Exist folder builds" || mkdir builds'
