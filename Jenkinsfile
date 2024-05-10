@@ -1,4 +1,4 @@
-def pathInServer = "/u01/app/test"
+def pathInServer = "/u01/app"
 pipeline {
     agent any
      environment {
@@ -57,7 +57,7 @@ pipeline {
                     echo "-------------------Run backup.sh done-------------------"
 
                     echo "-------------------Start push file to server-------------------"
-                    sshPut remote: remote, from: 'builds/', into: "${pathInServer}/"
+                    sshPut remote: remote, from: 'builds/', into: "${pathInServer}/test/"
                     echo "-------------------Push file to server done-------------------"
 
                     echo "-------------------Deploy done-------------------"
