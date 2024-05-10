@@ -1,5 +1,6 @@
 def pathInServer = "/u01/app"
 def message = "*Start build eContract FE dev*"
+def groupEChatWorkId = "BvAhbsAPysvyv3yK2"
 pipeline {
     agent any
      environment {
@@ -26,7 +27,7 @@ pipeline {
             steps {
                 echo '----------------------Start build----------------------'
                 sh """
-                   curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"receivers": [{"email": "quyen.nguyenhuu@mobifone.vn"},{"email": "dat.trinhtien10@mobifone.vn"},{"email": "duong.nguyenhuu@mobifone.vn"},{"email": "thao.phamthi10@mobifone.vn"},{"email": "ha.nguyendo10@mobifone.vn"},{"email": "tu.lehuuanh10@mobifone.vn"},{"email": "truong.vuongtat@mobifone.vn"},{"email": "hong.phamthu@mobifone.vn"},{"email": "vu.vuongtat@mobifone.vn"},{"email": "anh.nguyenkim@mobifone.vn"},{"email": "anh.vunam@mobifone.vn"},{"email": "ha.danghoang@mobifone.vn"},{"email": "khang.buithe10@mobifone.vn"},{"email": "nhu.nguyenthi@mobifone.vn"}],"announcement": "${message}"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement
+                   curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["${groupEChatWorkId}"],"announcement": "${message}"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement
                 """
                 sh 'pwd'
                 sh 'ls -l'
@@ -78,10 +79,10 @@ pipeline {
                     sshPut remote: remote, from: 'builds/eContract-web/.', into: "${pathInServer}/"
                     echo "-------------------Push file to server done-------------------"
 
-                    sh '''
-                      curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"receivers": [{"email": "quyen.nguyenhuu@mobifone.vn"},{"email": "dat.trinhtien10@mobifone.vn"},{"email": "duong.nguyenhuu@mobifone.vn"},{"email": "thao.phamthi10@mobifone.vn"},{"email": "ha.nguyendo10@mobifone.vn"},{"email": "tu.lehuuanh10@mobifone.vn"},{"email": "truong.vuongtat@mobifone.vn"},{"email": "hong.phamthu@mobifone.vn"},{"email": "vu.vuongtat@mobifone.vn"},{"email": "anh.nguyenkim@mobifone.vn"},{"email": "anh.vunam@mobifone.vn"},{"email": "ha.danghoang@mobifone.vn"},{"email": "khang.buithe10@mobifone.vn"},{"email": "nhu.nguyenthi@mobifone.vn"}],"announcement": "Build eContract FE dev done"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement
+                    sh """
+                      curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["${groupEChatWorkId}"],"announcement": "Build eContract FE dev done"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement
 
-                    '''
+                    """
                     echo "-------------------Deploy done-------------------"
                 }
             }
