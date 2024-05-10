@@ -395,6 +395,17 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       }
     })
 
+    // xoa fields khi chuyen sang loai ky ko support gan nhieu o ky
+    dataDetermine.forEach((data: any) => {
+      dataContractUserSign.forEach((element: any) => {
+        if (element.recipient_id == data.id ) {
+          if (dataContractUserSign.filter((item: any) => element.sign_unit == 'chu_ky_so' &&  ![2,4,6].includes(data?.sign_type[0]?.id))?.length > 1) {
+            element.isSupportMultiSignatureBox = false;
+          } 
+        }
+      })
+    })
+    // xoa fields khi chuyen sang loai ky ko support gan nhieu o ky
 
     // Get data have change 1 in 3 value name, email, type sign
     let dataDiffirent: any[] = [];
@@ -404,7 +415,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id)) ||
           (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id)) ||
           (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký"))))
-        ));
+        )
+        || dataDetermine.some((data: any) => val.sign_unit == 'chu_ky_so' && val.isSupportMultiSignatureBox == false && val.recipient_id == data.id)
+      );
     }
 
     // Get data no change of signature object
@@ -428,11 +441,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           * begin xóa đối tượng ký đã bị thay đổi dữ liệu
           */
           res.sign_config.forEach((element: any) => {
-            if (dataDiffirent.some((p: any) => p.id == element.id && p.recipient_id == element.recipient_id && p.id_have_data == element.id_have_data)) {
+            if (dataDiffirent.some((p: any) => p.id == element.id && p.recipient_id == element.recipient_id && p.id_have_data && p.id_have_data == element.id_have_data)) {
               if (dataDetermine.some((p: any) => p.id == element.recipient_id)) {
                 this.removeDataSignChange(element.id_have_data);
               }
             }
+            res.sign_config = []
           })
           /*
           end

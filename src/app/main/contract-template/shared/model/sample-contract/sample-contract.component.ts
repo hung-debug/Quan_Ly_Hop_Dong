@@ -419,6 +419,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     })
 
+    // xoa fields khi chuyen sang loai ky ko support gan nhieu o ky
+    dataDetermine.forEach((data: any) => {
+      dataContractUserSign.forEach((element: any) => {
+        if (element.recipient_id == data.id ) {
+          if (dataContractUserSign.filter((item: any) => element.sign_unit == 'chu_ky_so' &&  ![2,4,6].includes(data?.sign_type[0]?.id))?.length > 1) {
+            element.isSupportMultiSignatureBox = false;
+          } 
+        }
+      })
+    })
+    // xoa fields khi chuyen sang loai ky ko support gan nhieu o ky
+
     // loc du lieu khong trung nhau
     // lay du lieu trung ten, trung email (doi voi ky so + ky text da gan nguoi xu ly) + trung ten (doi voi ky text chua co nguoi xu ly)
     // (val.recipient_id as any) == (data.id as any) &&
@@ -442,7 +454,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         (val.sign_unit == 'so_tai_lieu') ||
         (val.sign_unit == "chu_ky_so" && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8)) && val.recipient_id == data.id)
         // || ((val.recipient ? val.recipient_id as any : val.email as any) == (val.recipient ? data.id as any : data.email as any))
-      ));
+      )
+      || dataDetermine.some((data: any) => val.sign_unit == 'chu_ky_so' && val.isSupportMultiSignatureBox == false && val.recipient_id == data.id)
+    );
     }
     // xoa nhung du lieu doi tuong bi thay doi
     if(!this.datas.isDeleteField){
@@ -454,9 +468,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             */
             res.sign_config.forEach((element: any) => {
               //chi remove neu da duoc gan nguoi xu ly
-              if ((element.id_have_data && dataDiffirent.some((p: any) => p.id_have_data == element.id_have_data))) {
+              if ((element.id_have_data && dataDiffirent.some((p: any) => p.id_have_data && p.id_have_data == element.id_have_data))) {
                 this.removeDataSignChange(element.id_have_data);
-              } 
+              }
+              res.sign_config = [] 
             })
             /*
             end
