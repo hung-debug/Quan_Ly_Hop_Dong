@@ -399,9 +399,11 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     dataDetermine.forEach((data: any) => {
       dataContractUserSign.forEach((element: any) => {
         if (element.recipient_id == data.id ) {
-          if (dataContractUserSign.filter((item: any) => element.sign_unit == 'chu_ky_so' &&  ![2,4,6].includes(data?.sign_type[0]?.id))?.length > 1) {
+          if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id && item.sign_unit == 'chu_ky_so' &&  ![2,4,6].includes(data?.sign_type[0]?.id))?.length > 1) {
             element.isSupportMultiSignatureBox = false;
-          } 
+          } else {
+            element.isSupportMultiSignatureBox = true;
+          }
         }
       })
     })
@@ -440,13 +442,17 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           /*
           * begin xóa đối tượng ký đã bị thay đổi dữ liệu
           */
-          res.sign_config.forEach((element: any) => {
+          res.sign_config.forEach((element: any, index: number) => {
             if (dataDiffirent.some((p: any) => p.id == element.id && p.recipient_id == element.recipient_id && p.id_have_data && p.id_have_data == element.id_have_data)) {
               if (dataDetermine.some((p: any) => p.id == element.recipient_id)) {
                 this.removeDataSignChange(element.id_have_data);
+                delete res.sign_config[index]
+              } 
+            } else if (dataDiffirent.some((p: any) => p.id == element.id && p.recipient_id == element.recipient_id)) {
+              if (dataDetermine.some((p: any) => p.id == element.recipient_id)) {
+                delete res.sign_config[index]
               }
             }
-            res.sign_config = []
           })
           /*
           end
