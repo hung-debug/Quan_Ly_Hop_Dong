@@ -1,4 +1,6 @@
 def pathInServer = "/u01/app"
+def message = "*Start build eContract FE dev*"
+def groupEChatWorkId = "BvAhbsAPysvyv3yK2"
 pipeline {
     agent any
      environment {
@@ -7,13 +9,26 @@ pipeline {
      }
     tools {nodejs "node_14_21_3"}
     stages {
+        stage("Get all commit") {
+              steps {
+                    script {
+                           def changeLogSets = currentBuild.changeSets
+                           for (int i = 0; i < changeLogSets.size(); i++) {
+                               def entries = changeLogSets[i].items
+                               for (int j = 0; j < entries.length; j++) {
+                                   def entry = entries[j]
+                                   message += "\\n- ${entry.msg}"
+                               }
+                           }
+                    }
+              }
+        }
         stage("Build"){
             steps {
                 echo '----------------------Start build----------------------'
-                sh '''
-                  curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"receivers": [{"email": "quyen.nguyenhuu@mobifone.vn"},{"email": "dat.trinhtien10@mobifone.vn"},{"email": "duong.nguyenhuu@mobifone.vn"},{"email": "thao.phamthi10@mobifone.vn"},{"email": "ha.nguyendo10@mobifone.vn"},{"email": "tu.lehuuanh10@mobifone.vn"},{"email": "truong.vuongtat@mobifone.vn"},{"email": "hong.phamthu@mobifone.vn"},{"email": "vu.vuongtat@mobifone.vn"},{"email": "anh.nguyenkim@mobifone.vn"},{"email": "anh.vunam@mobifone.vn"},{"email": "ha.danghoang@mobifone.vn"},{"email": "khang.buithe10@mobifone.vn"},{"email": "dat.trinhtien10@mobifone.vn"},{"email": "dat.trinhtien10@mobifone.vn"},{"email": "dat.trinhtien10@mobifone.vn"}],"announcement": "Start build eContract FE dev"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement
-
-                '''
+                sh """
+                   curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["${groupEChatWorkId}"],"announcement": "${message}"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement/group
+                """
                 sh 'pwd'
                 sh 'ls -l'
                 sh 'test -d "builds/" && echo "Exist folder builds" || mkdir builds'
@@ -64,10 +79,10 @@ pipeline {
                     sshPut remote: remote, from: 'builds/eContract-web/.', into: "${pathInServer}/"
                     echo "-------------------Push file to server done-------------------"
 
-                    sh '''
-                      curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"receivers": [{"email": "quyen.nguyenhuu@mobifone.vn"},{"email": "dat.trinhtien10@mobifone.vn"},{"email": "duong.nguyenhuu@mobifone.vn"},{"email": "thao.phamthi10@mobifone.vn"},{"email": "ha.nguyendo10@mobifone.vn"},{"email": "tu.lehuuanh10@mobifone.vn"},{"email": "truong.vuongtat@mobifone.vn"},{"email": "hong.phamthu@mobifone.vn"},{"email": "vu.vuongtat@mobifone.vn"},{"email": "anh.nguyenkim@mobifone.vn"},{"email": "anh.vunam@mobifone.vn"},{"email": "ha.danghoang@mobifone.vn"},{"email": "khang.buithe10@mobifone.vn"},{"email": "dat.trinhtien10@mobifone.vn"},{"email": "dat.trinhtien10@mobifone.vn"},{"email": "dat.trinhtien10@mobifone.vn"}],"announcement": "Build eContract FE dev done"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement
+                    sh """
+                      curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["${groupEChatWorkId}"],"announcement": "Hoàn thành deploy Front-end eContract Dev. Truy cập link https://econtractdev.mobifone.ai để test"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement/group
 
-                    '''
+                    """
                     echo "-------------------Deploy done-------------------"
                 }
             }
