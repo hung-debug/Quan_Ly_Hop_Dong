@@ -91,6 +91,31 @@
       }
     }
 
+    .sidebar-footer-custom {
+      height: 37px;
+      padding-left: 8px;
+      background-color: #F3F6FA;
+      box-shadow: none !important;
+    }
+
+    .sidebar-footer-logo {
+      margin: 10px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .sidebar-footer-version {
+      display: flex;
+      align-items: center;
+      vertical-align: middle;
+      color: #A8B5CE;
+      span {
+        font-size: 13px;
+        margin-top: 4px;
+      }
+    }
+
     .sidebar-profile {
       padding: 20px;
       overflow: hidden;
