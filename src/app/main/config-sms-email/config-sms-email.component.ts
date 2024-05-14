@@ -432,6 +432,7 @@ export class ConfigSmsEmailComponent implements OnInit {
       this.ConfigEmailServerForm?.get('passwordMailServer')?.disable();    
       this.ConfigEmailServerForm?.get('hostMailServer')?.disable();
       this.ConfigEmailServerForm?.get('portMailServer')?.disable();
+      this.ConfigEmailServerForm.controls['aliasMailServer'].setValue(this.aliasMailServer);
       this.ConfigEmailServerForm.controls['passwordMailServer'].setValue("");
       this.ConfigEmailServerForm.controls['hostMailServer'].setValue("");
       this.ConfigEmailServerForm.controls['portMailServer'].setValue("");
@@ -466,7 +467,7 @@ export class ConfigSmsEmailComponent implements OnInit {
   ValidConfigEmailServer(){
     this.ConfigEmailServerForm.valueChanges.subscribe(value => {
       this.isDisableConfigEmailServer = false;
-      if(this.listConfigEmailServer.userNameMailServer == value.userNameMailServer && this.listConfigEmailServer.aliasMailServer == value.aliasMailServer && this.listConfigEmailServer.passwordMailServer == value.passwordMailServer && this.listConfigEmailServer.hostMailServer == value.hostMailServer && this.listConfigEmailServer.portMailServer == value.portMailServer ){
+      if(this.listConfigEmailServer.userNameMailServer == value.userNameMailServer && this.listConfigEmailServer.aliasMailServer == value.aliasMailServer && this.listConfigEmailServer.passwordMailServer == value.passwordMailServer && this.listConfigEmailServer.hostMailServer == value.hostMailServer && this.listConfigEmailServer.portMailServer == value.portMailServer && this.listConfigEmailServer.tlsMailServer == value.tlsMailServer){
         this.isDisable = true;
       }
     })
