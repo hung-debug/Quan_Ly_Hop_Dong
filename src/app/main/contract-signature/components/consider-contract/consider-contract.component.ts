@@ -1637,8 +1637,13 @@ export class ConsiderContractComponent
                     let isInRecipient = false;
                     const participants = this.datas?.is_data_contract?.participants;
                     if ((this.recipient.sign_type.some((item: any) => item.id == 7 ))) {
-                      this.signBCY(this.pdfSrc, this.recipient.fields[0].id)
-                      return
+                      let checkCurrentSigning: any = await this.checkCurrentSigningCall()
+                      if (!checkCurrentSigning) {
+                        return
+                      } else if (checkCurrentSigning) {
+                        this.signBCY(this.pdfSrc, this.recipient.fields[0].id)
+                        return
+                      }
                     }
 
                     for (const participant of participants) {
@@ -2048,339 +2053,16 @@ export class ConsiderContractComponent
   font_size: any;
   currentBoxSignType: any
   async signDigitalDocument() {
-    let currentSigningStatus: any = null;
-    try {
-      currentSigningStatus = await this.contractService.checkCurrentSigning(this.recipientId).toPromise()
-    } catch (error) {
-      this.spinner.hide()
-      return this.toastService.showErrorHTMLWithTimeout("Lỗi ký số. Vui lòng thử lại sau ít phút", "", 3000)
-    }
-
-    if (!currentSigningStatus.success) {
-      if (currentSigningStatus.message) {
-        this.spinner.hide()
-        return this.toastService.showErrorHTMLWithTimeout(currentSigningStatus.message, "", 3000)
-      } else {
-        this.spinner.hide()
-        return this.toastService.showErrorHTMLWithTimeout("Lỗi ký số. Vui lòng thử lại sau ít phút", "", 3000)
-      }
-    } else if (currentSigningStatus.success) {
-      let typeSignDigital = this.typeSignDigital;
-      
-      //= 2 => Ky usb token
-      if (typeSignDigital == 2) {
-        if (this.signCertDigital) {
-          for (const signUpdate of this.isDataObjectSignature) {
-            if (signUpdate && (signUpdate.type == 1 || signUpdate.type == 3 || signUpdate.type == 4 || signUpdate.type == 5) && [3, 4].includes(this.datas.roleContractReceived) &&
-              signUpdate?.recipient?.email === this.currentUser.email && signUpdate?.recipient?.role === this.datas?.roleContractReceived) {
-              let fileC: any
-              try {
-                fileC = await this.contractService.getFileContractPromise(
-                  this.idContract
-                );
-              } catch (error) {
-                return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
-              }
-              const pdfC2 = fileC.find((p: any) => p.type == 2);
-              const pdfC1 = fileC.find((p: any) => p.type == 1);
-              if (pdfC2) {
-                fileC = pdfC2.path;
-              } else if (pdfC1) {
-                fileC = pdfC1.path;
-              } else {
-                return;
-              }
-              let signI = null;
-  
-              if (this.usbTokenVersion == 1)
-                this.prepareInfoSignUsbTokenV1(signUpdate.page);
-              else if (this.usbTokenVersion == 2)
-                this.prepareInfoSignUsbTokenV2(signUpdate.page);
-  
-              if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
-                let imageRender = null;
-                if (this.type == 4) {
-                  this.textSign = this.contractNoValueSign
-                } else {
-                  this.textSign = signUpdate.valueSign
-                }
-                this.width = signUpdate.width;
-  
-                await of(null).pipe(delay(150)).toPromise();
-                imageRender = <HTMLElement>(document.getElementById('text-sign'));
-  
-                this.font = signUpdate.font;
-                this.font_size = signUpdate.font_size;
-  
-                this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
-  
-                if (this.usbTokenVersion == 1) {
-                  signUpdate.signDigitalY = signUpdate.signDigitalY - signUpdate.page - 5;
-                  signUpdate.signDigitalWidth = signUpdate.signDigitalX + imageRender.offsetWidth;
-                  signUpdate.signDigitalHeight = signUpdate.signDigitalY + imageRender.offsetHeight;
-                } else if (this.usbTokenVersion == 2) {
-                  signUpdate.signDigitalY = signUpdate.signDigitalY - signUpdate.page - 5;
-                  signUpdate.signDigitalWidth = imageRender.offsetWidth;
-                  signUpdate.signDigitalHeight = imageRender.offsetHeight;
-                }
-  
-                await of(null).pipe(delay(120)).toPromise();
-  
-                if (imageRender) {
-                  const textSignB = await domtoimage.toPng(imageRender);
-                  signI = this.textSignBase64Gen = textSignB.split(',')[1];
-                }
-              } else if (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) {
-                //lấy ảnh chữ ký usb token
-                let imageRender: any = '';
-  
-                try {
-                  this.isDateTime = await this.timeService.getRealTime().toPromise();
-                } catch(err) {
-                  this.isDateTime = new Date();
-                }
-  
-                if(!this.isDateTime) this.isDateTime = new Date();
-  
-                if (this.usbTokenVersion == 1) {
-                  if (this.markImage) {
-                    await of(null).pipe(delay(150)).toPromise();
-                    imageRender = <HTMLElement>(document.getElementById('export-html-image'));
-                    // signUpdate.signDigitalWidth = signUpdate.signDigitalX + imageRender.offsetWidth;
-                  } else {
-                    // await of(null).pipe(delay(150)).toPromise();
-                    // imageRender = <HTMLElement>(document.getElementById('export-html'));
-                    imageRender = null
-                    signI = null
-                  }
-  
-                  if (imageRender) {
-                    try {
-                      if (signUpdate.type !== 3) {
-                        const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
-                        signI = textSignB.split(',')[1];
-                      } else {
-                        signI = this.srcMark.split(',')[1]
-                      }
-                    } catch (err) {
-  
-                    }
-                  }
-                  try {
-                    const getSignatureInfoTokenV1Data: any = await this.contractService.getSignatureInfoTokenV1(
-                      this.signCertDigital.Base64, signI
-                    ).toPromise()
-                    signI = getSignatureInfoTokenV1Data.data
-                  } catch (error) {
-                    this.spinner.hide()
-                    console.log(error);
-                  }
-                } else if (this.usbTokenVersion == 2) {
-                  if (this.markImage) {
-                    await of(null).pipe(delay(150)).toPromise();
-                    imageRender = <HTMLElement>(document.getElementById('export-html2-image'));
-                    signUpdate.signDigitalWidth = imageRender.offsetWidth;
-                  } else {
-                    // await of(null).pipe(delay(150)).toPromise();
-                    // imageRender = <HTMLElement>(document.getElementById('export-html2'));
-                    imageRender = null
-                    signI = null
-                  }
-  
-                  if (imageRender) {
-                    if (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) {
-                      signI = this.srcMark.split(',')[1]
-                    } else {
-                      const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
-                      signI = textSignB.split(',')[1];
-                    }
-                  }
-                }
-              }
-  
-              const signDigital = JSON.parse(JSON.stringify(signUpdate));
-              signDigital.Serial = this.signCertDigital.Serial;
-  
-              let base64String: any
-              try {
-                base64String = await this.contractService.getDataFileUrlPromise(fileC);
-              } catch (error) {
-                return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
-              }
-  
-              signDigital.valueSignBase64 = encode(base64String);
-  
-              if (this.usbTokenVersion == 2) {
-                try {
-                  await this.createEmptySignature(signUpdate, signDigital, signI);
-                } catch (err) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'Lỗi ký usb token ' + err,
-                    '',
-                    3000
-                  );
-                  return false;
-                }
-  
-                if (this.failUsbToken) {
-                  return false;
-                }
-  
-                const sign = await this.contractService.updateDigitalSignatured(
-                  signUpdate.id,
-                  this.base64Data
-                );
-                if (!sign.recipient_id) {
-                  this.spinner.hide()
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'Lỗi ký USB Token',
-                    '',
-                    3000
-                  );
-                  return false;
-                }
-              } else if (this.usbTokenVersion == 1) {
-                const dataSignMobi: any =
-                  await this.contractService.postSignDigitalMobi(
-                    signDigital,
-                    signI
-                  );
-  
-                if (!dataSignMobi.data.FileDataSigned) {
-                  this.spinner.hide()
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'Lỗi ký USB Token',
-                    '',
-                    3000
-                  );
-                  return false;
-                }
-                const sign = await this.contractService.updateDigitalSignatured(
-                  signUpdate.id,
-                  dataSignMobi.data.FileDataSigned
-                );
-  
-                if (!sign.recipient_id) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'Lỗi đẩy file sau khi ký usb token',
-                    '',
-                    3000
-                  );
-                  return false;
-                }
-              }
-            }
-          }
-          if (this.usbTokenVersion == 2) {
-            await this.signV2FixingProcess()
-          }
-          return true;
-        } else {
-          this.toastService.showErrorHTMLWithTimeout(
-            'Lỗi ký USB Token',
-            '',
-            3000
-          );
-          return false;
-        }
-      } else if (typeSignDigital == 3) {
-        const objSign = this.isDataObjectSignature.filter(
-          (signUpdate: any) =>
-            signUpdate &&
-            signUpdate.type == 3 &&
-            [3, 4].includes(this.datas.roleContractReceived) &&
-            signUpdate?.recipient?.email === this.currentUser.email &&
-            signUpdate?.recipient?.role === this.datas?.roleContractReceived
-        );
-        let fileC: any
-        try {
-          fileC = await this.contractService.getFileContractPromise(
-            this.idContract
-          );
-        } catch (error) {
-          return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
-        }
-        const pdfC2 = fileC.find((p: any) => p.type == 2);
-        const pdfC1 = fileC.find((p: any) => p.type == 1);
-        if (pdfC2) {
-          fileC = pdfC2.path;
-        } else if (pdfC1) {
-          fileC = pdfC1.path;
-        } else {
-          return;
-        }
-  
-        this.phonePKI = this.dataNetworkPKI.phone;
-        this.nameCompany = this.recipient.name;
-  
-        try {
-          this.isDateTime = await this.timeService.getRealTime().toPromise();
-        } catch(err) {
-          this.isDateTime = new Date();
-        }
-  
-        if(!this.isDateTime) this.isDateTime = new Date();
-        await of(null).pipe(delay(120)).toPromise();
-  
-        let imageRender = null;
-  
-        if (this.markImage) {
-          imageRender = <HTMLElement>(
-            document.getElementById('export-html-pki-image')
-          );
-        } else {
-          imageRender = <HTMLElement>document.getElementById('export-html-pki');
-        }
-  
-        let image_base64 = '';
-        if (imageRender) {
-          const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
-          image_base64 = this.textSignBase64Gen = textSignB.split(',')[1];
-        }
-  
-        if (fileC && objSign.length) {
-          const checkSign = await this.contractService.signPkiDigital(
-            this.dataNetworkPKI.phone,
-            this.dataNetworkPKI.networkCode.toLowerCase(),
-            this.recipientId,
-            this.datas.is_data_contract.name,
-            image_base64,
-            this.isTimestamp,
-            this.dataNetworkPKI.hidden_phone ? false : true,
-          );
-          // await this.signContractSimKPI();
-          if (!checkSign || (checkSign && !checkSign.success)) {
-            this.toastService.showErrorHTMLWithTimeout(
-              'Ký số không thành công!',
-              '',
-              3000
-            );
-            return false;
-          } else {
-            return true;
-          }
-        }
-      } else if (typeSignDigital == 4) {
-        // HSM SIGN
+    let typeSignDigital = this.typeSignDigital;
+    let checkCurrentSigningStatus: any = false;
+    checkCurrentSigningStatus = await this.checkCurrentSigningCall()
+    console.log("checkCurrentSigningStatus",checkCurrentSigningStatus);
+    if (!checkCurrentSigningStatus) return false;
+    if (typeSignDigital == 2) {
+      if (this.signCertDigital) {
         for (const signUpdate of this.isDataObjectSignature) {
-          if (
-            signUpdate &&
-            (signUpdate.type == 1 ||
-              signUpdate.type == 3 ||
-              signUpdate.type == 4 || signUpdate.type == 5) &&
-            [3, 4].includes(this.datas.roleContractReceived) &&
-            signUpdate?.recipient?.email === this.currentUser.email &&
-            signUpdate?.recipient?.role === this.datas?.roleContractReceived
-          ) {
-            const objSign = this.isDataObjectSignature.filter(
-              (signUpdate: any) =>
-                signUpdate &&
-                (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) &&
-                [3, 4].includes(this.datas.roleContractReceived) &&
-                signUpdate?.recipient?.email === this.currentUser.email &&
-                signUpdate?.recipient?.role === this.datas?.roleContractReceived
-            );
-  
+          if (signUpdate && (signUpdate.type == 1 || signUpdate.type == 3 || signUpdate.type == 4 || signUpdate.type == 5) && [3, 4].includes(this.datas.roleContractReceived) &&
+            signUpdate?.recipient?.email === this.currentUser.email && signUpdate?.recipient?.role === this.datas?.roleContractReceived) {
             let fileC: any
             try {
               fileC = await this.contractService.getFileContractPromise(
@@ -2389,7 +2071,6 @@ export class ConsiderContractComponent
             } catch (error) {
               return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
             }
-  
             const pdfC2 = fileC.find((p: any) => p.type == 2);
             const pdfC1 = fileC.find((p: any) => p.type == 1);
             if (pdfC2) {
@@ -2399,67 +2080,638 @@ export class ConsiderContractComponent
             } else {
               return;
             }
-  
             let signI = null;
-  
-            if (!this.mobile)
-              this.convertXForHsm(signUpdate.page);
-            let fieldHsm = {
-              id: signUpdate.id,
-              coordinate_x: signUpdate.signDigitalX ?? signUpdate.coordinate_x,
-              coordinate_y: signUpdate.coordinate_y,
-              width: signUpdate.width ,
-              height: signUpdate.height,
-              page: signUpdate.page,
-            };
-  
+
+            if (this.usbTokenVersion == 1)
+              this.prepareInfoSignUsbTokenV1(signUpdate.page);
+            else if (this.usbTokenVersion == 2)
+              this.prepareInfoSignUsbTokenV2(signUpdate.page);
+
             if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
+              let imageRender = null;
               if (this.type == 4) {
                 this.textSign = this.contractNoValueSign
               } else {
                 this.textSign = signUpdate.valueSign
               }
-  
+              this.width = signUpdate.width;
+
+              await of(null).pipe(delay(150)).toPromise();
+              imageRender = <HTMLElement>(document.getElementById('text-sign'));
+
               this.font = signUpdate.font;
               this.font_size = signUpdate.font_size;
-  
-              this.width = signUpdate.width;
-  
+
+              this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
+
+              if (this.usbTokenVersion == 1) {
+                signUpdate.signDigitalY = signUpdate.signDigitalY - signUpdate.page - 5;
+                signUpdate.signDigitalWidth = signUpdate.signDigitalX + imageRender.offsetWidth;
+                signUpdate.signDigitalHeight = signUpdate.signDigitalY + imageRender.offsetHeight;
+              } else if (this.usbTokenVersion == 2) {
+                signUpdate.signDigitalY = signUpdate.signDigitalY - signUpdate.page - 5;
+                signUpdate.signDigitalWidth = imageRender.offsetWidth;
+                signUpdate.signDigitalHeight = imageRender.offsetHeight;
+              }
+
               await of(null).pipe(delay(120)).toPromise();
-              const imageRender = <HTMLElement>(
-                document.getElementById('text-sign')
-              );
-  
+
               if (imageRender) {
                 const textSignB = await domtoimage.toPng(imageRender);
                 signI = this.textSignBase64Gen = textSignB.split(',')[1];
               }
             } else if (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) {
-  
+              //lấy ảnh chữ ký usb token
+              let imageRender: any = '';
+
               try {
                 this.isDateTime = await this.timeService.getRealTime().toPromise();
               } catch(err) {
                 this.isDateTime = new Date();
               }
+
               if(!this.isDateTime) this.isDateTime = new Date();
-              await of(null).pipe(delay(150)).toPromise();
-              let imageRender: HTMLElement | null = null;
-  
-              //render khi role là 4 (văn thư) hoặc role khác (người ký)
-              if (this.markImage) {
-                imageRender = <HTMLElement>(
-                  document.getElementById('export-html-hsm1-image')
-                );
-              } else {
-                imageRender = <HTMLElement>(
-                  document.getElementById('export-html-hsm1')
-                );
+
+              if (this.usbTokenVersion == 1) {
+                if (this.markImage) {
+                  await of(null).pipe(delay(150)).toPromise();
+                  imageRender = <HTMLElement>(document.getElementById('export-html-image'));
+                  // signUpdate.signDigitalWidth = signUpdate.signDigitalX + imageRender.offsetWidth;
+                } else {
+                  // await of(null).pipe(delay(150)).toPromise();
+                  // imageRender = <HTMLElement>(document.getElementById('export-html'));
+                  imageRender = null
+                  signI = null
+                }
+
+                if (imageRender) {
+                  try {
+                    if (signUpdate.type !== 3) {
+                      const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
+                      signI = textSignB.split(',')[1];
+                    } else {
+                      signI = this.srcMark.split(',')[1]
+                    }
+                  } catch (err) {
+
+                  }
+                }
+                try {
+                  const getSignatureInfoTokenV1Data: any = await this.contractService.getSignatureInfoTokenV1(
+                    this.signCertDigital.Base64, signI
+                  ).toPromise()
+                  signI = getSignatureInfoTokenV1Data.data
+                } catch (error) {
+                  this.spinner.hide()
+                  console.log(error);
+                }
+              } else if (this.usbTokenVersion == 2) {
+                if (this.markImage) {
+                  await of(null).pipe(delay(150)).toPromise();
+                  imageRender = <HTMLElement>(document.getElementById('export-html2-image'));
+                  signUpdate.signDigitalWidth = imageRender.offsetWidth;
+                } else {
+                  // await of(null).pipe(delay(150)).toPromise();
+                  // imageRender = <HTMLElement>(document.getElementById('export-html2'));
+                  imageRender = null
+                  signI = null
+                }
+
+                if (imageRender) {
+                  if (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) {
+                    signI = this.srcMark.split(',')[1]
+                  } else {
+                    const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
+                    signI = textSignB.split(',')[1];
+                  }
+                }
               }
-  
-              // fieldHsm.coordinate_y = fieldHsm.coordinate_y - 8;
-              // fieldHsm.height = imageRender.offsetHeight / 1.5;
-              // fieldHsm.width = imageRender.offsetWidth / 1.5;
-  
+            }
+
+            const signDigital = JSON.parse(JSON.stringify(signUpdate));
+            signDigital.Serial = this.signCertDigital.Serial;
+
+            let base64String: any
+            try {
+              base64String = await this.contractService.getDataFileUrlPromise(fileC);
+            } catch (error) {
+              return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
+            }
+
+            signDigital.valueSignBase64 = encode(base64String);
+
+            if (this.usbTokenVersion == 2) {
+              try {
+                await this.createEmptySignature(signUpdate, signDigital, signI);
+              } catch (err) {
+                this.toastService.showErrorHTMLWithTimeout(
+                  'Lỗi ký usb token ' + err,
+                  '',
+                  3000
+                );
+                return false;
+              }
+
+              if (this.failUsbToken) {
+                return false;
+              }
+
+              const sign = await this.contractService.updateDigitalSignatured(
+                signUpdate.id,
+                this.base64Data
+              );
+              if (!sign.recipient_id) {
+                this.spinner.hide()
+                this.toastService.showErrorHTMLWithTimeout(
+                  'Lỗi ký USB Token',
+                  '',
+                  3000
+                );
+                return false;
+              }
+            } else if (this.usbTokenVersion == 1) {
+              const dataSignMobi: any =
+                await this.contractService.postSignDigitalMobi(
+                  signDigital,
+                  signI
+                );
+
+              if (!dataSignMobi.data.FileDataSigned) {
+                this.spinner.hide()
+                this.toastService.showErrorHTMLWithTimeout(
+                  'Lỗi ký USB Token',
+                  '',
+                  3000
+                );
+                return false;
+              }
+              const sign = await this.contractService.updateDigitalSignatured(
+                signUpdate.id,
+                dataSignMobi.data.FileDataSigned
+              );
+
+              if (!sign.recipient_id) {
+                this.toastService.showErrorHTMLWithTimeout(
+                  'Lỗi đẩy file sau khi ký usb token',
+                  '',
+                  3000
+                );
+                return false;
+              }
+            }
+          }
+        }
+        if (this.usbTokenVersion == 2) {
+          await this.signV2FixingProcess()
+        }
+        return true;
+      } else {
+        this.toastService.showErrorHTMLWithTimeout(
+          'Lỗi ký USB Token',
+          '',
+          3000
+        );
+        return false;
+      }
+    } else if (typeSignDigital == 3) {
+      const objSign = this.isDataObjectSignature.filter(
+        (signUpdate: any) =>
+          signUpdate &&
+          signUpdate.type == 3 &&
+          [3, 4].includes(this.datas.roleContractReceived) &&
+          signUpdate?.recipient?.email === this.currentUser.email &&
+          signUpdate?.recipient?.role === this.datas?.roleContractReceived
+      );
+      let fileC: any
+      try {
+        fileC = await this.contractService.getFileContractPromise(
+          this.idContract
+        );
+      } catch (error) {
+        return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
+      }
+      const pdfC2 = fileC.find((p: any) => p.type == 2);
+      const pdfC1 = fileC.find((p: any) => p.type == 1);
+      if (pdfC2) {
+        fileC = pdfC2.path;
+      } else if (pdfC1) {
+        fileC = pdfC1.path;
+      } else {
+        return;
+      }
+
+      this.phonePKI = this.dataNetworkPKI.phone;
+      this.nameCompany = this.recipient.name;
+
+      try {
+        this.isDateTime = await this.timeService.getRealTime().toPromise();
+      } catch(err) {
+        this.isDateTime = new Date();
+      }
+
+      if(!this.isDateTime) this.isDateTime = new Date();
+      await of(null).pipe(delay(120)).toPromise();
+
+      let imageRender = null;
+
+      if (this.markImage) {
+        imageRender = <HTMLElement>(
+          document.getElementById('export-html-pki-image')
+        );
+      } else {
+        imageRender = <HTMLElement>document.getElementById('export-html-pki');
+      }
+
+      let image_base64 = '';
+      if (imageRender) {
+        const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
+        image_base64 = this.textSignBase64Gen = textSignB.split(',')[1];
+      }
+
+      if (fileC && objSign.length) {
+        const checkSign = await this.contractService.signPkiDigital(
+          this.dataNetworkPKI.phone,
+          this.dataNetworkPKI.networkCode.toLowerCase(),
+          this.recipientId,
+          this.datas.is_data_contract.name,
+          image_base64,
+          this.isTimestamp,
+          this.dataNetworkPKI.hidden_phone ? false : true,
+        );
+        // await this.signContractSimKPI();
+        if (!checkSign || (checkSign && !checkSign.success)) {
+          this.toastService.showErrorHTMLWithTimeout(
+            'Ký số không thành công!',
+            '',
+            3000
+          );
+          return false;
+        } else {
+          return true;
+        }
+      }
+    } else if (typeSignDigital == 4) {
+      // HSM SIGN
+      for (const signUpdate of this.isDataObjectSignature) {
+        if (
+          signUpdate &&
+          (signUpdate.type == 1 ||
+            signUpdate.type == 3 ||
+            signUpdate.type == 4 || signUpdate.type == 5) &&
+          [3, 4].includes(this.datas.roleContractReceived) &&
+          signUpdate?.recipient?.email === this.currentUser.email &&
+          signUpdate?.recipient?.role === this.datas?.roleContractReceived
+        ) {
+          const objSign = this.isDataObjectSignature.filter(
+            (signUpdate: any) =>
+              signUpdate &&
+              (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) &&
+              [3, 4].includes(this.datas.roleContractReceived) &&
+              signUpdate?.recipient?.email === this.currentUser.email &&
+              signUpdate?.recipient?.role === this.datas?.roleContractReceived
+          );
+
+          let fileC: any
+          try {
+            fileC = await this.contractService.getFileContractPromise(
+              this.idContract
+            );
+          } catch (error) {
+            return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
+          }
+
+          const pdfC2 = fileC.find((p: any) => p.type == 2);
+          const pdfC1 = fileC.find((p: any) => p.type == 1);
+          if (pdfC2) {
+            fileC = pdfC2.path;
+          } else if (pdfC1) {
+            fileC = pdfC1.path;
+          } else {
+            return;
+          }
+
+          let signI = null;
+
+          if (!this.mobile)
+            this.convertXForHsm(signUpdate.page);
+          let fieldHsm = {
+            id: signUpdate.id,
+            coordinate_x: signUpdate.signDigitalX ?? signUpdate.coordinate_x,
+            coordinate_y: signUpdate.coordinate_y,
+            width: signUpdate.width ,
+            height: signUpdate.height,
+            page: signUpdate.page,
+          };
+
+          if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
+            if (this.type == 4) {
+              this.textSign = this.contractNoValueSign
+            } else {
+              this.textSign = signUpdate.valueSign
+            }
+
+            this.font = signUpdate.font;
+            this.font_size = signUpdate.font_size;
+
+            this.width = signUpdate.width;
+
+            await of(null).pipe(delay(120)).toPromise();
+            const imageRender = <HTMLElement>(
+              document.getElementById('text-sign')
+            );
+
+            if (imageRender) {
+              const textSignB = await domtoimage.toPng(imageRender);
+              signI = this.textSignBase64Gen = textSignB.split(',')[1];
+            }
+          } else if (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) {
+
+            try {
+              this.isDateTime = await this.timeService.getRealTime().toPromise();
+            } catch(err) {
+              this.isDateTime = new Date();
+            }
+            if(!this.isDateTime) this.isDateTime = new Date();
+            await of(null).pipe(delay(150)).toPromise();
+            let imageRender: HTMLElement | null = null;
+
+            //render khi role là 4 (văn thư) hoặc role khác (người ký)
+            if (this.markImage) {
+              imageRender = <HTMLElement>(
+                document.getElementById('export-html-hsm1-image')
+              );
+            } else {
+              imageRender = <HTMLElement>(
+                document.getElementById('export-html-hsm1')
+              );
+            }
+
+            // fieldHsm.coordinate_y = fieldHsm.coordinate_y - 8;
+            // fieldHsm.height = imageRender.offsetHeight / 1.5;
+            // fieldHsm.width = imageRender.offsetWidth / 1.5;
+
+            if (imageRender) {
+              const textSignB = await domtoimage.toPng(
+                imageRender,
+                this.getOptions(imageRender)
+              );
+              signI = textSignB.split(',')[1];
+            }
+          }
+          if (!this.mobile || this.mobile) {
+            this.dataHsm = {
+              field: fieldHsm,
+              supplier: this.dataHsm.supplier,
+              ma_dvcs: this.dataHsm.ma_dvcs,
+              username: this.dataHsm.username,
+              password: this.dataHsm.password,
+              password2: this.dataHsm.password2,
+              imageBase64: (!this.markImage && signUpdate.type==3) ? null :
+                            (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
+            };
+          } else {
+            this.dataHsm = {
+              field: fieldHsm,
+              supplier: this.dataHsm.supplier,
+              ma_dvcs: this.dataHsm.ma_dvcs,
+              username: this.dataHsm.username,
+              password: this.dataHsm.password,
+              password2: this.dataHsm.password2,
+              imageBase64: (!this.markImage && signUpdate.type==3) ? null :
+                            (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
+            };
+          }
+          if (fileC && objSign.length) {
+            if (!this.mobile || this.mobile) {
+              const checkSign = await this.contractService.signHsm(
+                this.dataHsm,
+                this.recipientId,
+                this.isTimestamp,
+                signUpdate.type
+              );
+              if (!checkSign || (checkSign && !checkSign.success)) {
+                if (!checkSign.message) {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    'Đăng nhập không thành công',
+                    '',
+                    3000
+                  );
+                } else if (checkSign.message) {
+                  if (checkSign.message.includes('Cannot authenticate hsm')) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Không thể xác thực hsm',
+                      '',
+                      3000
+                    );
+                  } else if (checkSign.message.includes('Tax code do not match')) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'taxcode.not.match',
+                      '',
+                      3000
+                    );
+                  } else {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      checkSign.message,
+                      '',
+                      3000
+                    );
+                  }
+                }
+
+                return false;
+              } else {
+                if (checkSign.success === true) {
+                  if (pdfC2) {
+                    fileC = pdfC2.path;
+                  } else if (pdfC1) {
+                    fileC = pdfC1.path;
+                  }
+                }
+              }
+            } else {
+              const checkSign = await this.contractService.signHsmOld(
+                this.dataHsm,
+                this.recipientId
+              );
+
+              if (!checkSign || (checkSign && !checkSign.success)) {
+                if (!checkSign.message) {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    'Đăng nhập không thành công',
+                    '',
+                    3000
+                  );
+                } else if (checkSign.message) {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    checkSign.message,
+                    '',
+                    3000
+                  );
+                }
+
+                return false;
+              } else {
+                if (checkSign.success === true) {
+                  if (pdfC2) {
+                    fileC = pdfC2.path;
+                  } else if (pdfC1) {
+                    fileC = pdfC1.path;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      return true;
+    } else if (typeSignDigital == 5) {
+      const objSign = this.isDataObjectSignature.filter(
+        (signUpdate: any) =>
+          signUpdate &&
+          (signUpdate.type == 3 || signUpdate.type == 2) &&
+          [3, 4].includes(this.datas.roleContractReceived) &&
+          signUpdate?.recipient?.email === this.currentUser.email &&
+          signUpdate?.recipient?.role === this.datas?.roleContractReceived
+      );
+
+      let fileC: any
+      try {
+        fileC = await this.contractService.getFileContractPromise(
+          this.idContract
+        );
+      } catch (error) {
+        return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
+      }
+      const pdfC2 = fileC.find((p: any) => p.type == 2);
+      const pdfC1 = fileC.find((p: any) => p.type == 1);
+      if (pdfC2) {
+        fileC = pdfC2.path;
+      } else if (pdfC1) {
+        fileC = pdfC1.path;
+      } else {
+        return;
+      }
+
+      if (fileC && objSign.length) return true;
+    } else if (typeSignDigital == 6) {
+      for (const signUpdate of this.isDataObjectSignature) {
+        if (
+          signUpdate &&
+          (signUpdate.type == 1 ||
+            signUpdate.type == 3 ||
+            signUpdate.type == 4 ||
+            signUpdate.type == 5)  &&
+          [3, 4].includes(this.datas.roleContractReceived) &&
+          signUpdate?.recipient?.email === this.currentUser.email &&
+          signUpdate?.recipient?.role === this.datas?.roleContractReceived
+        ) {
+          const objSign = this.isDataObjectSignature.filter(
+            (signUpdate: any) =>
+              signUpdate &&
+              (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) &&
+              [3, 4].includes(this.datas.roleContractReceived) &&
+              signUpdate?.recipient?.email === this.currentUser.email &&
+              signUpdate?.recipient?.role === this.datas?.roleContractReceived
+          );
+
+          let fileC: any
+          try {
+            fileC = await this.contractService.getFileContractPromise(
+              this.idContract
+            );
+          } catch (error) {
+            return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
+          }
+
+          const pdfC2 = fileC.find((p: any) => p.type == 2);
+          const pdfC1 = fileC.find((p: any) => p.type == 1);
+          if (pdfC2) {
+            fileC = pdfC2.path;
+          } else if (pdfC1) {
+            fileC = pdfC1.path;
+          } else {
+            return;
+          }
+
+          //for test
+          let inforCert: any
+          try {
+            inforCert = await this.contractService
+              .certInfoCert(this.cert_id)
+              .toPromise();
+          } catch (error) {
+            return this.toastService.showErrorHTMLWithTimeout("get.cert.data.err","",3000)
+          }
+          this.name = inforCert.name;
+          this.company = inforCert.company;
+          this.cardId = inforCert.mst;
+          this.cccd = inforCert.cccd;
+          this.cmnd = inforCert.cmnd;
+          let signI = null;
+          // this.nameCompany = this.recipient.name;
+          if (!this.mobile)
+            this.convertXForHsm(signUpdate.page);
+
+          let fieldCert = {
+            page: signUpdate.page,
+            coordinate_x: signUpdate.signDigitalX ?? signUpdate.coordinate_x,
+            coordinate_y: signUpdate.coordinate_y,
+            width: signUpdate.signDigitalWidth,
+            height: signUpdate.signDigitalHeight,
+          };
+          if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
+            if (this.type == 4) {
+              this.textSign = this.contractNoValueSign
+            } else {
+              this.textSign = signUpdate.valueSign
+            }
+
+            this.font = signUpdate.font;
+            this.font_size = signUpdate.font_size;
+
+            this.width = signUpdate.width;
+
+            await of(null).pipe(delay(120)).toPromise();
+            const imageRender = <HTMLElement>(
+              document.getElementById('text-sign')
+            );
+
+            fieldCert.width = imageRender.clientWidth;
+            fieldCert.height = imageRender.clientHeight;
+
+            if (imageRender) {
+              const textSignB = await domtoimage.toPng(imageRender);
+              signI = this.textSignBase64Gen = textSignB.split(',')[1];
+            }
+          } else if (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) {
+            // this.nameCompany = this.recipient.name;
+
+            this.widthSign = signUpdate.width;
+            this.heightSign = signUpdate.height;
+
+            try {
+              this.isDateTime = await this.timeService.getRealTime().toPromise();
+            } catch(err) {
+              this.isDateTime = new Date();
+            }
+
+            if(!this.isDateTime) this.isDateTime = new Date();
+            await of(null).pipe(delay(150)).toPromise();
+            let imageRender: HTMLElement | null = null;
+            try {
+              if (this.markImage) {
+                imageRender = <HTMLElement>(document.getElementById('export-html-cert-image'));
+              } else {
+                imageRender = <HTMLElement>(document.getElementById('export-html-cert-image'));
+              }
+            } catch (error) {
+            }
+            // fieldHsm.height = imageRender.offsetHeight / 1.5;
+            // fieldHsm.width = imageRender.offsetWidth / 1.5;
+
+            // fieldCert.height = imageRender.offsetHeight;
+            // fieldCert.width = imageRender.offsetWidth;
+            try {
               if (imageRender) {
                 const textSignB = await domtoimage.toPng(
                   imageRender,
@@ -2467,83 +2719,51 @@ export class ConsiderContractComponent
                 );
                 signI = textSignB.split(',')[1];
               }
+            } catch (error) {
+              console.log(error);
             }
-            if (!this.mobile || this.mobile) {
-              this.dataHsm = {
-                field: fieldHsm,
-                supplier: this.dataHsm.supplier,
-                ma_dvcs: this.dataHsm.ma_dvcs,
-                username: this.dataHsm.username,
-                password: this.dataHsm.password,
-                password2: this.dataHsm.password2,
-                imageBase64: (!this.markImage && signUpdate.type==3) ? null :
-                              (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
-              };
-            } else {
-              this.dataHsm = {
-                field: fieldHsm,
-                supplier: this.dataHsm.supplier,
-                ma_dvcs: this.dataHsm.ma_dvcs,
-                username: this.dataHsm.username,
-                password: this.dataHsm.password,
-                password2: this.dataHsm.password2,
-                imageBase64: (!this.markImage && signUpdate.type==3) ? null :
-                              (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
-              };
-            }
-            if (fileC && objSign.length) {
-              if (!this.mobile || this.mobile) {
-                const checkSign = await this.contractService.signHsm(
-                  this.dataHsm,
-                  this.recipientId,
-                  this.isTimestamp,
-                  signUpdate.type
+
+          }
+          let fieldCert1 = {
+            id: signUpdate.id,
+            page: signUpdate.page,
+            coordinate_x: signUpdate.signDigitalX ?? signUpdate.coordinate_x,
+            coordinate_y: signUpdate.coordinate_y,
+            width: signUpdate.width,
+            height: signUpdate.height,
+          };
+
+          if (!this.mobile || this.mobile) {
+            this.dataCert = {
+              cert_id: this.cert_id,
+              image_base64: (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
+              field: fieldCert1,
+              width: null,
+              height: null,
+              isTimestamp: this.isTimestamp,
+              type: signUpdate.type
+            };
+          } else {
+
+            this.dataCert = {
+              cert_id: this.cert_id,
+              image_base64: (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
+              field: fieldCert1,
+              width: null,
+              height: null,
+              isTimestamp: this.isTimestamp,
+              type: signUpdate.type
+            };
+
+          }
+
+          if (fileC && objSign.length) {
+            if (!this.mobile) {
+              try {
+                const checkSign = await this.contractService.signCert(
+                  this.recipientId, this.dataCert
                 );
-                if (!checkSign || (checkSign && !checkSign.success)) {
-                  if (!checkSign.message) {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Đăng nhập không thành công',
-                      '',
-                      3000
-                    );
-                  } else if (checkSign.message) {
-                    if (checkSign.message.includes('Cannot authenticate hsm')) {
-                      this.toastService.showErrorHTMLWithTimeout(
-                        'Không thể xác thực hsm',
-                        '',
-                        3000
-                      );
-                    } else if (checkSign.message.includes('Tax code do not match')) {
-                      this.toastService.showErrorHTMLWithTimeout(
-                        'taxcode.not.match',
-                        '',
-                        3000
-                      );
-                    } else {
-                      this.toastService.showErrorHTMLWithTimeout(
-                        checkSign.message,
-                        '',
-                        3000
-                      );
-                    }
-                  }
-  
-                  return false;
-                } else {
-                  if (checkSign.success === true) {
-                    if (pdfC2) {
-                      fileC = pdfC2.path;
-                    } else if (pdfC1) {
-                      fileC = pdfC1.path;
-                    }
-                  }
-                }
-              } else {
-                const checkSign = await this.contractService.signHsmOld(
-                  this.dataHsm,
-                  this.recipientId
-                );
-  
+
                 if (!checkSign || (checkSign && !checkSign.success)) {
                   if (!checkSign.message) {
                     this.toastService.showErrorHTMLWithTimeout(
@@ -2558,7 +2778,7 @@ export class ConsiderContractComponent
                       3000
                     );
                   }
-  
+
                   return false;
                 } else {
                   if (checkSign.success === true) {
@@ -2569,402 +2789,220 @@ export class ConsiderContractComponent
                     }
                   }
                 }
+              } catch (error) {
+                this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
+                return false
               }
-            }
-          }
-        }
-        return true;
-      } else if (typeSignDigital == 5) {
-        const objSign = this.isDataObjectSignature.filter(
-          (signUpdate: any) =>
-            signUpdate &&
-            (signUpdate.type == 3 || signUpdate.type == 2) &&
-            [3, 4].includes(this.datas.roleContractReceived) &&
-            signUpdate?.recipient?.email === this.currentUser.email &&
-            signUpdate?.recipient?.role === this.datas?.roleContractReceived
-        );
-  
-        let fileC: any
-        try {
-          fileC = await this.contractService.getFileContractPromise(
-            this.idContract
-          );
-        } catch (error) {
-          return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
-        }
-        const pdfC2 = fileC.find((p: any) => p.type == 2);
-        const pdfC1 = fileC.find((p: any) => p.type == 1);
-        if (pdfC2) {
-          fileC = pdfC2.path;
-        } else if (pdfC1) {
-          fileC = pdfC1.path;
-        } else {
-          return;
-        }
-  
-        if (fileC && objSign.length) return true;
-      } else if (typeSignDigital == 6) {
-        for (const signUpdate of this.isDataObjectSignature) {
-          if (
-            signUpdate &&
-            (signUpdate.type == 1 ||
-              signUpdate.type == 3 ||
-              signUpdate.type == 4 ||
-              signUpdate.type == 5)  &&
-            [3, 4].includes(this.datas.roleContractReceived) &&
-            signUpdate?.recipient?.email === this.currentUser.email &&
-            signUpdate?.recipient?.role === this.datas?.roleContractReceived
-          ) {
-            const objSign = this.isDataObjectSignature.filter(
-              (signUpdate: any) =>
-                signUpdate &&
-                (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) &&
-                [3, 4].includes(this.datas.roleContractReceived) &&
-                signUpdate?.recipient?.email === this.currentUser.email &&
-                signUpdate?.recipient?.role === this.datas?.roleContractReceived
-            );
-  
-            let fileC: any
-            try {
-              fileC = await this.contractService.getFileContractPromise(
-                this.idContract
-              );
-            } catch (error) {
-              return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
-            }
-  
-            const pdfC2 = fileC.find((p: any) => p.type == 2);
-            const pdfC1 = fileC.find((p: any) => p.type == 1);
-            if (pdfC2) {
-              fileC = pdfC2.path;
-            } else if (pdfC1) {
-              fileC = pdfC1.path;
             } else {
-              return;
-            }
-  
-            //for test
-            let inforCert: any
-            try {
-              inforCert = await this.contractService
-                .certInfoCert(this.cert_id)
-                .toPromise();
-            } catch (error) {
-              return this.toastService.showErrorHTMLWithTimeout("get.cert.data.err","",3000)
-            }
-            this.name = inforCert.name;
-            this.company = inforCert.company;
-            this.cardId = inforCert.mst;
-            this.cccd = inforCert.cccd;
-            this.cmnd = inforCert.cmnd;
-            let signI = null;
-            // this.nameCompany = this.recipient.name;
-            if (!this.mobile)
-              this.convertXForHsm(signUpdate.page);
-  
-            let fieldCert = {
-              page: signUpdate.page,
-              coordinate_x: signUpdate.signDigitalX ?? signUpdate.coordinate_x,
-              coordinate_y: signUpdate.coordinate_y,
-              width: signUpdate.signDigitalWidth,
-              height: signUpdate.signDigitalHeight,
-            };
-            if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
-              if (this.type == 4) {
-                this.textSign = this.contractNoValueSign
-              } else {
-                this.textSign = signUpdate.valueSign
-              }
-  
-              this.font = signUpdate.font;
-              this.font_size = signUpdate.font_size;
-  
-              this.width = signUpdate.width;
-  
-              await of(null).pipe(delay(120)).toPromise();
-              const imageRender = <HTMLElement>(
-                document.getElementById('text-sign')
-              );
-  
-              fieldCert.width = imageRender.clientWidth;
-              fieldCert.height = imageRender.clientHeight;
-  
-              if (imageRender) {
-                const textSignB = await domtoimage.toPng(imageRender);
-                signI = this.textSignBase64Gen = textSignB.split(',')[1];
-              }
-            } else if (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) {
-              // this.nameCompany = this.recipient.name;
-  
-              this.widthSign = signUpdate.width;
-              this.heightSign = signUpdate.height;
-  
               try {
-                this.isDateTime = await this.timeService.getRealTime().toPromise();
-              } catch(err) {
-                this.isDateTime = new Date();
-              }
-  
-              if(!this.isDateTime) this.isDateTime = new Date();
-              await of(null).pipe(delay(150)).toPromise();
-              let imageRender: HTMLElement | null = null;
-              try {
-                if (this.markImage) {
-                  imageRender = <HTMLElement>(document.getElementById('export-html-cert-image'));
+                const checkSign = await this.contractService.signCertMobile(
+                  this.recipientId, this.dataCert
+                );
+
+                if (!checkSign || (checkSign && !checkSign.success)) {
+                  if (!checkSign.message) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Đăng nhập không thành công',
+                      '',
+                      3000
+                    );
+                  } else if (checkSign.message) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      checkSign.message,
+                      '',
+                      3000
+                    );
+                  }
+                  return false;
                 } else {
-                  imageRender = <HTMLElement>(document.getElementById('export-html-cert-image'));
-                }
-              } catch (error) {
-              }
-              // fieldHsm.height = imageRender.offsetHeight / 1.5;
-              // fieldHsm.width = imageRender.offsetWidth / 1.5;
-  
-              // fieldCert.height = imageRender.offsetHeight;
-              // fieldCert.width = imageRender.offsetWidth;
-              try {
-                if (imageRender) {
-                  const textSignB = await domtoimage.toPng(
-                    imageRender,
-                    this.getOptions(imageRender)
-                  );
-                  signI = textSignB.split(',')[1];
-                }
-              } catch (error) {
-                console.log(error);
-              }
-  
-            }
-            let fieldCert1 = {
-              id: signUpdate.id,
-              page: signUpdate.page,
-              coordinate_x: signUpdate.signDigitalX ?? signUpdate.coordinate_x,
-              coordinate_y: signUpdate.coordinate_y,
-              width: signUpdate.width,
-              height: signUpdate.height,
-            };
-  
-            if (!this.mobile || this.mobile) {
-              this.dataCert = {
-                cert_id: this.cert_id,
-                image_base64: (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
-                field: fieldCert1,
-                width: null,
-                height: null,
-                isTimestamp: this.isTimestamp,
-                type: signUpdate.type
-              };
-            } else {
-  
-              this.dataCert = {
-                cert_id: this.cert_id,
-                image_base64: (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
-                field: fieldCert1,
-                width: null,
-                height: null,
-                isTimestamp: this.isTimestamp,
-                type: signUpdate.type
-              };
-  
-            }
-  
-            if (fileC && objSign.length) {
-              if (!this.mobile) {
-                try {
-                  const checkSign = await this.contractService.signCert(
-                    this.recipientId, this.dataCert
-                  );
-  
-                  if (!checkSign || (checkSign && !checkSign.success)) {
-                    if (!checkSign.message) {
-                      this.toastService.showErrorHTMLWithTimeout(
-                        'Đăng nhập không thành công',
-                        '',
-                        3000
-                      );
-                    } else if (checkSign.message) {
-                      this.toastService.showErrorHTMLWithTimeout(
-                        checkSign.message,
-                        '',
-                        3000
-                      );
-                    }
-  
-                    return false;
-                  } else {
-                    if (checkSign.success === true) {
-                      if (pdfC2) {
-                        fileC = pdfC2.path;
-                      } else if (pdfC1) {
-                        fileC = pdfC1.path;
-                      }
+                  if (checkSign.success === true) {
+                    if (pdfC2) {
+                      fileC = pdfC2.path;
+                    } else if (pdfC1) {
+                      fileC = pdfC1.path;
                     }
                   }
-                } catch (error) {
-                  this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
-                  return false
                 }
-              } else {
-                try {
-                  const checkSign = await this.contractService.signCertMobile(
-                    this.recipientId, this.dataCert
-                  );
-  
-                  if (!checkSign || (checkSign && !checkSign.success)) {
-                    if (!checkSign.message) {
-                      this.toastService.showErrorHTMLWithTimeout(
-                        'Đăng nhập không thành công',
-                        '',
-                        3000
-                      );
-                    } else if (checkSign.message) {
-                      this.toastService.showErrorHTMLWithTimeout(
-                        checkSign.message,
-                        '',
-                        3000
-                      );
-                    }
-                    return false;
-                  } else {
-                    if (checkSign.success === true) {
-                      if (pdfC2) {
-                        fileC = pdfC2.path;
-                      } else if (pdfC1) {
-                        fileC = pdfC1.path;
-                      }
-                    }
-                  }
-                } catch (error) {
-                  this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
-                  return false
-                }
+              } catch (error) {
+                this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
+                return false
               }
             }
           }
         }
-        return true;
-      } else if (typeSignDigital == 8) {
-        this.currentBoxSignType = typeSignDigital
-        // REMOTE SIGNING
-        let boxSign: any
-  
-        for (let i = 0; i < this.isDataObjectSignature.length; i++) {
-          if (this.isDataObjectSignature[i].type == 3) {
-            boxSign = this.isDataObjectSignature[i]
-            boxSign.index = i
-            break
-          }
+      }
+      return true;
+    } else if (typeSignDigital == 8) {
+      this.currentBoxSignType = typeSignDigital
+      // REMOTE SIGNING
+      let boxSign: any
+
+      for (let i = 0; i < this.isDataObjectSignature.length; i++) {
+        if (this.isDataObjectSignature[i].type == 3) {
+          boxSign = this.isDataObjectSignature[i]
+          boxSign.index = i
+          break
         }
-        boxSign = this.isDataObjectSignature.splice(boxSign.index, 1)[0]
-        this.isDataObjectSignature.push(boxSign)
-        for (const signUpdate of this.isDataObjectSignature) {
-          if (
-            signUpdate &&
-            (signUpdate.type == 1 ||
-              signUpdate.type == 3 ||
-              signUpdate.type == 4 || signUpdate.type == 5) &&
-            [3, 4].includes(this.datas.roleContractReceived) &&
-            signUpdate?.recipient?.email === this.currentUser.email &&
-            signUpdate?.recipient?.role === this.datas?.roleContractReceived
-          ) {
-            const objSign = this.isDataObjectSignature.filter(
-              (signUpdate: any) =>
-                signUpdate &&
-                signUpdate.type == 3 &&
-                [3, 4].includes(this.datas.roleContractReceived) &&
-                signUpdate?.recipient?.email === this.currentUser.email &&
-                signUpdate?.recipient?.role === this.datas?.roleContractReceived
+      }
+      boxSign = this.isDataObjectSignature.splice(boxSign.index, 1)[0]
+      this.isDataObjectSignature.push(boxSign)
+      for (const signUpdate of this.isDataObjectSignature) {
+        if (
+          signUpdate &&
+          (signUpdate.type == 1 ||
+            signUpdate.type == 3 ||
+            signUpdate.type == 4 || signUpdate.type == 5) &&
+          [3, 4].includes(this.datas.roleContractReceived) &&
+          signUpdate?.recipient?.email === this.currentUser.email &&
+          signUpdate?.recipient?.role === this.datas?.roleContractReceived
+        ) {
+          const objSign = this.isDataObjectSignature.filter(
+            (signUpdate: any) =>
+              signUpdate &&
+              signUpdate.type == 3 &&
+              [3, 4].includes(this.datas.roleContractReceived) &&
+              signUpdate?.recipient?.email === this.currentUser.email &&
+              signUpdate?.recipient?.role === this.datas?.roleContractReceived
+          );
+
+          let fileC: any
+          try {
+            fileC = await this.contractService.getFileContractPromise(
+              this.idContract
             );
-  
-            let fileC: any
+          } catch (error) {
+            return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
+          }
+
+          const pdfC2 = fileC.find((p: any) => p.type == 2);
+          const pdfC1 = fileC.find((p: any) => p.type == 1);
+          if (pdfC2) {
+            fileC = pdfC2.path;
+          } else if (pdfC1) {
+            fileC = pdfC1.path;
+          } else {
+            return;
+          }
+
+          let signI = null;
+
+          if (!this.mobile)
+            this.convertXForHsm(signUpdate.page);
+          let fieldRemoteSigning = {
+            id: signUpdate.id,
+            coordinate_x: signUpdate.signDigitalX,
+            coordinate_y: signUpdate.coordinate_y,
+            width: signUpdate.width ,
+            height: signUpdate.height,
+            page: signUpdate.page,
+          };
+
+          if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
+            // this.textSign = this.contractNoValueSign
+
+            // this.font = signUpdate.font;
+            // this.font_size = signUpdate.font_size;
+
+            // this.width = signUpdate.width;
+
+            // await of(null).pipe(delay(120)).toPromise();
+            // const imageRender = <HTMLElement>(
+            //   document.getElementById('text-sign')
+            // );
+
+            // if (imageRender) {
+            //   const textSignB = await domtoimage.toPng(imageRender);
+            //   signI = this.textSignBase64Gen = textSignB.split(',')[1];
+            // }
+          } else if (signUpdate.type == 3) {
+
             try {
-              fileC = await this.contractService.getFileContractPromise(
-                this.idContract
+              this.isDateTime = await this.timeService.getRealTime().toPromise();
+            } catch(err) {
+              this.isDateTime = new Date();
+            }
+            if(!this.isDateTime) this.isDateTime = new Date();
+            await of(null).pipe(delay(150)).toPromise();
+            let imageRender: HTMLElement | null = null;
+
+            //render khi role là 4 (văn thư) hoặc role khác (người ký)
+            if (this.markImage) {
+              imageRender = <HTMLElement>(
+                document.getElementById('export-remote-signing-remote-image')
               );
-            } catch (error) {
-              return this.toastService.showErrorHTMLWithTimeout("get.contract.data.err","",3000)
-            }
-  
-            const pdfC2 = fileC.find((p: any) => p.type == 2);
-            const pdfC1 = fileC.find((p: any) => p.type == 1);
-            if (pdfC2) {
-              fileC = pdfC2.path;
-            } else if (pdfC1) {
-              fileC = pdfC1.path;
             } else {
-              return;
+              imageRender = null
             }
-  
-            let signI = null;
-  
-            if (!this.mobile)
-              this.convertXForHsm(signUpdate.page);
-            let fieldRemoteSigning = {
-              id: signUpdate.id,
-              coordinate_x: signUpdate.signDigitalX,
-              coordinate_y: signUpdate.coordinate_y,
-              width: signUpdate.width ,
-              height: signUpdate.height,
-              page: signUpdate.page,
+
+            // fieldHsm.coordinate_y = fieldHsm.coordinate_y - 8;
+            // fieldHsm.height = imageRender.offsetHeight / 1.5;
+            // fieldHsm.width = imageRender.offsetWidth / 1.5;
+
+            if (imageRender) {
+              const textSignB = await domtoimage.toPng(
+                imageRender,
+                this.getOptions(imageRender)
+              );
+              signI = textSignB.split(',')[1];
+            }
+          }
+
+          if (!this.isRemoteSigningExpired && signUpdate.type == 3 ) {
+            this.dataCert = {
+              field: fieldRemoteSigning,
+              cert_id: this.dataCert.cert_id,
+              imageBase64: (!this.markImage && signUpdate.type==3) ? null :
+                            (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
-  
-            if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
-              // this.textSign = this.contractNoValueSign
-  
-              // this.font = signUpdate.font;
-              // this.font_size = signUpdate.font_size;
-  
-              // this.width = signUpdate.width;
-  
-              // await of(null).pipe(delay(120)).toPromise();
-              // const imageRender = <HTMLElement>(
-              //   document.getElementById('text-sign')
-              // );
-  
-              // if (imageRender) {
-              //   const textSignB = await domtoimage.toPng(imageRender);
-              //   signI = this.textSignBase64Gen = textSignB.split(',')[1];
-              // }
-            } else if (signUpdate.type == 3) {
-  
+
+            if (fileC && objSign.length) {
               try {
-                this.isDateTime = await this.timeService.getRealTime().toPromise();
-              } catch(err) {
-                this.isDateTime = new Date();
-              }
-              if(!this.isDateTime) this.isDateTime = new Date();
-              await of(null).pipe(delay(150)).toPromise();
-              let imageRender: HTMLElement | null = null;
-  
-              //render khi role là 4 (văn thư) hoặc role khác (người ký)
-              if (this.markImage) {
-                imageRender = <HTMLElement>(
-                  document.getElementById('export-remote-signing-remote-image')
+                const checkSign = await this.contractService.signRemote(
+                  this.dataCert,
+                  this.recipientId,
+                  this.isTimestamp,
+                  signUpdate.type
                 );
-              } else {
-                imageRender = null
+                if (!checkSign || (checkSign && !checkSign.success)) {
+                  if (!checkSign.message) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Đăng nhập không thành công',
+                      '',
+                      3000
+                    );
+                  } else if (checkSign.message) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      checkSign.message,
+                      '',
+                      3000
+                    );
+                  }
+
+                  return false;
+                } else {
+                  if (checkSign.success === true) {
+                    if (pdfC2) {
+                      fileC = pdfC2.path;
+                    } else if (pdfC1) {
+                      fileC = pdfC1.path;
+                    }
+                  }
+                }
+              } catch (error) {
+                return this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
               }
-  
-              // fieldHsm.coordinate_y = fieldHsm.coordinate_y - 8;
-              // fieldHsm.height = imageRender.offsetHeight / 1.5;
-              // fieldHsm.width = imageRender.offsetWidth / 1.5;
-  
-              if (imageRender) {
-                const textSignB = await domtoimage.toPng(
-                  imageRender,
-                  this.getOptions(imageRender)
-                );
-                signI = textSignB.split(',')[1];
-              }
+
             }
-  
-            if (!this.isRemoteSigningExpired && signUpdate.type == 3 ) {
+          } else {
+            // truong hop qua han ky remote signing
+            if (signUpdate.type == 3) {
               this.dataCert = {
                 field: fieldRemoteSigning,
                 cert_id: this.dataCert.cert_id,
                 imageBase64: (!this.markImage && signUpdate.type==3) ? null :
                               (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
               };
-  
+
               if (fileC && objSign.length) {
                 try {
                   const checkSign = await this.contractService.signRemote(
@@ -2987,7 +3025,7 @@ export class ConsiderContractComponent
                         3000
                       );
                     }
-  
+
                     return false;
                   } else {
                     if (checkSign.success === true) {
@@ -3001,61 +3039,12 @@ export class ConsiderContractComponent
                 } catch (error) {
                   return this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
                 }
-  
-              }
-            } else {
-              // truong hop qua han ky remote signing
-              if (signUpdate.type == 3) {
-                this.dataCert = {
-                  field: fieldRemoteSigning,
-                  cert_id: this.dataCert.cert_id,
-                  imageBase64: (!this.markImage && signUpdate.type==3) ? null :
-                                (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
-                };
-  
-                if (fileC && objSign.length) {
-                  try {
-                    const checkSign = await this.contractService.signRemote(
-                      this.dataCert,
-                      this.recipientId,
-                      this.isTimestamp,
-                      signUpdate.type
-                    );
-                    if (!checkSign || (checkSign && !checkSign.success)) {
-                      if (!checkSign.message) {
-                        this.toastService.showErrorHTMLWithTimeout(
-                          'Đăng nhập không thành công',
-                          '',
-                          3000
-                        );
-                      } else if (checkSign.message) {
-                        this.toastService.showErrorHTMLWithTimeout(
-                          checkSign.message,
-                          '',
-                          3000
-                        );
-                      }
-  
-                      return false;
-                    } else {
-                      if (checkSign.success === true) {
-                        if (pdfC2) {
-                          fileC = pdfC2.path;
-                        } else if (pdfC1) {
-                          fileC = pdfC1.path;
-                        }
-                      }
-                    }
-                  } catch (error) {
-                    return this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
-                  }
-                }
               }
             }
           }
         }
-        return true;
       }
+      return true;
     }
   }
 
@@ -4464,7 +4453,7 @@ export class ConsiderContractComponent
       );
   }
 
-  eKYCStart(ekycDocType: string) {
+  async eKYCStart(ekycDocType: string) {
     const data = {
       id: 0,
       title: 'Xác thực CMT/CCCD mặt trước',
@@ -4473,6 +4462,8 @@ export class ConsiderContractComponent
       contractId: this.idContract,
       ekycDocType: ekycDocType
     };
+    let checkCurrentSigningStatus: any = await this.checkCurrentSigningCall()
+    if (!checkCurrentSigningStatus) return
 
     const dialogConfig = new MatDialogConfig();
     // dialogConfig.panelClass = 'custom-dialog-container';
@@ -4829,10 +4820,12 @@ export class ConsiderContractComponent
   }
 
   dataOTP: any;
-  confirmOtpSignContract(
+  async confirmOtpSignContract(
     id_recipient_signature: any,
     phone_recipient_signature: any
   ) {
+    let checkCurrentSigningStatus: any = await this.checkCurrentSigningCall()
+    if (!checkCurrentSigningStatus) return
     const data = {
       title: 'XÁC NHẬN OTP',
       is_content: 'forward_contract',
@@ -5153,13 +5146,27 @@ export class ConsiderContractComponent
 
   currentSigningStatus: any = null;
   async checkCurrentSigningCall() {
-    console.log("this.recipientId",this.recipientId);
-    this.contractService.checkCurrentSigning(this.recipientId).subscribe(
-      (res: any) => {
-        return res
-      }, (err: any) => {
-        return 
+    let currentSigningStatus: any = null;
+    try {
+      currentSigningStatus = await this.contractService.checkCurrentSigning(this.recipientId).toPromise()
+    } catch (error) {
+      this.spinner.hide()
+      this.toastService.showErrorHTMLWithTimeout("Lỗi ký số. Vui lòng thử lại sau ít phút", "", 3000)
+      return false
+    }
+
+    if (!currentSigningStatus.success) {
+      if (currentSigningStatus.message) {
+        this.spinner.hide()
+        this.toastService.showErrorHTMLWithTimeout(currentSigningStatus.message, "", 3000)
+        return false
+      } else {
+        this.spinner.hide()
+        this.toastService.showErrorHTMLWithTimeout("Lỗi ký số. Vui lòng thử lại sau ít phút", "", 3000)
+        return false
       }
-    )
+    } else if (currentSigningStatus.success) {
+      return true
+    }
   }
 }
