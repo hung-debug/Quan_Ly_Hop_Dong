@@ -33,7 +33,7 @@
     </div>
   </div>
 
-
+  <div style="min-height: 75vh;">
   <div class="row" style="padding-top: 15px;">
     <p-treeTable [value]="list" id="table" [autoLayout]="true">
       <ng-template pTemplate="header" let-columns>
@@ -62,12 +62,12 @@
       </ng-template>
       
     </p-treeTable>
-    <div class="footer_page_number">
-      {{'chart.number' | translate}}: {{total}}
-    </div> 
   </div>
-  
 </div>
+</div>
+<div class="footer_page_number">
+  {{'chart.number' | translate}}: {{total}}
+</div> 
 <div *ngIf="!isQLTC_01 && !isQLTC_02 && !isQLTC_03 && !isQLTC_04">
   {{'no.role' | translate}}
 </div>

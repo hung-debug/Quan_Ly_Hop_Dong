@@ -1,4 +1,5 @@
 <div *ngIf="isQLND_01 || isQLND_02 || isQLND_03 || isQLND_04" class="container-fluid">
+  <div style="background-color: #FFFFFF;">
   <div class="row">
     <div class="col-md-3" *ngIf="isQLND_03">
       <div>{{'unit.name' | translate}}</div>
@@ -51,7 +52,7 @@
     </div>
   </div>
 
-
+  <div style="min-height: 73vh;">
   <div class="row" style="padding-top: 20px;">
     <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true" [(first)]="first">
       <ng-template pTemplate="header" let-columns>
@@ -85,8 +86,10 @@
       </ng-template>
     </p-table>
   </div>
-
+  </div>
+  </div>
 </div>
+
 <div *ngIf="!isQLND_01 && !isQLND_02 && !isQLND_03 && !isQLND_04">
   {{'no.role' | translate}}
 </div>
