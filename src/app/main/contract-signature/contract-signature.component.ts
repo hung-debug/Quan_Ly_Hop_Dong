@@ -1851,6 +1851,8 @@ export class ContractSignatureComponent implements OnInit {
                     .getDataObjectSignatureLoadChange(idContract[i])
                     .toPromise();
                   dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i])
+                  let currentSigningStatus: any = this.checkCurrentSigningCall(recipientId[i])
+                  if (!currentSigningStatus) return
                   for (let j = 0; j < dataObjectSignature.length; j++) {
                     if (dataObjectSignature[j].recipient) {
                       if (recipientId[i] == dataObjectSignature[j].recipient.id) {
@@ -1923,7 +1925,7 @@ export class ContractSignatureComponent implements OnInit {
                     let sign: any = null;
                     try {
                       sign = await this.contractServiceV1.updateDigitalSignatured(
-                        idSignMany[i],
+                        dataObjectSignature[j].id,
                         dataSignMobi.data.FileDataSigned
                       );
 
@@ -2088,6 +2090,8 @@ export class ContractSignatureComponent implements OnInit {
           .getDataObjectSignatureLoadChange(idContract[i])
           .toPromise();
         dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i])
+        let currentSigningStatus: any = this.checkCurrentSigningCall(recipientId[i])
+        if (!currentSigningStatus) return
         for (let j = 0; j < dataObjectSignature.length; j++) {
           if (dataObjectSignature[j].recipient) {
             if (recipientId[i] == dataObjectSignature[j].recipient.id) {
@@ -2330,7 +2334,7 @@ export class ContractSignatureComponent implements OnInit {
 
 
             const sign = await this.contractServiceV1.updateDigitalSignatured(
-              idSignMany[i],
+              dataObjectSignature[j].id,
               filePdfSigned
             );
 
@@ -2860,5 +2864,30 @@ export class ContractSignatureComponent implements OnInit {
         field.currentHeight += heightPages[i-1].height
       }
     })
+  }
+  
+  async checkCurrentSigningCall(recipientId: any) {
+    let currentSigningStatus: any = null;
+    try {
+      currentSigningStatus = await this.contractServiceV1.checkCurrentSigning(recipientId).toPromise()
+    } catch (error) {
+      this.spinner.hide()
+      this.toastService.showErrorHTMLWithTimeout("Lỗi ký số. Vui lòng thử lại sau ít phút", "", 3000)
+      return false
+    }
+
+    if (!currentSigningStatus.success) {
+      if (currentSigningStatus.message) {
+        this.spinner.hide()
+        this.toastService.showErrorHTMLWithTimeout(currentSigningStatus.message, "", 3000)
+        return false
+      } else {
+        this.spinner.hide()
+        this.toastService.showErrorHTMLWithTimeout("Lỗi ký số. Vui lòng thử lại sau ít phút", "", 3000)
+        return false
+      }
+    } else if (currentSigningStatus.success) {
+      return true
+    }
   }
 }
