@@ -740,6 +740,14 @@
             </div>
 
             <div class="contract_footer">
+                <div class="footer_contract_per_page">
+                  <div>Hiển thị&nbsp;</div>
+                  <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
+                      <option value="" hidden>{{this.page}}</option>
+                      <option *ngFor="let d of this.pageOptions">{{d}}</option>
+                  </select>
+                  <div>&nbsp;{{'contracts.per.page' | translate}}</div>
+                </div>
                 <div class="footer_title"></div>
                 <div class="footer_pagination">
                     <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; downloadMany()" previousLabel="" nextLabel=""></pagination-controls>
