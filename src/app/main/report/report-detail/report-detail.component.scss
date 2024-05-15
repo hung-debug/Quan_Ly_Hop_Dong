@@ -219,8 +219,16 @@ input[type="checkbox"]:checked + label:before {
 .footer_pagination_between {
   display: flex;
   margin: auto;
+
+  @media (max-width: 1520px) {
+    display: block;
+  }
 }
 
+.footer_pagination_between_input {
+  display: flex;
+  justify-content: center;
+}
 .enterPage input {
   display: block;
   margin: auto 0;

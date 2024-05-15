@@ -143,7 +143,7 @@
         <div></div>
         <div class = "footer_pagination_between">
             <p-paginator class="footer_pagination_between_p_paginator" [first]="page * row"  (onPageChange)="onPageChange($event)" [rows]="row" [totalRecords]="totalRecords"></p-paginator>
-            <div *ngIf = "totalRecords" class="enterPage footer_pagination_between">
+            <div *ngIf = "totalRecords" class="enterPage footer_pagination_between_input">
                 <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
                 <p>của {{numberPage}} trang</p>
             </div>

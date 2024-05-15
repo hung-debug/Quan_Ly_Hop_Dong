@@ -372,7 +372,7 @@ export class ReportDetailComponent implements OnInit {
   }
 
   autoSearchEnterPage(event: any) {
-    if(event.target.value && event.target.value <= this.numberPage) {
+    if(event.target.value && event.target.value != 0 && event.target.value <= this.numberPage) {
       this.page = this.enterPage - 1;
     } else {
       this.enterPage = this.page + 1;
