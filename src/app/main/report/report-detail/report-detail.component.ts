@@ -60,6 +60,9 @@ export class ReportDetailComponent implements OnInit {
   totalRecords: number = 0;
   row: number = 15;
   page: number = 0;
+  enterPage: number = 1;
+  inputTimeout: any;
+  numberPage: number;
   constructor(
     private appService: AppService,
     private userService: UserService,
@@ -337,6 +340,7 @@ export class ReportDetailComponent implements OnInit {
 
           this.list = listFirst.concat(letSecond);
           this.totalRecords = response.TotalElements;
+          this.numberPage = response.TotalPages;
         }
       
     })
@@ -349,6 +353,30 @@ export class ReportDetailComponent implements OnInit {
 
   onPageChange(event: any) {
     this.page = event.page;
+    this.enterPage = this.page + 1;
+    this.export(false);
+  }
+
+  validateInput(event: KeyboardEvent) {
+    const input = event.key;
+    if (input === ' ' || (isNaN(Number(input)) && input !== 'Backspace')) {
+      event.preventDefault();
+    }
+  }
+
+  onInput(event: any) {
+    clearTimeout(this.inputTimeout);
+    this.inputTimeout = setTimeout(() => {
+      this.autoSearchEnterPage(event);
+    }, 1000);
+  }
+
+  autoSearchEnterPage(event: any) {
+    if(event.target.value && event.target.value <= this.numberPage) {
+      this.page = this.enterPage - 1;
+    } else {
+      this.enterPage = this.page + 1;
+    }
     this.export(false);
   }
 

@@ -133,15 +133,21 @@
             <!-- <ng-template  pTemplate="paginatorleft" let-state>
                 <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ? (state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
               </ng-template> -->
-            <ng-template pTemplate="paginatorright" let-state>
+            <!-- <ng-template pTemplate="paginatorright" let-state>
                 <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ?(state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
-            </ng-template>
+            </ng-template> -->
         </p-table>
     </div>
 
-    <div style="display: grid;margin-top: 10px;grid-template-columns: repeat(3, 1fr)">
+    <div class="footer_pagination">
         <div></div>
-        <p-paginator (onPageChange)="onPageChange($event)" [rows]="row" [totalRecords]="totalRecords"></p-paginator>
+        <div class = "footer_pagination_between">
+            <p-paginator class="footer_pagination_between_p_paginator" [first]="page * row"  (onPageChange)="onPageChange($event)" [rows]="row" [totalRecords]="totalRecords"></p-paginator>
+            <div *ngIf = "totalRecords" class="enterPage footer_pagination_between">
+                <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
+                <p>của {{numberPage}} trang</p>
+            </div>
+        </div>
         <div style="color: #0160AE !important;margin: auto 0 auto auto;">{{'chart.number' | translate}}: {{totalRecords === 0 ? 0 : page * row}} - {{totalRecords > 0 ? toRecord() : 0}} / {{totalRecords > 0 ? totalRecords : 0}}</div>
     </div>
 </div>
