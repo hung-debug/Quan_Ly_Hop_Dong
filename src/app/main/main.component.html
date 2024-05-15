@@ -1,9 +1,12 @@
 <div class="page-wrapper" [ngClass]="{'toggled' : getSideBarState()}">
 
-
-  <app-sidebar *ngIf="getShowHideSideBar() && this.mobile === false" (evenSelectSidebar)="getName($event)"></app-sidebar>
-
   <main class="page-content" [ngStyle]="getStyleWithSideBar()" style="padding-bottom: 25px;">
+    <div class="sidebar-header sidebar-header-custom">
+      <a>
+        <img src="assets/img/logo_eContract_db.svg" alt="Logo" class="img-responsive" width="150px" height="auto" style="position: absolute; top: 8px; left: 27px;" />
+      </a>
+    </div>
+    <app-sidebar *ngIf="getShowHideSideBar() && this.mobile === false" (evenSelectSidebar)="getName($event)"></app-sidebar>
     <header [ngStyle]="getStyleSideBar()">
 
       <div class="search-wrapper">
