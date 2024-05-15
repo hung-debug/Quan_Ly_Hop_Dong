@@ -57,7 +57,9 @@ export class ReportDetailComponent implements OnInit {
 
   orgName: any;
   contractInfo: string;
-
+  totalRecords: number = 0;
+  row: number = 15;
+  page: number = 0;
   constructor(
     private appService: AppService,
     private userService: UserService,
@@ -280,7 +282,7 @@ export class ReportDetailComponent implements OnInit {
     if(this.contractInfo){
        payload ='&textSearch=' + this.contractInfo.trim()
     }
-    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData + payload;
+    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData + payload + `&pageNumber=`+this.page+`&pageSize=`+this.row;
     this.reportService.export('rp-detail',idOrg,params, flag).subscribe((response: any) => {
         this.spinner.hide();
         if(flag) {
@@ -334,10 +336,20 @@ export class ReportDetailComponent implements OnInit {
           let letSecond = response.contracts;
 
           this.list = listFirst.concat(letSecond);
+          this.totalRecords = response.TotalElements;
         }
       
     })
  
+  }
+  
+  toRecord() {
+    return Math.min((this.page + 1) * this.row, this.totalRecords)
+  }
+
+  onPageChange(event: any) {
+    this.page = event.page;
+    this.export(false);
   }
 
   getValue(list: any,index: number,code: string) {

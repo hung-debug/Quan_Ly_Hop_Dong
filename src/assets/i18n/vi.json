@@ -829,5 +829,6 @@
   "password.blank":"Mật khẩu không được để trống",
   "taxcode.not.match.hsm":"Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng",
   "login.method.title": "Hoặc đăng nhập bằng",
-  "folder.search.placeholder": "Tìm kiếm theo tên thư mục, tên hợp đồng, mã hợp đồng, tên đối tác"
+  "folder.search.placeholder": "Tìm kiếm theo tên thư mục, tên hợp đồng, mã hợp đồng, tên đối tác",
+  "contract.enterPage": "Nhập số trang"
 }

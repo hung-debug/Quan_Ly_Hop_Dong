@@ -113,7 +113,9 @@ export class ContractSignatureComponent implements OnInit {
   contractSelected: boolean = false;
   currentDate: Date;
   endDate: any;
-
+  inputTimeout: any
+  numberPage: number;
+  enterPage: number = 1;
   constructor(
     private appService: AppService,
     private contractServiceV1: ContractService,
@@ -510,7 +512,7 @@ export class ContractSignatureComponent implements OnInit {
       if (event = 'contract-signature')
         this.p = 1;
     });
-
+    this.enterPage = this.p;
     //get list contract share
     if (this.filter_status == -1) {
       this.contractService
@@ -730,6 +732,34 @@ export class ContractSignatureComponent implements OnInit {
 
       this.getContractList();
     }, 1000)
+  }
+
+  onInput(event: any) {
+    clearTimeout(this.inputTimeout);
+    this.inputTimeout = setTimeout(() => {
+      this.autoSearchEnterPage(event);
+    }, 1000);
+  }
+
+  validateInput(event: KeyboardEvent) {
+    const input = event.key;
+    if (input === ' ' || (isNaN(Number(input)) && input !== 'Backspace')) {
+      event.preventDefault();
+    }
+  }
+  
+  autoSearchEnterPage(event: any) {
+    if(event.target.value && event.target.value <= this.numberPage) {
+      this.p = this.enterPage;
+    } else {
+      this.enterPage = this.p;
+    }
+    this.getContractList();
+  }
+
+  countPage() {
+    this.numberPage = Math.ceil(this.pageTotal / this.page);
+    return this.numberPage;
   }
 
   private convertActionStr(): string {
