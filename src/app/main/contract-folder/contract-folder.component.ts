@@ -51,7 +51,9 @@ export class ContractFolderComponent implements OnInit {
   checkedAll: boolean = false;
   searchName: string = "";
   pageDownload: number = 10;
-
+  inputTimeout: any
+  numberPage: number;
+  enterPage: number = 1;
 
   constructor(
     private appService: AppService,
@@ -252,10 +254,11 @@ export class ContractFolderComponent implements OnInit {
 
   async getContractList(folderId?: number) {
     if (this.p < 1) {
-      this. p = 1
+      this.p = 1
     }
     if (folderId) this.currentParentId = folderId
     this.checkedAll = false;
+    this.enterPage = this.p;
     this.contractFolderService.getContractInFolder(folderId, this.searchName?.trim(), this.p - 1, this.page).subscribe((response: any) => {
       this.getCurrentPathData(response)
       if (folderId == 0) {
@@ -527,5 +530,33 @@ export class ContractFolderComponent implements OnInit {
     } else if (contractData.liquidationContractId) {
       contractData.status = 40
     }
+  }
+
+  onInput(event: any) {
+    clearTimeout(this.inputTimeout);
+    this.inputTimeout = setTimeout(() => {
+      this.autoSearchEnterPage(event);
+    }, 1000);
+  }
+
+  validateInput(event: KeyboardEvent) {
+    const input = event.key;
+    if (input === ' ' || (isNaN(Number(input)) && input !== 'Backspace')) {
+      event.preventDefault();
+    }
+  }
+  
+  autoSearchEnterPage(event: any) {
+    if(event.target.value && event.target.value != 0 && event.target.value <= this.numberPage) {
+      this.p = this.enterPage;
+    } else {
+      this.enterPage = this.p;
+    }
+    this.pageChange();
+  }
+  
+  countPage() {
+    this.numberPage = Math.ceil(this.pageTotal / this.page);
+    return this.numberPage;
   }
 }
