@@ -69,7 +69,7 @@
 
     <!--Bảng dữ liệu-->
     <div class="row" style="padding-top: 20px;">
-        <p-table #dt [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
+        <p-table #dt [value]="list" [paginator]="false" [rows]="row" id="table" [autoLayout]="true">
 
             <!--header-->
             <ng-template pTemplate="header">
@@ -107,13 +107,25 @@
                 </tr>
             </ng-template>
 
-            <ng-template  pTemplate="paginatorleft" let-state>
+            <!-- <ng-template  pTemplate="paginatorleft" let-state>
                 <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ? (state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
               </ng-template>
             <ng-template pTemplate="paginatorright" let-state>
                 <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ?(state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
-            </ng-template>
+            </ng-template> -->
         </p-table>
+    </div>
+
+    <div class="footer_pagination">
+        <div></div>
+        <div class = "footer_pagination_between">
+            <p-paginator class="footer_pagination_between_p_paginator" [first]="page * row"  (onPageChange)="onPageChange($event)" [rows]="row" [totalRecords]="totalRecords"></p-paginator>
+            <div *ngIf = "totalRecords" class="enterPage footer_pagination_between_input">
+                <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
+                <p>của {{numberPage}} trang</p>
+            </div>
+        </div>
+        <div style="color: #0160AE !important;margin: auto 0 auto auto;">{{'chart.number' | translate}}: {{totalRecords === 0 ? 0 : page * row}} - {{totalRecords > 0 ? toRecord() : 0}} / {{totalRecords > 0 ? totalRecords : 0}}</div>
     </div>
 </div>
 
