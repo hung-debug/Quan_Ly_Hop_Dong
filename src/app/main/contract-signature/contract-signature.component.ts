@@ -55,11 +55,11 @@ export class ContractSignatureComponent implements OnInit {
   closeResult: string = '';
   public contracts: any[] = [];
   public contractsSignMany: any[] = [];
-  pageOptions: any[] = [5, 10, 20, 50, 100];
+  pageOptions: any[] = [10, 20, 50, 100];
 
   p: number = 1;
-  page: number = 5;
-  pageDownload: number = 20;
+  page: number = 10;
+  // pageDownload: number = 20;
   pageStart: number = 0;
   pageEnd: number = 0;
   pageTotal: number = 0;
@@ -346,7 +346,7 @@ export class ContractSignatureComponent implements OnInit {
     this.typeDisplay = 'downloadMany';
 
     this.contractService.getContractMyProcessList(this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status,
-      this.p, 20, 30).subscribe((data) => {
+      this.p, this.page, 30).subscribe((data) => {
         this.checkedAll = false;
         this.dataChecked = [];
 
@@ -985,7 +985,11 @@ export class ContractSignatureComponent implements OnInit {
     this.p = 1;
     this.page = e.target.value;
     sessionStorage.setItem('receivePageNum', this.page.toString());
-    this.getContractList();
+    if(this.typeDisplay == 'downloadMany'){
+      this.downloadMany();
+    } else {
+      this.getContractList();
+    }
   }
 
   setPage() {
@@ -1010,7 +1014,7 @@ export class ContractSignatureComponent implements OnInit {
 
   setPageDownload() {
     this.pageStart = (this.p - 1) * 20 + 1;
-    this.pageEnd = this.p * 20;
+    this.pageEnd = this.p * this.page;
 
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
