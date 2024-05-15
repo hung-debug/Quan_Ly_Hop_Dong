@@ -208,3 +208,43 @@ word-break:break-word
 #table td {
   white-space: pre-wrap;
 }
+
+.footer_pagination {
+  display: grid;
+  margin-top: 10px;
+  grid-template-columns: 1fr 2fr 1fr
+}
+
+.footer_pagination_between {
+  display: flex;
+  margin: auto;
+
+  @media (max-width: 1520px) {
+    display: block;
+  }
+}
+
+.footer_pagination_between_input {
+  display: flex;
+  justify-content: center;
+}
+.enterPage input {
+  display: block;
+  margin: auto 0;
+  text-align:center;
+  margin-left: 5px;
+  margin-right: 5px;
+  height: 25px;
+  width: 50px; 
+  border-radius: 5px;
+  border: 1px solid #0160AE;
+}
+
+.text-enterPage::placeholder {
+  font-size: 10px;
+}
+
+.enterPage p {
+  display: block;
+  margin: auto 0;
+}
