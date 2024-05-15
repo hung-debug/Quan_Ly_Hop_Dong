@@ -44,10 +44,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
   public contractsDownload: any[] = [];
   p: number = 1;
   page: number = 10;
-  pageDownload: number = 20;
+  pageDownload: number = 10;
   pageStart: number = 0;
   pageEnd: number = 0;
   pageTotal: number = 0;
+  totalPage: number = 0;
   statusPopup: number = 1;
   notificationPopup: string = '';
   pageOptions: any[] = [10, 20, 50, 100];
@@ -358,6 +359,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   downloadManyContract() {
     if (this.dataChecked.length === 0) {
+      this.toastService.showErrorHTMLWithTimeout('not.select.contract','',3000);
       return
     }
     this.spinner.show();
@@ -376,8 +378,9 @@ export class ContractComponent implements OnInit, AfterViewInit {
         a.download = 'Contracts'+ '_' + formattedDate;
         a.click();
         window.URL.revokeObjectURL(fileUrl);
-        a.remove()
-        window.location.reload();
+        a.remove();
+        // window.location.reload();
+        this.downloadMany();
       },
       (error) => {
         this.toastService.showErrorHTMLWithTimeout('no.contract.download.file.error', '', 3000);
@@ -403,6 +406,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = data.total_elements;
+      this.totalPage = data.total_pages;
+      
       this.checkedAll = false;
       this.dataChecked = [];
       if (this.pageTotal == 0) {
@@ -623,6 +628,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   getPageData() {
+    window.scrollTo({ top: 0 });
      if (this.typeDisplay == 'downloadMany') {
       this.downloadMany();
     }
@@ -761,7 +767,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     this.p = 1;
     this.page = e.target.value;
-    sessionStorage.setItem('createdPageNum', this.page.toString());
+    sessionStorage.setItem('receivePageNum', this.page.toString());
     
     if(this.typeDisplay == 'downloadMany'){
       this.downloadMany();
@@ -772,8 +778,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   setPageDownload() {
-    this.pageStart = (this.p - 1) * 20 + 1;
-    this.pageEnd = this.p * this.page;
+    this.pageStart = (this.p - 1) * this.page + 1;
+    this.pageEnd = (this.p) * this.page;
 
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
