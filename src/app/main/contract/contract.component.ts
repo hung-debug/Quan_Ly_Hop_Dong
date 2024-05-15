@@ -829,7 +829,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
   
   autoSearchEnterPage(event: any) {
-    if(event.target.value && event.target.value <= this.numberPage) {
+    if(event.target.value && event.target.value != 0 && event.target.value <= this.numberPage) {
       this.p = this.enterPage;
     } else {
       this.enterPage = this.p;

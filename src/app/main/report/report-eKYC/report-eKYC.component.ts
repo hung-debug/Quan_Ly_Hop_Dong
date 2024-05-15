@@ -36,7 +36,12 @@ export class ReportEKYCComponent implements OnInit {
   optionsStatus: any = [];
   contractStatus: any;
   maxSelectableDate: Date;
-  
+  totalRecords: number = 0;
+  row: number = 15;
+  page: number = 0;
+  enterPage: number = 1;
+  inputTimeout: any;
+  numberPage: number;
   constructor(
     private appService: AppService,
     private inputTreeService: InputTreeService,
@@ -190,7 +195,7 @@ export class ReportEKYCComponent implements OnInit {
       "processIdEnd": to_date,
     }
 
-    let params = `?pageNumber=0&pageSize=10000`
+    let params = `?pageNumber=`+this.page+`&pageSize=`+this.row;
     
     try {
       if (!isExport) {
@@ -202,6 +207,8 @@ export class ReportEKYCComponent implements OnInit {
             this.spinner.hide()
             // this.list = res.content.filter((item: any) => !item.emailOrPhone.includes('@'))
             this.list = res.content
+            this.totalRecords = res.totalElements;
+            this.numberPage = res.totalPages;
           }
         )
       } else {
@@ -228,6 +235,39 @@ export class ReportEKYCComponent implements OnInit {
     }
   }
   
+  toRecord() {
+    return Math.min((this.page + 1) * this.row, this.totalRecords)
+  }
+
+  onPageChange(event: any) {
+    this.page = event.page;
+    this.enterPage = this.page + 1;
+    this.exportEKYCReportCall(false);
+  }
+
+  validateInput(event: KeyboardEvent) {
+    const input = event.key;
+    if (input === ' ' || (isNaN(Number(input)) && input !== 'Backspace')) {
+      event.preventDefault();
+    }
+  }
+
+  onInput(event: any) {
+    clearTimeout(this.inputTimeout);
+    this.inputTimeout = setTimeout(() => {
+      this.autoSearchEnterPage(event);
+    }, 1000);
+  }
+
+  autoSearchEnterPage(event: any) {
+    if(event.target.value && event.target.value != 0 && event.target.value <= this.numberPage) {
+      this.page = this.enterPage - 1;
+    } else {
+      this.enterPage = this.page + 1;
+    }
+    this.exportEKYCReportCall(false);
+  }
+
   downloadFile(data: any) {
     let currentDate = moment().format('HH:mm:ss')
     let selectedStartDate = moment(this.date[0]).format('DD-MM-YYYY')
