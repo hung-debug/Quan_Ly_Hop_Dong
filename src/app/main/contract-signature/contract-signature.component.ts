@@ -824,6 +824,7 @@ export class ContractSignatureComponent implements OnInit {
 
   downloadManyContract() {
     if (this.dataChecked.length === 0) {
+      this.toastService.showErrorHTMLWithTimeout('not.select.contract','',3000);
       return
     }
     this.spinner.show();
@@ -842,7 +843,8 @@ export class ContractSignatureComponent implements OnInit {
       a.click();
       window.URL.revokeObjectURL(fileUrl);
       a.remove();
-      window.location.reload();
+      // window.location.reload();
+      this.downloadMany();
     },
       (error) => {
         this.toastService.showErrorHTMLWithTimeout(
@@ -1013,7 +1015,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   setPageDownload() {
-    this.pageStart = (this.p - 1) * 20 + 1;
+    this.pageStart = (this.p - 1) * this.page + 1;
     this.pageEnd = this.p * this.page;
 
     if (this.pageTotal < this.pageEnd) {

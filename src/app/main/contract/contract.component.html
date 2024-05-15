@@ -628,7 +628,7 @@
                 </div>
             </div>
 
-            <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}">
+            <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
                 <div class="row">
                     <!--Cột 1-->
                     <div class="col-md-4">
@@ -743,14 +743,14 @@
                 <div class="footer_contract_per_page">
                   <div>Hiển thị&nbsp;</div>
                   <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
-                      <option value="" hidden>{{this.page}}</option>
+                      <option value="" hidden>10</option>
                       <option *ngFor="let d of this.pageOptions">{{d}}</option>
                   </select>
                   <div>&nbsp;{{'contracts.per.page' | translate}}</div>
                 </div>
                 <div class="footer_title"></div>
                 <div class="footer_pagination">
-                    <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; downloadMany()" previousLabel="" nextLabel=""></pagination-controls>
+                    <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getPageData()" previousLabel="" nextLabel=""></pagination-controls>
                 </div>
                 <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}
                 </div>

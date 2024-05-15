@@ -33,7 +33,7 @@ export const parttern = {
 export const parttern_input = {
   // input_form: /^[^!“#$%&‘()*;<=>?@[\]^_`{|}~\\]*$/,
 
-  contract_name_valid: /^[^!@#$%^&*+~<?'';{}\[\]]*$/,
+  contract_name_valid: /^[^!@#$%^&*+~<?'';{}\[\]/]*$/,
   input_form: /^[^!@#$%^&*+~<?'';{}\[\]]*$/,
   // regex input ten nguoi ky
   new_input_form: /^[^!@#$%^&*+~<?;{}\[\],_/\\]*$/,
