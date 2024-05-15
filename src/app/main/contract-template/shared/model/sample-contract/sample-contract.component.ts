@@ -463,12 +463,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // xoa nhung du lieu doi tuong bi thay doi
     if(!this.datas.isDeleteField){
       if (dataDiffirent.length > 0) {
-        this.datas.contract_user_sign.forEach((res: any, index: number) => {
+        this.datas.contract_user_sign.forEach((res: any) => {
           if (res.sign_config.length > 0) {
             /*
             * begin xóa đối tượng ký đã bị thay đổi dữ liệu
             */
-            res.sign_config.forEach((element: any) => {
+            res.sign_config.forEach((element: any, index: number) => {
               //chi remove neu da duoc gan nguoi xu ly
               if ((element.id_have_data && dataDiffirent.some((p: any) => p.id_have_data && p.id_have_data == element.id_have_data))) {
                 this.removeDataSignChange(element.id_have_data);
@@ -491,7 +491,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               || (
                 (val.name as any) == (data.name as any)
                 && (val.type as any) == (data.type as any)
-                && (val.recipient_id ? val.recipient_id as any : val.email as any) === (val.recipient_id ? data.recipient_id as any : data.email as any)
+                && (val.recipient_id ? val.recipient_id as any : val.email as any) === (data.recipient_id ? data.recipient_id as any : data.email as any)
                 && val.sign_unit == data.sign_unit)));
             res.sign_config.forEach((items: any) => {
               items.id = items.id + '1';
