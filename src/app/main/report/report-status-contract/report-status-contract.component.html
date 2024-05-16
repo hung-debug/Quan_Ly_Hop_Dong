@@ -132,7 +132,7 @@
                 <p>của {{numberPage}} trang</p>
             </div>
         </div>
-        <div class="footer_pagination_quantity">{{'chart.number' | translate}}: {{totalRecords === 0 ? 0 : page * row}} - {{totalRecords > 0 ? toRecord() : 0}} / {{totalRecords > 0 ? totalRecords : 0}}</div>
+        <div class="footer_pagination_quantity">{{'chart.number' | translate}}: {{totalRecords === 0 ? 0 : page * row + 1}} - {{totalRecords > 0 ? toRecord() : 0}} / {{totalRecords > 0 ? totalRecords : 0}}</div>
     </div>
 </div>
 

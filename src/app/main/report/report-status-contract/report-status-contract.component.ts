@@ -401,6 +401,7 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
 
   changePageNumber(e: any){
     this.page = 0;
+    this.enterPage = 1;
     this.row = e.target.value;
     // sessionStorage.setItem('createdPageNum', this.page.toString());
     this.export(false);
