@@ -40,7 +40,9 @@ export class AddContractTemplateComponent implements OnInit {
       'sample_contract': false,
       'confirm_infor_contract': false
     },
-    flagDigitalSign: false
+    flagDigitalSign: false,
+    isUploadNewFile: false,
+    countUploadContractFile : 0,
   }
   personalDetails!: FormGroup;
   addressDetails!: FormGroup;
@@ -68,10 +70,10 @@ export class AddContractTemplateComponent implements OnInit {
   ) {
   }
 
-  isQLHD_01:boolean=true;
-  isQLHD_02:boolean=true;
-  isQLHD_08:boolean=true;
-  isQLHD_11:boolean=true;
+  isQLMHD_01:boolean=true;
+  isQLMHD_02:boolean=true;
+  isQLMHD_08:boolean=true;
+  isQLMHD_11:boolean=true;
 
   ngOnInit() {
     //title
@@ -88,10 +90,10 @@ export class AddContractTemplateComponent implements OnInit {
           data => {
             let listRole: any[];
             listRole = data.permissions;
-            this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
+            this.isQLMHD_01 = listRole.some(element => element.code == 'QLMHD_01');
             // this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
             // this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
-            this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
+            this.isQLMHD_11 = listRole.some(element => element.code == 'QLMHD_11');
           }, error => {
             setTimeout(() => this.router.navigate(['/login']));
             this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
@@ -113,7 +115,7 @@ export class AddContractTemplateComponent implements OnInit {
         const array_empty: any [] = [];
         array_empty.push({ref_id: Number(params['id'])});
         this.datas.contractConnect = array_empty;
-        console.log(this.datas.contractConnect);
+        
       } else if (this.action == 'edit') {
         this.id = params['id'];
         this.appService.setTitle('Sửa mẫu hợp đồng');
@@ -131,6 +133,7 @@ export class AddContractTemplateComponent implements OnInit {
             i_data_file_contract: rs[1],
             is_data_object_signature: rs[2]
           }
+          this.datas.storedFields = rs[2]
           // this.contractService.changeMessage(data_api);
           this.getDataContractCreated(data_api);
         }, () => {
@@ -144,7 +147,7 @@ export class AddContractTemplateComponent implements OnInit {
   }
 
   getDataContractCreated(data: any) {
-    console.log("data ", data);
+    
     // this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
     if (data) {
       let fileName = data.i_data_file_contract.filter((p: any) => p.type == 1 && p.status == 1)[0];
@@ -170,8 +173,8 @@ export class AddContractTemplateComponent implements OnInit {
       this.datas.start_time = data.is_data_contract.start_time;
       this.datas.end_time = data.is_data_contract.end_time;
 
-      console.log("add ", data.is_data_contract.start_time);
-      console.log("add1 ", this.datas.end_time);
+      
+      
   
       this.datas = Object.assign(this.datas, data.is_data_contract);
       this.step = variable.stepSampleContract.step1;
@@ -180,7 +183,7 @@ export class AddContractTemplateComponent implements OnInit {
 
 
   receiveMessage(event: any) {
-    console.log(event)
+    
     this.shareData = event;
   }
 

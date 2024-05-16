@@ -39,7 +39,7 @@ export class AdminUserService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    console.log(headers);
+    
     return this.http.get<any>(this.getUserByIdUrl + id, {'headers': headers});
   }
 
@@ -59,8 +59,8 @@ export class AdminUserService {
       status: datas.status
     
     });    
-    console.log("body ",body);
-    console.log("id ", datas.id);
+    
+    
     
     return this.http.put<any>(this.updateUserUrl + datas.id, body, {'headers': headers});
   }
@@ -84,7 +84,7 @@ export class AdminUserService {
     const body = JSON.stringify({
       email: email
     });
-    console.log(headers);
+    
     return this.http.post<any>(this.getUserByEmailUrl, body, {'headers': headers});
   }
 
@@ -95,8 +95,8 @@ export class AdminUserService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-      console.log("data add user");
-      console.log(datas);
+      
+      
 
     const body = JSON.stringify({
       email: datas.email,

@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { variable } from "../../../../config/variable";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog,MatDialogRef } from "@angular/material/dialog";
 import { ForwardContractComponent } from "../../shared/model/forward-contract/forward-contract.component";
 import { ContractService } from "../../../../service/contract.service";
 import { DisplayDigitalSignatureComponent } from "../../display-digital-signature/display-digital-signature.component";
@@ -9,6 +9,8 @@ import { DeviceDetectorService } from "ngx-device-detector";
 import { UnitService } from 'src/app/service/unit.service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-footer-signature',
   templateUrl: './footer-signature.component.html',
@@ -32,7 +34,7 @@ export class FooterSignatureComponent implements OnInit {
   @Input() pageBefore: number;
 
   @Input() status: any;
-
+  @Input() signBoxData: any;
   is_show_coordination: boolean = false;
   is_data_coordination: any;
   orgId: any;
@@ -46,13 +48,14 @@ export class FooterSignatureComponent implements OnInit {
 
   currentUser: any;
   emailRecipients: any;
-
+  
   pageRendering: any;
   pageNumPending: any = null;
 
   email: string = "email";
   phone: string = "phone";
-
+  currentRecipient: any;
+  type: any = 0;
   constructor(
     private dialog: MatDialog,
     private contractService: ContractService,
@@ -60,14 +63,15 @@ export class FooterSignatureComponent implements OnInit {
     private deviceService: DeviceDetectorService,
     private unitService: UnitService,
     private router: Router,
-    private _location: Location
+    public translate: TranslateService,
+    private spinner: NgxSpinnerService,
+    public dialogRef: MatDialogRef<FooterSignatureComponent>
   ) {
   }
 
   lang: string;
   ngOnInit(): void {
-    console.log("ngOnInit: ",this.datas)
-    console.log("ngOnInit keys: ",Object.keys(this.datas))
+    
     this.getDeviceApp();
 
     if (sessionStorage.getItem('lang') == 'en') {
@@ -76,6 +80,11 @@ export class FooterSignatureComponent implements OnInit {
       this.lang = 'vi';
     }
 
+    if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
+      this.type = 1;
+    } else
+      this.type = 0;
+
     let data_coordination = this.datas.is_data_contract.participants;
     let emailCurrent = this.contractService.getAuthCurrentUser().email;
     let isBreak = false;
@@ -83,6 +92,7 @@ export class FooterSignatureComponent implements OnInit {
       for (let j = 0; j < data_coordination[i].recipients.length; j++) {
         if (data_coordination[i].recipients[j].email == emailCurrent) {
           this.is_data_coordination = data_coordination[i];
+          this.currentRecipient = data_coordination[i].recipients[j]
           isBreak = true;
           break;
         }
@@ -122,6 +132,7 @@ export class FooterSignatureComponent implements OnInit {
 
       }
     }
+    this.getNumberOfSigningObj(this.currentRecipient?.fields)
   }
 
   mobile: boolean = false;
@@ -148,13 +159,12 @@ export class FooterSignatureComponent implements OnInit {
   }
 
   switchesValueChange($event: any) {
-    console.log("abc")
-    console.log("event ", $event);
+    
+    
   }
 
   indexY: number = 0;
   autoScroll() {
-
     this.coordinateY = this.coordinateY.sort(function (a: number, b: number) {
       return a - b;
     });
@@ -162,7 +172,6 @@ export class FooterSignatureComponent implements OnInit {
     this.idElement = this.idElement.sort(function (a: number, b: number) {
       return a - b;
     });
-
     let pdffull: any = document.getElementById('pdf-full');
 
     if (this.confirmSignature == 1 || this.confirmSignature == 3) {
@@ -182,6 +191,40 @@ export class FooterSignatureComponent implements OnInit {
     }
 
     if (this.indexY <= this.coordinateY.length - 1) {
+      this.indexY++;
+    } else {
+      this.indexY = 0;
+      pdffull.scrollTo(0, 0);
+    }
+  }
+
+  findSignBox() {
+
+    this.signBoxData.coordinateY = this.signBoxData.coordinateY.sort(function (a: number, b: number) {
+      return a - b;
+    });
+    this.signBoxData.idElement = this.signBoxData.idElement.sort(function (a: number, b: number) {
+      return a - b;
+    });
+    let pdffull: any = document.getElementById('pdf-full');
+
+    if (this.confirmSignature == 1 || this.confirmSignature == 3) {
+      pdffull.scrollTo(0, this.signBoxData.coordinateY[this.indexY]);
+
+      let id: any = document.getElementById(this.signBoxData.idElement[this.indexY]);
+
+      if (id) {
+        id.style.backgroundColor = 'yellow';
+      }
+      for (let i = 0; i < this.signBoxData.idElement.length; i++) {
+        if (this.signBoxData.idElement[i] != this.signBoxData.idElement[this.indexY]) {
+          let elemet: any = document.getElementById(this.signBoxData.idElement[i]);
+          elemet.style.backgroundColor = '#EBF8FF';
+        }
+      }
+    }
+
+    if (this.indexY <= this.signBoxData.coordinateY.length - 1) {
       this.indexY++;
     } else {
       this.indexY = 0;
@@ -250,26 +293,60 @@ export class FooterSignatureComponent implements OnInit {
   }
   ArrRecipientsNew: boolean;
   action() {
-    console.log("##############datas", this.datas);
+    
     if (this.datas.action_title == 'dieu_phoi') {
-      // console.log("datas", this.datas);
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+      let id_recipient_signature = null;
 
-      // this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-      // const ArrRecipients = this.datas.is_data_contract.participants[0].recipients;
-      // const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email); 
-      // console.log("ArrRecipientsNew111", ArrRecipientsNew);
+      for (const d of this.datas.is_data_contract.participants) {
+        for (const q of d.recipients) {
+          if (q.email) {
+            if (q.email == this.currentUser.email && q.status == 1) {
+              id_recipient_signature = q.id;
+              break
+            }
+          }
+        }
+        if (id_recipient_signature) break;
+      }
+      
 
-      // if (!ArrRecipientsNew.includes(this.currentUser.email)) {
+      this.contractService.getDetermineCoordination(id_recipient_signature).subscribe(async (response) => {
+        
+        const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+        
 
-      //   this.toastService.showErrorHTMLWithTimeout(
-      //     'Bạn không có quyền xử lý hợp đồng này!',
-      //     '',
-      //     3000
-      //   );
-      //   this.router.navigate(['/main/dashboard']);
-      //   return
-      // };
-      // console.log("this.currentUser.email", this.currentUser);
+        let ArrRecipientsNew = false
+        ArrRecipients.map((item: any) => {
+          if (item.email === this.currentUser.email) {
+            ArrRecipientsNew = true
+            return
+          }
+        });
+        
+
+        if (!ArrRecipientsNew) {
+
+          this.toastService.showErrorHTMLWithTimeout(
+            'Bạn không có quyền xử lý hợp đồng này!',
+            '',
+            3000
+          );
+          if (this.type == 1) {
+            this.router.navigate(['/login']);
+            this.dialogRef.close();
+            this.spinner.hide();
+            return
+          } else {
+            this.router.navigate(['/main/dashboard']);
+            this.dialogRef.close();
+            this.spinner.hide();
+            return
+          }
+        };
+        
+      })
+
 
       if (this.is_data_coordination) { // chỉ lấy dữ liệu của người điều phối
         if (this.is_data_coordination['recipients']) {
@@ -354,7 +431,7 @@ export class FooterSignatureComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
@@ -362,26 +439,54 @@ export class FooterSignatureComponent implements OnInit {
   refuseContract() {
     if (this.datas.action_title == 'dieu_phoi') {
       this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-      // this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
-      // console.log("this.emailRecipientssssssssss",this.emailRecipients);
-      const ArrRecipients = this.datas.is_data_contract.participants[1].recipients;
-      const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email);
-      console.log("ArrRecipientsNew", ArrRecipientsNew);
+      let id_recipient_signature = null;
 
-      // if (!ArrRecipientsNew.includes(this.currentUser.email)) {
+      for (const d of this.datas.is_data_contract.participants) {
+        for (const q of d.recipients) {
+          if (q.email) {
+            if (q.email == this.currentUser.email && q.status == 1) {
+              id_recipient_signature = q.id;
+              break
+            }
+          }
+        }
+        if (id_recipient_signature) break;
+      }
+      this.contractService.getDetermineCoordination(id_recipient_signature).subscribe(async (response) => {
+        
+        const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+        
 
-      //   this.toastService.showErrorHTMLWithTimeout(
-      //     'Bạn không có quyền xử lý hợp đồng này!',
-      //     '',
-      //     3000
-      //   );
-      //   this.router.navigate(['/main/dashboard']);
-      //   return
-      // };
-      console.log("this.currentUser.email", this.currentUser.email);
-      console.log("ArrRecipientsNew", ArrRecipientsNew);
+        let ArrRecipientsNew = false
+        ArrRecipients.map((item: any) => {
+          if (item.email === this.currentUser.email) {
+            ArrRecipientsNew = true
+            return
+          }
+        });
+        
 
-      this.submitChanges.emit(1);
+        if (!ArrRecipientsNew) {
+
+          this.toastService.showErrorHTMLWithTimeout(
+            'Bạn không có quyền xử lý hợp đồng này!',
+            '',
+            3000
+          );
+          if (this.type == 1) {
+            this.router.navigate(['/login']);
+            this.dialogRef.close();
+            this.spinner.hide();
+            return
+          } else {
+            this.router.navigate(['/main/dashboard']);
+            this.dialogRef.close();
+            this.spinner.hide();
+            return
+          }
+        } else this.submitChanges.emit(1);
+        
+      })
     }
   }
 
@@ -390,7 +495,13 @@ export class FooterSignatureComponent implements OnInit {
   }
 
   endContract() {
-    this.router.navigate(['/main/c/receive/wait-processing']);
+    if(this.type == 0) {
+      this.router.navigate(['/main/c/receive/wait-processing']);
+    } else {
+      // this.router.navigate(['/main/c/receive/wait-processing']);
+      this.router.navigate(['/login']);
+      this.contractService.deleteToken().subscribe();
+    }
   }
 
 
@@ -419,54 +530,209 @@ export class FooterSignatureComponent implements OnInit {
   }
 
 
-  processingAuthorization() {
+  async processingAuthorization() {
     this.getCoordination();
+    // const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
+    // const isInRecipient = this.is_data_coordination.recipients.some( (el: any) => el.name === updatedInfo.name)
+    const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
+    let isInRecipient = false;
+
+    if (this.datas?.is_data_contract?.participants?.length) {
+      const participants = this.datas?.is_data_contract?.participants;
+      for (const participant of participants) {
+        for (const recipient of participant.recipients) {
+          if (updatedInfo.name == recipient.name) {
+            isInRecipient = true;
+          }
+        }
+      }
+    }
+    if(!isInRecipient){
+      this.toastService.showErrorHTMLWithTimeout(
+        'Bạn không có quyền xử lý hợp đồng này!',
+        '',
+        3000
+      );
+      if (this.type == 1) {
+        this.router.navigate(['/login']);
+        this.dialogRef.close();
+        this.spinner.hide();
+        return
+      } else {
+        this.router.navigate(['/main/dashboard']);
+        this.dialogRef.close();
+        this.spinner.hide();
+        return
+      }
+    }
     const data = {
-      title: 'ỦY QUYỀN XỬ LÝ',
+      title: this.translate.instant('processing.auth').toUpperCase(),
       is_content: 'processing_author',
       dataContract: this.datas,
       recipientId: this.recipientId
     };
-    if (this.datas.action_title == 'dieu_phoi') {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+
+    this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
+      const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+      
+
+      let ArrRecipientsNew = false
+      ArrRecipients.map((item: any) => {
+        if (item.email === this.currentUser.email) {
+          ArrRecipientsNew = true
+          return
+        }
+      });
+      
+
+      if (!ArrRecipientsNew) {
+
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        }
+      };
+
+      if (this.datas.action_title == 'dieu_phoi') {
+
+        // @ts-ignore
+        data['role_coordination'] = 1;
+      }
+
       // @ts-ignore
-      data['role_coordination'] = 1;
+      const dialogRef = this.dialog.open(ForwardContractComponent, {
+        width: '500px',
+        backdrop: 'static',
+        keyboard: true,
+        data
+      })
+      dialogRef.afterClosed().subscribe((result: any) => {
+        
+        let is_data = result
+      })
     }
-    // @ts-ignore
-    const dialogRef = this.dialog.open(ForwardContractComponent, {
-      width: '500px',
-      backdrop: 'static',
-      keyboard: true,
-      data
-    })
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      let is_data = result
-    })
+    )
   }
 
-  forWardContract() {
+  async forWardContract() {
     this.getCoordination();
+    
+    
+    // const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
+    // const isInRecipient = this.is_data_coordination.recipients.some( (el: any) => el.name === updatedInfo.name)
+    const updatedInfo = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
+    let isInRecipient = false;
+
+    if (this.datas?.is_data_contract?.participants?.length) {
+      const participants = this.datas?.is_data_contract?.participants;
+      
+      
+      for (const participant of participants) {
+        for (const recipient of participant.recipients) {
+          if (updatedInfo.name == recipient.name) {
+            isInRecipient = true;
+          }
+        }
+      }
+    }
+    if(!isInRecipient){
+      this.toastService.showErrorHTMLWithTimeout(
+        'Bạn không có quyền xử lý hợp đồng này!',
+        '',
+        3000
+      );
+      if (this.type == 1) {
+        this.router.navigate(['/login']);
+        this.dialogRef.close();
+        this.spinner.hide();
+        return
+      } else {
+        this.router.navigate(['/main/dashboard']);
+        this.dialogRef.close();
+        this.spinner.hide();
+        return
+      }
+    }
     const data = {
-      title: 'CHUYỂN TIẾP',
+      title: this.translate.instant('forward').toUpperCase(),
       is_content: 'forward_contract',
       dataContract: this.datas,
       recipientId: this.recipientId
     };
-    if (this.datas.action_title == 'dieu_phoi') {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    // 
+    this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
+      const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+      
+
+      let ArrRecipientsNew = false
+      ArrRecipients.map((item: any) => {
+        if (item.email === this.currentUser.email) {
+          ArrRecipientsNew = true
+          return
+        }
+      });
+      
+
+      if (!ArrRecipientsNew) {
+
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        }
+      };
+      if (this.datas.action_title == 'dieu_phoi') {
+        // @ts-ignore
+        data['role_coordination'] = 1;
+      }
       // @ts-ignore
-      data['role_coordination'] = 1;
+      const dialogRef = this.dialog.open(ForwardContractComponent, {
+        width: '500px',
+        backdrop: 'static',
+        keyboard: true,
+        data
+      })
+      dialogRef.afterClosed().subscribe((result: any) => {
+        
+        let is_data = result
+      })
     }
-    // @ts-ignore
-    const dialogRef = this.dialog.open(ForwardContractComponent, {
-      width: '500px',
-      backdrop: 'static',
-      keyboard: true,
-      data
-    })
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      let is_data = result
-    })
+    )
   }
 
+  signBoxes: number = 0;
+  inforBoxes: number = 0;
+  getNumberOfSigningObj(arr: any[]) {
+    arr.forEach((item: any) => {
+      if (item.type == 3 || item.type == 2) {
+        this.signBoxes++
+      }
+    })
+    this.inforBoxes = this.currentRecipient?.fields?.length - this.signBoxes
+  }
 }

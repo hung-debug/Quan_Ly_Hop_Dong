@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { data } from 'jquery';
 
 export interface Unit {
+  totalCecaPurchased: number;
   tax_code: any;
   id: number,
   name: string,
@@ -19,7 +20,10 @@ export interface Unit {
   status: string,
   short_name: string,
   parent_id: string,
-  ceca_push_mode: any
+  ceca_push_mode: any,
+  brandName: any,
+  smsUser: any,
+  smsPass: any,
 }
 @Injectable({
   providedIn: 'root'
@@ -36,6 +40,7 @@ export class UnitService {
   getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
   getNumberContractCreateOriganzationUrl: any = `${environment.apiUrl}/api/v1/contracts/total-contracts?orgId=`;
   getNumberContractBuyOriganzationUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
+  getTaxCodeOriganzationUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
 
   token:any;
   customer_id:any;
@@ -59,11 +64,11 @@ export class UnitService {
     let listUnitUrl = this.listUnitUrl + '?code=' + filter_code.trim() + '&name=' + filter_name.trim() + "&size=10000";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Unit[]>(listUnitUrl, {headers}).pipe(catchError(this.handleError));
-  }  
+  }
 
   //add api thêm mới tổ chức user
   addUnit(datas: any) {
-    console.log("datas unit ", datas);
+
 
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -79,7 +84,10 @@ export class UnitService {
       fax: datas.fax,
       status: datas.status,
       parent_id: datas.parent_id,
-      tax_code: datas.tax_code
+      tax_code: datas.tax_code,
+      // brandName: datas.brandName,
+      // smsUser: datas.smsUser,
+      // smsPass: datas.smsPass,
     });
 
     return this.http.post<any>(this.addUnitUrl, body, {'headers': headers});
@@ -93,7 +101,7 @@ export class UnitService {
 
     const headers = new HttpHeaders()
       .append('Authorization', 'Bearer ' + this.token)
-          
+
       return this.http.post(
         this.uploadFileUnitUrl,
         formData,
@@ -121,7 +129,10 @@ export class UnitService {
       status: datas.status,
       parent_id: datas.parent_id,
       path: datas.path,
-      tax_code: datas.tax_code
+      tax_code: datas.tax_code,
+      // brandName: datas.brandName,
+      // smsUser: datas.smsUser,
+      // smsPass: datas.smsPass,
     });
     return this.http.put<any>(this.updateUnitUrl + datas.id, body, {'headers': headers});
   }
@@ -146,7 +157,7 @@ export class UnitService {
     });
     return this.http.post<any>(this.checkNameUniqueUrl, body, {headers}).pipe();
   }
-  
+
   checkCodeUnique(data:any, code:any){
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -187,6 +198,15 @@ export class UnitService {
     return this.http.get<any>(listUrl, {headers}).pipe();
   }
 
+  getTaxCodeOriganzation(organization_id:any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let listUrl = this.getTaxCodeOriganzationUrl + organization_id;
+    return this.http.get<any>(listUrl, {headers}).pipe();
+  }
+
   getNumberContractBuyOriganzation(organization_id:any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -199,9 +219,17 @@ export class UnitService {
   handleError(error: HttpErrorResponse) {
     if (error.status === 0 && error.error instanceof ProgressEvent) {
       // A client-side or network error occurred. Handle it accordingly.
-      console.log('Client side error:', error.error)
+
       this.router.navigateByUrl("/login");
     }
     return throwError(this.errorData);
   };
+  getDataNotifyOriganzation1(organization_id:any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let listUrl = this.getNotifyOriganzation + organization_id;
+    return this.http.get<any[]>(listUrl, {headers}).pipe();
+  }
 }

@@ -4,12 +4,12 @@
         <div class="col-md-2">
             <div>{{'organization' | translate}}</div>
             <div class="input-line">
-            <p-treeSelect 
-                [(ngModel)]="selectedNodeOrganization" 
-                placeholder="{{'all' | translate}}" 
-                [filter]="true" 
-                filterBy="name"  
-                [droppable]="true" 
+            <p-treeSelect
+                [(ngModel)]="selectedNodeOrganization"
+                placeholder="{{'all' | translate}}"
+                [filter]="true"
+                filterBy="name"
+                [droppable]="true"
                 [options]="listOrgCombobox"
             >
           </p-treeSelect>
@@ -18,30 +18,30 @@
 
         <!--Ngày tạo hợp đồng-->
         <div class="col-md-2">
-            <div>{{ 'create-date' | translate}} *</div>
+            <div>{{ 'create-date' | translate}} <span style="color: red"> *</span></div>
             <div class="input-line">
-                <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"
-                          
+                <p-calendar selectionMode="range" [readonlyInput]="false" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"
+
                 ></p-calendar>
             </div>
         </div>
 
         <!--Trạng thái-->
-        <div class="col-md-2">
+        <!-- <div class="col-md-2">
             <div>{{'contract.status' | translate}}</div>
             <div class="input-line">
-                <p-dropdown 
+                <p-dropdown
                     panelStyleClass="font"
                     appendTo="body"
                     optionLabel="name"
-                    optionValue="id" 
-                    placeholder="{{'contract.status.v2' | translate}}" 
-                    [showClear]="true"  
+                    optionValue="id"
+                    placeholder="{{'contract.status.v2' | translate}}"
+                    [showClear]="true"
                     [options]="optionsStatus"
                     [(ngModel)]="contractStatus"
                 ></p-dropdown>
             </div>
-        </div>
+        </div> -->
 
         <!--Button-->
         <div class="col-md-6 btn_search">
@@ -63,7 +63,7 @@
 
     <!--Bảng dữ liệu-->
     <div class="row" style="padding-top: 20px;">
-        <p-table [value]="list" id="table" [autoLayout]="true">
+        <p-table #dt [value]="list" id="table" [paginator]="true" [rows]="2">
 
             <!--header-->
             <ng-template pTemplate="header">
@@ -76,27 +76,57 @@
             </ng-template>
 
             <ng-template let-i="rowIndex" pTemplate="body" let-list>
-                <tr *ngIf="i == 0" class="subheader-row">
-                    <td *ngFor="let col of cols; let colIndex = index">
-                        <span *ngIf="col.id == 8">{{this.org}}</span>
-                    </td>
+
+                <tr style="background-color: #EEF7FF;">
+                    <td style="font-style: normal;font-weight: 800;font-size: 13px;">{{list.orgName}}</td>
+                    <td></td>
                 </tr>
 
-                <tr *ngIf="i != 0 && list.name != 'waiting' && list.name != 'total'">
-                    <td>{{this.convert(list.name)}}</td>
-                    <td>{{list.value}}</td>
+                <tr>
+                    <td>{{this.convert('rejected')}}</td>
+                    <td>{{list.rejected}}</td>
+                </tr>
+
+                <tr>
+                    <td>{{this.convert('cancel')}}</td>
+                    <td>{{list.canceled}}</td>
+                </tr>
+
+                <tr>
+                    <td>{{this.convert('expired')}}</td>
+                    <td>{{list.expired}}</td>
+                </tr>
+
+                <tr>
+                    <td>{{this.convert('prepare_expires')}}</td>
+                    <td>{{list.prepare_expires}}</td>
+                </tr>
+
+                <tr>
+                    <td>{{this.convert('processed')}}</td>
+                    <td>{{list.processed}}</td>
+                </tr>
+
+                <tr>
+                    <td>{{this.convert('processing')}}</td>
+                    <td>{{list.processing}}</td>
+                </tr>
+
+                <tr>
+                    <td style="font-style: normal;font-weight: 700;font-size: 13px;color: #106DB6;">{{this.convert('total')}}</td>
+                    <td>{{list.total}}</td>
                 </tr>
             </ng-template>
 
-            <ng-template pTemplate="footer">
-                <tr *ngIf="this.clickReport">
-                    <td>{{'total' | translate}}</td>
-                    <td>{{this.total}}</td>
-                </tr>
+            <ng-template pTemplate="paginatorleft" let-state>
+                <span style="color: white !important;">{{'chart.number' | translate}}: {{(state.totalRecords <= 0 || state.fisrt <= 0) ? 0 : state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+              </ng-template>
+            <ng-template pTemplate="paginatorright" let-state>
+                <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{(state.totalRecords <= 0 || state.fisrt <= 0) ? 0 : state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
             </ng-template>
         </p-table>
     </div>
-    
+
 </div>
 
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">

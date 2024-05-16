@@ -40,7 +40,7 @@ export class ContractHeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("vao day ");
+    
     this.sub = this.route.params.subscribe((params: any) => {
       this.action = params.action
     }, null, () => {
@@ -254,7 +254,7 @@ export class ContractHeaderComponent implements OnInit {
   }
 
   t() {
-    console.log(this.datas);
+    
   }
 
   //--end

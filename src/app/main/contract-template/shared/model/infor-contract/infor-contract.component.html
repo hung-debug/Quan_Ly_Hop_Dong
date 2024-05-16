@@ -20,7 +20,7 @@
     <div class="col-md-12">
       <div class="form-group">
         <div class="label_item">{{'contract-template.file' | translate}} <span class="require_star">*</span></div>
-        <input id="file-input" type="file" accept=".pdf" (change)="fileChanged($event)" style="display: none;"/>
+        <input id="file-input" type="file" accept=".pdf,.docx" (change)="fileChanged($event)" style="display: none;"/>
         <div class="file-contract" (click)="addFile()">
           <img src="assets/img/upload_file.svg" alt="mobifone.contract">
           <div style="padding-top: 7px;"><span style="color: #798693;" *ngIf="this.datas.file_name==null">{{'choose.contract.file' | translate }}</span>{{this.datas.file_name}}</div>
@@ -53,7 +53,9 @@
     <div class="col-md-2"></div>
     <div class="col-md-5">
       <div class="form-group">
-        <div class="label_item">{{'contract.type' | translate}}</div>
+        <div class="label_item">{{'contract.type' | translate}}
+          <span *ngIf="this.environment.flag=='NB'" class="require_star">*</span>
+        </div>
         <div>
           <p-dropdown
             panelStyleClass="font"
@@ -68,6 +70,11 @@
             ></p-dropdown>
         </div>
       </div>
+      <div *ngIf="this.environment.flag=='NB'" class="form-group">
+        <div class="invalid" *ngIf="errorContractType != ''">
+          {{errorContractType | translate}}
+        </div>
+      </div>
     </div>
   </div>
 
@@ -77,7 +84,7 @@
         <div class="select-file-contract">
           <div class="file-approve">
             <div class="label_item">{{'file.attach' | translate}}</div>
-            <input id="attachFile" type="file" accept=".pdf, .doc, .docx"
+            <input id="attachFile" type="file" accept=".pdf, .doc, .docx, .png, .jpg, .jpeg, .zip, .rar, .txt, .xls, .xlsx"
                   (change)="fileChangedAttach($event)" style="display: none;" multiple/>
             <div class="select-contract" >
               <div class="div_file_attach">
@@ -98,7 +105,7 @@
           <div class="form-group">
             <div class="label_item">{{'effective-start-date' | translate}} <span class="require_star">*</span></div>
             <div>
-              <p-calendar *ngIf="this.templateIsUse" [(ngModel)]="start_time" [disabled]="true" [showIcon]="true" [readonlyInput]="true" dateFormat="dd/mm/yy" (onSelect)="startTimeRequired();"></p-calendar>
+              <p-calendar *ngIf="this.templateIsUse" [(ngModel)]="start_time" [disabled]="true" [showIcon]="true" [readonlyInput]="false" dateFormat="dd/mm/yy" (onSelect)="startTimeRequired();"></p-calendar>
               <p-calendar *ngIf="!this.templateIsUse" [(ngModel)]="start_time" [disabled]="false" [showIcon]="true" [readonlyInput]="false" dateFormat="dd/mm/yy" (onSelect)="startTimeRequired();"></p-calendar>
             </div>
           </div>
@@ -113,7 +120,7 @@
           <div class="form-group">
             <div class="label_item">{{'effective-end-date' | translate}} <span class="require_star">*</span></div>
             <div>
-              <p-calendar [(ngModel)]="end_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true" dateFormat="dd/mm/yy" (onSelect)="endTimeValid();"></p-calendar>
+              <p-calendar [(ngModel)]="end_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="false" dateFormat="dd/mm/yy" (onSelect)="endTimeValid();"></p-calendar>
             </div>
           </div>
           <div class="form-group">

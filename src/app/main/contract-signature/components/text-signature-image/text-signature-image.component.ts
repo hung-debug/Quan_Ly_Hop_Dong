@@ -22,13 +22,15 @@ export class TextSignatureImageComponent implements OnInit {
   }
 
   getStyleText() {
-    console.log("this ", this.datas);
     return {
-      'font': this.datas.is_data_object_signature[0].font,
-      'font-size':this.datas.is_data_object_signature[0].font_size+'px',
-      // 'width':this.width + 'px',
-      // 'height': this.height + 'px',
+      'font': this.font,
+      'font-size':this.font_size+'px',
+      'width':'fit-content',
+      'height': this.height + 'px',
+      'text-align':'left',
+      'max-width':this.width + 'px',
     };
   }
+
 
 }

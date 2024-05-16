@@ -23,7 +23,7 @@
       <!--upload file hợp đồng-->
       <div class="form-group">
         <div class="label_item">{{'contract.file' | translate}} <span class="require_star">*</span></div>
-        <input id="file-input" type="file" accept=".pdf" (change)="fileChanged($event)" style="display: none;" />
+        <input id="file-input" type="file" accept=".pdf,.docx" (change)="fileChanged($event)" style="display: none;" />
         <div class="file-contract" (click)="addFile()">
           <img src="assets/img/upload_file.svg" alt="mobifone.contract">
           <div style="padding-top: 7px;"><span style="color: #798693"
@@ -46,7 +46,7 @@
       <div class="form-group">
         <div class="label_item">{{'contract.number' | translate}}</div>
         <div class="input-group">
-          <input type="text" [(ngModel)]="contract_no" maxlength="100" class="input_text" />
+          <input type="text" [(ngModel)]="contract_no" (click)="reverseInput($event)" (ngxInputSearch)="changeInput($event)" (blur)="changeInput($event)" maxlength="100" class="input_text" />
         </div>
       </div>
       <div class="form-group">
@@ -61,11 +61,18 @@
     <!--Loại hợp đồng-->
     <div class="col-md-5">
       <div class="form-group">
-        <div class="label_item">{{'contract.type' | translate}}</div>
+        <div class="label_item">{{'contract.type' | translate}}
+          <span *ngIf="this.environment.flag =='NB'" class="require_star">*</span>
+        </div>
         <div>
           <p-dropdown (onChange)="changeTypeContract()" panelStyleClass="font" [options]="typeList" [(ngModel)]="type_id" optionLabel="name"
             optionValue="id" placeholder="{{'choose.contract.type' | translate}}" [filter]="true" filterBy="name" [showClear]="true">
           </p-dropdown>
+        </div>
+      </div>
+      <div *ngIf="this.environment.flag == 'NB'" class="form-group">
+        <div class="invalid" *ngIf="errorContractType != ''">
+          {{errorContractType | translate}}
         </div>
       </div>
     </div>
@@ -87,10 +94,10 @@
         <div class="select-file-contract">
           <div class="file-approve">
             <div class="label_item">{{'file.attach' | translate}}</div>
-            <input id="attachFile" type="file" accept=".pdf, .doc, .docx"(change)="fileChangedAttach($event)" multiple/>
+            <input id="attachFile" type="file" accept=".pdf, .doc, .docx, .png, .jpg, .jpeg, .zip, .rar, .txt, .xls, .xlsx"(change)="fileChangedAttach($event)" multiple/>
             <div class="select-contract">
               <div class="div_file_attach">
-                <div *ngIf="this.attachFileNameArr.length == 0" style="color:gray">{{'choose.contract.file.attach' |
+                <div *ngIf="!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length == 0" style="color:gray">{{'choose.contract.file.attach' |
                   translate }}</div>
                 <div *ngFor="let item of this.datas.attachFileNameArr; let i = index" style="width: 80%;">
                   {{item.filename}} <img *ngIf="item" style="cursor: pointer;" (click)="deleteFileAttach(item, i)"
@@ -118,7 +125,7 @@
       <div class="form-group">
         <div class="label_item">{{'expiration-date' | translate}} <span class="require_star">*</span></div>
         <div>
-          <p-calendar [(ngModel)]="sign_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true"
+          <p-calendar [(ngModel)]="sign_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="false"
             dateFormat="dd/mm/yy"></p-calendar>
         </div>
       </div>
@@ -136,7 +143,7 @@
       <div class="form-group">
         <div class="label_item">{{'expire.date.contract' | translate}}</div>
         <div>
-          <p-calendar [(ngModel)]="expire_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true"
+          <p-calendar [(ngModel)]="expire_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="false"
             dateFormat="dd/mm/yy"></p-calendar>
         </div>
       </div>
@@ -144,7 +151,7 @@
     <div class="col-md-2"></div>
 
     <!--Đẩy lên ceca-->
-    <div *ngIf="this.ceca" class="col-md-5">
+    <div *ngIf="environment.flag == 'NB' ? true : this.ceca" class="col-md-5">
       <div class="form-group">
         <div class="label_item">{{'contract-type.ceca' | translate}}<span class="require_star">*</span></div>
           <p-dropdown panelStyleClass="font" [options]="optionsCeCa" [(ngModel)]="optionsCeCaValue" optionLabel="name"

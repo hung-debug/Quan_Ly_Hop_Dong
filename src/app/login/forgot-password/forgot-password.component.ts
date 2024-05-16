@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from 'src/app/service/user.service';
 import { SendPasswordDialogComponent } from '../dialog/send-password-dialog/send-password-dialog.component';
+import { ToastService } from 'src/app/service/toast.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-forgot-password',
@@ -19,12 +19,13 @@ export class ForgotPasswordComponent implements OnInit {
   error:boolean = false;
   errorDetail:string = '';
   constructor(private fb: FormBuilder,
-              private translateService: TranslateService,
               private userService: UserService,
               public translate: TranslateService,
-              private dialog: MatDialog,) {
+              private dialog: MatDialog,
+              private toastService: ToastService
+              ) {
     translate.addLangs(['en', 'vi']);
-    translate.setDefaultLang('vi');
+    translate.setDefaultLang(sessionStorage.getItem('lang') || 'vi');
     //localStorage.setItem('lang', 'vi');
   }
 
@@ -44,6 +45,12 @@ export class ForgotPasswordComponent implements OnInit {
 
   sendForgetPassword() {
     let email = this.forgotPasswordForm.value.email;
+
+    if(environment.flag == 'NB' && email.includes('@mobifone.vn')) {
+      this.toastService.showErrorHTMLWithTimeout('mobifone.fail','',3000);
+      return;
+    }
+
     if(email == ''){
       this.error = true;
       this.errorDetail = 'Tên email không được để trống!';
@@ -60,14 +67,11 @@ export class ForgotPasswordComponent implements OnInit {
           if(data.status == 0){
             this.sendPassword('Chúng tôi đã gửi thông tin về địa chỉ email '+ email +'<br>Vui lòng truy cập email để tiếp tục!');
           }else{
-            // if(data.code == '01'){
-            //   this.sendPassword('Địa chỉ email '+ email +' không tồn tại trên hệ thống!');
-            // }else if(data.code == '02'){
-            //   this.sendPassword('Địa chỉ email '+ email +' có tài khoản không hoạt động!');
-            // }else if(data.code == '03'){
-            //   this.sendPassword('Địa chỉ email '+ email +' có tổ chức không hoạt động!');
-            // }
-            this.sendPassword(this.translateService.instant('email.valid'));
+            if (!data.message) {
+              this.sendPassword(this.translate.instant('email.valid'));
+            } else if (data.message) {
+              this.sendPassword(this.translate.instant(data.message));
+            }
           }
           
         },
@@ -92,7 +96,7 @@ export class ForgotPasswordComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }

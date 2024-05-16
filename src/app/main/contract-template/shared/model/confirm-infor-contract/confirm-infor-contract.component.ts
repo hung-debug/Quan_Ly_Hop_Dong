@@ -9,6 +9,7 @@ import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PreviewContractTemplateComponent } from '../preview-contract-template/preview-contract-template.component';
+import { isTemplateExpression } from 'typescript';
 @Component({
   selector: 'app-confirm-infor-contract',
   templateUrl: './confirm-infor-contract.component.html',
@@ -70,7 +71,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
     this.data_parnter_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
 
-    console.log("datas ", this.datas);
+    
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -165,8 +166,10 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
                 item.status = 0;
               }
 
-            } else {
-              item['type'] = 1;
+            } else if(item.sign_unit == 'text'){
+              if(item.text_type == "currency"){
+                item['type'] = 5;} else {
+              item['type'] = 1;}
             }
 
             data_remove_arr_request.forEach((item_remove: any) => {
@@ -178,7 +181,11 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       })
 
       this.spinner.show();
-
+      this.data_sample_contract.forEach((element: any) => {
+        if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datas.difX;
+        }
+      })
       this.contractTemplateService.getContractSample(this.data_sample_contract).subscribe((data) => {
         if (action == 'finish_contract') {
           this.callAPIFinish();
@@ -196,7 +203,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
             this.save_draft_infor.close_header = false;
             this.save_draft_infor.close_modal.close();
           }
-          this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý.", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("Vui lòng liên hệ đội hỗ trợ để được xử lý.", "", 3000);
           this.spinner.hide();
         }, () => {
           this.spinner.hide();
@@ -219,22 +226,26 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       let countIsSignId = 0;
       this.spinner.show();
 
+      dataSignId.forEach((element: any) => {
+        if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datas.difX;
+        }
+      })
       for (let i = 0; i < dataSignId.length; i++) {
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
-        // dataSignId[i].font = this.datas.font;
-        // dataSignId[i].font_size = this.datas.size ? this.datas.size : 13;
-
-        console.log("dataSignId ", dataSignId);
-
         if(!dataSignId[i].type) 
           dataSignId[i].type = 4
+
+        if(dataSignId[i].text_type == "currency") {
+            dataSignId[i].type = 5; 
+        }
 
         await this.contractTemplateService.editContractSample(dataSignId[i], id).toPromise().then((data: any) => {
           dataSample_contract.push(data);
         }, (error) => {
           this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("Vui lòng liên hệ đội hỗ trợ để được xử lý", "", 3000);
           countIsSignId++;
         })
         if (countIsSignId > 0) {
@@ -260,8 +271,10 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           item['type'] = 3;
         } else if (item.sign_unit == 'so_tai_lieu') {
           item['type'] = 4;
-        } else {
-          item['type'] = 1;
+        } else if(item.sign_unit == 'text'){
+          if(item.text_type == "currency"){
+            item['type'] = 5;} else {
+          item['type'] = 1;}
         }
 
         data_remove_arr_request.forEach((item_remove: any) => {
@@ -269,13 +282,17 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         })
       })
 
-      // Array.prototype.push.apply(this.data_sample_contract, dataSignNotId);
+      dataSignNotId.forEach((element: any) => {
+        if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datas.difX;
+        }
+      })
       await this.contractTemplateService.getContractSample(dataSignNotId).toPromise().then((data) => {
         this.spinner.hide();
       }, error => {
         isErrorNotId = true;
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý", "", 3000);
+        this.toastService.showErrorHTMLWithTimeout("Vui lòng liên hệ đội hỗ trợ để được xử lý", "", 3000);
         return false;
       });
     }
@@ -315,6 +332,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   }
 
   preview() {
+    this.datas.isFirstLoadPreview = false;
     // @ts-ignore
     const dialogRef = this.dialog.open(PreviewContractTemplateComponent, {
       width: '800px',
@@ -322,7 +340,14 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       backdrop: 'static',
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+        this.datas.isFirstLoadPreview = false;
+        this.datas.contract_user_sign.forEach((element: any) => {
+          element.sign_config.forEach((item: any) => {
+            if(this.datas.arrDifPage[Number(item.page)-1] == 'max'){
+              item.coordinate_x = item.coordinate_x + this.datas.difX;
+            }
+          })
+        })
     }) 
   }
 

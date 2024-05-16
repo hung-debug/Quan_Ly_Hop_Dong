@@ -43,8 +43,6 @@ export class CheckSignDigitalComponent implements OnInit {
   }
 
   fileChangedAttach(e: any) {
-    
-    console.log(e.target.files)
     let files = e.target.files;
     this.fileName = '';
     for (let i = 0; i < files.length; i++) {
@@ -60,13 +58,14 @@ export class CheckSignDigitalComponent implements OnInit {
               this.list = response;
 
               //kiem tra tinh nguyen ven cua noi dung van ban
-              this.isModified=false;
-              for(var i = 0; i < this.list.length; i++){
-                if(this.list[i].isModified){
-                  this.isModified = true;
-                  break;
-                }
-              }
+              this.isModified = this.list[this.list.length - 1]?.isModified;
+              // this.isModified=false;
+              // for(var i = 0; i < this.list.length; i++){
+              //   if(this.list[i].isModified){
+              //     this.isModified = true;
+              //     break;
+              //   }
+              // }
 
               this.totalRecord = this.list.length;
               this.spinner.hide();

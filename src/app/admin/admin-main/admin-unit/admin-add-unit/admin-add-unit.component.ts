@@ -53,14 +53,14 @@ export class AdminAddUnitComponent implements OnInit {
     this.addForm = this.fbd.group({
       nameOrg: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
       short_name: this.fbd.control('', [
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
       code: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
       email: this.fbd.control('', [Validators.required, Validators.email]),
       phone: this.fbd.control('', [
@@ -69,12 +69,12 @@ export class AdminAddUnitComponent implements OnInit {
       ]),
       size: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
       status: 1,
       representatives: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
       tax_code: this.fbd.control('', [
         Validators.required,
@@ -82,11 +82,11 @@ export class AdminAddUnitComponent implements OnInit {
       ]),
       address: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
       position: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
     });
   }
@@ -98,25 +98,25 @@ export class AdminAddUnitComponent implements OnInit {
 
     //lay du lieu form cap nhat
     if (this.data.id != null) {
-      console.log('vao form cap nhat');
+      
 
       //lay danh sach to chuc
       this.adminUnitService.getUnitById(this.data.id).subscribe(
         (data) => {
-          console.log('data');
-          console.log(data);
+          
+          
 
           this.addForm = this.fbd.group({
             nameOrg: this.fbd.control(data.name, [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.new_input_form),
             ]),
             short_name: this.fbd.control(data.shortName, [
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.new_input_form),
             ]),
             code: this.fbd.control(data.code, [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.new_input_form),
             ]),
             email: this.fbd.control(data.email, [
               Validators.required,
@@ -128,12 +128,12 @@ export class AdminAddUnitComponent implements OnInit {
             ]),
             size: this.fbd.control(data.size, [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.new_input_form),
             ]),
             status: this.convertStatus(data.status),
             representatives: this.fbd.control(data.representative, [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.new_input_form),
             ]),
             tax_code: this.fbd.control(data.taxCode, [
               Validators.required,
@@ -141,11 +141,11 @@ export class AdminAddUnitComponent implements OnInit {
             ]),
             address: this.fbd.control(data.address, [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.new_input_form),
             ]),
             position: this.fbd.control(data.position, [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.new_input_form),
             ]),
           });
         },
@@ -162,14 +162,14 @@ export class AdminAddUnitComponent implements OnInit {
       this.addForm = this.fbd.group({
         nameOrg: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.new_input_form),
         ]),
         short_name: this.fbd.control('', [
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.new_input_form),
         ]),
         code: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.new_input_form),
         ]),
         email: this.fbd.control('', [Validators.required, Validators.email]),
         phone: this.fbd.control('', [
@@ -178,12 +178,12 @@ export class AdminAddUnitComponent implements OnInit {
         ]),
         size: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.new_input_form),
         ]),
         status: 1,
         representatives: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.new_input_form),
         ]),
         tax_code: this.fbd.control('', [
           Validators.required,
@@ -191,11 +191,11 @@ export class AdminAddUnitComponent implements OnInit {
         ]),
         address: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.new_input_form),
         ]),
         position: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.new_input_form),
         ]),
       });
     }
@@ -205,7 +205,7 @@ export class AdminAddUnitComponent implements OnInit {
     if (status == 'IN_ACTIVE' || status == 'NOT_ACTIVATED') {
       status = 0;
     } else if (status == 'ACTIVE') {
-      console.log('status 0');
+      
       status = 1;
     }
 
@@ -216,7 +216,7 @@ export class AdminAddUnitComponent implements OnInit {
     this.submitted = true;
     // stop here if form is invalid
     if (this.addForm.invalid) {
-      console.log("invalid ", invalid);
+      
       return;
     }
 
@@ -237,11 +237,11 @@ export class AdminAddUnitComponent implements OnInit {
 
     //truong hop sua ban ghi
     if (dataForm.id != null) {
-      console.log('vao truong hop sua ban ghi');
+      
 
       this.adminUnitService.updateUnitt(dataForm).subscribe(
         (data) => {
-          console.log('data ', data);
+          
 
           if (data.id != null) {
             if (data.codeInfo == 1) {
@@ -264,7 +264,7 @@ export class AdminAddUnitComponent implements OnInit {
               this.adminUnitService.addRoleByOrg(dataRoleIn).subscribe(
                 (dataRole) => {
                   //this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò cho tổ chức thành công!', "", 3000);
-                  console.log(dataRole);
+                  
                   //them nguoi dung
                   const dataUserIn = {
                     name: 'Admin',
@@ -278,7 +278,7 @@ export class AdminAddUnitComponent implements OnInit {
 
                   this.adminUnitService.addUser(dataUserIn).subscribe(
                     (dataUser) => {
-                      console.log(dataUser);
+                      
                       this.toastService.showSuccessHTMLWithTimeout(
                         'Cập nhật tổ chức thành công!',
                         '',
@@ -313,7 +313,7 @@ export class AdminAddUnitComponent implements OnInit {
                 (responseEmail) => {
                   this.adminUnitService.getRoleByOrgId(data.id).subscribe(
                     (dataRoleByOrgId) => {
-                      console.log('data role by org id ', dataRoleByOrgId);
+                      
 
                       let roleAdmin = dataRoleByOrgId.entities.filter(
                         (p: any) => p.code == 'ADMIN'
@@ -388,7 +388,7 @@ export class AdminAddUnitComponent implements OnInit {
                 3000
               );
             }
-            // console.log(data.status);
+            // 
 
             // this.toastService.showSuccessHTMLWithTimeout(
             //   'Cập nhật thành công!',
@@ -431,8 +431,8 @@ export class AdminAddUnitComponent implements OnInit {
           }
         },
         (error) => {
-          console.log('error ');
-          console.log(error);
+          
+          
           this.toastService.showErrorHTMLWithTimeout(
             'Cập nhật thất bại',
             '',
@@ -461,7 +461,7 @@ export class AdminAddUnitComponent implements OnInit {
     position: any;
     address: any;
   }) {
-    console.log('vao truong hop them moi ban ghi');
+    
 
     if (dataForm.status == 1) {
       dataForm.status = 'ACTIVE';
@@ -483,7 +483,7 @@ export class AdminAddUnitComponent implements OnInit {
               });
             });
 
-            console.log("roleArrConvert ",roleArrConvert);
+            
 
             const dataRoleIn = {
               name: 'Admin',
@@ -495,7 +495,7 @@ export class AdminAddUnitComponent implements OnInit {
             this.adminUnitService.addRoleByOrg(dataRoleIn).subscribe(
               (dataRole) => {
                 //this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò cho tổ chức thành công!', "", 3000);
-                console.log("dataRole ",dataRole);
+                
                 //them nguoi dung
                 const dataUserIn = {
                   name: 'Admin',
@@ -509,7 +509,7 @@ export class AdminAddUnitComponent implements OnInit {
 
                 this.adminUnitService.addUser(dataUserIn).subscribe(
                   (dataUser) => {
-                    console.log(dataUser);
+                    
                     //this.toastService.showSuccessHTMLWithTimeout('Thêm mới người dùng admin thành công!', "", 3000);
                     this.toastService.showSuccessHTMLWithTimeout(
                       'Thêm mới tổ chức thành công!',
@@ -577,8 +577,8 @@ export class AdminAddUnitComponent implements OnInit {
         }
       },
       (error) => {
-        console.log('error ');
-        console.log(error);
+        
+        
         this.toastService.showErrorHTMLWithTimeout(
           'Thêm mới thất bại',
           '',

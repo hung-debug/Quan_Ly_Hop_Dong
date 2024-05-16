@@ -4,24 +4,31 @@
         <div class="col-md-2">
             <div>{{'organization' | translate}}</div>
             <div class="input-line">
-            <p-treeSelect 
-                [(ngModel)]="selectedNodeOrganization" 
-                placeholder="{{'all' | translate}}" 
-                [filter]="true" 
-                filterBy="name"  
-                [droppable]="true" 
+            <p-treeSelect #nameContract
+                [(ngModel)]="selectedNodeOrganization"
+                [filter]="true"
+                filterBy="name"
+                [droppable]="true"
                 [options]="listOrgCombobox"
+                (onNodeSelect)="changeOrg()"
             >
           </p-treeSelect>
             </div>
         </div>
+        
+        <div class="col-md-2">
+          <div>{{'contract.information' | translate}}</div>
+          <div class="input-line">
+            <input type="text" [(ngModel)]="contractInfo" class="input_text" placeholder="Tìm kiếm theo Mã HĐ, Số HĐ, Tên HĐ" />
+          </div>
+        </div>
 
         <!--Ngày tạo hợp đồng-->
         <div class="col-md-2">
-            <div>{{ 'create-date' | translate}} *</div>
+            <div>{{ 'create-date' | translate}} <span style="color: red"> *</span></div>
             <div class="input-line">
-                <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"
-                          
+                <p-calendar selectionMode="range" [readonlyInput]="false" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"
+
                 ></p-calendar>
             </div>
         </div>
@@ -30,39 +37,39 @@
         <div class="col-md-2">
             <div>{{'contract.status' | translate}}</div>
             <div class="input-line">
-                <p-dropdown 
+                <p-dropdown
+                    [(ngModel)] = "contractStatus"
                     panelStyleClass="font"
                     appendTo="body"
                     optionLabel="name"
-                    optionValue="id" 
-                    placeholder="{{'contract.status.v2' | translate}}" 
-                    [showClear]="true"  
+                    optionValue="id"
+                    placeholder="{{'all' | translate}}"
+                    [showClear]="true"
                     [options]="optionsStatus"
-                    [(ngModel)] = "contractStatus"
+                    [autoDisplayFirst]="false"
                 ></p-dropdown>
             </div>
         </div>
 
+        <!--Loại hợp đồng-->
+        <div class="col-md-2">
+            <div>{{'contract.type' | translate}}</div>
+            <div class="input-line">
+              <p-dropdown #typeContract optionValue="name" [(ngModel)]="type_id" placeholder="{{'all' | translate}}" [showClear]="true" [filter]="true" filterBy="name" [options]="typeList" optionLabel="name" >
+            </p-dropdown>
+            </div>
+        </div>
+
         <!--Button-->
-        <div class="col-md-6 btn_search">
+        <div class="col-md-2 btn_search">
             <button class="btn btn-lg btn-block btn_submit" (click)="export(false)">{{'btn.report' | translate }}</button>
             <button class="btn btn-lg btn-block btn_submit" (click)="export(true)">Export</button>
         </div>
     </div>
 
-    <!--Nút tick bao gồm tổ chức-->
-    <!-- <div class="row" style="padding-top: 10px;">
-        <div class="col-md-6">
-            <input type="radio">&nbsp;
-            <span>{{'include.org1' | translate}}</span>
-        </div>
-    </div> -->
-
-
-
     <!--Bảng dữ liệu-->
     <div class="row" style="padding-top: 20px;">
-        <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
+        <p-table #dt [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
 
             <!--header-->
             <ng-template pTemplate="header">
@@ -72,24 +79,44 @@
                       {{col.header | translate}}
                     </th>
                 </tr>
+            </ng-template>
 
-                <!--header 2 bên đề nghị-->
+            <ng-template pTemplate="body" let-list let-row="rowIndex">
                 <tr>
-                    <th *ngFor="let col of colsSuggest" [style]='col.style' [colSpan]="col.colspan" [rowSpan]="col.rowspan">
-                        {{col.header | translate}}
-                    </th>
+                    <ng-container style="background-color: #EEF7FF;" *ngIf="row == 0">
+                        <td style="font-style: normal;font-weight: 800;font-size: 13px;">{{this.orgName}}</td>
+                        <td *ngFor="let i of Arr(cols.length - 1).fill(1)"></td>
+                    </ng-container>
+
+                    <ng-container *ngIf="row > 0">
+                        <td>{{list.name}}</td>
+                        <td>{{list.contractNo}}</td>
+                        <td>{{list.typeName}}</td>
+                        <td>{{list.organization?.name}}</td>
+                        <td>{{list.participants[0].name}}</td>
+                        <td *ngFor="let i of getNumberArray(this.maxParticipants - 1)">
+                            <span *ngIf="list.participants[i]">
+                                {{ list.participants[i].name }}
+                            </span>
+                        </td>
+                        <td>{{this.convert(list.status)}}</td>
+                        <td>{{list.processedUser}}</td>
+                        <td>{{list.processingUser}}</td>
+                        <td>{{list.notProcessedYet}}</td>
+                    </ng-container>
                 </tr>
             </ng-template>
 
-            <ng-template pTemplate="body" let-list>
-                <tr class="subheader-row">
-                    <!-- <td>{{list.product}}</td> -->
-                    <td *ngFor="let col of mergeCol; let colIndex = index">
-                        <span *ngIf="col.id == 1">{{list.product}}</span>
-                    </td>
-                </tr>
+            <ng-template  pTemplate="paginatorleft" let-state>
+                <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ? (state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
+              </ng-template>
+            <ng-template pTemplate="paginatorright" let-state>
+                <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ?(state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
             </ng-template>
         </p-table>
     </div>
-    
 </div>
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+    <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+</ngx-spinner>

@@ -23,6 +23,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 import { parttern, parttern_input } from 'src/app/config/parttern';
+import { NgxInputSearchModule } from "ngx-input-search";
+import { environment } from 'src/environments/environment';
 
 export class ContractConnectArr {
   ref_id: number;
@@ -75,11 +77,11 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
   optionsCeCa: any;
   optionsCeCaValue: any;
-
+  errorContractType: string = '';
   checkView: boolean = false;
 
   ceca: any;
-
+  environment: any = ''
   constructor(
     private contractService: ContractService,
     private contractTemplateService: ContractTemplateService,
@@ -95,8 +97,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-
-    console.log("vao day ");
+    this.environment = environment
     this.spinner.hide();
 
     let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
@@ -126,13 +127,12 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
   actionSuccess() {
     this.optionsCeCa = optionsCeCa;
-    this.optionsCeCaValue = null;
-    this.optionsCeCaValue = null;
-    this.datasForm.ceca_push = this.optionsCeCaValue;
 
     if (this.datasForm.ceca_push != 0 && this.datasForm.ceca_push != 1)
       this.datasForm.ceca_push = this.optionsCeCaValue;
-    else this.optionsCeCaValue = this.datasForm.ceca_push;
+    else
+      this.optionsCeCaValue = this.datasForm.ceca_push;
+
 
     let dataRouter = this.route.params.subscribe(
       (params: any) => {
@@ -143,11 +143,16 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         dataRouter.unsubscribe;
       }
     );
-
     this.datasForm.sign_time = this.datasForm.sign_time
       ? moment(this.datasForm.sign_time).toDate()
       : moment(new Date()).add(30, 'day').toDate();
-
+    
+    if (this.action == 'edit' && this.datasForm.contract_expire_time !== null) {
+      this.datasForm.contract_expire_time = moment(this.datasForm.contract_expire_time).toDate()
+    } else {
+      this.datasForm.contract_expire_time ? moment(this.datasForm.contract_expire_time).toDate() : null
+    }
+    
     // this.datasForm.type_id = this.datasForm.type_id ? this.datasForm.type_id : null;
     this.contractConnect = this.datasForm.contractConnect
       ? this.datasForm.contractConnect
@@ -167,56 +172,62 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       this.datasForm['isChangeForm'] = false;
     }
 
-    this.getContractTemplateForm(); // ham lay mau hop dong
-    this.getListTypeContract(); // ham get contract type
-    this.getContractList(); // ham lay danh sach hop dong
-    this.convertData();
-
     this.contractService.getDataNotifyOriganzation().subscribe((response) => {
       if (response.ceca_push_mode == 'NONE') {
         this.ceca = false;
       } else if (response.ceca_push_mode == 'SELECTION') {
         this.ceca = true;
+        if (environment.flag == 'NB') {
+          this.optionsCeCaValue = 1
+        }
       }
+
+      this.getContractTemplateForm(); // ham lay mau hop dong
+      this.getListTypeContract(); // ham get contract type
+      this.getContractList(); // ham lay danh sach hop dong
+      this.convertData();
     });
   }
 
   async changeTypeContract(e: any) {
-
     if(!e.value) {
-      this.optionsCeCa = optionsCeCa;
-      this.datasForm.ceca_push = 0;
-      this.optionsCeCaValue = 0;
 
+      this.optionsCeCa = optionsCeCa;
+      this.datasForm.type_id = null;
       const e = {
         value: this.datasForm.template_contract_id
       }
 
-      this.onChangeForm(e);
+      if (environment.flag == 'NB') {
+        this.datasForm.ceca_push = 1;
+        this.optionsCeCaValue = 1;
+      } else {
+        this.datasForm.ceca_push = 0;
+        this.optionsCeCaValue = 0;
+      }
 
-      // console.log("id temp ", this.datasForm.template_contract_id)
+      // this.onChangeForm(e);
     } else {
-      
-    this.datasForm.type_id = e.value;
+      this.datasForm.type_id = e.value;
 
-    const informationContractType = await this.contractTypeService
-      .getContractTypeById(this.datasForm.type_id)
-      .toPromise();
+      const informationContractType = await this.contractTypeService
+        .getContractTypeById(this.datasForm.type_id)
+        .toPromise();
 
-    if (informationContractType.ceca_push == 1) {
-      this.optionsCeCa = optionsCeCa;
-      this.optionsCeCaValue = 1;
-      this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
-    } else if (!informationContractType.ceca_push) {
-      this.optionsCeCa = optionsCeCa;
-      this.optionsCeCaValue = 0;
-      this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
-    } else {
-      this.optionsCeCaValue = null;
-      this.optionsCeCa = optionsCeCa;
-    }
+      if (informationContractType.ceca_push == 1) {
+        this.optionsCeCa = optionsCeCa;
+        this.optionsCeCaValue = 1;
+        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+      } else if (!informationContractType.ceca_push) {
+        this.optionsCeCa = optionsCeCa;
+        this.optionsCeCaValue = 0;
+        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
+      } else {
+        this.optionsCeCaValue = null;
+        this.optionsCeCa = optionsCeCa;
+      }
 
-    this.datasForm.ceca_push = this.optionsCeCaValue;
+      this.datasForm.ceca_push = this.optionsCeCaValue;
     }
   }
 
@@ -240,16 +251,39 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     this.contractService.getContractTypeList().subscribe(
       (data) => {
         this.typeList = data;
+
+        this.checkCeCa(this.datasForm.type_id);
       },
       (error) => {
-        console.log(error);
+
       }
     );
   }
 
+  async checkCeCa(typeId: number) {
+    if(typeId) {
+      const informationContractType = await this.contractTypeService
+      .getContractTypeById(typeId)
+      .toPromise();
+
+      if (informationContractType.ceca_push == 1) {
+        this.optionsCeCa = optionsCeCa;
+        this.optionsCeCaValue = 1;
+        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+      } else if (!informationContractType.ceca_push) {
+        this.optionsCeCa = optionsCeCa;
+        this.optionsCeCaValue = 0;
+        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
+      } else {
+        this.optionsCeCaValue = null;
+        this.optionsCeCa = optionsCeCa;
+      }
+    }
+  }
+
   getContractList() {
     this.contractService
-      .getContractList('off', '', '', '', '', '', '', 30, '', '')
+      .getContractList('off', '', '', '', '', '', '', 30, '', 10000)
       .subscribe(
         (data) => {
           this.contractConnectList = data.entities;
@@ -397,6 +431,35 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     // @ts-ignore
     document.getElementById('attachFile').click();
   }
+  convertFileName(str1: any) {
+    let str = str1.normalize('NFC');
+    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a");
+    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e");
+    str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i");
+    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o");
+    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u");
+    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y");
+    str = str.replace(/đ/g,"d");
+    str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+    str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+    str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+    str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+    str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+    str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+    str = str.replace(/Đ/g, "D");
+    // Some system encode vietnamese combining accent as individual utf-8 characters
+    // Một vài bộ encode coi các dấu mũ, dấu chữ như một kí tự riêng biệt nên thêm hai dòng này
+    str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); // ̀ ́ ̃ ̉ ̣  huyền, sắc, ngã, hỏi, nặng
+    str = str.replace(/\u02C6|\u0306|\u031B/g, ""); // ˆ ̆ ̛  Â, Ê, Ă, Ơ, Ư
+    // Remove extra spaces
+    // Bỏ các khoảng trắng liền nhau
+    str = str.replace(/ /g,"-");
+    str = str.trim();
+    // Remove punctuations
+    // Bỏ dấu câu, kí tự đặc biệt
+    str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g,"-");
+    return str;
+  }
 
   uploadFileAttachForm(e: any) {
     let files = e.target.files;
@@ -404,32 +467,35 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       this.datasForm.fileAttachForm = [];
     }
     for (let i = 0; i < files.length; i++) {
-      const file = e.target.files[i];
-      if (file) {
-        if (file.size <= 10000000) {
-          const file_name = file.name;
-          if (
-            this.listFileAttach.filter((p: any) => p.filename == file_name)
-              .length == 0
-          ) {
-            this.listFileAttach.push(file);
+      let file1 = e.target.files[i];
+      // const file = e.target.files[i];
+
+
+      if (file1) {
+        let file = new File([file1], this.convertFileName(file1.name));
+        const extension: any = file.name.split('.').pop();
+
+        if (file.size <= 10*(Math.pow(1024, 2))) {
+
+          if (extension && extension.toLowerCase() == 'pdf' || extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx' || extension.toLowerCase() == 'png'
+          || extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'jpeg' || extension.toLowerCase() == 'zip' || extension.toLowerCase() == 'rar'
+          || extension.toLowerCase() == 'txt' || extension.toLowerCase() == 'xls' || extension.toLowerCase() == 'xlsx') {
+            const file_name = file.name;
+            if (this.listFileAttach.filter((p: any) => p.filename == file_name).length == 0) {
+              this.listFileAttach.push(file);
+            }
+
+            if (!this.datasForm.fileAttachForm.some((p: any) => file.name == p.filename || file.name == p.name)) {
+              this.datasForm.fileAttachForm.push(file);
+            }
+          } else {
+            this.toastService.showWarningHTMLWithTimeout("attach.file.valid", "", 3000);
           }
 
-          if (
-            !this.datasForm.fileAttachForm.some(
-              (p: any) => file.name == p.filename || file.name == p.name
-            )
-          ) {
-            this.datasForm.fileAttachForm.push(file);
-          }
         } else {
           this.datasForm.file_name_attach = '';
           this.datasForm.attachFile = '';
-          this.toastService.showWarningHTMLWithTimeout(
-            'File đính kèm yêu cầu có dung lượng nhỏ hơn 5MB',
-            '',
-            3000
-          );
+          this.toastService.showWarningHTMLWithTimeout('File đính kèm yêu cầu có dung lượng tối đa 10MB','',3000);
           break;
         }
       }
@@ -478,6 +544,14 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       );
     }
   }
+  checkIdInTypeList() {
+    for(let i = 0; i < this.typeList.length; i++) {
+      if(this.datasForm.type_id == this.typeList[i].id)
+        return true;
+    }
+    return false;
+  }
+
 
   validDataForm() {
     if (!this.datasForm.template_contract_id) {
@@ -491,7 +565,19 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       return false;
     }
 
-    // if(!parttern_input.input_form.test(this.datasForm.name)) {
+    //Check khong có type_id và type_id đó không nằm trong typeList thì báo valid
+    if (environment.flag == 'NB') {
+      if (!this.datasForm.type_id || !this.checkIdInTypeList()) {
+        this.toastService.showWarningHTMLWithTimeout(
+          this.translate.instant('error.contract-type.required'),
+          '',
+          3000
+        );
+        return false;
+      }
+    }
+
+    // if(!parttern_input.new_input_form.test(this.datasForm.name)) {
     //   this.toastService.showWarningHTMLWithTimeout(this.translate.instant('error.contract.name.valid'),'',3000);
     //   return false;
     // }
@@ -843,4 +929,15 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     this.nextOrPreviousStep(this.stepForm);
     this.spinner.hide();
   }
+
+  changeInput(e: any): void {
+    // e.target.value = this.convertCurrency(e.target.value);
+    // this.datasForm.contract_no = e.target.value;
+  }
+
+  reverseInput(e: any): void {
+    // e.target.value = this.removePeriodsFromCurrencyValue(e.target.value);
+  }
+
+
 }

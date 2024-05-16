@@ -52,13 +52,14 @@ export class ContractHeaderComponent implements OnInit {
         data
       })
       dialogRef.afterClosed().subscribe((result: any) => {
-        console.log('the close dialog');
+        
         let is_data = result
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          // this.router.navigate(['/main/contract-signature/coordinates/' + this.datas.contract_id]);
+          this.router.navigate(['/main/c/receive/wait-processing']);
+        });
       })
 
-      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate(['/main/contract-signature/coordinates/' + this.datas.contract_id]);
-      });
     }
 
     return minutes.toString().padStart(2, '0') + ':' + 

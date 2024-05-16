@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from 'src/app/service/toast.service';
@@ -16,7 +16,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   templateUrl: './add-user.component.html',
   styleUrls: ['./add-user.component.scss']
 })
-export class AddUserComponent implements OnInit {
+export class AddUserComponent implements OnInit, OnDestroy {
   
   submitted = false;
   get f() { return this.addForm.controls; }
@@ -38,6 +38,7 @@ export class AddUserComponent implements OnInit {
   imgSignBucket:null;
   imgSignPath:null;
   isEditRole:boolean=false;
+  isMailSame: boolean = false;
 
   organizationName:any;
   roleName:any;
@@ -62,7 +63,7 @@ export class AddUserComponent implements OnInit {
               private spinner: NgxSpinnerService
     ) {
     this.addForm = this.fbd.group({
-      name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
       email: this.fbd.control("", [Validators.required, Validators.email]),
       birthday: null,
       phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -73,7 +74,7 @@ export class AddUserComponent implements OnInit {
       phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
       networkKpi: null,
 
-      nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
+      nameHsm: this.fbd.control("", Validators.pattern(parttern_input.new_input_form)),
       taxCodeHsm: this.fbd.control("",Validators.pattern(parttern_input.taxCode_form)),
       password1Hsm: this.fbd.control(""),
 
@@ -113,7 +114,7 @@ export class AddUserComponent implements OnInit {
         this.isEditRole = true;
         if(this.isQLND_01){
           this.addForm = this.fbd.group({
-            name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+            name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
             email: this.fbd.control("", [Validators.required, Validators.email]),
             birthday: null,
             phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -124,7 +125,7 @@ export class AddUserComponent implements OnInit {
             phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
             networkKpi: null,
 
-            nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
+            nameHsm: this.fbd.control("", Validators.pattern(parttern_input.new_input_form)),
             taxCodeHsm: this.fbd.control("",Validators.pattern(parttern.cardid)),
             password1Hsm: this.fbd.control(""),
 
@@ -149,7 +150,7 @@ export class AddUserComponent implements OnInit {
                   this.roleName = dataRoleUser.name;
                   this.orgIdOld = data.organization_id;
                   this.addForm = this.fbd.group({
-                    name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+                    name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
                     email: this.fbd.control(data.email, [Validators.required, Validators.email]),
                     birthday: data.birthday==null?null:new Date(data.birthday),
                     phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -160,7 +161,7 @@ export class AddUserComponent implements OnInit {
                     phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
                     networkKpi: data.phone_tel,
 
-                    nameHsm: this.fbd.control(data.hsm_name , Validators.pattern(parttern_input.input_form)),
+                    nameHsm: this.fbd.control(data.hsm_name , Validators.pattern(parttern_input.new_input_form)),
                     taxCodeHsm: this.fbd.control(data.tax_code,Validators.pattern(parttern.cardid)),
                     password1Hsm: this.fbd.control(data.hsm_pass),
 
@@ -169,9 +170,14 @@ export class AddUserComponent implements OnInit {
                     organization_change: data.organization_change
                   }); 
                   this.phoneOld = data.phone;
+
                   this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
                   this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
                   this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
+
+                  this.imgSignPCSelectMark = data.stampImage != null && data.stampImage.length>0?data.stampImage[0].presigned_url:null;
+                  this.imgSignBucketMark = data.stampImage != null && data.stampImage.length>0?data.stampImage[0].bucket:null;
+                  this.imgSignPathMark = data.stampImage != null && data.stampImage.length>0?data.stampImage[0].path:null;
 
                   //set name
                   if(data.organization_id != null){
@@ -226,6 +232,8 @@ export class AddUserComponent implements OnInit {
     //lay id user
     this.spinner.show();
     let userId = this.userService.getAuthCurrentUser().id;
+    this.isMailSame = sessionStorage.getItem('isMailSame') == "true" ? true : false;  
+
     
     this.userService.getUserById(userId).subscribe(
       data => {
@@ -239,7 +247,7 @@ export class AddUserComponent implements OnInit {
             listRole = data.permissions;
 
             this.isQLND_01 = listRole.some(element => element.code == 'QLND_01');
-            this.isQLND_02 = listRole.some(element => element.code == 'QLND_02');
+            this.isQLND_02 = listRole.some(element => element.code == 'QLND_02') || this.isMailSame;
 
             this.getDataOnInit();
           }, error => {
@@ -286,41 +294,45 @@ export class AddUserComponent implements OnInit {
     }
   }
 
-  update(data:any){
+  imgSignBucketMark: any;
+  imgSignPathMark: any
+  async update(data:any){
     data.id = this.id;
-
-    if(data.fileImage != null){
-      this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
-        const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
-        const sign_image:never[]=[];
-        (sign_image as string[]).push(sign_image_content);
-        data.sign_image = sign_image;
-
-        this.userService.updateUser(data).subscribe(
-          data => {
-            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công!', "", 3000);
-            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-              this.router.navigate(['/main/user']);
-            });
-            this.spinner.hide();
-          }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại', "", 3000);
-            this.spinner.hide();
-          }
-        )
-      },
-      error => {
-        this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
-        this.spinner.hide();
-        return false;
-      });
-    }else{
-      if(this.imgSignBucket != null && this.imgSignPath != null){
+      if(this.imgSignBucket != null && this.imgSignPath != null && !data.fileImage){
         const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
         const sign_image:never[]=[];
         (sign_image as string[]).push(sign_image_content);
         data.sign_image = sign_image;
+      } else if(data.fileImage) {
+        try {
+          const fileImage = await this.uploadService.uploadFile(data.fileImage).toPromise();
+          const sign_image_content:any = {bucket: fileImage.file_object.bucket, path: fileImage.file_object.file_path};
+          const sign_image:never[]=[];
+          (sign_image as string[]).push(sign_image_content);
+          data.sign_image = sign_image;
+        } catch(err) {
+          
+        }
       }
+
+      if(this.imgSignBucketMark != null && this.imgSignPathMark != null && !data.fileImageMark){
+        const sign_image_content:any = {bucket: this.imgSignBucketMark, path: this.imgSignPathMark};
+        const sign_image:never[]=[];
+        (sign_image as string[]).push(sign_image_content);
+        data.stampImage = sign_image;
+      } else if(data.fileImageMark) {
+        try {
+          const fileImageMark = await this.uploadService.uploadFile(data.fileImageMark).toPromise();
+          const sign_image_content:any = {bucket: fileImageMark.file_object.bucket, path: fileImageMark.file_object.file_path};
+          const sign_image:never[]=[];
+          (sign_image as string[]).push(sign_image_content);
+          data.stampImage = sign_image;
+        } catch(err) {
+          
+        }  
+      }
+
+      
       this.userService.updateUser(data).subscribe(
         dataOut => {
           
@@ -345,7 +357,6 @@ export class AddUserComponent implements OnInit {
           this.spinner.hide();
         }
       )
-    }
   }
 
   getRoleByOrg(orgId:any){
@@ -379,7 +390,9 @@ export class AddUserComponent implements OnInit {
       taxCodeHsm: this.addForm.value.taxCodeHsm,
       password1Hsm: this.addForm.value.password1Hsm,
       fileImage: this.attachFile,
+      fileImageMark: this.attachFileMark,
       sign_image: [],
+      stampImage: [],
       organization_change: this.addForm.value.organizationId!= this.orgIdOld?1:this.addForm.value.organization_change
     }
     
@@ -423,7 +436,6 @@ export class AddUserComponent implements OnInit {
                   this.spinner.hide();
                 }
               )
-
               //ham update nguoi dung
               this.checkChangeUnit(data);
             }else if(dataByPhone.code == '01'){
@@ -436,6 +448,8 @@ export class AddUserComponent implements OnInit {
           }
         )
       }else{
+        // this.attachFile ? data.sign_image = this.attachFile : data.sign_image = []
+        // this.attachFileMark ? data.stampImage = this.attachFileMark : data.stampImage = []
         //ham update
         this.checkChangeUnit(data);
       }
@@ -452,12 +466,12 @@ export class AddUserComponent implements OnInit {
       
                   if(data.fileImage != null){
                     this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
-                      console.log(JSON.stringify(dataFile));
+                      
                       const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
                       const sign_image:never[]=[];
                       (sign_image as string[]).push(sign_image_content);
                       data.sign_image = sign_image;
-                      console.log(data);
+                      
             
                       //call api them moi
                       this.userService.addUser(data).subscribe(
@@ -515,8 +529,8 @@ export class AddUserComponent implements OnInit {
     }
   }
 
-  fileChangedAttach(e: any) {
-    console.log(e.target.files)
+  attachFileMark: any;
+  fileChangedAttach(e: any, code: string) {
     let files = e.target.files;
     for(let i = 0; i < files.length; i++){
 
@@ -527,34 +541,53 @@ export class AddUserComponent implements OnInit {
           const file_name = file.name;
           const extension = file.name.split('.').pop();
           if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'jpge') {
-            this.handleUpload(e);
-            this.attachFile = file;
-            console.log(this.attachFile);
+            this.handleUpload(e, code);
+
+            if(code == 'sign')
+              this.attachFile = file;
+            else if(code == 'mark')
+              this.attachFileMark = file;
           }else{
             this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng JPG, PNG, JPGE", "", 3000);
           }
 
         } else {
           this.attachFile = null;
+          this.attachFileMark = null;
           this.toastService.showErrorHTMLWithTimeout("Yêu cầu file nhỏ hơn 50MB", "", 3000);
           break;
         }
       }
     }
   }
+
   imgSignPCSelect: string;
-  handleUpload(event: any) {
+  imgSignPCSelectMark: string;
+  handleUpload(event: any, code: string) {
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      //console.log(reader.result);
-      this.imgSignPCSelect = reader.result? reader.result.toString() : '';
+      if(code == 'sign') {
+        this.imgSignPCSelect = reader.result? reader.result.toString() : '';
+      }
+      else if(code == 'mark') {
+        this.imgSignPCSelectMark = reader.result? reader.result.toString() : '';
+      }
     };
   }
 
-  addFileAttach() {
-    // @ts-ignore
-    document.getElementById('attachFileSignature').click();
+  addFileAttach(code: string) {
+
+    if(code == 'sign')
+      // @ts-ignore
+      document.getElementById('attachFileSignature').click();
+    else if(code == 'mark')
+      // @ts-ignore
+      document.getElementById('attachFileMark').click();
+  }
+
+  ngOnDestroy(): void {
+      sessionStorage.removeItem('isMailSame');
   }
 }

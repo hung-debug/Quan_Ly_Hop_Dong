@@ -30,8 +30,7 @@ import { UnitService } from 'src/app/service/unit.service';
   styleUrls: ['./confirm-contract-batch.component.scss'],
 })
 export class ConfirmContractBatchComponent
-  implements OnInit, OnDestroy, AfterViewInit
-{
+  implements OnInit, OnDestroy, AfterViewInit {
   @Input() datasBatch: any;
   data_coordinates: any;
   @Input() step: any;
@@ -44,6 +43,7 @@ export class ConfirmContractBatchComponent
   arrPage: any = [];
   objDrag: any = {};
   scale: any;
+  orgId: any;
   objPdfProperties: any = {
     pages: [],
   };
@@ -103,6 +103,8 @@ export class ConfirmContractBatchComponent
   loaded = false;
   isDisablePrevious = false;
   isDisableNext = false;
+  difX: number;
+  arrDifPage: any = [];
 
   data_organization: any;
   is_origanzation_reviewer: any = [];
@@ -117,7 +119,7 @@ export class ConfirmContractBatchComponent
   // ]
 
   sum: number[] = [];
-  top: any[]= [];
+  top: any[] = [];
 
   constructor(
     private contractService: ContractService,
@@ -125,6 +127,7 @@ export class ConfirmContractBatchComponent
     private spinner: NgxSpinnerService,
     private contractTemplateService: ContractTemplateService,
     private router: Router,
+    private userService: UserService,
   ) {
     this.step = variable.stepSampleContractBatch.step2;
   }
@@ -132,14 +135,14 @@ export class ConfirmContractBatchComponent
   ngOnInit() {
     // console.log(this.datasBatch);
     this.spinner.show();
-    this.contractService.getContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,this.datasBatch.ceca_push).subscribe((response: any) => {
-        this.contractList = response;
+    this.contractService.getContractBatchList(this.datasBatch.contractFile, this.datasBatch.idContractTemplate, this.datasBatch.ceca_push).subscribe((response: any) => {
+      this.contractList = response;
 
-        this.pageNumberTotal = this.contractList.length;
-        if (this.pageNumberTotal > 0) {
-          this.getDataContractSignature(this.pageNumberCurrent - 1);
-        }
-      }),
+      this.pageNumberTotal = this.contractList.length;
+      if (this.pageNumberTotal > 0) {
+        this.getDataContractSignature(this.pageNumberCurrent - 1);
+      }
+    }),
       (error: any) => {
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout(
@@ -190,6 +193,10 @@ export class ConfirmContractBatchComponent
             }
             if (res.type == 4) {
               res['sign_unit'] = 'so_tai_lieu';
+            }
+            if(res.type == 5){
+              res['sign_unit'] = 'text';
+              res['text_type'] = 'currency';
             }
             let obj = res;
             this.datasBatch.is_data_object_signature.push(obj);
@@ -269,8 +276,8 @@ export class ConfirmContractBatchComponent
           const pdfC1 = this.datasBatch.i_data_file_contract.find(
             (p: any) => p.type == 1
           );
-          if (pdfC2) {
-            fileC = pdfC2.path;
+          if (pdfC2 && pdfC1) {
+            fileC = pdfC1.path;
           } else if (pdfC1) {
             fileC = pdfC1.path;
           } else {
@@ -372,28 +379,67 @@ export class ConfirmContractBatchComponent
           this.setPosition();
           this.eventMouseover();
 
-          for(let i = 0; i <= this.pageNumber;i++) {
+          for (let i = 0; i <= this.pageNumber; i++) {
             this.top[i] = 0;
-  
-            if(i < this.pageNumber)
+
+            if (i < this.pageNumber)
               this.sum[i] = 0;
           }
-  
+
+          for (let i = 1; i <= this.pageNumber; i++) {
+            let canvas: any = document.getElementById('canvas-step3-' + i);
+            this.top[i] = canvas.height;
+          }
+
+          for (let i = 0; i < this.pageNumber; i++) {
+            this.top[i + 1] += this.top[i];
+            this.sum[i] = this.top[i + 1];
+          }
+
+          //vuthanhtan
+          let canvasWidth: any [] = [];
           for(let i = 1; i <= this.pageNumber; i++) {
             let canvas: any = document.getElementById('canvas-step3-'+i);
             this.top[i] = canvas.height;
+            canvasWidth.push(canvas.getBoundingClientRect().left)
           }
-          
+          this.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
   
           for(let i = 0; i < this.pageNumber; i++) {
-            this.top[i+1] += this.top[i];
-            this.sum[i] = this.top[i+1];
+            if(canvasWidth[i] == Math.min(...canvasWidth))
+            this.arrDifPage.push('min');
+            else  
+            this.arrDifPage.push('max');
           }
+          console.log(this.datasBatch.isFirstLoadDrag)
+          this.setX();
+          this.datasBatch.arrDifPage = this.arrDifPage;
+          this.datasBatch.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
         }, 100);
       });
   }
 
-  eventMouseover() {}
+  setX(){
+    this.datasBatch.isFirstLoadDrag = true;
+    let i = 0;
+    this.datasBatch.contract_user_sign.forEach((element: any) => {
+      element.sign_config.forEach((item: any) => {
+        const htmlElement: HTMLElement | null = document.getElementById(item.id);
+        if(htmlElement) {
+          var oldX = Number(htmlElement.getAttribute('data-x'));
+          if(oldX) {
+            var newX = oldX + this.difX;
+            htmlElement.setAttribute('data-x', newX.toString());
+          }
+        }
+        if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+          item.coordinate_x += this.difX;
+        }
+      })
+    })
+  }
+
+  eventMouseover() { }
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -402,8 +448,8 @@ export class ConfirmContractBatchComponent
       let width_drag_element = document.getElementById('width-element-info');
       this.widthDrag = width_drag_element
         ? width_drag_element.getBoundingClientRect().right -
-          width_drag_element.getBoundingClientRect().left -
-          15
+        width_drag_element.getBoundingClientRect().left -
+        15
         : '';
     }, 100);
     this.setPosition();
@@ -462,7 +508,7 @@ export class ConfirmContractBatchComponent
           height: viewport.height,
         });
       }
-      
+
       var renderContext: any = {
         canvasContext: canvas.getContext('2d'),
         viewport: viewport,
@@ -470,11 +516,11 @@ export class ConfirmContractBatchComponent
 
       var interval = setInterval(() => {
         page.render(renderContext);
-      },1000)
+      }, 1000)
 
       setTimeout(() => {
         clearInterval(interval)
-      },2000);
+      }, 2000);
       if (test) {
         let paddingPdf =
           (test.getBoundingClientRect().width - viewport.width) / 2;
@@ -512,13 +558,21 @@ export class ConfirmContractBatchComponent
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
-    let style: any = {
-      transform:
-        'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
-      position: 'absolute',
-      backgroundColor: '#EBF8FF',
-    };
-    style.backgroundColor = d.value ? '' : '#EBF8FF';
+    let style: any =
+    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
+    {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#EBF8FF'
+    } :
+    {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#FFFFFF',
+      "border": "1px dashed #6B6B6B",
+      "border-radius": "6px"
+    }
+    // style.backgroundColor = d.value ? '' : '#EBF8FF';
     if (d['width']) {
       style.width = parseInt(d['width']) + 'px';
     }
@@ -608,12 +662,7 @@ export class ConfirmContractBatchComponent
 
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
-    if (
-      this.datasBatch &&
-      this.datasBatch.is_data_object_signature &&
-      this.datasBatch.is_data_object_signature.length
-    ) {
-      console.log("aaa ", this.datasBatch.is_data_object_signature)
+    if (this.datasBatch && this.datasBatch.is_data_object_signature && this.datasBatch.is_data_object_signature.length) {
       return this.datasBatch.is_data_object_signature;
     } else {
       return [];
@@ -748,7 +797,6 @@ export class ConfirmContractBatchComponent
     } else {
       this.pageNumberCurrent = value;
       this.pageNumberOld = this.pageNumberCurrent;
-      console.log(this.pageNumberCurrent);
       this.getDataContractSignature(this.pageNumberCurrent - 1);
     }
   }
@@ -781,7 +829,7 @@ export class ConfirmContractBatchComponent
   user: any;
   submit() {
 
-    if(!this.datasBatch.ceca_push) 
+    if (!this.datasBatch.ceca_push)
       this.datasBatch.ceca_push = 0;
 
     this.next(this.datasBatch.ceca_push);
@@ -803,33 +851,108 @@ export class ConfirmContractBatchComponent
     // });
   }
 
-  next(isCeCA: any) {
-    this.spinner.show();
-    this.contractService
-      .confirmContractBatchList(
-        this.datasBatch.contractFile,
-        this.datasBatch.idContractTemplate,
-        isCeCA
-      )
-      .subscribe((response: any) => {
-        this.router
+  saveDraft(){
+    if (!this.datasBatch.ceca_push)
+    this.datasBatch.ceca_push = 0;
+
+  this.nextDraft(this.datasBatch.ceca_push);
+  }
+
+  async nextDraft(isCeCA: any) {
+    const isAllow = await this.checkNumber(this.datasBatch.ceca_push, this.convertToSignConfig().length);
+    if (isAllow) {
+      this.spinner.show();
+
+      this.contractService
+        .saveDraftContractBatch(
+          this.datasBatch.contractFile,
+          this.datasBatch.idContractTemplate,
+          isCeCA
+        )
+        .subscribe((response: any) => {
+          this.router
+            .navigateByUrl('/', { skipLocationChange: true })
+            .then(() => {
+              this.router.navigate(['/main/contract/create/draft']);
+            });
+          this.spinner.hide();
+          this.toastService.showSuccessHTMLWithTimeout(
+            'Lưu nháp thành công',
+            '',
+            3000
+          );
+        }),
+        (error: any) =>
+          this.toastService.showErrorHTMLWithTimeout(
+            'Lưu nháp thất bại',
+            '',
+            3000
+          );
+    }
+  }
+
+  async next(isCeCA: any) {
+    const isAllow = await this.checkNumber(this.datasBatch.ceca_push, this.convertToSignConfig().length);
+    if (isAllow) {
+      try {
+        this.spinner.show();
+        const confirmContractBatchCall = await this.contractService.confirmContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,isCeCA).toPromise()
+        let response = confirmContractBatchCall
+
+        if(response.errors?.length > 0) {
+          if(response.errors[0].code == 1015) {
+            this.toastService.showErrorHTMLWithTimeout('Số lượng hợp đồng đã mua không còn đủ để tạo hợp đồng','',3000);
+            this.spinner.hide();
+            return;
+          } else {
+            this.toastService.showErrorHTMLWithTimeout('Tạo hợp đồng theo lô thất bại','',3000);
+            this.spinner.hide();
+            return;
+          }
+        } else {
+          this.router
           .navigateByUrl('/', { skipLocationChange: true })
           .then(() => {
             this.router.navigate(['/main/contract/create/processing']);
           });
-        this.spinner.hide();
-        this.toastService.showSuccessHTMLWithTimeout(
-          'Tạo hợp đồng theo lô thành công',
-          '',
-          3000
-        );
-      }),
-      (error: any) =>
-        this.toastService.showErrorHTMLWithTimeout(
-          'Tạo hợp đồng theo lô thất bại',
-          '',
-          3000
-        );
+          this.spinner.hide();
+          this.toastService.showSuccessHTMLWithTimeout(
+            'Tạo hợp đồng theo lô thành công',
+            '',
+            3000
+          );
+        }
+      } catch (error: any) {
+        this.spinner.hide()
+        this.toastService.showErrorHTMLWithTimeout(error.error.message,'',3000);
+      }
+    }
+  }
+
+  async checkNumber(countCeCa: number, countTimestamp: number) {
+
+    // this.orgId = this.userService.getInforUser().organization_id;
+    // let getNumberContractCreateOrg;
+    // try {
+    //   getNumberContractCreateOrg = await this.contractService.getDataNotifyOriganzation().toPromise();
+    // } catch (err) {
+    //   this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng' + err, '', 3000);
+    // }
+
+    // if ((countCeCa > 0 && (Number(getNumberContractCreateOrg.numberOfCeca) - this.datasBatch.ceca_push) < 0) &&
+    //   (countTimestamp > 0 && (Number(getNumberContractCreateOrg.numberOfTimestamp) - this.convertToSignConfig().length) < 0)) {
+    //   this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng timestamp và số lần gửi xác nhận BCT đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+    //   return false;
+    // }
+    // else if (countTimestamp > 0 && (Number(getNumberContractCreateOrg.numberOfTimestamp) - this.convertToSignConfig().length) < 0) {
+    //   this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng timestamp đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+    //   return false;
+    // }
+    // else if (countCeCa > 0 && (Number(getNumberContractCreateOrg.numberOfCeca) - this.datasBatch.ceca_push) < 0) {
+    //   this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lần gửi xác nhận BCT. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+    //   return false;
+    // }
+    return true
   }
 
   pageNum: number = 1;
@@ -847,7 +970,7 @@ export class ConfirmContractBatchComponent
   }
 
   lastPage() {
-    let canvas: any = document.getElementById('canvas-step3-'+this.pageNumber);
+    let canvas: any = document.getElementById('canvas-step3-' + this.pageNumber);
 
     let canvas1: any = document.getElementById('pdf-viewer-step-3');
 
@@ -878,7 +1001,7 @@ export class ConfirmContractBatchComponent
     if (this.pageRendering) {
       this.pageNumPending = num;
     } else {
-      let canvas: any = document.getElementById('canvas-step3-'+num);
+      let canvas: any = document.getElementById('canvas-step3-' + num);
 
       let canvas1: any = document.getElementById('pdf-viewer-step-3');
 
@@ -889,7 +1012,7 @@ export class ConfirmContractBatchComponent
   }
 
   onEnter(event: any) {
-    let canvas: any = document.getElementById('canvas-step3-'+event.target.value);
+    let canvas: any = document.getElementById('canvas-step3-' + event.target.value);
 
     let canvas1: any = document.getElementById('pdf-viewer-step-3');
 
@@ -902,28 +1025,28 @@ export class ConfirmContractBatchComponent
     //đổi màu cho nút back page
     let canvas1: any = document.getElementById('canvas-step3-1');
 
-    if(event.srcElement.scrollTop < canvas1.height/2) {
+    if (event.srcElement.scrollTop < canvas1.height / 2) {
       this.page1 = false;
     } else {
       this.page1 = true;
     }
 
     //đổi màu cho nút next page
-    let canvasLast: any = document.getElementById('canvas-step3-'+this.pageNumber);
+    let canvasLast: any = document.getElementById('canvas-step3-' + this.pageNumber);
     let step3: any = document.getElementById('pdf-viewer-step-3');
-    if(event.srcElement.scrollTop < Number(canvasLast.getBoundingClientRect().top - step3.getBoundingClientRect().top)) {
+    if (event.srcElement.scrollTop < Number(canvasLast.getBoundingClientRect().top - step3.getBoundingClientRect().top)) {
       this.pageLast = true;
     } else {
       this.pageLast = false;
     }
 
-    this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
+    this.pageNum = Number(Math.floor(event.srcElement.scrollTop / canvas1.height) + 1);
 
     let scrollTop = Number(event.srcElement.scrollTop);
 
-    for(let i = 0; i < this.sum.length;i++) {
-      if(this.sum[i] < scrollTop && scrollTop < this.sum[i+1]) {
-        this.pageNum = Number(i+2);
+    for (let i = 0; i < this.sum.length; i++) {
+      if (this.sum[i] < scrollTop && scrollTop < this.sum[i + 1]) {
+        this.pageNum = Number(i + 2);
       }
     }
   }

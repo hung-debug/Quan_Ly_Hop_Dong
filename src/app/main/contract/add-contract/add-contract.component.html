@@ -1,5 +1,5 @@
 <!--xử lý gọi các component trong các step theo từng điều kiện-->
-<div *ngIf="((action=='add' || action=='add-form' || action=='add-batch') && (type == 1 && isQLHD_01) || (type == 2 && isQLHD_14) || (type == 3 && isQLHD_15)) || (action=='add-contract-connect' && isQLHD_11) || (action=='edit' && isQLHD_02) || (action=='copy' && isQLHD_08)"
+<div *ngIf="((action=='add' || action=='add-form' || action=='add-batch') && (type == 1 && isQLHD_01) || (type == 2 && isQLHD_14) || (type == 3 && isQLHD_15)) || (action=='add-contract-connect' && isQLHD_11) || (action=='edit' && isQLHD_02) || (action=='copy' && isQLHD_08) || (action =='add-contract-liquidation')"
     class="container-fluid">
     <app-contract-header *ngIf="type == 1 && (isQLHD_01 || this.action == 'edit')" #contractHeader [AddComponent]="this" [datas]="datas" [step]="step"
         (messageEvent)="receiveMessage($event)"></app-contract-header>
@@ -69,6 +69,6 @@
            !((action=='add' || action=='add-batch') && type == 3 && isQLHD_15) && 
            !(action=='add-contract-connect' && isQLHD_11) && 
            !(action=='edit' && isQLHD_02) && 
-           !(action=='copy' && isQLHD_08)">
+           !(action=='copy' && isQLHD_08) && !(action == 'add-contract-liquidation')"> 
     {{'no.role' | translate}}
 </div> 

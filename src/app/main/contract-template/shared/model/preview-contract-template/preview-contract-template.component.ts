@@ -13,6 +13,7 @@ export class PreviewContractTemplateComponent implements OnInit {
 
   pdfSrc: any;
   thePDF: any;
+  isFirstLoadDrag: boolean = false;
   pageNumber: number = 1;
   arrPage: any = [];
   datas: any;
@@ -29,20 +30,24 @@ export class PreviewContractTemplateComponent implements OnInit {
   ngOnInit(): void {
     this.datas = this.data;
 
-    if (this.datas.is_action_contract_created) {
-      if (this.datas.uploadFileContractAgain) {
-        this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
-      } else {
-        let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
-        let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
-        if (fileContract_2) {
-          this.pdfSrc = fileContract_2.path;
-        } else {
-          this.pdfSrc = fileContract_1.path;
-        }
-      }
+    if (this.data.isDocx) {
+      this.pdfSrc = this.data.convertedContractFileUrl
     } else {
-      this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
+      if (this.datas.is_action_contract_created) {
+        if (this.datas.uploadFileContractAgain) {
+          this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
+        } else {
+          let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
+          let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
+          if (fileContract_2) {
+            this.pdfSrc = fileContract_1.path;
+          } else {
+            this.pdfSrc = fileContract_1.path;
+          }
+        }
+      } else {
+        this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
+      }
     }
 
     this.getPage();
@@ -50,7 +55,19 @@ export class PreviewContractTemplateComponent implements OnInit {
 
   convertToSignConfig() {
     let arrSignConfig: any = [];
+
+
     let cloneUserSign = [...this.datas.contract_user_sign];
+    if(this.datas.isFirstLoadPreview != true){
+      this.datas.isFirstLoadPreview = true;
+      cloneUserSign.forEach((element: any) => {
+        element.sign_config.forEach((item: any) => {
+        if(this.datas.arrDifPage[Number(item.page)-1] == 'max'){
+          item.coordinate_x = item.coordinate_x - this.datas.difX;
+        }
+      })
+      })
+    }
     cloneUserSign.forEach(element => {
       if (this.datas.is_action_contract_created) {
         if ((element.recipient && ![2, 3].includes(element.recipient.status)) || (!element.recipient && ![2, 3].includes(element.status))) {
@@ -81,19 +98,17 @@ export class PreviewContractTemplateComponent implements OnInit {
   }
 
   changePosition(d?: any, e?: any, sizeChange?: any) {
-
-    console.log("ddd ", d);
-
     let style: any = {
 
     };
 
     if(d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu') {
-      // console.log("xx ");
       style = {
         "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
         "position": "absolute",
-        "backgroundColor": '#EBF8FF'
+        "backgroundColor": '#FFFFFF',
+        "border": "1px dashed #6B6B6B",
+        "border-radius": "6px"
       }
     } else {
       const font_size = d.font_size ? d.font_size : 13;
@@ -102,18 +117,8 @@ export class PreviewContractTemplateComponent implements OnInit {
         style = {
           "transform": 'translate(' + d['coordinate_x'] + 'px, ' + Number(d['coordinate_y']+Number(d['height'])-Number(font_size)*1.3 - 1) + 'px)',
           "position": "absolute",
-          // "left":"0px",
-          // "bottom":"0px"
         }
-      } 
-      
-      // else if(d.sign_unit == 'so_tai_lieu') {
-      //   style = {
-      //     "transform": 'translate(' + d['coordinate_x'] + 'px, ' + Number(Number(d['coordinate_y']) + 5) + 'px)',
-      //     "position": "absolute",
-      //   }
-      // }
-       
+      }      
     }
   
     if (d['width'] && (d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu')) {
@@ -155,7 +160,6 @@ export class PreviewContractTemplateComponent implements OnInit {
           this.renderPage(page, canvas);
         }
       }).then(() => {
-      
       })
   }
 

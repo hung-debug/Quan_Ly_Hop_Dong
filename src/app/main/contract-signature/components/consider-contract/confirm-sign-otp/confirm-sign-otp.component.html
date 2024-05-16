@@ -16,8 +16,8 @@
       <div *ngIf="submitted && f.otp.errors" class="invalid">
         <div *ngIf="f.otp.errors.required">{{'Mã OTP không được để trống' | translate}}</div>
       </div>
-      <div class="label-input-otp-sent" style="margin-left: 100px;" *ngIf="this.count > 0">Mã OTP hết hạn sau {{counter$ | async }}s</div>
-      <div class="label-input-otp-sent" style="margin-left: 150px;" *ngIf="this.count == 0">Mã OTP đã hết hạn</div>
+      <div class="label-input-otp-sent" *ngIf="this.count > 0">Mã OTP hết hạn sau {{counter$ | async }}s</div>
+      <div class="label-input-otp-sent" *ngIf="this.count == 0">Mã OTP đã hết hạn</div>
     </div>
 
     <div class="select-option">

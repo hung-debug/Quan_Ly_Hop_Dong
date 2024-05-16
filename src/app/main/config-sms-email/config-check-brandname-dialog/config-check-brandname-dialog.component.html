@@ -1,0 +1,33 @@
+<div class="container-fluid">
+  <div class="header">
+    <h3 style="text-align: center;" class="label-header">{{this.data.title | translate}}</h3>
+    <span style="text-align: center; color: #8E9AB0;">{{'check.config.brandname' | translate}}</span>
+  </div>
+
+  <div class="row">
+    <form [formGroup]="checkBrandnameForm" class="content">
+      <div>
+        <div class="label text-color">{{'user.phone' | translate}}
+          <span class="required-title">*</span>
+        </div>
+        <div class="input-data">
+          <input type="text" formControlName="phone" placeholder="Nhập số điện thoại" (keyup)="validPhoneNumber()">
+        </div>
+        <div *ngIf="f.phone?.errors" class="invalid">
+          <div *ngIf="f.phone?.errors?.required">{{'error.user.phone.required' | translate}}</div>
+          <div *ngIf="f.phone?.errors?.pattern">{{'validate.regex.phone' | translate}}</div>
+        </div>
+      </div>
+      
+      <div style="padding-top: 20px;">
+        <div class="label text-color">{{'content.sms.brand' | translate}}
+          <span class="required-title">*</span>
+        </div>
+        <textarea formControlName="message" style="width: 100%; height: 120px; background-color: #F7F7F7;"></textarea>
+      </div>
+    </form>
+  </div>
+  <div style="text-align: center; padding-top: 10px;">
+    <button [class]="isDisable? 'disable-button' : 'save-button'" [disabled]="isDisable" (click)="onCheck()" type="button">{{'check.button' | translate}}</button>
+  </div>
+</div>

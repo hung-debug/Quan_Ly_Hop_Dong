@@ -17,6 +17,15 @@
   font-size: 16px;
   color: #106DB6;
   cursor: pointer;
+  white-space: pre-wrap;
+}
+
+.item_contract_created{
+  color: #666666;
+  font-size: 13px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .item_contract_infor{
@@ -195,6 +204,18 @@
   display: flex;
   justify-content: space-between;
 }
+
+.footer_contract_per_page{
+  position:absolute;
+  display: flex;
+  flex-wrap: nowrap;
+  color: #0160AE;
+  select{
+    border: 1px solid #0160AE;
+    border-radius: 5px;
+  }
+}
+
 .footer_title{
   width: 120px;
 }

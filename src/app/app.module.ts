@@ -1,8 +1,10 @@
+import { DeleteFolderComponent } from './main/contract-folder/delete-folder/delete-folder.component';
+import { AddFolderComponent } from './main/contract-folder/add-folder/add-folder.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ChartModule } from 'angular-highcharts';
 import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA, Pipe } from '@angular/core';
+import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA, Pipe } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -11,13 +13,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { MatBadgeModule} from '@angular/material/badge';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { CommonModule, CurrencyPipe, DatePipe} from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
-
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { DatepickerModule } from 'ng2-datepicker';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
@@ -95,27 +98,98 @@ import { AdminFilterUnitComponent } from './admin/admin-main/admin-unit/dialog/a
 import { AdminDeleteUnitComponent } from './admin/admin-main/admin-unit/admin-delete-unit/admin-delete-unit.component';
 import { AdminDeletePackUnitComponent } from './admin/admin-main/admin-unit/admin-delete-pack-unit/admin-delete-pack-unit.component';
 import { AdminInfoUserComponent } from './admin/admin-main/admin-user/admin-info-user/admin-info-user.component';
+import { CustomerComponent } from './main/customer/customer.component';
 
 import {WebcamModule} from 'ngx-webcam';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ReportDetailComponent } from './main/report/report-detail/report-detail.component';
 import { ReportStatusContractComponent } from './main/report/report-status-contract/report-status-contract.component';
 import { ReportSoonExpireComponent } from './main/report/report-soon-expire/report-soon-expire.component';
+import { ReportStatusSendSmsEmailComponent } from './main/report/report-status-send-sms-email/report-status-send-sms-email.component';
+import { ReportStatusSendEmailComponent } from './main/report/report-contract-send-email/report-contract-send-email.component';
+import { ReportEKYCComponent } from './main/report/report-eKYC/report-eKYC.component';
 import { ReportContractNumberFollowStatusComponent } from './main/report/report-contract-number-follow-status/report-contract-number-follow-status.component';
+import { ReportContractNumberEcontractMsaleComponent } from './main/report/report-contract-number-eContract-mSale/report-contract-number-eContract-mSale.component';
 import { ContractNumberFollowSignComponent } from './main/report/contract-number-follow-sign/contract-number-follow-sign.component';
 
 import { ContractNumberFollowTypeComponent } from './main/report/contract-number-follow-type/contract-number-follow-type.component';
 
+import { ConfigSmsEmailComponent } from './main/config-sms-email/config-sms-email.component';
+import { DeleteCustomerComponent } from './main/customer/delete-customer/delete-customer.component';
+import { CustomerDetailComponent } from './main/customer/customer-detail/customer-detail.component';
+import { ContractFolderComponent } from './main/contract-folder/contract-folder.component';
+import { ReportContractReceiveComponent } from './main/report/report-contract-receive/report-contract-receive.component';
+import { CustomerAddComponent } from './main/customer/customer-add/customer-add.component';
+import { CurrentFolderComponent } from './main/contract-folder/current-folder/current-folder.component';
+import { AddContractFolderComponent } from './main/contract-folder/current-folder/add-contract-folder/add-contract-folder.component';
+import {DigitalCertificateComponent} from './main/digital-certificate/digital-certificate.component';
+import {DigitalCertificateAddComponent} from './main/digital-certificate/digital-certificate-add/digital-certificate-add.component';
+import {DigitalCertificateDetailComponent} from './main/digital-certificate/digital-certificate-detail/digital-certificate-detail.component';
+import {DigitalCertificateEditComponent} from './main/digital-certificate/digital-certificate-edit/digital-certificate-edit.component';
+import {ContentSmsComponent} from './main/report/report-status-send-sms-email/content-sms/content-sms.component';
+import { ConfigBrandnameDialogComponent } from './main/config-sms-email/config-check-brandname-dialog/config-check-brandname-dialog.component';
+import {ContentEmailComponent} from './main/report/report-contract-send-email/content-email/content-email.component';
+import { HeadersInterceptor } from './headers.interceptor';
+import { UploadAttachFilesComponent } from './main/contract/dialog/upload-attach-files-dialog/upload-attach-files-dialog.component';
+import { DeleteContractFolderComponent } from './main/contract-folder/current-folder/delete-contract-folder/delete-contract-folder.component';
+import { UploadContractFileComponent } from './main/contract-folder/current-folder/upload-contract-file/upload-contract-file.component';
+import { AccountLinkDialogComponent } from './main/dialog/account-link-dialog/account-link-dialog.component';
+import { NgOtpInputModule } from  'ng-otp-input';
+import { environment } from 'src/environments/environment';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
+
+function initializeKeycloak(keycloak: KeycloakService) {
+  // const fullUrl = window.location.href
+  // if (!fullUrl.includes('/login?type=mobifone-sso'))
+  if (environment.flag == 'KD') {
+    return () =>
+      keycloak.init({
+        config: {
+          url: environment.SSO_URL,
+          realm: environment.SSO_REALM,
+          clientId: environment.SSO_CLIENTID,
+        },
+        initOptions: {
+          checkLoginIframe: false,
+          // pkceMethod: "S256",
+          // onLoad: 'check-sso',
+        },
+        enableBearerInterceptor: false,
+      })
+      .then(
+        (authenticated: any) => {
+          const idToken: any = keycloak.getKeycloakInstance().idToken;
+          const ssoToken: any = keycloak.getKeycloakInstance().token;
+          localStorage.setItem('sso_id_token',idToken ?? '')
+          localStorage.setItem('sso_token',ssoToken ?? '')
+          if (!authenticated) {
+            const fullUrl = window.location.href
+            if (fullUrl.includes('/login?type=mobifone-sso')) {
+              keycloak.login()
+            }
+          } 
+        }, (err: any) => {
+        }
+      );
+  } else return () => {}
+}
+
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     MainComponent,
     UserComponent,
+    DigitalCertificateComponent,
+    DigitalCertificateAddComponent,
+    DigitalCertificateDetailComponent,
+    DigitalCertificateEditComponent,
+    ContentSmsComponent,
+    ConfigBrandnameDialogComponent,
+    ContentEmailComponent,
     ContractComponent,
     ContractSignatureComponent,
     UnitComponent,
@@ -170,18 +244,38 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdminDeleteUnitComponent,
     AdminDeletePackUnitComponent,
     AdminInfoUserComponent,
+    CustomerComponent,
 
     ReportDetailComponent,
     ReportStatusContractComponent,
     ReportSoonExpireComponent,
+    ReportStatusSendSmsEmailComponent,
+    ReportStatusSendEmailComponent,
+    ReportEKYCComponent,
     ReportContractNumberFollowStatusComponent,
+    ReportContractNumberEcontractMsaleComponent,
     ContractNumberFollowSignComponent,
     ContractNumberFollowTypeComponent,
 
-    ContractComponent
+    ContractComponent,
+    ConfigSmsEmailComponent,
+    DeleteCustomerComponent,
+    CustomerDetailComponent,
+    ReportContractReceiveComponent,
+    ContractFolderComponent,
+    CustomerAddComponent,
+    AddFolderComponent,
+    DeleteFolderComponent,
+    CurrentFolderComponent,
+    AddContractFolderComponent,
+    UploadAttachFilesComponent,
+    DeleteContractFolderComponent,
+    UploadContractFileComponent,
+    AccountLinkDialogComponent
   ],
   imports: [
     TranslateModule,
+
     BrowserModule,
     AppRoutingModule,
     NgxChartsModule,
@@ -196,6 +290,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MatBadgeModule,
     ContractModule,
     NgMultiSelectDropDownModule,
+    MultiSelectModule,
     CommonModule,
     NgxPaginationModule,
     MdbTabsModule,
@@ -233,12 +328,26 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TreeSelectModule,
     WebcamModule,
     PdfViewerModule,
+    KeycloakAngularModule,
+    NgOtpInputModule
   ],
-  providers: [ AppService, DatePipe,CurrencyPipe,
+  providers: [ AppService, DatePipe,CurrencyPipe,KeycloakAngularModule, KeycloakService,
     {
     provide: PERFECT_SCROLLBAR_CONFIG,
     useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
-    }],
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HeadersInterceptor,
+      multi: true
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService]
+    }
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

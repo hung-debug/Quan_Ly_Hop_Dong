@@ -18,47 +18,42 @@
             <div *ngIf = "!this.reasonCancel" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
 
                 <div class="col-md-6" style="display: flex; flex-direction: column;text-align: left;">
-                    <div style="display: flex;">
-
+                    <div *ngIf="d.name" style="display: flex;">
                     <!--Tên người trong luồng hợp đồng-->
-                    <span>{{d.name}}</span>&nbsp;
-                    <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span>
+                        <span>{{d.name}}</span>&nbsp;
+                        <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span>
                     </div>
-                    <span style="color: #8B8B8B" *ngIf="d.type != 3 && d.name_company">{{d.name_company}}</span>
+                    <!-- <span style="color: #8B8B8B" *ngIf="d.type != 3 && d.name_company">{{d.name_company}}</span> -->
+                    <span style="color: #8B8B8B" *ngIf="d.type == 1 && d.user_in_organization">{{d.user_in_organization}}</span>
                     <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'vi' || !this.lang">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name : ''}}</span>
 
                     <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'en'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name.replace("Ký ảnh và OTP"," Sign by OTP").replace("Ký eKYC","Sign eKYC").replace("Ký số bằng","Sign by").replace("và","and"): ''}}</span>
+                    <span style="color: dimgray" *ngIf="d.card_id && !(d.typeOfSign.id == 1 || d.typeOfSign.id == 3 || d.typeOfSign.id == 7) ">MST/CCCD: {{d.card_id}}</span>
                 </div>
 
-               
+
                 <div class="col-md-4" style="display: flex; flex-direction: column;text-align: center">
                     <div style="display: flex; justify-content: center;align-items: center;">
-                        
+
                         <span [style.color]="d.status === ('rejected' | translate) ? '#d11919' : d.status !== 0 ? '#106DB6' : '#545252'">{{d.status}}</span> &nbsp;
                         <div class="div_icon " style="width: 90px;display: flex;margin-left:10px"  *ngIf="d.statusNumber === 3" >
                             <div class="img_icon button" ngbTooltip="{{'contract.reject' | translate}}" (click)="viewReasonRejected(d.id)">{{'view.reason' | translate}}</div>
                         </div>
-                    </div> 
+                    </div>
                     <span style="color: #8B8B8B" *ngIf="d.process_at">({{d.process_at}})</span>
                 </div>
-            
 
-                <div class="col-md-2" style="text-align: center;display: flex;justify-content: center" *ngIf = " isHiddenButton && listCheckSmsEmail && isEndDate ">
+
+                <div class="col-md-2" style="text-align: center;display: flex;justify-content: center" *ngIf = "isHiddenButton && listCheckSmsEmail && isEndDate ">
                         <div *ngIf = "d.statusNumber != 0 && d.statusNumber !== 4">
                             <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d.id)"/>
                         </div>
 
-                        <!-- <div *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4 && (d.change_num === 0 || !d.change_num)" class="div_icon">
-                             <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update.person-process' | translate}}" (click)="openEdit(d.id)"/>
-                        </div> -->
-                    
-
-                    <!-- <div *ngIf = "!isHiddenButton || listCheckSmsEmail || !isEndDate">
-                    </div> -->
+                        <div *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4 && (d.change_num < 5 || !d.change_num)" class="div_icon">
+                        <!-- <div *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4" class="div_icon"> -->
+                             <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update_person_process' | translate}}" (click)="openEdit(d.id)"/>
+                        </div>
                 </div>
-
-                <!-- <div class="col-md-2" *ngIf="!isHiddenButton || !listCheckSmsEmail || isEndDate">
-                </div> -->
             </div>
 
             <div *ngIf = "this.reasonCancel && (d.statusNumber == 2 || d.statusNumber == 3 || d.statusNumber == 4)" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
@@ -72,30 +67,31 @@
                     </div>
                     <span style="color: #8B8B8B" *ngIf="d.type != 3 && d.name_company">{{d.name_company}}</span>
 
-                    <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'vi'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name : ''}}</span>
+                    <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'vi'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name}}</span>
 
-                    <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'en'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name.replace("Ký số bằng","Sign by").replace("và","and").replace("ảnh","OTP"): ''}}</span>
+                    <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'en'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name.replace("Ký số bằng","Sign by").replace("và","and").replace("ảnh","OTP")}}</span>
                 </div>
 
                 <div class="col-md-4" style="display: flex; flex-direction: column;text-align: center">
                     <div style="display: flex; justify-content: center;align-items: center;">
-                        
+
                         <span [style.color]="d.status === ('rejected' | translate) ? '#d11919' : d.status !== 0 ? '#106DB6' : '#545252'">{{d.status}}</span> &nbsp;
                         <div class="div_icon " style="width: 90px;display: flex;margin-left:10px"  *ngIf="d.statusNumber == 3" >
                             <div class="img_icon button" ngbTooltip="{{'contract.reject' | translate}}" (click)="viewReasonRejected(d.id)">{{'view.reason' | translate}}</div>
                         </div>
-                    </div> 
+                    </div>
                     <span style="color: #8B8B8B" *ngIf="d.process_at">({{d.process_at}})</span>
                 </div>
 
                 <div class="col-md-2" style="text-align: center; display: flex;justify-content: center"
-                *ngIf = " isHiddenButton && listCheckSmsEmail && isEndDate "> 
+                *ngIf = " isHiddenButton && listCheckSmsEmail && isEndDate ">
                     <div *ngIf = "d.statusNumber !== 0 && d.statusNumber !== 4">
                         <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d.id)"/>
                     </div>
-                    <!-- <div class="div_icon" *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4 && (d.change_num === 0 || !d.change_num)">
-                        <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update.person-process' | translate}}" (click)="openEdit(d.id)"/>
-                    </div> -->
+                    <div class="div_icon" *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4 && (d.change_num === 0 || !d.change_num)">
+                    <!-- <div class="div_icon" *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4"> -->
+                        <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update_person_process' | translate}}" (click)="openEdit(d.id)"/>
+                    </div>
                 </div>
             </div>
         </div>

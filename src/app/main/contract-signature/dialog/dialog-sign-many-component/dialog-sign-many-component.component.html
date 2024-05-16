@@ -7,6 +7,14 @@
         <div style="font-size: 16px">{{'multi.sign.question' | translate}}
         </div>
       </div>
+
+      <div *ngIf="!this.mobile" class="name-item" style="padding-top: 10px;">
+        <div style="font-size: 14px">{{'stamp.contract.questions' | translate}}
+        </div>
+        <div style="padding-top: 2px;">
+          <p-dropdown [(ngModel)]="id" optionLabel="name" optionValue="id" [options]="options" (onChange)="onChangeForm($event)"></p-dropdown>
+        </div>
+      </div>
   
       <div class="select-option">
         <button (click)="dialog.closeAll()"

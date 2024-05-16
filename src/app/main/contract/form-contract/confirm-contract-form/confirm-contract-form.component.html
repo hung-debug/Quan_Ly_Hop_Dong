@@ -140,7 +140,7 @@
     <div class="content_footer"></div>
     <div>
         <button type="button" name="next" class="next draft-button" (click)="SaveContract('saveDraft_contract')">{{'btn.save-draft' | translate}}</button>
-        <button (click)="submit('finish_contract')" type="button" name="next" class="next action-button pull-right">{{'btn.done' | translate}}</button>
+        <button [disabled]="isButtonDisabled" (click)="submit('finish_contract')" type="button" name="next" class="next action-button pull-right">{{'btn.done' | translate}}</button>
     </div>
 </div>
 

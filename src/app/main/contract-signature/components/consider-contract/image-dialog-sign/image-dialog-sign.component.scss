@@ -23,7 +23,7 @@
 
   .select-option {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     margin-top: 29px;
     button {
       width: 91px;
@@ -31,7 +31,8 @@
       border-radius: 5px;
       border: none;
       color: white;
-      background-color: #8B8B8B;
+      // background-color: #8B8B8B;
+      background-color: #106DB6;
       cursor: pointer;
     }
     button:nth-last-child(1) {

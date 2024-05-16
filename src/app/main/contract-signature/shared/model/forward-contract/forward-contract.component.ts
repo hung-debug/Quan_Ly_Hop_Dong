@@ -1,3 +1,4 @@
+// import { locale } from 'date-fns/locale/en-US';
 import { Component, Inject, OnInit, ElementRef, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
@@ -6,6 +7,9 @@ import { ContractService } from "../../../../../service/contract.service";
 import { ToastService } from "../../../../../service/toast.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { parttern, parttern_input } from 'src/app/config/parttern';
+import { environment } from 'src/environments/environment';
+import { type_signature } from 'src/app/config/variable';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-forward-contract',
@@ -21,9 +25,16 @@ export class ForwardContractComponent implements OnInit {
 
   isReqCardIdToken: boolean = false;
   isReqCardIdHsm: boolean = false;
-
+  isReqCardIdCts: boolean = false
+  site: string;
   login: string;
-
+  type: any = 0;
+  locale: string;
+  isVietnamese: boolean = true;
+  dropdownSignTypeSettings: any = {};
+  dataSign: any;
+  signTypeList: Array<any> = type_signature;
+  currentSignType: any = null
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -32,25 +43,32 @@ export class ForwardContractComponent implements OnInit {
     private contractService: ContractService,
     public dialogRef: MatDialogRef<ForwardContractComponent>,
     private toastService: ToastService,
-    private el: ElementRef,
     private spinner: NgxSpinnerService,
+    private translate: TranslateService
   ) {
+   
   }
 
 
   ngOnInit(): void {
     this.datas = this.data;
     this.login = "email";
+    if (environment.flag == 'NB') {
+      this.site = 'NB';
+    } else if (environment.flag == 'KD') {
+      this.site = 'KD';
+    }
 
+    if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
+      this.type = 1;
+    } else
+      this.type = 0;
 
     this.getCurrentUser();
-    this.myForm = this.fbd.group({
-      name: this.fbd.control("", [Validators.required]),
-      email: this.fbd.control("", [Validators.required]),
-      phone: "",
-      card_id: "",
-    });
-
+    
+    // this.locale = this.datas?.dataContract?.is_data_contract?.participants[0]?.recipients[0]?.locale;
+    const currentRecipientData = this.getTargetRecipientData(this.datas?.recipientId);
+    this.locale = currentRecipientData?.locale ? currentRecipientData?.locale: 'vi';
 
     for (const d of this.datas.dataContract.is_data_contract.participants) {
       for (const q of d.recipients) {
@@ -66,6 +84,11 @@ export class ForwardContractComponent implements OnInit {
           //Chữ ký usb token
           let data_sign_cardIdToken = q.sign_type.filter((p: any) => p.id == 2)[0];
 
+          //Chữ ký CTS
+          let data_sign_cts = q.sign_type.filter((p: any) => p.id == 6)[0];
+
+          let data_sign_rs = q.sign_type.filter((p: any) => p.id == 8)[0];
+
           if (data_sign_cka) {
             this.isReqPhone = true;
           }
@@ -80,29 +103,234 @@ export class ForwardContractComponent implements OnInit {
           if (data_sign_cardIdToken) {
             this.isReqCardIdToken = true;
           }
+          if (data_sign_cts || data_sign_rs) {
+            this.isReqCardIdCts = true;
+          }
 
           break
         }
       }
       if (this.isReqPhone || this.isReqCardId) break;
     }
+
+    this.actionWithSignTypeForm()
   }
 
+
+  actionWithSignTypeForm() {
+    this.dropdownSignTypeSettings = {
+      singleSelection: false,
+      idField: "id",
+      textField: "name",
+      enableCheckAll: false,
+      allowSearchFilter: true,
+      itemsShowLimit: 1,
+      limitSelection: 1,
+      disabledField: 'item_disable',
+    };
+
+    const currentRecipientData = this.getTargetRecipientData(this.datas?.recipientId);
+
+    if(currentRecipientData.sign_type.length > 0) {
+      if(currentRecipientData.sign_type[0].id == 2 || currentRecipientData.sign_type[0].id == 4 || currentRecipientData.sign_type[0].id == 6 || currentRecipientData.sign_type[0].id == 8) {
+        this.dataSign = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8);
+      } else if(currentRecipientData.sign_type[0].id == 1 ||  currentRecipientData.sign_type[0].id == 5) {
+        this.dataSign = this.signTypeList.filter((p: any) => p.id == 1 || p.id == 5);
+      } else if(currentRecipientData.sign_type[0].id == 3 || currentRecipientData.sign_type[0].id == 7) {
+        this.dataSign = this.signTypeList.filter((p: any) => p.id == 3 || p.id == 7);
+      }
+
+      this.myForm = this.fbd.group({
+        name: this.fbd.control("", [Validators.required]),
+        email: this.fbd.control("", [Validators.required]),
+        phone: "",
+        card_id: "",
+        dataSign: this.fbd.control(this.dataSign.filter((p: any) => p.id == currentRecipientData.sign_type[0].id),[Validators.required])
+      });
+    } else {
+      this.myForm = this.fbd.group({
+        name: this.fbd.control("", [Validators.required]),
+        email: this.fbd.control("", [Validators.required]),
+        phone: "",
+        card_id: "",
+      });
+    }
+
+  
+  }
+
+  onItemSelect(event: any) {
+    //1: Ký ảnh
+    //5: Ký ekyc
+    if(event.id == 1) {
+      this.isReqPhone = true;
+      this.isReqCardId = false;
+    } else if(event.id == 5) {
+      this.isReqPhone = false;
+      this.isReqCardId = true;
+    } else if(event.id == 4) {
+      //Ký hsm
+      this.isReqCardIdHsm = true;
+      this.isReqCardIdToken = false;
+      this.isReqCardIdCts = false;
+    } else if(event.id == 2) {
+      //Ký token
+      this.isReqCardIdHsm = false;
+      this.isReqCardIdToken = true;
+      this.isReqCardIdCts = false;
+    } else if(event.id == 6){
+      this.isReqCardIdCts = true;
+      this.isReqCardIdHsm = false;
+      this.isReqCardIdToken = false;
+    } else if(event.id == 8){
+      this.isReqCardIdCts = true;
+      this.isReqCardIdHsm = false;
+      this.isReqCardIdToken = false;
+      this.isReqPhone = false;
+    } 
+    this.currentSignType = event.id
+  }
+
+  getTargetRecipientData(targetId : number){
+    if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
+      const participants = this.datas?.dataContract?.is_data_contract?.participants;
+      for (const participant of participants) {
+        for (const recipient of participant.recipients) {
+          if (targetId == recipient.id) {
+            return recipient;
+          }
+        }
+      }
+    }
+  }
+
+  dataSignModel: any;
   changeTypeSign(e: any,) {
     this.login = e.target.value;
+    
+    if(this.login == 'phone') {
+      this.dataSign = this.dataSign.filter((item: any) => item.id != 2 && item.id != 7);
+
+      if(this.myForm.get('dataSign')?.value && this.myForm.get('dataSign')?.value.length > 0) {
+        if(this.myForm.get('dataSign')?.value[0].id == 2) {
+          this.myForm.patchValue({
+            dataSign: this.dataSign.filter((item: any) => item.id == 4)
+          })
+          this.isReqCardIdToken = false;
+          this.isReqCardIdHsm = true;
+        } else if (this.myForm.get('dataSign')?.value[0].id == 7) {
+          this.myForm.patchValue({
+            dataSign: this.dataSign.filter((item : any) => item.id == 3)
+          })
+        }
+      }
+
+    } else {
+      const currentRecipientData = this.getTargetRecipientData(this.datas?.recipientId);
+
+      if(currentRecipientData.sign_type.length > 0) {
+        if(currentRecipientData.sign_type[0].id == 2 || currentRecipientData.sign_type[0].id == 4 || currentRecipientData.sign_type[0].id == 6 || currentRecipientData.sign_type[0].id == 8) {
+          this.dataSign = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 8);
+          if(currentRecipientData.sign_type[0].id == 2 ) {
+            this.isReqCardIdToken = true;
+            this.isReqCardIdHsm = false;
+            this.isReqCardIdCts = false;
+          } else if (currentRecipientData.sign_type[0].id == 4 ) {
+            this.isReqCardIdToken = false;
+            this.isReqCardIdHsm = true;
+            this.isReqCardIdCts = false;
+          } else if (currentRecipientData.sign_type[0].id == 6 || currentRecipientData.sign_type[0].id == 8) {
+            this.isReqCardIdCts = true;
+            this.isReqCardIdToken = false;
+            this.isReqCardIdHsm = false;
+          } 
+        } else if(currentRecipientData.sign_type[0].id == 1 ||  currentRecipientData.sign_type[0].id == 5) {
+          this.dataSign = this.signTypeList.filter((p: any) => p.id == 1 || p.id == 5);
+        } else if(currentRecipientData.sign_type[0].id == 3 || currentRecipientData.sign_type[0].id == 7) {
+          this.dataSign = this.signTypeList.filter((p: any) => p.id == 3 || p.id == 7);
+        }
+      }
+
+      this.myForm.patchValue({
+        dataSign: this.dataSign.filter((p: any) => p.id == (this.currentSignType ? this.currentSignType :  currentRecipientData.sign_type[0].id))
+      })
+    }
   }
 
-  async onSubmit() {
-    console.log("datasssssssssss",this.datas);
-    
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    // this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
-    // console.log("this.emailRecipientssssssssss",this.emailRecipients);
-    // const ArrRecipients = this.datas.dataContract.is_data_contract.participants[0].recipients;
-    // const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email);
-    // console.log("ArrRecipientsNew", ArrRecipientsNew);
+  setLocale(lang: string) {
+    this.locale = lang;
+  }
 
-   
+  dropdownButtonText = '';
+  async onSubmit() {
+    const updatedInfo = await this.contractService.getInforPersonProcess(this.datas.recipientId).toPromise()
+    let isInRecipient = false;
+
+    if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
+      const participants = this.datas?.dataContract?.is_data_contract?.participants;
+      
+      for (const participant of participants) {
+        for (const recipient of participant.recipients) {
+          if (updatedInfo.name == recipient.name) {
+            isInRecipient = true;
+          }
+        }
+      }
+    }
+
+    if (!isInRecipient) {
+      
+      this.toastService.showErrorHTMLWithTimeout(
+        'Bạn không có quyền xử lý hợp đồng này do tên không trùng khớp!',
+        '',
+        3000
+      );
+      if (this.type == 1) {
+        this.router.navigate(['/login']);
+        this.dialogRef.close();
+        this.spinner.hide();
+        return
+      } else {
+        this.router.navigate(['/main/dashboard']);
+        this.dialogRef.close();
+        this.spinner.hide();
+        return
+      }
+    }
+
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
+      const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+
+      let ArrRecipientsNew = false
+      ArrRecipients.map((item: any) => {
+        if (item.email === this.currentUser.email) {
+          ArrRecipientsNew = true
+          return
+        }
+      });
+      
+
+      if (!ArrRecipientsNew) {
+
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          this.dialogRef.close();
+          this.spinner.hide();
+          return
+        }
+      };
+      
       if (!String(this.myForm.value.name)) {
         // this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền'
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập tên người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
@@ -112,11 +340,17 @@ export class ForwardContractComponent implements OnInit {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
         return;
       } else if (this.login == 'email' && !String(this.myForm.value.email).toLowerCase().match(
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        )) {
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      )) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng email', '', 3000);
         return;
       }
+
+      if(this.login == 'phone' && !String(this.myForm.value.phone)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập SĐT người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+        return;
+      }
+
       if (this.isReqPhone && !String(this.myForm.value.phone)) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập số điện thoại người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
         return;
@@ -144,7 +378,20 @@ export class ForwardContractComponent implements OnInit {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập thông tin trong usb token của người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
         return;
       } else if (this.isReqCardIdToken && this.myForm.value.card_id && (!String(this.myForm.value.card_id).toLowerCase().match(parttern_input.taxCode_form) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id9)) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id12)) {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng mã số thuế/CMT/CCCD', '', 3000);
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng MST/CMT/CCCD', '', 3000);
+        return;
+      }
+      else if (this.isReqCardIdCts && !String(this.myForm.value.card_id)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập MST/CMT/CCCD người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+        return;
+      } else if (this.isReqCardIdCts && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.cardid)) {
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng MST/CMT/CCCD', '', 3000);
+        return;
+      }
+
+   
+      if(this.dataSign && this.dataSign.length > 0 && (!this.myForm.value.dataSign || this.myForm.value.dataSign.length == 0)) {
+        this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn loại ký cho người được uỷ quyền/chuyển tiếp','',3000);
         return;
       }
 
@@ -158,7 +405,7 @@ export class ForwardContractComponent implements OnInit {
       }
 
       // this.checkCanSwitchContractPhone();
-   
+
 
       if (this.currentUser) {
         this.spinner.show();
@@ -186,10 +433,7 @@ export class ForwardContractComponent implements OnInit {
           this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
         })
 
-        console.log("role ", this.data.role_coordination);
-
-        console.log("role 1 ", this.datas.dataContract.roleContractReceived)
-
+        
         if (coutError == 0) {
           //is_replace: false = giữ lại uỷ quyền
           const dataAuthorize = {
@@ -200,10 +444,12 @@ export class ForwardContractComponent implements OnInit {
             role: this.data.role_coordination ? this.data.role_coordination : this.datas.dataContract.roleContractReceived,
             recipient_id: this.datas.recipientId,
             is_replace: false,
-            login_by: this.login
+            login_by: this.login,
+            locale: this.locale,
+            sign_type: this.myForm.value.dataSign
           };
-
-          if(this.login == 'phone') {
+          
+          if (this.login == 'phone') {
             dataAuthorize.email = dataAuthorize.phone
           }
 
@@ -236,8 +482,11 @@ export class ForwardContractComponent implements OnInit {
               this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
             }
           )
+
         }
+
       }
+    })
   }
 
   getCurrentUser(): any {
@@ -248,7 +497,7 @@ export class ForwardContractComponent implements OnInit {
     if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
       for (const participant of this.datas.dataContract.is_data_contract.participants) {
         for (const recipient of participant.recipients) {
-          if (this.myForm.value.email == recipient.email && recipient.status != 4) {
+          if (this.myForm.value.email && this.myForm.value.email == recipient.email && recipient.status != 4) {
             return false;
           }
         }
@@ -261,9 +510,7 @@ export class ForwardContractComponent implements OnInit {
     if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
       for (const participant of this.datas.dataContract.is_data_contract.participants) {
         for (const recipient of participant.recipients) {
-          // console.log("rec ",recipient);
-          // console.log("this ", this.myForm.value);
-          if (this.myForm.value.email == recipient.email) {
+          if (this.myForm.value.phone == recipient.phone && recipient.status !== 4 ) {
             return false;
           }
         }
@@ -293,7 +540,7 @@ export class ForwardContractComponent implements OnInit {
   }
 
   t() {
-    console.log(this);
+    
   }
 
 }

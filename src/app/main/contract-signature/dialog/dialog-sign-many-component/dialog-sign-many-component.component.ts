@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DeviceDetectorService } from 'ngx-device-detector';
+import { optionsCeCa } from 'src/app/config/variable';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-dialog-sign-many-component',
@@ -8,16 +11,47 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 })
 export class DialogSignManyComponentComponent implements OnInit {
 
+  options: any;
+  id: number = 0;
+  currentUser: any;
+  markSignAcc: string | null;
+  mobile: boolean;
+
   constructor(
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<DialogSignManyComponentComponent>,
-  ) { }
-
-  ngOnInit(): void {
+    private userService: UserService,
+    private deviceService: DeviceDetectorService,
+  ) {
+    this.currentUser = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.info;
   }
 
-  onSubmit() {
-    this.dialogRef.close(1);
+  ngOnInit(): void {
+    this.options = optionsCeCa;
+  }
+
+  onChangeForm(event: any) {
+    this.id = event.value;
+  }
+
+  async onSubmit() {
+    const data = {
+      mark: this.id,
+      agree: 1,
+    }
+    console.log("data",data);
+
+    this.dialogRef.close(data);
+  }
+
+  getDeviceApp() {
+    if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
+      this.mobile = true;
+    } else {
+      this.mobile = false;
+    }
   }
 
 }

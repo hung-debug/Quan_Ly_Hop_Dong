@@ -101,7 +101,8 @@ export class FilterListDialogComponent implements OnInit {
           'filter_contract_no': data.filter_contract_no,
           'filter_from_date': data.filter_from_date,
           'filter_to_date': data.filter_to_date,
-          'contractStatus' : data.contractStatus
+          'contractStatus' : data.contractStatus,
+          'type_display': this.data.type_display
         },
         skipLocationChange: true
       });

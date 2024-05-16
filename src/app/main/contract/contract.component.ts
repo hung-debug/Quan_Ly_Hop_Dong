@@ -1,5 +1,5 @@
 import { UploadService } from 'src/app/service/upload.service';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from 'src/app/service/app.service';
 import { ContractService } from 'src/app/service/contract.service';
@@ -13,12 +13,19 @@ import { ContractConnectDialogComponent } from './dialog/contract-connect-dialog
 import { AddConnectDialogComponent } from './dialog/add-connect-dialog/add-connect-dialog.component';
 import { ShareContractDialogComponent } from './dialog/share-contract-dialog/share-contract-dialog.component';
 import { DeleteContractDialogComponent } from './dialog/delete-contract-dialog/delete-contract-dialog.component';
+import { DeleteMultiContractDialogComponent } from './dialog/delete-multi-contract-dialog/delete-multi-contract-dialog.component';
 import { NgxSpinnerService } from "ngx-spinner";
 import { Subscription } from "rxjs";
 import { UserService } from 'src/app/service/user.service';
 import { RoleService } from 'src/app/service/role.service';
 import { sideList } from 'src/app/config/variable';
 import { DialogReasonCancelComponent } from '../contract-signature/shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
+import { ContractSignatureService } from '../../service/contract-signature.service';
+import { DatePipe } from '@angular/common';
+import { TranslateService } from '@ngx-translate/core';
+import { EditExpirationSigningTimeComponent } from './edit-expiration-signing-time/edit-expiration-signing-time.component';
+import { UploadAttachFilesComponent } from './dialog/upload-attach-files-dialog/upload-attach-files-dialog.component';
+import { ProcessingHandleEcontractComponent } from '../contract-signature/shared/model/processing-handle-econtract/processing-handle-econtract.component';
 
 @Component({
   selector: 'app-contract',
@@ -26,24 +33,32 @@ import { DialogReasonCancelComponent } from '../contract-signature/shared/model/
   styleUrls: ['./contract.component.scss']
 })
 export class ContractComponent implements OnInit, AfterViewInit {
+  datas: any;
+  data_contract: any;
+  idContract: any;
   action: string;
   status: string;
   type: string;
   private sub: any;
   public contracts: any[] = [];
+  public contractsDownload: any[] = [];
   p: number = 1;
   page: number = 10;
+  pageDownload: number = 10;
   pageStart: number = 0;
   pageEnd: number = 0;
   pageTotal: number = 0;
+  totalPage: number = 0;
   statusPopup: number = 1;
   notificationPopup: string = '';
+  pageOptions: any[] = [10, 20, 50, 100];
+  scrollY: any;
 
   title: any = "";
   id: any = "";
   notification: any = "";
   isOrg: string = 'off';
-  
+
   stateOptions: any[];
   organization_id: any = "";
 
@@ -64,6 +79,9 @@ export class ContractComponent implements OnInit, AfterViewInit {
   message: any;
   subscription: Subscription;
   roleMess: any = "";
+  checkedAll: boolean = false;
+  typeDisplay: string = 'view';
+  dataDeleteDraftChecked: any[] = [];
 
   //phan quyen
   isQLHD_01: boolean = true;  //them moi hop dong
@@ -79,9 +97,12 @@ export class ContractComponent implements OnInit, AfterViewInit {
   isQLHD_11: boolean = true;  //tao hop dong lien quan
   isQLHD_12: boolean = true;  //xem hop dong lien quan
   isQLHD_13: boolean = true;  //chia se hop dong
+  isQLHD_16: boolean = true;  //thanh lý hợp đồng
+
 
   constructor(private appService: AppService,
     private contractService: ContractService,
+    private ContractSignatureService: ContractSignatureService,
     private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService,
@@ -90,6 +111,9 @@ export class ContractComponent implements OnInit, AfterViewInit {
     private spinner: NgxSpinnerService,
     private userService: UserService,
     private roleService: RoleService,
+    private datePipe: DatePipe,
+    private translate: TranslateService,
+    private activeRoute: ActivatedRoute,
   ) {
 
     this.stateOptions = [
@@ -103,9 +127,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.route.queryParams.subscribe(async params => {
       if (typeof params.filter_name != 'undefined' && params.filter_name) {
         this.filter_name = params.filter_name;
-      } else {
-        this.filter_name = "";
       }
+
       if (typeof params.filter_type != 'undefined' && params.filter_type) {
         this.filter_type = params.filter_type;
       } else {
@@ -126,11 +149,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
       } else {
         this.filter_to_date = "";
       }
+
       if (typeof params.isOrg != 'undefined' && params.isOrg) {
         this.isOrg = params.isOrg;
-      } else {
-        this.isOrg = "off";
       }
+
       if (typeof params.status != 'undefined' && params.status) {
         this.status = params.status;
       } else {
@@ -146,58 +169,67 @@ export class ContractComponent implements OnInit, AfterViewInit {
       } else {
         this.organization_id = "";
       }
+
+      this.sub = this.route.params.subscribe(params => {
+        this.action = params['action'];
+        this.status = params['status'];
+
+        //set status
+        this.convertStatusStr();
+
+        this.appService.setTitle("contract.list.created");
+
+        //lay id user
+        let userId = this.userService.getAuthCurrentUser().id;
+        this.userService.getUserById(userId).subscribe(
+          data => {
+            //lay id role
+            this.roleService.getRoleById(data?.role_id).subscribe(
+              data => {
+                let listRole: any[];
+                listRole = data.permissions;
+                this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
+                this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
+                this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');
+                this.isQLHD_04 = listRole.some(element => element.code == 'QLHD_04');
+                this.isQLHD_05 = true;
+                this.isQLHD_06 = listRole.some(element => element.code == 'QLHD_06');
+                this.isQLHD_07 = listRole.some(element => element.code == 'QLHD_07');
+                this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
+                this.isQLHD_09 = listRole.some(element => element.code == 'QLHD_09');
+                this.isQLHD_10 = listRole.some(element => element.code == 'QLHD_10');
+                this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
+                this.isQLHD_12 = listRole.some(element => element.code == 'QLHD_12');
+                this.isQLHD_13 = listRole.some(element => element.code == 'QLHD_13');
+                this.isQLHD_16 = listRole.some(element => element.code == 'QLHD_16');
+
+                //neu co quyen xem danh sach hop dong cua to chuc minh va to chuc con
+                this.filter_is_org_me_and_children = this.isQLHD_03;
+
+                this.getContractList();
+
+                if(sessionStorage.getItem('createdPageNum')) this.page = Number(sessionStorage.getItem('createdPageNum'));
+              }, error => {
+                setTimeout(() => this.router.navigate(['/login']));
+                this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+              }
+            );
+
+          }, error => {
+            setTimeout(() => this.router.navigate(['/login']));
+            this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+          }
+        )
+      });
     });
-    this.sub = this.route.params.subscribe(params => {
-      this.action = params['action'];
-      this.status = params['status'];
+  }
 
-      //set status
-      this.convertStatusStr();
 
-      this.appService.setTitle("contract.list.created");
-
-      //lay id user
-      let userId = this.userService.getAuthCurrentUser().id;
-      this.userService.getUserById(userId).subscribe(
-        data => {
-          //lay id role
-          this.roleService.getRoleById(data?.role_id).subscribe(
-            data => {
-              let listRole: any[];
-              listRole = data.permissions;
-              this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
-              this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
-              this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');
-              this.isQLHD_04 = listRole.some(element => element.code == 'QLHD_04');
-              this.isQLHD_05 = true;
-              this.isQLHD_06 = listRole.some(element => element.code == 'QLHD_06');
-              this.isQLHD_07 = listRole.some(element => element.code == 'QLHD_07');
-              this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
-              this.isQLHD_09 = listRole.some(element => element.code == 'QLHD_09');
-              this.isQLHD_10 = listRole.some(element => element.code == 'QLHD_10');
-              this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
-              this.isQLHD_12 = listRole.some(element => element.code == 'QLHD_12');
-              this.isQLHD_13 = listRole.some(element => element.code == 'QLHD_13');
-
-              //neu co quyen xem danh sach hop dong cua to chuc minh va to chuc con
-              this.filter_is_org_me_and_children = this.isQLHD_03;
-
-              this.getContractList();
-            }, error => {
-              setTimeout(() => this.router.navigate(['/login']));
-              this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-              
-            }
-          );
-
-        }, error => {
-          setTimeout(() => this.router.navigate(['/login']));
-          this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-          
-
-        }
-      )
-    });
+  @HostListener('window:scroll', ['$event']) // for window scroll events
+  onScroll(event: any) {
+    if(window.scrollY>0){
+      this.scrollY = window.scrollY;
+    }
   }
 
   cancelMany() {
@@ -217,11 +249,255 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.cancelContract(idMany);
   }
 
-  ngAfterViewInit(): void {
-    this.spinner.hide();
+  dataReleaseChecked: any[] = [];
+  toggleOneRelease(item: any){
+    let data = {
+      id: item.participants[0]?.contract_id,
+      selectedId: item.id
+    }
+    if(this.dataReleaseChecked.some(element => element.id === data.id)){
+      this.dataReleaseChecked = this.dataReleaseChecked.filter((item) => {
+        return item.id != data.id
+      })
+    } else {
+      this.dataReleaseChecked.push(data);
+    }
   }
 
-  getContractList() {
+
+  dataChecked: any[] = [];
+  toggleOneDownload(item: any){
+
+
+    let data = {
+      id: item.participants[0]?.contract_id,
+      selectedId: item.id
+    }
+    if(this.dataChecked.some(el => el.id === data.id)){
+      this.dataChecked = this.dataChecked.filter((item) => {
+        return item.id != data.id
+      })
+    } else {
+      this.dataChecked.push(data);
+    }
+  }
+
+  selectContract(item: any){
+    if(!item.checked) this.checkedAll = false;
+    else {
+      let checked = true;
+      for (let i = 0; i < this.contracts.length; i++){
+        if(!this.contracts[i].checked) {
+          checked = false;
+          break;
+        }
+      }
+
+      this.checkedAll = checked;
+    }
+  }
+
+  toggleReleaseAll(checkedAll: boolean){
+    this.dataReleaseChecked = [];
+    if(checkedAll){
+
+
+      for(let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = false;
+      }
+    } else {
+      for (let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = true;
+        this.dataReleaseChecked.push({
+          id: this.contracts[i].participants[0]?.contract_id,
+          selectedId : this.contracts[i].id
+        })
+      }
+    }
+
+  }
+
+  toggleDownload(checkedAll: boolean){
+    this.dataChecked = [];
+
+    if(checkedAll){
+
+
+      for(let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = false;
+      }
+    } else {
+      for (let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = true;
+        this.dataChecked.push({
+          id: this.contracts[i].participants[0]?.contract_id,
+          selectedId : this.contracts[i].id
+        })
+      }
+    }
+  }
+
+
+  releaseMany(){
+    if(this.dataReleaseChecked.length === 0){
+      return;
+    }
+    this.spinner.show();
+    const ids = this.dataReleaseChecked.map(el => el.id);
+    this.contractService.confirmContractRelease(ids).subscribe(
+      (data) => {
+        this.toastService.showSuccessHTMLWithTimeout('release.contract.success', '', 3000);
+        this.spinner.hide();
+        window.location.reload();
+      },
+      (error) => {
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout('release.contract.error', '', 3000);
+      }
+    )
+  }
+
+  downloadManyContract() {
+    if (this.dataChecked.length === 0) {
+      this.toastService.showErrorHTMLWithTimeout('not.select.contract','',3000);
+      return
+    }
+    this.spinner.show();
+    const myDate = new Date();
+    // Replace 'yyyy-MM-dd' with your desired date format
+    const formattedDate = this.datePipe.transform(myDate, 'ddMMyyyy');
+    const ids = this.dataChecked.map(el => el.id).toString();
+    this.ContractSignatureService.getContractMyProcessListDownloadMany(ids).subscribe(
+      (data) => {
+        const file = new Blob([data], {type: 'application/zip'});
+        let fileUrl = window.URL.createObjectURL(file);
+        let a = document.createElement('a');
+        document.body.appendChild(a);
+        a.setAttribute('style', 'display: none');
+        a.href = fileUrl;
+        a.download = 'Contracts'+ '_' + formattedDate;
+        a.click();
+        window.URL.revokeObjectURL(fileUrl);
+        a.remove();
+        // window.location.reload();
+        this.downloadMany();
+      },
+      (error) => {
+        this.toastService.showErrorHTMLWithTimeout('no.contract.download.file.error', '', 3000);
+      }
+    );
+  }
+
+  downloadMany() {
+    this.spinner.show();
+    this.typeDisplay = 'downloadMany';
+    this.roleMess = "";
+    if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
+      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền";
+    }
+
+    if (!this.roleMess) {
+      let isOrg = this.isOrg;
+
+      if(!this.isQLHD_03 && !this.isQLHD_04) {
+        isOrg ='off';
+      }
+
+    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
+      this.contracts = data.entities;
+      this.pageTotal = data.total_elements;
+      this.totalPage = data.total_pages;
+      
+      this.checkedAll = false;
+      this.dataChecked = [];
+      if (this.pageTotal == 0) {
+        this.p = 0;
+        this.pageStart = 0;
+        this.pageEnd = 0;
+      } else {
+        this.setPageDownload();
+      }
+      const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
+
+      for(let i = 0; i< this.contracts.length; i++){
+        let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
+        if(checkIf){
+          this.contracts[i].checked = true;
+        } else {
+          this.contracts[i].checked = false;
+        }
+      }
+        this.spinner.hide();
+      },
+        (error) => {
+          setTimeout(() => this.router.navigate(['/login']));
+          this.toastService.showErrorHTMLWithTimeout(
+            'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+            '',
+            3000
+          );
+        }
+      );
+    }
+  }
+
+  release() {
+    this.spinner.show();
+    this.typeDisplay = 'release';
+    this.roleMess = "";
+
+    if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
+      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền";
+    }
+
+    if (!this.roleMess) {
+
+      let isOrg = this.isOrg;
+
+      if(!this.isQLHD_03 && !this.isQLHD_04) {
+        isOrg ='off';
+      }
+
+    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, 20, true).subscribe(data => {
+      this.contracts = data.entities;
+      this.pageTotal = data.total_elements;
+      this.checkedAll = false;
+      this.dataChecked = [];
+      if (this.pageTotal == 0) {
+        this.p = 0;
+        this.pageStart = 0;
+        this.pageEnd = 0;
+      } else {
+        this.setPageDownload();
+      }
+      const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
+
+      for(let i = 0; i< this.contracts.length; i++){
+        let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
+        if(checkIf){
+          this.contracts[i].checked = true;
+        } else {
+          this.contracts[i].checked = false;
+        }
+      }
+
+        this.spinner.hide();
+      },
+        (error) => {
+          setTimeout(() => this.router.navigate(['/login']));
+          this.toastService.showErrorHTMLWithTimeout(
+            'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+            '',
+            3000
+          );
+        }
+      );
+    }
+  }
+
+  multiDeleteDraft(action: string){
+    this.spinner.show();
+    this.typeDisplay = 'multiDeleteDraft';
     this.roleMess = "";
     if (this.isOrg == 'off' && !this.isQLHD_05) {
       this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
@@ -230,10 +506,195 @@ export class ContractComponent implements OnInit, AfterViewInit {
       this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
     }
     if (!this.roleMess) {
-      
+
       let isOrg = this.isOrg;
 
       if(!this.isQLHD_03) {
+        isOrg ='off';
+      }
+    if (action == 'multiDelete') {
+      this.p = 0
+    }
+
+    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, 20).subscribe(data => {
+      this.contracts = data.entities;
+      this.pageTotal = data.total_elements;
+      this.checkedAll = false;
+      this.dataChecked = [];
+      if (this.pageTotal == 0) {
+        this.p = 0;
+        this.pageStart = 0;
+        this.pageEnd = 0;
+      } else {
+        this.setPageDownload();
+      }
+      const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
+
+      for(let i = 0; i< this.contracts.length; i++){
+        let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
+        if(checkIf){
+          this.contracts[i].checked = true;
+        } else {
+          this.contracts[i].checked = false;
+        }
+      }
+
+        this.spinner.hide();
+      },
+        (error) => {
+          setTimeout(() => this.router.navigate(['/login']));
+          this.toastService.showErrorHTMLWithTimeout(
+            'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+            '',
+            3000
+          );
+        }
+      );
+    }
+    this.dataDeleteDraftChecked = []
+  }
+
+  multiDeleteDraftMany(){
+    if(this.dataDeleteDraftChecked.length === 0){
+      this.toastService.showWarningHTMLWithTimeout('choose.contract.draft', '', 3000);
+      return;
+    }
+    let data: any = "";
+    let selectedContracts = this.dataDeleteDraftChecked.map((item: any) => item.selectedId)
+    if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
+      data = {
+        title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
+        contractIds: selectedContracts
+      };
+    } else if (sessionStorage.getItem('lang') == 'en') {
+      data = {
+        title: 'CONTRACT DELETE CONFIRMATION',
+        contractIds: selectedContracts
+      };
+    }
+
+    // @ts-ignore
+    const dialogRef = this.dialog.open(DeleteMultiContractDialogComponent, {
+      width: '500px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+
+      let is_data = result
+    })
+  }
+
+
+  toggleDeleteDraftAll(checkedAll: boolean){
+    this.dataDeleteDraftChecked = [];
+
+    if(checkedAll){
+      for(let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = false;
+      }
+    } else {
+      for (let i = 0; i < this.contracts.length; i++){
+        this.contracts[i].checked = true;
+        this.dataDeleteDraftChecked.push({
+          id: this.contracts[i].participants[0]?.contract_id,
+          selectedId : this.contracts[i].id
+        })
+      }
+    }
+
+  }
+
+  toggleOneDraft(item: any){
+
+    let data = {
+      id: item.id,
+      selectedId: item.id
+    }
+
+    if(this.dataDeleteDraftChecked.some(element => element.id === data.id)){
+      this.dataDeleteDraftChecked = this.dataDeleteDraftChecked.filter((item) => {
+        return item.id != data.id
+      })
+    } else {
+      this.dataDeleteDraftChecked.push(data);
+    }
+  }
+
+  ngAfterViewInit(): void {
+    this.spinner.hide();
+  }
+
+  getPageData() {
+    window.scrollTo({ top: 0 });
+     if (this.typeDisplay == 'downloadMany') {
+      this.downloadMany();
+    }
+  }
+
+  cancelDownloadMany() {
+    this.typeDisplay = 'signOne';
+    this.spinner.show();
+    window.location.reload();
+  }
+
+  cancelDeleteDraftMany(){
+    this.typeDisplay = 'signOne';
+    this.spinner.show();
+    window.location.reload();
+  }
+
+  cancelRelease(){
+    this.spinner.show();
+    this.typeDisplay = 'signOne';
+    window.location.reload();
+  }
+
+
+
+  processHandleContract(contractId: any) {
+    let processData: any = {
+      is_data_contract: {
+        id: null
+      },
+      content: null,
+    }
+
+    processData.is_data_contract.id = contractId
+
+    // @ts-ignore
+    const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
+      width: '1000px',
+      backdrop: 'static',
+      keyboard: true,
+      data: processData
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      let is_data = result;
+    });
+  }
+
+  getContractList() {
+    this.pageTotal = 0;
+    this.scrollY = 0;
+    this.roleMess = "";
+    this.typeDisplay="view";
+    this.contracts = []
+    this.contractService.sidebarContractEvent.subscribe((event: any) => {
+      if(event='contract-signature')
+      this.p = 1;
+    })
+
+    if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
+      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền";
+    }
+
+    if (!this.roleMess) {
+      let isOrg = this.isOrg;
+
+      if(!this.isQLHD_03 && !this.isQLHD_04) {
         isOrg ='off';
       }
 
@@ -241,6 +702,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
       this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
         this.contracts = data.entities;
         this.pageTotal = data.total_elements;
+        this.checkedAll = false;
+        this.dataChecked = [];
         if (this.pageTotal == 0) {
           this.p = 0;
           this.pageStart = 0;
@@ -248,20 +711,30 @@ export class ContractComponent implements OnInit, AfterViewInit {
         } else {
           this.setPage();
         }
+        this.spinner.hide();
+        const checkedDownloadFiles = this.dataChecked.map(el=>el.selectedId)
+
+        for(let i = 0; i< this.contracts.length; i++){
+          let checkIf = checkedDownloadFiles.some(el => el === this.contracts[i].id)
+          if(checkIf){
+            this.contracts[i].checked = true;
+          } else {
+            this.contracts[i].checked = false;
+          }
+        }
       });
     }
   }
 
   sortParticipant(list: any) {
-    return list.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
+    // return list.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
+    return list;
   }
 
   getNameOrganization(item: any, index: any) {
-    console.log("item ", item);
     if(item.type == 3 && item.recipients.length > 0)
       return sideList[index].name + " : " + item.recipients[0].name;
     return sideList[index].name + " : " + item.name;
-    // return item.name;
   }
 
   changeTab() {
@@ -285,9 +758,44 @@ export class ContractComponent implements OnInit, AfterViewInit {
       this.filter_status = 32;
     } else if (this.status == 'complete') {
       this.filter_status = 30;
-    } else if (this.status == 'past-complete') {
+    } else if (this.status =='liquidated') {
       this.filter_status = 40;
     }
+  }
+
+  changePageNumber(e: any){
+    this.spinner.show();
+    this.p = 1;
+    this.page = e.target.value;
+    sessionStorage.setItem('receivePageNum', this.page.toString());
+    
+    if(this.typeDisplay == 'downloadMany'){
+      this.downloadMany();
+    } else {
+      this.getContractList();
+    }
+    
+  }
+
+  setPageDownload() {
+    this.pageStart = (this.p - 1) * this.page + 1;
+    this.pageEnd = (this.p) * this.page;
+
+    if (this.pageTotal < this.pageEnd) {
+      this.pageEnd = this.pageTotal;
+    }
+  }
+
+  getPageStartEnd() {
+    const temp: number = this.pageStart;
+    if(this.pageStart < 0) {
+      this.pageStart = 1;
+      this.pageEnd = Math.abs(temp) + 1;
+    }
+    if (this.pageTotal <= this.pageEnd && this.pageTotal > 0) {
+      this.pageEnd = this.pageTotal;
+    }
+    return this.pageStart + '-' + this.pageEnd;
   }
 
   setPage() {
@@ -305,16 +813,17 @@ export class ContractComponent implements OnInit, AfterViewInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+
       let is_data = result
     })
   }
 
   autoSearch(event: any) {
-    // this.p = 1;
+    this.p = 1;
     this.filter_name = event.target.value;
     this.getContractList();
   }
+
 
   openDetail(id: number) {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
@@ -322,13 +831,14 @@ export class ContractComponent implements OnInit, AfterViewInit {
       {
         queryParams: {
           'page': this.p,
-          'filter_type': this.filter_type, 
+          'filter_type': this.filter_type,
           'filter_contract_no': this.filter_contract_no,
           'filter_from_date': this.filter_from_date,
           'filter_to_date': this.filter_to_date,
           'isOrg': this.isOrg,
           'organization_id': this.organization_id,
-          'status': this.status
+          'status': this.status,
+          filter_name: this.filter_name
         },
         skipLocationChange: false
       });
@@ -336,20 +846,18 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   openCopy(id: number) {
-    if (this.status != 'complete') {
-      this.spinner.show();
-      this.contractService.getContractCopy(id).subscribe((res: any) => {
-        // console.log(res);
-        this.toastService.showSuccessHTMLWithTimeout(`Sao chép hợp đồng ${res.name} thành công!`, "", 3000)
-        this.getContractList();
+    this.spinner.show();
+    this.contractService.getContractCopy(id).subscribe((res: any) => {
+      //
+      this.toastService.showSuccessHTMLWithTimeout(`Sao chép hợp đồng ${res.name} thành công!`, "", 3000)
+      this.getContractList();
 
-      }, (error: HttpErrorResponse) => {
-        this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000)
-        this.spinner.hide();
-      }, () => {
-        this.spinner.hide();
-      })
-    }
+    }, (error: HttpErrorResponse) => {
+      this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000)
+      this.spinner.hide();
+    }, () => {
+      this.spinner.hide();
+    })
   }
 
   openEdit(id: number) {
@@ -358,8 +866,33 @@ export class ContractComponent implements OnInit, AfterViewInit {
     }, 100)
   }
 
+  openEditExpiration(item: any) {
+    let title = this.translate.instant('edit.exp.sign.time')
+    const data = {
+      title: title,
+      expirationSign: item.sign_time,
+      contractId: item.id,
+      scrollY: this.scrollY
+    }
+
+     // @ts-ignore
+    const dialogRef = this.dialog.open(EditExpirationSigningTimeComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      let is_data = result
+    })
+  }
+
   addContractConnectNew(id: number) {
     this.router.navigate(['main/form-contract/add-contract-connect/' + id]);
+  }
+
+  addContractLiquidationNew(id: number){
+    this.router.navigate(['main/form-contract/add-contract-liquidation/' + id]);
   }
 
   deleteItem(id: number) {
@@ -368,7 +901,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   searchContract() {
-
     let title: any = "";
 
     if (sessionStorage.getItem('lang') == 'en') {
@@ -376,7 +908,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
     } else if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       title = "TÌM KIẾM HỢP ĐỒNG";
     }
-
 
     const data = {
       title: title,
@@ -402,7 +933,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   cancelContract(id: any) {
-
     let data: any = "";
 
     if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
@@ -443,7 +973,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+
       let is_data = result
     })
   }
@@ -462,7 +992,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+
       let is_data = result
     })
   }
@@ -481,7 +1011,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
       let is_data = result
     })
   }
@@ -489,7 +1018,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   deleteContract(id: any) {
     let data: any = "";
 
-    if (sessionStorage.getItem('lang') == 'vi') {
+    if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       data = {
         title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
         id: id
@@ -510,14 +1039,12 @@ export class ContractComponent implements OnInit, AfterViewInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
       let is_data = result
     })
   }
 
   downloadContract(id: any) {
     this.contractService.getFileZipContract(id).subscribe((data) => {
-      //console.log(data);
       this.uploadService.downloadFile(data.path).subscribe((response: any) => {
         let url = window.URL.createObjectURL(response);
         let a = document.createElement('a');
@@ -560,4 +1087,23 @@ export class ContractComponent implements OnInit, AfterViewInit {
     return "";
   }
 
+  uploadAttachFiles(contractData: any) {
+    const data = {
+      title: 'TẢI LÊN FILE ĐÍNH KÈM',
+      contractId: contractData.id,
+      contractName: contractData.name
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(UploadAttachFilesComponent, {
+      width: '519px',
+      height: '354px',
+      overflow: 'auto',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      let is_data = result
+    })
+  }
 }

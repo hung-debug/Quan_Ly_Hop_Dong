@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { parttern_input } from 'src/app/config/parttern';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -38,6 +39,9 @@ export class ResetPasswordComponent implements OnInit {
   switchLang(lang: string) {
     this.translate.use(lang);
     this.translate.currentLang = lang;
+
+    localStorage.setItem('lang', lang);
+    sessionStorage.setItem('lang', lang);
   }
 
   initResetPasswordgForm() {
@@ -47,13 +51,33 @@ export class ResetPasswordComponent implements OnInit {
     });
   }
 
+  validToken: boolean = false;
   ngOnInit(): void {
-    this.sub = this.route.params.subscribe(params => {
+    this.sub = this.route.params.subscribe(async params => {
       this.token = params['token'];
-    });
-    console.log(this.token);
-    this.initResetPasswordgForm();
+      
+      let checkTokenDate = null;
+      try{
+        checkTokenDate = await this.userService.checkTokenDate(this.token).toPromise();
 
+        if(checkTokenDate.status == 0) {
+          this.validToken = true;
+        } else {
+          this.validTokenFalse();
+        }
+
+      } catch(err) {
+        this.validTokenFalse();
+      }
+    });
+
+    this.initResetPasswordgForm();
+  }
+
+  validTokenFalse() {
+    this.validToken = false;
+    this.router.navigate(['/page-not-found']);
+    this.toastService.showErrorHTMLWithTimeout("link.valid",'',3000);
   }
 
   ngOnDestroy() {
@@ -102,6 +126,12 @@ export class ResetPasswordComponent implements OnInit {
         this.errorDetail = 'error.confirm-password-new.incorrect';
       }else{
 
+        if(!parttern_input.weak_pass.test(password)) {
+          this.error = true;
+          this.errorDetail = 'error.password.valid';
+          return false;
+        }
+
         let token = this.token;
         this.userService.sendResetPassword(token, password).subscribe((data) => {
 
@@ -121,7 +151,12 @@ export class ResetPasswordComponent implements OnInit {
         },
         (error:any) => {
           this.error = true;
-          this.errorDetail = 'error.server';
+
+          if(error.includes("Error Code: 400")) {
+            this.errorDetail = 'link.valid';
+          } else {
+            this.errorDetail = 'error.server';
+          }
         }
         );
       }

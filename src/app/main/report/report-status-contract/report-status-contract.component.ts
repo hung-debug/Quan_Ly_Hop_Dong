@@ -1,21 +1,37 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
+import { ContractTypeService } from 'src/app/service/contract-type.service';
+import { ContractService } from 'src/app/service/contract.service';
+import { ConvertStatusService } from 'src/app/service/convert-status.service';
 import { InputTreeService } from 'src/app/service/input-tree.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-report-status-contract',
   templateUrl: './report-status-contract.component.html',
   styleUrls: ['./report-status-contract.component.scss'],
 })
-export class ReportStatusContractComponent implements OnInit {
+export class ReportStatusContractComponent implements OnInit, AfterViewInit {
+  @ViewChild('dt') table: Table;
+
   //Biến lưu dữ liệu trong bảng
-  list: any[];
+  list: any[] = [];
 
   //col header
   cols: any[];
@@ -38,14 +54,23 @@ export class ReportStatusContractComponent implements OnInit {
 
   params: any;
   date: any;
-  optionsStatus: any;
+  optionsStatus: any = [];
 
   formGroup: any;
 
-  contractStatus: number = -1;
+  contractStatus: any;
 
   fetchChildData: boolean = false;
 
+  orgName: any;
+
+  Arr = Array;
+  type_id: any;
+
+  typeList: Array<any> = [];
+  contractInfo: string;
+
+  @ViewChild('typeContract') typeContract: any;
   constructor(
     private appService: AppService,
     private userService: UserService,
@@ -55,17 +80,24 @@ export class ReportStatusContractComponent implements OnInit {
     private reportService: ReportService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private translate: TranslateService 
+    private convertStatusService: ConvertStatusService,
+    private contractTypeService: ContractTypeService
+  ) {
+ 
+  }
 
-  ) {}
 
   ngOnInit(): void {
+    this.spinner.hide();
+
     this.appService.setTitle('report.processing.status.contract.full');
 
+    this.getTypeListContract();
+
     this.optionsStatus = [
-      { id: -1, name: 'Tất cả' },
       { id: 20, name: 'Đang thực hiện' },
-      { id: 2, name:'Quá hạn' },
+      { id: 33, name: 'Sắp hết hạn' },
+      { id: 34, name: 'Quá hạn' },
       { id: 31, name: 'Từ chối' },
       { id: 32, name: 'Huỷ bỏ' },
       { id: 30, name: 'Hoàn thành' },
@@ -77,9 +109,9 @@ export class ReportStatusContractComponent implements OnInit {
       this.lang = 'en';
 
       this.optionsStatus = [
-        { id: -1, name: 'All' },
         { id: 20, name: 'Processing' },
-        { id: 2, name:'Overdue' },
+        { id: 33, name: 'Expiration soon' },
+        { id: 34, name: 'Overdue' },
         { id: 31, name: 'Reject' },
         { id: 32, name: 'Cancel' },
         { id: 30, name: 'Complete' },
@@ -87,170 +119,247 @@ export class ReportStatusContractComponent implements OnInit {
     }
 
     //lay id user
-    this.organization_id_user_login = this.userService.getAuthCurrentUser().organizationId;
-    
+    this.organization_id_user_login =
+      this.userService.getAuthCurrentUser().organizationId;
+
     //mac dinh se search theo ma to chuc minh
     this.organization_id = this.organization_id_user_login;
 
     //lấy danh sách tổ chức
     this.inputTreeService.getData().then((res: any) => {
       this.listOrgCombobox = res;
-
+      this.listOrgCombobox[0]?.children.forEach((element: any) => {
+        element.expanded = !element.expanded
+      });
       this.selectedNodeOrganization = this.listOrgCombobox.filter(
         (p: any) => p.data == this.organization_id
       );
     });
 
+    this.setColForTable();
+  }
+
+  changeOrg() {
+    this.getTypeListContract(this.selectedNodeOrganization.data);
+  }
+
+  async getTypeListContract(typeId?: number) {
+    const inforType = await this.contractTypeService
+      .getContractTypeList('', '', typeId)
+      .toPromise();
+    this.typeList = inforType;
+  }
+
+  ngAfterViewInit() {
+    this.typeContract.autoDisplayFirst = false;
+  }
+
+  setColForTable() {
     this.cols = [
       {
-        id: 1,
         header: 'contract.name',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
+        rowspan: 1,
       },
       {
-        id: 2,
+        header: 'contract.number',
+        style: 'text-align: left;',
+        colspan: 1,
+        rowspan: 1,
+      },
+      {
         header: 'contract.type',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
+        rowspan: 1,
       },
-      // {
-      //   id: 3,
-      //   header: 'contract.number',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 4,
-      //   header: 'contract.uid',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 5,
-      //   header: 'contract.connect',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 6,
-      //   header: 'contract.time.create',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 7,
-      //   header: 'signing.expiration.date',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
       {
-        id: 8,
-        header: 'contract.status.v2',
-        style: 'text-align:left',
+        header: 'created.unit',
+        style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
+        rowspan: 1,
       },
-      // {
-      //   id: 9,
-      //   header: 'date.completed',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
       {
-        id: 10,
         header: 'suggest',
-        style: 'text-align: center',
-        colspan: '5',
-        rowspan: 1,
-      },
-      {
-        id: 11,
-        header: 'user.ed',
-        style: 'text-align: center',
-        colspan: '5',
-        rowspan: 1,
-      },
-      {
-        id: 11,
-        header: 'user.ing',
-        style: 'text-align: center',
-        colspan: '5',
-        rowspan: 1,
-      },
-      {
-        id: 11,
-        header: 'user.not.process',
-        style: 'text-align: center',
-        colspan: '5',
+        style: 'text-align: left',
+        colspan: 1,
         rowspan: 1,
       },
     ];
   }
 
-  
   validData() {
-    if(!this.date || (this.date && this.date.length < 2)) {
-      this.toastService.showErrorHTMLWithTimeout('Vui lòng nhập đủ ngày ngày tạo','',3000);
+    if (!this.date || (this.date && this.date.length < 2)) {
+      this.toastService.showErrorHTMLWithTimeout('date.full.valid', '', 3000);
       return false;
     }
     return true;
   }
 
+  getNumberArray(num: number): number[] {
+    return Array(num)
+      .fill(0)
+      .map((x, i) => i + 1);
+  }
+
   //Export ra file excel
+  maxParticipants: number = 0;
   export(flag: boolean) {
-    if(!this.validData()) {
+    if (!this.validData()) {
       return;
     }
 
     this.spinner.show();
 
-    let idOrg = this.organization_id;
-    if(this.selectedNodeOrganization.data) {
-      idOrg = this.selectedNodeOrganization.data;
-    }
+    this.selectedNodeOrganization = !this.selectedNodeOrganization.length
+      ? this.selectedNodeOrganization
+      : this.selectedNodeOrganization[0];
+
+    this.orgName = this.selectedNodeOrganization.label;
+    let idOrg = this.selectedNodeOrganization.data;
 
     let from_date: any = '';
     let to_date: any = '';
-    if(this.date && this.date.length > 0) {
-      from_date = this.datepipe.transform(this.date[0],'yyyy-MM-dd');
-      to_date = this.datepipe.transform(this.date[1],'yyyy-MM-dd');
+    if (this.date && this.date.length > 0) {
+      from_date = this.datepipe.transform(this.date[0], 'yyyy-MM-dd');
+      to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
     }
 
     let contractStatus = this.contractStatus;
 
-    if(!contractStatus) 
-      contractStatus = -1;
+    if (!contractStatus) contractStatus = -1;
 
-    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChilData='+this.fetchChildData;
-    this.reportService.export('rp-by-status-process',idOrg,params, true).subscribe((response: any) => {
+    this.type_id = this.type_id ? this.type_id : '';
 
-      this.spinner.hide();
+    if (!to_date) to_date = from_date;
+    
+    let payload = ""
+    if(this.contractInfo){
+       payload ='&textSearch=' + this.contractInfo.trim()
+    }
 
-      if(flag) {
-        let url = window.URL.createObjectURL(response);
-        let a = document.createElement('a');
-        document.body.appendChild(a);
-        a.setAttribute('style', 'display: none');
-        a.href = url;
-        a.download = `report-by-status-process_${new Date().getTime()}.xlsx`;
-        a.click();
-        window.URL.revokeObjectURL(url);
-        a.remove();
+    let params =
+      '?from_date=' +
+      from_date +
+      '&to_date=' +
+      to_date +
+      '&status=' +
+      contractStatus +
+      '&fetchChildData=' +
+      this.fetchChildData +
+      '&type=' +
+      this.type_id + payload;
 
-        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
-      }
-      
-    })
+    if (!this.type_id) {
+      params =
+        '?from_date=' +
+        from_date +
+        '&to_date=' +
+        to_date +
+        '&status=' +
+        contractStatus + payload;
+    }
 
+    this.reportService
+      .export('rp-by-status-process', idOrg, params, flag)
+      .subscribe((response: any) => {
+        this.spinner.hide();
+
+        if (flag) {
+          let url = window.URL.createObjectURL(response);
+          let a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          a.download = `BaoCaoTrangThaiXuLy_${new Date().getDate()}-${
+            new Date().getMonth() + 1
+          }-${new Date().getFullYear()}.xlsx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+
+          this.toastService.showSuccessHTMLWithTimeout(
+            'no.contract.download.file.success',
+            '',
+            3000
+          );
+        } else {
+          this.list = [];
+
+          this.table.first = 0;
+          this.setColForTable();
+          for (let i = 0; i < response.maxParticipant - 1; i++) {
+            this.cols.push({
+              header: 'Bên được yêu cầu ký ' + (i + 1),
+              style: 'text-align: left;',
+              colspan: 1,
+              rowspan: 1,
+            });
+          }
+
+          this.cols.push({
+            header: 'contract.status.v2',
+            style: 'text-align:left',
+            colspan: 1,
+            rowspan: 1,
+          });
+
+          this.cols.push({
+            header: 'user.ed',
+            style: 'text-align: left',
+            colspan: 1,
+            rowspan: 1,
+          });
+
+          this.cols.push({
+            header: 'user.ing',
+            style: 'text-align: left',
+            colspan: 1,
+            rowspan: 1,
+          });
+
+          this.cols.push({
+            header: 'user.not.process',
+            style: 'text-align: left',
+            colspan: 1,
+            rowspan: 1,
+          });
+
+          this.maxParticipants = response.maxParticipant;
+          this.cols.sort((a, b) => a.id - b.id);
+
+          let listFirst = [this.orgName];
+          let listSecond = response.contracts;
+
+          listSecond.forEach((ele: any) => {
+            // Lọc lấy phần tử có thuộc tính type = 1
+            let type1 = ele.participants.filter(function (participant: any) {
+              return participant.type === 1;
+            });
+
+            // Sắp xếp mảng các phần tử không phải type 1 theo thứ tự tăng dần của thuộc tính 'ordering'
+            let others = ele.participants
+              .filter(function (participant: any) {
+                return participant.type !== 1;
+              })
+              .sort(function (a: any, b: any) {
+                return a.ordering - b.ordering;
+              });
+
+            // Kết hợp mảng type1 và others thành một mảng mới
+            let sortedParticipants = type1.concat(others);
+
+            ele.participants = sortedParticipants;
+          });
+
+          this.list = listFirst.concat(listSecond);
+        }
+      });
+  }
+
+  convert(code: string) {
+    return this.convertStatusService.convert(code.toLowerCase());
   }
 
   changeCheckBox(event: any) {

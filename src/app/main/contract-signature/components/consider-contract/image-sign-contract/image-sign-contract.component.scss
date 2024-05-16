@@ -1,21 +1,27 @@
+.content {
+  width: 100%;
+  height: 100%;
+}
 .content .skeleton-sign {
   //height: 102px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  // align-items: center;
+  // justify-content: center;
+  // flex-direction: column;
 }
+
 
 .skeleton-sign-value {
   position: absolute;
-  bottom: 0px;
   left: 0px;
+  bottom: 5px;
 }
 
 .skeleton-sign-value1 {
   display: none;
 }
-
 
 .input-edit-text {
   width: 101%;
@@ -24,4 +30,29 @@
   margin-left: -1px;
   border-radius: 3px;
   border: none;
+  color: black;
+}
+
+.stamp-content {
+  flex-basis: 33.33%;
+  background-color: #106DB6;
+  border-radius: 6px;
+  margin-right: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sign-info-content {
+  flex-basis: 66.66%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #EBF8FF;
+  border-radius: 6px;
+  color: #106DB6;
+  // font-family: Lexend Deca !important;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0px;
 }

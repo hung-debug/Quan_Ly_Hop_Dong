@@ -11,6 +11,7 @@ import { networkList } from "../../../config/variable";
 import {parttern_input, parttern} from "../../../config/parttern"
 import * as moment from "moment";
 import { NgxSpinnerService } from 'ngx-spinner';
+import { error } from 'console';
 @Component({
   selector: 'app-infor-user',
   templateUrl: './infor-user.component.html',
@@ -46,6 +47,10 @@ export class InforUserComponent implements OnInit {
   attachFile:any;
   imgSignBucket:any;
   imgSignPath:any;
+
+  imgSignBucketMark: any;
+  imgSignPathMark: any;
+
   phoneOld:any;
 
   organizationName:any;
@@ -64,7 +69,7 @@ export class InforUserComponent implements OnInit {
     private spinner: NgxSpinnerService
     ) {
       this.addInforForm = this.fbd.group({
-        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
         email: this.fbd.control("", [Validators.required, Validators.email]),
         birthday: null,
         phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -80,7 +85,7 @@ export class InforUserComponent implements OnInit {
       });
    
       this.addHsmForm = this.fbd.group({
-        nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
+        nameHsm: this.fbd.control("", Validators.pattern(parttern_input.new_input_form)),
         taxCodeHsm: this.fbd.control("",[
             Validators.pattern(parttern.cardid),
             ]
@@ -109,7 +114,7 @@ export class InforUserComponent implements OnInit {
     this.userService.getUserById(this.id).subscribe(
       data => {
         this.addInforForm = this.fbd.group({
-          name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+          name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
           email: this.fbd.control(data.email, [Validators.required, Validators.email]),
           birthday: data.birthday==null?null:new Date(data.birthday),
           phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -143,19 +148,24 @@ export class InforUserComponent implements OnInit {
         });
 
         this.addHsmForm = this.fbd.group({
-          nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.input_form)),
+          nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.new_input_form)),
           taxCodeHsm: this.fbd.control(data.tax_code, [
               Validators.pattern(parttern.cardid),
             ]
             ),
           password1Hsm: this.fbd.control(data.hsm_pass)
         });
+
         this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
         this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
         this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
 
+        this.imgSignPCSelectMark = data.stampImage != null && data.stampImage.length>0?data.stampImage[0].presigned_url:null;
+        this.imgSignBucketMark = data.stampImage != null && data.stampImage.length>0?data.stampImage[0].bucket:null;
+        this.imgSignPathMark = data.stampImage != null && data.stampImage.length>0?data.stampImage[0].path:null;
+
         this.addInforFormOld = this.fbd.group({
-          name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+          name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
           email: this.fbd.control(data.email, [Validators.required, Validators.email]),
           birthday: data.birthday==null?null:new Date(data.birthday),
           phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -168,7 +178,7 @@ export class InforUserComponent implements OnInit {
           networkKpi: data.phone_tel
         });
         this.addHsmFormOld = this.fbd.group({
-          nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.input_form)),
+          nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.new_input_form)),
           taxCodeHsm: this.fbd.control(data.tax_code, [
             Validators.pattern(parttern.cardid),
           ]),
@@ -194,6 +204,14 @@ export class InforUserComponent implements OnInit {
       (sign_image as string[]).push(sign_image_content);
       data.sign_image = sign_image;
     }
+
+    if(this.imgSignBucketMark != null && this.imgSignPathMark != null){
+      const sign_image_content:any = {bucket: this.imgSignBucketMark, path: this.imgSignPathMark};
+      const sign_image:never[]=[];
+      (sign_image as string[]).push(sign_image_content);
+      data.stampImage = sign_image;
+    }
+
     this.userService.updateUser(data).subscribe(
       data => {
         this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
@@ -208,41 +226,57 @@ export class InforUserComponent implements OnInit {
     )
   }
 
-  updateSign(data:any){
-    //neu co up anh moi => day lai anh, update lai thong tin
-    if(data.fileImage != null){
-      this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
-        const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
-        const sign_image:never[]=[];
-        (sign_image as string[]).push(sign_image_content);
-        data.sign_image = sign_image;
+  async updateSign(data:any){
 
-        this.userService.updateUser(data).subscribe(
-          data => {
-            this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
-            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-              this.router.navigate(['/main/user-infor']);
-            });
-            this.spinner.hide();
-          }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
-            this.spinner.hide();
-          }
-        )
-      },
-      error => {
-        this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
-        this.spinner.hide();
-        return false;
-      });
-    }else{
-      //lay lai thong tin anh cu truoc do => day lai
+    
+
+      //upload file
+      if(this.attachFile) {
+        const dataFile = await this.uploadService.uploadFile(this.attachFile).toPromise();
+        this.imgSignPath = dataFile.file_object.file_path;
+        this.imgSignBucket = dataFile.file_object.bucket;
+      }
+     
+      if(this.attachFileMark) {
+        const dataFile = await this.uploadService.uploadFile(this.attachFileMark).toPromise();
+        this.imgSignPathMark = dataFile.file_object.file_path;
+        this.imgSignBucketMark = dataFile.file_object.bucket;
+      }
+
       if(this.imgSignBucket != null && this.imgSignPath != null){
         const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
         const sign_image:never[]=[];
         (sign_image as string[]).push(sign_image_content);
         data.sign_image = sign_image;
+      } else if(data.fileImage) {
+        try {
+          const fileImage = await this.uploadService.uploadFile(data.fileImage).toPromise();
+          const sign_image_content:any = {bucket: fileImage.file_object.bucket, path: fileImage.file_object.file_path};
+          const sign_image:never[]=[];
+          (sign_image as string[]).push(sign_image_content);
+          data.sign_image = sign_image;
+        } catch(err) {
+          
+        }
       }
+
+      if(this.imgSignBucketMark != null && this.imgSignPathMark != null){
+        const sign_image_content:any = {bucket: this.imgSignBucketMark, path: this.imgSignPathMark};
+        const sign_image:never[]=[];
+        (sign_image as string[]).push(sign_image_content);
+        data.stampImage = sign_image;
+      } else if(data.fileImageMark) {
+        try {
+          const fileImageMark = await this.uploadService.uploadFile(data.fileImageMark).toPromise();
+          const sign_image_content:any = {bucket: fileImageMark.file_object.bucket, path: fileImageMark.file_object.file_path};
+          const sign_image:never[]=[];
+          (sign_image as string[]).push(sign_image_content);
+          data.stampImage = sign_image;
+        } catch(err) {
+          
+        }  
+      }
+
       this.userService.updateUser(data).subscribe(
         data => {
           this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
@@ -255,7 +289,6 @@ export class InforUserComponent implements OnInit {
           this.spinner.hide();
         }
       )
-    }
   }
 
   updateUser(){
@@ -276,6 +309,7 @@ export class InforUserComponent implements OnInit {
       status: this.addInforForm.value.status,
 
       fileImage: this.attachFile,
+      fileImageMark: this.attachFileMark,
       sign_image: [],
 
       phoneKpi: this.addKpiFormOld.value.phoneKpi,
@@ -363,6 +397,9 @@ export class InforUserComponent implements OnInit {
       fileImage: this.attachFile,
       sign_image: [],
 
+      fileImageMark: this.attachFileMark,
+      stampImage: [],
+
       phoneKpi: this.addKpiForm.value.phoneKpi,
       networkKpi: this.addKpiForm.value.networkKpi == 'bcy' ? 3: this.addKpiForm.value.networkKpi,
 
@@ -376,7 +413,8 @@ export class InforUserComponent implements OnInit {
     this.updateSign(data);
   }
 
-  fileChangedAttach(e: any) {
+  attachFileMark: any = null;
+  fileChangedAttach(e: any, code: string) {
     let files = e.target.files;
     for(let i = 0; i < files.length; i++){
 
@@ -387,14 +425,19 @@ export class InforUserComponent implements OnInit {
           const file_name = file.name;
           const extension = file.name.split('.').pop();
           if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'jpge') {
-            this.handleUpload(e);
-            this.attachFile = file;
+            this.handleUpload(e, code);
+            if(code == 'sign') {
+              this.attachFile = file;
+            } else if(code == 'mark') {
+              this.attachFileMark = file;
+            }
           }else{
             this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng JPG, PNG, JPGE", "", 3000);
           }
 
         } else {
           this.attachFile = null;
+          this.attachFileMark = null;
           this.toastService.showErrorHTMLWithTimeout("Yêu cầu file nhỏ hơn 50MB", "", 3000);
           break;
         }
@@ -402,19 +445,26 @@ export class InforUserComponent implements OnInit {
     }
   }
   imgSignPCSelect: string;
-  handleUpload(event: any) {
+  imgSignPCSelectMark: string;
+  handleUpload(event: any, code: string) {
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      //console.log(reader.result);
+      if(code == 'sign')
       this.imgSignPCSelect = reader.result? reader.result.toString() : '';
+    else if(code == 'mark')
+      this.imgSignPCSelectMark = reader.result? reader.result.toString() : '';
     };
   }
 
-  addFileAttach() {
-    // @ts-ignore
-    document.getElementById('attachFileSignature').click();
+  addFileAttach(code: string) {
+    if(code == 'sign')
+      // @ts-ignore
+      document.getElementById('attachFileSignature').click();
+    else if(code == 'mark')
+      // @ts-ignore
+      document.getElementById('attachFileMark').click();
   }
 
 }

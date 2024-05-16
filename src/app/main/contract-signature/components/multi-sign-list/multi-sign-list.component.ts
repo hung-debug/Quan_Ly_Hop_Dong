@@ -199,7 +199,7 @@ export class MultiSignListComponent implements OnInit {
     this.contractService.getDetailContract(idContact).subscribe(
       async (rs) => {
 
-        console.log("rs ", rs);
+        
         this.isDataContract = rs[0];
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
@@ -212,7 +212,7 @@ export class MultiSignListComponent implements OnInit {
 
         this.datas = this.data_contract;
 
-        console.log("datass ", this.datas?.is_data_contract?.participants);
+        
 
         if (this.datas?.i_data_file_contract) {
           let fileC = null;

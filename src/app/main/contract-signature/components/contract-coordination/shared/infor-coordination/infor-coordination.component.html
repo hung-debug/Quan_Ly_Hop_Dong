@@ -6,16 +6,20 @@
       </div>
       <div style="line-height: 25px">
         <div>
-          <span class="title-contract">{{'contract.type' | translate}}:</span>
-          <span>{{datas.is_data_contract.type_id}}</span>
+          <span class="title-contract">{{'contract.uid' | translate}}:</span>
+          <span>{{datas?.is_data_contract?.contract_uid}}</span>
+        </div>
+        <div>
+          <span class="title-contract">{{'menu.contract.type.list' | translate}}:</span>
+          <span>{{datas?.is_data_contract?.type_name}}</span>
         </div>
         <div>
           <span class="title-contract">{{'contract.name' | translate}}:</span>
-          <span>{{datas.is_data_contract.name}}</span>
+          <span>{{datas?.is_data_contract.name}}</span>
         </div>
         <div>
           <span class="title-contract">{{'contract.number' | translate}}:</span>
-          <span>{{datas.is_data_contract.code}}</span>
+          <span>{{datas?.is_data_contract.code}}</span>
         </div>
         <div>
           <span class="title-contract">{{'file.attach' | translate}}:</span>
@@ -70,8 +74,8 @@
                (click)="getSignSelect(d)"
                [ngClass]="changeColorDrag(null, true)"
                [ngStyle]="changePosition(d)">
-            <div *ngIf="d.name" class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
-            <app-image-sign-contract *ngIf="!view" [datas]="datas" [view]="true" [sign]="d"></app-image-sign-contract>
+            <div *ngIf="d.name" class="name-sig-img-daky long-text-ellipsis">{{(d.name && !d.value) ? d.name : ''}}</div>
+            <app-image-sign-contract [ngClass]="(d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh') ? 'main-sign-box': ''" *ngIf="!view" [datas]="datas" [view]="true" [sign]="d"></app-image-sign-contract>
           </div>
         </div>
       </div>

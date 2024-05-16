@@ -102,6 +102,8 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   valid: boolean = false;
   loaded: boolean = false;
   confirmCoordition: number = 1;
+  difX: number;
+  arrDifPage: any = [];
 
   checkView: boolean = true;
 
@@ -123,10 +125,8 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   async ngOnInit() {
-    console.log("info coordination ngOnInIt", this.datas)
-    console.log("info coordination ngOnInIt", Object.keys(this.datas))
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
-    // console.log(this.datas);
+    // 
 
     this.idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
 
@@ -137,7 +137,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     } else {
       this.router.navigate(['/page-not-found']);
     }
-
   }
 
   indexY: number = 0;
@@ -187,6 +186,16 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   pageBefore: number;
   status: any;
   getDataContractSignature() {
+
+    if (this.datas?.is_data_contract?.type_id) {
+      this.contractService
+        .getContractTypes(this.datas?.is_data_contract?.type_id)
+        .subscribe((data) => {
+          if (this.datas?.is_data_contract) {
+            this.datas.is_data_contract.type_name = data;
+          }
+        });
+    }
 
     let arr = this.convertToSignConfig();
 
@@ -255,7 +264,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
 
     // this.datas.action_title = 'Xác nhận';
     this.activeRoute.url.subscribe(params => {
-      // console.log(params);
+      // 
       if (params && params.length > 0) {
         params.forEach(item => {
           if (item.path == 'consider-contract') {
@@ -352,12 +361,50 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
           this.top[i] = canvas.height;
         }
         
-
         for(let i = 0; i < this.pageNumber; i++) {
           this.top[i+1] += this.top[i];
           this.sum[i] = this.top[i+1];
         }
+
+        //vuthanhtan
+        let canvasWidth: any [] = [];
+        for(let i = 1; i <= this.pageNumber; i++) {
+          let canvas: any = document.getElementById('canvas-step3-'+i);
+          this.top[i] = canvas.height;
+          canvasWidth.push(canvas.getBoundingClientRect().left)
+        }
+        this.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
+
+        for(let i = 0; i < this.pageNumber; i++) {
+          if(canvasWidth[i] == Math.min(...canvasWidth))
+          this.arrDifPage.push('min');
+          else  
+          this.arrDifPage.push('max');
+        }
+
+        this.setX();
+        this.datas.arrDifPage = this.arrDifPage;
+        this.datas.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
       }, 100)
+    })
+  }
+
+  setX(){
+    let i = 0;
+    this.datas.contract_user_sign.forEach((element: any) => {
+      element.sign_config.forEach((item: any) => {
+        const htmlElement: HTMLElement | null = document.getElementById(item.id);
+        if(htmlElement) {
+          var oldX = Number(htmlElement.getAttribute('data-x'));
+          if(oldX) {
+            var newX = oldX + this.difX;
+            htmlElement.setAttribute('data-x', newX.toString());
+          }
+        }
+        if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+          item.coordinate_x += this.difX;
+        }
+      })
     })
   }
 
@@ -470,10 +517,19 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any) {
-    let style: any = {
+    let style: any = 
+    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
+    {
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
+    } :
+    {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#FFFFFF',
+      "border": "1px dashed #6B6B6B",
+      "border-radius": "6px"
     }
 
     if (d['width']) {
@@ -584,7 +640,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
     }, null, () => {
     }).unsubscribe();
 

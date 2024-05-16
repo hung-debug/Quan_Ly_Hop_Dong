@@ -18,12 +18,14 @@ export class ContractSignatureService {
 
   listContractMyProcessUrl: any = `${environment.apiUrl}/api/v1/contracts/my-process`;
   listContractMyProcessUrlSignMany: any = `${environment.apiUrl}/api/v1/contracts/my-contract/can-sign-multi?`;
+  listContractMyProcessUrlDownloadMany: any = `${environment.apiUrl}/api/v1/file/download-multi?`;
 
   token: any;
   addContractUrl:any = `${environment.apiUrl}/api/v1/auth/login`;
   shareContractUrl: any = `${environment.apiUrl}/api/v1/shares`;
   shareListContractUrl: any = `${environment.apiUrl}/api/v1/shares`;
   dashboardContractMyProcessUrl: any = `${environment.apiUrl}/api/v1/dashboard/my-process-by-status/`;
+  getViewContractList: any = `${environment.apiUrl}/api/v1/contracts/my-contract/can-review-multi?`;
 
   errorData:any = {};
   redirectUrl: string = '';
@@ -48,12 +50,12 @@ export class ContractSignatureService {
       page = page - 1;
     }
     let listContractMyProcessUrl = this.listContractMyProcessUrl + '?keyword=' + filter_name.trim() + '&type=' + filter_type + '&status=' + filter_status + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size + "&contractStatus=" + contractStatus;
-    console.log(listContractMyProcessUrl);
+    
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Contract[]>(listContractMyProcessUrl, {headers}).pipe();
   }
 
-  public getContractMyProcessListSignMany() {
+  public getContractMyProcessListSignMany(keyword?: string, filter_type?: any, filter_contract_no?: any, filter_from_date?: any, filter_to_date?: any) {
     this.getCurrentUser();
 
     const headers = {'Authorization': 'Bearer ' + this.token};
@@ -61,11 +63,40 @@ export class ContractSignatureService {
       localStorage.getItem('currentUser') || ''
     ).customer.info.organizationId;
 
-    return this.http.get<any[]>(this.listContractMyProcessUrlSignMany+'orgId='+orgId+'&platform=web',{headers}).pipe();
+    filter_type = filter_type ? filter_type : '';
+    filter_contract_no = filter_contract_no ? filter_contract_no: '';
+    
+    filter_from_date = filter_from_date ? this.datepipe.transform(filter_from_date, 'yyyy-MM-dd'): '';
+    filter_to_date = filter_to_date ? this.datepipe.transform(filter_to_date, 'yyyy-MM-dd'): '';
+    keyword = keyword ? keyword : '';
+    
+    return this.http.get<any[]>(this.listContractMyProcessUrlSignMany+'orgId='+orgId+'&platform=web'+'&keyword='+keyword+'&type=' + filter_type+ '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date,{headers}).pipe();
   }
 
-  
+  public getViewContractMyProcessList(keyword?: string, filter_type?: any, filter_contract_no?: any, filter_from_date?: any, filter_to_date?: any){
+    this.getCurrentUser();
 
+    const headers = {'Authorization': 'Bearer ' + this.token};
+    const orgId = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.info.organizationId;
+
+    filter_type = filter_type ? filter_type : '';
+    filter_contract_no = filter_contract_no ? filter_contract_no: '';
+    
+    filter_from_date = filter_from_date ? this.datepipe.transform(filter_from_date, 'yyyy-MM-dd'): '';
+    filter_to_date = filter_to_date ? this.datepipe.transform(filter_to_date, 'yyyy-MM-dd'): '';
+    keyword = keyword ? keyword : '';
+
+    return this.http.get<any[]>(this.getViewContractList+'orgId='+orgId+'&platform=web'+'&keyword='+keyword+'&type=' + filter_type+ '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date,{headers}).pipe();
+  }
+
+  public getContractMyProcessListDownloadMany(ids: any): Observable<any> {
+    this.getCurrentUser();
+    const headers = new HttpHeaders().append('Authorization', 'Bearer ' + this.token)
+    return this.http.get(this.listContractMyProcessUrlDownloadMany+'ids='+ids,{headers, responseType: 'blob'}).pipe();
+  }
+  
   public getSignatureListUser(): Observable<any> {
     return this.http.get("/assets/data-signature-user.json");
   }
@@ -87,7 +118,7 @@ export class ContractSignatureService {
       email: email,
       contract_id: id
     });
-    console.log(body);
+    
     return this.http.post<any>(this.shareContractUrl, body, {'headers': headers}).pipe();
   }
 
@@ -209,7 +240,7 @@ export class ContractSignatureService {
       // Get server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
-    console.log(errorMessage);
+    
     return throwError(errorMessage);
  }
 

@@ -5,6 +5,20 @@
 //  font-style:normal;
 //}
 
+::ng-deep .multiselect-dropdown {
+  .dropdown-btn {
+    border: 1px solid #106DB6 !important;
+    border-radius: 5px;
+    height: 38px;
+    // white-space: nowrap;
+  }
+}
+
+::ng-deep .multiselect-dropdown .dropdown-btn .selected-item-container .selected-item {
+  /* ... */
+  max-width: 390px !important; /* Xóa hoặc thay đổi giá trị max-width */
+}
+
 .content {
   .name-item {
     .require_star {
@@ -55,5 +69,249 @@
     outline: none;
     padding-left: 19px;
     width: 100%;
+  }
+}
+.db_icon_english {
+  height: 20px;
+  width: 30px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url(../../../../../../assets/img/icon_english.svg);
+}
+.db_icon_vietnam {
+  height: 20px;
+  width: 30px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url(../../../../../../assets/img/icon_vietnam.svg);
+}
+.drop_menu{
+  border-color: #C2E4FF;
+  padding: 0;
+  font-size: inherit;
+  right: 10px;
+  left: unset !important;
+}
+.language{
+  margin-left: 20px;
+}
+.switch-language{
+  padding: 5px;
+}
+//::ng-deep .mat-form-field-flex {
+//  background-color: white;
+//}
+.dropdown-toggle:empty::after {
+  margin-left: 24px;
+  margin-bottom: 2px;
+  width: 9px;
+}
+.btn-outline-primary:hover{
+  color: grey;
+}
+.dropdownSMS{
+  width: 8%;
+  margin-top: 9px;
+  margin-right: 25px; 
+  height: 24px;
+}
+.DropdownToggleSMS{
+  margin: -8px;
+  padding-left: 22px;
+  background-color: #ffffff0a;
+  border: 1px solid #106DB6;
+}
+.input-dataPhone{
+  width: 80%;
+  border: 1px solid #106DB6;
+  border-radius: 5px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+
+  > img {
+    padding-left: 14px;
+  }
+
+  > input {
+    border: none;
+    outline: none;
+    padding-left: 19px;
+    width: 100%;
+  }
+}
+.input-dataEmail{
+  width: 80%;
+  border: 1px solid #106DB6;
+  border-radius: 5px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+
+  > img {
+    padding-left: 14px;
+  }
+
+  > input {
+    border: none;
+    outline: none;
+    padding-left: 19px;
+    width: 100%;
+  }
+}
+@media only screen and (min-width: 370px) and (max-width: 480px) {
+  .dropdownSMS{
+    width: 12%;
+    margin-top: 9px;
+    margin-right: 28px; 
+    height: 24px;
+  }
+  .DropdownToggleSMS{
+    margin: -8px;
+    padding-left: 22px;
+    background-color: #ffffff0a;
+    border: 1px solid #106DB6;
+  }
+  .input-dataPhone{
+    width: 65%;
+    border: 1px solid #106DB6;
+    border-radius: 5px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+  
+    > img {
+      padding-left: 14px;
+    }
+  
+    > input {
+      border: none;
+      outline: none;
+      padding-left: 19px;
+      width: 100%;
+    }
+  }
+  .input-dataEmail{
+    width: 65%;
+    border: 1px solid #106DB6;
+    border-radius: 5px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+  
+    > img {
+      padding-left: 14px;
+    }
+  
+    > input {
+      border: none;
+      outline: none;
+      padding-left: 19px;
+      width: 100%;
+    }
+  }
+}
+@media only screen and (max-width: 370px) {
+  .dropdownSMS{
+    width: 17%;
+    margin-top: 9px;
+    margin-right: 24px; 
+    height: 24px;
+  }
+  .DropdownToggleSMS{
+    margin: -8px;
+    padding-left: 22px;
+    background-color: #ffffff0a;
+    border: 1px solid #106DB6;
+  }
+  .input-dataPhone{
+    width: 60%;
+    border: 1px solid #106DB6;
+    border-radius: 5px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+  
+    > img {
+      padding-left: 14px;
+    }
+  
+    > input {
+      border: none;
+      outline: none;
+      padding-left: 19px;
+      width: 100%;
+    }
+  }
+  .input-dataEmail{
+    width: 60%;
+    border: 1px solid #106DB6;
+    border-radius: 5px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+  
+    > img {
+      padding-left: 14px;
+    }
+  
+    > input {
+      border: none;
+      outline: none;
+      padding-left: 19px;
+      width: 100%;
+    }
+  }
+}
+@media only screen and (min-width: 480px) and (max-width: 560px) {
+  .dropdownSMS{
+    width: 9%;
+    margin-top: 9px;
+    margin-right: 28px; 
+    height: 24px;
+  }
+  .DropdownToggleSMS{
+    margin: -8px;
+    padding-left: 22px;
+    background-color: #ffffff0a;
+    border: 1px solid #106DB6;
+  }
+  .input-dataPhone{
+    width: 75%;
+    border: 1px solid #106DB6;
+    border-radius: 5px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+  
+    > img {
+      padding-left: 14px;
+    }
+  
+    > input {
+      border: none;
+      outline: none;
+      padding-left: 19px;
+      width: 100%;
+    }
+  }
+  .input-dataEmail{
+    width: 75%;
+    border: 1px solid #106DB6;
+    border-radius: 5px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+  
+    > img {
+      padding-left: 14px;
+    }
+  
+    > input {
+      border: none;
+      outline: none;
+      padding-left: 19px;
+      width: 100%;
+    }
   }
 }

@@ -1,3 +1,7 @@
+import { CurrentFolderComponent } from './main/contract-folder/current-folder/current-folder.component';
+import { CustomerAddComponent } from './main/customer/customer-add/customer-add.component';
+import { ContractFolderComponent } from './main/contract-folder/contract-folder.component';
+import { CustomerDetailComponent } from './main/customer/customer-detail/customer-detail.component';
 import {DetailContractComponent} from './main/contract/detail-contract/detail-contract.component';
 import {SignupComponent} from './login/signup/signup.component';
 import {ContractTemplateComponent} from './main/contract-template/contract-template.component';
@@ -35,9 +39,24 @@ import { MultiSignListComponent } from './main/contract-signature/components/mul
 import { ReportDetailComponent } from './main/report/report-detail/report-detail.component';
 import { ReportStatusContractComponent } from './main/report/report-status-contract/report-status-contract.component';
 import { ReportSoonExpireComponent } from './main/report/report-soon-expire/report-soon-expire.component';
+import { ReportStatusSendSmsEmailComponent } from './main/report/report-status-send-sms-email/report-status-send-sms-email.component';
+import { ReportStatusSendEmailComponent } from './main/report/report-contract-send-email/report-contract-send-email.component';
+import { ReportEKYCComponent } from './main/report/report-eKYC/report-eKYC.component';
 import { ReportContractNumberFollowStatusComponent } from './main/report/report-contract-number-follow-status/report-contract-number-follow-status.component';
+import { ReportContractNumberEcontractMsaleComponent } from './main/report/report-contract-number-eContract-mSale/report-contract-number-eContract-mSale.component';
 import { ContractNumberFollowTypeComponent } from './main/report/contract-number-follow-type/contract-number-follow-type.component';
 import { ContractNumberFollowSignComponent } from './main/report/contract-number-follow-sign/contract-number-follow-sign.component';
+import { ConfigSmsEmailComponent } from './main/config-sms-email/config-sms-email.component';
+import { CustomerComponent } from './main/customer/customer.component';
+
+import {DigitalCertificateComponent} from './main/digital-certificate/digital-certificate.component';
+import {DigitalCertificateAddComponent} from './main/digital-certificate/digital-certificate-add/digital-certificate-add.component';
+import {DigitalCertificateDetailComponent} from './main/digital-certificate/digital-certificate-detail/digital-certificate-detail.component';
+import {DigitalCertificateEditComponent} from './main/digital-certificate/digital-certificate-edit/digital-certificate-edit.component';
+import {ContentSmsComponent} from './main/report/report-status-send-sms-email/content-sms/content-sms.component';
+import {ContentEmailComponent} from './main/report/report-contract-send-email/content-email/content-email.component';
+import { ReportContractReceiveComponent } from './main/report/report-contract-receive/report-contract-receive.component';
+import { environment } from 'src/environments/environment';
 
 const contract_signatures = "c";
 const signatures = "s9";
@@ -122,8 +141,35 @@ const routes: Routes = [
         component: InforUserComponent,
       },
       {
+        path: 'customer',
+        component: CustomerComponent,
+      },
+      {
+        path:'form-customer/:action/:type',
+        component: CustomerAddComponent
+      },
+      {
+        path: 'form-customer/:action/:type/:id',
+        component: CustomerAddComponent
+      },
+      {
+        path: 'info-customer/:type/:id',
+        component: CustomerDetailComponent
+      },{
+        path: 'contract-folder',
+        component: ContractFolderComponent
+      },
+      {
+        path: 'my-folder/:name',
+        component: CurrentFolderComponent
+      },
+      {
         path: 'contract/:action/:status',
         component: ContractComponent,
+      },
+      {
+        path: 'digital-certificate',
+        component: DigitalCertificateComponent,
       },
       {
         path: contract_signatures,
@@ -165,6 +211,29 @@ const routes: Routes = [
           {
             path: 'contract-number-follow-sign',
             component: ContractNumberFollowSignComponent
+          },
+          //Báo cáo số lượng hợp đồng nhận
+          {
+            path: 'contract-receive',
+            component: ReportContractReceiveComponent
+          },
+          //Báo cáo sản lượng hợp đồng eContract mSale
+          {
+            path: 'contract-number-econtract-mSale',
+            component: environment.flag == 'NB'? ReportContractNumberEcontractMsaleComponent: PageNotFoundComponent
+          },
+          //Báo cáo trạng thái gửi Sms
+          {
+            path: 'status-send-sms',
+            component: ReportStatusSendSmsEmailComponent
+          },
+          {
+            path: 'status-send-email',
+            component: ReportStatusSendEmailComponent
+          },
+          {
+            path: 'status-ekyc',
+            component: ReportEKYCComponent
           }
         ]
       },
@@ -232,7 +301,11 @@ const routes: Routes = [
         path: 'notification',
         component: NotificationComponent,
       },
-      
+      {
+        path:'config-sms-email',
+        component: ConfigSmsEmailComponent
+      }
+
     ],
   },
   {
@@ -267,7 +340,7 @@ const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full',
   },
-  
+
   {path: '**', component: PageNotFoundComponent}
 ];
 

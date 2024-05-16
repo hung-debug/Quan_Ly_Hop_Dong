@@ -33,6 +33,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   thePDF: any = null;
   pageNumber = 1;
   canvasWidth = 0;
+  canvasHeight = 0;
   arrPage: any = [];
   objDrag: any = {};
   scale: any;
@@ -110,6 +111,8 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   allFileAttachment: any[];
   role:any;
   status:any;
+  difX: number = 0;
+  arrDifPage: any[] = [];
 
   sum: number[] = [];
   top: any[]= [];
@@ -118,6 +121,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   roleMess:any="";
 
   pageBefore: number;
+  defaultValue: number = 100;
 
   constructor(
     private contractTemplateService: ContractTemplateService,
@@ -137,6 +141,25 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
     this.getDataContractSignature();
   }
 
+  setX(){
+    let i = 0;
+    this.datas.contract_user_sign.forEach((element: any) => {
+      element.sign_config.forEach((item: any) => {
+        const htmlElement: HTMLElement | null = document.getElementById(item.id);
+        if(htmlElement) {
+          var oldX = Number(htmlElement.getAttribute('data-x'));
+          if(oldX) {
+            var newX = oldX + this.difX;
+            htmlElement.setAttribute('data-x', newX.toString());
+          }
+        }
+        if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+          item.coordinate_x += this.difX;
+        }
+      })
+    })
+  }
+
   endContract() {
     this.actionBack();
   }
@@ -147,7 +170,6 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   }
 
   actionBack() {
-    console.log("pB ", this.pageBefore);
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['/main/contract-template/'],
       {
@@ -170,14 +192,14 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
 
     //kiem tra quyen chia se
     //lay thong tin user dang nhap
-    let userLogin = this.userService.getAuthCurrentUser();    
+    let userLogin = this.userService.getAuthCurrentUser();
     this.contractTemplateService.getEmailShareList(this.idContract, userLogin.organizationId).subscribe(listShared => {
       let isShare = listShared.filter((p:any) => p.email === userLogin.email);
       if(isShare.length > 0){
         this.roleAccess = true;
       }
       this.contractTemplateService.getDetailContractV2(this.idContract).subscribe(rs => {
-        console.log(rs);
+
         this.isDataContract = rs[0];
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
@@ -190,14 +212,15 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
           is_data_object_signature: rs[2]
         };
         this.datas = this.data_contract;
-        console.log(this.datas);
+
         this.allFileAttachment = this.datas.i_data_file_contract.filter((f: any) => f.type == 3);
+        this.allFileAttachment = this.allFileAttachment.map((item: any) => ({...item, path: item.path.includes('.txt') ? item.path : item.path.replace("/tmp/","/tmp/v2/")}))
         this.checkIsViewContract();
-  
+
         if(this.datas.is_data_contract?.created_by == userLogin.id){
           this.roleAccess = true;
         }else{
-          if(!this.roleAccess){  
+          if(!this.roleAccess){
             this.roleMess = "Mẫu hợp đồng không còn được chia sẻ đến bạn";
           }else if(this.datas?.is_data_contract?.status==32){
             this.roleMess = "Mẫu hợp đồng đã ngừng phát hành";
@@ -207,11 +230,11 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
             this.roleMess = "Mẫu hợp đồng hết hiệu lực";
           }
         }
-        
+
         if(!this.datas?.is_data_contract){
           this.roleMess = "Mẫu hợp đồng không còn tồn tại trên hệ thống";
         }
-  
+
         this.datas.is_data_object_signature.forEach((element: any) => {
           // 1: van ban, 2: ky anh, 3: ky so
           // tam thoi de 1: ky anh, 2: ky so
@@ -228,16 +251,16 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
             element['sign_unit'] = 'so_tai_lieu'
           }
         })
-  
+
         let data_sign_config_cks = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_so');
         let data_sign_config_cka = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_anh');
         let data_sign_config_text = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'text');
         let data_sign_config_so_tai_lieu = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'so_tai_lieu');
-  
+
         this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
-  
+
         this.datas.contract_user_sign.forEach((element: any) => {
-          // console.log(element.sign_unit, element.sign_config);
+          //
           if (element.sign_unit == 'chu_ky_so') {
             Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
           } else if (element.sign_unit == 'chu_ky_anh') {
@@ -255,25 +278,25 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
             }
           })
         }
-  
+
         this.scale = 1;
 
-        
-  
+
+
         if (!this.signCurent) {
           this.signCurent = {
             offsetWidth: 0,
             offsetHeight: 0
           }
         }
-  
+
         // convert base64 file pdf to url
         if (this.datas?.i_data_file_contract) {
           let fileC = null;
           const pdfC2 = this.datas.i_data_file_contract.find((p: any) => p.type == 2);
           const pdfC1 = this.datas.i_data_file_contract.find((p: any) => p.type == 1);
           if (pdfC2) {
-            fileC = pdfC2.path;
+            fileC = pdfC1.path;
           } else if (pdfC1) {
             fileC = pdfC1.path;
           } else {
@@ -288,7 +311,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
         // @ts-ignore
         this.handleError();
       })
-      
+
     });
   }
 
@@ -365,12 +388,27 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
           let canvas: any = document.getElementById('canvas-step3-'+i);
           this.top[i] = canvas.height;
         }
-        
 
         for(let i = 0; i < this.pageNumber; i++) {
           this.top[i+1] += this.top[i];
           this.sum[i] = this.top[i+1];
         }
+
+        let canvasWidth: any [] = [];
+        for(let i = 1; i <= this.pageNumber; i++) {
+          let canvas: any = document.getElementById('canvas-step3-'+i);
+          this.top[i] = canvas.height;
+          canvasWidth.push(canvas.getBoundingClientRect().left)
+        }
+        this.difX = Math.max(...canvasWidth) - Math.min(...canvasWidth);
+        for(let i = 0; i < this.pageNumber; i++) {
+          if(canvasWidth[i] == Math.min(...canvasWidth))
+          this.arrDifPage.push('min');
+          else
+          this.arrDifPage.push('max');
+        }
+
+        this.setX();
       }, 100)
     })
   }
@@ -418,6 +456,51 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
     }
   }
 
+  // updateCanvasSize() {
+  //   // @ts-ignore
+  //   // const pdfjs = await import('pdfjs-dist/build/pdf');
+  //   // @ts-ignore
+  //   // const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
+  //   // pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+  //   let canvas = document.createElement('canvas');
+  //   canvas.className = 'dropzone';
+  //   // canvas.id = 'canvas-step3-' + page;
+  //   const canvasList = document.querySelectorAll('.dropzone');
+  //   canvasList.forEach((canvas: any) => {
+  //     canvas.style.width = this.canvasWidth * this.scale + 'px';
+  //     console.log("canvas.style.width",canvas.style.width);
+  //     canvas.style.height = this.canvasHeight * this.scale + 'px';
+  //     console.log("anvas.style.height",canvas.style.height);
+  //   });
+  // }
+
+  // changeScale(values: any){
+  //   switch (values){
+  //     case "-":
+  //       if(this.scale > 0.25){
+  //         this.scale = this.scale - 0.25;
+  //         this.defaultValue = this.scale * 100
+  //         this.getPage()
+
+  //       }else{
+  //         break;
+  //       }
+  //       break;
+  //     case "+":
+  //       if(this.scale < 5){
+  //         this.scale = this.scale + 0.25;
+  //         this.defaultValue = this.scale * 100
+  //         this.getPage()
+
+  //       }else{
+  //         break;
+  //       }
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
+
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
     //This gives us the page's dimensions at full scale
@@ -428,6 +511,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;
+      this.canvasHeight = viewport.height;
       canvas.height = viewport.height;
       canvas.width = viewport.width;
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
@@ -485,12 +569,21 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
-    let style: any = {
+    let style: any =
+    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
+    {
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
+    } :
+    {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#FFFFFF',
+      "border": "1px dashed #6B6B6B",
+      "border-radius": "6px"
     }
-    style.backgroundColor = '#EBF8FF';
+    // style.backgroundColor = '#EBF8FF';
     if (d['width']) {
       style.width = parseInt(d['width']) + "px";
     }
@@ -548,7 +641,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
         this.objSignInfo.offsetHeight = parseInt(d.offsetHeight);
         // this.signCurent.offsetWidth = d.offsetWidth;
         // this.signCurent.offsetHeight = d.offsetHeight;
-        // console.log(this.signCurent)
+        //
 
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
@@ -605,7 +698,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+
       let is_data = result
     })
 
@@ -630,7 +723,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
 
   // edit location doi tuong ky
   changePositionSign(e: any, locationChange: any, property: any) {
-    // console.log(e, this.objSignInfo, this.signCurent);
+    //
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
@@ -664,8 +757,8 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
             signElement.setAttribute("signature_party", isObjSign.signature_party);
           }
         }
-        // console.log(this.signCurent)
-        // console.log(this.objSignInfo)
+        //
+        //
       }
     }
   }
@@ -700,7 +793,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   }
 
   t() {
-    console.log(this);
+
   }
 
   checkIsViewContract() {
@@ -719,7 +812,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   pageNum: number = 1;
   page1: boolean = false;
   pageLast: boolean = true;
-  
+
   pageRendering:any;
   pageNumPending: any = null;
   firstPage() {

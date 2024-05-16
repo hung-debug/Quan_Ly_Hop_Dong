@@ -1,0 +1,299 @@
+.header{
+  text-align: center;
+  font-weight: bold
+}
+.container-fluid{
+  padding: 0px !important;
+}
+.label-header{
+  color: #106DB6;
+  font-family: inherit;
+  text-transform: uppercase;
+}
+.required-title {
+  color: red;
+}
+.input-text {
+  border: 0;
+  padding: 5px;
+  width: 100%;
+  outline:0px;
+  border-radius: 0 5px 5px 0;
+}
+
+.input-data {
+  border: 1px solid #106DB6;
+  border-radius: 5px;
+  min-height: 33px;
+  display: flex;
+  align-items: center;
+
+  > input, div {
+      border: none;
+      outline: none;
+      padding-left: 15px;
+      width: 100%;
+      border-radius: 5px;
+  }
+  > div{
+      padding: 5px 15px;
+  }
+}
+.cancel-button{
+  border: 0px;
+  border-radius: 5px;
+  height: 33px;
+  width: 100px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #8B8B8B;
+  font-size: 13px;
+  margin: 0 10px;
+}
+.save-button{
+  border: 0px;
+  border-radius: 5px;
+  height: 33px;
+  width: 100px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #106DB6;
+  font-size: 13px;
+  margin: 0 10px;
+}
+.error-detail{
+  font-size: inherit;
+  padding: 6px;
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+#table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+  font-family: font_lexend_deca;
+  }
+  #table td, #table th {
+  //border: 1px solid #ddd;
+  padding: 8px;
+  }
+
+  #table tr:nth-child(even){background-color: #f2f2f2;}
+
+  #table tr:hover {background-color: #ddd;}
+
+  #table th {
+  //text-align: center;
+  background-color: #E2ECF6;
+  color: #106DB6;
+  }
+
+  #table tr:last-child th:first-child {
+    border-top-left-radius: 10px;
+  }
+  #table tr:last-child th:last-child {
+    border-top-right-radius: 10px;
+  }
+  #table tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+  }
+  #table tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+  }
+:host ::ng-deep {
+  .p-dropdown, .p-multiselect {
+      border: 1px solid #106DB6;
+      border-radius: 5px;
+      height: 33px;
+      width: 100%;
+      outline: 0;
+      color: black !important;
+  }
+  .p-dropdown-label, .p-multiselect-label {
+      padding: 5px 5px 5px 15px;
+  }
+  .p-chips{
+    width: 100%;
+  }
+  .p-chips .p-chips-multiple-container{
+    width: 100%;
+    border: 1px solid #106DB6;
+    outline: none !important;
+    outline-offset: 0;
+    box-shadow: none !important;
+    padding: 2px 0.25rem;
+  }
+  .p-chips-token{
+    margin: 2px 0;
+  }
+
+  .p-selectbutton .p-button {
+    outline: 0 !important;
+    box-shadow: none !important;
+    height: 33px;
+    width: 50%;
+  }
+  .p-selectbutton .p-button.p-highlight {
+    background: #c5ebff;
+    border-color: #c5ebff;
+    color: #106DB6;
+  }
+  .p-paginator .p-paginator-pages .p-paginator-page{
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+    margin: 4px;
+    height: 26px !important;
+    width: 50px;
+    border-radius: 5px;
+    background-color: #e6e6e6;
+  }
+
+  .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    background-color: #2199e8;
+    color: white;
+    border: 1px solid #2199e8;
+  }
+
+  .p-paginator-bottom .p-ripple{
+    padding: 10px;
+    border-width: 0 !important;
+    height: 26px !important;
+    width: 50px !important;
+  }
+  .p-datatable-table, .p-datatable-table .ng-star-inserted, .p-paginator-pages .ng-star-inserted{
+    font-size: 13px;
+    font-family: font_lexend_deca;
+  }
+  .p-datatable .p-paginator-bottom {
+    border-width: 0;
+  }
+}
+:host ::ng-deep {
+  .p-dropdown {
+      border: 1px solid #106DB6;
+      border-radius: 5px;
+      height: 33px;
+      width: 100%;
+      outline: 0;
+      color: black !important;
+  }
+  .p-dropdown-label {
+      padding: 5px 5px 5px 15px;
+  }
+  .p-multiselect .p-multiselect-label.p-placeholder, .p-dropdown .p-dropdown-label.p-placeholder {
+      color: #6c757d !important;
+  }
+}
+.invalid{
+  color: red;
+}
+.hidden-color{
+  background-color: #EFF2F5;
+}
+
+.input-line {
+  border: 1px solid #106DB6;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  height: 30px;
+  height: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 200px; /* Điều chỉnh chiều cao tối đa */
+  overflow-y: auto; /* Tạo thanh cuộn khi vượt quá chiều cao tối đa */
+
+  > input, div {
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    padding-left: 15px;
+  }
+  > div{
+    padding: 5px 15px;
+  }
+}
+:host ::ng-deep {
+  .p-treeselect, .p-dropdown {
+      border: 1px solid #106DB6;
+      border-radius: 5px;
+      height: 40px;
+      width: 100%;
+      outline: 0;
+      color: black !important;
+  }
+  .p-treeselect-label, .p-dropdown-label {
+      padding: 5px 5px 5px 15px;
+  }
+  .p-datatable-table, .p-datatable-table .ng-star-inserted, .p-paginator-pages .ng-star-inserted{
+    font-size: 13px;
+    font-family: font_lexend_deca;
+  }
+  .p-datatable .p-paginator-bottom {
+    border-width: 0;
+  }
+}
+.file-contract{
+  height: 80px;
+  border: 1px solid #106DB6;
+  cursor: pointer;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+}
+.label_detail {
+  font-weight: 500;
+  height: 40px;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  align-items: center;
+}
+.footer-btn button {
+  width: 120px;
+  height: 40px;
+  background-color: #8b8b8b;
+  border-radius: 5px;
+  outline: none;
+  color: white;
+  border: 1px solid #8B8B8B;
+  margin: 0 10px 0;
+}
+.footer-btn{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin: 15px;
+}
+.update-btn{
+  color: white;
+  background-color: #106DB6 !important;
+}
+.text_webmobile{
+  display: none;
+  /* Medium devices (landscape tablets, 768px and up) */
+  @media only screen and (max-width: 820px) {
+    display: block;
+    color: #106DB6;
+  }
+}
+#table td, #table th {
+  @media only screen and (max-width: 820px) {
+  padding: 5px;
+  }
+}
+
+.popup_cert{
+  @media only screen and (max-width: 820px) {
+    justify-content: flex-start !important;
+  }
+}
+.radioChoose{
+  width: 17%;
+  display: flex;
+}
+

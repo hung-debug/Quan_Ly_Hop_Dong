@@ -5,6 +5,8 @@ import { ImportService } from 'src/app/service/import.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { ToastService } from 'src/app/service/toast.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { RoleService } from 'src/app/service/role.service';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -18,15 +20,19 @@ export class UserComponent implements OnInit {
     private router : Router,
     private importService: ImportService,
     private toastService: ToastService,
+    private spinner: NgxSpinnerService,
+    private roleService: RoleService
     ) { }
 
   organization_id_user_login:any;
   organization_id:any = "";
-  email:any = "";
+  nameOrEmail:any = "";
   list: any[];
   cols: any[];
   orgList: any[] = [];
   orgListTmp: any[] = [];
+  myEmail: string;
+  name: string = "";
 
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
@@ -37,6 +43,34 @@ export class UserComponent implements OnInit {
 
   lang: any;
   async ngOnInit(): Promise<void> {
+    let userId = this.userService.getAuthCurrentUser().id;
+    this.myEmail = this.userService.getInforUser().email;
+
+    this.userService.getUserById(userId).subscribe(
+      data => {
+
+        //lay id role
+        this.roleService.getRoleById(data?.role_id).subscribe(
+          data => {
+
+            let listRole: any[];
+            listRole = data.permissions;
+
+            this.isQLND_02 = listRole.some(element => element.code == 'QLND_02');
+            this.isQLND_04 = listRole.some(element => element.code == 'QLND_04');
+          }, error => {
+            this.spinner.hide();
+            // this.toastService.showErrorHTMLWithTimeout('Lấy thông tin phân quyền', "", 3000);
+            this.router.navigate(['/login'])
+          }
+        );
+
+      }, error => {
+        this.spinner.hide();
+        // this.toastService.showErrorHTMLWithTimeout('Hết phiên đăng nhập, Vui lòng đăng nhập lại', "", 3000);
+        this.router.navigate(['/login'])
+      }
+    )
 
     if(sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
@@ -53,18 +87,16 @@ export class UserComponent implements OnInit {
     this.searchUser();
 
     this.unitService.getUnitList('', '').subscribe(data => {
-      console.log(data.entities);
-
       if(this.lang == 'vi')
         this.orgListTmp.push({name: "Tất cả", id:""});
-      else if(this.lang == 'en') 
+      else if(this.lang == 'en')
         this.orgListTmp.push({name: "All", id:""});
-      
+
       let dataUnit = data.entities.sort((a:any,b:any) => a.path.toString().localeCompare(b.path.toString()));
       for(var i = 0; i < dataUnit.length; i++){
         this.orgListTmp.push(dataUnit[i]);
       }
-      
+
       this.orgList = this.orgListTmp;
       this.convertData();
       this.selectedNodeOrganization = this.listOrgCombobox.filter((p: any) => p.data == this.organization_id);
@@ -85,6 +117,22 @@ export class UserComponent implements OnInit {
     ];
   }
 
+  // onInputChange(event: any) {
+  //   // Lấy giá trị đã nhập từ sự kiện
+  //   let inputValue = event.target.value;
+
+  //   // Chuỗi chứa những ký tự đặc biệt mà bạn muốn loại bỏ
+  //   const specialCharacters = /[`!#$%^&*()_+\=[\]{};':"\\|,<>/?~]/;
+
+  //   // Kiểm tra xem giá trị nhập vào có chứa ký tự đặc biệt không
+  //   if (specialCharacters.test(inputValue)) {
+  //     // Nếu có, thay thế ký tự đặc biệt bằng chuỗi rỗng
+  //     inputValue = inputValue.replace(specialCharacters, '');
+  //     // Gán lại giá trị của input mà không chứa các ký tự đặc biệt
+  //     event.target.value = inputValue;
+  //   }
+  // }
+
   array_empty: any = [];
   listOrgCombobox: any[];
   selectedNodeOrganization:any;
@@ -96,12 +144,12 @@ export class UserComponent implements OnInit {
       let dataChildren = this.findChildren(element);
       let data:any="";
       data = {
-        label: element.name, 
+        label: element.name,
         data: element.id,
         expanded: true,
         children: dataChildren
       };
-      
+
       this.array_empty.push(data);
       //this.removeElementFromStringArray(element.id);
     })
@@ -111,15 +159,15 @@ export class UserComponent implements OnInit {
   findChildren(element:any){
     let dataChildren:any[]=[];
     let arrCon = this.orgList.filter((p: any) => p.parent_id == element.id);
-    
+
     arrCon.forEach((elementCon: any, indexCOn: number) => {
       let is_edit = false;
-      
+
       dataChildren.push(
       {
-        label: elementCon.name, 
+        label: elementCon.name,
         data: elementCon.id,
-        expanded: true,
+        expanded: false,
         children: this.findChildren(elementCon)
       });
       this.removeElementFromStringArray(elementCon.id);
@@ -132,20 +180,25 @@ export class UserComponent implements OnInit {
         if(value.id==element){
           this.orgList.splice(index,1);
         }
-        
+
     });
   }
 
-  
+
   changeOrg(){
-    console.log(this.selectedNodeOrganization);
+
     this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
   }
 
   searchUser(){
     this.first = 0;
-    this.userService.getUserList(this.organization_id==null?"":this.organization_id, this.email).subscribe(response => {
+
+    this.spinner.show();
+    this.userService.getUserList(this.organization_id? this.organization_id : '', this.nameOrEmail, this.name).subscribe(response => {
+      this.spinner.hide();
       this.list = response.entities;
+      console.log("ressponse",response);
+
     });
   }
 
@@ -161,9 +214,9 @@ export class UserComponent implements OnInit {
     this.router.navigate(['/main/user-detail/' + id]);
   }
 
-  
+
   downFileExample() {
-    
+
   }
 
   fileChanged(e: any) {

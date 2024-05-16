@@ -47,7 +47,7 @@ export class RoleComponent implements OnInit {
       {header: 'role.name', style:'text-align: left;' },
       {header: 'role.code', style:'text-align: left;' },
       {header: 'role.manage', style:'text-align: center;' },
-      ];
+    ];
    
     //lay id user
     let userId = this.userService.getAuthCurrentUser().id;
@@ -56,7 +56,7 @@ export class RoleComponent implements OnInit {
         //lay id role
         this.roleService.getRoleById(data?.role_id).subscribe(
           data => {
-            console.log(data);
+            
             let listRole: any[];
             listRole = data.permissions;
             this.isQLVT_01 = listRole.some(element => element.code == 'QLVT_01');
@@ -82,9 +82,9 @@ export class RoleComponent implements OnInit {
 
   searchRole(){
     this.roleService.getRoleList(this.code, this.name).subscribe(response => {
-      console.log(response);
+      
       this.list = response.entities;
-      console.log(this.list);
+      
     });
   }
 
@@ -100,7 +100,7 @@ export class RoleComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
@@ -118,7 +118,7 @@ export class RoleComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
@@ -137,7 +137,7 @@ export class RoleComponent implements OnInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
@@ -156,7 +156,7 @@ export class RoleComponent implements OnInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }

@@ -9,7 +9,7 @@
       <div class="col-md-12">
         <div class="label_item">{{ "unit.name" | translate }}</div>
         <div>
-          <div [innerHTML]="name" class="input_text"></div>
+          <div [innerText]="name" class="input_text"></div>
         </div>
       </div>
     </div>
@@ -19,14 +19,14 @@
       <div class="col-md-6">
         <div class="label_item">{{ "unit.id" | translate }}</div>
         <div>
-          <div [innerHTML]="id" class="input_text"></div>
+          <div [innerText]="id" class="input_text"></div>
         </div>
       </div>
 
       <div class="col-md-6">
         <div class="label_item">{{ "unit.short-name" | translate }}</div>
         <div>
-          <div [innerHTML]="short_name" class="input_text"></div>
+          <div [innerText]="short_name" class="input_text"></div>
         </div>
       </div>
     </div>
@@ -36,14 +36,14 @@
       <div class="col-md-6">
         <div class="label_item">{{ "unit.code" | translate }}</div>
         <div>
-          <div [innerHTML]="code" class="input_text"></div>
+          <div [innerText]="code" class="input_text"></div>
         </div>
       </div>
 
       <div class="col-md-6">
         <div class="label_item">{{ "unit.email" | translate }}</div>
         <div>
-          <div [innerHTML]="email" class="input_text"></div>
+          <div [innerText]="email" class="input_text"></div>
         </div>
       </div>
     </div>
@@ -52,14 +52,14 @@
       <div class="col-md-6">
         <div class="label_item">{{ "unit.parent" | translate }}</div>
         <div>
-          <div [innerHTML]="parent_id" class="input_text"></div>
+          <div [innerText]="parent_id" class="input_text"></div>
         </div>
       </div>
 
       <div class="col-md-6">
         <div class="label_item">{{ "unit.phone" | translate }}</div>
         <div>
-          <div [innerHTML]="phone" class="input_text"></div>
+          <div [innerText]="phone" class="input_text"></div>
         </div>
       </div>
     </div>
@@ -68,7 +68,7 @@
       <div class="col-md-6">
         <div class="label_item">{{ "Mã số thuế" | translate }}</div>
         <div>
-          <div [innerHTML]="taxCode" class="input_text"></div>
+          <div [innerText]="taxCode" class="input_text"></div>
         </div>
       </div>
 
@@ -83,7 +83,7 @@
     </div>
 
     <div *ngIf="this.site === 'KD'">
-      <div class="row" style="padding-top: 2px">
+      <div class="row" style="padding-top: 15px">
         <div class="header">
           <h3 class="label-header">{{ "package.information" | translate }}</h3>
         </div>
@@ -148,6 +148,47 @@
           </div>
         </div>
       </div>
+
+      <!-- <div class="row" style="padding-top: 10px">
+        <div class="col-md-6">
+          <div class="label_item">
+            {{ "timestamp.used" | translate }}
+            <span class="highlight_result">
+              {{ this.numTimeStampUse }}
+            </span>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="label_item">
+            {{ "timestamp.purchased" | translate }}
+            <span class="highlight_result">
+              {{ this.numTimeStampBuy }}
+            </span>
+          </div>
+        </div>
+      </div> -->
+
+      <div class="row" style="padding-top: 10px">
+        <div class="col-md-6">
+          <div class="label_item">
+            {{ "ceca.used" | translate }}
+            <span class="highlight_result">
+              {{ this.numCecaUse }}
+            </span>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="label_item">
+            {{ "ceca.purchased" | translate }}
+            <span class="highlight_result">
+              {{ this.numCecaBuy }}
+            </span>
+          </div>
+        </div>
+      </div>
+      
     </div>
 
     <div class="row" style="justify-content: center; padding-top: 10px">

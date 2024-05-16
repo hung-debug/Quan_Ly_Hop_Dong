@@ -19,6 +19,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { TRISTATECHECKBOX_VALUE_ACCESSOR } from 'primeng/tristatecheckbox';
 import { UnitService } from 'src/app/service/unit.service';
 import { environment } from 'src/environments/environment';
+import { TimeService } from 'src/app/service/time.service';
 
 
 @Component({
@@ -57,7 +58,8 @@ export class ConfirmSignOtpComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public datepipe: DatePipe,
     private deviceService: DeviceDetectorService,
-    private unitService: UnitService
+    private unitService: UnitService,
+    private timeService: TimeService
   ) { }
 
 
@@ -98,7 +100,7 @@ export class ConfirmSignOtpComponent implements OnInit {
       return;
     }
     //this.dialogRef.close(this.addForm.value.otp);
-    // console.log(this.addForm.value.otp);
+    // 
     // this.confirmOtpForm.emit(this.addForm.value.otp);
     await this.signContractSubmit();
   }
@@ -186,9 +188,9 @@ export class ConfirmSignOtpComponent implements OnInit {
     let indexSignUpload: any[] = [];
     let iu = 0;
 
-    if(!this.mobile) {
+    if(!this.mobile || this.mobile) {
       for (const signUpdate of this.datas.is_data_object_signature) {
-        console.log('ki anh', signUpdate);
+        
         if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived)
           && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
           && signUpdate?.recipient?.role === this.datas?.roleContractReceived
@@ -196,11 +198,12 @@ export class ConfirmSignOtpComponent implements OnInit {
     
           const formData = {
             "name": "image_" + new Date().getTime() + ".jpg",
-            "content": signUpdate.valueSign,
-            organizationId: this.datas?.is_data_contract?.organization_id
+            "content": this.data.otpValueSign,
+            organizationId: this.datas?.is_data_contract?.organization_id,
+            signType: '',
+            ocrResponseName: ''
           }
           
-          console.log("form ", formData);
           signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
     
           indexSignUpload.push(iu);
@@ -215,8 +218,10 @@ export class ConfirmSignOtpComponent implements OnInit {
         ) {
           const formData = {
             "name": "image_" + new Date().getTime() + ".jpg",
-            "content": this.datas.is_data_object_signature.valueSign,
-            organizationId: this.datas?.is_data_contract?.organization_id
+            "content": this.data.otpValueSign,
+            organizationId: this.datas?.is_data_contract?.organization_id,
+            signType: '',
+            ocrResponseName: ''
           }
 
   
@@ -230,6 +235,7 @@ export class ConfirmSignOtpComponent implements OnInit {
     
 
     forkJoin(signUploadObs$).subscribe(async results => {
+      let bucket = results[0].file_object.bucket;
       let ir = 0;
       for (const resE of results) {
         this.datas.filePath = resE?.file_object?.file_path;
@@ -238,8 +244,9 @@ export class ConfirmSignOtpComponent implements OnInit {
         }
         ir++;
       }
-      await this.signContract(false);
+      await this.signContract(false, bucket);
     }, error => {
+      this.spinner.hide()
       this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
     });
     if (signUploadObs$.length == 0) {
@@ -257,9 +264,9 @@ export class ConfirmSignOtpComponent implements OnInit {
     }
   }
 
-  async signContract(notContainSignImage?: boolean) {
+  async signContract(notContainSignImage?: boolean,bucket?: string) {
     const signUpdateTemp = JSON.parse(JSON.stringify(this.datas.is_data_object_signature));
-    let signUpdatePayload = "";
+    let signUpdatePayload: any = "";
     //neu khong chua chu ky anh
     if (notContainSignImage) {
       signUpdatePayload = signUpdateTemp.filter(
@@ -270,7 +277,8 @@ export class ConfirmSignOtpComponent implements OnInit {
             name: item.name,
             value: (item.type == 1 || item.type == 4) ? item.valueSign : item.value,
             font: item.font,
-            font_size: item.font_size
+            font_size: item.font_size,
+            bucket: bucket
           }
         });
     }else{
@@ -279,28 +287,14 @@ export class ConfirmSignOtpComponent implements OnInit {
       
       let http = null;
 
-      if(environment.apiUrl == 'http://14.160.91.174:1387') {
-        http = "http";
-      } else {
-        http = "https";
-      }
-      
-      try {
-        const date = await fetch(http+"://worldtimeapi.org/api/ip").then(response => response.json());
-        this.isDateTime = date.datetime;
-      } catch(err) {
-        this.isDateTime = new Date();
-      }
-     
-
-      this.isDateTime = this.datepipe.transform(this.isDateTime, "dd/MM/yyyy HH:mm");
+      this.isDateTime = await this.timeService.getRealTime().toPromise();
       await of(null).pipe(delay(100)).toPromise();
       
       const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
       
       let signI:any;
       if (imageRender) {
-        const textSignB = await domtoimage.toPng(imageRender);
+        const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
         signI = textSignB.split(",")[1];
       }
      
@@ -311,19 +305,25 @@ export class ConfirmSignOtpComponent implements OnInit {
           return {
             otp: this.addForm.value.otp,
             signInfo: signI,
-            processAt: this.datepipe.transform(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'"),
+            processAt: this.isDateTime,
             fields:[
               {
                 id: item.id,
                 name: item.name,
                 value: (item.type == 1 || item.type == 4) ? item.valueSign : item.value,
-                font: 'Arial',
-                font_size: 14
+                font: 'Times New Roman',
+                font_size: 14,
+                bucket: bucket
               }]
           }
         });
       if(signUpdatePayload){
-        signUpdatePayload = signUpdatePayload[0];
+        signUpdatePayload = {
+          otp: signUpdatePayload[0]?.otp,
+          signInfo: signUpdatePayload[0]?.signInfo,
+          processAt: signUpdatePayload[0]?.processAt,
+          fields: signUpdatePayload.map((item: any) => item.fields[0])
+        };
       }
     }
     
@@ -348,6 +348,18 @@ export class ConfirmSignOtpComponent implements OnInit {
       await this.signImageC(signUpdatePayload, notContainSignImage);
     }
 
+  }
+
+  getOptions(imageRender: any) {
+    const scale = 5;
+    const options = {
+      quality: 0.99,
+      width: imageRender.clientWidth * scale,
+      height: imageRender.clientHeight * scale,
+      style: { transform: 'scale(' + scale + ')', transformOrigin: 'top left' },
+    };
+
+    return options;
   }
 
   async signImageC(signUpdatePayload: any, notContainSignImage: any) {
@@ -390,7 +402,7 @@ export class ConfirmSignOtpComponent implements OnInit {
             if (!notContainSignImage) {
             }
             setTimeout(() => {
-              console.log("vao day ky hop dong thanh cong ");
+              
               this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
               this.toastService.showSuccessHTMLWithTimeout(
                 [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'

@@ -11,8 +11,8 @@
       //position: relative;
       .sig-img-daky{
         position: absolute;
-        top: -11px;
-        right: -8px;
+        top: -20px;
+        right: -3px;
         //cursor: pointer;
       }
   
@@ -356,7 +356,7 @@
       left: 6px;
       padding: 0 4px;
       border: 1px solid #ddd;
-      width: 100px;
+      // width: 100px;
   }
   .sig-img-daky {
       cursor: pointer;
@@ -414,4 +414,12 @@
   background: #FFFFFF;
   border: 1px solid #87CAFF;
   border-radius: 5px; 
+}
+
+.text-ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: inherit;
+  max-width: 106px;
 }

@@ -16,6 +16,7 @@
   font-size: 16px;
   color: #106DB6;
   cursor: pointer;
+  white-space: pre-wrap;
 }
 
 .item_contract_infor{
@@ -192,4 +193,12 @@
   flex-direction: column;
   justify-content: center;
   text-align: center;
+}
+
+.col-cell-ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
+  margin: auto;
 }

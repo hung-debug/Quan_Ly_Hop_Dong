@@ -95,16 +95,16 @@
         <div class="label-header">{{'sign.information' | translate}}</div>
         <div class="content-body">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="label-header">
                         {{'sign.file-image' | translate}}
                     </div>
-                    <div class="content-body">
+                    <div class="content-body" style="margin-top:12px">
                         <div [hidden]="imgSignPCSelect">
-                            <input id="attachFileSignature" type="file" accept=".jpg, .png, .jpge" (change)="fileChangedAttach($event)" style="display: none;" />
-                            <div class="select-contract container-img-file" (click)="addFileAttach()">
-                                <div class="upload-image-region d-flex flex-column container-img-file-1">
-                                    <img src="assets/img/img-icon.svg" alt="#" width="50px">
+                            <input id="attachFileSignature" type="file" accept=".jpg, .png, .jpeg" (change)="fileChangedAttach($event,'sign')" style="display: none;" />
+                            <div class="select-contract container-img-file" (click)="addFileAttach('sign')">
+                                <div class="upload-image-region d-flex flex-column container-img-file">
+                                    <img src="assets/img/img-icon.svg" alt="#" width="20px">
                                     <div class="text-choose-file">{{'choose.sign.file.image' | translate}}</div>
                                     <div class="text-support-extension">{{'support.format.PNG.JPG.JPGE' | translate}}</div>
                                 </div>
@@ -112,12 +112,34 @@
                         </div>
                         <div class="image-div">
                             <img *ngIf="imgSignPCSelect" [src]="imgSignPCSelect" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
-                            <img class="hidden_img" (click)="addFileAttach()" src="assets/img/img-icon.svg" width="30" height="30" />
+                            <img class="hidden_img" (click)="addFileAttach('sign')" src="assets/img/img-icon.svg" width="30" height="30" />
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <div class="label-header">
+                        {{'sign.file-image.mark' | translate}}
+                    </div>
+                    <div class="content-body" style="margin-top: 12px">
+                        <div [hidden]="imgSignPCSelectMark">
+                            <input id="attachFileMark" type="file" accept=".jpg, .png, .jpeg" (change)="fileChangedAttach($event,'mark')" style="display: none;" />
+                            <div class="select-contract container-img-file" (click)="addFileAttach('mark')">
+                                <div class="upload-image-region d-flex flex-column container-img-file">
+                                    <img src="assets/img/img-icon.svg" alt="#" width="20px">
+                                    <div class="text-choose-file">{{'choose.sign.file.image' | translate}}</div>
+                                    <div class="text-support-extension">{{'support.format.PNG.JPG.JPGE' | translate}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="image-div">
+                            <img *ngIf="imgSignPCSelectMark" [src]="imgSignPCSelectMark" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
+                            <img class="hidden_img" (click)="addFileAttach('mark')" src="assets/img/img-icon.svg" width="30" height="30" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
                     <div class="label-header">
                         <div class="row" style="padding: 0 10px;">
                             <div class="col-md-12">
@@ -148,7 +170,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="label-header">
                         <div class="row" style="padding: 0 10px;">
                             <div class="col-md-12">

@@ -89,7 +89,7 @@ export class AdminSidebarService {
 
     menuShow.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
 
-    console.log("menushow ",menuShow);
+    
   
     return menuShow;
   }
@@ -97,8 +97,8 @@ export class AdminSidebarService {
   getSubMenuList(menuParent:any) {
     this.menus.forEach((element:any) => {
       if (element === menuParent) {
-        console.log(element);
-        console.log(element.submenus);
+        
+        
         return element.submenus;
       }
     });

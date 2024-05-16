@@ -64,7 +64,7 @@ export class AdminAddUserComponent implements OnInit {
     this.addForm = this.fbd.group({
       name: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.new_input_form),
       ]),
       email: this.fbd.control('', [Validators.required, Validators.email]),
       phone: this.fbd.control('', [
@@ -78,10 +78,10 @@ export class AdminAddUserComponent implements OnInit {
   }
 
   checkClick() {
-    console.log('flag ' + this.flagAddUpdate);
+    
 
     if (this.flagAddUpdate === 0) {
-      console.log('on submit');
+      
       this.onSubmit();
     } else if (this.flagAddUpdate === 1) {
       this.update();
@@ -99,7 +99,7 @@ export class AdminAddUserComponent implements OnInit {
         this.addForm = this.fbd.group({
           name: this.fbd.control('', [
             Validators.required,
-            Validators.pattern(parttern_input.input_form),
+            Validators.pattern(parttern_input.new_input_form),
           ]),
           email: this.fbd.control('', [Validators.required, Validators.email]),
           phone: this.fbd.control('', [
@@ -121,7 +121,7 @@ export class AdminAddUserComponent implements OnInit {
             this.addForm = this.fbd.group({
               name: this.fbd.control(data.name, [
                 Validators.required,
-                Validators.pattern(parttern_input.input_form),
+                Validators.pattern(parttern_input.new_input_form),
               ]),
               email: this.fbd.control(data.email, [
                 Validators.required,
@@ -170,8 +170,8 @@ export class AdminAddUserComponent implements OnInit {
       roleArrConvert.push(key.code);
     });
 
-    console.log('role arr convert');
-    console.log(roleArrConvert);
+    
+    
 
     return roleArrConvert;
   }
@@ -230,7 +230,7 @@ export class AdminAddUserComponent implements OnInit {
                   data.id ==
                   JSON.parse(localStorage.getItem('currentAdmin') || '').user.id
                 ) {
-                  console.log('vao day');
+                  
 
                   const dataUpdate = {
                     token: JSON.parse(
@@ -279,7 +279,7 @@ export class AdminAddUserComponent implements OnInit {
                     }
 
                     if (flag == 0) {
-                      console.log('vao day ');
+                      
                       for (
                         let i = 0;
                         i < dataUpdate.user.permissions.length;
@@ -288,11 +288,11 @@ export class AdminAddUserComponent implements OnInit {
                         if (
                           dataUpdate.user.permissions[i].code.includes('QLTC')
                         ) {
-                          console.log('vao phan quan ly to chuc');
+                          
                           this.router.navigate(['/admin-main/unit']);
                           break;
                         } else {
-                          console.log('vao day goi dich vu');
+                          
                           this.router.navigate(['/admin-main/pack']);
                           break;
                         }
@@ -366,19 +366,19 @@ export class AdminAddUserComponent implements OnInit {
       role: this.addForm.value.role,
       status: this.addForm.value.status,
     };
-    console.log(data);
+    
 
     this.selectedRoleConvert = [];
 
-    console.log('data role ');
-    console.log(data.role);
+    
+    
 
     data.role.forEach((key: any, v: any) => {
       let jsonData = { code: key };
       this.selectedRoleConvert.push(jsonData);
     });
 
-    console.log('this selected role convert ' + this.selectedRoleConvert);
+    
 
     data.role = this.selectedRoleConvert;
 
@@ -404,8 +404,8 @@ export class AdminAddUserComponent implements OnInit {
           //   3000
           // );
 
-          console.log('error');
-          console.log(data.errors);
+          
+          
 
           if (data.errors[0].code === 1001) {
             this.toastService.showErrorHTMLWithTimeout(
@@ -423,8 +423,8 @@ export class AdminAddUserComponent implements OnInit {
         }
       },
       (error) => {
-        console.log('error ');
-        console.log(error);
+        
+        
         this.toastService.showErrorHTMLWithTimeout(
           'Thêm mới thất bại',
           '',
@@ -435,7 +435,7 @@ export class AdminAddUserComponent implements OnInit {
   }
 
   fileChangedAttach(e: any) {
-    console.log(e.target.files);
+    
     let files = e.target.files;
     for (let i = 0; i < files.length; i++) {
       const file = e.target.files[i];
@@ -451,7 +451,7 @@ export class AdminAddUserComponent implements OnInit {
           ) {
             this.handleUpload(e);
             this.attachFile = file;
-            console.log(this.attachFile);
+            
           } else {
             this.toastService.showErrorHTMLWithTimeout(
               'File hợp đồng yêu cầu định dạng JPG, PNG, JPGE',
@@ -477,7 +477,7 @@ export class AdminAddUserComponent implements OnInit {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      //console.log(reader.result);
+      //
       this.imgSignPCSelect = reader.result ? reader.result.toString() : '';
     };
   }

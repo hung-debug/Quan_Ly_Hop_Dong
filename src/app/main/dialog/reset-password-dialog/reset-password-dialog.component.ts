@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { parttern_input } from 'src/app/config/parttern';
+import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 
@@ -22,6 +23,7 @@ export class ResetPasswordDialogComponent implements OnInit {
   repeatFieldTextTypeNew: boolean = false;
 
   submitted = false;
+
   get f() { return this.addForm.controls; }
 
   constructor(
@@ -32,6 +34,7 @@ export class ResetPasswordDialogComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog,
     private userService : UserService,
+    private contractService: ContractService
     ) { 
       this.addForm = this.fbd.group({
         passwordOld: ["", [Validators.required]],
@@ -46,7 +49,7 @@ export class ResetPasswordDialogComponent implements OnInit {
       passwordNew: ["", [Validators.required,Validators.pattern(parttern_input.weak_pass)]],
       confirmPasswordNew: ["", [Validators.required,Validators.pattern(parttern_input.weak_pass)]]
     });
-    console.log(this.addForm);
+
   }
 
   onSubmit() {
@@ -70,13 +73,17 @@ export class ResetPasswordDialogComponent implements OnInit {
       if(data.passwordOld == data.confirmPasswordNew){
         this.errorDetail = 'Mậu khẩu mới không được trùng với mật khẩu cũ!';
       }else{
-        this.userService.sendResetPasswordToken(data.passwordOld, data.passwordNew).subscribe((data) => {
+        this.userService.sendResetPasswordToken(data.passwordOld, data.passwordNew).subscribe((data:any) => {
           if (data != null) {
             this.dialogRef.close();
             this.toastService.showSuccessHTMLWithTimeout("Đổi mật khẩu mới thành công.<br>Vui lòng đăng nhập để tiếp tục!", "", 3000);
             this.logout();
+
+            window.location.reload();
+          } else if(data == 1) {
+
           } else {
-            this.toastService.showErrorHTMLWithTimeout("Đổi mật khẩu mới thất bại!", "", 3000);
+            this.toastService.showErrorHTMLWithTimeout("no.reset.password.error", "", 3000);
           }
         },
         (error: any) => {
@@ -88,6 +95,9 @@ export class ResetPasswordDialogComponent implements OnInit {
 
   //click logout
   logout() {
+    this.contractService.deleteToken().subscribe((res:any) => { 
+    })
+
     localStorage.clear();
     sessionStorage.clear();
     localStorage.removeItem('currentUser');

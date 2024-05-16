@@ -108,3 +108,29 @@ h3{
       padding: 5px 5px 5px 15px;
   }
 }
+
+@media only screen and (max-width: 768px) {
+  #num-contract {
+    position: relative;
+  }
+  #num-contract-body {
+    position: relative;
+    padding-bottom: 10%;
+  }
+  .first-col {
+    width: 80%!important;
+  }
+  #noti {
+    height: 90%!important;
+  }
+}
+
+// ::ng-deep #toast-container > div {
+//   width: 490px !important;
+// }
+
+::ng-deep {
+  .mat-dialog-container {
+    border-radius: 12px !important;
+  }
+}

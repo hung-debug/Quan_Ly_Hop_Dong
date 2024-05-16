@@ -1,12 +1,13 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Input } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
-import { result } from 'lodash';
+import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
 import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
+import { Router } from '@angular/router';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-ekyc-dialog-sign',
@@ -14,8 +15,9 @@ import { ToastService } from 'src/app/service/toast.service';
   styleUrls: ['./ekyc-dialog-sign.component.scss']
 })
 export class EkycDialogSignComponent implements OnInit {
-
+  @Input() datas: any;
   personEkyc: any;
+  width: number = 100;
 
   constructor(
     private contractService: ContractService,
@@ -23,7 +25,9 @@ export class EkycDialogSignComponent implements OnInit {
     public dialogRef: MatDialogRef<EkycDialogSignComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private toastService: ToastService,
-    private activeRoute: ActivatedRoute,
+    private translate: TranslateService,
+    private router: Router,
+    private deviceSerce: DeviceDetectorService
   ) {
 
   }
@@ -34,8 +38,8 @@ export class EkycDialogSignComponent implements OnInit {
   public multipleWebcamsAvailable = false;
   public deviceId: string;
   public videoOptions: MediaTrackConstraints = {
-    // width: {exact: 480},
-    // height: {exact: 640},
+    width: {exact: 640},
+    height: {exact: 640},
     // facingMode: 'environment'
     
   };
@@ -56,7 +60,22 @@ export class EkycDialogSignComponent implements OnInit {
   initWebcamImage: any;
   contractId: number;
   organizationId: any;
+  type: any = 0;
+  ekycDocType: any = ''
   public ngOnInit(): void {
+    if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
+      this.type = 1;
+    } else
+      this.type = 0;
+
+    if(window.innerWidth > window.innerHeight) {
+      this.width=window.innerHeight
+    } else
+      this.width = window.innerWidth;
+     
+    if(this.width > 768){
+      this.width = 0.5*window.innerWidth;
+    }
 
     this.initWebcamImage = this.webcamImage;
 
@@ -66,30 +85,44 @@ export class EkycDialogSignComponent implements OnInit {
       this.title = 0;
     } else {
       this.title = 1;
-      this.data.title = 'Nhận dạng khuôn mặt';
+      this.data.title = 'face.recog';
     }
 
     WebcamUtil.getAvailableVideoInputs()
       .then((mediaDevices: MediaDeviceInfo[]) => {
         this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
       });
+    this.ekycDocType = sessionStorage.getItem('ekycDocType')
   }
 
   cardId: any;
   name:any;
+  currentUser: any;
   public async triggerSnapshot(): Promise<void> {
     this.trigger.next();
+  }
 
+  public async confirmData(): Promise<void>{
     this.spinner.show();
 
     if(this.data.recipientId) {
-      const determineCoordination = await this.contractService.getDetermineCoordination(this.data.recipientId).toPromise();
-
-      this.cardId = determineCoordination.recipients[0].card_id;
-      this.name = determineCoordination.recipients[0].name;
+      let determineCoordination = await this.contractService.getDetermineCoordination(this.data.recipientId).toPromise();
+      determineCoordination.recipients.forEach((element: any) => {
+        if (element.status == 1) {
+          this.cardId = element.card_id;
+          this.name = element.name;
+        }
+      })
     }
  
+    const img = new Image();
+    img.onload = () => {
+      this.callAPI(img);
+    };
+    img.src = this.webcamImage.imageAsDataUrl;
+  }
 
+  callAPI(img: any) {
     this.contractService.getDataCoordination(this.data.contractId).subscribe(async (response) => {
       this.organizationId =  response.organization_id;
 
@@ -98,81 +131,140 @@ export class EkycDialogSignComponent implements OnInit {
           "name": "image_ekyc_web_cardId" + new Date().getTime() + ".jpg",
           "content":this.webcamImage.imageAsDataUrl,
           "organizationId": this.organizationId,
-        }
-  
-        this.upFileImageToDb(formData);
-  
-        this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl).subscribe((response) => {
-          console.log("ma" + this.webcamImage.imageAsDataUrl);
+          signType: 'eKYC',
+          ocrResponseName: this.name ? this.name : response.participants[0].name
+        }  
+        this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl, this.data.contractId, this.data.recipientId,img,this.deviceSerce).subscribe((response) => {
           this.spinner.hide();
-          if(response.result_code == 200 && response.action == 'pass') {
+          if(response.result_code == 200 && (response.action == 'pass' || (response.action == 'manualReview' && this.checkWarning(response.warning)))) {
+            if (response.document && response.id_type == 0 && this.data.id == 0){
+              this.ekycDocType = sessionStorage.setItem('ekycDocType',response.document)
+            } 
             if(this.cardId) {
-              if(this.cardId == response.id && this.name.toUpperCase().split(" ").join("") == response.name.toUpperCase().split(" ").join("")) {
+              if(this.cardId == response.id && 
+                this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") == response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") &&
+                (!response.reason_for_action.includes('slow id_confidence') && !response.reason_for_action.includes('slow name_confidence'))
+                ) {
                 this.flagSuccess == true;
-                alert("Xác thực thành công");
+                this.upFileImageToDb(formData);
+                alert(this.translate.instant('confirm.success'));
                 this.dialogRef.close(this.webcamImage.imageAsDataUrl);
               } else if(this.cardId != response.id){
+                if (response.id_type == 1){
+                  this.flagSuccess == false;
+                  this.webcamImage = this.initWebcamImage
+                  alert(this.translate.instant('error.recognition.front.cccd'));
+                } else if( this.data.id == 0 ) {
+                  if(this.ekycDocType == response.document && this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") != response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "")) {
+                    this.flagSuccess == false;
+                    this.webcamImage = this.initWebcamImage;
+                    alert(this.translate.instant('name.not.match'));
+                  } else {
+                    this.flagSuccess == false
+                    this.webcamImage = this.initWebcamImage
+                    alert(this.translate.instant('card.id.not.match'));
+                  }
+                }
+              } else if(this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") != response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "")) {
                 this.flagSuccess == false;
                 this.webcamImage = this.initWebcamImage;
-                alert("Mã CMT/CCCD không trùng khớp");
-
-                // string.replace(/  +/g, ' ');
-              } else if(this.name.toUpperCase().split(" ").join("") != response.name.toUpperCase().split(" ").join("")) {
-                this.flagSuccess == false;
-                this.webcamImage = this.initWebcamImage;
-                alert("Họ tên trên CMT/CCCD không trùng khớp với tên người ký");
+                alert(this.translate.instant('name.not.match'));
               }else{
                 this.flagSuccess == false;
-                alert("Thông tin không hợp lệ");
+                this.webcamImage = this.initWebcamImage;
+                alert(this.translate.instant('invalid.infor'));
               }
+            } else if (this.data.id == 1 && response.result_code == 200 && !isNaN(response.id)) {
+              this.flagSuccess == false;
+              this.webcamImage = this.initWebcamImage
+              alert(this.translate.instant('error.recognition.back.cccd'));
+            } else if (this.ekycDocType && response.document && this.ekycDocType !== response.document){
+              this.flagSuccess == false
+              this.webcamImage = this.initWebcamImage
+              alert(this.translate.instant('CMT/CCCD mặt trước và mặt sau không cùng loại'));
             } else {
-              alert("Xác thực thành công");
+              alert(this.translate.instant('confirm.success'));
+              this.upFileImageToDb(formData);
               this.dialogRef.close(this.webcamImage.imageAsDataUrl);
-            }
-             
+            }  
+          } else if (this.data.id == 1 && response.result_code == 403) {
+            this.flagSuccess == false;
+            this.webcamImage = this.initWebcamImage;
+            alert(this.translate.instant('CMT/CCCD không hợp lệ. Vui lòng chụp lại mặt sau của CMT/CCCD'))
+          } else if (this.data.id == 0 && response.result_code == 403) {
+            this.flagSuccess == false;
+            this.webcamImage = this.initWebcamImage;
+            alert(this.translate.instant('CMT/CCCD không hợp lệ. Vui lòng chụp lại mặt trước của CMT/CCCD'))
           } else {
             this.flagSuccess = false;
-            this.webcamImage = this.initWebcamImage; 
-            alert("Xác thực thất bại "+ response.warning_msg[0]);
+            this.webcamImage = this.initWebcamImage;
+            
+            if(response.warning_msg?.length > 0)
+              alert(this.translate.instant('confirm.fail')+' '+response.warning_msg[0].replace('giấy tờ' || 'Chứng minh nhân dân','CMT/CCCD'));
+            else if(response.reason_for_action?.length > 0)
+              alert(this.translate.instant('image.not.clear'));
+            else
+              alert(this.translate.instant('confirm.fail'));
           }
          
         }, (error: any) => {
-          alert("Nhận dạng căn cước công dân mặt sau lỗi");
+          alert(this.translate.instant('card.id.fail'));
         })
       } else {
-  
         let formData = {
           "name": "image_ekyc_web_face" + new Date().getTime() + ".jpg",
           "content":this.webcamImage.imageAsDataUrl,
           "organizationId": this.organizationId,
+          signType: 'eKYC',
+          ocrResponseName: this.name
         }
   
-        //up file anh len db
-        this.upFileImageToDb(formData);
-  
-        this.contractService.detectFace(this.data.cccdFront, this.webcamImage.imageAsDataUrl).subscribe((response) => {
+        this.contractService.detectFace(this.data.cccdFront, this.webcamImage.imageAsDataUrl,this.data.contractId, this.data.recipientId,img,this.deviceSerce).subscribe(async (response) => {
           this.spinner.hide();
-          if(response.verify_result == 2) {
-            alert("Nhận dạng thành công");
+          if(response.verify_result == 2 && response.face_anti_spoof_status.status == 'REAL') {
+            alert(this.translate.instant('confirm.success'));
+            //up file anh len db
+            this.upFileImageToDb(formData);
+            //call api trừ ekyc
+            await this.contractService.decreaseNumberOfEkyc(this.organizationId).toPromise();
+
             this.dialogRef.close(response.verify_result);
           } else {
-            if(response.message.error_message && response.message.error_message != 'undefined') {
+            if(response.face_anti_spoof_status.status == 'FAKE') {
+              alert(this.translate.instant('face.fail'));
+            } else if(response.message.error_message && response.message.error_message != 'undefined') {
               alert(response.message.error_message);
-              this.flagSuccess == false;
-              this.webcamImage = this.initWebcamImage;
             } else {
-              alert("Nhận dạng thất bại")
+              alert(this.translate.instant('confirm.fail'))
             }
 
             this.flagSuccess = false;
             this.webcamImage = this.initWebcamImage; 
           }
         }, (error: any) => {
-          alert("Nhận dạng căn cước công dân mặt sau lỗi");
+          alert(this.translate.instant('confirm.fail'))
         })
       }
   
     })
+  }
+
+  checkWarning(warning: any) {
+    if(warning.length > 0) {
+      for (let i = 0; i < warning.length; i++) {
+        if (warning[i].includes("giay_to_co_do_phan_giai_thap")) {
+          return true;
+        }
+        if (warning[i].includes("giay_to_bi_mo")) {
+          return true;
+        }
+        if (warning[i].includes("giay_to_bi_choi_sang")) {
+          return true;
+        }
+      }
+    }
+  
+    return false;
   }
 
   upFileImageToDb(formData: any) {
@@ -193,16 +285,17 @@ export class EkycDialogSignComponent implements OnInit {
 
         this.contractService.addDocumentEkyc(body).subscribe((response) => {
           if(!response.id) {
-            this.toastService.showErrorHTMLWithTimeout("Đẩy file ảnh không thành công","",3000);
+            this.toastService.showErrorHTMLWithTimeout('push.image.fail','',3000);
             return;
           }
         })
 
       } else {
-        this.toastService.showErrorHTMLWithTimeout("Đẩy file ảnh không thành công","",3000);
+        this.toastService.showErrorHTMLWithTimeout('push.image.fail',"",3000);
         return;
       }
     })
+
   }
 
   public toggleWebcam(): void {
@@ -221,12 +314,11 @@ export class EkycDialogSignComponent implements OnInit {
   }
 
   public handleImage(webcamImage: WebcamImage): void {
-    console.info('received webcam image', webcamImage);
     this.webcamImage = webcamImage;
   }
 
   public cameraWasSwitched(deviceId: string): void {
-    console.log('active device: ' + deviceId);
+    
     this.deviceId = deviceId;
   }
 

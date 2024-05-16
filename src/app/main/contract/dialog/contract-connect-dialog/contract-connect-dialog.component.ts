@@ -30,7 +30,7 @@ export class ContractConnectDialogComponent implements OnInit {
       data => {
         
         this.datas = data.refs;
-        console.log(this.datas);
+        
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
       }

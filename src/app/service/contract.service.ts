@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -19,6 +19,7 @@ export interface Contract {
   status: string;
   createdAt: Date;
   signTime: Date;
+  originalContractId?: number;
 }
 export interface File {
   path: string;
@@ -30,6 +31,7 @@ export interface File {
 export class ContractService {
   private messageShareData = new BehaviorSubject<unknown>('');
   currentMessage = this.messageShareData.asObservable();
+  sidebarContractEvent: EventEmitter<any> = new EventEmitter();
 
   listContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract`;
   listPastContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract/organization-old`;
@@ -61,6 +63,7 @@ export class ContractService {
   rejectContractUrl: any = `${environment.apiUrl}/api/v1/processes/reject/`;
   uploadFileUrl: any = `${environment.apiUrl}/api/v1/upload/organizations/`;
   uploadFileBase64Url: any = `${environment.apiUrl}/api/v1/upload/organizations/`;
+  uploadFileBase64UrlV2: any = `${environment.apiUrl}/api/v1/upload/organizations/v2/`;
   // currentUser: any = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
   isDataDetermine: any = `${environment.apiUrl}/api/v1/participants/byRecipient/`;
@@ -82,6 +85,7 @@ export class ContractService {
   checkCodeUniqueUrl: any = `${environment.apiUrl}/api/v1/contracts/check-code-unique`;
   getCopyContract: any = `${environment.apiUrl}/api/v1/contracts/clone/`;
   deleteContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
+  deleteMultiContractUrl: any = `${environment.apiUrl}/api/v1/contracts/multi`;
   private getDetailFormContract = `${environment.apiUrl}/api/v1/documents/template/by-contract/`;
   private getSaveContractFormInfo = `${environment.apiUrl}/api/v1/contracts/template`;
   getObjectSignature: any = `${environment.apiUrl}/api/v1/fields/template/by-contract/`;
@@ -95,6 +99,7 @@ export class ContractService {
   changeStatusHandle: any = `${environment.apiUrl}/api/v1/recipients/`;
   updateInfoContractConsiderAndOtpUrl: any = `${environment.apiUrl}/api/v1/processes/approval-sign-image/`;
   updateContractIsPushCeCAUrl: any = `${environment.apiUrl}/api/v1/contracts/ceca-push/`;
+  releaseContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract/issue`;
 
   getStatusSignImageOtpUrl: any = `${environment.apiUrl}/api/v1/processes/approval-sign-image/`;
   getSendOtpContractProcessUrl: any = `${environment.apiUrl}/api/v1/processes/approval/`;
@@ -102,7 +107,12 @@ export class ContractService {
   checkTaxCodeExistUrl: any = `${environment.apiUrl}/api/v1/contracts/check-mst-exist`;
 
   signHsmUrl: any = `${environment.apiUrl}/api/v1/sign/hsm/`;
+  signHsmUrl2: any = `${environment.apiUrl}/api/v1/sign/hsm-v2/`;
+
   signHsmOldUrl: any = `${environment.apiUrl}/api/v1/sign/old-hsm/`
+
+  signRemoteUrl: any = `${environment.apiUrl}/api/v1/sign/remote-signing/`;
+  signManyRemoteUrl: any = `${environment.apiUrl}/api/v1/sign/multi/remoteSigning`;
 
   getFilePdfForMobileUrl: any = `${environment.apiUrl}/api/v1/contracts/review/`;
 
@@ -140,7 +150,30 @@ export class ContractService {
 
   getAllInfoUserUrl: any = `${environment.apiUrl}/api/v1/customers/suggested-list`;
 
-  deleteTokenUrl: any = `${environment.apiUrl}/api/v1/auth/logout`
+  deleteTokenUrl: any = `${environment.apiUrl}/api/v1/auth/logout`;
+
+  configSmsUrl: any = `${environment.apiUrl}/api/v1/notification/sms-types`;
+
+  configExpirationDateUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
+  certInfoCertUrl: any = `${environment.apiUrl}/api/v1/sign/cert-information`;
+
+  signCertificate: any = `${environment.apiUrl}/api/v1/sign/certificate`;
+  signCertWebMobile: any = `${environment.apiUrl}/api/v1/sign/certificate/web-mobile/`;
+  signCertMultiUrl: any = `${environment.apiUrl}/api/v1/sign/multi/certificate`;
+
+  // detect CCCD
+  newEkycRecognitionUrl: any = `${environment.apiUrl}/api/v1/tp/contracts/ekyc/recognition`;
+  // detect Face
+  newEkycVerification: any = `${environment.apiUrl}/api/v1/tp/contracts/ekyc/verification`;
+  getSignatureInfoTokenV1Url: any = `${environment.apiUrl}/api/v1/sign/token/genImage`;
+  getRemoteSigningCurrentStatusUrl: any = `${environment.apiUrl}/api/v1/sign/status/remoteSigning`
+
+  // token v2 fixing ===============================
+  checkTokenV2InforUrl: any = `${environment.apiUrl}/api/v1/processes/checkUsbTokenError`
+  createEmptyFixingUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/create-empty-tokenError`
+  mergeTimestampFixingUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/merge-time-stampError`
+  checkCurrentSigningUrl: any = `${environment.apiUrl}/api/v1/sign/check-process-is-sign`
+  // token v2 fixing ===============================
 
   token: any;
   customer_id: any;
@@ -218,10 +251,12 @@ export class ContractService {
       .pipe();
   }
 
-  public getContractList(isOrg: any,organization_id: any,filter_name: any,filter_type: any,filter_contract_no: any,filter_from_date: any,filter_to_date: any,filter_status: any,
+  public getContractList(isOrg: any, organization_id: any, filter_name: any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status: any,
     page: any,
-    size: any
+    size: any,
+    issue?: any
   ): Observable<any> {
+    console.log("iss ", isOrg);
     this.getCurrentUser();
 
     if (filter_from_date != '') {
@@ -242,7 +277,7 @@ export class ContractService {
     }
     let listContractUrl = '';
     if (isOrg == 'off') {
-      if (filter_status == '40') {
+      if (filter_status == '50') {
         filter_status = '30';
         listContractUrl =
           this.listPastContractUrl +
@@ -311,32 +346,16 @@ export class ContractService {
           '&size=' +
           size;
       } else {
-        listContractUrl =
-          this.listContractOrgUrl +
-          '?organization_id=' +
-          organization_id +
-          '&keyword=' +
-          filter_name.trim() +
-          '&type=' +
-          filter_type +
-          '&contract_no=' +
-          filter_contract_no.trim() +
-          '&from_date=' +
-          filter_from_date +
-          '&to_date=' +
-          filter_to_date +
-          '&status=' +
-          filter_status +
-          '&remain_day=' +
-          remain_day +
-          '&page=' +
-          page +
-          '&size=' +
-          size;
+        listContractUrl = this.listContractOrgUrl + '?organization_id=' + organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' +
+          filter_contract_no.trim() + '&from_date=' + filter_from_date + '&to_date=' + filter_to_date + '&status=' + filter_status + '&remain_day=' + remain_day +
+          '&page=' + page + '&size=' + size;
       }
     }
 
-    // console.log(listContractUrl);
+    if (issue) {
+      listContractUrl += '&issue=' + issue;
+    }
+    //
     const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
   }
@@ -374,7 +393,7 @@ export class ContractService {
       .pipe();
   }
 
-  public getContractMyProcessListSignMany() {}
+  public getContractMyProcessListSignMany() { }
 
   addContractStep1(datas: any, id?: any, type_form?: string) {
     this.getCurrentUser();
@@ -388,7 +407,7 @@ export class ContractService {
       sign_time: this.datepipe.transform(
         datas.sign_time ? datas.sign_time : datas.end_time,
         "yyyy-MM-dd'T'HH:mm:ss'Z'"
-      )?.slice(0,11).concat("00:00:00Z"),
+      )?.slice(0, 11).concat("00:00:00Z"),
       notes: datas.notes,
       role_id: datas.role_id,
       alias_url: '',
@@ -397,10 +416,11 @@ export class ContractService {
       is_template: type_form ? true : false,
       template_contract_id: type_form ? datas.template_contract_id : null,
       contract_expire_time: this.datepipe.transform(
-        datas.expire_time,
+        datas.contract_expire_time,
         "yyyy-MM-dd'T'HH:mm:ss'Z'"
-      )?.slice(0,11).concat("00:00:00Z"),
-      ceca_push: datas.ceca_push
+      )?.slice(0, 11).concat("00:00:00Z"),
+      ceca_push: datas.ceca_push,
+      originalContractId: datas.original_contract_id ? datas.original_contract_id : null,
     });
 
     if (id) {
@@ -409,7 +429,7 @@ export class ContractService {
         .pipe(
           map((contract) => {
             if (JSON.parse(JSON.stringify(contract)).id != 0) {
-              console.log('contract ', contract);
+
               return contract;
             } else {
               return null;
@@ -433,6 +453,16 @@ export class ContractService {
     }
   }
 
+  editContract(body: any, contractId: number) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.put<Contract>(this.addGetDataContract + contractId, body, { headers: headers })
+  }
+
   getSignPositionCoordinatesForm(id_contract_form: number) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -444,15 +474,17 @@ export class ContractService {
   }
 
   api_key: any = '9b84cd8c-f042-11ec-aae7-0c4de99e932e';
-  detectCCCD(image: any) {
+  detectCCCD(image: any, contractId: number, recipientId: number, img?: any,deviceSerce?: any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
-      .append('api-key', this.api_key);
+      .append('api-key', this.api_key)
+      // .append('Authorization', 'Bearer ' + this.token);
 
     const body = {
       image: image,
+      request_id: contractId+"_"+recipientId+"_"+img?.width+"_"+img?.height+"_"+deviceSerce?.device+"_"+deviceSerce?.browser+"_"+deviceSerce?.browser_version+"-webMBF"
     };
 
     if (environment.apiUrl == 'https://econtract.mobifone.vn/service') {
@@ -460,30 +492,32 @@ export class ContractService {
     } else if (environment.apiUrl == 'https://mobifone-econtract.vn/service') {
       return this.http.post<any>(this.cccdFrontKD, body, { headers });
     } else {
-      return this.http.post<any>(this.cccdFront, body, { headers });
+      // return this.http.post<any>(this.cccdFront, body, { headers });
+      return this.http.post<any>(this.cccdFrontKD, body, { headers });
     }
+    // return this.http.post<any>(this.newEkycRecognitionUrl, body, { headers });
   }
 
 
-  detectFace(imageCCCD: any, imageFace: any) {
+  detectFace(imageCCCD: any, imageFace: any, contractId: number, recipientId:number, img: any,deviceService: any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
+      // .append('Authorization', 'Bearer ' + this.token)
       .append('api-key', this.api_key);
 
     const body = {
       image_cmt: imageCCCD,
       image_live: imageFace,
+      request_id: contractId+"_"+recipientId+"_"+img?.width+"_"+img?.height+"-"+deviceService?.device+"_"+deviceService?.browser+"_"+deviceService?.browser_version+"-web"
     };
 
     if (environment.apiUrl == 'https://econtract.mobifone.vn/service') {
       return this.http.post<any>(this.detectFaceUrlNB, body, { headers });
     } else if (environment.apiUrl == 'https://mobifone-econtract.vn/service') {
       return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
-    } else {
-      return this.http.post<any>(this.detectFaceUrl, body, { headers });
-    }
+    } else return this.http.post<any>(this.detectFaceUrlKD, body, { headers });
   }
 
   getContractSample(data_sample_contract: any) {
@@ -491,9 +525,9 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+
     const body = JSON.stringify(data_sample_contract);
-    return this.http
-      .post<Contract>(this.addSampleCntractUrl, body, { headers: headers })
+    return this.http.post<Contract>(this.addSampleCntractUrl, body, { headers: headers })
       .pipe(
         map((contract) => {
           if (JSON.parse(JSON.stringify(contract)).id != 0) {
@@ -513,8 +547,8 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_sample_contract);
     return this.http.put<Contract>(this.addSampleCntractUrl + `/${id}`, body, {
-        headers: headers,
-      })
+      headers: headers,
+    })
       .pipe(
         map((contract) => {
           if (JSON.parse(JSON.stringify(contract)).id != 0) {
@@ -567,12 +601,12 @@ export class ContractService {
     });
   }
 
-  createEmptySignature(recipientId: number, signUpdate: any,signDigital: any, image: any, cert: any) {
+  createEmptySignature(recipientId: number, signUpdate: any, signDigital: any, image: any, cert: any, boxType?: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    
+
     const body = JSON.stringify({
       fieldId: signUpdate.id,
       image: image,
@@ -581,12 +615,13 @@ export class ContractService {
       x: Math.floor(signDigital.signDigitalX),
       y: Math.floor(signDigital.signDigitalY),
       width: Math.floor(signDigital.signDigitalWidth),
-      height: Math.floor(signDigital.signDigitalHeight)
+      height: Math.floor(signDigital.signDigitalHeight),
+      type: boxType
     })
-    
-    return this.http.post<any>(this.emptySignatureUrl + recipientId+'/create-empty-token', body, {
-        headers: headers,
-      });
+
+    return this.http.post<any>(this.emptySignatureUrl + recipientId + '/create-empty-token', body, {
+      headers: headers,
+    });
   }
 
   meregeTimeStamp(recipientId: number, contractId: number, signature: any, fieldName: any, cert: any, hexDigestTempFile: any, isTimestamp: string) {
@@ -594,19 +629,19 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    
-      const body = JSON.stringify({
-        contractId: contractId,
-        signature: signature,
-        filedName: fieldName,
-        cert: cert,
-        isTimestamp: isTimestamp,
-        hexDigestTempFile: hexDigestTempFile
-      })
-    
-      return this.http.post<any>(this.mergeTimeStampUrl + recipientId+'/merge-time-stamp', body, {
-        headers: headers,
-      });
+
+    const body = JSON.stringify({
+      contractId: contractId,
+      signature: signature,
+      filedName: fieldName,
+      cert: cert,
+      isTimestamp: isTimestamp,
+      hexDigestTempFile: hexDigestTempFile
+    })
+
+    return this.http.post<any>(this.mergeTimeStampUrl + recipientId + '/merge-time-stamp', body, {
+      headers: headers,
+    });
   }
 
   checkTaxCodeExist(taxCode: any, certB64: any) {
@@ -648,7 +683,7 @@ export class ContractService {
       image_base64: image_base64,
     };
 
-    return this.http.post<any>(this.getFilePdfForMobileUrl + recipientId,body,
+    return this.http.post<any>(this.getFilePdfForMobileUrl + recipientId, body,
       {
         headers: headers,
       }
@@ -674,11 +709,6 @@ export class ContractService {
       imageData: imgSignGen ? imgSignGen : this.imageMobiBase64,
       page: signCertDigital.page.toString(),
 
-      // ph: signCertDigital.signDigitalHeight.toString(),
-      // pw: signCertDigital.signDigitalWidth.toString(),
-      // px: signCertDigital.signDigitalX.toString(),
-      // py: signCertDigital.signDigitalY.toString(), 
-
       ph: Math.floor(
         signCertDigital.signDigitalHeight
           ? signCertDigital.signDigitalHeight
@@ -689,20 +719,14 @@ export class ContractService {
           ? signCertDigital.signDigitalWidth
           : signCertDigital.width
       ).toString(),
-      px: Math.floor(
-        signCertDigital.signDigitalX
-          ? signCertDigital.signDigitalX
-          : signCertDigital.coordinate_x
-      ).toString(),
-      py: Math.floor(
-        signCertDigital.signDigitalY
-          ? signCertDigital.signDigitalY
-          : signCertDigital.coordinate_y
-      ).toString(),
+      px: signCertDigital.signDigitalX.toString(),
+      py: signCertDigital.signDigitalY.toString(),
 
       signDate: '11-05-2019 09:55:55',
       typeSign: '4',
     };
+
+
 
     return axios.post(this.postSignDigital, dataPost, config);
   }
@@ -782,12 +806,12 @@ export class ContractService {
 
     const byteNumbers = new Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
 
     const byteArray = new Uint8Array(byteNumbers);
 
-    var blob = new Blob([byteArray], {type: 'application/pdf'});
+    var blob = new Blob([byteArray], { type: 'application/pdf' });
     var blobURL = URL.createObjectURL(blob);
     window.open(blobURL);
   }
@@ -870,12 +894,53 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    if(this.organization_id) {
+    if (this.organization_id) {
       orgId = this.organization_id;
     }
 
     let listContractUrl = this.getNotifyOriganzation + orgId;
     return this.http.get<any>(listContractUrl, { headers }).pipe();
+  }
+
+  getConfigSmsOrg() {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.get<any>(this.configSmsUrl + "/config/" + this.organization_id, { headers }).pipe();
+  }
+
+  updateConfigSmsOrg(smsTypeIdList: any[]) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    const body = smsTypeIdList
+
+    return this.http.post<any>(this.configSmsUrl, body, {
+      headers: headers,
+      observe: 'response',
+    }).pipe();
+  }
+
+  getConfigExpirationDate() {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.get<any>(this.configExpirationDateUrl + this.organization_id + "/config", { headers }).pipe();
+  }
+
+  editConfigExpirationDate(body: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.put<any>(this.configExpirationDateUrl + this.organization_id + "/config", body, { headers }).pipe();
   }
 
   changeLink(code: any) {
@@ -962,8 +1027,8 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
 
     let listUserUrl =
-      this.getAllInfoUserUrl + '?name='+name;
-    return this.http.get<any>(listUserUrl, {headers});
+      this.getAllInfoUserUrl + '?name=' + name;
+    return this.http.get<any>(listUserUrl, { headers });
   }
 
   getListDataCoordination(id: any) {
@@ -980,7 +1045,7 @@ export class ContractService {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);
+      .append('Authorization', 'Bearer ' + this.token);    
     const body = JSON.stringify({
       name: datas.name,
       type: is_type ? is_type : 1,
@@ -991,7 +1056,7 @@ export class ContractService {
       ordering: 1,
       status: is_status ? is_status : 1,
       contract_id: datas.id,
-    });
+    });  
     return this.http.post<Contract>(this.documentUrl, body, {
       headers: headers,
     });
@@ -1059,7 +1124,7 @@ export class ContractService {
     });
   }
 
-  signPkiDigital(phone: any,networkCode: any,recipientId: any,nameContract: any,image_base64: any, isTimestamp: any) {
+  signPkiDigital(phone: any, networkCode: any, recipientId: any, nameContract: any, image_base64: any, isTimestamp: any, hidden_phone: boolean) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -1071,14 +1136,15 @@ export class ContractService {
       prompt: `Bạn có yêu cầu ký số hợp đồng ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
       reason: 'reason',
       image_base64: image_base64,
-      isTimestamp: isTimestamp
+      isTimestamp: isTimestamp,
+      hidden_phone: hidden_phone,
     };
     return this.http
       .post<any>(this.signFilePKI + recipientId, body, { headers: headers })
       .toPromise();
   }
 
-  signHsm(datas: any, recipientId: number, isTimestamp: any) {
+  signHsm(datas: any, recipientId: number, isTimestamp: any, boxType: any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -1092,13 +1158,37 @@ export class ContractService {
       password2: datas.password2,
       image_base64: datas.imageBase64,
       // isTimestamp: isTimestamp
-      field: datas.field
+      field: datas.field,
+      type: boxType,
+      supplier: datas.supplier
     });
 
     return this.http
       .post<any>(this.signHsmUrl + recipientId, body, { headers: headers })
       .toPromise();
   }
+
+  // signHsm2(datas: any, recipientId: number, isTimestamp: any) {
+  //   this.getCurrentUser();
+
+  //   const headers = new HttpHeaders()
+  //     .append('Content-Type', 'application/json')
+  //     .append('Authorization', 'Bearer ' + this.token);
+
+  //   const body = JSON.stringify({
+  //     ma_dvcs: datas.ma_dvcs,
+  //     username: datas.username,
+  //     password: datas.password,
+  //     password2: datas.password2,
+  //     image_base64: datas.imageBase64,
+  //     // isTimestamp: isTimestamp
+  //     field: datas.field
+  //   });
+
+  //   return this.http
+  //     .post<any>(this.signHsmUrl2 + recipientId, body, { headers: headers })
+  //     .toPromise();
+  // }
 
   signHsmOld(datas: any, recipientId: number) {
     this.getCurrentUser();
@@ -1134,6 +1224,97 @@ export class ContractService {
 
     return this.http
       .post<any>(this.signHsmMultiUrl, body, { headers: headers })
+      .toPromise();
+  }
+
+  certInfoCert(id: number) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    const body = JSON.stringify({
+      id: id,
+    });
+
+    return this.http.get<any>(this.certInfoCertUrl +'?id='+id, { headers: headers })
+  }
+
+  signCert(id: any, dataCert: any) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    //fix tạm
+    return this.http
+      .post<any>(this.signCertificate + '?id='+ id ,dataCert,{ headers: headers })
+      .toPromise();
+  }
+
+  signCertMobile(id: any, dataCert: any) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    //fix tạm
+    return this.http
+      .post<any>(this.signCertWebMobile + id ,dataCert,{ headers: headers })
+      .toPromise();
+  }
+
+  signCertMulti(id: any, dataCert: any) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http
+      .post<any>(this.signCertMultiUrl + '?id='+ id ,dataCert, { headers: headers })
+      .toPromise();
+  }
+
+  signRemote(datas: any, recipientId: number, isTimestamp: any, boxType: any) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    const body = JSON.stringify({
+      userCode: datas.cert_id,
+      image_base64: datas.imageBase64,
+      isTimestamp: isTimestamp,
+      type: boxType,
+      field: datas.field,
+    });
+
+    return this.http
+      .post<any>(this.signRemoteUrl + recipientId, body, { headers: headers })
+      .toPromise();
+  }
+
+  signRemoteMulti(datas: any, recipientIds: [], isTimestamp: any, boxType: any) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    const body = JSON.stringify({
+      userCode: datas.cert_id,
+      image_base64: datas.imageBase64,
+      isTimestamp: false,
+      type: boxType,
+      field: datas.field,
+    });
+
+    return this.http
+      .post<any>(this.signManyRemoteUrl + "?id=" + recipientIds, body, { headers: headers })
       .toPromise();
   }
 
@@ -1175,8 +1356,8 @@ export class ContractService {
   downloadPDF(url: any) {
     const options = { responseType: 'blob' as 'json' };
     return this.http
-   .get<Blob>(url, options)
-   .pipe(map(res => new Blob([res], { type: 'application/pdf' })));
+      .get<Blob>(url, options)
+      .pipe(map(res => new Blob([res], { type: 'application/pdf' })));
   }
 
   getFileContract(idContract: any): Observable<any> {
@@ -1266,7 +1447,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.post<any>(this.deleteTokenUrl, {},{headers: headers});
+    return this.http.post<any>(this.deleteTokenUrl, {}, { headers: headers });
   }
 
   considerRejectContract(id: any, reason: string) {
@@ -1289,7 +1470,7 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.post<any>(
       this.resendSmsEmailUrl + recipient_id,
-      {recipient_id},
+      { recipient_id },
       { headers: headers }
     );
   }
@@ -1400,7 +1581,7 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
 
     return this.http.post<any>(
-      this.uploadFileBase64Url + formData?.organizationId + `/base64`,
+      this.uploadFileBase64UrlV2 + formData?.organizationId + `/base64`,
       formData,
       { headers: headers }
     );
@@ -1414,22 +1595,22 @@ export class ContractService {
     return this.http.get<any>(this.getCheckSign + id_recipient, { headers });
   }
 
-  getInforPersonProcess(recipient?: number | string){
+  getInforPersonProcess(recipient?: number | string) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<any>(this.inforPersonProcessUrl  + recipient, {headers});
-    
+    return this.http.get<any>(this.inforPersonProcessUrl + recipient, { headers });
+
   }
- 
+
   updateInfoPersonProcess(datas: any, recipient: any, idContract: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-      console.log("contractid",idContract);
+
     return this.http.put<any>(
       this.updateInforPersonProcessUrl + idContract + '/' + recipient,
       datas,
@@ -1470,6 +1651,81 @@ export class ContractService {
       headers,
     });
     // addGetDataContract:any = `${environment.apiUrl}/api/v1/contracts/`;
+  }
+
+  getDataPreRelease(idContract: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.addGetDataContract + idContract, {
+      headers,
+    });
+  }
+
+  addContractRelease(contract: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let contractDetail = {
+      name: contract.name,
+      notes: contract.notes,
+      refs: contract.refs,
+      contract_no: contract.contract_no,
+      sign_time: contract.sign_time,
+      type_id: contract.type_id,
+      ceca_push: contract.ceca_push,
+      contract_expire_time: contract.contract_expire_time,
+      readyIssue: true
+    }
+    const body = JSON.stringify(contractDetail);
+    return this.http.put<any>(this.addGetDataContract + contract.id, body, { headers });
+  }
+
+  confirmContractRelease(ids: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.put<any>(this.releaseContractUrl, ids, { headers });
+  }
+
+  removePeriodsFromCurrencyValue(value: string): string {
+    const result = value.toString().replace(/\./g, '');
+    return result;
+  }
+
+  convertCurrency(value: any) {
+    if (!isNaN(parseFloat(value)) && isFinite(value) && value.indexOf(".") === -1) {
+      value = parseFloat(value).toLocaleString('vi-VN');
+      return value;
+    }
+    return value;
+  }
+
+  checkCurrencyValue(datasForm: any) {
+    datasForm.contract_user_sign[1].sign_config.forEach((res: any) => {
+
+      if (res.type == 5 && res.value != undefined) {
+        const num = res.value.toString().replace(/\./g, '');
+        if (!isNaN(parseFloat(num)) && isFinite(num)) { // check if value is a number
+          res.value = parseFloat(num).toLocaleString('vi-VN')
+        }
+      }
+    })
+    datasForm.is_data_object_signature.forEach((res: any) => {
+      if (res.type == 5 && res.value != undefined) {
+        const num = res.value.toString().replace(/\./g, '');
+        if (!isNaN(parseFloat(num)) && isFinite(num)) { // check if value is a number
+          res.value = parseFloat(num).toLocaleString('vi-VN')
+        }
+      }
+    })
+  }
+
+  emitSidebarContractEvent(eventData: any) {
+    this.sidebarContractEvent.emit(eventData);
   }
 
   getDetailInforContract(idContract: any) {
@@ -1524,6 +1780,20 @@ export class ContractService {
     });
   }
 
+  deleteMultiContract(contractIds: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = {
+      ids: contractIds
+    }
+    return this.http.delete<any>(this.deleteMultiContractUrl, {
+      headers: headers,
+      body: body
+    });
+  }
+
   getFileContractBatch(idContractTemplate: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -1546,14 +1816,18 @@ export class ContractService {
       'Authorization',
       'Bearer ' + this.token
     );
-    return this.http.post<any>(
+    return this.http.post(
       this.uploadFileContractBatchUrl +
-        idContractTemplate +
-        '?organization_id=' +
-        this.organization_id,
+      idContractTemplate +
+      '?organization_id=' +
+      this.organization_id,
       formData,
-      { headers: headers }
-    );
+      {
+        headers: headers,
+        responseType: 'blob',
+        observe: 'response'
+      }
+    )
   }
 
   uploadFileUnit(file: any) {
@@ -1571,7 +1845,7 @@ export class ContractService {
     });
   }
 
-  getContractBatchList(file: any, idContractTemplate: any,ceca_push: any) {
+  getContractBatchList(file: any, idContractTemplate: any, ceca_push: any) {
     this.getCurrentUser();
     let formData = new FormData();
     formData.append('file', file);
@@ -1598,6 +1872,21 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.post<any>(
       this.confirmContractBatchListUrl + idContractTemplate + '/' + isCeCA,
+      formData,
+      { headers: headers }
+    );
+  }
+
+  saveDraftContractBatch(file: any, idContractTemplate: any, isCeCA: any) {
+    this.getCurrentUser();
+    let formData = new FormData();
+    formData.append('file', file);
+
+    const headers = new HttpHeaders()
+      //.append('Content-Type', 'multipart/form-data')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.post<any>(
+      this.confirmContractBatchListUrl + idContractTemplate + '/' + isCeCA + '?status=draft',
       formData,
       { headers: headers }
     );
@@ -1667,6 +1956,92 @@ export class ContractService {
 
     return this.http
       .get<any>(this.infoPageUrl + documentId, { headers: headers })
+      .pipe();
+  }
+
+  getSignatureInfoTokenV1(base64Cert: any, base64Img: any) {
+      this.getCurrentUser();
+      const headers = new HttpHeaders()
+        .append('Content-Type', 'application/json')
+        .append('Authorization', 'Bearer ' + this.token);
+      const body = JSON.stringify({
+        base64_cert: base64Cert,
+        base64_image: base64Img,
+      });
+      return this.http.post<any>(
+        this.getSignatureInfoTokenV1Url,
+        body,
+        { headers }
+      );
+  }
+
+  getRemoteSigningCurrentStatus(recipientId: string) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http
+      .get<any>(this.getRemoteSigningCurrentStatusUrl + '?recipientId=' + recipientId, { headers: headers })
+      .pipe();
+  }
+
+  // tokenV2 fixing =======================================================
+  checkTokenV2Infor() {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http
+      .get<any>(this.checkTokenV2InforUrl, { headers: headers })
+      .pipe();
+  }
+
+  createEmptyFixing(cert: any, recipientId: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let body: any
+    body = {
+      cert: cert,
+      recipientId: recipientId
+    }
+    return this.http
+      .post<any>(this.createEmptyFixingUrl, body, { headers: headers })
+      .pipe();
+  }
+
+  meregeTimeStampFixing(recipientId: number, contractId: number, signature: any, fieldName: any, cert: any, hexDigestTempFile: any, isTimestamp: string) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    const body = JSON.stringify({
+      recipientId: recipientId,
+      contractId: contractId,
+      signature: signature,
+      filedName: fieldName,
+      cert: cert,
+      isTimestamp: isTimestamp,
+      hexDigestTempFile: hexDigestTempFile
+    })
+    return this.http
+      .post<any>(this.mergeTimestampFixingUrl, body, { headers: headers })
+      .pipe();
+  }
+  // tokenV2 fixing =======================================================
+
+  checkCurrentSigning(recipientId: string) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http
+      .get<any>(this.checkCurrentSigningUrl + `/${recipientId}`, { headers: headers })
       .pipe();
   }
 
@@ -1798,7 +2173,7 @@ export class ContractService {
             sign_type: [
               // hình thức ký
             ],
-            locale:'vi',
+            locale: 'vi',
           },
           // Dữ liệu người ký
           {
@@ -1839,7 +2214,7 @@ export class ContractService {
               //   is_otp: false,
               // },
             ],
-            locale:'vi',
+            locale: 'vi',
           },
           // dữ liệu văn thư
           {
@@ -1854,9 +2229,9 @@ export class ContractService {
             is_otp: 0, // select otp
             sign_type: [
               // hình thức ký
-            
+
             ],
-            locale:'vi',
+            locale: 'vi',
           },
         ],
       },
@@ -1879,7 +2254,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
-            locale:'vi',
+            locale: 'vi',
           },
           // người xem xét
           {
@@ -1893,7 +2268,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
-            locale:'vi',
+            locale: 'vi',
           },
           // người ký
           {
@@ -1907,7 +2282,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
-            locale:'vi',
+            locale: 'vi',
           },
           // văn thư
           {
@@ -1921,7 +2296,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
-            locale:'vi',
+            locale: 'vi',
           },
         ],
       },
@@ -1935,6 +2310,7 @@ export class ContractService {
         type: 1,
         ordering: 1,
         status: 1,
+        hideFlow: false,
         recipients: [
           {
             login_by: 'email',
@@ -1947,30 +2323,10 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
-            locale:'vi',
+            locale: 'vi',
           },
         ],
       },
-      // {
-      //   name: '',
-      //   type: 2,
-      //   ordering: 2,
-      //   status: 1,
-      //   recipients: [
-      //     {
-      //       login_by: 'email',
-      //       name: '',
-      //       email: '',
-      //       phone: '',
-      //       card_id: '',
-      //       role: 3,
-      //       ordering: 1,
-      //       status: 0,
-      //       is_otp: 0,
-      //       sign_type: [],
-      //     },
-      //   ],
-      // },
     ];
   }
 
@@ -1981,6 +2337,7 @@ export class ContractService {
         type: 1,
         ordering: 1,
         status: 1,
+        hideFlow: false,
         recipients: [
           {
             login_by: 'email',
@@ -1993,7 +2350,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
-            locale:'vi',
+            locale: 'vi',
           },
         ],
       },
@@ -2002,6 +2359,7 @@ export class ContractService {
         type: 2,
         ordering: 1,
         status: 1,
+        hideFlow: false,
         recipients: [
           {
             login_by: 'email',
@@ -2014,7 +2372,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
-            locale:'vi',
+            locale: 'vi',
           },
         ],
       },

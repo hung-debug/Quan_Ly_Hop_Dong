@@ -21,8 +21,8 @@ export class AdminAuthGuard implements CanActivate {
     // @ts-ignore
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     let role;
-    // console.log(next);
-     //console.log(state.url);
+    // 
+     //
     //console
     //@ts-ignore
 
@@ -30,17 +30,17 @@ export class AdminAuthGuard implements CanActivate {
     if (state.url.search('loginType') > 0 && (next._urlSegment.segments.some((p: any) => p.path == 'contract-signature') || next._urlSegment.segments.some((p: any) => p.path == 'contract-template') || next._urlSegment.segments.some((p: any) => p.path == 'form-contract'))) {
       sessionStorage.clear();
 
-      //console.log(state.url);
-      console.log(!sessionStorage.getItem('url'), state.url.includes("recipientEmail"));
+      //
+      
       if (!sessionStorage.getItem('url') && state.url.includes("recipientEmail")) {
-        console.log(2);
+        
         let isCheckUrl = state.url.split("&recipientEmail=");
         
         // sessionStorage.setItem('url', state.url);
         sessionStorage.setItem('url', isCheckUrl[0]);
-        console.log(3);
+        
         sessionStorage.setItem('recipientEmail', isCheckUrl[isCheckUrl.length - 1]);
-        console.log(4);
+        
         
         let is_local = sessionStorage.getItem('url');
         if (is_local?.includes('loginType')) {
@@ -55,7 +55,7 @@ export class AdminAuthGuard implements CanActivate {
         const urlC = sessionStorage.getItem('url');
         const lt = sessionStorage.getItem('urlLoginType');
         const isEmail = sessionStorage.getItem('recipientEmail');
-        console.log(1);
+        
         sessionStorage.clear();
         sessionStorage.setItem('url', urlC ? urlC : '');
         sessionStorage.setItem('urlLoginType', lt ? lt : '');
@@ -75,10 +75,10 @@ export class AdminAuthGuard implements CanActivate {
       } else return true;
     } else {
       if (localStorage.getItem('currentAdmin') != null) {
-        //console.log(localStorage.getItem('currentUser'));
+        //
         return true;
       } else {
-        console.log("No Log in")
+        
         this.router.navigate(['/login']);
         return false;
       }

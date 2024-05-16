@@ -1,42 +1,56 @@
-<div style="text-align:center">
+<div class="ekyc-dialog">
 
-  <div *ngIf="this.title != 1">
-    {{this.data.title}}
+  <div *ngIf="this.title != 1" class="title-dialog">
+    <img src="../../../../../../assets/img/arrow-circle-left.svg" (click)="this.dialogRef.close();" class="icon-back" >
+    <div>{{this.data.title}}</div>
   </div>
-
-  <div *ngIf="this.title == 1">
-    Nhận dạng khuôn mặt
+  <div *ngIf="this.title == 1" class="title-dialog">
+    <img src="../../../../../../assets/img/arrow-circle-left.svg" (click)="this.dialogRef.close();" class="icon-back" >
+    <div>Nhận dạng khuôn mặt</div>
   </div>
 
   <div *ngIf = "!webcamImage && !this.flagSuccess && this.title!=1">
-    <webcam [width]="200*4/3" [height]="200*16/9" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+    <webcam class="webcam-image" style="border-radius: 10px" [width]="this.width*0.85" [height]="this.width*0.85" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
             [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
-            [videoOptions]="{ width: {exact: 480}, height: {exact: 640}, facingMode: 'environment'}" 
+            [videoOptions]="{ width: {exact: 640}, height: {exact: 640}, facingMode: 'environment'}" 
             [imageQuality]="1"
             (cameraSwitched)="cameraWasSwitched($event)"
             (initError)="handleInitError($event)"
     ></webcam>
     <br/>
-    <button class="actionBtn" (click)="triggerSnapshot();">Chụp ảnh</button>&nbsp;&nbsp;
-    <button class="actionBtn" (click)="this.dialogRef.close()">Huỷ</button>
+    <div class="noti"><span>{{this.data.noti}}</span></div>
   </div>
-  <div *ngIf = "!webcamImage && !this.flagSuccess && this.title==1">
-    <webcam [width]="600" [height]="300" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
-            [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
+  <div *ngIf = "!webcamImage && !this.flagSuccess && this.title!=1" class="button-camera">
+    <img (click)="triggerSnapshot()" src="../../../../../../assets/img/camera-button.svg">
+  </div>
+
+  <div *ngIf = "!webcamImage && !this.flagSuccess && this.title==1" class="webcam">
+    <webcam class="webcam-image-circle" [width]="this.width*0.7"  [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
             [videoOptions]="videoOptions" 
             [imageQuality]="1"
             (cameraSwitched)="cameraWasSwitched($event)"
             (initError)="handleInitError($event)"
     ></webcam>
     <br/>
-    <button class="actionBtn" (click)="triggerSnapshot();">Chụp ảnh</button>&nbsp;&nbsp;
-    <button class="actionBtn" (click)="this.dialogRef.close()">Huỷ</button>
+    <div class="noti"><span>Vui lòng đưa mặt bạn lại gần khung hình</span></div>
   </div>
+  <div *ngIf = "!webcamImage && !this.flagSuccess && this.title==1" class="button-camera">
+    <img (click)="triggerSnapshot()" src="../../../../../../assets/img/camera-button.svg">
+  </div>
+
   <div  *ngIf="webcamImage && this.title!=1">
-    <img [height]="200" [width]="200*4/3" [src]="webcamImage.imageAsDataUrl"/>
+    <img class="webcam-image" [width]="this.width*0.85" [src]="webcamImage.imageAsDataUrl"/>
   </div>
-  <div  *ngIf="webcamImage && this.title==1">
-    <img [height]="300" [width]="225" [src]="webcamImage.imageAsDataUrl"/>
+  <div *ngIf="webcamImage && this.title!=1" class="button-camera">    
+    <img src="../../../../../../assets/img/gg_check-o.png" (click)="confirmData();" class="icon-check" >
+    <img src="../../../../../../assets/img/ic_outline-cancel.png" (click)="this.webcamImage = this.initWebcamImage;" class="icon-cancel">
+  </div>
+  <div  *ngIf="webcamImage && this.title==1" class="webcam-image-circle">
+    <img class="img-face" [height]="this.width*0.7" [width]="this.width*0.7" [src]="webcamImage.imageAsDataUrl"/>
+  </div>
+  <div *ngIf="webcamImage && this.title==1" class="button-camera">    
+    <img src="../../../../../../assets/img/gg_check-o.png" (click)="confirmData();" class="icon-check" >
+    <img src="../../../../../../assets/img/ic_outline-cancel.png" (click)="this.webcamImage = this.initWebcamImage;" class="icon-cancel">
   </div>
 </div>
 

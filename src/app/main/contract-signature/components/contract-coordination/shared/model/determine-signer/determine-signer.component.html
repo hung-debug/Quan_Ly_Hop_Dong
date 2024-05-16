@@ -1,64 +1,35 @@
 <!--begin template-->
 <div class="container-fluid">
   <!--  Đối tác-->
-  <div
-    class="contract-determine"
-    *ngFor="let item of dataParnterOrganization(); let id = index"
-    style="display: flex"
-  >
+  <div class="contract-determine" *ngFor="let item of dataParnterOrganization(); let id = index" style="display: flex">
     <div class="col-md-1">
-      <input
-        class="contract-total"
-        style="width: 25px; height: 25px"
-        type="number"
-        [(ngModel)]="item.ordering"
+      <input class="contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="item.ordering"
         oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-        disabled
-      />
+        disabled />
     </div>
     <div class="col-md-11 contract--content">
       <div class="contract__content--title">
         <div style="width: 72px">{{ "doi_tac" | translate | uppercase }} -</div>
-        <input
-          type="text"
-          placeholder="{{
+        <input type="text" placeholder="{{
             (item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate
-          }}"
-          [(ngModel)]="item.name"
-          [disabled]="item.type == 3"
-        />
+          }}" [(ngModel)]="item.name" [disabled]="item.type == 3" />
         <!--        <input *ngIf="item.type == 3" type="text" [ngModel]="this.getNameIndividual" disabled>-->
       </div>
-      <div
-        *ngIf="this.dataParnterOrganization().length > 1"
-        style="display: flex; justify-content: flex-end"
-      >
-        <u
-          class="label text-color"
-          (click)="deletePartner(id)"
-          style="background-color: #ffffff; cursor: pointer"
-          >{{
-            (item.type == 2 ? "xoa_doi_tac_to_chuc" : "xoa_doi_tac_ca_nhan")
-              | translate
-          }}</u
-        >
+      <div *ngIf="this.dataParnterOrganization().length > 1" style="display: flex; justify-content: flex-end">
+        <u class="label text-color" (click)="deletePartner(id)" style="background-color: #ffffff; cursor: pointer">{{
+          (item.type == 2 ? "xoa_doi_tac_to_chuc" : "xoa_doi_tac_ca_nhan")
+          | translate
+          }}</u>
       </div>
 
       <div class="contract__content--participants">
         <div *ngIf="item.type == 2">
           <div class="participants-border">
             <div class="label">{{ "user.view" | translate }}</div>
-            <div
-              class="participants--content"
-              *ngFor="let d of getPartnerReviewer(item); let index = index"
-            >
-              <input
-                class="col-md-1 contract-total"
-                style="width: 25px; height: 25px"
-                type="number"
+            <div class="participants--content" *ngFor="let d of getPartnerReviewer(item); let index = index">
+              <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-                [(ngModel)]="d.ordering"
-              />
+                [(ngModel)]="d.ordering" />
               <div class="col-md-10 participants--input">
                 <div class="participants__name">
                   <div class="label text-color">
@@ -67,11 +38,7 @@
                   </div>
                   <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img" />
-                    <input
-                      type="text"
-                      placeholder="{{ 'nhap_ho_va_ten' | translate }}"
-                      [(ngModel)]="d.name"
-                    />
+                    <input type="text" placeholder="{{ 'nhap_ho_va_ten' | translate }}" [(ngModel)]="d.name" />
                   </div>
                 </div>
                 <div class="participants__name">
@@ -80,32 +47,18 @@
                   </div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img" />
-                    <input
-                      type="text"
-                      placeholder="{{ 'nhap_email' | translate }}"
-                      [(ngModel)]="d.email"
-                    />
+                    <input type="text" placeholder="{{ 'nhap_email' | translate }}" [(ngModel)]="d.email" />
                   </div>
                 </div>
               </div>
-              <div
-                class="col-md-1 delete-element"
-                (click)="deletePartnerReviewer(index, item, id)"
-              >
+              <div class="col-md-1 delete-element" (click)="deletePartnerReviewer(index, item, id)">
                 <img src="assets/img/border_close.svg" alt="close.vn" />
-                <img
-                  class="close-btn"
-                  src="assets/img/x_close.svg"
-                  alt="close.vn"
-                />
+                <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn" />
               </div>
             </div>
             <div class="participants--add">
-              <u
-                class="label text-color"
-                (click)="addPartnerReviewer(item, id)"
-                >{{ "btn.add.user.view" | translate }}</u
-              >
+              <u class="label text-color" (click)="addPartnerReviewer(item, id)">{{ "btn.add.user.view" | translate
+                }}</u>
             </div>
           </div>
 
@@ -113,17 +66,10 @@
           <div class="participants-border">
             <div class="label">{{ "user.sign" | translate }}</div>
             <div class="participants--content" *ngFor="let d of getPartnerSignature(item); let index = index">
-              <input
-                class="col-md-1 contract-total"
-                style="width: 25px; height: 25px"
-                type="number"
+              <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-                [(ngModel)]="d.ordering"
-              />
-              <div
-                class="col-md-10 participants__content--input"
-                style="display: flex; flex-direction: column"
-              >
+                [(ngModel)]="d.ordering" />
+              <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label text-color">
@@ -132,12 +78,8 @@
                     </div>
                     <div class="input-data">
                       <img src="assets/img/icon_name.svg" class="input-img" />
-                      <input
-                        [id]="'signature-partner-' + d.ordering"
-                        type="text"
-                        placeholder="{{ 'nhap_ho_va_ten' | translate }}"
-                        [(ngModel)]="d.name"
-                      />
+                      <input [id]="'signature-partner-' + d.ordering" type="text"
+                        placeholder="{{ 'nhap_ho_va_ten' | translate }}" [(ngModel)]="d.name" />
                     </div>
                   </div>
                   <div class="participants__name">
@@ -146,50 +88,34 @@
                     </div>
                     <div class="input-data">
                       <img src="assets/img/login_email.svg" class="input-img" />
-                      <input
-                        type="text"
-                        placeholder="{{ 'nhap_email' | translate }}"
-                        [(ngModel)]="d.email"
-                      />
+                      <input type="text" placeholder="{{ 'nhap_email' | translate }}" [(ngModel)]="d.email" />
                     </div>
                   </div>
                 </div>
 
-                <div
-                  class="participants--input select-text-input"
-                  style="display: flex"
-                >
-                  <div class="participants__name" style="width: 90%">
+                <div class="participants--input select-text-input" style="display: flex;justify-content: space-around;">
+                  <div class="participants__name" style="width: 40%">
                     <div class="label text-color">
                       {{ "user.sign-type" | translate }}:
                       <span class="required-title">*</span>
                     </div>
 
-                    <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{ 'choose' | translate }}" [settings]="dropdownSignTypeSettings" [data]="signTypeList">
-                      <ng-template
-                        #optionsTemplate
-                        let-item
-                        let-option="option"
-                        let-id="id"
-                        let-isSelected="isSelected"
-                      >
-                        <div
-                          style="
+                    <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{ 'choose' | translate }}"
+                      [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                      <ng-template #optionsTemplate let-item let-option="option" let-id="id"
+                        let-isSelected="isSelected">
+                        <div style="
                             padding: 1px 10px;
                             margin-right: 10px;
                             right: 2px;
                             top: -2px;
-                          "
-                        >
-                          <label
-                            style="color: #333; font-weight: normal"
-                            [ngStyle]="{
+                          ">
+                          <label style="color: #333; font-weight: normal" [ngStyle]="{
                               'font-weight': isSelected ? 'bold' : ' normal',
                               color: getContractConnectItems[id].isDisabled
                                 ? 'lightgrey'
                                 : ''
-                            }"
-                          >
+                            }">
                             {{ getContractConnectItems[id].name }}
                           </label>
                         </div>
@@ -199,14 +125,53 @@
                       {{ "note_chon_loai_ki_so" | translate }}
                     </div>
                   </div>
+
+                  <div style="width: 40%; display: flex; justify-content: space-between;">
+                    <div class="participants__name" style="width: 80%">
+                      <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<div
+                          style="color: #ffc107;">
+                          ({{'receive.contract.process' | translate}})</div>
+                      </div>
+                      <div class="input-data">
+                        <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
+                        <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                      </div>
+                    </div>
+
+                    <div class="participants__name" style="width: 12%">
+                      <div class="label_detail text-color">
+                        <span class="required-title"></span>
+                      </div>
+                      <div class="input-data">
+                        <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                          <div *ngIf="d.locale =='vi'">
+                            <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                              id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                          </div>
+                          <div *ngIf="d.locale =='en'">
+                            <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                              id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                          </div>
+                          <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                            <div class="switch-language">
+                              <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                                <div class="language">{{ "vie" | translate }}</div>
+                              </button>
+                            </div>
+                            <div class="switch-language">
+                              <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                                <div class="language">{{ "eng" | translate }}</div>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là usbtoken-->
-                <div
-                  class="participants--input"
-                  style="display: flex"
-                  *ngIf="getDataSignUSBToken(d).length > 0"
-                >
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
                   <div class="participants__name" style="width: 90%">
                     <div class="label_detail text-color">Mã số thuế/CMT/CCCD&nbsp;<span class="required-title">*</span>
                       <div style="color: #ffc107">
@@ -216,59 +181,35 @@
                     <div class="input-data">
                       <input type="text" placeholder="{{
                           'Nhập mã số thuế/CMT/CCCD' | translate
-                        }}"
-                        [(ngModel)]="d.card_id"
-                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-                      />
+                        }}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
                     </div>
                   </div>
                 </div>
 
-                <div
-                  class="participants--input"
-                  style="display: flex"
-                  *ngIf="getDataSignHsm(d).length > 0"
-                >
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
                   <div class="participants__name" style="width: 90%">
                     <div class="label_detail text-color">
                       Mã số thuế/CMT/CCCD&nbsp;<span class="required-title">*</span>
                     </div>
                     <div class="input-data">
-                      <input
-                        type="text"
-                        placeholder="{{ 'Nhập mã số thuế' | translate }}"
-                        [(ngModel)]="d.card_id"
-                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-                      />
+                      <input type="text" placeholder="{{ 'Nhập mã số thuế' | translate }}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div
-                *ngIf="getPartnerSignature(item).length > 1"
-                class="col-md-1 delete-element"
-                (click)="deletePartnerSignature(index, item)"
-              >
+              <div *ngIf="getPartnerSignature(item).length > 1" class="col-md-1 delete-element"
+                (click)="deletePartnerSignature(index, item)">
                 <img src="assets/img/border_close.svg" alt="close.vn" />
-                <img
-                  class="close-btn"
-                  src="assets/img/x_close.svg"
-                  alt="close.vn"
-                />
+                <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn" />
               </div>
-              <div
-                *ngIf="getPartnerSignature(item).length == 1"
-                class="col-md-1 delete-element"
-              ></div>
+              <div *ngIf="getPartnerSignature(item).length == 1" class="col-md-1 delete-element"></div>
             </div>
             <div class="participants--add">
-              <u
-                class="label text-color"
-                style="color: #106db6"
-                (click)="addPartnerSignature(item, id)"
-                >{{ "btn.add.user.sign" | translate }}</u
-              >
+              <u class="label text-color" style="color: #106db6" (click)="addPartnerSignature(item, id)">{{
+                "btn.add.user.sign" | translate }}</u>
             </div>
           </div>
 
@@ -278,12 +219,8 @@
             <div class="participants--content" *ngFor="let d of getPartnerDocument(item); let index = index">
               <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-                [(ngModel)]="d.ordering"
-              />
-              <div
-                class="col-md-10 participants__content--input"
-                style="display: flex; flex-direction: column"
-              >
+                [(ngModel)]="d.ordering" />
+              <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label text-color">
@@ -292,11 +229,7 @@
                     </div>
                     <div class="input-data">
                       <img src="assets/img/icon_name.svg" class="input-img" />
-                      <input
-                        type="text"
-                        placeholder="{{ 'nhap_ho_va_ten' | translate }}"
-                        [(ngModel)]="d.name"
-                      />
+                      <input type="text" placeholder="{{ 'nhap_ho_va_ten' | translate }}" [(ngModel)]="d.name" />
                     </div>
                   </div>
                   <div class="participants__name">
@@ -305,51 +238,33 @@
                     </div>
                     <div class="input-data">
                       <img src="assets/img/login_email.svg" class="input-img" />
-                      <input
-                        type="text"
-                        placeholder="{{ 'nhap_email' | translate }}"
-                        [(ngModel)]="d.email"
-                      />
+                      <input type="text" placeholder="{{ 'nhap_email' | translate }}" [(ngModel)]="d.email" />
                     </div>
                   </div>
                 </div>
 
-                <div class="participants-information">
-                  <div class="participants-signature-type" style="width: 90%">
+                <div class="participants--input select-text-input" style="display: flex;justify-content: space-around;">
+                  <div class="participants__name" style="width: 40%">
                     <div class="label text-color">
                       {{ "user.sign-type" | translate }}:
                       <span class="required-title">*</span>
                     </div>
-                    <ng-multiselect-dropdown
-                      [(ngModel)]="d.sign_type"
-                      placeholder="{{ 'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings"
-                      [data]="signType_doc"
-                    >
-                      <ng-template
-                        #optionsTemplate
-                        let-item
-                        let-option="option"
-                        let-id="id"
-                        let-isSelected="isSelected"
-                      >
-                        <div
-                          style="
+                    <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{ 'choose' | translate }}"
+                      [settings]="dropdownSignTypeSettings" [data]="signType_doc">
+                      <ng-template #optionsTemplate let-item let-option="option" let-id="id"
+                        let-isSelected="isSelected">
+                        <div style="
                             padding: 1px 10px;
                             margin-right: 10px;
                             right: 2px;
                             top: -2px;
-                          "
-                        >
-                          <label
-                            style="color: #333; font-weight: normal"
-                            [ngStyle]="{
+                          ">
+                          <label style="color: #333; font-weight: normal" [ngStyle]="{
                               'font-weight': isSelected ? 'bold' : ' normal',
                               color: getContractConnectItems[id].isDisabled
                                 ? 'lightgrey'
                                 : ''
-                            }"
-                          >
+                            }">
                             {{ getContractConnectItems[id].name }}
                           </label>
                         </div>
@@ -359,10 +274,55 @@
                       {{ "note_chon_loai_ki_so" | translate }}
                     </div>
                   </div>
+
+                  <div style="width: 40%; display: flex; justify-content: space-between;">
+                    <div class="participants__name" style="width: 80%">
+                      <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<div
+                          style="color: #ffc107;">
+                          ({{'receive.contract.process' | translate}})</div>
+                      </div>
+                      <div class="input-data">
+                        <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
+                        <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                      </div>
+                    </div>
+
+                    <div class="participants__name" style="width: 12%">
+                      <div class="label_detail text-color">
+                        <span class="required-title"></span>
+                      </div>
+                      <div class="input-data">
+                        <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                          <div *ngIf="d.locale =='vi'">
+                            <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                              id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                          </div>
+                          <div *ngIf="d.locale =='en'">
+                            <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                              id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                          </div>
+                          <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                            <div class="switch-language">
+                              <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                                <div class="language">{{ "vie" | translate }}</div>
+                              </button>
+                            </div>
+                            <div class="switch-language">
+                              <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                                <div class="language">{{ "eng" | translate }}</div>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
 
                 <!--trường hiển thị khi van thu tổ chức của tôi chọn loại ký là usbtoken-->
-                <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0 || getDataSignHsm(d).length > 0">
+                <div class="participants--input" style="display: flex"
+                  *ngIf="getDataSignUSBToken(d).length > 0 || getDataSignHsm(d).length > 0">
                   <div class="participants__name" style="width: 90%">
                     <div class="label_detail text-color">
                       Mã số thuế/CMT/CCCD&nbsp;<span class="required-title">*</span>
@@ -373,31 +333,19 @@
                     <div class="input-data">
                       <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}"
                         [(ngModel)]="d.card_id"
-                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-                      />
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
                     </div>
                   </div>
                 </div>
               </div>
-              <div
-                class="col-md-1 delete-element"
-                (click)="deletePartnerDocument(index, item)"
-              >
+              <div class="col-md-1 delete-element" (click)="deletePartnerDocument(index, item)">
                 <img src="assets/img/border_close.svg" alt="close.vn" />
-                <img
-                  class="close-btn"
-                  src="assets/img/x_close.svg"
-                  alt="close.vn"
-                />
+                <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn" />
               </div>
             </div>
             <div class="participants--add">
-              <u
-                class="label text-color"
-                style="color: #106db6"
-                (click)="addPartnerDocument(item, id)"
-                >{{ "btn.add.user.doc" | translate }}</u
-              >
+              <u class="label text-color" style="color: #106db6" (click)="addPartnerDocument(item, id)">{{
+                "btn.add.user.doc" | translate }}</u>
             </div>
           </div>
         </div>
@@ -406,21 +354,11 @@
           <div class="contract__content--participants">
             <div class="participants-border">
               <div class="label">{{ "user.sign" | translate }}</div>
-              <div
-                class="participants--content"
-                *ngFor="let d of getPartnerSignature(item); let index = index"
-              >
-                <input
-                  class="col-md-1 contract-total"
-                  style="width: 25px; height: 25px"
-                  type="number"
+              <div class="participants--content" *ngFor="let d of getPartnerSignature(item); let index = index">
+                <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
                   oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-                  [(ngModel)]="d.ordering"
-                />
-                <div
-                  class="col-md-10 participants__content--input"
-                  style="display: flex; flex-direction: column"
-                >
+                  [(ngModel)]="d.ordering" />
+                <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
                   <div class="participants--input" style="display: flex">
                     <div class="participants__name">
                       <div class="label text-color">
@@ -429,13 +367,9 @@
                       </div>
                       <div class="input-data">
                         <img src="assets/img/icon_name.svg" class="input-img" />
-                        <input
-                          [id]="'signature-partner-' + d.ordering"
-                          type="text"
-                          placeholder="{{ 'nhap_ho_va_ten' | translate }}"
-                          [(ngModel)]="d.name"
-                          (change)="getName($event, item)"
-                        />
+                        <input [id]="'signature-partner-' + d.ordering" type="text"
+                          placeholder="{{ 'nhap_ho_va_ten' | translate }}" [(ngModel)]="d.name"
+                          (change)="getName($event, item)" />
                       </div>
                     </div>
                     <div class="participants__name">
@@ -443,58 +377,34 @@
                         Email: <span class="required-title">*</span>
                       </div>
                       <div class="input-data">
-                        <img
-                          src="assets/img/login_email.svg"
-                          class="input-img"
-                        />
-                        <input
-                          type="text"
-                          placeholder="{{ 'nhap_email' | translate }}"
-                          [(ngModel)]="d.email"
-                        />
+                        <img src="assets/img/login_email.svg" class="input-img" />
+                        <input type="text" placeholder="{{ 'nhap_email' | translate }}" [(ngModel)]="d.email" />
                       </div>
                     </div>
                   </div>
-                  <div
-                    class="participants--input select-text-input"
-                    style="display: flex"
-                  >
+                  <div class="participants--input select-text-input" style="display: flex">
                     <div class="participants__name" style="width: 90%">
                       <div class="label text-color">
                         {{ "user.sign-type" | translate }}:
                         <span class="required-title">*</span>
                       </div>
 
-                      <ng-multiselect-dropdown
-                        [(ngModel)]="d.sign_type"
-                        placeholder="{{ 'choose' | translate }}"
-                        [settings]="dropdownSignTypeSettings"
-                        [data]="signTypeList_personal_partner"
-                      >
-                        <ng-template
-                          #optionsTemplate
-                          let-item
-                          let-option="option"
-                          let-id="id"
-                          let-isSelected="isSelected"
-                        >
-                          <div
-                            style="
+                      <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{ 'choose' | translate }}"
+                        [settings]="dropdownSignTypeSettings" [data]="signTypeList_personal_partner">
+                        <ng-template #optionsTemplate let-item let-option="option" let-id="id"
+                          let-isSelected="isSelected">
+                          <div style="
                               padding: 1px 10px;
                               margin-right: 10px;
                               right: 2px;
                               top: -2px;
-                            "
-                          >
-                            <label
-                              style="color: #333; font-weight: normal"
-                              [ngStyle]="{
+                            ">
+                            <label style="color: #333; font-weight: normal" [ngStyle]="{
                                 'font-weight': isSelected ? 'bold' : ' normal',
                                 color: getContractConnectItems[id].isDisabled
                                   ? 'lightgrey'
                                   : ''
-                              }"
-                            >
+                              }">
                               {{ getContractConnectItems[id].name }}
                             </label>
                           </div>
@@ -506,33 +416,16 @@
                     </div>
                   </div>
                 </div>
-                <div
-                  *ngIf="getPartnerSignature(item).length > 1"
-                  class="col-md-1 delete-element"
-                  (click)="deletePartnerSignature(index, item)"
-                >
+                <div *ngIf="getPartnerSignature(item).length > 1" class="col-md-1 delete-element"
+                  (click)="deletePartnerSignature(index, item)">
                   <img src="assets/img/border_close.svg" alt="close.vn" />
-                  <img
-                    class="close-btn"
-                    src="assets/img/x_close.svg"
-                    alt="close.vn"
-                  />
+                  <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn" />
                 </div>
-                <div
-                  *ngIf="getPartnerSignature(item).length == 1"
-                  class="col-md-1 delete-element"
-                ></div>
+                <div *ngIf="getPartnerSignature(item).length == 1" class="col-md-1 delete-element"></div>
               </div>
-              <div
-                *ngIf="getPartnerSignature(item).length > 1"
-                class="participants--add"
-              >
-                <u
-                  class="label text-color"
-                  style="color: #106db6"
-                  (click)="addPartnerSignature(item, id)"
-                  >{{ "btn.add.user.sign" | translate }}</u
-                >
+              <div *ngIf="getPartnerSignature(item).length > 1" class="participants--add">
+                <u class="label text-color" style="color: #106db6" (click)="addPartnerSignature(item, id)">{{
+                  "btn.add.user.sign" | translate }}</u>
               </div>
             </div>
           </div>
@@ -550,39 +443,21 @@
 <!--  </div>-->
 <!--</div>-->
 
-<div
-  class="footer-determine"
-  style="display: flex; justify-content: space-between"
->
+<div class="footer-determine" style="display: flex; justify-content: space-between">
   <div style="width: 200px">
-    <button
-      (click)="back($event, 'infor-coordination')"
-      type="button"
-      name="next"
-      class="next action-button"
-      style="background-color: #8b8b8b"
-    >
+    <button (click)="back($event, 'infor-coordination')" type="button" name="next" class="next action-button"
+      style="background-color: #8b8b8b">
       {{ "btn.previous" | translate }}
     </button>
   </div>
   <div>
-    <button
-      (click)="getApiDetermine()"
-      type="button"
-      name="next"
-      class="next action-button pull-right"
-    >
+    <button (click)="getApiDetermine()" type="button" name="next" class="next action-button pull-right">
       {{ "btn.next" | translate }}
     </button>
   </div>
 </div>
 
-<ngx-spinner
-  bdColor="rgba(51,51,51,0.8)"
-  size="medium"
-  color="#fff"
-  type="ball-spin-clockwise"
->
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
   <p style="font-size: 18px; color: white">
     {{ "sys.processing" | translate }}...
   </p>

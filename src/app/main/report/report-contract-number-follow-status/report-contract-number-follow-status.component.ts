@@ -1,12 +1,15 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import axios from 'axios';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
+import { ConvertStatusService } from 'src/app/service/convert-status.service';
 import { InputTreeService } from 'src/app/service/input-tree.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-report-contract-number-follow-status',
@@ -14,6 +17,7 @@ import { ReportService } from '../report.service';
   styleUrls: ['./report-contract-number-follow-status.component.scss']
 })
 export class ReportContractNumberFollowStatusComponent implements OnInit {
+  @ViewChild('dt') table: Table;
 
    //Biến lưu dữ liệu trong bảng
    list: any[] = [];
@@ -45,7 +49,9 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
 
    contractStatus: number = -1;
 
-   fetchChildData: boolean = false;
+   fetchChildData: boolean = true;
+
+   Arr = Array;
 
   constructor(
     private appService: AppService,
@@ -56,10 +62,12 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
     private reportService: ReportService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private translate: TranslateService 
+    private convertStatusService: ConvertStatusService 
   ) { }
 
   ngOnInit(): void {
+    this.spinner.hide();
+
     this.appService.setTitle('report.number.contracts.status.full');
 
     this.optionsStatus = [
@@ -69,6 +77,7 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
       { id: 31, name: 'Từ chối' },
       { id: 32, name: 'Huỷ bỏ' },
       { id: 30, name: 'Hoàn thành' },
+      { id: 33, name: 'Sắp hết hạn'}
     ];
 
     if (sessionStorage.getItem('lang') == 'vi') {
@@ -83,6 +92,7 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
         { id: 31, name: 'Reject' },
         { id: 32, name: 'Cancel' },
         { id: 30, name: 'Complete' },
+        { id: 33, name: 'Expiration soon' }
       ];
     }
 
@@ -95,89 +105,28 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
     //lấy danh sách tổ chức
     this.inputTreeService.getData().then((res: any) => {
       this.listOrgCombobox = res;
-
+      this.listOrgCombobox[0]?.children.forEach((element: any) => {
+        element.expanded = !element.expanded
+      });
       this.selectedNodeOrganization = this.listOrgCombobox.filter(
         (p: any) => p.data == this.organization_id
       );
     });
 
     this.cols = [
-      // {
-      //   id: 1,
-      //   header: 'contract.name',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 2,
-      //   header: 'contract.type',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 3,
-      //   header: 'contract.number',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 4,
-      //   header: 'contract.uid',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 5,
-      //   header: 'contract.connect',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 6,
-      //   header: 'contract.time.create',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 7,
-      //   header: 'signing.expiration.date',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
       {
         id: 8,
         header: 'contract.status.v2',
         style: 'text-align:left',
         colspan: 1,
-        rowspan: '2',
+        rowspan: 1,
       },
-      // {
-      //   id: 9,
-      //   header: 'date.completed',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 10,
-      //   header: 'suggest',
-      //   style: 'text-align: center',
-      //   colspan: '5',
-      //   rowspan: 1,
-      // },
       {
         id: 13,
         header: 'chart.number',
         style: 'text-align:left',
         colspan: 1,
-        rowspan: '2',
+        rowspan: 1,
       }
     ];
   }
@@ -185,7 +134,7 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
   
   validData() {
     if(!this.date || (this.date && this.date.length < 2)) {
-      this.toastService.showErrorHTMLWithTimeout('Vui lòng nhập đủ ngày ngày tạo','',3000);
+      this.toastService.showErrorHTMLWithTimeout('date.full.valid','',3000);
       return false;
     }
     return true;
@@ -194,17 +143,16 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
   org: any;
   clickReport: boolean = false;
   total: number;
-  export(flag: boolean) {
+  async export(flag: boolean) {
     if(!this.validData()) {
       return;
     }
 
     this.spinner.show();
 
-    let idOrg = this.organization_id;
-    if(this.selectedNodeOrganization.data) {
-      idOrg = this.selectedNodeOrganization.data;
-    }
+    this.selectedNodeOrganization = !this.selectedNodeOrganization.length ? this.selectedNodeOrganization : this.selectedNodeOrganization[0]
+
+    let idOrg = this.selectedNodeOrganization.data;
 
     let from_date: any = '';
     let to_date: any = '';
@@ -218,79 +166,40 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
     if(!contractStatus) 
       contractStatus = -1;
 
-    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChilData='+this.fetchChildData;
+    if(!to_date)
+      to_date = from_date
 
-    this.reportService.export('rp-by-status',idOrg,params, flag).subscribe((response: any) => {
-        this.spinner.hide();
-        
-        if(flag) {
-          let url = window.URL.createObjectURL(response);
-          let a = document.createElement('a');
-          document.body.appendChild(a);
-          a.setAttribute('style', 'display: none');
-          a.href = url;
-          a.download = `report-by-status_${new Date().getTime()}.xlsx`;
-          a.click();
-          window.URL.revokeObjectURL(url);
-          a.remove();
-  
-          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
-        } else {
+    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
 
-          this.clickReport = true;
+    const response = await this.reportService.export('rp-by-status',idOrg,params, flag).toPromise();
 
-          let array: any = [];
+    this.spinner.hide();
+    if(flag) {
+      let url = window.URL.createObjectURL(response);
+      let a = document.createElement('a');
+      document.body.appendChild(a);
+      a.setAttribute('style', 'display: none');
+      a.href = url;
+      a.download = `BaoCaoSLTheoTrangThai_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
 
-          Object.keys(response).forEach((key, index) => {
-            this.org = key;
+      this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+    } else {
 
-            array[0] = response[key]
-          });
+      this.list = [];
+      this.table.first = 0
 
-          let reportList =array[0];
+      this.spinner.hide();
+      this.clickReport = true;
 
-          let name: any[] = [];
-          let value: any[] = [];
-
-          Object.keys(reportList).forEach((key: any, index: any) => {
-            name.push(key);
-            value.push(reportList[key]);
-          });
-          
-          for(let i = 0; i < name.length; i++) {
-            this.list[i + 1] = {
-              name: name[i],
-              value: value[i]
-            }
-          }
-
-          this.list.forEach((item: any) => {
-            if(item.name == 'total') {
-              this.total = item.value;
-            }
-            return;
-          })
-
-        }
-      
-    })
+      this.list = response;
+    }
   }
 
   convert(code: string) {
-    if(code == 'processed') {
-      return this.translate.instant('contract.status.complete');
-    } else if(code == 'processing') {
-      return this.translate.instant('contract.status.processing');
-    } else if(code == 'canceled') {
-      return this.translate.instant('contract.status.cancel');
-    } else if(code == 'rejected') {
-      return this.translate.instant('contract.status.fail');
-    } else if(code == 'expired') {
-      return this.translate.instant('contract.status.overdue');
-    } else if(code == 'prepare_expires') {
-      return this.translate.instant('prepare_expires');
-    }
-    return code;
+    return this.convertStatusService.convert(code);
   }
 
   changeCheckBox(event: any) {

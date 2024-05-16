@@ -37,6 +37,7 @@ export class UserService {
 
   updateUserUrl: any = `${environment.apiUrl}/api/v1/customers/`;
   getUserByIdUrl: any = `${environment.apiUrl}/api/v1/customers/`;
+  getOrgChildren: any = `${environment.apiUrl}/api/v1/organizations/getParent`;
   listUserUrl: any = `${environment.apiUrl}/api/v1/customers/search`;
   getUserByEmailUrl: any = `${environment.apiUrl}/api/v1/customers/get-by-email`;
   checkPhoneUrl: any = `${environment.apiUrl}/api/v1/customers/check-phone-unique`;
@@ -47,6 +48,13 @@ export class UserService {
   getCheckContractUserUrl: any = `${environment.apiUrl}/api/v1/contracts/check-contract-exist`;
 
   checkServiceStatusUrl: any = `${environment.apiUrl}/api/v1/customers/check-service-status`;
+
+  checkTokenDateUrl: any = `${environment.apiUrl}/api/v1/customers/password/recover/valid`;
+  checkBrandnameUrl: any = `${environment.apiUrl}/api/v1/notification/checkBranchName`;
+  updateConfigBrandName: any = `${environment.apiUrl}/api/v1/organizations/branchName/`;
+  updateConfigMailServer: any = `${environment.apiUrl}/api/v1/organizations/configMailServer/`;
+  getSsoLinkOtpUrl: any = `${environment.apiUrl}/api/v1/customers/sendEmailOTP`;
+  syncAccountSsoUrl: any = `${environment.apiUrl}/api/v1/customers/syncUserSSO`;
 
   token: any;
   customer_id: any;
@@ -91,7 +99,7 @@ export class UserService {
 
     const headers = new HttpHeaders()
       .append('Authorization', 'Bearer ' + this.token)
-          
+
       return this.http.post(
         this.uploadFileUserUrl,
         formData,
@@ -127,6 +135,16 @@ export class UserService {
       .pipe();
   }
 
+  checkTokenDate(token: string) {
+    const headers = new HttpHeaders().append(
+      'Content-Type',
+      'application/json'
+    );
+
+
+    return this.http.get<any>(this.checkTokenDateUrl + "?token=" + token, { headers: headers});
+  }
+
   sendResetPassword(token: string, password: string) {
     const headers = new HttpHeaders().append(
       'Content-Type',
@@ -137,7 +155,7 @@ export class UserService {
       .post<User>(this.resetPasswordUrl, body, { headers: headers })
       .pipe(
         map((user) => {
-          console.log(user);
+
           if (JSON.parse(JSON.stringify(user)).status == 0) {
             return user;
           } else {
@@ -182,7 +200,7 @@ export class UserService {
       .post<User>(this.resetPasswordTokenUrl, body, { headers: headers })
       .pipe(
         map((user) => {
-          console.log(user);
+
           if (JSON.parse(JSON.stringify(user)).status == 0) {
             return user;
           } else {
@@ -220,8 +238,8 @@ export class UserService {
       tax_code: datas.taxCodeHsm,
       hsm_pass: datas.password1Hsm,
     });
-    console.log(headers);
-    console.log(body);
+
+
     return this.http.post<User>(this.addUserUrl, body, { headers: headers });
   }
 
@@ -233,9 +251,6 @@ export class UserService {
     if (datas.birthday != null) {
       datas.birthday = this.datepipe.transform(datas.birthday, 'yyyy/MM/dd');
     }
-    console.log(datas.sign_image);
-
-    console.log("datas update user ", datas);
 
     const body = JSON.stringify({
       name: datas.name,
@@ -247,6 +262,7 @@ export class UserService {
       role_id: datas.role,
 
       sign_image: datas.sign_image,
+      stampImage: datas.stampImage,
 
       phone_sign: datas.phoneKpi,
       phone_tel: datas.networkKpi ==='bcy' ? 3 : datas.networkKpi,
@@ -257,10 +273,7 @@ export class UserService {
 
       organization_change: datas.organization_change,
     });
-    console.log(headers);
-    console.log(body);
 
-    console.log("id ",datas.id);
     return this.http.put<User>(this.updateUserUrl + datas.id, body, {
       headers: headers,
     });
@@ -274,50 +287,15 @@ export class UserService {
     return this.http.get<any>(this.getUserByIdUrl + id, { headers: headers},);
   }
 
+  getOrgIdChildren(orgId: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.getOrgChildren + '?orgId='+ orgId, { headers: headers},);
+  }
+
   async getUserById1(id: any) {
-    // this.getCurrentUser();
-    // const headers = new HttpHeaders()
-    //   .append('Content-Type', 'application/json')
-    //   .append('Authorization', 'Bearer ' + this.token)
-    //   .append("Access-Control-Allow-Headers", "Authorization, X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept, X-Custom-header")
-    //   .append("Access-Control-Allow-Credentials", "true");;
-
-    //  const headers = new HttpHeaders().
-    //  append("Access-Control-Allow-Origin", "*")
-    // .append("Access-Control-Allow-Credentials", "true")
-    // .append("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT")
-    // .append("Access-Control-Allow-Headers", "*");
-    // return this.http.get<any>(this.getUserByIdUrl + id, { headers: headers, observe: 'response' as 'body'});
-
-    // this.getCurrentUser();
-    // console.log("token ", this.token);
-    // const test = await fetch(
-    //   this.getUserByIdUrl + id,
-    //   {
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': 'Bearer '+ this.token,
-    //     },
-    //     method: 'GET',
-    //     mode: 'no-cors'
-    //   }
-    // ).then((res) => {
-    //   res.json()
-    // });
-
-    // this.getCurrentUser();
-    // fetch(this.getUserByIdUrl + id, {
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': 'Bearer '+ this.token,
-    //     },
-    //     // mode: 'no-cors',
-    // }).then(response  =>  response.json()).then(function (response) {
-    //   console.log(response, response);
-    //   console.log("a ",response.headers.get('x-auth-token'));
-
-    // }).catch(async function (error) {console.log('error', error);
-
     this.getCurrentUser();
     let response = await fetch(this.getUserByIdUrl + id, {
               headers: {
@@ -325,10 +303,6 @@ export class UserService {
           'Authorization': 'Bearer '+ this.token,
         },
     });
-
-    console.log("h ",response.headers); // application/json; charset=utf-8
-
-
   }
 
   getUnitById(id: any) {
@@ -351,7 +325,7 @@ export class UserService {
     const body = JSON.stringify({
       email: email,
     });
-    console.log(headers);
+
     return this.http.post<User>(this.getUserByEmailUrl, body, {
       headers: headers,
     });
@@ -359,17 +333,12 @@ export class UserService {
 
   public getUserList(
     filter_organization_id: any,
+    filter_nameOrEmail: any,
     filter_email: any
   ): Observable<any> {
     this.getCurrentUser();
 
-    let listUserUrl =
-      this.listUserUrl +
-      '?name=&phone=&organization_id=' +
-      filter_organization_id +
-      '&email=' +
-      filter_email.trim() +
-      '&size=10000';
+    let listUserUrl = this.listUserUrl + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email.trim() + '&size=10000';
     const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<User[]>(listUserUrl, { headers }).pipe();
   }
@@ -379,12 +348,43 @@ export class UserService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http
-      .get<any>(this.getUserByIdUrl + id, { headers: headers })
+    return this.http.get<any>(this.getUserByIdUrl + id, { headers: headers })
       .pipe(
         map((res) => {
           if (res?.sign_image?.length) {
             return res?.sign_image[0].presigned_url;
+          }
+        }),
+        concatMap((res: any) => {
+          if (res) {
+            const headers = new HttpHeaders().append(
+              'Content-Type',
+              'application/arraybuffer'
+            );
+            return this.http
+              .get(res, { responseType: 'arraybuffer', headers })
+              .pipe(
+                map((res) => {
+                  return encode(res);
+                })
+              );
+          } else {
+            return of(null);
+          }
+        })
+      );
+  }
+
+  getMarkUserById(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.getUserByIdUrl + id, { headers: headers })
+      .pipe(
+        map((res) => {
+          if (res?.stampImage?.length) {
+            return res?.stampImage[0].presigned_url;
           }
         }),
         concatMap((res: any) => {
@@ -434,7 +434,7 @@ export class UserService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    console.log(headers);
+
     return this.http.get<any>(this.getCheckContractUserUrl + '?id=' + id, {
       headers: headers,
     });
@@ -445,9 +445,90 @@ export class UserService {
     const headers = new HttpHeaders()
     .append('Content-Type', 'application/json')
     .append('Authorization', 'Bearer ' + this.token);
-    
+
     return this.http.get<any>(this.checkServiceStatusUrl, {headers}).pipe();
 
+  }
+
+  checkBrandname(data: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      brandName: data.brandName,
+      supplier: data.supplier,
+      user: data.user,
+      password: data.password,
+      phone: data.phone,
+      message: data.message
+    });
+
+    return this.http.post<User>(this.checkBrandnameUrl, body, {
+      headers: headers,
+    });
+  }
+  
+  
+  updateConfigBrandname(data: any, orgId: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      brandName: data.brandName,
+      supplier: data.contractSupplier,
+      user: data.smsUser,
+      password: data.smsPass,
+    });
+
+    return this.http.put<User>(this.updateConfigBrandName + orgId, body, {
+      headers: headers,
+    });
+  }
+  
+  updateConfigEmailServer(data: any, orgId: any) {
+    const headers = new HttpHeaders()
+    .append('Content-Type', 'application/json')
+    .append('Authorization', 'Bearer ' + this.token);
+    console.log("data",data);
+    
+  const body = JSON.stringify({
+    userNameMailServer: data.userNameMailServer,
+    aliasMailServer: data.aliasMailServer,
+    passwordMailServer: data.passwordMailServer,
+    hostMailServer: data.hostMailServer,
+    portMailServer: data.portMailServer,
+    tlsMailServer: data.tlsMailServer,
+  });
+
+  return this.http.put<User>(this.updateConfigMailServer + orgId, body, {
+    headers: headers,
+  });
+  }
+
+  getSsoLinkOtp(email: string) {
+    this.getCurrentUser()
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.post<User>(this.getSsoLinkOtpUrl + `?email=${email}`, '', {
+      headers: headers,
+    });
+  }
+
+  syncAccountSso(email: string, otp: string) {
+    this.getCurrentUser()
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = {
+      customer_id: this.customer_id,
+      email: email,
+      otp: otp
+    }
+    return this.http.post<User>(this.syncAccountSsoUrl, body, {
+      headers: headers,
+    });
   }
 
 

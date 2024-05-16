@@ -10,11 +10,31 @@
   margin: 5px 5px;
 }
 
+.find-sign-box-btn {
+  width: fit-content;
+  height: 30px;
+  border-radius: 7px;
+  border: 1px solid #EE7200;
+  color: #EE7200;
+  background-color: #FFFFFF;
+  margin: 5px 5px;
+}
+
+.find-infor-box-btn {
+  width: fit-content;
+  height: 30px;
+  border-radius: 7px;
+  border: 1px solid #2674B0;
+  color: #2674B0;
+  background-color: #FFFFFF;
+  margin: 5px 5px;
+}
+
 .footer-contract {
   border-top: 1px solid #ddd;
   display: flex;
   align-items: center;
-  height: 46px;
+  height: 37px;
   //add css 16022022
   float: right;
   width: 75%;
@@ -73,6 +93,17 @@ input {
   background: #FFFFFF;
   border: 1px solid #87CAFF;
   border-radius: 5px; 
+}
+
+.forward-btn-mobile {
+  background: white;
+  border: 1px solid #106DB6;
+  color: #106DB6;
+  width: 114px;
+  height: 30px;
+  border-radius: 7px;
+  cursor: pointer;
+  margin: 5px 5px;
 }
 
 

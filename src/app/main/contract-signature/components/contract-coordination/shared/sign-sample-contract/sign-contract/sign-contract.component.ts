@@ -14,7 +14,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // console.log(this.sign)
+    // 
     if (this.sign.sign_unit == 'so_tai_lieu' || this.sign.sign_unit == 'text') {
       setTimeout(() => {
         // @ts-ignore

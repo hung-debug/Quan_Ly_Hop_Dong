@@ -1,11 +1,11 @@
-<p-selectButton *ngIf="filter_status!=40" [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()">
+<p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()">
     <ng-template #options let-item>
         <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
     </ng-template>
 </p-selectButton>
 
 <!--Truong hop dang xu ly va sap het han-->
-<div *ngIf="(this.filter_status == 20 || this.filter_status == 33) && this.isOrg == 'off'" class="col-md-4" class="container-fluid">
+<div #mydiv *ngIf="(this.filter_status == 20 || this.filter_status == 33) && this.isOrg == 'off'" class="col-md-4" class="container-fluid">
     <ng-template [ngIf]="!roleMess">
         <div class="col-md-12" style="padding-top: 20px;">
             <div class="input-line search">
@@ -13,6 +13,7 @@
                 <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                 <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
             </div>
+
         </div>
 
         <div>
@@ -29,87 +30,113 @@
         </div>
 
         <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
-                <div class="row">
-                    <!--Cột 1-->
-                    <div class="col-md-4">
-                        <div class="row">
-                            <div class="col-md-11">                                 
-                                <div class="item_contract_name" (click)="isQLHD_07?openDetail(item.id):null">{{item.name}}</div>
+            <div class="row">
+                <!--Cột 1-->
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <div class="item_contract_name">
+                                <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
+                                            'page': this.p,
+                                            'filter_type': this.filter_type,
+                                            'filter_contract_no': this.filter_contract_no,
+                                            'filter_from_date': this.filter_from_date,
+                                            'filter_to_date': this.filter_to_date,
+                                            'isOrg': this.isOrg,
+                                            'organization_id': this.organization_id,
+                                            'status': this.status
+                                          }">{{item.name}}</a>
+                            </div>
 
-                                <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
-                                    <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
+                            <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
+                                <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
                                 </div>
+                            </div>
 
-                                <div class="row">
-                                    <div class="item_contract_infor">{{'contract.status' | translate}}:
-                                        <span class="status_blue">{{item.status | pipe | translate}} {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) | translate}}</span>
-                                    </div>
+                            <div class="row">
+                                <div class="item_contract_infor">{{'contract.status' | translate}}:
+                                    <span class="status_blue">{{this.filter_status | pipe | translate}}
+                                        {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
+                                        translate}}</span>
                                 </div>
+                            </div>
+                            <div class="row">
+                              <div class="item_contract_infor">
+                                <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
+                              </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!--Cột 2: Ngày tạo-->
-                    <div class="col-md-2 calendar_create">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span></div>
+                <!--Cột 2: Ngày tạo-->
+                <div class="col-md-2 calendar_create">
+                    <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date:
+                            'dd/MM/yyyy HH:mm'}}</span></div>
+                </div>
+
+                <!--Cột 3: Ngày hết hạn ký-->
+                <div class="col-md-2 calendar_deadline">
+                    <div style="display: flex; justify-content: center;">
+                        <div class="div_icon"><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date:
+                                'dd/MM/yyyy'}}</span></div>
+                        <div class="div_icon"><img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'edit.exp.sign.time' | translate}}" (click)="openEditExpiration(item)" />
+                        </div>
                     </div>
+                </div>
 
-                    <!--Cột 3: Ngày hết hạn ký-->
-                    <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy'}}</span></div>
-                    </div>
-
-                    <!--Cột 4: Thao tác-->
-                    <div class="col-md-3 item_icon">
-                        <div *ngIf="isOrg=='off'" style="display: flex; justify-content: center;">
-                            <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08">
-                                <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'contract.copy' | translate}}" (click)="openCopy(item.id)" />
-                            </div>
-                            <div class="div_icon" *ngIf="status == 'draft' && isQLHD_02">
-                                <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.edit' | translate}}" (click)="openEdit(item.id)" />
-                            </div>
-                            <div class="div_icon" *ngIf="status == 'draft'">
-                                <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'contract.delete' | translate}}" (click)="deleteContract(item.id)" />
-                            </div>
-                            <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12">
-                                <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.view' | translate}}" (click)="contractConnect(item.id)" />
-                            </div>
-                            <!-- 
+                <!--Cột 4: Thao tác-->
+                <div class="col-md-3 item_icon">
+                    <div *ngIf="isOrg=='off'" style="display: flex; justify-content: center;">
+                        <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08">
+                            <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'contract.copy' | translate}}" (click)="openCopy(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'draft' && isQLHD_02">
+                            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.edit' | translate}}" (click)="openEdit(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'draft'">
+                            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'contract.delete' | translate}}" (click)="deleteContract(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12">
+                            <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.view' | translate}}" (click)="contractConnect(item.id)" />
+                        </div>
+                        <!--
                             <div class="div_icon" *ngIf="status == 'processing' || status == 'expire'">
                                 <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnect(item.id)"/>
                             </div> -->
-                            <div class="div_icon" *ngIf="status == 'complete' && isQLHD_11">
-                                <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnectNew(item.id)" />
-                            </div>
-                            <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire') && isQLHD_09">
-                                <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="{{'contract.cancel' | translate}}" (click)="cancelContract(item.id);" />
-                            </div>
-                            <div class="div_icon" *ngIf="status == 'complete'">
-                                <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
-                            </div>
-                            <div class="div_icon" *ngIf="status == 'complete' && isQLHD_13">
-                                <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}" (click)="shareContract(item.id);" />
-                            </div>
-                            <div class="div_icon" *ngIf="status == 'cancel'">
-                                <!-- <img src="../../assets/img/view_reason_icon.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" /> -->
-                                <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{ 'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" />
-                            </div>
+                        <div class="div_icon" *ngIf="status == 'complete' && isQLHD_11">
+                            <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnectNew(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire') && isQLHD_09">
+                            <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="{{'contract.cancel' | translate}}" (click)="cancelContract(item.id);" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'complete'">
+                            <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'complete' && isQLHD_13">
+                            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}" (click)="shareContract(item.id);" />
+                        </div>
+
+                        <div class="div_icon" *ngIf="status == 'cancel'">
+                            <!-- <img src="../../assets/img/view_reason_icon.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" /> -->
+                            <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{ 'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" />
                         </div>
                     </div>
+                </div>
 
-                    <!--Cột 5: Input checkbox-->
-                    <div class="col-md-1 item_icon">
-                        <div style="display: flex; justify-content: center;">
-                            <div class="div_icon">
-                                <div class="col-md-1 calendar_create">
-                                    <div>
-                                        <input name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" />
-                                    </div>
+                <!--Cột 5: Input checkbox-->
+                <div class="col-md-1 item_icon">
+                    <div style="display: flex; justify-content: center;">
+                        <div class="div_icon">
+                            <div class="col-md-1 calendar_create">
+                                <div>
+                                    <input name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
 
         <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
@@ -120,11 +147,21 @@
         </div>
 
         <div class="contract_footer">
-            <div class="footer_title"></div>
+            <div class="footer_contract_per_page">
+                <div>Hiển thị&nbsp;</div>
+                <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
+                    <option value="" hidden>{{this.page}}</option>
+                    <option *ngFor="let d of this.pageOptions">{{d}}</option>
+                </select>
+                <div>&nbsp;{{'contracts.per.page' | translate}}</div>
+            </div>
+            <div class="footer_title">
+            </div>
             <div class="footer_pagination">
                 <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
             </div>
-            <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
+            <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}
+            </div>
         </div>
     </ng-template>
 
@@ -132,7 +169,169 @@
 </div>
 
 <!--Truong hop khac-->
-<div *ngIf="!((this.filter_status == 20 || this.filter_status == 33) && this.isOrg == 'off')" class="container-fluid">
+<div *ngIf="!((this.filter_status == 20 ||
+               this.filter_status == 33 ||
+               this.filter_status == 30 ||
+               this.typeDisplay =='multiDeleteDraft' ||
+               this.typeDisplay =='release') && this.isOrg == 'off') && status != 'complete'" class="container-fluid">
+    <ng-template [ngIf]="!roleMess">
+        <div class="col-md-12" style="padding-top: 20px;">
+            <div class="input-line search">
+                <img src="../../assets/img/icon_search.svg" class="input-img" />
+                <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
+            </div>
+        </div>
+        <div style="display: flex;">
+          <div class="btn-size btn_search" style="padding-top: 10px;">
+            <button *ngIf="status == 'draft' && this.isOrg == 'off'" (click)="release()" class="btn btn-lg btn-block btn_submit">{{'release'|translate}}</button>
+        </div>
+
+          <div class="btn-size btn_search" style="padding-top: 10px;margin-left: 1%">
+            <button *ngIf="status == 'draft' && this.isOrg == 'off'" (click)="multiDeleteDraft('multiDelete')" class="btn btn-lg btn-block btn_submit">{{'btn.multi.delete'|translate}}</button>
+          </div>
+        </div>
+
+
+        <div class="row list_header" *ngIf="pageTotal > 0;">
+            <div class="col-md-4"></div>
+            <div class="col-md-2">{{'create-date' | translate}}</div>
+            <div class="col-md-2">{{'expiration-date' | translate}}</div>
+            <div class="col-md-3">{{'action' | translate}}</div>
+
+        </div>
+
+
+        <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
+            <div class="row">
+                <!--Cột 1-->
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <div class="item_contract_name">
+                                <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
+                                        'page': this.p,
+                                        'filter_type': this.filter_type,
+                                        'filter_contract_no': this.filter_contract_no,
+                                        'filter_from_date': this.filter_from_date,
+                                        'filter_to_date': this.filter_to_date,
+                                        'isOrg': this.isOrg,
+                                        'organization_id': this.organization_id,
+                                        'status': this.status
+                                      }">{{item.name}}</a>
+                            </div>
+
+                            <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
+                                <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="item_contract_infor">{{'contract.status' | translate}}:
+                                    <span class="status_blue">{{this.filter_status | pipe | translate}}
+                                        {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
+                                        translate}}</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                              <div class="item_contract_infor">
+                                <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Cột 2: Ngày tạo-->
+                <div class="col-md-2 calendar_create">
+                    <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date:
+                            'dd/MM/yyyy HH:mm'}}</span></div>
+                </div>
+
+                <!--Cột 3: Ngày hết hạn ký-->
+                <div class="col-md-2 calendar_deadline">
+                    <div style="display: flex; justify-content: center;">
+                        <div class="div_icon"><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date:
+                                'dd/MM/yyyy'}}</span></div>
+                        <!--34: quá hạn cho phép sửa ngay hết hạn-->
+                        <div *ngIf="this.filter_status == 34" class="div_icon"><img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'edit.exp.sign.time' | translate}}" (click)="openEditExpiration(item)" />
+                        </div>
+                    </div>
+                </div>
+
+                <!--Cột 4: Thao tác-->
+                <div class="col-md-3 item_icon">
+                    <div style="display: flex; justify-content: center;">
+                        <!-- <div *ngIf="this.isOrg == 'off'"> -->
+                        <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue' || status == 'cancel') && isQLHD_08 && this.isOrg == 'off'">
+                            <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'contract.copy' | translate}}" (click)="openCopy(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'draft' && isQLHD_02 && this.isOrg == 'off'">
+                            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.edit' | translate}}" (click)="openEdit(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'draft' && this.isOrg == 'off'">
+                            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'contract.delete' | translate}}" (click)="deleteContract(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12 && this.isOrg == 'off'">
+                            <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.view' | translate}}" (click)="contractConnect(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'complete' && isQLHD_11 && this.isOrg == 'off'">
+                            <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnectNew(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire') && isQLHD_09 && this.isOrg == 'off'">
+                            <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="{{'contract.cancel' | translate}}" (click)="cancelContract(item.id);" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'">
+                            <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'complete' && isQLHD_13 && this.isOrg == 'off'">
+                            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}" (click)="shareContract(item.id);" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'cancel'">
+                            <!-- <img src="../../assets/img/view_reason_icon.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" /> -->
+                            <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" />
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+            <div style="display: table-cell;vertical-align: middle;">
+                <img src="../../../assets/img/empty_data.svg" />
+                <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+            </div>
+        </div>
+
+        <div class="contract_footer">
+            <div class="footer_contract_per_page">
+                <div>Hiển thị&nbsp;</div>
+                <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
+                    <option value="" hidden>10</option>
+                    <option *ngFor="let d of this.pageOptions">{{d}}</option>
+                </select>
+                <div>&nbsp;{{'contracts.per.page' | translate}}</div>
+            </div>
+            <div class="footer_title"></div>
+            <div class="footer_pagination">
+                <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
+            </div>
+            <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}
+            </div>
+        </div>
+    </ng-template>
+
+    <div>{{roleMess | translate}}</div>
+</div>
+
+<!-- Màn HĐ hoàn thành HĐ của tổ chức-->
+<div *ngIf="!((this.filter_status == 20 ||
+              this.filter_status == 33 ||
+              this.filter_status == 30 ||
+              this.typeDisplay =='release') && this.isOrg == 'off')
+              && this.typeDisplay !== 'downloadMany' && status == 'complete'" class="container-fluid">
     <ng-template [ngIf]="!roleMess">
         <div class="col-md-12" style="padding-top: 20px;">
             <div class="input-line search">
@@ -142,80 +341,87 @@
             </div>
         </div>
 
+        <div class="col-md-1 btn_search" style="padding-top: 10px;">
+          <button *ngIf="this.typeDisplay === 'view'" (click)="downloadMany()" class="btn btn-lg btn-block btn_submit">{{'download.multi'|translate}}</button>
+        </div>
+
         <div class="row list_header" *ngIf="pageTotal > 0;">
-            <div class="col-md-5"></div>
+            <div class="col-md-4"></div>
             <div class="col-md-2">{{'create-date' | translate}}</div>
             <div class="col-md-2">{{'expiration-date' | translate}}</div>
             <div class="col-md-3">{{'action' | translate}}</div>
         </div>
 
+
         <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
-                <div class="row">
-                    <!--Cột 1-->
-                    <div class="col-md-5">
-                        <div class="row">
-                            <div class="col-md-11">
-                                <div class="item_contract_name" (click)="isQLHD_07?openDetail(item.id):null">{{item.name}}</div>
+            <div class="row">
+                <!--Cột 1-->
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <div class="item_contract_name">
+                                <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
+                                        'page': this.p,
+                                        'filter_type': this.filter_type,
+                                        'filter_contract_no': this.filter_contract_no,
+                                        'filter_from_date': this.filter_from_date,
+                                        'filter_to_date': this.filter_to_date,
+                                        'isOrg': this.isOrg,
+                                        'organization_id': this.organization_id,
+                                        'status': this.status
+                                      }">{{item.name}}</a>
+                            </div>
 
-                                <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
-                                    <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
+                            <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
+                                <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
                                 </div>
+                            </div>
 
-                                <div class="row">
-                                    <div class="item_contract_infor">{{'contract.status' | translate}}:
-                                        <span class="status_blue">{{item.status | pipe | translate}} {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) | translate}}</span>
-                                    </div>
+                            <div class="row">
+                                <div class="item_contract_infor">{{'contract.status' | translate}}:
+                                    <span class="status_blue">{{this.filter_status | pipe | translate}}
+                                        {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
+                                        translate}}</span>
                                 </div>
+                            </div>
+                            <div class="row">
+                              <div class="item_contract_infor">
+                                <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
+                              </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!--Cột 2: Ngày tạo-->
-                    <div class="col-md-2 calendar_create">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span></div>
-                    </div>
+                <!--Cột 2: Ngày tạo-->
+                <div class="col-md-2 calendar_create">
+                    <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date:
+                            'dd/MM/yyyy HH:mm'}}</span></div>
+                </div>
 
-                    <!--Cột 3: Ngày hết hạn ký-->
-                    <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy'}}</span></div>
-                    </div>
-
-                    <!--Cột 4: Thao tác-->
-                    <div class="col-md-3 item_icon">
-                        <div style="display: flex; justify-content: center;">
-                            <!-- <div *ngIf="this.isOrg == 'off'"> -->
-                                <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08 && this.isOrg == 'off'">
-                                    <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'contract.copy' | translate}}" (click)="openCopy(item.id)" />
-                                </div>
-                                <div class="div_icon" *ngIf="status == 'draft' && isQLHD_02 && this.isOrg == 'off'">
-                                    <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.edit' | translate}}" (click)="openEdit(item.id)" />
-                                </div>
-                                <div class="div_icon" *ngIf="status == 'draft' && this.isOrg == 'off'">
-                                    <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'contract.delete' | translate}}" (click)="deleteContract(item.id)" />
-                                </div>
-                                <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12 && this.isOrg == 'off'">
-                                    <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.view' | translate}}" (click)="contractConnect(item.id)" />
-                                </div>                 
-                                <div class="div_icon" *ngIf="status == 'complete' && isQLHD_11 && this.isOrg == 'off'">
-                                    <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnectNew(item.id)" />
-                                </div>
-                                <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire') && isQLHD_09 && this.isOrg == 'off'">
-                                    <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="{{'contract.cancel' | translate}}" (click)="cancelContract(item.id);" />
-                                </div>
-                                <div class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'">
-                                    <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
-                                </div>
-                                <div class="div_icon" *ngIf="status == 'complete' && isQLHD_13 && this.isOrg == 'off'">
-                                    <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}" (click)="shareContract(item.id);" />
-                                </div>
-                            </div>
-                            <div class="div_icon" *ngIf="status == 'cancel'">
-                                <!-- <img src="../../assets/img/view_reason_icon.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" /> -->
-                                <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" />
-                            </div>
+                <!--Cột 3: Ngày hết hạn ký-->
+                <div class="col-md-2 calendar_deadline">
+                    <div style="display: flex; justify-content: center;">
+                        <div class="div_icon"><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date:
+                                'dd/MM/yyyy'}}</span></div>
+                        <!--34: quá hạn cho phép sửa ngay hết hạn-->
+                        <div *ngIf="this.filter_status == 34" class="div_icon"><img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'edit.exp.sign.time' | translate}}" (click)="openEditExpiration(item)" />
                         </div>
                     </div>
-                <!-- </div> -->
+                </div>
+
+                <!--Cột 4: Thao tác-->
+                <div class="col-md-3 item_icon">
+                    <div style="display: flex; justify-content: center;">
+                        <div class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'on'">
+                          <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
         </div>
 
         <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
@@ -226,11 +432,165 @@
         </div>
 
         <div class="contract_footer">
+            <div class="footer_contract_per_page">
+                <div>Hiển thị&nbsp;</div>
+                <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
+                    <option value="" hidden>10</option>
+                    <option *ngFor="let d of this.pageOptions">{{d}}</option>
+                </select>
+                <div>&nbsp;{{'contracts.per.page' | translate}}</div>
+            </div>
             <div class="footer_title"></div>
             <div class="footer_pagination">
                 <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
             </div>
-            <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
+            <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}
+            </div>
+        </div>
+    </ng-template>
+
+    <div>{{roleMess | translate}}</div>
+</div>
+
+<!-- HD Hoàn thành -->
+<div *ngIf="(this.filter_status == 30 && this.isOrg == 'off' && this.typeDisplay === 'view')" class="container-fluid">
+    <ng-template [ngIf]="!roleMess">
+        <div class="col-md-12" style="padding-top: 20px;">
+            <div class="input-line search">
+                <img src="../../assets/img/icon_search.svg" class="input-img" />
+                <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
+            </div>
+        </div>
+
+        <div class="col-md-1 btn_search" style="padding-top: 10px;">
+            <button *ngIf="this.typeDisplay === 'view'" (click)="downloadMany()" class="btn btn-lg btn-block btn_submit">{{'download.multi'|translate}}</button>
+        </div>
+
+        <div class="row list_header" *ngIf="pageTotal > 0;">
+            <div class="col-md-4"></div>
+            <div class="col-md-2">{{'create-date' | translate}}</div>
+            <div class="col-md-2">{{'expiration-date' | translate}}</div>
+            <div class="col-md-3">{{'action' | translate}}</div>
+        </div>
+
+        <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
+            <div class="row">
+                <!--Cột 1-->
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <div class="item_contract_name">
+                                <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
+                                        'page': this.p,
+                                        'filter_type': this.filter_type,
+                                        'filter_contract_no': this.filter_contract_no,
+                                        'filter_from_date': this.filter_from_date,
+                                        'filter_to_date': this.filter_to_date,
+                                        'isOrg': this.isOrg,
+                                        'organization_id': this.organization_id,
+                                        'status': this.status
+                                      }">{{item.name}}</a>
+                            </div>
+
+                            <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
+                                <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="item_contract_infor">{{'contract.status' | translate}}:
+                                    <span class="status_blue">{{this.filter_status | pipe | translate}}
+                                        {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
+                                        translate}}</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                              <div class="item_contract_infor">
+                                <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Cột 2: Ngày tạo-->
+                <div class="col-md-2 calendar_create">
+                    <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date:
+                            'dd/MM/yyyy HH:mm'}}</span></div>
+                </div>
+
+                <!--Cột 3: Ngày hết hạn ký-->
+                <div class="col-md-2 calendar_deadline">
+                    <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date:
+                            'dd/MM/yyyy'}}</span></div>
+                </div>
+
+                <!--Cột 4: Thao tác-->
+                <div class="col-md-3 item_icon">
+                    <div style="display: flex; justify-content: center;">
+                        <!-- <div *ngIf="this.isOrg == 'off'"> -->
+                        <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue' || status == 'complete') && isQLHD_08 && this.isOrg == 'off'">
+                            <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'contract.copy' | translate}}" (click)="openCopy(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'draft' && isQLHD_02 && this.isOrg == 'off'">
+                            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.edit' | translate}}" (click)="openEdit(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'draft' && this.isOrg == 'off'">
+                            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'contract.delete' | translate}}" (click)="deleteContract(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12 && this.isOrg == 'off'">
+                            <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.view' | translate}}" (click)="contractConnect(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'complete' && isQLHD_11 && this.isOrg == 'off'">
+                            <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnectNew(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire') && isQLHD_09 && this.isOrg == 'off'">
+                            <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="{{'contract.cancel' | translate}}" (click)="cancelContract(item.id);" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'">
+                            <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'complete' && isQLHD_13 && this.isOrg == 'off'">
+                            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}" (click)="shareContract(item.id);" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'complete'">
+                            <img src="../../assets/img/upload_file.svg" class="img_icon" ngbTooltip="{{'upload_attach_files' | translate}}" (click)="uploadAttachFiles(item);" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'cancel'">
+                            <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off' && item.liquidationContractId == null && item.originalContractId == null && this.isQLHD_16">
+                            <img src="../../../assets/img/contract-liquidation.svg" class="img_icon" ngbTooltip="{{'contract.liquidation' | translate}}" (click)="addContractLiquidationNew(item.id);" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+            <div style="display: table-cell;vertical-align: middle;">
+                <img src="../../../assets/img/empty_data.svg" />
+                <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+            </div>
+        </div>
+
+        <div class="contract_footer">
+            <div class="footer_contract_per_page">
+                <div>Hiển thị&nbsp;</div>
+                <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
+                    <option value="" hidden>10</option>
+                    <option *ngFor="let d of this.pageOptions">{{d}}</option>
+                </select>
+                <div>&nbsp;{{'contracts.per.page' | translate}}</div>
+            </div>
+            <div class="footer_title"></div>
+            <div class="footer_pagination">
+                <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
+            </div>
+            <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}
+            </div>
         </div>
     </ng-template>
 
@@ -238,9 +598,478 @@
 </div>
 
 
+
+
+<div *ngIf="(this.typeDisplay == 'downloadMany' && this.filter_status == 30)">
+    <div class="container-fluid">
+        <ng-template [ngIf]="!roleMess">
+            <div class="col-md-12" style="padding-top: 20px;">
+                <div class="input-line search">
+                    <img src="../../assets/img/icon_search.svg" class="input-img" />
+                    <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                    <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
+                </div>
+            </div>
+
+            <div *ngIf="this.typeDisplay === 'downloadMany'" style="padding-top: 10px;">
+                <button class="btn_submit" (click)="downloadManyContract()">{{'contract.down'| translate}}</button>
+
+                <button class="btn_submit" style="width: 90px;" (click)="cancelDownloadMany()">{{'cancel'| translate}}</button>
+            </div>
+
+            <div class="row list_header" *ngIf="pageTotal > 0;">
+                <div class="col-md-4"></div>
+                <div class="col-md-2">{{'create-date' | translate}}</div>
+                <div class="col-md-2">{{'expiration-date' | translate}}</div>
+                <div class="col-md-3">{{'action' | translate}}</div>
+
+                <div *ngIf="this.filter_status == 30" class="col-md-1">
+                    <input style="margin-left: 4px;" id="allDownload" name="allDownload" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDownload(checkedAll)" />
+                </div>
+            </div>
+
+            <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
+                <div class="row">
+                    <!--Cột 1-->
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-md-11">
+                                <div class="item_contract_name">
+                                    <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
+                                            'page': this.p,
+                                            'filter_type': this.filter_type,
+                                            'filter_contract_no': this.filter_contract_no,
+                                            'filter_from_date': this.filter_from_date,
+                                            'filter_to_date': this.filter_to_date,
+                                            'isOrg': this.isOrg,
+                                            'organization_id': this.organization_id,
+                                            'status': this.status
+                                          }">{{item.name}}</a>
+                                </div>
+
+                                <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
+                                    <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="item_contract_infor">{{'contract.status' | translate}}:
+                                        <span class="status_blue">{{this.filter_status | pipe | translate}}
+                                            {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
+                                            translate}}</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                  <div class="item_contract_infor">
+                                    <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Cột 2: Ngày tạo-->
+                    <div class="col-md-2 calendar_create">
+                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date:
+                                'dd/MM/yyyy HH:mm'}}</span></div>
+                    </div>
+
+                    <!--Cột 3: Ngày hết hạn ký-->
+                    <div class="col-md-2 calendar_deadline">
+                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date:
+                                'dd/MM/yyyy'}}</span></div>
+                    </div>
+
+                    <!--Cột 4: Thao tác-->
+                    <div class="col-md-3 item_icon">
+                        <div style="display: flex; justify-content: center;">
+                            <!-- <div *ngIf="this.isOrg == 'off'"> -->
+                            <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08 && this.isOrg == 'off'">
+                                <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'contract.copy' | translate}}" (click)="openCopy(item.id)" />
+                            </div>
+                            <div class="div_icon" *ngIf="status == 'draft' && isQLHD_02 && this.isOrg == 'off'">
+                                <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.edit' | translate}}" (click)="openEdit(item.id)" />
+                            </div>
+                            <div class="div_icon" *ngIf="status == 'draft' && this.isOrg == 'off'">
+                                <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'contract.delete' | translate}}" (click)="deleteContract(item.id)" />
+                            </div>
+                            <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12 && this.isOrg == 'off'">
+                                <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.view' | translate}}" (click)="contractConnect(item.id)" />
+                            </div>
+                            <div class="div_icon" *ngIf="status == 'complete' && isQLHD_11 && this.isOrg == 'off'">
+                                <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnectNew(item.id)" />
+                            </div>
+                            <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire') && isQLHD_09 && this.isOrg == 'off'">
+                                <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="{{'contract.cancel' | translate}}" (click)="cancelContract(item.id);" />
+                            </div>
+                            <div class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'">
+                                <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
+                            </div>
+                            <div class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'on'">
+                              <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
+                            </div>
+                            <div class="div_icon" *ngIf="status == 'complete' && isQLHD_13 && this.isOrg == 'off'">
+                                <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}" (click)="shareContract(item.id);" />
+                            </div>
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'cancel'">
+                            <!-- <img src="../../assets/img/view_reason_icon.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" /> -->
+                            <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" />
+                        </div>
+                    </div>
+                    <!--Cột 5: Input checkbox-->
+                    <div class="col-md-1 item_icon" *ngIf="this.filter_status == 30">
+                        <div style="display: flex; justify-content: center;">
+                            <div class="div_icon">
+                                <div class="col-md-1 calendar_create">
+                                    <div>
+                                        <input name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneDownload(item)"(change)="selectContract(item)" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+                <div style="display: table-cell;vertical-align: middle;">
+                    <img src="../../../assets/img/empty_data.svg" />
+                    <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+                </div>
+            </div>
+
+            <div class="contract_footer">
+                <div class="footer_contract_per_page">
+                  <div>Hiển thị&nbsp;</div>
+                  <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
+                      <option value="" hidden>10</option>
+                      <option *ngFor="let d of this.pageOptions">{{d}}</option>
+                  </select>
+                  <div>&nbsp;{{'contracts.per.page' | translate}}</div>
+                </div>
+                <div class="footer_title"></div>
+                <div class="footer_pagination">
+                    <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getPageData()" previousLabel="" nextLabel=""></pagination-controls>
+                </div>
+                <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}
+                </div>
+            </div>
+        </ng-template>
+
+        <div>{{roleMess | translate}}</div>
+    </div>
+</div>
+
+<!--Phát hành hợp đồng-->
+<div *ngIf="(this.typeDisplay == 'release' && this.filter_status == 0)">
+    <div class="container-fluid">
+        <ng-template [ngIf]="!roleMess">
+            <div class="col-md-12" style="padding-top: 20px;">
+                <div class="input-line search">
+                    <img src="../../assets/img/icon_search.svg" class="input-img" />
+                    <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                    <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
+                </div>
+            </div>
+
+            <div style="width: 100%; display: flex; flex-wrap: nowrap">
+                <div class="col-md-1 btn_search" style="padding-top: 10px;">
+                    <button (click)="releaseMany()" class="btn btn-lg btn-block btn_submit">{{'release'|translate}}</button>
+                </div>
+                <div class="col-md-1 btn_search" style="padding-top: 10px; padding-left: 10px">
+                    <button (click)="cancelDownloadMany()" class="btn btn-lg btn-block btn_submit">{{'cancel'|translate}}</button>
+                </div>
+            </div>
+
+            <div class="row list_header" *ngIf="pageTotal > 0;">
+                <div class="col-md-4"></div>
+                <div class="col-md-2">{{'create-date' | translate}}</div>
+                <div class="col-md-2">{{'expiration-date' | translate}}</div>
+                <div class="col-md-3">{{'action' | translate}}</div>
+
+                <div *ngIf="this.filter_status == 0" class="col-md-1">
+                    <input style="margin-left: 4px;" id="allRelease" name="allRelease" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleReleaseAll(checkedAll)" />
+                </div>
+            </div>
+
+            <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}">
+                <div class="row">
+                    <!--Cột 1-->
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-md-11">
+                                <div class="item_contract_name">
+                                    <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
+                                            'page': this.p,
+                                            'filter_type': this.filter_type,
+                                            'filter_contract_no': this.filter_contract_no,
+                                            'filter_from_date': this.filter_from_date,
+                                            'filter_to_date': this.filter_to_date,
+                                            'isOrg': this.isOrg,
+                                            'organization_id': this.organization_id,
+                                            'status': this.status
+                                          }">{{item.name}}</a>
+                                </div>
+
+                                <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
+                                    <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="item_contract_infor">{{'contract.status' | translate}}:
+                                        <span class="status_blue">{{this.filter_status | pipe | translate}}
+                                            {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
+                                            translate}}</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                  <div class="item_contract_infor">
+                                    <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Cột 2: Ngày tạo-->
+                    <div class="col-md-2 calendar_create">
+                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date:
+                                'dd/MM/yyyy HH:mm'}}</span></div>
+                    </div>
+
+                    <!--Cột 3: Ngày hết hạn ký-->
+                    <div class="col-md-2 calendar_deadline">
+                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date:
+                                'dd/MM/yyyy'}}</span></div>
+                    </div>
+
+                    <!--Cột 4: Thao tác-->
+                    <div class="col-md-3 item_icon">
+                        <div style="display: flex; justify-content: center;">
+                            <!-- <div *ngIf="this.isOrg == 'off'"> -->
+                            <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08 && this.isOrg == 'off'">
+                                <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'contract.copy' | translate}}" (click)="openCopy(item.id)" />
+                            </div>
+                            <div class="div_icon" *ngIf="status == 'draft' && isQLHD_02 && this.isOrg == 'off'">
+                                <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.edit' | translate}}" (click)="openEdit(item.id)" />
+                            </div>
+                            <div class="div_icon" *ngIf="status == 'draft' && this.isOrg == 'off'">
+                                <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'contract.delete' | translate}}" (click)="deleteContract(item.id)" />
+                            </div>
+                            <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12 && this.isOrg == 'off'">
+                                <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.view' | translate}}" (click)="contractConnect(item.id)" />
+                            </div>
+                            <div class="div_icon" *ngIf="status == 'complete' && isQLHD_11 && this.isOrg == 'off'">
+                                <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnectNew(item.id)" />
+                            </div>
+                            <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire') && isQLHD_09 && this.isOrg == 'off'">
+                                <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="{{'contract.cancel' | translate}}" (click)="cancelContract(item.id);" />
+                            </div>
+                            <div class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'">
+                                <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
+                            </div>
+                            <div class="div_icon" *ngIf="status == 'complete' && isQLHD_13 && this.isOrg == 'off'">
+                                <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}" (click)="shareContract(item.id);" />
+                            </div>
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'cancel'">
+                            <!-- <img src="../../assets/img/view_reason_icon.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" /> -->
+                            <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" />
+                        </div>
+                    </div>
+                    <!--Cột 5: Input checkbox-->
+                    <div class="col-md-1 item_icon" *ngIf="this.filter_status == 0">
+                        <div style="display: flex; justify-content: center;">
+                            <div class="div_icon">
+                                <div class="col-md-1 calendar_create">
+                                    <div>
+                                        <input name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneRelease(item)" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+                <div style="display: table-cell;vertical-align: middle;">
+                    <img src="../../../assets/img/empty_data.svg" />
+                    <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+                </div>
+            </div>
+
+            <div class="contract_footer">
+                <div class="footer_title"></div>
+                <div class="footer_pagination">
+                    <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; release()" previousLabel="" nextLabel=""></pagination-controls>
+                </div>
+                <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}
+                </div>
+            </div>
+        </ng-template>
+
+        <div>{{roleMess | translate}}</div>
+    </div>
+</div>
+
+<!-- Xóa nhiều bản nháp -->
+<div *ngIf="(this.typeDisplay == 'multiDeleteDraft' && this.filter_status == 0)">
+  <div class="container-fluid">
+      <ng-template [ngIf]="!roleMess">
+          <div class="col-md-12" style="padding-top: 20px;">
+              <div class="input-line search">
+                  <img src="../../assets/img/icon_search.svg" class="input-img" />
+                  <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                  <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
+              </div>
+          </div>
+
+          <div style="width: 100%; display: flex; flex-wrap: nowrap">
+              <div class="col-md-1 btn_search" style="padding-top: 10px;">
+                  <button (click)="multiDeleteDraftMany()" class="btn btn-lg btn-block btn_submit">{{'btn.delete'|translate}}</button>
+              </div>
+              <div class="col-md-1 btn_search" style="padding-top: 10px; padding-left: 10px">
+                  <button (click)="cancelDeleteDraftMany()" class="btn btn-lg btn-block btn_submit">{{'cancel'|translate}}</button>
+              </div>
+          </div>
+
+          <div class="row list_header" *ngIf="pageTotal > 0;">
+              <div class="col-md-4"></div>
+              <div class="col-md-2">{{'create-date' | translate}}</div>
+              <div class="col-md-2">{{'expiration-date' | translate}}</div>
+              <div class="col-md-3">{{'action' | translate}}</div>
+
+              <div *ngIf="this.filter_status == 0" class="col-md-1">
+                <input style="margin-left: 4px;" id="allDeleteDraft" name="allDeleteDraft" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDeleteDraftAll(checkedAll)" />
+              </div>
+          </div>
+
+          <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}">
+              <div class="row">
+                  <!--Cột 1-->
+                  <div class="col-md-4">
+                      <div class="row">
+                          <div class="col-md-11">
+                              <div class="item_contract_name">
+                                  <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
+                                          'page': this.p,
+                                          'filter_type': this.filter_type,
+                                          'filter_contract_no': this.filter_contract_no,
+                                          'filter_from_date': this.filter_from_date,
+                                          'filter_to_date': this.filter_to_date,
+                                          'isOrg': this.isOrg,
+                                          'organization_id': this.organization_id,
+                                          'status': this.status
+                                        }">{{item.name}}</a>
+                              </div>
+
+                              <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
+                                  <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                                  </div>
+                              </div>
+
+                              <div class="row">
+                                  <div class="item_contract_infor">{{'contract.status' | translate}}:
+                                      <span class="status_blue">{{this.filter_status | pipe | translate}}
+                                          {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
+                                          translate}}</span>
+                                  </div>
+                              </div>
+                              <div class="row">
+                                <div class="item_contract_infor">
+                                  <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <!--Cột 2: Ngày tạo-->
+                  <div class="col-md-2 calendar_create">
+                      <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date:
+                              'dd/MM/yyyy HH:mm'}}</span></div>
+                  </div>
+
+                  <!--Cột 3: Ngày hết hạn ký-->
+                  <div class="col-md-2 calendar_deadline">
+                      <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date:
+                              'dd/MM/yyyy'}}</span></div>
+                  </div>
+
+                  <!--Cột 4: Thao tác-->
+                  <div class="col-md-3 item_icon">
+                      <div style="display: flex; justify-content: center;">
+                          <!-- <div *ngIf="this.isOrg == 'off'"> -->
+                          <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08 && this.isOrg == 'off'">
+                              <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'contract.copy' | translate}}" (click)="openCopy(item.id)" />
+                          </div>
+                          <div class="div_icon" *ngIf="status == 'draft' && isQLHD_02 && this.isOrg == 'off'">
+                              <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.edit' | translate}}" (click)="openEdit(item.id)" />
+                          </div>
+                          <div class="div_icon" *ngIf="status == 'draft' && this.isOrg == 'off'">
+                              <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'contract.delete' | translate}}" (click)="deleteContract(item.id)" />
+                          </div>
+                          <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12 && this.isOrg == 'off'">
+                              <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.view' | translate}}" (click)="contractConnect(item.id)" />
+                          </div>
+                          <div class="div_icon" *ngIf="status == 'complete' && isQLHD_11 && this.isOrg == 'off'">
+                              <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnectNew(item.id)" />
+                          </div>
+                          <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire') && isQLHD_09 && this.isOrg == 'off'">
+                              <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="{{'contract.cancel' | translate}}" (click)="cancelContract(item.id);" />
+                          </div>
+                          <div class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'">
+                              <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
+                          </div>
+                          <div class="div_icon" *ngIf="status == 'complete' && isQLHD_13 && this.isOrg == 'off'">
+                              <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}" (click)="shareContract(item.id);" />
+                          </div>
+                      </div>
+                      <div class="div_icon" *ngIf="status == 'cancel'">
+                          <!-- <img src="../../assets/img/view_reason_icon.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" /> -->
+                          <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.id)" />
+                      </div>
+                  </div>
+                  <!--Cột 5: Input checkbox-->
+                  <div class="col-md-1 item_icon" *ngIf="this.filter_status == 0">
+                      <div style="display: flex; justify-content: center;">
+                          <div class="div_icon">
+                              <div class="col-md-1 calendar_create">
+                                  <div>
+                                      <input name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneDraft(item)" (change)="selectContract(item)" />
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+              <div style="display: table-cell;vertical-align: middle;">
+                  <img src="../../../assets/img/empty_data.svg" />
+                  <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+              </div>
+          </div>
+
+          <div class="contract_footer">
+              <div class="footer_title"></div>
+              <div class="footer_pagination">
+                  <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; multiDeleteDraft('changePages')" previousLabel="" nextLabel=""></pagination-controls>
+              </div>
+              <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}
+              </div>
+          </div>
+      </ng-template>
+
+      <div>{{roleMess | translate}}</div>
+  </div>
+</div>
+
+
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
     <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
 </ngx-spinner>
-
-
-

@@ -53,10 +53,6 @@ export class AdminMainComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    console.log("info");
-    console.log(JSON.parse(localStorage.getItem('currentAdmin') || ''));
-
     const permissions =  JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
 
     if(permissions.length === 0) {
@@ -124,7 +120,6 @@ export class AdminMainComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
       let is_data = result
     })
   }
@@ -208,7 +203,7 @@ export class AdminMainComponent implements OnInit {
   openLinkNotification(link:any, id:any) {
     // window.location.href = link.replace('&loginType=', '').replace('&loginType=1', '');
     // this.dashboardService.updateViewNotification(id).subscribe(data => {
-    //   console.log(data);
+    //   
     // });
   }
 
@@ -216,7 +211,6 @@ export class AdminMainComponent implements OnInit {
     this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
       //this.numberNotification = data.total_elements;
       this.listNotification = data.entities;
-      console.log(data);
     });
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
       this.numberNotification = data.total_elements;

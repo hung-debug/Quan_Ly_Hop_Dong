@@ -33,10 +33,10 @@ export class DetailRoleComponent implements OnInit {
   ngOnInit(): void {
     this.roleService.getRoleById(this.data.id).subscribe(
       data => {
-        console.log(data);
+        
         this.name = data.name,
         this.code = data.code,
-        this.role = data.role,  
+        this.role = data.description,  
         this.selectedRole = this.convertRoleArr(data.permissions)
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);

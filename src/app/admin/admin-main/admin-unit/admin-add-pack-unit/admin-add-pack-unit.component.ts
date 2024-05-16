@@ -111,13 +111,13 @@ export class AdminAddPackUnitComponent implements OnInit {
         endDate: this.fbd.control(''),
       });
     } else {
-      console.log('vao form cap nhat');
+      
 
       this.adminUnitService
         .getPackUnitByIdPack(this.data.id, this.data.idPack)
         .subscribe((response) => {
-          console.log('response id pack ', response);
-          console.log('response start date', response.startDate);
+          
+          
 
           this.addForm = this.fbd.group({
             packCode: this.fbd.control(response.code, [Validators.required]),
@@ -149,7 +149,7 @@ export class AdminAddPackUnitComponent implements OnInit {
             endDate: this.fbd.control(this.checkNullEndDate(response.endDate)),
           });
 
-          console.log('start date ', this.addForm.value.startDate);
+          
         });
     }
   }
@@ -173,7 +173,7 @@ export class AdminAddPackUnitComponent implements OnInit {
 
   convertCalculatorMethod(calculatorMethod: string): string {
     if (calculatorMethod == 'BY_TIME') {
-      console.log('vao day by time');
+      
 
       this.flagTime = 1;
 
@@ -221,17 +221,17 @@ export class AdminAddPackUnitComponent implements OnInit {
 
   onChangeMaGoi(event: any) {
     if (this.flagTime === 1) {
-      console.log('vao day');
+      
 
       const startDate1 = new Date(this.startDate);
 
-      console.log('duration model ', this.addForm.value.duration);
+      
 
       this.endDate = new Date(
         startDate1.setMonth(startDate1.getMonth() + this.duration)
       ).toLocaleDateString('fr-CA');
 
-      console.log('this end date ', this.endDate);
+      
     }
 
     for (let i = 0; i < this.listDichVu.length; i++) {
@@ -242,7 +242,7 @@ export class AdminAddPackUnitComponent implements OnInit {
         this.totalAfterVAT = this.listDichVu[i].totalAfterVAT;
 
         if (this.listDichVu[i].calculatorMethod == 'BY_TIME') {
-          console.log('vao day thoi gian');
+          
           this.calculatorMethod = 'Theo thời gian';
           this.duration = this.listDichVu[i].duration;
           this.numberOfContracts = '';
@@ -260,7 +260,7 @@ export class AdminAddPackUnitComponent implements OnInit {
               .reverse()
               .join('/');
 
-          console.log('this end date ', this.endDate);
+          
 
           this.addForm.controls.startDate.setValidators([Validators.required]);
           this.addForm.controls.startDate.updateValueAndValidity();
@@ -272,7 +272,7 @@ export class AdminAddPackUnitComponent implements OnInit {
           // this.startDate = '';
           this.endDate = '';
 
-          console.log('vao day so luong');
+          
           this.calculatorMethod = 'Theo số lượng hợp đồng';
           this.numberOfContracts = this.listDichVu[i].numberOfContracts;
           this.duration = '';
@@ -324,15 +324,15 @@ export class AdminAddPackUnitComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('id org ', this.data.id);
+    
 
     this.submitted = true;
     if (this.addForm.invalid) {
-      console.log('invalid');
+      
       return;
     }
 
-    console.log('start date ', this.startDate);
+    
 
     const dataForm = {
       id: this.data.id,
@@ -345,7 +345,7 @@ export class AdminAddPackUnitComponent implements OnInit {
       endDate: this.endDate,
     };
 
-    console.log('data form start date ', dataForm.startDate);
+    
 
     if (
       this.addForm.value.paymentDate == null ||
@@ -410,7 +410,7 @@ export class AdminAddPackUnitComponent implements OnInit {
         subcription.unsubscribe();
 
         if(flagServiceTime == 1 && this.calculatorMethod == 'Theo thời gian') {
-          console.log("dich vu theo thoi gian");
+          
           this.toastService.showErrorHTMLWithTimeout('Tổ chức vẫn đang sử dụng một gói dịch vụ theo thời gian','',3000);
         } else if(flagServiceContract == 1 && this.calculatorMethod == 'Theo số lượng hợp đồng') {
           this.toastService.showErrorHTMLWithTimeout('Tổ chức vẫn đang sử dụng một gói dịch vụ theo số lượng hợp đồng','',3000);
@@ -435,11 +435,11 @@ export class AdminAddPackUnitComponent implements OnInit {
   }
 
   updatePackUnit(dataForm: any) {
-    console.log('ngay ket thuc ', this.addForm.value.endDate);
+    
     this.adminUnitService
       .updatePackUnit(dataForm, this.data.idPack)
       .subscribe((response) => {
-        console.log('res ', response);
+        
 
         if (response.id != null && response.id != undefined) {
           this.toastService.showSuccessHTMLWithTimeout(
@@ -462,7 +462,7 @@ export class AdminAddPackUnitComponent implements OnInit {
             data,
           });
           dialogRef1.afterClosed().subscribe((result: any) => {
-            console.log('the close dialog');
+            
           });
         }
       });
@@ -493,14 +493,14 @@ export class AdminAddPackUnitComponent implements OnInit {
           data,
         });
         dialogRef1.afterClosed().subscribe((result: any) => {
-          console.log('the close dialog');
+          
         });
       }
     });
   }
 
   onChangePaymentDate(event: any) {
-    console.log('event ', event);
+    
   }
 }
 

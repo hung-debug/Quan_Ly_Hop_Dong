@@ -1,9 +1,10 @@
 .content {
     //height: 102px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+    width: 100%;
+    // align-items: center;
+    // justify-content: center;
+    // flex-direction: column;
   }
   
   .text-sign span {
@@ -12,9 +13,6 @@
     height: 25px;
     outline: none;
     color: #106DB6;
-
-    // align-items: left;
-    // justify-content: left;
   }
   
   
@@ -23,5 +21,30 @@
     background-color: rgb(235, 248, 255);
     border: none;
     outline: none;
+  }
+
+  .stamp-content {
+    flex-basis: 33.33%;
+    background-color: #106DB6;
+    border-radius: 6px;
+    margin-right: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .sign-info-content {
+    flex-basis: 66.66%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #EBF8FF;
+    border-radius: 6px;
+    color: #106DB6;
+    // font-family: Lexend Deca !important;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0px;
   }
   

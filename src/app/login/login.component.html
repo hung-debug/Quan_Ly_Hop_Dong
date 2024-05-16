@@ -1,6 +1,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-<div *ngIf="this.mobile == false" class="all">
+<div id="all" *ngIf="this.mobile == false && !isSSOlogin" class="all">
+
   <div class="full-height d-flex flex-row">
     <div class="left-background"></div>
     <div class="right-panel">
@@ -29,93 +30,121 @@
           </button>
         </div>
       </div>
-      <div>
-        <div class="small-logo d-flex flex-column justify-content-center">
-          <div>
-            <img
-              src="../../assets/img/logo_eContract_21.svg"
-              width="300px"
-              style="max-width: 50%"
-            />
+      <div class="login-form">
+        <div id="login-form">
+          <div class="small-logo d-flex flex-column justify-content-center">
+            <div>
+              <img
+                src="../../assets/img/EC_new_logo.png"
+                width="300px"
+                style="max-width: 50%"
+              />
+            </div>
           </div>
-        </div>
-        <div class="input-form ng-touched ng-pristine ng-invalid">
-          <form class="form-signin" [formGroup]="loginForm">
-            <div *ngIf="type == 1" class="form-group note">
-              {{ "login.note.user" | translate }}
-            </div>
-            <div class="form-group">
-              <div class="input-line">
-                <img src="../../assets/img/login_user.svg" class="input-img" />
-                <input
-                  type="text"
-                  id="username"
-                  placeholder="{{ 'login.username' | translate }}"
-                  formControlName="username"
-                  class="input-text"
-                />
+          <div class="input-form ng-touched ng-pristine ng-invalid">
+            <form class="form-signin" [formGroup]="loginForm">
+              <div *ngIf="type == 1" class="form-group note">
+                {{ "login.note.user" | translate }}
               </div>
-            </div>
+              <div class="form-group">
+                <div class="input-line">
+                  <img src="../../assets/img/login_user.svg" class="input-img" />
+                  <input
+                    type="text"
+                    id="username"
+                    placeholder="{{ 'login.username' | translate }}"
+                    formControlName="username"
+                    class="input-text"
+                  />
+                </div>
+              </div>
 
-            <div class="form-group">
-              <div class="input-line">
-                <img
-                  src="../../assets/img/login_password.svg"
-                  class="input-img"
-                />
-                <input
-                  [type]="fieldTextType ? 'text' : 'password'"
-                  placeholder="{{ 'login.password' | translate }}"
-                  formControlName="password"
-                  class="input-text"
-                />
-                <div class="icon-password">
-                  <i
-                    class="fa"
-                    [ngClass]="{
-                      'fa-eye-slash': !fieldTextType,
-                      'fa-eye': fieldTextType
-                    }"
-                    (click)="toggleFieldTextType()"
-                    style="color: #106db6"
-                  ></i>
+              <div class="form-group">
+                <div class="input-line">
+                  <img
+                    src="../../assets/img/login_password.svg"
+                    class="input-img"
+                  />
+                  <input
+                    [type]="fieldTextType ? 'text' : 'password'"
+                    placeholder="{{ 'login.password' | translate }}"
+                    formControlName="password"
+                    class="input-text"
+                  />
+                  <div class="icon-password">
+                    <i
+                      class="fa"
+                      [ngClass]="{
+                        'fa-eye-slash': !fieldTextType,
+                        'fa-eye': fieldTextType
+                      }"
+                      (click)="toggleFieldTextType()"
+                      style="color: #106db6"
+                    ></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group" *ngIf="captcha">
+                <label>Captcha</label>
+                <div id="preview" class="preview" #previewCaptcha></div>
+                <div class="input-line">
+                  <input formControlName="captchaName" class="input-captcha" type="text" placeholder="{{'enter.captcha' | translate}}"/>
+                  <button (click)="generateCaptcha()">
+                    <i class="fa fa-refresh"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div *ngIf="this.type != 1" class="form-group forgot-password">
+                <a href="/forgot-password" 
+                  >{{ "login.forgot_password" | translate }}?</a
+                >
+              </div>
+
+              <div class="form-group">
+                <p class="alert alert-danger" role="alert" *ngIf="error" style="text-align: center">
+                  <strong>{{ errorDetail | translate }}</strong>
+                </p>
+              </div>
+
+              <div class="form-group sub-login">
+                <button class="btn btn-lg btn-block" (click)="loginUser()">
+                  {{ "login" | translate }}
+                </button>
+              </div>
+
+              <div *ngIf="isNB" class="form-group sign-up">
+                <b>{{ "signup.not_account" | translate }}?</b>&nbsp;<a
+                  href="/signup"
+                  >{{ "signup" | translate }}</a
+                >
+              </div>
+            </form>
+
+            <!-- SSO -->
+            <div *ngIf="!isNB" class="form-signin">
+              <div class="form-group">
+                <p class="login_methods__title">
+                  <span>
+                    {{ 'login.method.title' | translate }}
+                  </span>
+                </p>
+                <div class="login_methods__list">
+                  <div class="login-methods__item" (click)="loginSSO()">
+                    <span class="login-methods__icon">
+                      <img src="../../assets/img/login_method_sso.svg">
+                    </span>
+                    SSO
+                  </div>
                 </div>
               </div>
             </div>
-
-            <div *ngIf="this.type != 1" class="form-group forgot-password">
-              <a href="/forgot-password"
-                >{{ "login.forgot_password" | translate }}?</a
-              >
-            </div>
-
-            <div class="form-group">
-              <p
-                class="alert alert-danger"
-                role="alert"
-                *ngIf="error"
-                style="text-align: center"
-              >
-                <strong>{{ errorDetail | translate }}</strong>
-              </p>
-            </div>
-
-            <div class="form-group sub-login">
-              <button class="btn btn-lg btn-block" (click)="loginUser()">
-                {{ "login" | translate }}
-              </button>
-            </div>
-
-            <div class="form-group sign-up">
-              <b>{{ "signup.not_account" | translate }}?</b>&nbsp;<a
-                href="/signup"
-                >{{ "signup" | translate }}</a
-              >
-            </div>
-          </form>
+            <!-- SSO -->
+          </div>
         </div>
 
-        <div class="slogan">
+        <div class="slogan" [ngStyle]="getStyleFooter()">
           <div class="bg-footer-login"></div>
         </div>
       </div>
@@ -156,7 +185,7 @@
         <div class="small-logo d-flex flex-column justify-content-center">
           <div>
             <img
-              src="../../assets/img/logo_eContract_21.svg"
+              src="../../assets/img/EC_new_logo.png"
               width="300px"
               style="max-width: 50%"
             />
@@ -182,10 +211,7 @@
 
             <div class="form-group">
               <div class="input-line">
-                <img
-                  src="../../assets/img/login_password.svg"
-                  class="input-img"
-                />
+                <img src="../../assets/img/login_password.svg" class="input-img"/>
                 <input
                   [type]="fieldTextType ? 'text' : 'password'"
                   placeholder="{{ 'login.password' | translate }}"
@@ -206,19 +232,25 @@
               </div>
             </div>
 
+            <div class="form-group" *ngIf="captcha">
+              <label>Captcha</label>
+              <div id="preview" class="preview" #previewCaptcha></div>
+              <div class="input-line">
+                <input formControlName="captchaName" class="input-captcha" type="text" placeholder="{{'enter.captcha' | translate}}"/>
+                <button (click)="generateCaptcha()">
+                  <i class="fa fa-refresh"></i>
+                </button>
+              </div>
+            </div>
+
             <div class="form-group forgot-password">
               <a href="/forgot-password"
-                >{{ "login.forgot_password" | translate }}?</a
-              >
+                >{{ "login.forgot_password" | translate }}?
+              </a>
             </div>
 
             <div class="form-group">
-              <p
-                class="alert alert-danger"
-                role="alert"
-                *ngIf="error"
-                style="text-align: center"
-              >
+              <p class="alert alert-danger" role="alert" *ngIf="error" style="text-align: center">
                 <strong>{{ errorDetail | translate }}</strong>
               </p>
             </div>
@@ -229,7 +261,7 @@
               </button>
             </div>
 
-            <div class="form-group sign-up">
+            <div *ngIf="isNB" class="form-group sign-up">
               <b>{{ "signup.not_account" | translate }}?</b>&nbsp;<a
                 href="/signup"
                 >{{ "signup" | translate }}</a
@@ -244,4 +276,12 @@
       </div>
     </div>
   </div>
+</div>
+
+<div *ngIf="!isNB && isSSOlogin">
+  <h2>Đang tải dữ liệu...</h2>
+  <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+    <p style="font-size: 18px; color: white">{{'Đang tải dữ liệu' | translate}}...</p>
+  </ngx-spinner>
+  <html><body><script>parent.postMessage(location.href, location.origin)</script></body></html>
 </div>

@@ -136,7 +136,7 @@ export class InforContractComponent implements OnInit {
     const file = e.target.files[0];
     if (file) {
       // giới hạn file upload lên là 5mb
-      if (e.target.files[0].size <= 5000000) {
+      if (e.target.files[0].size <= 10*(Math.pow(1024, 2))) {
         const file_name = file.name;
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
@@ -149,7 +149,7 @@ export class InforContractComponent implements OnInit {
           alert('Chỉ hỗ trợ file có định dạng PDF')
         }
       } else {
-        alert('Yêu cầu file nhỏ hơn 5MB');
+        alert('Yêu cầu file tối đa 10MB');
       }
     }
   }
@@ -160,14 +160,14 @@ export class InforContractComponent implements OnInit {
   }
 
   fileChangedAttach(e: any) {
-    console.log(e.target.files)
+    
     let files = e.target.files;
     for(let i = 0; i < files.length; i++){
 
       const file = e.target.files[i];
       if (file) {
         // giới hạn file upload lên là 5mb
-        if (e.target.files[0].size <= 5000000) {
+        if (e.target.files[0].size <= 10*(Math.pow(1024, 2))) {
           const file_name = file.name;
           const extension = file.name.split('.').pop();
           this.datas.file_name_attach = file_name;
@@ -177,7 +177,7 @@ export class InforContractComponent implements OnInit {
         } else {
           this.datas.file_name_attach = '';
           this.datas.attachFile = '';
-          alert('Yêu cầu file nhỏ hơn 5MB');
+          alert('Yêu cầu file tối đa 10MB');
           break;
         }
       }
@@ -245,7 +245,7 @@ export class InforContractComponent implements OnInit {
   }
 
   changeAddContract(link:any){
-    console.log(link);
+    
     this.router.navigate([link]);
   }
 

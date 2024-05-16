@@ -3,26 +3,36 @@
     <div class="col-md-3" *ngIf="isQLND_03">
       <div>{{'unit.name' | translate}}</div>
       <div>
-          <p-treeSelect 
-            [(ngModel)]="selectedNodeOrganization" 
-            [options]="listOrgCombobox" 
-            placeholder="{{'all' | translate}}" 
-            [filter]="true" filterBy="name"  
-            [droppable]="true" 
+          <p-treeSelect
+            [(ngModel)]="selectedNodeOrganization"
+            [options]="listOrgCombobox"
+            placeholder="{{'all' | translate}}"
+            [filter]="true" filterBy="name"
+            [droppable]="true"
             (onNodeSelect)="changeOrg()">
           </p-treeSelect>
       </div>
     </div>
+
     <div class="col-md-3" *ngIf="isQLND_03">
-      <div>{{'unit.email' | translate}}</div>
+      <div>{{'unit.email.name' | translate}}</div>
       <div class="input-line">
-        <input type="text" [(ngModel)]="email" class="input_text"/>
+        <input type="text" [(ngModel)]="nameOrEmail" class="input_text"/>
       </div>
     </div>
 
-    <div class="col-md-6 btn_search">
+    <!-- <div class="col-md-3" *ngIf="isQLND_03">
+      <div>{{'user.name' | translate}}</div>
+      <div class="input-line">
+        <input type="text" [(ngModel)]="name" class="input_text"/>
+      </div>
+    </div> -->
+
+    <div class="col-md-3 btn_search">
       <button *ngIf="isQLND_03" class="btn btn-lg btn-block btn_submit" (click)="searchUser()">{{'btn.search' | translate }}</button>
-      <button *ngIf="isQLND_01" class="btn btn-lg btn-block btn_submit" (click)="addUser()">{{'btn.add' | translate }}</button>
+        <a *ngIf="isQLND_01" class="btn btn-lg btn-block btn_submit" [routerLink]="['/main/form-user/add']" (click)="addUser()">
+          {{'btn.add' | translate }}
+        </a>
     </div>
   </div>
 
@@ -53,18 +63,17 @@
       </ng-template>
       <ng-template pTemplate="body" let-list>
           <tr>
-              <td><a (click)="isQLND_04?detailUser(list.id):null" style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
+              <td><a (click)="isQLND_04?detailUser(list.id):null" [routerLink]="['/main/user-detail/', list.id]" style="color: #0160AE; cursor: pointer; text-decoration: none;">{{list.name}}</a></td>
               <td>{{list.email}}</td>
               <td>{{list.phone}}</td>
               <td>{{list.organization.name}}</td>
-              <!-- <td>{{list.status==1?'Hoạt động':'Không hoạt động'}}</td> -->
 
               <td *ngIf="list.status == 1">{{'unit.active' | translate}}</td>
               <td *ngIf="list.status != 1">{{'unit.inactive' | translate}}</td>
 
               <td>{{list.role?.name}}</td>
               <td style="text-align: center">
-                <img *ngIf="isQLND_02" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
+                <img *ngIf="isQLND_02 || list.email == this.myEmail" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
               </td>
           </tr>
       </ng-template>
@@ -73,7 +82,7 @@
       </ng-template>
       <ng-template pTemplate="paginatorright" let-state>
         <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-      </ng-template> 
+      </ng-template>
     </p-table>
   </div>
 
@@ -81,5 +90,8 @@
 <div *ngIf="!isQLND_01 && !isQLND_02 && !isQLND_03 && !isQLND_04">
   {{'no.role' | translate}}
 </div>
- 
-  
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+  <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+</ngx-spinner>
+

@@ -16,11 +16,20 @@
   font-size: 16px;
   color: #106DB6;
   cursor: pointer;
+  white-space: pre-wrap;
 }
 
 
 .item_contract_infor{
   color: #666666;
+}
+
+.item_contract_created{
+  color: #666666;
+  font-size: 13px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .status_blue{
@@ -192,6 +201,17 @@
   display: flex;
   justify-content: space-between;
 }
+.footer_contract_per_page{
+  position:absolute;
+  display: flex;
+  flex-wrap: nowrap;
+  color: #0160AE;
+  select{
+    border: 1px solid #0160AE;
+    border-radius: 5px;
+  }
+}
+
 .footer_title{
   width: 120px;
 }
@@ -235,6 +255,11 @@
   width: 100%;
   border-radius: 5px;
 }
+
+.btn-size{
+  width: fit-content;
+}
+
 .div_icon{
   padding: 0 10px;
 }
@@ -257,6 +282,11 @@
   align-self: flex-end;
 }
 
+.btn-size{
+  width: fit-content;
+}
+
+
 .btn_submit{
   border: 0px;
   border-radius: 5px;
@@ -266,4 +296,8 @@
   background-color: #106DB6;
   font-size: 13px;
   margin: 0 10px;
+}
+
+#table td {
+  white-space: pre-wrap;
 }

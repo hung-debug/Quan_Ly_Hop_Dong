@@ -3,11 +3,11 @@
     border: 1px solid #0160AE;
     margin-top: 10px;
   }
-  
+
   .add_click {
     margin: 10px;
   }
-  
+
   .add_link {
     padding-top: 5px;
     color: #b8bcbf;
@@ -16,7 +16,7 @@
     text-decoration: none;
     cursor: pointer;
   }
-  
+
   .label {
     font-weight: 500;
     color: #0160AE;
@@ -27,7 +27,7 @@
     align-items: center;
     padding-left: 40%;
   }
-  
+
   .label_detail {
     font-weight: 500;
     color: #0160AE;
@@ -37,18 +37,18 @@
     display: flex;
     align-items: center;
   }
-  
+
   .label_item {
     padding: 12px 0px 3px;
     color: #5e5e5e;
   }
-  
+
   .order {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  
+
   .order_input {
     background: #f9f9f9;
     text-align: center;
@@ -56,75 +56,75 @@
     width: 40px;
     font-size: inherit;
   }
-  
+
   .input_phone {
     font-size: inherit;
   }
-  
+
   .remove {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  
+
   .remove_icon {
     color: #b8bcbf;
     cursor: pointer;
   }
-  
+
   .form-check-input {
     width: 20px;
     margin: 0;
     height: 20px;
   }
-  
+
   .form_content {
     border: 1px solid #0160AE;
     padding: 8px;
     border-radius: 10px;
   }
-  
+
   .require_star {
     color: red;
   }
-  
+
   .partner_content {
     padding-top: 20px;
   }
-  
+
   .labelOrg {
     padding: 10px 0px 5px;
     font-weight: 500;
     text-transform: uppercase;
   }
-  
+
   .textOrg {
     font-size: inherit;
   }
-  
+
   .form-control {
     border: 1px solid #87CAFF;
   }
-  
+
   .form-control:disabled, .form-control[readonly] {
     background-color: #f9f9f9;
   }
-  
+
   hr {
     border: 1px solid #0160AE;
   }
-  
+
   .label_type {
     text-align: center;
     font-weight: 500;
     padding: 10px;
   }
-  
+
   .label_type_radio {
     text-align: center;
     font-weight: 500;
   }
-  
+
   //input type number
   /* Chrome, Safari, Edge, Opera */
   input::-webkit-outer-spin-button,
@@ -132,19 +132,19 @@
     // -webkit-appearance: none;
     margin: 0;
   }
-  
+
   /* Firefox */
 //   input[type=number] {
 //     // -moz-appearance: textfield;
 //   }
-  
+
   //change css dropdown multi
   :host ::ng-deep {
     .selected-item {
       max-width: 100% !important;
     }
   }
-  
+
   //style button
   .action-button {
     width: 100px;
@@ -157,7 +157,7 @@
     padding: 10px 5px;
     margin: 10px 5px;
   }
-  
+
   .draft-button {
     width: 100px;
     background: #FCAF17;
@@ -169,7 +169,7 @@
     padding: 10px 5px;
     margin: 10px 5px;
   }
-  
+
   .action-button-previous {
     width: 100px;
     background: #C5C5F1;
@@ -181,36 +181,36 @@
     padding: 10px 5px;
     margin: 10px 5px;
   }
-  
+
   .footer-determine {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  
+
     .content_footer {
       color: #0160AE;
       font-size: 13px;
       font-weight: 500;
     }
   }
-  
+
   .error-detail {
     font-size: inherit;
     padding: 7px;
     margin-top: 5px;
     margin-bottom: 0;
   }
-  
+
   .input-line {
     display: flex;
     position: relative;
   }
-  
+
   .input-img {
     top: 10px;
     left: 20px;
   }
-  
+
   .input-text {
     border: 0;
     width: 90%;
@@ -218,32 +218,32 @@
     outline: 0;
     font-size: 14px;
   }
-  
+
   // defind json data follow backend
-  
+
   .contract-determine {
     align-items: center;
-  
+
     &:not(:last-child) {
       margin-bottom: 20px;
     }
-  
+
     .contract--content {
       display: flex;
       flex-direction: column;
       width: 100%;
     }
-  
+
     .contract__content--title {
       display: flex;
       color: #106DB6;
       align-items: center;
       margin-bottom: 8px;
-  
+
       > div {
         width: 158px;
       }
-  
+
       > input {
         padding-left: 10px;
         outline: none;
@@ -253,17 +253,17 @@
         border: 1px solid #106DB6;
       }
     }
-  
+
     .contract__content--title-doi-tac {
       display: flex;
       color: #106DB6;
       align-items: center;
       margin-bottom: 8px;
-  
+
       > div {
         width: 158px;
       }
-  
+
       > input.input1 {
         padding-left: 10px;
         outline: none;
@@ -281,20 +281,20 @@
         border: 1px solid #106DB6;
       }
     }
-  
+
     .contract__content--participants {
       border-radius: 10px;
       // border: 1px solid #87CAFF;
       background-color: #F9FDFF;
       padding: 19px 10px 13px 10px;
-  
+
       .participants--content {
         // display: flex;
         background-color: #FFFFFF;
         align-items: center;
         justify-content: space-around;
         border-radius: 0 0 11px 11px;
-  
+
         ::ng-deep .mat-form-field {
           width: 100%;
           background-color: white !important;
@@ -307,39 +307,39 @@
             border-top: 0;
           }
         }
-  
+
         .participants__content--input .participants-information {
           display: flex;
           text-align: center;
           justify-content: center;
           margin-bottom: 14px;
-  
+
           .participants-signature-type {
             width: 95%;
             text-align: center;
           }
         }
-  
+
         .participants--input {
           background-color: "red";
           display: flex;
           justify-content: space-around;
-  
+
           .participants__name {
             // background-color: blue;
             width: 42%;
-  
+
             .input-data {
               border: 1px solid #106DB6;
               border-radius: 5px;
               height: 38px;
               display: flex;
               align-items: center;
-  
+
               > img {
                 padding-left: 14px;
               }
-  
+
               > input {
                 border: none;
                 outline: none;
@@ -347,13 +347,13 @@
                 width: 100%;
               }
             }
-  
+
             input {
               outline: none;
               padding-left: 19px;
               width: 100%;
             }
-  
+
             .search-name {
               display: flex;
               position: absolute;
@@ -367,43 +367,43 @@
               overflow: auto;
               cursor: pointer;
               z-index: 1;
-  
+
               .search-name-items {
                 border: none;
                 background-color: white;
                 text-align: left;
-  
+
                 &:hover {
                   background-color: #e9eceff7;
                 }
               }
-  
+
               //span:hover {
               //  background-color: #dddddd94;
               //}
             }
-  
+
           }
         }
-  
+
         .participants--input1 {
           display: flex;
           justify-content: space-around;
-  
+
           .participants__name {
             width: 40%;
-  
+
             .input-data {
               border: 1px solid #106DB6;
               border-radius: 5px;
               height: 38px;
               display: flex;
               align-items: center;
-  
+
               > img {
                 padding-left: 14px;
               }
-  
+
               > input {
                 border: none;
                 outline: none;
@@ -411,13 +411,13 @@
                 width: 100%;
               }
             }
-  
+
             input {
               outline: none;
               padding-left: 19px;
               width: 100%;
             }
-  
+
             .search-name {
               display: flex;
               position: absolute;
@@ -431,45 +431,45 @@
               overflow: auto;
               cursor: pointer;
               z-index: 1;
-  
+
               .search-name-items {
                 border: none;
                 background-color: white;
                 text-align: left;
-  
+
                 &:hover {
                   background-color: #e9eceff7;
                 }
               }
-  
+
               //span:hover {
               //  background-color: #dddddd94;
               //}
             }
-  
+
           }
         }
-  
+
         .delete-element {
           position: relative;
           cursor: pointer;
-  
+
           .close-btn {
             position: absolute;
             top: 8px;
             left: 4.4px;
           }
         }
-  
+
         .select-text-input {
           display: flex;
           //margin: 0 29px;
           //margin: 0 44px;
-  
+
         //   div:first-child, div:last-child {
         //     //width: 42%;
         //   }
-  
+
           .participants__name:last-child {
             input {
               border: 1px solid #106DB6;
@@ -479,50 +479,50 @@
               align-items: center;
             }
           }
-  
+
           .participants-otp {
             position: relative;
             top: 40px;
-  
+
             input {
               top: 13px;
               position: absolute;
             }
           }
-  
+
         }
-  
+
       }
-  
+
       .participants-border {
         border-radius: 11px 11px 11px 11px;
         border: 1px solid #ddd;
-  
+
         .participants--add {
           display: inline-block;
           color: #106DB6;
           cursor: pointer;
         }
-  
+
         &:not(:last-child) {
           margin-bottom: 10px;
         }
       }
-  
+
       ::ng-deep .multiselect-dropdown .dropdown-btn {
         border: 1px solid #106DB6 !important;
         min-height: 38px;
         height: auto;
       }
-  
+
     }
-  
+
     .text-color {
       background-color: #FFFFFF;
       border-radius: 0 0 11px 11px;
     }
   }
-  
+
   .contract-total {
     border: 1px solid #106DB6;
     color: #106DB6;
@@ -530,18 +530,18 @@
     border-radius: 5px;
     outline: none;
   }
-  
+
   .required-title {
     color: red;
   }
-  
+
   .notify {
     width: 100% !important;
     text-align: left;
     color: #ffc107;
     font-size: 12px;
   }
-  
+
   //::ng-deep .mat-form-field-flex {
   //  background-color: white;
   //}
@@ -558,9 +558,61 @@
   .footer-btn{
     display: flex;
     justify-content: center;
-    text-align: center; 
+    text-align: center;
     margin: 15px;
+  }
+  .update-btn{
+    color: white;
+    background-color: #106DB6 !important;
   }
   .invalid{
     color: red;
   }
+  // .btn-outline-primary:hover{
+  //   color: grey;
+  // }
+  // .dropdown-toggle:empty::after {
+  //   margin-left: 24px;
+  //   margin-bottom: 2px;
+  //   width: 9px;
+  // }
+  // .dropdownSMS{
+  //   // width: 8%;
+  //   margin-top: 9px;
+  //   margin-right: 25px;
+  //   height: 24px;
+  //   margin-right: 21.5%;
+  // }
+  // .DropdownToggleSMS{
+  //   margin: -8px;
+  //   padding-left: 22px;
+  //   background-color: #ffffff0a;
+  //   border: 1px solid #106DB6;
+  // }
+  // .db_icon_english {
+  //   height: 20px;
+  //   width: 30px;
+  //   background-size: cover;
+  //   background-repeat: no-repeat;
+  //   background-image: url(../../../../../../assets/img/icon_english.svg);
+  // }
+  // .db_icon_vietnam {
+  //   height: 20px;
+  //   width: 30px;
+  //   background-size: cover;
+  //   background-repeat: no-repeat;
+  //   background-image: url(../../../../../../assets/img/icon_vietnam.svg);
+  // }
+  // .drop_menu{
+  //   border-color: #C2E4FF;
+  //   padding: 0;
+  //   font-size: inherit;
+  //   right: 10px;
+  //   left: unset !important;
+  // }
+  // .language{
+  //   margin-left: 20px;
+  // }
+  // .switch-language{
+  //   padding: 5px;
+  // }

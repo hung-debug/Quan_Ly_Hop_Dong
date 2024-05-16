@@ -5,8 +5,8 @@
     //position: relative;
     .sig-img-daky {
       position: absolute;
-      top: -11px;
-      right: -8px;
+      top: -20px;
+      right: -3px;
       //cursor: pointer;
     }
   }
@@ -234,7 +234,7 @@
   //height: 32px;
   font-size: 12px;
   border-radius: 3px;
-  font-family: sans-serif;
+  // font-family: sans-serif;
   outline: none;
   touch-action: none;
   display: flex;
@@ -364,4 +364,83 @@
   border: 1px solid #87CAFF;
   border-radius: 5px; 
   font-size: 15px;
+}
+
+.main-sign-box {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 4px;
+}
+
+.text-ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: inherit;
+  max-width: 106px;
+}
+
+.rotate{
+  left: 1480px;
+  position: fixed;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.input-web {
+  box-sizing: border-box;
+  text-align: center;
+  width: 40px;
+  height: 22px;
+  background: #FFFFFF;
+  border: 1px solid #87CAFF;
+  border-radius: 5px;
+}
+
+.zoom-in-out{
+  width: 100%;
+  position: fixed;
+  z-index: 1000;
+  left: 340px;
+}
+@media screen and (max-width:1440px){
+  .zoom-in-out{
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
+    left: 250px;
+  }
+}
+@media screen and (max-width:1366px){
+  .zoom-in-out{
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
+    left: 255px;
+  }
+}
+@media screen and (max-width:1600px){
+  .zoom-in-out{
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
+    left: 280px;
+  }
+}
+@media screen and (max-width:1280px){
+  .zoom-in-out{
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
+    left: 230px;
+  }
+}
+@media screen and (max-width:1920px){
+  .zoom-in-out{
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
+    left: 330px;
+  }
 }

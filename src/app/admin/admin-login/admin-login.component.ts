@@ -163,12 +163,6 @@ export class AdminLoginComponent implements OnInit {
 
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
-      console.log(
-        this.deviceService.isMobile(),
-        this.deviceService.deviceType,
-        this.deviceService
-      );
-
       // @ts-ignore
       const dialogRef = this.dialog.open(ActionDeviceComponent, {
         width: '580px',
@@ -177,7 +171,6 @@ export class AdminLoginComponent implements OnInit {
         panelClass: 'custom-modalbox',
       });
       dialogRef.afterClosed().subscribe((result: any) => {
-        console.log('the close dialog');
         if (!this.router.url.endsWith('login')) {
           this.sub = this.route.params.subscribe((params) => {
             this.type = params['loginType'];

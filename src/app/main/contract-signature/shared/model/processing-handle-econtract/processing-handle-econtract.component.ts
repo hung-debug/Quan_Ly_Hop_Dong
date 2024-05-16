@@ -7,7 +7,6 @@ import { ContractService } from 'src/app/service/contract.service';
 import { DialogReasonRejectedComponent } from '../dialog-reason-rejected/dialog-reason-rejected.component';
 import { EditHandlerComponent } from '../edit-handler-dialog/edit-handler-dialog.component';
 import { ToastService } from 'src/app/service/toast.service';
-import { log } from 'console';
 @Component({
   selector: 'app-processing-handle-econtract',
   templateUrl: './processing-handle-econtract.component.html',
@@ -29,6 +28,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   cancelDate: any;
   isEndDate: boolean;
   staus: number;
+  card_id : any;
 
   status: any = [
     {
@@ -56,27 +56,18 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   lang: string;
-  ngOnInit(): void {
-
-    console.log("aaa ", sessionStorage.getItem('lang'));
-
+  async ngOnInit(): Promise<void> {
     if(sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     } else if (sessionStorage.getItem('lang') == 'en') {
       this.lang = 'en';
     }
-    console.log("data", this.data)
-    this.contractService.getDetailContract(this.data.is_data_contract.id).subscribe(response => {
-      this.endDate = moment(response[0].sign_time, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss")
-      let timeNow = moment(new Date(), "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss")
-
-      // console.log("SUABc 1", moment(timeNow, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss"))
-      // console.log("SUABc 2", moment(this.endDate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss"))
-      // console.log("SUABc 3", moment(this.endDate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") >= moment(timeNow, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss"))
-
-      this.isEndDate = this.endDate >= timeNow ? true : false
-    })
-
+    const detailContract = await this.contractService.getDetailContract(this.data.is_data_contract.id).toPromise();
+    this.endDate = moment(detailContract[0].sign_time, "YYYY/MM/DD").format("YYYY/MM/DD")
+    let timeNow = moment(new Date(), "YYYY/MM/DD").format("YYYY/MM/DD")
+    this.isEndDate = this.endDate >= timeNow ? true : false;
+    let participants = detailContract[0].participants;
+    
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
       this.personCreate = response.createdBy.name;
 
@@ -93,49 +84,39 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       } else {
         this.isHiddenButton = false;
       }
-
-
       response.recipients.forEach((element: any) => {
-        console.log("su element",element);
-        
         let data = {
           id: element.id,
           name: element.name,
           name_company: element.participantName,
-          emailRecipients: element.email,
+          emailRecipients: element.email ? element.email : element.phone,
           status: this.checkStatusUser(element.status, element.role),
-          typeOfSign: element.signType[0],
+          typeOfSign: (element.signType && element.signType.length > 0) ? element.signType[0] : "",
           process_at: element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null,
           reasonReject: element.reasonReject,
           type: element.participantType,
           statusNumber: element.status,
-          phone: element.phone
+          phone: element.phone,
+          change_num: this.checkChangeNum(participants, element.id),
+          card_id: element.cardId,
+          user_in_organization: element.user_in_organization
         }
 
         this.is_list_name.push(data);
+        
       })
 
       this.is_list_name.map((x: any) => {
-        this.data.is_data_contract.participants.map((item: any) => {
+        participants.map((item: any) => {
           item.recipients.map((y: any) => {
             if (x.id === y.id) {
-              x["change_num"] = y.change_num
+              x.change_num = y.change_num
             }
           })
         })
       })
 
-      console.log("is_list_name", this.is_list_name);
-
       this.listCheckSmsEmail = true
-      // this.is_list_name.map((item: any) => {
-      //   if (item.statusNumber === 3 || item.statusNumber === 34) {
-      //     console.log(" item.statusNumber", item.statusNumber);
-
-      //     this.listCheckSmsEmail = false
-      //   }
-      // });
-
 
       if (response.contractStatus === 31 || response.contractStatus === 34 || response.contractStatus === 0) {
         this.listCheckSmsEmail = false
@@ -143,6 +124,24 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
     });
 
+  }
+
+  checkChangeNum(participants: any, recipientId: any) {
+    let change_num = 0;
+
+    this.is_list_name.map((x: any) => {
+      participants.map((item: any) => {
+        item.recipients.map((y: any) => {
+          if(x.id === y.id) {
+
+            change_num = y.change_num;
+            return;
+          }
+        })
+      })
+    })
+
+    return change_num;
   }
 
   getStatus(status: any) {
@@ -155,10 +154,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
   checkStatusUser(status: any, role: any) {
     let res = '';
-
-    console.log("status ", status);
-
-    console.log("role ", role);
 
     if(this.lang == 'vi' || !this.lang) {
       if (status == 3) {
@@ -177,7 +172,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         res += 'Đã ';
       }
 
-      // if (!this.reasonCancel) {
       if (role == 1) {
         res += 'điều phối';
       } else if (role == 2) {
@@ -189,7 +183,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       } else
         if (!res.includes('Đã'))
           res = 'Đã huỷ'
-      // }
     } else if (this.lang == 'en') {
       if (status == 3) {
         return 'Rejected';
@@ -247,15 +240,12 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+
     })
   }
 
   resendSmsEmail(id: any) {
-    let responseSmsEmail: any;
     this.contractService.resendSmsEmail(id).subscribe((responseSmsEmail) => {
-      console.log("data success", responseSmsEmail);
-
       if (responseSmsEmail.success == true) {
         this.toastService.showSuccessHTMLWithTimeout((this.translate.instant('send.sms.email')), "", 3000);
       } else {
@@ -267,35 +257,33 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   openEdit(recipient: any) {
-
-    this.contractService.getInforPersonProcess(recipient).subscribe((response) => {
-
+    this.contractService.getInforPersonProcess(recipient).subscribe((response) => {    
       let data: any;
       data = response;
       data["contract_id"] = this.data.is_data_contract.id
-      console.log("data luongxly hodng", data);
-      console.log("contractid", this.data.is_data_contract.id);
+
+
       const dialogRef = this.dialog.open(EditHandlerComponent, {
         width: '1000px',
+        disableClose: true,
         data,
       })
 
-      console.log("list name", this.is_list_name);
-
-      dialogRef.afterClosed().subscribe((result: any) => {
-        console.log('the close dialog', result);
-
+      dialogRef.afterClosed().subscribe((result: any) => {  
         this.is_list_name = this.is_list_name.map((x: any) => {
-          if (x.id === result.id) {
+          if (x?.id === result?.id) {
             return {
               ...x, name: result.name,
               emailRecipients: result.email,
               phone: result.phone,
-              change_num: result.change_num
+              change_num: result.change_num,
+              typeOfSign: result.sign_type[0],
+              card_id: result.card_id,
+              user_in_organization: result.user_in_organization
             }
           }
           return x
-        })
+        })  
       })
     })
   }

@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 import { DashboardService } from 'src/app/service/dashboard.service';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: 'root',
@@ -57,19 +59,44 @@ export class SidebarService {
   isQLLHD_04: boolean = true; //tim kiem loai hop dong
   isQLLHD_05: boolean = true; //xem thong tin chi tiet loai hop dong
 
+  QLDSCTS_01: boolean = true; //them moi chung thu so
+  QLDSCTS_02: boolean = true; //sua thong tin chung thu so
+  QLDSCTS_03: boolean = true; //xem thong tin chung thu so
+  QLDSCTS_04: boolean = true; //tim kiem thong tin
+
+
+  isBaoCaoChiTiet: boolean = true; // báo cáo chi tiết hợp đồng
+  isBaoCaoSapHetHieuLuc: boolean = true; // báo cáo hợp đồng sắp hết hiệu lực
+  isBaoCaoTrangThaiXuLy: boolean = true; // báo cáo hợp đồng trạng thái xử lý
+  isBaoCaoSoLuongTrangThai: boolean = true; // báo cáo số lượng hợp đồng theo trạng thái
+  isBaoCaoSoLuongLoai: boolean = true; // báo cáo số lượng hợp đồng theo loại
+  isBaoCaoHopDongNhan: boolean = true; //báo cáo hợp đồng nhận
+  isBaoCaoHopDongEcontractMsale: boolean = true; // báo cáo hợp đồng số lượng hợp đồng eContract-mSale
+  isBaoCaoTrangThaiGuiSms: boolean = true; //báo cáo trạng thái gửi Sms
+  isBaoCaoTrangThaiGuiEmail: boolean = true; //báo cáo trạng thái gửi Email
+  isBaoCaoEKYC: boolean = true; // báo cáo xác thực ekyc
+
+  isConfigSms: boolean = true; //cấu hình sms
+  isConfigSoonExpireDay: boolean = true; // cấu hình ngày sắp hết hạn
+  isConfigBrandname: boolean = true; // cấu hình brandname
+  isConfigMailServer: boolean = true; //cấu hình mail server
+
   toggled = false;
   _hasBackgroundImage = true;
 
   subMenus: any = [];
-  
+
   contract_signatures: any = "c";
+
+  private reloadSidebarSubject = new Subject<void>();
+
+  reloadSidebar$ = this.reloadSidebarSubject.asObservable();
 
   constructor(
     private userService: UserService,
     private roleService: RoleService,
     private toastService: ToastService,
     private router: Router,
-    private dashboardService: DashboardService
   ) {}
 
   toggle() {
@@ -98,7 +125,7 @@ export class SidebarService {
     ];
 
     const currentUserC = JSON.parse(localStorage.getItem('currentUser') || '');
-    console.log(currentUserC.customer.info.organizationChange);
+
     this.userService.getUserById(currentUserC.customer.info.id).subscribe(
       (data) => {
         this.roleService.getRoleById(data?.role_id).subscribe(
@@ -232,15 +259,67 @@ export class SidebarService {
             this.isQLLHD_05 = listRole.some(
               (element) => element.code == 'QLLHD_05'
             );
+            this.QLDSCTS_01 = listRole.some(
+              (element) => element.code == 'QLDSCTS_01'
+            );
+            this.QLDSCTS_02 = listRole.some(
+              (element) => element.code == 'QLDSCTS_02'
+            );
+            this.QLDSCTS_03 = listRole.some(
+              (element) => element.code == 'QLDSCTS_03'
+            );
+            this.QLDSCTS_04 = listRole.some(
+              (element) => element.code == 'QLDSCTS_04'
+            );
+
+            this.isBaoCaoChiTiet = listRole.some(
+              (element) => element.code == 'BAOCAO_CHITIET'
+            )
+
+            this.isBaoCaoSapHetHieuLuc = listRole.some(
+              (element) => element.code == 'BAOCAO_SAPHETHIEULUC'
+            )
+
+            this.isBaoCaoTrangThaiXuLy = listRole.some(
+              (element) => element.code == 'BAOCAO_TRANGTHAIXULY'
+            )
+
+            this.isBaoCaoSoLuongTrangThai = listRole.some(
+              (element) => element.code == 'BAOCAO_SOLUONG_TRANGTHAI'
+            )
+
+            this.isBaoCaoHopDongEcontractMsale = listRole.some(
+              (element) => element.code == 'BAOCAO_SOLUONG_HOPDONG_ECONTRACT_MSALE'
+            )
+
+            this.isBaoCaoTrangThaiGuiSms = listRole.some(
+              (element) => element.code == 'BAOCAO_TRANGTHAIGUI_SMS'
+            )
+
+            this.isBaoCaoTrangThaiGuiEmail = listRole.some(
+              (element) => element.code == 'BAOCAO_TRANGTHAIGUI_EMAIL'
+            )
+            
+            this.isBaoCaoEKYC = listRole.some(
+              (element) => element.code == 'BAOCAO_EKYC'
+            )
+
+            this.isBaoCaoSoLuongLoai = listRole.some((element) => element.code == 'BAOCAO_SOLUONG_LOAIHOPDONG');
+
+            this.isBaoCaoHopDongNhan = listRole.some((element) => element.code == 'BAOCAO_HOPDONG_NHAN');
+
+            this.isConfigSms = listRole.some((element) => element.code == 'CAUHINH_SMS');
+
+            this.isConfigSoonExpireDay = listRole.some((element) => element.code == 'CAUHINH_NGAYSAPHETHAN');
+            
+            this.isConfigBrandname = listRole.some((element) => element.code == 'CAUHINH_BRANDNAME');
+            
+            this.isConfigMailServer = listRole.some((element) => element.code == 'CAUHINH_MAILSERVER');
 
             this.buildMenu(currentUserC);
           },
           (error) => {
-            // this.toastService.showErrorHTMLWithTimeout(
-            //   'Lấy thông tin phân quyền',
-            //   '',
-            //   3000
-            // );
+            this.toastService.showErrorHTMLWithTimeout('Lấy thông tin phân quyền','',3000);
             this.router.navigate(['/login'])
           }
         );
@@ -252,12 +331,12 @@ export class SidebarService {
           '',
           3000
         );
-        
+
       }
     );
 
     this.menus =  this.menus.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
-    
+
     return this.menus;
   }
 
@@ -321,6 +400,11 @@ export class SidebarService {
           title: 'contract.status.complete',
           active: false,
           href: '/main/contract/create/complete',
+        },
+        {
+          title: 'contract.status.liquidated',
+          active: false,
+          href: '/main/contract/create/liquidated',
         }
       );
 
@@ -385,7 +469,7 @@ export class SidebarService {
       this.isQLMHD_08
     ) {
       this.menus.push({
-        title: 'menu.contract.template.list',
+        title: 'menu.contract.template',
         icon: '/assets/img/db_processing.svg',
         active: false,
         type: 'simple',
@@ -394,57 +478,231 @@ export class SidebarService {
       });
     }
 
-    if (this.isQLTC_01 || this.isQLTC_02 || this.isQLTC_03 || this.isQLTC_04) {
+    if(this.isQLTC_01 || this.isQLTC_02 || this.isQLTC_03 || this.isQLTC_04 ||
+      this.isQLND_01 || this.isQLND_02 || this.isQLND_03 || this.isQLND_04 ||
+      this.isQLVT_01 || this.isQLVT_02 || this.isQLVT_03 || this.isQLVT_04 || this.isQLVT_05)
+      {
+        let submenusUserManage: any[] = [];
+        submenusUserManage.push(
+          {
+            title: 'menu.organization.list',
+            active: false,
+            href: '/main/unit',
+          },
+          {
+            title: 'menu.user.list',
+            active: false,
+            href: '/main/user',
+          },
+          {
+            title: 'menu.role.list',
+            active: false,
+            href: '/main/role',
+          }
+        )
+        this.menus.push({
+          title: 'menu.manager.user',
+          icon: '/assets/img/db_processing.svg',
+          active: false,
+          activeDrop: false,
+          type: 'dropdown',
+          href: '#',
+          submenus: submenusUserManage,
+          id: 5,
+        });
+      }
+
+    // if (this.isQLTC_01 || this.isQLTC_02 || this.isQLTC_03 || this.isQLTC_04) {
+    //   this.menus.push({
+    //     title: 'menu.organization.list',
+    //     icon: '/assets/img/db_user_group.svg',
+    //     active: false,
+    //     type: 'simple',
+    //     href: '/main/unit',
+    //     id: 5,
+    //   });
+    // }
+    // if (this.isQLND_01 || this.isQLND_02 || this.isQLND_03 || this.isQLND_04) {
+    //   this.menus.push({
+    //     title: 'menu.user.list',
+    //     icon: '/assets/img/db_user.svg',
+    //     active: false,
+    //     type: 'simple',
+    //     href: '/main/user',
+    //     id: 6,
+    //   });
+    // }
+    // if (this.isQLVT_01 || this.isQLVT_02 || this.isQLVT_03 || this.isQLVT_04 || this.isQLVT_05) {
+    //   this.menus.push({
+    //     title: 'menu.role.list',
+    //     icon: '/assets/img/db_role.svg',
+    //     active: false,
+    //     type: 'simple',
+    //     href: '/main/role',
+    //     id: 7,
+    //   });
+    // }
+
+    this.menus.push({
+      title: 'customer.list',
+      icon: '/assets/img/customer_list.svg',
+      active: false,
+      type: 'simple',
+      href: '/main/customer',
+      id: 11,
+    })
+
+    if(this.isQLLHD_01 || this.isQLLHD_02 || this.isQLLHD_03 || this.isQLLHD_04 || this.isQLLHD_05 ||
+      this.isConfigSms || this.isConfigSoonExpireDay || this.isConfigBrandname || this.isConfigMailServer ||
+      this.QLDSCTS_01 || this.QLDSCTS_02 || this.QLDSCTS_03 || this.QLDSCTS_04)
+      {
+        let submenusConfig: any[] = [];
+        submenusConfig.push(
+          {
+            title: 'menu.contract.type.list',
+            active: false,
+            href: '/main/contract-type',
+          },
+          {
+            title: 'menu.config-sms-email',
+            active: false,
+            href: '/main/config-sms-email',
+          },
+          {
+            title: 'certificate.list',
+            active: false,
+            href: '/main/digital-certificate',
+          }
+        )
+        this.menus.push({
+          title: 'menu.config',
+          icon: '/assets/img/email-sms.svg',
+          active: false,
+          activeDrop: false,
+          type: 'dropdown',
+          href: '#',
+          submenus: submenusConfig,
+          id: 6,
+        });
+      }
+
       this.menus.push({
-        title: 'menu.organization.list',
-        icon: '/assets/img/db_user_group.svg',
+        title: 'contract.folder',
+        icon: '/assets/img/contract.svg',
         active: false,
         type: 'simple',
-        href: '/main/unit',
-        id: 5,
-      });
+        href: '/main/contract-folder',
+        id: 12,
+      })
+
+    // if (this.isQLLHD_01 || this.isQLLHD_02 || this.isQLLHD_03 || this.isQLLHD_04 || this.isQLLHD_05)
+    // {
+    //   this.menus.push({
+    //     title: 'menu.contract.type.list',
+    //     icon: '/assets/img/db_contract_type.svg',
+    //     active: false,
+    //     type: 'simple',
+    //     href: '/main/contract-type',
+    //     id: 8,
+    //   });
+    // }
+
+
+    let submenusReport: any[] = [];
+
+    if(this.isBaoCaoChiTiet) {
+      submenusReport.push({
+        title: 'report.detail.contract',
+        active: false,
+        href: '/main/report/detail',
+      })
     }
-    if (this.isQLND_01 || this.isQLND_02 || this.isQLND_03 || this.isQLND_04) {
-      this.menus.push({
-        title: 'menu.user.list',
-        icon: '/assets/img/db_user.svg',
+    if(this.isBaoCaoSapHetHieuLuc) {
+      submenusReport.push({
+        title: 'report.expires-soon.contract',
         active: false,
-        type: 'simple',
-        href: '/main/user',
-        id: 6,
-      });
+        href: '/main/report/soon-expire',
+      })
     }
-    if (
-      this.isQLVT_01 ||
-      this.isQLVT_02 ||
-      this.isQLVT_03 ||
-      this.isQLVT_04 ||
-      this.isQLVT_05
-    ) {
-      this.menus.push({
-        title: 'menu.role.list',
-        icon: '/assets/img/db_role.svg',
+
+    if(this.isBaoCaoTrangThaiXuLy) {
+      submenusReport.push( {
+        title: 'report.processing.status.contract',
         active: false,
-        type: 'simple',
-        href: '/main/role',
-        id: 7,
-      });
+        href: '/main/report/status-contract',
+      })
     }
-    if (
-      this.isQLLHD_01 ||
-      this.isQLLHD_02 ||
-      this.isQLLHD_03 ||
-      this.isQLLHD_04 ||
-      this.isQLLHD_05
-    ) {
-      this.menus.push({
-        title: 'menu.contract.type.list',
-        icon: '/assets/img/db_contract_type.svg',
+
+    if(this.isBaoCaoSoLuongTrangThai) {
+      submenusReport.push(
+        {
+          title: 'report.number.contracts.status',
+          active: false,
+          href: '/main/report/contract-number-follow-status',
+        }
+      )
+    }
+
+    if(this.isBaoCaoSoLuongLoai) {
+      submenusReport.push({
+        title:'report.number.contracts.type',
         active: false,
-        type: 'simple',
-        href: '/main/contract-type',
-        id: 8,
-      });
+        href: '/main/report/contract-number-follow-type'
+      })
+    }
+
+    if(this.isBaoCaoHopDongNhan) {
+      submenusReport.push({
+        title:'report.contract.receive',
+        active: false,
+        href: '/main/report/contract-receive'
+      })
+    }
+
+    if(this.isBaoCaoHopDongEcontractMsale && environment.flag == 'NB'){
+      submenusReport.push({
+        title: 'report.number.econtract.msale',
+        active: false,
+        href: '/main/report/contract-number-econtract-mSale',
+      })
+    }
+
+    if(this.isBaoCaoTrangThaiGuiSms) {
+      submenusReport.push({
+        title: 'report.status.send.sms',
+        active: false,
+        href: '/main/report/status-send-sms'
+      })
+    }
+
+    if(this.isBaoCaoTrangThaiGuiEmail) {
+      submenusReport.push({
+        title: 'report.contract.send.email',
+        active: false,
+        href: '/main/report/status-send-email'
+      })
+    }
+    
+    if(this.isBaoCaoEKYC) {
+      submenusReport.push({
+        title: 'report.ekyc',
+        active: false,
+        href: '/main/report/status-ekyc'
+      })
+    }
+
+
+    if(this.isBaoCaoChiTiet || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoSapHetHieuLuc || this.isBaoCaoTrangThaiXuLy || this.isBaoCaoSoLuongLoai || this.isBaoCaoHopDongNhan || this.isBaoCaoSoLuongTrangThai || this.isBaoCaoTrangThaiGuiSms || this.isBaoCaoTrangThaiGuiEmail || this.isBaoCaoEKYC) {
+      this.menus.push({
+        title: 'report',
+        icon: '/assets/img/analytics1.svg',
+        active: false,
+        activeDrop: false,
+        type: 'dropdown',
+        href: '#',
+        submenus: submenusReport,
+        id: 10,
+      })
     }
 
     this.menus.push({
@@ -455,56 +713,28 @@ export class SidebarService {
       href: '/main/check-sign-digital',
       id: 9,
     });
+    // if (this.QLDSCTS_01 || this.QLDSCTS_02 || this.QLDSCTS_03 || this.QLDSCTS_04) {
+    //   this.menus.push({
+    //     title: 'certificate.list',
+    //     icon: '/assets/img/icon-document.svg',
+    //     active: false,
+    //     type: 'simple',
+    //     href: '/main/digital-certificate',
+    //     id: 6,
+    //   });
+    // }
 
-    let submenusReport: any[] = [];
-    submenusReport.push(
-      //Chi tiết hợp đồng
-      {
-        title: 'report.detail.contract',
-        active: false,
-        href: '/main/report/detail',
-      },
-      //HĐ sắp hết hiệu lực
-      {
-        title: 'report.expires-soon.contract',
-        active: false,
-        href: '/main/report/soon-expire',
-      },
-      //Trạng thái xử lý hợp đồng
-      {
-        title: 'report.processing.status.contract',
-        active: false,
-        href: '/main/report/status-contract',
-      },
-      //Số lượng hợp đồng theo trạng thái
-      {
-        title: 'report.number.contracts.status',
-        active: false,
-        href: '/main/report/contract-number-follow-status',
-      },
-      //Số lượng hợp đồng theo loại hợp đồng
-      {
-        title: 'report.number.contracts.contract-type',
-        active: false,
-        href: '/main/report/contract-number-follow-type',
-      },
-      // //Số lượng HĐ theo hình thức ký
-      // {
-      //   title: 'report.number.contracts.type.sign',
-      //   active: false,
-      //   href: '/main/report/contract-number-follow-sign',
-      // }
-    );
-    this.menus.push({
-      title: 'report',
-      icon: '/assets/img/analytics1.svg',
-      active: false,
-      activeDrop: false,
-      type: 'dropdown',
-      href: '#',
-      submenus: submenusReport,
-      id: 10,
-    })
+    // if(this.isConfigSms || this.isConfigSoonExpireDay) {
+    //   this.menus.push({
+    //     title: 'menu.config-sms-email',
+    //     icon: '/assets/img/email-sms.svg',
+    //     active: false,
+    //     type: 'simple',
+    //     href: '/main/config-sms-email',
+    //     id: 9,
+    //   })
+    // }
+
 
     //xu ly highlight
     this.menus.forEach((element: any) => {
@@ -529,16 +759,20 @@ export class SidebarService {
       }
     });
 
+    this.menus = [];
+
   }
 
   getSubMenuList(menuParent: any) {
     this.menus.forEach((element: any) => {
       if (element === menuParent) {
-        console.log(element);
-        console.log(element.submenus);
         return element.submenus;
       }
     });
+  }
+
+  triggerReloadSidebar() {
+    this.reloadSidebarSubject.next();
   }
 
   get hasBackgroundImage() {

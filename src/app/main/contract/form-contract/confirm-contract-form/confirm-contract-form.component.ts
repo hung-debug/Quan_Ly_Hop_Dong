@@ -90,7 +90,9 @@ export class ConfirmContractFormComponent implements OnInit {
   data_parnter_organization: any = [];
 
   conn: string;
+  userSignType: any;
   ngOnInit(): void {
+
     this.spinner.hide();
     this.data_organization = this.datasForm.is_determine_clone.filter(
       (p: any) => p.type == 1
@@ -109,12 +111,9 @@ export class ConfirmContractFormComponent implements OnInit {
       (p: any) => p.type == 2 || p.type == 3
     );
 
-    console.log("vao day ");
-    console.log("dsf ", this.datasForm);
     if (!this.datasForm.contract_user_sign) {
       if (this.datasForm.is_data_object_signature && this.datasForm.is_data_object_signature.length && this.datasForm.is_data_object_signature.length > 0) {
         this.datasForm.is_data_object_signature.forEach((res: any) => {
-          console.log("res ", res);
           res['id_have_data'] = res.id;
           if (res.type == 1) {
             res['sign_unit'] = 'text';
@@ -183,25 +182,32 @@ export class ConfirmContractFormComponent implements OnInit {
     //call API step confirm
     //this.contractService.addConfirmContract(this.datasForm).subscribe((data) => {
     this.spinner.show();
-    this.contractService
-      .changeStatusContract(this.datasForm.id, 10, '')
-      .subscribe(
-        (data) => {
-          //this.router.navigate(['/main/contract/create/processing']);
-          this.router
-            .navigateByUrl('/', { skipLocationChange: true })
-            .then(() => {
-              this.router.navigate(['/main/contract/create/processing']);
-            });
-          this.spinner.show();
-          this.toastService.showSuccessHTMLWithTimeout(
-            'Tạo hợp đồng thành công!',
-            '',
-            3000
-          );
+    this.contractService.changeStatusContract(this.datasForm.id, 10, '').subscribe(
+        (data: any) => {
+          if(data.errors?.length > 0) {
+            if(data.errors[0].code == 1017) {
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout('contract.no.existed','',3000);
+            }
+          } else {
+            this.router.navigate(['/main/contract/create/processing']);
+            this.router
+              .navigateByUrl('/', { skipLocationChange: true })
+              .then(() => {
+                this.router.navigate(['/main/contract/create/processing']);
+              });
+            this.spinner.show();
+            this.toastService.showSuccessHTMLWithTimeout(
+              'create.contract.success',
+              '',
+              3000
+            );
+  
+            this.spinner.hide();  
+          }
         },
         (error) => {
-          this.spinner.show();
+          this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout(
             'no.push.information.contract.error',
             '',
@@ -252,6 +258,15 @@ export class ConfirmContractFormComponent implements OnInit {
     // });
   }
 
+  setValueForContractNo(dataSign: any) {
+    dataSign.forEach((item:any) => {
+      if (item.type === 4) {
+        item.value = this.datasForm.contract_no;
+      }
+    });
+  }
+
+  isButtonDisabled: boolean = false;
   async SaveContract(action: string) {
     if (this.router.url.includes('edit')) {
       let isHaveFieldId: any[] = [];
@@ -286,8 +301,8 @@ export class ConfirmContractFormComponent implements OnInit {
       isContractUserSign_clone.forEach((element: any) => {
         if (element.sign_config.length > 0) {
           element.sign_config.forEach((item: any) => {
-            item['font'] = this.datasForm.font ? this.datasForm.font : 'Times New Roman';
-            item['font_size'] = this.datasForm.size ? this.datasForm.size : 13;
+            item['font'] = item.font ? item.font : 'Times New Roman';
+            item['font_size'] = item.font_size ? item.font_size : 12;
             item['contract_id'] = this.datasForm.contract_id;
             item['document_id'] = this.datasForm.document_id;
             if (item.text_attribute_name) {
@@ -306,6 +321,8 @@ export class ConfirmContractFormComponent implements OnInit {
                 if (!item.recipient_id) item.recipient_id = '';
 
                 if (!item.status) item.status = 0;
+
+                if(item.contract_no) item.contract_no = item.contract_no.trim();
               }
             } else {
               item['type'] = 1;
@@ -323,9 +340,18 @@ export class ConfirmContractFormComponent implements OnInit {
       });
 
       this.spinner.show();
+
+      this.data_sample_contract.forEach((element: any) => {
+        if(this.datasForm.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datasForm.difX;
+        }
+      })
+
+      this.setValueForContractNo(this.data_sample_contract);
       this.contractService.getContractSample(this.data_sample_contract).subscribe(
           (data) => {
             if (action == 'finish_contract') {
+              this.isButtonDisabled = true;
               this.callAPIFinish();
             } else {
               if (
@@ -354,14 +380,14 @@ export class ConfirmContractFormComponent implements OnInit {
               this.save_draft_infor_form.close_modal.close();
             }
             this.toastService.showErrorHTMLWithTimeout(
-              'Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý.',
+              'Vui lòng liên hệ đội hỗ trợ để được xử lý.',
               '',
               3000
             );
             this.spinner.hide();
           },
           () => {
-            this.spinner.hide();
+            // this.spinner.hide();
           }
         );
     }
@@ -370,10 +396,8 @@ export class ConfirmContractFormComponent implements OnInit {
   async getDefinddatasFormignEdit(datasFormignId: any,datasFormignNotId: any,action: any) {
     let datasFormample_contract: any[] = [];
     if (datasFormignId.length > 0) {
-      console.log("dsid ", datasFormignId);
       datasFormignId.forEach((res: any) => {
         this.arrVariableRemove.forEach((itemRemove: any) => {
-          console.log("itt ", itemRemove);
           if (itemRemove !== 'id_have_data') {
             delete res[itemRemove];
           }
@@ -382,24 +406,26 @@ export class ConfirmContractFormComponent implements OnInit {
 
       let countIsSignId = 0;
       this.spinner.show();
+
+      datasFormignId.forEach((element: any) => {
+        if(this.datasForm.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datasForm.difX;
+        }
+      })
+
+      this.setValueForContractNo(datasFormignId);
       for (let i = 0; i < datasFormignId.length; i++) {
         let id = datasFormignId[i].id_have_data;
         delete datasFormignId[i].id_have_data;
+        datasFormignId[i].contract_no = datasFormignId[i].contract_no?.trim();
 
-        // datasFormignId[i].font_size = this.datasForm.size;
-        // datasFormignId[i].font = this.datasForm.font;
-        
-        // datasFormignId[i].font = datasFormignId[i].font ? datasFormignId[i].font : 'Times New Roman';
-        // datasFormignId[i].font_size = datasFormignId[i].size ? datasFormignId[i].size : 13;
-
-        // console.log("vao day ");
         await this.contractService.getContractSampleEdit(datasFormignId[i], id).toPromise().then((data: any) => {
               datasFormample_contract.push(data);
             },
             (error) => {
               this.spinner.hide();
               this.toastService.showErrorHTMLWithTimeout(
-                'Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý',
+                'Vui lòng liên hệ đội hỗ trợ để được xử lý',
                 '',
                 3000
               );
@@ -417,7 +443,7 @@ export class ConfirmContractFormComponent implements OnInit {
     if (datasFormignNotId.length > 0) {
       datasFormignNotId.forEach((item: any) => {
         item['font'] = item.font ? item.font : 'Times New Roman';
-        item['font_size'] = item.size ? item.size : 13;
+        item['font_size'] = item.font_size ? item.font_size : 12;
         item['contract_id'] = this.datasForm.contract_id;
         item['document_id'] = this.datasForm.document_id;
         if (item.text_attribute_name) {
@@ -444,7 +470,12 @@ export class ConfirmContractFormComponent implements OnInit {
           delete item[item_remove];
         });
       });
-      // Array.prototype.push.apply(this.data_sample_contract, datasFormignNotId);
+
+      datasFormignNotId.forEach((element: any) => {
+        if(this.datasForm.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datasForm.difX;
+        }
+      })
       await this.contractService.getContractSample(datasFormignNotId).toPromise().then(
           (data) => {
             this.spinner.hide();
@@ -453,7 +484,7 @@ export class ConfirmContractFormComponent implements OnInit {
             isErrorNotId = true;
             this.spinner.hide();
             this.toastService.showErrorHTMLWithTimeout(
-              'Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý',
+              'Vui lòng liên hệ đội hỗ trợ để được xử lý',
               '',
               3000
             );

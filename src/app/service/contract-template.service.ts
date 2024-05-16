@@ -39,6 +39,7 @@ export class ContractTemplateService {
   templateUseUrl: any = `${environment.apiUrl}/api/v1/contracts/template/is-use/`;
 
   checkViewTemplateContractUrl: any = `${environment.apiUrl}/api/v1/contracts/template/check-view-contract/`
+  getCopyContractTemplate: any = `${environment.apiUrl}/api/v1/contracts/template/clone/`;
 
   constructor(private http: HttpClient,
     public datepipe: DatePipe,) { }
@@ -67,7 +68,7 @@ export class ContractTemplateService {
     } else {
       listContractTemplateUrl = this.listContractShareTemplateUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + "&page=" + page + "&size=" + size;
     }
-    console.log(listContractTemplateUrl);
+    
     const headers = { 'Authorization': 'Bearer ' + this.token }
     return this.http.get<any[]>(listContractTemplateUrl, { headers }).pipe();
   }
@@ -204,7 +205,7 @@ export class ContractTemplateService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    console.log(body);
+    
     return this.http.put<any>(this.documentUrl + `/${id}`, body, { 'headers': headers });
   }
 
@@ -213,7 +214,7 @@ export class ContractTemplateService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    console.log(body);
+    
     return this.http.put<any>(this.documentUrl + `/${id}`, body, { 'headers': headers });
   }
 
@@ -223,7 +224,7 @@ export class ContractTemplateService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_determine);
-    console.log(body);
+    
     return this.http.post<any>(this.addDetermineUrl + id, body, { 'headers': headers }).pipe();
   }
 
@@ -234,7 +235,7 @@ export class ContractTemplateService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_determine);
 
-    console.log("body ", body);
+    
     return this.http.put<any>(this.editDetermineUrl + id, body, { 'headers': headers }).pipe();
   }
 
@@ -244,7 +245,7 @@ export class ContractTemplateService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_sample_contract);
-    console.log(body);
+    
     return this.http.post<any>(this.addSampleContractUrl, body, { 'headers': headers }).pipe();
   }
 
@@ -253,7 +254,7 @@ export class ContractTemplateService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    console.log(headers);
+    
     return this.http.delete<any>(this.deleteInfoContractUrl + id, { headers });
   }
 
@@ -271,7 +272,7 @@ export class ContractTemplateService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    console.log(headers);
+    
     const body = {};
     return this.http.post<any>(this.changeStatusContractUrl + id + '/change-status/' + statusNew, body, { 'headers': headers });
   }
@@ -304,6 +305,14 @@ export class ContractTemplateService {
     return forkJoin(arrApi);
   }
 
+  getContractFilePath(idContract: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.getFileContract + idContract, { headers })
+  }
+
   getInfoContractTemplate(idContract: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -322,8 +331,8 @@ export class ContractTemplateService {
       email: email,
       contract_id: id
     });
-    console.log(body);
-    console.log(this.shareContractTemplateUrl);
+    
+    
     return this.http.post<any>(this.shareContractTemplateUrl, body, { 'headers': headers }).pipe();
   }
 
@@ -347,7 +356,7 @@ export class ContractTemplateService {
       organization_id: this.organization_id,
       id: id
     });
-    console.log(body);
+    
     return this.http.post<any>(this.checkCodeUniqueUrl, body, { headers }).pipe();
   }
 
@@ -521,6 +530,7 @@ export class ContractTemplateService {
         type: 1,
         ordering: 1,
         status: 1,
+        hideFlow: false,
         recipients: [
           {
             login_by: 'email',
@@ -568,6 +578,7 @@ export class ContractTemplateService {
         type: 1,
         ordering: 1,
         status: 1,
+        hideFlow: false,
         recipients: [
           {
             login_by: 'email',
@@ -632,5 +643,13 @@ export class ContractTemplateService {
         sign_config: []
       },
     ]
+  }
+
+  cloneContractTemplate(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.getCopyContractTemplate + id, { headers });
   }
 }

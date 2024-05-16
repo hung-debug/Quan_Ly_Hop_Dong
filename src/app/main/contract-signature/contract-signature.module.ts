@@ -36,11 +36,13 @@ import { PkiDialogSignComponent } from './components/consider-contract/pki-dialo
 import { ImageDialogSignComponent } from './components/consider-contract/image-dialog-sign/image-dialog-sign.component';
 import {NgxSelectModule} from "ngx-select-ex";
 import { HsmDialogSignComponent } from './components/consider-contract/hsm-dialog-sign/hsm-dialog-sign.component';
+import { CertDialogSignComponent } from './components/consider-contract/cert-dialog-sign/cert-dialog-sign.component';
 import {AngularSignaturePadModule} from "@almothafar/angular-signature-pad";
 import {ChooseTypeSignComponent} from "./components/consider-contract/choose-type-sign/choose-type-sign.component";
 import {NgxSpinnerModule} from "ngx-spinner";
 import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
-
+import {TreeTableModule} from 'primeng/treetable';
+import {TableModule} from 'primeng/table';
 import {DropdownModule} from 'primeng/dropdown';
 import {CalendarModule} from 'primeng/calendar';
 import {MultiSelectModule} from 'primeng/multiselect';
@@ -50,13 +52,15 @@ import { ContractSignatureComponent } from './contract-signature.component';
 import { DisplaySignatureImageComponent } from './display-signature-image/display-signature-image.component';
 import { NotificationExpireComponent } from './components/contract-coordination/shared/model/dialog/notification-expire/notification-expire.component';
 import { DialogSignManyComponentComponent } from './dialog/dialog-sign-many-component/dialog-sign-many-component.component';
+import { DialogViewManyComponentComponent } from './dialog/dialog-view-many-component/dialog-view-many-component.component'
 import { EkycDialogSignComponent } from './components/consider-contract/ekyc-dialog-sign/ekyc-dialog-sign.component';
 import { WebcamModule } from 'ngx-webcam';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { DialogReasonRejectedComponent } from './shared/model/dialog-reason-rejected/dialog-reason-rejected.component';
 import { DialogReasonCancelComponent } from './shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
 import { EditHandlerComponent } from './shared/model/edit-handler-dialog/edit-handler-dialog.component';
-import { MultiSignListComponent } from './components/multi-sign-list/multi-sign-list.component'
+import { MultiSignListComponent } from './components/multi-sign-list/multi-sign-list.component';
+import { RemoteDialogSignComponent } from './components/consider-contract/remote-dialog-sign/remote-dialog-sign.component';
 
 const signatures = "s9";
 const consider = "c9";
@@ -107,17 +111,20 @@ export const contractSignatureRoutes1: Routes = [
     ChooseTypeSignComponent,
     ImageDialogSignComponent,
     HsmDialogSignComponent,
+    CertDialogSignComponent,
     FilterListDialogComponent,
     DisplayDigitalSignatureComponent,
     TextSignatureImageComponent,
     DisplaySignatureImageComponent,
     NotificationExpireComponent,
     DialogSignManyComponentComponent,
+    DialogViewManyComponentComponent,
     EkycDialogSignComponent,
     DialogReasonRejectedComponent,
     DialogReasonCancelComponent,
     EditHandlerComponent,
-    MultiSignListComponent
+    MultiSignListComponent,
+    RemoteDialogSignComponent
     // AddContractComponent
   ],
   imports: [
@@ -141,10 +148,11 @@ export const contractSignatureRoutes1: Routes = [
     DropdownModule,
     CalendarModule,
     MultiSelectModule,
-
+    TreeTableModule,
+    TableModule,
     WebcamModule,
     PdfViewerModule,
-    
+
   ],
   providers: [
     NoAuthGuard,

@@ -4,7 +4,8 @@ import {
   type_signature_template,
   type_signature_doc_template,
   type_signature_personal_party_template,
-  variable
+  variable,
+  type_signature_doc
 } from "../../../../../../../config/variable";
 import { Helper } from "../../../../../../../core/Helper";
 import { ContractService } from "../../../../../../../service/contract.service";
@@ -46,9 +47,9 @@ export class DetermineSignerComponent implements OnInit {
   toppings = new FormControl();
 
   //dropdown
-  signTypeList: Array<any> = type_signature_template;
+  signTypeList: Array<any> = type_signature_doc;
   signTypeList_personal_partner: Array<any> = type_signature_personal_party_template;
-  signType_doc: Array<any> = type_signature_doc_template;
+  signType_doc: Array<any> = type_signature_doc;
 
   dropdownSignTypeSettings: any = {};
   getNameIndividual: string = "";
@@ -122,7 +123,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   getDataSignHsm(data: any) {
-    return data.sign_type.filter((p: any) => p.id == 4);
+    return data.sign_type.filter((p: any) => [4,6,8].includes(p.id));
   }
 
   getApiDetermine() {
@@ -150,9 +151,13 @@ export class DetermineSignerComponent implements OnInit {
     this.datas.stepLast = step;
     this.stepChangeDetermineSigner.emit(step);
   }
+  setLocale(d: any, lang: string) {
+    d.locale = lang;
+  }
+  dropdownButtonText = '';
 
   getData(item: any) {
-    // console.log(item)
+    // 
   }
 
   // valid data step 2
@@ -164,7 +169,7 @@ export class DetermineSignerComponent implements OnInit {
     dataArrPartner.forEach((element: any) => {
       element.recipients.forEach((eleRecipient: any) => {
         if(eleRecipient.sign_type.length > 0) {
-          if(eleRecipient.sign_type[0].id != 4 && eleRecipient.sign_type[0].id != 2) {
+          if(![2,4,6,8].includes(eleRecipient?.sign_type[0]?.id)) {
             eleRecipient.card_id = '';
           }
         }
@@ -227,7 +232,7 @@ export class DetermineSignerComponent implements OnInit {
             break;
           }
 
-          console.log("dataArrPartner ", dataArrPartner[j]);
+          
           if(!dataArrPartner[j].recipients[k].card_id && (dataArrPartner[j].recipients[k].role == 3 || dataArrPartner[j].recipients[k].role == 4) && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
             this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObject(3)+"của đối tác");
             count++;
@@ -338,9 +343,9 @@ export class DetermineSignerComponent implements OnInit {
 
   getCheckDuplicateCardId(isParty: string, dataValid?: any) {
 
-    console.log("all check email ", isParty);
+    
 
-    console.log("data valid ", dataValid);
+    
 
     let arrCheckCardId = [];
     // valid card_id đối tác và các bên tham gia
@@ -369,7 +374,7 @@ export class DetermineSignerComponent implements OnInit {
           let countCheck_duplicate = true;
           for (const d of arrCardId) {
             if (duplicateCardId.length > 0 && duplicateCardId.some((p: any) => p.card_id == d.card_id && (p.type != d.type || p.ordering != d.ordering))) { // check duplicate card_id coordination with between party
-              console.log("vao day ");
+              
               return true;
             }
             duplicateCardId.push(d);
@@ -395,7 +400,7 @@ export class DetermineSignerComponent implements OnInit {
     for (var k = 0; k < arrCheckCardId.length; ++k) {
       var value: any = arrCheckCardId[k];
       if (value in valueSoFar) {
-        console.log("vao day ");
+        
         return true;
       }
       valueSoFar[value] = true;
@@ -500,7 +505,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   getDataSignature(e: any) {
-    console.log(e)
+    
   }
 
   getValueData(data: any, index: any) {
@@ -785,6 +790,8 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   dataParnterOrganization() {
+    let determineClone = this.is_determine_clone.filter((p: any) => (p.type == 2 || p.type == 3) && p.recipients.some((q: any) => q.status == 1 && q.email == this.emailUser))
+    this.datas.is_data_object_signature = determineClone[0]?.recipients.filter((item: any) => item.role !== 1)
     return this.is_determine_clone.filter((p: any) => (p.type == 2 || p.type == 3) && p.recipients.some((q: any) => q.status == 1 && q.email == this.emailUser));
   }
 
@@ -798,7 +805,7 @@ export class DetermineSignerComponent implements OnInit {
       res.ordering = index + 1;
     })
 
-    console.log(this.data_parnter_organization);
+    
   }
 
   // xóa đối tượng tham gia bên đối tác
@@ -818,7 +825,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeType(e: any, item: any, index: number) {
-    // console.log(item, e);
+    // 
     item.name = "";
     let newArr: any[] = [];
     for (let i = 0; i < item.recipients.length; i++) {

@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
+import { RoleService } from 'src/app/service/role.service';
 import { UnitService } from 'src/app/service/unit.service';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-filter-list-dialog',
@@ -22,7 +24,6 @@ export class FilterListDialogComponent implements OnInit {
   orgList: any[] = [];
   orgListTmp: any[] = [];
   
-
   filter_type:any;
   filter_contract_no:any;
   filter_from_date:any;
@@ -31,6 +32,7 @@ export class FilterListDialogComponent implements OnInit {
   isOrg:any="";
   organization_id:any;
   selectedNodeOrganization:any;
+  isQLHD_03: boolean | undefined;
 
   get f() { return this.addForm.controls; }
 
@@ -40,14 +42,31 @@ export class FilterListDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<FilterListDialogComponent>,
     public router: Router,
     public dialog: MatDialog,
-    private contractTypeService : ContractTypeService) { 
+    private contractTypeService : ContractTypeService,
+    private userService: UserService,
+    private roleService: RoleService
+    ) { 
     }
 
   ngOnInit(): void {
     this.organization_id = Number(this.data.organization_id);
+
+    let userId = this.userService.getAuthCurrentUser().id;
+    this.userService.getUserById(userId).subscribe(
+      data => {
+        //lay id role
+        this.roleService.getRoleById(data?.role_id).subscribe(
+          data => {
+            let listRole: any[];
+            listRole = data.permissions;
+            this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');
+        }, error => {
+        });
+    }, error => {}
+    )
+
     //lay danh sach to chuc
     this.contractTypeService.getContractTypeList("", "").subscribe(data => {
-      console.log(data);
       this.contractTypeList = data;
     });
 
@@ -64,7 +83,6 @@ export class FilterListDialogComponent implements OnInit {
       this.selectedNodeOrganization = this.orgList.filter((p: any) => p.id == this.organization_id);
       this.convertData();
 
-
       this.filter_type = this.data.filter_type?Number(this.data.filter_type):"";
       this.filter_contract_no = this.data.filter_contract_no;
       this.filter_from_date = this.data.filter_from_date?new Date(this.data.filter_from_date):"";
@@ -75,8 +93,8 @@ export class FilterListDialogComponent implements OnInit {
             
       let dataOrg:any="";
       dataOrg = {
-        label: this.selectedNodeOrganization?this.selectedNodeOrganization[0].name:"Tất cả", 
-        data: this.selectedNodeOrganization?this.selectedNodeOrganization[0].id:"",
+        label: this.selectedNodeOrganization.length > 0 ? this.selectedNodeOrganization[0].name:"Tất cả", 
+        data: this.selectedNodeOrganization.length > 0 ? this.selectedNodeOrganization[0].id:"",
         expanded: true,
       };
       this.selectedNodeOrganization = [];
@@ -96,7 +114,7 @@ export class FilterListDialogComponent implements OnInit {
       organization_id: this.organization_id
     }
     this.dialogRef.close();
-    console.log(data);
+    
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['/main/contract/create/' + data.status],
       {
@@ -144,7 +162,7 @@ export class FilterListDialogComponent implements OnInit {
       {
         label: elementCon.name, 
         data: elementCon.id,
-        expanded: true,
+        expanded: false,
         children: this.findChildren(elementCon)
       });
       this.removeElementFromStringArray(elementCon.id);
@@ -157,7 +175,6 @@ export class FilterListDialogComponent implements OnInit {
         if(value.id==element){
           this.orgList.splice(index,1);
         }
-        
     });
   }
 

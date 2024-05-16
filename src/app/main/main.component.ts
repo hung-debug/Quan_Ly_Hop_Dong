@@ -1,7 +1,5 @@
-import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Router} from '@angular/router';
 import {AppService} from '../service/app.service';
 import {SidebarService} from './sidebar/sidebar.service';
 import {TranslateService} from '@ngx-translate/core';
@@ -12,6 +10,10 @@ import { DashboardService } from '../service/dashboard.service';
 import { UserService } from '../service/user.service';
 import {DeviceDetectorService} from "ngx-device-detector";
 import { ContractService } from '../service/contract.service';
+import { environment } from 'src/environments/environment';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { KeycloakService } from 'keycloak-angular';
+import { AuthenticationService } from '../service/authentication.service';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -31,7 +33,8 @@ export class MainComponent implements OnInit {
   urlLoginType: any;
   nameCurrentUser:any;
   listNotification: any[] = [];
-
+  getAlllistNotification: any[] = [];
+  isSsoSync: boolean = false;
   constructor(private router: Router,
               private appService: AppService,
               public sidebarservice: SidebarService,
@@ -41,36 +44,74 @@ export class MainComponent implements OnInit {
               private dialog: MatDialog,
               private userService: UserService,
               private deviceService: DeviceDetectorService,
-              private contractService: ContractService
+              private contractService: ContractService,
+              private spinner: NgxSpinnerService,
+              private toastService: ToastService,
+              private keycloakService: KeycloakService,
+              private authenticationService: AuthenticationService
               ) {
     this.title = 'err';
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang(localStorage.getItem('lang') || 'vi');
+    // this.router.events.subscribe((event) => {
+    //   if (event instanceof NavigationEnd) {
+    //     const currentRoute = event.urlAfterRedirects;
+    //     if (currentRoute.includes('/main/contract/create/')) {
+    //       this.sidebarservice.triggerReloadSidebar();
+    //     }
+    //   }
+    // });
   }
 
   lang: any;
-  ngOnInit() {
+  async ngOnInit() {
     if(localStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     } else if(localStorage.getItem('lang') == 'en') {
       this.lang = 'en';
     }
 
+    this.getScreenResolution();
     this.getDeviceApp();
 
     //update title by component
     this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('type')));
-   
+
     this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
 
     this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
       data => {
+        if (environment.flag == 'KD' && data.is_required_sso) {
+          this.isSsoSync = true
+        } else {
+          this.isSsoSync = false
+        }
         this.nameCurrentUser = data?.name;
       });
 
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
       this.numberNotification = data.total_elements;
+
     });
+
+    if (environment.flag == 'KD' && await this.keycloakService.isLoggedIn()) {
+      let accessToken: any = this.keycloakService.getKeycloakInstance().token
+      let ssoIdToken: any = this.keycloakService.getKeycloakInstance().idToken
+      localStorage.setItem('sso_id_token',ssoIdToken ?? '')
+      localStorage.setItem('sso_token',accessToken ?? '')
+    }
+
+  }
+
+  readAll(){
+    this.dashboardService.readAllViewNotification().subscribe(readAll =>{
+      if(readAll.status == true){
+        this.toastService.showSuccessHTMLWithTimeout('read.all.success',"",3000)
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigate(['/main/dashboard']);
+        });
+      }
+    })
   }
 
   //apply change title
@@ -78,35 +119,73 @@ export class MainComponent implements OnInit {
     this.changeDetectorRef.detectChanges();
   }
 
-  //click logout
-  logout() {
-     //call api delete token
-    //  this.contractService.deleteToken().subscribe((res:any) => { 
-    // })
+  getScreenResolution(): void {
+    let screenWidth = window.screen.width;
+    let screenHeight = window.screen.height;
+  }
 
-    sessionStorage.clear();
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('myTaxCode');
-    localStorage.removeItem('url');
+  //click logout
+  async logout() {
+     //call api delete token
+     if (environment.flag == 'KD') {
+       this.contractService.deleteToken().subscribe((res:any) => {
+      })
   
-    this.router.navigate(['/login']);
+      sessionStorage.clear();
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('myTaxCode');
+      localStorage.removeItem('url');
+  
+      this.router.navigate(['/login']);
+     } else {
+      let ssoIdToken: any = localStorage.getItem('sso_id_token') || ''
+      if (localStorage.getItem('sso_token')) {
+        await this.authenticationService.logoutSso(ssoIdToken)
+        localStorage.removeItem('sso_token');
+        localStorage.clear()
+        sessionStorage.clear();
+        this.authenticationService.deleteAllCookies()
+        this.router.navigate(['/login']);
+      } else {
+        localStorage.removeItem('sso_token');
+        localStorage.clear()
+        sessionStorage.clear()
+        this.router.navigate(['/login']);
+      }
+     }
+  }
+
+  email: string;
+  checkMailMbf() {
+    this.email = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email;
+
+    if(this.email.includes('@mobifone.vn') && environment.flag == 'NB')
+      return true;
+
+    return false;
   }
 
   resetPassword(){
-    const data = {
-      title: 'ĐỔI MẬT KHẨU'
-    };
-    // @ts-ignore
-    const dialogRef = this.dialog.open(ResetPasswordDialogComponent, {
-      width: '420px',
-      backdrop: 'static',
-      keyboard: false,
-      data
-    })
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      let is_data = result
-    })
+    if ((environment.flag == 'KD' && !this.isSsoSync) || environment.flag == 'NB') {
+      const data = {
+        title: 'ĐỔI MẬT KHẨU',
+        weakPass: false
+      };
+      // @ts-ignore
+      const dialogRef = this.dialog.open(ResetPasswordDialogComponent, {
+        width: '420px',
+        backdrop: 'static',
+        keyboard: false,
+        data
+      })
+      dialogRef.afterClosed().subscribe((result: any) => {
+  
+        let is_data = result
+      })
+    } else {
+      window.open('https://auth-sso.mobifone.vn/vn/profile-information')
+    }
+    
   }
 
   //side bar menu
@@ -178,7 +257,7 @@ export class MainComponent implements OnInit {
   }
 
   getStyle() {
-    
+
     if (this.router.url.includes("contract-signature")) {
       return {
         'margin-top': '40px'
@@ -198,7 +277,7 @@ export class MainComponent implements OnInit {
   openLinkNotification(link:any, id:any) {
     window.location.href = link.replace('&type=', '').replace('&type=1', '').replace('?id','?recipientId').replace('contract-signature','c').replace('signatures','s9').replace('consider','c9').replace('secretary','s8').replace('coordinates','c8');
     this.dashboardService.updateViewNotification(id).subscribe(data => {
-      console.log(data);
+
     });
   }
 
@@ -206,11 +285,16 @@ export class MainComponent implements OnInit {
     this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
       //this.numberNotification = data.total_elements;
       this.listNotification = data.entities;
-      console.log(data);
+
     });
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
       this.numberNotification = data.total_elements;
       //this.listNotification = data.entities;
+    });
+
+    this.dashboardService.getNotification(0, '', '', 10, '').subscribe(data => {
+      //this.numberNotification = data.total_elements;
+     this.getAlllistNotification = data.entities
     });
   }
 
@@ -224,4 +308,5 @@ export class MainComponent implements OnInit {
   viewLink(){
     window.open("https://drive.google.com/drive/folders/1NHaCYOMCMsLvrw1uPbX2ezsC-Uo9huW3");
   }
+
 }

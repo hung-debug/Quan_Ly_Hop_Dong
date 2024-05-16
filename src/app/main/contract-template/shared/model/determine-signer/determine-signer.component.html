@@ -8,11 +8,18 @@
         oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
     </div>
     <div class="contract--content">
-      <div class="contract__content--title">
-        <div>{{'organization.me' | translate | uppercase}} -</div>
-        <input type="text" [(ngModel)]="data_organization.name">
-      </div>
+      <div class="contract__content--title-doi-tac">
+        <div style="width: 85px">
+          {{ "organization.me" | translate | uppercase }}&nbsp;<span style="color: red">*</span>
+        </div>
+        <input class="input1" type="text" [(ngModel)]="data_organization.name" />
 
+        <!--Ẩn luồng xử lý-->
+        <div style="width: 120px; margin-left: 5px">
+          {{'hide.processing.thread' | translate}}
+        </div>
+        <input type ="checkbox" [(ngModel)]="data_organization.hideFlow">
+      </div>
 
       <div class="contract__content--participants">
 
@@ -24,7 +31,7 @@
               (focusout)="onChangeValue($event,'ordering-organzation-view-' + index)" style="width: 25px; height: 25px"
               type="number" [(ngModel)]="d.ordering"
               oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-              [disabled]="getOriganzationReviewer().length == 1">
+              [disabled]="getOriganzationReviewer().length == 1 && !isEditOrdering">
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
               <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
@@ -33,7 +40,7 @@
                   <div class="label_detail text-color">
 
                     <div>
-                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}"
+                      <input (change)="changeTypeSign(d, index)" type="radio" name="checkPhoneMailOrgViewer_{{index}}"
                         [value]="email" [(ngModel)]="d.login_by" />
                     </div>&nbsp;
                     <div>
@@ -44,7 +51,7 @@
                 <div class="participants__name">
                   <div class="label_detail text-color">
                     <div>
-                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}"
+                      <input (change)="changeTypeSign(d, index)" type="radio" name="checkPhoneMailOrgViewer_{{index}}"
                         [(ngModel)]="d.login_by" [value]="phone" />
                     </div>&nbsp;
                     <div>
@@ -95,7 +102,7 @@
                   <div style="display: flex;">
                     <div class="input-data" style="width: 91%;margin-right: -3%;">
                       <img class="input-img">
-                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                     </div>
 
                     <div class="participants__name" style="width: 17%;margin-left: 5%;">
@@ -147,7 +154,7 @@
                       </div>
                       <div class="input-data">
                         <img class="input-img">
-                        <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                        <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                       </div>
                     </div>
 
@@ -248,7 +255,7 @@
               (focusout)="onChangeValue($event,'ordering-sign-' + index)" style="width: 25px; height: 25px"
               type="number" [(ngModel)]="d.ordering"
               oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-              [disabled]="getOriganzationSignature().length == 1">
+              [disabled]="getOriganzationSignature().length == 1 && !isEditOrdering">
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
               <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi ký to chuc-->
@@ -257,7 +264,7 @@
                   <div class="label_detail text-color">
 
                     <div>
-                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
+                      <input (change)="changeTypeSign(d, index,null,'signer')" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
                         [value]="email" [(ngModel)]="d.login_by" />
                     </div>&nbsp;
                     <div>
@@ -268,7 +275,7 @@
                 <div class="participants__name">
                   <div class="label_detail text-color">
                     <div>
-                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
+                      <input (change)="changeTypeSign(d,index, null, 'signer')" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
                         [(ngModel)]="d.login_by" [value]="phone" />
                     </div>&nbsp;
                     <div>
@@ -306,7 +313,8 @@
                       class="required-title">*</span>
                   </div>
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                    [settings]="dropdownSignTypeSettings" [data]="d.isListSignNotPerson ? d.isListSignNotPerson : this.getListSignType('org')">
+                    [settings]="dropdownSignTypeSettings" [data]="d.isListSignNotPerson ? d.isListSignNotPerson : this.getListSignType('org')"
+                    (onSelect)="onItemSelect($event)" (ngModelChange)="selectWithOtp($event, d, 'organization')">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
                         <label style="color: #333; font-weight: normal;"
@@ -336,7 +344,7 @@
                   <div style="display: flex;">
                     <div class="input-data" style="width: 85%;">
                       <img class="input-img">
-                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                     </div>
 
                     <div class="input-data" style="width: 7%;margin-left: 8%;">
@@ -429,7 +437,7 @@
                       class="required-title">*</span></div>
                   <div class="input-data">
                     <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
-                    <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                    <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                   </div>
                 </div>
 
@@ -464,6 +472,34 @@
                 </div>
               </div>
 
+              <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là usbtoken-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span
+                      class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'info.token' | translate}})</div>
+                  </div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+
+              <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là hsm-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span
+                      class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'info.hsm' | translate}})</div>
+                  </div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+
               <div class="participants--input" style="display: flex" *ngIf="getDataSignEkyc(d).length > 0">
                 <div class="participants__name" style="width: 91%">
                   <div class="label_detail text-color">CMT/CCCD&nbsp;<span class="required-title">*</span></div>
@@ -473,6 +509,21 @@
                   </div>
                 </div>
               </div>
+
+              <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là chứng thư số-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                  </div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+
             </div>
             <div *ngIf="getOriganzationSignature().length > 1" class="col-md-1 delete-element"
               (click)="deleteOriganzationSignature(index)">
@@ -493,7 +544,7 @@
           <div class="participants--content" *ngFor="let d of getOriganzationDocument(); let index = index">
             <input [id]="'ordering-doc-' + index" class="col-md-1 contract-total"
               (focusout)="onChangeValue($event, 'ordering-doc-' + index)" style="width: 25px; height: 25px"
-              type="number" [(ngModel)]="d.ordering" [disabled]="getOriganzationDocument().length == 1"
+              type="number" [(ngModel)]="d.ordering" [disabled]="getOriganzationDocument().length == 1 && !isEditOrdering"
               oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
               <div class="participants--input" style="display: flex">
@@ -514,12 +565,13 @@
                   </div>
                 </div>
                 <div class="participants__name">
-
                   <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span
                       class="required-title">*</span>
                   </div>
+
+                  <!--Văn thư tổ chức của tôi chọn loại ký-->
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                    [settings]="dropdownSignTypeSettings" [data]="signType_doc">
+                    [settings]="dropdownSignTypeSettings" [data]="signType_doc"  (ngModelChange)="selectWithOtp($event, d, 'organization')">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
                         <label style="color: #333; font-weight: normal;"
@@ -531,7 +583,6 @@
                   </ng-multiselect-dropdown>
                 </div>
               </div>
-
 
               <!--NB-->
               <div class="participants--input" style="display: flex" *ngIf="this.site == 'NB'">
@@ -588,7 +639,7 @@
 
               <!--KD-->
               <div class="participants--input" style="display: flex" *ngIf="this.site == 'KD'">
-                <div class="participants__name" style="width: 90%">
+                <div class="participants__name" style="width: 91%">
                   <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
@@ -598,7 +649,7 @@
               </div>
 
               <div class="participants--input" style="display: flex" *ngIf="getDataSignEkyc(d).length > 0">
-                <div class="participants__name" style="width: 90%">
+                <div class="participants__name" style="width: 91%">
                   <div class="label_detail text-color">CMT/CCCD&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
                     <input type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id"
@@ -606,6 +657,48 @@
                   </div>
                 </div>
               </div>
+              <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là usb token-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div>
+                  </div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+
+
+              <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là hsm-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                  </div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax.code' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+
+              <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là chứng thư số-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                  </div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+
             </div>
             <div class="col-md-1 delete-element" (click)="deleteOriganzationDocument(index)">
               <img src="assets/img/border_close.svg" alt="close.vn">
@@ -631,10 +724,20 @@
         [(ngModel)]="item.ordering">
     </div>
     <div class="contract--content">
-      <div class="contract__content--title">
-        <div style="width: 72px">{{'doi_tac' | translate | uppercase}} -</div>
-        <input type="text" placeholder="{{(item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate}}"
-          [(ngModel)]="item.name" disabled>
+      <div class="contract__content--title-doi-tac">
+        <div style="width: 85px">
+          {{ "doi_tac" | translate | uppercase }}&nbsp;<span style="color: red">*</span>
+          -
+        </div>
+        <input class="input1" type="text" placeholder="{{
+            (item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate
+          }}" [(ngModel)]="item.name" [disabled]="item.type == 3" />
+
+          <!--Ẩn luồng xử lý-->
+          <div style="width: 120px; margin-left: 5px">
+            {{'hide.processing.thread' | translate}}
+          </div>
+          <input type ="checkbox" [(ngModel)]="item.hideFlow">
       </div>
 
       <div *ngIf="this.dataParnterOrganization().length >= 1" style="display: flex; justify-content: flex-end">
@@ -674,10 +777,10 @@
                     (change)="changeIsCoordination($event, item, id)">
                   <div style="padding: 0 20px 0 5px">Có người điều phối</div>
 
-                  <div *ngIf="getPartnerCoordination(item).length > 0 " style="display: flex">
-                    <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="getPartnerCoordination(item)[0].is_otp != 1" 
+                  <div *ngIf="getPartnerCoordination(item).length > 0 && this.site === 'NB'" style="display: flex">
+                    <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="getPartnerCoordination(item)[0].is_otp != 1"
                     (change)="changeIsSmsCoordination($event, item, 0)">
-                    <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="getPartnerCoordination(item)[0].is_otp == 1" checked 
+                    <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="getPartnerCoordination(item)[0].is_otp == 1" checked
                     (change)="changeIsSmsCoordination($event, item, 0)">
                     <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
                   </div>
@@ -723,7 +826,7 @@
 
               <input [id]="'ordering-view-' + index" class="col-md-1 contract-total"
                 (focusout)="onChangeValue($event,'ordering-view-' + index)" style="width: 25px; height: 25px"
-                type="number" [(ngModel)]="d.ordering" disabled
+                type="number" [(ngModel)]="d.ordering" [disabled]="!isEditOrdering"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
               <div class="col-md-10 participants--input" style="display: flex; flex-direction: column">
 
@@ -789,7 +892,7 @@
                               id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
                           </div>
 
-                      
+
                             <!--Ko vào lần đầu-->
                             <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
                               <div class="switch-language">
@@ -803,7 +906,7 @@
                                 </button>
                               </div>
                             </div>
-                          <!-- </div> -->                         
+                          <!-- </div> -->
                         </div>
                       </div>
 
@@ -889,7 +992,7 @@
                 (focusout)="onChangeValue($event,'ordering-sign-partner-' + index)" class="col-md-1 contract-total"
                 style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-                [disabled]="getPartnerSignature(item).length == 1">
+                [disabled]="getPartnerSignature(item).length == 1 && !isEditOrdering">
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
                 <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi ky to chuc-->
@@ -971,7 +1074,7 @@
                             id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
                         </div>
 
-                        
+
                         <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
                           <div class="switch-language">
                             <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
@@ -1011,7 +1114,7 @@
                               id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
                           </div>
 
-                      
+
                             <!--Ko vào lần đầu-->
                             <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
                               <div class="switch-language">
@@ -1026,7 +1129,7 @@
                               </div>
                             </div>
                           <!-- </div> -->
-                          
+
                         </div>
                       </div>
 
@@ -1050,6 +1153,7 @@
             </div>
           </div>
 
+          <!-- Văn thư -->
           <div class="participants-border">
             <div class="label">{{'user.doc' | translate}}</div>
             <div class="participants--content" *ngFor="let d of getPartnerDocument(item); let index = index">
@@ -1057,7 +1161,7 @@
                 (focusout)="onChangeValue($event, 'ordering-partner-doc-' + index)" class="col-md-1 contract-total"
                 style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-                [disabled]="getPartnerDocument(item).length == 1">
+                [disabled]="getPartnerDocument(item).length == 1 && !isEditOrdering">
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
@@ -1111,7 +1215,7 @@
                               id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
                           </div>
 
-                      
+
                             <!--Ko vào lần đầu-->
                             <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
                               <div class="switch-language">
@@ -1126,10 +1230,10 @@
                               </div>
                             </div>
                           <!-- </div> -->
-                          
+
                         </div>
                       </div>
-                      
+
                     </div>
                   </div>
                 </div>
@@ -1284,7 +1388,7 @@
                   </div>
                 </div>
 
-                <div *ngIf="this.site === 'NB' && d.login_by === 'email'" class="participants--input"  
+                <div *ngIf="this.site === 'NB' && d.login_by === 'email'" class="participants--input"
                   style="display: flex;margin-left: 5%;">
                   <div class="participants__name" style="width: 100%">
                     <div style="height: 40px; display: flex; align-items: center; margin-top: 8px;">
@@ -1306,7 +1410,7 @@
                               id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
                           </div>
 
-                      
+
                             <!--Ko vào lần đầu-->
                             <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
                               <div class="switch-language">
@@ -1321,7 +1425,7 @@
                               </div>
                             </div>
                           <!-- </div> -->
-                          
+
                         </div>
                       </div>
                     </div>

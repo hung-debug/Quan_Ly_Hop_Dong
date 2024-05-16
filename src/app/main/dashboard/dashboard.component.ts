@@ -1,3 +1,4 @@
+import { ToastService } from './../../service/toast.service';
 import {Component, Input, OnInit, Output} from '@angular/core';
 import {AppService} from 'src/app/service/app.service';
 import {Chart} from 'angular-highcharts';
@@ -8,6 +9,11 @@ import {UserService} from 'src/app/service/user.service';
 import {Router} from '@angular/router';
 import {UnitService} from 'src/app/service/unit.service';
 import {DatePipe} from '@angular/common';
+import { RoleService } from 'src/app/service/role.service';
+import * as moment from 'moment';
+import { environment } from 'src/environments/environment';
+import { MatDialog } from '@angular/material/dialog';
+import { AccountLinkDialogComponent } from '../dialog/account-link-dialog/account-link-dialog.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,12 +35,15 @@ export class DashboardComponent implements OnInit {
   date: any = "";
   filter_from_date: any = "";
   filter_to_date: any = "";
+  chartHeight: number = 450;
 
   user: any;
   numberWaitProcess: any = 0;
   numberExpire: any = 0;
   numberComplete: any = 0;
   numberWaitComplete: any = 0;
+  numContractUse: number = 0;
+  numContractBuy: number = 0;
 
   isOrg: string = 'off';
   stateOptions: any[];
@@ -45,6 +54,25 @@ export class DashboardComponent implements OnInit {
   organization_id: any = "";
 
   selectedNodeOrganization: any;
+  isQLHD_03: boolean | undefined;
+  isQLHD_04: boolean | undefined;
+  currentDate: Date;
+  daysRemaining: number;
+  formattedEndDate: string;
+  message: string;
+  messageExpired: string;
+  endLicense: any;
+  countNoti: any = 0;
+  notiExpried: any;
+  isSoonExp: boolean = false;
+  isExp: boolean = false;
+  isEkycExp: boolean = false;
+  isSmsExp: boolean = false;
+  isCecaExp: boolean = false;
+  isContractExp: boolean = false;
+  OrgId: any;
+  enviroment: any = "";
+  site: string;
 
   constructor(
     private appService: AppService,
@@ -54,6 +82,9 @@ export class DashboardComponent implements OnInit {
     private unitService: UnitService,
     private router: Router,
     public datepipe: DatePipe,
+    private toastService: ToastService,
+    private roleService: RoleService,
+    private dialog: MatDialog,
   ) {
     this.stateOptions = [
       {label: "my.contract", value: 'off'},
@@ -63,8 +94,51 @@ export class DashboardComponent implements OnInit {
 
   lang: any;
   ngOnInit(): void {
+
+    this.enviroment = environment;
+    if (environment.flag == 'NB') {
+      this.site = 'NB';
+    } else if (environment.flag == 'KD') {
+      this.site = 'KD';
+    }
+
     this.appService.setTitle("menu.dashboard");
     this.search();
+    let count = localStorage.getItem('countNoti')
+    let userId = this.userService.getAuthCurrentUser().id;
+    this.userService.getUserById(userId).subscribe(
+      data => {
+        //lay id role
+        if (environment.flag == 'KD' && !data.is_required_sso) {
+          this.openAccountLinkDialog(data)
+        }
+        this.roleService.getRoleById(data?.role_id).subscribe(
+          data => {
+            let listRole: any[];
+            listRole = data.permissions;
+            this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');
+            this.isQLHD_04 = listRole.some(element => element.code == 'QLHD_04');
+        }, error => {
+        });
+        this.OrgId = data.organization.id;
+        this.userService.getOrgIdChildren(this.OrgId).subscribe(dataOrg => {
+          let countNotiWarning: number = localStorage.getItem('countNoti') as any
+          countNotiWarning++;
+          localStorage.setItem("countNoti",countNotiWarning.toString())
+          if(count == '0'){
+            countNotiWarning++;
+            localStorage.setItem("countNoti",countNotiWarning.toString())
+            this.currentDate = new Date();
+            this.endLicense = new Date(dataOrg.endLicense);
+            this.daysRemaining = Math.floor((new Date(this.endLicense).getTime() - this.currentDate.getTime()) / (1000 * 60 * 60 * 24));
+            // this.daysRemaining = Math.abs(this.daysRemaining)
+            this.validateExpDateAndPackageNumber(dataOrg.numberOfEkyc, dataOrg.numberOfSms, dataOrg.numberOfContractsCanCreate, dataOrg.numberOfCeca, this.daysRemaining, this.currentDate, this.endLicense)
+
+          }
+        })
+
+    }, error => {}
+    )
 
     this.user = this.userService.getInforUser();
 
@@ -86,11 +160,88 @@ export class DashboardComponent implements OnInit {
         this.orgListTmp.push(dataUnit[i]);
       }
 
+      this.unitService.getNumberContractUseOriganzation(this.userService.getInforUser().organization_id).toPromise().then(
+        data => {
+          this.numContractUse = data.contract;
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
+        }
+      )
+
+      //lay so luong hop dong da mua
+      this.unitService.getNumberContractBuyOriganzation(this.userService.getInforUser().organization_id).toPromise().then(
+        data => {
+          this.numContractBuy = data.contract;
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+        }
+      )
+
       this.orgList = this.orgListTmp;
-      console.log(this.orgList);
       this.convertData();
-      console.log(this.list);
     });
+  }
+
+  getNotiMessage(isSoonExp: boolean, isExp: boolean, isEkycExp: boolean, isSmsExp: boolean, isCecaExp: boolean, isContractExp: boolean){
+    let messageSoonExp = ""
+    let messageExp = ""
+    let messageEkycExp = ""
+    let messageCecaExp = ""
+    let messageSmsExp = ""
+    let messageContractExp = ""
+    let numberExpMessage = ""
+    let numberExpArr = []
+    if (isSoonExp){
+      messageSoonExp = `Thời gian sử dụng dịch vụ sẽ hết hạn vào ngày ${moment(this.endLicense).format("DD/MM/YYYY")}, 
+      Quý khách vui lòng đóng phí duy trì dịch vụ hàng năm để tiếp tục sử dụng sau ngày ${moment(this.endLicense).format("DD/MM/YYYY")}. Trân trọng cảm ơn!`
+    }
+    if (isExp){
+      messageExp = `Thời gian sử dụng dịch vụ đã hết. 
+      Quý khách vui lòng đóng phí duy trì dịch vụ hàng năm để tiếp tục sử dụng sau ngày ${moment(this.endLicense).format("DD/MM/YYYY")}. Trân trọng cảm ơn!`
+    }
+    if (isContractExp){
+      messageContractExp = "Hợp đồng"
+      numberExpArr.push(messageContractExp)
+    }
+    if (isEkycExp){
+      messageEkycExp = "eKYC"
+      numberExpArr.push(messageEkycExp)
+    }
+    if (isSmsExp){
+      messageSmsExp = "SMS"
+      numberExpArr.push(messageSmsExp)
+    }
+    if (isCecaExp){
+      messageCecaExp = "Xác thực CeCA"
+      numberExpArr.push(messageCecaExp)
+    }
+
+    numberExpMessage = (isEkycExp || isSmsExp || isCecaExp || isContractExp) ? "Số lượng " + numberExpArr.toString().replaceAll(",","/") + " sắp hết.<br>": ""
+    return this.toastService.showWarningHTMLWithTimeout(numberExpMessage + (messageSoonExp ? messageSoonExp :  messageExp),"",9000)
+  }
+
+  validateExpDateAndPackageNumber(numberOfEkyc: any, numberOfSms: any, numberOfContractsCanCreate: any, numberOfCeca: any, daysRemaining: any, currentDate: any, endLicense: any){
+    if(environment.flag == 'KD'){
+      if (daysRemaining < 60 && daysRemaining > 0){
+        this.isSoonExp = true
+      }
+      if (new Date(currentDate) > new Date(endLicense)){
+        this.isExp = true
+      }
+      if (numberOfEkyc < 30 && numberOfEkyc > 0){
+        this.isEkycExp = true
+      }
+      if (numberOfSms < 30 && numberOfSms > 0) {
+        this.isSmsExp = true
+      }
+      if (numberOfContractsCanCreate < 30 && numberOfContractsCanCreate > 0) {
+        this.isContractExp = true
+      }
+      if (numberOfCeca < 30 && numberOfCeca > 0) {
+        this.isCecaExp = true
+      }
+      this.getNotiMessage(this.isSoonExp, this.isExp, this.isEkycExp, this.isSmsExp, this.isCecaExp, this.isContractExp)
+    }
   }
 
   array_empty: any = [];
@@ -112,7 +263,7 @@ export class DashboardComponent implements OnInit {
       this.array_empty.push(data);
       //this.removeElementFromStringArray(element.id);
     })
-    this.list = this.array_empty;
+    this.list = this.array_empty
   }
 
   findChildren(element:any){
@@ -126,7 +277,7 @@ export class DashboardComponent implements OnInit {
       {
         label: elementCon.name,
         data: elementCon.id,
-        expanded: true,
+        expanded: false,
         children: this.findChildren(elementCon)
       });
       this.removeElementFromStringArray(elementCon.id);
@@ -160,7 +311,6 @@ export class DashboardComponent implements OnInit {
     window.location.href = link.replace('&type=1', '').replace('&type=', '').replace('?id','?recipientId').replace('contract-signature','c').replace('signatures','s9').replace('consider','c9').replace('secretary','s8').replace('coordinates','c8');
 
     this.dashboardService.updateViewNotification(id).subscribe(data => {
-      console.log(data);
     });
   }
 
@@ -181,13 +331,19 @@ export class DashboardComponent implements OnInit {
       newData.organization_id = this.organization_id;
       newData.from_date = this.filter_from_date;
       newData.to_date = this.filter_to_date;
-      
+
       this.totalCreate = newData.total_process + newData.total_signed + newData.total_reject + newData.total_cancel + newData.total_expires;
+
+      let numContractHeight = document.getElementById('num-contract')?.offsetHeight || 0;
+      let numContractBodyHeight = document.getElementById('num-contract-body')?.offsetHeight || 0;
+      let notiHeight = document.getElementById('noti')?.offsetHeight || 450;
+
+      this.chartHeight = numContractHeight + notiHeight + numContractBodyHeight - 37;
 
       if(localStorage.getItem('lang') == 'vi' || sessionStorage.getItem('lang') == 'vi')
         this.createChart("Đang xử lý","Hoàn thành","Từ chối","Huỷ bỏ", "Quá hạn", "Số lượng", newData);
       else if(localStorage.getItem('lang') == 'en' || sessionStorage.getItem('lang') == 'en')
-        this.createChart("Processing","Complete","Reject","Cancel","Out of date", "Number", newData);     
+        this.createChart("Processing","Complete","Reject","Cancel","Out of date", "Number", newData);
     });
   }
 
@@ -198,7 +354,8 @@ export class DashboardComponent implements OnInit {
         type: 'column',
         style: {
           fontFamily: 'inherit',
-        }
+        },
+        height: 500
       },
       title: {
         text: this.chartContractCreated,
@@ -237,7 +394,7 @@ export class DashboardComponent implements OnInit {
               link = "/main/contract/create/overdue"
             }
             link = link + "?isOrg=" + data.isOrg + "&organization_id=" + data.organization_id + "&filter_from_date=" + data.from_date + "&filter_to_date=" + data.to_date;
-            return '<a style="cursor: pointer; color: #106db6; text-decoration: none" href="' + link + '">' + this.value + '</a>';
+            return '<a style="cursor: pointer; color: #106db6; text-decoration: none"; href="' + link + '">' + this.value + '</a>';
           },
           useHTML: true
         }
@@ -279,7 +436,7 @@ export class DashboardComponent implements OnInit {
           },
         }
       },
-      
+
 
       series: [
         {
@@ -297,22 +454,44 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  getNumberContractBoxHeight(){
+    let chartHeight = document.getElementById('chart-column')?.offsetHeight || 0;
+    let numContractBodyHeight = document.getElementById('num-contract-body')?.offsetHeight || 450;
+    let numContractHeight = document.getElementById('num-contract')?.offsetHeight || 0;
+    let notiHeight = chartHeight - numContractBodyHeight - numContractHeight;
+
+    return {
+      'height': notiHeight + 'px',
+      'overflow': 'auto'
+    };
+  }
+
   search() {
     this.searchCountCreate();
 
     this.dashboardService.countContractReceived("", "").subscribe(data => {
-      console.log(data);
+
       this.numberWaitProcess = data.processing;
       this.numberComplete = data.processed;
       this.numberExpire = data.prepare_expires;
       this.numberWaitComplete = data.waiting;
     });
 
-    console.log("menu dashboard ");
-
     this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
       this.listNotification = data.entities;
-      console.log(this.listNotification);
+
     });
+  }
+
+  openAccountLinkDialog(userData: any) {
+    // @ts-ignore
+    const dialogRef: any = this.dialog.open(AccountLinkDialogComponent, {
+      width: '498px',
+    // @ts-ignore
+      backdrop: 'static',
+      data: userData,
+      disableClose: true,
+      autoFocus: false
+    })
   }
 }

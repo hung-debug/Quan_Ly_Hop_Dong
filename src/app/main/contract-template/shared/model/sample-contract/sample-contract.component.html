@@ -1,4 +1,4 @@
-<div class="sample-contract row">
+<div   (window:resize)="onResize($event)" class="sample-contract row">
     <div class="col-md-3 sample-contract__information" style="background-color: white; z-index: 10">
         <div class="sample-contract__information--drag" id="width-element-info" style="position: relative">
             <div style="padding-bottom: 10px" class="label">{{'components'|translate}} (<span style="color: red">{{'drag-drop'|translate}}</span>)</div>
@@ -35,16 +35,37 @@
                 <label class="label">{{'attribute' | translate}}</label>
                 <div class="name-text" *ngIf="isEnableText">
                     <label class="label-require">{{'attribute.name' | translate}}: *</label>
-                    <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name" (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
+                    <input id="text-input-element" type="text" [(ngModel)]="this.objSignInfo.text_attribute_name" (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
+                </div>
+
+                <!--Option chọn loại text-->
+                <div class="sign-unit-select" *ngIf="isEnableText">
+                    <label class="label-require">{{'attribute.text.type' | translate}}: *</label>
+                    <select class="form-select" id="select-dropdown-text" aria-label="Default select example"
+                        (change)="changePositionSign($event, 'text_type', 'text')" [disabled]="isEnableSelect"
+                        [(ngModel)]="selectedTextType">
+                        <option value="" hidden>{{'choose.text.type'| translate}}
+                        </option>
+                        <option *ngFor="let d of this.list_text_type, let i = index" [selected]="d.selected"
+                            value="{{d.id}}" [disabled]="d.is_disable">{{d.name | translate}}</option>
+                    </select>
                 </div>
 
                 <!--Người ký/người nhập-->
                 <div class="sign-unit-select">
                     <label class="label-require">{{isEnableText || isChangeText ? ('user.import' | translate) : ('user.sign' | translate)+': *'}}</label>
-                    <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
-                        <option value="" hidden>{{isEnableText || isChangeText ? ('choose.importer' | translate) : ('choose.signer' | translate)}}</option>
-                        <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}" [disabled]="d.is_disable">{{getName(d)}}</option>
-                    </select>
+                    <div style="position: relative;">
+                        <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
+                          <option value="" hidden>{{isEnableText || isChangeText ? ('choose.importer' | translate) : ('choose.signer' | translate)}}</option>
+                          <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}" [disabled]="d.is_disable">{{getName(d)}}</option>
+                        </select>
+                        <div *ngIf="(isEnableText || isChangeText) && showSignClear" style="position: absolute; top: 50%; right: 32px; transform: translateY(-50%); display: flex; align-items: center; cursor: pointer" (click)="clearSign()">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="15px" stroke="#000000" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 6L6 18M6 6l12 12"></path>
+                          </svg>
+                        </div>
+                    </div>
+                      
                 </div>
 
                 <!--Option chọn font + size chữ-->
@@ -100,13 +121,16 @@
         <div id="pdf-viewer-step-3">
             <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
                 <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
-                    <div *ngIf="d.sign_unit != 'text'" class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
-                    <div *ngIf="d.sign_unit == 'text'" class="name-sig-img-daky">{{d.text_attribute_name ? d.text_attribute_name  : ''}}</div>
+                    <div *ngIf="d.sign_unit != 'text'" class="name-sig-img-daky long-text-ellipsis">{{d.name ? d.name : ''}}</div>
+                    <div *ngIf="d.sign_unit == 'text'" class="name-sig-img-daky long-text-ellipsis">{{d.text_attribute_name ? d.text_attribute_name  : ''}}</div>
                     <div class="sig-img-daky" (click)="onCancel($event, d)">
-                        <img src="assets/img/clear.svg" alt="">
+                        <!-- <img src="assets/img/clear.svg" alt=""> -->
                         <img src="assets/img/border-clear.svg" alt="">
                     </div>
-                    <app-sign-contract-template [datas]="datas" [sign]="d"></app-sign-contract-template>
+                    <app-sign-contract-template 
+                    [ngClass]="(d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh') ? 'main-sign-box': ''"  
+                    [datas]="datas" 
+                    [sign]="d"></app-sign-contract-template>
                 </div>
             </div>
         </div>

@@ -7,9 +7,17 @@
         oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
     </div>
     <div class="contract--content">
-      <div class="contract__content--title">
-        <div>{{ "organization.me" | translate | uppercase }} -</div>
-        <input type="text" [(ngModel)]="data_organization.name" />
+      <div class="contract__content--title-doi-tac">
+        <div style="width: 85px">
+          {{ "organization.me" | translate | uppercase }}&nbsp;<span style="color: red">*</span>
+        </div>
+        <input class="input1" type="text" [(ngModel)]="data_organization.name" />
+
+        <!-- Ẩn luồng xử lý-->
+        <div style="width: 120px; margin-left: 5px">
+          {{'hide.processing.thread' | translate}}
+        </div>
+        <input type ="checkbox" [(ngModel)]="data_organization.hideFlow">
       </div>
 
       <div class="contract__content--participants">
@@ -22,7 +30,7 @@
               (focusout)="onChangeValue($event,'ordering-organzation-view-' + index)" style="width: 25px; height: 25px"
               type="number" [(ngModel)]="d.ordering"
               oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-              [disabled]="getOriganzationReviewer().length == 1">
+              [disabled]="getOriganzationReviewer().length == 1 && !isEditOrdering">
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
               <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
@@ -93,7 +101,7 @@
                   <div style="display: flex;">
                     <div class="input-data" style="width: 91%;margin-right: -3%;">
                       <img class="input-img">
-                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                     </div>
 
                     <div class="participants__name" style="width: 17%;margin-left: 5%;">
@@ -145,7 +153,7 @@
                       </div>
                       <div class="input-data">
                         <img class="input-img">
-                        <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                        <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                       </div>
                     </div>
 
@@ -246,7 +254,7 @@
               (focusout)="onChangeValue($event, 'ordering-sign-' + index)" style="width: 25px; height: 25px"
               type="number" [(ngModel)]="d.ordering"
               oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-              [disabled]="getOriganzationSignature().length == 1" />
+              [disabled]="getOriganzationSignature().length == 1 && !isEditOrdering" />
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
               <!--Chọn   {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại với người ký tổ chức của tôi-->
@@ -311,7 +319,7 @@
                   <!--Tổ chức của tôi chọn loại ký-->
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
                     [settings]="dropdownSignTypeSettings" [data]="d.isListSignNotPerson ? d.isListSignNotPerson : this.getListSignType('org')" (onSelect)="onItemSelect($event)"
-                    (onDeSelect)="deSelectOrg($event)" (ngModelChange)="selectWithOtp($event, d)">
+                    (onDeSelect)="deSelectOrg($event)" (ngModelChange)="selectWithOtp($event, d, '1')">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
                         <label style="color: #333; font-weight: normal;"
@@ -343,7 +351,7 @@
                   <div style="display: flex;">
                     <div class="input-data" style="width: 85%;">
                       <img class="input-img">
-                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                     </div>
 
                     <div class="input-data" style="width: 7%;margin-left: 8%;">
@@ -437,7 +445,7 @@
                   </div>
                   <div class="input-data">
                     <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
-                    <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                    <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                   </div>
                 </div>
 
@@ -500,6 +508,7 @@
                 </div>
               </div>
 
+
               <div class="participants--input" style="display: flex" *ngIf="getDataSignEkyc(d).length > 0">
                 <div class="participants__name" style="width: 91%">
                   <div class="label_detail text-color">
@@ -511,6 +520,21 @@
                   </div>
                 </div>
               </div>
+
+              <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là chứng thư số-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                  </div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+
             </div>
             <div *ngIf="getOriganzationSignature().length > 1" class="col-md-1 delete-element"
               (click)="deleteOriganzationSignature(index)">
@@ -531,7 +555,7 @@
           <div class="participants--content" *ngFor="let d of getOriganzationDocument(); let index = index">
             <input [id]="'ordering-doc-' + index" class="col-md-1 contract-total"
               (focusout)="onChangeValue($event, 'ordering-doc-' + index)" style="width: 25px; height: 25px"
-              type="number" [(ngModel)]="d.ordering" [disabled]="getOriganzationDocument().length == 1"
+              type="number" [(ngModel)]="d.ordering" [disabled]="getOriganzationDocument().length == 1 && !isEditOrdering"
               oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
@@ -566,7 +590,7 @@
                   <!--Văn thư tổ chức của tôi chọn loại ký-->
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{ 'choose' | translate }}"
                     [settings]="dropdownSignTypeSettings" [data]="signType_doc"
-                    (ngModelChange)="selectWithOtp($event, d)">
+                    (ngModelChange)="selectWithOtp($event, d,'1')">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="
                           padding: 1px 10px;
@@ -643,7 +667,7 @@
 
               <!--KD-->
               <div class="participants--input" style="display: flex" *ngIf="this.site == 'KD'">
-                <div class="participants__name" style="width: 90%">
+                <div class="participants__name" style="width: 91%">
                   <div class="label_detail text-color">Email&nbsp;
                     <span class="required-title">*</span>
                   </div>
@@ -656,7 +680,7 @@
 
               <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là usb token-->
               <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
-                <div class="participants__name" style="width: 90%">
+                <div class="participants__name" style="width: 91%">
                   <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
                     <span class="required-title">*</span>
                     <div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div>
@@ -671,7 +695,7 @@
 
               <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là hsm-->
               <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
-                <div class="participants__name" style="width: 90%">
+                <div class="participants__name" style="width: 91%">
                   <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;
                     <span class="required-title">*</span>
                   </div>
@@ -681,6 +705,21 @@
                   </div>
                 </div>
               </div>
+
+              <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là chứng thư số-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                <div class="participants__name" style="width: 91%">
+                  <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                    <span class="required-title">*</span>
+                    <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                  </div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+
             </div>
             <div class="col-md-1 delete-element" (click)="deleteOriganzationDocument(index)">
               <img src="assets/img/border_close.svg" alt="close.vn" />
@@ -706,10 +745,19 @@
     </div>
     <div class="contract--content">
       <div class="contract__content--title-doi-tac">
-        <div style="width: 85px">{{ "doi_tac" | translate | uppercase }} -</div>
+        <div style="width: 85px">
+          {{ "doi_tac" | translate | uppercase }}&nbsp;<span style="color: red">*</span>
+          -
+        </div>
         <input class="input1" type="text" placeholder="{{
             (item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate
           }}" [(ngModel)]="item.name" [disabled]="item.type == 3" />
+
+          <!--Ẩn luồng xử lý-->
+          <div style="width: 120px; margin-left: 5px">
+            {{'hide.processing.thread' | translate}}
+          </div>
+          <input type ="checkbox" [(ngModel)]="item.hideFlow">
       </div>
       <div *ngIf="this.dataParnterOrganization().length >= 1" style="display: flex; justify-content: flex-end">
         <u class="label text-color" (click)="deletePartner(id, item)"
@@ -829,7 +877,7 @@
             <div class="participants--content" *ngFor="let d of getPartnerReviewer(item); let index = index">
               <input [id]="'ordering-view-' + index" class="col-md-1 contract-total"
                 (focusout)="onChangeValue($event, 'ordering-view-' + index)" style="width: 25px; height: 25px"
-                type="number" [(ngModel)]="d.ordering" [disabled]="getPartnerReviewer(item).length == 1"
+                type="number" [(ngModel)]="d.ordering" [disabled]="getPartnerReviewer(item).length == 1 && !isEditOrdering"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
               <div class="col-md-10 participants__content--input">
 
@@ -894,7 +942,7 @@
                     <div style="display: flex;">
                     <div class="input-data" style="width: 91%;margin-right: -3%;">
                       <img class="input-img">
-                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                     </div>
 
                     <div class="participants__name" style="width: 17%;margin-left: 5%;">
@@ -945,7 +993,7 @@
                         </div>
                         <div class="input-data">
                           <img class="input-img">
-                          <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                          <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                         </div>
                       </div>
 
@@ -1042,7 +1090,7 @@
                 " class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
                 [(ngModel)]="d.ordering"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-                [disabled]="getPartnerSignature(item).length == 1" />
+                [disabled]="getPartnerSignature(item).length == 1 && !isEditOrdering" />
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
@@ -1050,7 +1098,7 @@
 
                       <div>
                         <input (change)="changeTypeSign(d, index,id, 'sign_partner')" type="radio" name="checkPhoneMailPartSign_{{index}}_{{id}}"
-                          [value]="email" [(ngModel)]="email" />
+                          [value]="email" [(ngModel)]="d.login_by" />
                       </div>&nbsp;
                       <div>
                         {{'typeOfSignEmail' | translate}}
@@ -1089,7 +1137,7 @@
 
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{ 'choose' | translate }}"
                       [settings]="dropdownSignTypeSettings" [data]="d.isListSignNotPersonPartner ? d.isListSignNotPersonPartner : this.getListSignType('partner')"
-                      (onSelect)="onItemSelect($event)" (ngModelChange)="selectWithOtp($event, d)">
+                      (onSelect)="onItemSelect($event)" (ngModelChange)="selectWithOtp($event, d, item.type)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
                         <div style="
@@ -1132,7 +1180,7 @@
                     <div style="display: flex;">
                       <div class="input-data" style="width: 85%;">
                         <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
-                        <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                        <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                       </div>
 
                       <div class="input-data" style="width: 7%;margin-left: 8%;">
@@ -1223,7 +1271,7 @@
                         class="required-title">*</span></div>
                     <div class="input-data">
                       <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
-                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                     </div>
                   </div>
 
@@ -1297,6 +1345,21 @@
                     </div>
                   </div>
                 </div>
+
+                <!--trường hiển thị khi người ký của đối tác chọn loại ký là chứng thư số-->
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                  <div class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                      <span class="required-title">*</span>
+                      <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                    </div>
+                    <div class="input-data">
+                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                  </div>
+                </div>
+
               </div>
               <div *ngIf="
                   getPartnerSignature(item).length > 1 ||
@@ -1325,7 +1388,7 @@
                 " class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
                 [(ngModel)]="d.ordering"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-                [disabled]="getPartnerDocument(item).length == 1" />
+                [disabled]="getPartnerDocument(item).length == 1 && !isEditOrdering" />
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
@@ -1356,7 +1419,7 @@
                     </div>
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{ 'choose' | translate }}"
                       [settings]="dropdownSignTypeSettings" [data]="signType_doc"
-                      (ngModelChange)="selectWithOtp($event, d)">
+                      (ngModelChange)="selectWithOtp($event, d,item.type)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
                         <div style="
@@ -1482,6 +1545,20 @@
                   </div>
                 </div>
 
+                <!--trường hiển thị khi văn thư đối tác chọn loại ký là chứng thư số-->
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                  <div class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                      <span class="required-title">*</span>
+                      <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                    </div>
+                    <div class="input-data">
+                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                  </div>
+                </div>
+
               </div>
               <div class="col-md-1 delete-element" (click)="deletePartnerDocument(index, item)">
                 <img src="assets/img/border_close.svg" alt="close.vn" />
@@ -1555,7 +1632,7 @@
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{ 'choose' | translate }}"
                       [settings]="dropdownSignTypeSettings" [data]="d.isListSignPersonal ? d.isListSignPersonal : this.getListSignType('personal')"
                       (onSelect)="selectPartnerSign($event, id)" (onDeSelect)="deSelectPartnerSign($event, id)"
-                      (ngModelChange)="selectWithOtp($event, d)">
+                      (ngModelChange)="selectWithOtp($event, d, item.type)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
                         <div style="
@@ -1587,7 +1664,7 @@
                     <div style="display: flex;">
                     <div class="input-data" style="width: 85%;">
                       <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
-                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                     </div>
 
                     <div class="input-data" style="width: 7%;margin-left: 8%;">
@@ -1685,7 +1762,7 @@
                         class="required-title">*</span></div>
                     <div class="input-data">
                       <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
-                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                     </div>
                   </div>
 
@@ -1743,7 +1820,7 @@
                         oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
-                  
+
                   <div class="participants__name" style="width: 6%; margin-left: -15%;">
                     <div class="label_detail text-color"><span class="required-title"></span></div>
                     <div class="input-data">
@@ -1798,6 +1875,21 @@
                     </div>
                   </div>
                 </div>
+
+                <!--trường hiển thị khi người ký đối tác cá nhân chọn loại ký là chứng thư số-->
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignCert(d).length > 0">
+                  <div class="participants__name" style="width: 91%">
+                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;
+                      <span class="required-title">*</span>
+                      <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
+                    </div>
+                    <div class="input-data">
+                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
               <div *ngIf="getPartnerSignature(item).length > 1" class="col-md-1 delete-element"
@@ -1837,10 +1929,10 @@
     </button>
   </div>
   <div>
-    <button type="button" name="next" class="next draft-button" (click)="next('save-draft')">
+    <button [disabled]="isButtonDisabled" type="button" name="next" class="next draft-button" (click)="next('save-draft')">
       {{ "btn.save-draft" | translate }}
     </button>
-    <button (click)="next('save-step')" type="button" name="next" class="next action-button pull-right">
+    <button [disabled]="isButtonDisabled" (click)="next('save-step')" type="button" name="next" class="next action-button pull-right">
       {{ "btn.next" | translate }}
     </button>
   </div>

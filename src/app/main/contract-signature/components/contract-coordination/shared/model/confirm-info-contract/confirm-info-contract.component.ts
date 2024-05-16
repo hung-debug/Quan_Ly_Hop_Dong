@@ -1,11 +1,12 @@
-import {DatePipe} from '@angular/common';
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {variable} from 'src/app/config/variable';
-import {ContractService} from 'src/app/service/contract.service';
-import {ToastService} from 'src/app/service/toast.service';
-import {NgxSpinnerService} from "ngx-spinner";
+import { DatePipe } from '@angular/common';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { variable } from 'src/app/config/variable';
+import { ContractService } from 'src/app/service/contract.service';
+import { ToastService } from 'src/app/service/toast.service';
+import { NgxSpinnerService } from "ngx-spinner";
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-confirm-info-contract',
@@ -18,7 +19,7 @@ export class ConfirmInfoContractComponent implements OnInit {
   @Output() stepChangeConfirmInforContract = new EventEmitter<string>();
 
   currentUser: any;
-  emailRecipients:any;
+  emailRecipients: any;
   arrVariableRemove = [
     'id',
     'sign_unit',
@@ -40,11 +41,12 @@ export class ConfirmInfoContractComponent implements OnInit {
   ];
 
   constructor(private formBuilder: FormBuilder,
-              public datepipe: DatePipe,
-              private contractService: ContractService,
-              private router: Router,
-              private spinner: NgxSpinnerService,
-              private toastService: ToastService,) {
+    public datepipe: DatePipe,
+    private contractService: ContractService,
+    private router: Router,
+    private spinner: NgxSpinnerService,
+    private dialog: MatDialog,
+    private toastService: ToastService,) {
     this.step = variable.stepSampleContract.step4
   }
 
@@ -57,6 +59,7 @@ export class ConfirmInfoContractComponent implements OnInit {
   data_parnter_organization: any = [];
 
   isFileName: string;
+  type: any = 0;
 
   getPartnerCoordinationer(item: any) {
     return item.recipients.filter((p: any) => p.role == 1)
@@ -81,6 +84,11 @@ export class ConfirmInfoContractComponent implements OnInit {
     this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
     this.data_parnter_organization = this.datas.determine_contract.filter((p: any) => p.type == 2 || p.type == 3);
     this.isFileName = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 1)[0].filename;
+
+    if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
+      this.type = 1;
+    } else
+      this.type = 0;
   }
 
   back(e: any, step?: any) {
@@ -94,34 +102,69 @@ export class ConfirmInfoContractComponent implements OnInit {
   }
 
   next() {
-    // this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    // this.emailRecipients =  this.datas.is_data_contract.participants[1].recipients[0].email;
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    
+    let id_recipient_signature = null;
 
-    //     // response[0].participants[0].recipients[0].email
-    //     if (this.emailRecipients !== this.currentUser.email) {
-          
-    //       this.toastService.showErrorHTMLWithTimeout(
-    //         'Bạn không có quyền xử lý hợp đồng này!',
-    //         '',
-    //         3000
-    //       );
-    //       this.router.navigate(['/main/dashboard']);
-    //       return
-    //     };
-        
-    //     console.log("this.currentUser.email", this.currentUser.email);
-    //     console.log("this.emailRecipients", this.emailRecipients);
-    let isHaveFieldId: any[] = [];
-    let isNotFieldId: any[] = [];
-    let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
-    isUserSign_clone.forEach((res: any) => {
-      res.sign_config.forEach((element: any) => {
-        if (element.id_have_data) {
-          isHaveFieldId.push(element)
-        } else isNotFieldId.push(element);
+    for (const d of this.datas.is_data_contract.participants) {
+      for (const q of d.recipients) {
+        if (q.email) {
+          if (q.email == this.currentUser.email && q.status == 1) {
+            id_recipient_signature = q.id;
+            break
+          }
+        }
+      }
+      if (id_recipient_signature) break;
+    }
+    
+    this.contractService.getDetermineCoordination(id_recipient_signature).subscribe(async (response) => {
+      
+
+      // const ArrRecipients = response.is_data_contract.participants.map((ele: any) => ele.recipients);
+      const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+      
+
+      let ArrRecipientsNew = false
+      ArrRecipients.map((item: any) => {
+        if (item.email === this.currentUser.email) {
+          ArrRecipientsNew = true
+          return
+        }
+      });
+      
+
+      if (!ArrRecipientsNew) {
+
+        this.toastService.showErrorHTMLWithTimeout(
+          'Bạn không có quyền xử lý hợp đồng này!',
+          '',
+          3000
+        );
+        if (this.type == 1) {
+          this.router.navigate(['/login']);
+          this.dialog.closeAll();
+          return
+        } else {
+          this.router.navigate(['/main/dashboard']);
+          this.dialog.closeAll();
+          return
+        }
+      };
+      
+      let isHaveFieldId: any[] = [];
+      let isNotFieldId: any[] = [];
+      let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
+      isUserSign_clone.forEach((res: any) => {
+        res.sign_config.forEach((element: any) => {
+          if (element.id_have_data) {
+            isHaveFieldId.push(element)
+          } else isNotFieldId.push(element);
+        })
       })
+
+      this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId);
     })
-    this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId);
   }
 
   // push dữ liệu step 3
@@ -146,7 +189,7 @@ export class ConfirmInfoContractComponent implements OnInit {
           dataSample_contract.push(data);
         }, (error) => {
           this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("Vui lòng liên hệ đội hỗ trợ để được xử lý", "", 3000);
           countIsSignId++;
         })
         if (countIsSignId > 0) {
@@ -158,27 +201,27 @@ export class ConfirmInfoContractComponent implements OnInit {
     // ===============================
     // if (isSuccess == 0) {
     let response_determine_contract: any = [];
-      await this.contractService.getContractDetermine(this.datas.determine_contract, this.datas.data_contract_document_id.contract_id).toPromise().then((res: any) => {
-          // console.log('success step confirm 2');
-          if (res && res.length > 0) {
-            response_determine_contract = res.filter((res: any) => res.type != 1 && res.recipients.some((val: any) => val.id == this.datas.recipient_id_coordition))[0];
-          }
-        },
-        (error: any) => {
-          isSuccess++;
-          this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout(error.error, "", 3000);
-        });
+    await this.contractService.getContractDetermine(this.datas.determine_contract, this.datas.data_contract_document_id.contract_id).toPromise().then((res: any) => {
+      // 
+      if (res && res.length > 0) {
+        response_determine_contract = res.filter((res: any) => res.type != 1 && res.recipients.some((val: any) => val.id == this.datas.recipient_id_coordition))[0];
+      }
+    },
+      (error: any) => {
+        isSuccess++;
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout(error.error, "", 3000);
+      });
     // }
-// =============================
+    // =============================
 
-    console.log(response_determine_contract);
+    
     // mang update cac doi tuong o ky moi (them or bi xoa)
     let isErrorNotId = false;
     if (dataSignNotId.length > 0) {
       dataSignNotId.forEach((item: any) => {
-        item['font'] = 'Times New Roman';
-        item['font_size'] = 13;
+        item['font'] = item.font ? item.font : 'Times New Roman';
+        item['font_size'] = item.font_size ? item.font_size : 13;
         item['contract_id'] = this.datas.data_contract_document_id.contract_id;
         item['document_id'] = this.datas.data_contract_document_id.document_id;
         if (item.text_attribute_name) {
@@ -204,7 +247,7 @@ export class ConfirmInfoContractComponent implements OnInit {
           item['type'] = 1;
         }
 
-        if (!item.recipient_id ) {
+        if (!item.recipient_id) {
           let getIdRecipientObj = response_determine_contract.recipients.filter((idField: any) => idField.email == item.email && idField.role != 1)[0];
           item.recipient_id = getIdRecipientObj && getIdRecipientObj.id ? getIdRecipientObj.id : undefined;
         }
@@ -213,11 +256,17 @@ export class ConfirmInfoContractComponent implements OnInit {
           delete item[item_remove]
         })
       })
+
+      dataSignNotId.forEach((element: any) => {
+        if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
+          element.coordinate_x = element.coordinate_x - this.datas.difX;
+        }
+      })      
       await this.contractService.getContractSample(dataSignNotId).toPromise().then((data) => {
       }, error => {
         isErrorNotId = true;
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý", "", 3000);
+        this.toastService.showErrorHTMLWithTimeout("Vui lòng liên hệ đội hỗ trợ để được xử lý", "", 3000);
         return false;
       });
     }
@@ -274,11 +323,11 @@ export class ConfirmInfoContractComponent implements OnInit {
       if (!isCheckFail) {
         // arrCoordination (data old, request) thay bằng response_determine_contract.recipients (response)
         await this.contractService.coordinationContract(participantId, response_determine_contract.recipients, this.datas.recipient_id_coordition).toPromise().then((data) => {
-            this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 3000);
-            // save local check khi user f5 reload lại trang sẽ ko còn action điều phối hđ
-            // localStorage.setItem('coordination_complete', JSON.stringify(true));
-            // this.spinner.hide();
-          },
+          this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 3000);
+          // save local check khi user f5 reload lại trang sẽ ko còn action điều phối hđ
+          // localStorage.setItem('coordination_complete', JSON.stringify(true));
+          // this.spinner.hide();
+        },
           error => {
             isCheckFail = true;
             this.spinner.hide();
@@ -303,5 +352,6 @@ export class ConfirmInfoContractComponent implements OnInit {
       }
     }
   }
+
 
 }

@@ -57,19 +57,21 @@ export class AuthGuard implements CanActivate {
           urlChange = url.substring(index);
         }
 
+        if(response.sign_type?.length > 0)
+          localStorage.setItem('sign_type',response.sign_type[0].id)
         this.router.navigateByUrl(urlChange, { skipLocationChange: true });
       })
      }
-
     
+
     //console
     //@ts-ignore
-    console.log("next", next._urlSegment.segments.some((p: any) => p.path == 'form-contract'));
+    
     //@ts-ignore
     if (state.url.search('type') > 0 && (next._urlSegment.segments.some((p: any) => p.path == this.contract_signatures) || next._urlSegment.segments.some((p: any) => p.path == 'contract-template') || next._urlSegment.segments.some((p: any) => p.path == 'form-contract'))) {
       if (!sessionStorage.getItem('url') && state.url.includes(this.kyTuCach+"mail")) {
         let isCheckUrl = state.url.split(this.kyTuCach+"mail=");
-        
+    
         sessionStorage.setItem('url', isCheckUrl[0]);
 
         sessionStorage.setItem('mail', isCheckUrl[isCheckUrl.length - 1]);
@@ -87,37 +89,37 @@ export class AuthGuard implements CanActivate {
         const urlC = sessionStorage.getItem('url');
         const lt = sessionStorage.getItem('type');
         const isEmail = sessionStorage.getItem('mail');
-        console.log(1);
+        
         sessionStorage.clear();
         sessionStorage.setItem('url', urlC ? urlC : '');
 
-        console.log("lt ",lt);
+        
         sessionStorage.setItem('type', lt ? lt : '');
         sessionStorage.setItem('mail', isEmail ? isEmail : '');
+  
 
-        console.log("next.queryParams ", next.queryParams.type);
-        console.log("next query params ", next.queryParams);
 
-        if (next.queryParams.type && next.queryParams.type == 1) {
-          console.log("vao day");
-          this.router.navigate(['/login'],
+
+          if (next.queryParams.type && next.queryParams.type == 1) {
+          
+            this.router.navigate(['/login'],
             {
               queryParams: {'loginType': 1}
-            });
-        } else {
-          this.router.navigate(['/login'],
-            {
-              queryParams: {'loginType': 0}
-            });
-        }
-        return false;
+            }).then(() => window.location.reload())
+          } else {
+            this.router.navigate(['/login'],
+              {
+                queryParams: {'loginType': 0}
+              });
+          }
+          return false;
       } else return true;
     } else {
       if (localStorage.getItem('currentUser') != null) {
-        //console.log(localStorage.getItem('currentUser'));
+        //
         return true;
       } else {
-        console.log("No Log in")
+        
         this.router.navigate(['/login']);
         return false;
       }

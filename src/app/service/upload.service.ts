@@ -23,9 +23,8 @@ export class UploadService {
   organization_id:any;
 
   uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`;
-
-
-
+  checkFileDuplicateUrl:any = `${environment.apiUrl}/api/v1/documents/checkFile`;
+  uploadCompleteContractFileUrl: any = `${environment.apiUrl}/api/v1/contracts/upload/file-contact-sign`
   constructor(private http: HttpClient) { }
 
   getCurrentUser(){
@@ -33,10 +32,13 @@ export class UploadService {
     this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId;
   }
 
-  uploadFile(file: any) {
+  uploadFile(file: any, isFileContract?: boolean) {
     this.getCurrentUser();
     let formData = new FormData();
     formData.append('file', file);
+    if (isFileContract) {
+      formData.append('fileContract', isFileContract.toString());
+    }
 
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
@@ -60,5 +62,65 @@ export class UploadService {
     }
     console.error(errorMessage);
     return throwError(errorMessage);
+  }
+
+  uploadMultiFileToOrg(files: any) {
+    this.getCurrentUser();
+    let formData = new FormData();
+    for (let i = 0; i<files?.length; i++){
+      formData.append('file', files[i]);
+    }
+    const headers = new HttpHeaders()
+      //.append('Content-Type', 'multipart/form-data')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.post<File>(this.uploadFileUrl + this.organization_id + `/singleMultipleFile`, formData, {'headers':headers});
+  }
+  
+  checkDuplicateFileUploaded(fileNameArr: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = fileNameArr
+    ;
+    return this.http.post<any>(
+      this.checkFileDuplicateUrl,
+      body,
+      { headers: headers }
+    );
+  }
+
+  uploadCompleteContractFile(file: any, contractName: string, folderId: string) {
+    this.getCurrentUser();
+    let formData = new FormData();
+    formData.append('file', file);
+    formData.append('fileName', contractName);
+    formData.append('folderId', folderId);
+
+    const headers = new HttpHeaders().append(
+      'Authorization',
+      'Bearer ' + this.token
+    );
+
+    return this.http.post<any>(this.uploadCompleteContractFileUrl, formData, {
+      headers: headers,
+    });
+  }
+
+  editCompleteContractFile(file: any, contractName: string, folderId: string, contractId: string) {
+    this.getCurrentUser();
+    let formData = new FormData();
+    formData.append('file', file);
+    formData.append('fileName', contractName);
+    formData.append('folderId', folderId);
+
+    const headers = new HttpHeaders().append(
+      'Authorization',
+      'Bearer ' + this.token
+    );
+
+    return this.http.put<any>(this.uploadCompleteContractFileUrl + `/${contractId}`, formData, {
+      headers: headers,
+    });
   }
 }

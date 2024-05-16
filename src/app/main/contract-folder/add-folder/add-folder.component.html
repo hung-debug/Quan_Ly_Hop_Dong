@@ -1,0 +1,27 @@
+<div class="container-fluid">
+  <div style="text-align: center; font-weight: bold">
+    <h3 style="color: #106DB6; font-family: inherit;text-transform: uppercase;">{{ title | translate}}</h3>
+  </div>
+  <div class="folder-name">
+    <div class="label-input">{{'folder.name' | translate}}&nbsp;<span style="color: red; padding: 0">*</span></div>
+    <div class="input-data-name" [ngStyle]="getStyleDetail()"><input type="text border" [readonly]="this.action == 'openDetail'" [ngStyle]="getStyleDetail()" [(ngModel)]="this.name" maxlength="255"></div>
+    <div style="color: red" *ngIf="!this.name?.trim() && this.isSubmit">
+        {{'name.folder.invalid' | translate}}
+    </div>
+    <div style="color: red" *ngIf="this.name?.trim() && !parttern_input.new_input_form.test(this.name) && this.isSubmit">
+      {{'name.folder.not.special.char' | translate}}
+    </div>
+  </div>
+  <div class="folder-name">
+    <div class="label-input-description">{{'folder.description' | translate}}&nbsp;</div>
+    <div class="input-data-description" [ngStyle]="getStyleDetail()"><textarea type="text border" [ngStyle]="getStyleDetail()" [readonly]="this.action == 'openDetail'" [(ngModel)]="this.description" maxlength="1000"></textarea></div>
+  </div>
+  <div class="row" style="justify-content: center;padding-top: 10px;">
+    <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
+    <button *ngIf="this.action != 'openDetail'" class="save-button" (click)="submit()" type="button">{{'btn.save' | translate}}</button>
+</div>
+
+</div>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+  <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+</ngx-spinner>

@@ -13,7 +13,7 @@
     <div class="form-group">
       <div class="label_item">{{'contract.number' | translate}}</div>
       <div class="input-group">
-        <input type="text" [(ngModel)]="this.datasForm.contract_no" maxlength="100" class="input_text" placeholder="{{'enter.contract.no' | translate}}" />
+        <input type="text" [(ngModel)]="this.datasForm.contract_no" (click)="reverseInput($event)" (ngxInputSearch)="changeInput($event)" (blur)="changeInput($event)" maxlength="100" class="input_text" placeholder="{{'enter.contract.no' | translate}}" />
       </div>
     </div>
 
@@ -22,7 +22,7 @@
         <div class="file-approve">
           <div class="label_item">{{'file.attach' | translate}}</div>
 
-          <input id="attachFile" type="file" accept=".pdf, .doc, .docx" (change)="uploadFileAttachForm($event)"
+          <input id="attachFile" type="file" accept=".pdf, .doc, .docx, .png, .jpg, .jpeg, .zip, .rar, .txt, .xls, .xlsx" (change)="uploadFileAttachForm($event)"
             style="display: none;" multiple />
 
           <div class="select-contract">
@@ -49,7 +49,7 @@
       </div>
     </div>
 
-    <div *ngIf="this.ceca" class="form-group">
+    <div *ngIf=" environment.flag == 'NB' ? true : this.ceca" class="form-group">
       <div class="label_item">{{'contract-type.ceca' | translate}}<span class="require_star">*</span></div>
         <p-dropdown panelStyleClass="font" [options]="optionsCeCa" [(ngModel)]="optionsCeCaValue" optionLabel="name"
           optionValue="id" [showClear]="true">
@@ -71,7 +71,9 @@
 
     <!--Loại hợp đồng-->
     <div class="form-group">
-      <div class="label_item">{{'contract.type' | translate}}</div>
+      <div class="label_item">{{'contract.type' | translate}}
+        <span *ngIf="this.environment.flag == 'NB'" class="require_star">*</span>
+      </div>
       <div>
         <p-dropdown (onChange)="changeTypeContract($event)" panelStyleClass="font" [options]="typeList" [(ngModel)]="datasForm.type_id" optionLabel="name"
           optionValue="id" placeholder="{{'choose.contract.type' | translate}}" [filter]="true" filterBy="name" [showClear]="true"
@@ -92,7 +94,7 @@
     <div class="form-group">
       <div class="label_item">{{'expiration-date' | translate}} <span class="require_star">*</span></div>
       <div>
-        <p-calendar [(ngModel)]="this.datasForm.sign_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true"
+        <p-calendar [(ngModel)]="this.datasForm.sign_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="false"
           aria-placeholder="{{'choose.expire.date'| translate}}" dateFormat="dd/mm/yy"></p-calendar>
       </div>
     </div>
@@ -100,7 +102,7 @@
     <div class="form-group">
       <div class="label_item">{{'expire.date.contract' | translate}}</div>
       <div>
-        <p-calendar [(ngModel)]="this.datasForm.expire_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true"
+        <p-calendar [(ngModel)]="this.datasForm.contract_expire_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="false"
           aria-placeholder="chọn ngày hết hạn hợp đồng" dateFormat="dd/mm/yy"></p-calendar>
       </div>
     </div>

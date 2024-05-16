@@ -30,6 +30,7 @@ export class AddUnitComponent implements OnInit {
   orgList: Array<any> = [];
   submitted = false;
   get f() { return this.addForm.controls; }
+  fieldTextType: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -45,15 +46,15 @@ export class AddUnitComponent implements OnInit {
     ) { 
 
       this.addForm = this.fbd.group({
-        nameOrg: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        short_name: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
+        nameOrg: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.contract_name_valid)]),
+        short_name: this.fbd.control("", [Validators.pattern(parttern_input.new_input_form)]),
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
         email: this.fbd.control("", [Validators.email]),
         phone: this.fbd.control("", [Validators.pattern("[0-9 ]{10}")]),
-        fax: this.fbd.control(""),
+        fax: this.fbd.control("",[Validators.pattern(parttern_input.new_input_form)]),
         status: 1,
         parent_id: this.fbd.control("", [Validators.required]),
-        taxCode: this.fbd.control("",Validators.pattern(parttern_input.taxCode_form)),
+        taxCode: this.fbd.control("",Validators.pattern(parttern.cardid)),
         idOrg: this.fbd.control(""),
       });
     }
@@ -73,17 +74,18 @@ export class AddUnitComponent implements OnInit {
       });
       this.unitService.getUnitById(this.data.id).subscribe(
         data => {
+          
           this.addForm = this.fbd.group({
-            nameOrg: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            short_name: this.fbd.control(data.short_name, [Validators.pattern(parttern_input.input_form)]),
-            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
+            nameOrg: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.contract_name_valid)]),
+            short_name: this.fbd.control(data.short_name, [Validators.pattern(parttern_input.new_input_form)]),
+            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
             email: this.fbd.control(data.email, [Validators.email]),
             phone: this.fbd.control(data.phone, [Validators.pattern("[0-9 ]{10}")]),
-            fax: this.fbd.control(data.fax),
+            fax: this.fbd.control(data.fax,[Validators.pattern(parttern_input.new_input_form)]),
             status: this.fbd.control(data.status),
             parent_id: this.fbd.control(data.parent_id),
             path: this.fbd.control(data.path),
-            taxCode: this.fbd.control(data.tax_code,Validators.pattern(parttern_input.taxCode_form)),
+            taxCode: this.fbd.control(data.tax_code,Validators.pattern(parttern.cardid)),
             idOrg: this.fbd.control(data.id),
           });
           this.nameOld = data.name;
@@ -113,17 +115,21 @@ export class AddUnitComponent implements OnInit {
         this.orgList = data.entities;
       });
       this.addForm = this.fbd.group({
-        nameOrg: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        short_name: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
+        nameOrg: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.contract_name_valid)]),
+        short_name: this.fbd.control("", [Validators.pattern(parttern_input.new_input_form)]),
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.new_input_form)]),
         email: this.fbd.control("", [Validators.email]),
         phone: this.fbd.control("", [Validators.pattern("[0-9 ]{10}")]),
-        fax: this.fbd.control(""),
+        fax: this.fbd.control("",[Validators.pattern(parttern_input.new_input_form)]),
         status: 1,
         parent_id: this.fbd.control(orgId, [Validators.required]),
-        taxCode: this.fbd.control("",[Validators.pattern(parttern_input.taxCode_form)]),
+        taxCode: this.fbd.control("",[Validators.pattern(parttern.cardid)]),
       });
     }
+  }
+  
+  toggleFieldTextType() {
+    this.fieldTextType = !this.fieldTextType;
   }
 
   convertFileCeCa(ceCAPushMode: any): any {
@@ -297,7 +303,7 @@ export class AddUnitComponent implements OnInit {
     this.submitted = true;
     // stop here if form is invalid
     if (this.addForm.invalid) {
-      console.log("invalid ", this.addForm);
+      
       return;
     }
     const data = {
@@ -311,7 +317,7 @@ export class AddUnitComponent implements OnInit {
       status: this.addForm.value.status,
       parent_id: this.addForm.value.parent_id,
       path: this.addForm.value.path,
-      tax_code: this.addForm.value.taxCode
+      tax_code: this.addForm.value.taxCode,
     }
 
     this.spinner.show();
@@ -380,45 +386,10 @@ export class AddUnitComponent implements OnInit {
                                             roleArrConvert.push(jsonData);
                                           });
                                         });
-                                        const dataRoleIn = {
-                                          name: 'Admin',
-                                          code: 'ADMIN',
-                                          selectedRole: roleArrConvert,
-                                          organization_id: dataUnit.id
-                                        }
-                                        console.log(dataRoleIn);
                                         
-                                        this.roleService.addRoleByOrg(dataRoleIn).subscribe(
-                                          dataRole => {
-                                            //them nguoi dung
-                                            const dataUserIn = {
-                                              name: "Admin",
-                                              email: data.email,
-                                              phone: data.phone,
-                                              organizationId: dataUnit.id,
-                                              role: dataRole.id,
-                                              status: 1,
-                                              sign_image: []
-                                            }
-                                            this.userService.addUser(dataUserIn).subscribe(
-                                              dataUser => {
-                                                //this.toastService.showSuccessHTMLWithTimeout('Thêm mới người dùng admin thành công!', "", 3000);
-                                                this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
-                                                this.dialogRef.close();
-                                                this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                                                  this.router.navigate(['/main/unit']);
-                                                });
-                                                this.spinner.hide();
-                                              }, error => {
-                                                this.toastService.showErrorHTMLWithTimeout('Thêm mới người dùng admin thất bại', "", 3000);
-                                                this.spinner.hide();
-                                              }
-                                            )
-                                          }, error => {
-                                            this.toastService.showErrorHTMLWithTimeout('Thêm mới vai trò cho tổ chức thất bại', "", 3000);
-                                            this.spinner.hide();
-                                          }
-                                        )
+                                        this.dialogRef.close();
+                                        this.toastService.showSuccessHTMLWithTimeout('add.unit.success', "", 3000);
+                                        this.spinner.hide();
                                       }, error => {
                                         this.toastService.showErrorHTMLWithTimeout('Thêm mới tổ chức thất bại', "", 3000);
                                         this.spinner.hide();
@@ -444,36 +415,10 @@ export class AddUnitComponent implements OnInit {
                                         let jsonData = {code: keyItem.value, status: 1};
                                         roleArrConvert.push(jsonData);
                                       });
-                                    });
-                                    const dataRoleIn = {
-                                      name: 'Admin',
-                                      code: 'ADMIN',
-                                      selectedRole: roleArrConvert,
-                                      organization_id: dataUnit.id
-                                    }                                    
-                                    this.roleService.addRoleByOrg(dataRoleIn).subscribe(
-                                      dataRole => {
-                                        this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
-
-                                        this.dialogRef.close();
-                                        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                                          this.router.navigate(['/main/unit']);
-                                        });
-                                        //them nguoi dung
-                                        const dataUserIn = {
-                                          name: "Admin",
-                                          email: data.email,
-                                          phone: data.phone,
-                                          organizationId: dataUnit.id,
-                                          role: dataRole.id,
-                                          status: 1,
-                                          sign_image: []
-                                        }
-                                      }, error => {
-                                        this.toastService.showErrorHTMLWithTimeout('Thêm mới vai trò cho tổ chức thất bại', "", 3000);
-                                        this.spinner.hide();
-                                      }
-                                    )
+                                    });    
+                                    
+                                    this.dialogRef.close();
+                                   
                                   }, error => {
                                     this.toastService.showErrorHTMLWithTimeout('Thêm mới tổ chức thất bại', "", 3000);
                                     this.spinner.hide();
@@ -502,27 +447,12 @@ export class AddUnitComponent implements OnInit {
                                 roleArrConvert.push(jsonData);
                               });
                             });
-                            const dataRoleIn = {
-                              name: 'Admin',
-                              code: 'ADMIN',
-                              selectedRole: roleArrConvert,
-                              organization_id: dataUnit1.id
-                            }
+
+                            this.dialogRef.close();
                             
                             if(dataUnit1.id) {
-                              this.roleService.addRoleByOrg(dataRoleIn).subscribe(
-                                dataRole => {
-                                  this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
-                                  this.spinner.hide();
-                                  this.dialogRef.close();
-                                  this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                                    this.router.navigate(['/main/unit']);
-                                  });
-                                }, error => {
-                                  this.toastService.showErrorHTMLWithTimeout('Thêm mới vai trò cho tổ chức thất bại', "", 3000);
-                                  this.spinner.hide();
-                                }
-                              )
+                              this.spinner.hide();
+                              this.toastService.showSuccessHTMLWithTimeout('add.unit.success', "", 3000);
                             } else {
                               if(dataUnit1.errors[0].code == 1006) {
                                 this.toastService.showErrorHTMLWithTimeout('Mã số thuế đã tồn tại', "", 3000);

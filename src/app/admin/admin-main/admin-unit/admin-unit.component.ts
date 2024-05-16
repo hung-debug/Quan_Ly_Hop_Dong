@@ -136,8 +136,8 @@ export class AdminUnitComponent implements OnInit {
       // this.getUnitList();
     });
 
-    console.log('info unit role');
-    console.log(this.infoUnitRole);
+    
+    
 
     // this.getUnitList();
 
@@ -177,7 +177,7 @@ export class AdminUnitComponent implements OnInit {
           this.rows
         )
         .subscribe((res) => {
-          console.log('page', this.page);
+          
 
           this.temp = this.listData;
 
@@ -203,16 +203,16 @@ export class AdminUnitComponent implements OnInit {
       selectedRoleConvert.push(jsonData);
     });
 
-    console.log('se');
-    console.log(selectedRoleConvert);
+    
+    
 
     for (let i = 0; i < selectedRoleConvert.length; i++) {
       let role = selectedRoleConvert[i].code;
 
       if (role.includes(code)) {
-        console.log('role ', role);
-        console.log('code ', code);
-        console.log('i ', i);
+        
+        
+        
 
         flag = true;
         break;
@@ -245,11 +245,11 @@ export class AdminUnitComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result;
 
-      console.log('result');
-      console.log(result);
+      
+      
     });
   }
 
@@ -267,7 +267,7 @@ export class AdminUnitComponent implements OnInit {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result;
     });
   }
@@ -285,7 +285,7 @@ export class AdminUnitComponent implements OnInit {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result;
     });
   }
@@ -303,13 +303,13 @@ export class AdminUnitComponent implements OnInit {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result;
     });
   }
 
   detailUnit(id: any) {
-    console.log('id unit ', id);
+    
     if (this.infoUnitRole === true) {
       const data = {
         title: 'unit.information',
@@ -324,7 +324,7 @@ export class AdminUnitComponent implements OnInit {
         data,
       });
       dialogRef.afterClosed().subscribe((result: any) => {
-        console.log('the close dialog');
+        
         let is_data = result;
       });
     }
@@ -344,7 +344,7 @@ export class AdminUnitComponent implements OnInit {
         data,
       });
       dialogRef.afterClosed().subscribe((result: any) => {
-        console.log('the close dialog');
+        
         let is_data = result;
       });
     }
@@ -367,7 +367,7 @@ export class AdminUnitComponent implements OnInit {
           this.rows
         )
         .subscribe((res) => {
-          console.log('res ');
+          
   
           this.listData = res.entities;
   

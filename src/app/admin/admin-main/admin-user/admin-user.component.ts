@@ -53,7 +53,7 @@ export class AdminUserComponent implements OnInit {
     ).user.permissions;
 
     if(this.permissions[0].code.includes('QLTB')) {
-      console.log("vao qltb");
+      
       this.adminUserRole = false;
 
       this.appService.setTitle('');
@@ -66,8 +66,8 @@ export class AdminUserComponent implements OnInit {
       this.appService.setTitle('user.list');
     }
 
-    console.log('qlnd 02');
-    console.log(this.addUserRole);
+    
+    
 
     // this.searchUser();
 
@@ -86,9 +86,9 @@ export class AdminUserComponent implements OnInit {
   }
 
   checkRole(flag: boolean, code: string) {
-    console.log('length ', this.permissions.length);
+    
 
-    console.log('permission ', this.permissions);
+    
 
     const selectedRoleConvert: { code: any }[] = [];
 
@@ -154,7 +154,7 @@ export class AdminUserComponent implements OnInit {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result;
     });
   }
@@ -173,9 +173,9 @@ export class AdminUserComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result: any) => {
 
-      console.log("result ",result);
+      
 
-      console.log('the close dialog');
+      
 
       
     });
@@ -195,7 +195,7 @@ export class AdminUserComponent implements OnInit {
         data,
       });
       dialogRef.afterClosed().subscribe((result: any) => {
-        console.log('the close dialog');
+        
         let is_data = result;
       });
     }
@@ -214,7 +214,7 @@ export class AdminUserComponent implements OnInit {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result;
     });
   }

@@ -1,3 +1,4 @@
+import { ContractService } from 'src/app/service/contract.service';
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {ConfirmSignOtpComponent} from "../confirm-sign-otp/confirm-sign-otp.component";
@@ -20,13 +21,14 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   @Input() view: any;
   @Input() contractNoValue: boolean;
   @Input() contractNoValueSign: string;
-
+  @Input() isNotTextSupport: boolean
+  @Input() otpValueSign: any;
   @ViewChild('inputEditText') inputEditText: ElementRef;
   @ViewChild('inputEditContractNo') inputEditContractNo: ElementRef;
 
-
   @Output('checkedChange') newItemEvent = new EventEmitter<string>();
   @Output('contractNoValue') contractNoValueEvent = new EventEmitter<string>();
+  @Output('otpValueChange') otpValueChangeEvent = new EventEmitter<string>();
 
   checkShowEdit = false;
   currentUser: any;
@@ -34,10 +36,11 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   typeSignDigital: any;
 
   contractNo: boolean = false;
-
+  countOtpBox: number = 0;
   constructor(
     private dialog: MatDialog,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private contractService: ContractService
   ) { }
 
   ngOnInit(): void {
@@ -50,10 +53,12 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   getStyle(sign: any) {
     return {
-      font: sign.font
-    }
+      'font': sign.font,
+      'font-size':sign.font_size+'px',
+    };
   }
 
+  
   ngAfterViewInit() {
     if (this.sign.sign_unit == 'so_tai_lieu' || this.sign.sign_unit == 'text') {
       setTimeout(() => {
@@ -119,8 +124,11 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      this.sign.valueSign = result;
+      if (result) {
+        this.countOtpBox++
+        this.sign.valueSign = result;
+        this.otpValueChangeEvent.emit(this.sign.valueSign)
+      }
     })
   }
 
@@ -159,19 +167,24 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
 
-  doneEditTextSign() {
+  doneEditTextSign(e?: any) {
     this.checkShowEdit = false;
+    
+    
+    if(this.sign.text_type == 'currency'){
+        e.target.value = this.contractService.convertCurrency(e.target.value);
+      this.sign.valueSign = e.target.value;}
   }
 
-  doneEditContractNoSign(sign: any) {
+  doneEditContractNoSign(sign: any, e: any) {
     // this.checkShowEdit = false;
 
-
+    // e.target.value = this.convertCurrency(e.target.value);
     this.contractNoValue = false;
     this.count++;
     sign.valueSign = this.contractNoValueSign;
@@ -190,12 +203,17 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ConfirmSignOtpComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
+      
       let is_data = result
     })
   }
 
   doEditText() {
+    if (this.isNotTextSupport) return
+    if(this.sign.valueSign != undefined)
+    this.sign.valueSign = this.contractService.removePeriodsFromCurrencyValue(this.sign.valueSign);
+
+    
     if ([2,3,4].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
       this.checkShowEdit = !this.checkShowEdit;
 
@@ -207,12 +225,13 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doEditContractNo() {
+    if (this.isNotTextSupport) return
     this.contractNoValue = !this.contractNoValue;
 
     setTimeout(()=>{
       this.inputEditContractNo.nativeElement.focus();
     },100);
-
+   
   }
 
   count: number = 0;
@@ -220,29 +239,42 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     this.newItemEvent.emit("1");
     if (sign.sign_unit == 'text') {
       if(sign.valueSign) {
+        // sign.valueSign = this.convertCurrency(sign.valueSign);
         return sign.valueSign;
       }
-      return 'Text';
+      if(sign.text_type == 'currency'){
+        return 'Số tiền'
+      } else {
+      return 'Text';}
     } else {
-      // if (this.datas.is_data_contract.code) {
-      //   console.log("1")
-      //   return this.datas.is_data_contract.code;
-      // } else 
-      if (sign.value) {
-        console.log("vao day ");
-        return sign.value;
-      } else if(sign.valueSign) {
-        console.log("vao day ");
-        return sign.valueSign;
-      } else if(this.contractNoValueSign) {
-        console.log("vao day ");
-        this.count++;
-        sign.valueSign = this.contractNoValueSign;
-        return sign.valueSign;
+      if (sign.sign_unit == 'so_tai_lieu') {
+        if (sign.value) {
+          // sign.value= this.convertCurrency(sign.value);
+          
+          return sign.value;
+        } else if(sign.valueSign) {
+          // sign.valueSign= this.convertCurrency(sign.valueSign);
+          
+          return sign.valueSign;
+        } else if(this.contractNoValueSign) {
+          
+          this.count++;
+          sign.valueSign= this.contractNoValueSign
+          return sign.valueSign;
 
+        }
+        return 'Số hợp đồng';
+      } else if (sign.sign_unit == 'chu_ky_anh') {
+        if(this.otpValueSign) {
+          sign.valueSign= this.otpValueSign
+          return sign.valueSign;
+        }
       }
-      return 'Số hợp đồng';
     }
+  }
+
+  reverseInput(e:any){
+    e.target.value = this.contractService.removePeriodsFromCurrencyValue(e.target.value);
   }
 
 }

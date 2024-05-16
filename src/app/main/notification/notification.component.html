@@ -1,16 +1,16 @@
 <div class="container-fluid" style="padding-top: 10px;">
-  
-    <div *ngIf="listNotification.length > 0"> 
+
+    <div *ngIf="listNotification.length > 0">
         <div *ngFor="let item of listNotification| paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}" style="padding: 4px;"
         [style.background-color]="item.status==0 ? '#eaf4ff' : ''" class="item_contract">
           <div class="row">
-            <div *ngIf="this.lang == 'vi'" class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name}}</div>
-            <div *ngIf="this.lang == 'en'" class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name.replace("Ký HĐ","Sign contract").replace("Quá hạn","Overdue").replace("Hoàn thành","Completed")}}</div>
+            <div class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name}}</div>
+            <!-- <div *ngIf="this.lang == 'en'" class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name.replace("Ký HĐ","Sign contract").replace("Quá hạn","Overdue").replace("Hoàn thành","Completed")}}</div> -->
           </div>
           <div class="row" *ngFor="let s of item.notice_content.split('<br/>')">
             <div *ngIf="!s.includes('\nBên B: #PARTICIPANT_2#')" class="col-md-12 item_contract_infor">
               <img src="../../../assets/img/user_icon.svg" width="12px"/>
-              <span> {{s}}</span> 
+              <span> {{s}}</span>
             </div>
           </div>
           <div class="row item_contract_infor">
@@ -19,7 +19,7 @@
               <img src="../../../assets/img/calendar_icon.svg" width="15px"/>
               <span class="item_date"> {{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
             </div>
-            
+
             <div class="col-md-6 item_contract_infor">{{'contract.status' | translate}}:
               <span class="status_blue" *ngIf="item.message_code=='sign_flow_coordinator'">{{'contract.lead' | translate}}</span>
               <span class="status_blue" *ngIf="item.message_code=='sign_flow_reject'">{{'contract.status.fail' | translate}}</span>
@@ -30,20 +30,23 @@
               <span class="status_blue" *ngIf="item.message_code=='sign_flow_cancel'">{{'contract.status.cancel' | translate}}</span>
               <span class="status_blue" *ngIf="item.message_code=='contract_exprire'">{{'contract.status.overdue' | translate}}</span>
               <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire'">{{'contract.status.expire' | translate}}</span>
+              <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire_createdby'">{{'contract.status.expire' | translate}}</span>
+              <span class="status_blue" *ngIf="item.message_code=='contract_exprire_createdby'">{{'contract.status.overdue' | translate}}</span>
+              <span class="status_blue" *ngIf="item.message_code=='contract_exprire_time'">{{'expire.status' | translate}}</span>
             </div>
-        
+
           </div>
         </div>
       </div>
-  
-    <div *ngIf="listNotification.length == 0" 
+
+    <div *ngIf="listNotification.length == 0"
     style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
       <div style="display: table-cell;vertical-align: middle;">
         <img src="../../../assets/img/empty_data.svg"/>
         <div style="color: #94A7C6">{{'no.data' | translate}}</div>
       </div>
     </div>
-  
+
     <div class="contract_footer">
       <div class="footer_title"></div>
       <div class="footer_pagination">
@@ -51,6 +54,5 @@
       </div>
       <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
     </div>
-  
+
   </div>
-  

@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
@@ -7,6 +7,7 @@ import { InputTreeService } from 'src/app/service/input-tree.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-contract-number-follow-type',
@@ -14,6 +15,7 @@ import { ReportService } from '../report.service';
   styleUrls: ['./contract-number-follow-type.component.scss']
 })
 export class ContractNumberFollowTypeComponent implements OnInit {
+  @ViewChild('dt') table: Table;
 
    //Biến lưu dữ liệu trong bảng
    list: any[] = [];
@@ -45,16 +47,19 @@ export class ContractNumberFollowTypeComponent implements OnInit {
 
    contractStatus: number = -1;
 
-   fetchChildData: boolean = false;
+   fetchChildData: boolean = true;
 
   total: any = {
     total: 0,
     processed: 0,
     processing: 0,
+    rejected: 0,
     canceled: 0,
     prepare_expires: 0,
     expired: 0
   };
+
+  Arr = Array;
 
   constructor(
     private appService: AppService,
@@ -65,15 +70,15 @@ export class ContractNumberFollowTypeComponent implements OnInit {
     private reportService: ReportService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private translate: TranslateService 
-
   ) { }
 
   ngOnInit(): void {
+
+    this.spinner.hide();
     this.appService.setTitle('report.number.contracts.contract-type.full');
 
     this.optionsStatus = [
-      { id: -1, name: 'Tất cả' },
+      // { id: -1, name: 'Tất cả' },
       { id: 20, name: 'Đang thực hiện' },
       { id: 2, name:'Quá hạn' },
       { id: 31, name: 'Từ chối' },
@@ -105,124 +110,54 @@ export class ContractNumberFollowTypeComponent implements OnInit {
     //lấy danh sách tổ chức
     this.inputTreeService.getData().then((res: any) => {
       this.listOrgCombobox = res;
-
+      this.listOrgCombobox[0]?.children.forEach((element: any) => {
+        element.expanded = !element.expanded
+      });
       this.selectedNodeOrganization = this.listOrgCombobox.filter(
         (p: any) => p.data == this.organization_id
       );
     });
 
     this.cols = [
-      // {
-      //   id: 1,
-      //   header: 'contract.name',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
       {
-        id: 2,
         header: 'contract.type',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
       },
-      // {
-      //   id: 3,
-      //   header: 'contract.number',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 4,
-      //   header: 'contract.uid',
-      //   style: 'text-align: left;',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 5,
-      //   header: 'contract.connect',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 6,
-      //   header: 'contract.time.create',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 7,
-      //   header: 'signing.expiration.date',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 8,
-      //   header: 'contract.status.v2',
-      //   style: 'text-align:left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 9,
-      //   header: 'date.completed',
-      //   style: 'text-align: left',
-      //   colspan: 1,
-      //   rowspan: '2',
-      // },
-      // {
-      //   id: 10,
-      //   header: 'suggest',
-      //   style: 'text-align: center',
-      //   colspan: '5',
-      //   rowspan: 1,
-      // },
       {
-        id: 13,
         header: 'chart.number',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
       },
       {
-        id: 14,
         header: 'contract.status.complete',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
       },
       {
-        id: 15,
         header: 'sys.processing',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
       },
       {
-        id: 16,
+        header: 'contract.status.fail',
+        style: 'text-align: left;',
+        colspan: 1,
+      },
+      {
         header: 'contract.status.cancel',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
       },
       {
-        id: 17,
         header: 'contract.status.expire',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
       },
       {
-        id: 18,
         header: 'contract.status.overdue',
         style: 'text-align: left;',
         colspan: 1,
-        rowspan: '2',
       }
     ];
   }
@@ -230,7 +165,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
   
   validData() {
     if(!this.date || (this.date && this.date.length < 2)) {
-      this.toastService.showErrorHTMLWithTimeout('Vui lòng nhập đủ ngày ngày tạo','',3000);
+      this.toastService.showErrorHTMLWithTimeout('date.full.valid','',3000);
       return false;
     }
     return true;
@@ -239,7 +174,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
   //Export ra file excel
   clickReport: boolean = false;
   org: any;
-  export(flag: boolean) {
+  async export(flag: boolean) {
     if(!this.validData()) {
       return;
     }
@@ -253,6 +188,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
 
     let from_date: any = '';
     let to_date: any = '';
+
     if(this.date && this.date.length > 0) {
       from_date = this.datepipe.transform(this.date[0],'yyyy-MM-dd');
       to_date = this.datepipe.transform(this.date[1],'yyyy-MM-dd');
@@ -263,7 +199,10 @@ export class ContractNumberFollowTypeComponent implements OnInit {
     if(!contractStatus) 
       contractStatus = -1;
 
-    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChilData='+this.fetchChildData;
+    if(!to_date)
+      to_date = from_date;
+    
+    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
     this.reportService.export('rp-by-type',idOrg,params, flag).subscribe((response: any) => {
 
         this.spinner.hide();
@@ -275,7 +214,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
           document.body.appendChild(a);
           a.setAttribute('style', 'display: none');
           a.href = url;
-          a.download = `report-by-type_${new Date().getTime()}.xlsx`;
+          a.download = `BaoCaoSLTheoLoaiHopDong_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
           a.remove();
@@ -283,9 +222,22 @@ export class ContractNumberFollowTypeComponent implements OnInit {
           this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
         } else {
 
+          this.table.first = 0
+
           this.clickReport = true;
 
           let array: any = [];
+          this.list = [];
+
+          this.total = {
+            total: 0,
+            processed: 0,
+            processing: 0,
+            rejected: 0,
+            canceled: 0,
+            prepare_expires: 0,
+            expired: 0
+          };
 
           Object.keys(response).forEach((key, index) => {
             this.org = key;
@@ -300,22 +252,32 @@ export class ContractNumberFollowTypeComponent implements OnInit {
 
           Object.keys(reportList).forEach((key: any, index: any) => {
             name.push(key);
-            console.log("re ", reportList[key]);
             value.push(reportList[key]);
           });
           
           for(let i = 0; i < name.length; i++) {
-            this.list[i + 1] = {
+            this.list[i] = {
               name: name[i],
               value: value[i]
             }
           }
 
-          this.list.forEach((item: any) => {
-            console.log("item ", item.value);
+          let listFirst = [this.org];
+          let listSecond = this.list;
+
+          listSecond.sort((a, b) => a.name.localeCompare(b.name));
+
+          this.list = listFirst.concat(listSecond);
+
+          const listData = this.list.slice(1);
+
+          listData.forEach((item: any) => {
+              this.total.name = item.name;
+
               this.total.total += item.value.total;
               this.total.processed += item.value.processed;
               this.total.processing += item.value.processing;
+              this.total.rejected += item.value.rejected;
               this.total.canceled += item.value.canceled;
               this.total.prepare_expires += item.value.prepare_expires;
               this.total.expired += item.value.expired;
@@ -323,7 +285,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
         }
        
     })
- 
+
   }
 
   changeCheckBox(event: any) {

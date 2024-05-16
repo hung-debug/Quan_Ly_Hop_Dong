@@ -49,6 +49,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   thePDF: any = null;
   pageNumber = 1;
   canvasWidth = 0;
+  canvasHeight = 0;
   arrPage: any = [];
   objDrag: any = {};
   scale: any;
@@ -131,6 +132,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   status: any;
   pdfSrcMobile: string;
   trustedUrl: any;
+  action: any;
 
   consider: boolean = false;
 
@@ -149,7 +151,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   statusLink: any;
   signBefore: boolean = false;
-
+  folderId: any;
+  folderName: any;
+  defaultValue: number = 100;
+  liquidationContractData: any;
   constructor(
     private contractService: ContractService,
     private checkViewContractService: CheckViewContractService,
@@ -220,19 +225,34 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       } else {
         this.isOrg = '';
       }
-      if (
-        typeof params.organization_id != 'undefined' &&
-        params.organization_id
+
+      if (typeof params.organization_id != 'undefined' && params.organization_id
       ) {
         this.organization_id = params.organization_id;
       } else {
         this.organization_id = '';
       }
 
+      if (typeof params.folderId != 'undefined' && params.folderId
+      ) {
+        this.folderId = params.folderId;
+      }
+
+      if(typeof params.folderName != 'undefined' && params.folderName) {
+        this.folderName = params.folderName;
+      }
+
+
       if (typeof params.status != 'undefined' && params.status) {
         this.statusLink = params.status;
       } else {
         this.statusLink = '';
+      }
+
+      if(typeof params.action != 'undefined' && params.action){
+        this.action = params.action;
+      }else{
+        this.action = '';
       }
     });
 
@@ -304,11 +324,33 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     });
 
     this.contractService.getDetailContract(this.idContract).subscribe(
-      (rs) => {
+      async (rs) => {
 
         this.isDataContract = rs[0];
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
+
+         //Hợp đồng huỷ status = 32 => link 404 đối với những người xử lý trong hợp đồng đó trừ người tạo
+         if(this.isDataContract.status == 32) {
+          const callApiBpmn = await this.contractService
+          .viewFlowContract(this.idContract)
+          .toPromise();
+
+          if(!this.mobile) {
+            if (callApiBpmn.createdBy.email != this.currentUser.email) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'not.process.contract',
+                '',
+                3000
+              );
+              return;
+            }
+          } else {
+            alert(this.translate.instant('not.process.contract'));
+            return;
+          }
+        }
+
         if (rs[0] && rs[1] && rs[1].length && rs[2] && rs[2].length) {
           this.valid = true;
         }
@@ -319,6 +361,19 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         };
 
         this.datas = this.data_contract;
+        
+        if(this.datas.is_data_contract.originalContractId)
+        this.contractService.getDataCoordination(this.datas.is_data_contract.originalContractId).subscribe((item) =>{
+      
+          this.datas.is_data_contract.original_contract_name =  item.name;
+        })
+
+        if(this.datas.is_data_contract.liquidationContractId)
+        this.contractService.getDataCoordination(this.datas.is_data_contract.liquidationContractId).subscribe((item) =>{
+          this.datas.is_data_contract.liquidation_contract_name =  item.name;
+          this.liquidationContractData = item
+          // this.datas.is_data_contract
+        })
 
         let email = JSON.parse(localStorage.getItem('currentUser') || '')
           ?.customer.info.email;
@@ -353,11 +408,12 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           )
           .subscribe();
 
-        console.log('this datas ', this.datas.is_data_contract);
+
 
         this.allFileAttachment = this.datas.i_data_file_contract.filter(
           (f: any) => f.type == 3
         );
+        this.allFileAttachment = this.allFileAttachment.map((item: any) => ({...item, path: item.path.includes('.txt') ? item.path : item.path.replace("/tmp/","/tmp/v2/")}))
         this.checkIsViewContract();
         this.datas.is_data_object_signature.forEach((element: any) => {
           // 1: van ban, 2: ky anh, 3: ky so
@@ -373,6 +429,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           }
           if (element.type == 4) {
             element['sign_unit'] = 'so_tai_lieu';
+          }
+          if (element.type == 5) {
+            element['sign_unit'] = 'text';
+            element['text_type'] = 'currency'
           }
         });
 
@@ -391,7 +451,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           this.contractService.getDataFormatContractUserSign();
 
         this.datas.contract_user_sign.forEach((element: any) => {
-          // console.log(element.sign_unit, element.sign_config);
+          //
           if (element.sign_unit == 'chu_ky_so') {
             Array.prototype.push.apply(
               element.sign_config,
@@ -644,6 +704,56 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     }
   }
 
+  updateCanvasSize() {
+    // @ts-ignore
+    // const pdfjs = await import('pdfjs-dist/build/pdf');
+    // @ts-ignore
+    // const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
+    // pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+    let canvas = document.createElement('canvas');
+    canvas.className = 'dropzone';
+    // canvas.id = 'canvas-step3-' + page;
+    const canvasList = document.querySelectorAll('.dropzone');
+    canvasList.forEach((canvas: any) => {
+      canvas.style.width = this.canvasWidth * this.scale + 'px';
+      canvas.style.height = this.canvasHeight * this.scale + 'px';
+    });
+  }
+
+  changeScale(values: any){
+    switch (values){
+      case "-":
+        if(this.scale > 0.25){
+          this.scale = this.scale - 0.25;
+          this.defaultValue = this.scale * 100
+          // for (let page = 1; page <= this.pageNumber; page++) {
+          //   let canvas = document.getElementById('canvas-step3-' + page);
+          //   this.renderPageZoomInOut(page, canvas);
+          // }
+          this.getPage();
+
+        }else{
+          break;
+        }
+        break;
+      case "+":
+        if(this.scale < 5){
+          this.scale = this.scale + 0.25;
+          this.defaultValue = this.scale * 100
+          // for (let page = 1; page <= this.pageNumber; page++) {
+          //   let canvas = document.getElementById('canvas-step3-' + page);
+          //   this.renderPageZoomInOut(page, canvas);
+          // }
+          this.getPage();
+        }else{
+          break;
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
     //This gives us the page's dimensions at full scale
@@ -651,9 +761,11 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     this.thePDF.getPage(pageNumber).then((page) => {
       // let viewport = page.getViewport(this.scale);
       let viewport = page.getViewport({ scale: this.scale });
+
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;
+      this.canvasHeight = viewport.height;
       canvas.height = viewport.height;
       canvas.width = viewport.width;
       let _objPage = this.objPdfProperties.pages.filter(
@@ -679,6 +791,46 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         clearInterval(interval);
       }, 2000);
+
+      if (test) {
+        let paddingPdf =
+          (test.getBoundingClientRect().width - viewport.width) / 2;
+        $('.viewer-pdf').css('padding-left', paddingPdf + 'px');
+        $('.viewer-pdf').css('padding-right', paddingPdf + 'px');
+      }
+      this.activeScroll();
+    });
+  }
+
+  renderPageZoomInOut(pageNumber: any, canvas: any) {
+    //This gives us the page's dimensions at full scale
+    //@ts-ignore
+    this.thePDF.getPage(pageNumber).then((page) => {
+      // let viewport = page.getViewport(this.scale);
+      let viewport = page.getViewport({ scale: this.scale });
+
+      let test = document.querySelector('.viewer-pdf');
+
+      this.canvasWidth = viewport.width;
+      this.canvasHeight = viewport.height;
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+      let _objPage = this.objPdfProperties.pages.filter(
+        (p: any) => p.page_number == pageNumber
+      )[0];
+      if (!_objPage) {
+        this.objPdfProperties.pages.push({
+          page_number: pageNumber,
+          width: parseInt(viewport.width),
+          height: viewport.height,
+        });
+      }
+
+      var renderContext: any = {
+        canvasContext: canvas.getContext('2d'),
+        viewport: viewport,
+      };
+      page.render(renderContext);
 
       if (test) {
         let paddingPdf =
@@ -782,7 +934,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         this.objSignInfo.offsetHeight = parseInt(d.offsetHeight);
         // this.signCurent.offsetWidth = d.offsetWidth;
         // this.signCurent.offsetHeight = d.offsetHeight;
-        // console.log(this.signCurent)
+        //
 
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
@@ -830,7 +982,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   processHandleContract() {
     // alert('Luồng xử lý hợp đồng!');
     const data = this.datas;
-    console.log('the close dialog', data);
+
     // @ts-ignore
     const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
       width: '1000px',
@@ -839,8 +991,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      this.reLoadData();
+
+      // this.reLoadData();
       let is_data = result;
     });
   }
@@ -864,7 +1016,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   // edit location doi tuong ky
   changePositionSign(e: any, locationChange: any, property: any) {
-    // console.log(e, this.objSignInfo, this.signCurent);
+    //
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter(
@@ -908,8 +1060,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
             );
           }
         }
-        // console.log(this.signCurent)
-        // console.log(this.objSignInfo)
+        //
+        //
       }
     }
   }
@@ -1002,9 +1154,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   actionBack() {
-    console.log('vao day ');
-
-    // console.log("is ", this.isOrg);
     if (this.pageBefore && this.isOrg) {
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         this.router.navigate(['/main/contract/create/' + this.statusLink], {
@@ -1017,12 +1166,14 @@ export class DetailContractComponent implements OnInit, OnDestroy {
             isOrg: this.isOrg,
             organization_id: this.organization_id,
             status: this.statusLink,
+            filter_name:this.filter_name
           },
           skipLocationChange: true,
         });
       });
-    } else if (this.pageBefore) {
-      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+    } else if(this.pageBefore) {
+       //Ket thuc hop dong nhan
+       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         this.router.navigate(['/main/c/receive/' + this.statusLink], {
           queryParams: {
             page: this.pageBefore,
@@ -1033,6 +1184,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
             isOrg: this.isOrg,
             organization_id: this.organization_id,
             status: this.statusLink,
+            filter_name:this.filter_name
           },
           skipLocationChange: true,
         });
@@ -1046,10 +1198,23 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         if (this.isOrg) {
           this._location.back();
         } else {
-          // console.log("vao day ");
-          this.router.navigate(['/login']);
+          if(this.action == 'folder') {
+            // this.router.navigate(['/main/my-folder/'+this.folderName]);
 
-          this.contractService.deleteToken().subscribe((response: any) => {});
+            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+              this.router.navigate(['/main/my-folder/'+this.folderName],
+              {
+                queryParams: {
+                  'id': this.folderId,
+                },
+                skipLocationChange: false
+              });
+            });
+          } else {
+            this.router.navigate(['/login']);
+            this.contractService.deleteToken().subscribe();
+          }
+
         }
       }
     }
@@ -1098,7 +1263,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     dialogConfig.data = data;
     // const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
     // dialogRef.afterClosed().subscribe((result: any) => {
-    //   console.log('the close dialog');
+    //
     //   let is_data = result
     // })
   }
@@ -1115,7 +1280,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     dialogConfig.data = data;
     // const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
     // dialogRef.afterClosed().subscribe((result: any) => {
-    //   console.log('the close dialog');
+    //
     //   let is_data = result
     // })
   }
@@ -1308,17 +1473,17 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   t() {
-    console.log(this);
+
   }
 
   downloadContract(id: any) {
     if (this.isDataContract.status == 30) {
       this.contractService.getFileZipContract(id).subscribe((data) => {
-          console.log(data);
+
           this.uploadService
             .downloadFile(data.path)
             .subscribe((response: any) => {
-              //console.log(response);
+              //
 
               let url = window.URL.createObjectURL(response);
               let a = document.createElement('a');
@@ -1379,17 +1544,18 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       }
 
       if (recipients.length == 2) {
-        for (const participant of this.datas.is_data_contract.participants) {
-          for (const recipient of participant.recipients) {
-            if (
-              this.currentUser.email == recipient.email &&
-              recipient.role != 1
-            ) {
-              this.recipient = recipient;
-              return;
-            }
-          }
-        }
+        // for (const participant of this.datas.is_data_contract.participants) {
+        //   for (const recipient of participant.recipients) {
+        //     if (
+        //       this.currentUser.email == recipient.email &&
+        //       recipient.role != 1
+        //     ) {
+        //       this.recipient = recipient;
+        //       return;
+        //     }
+        //   }
+        // }
+        this.recipient = recipients[recipients.length - 1];
       } else if (recipients.length == 1) {
         for (const participant of this.datas.is_data_contract.participants) {
           for (const recipient of participant.recipients) {
@@ -1557,5 +1723,43 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         this.pageNum = Number(i + 2);
       }
     }
+  }
+
+  openDetailOriginalContract(data: any){
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/main/form-contract/detail/' +data.originalContractId],
+      {
+        queryParams: {
+          'page': 1,
+          'filter_type': '',
+          'filter_contract_no':'',
+          'filter_from_date': '',
+          'filter_to_date': '',
+          'isOrg': 'off',
+          'organization_id': '',
+          'status': 'complete'
+        },
+        skipLocationChange: false
+      });
+    });
+  }
+
+  openDetailLiquidatedContract(data: any){
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/main/form-contract/detail/' + data.liquidationContractId],
+      {
+        queryParams: {
+          'page': 1,
+          'filter_type': '',
+          'filter_contract_no':'',
+          'filter_from_date': '',
+          'filter_to_date': '',
+          'isOrg': 'off',
+          'organization_id': '',
+          'status': 'liquidated'
+        },
+        skipLocationChange: false
+      });
+    });
   }
 }

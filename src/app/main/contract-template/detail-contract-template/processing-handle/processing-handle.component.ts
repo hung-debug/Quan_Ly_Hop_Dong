@@ -40,7 +40,7 @@ export class ProcessingHandleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.data.is_data_contract.participants);
+    
 
     this.data_organization = this.data.is_data_contract.participants.filter((p: any) => p.type == 1)[0];
     this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
@@ -49,7 +49,7 @@ export class ProcessingHandleComponent implements OnInit {
 
     this.data_parnter_organization = this.data.is_data_contract.participants.filter((p: any) => p.type == 2 || p.type == 3);
 
-    console.log("this data partner org ", this.data_parnter_organization);
+    
   }
 
   acceptRequest() {
