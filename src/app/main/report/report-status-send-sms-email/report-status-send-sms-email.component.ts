@@ -326,6 +326,7 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
 
   changePageNumber(e: any){
     this.page = 0;
+    this.enterPage = 1;
     this.row = e.target.value;
     // sessionStorage.setItem('createdPageNum', this.page.toString());
     this.exportSmsReportCall(false);

@@ -208,7 +208,8 @@ export class ContractTemplateComponent implements OnInit {
 
 
   searchContract(){
-    // this.p = 1;
+    this.p = 1;
+    this.enterPage = 1;
     this.getContractTemplateList();
   }
 

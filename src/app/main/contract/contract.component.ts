@@ -740,7 +740,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   changeTab() {
-    // this.p = 1;
+    this.p = 1;
+    this.enterPage = 1;
     this.getContractList();
   }
 
