@@ -70,7 +70,8 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
   typeList: Array<any> = [];
   contractInfo: string;
   totalRecords: number = 0;
-  row: number = 15;
+  row: number = 10;
+  pageOptions: any[] = [10, 20, 50, 100];
   page: number = 0;
   enterPage: number = 1;
   inputTimeout: any;
@@ -398,6 +399,13 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
     this.export(false);
   }
 
+  changePageNumber(e: any){
+    this.page = 0;
+    this.row = e.target.value;
+    // sessionStorage.setItem('createdPageNum', this.page.toString());
+    this.export(false);
+  }
+  
   convert(code: string) {
     return this.convertStatusService.convert(code.toLowerCase());
   }

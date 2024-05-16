@@ -213,7 +213,11 @@ input[type="checkbox"]:checked + label:before {
 .footer_pagination {
   display: grid;
   margin-top: 10px;
-  grid-template-columns: 1fr 2fr 1fr
+  grid-template-columns: 1fr 2fr 1fr;
+
+  @media (max-width: 1245px) {
+    display: block;
+  }
 }
 
 .footer_pagination_between {
@@ -248,4 +252,31 @@ input[type="checkbox"]:checked + label:before {
 .enterPage p {
   display: block;
   margin: auto 0;
+}
+
+.footer_contract_per_page{
+  display: flex;
+  margin: auto 0 auto 5px;
+  flex-wrap: nowrap;
+  color: #0160AE;
+  select{
+    height: 20px;
+    width: 50px;
+    border: 1px solid #0160AE;
+    border-radius: 5px;
+  }
+
+  @media (max-width: 1245px) {
+    justify-content: center;
+  }
+}
+
+.footer_pagination_quantity {
+  color: #0160AE !important;
+  margin: auto 0 auto auto;
+  @media (max-width: 1245px) {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
 }

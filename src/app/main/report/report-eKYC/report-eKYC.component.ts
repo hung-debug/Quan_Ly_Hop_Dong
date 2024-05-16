@@ -37,11 +37,12 @@ export class ReportEKYCComponent implements OnInit {
   contractStatus: any;
   maxSelectableDate: Date;
   totalRecords: number = 0;
-  row: number = 15;
+  row: number = 10;
   page: number = 0;
   enterPage: number = 1;
   inputTimeout: any;
   numberPage: number;
+  pageOptions: any[] = [10, 20, 50, 100];
   constructor(
     private appService: AppService,
     private inputTreeService: InputTreeService,
@@ -268,6 +269,13 @@ export class ReportEKYCComponent implements OnInit {
     this.exportEKYCReportCall(false);
   }
 
+  changePageNumber(e: any){
+    this.page = 0;
+    this.row = e.target.value;
+    // sessionStorage.setItem('createdPageNum', this.page.toString());
+    this.exportEKYCReportCall(false);
+  }
+  
   downloadFile(data: any) {
     let currentDate = moment().format('HH:mm:ss')
     let selectedStartDate = moment(this.date[0]).format('DD-MM-YYYY')

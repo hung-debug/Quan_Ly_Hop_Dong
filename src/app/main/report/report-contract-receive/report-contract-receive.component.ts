@@ -56,7 +56,8 @@ export class ReportContractReceiveComponent implements OnInit {
   orgName: any;
   contractInfo: string;
   totalRecords: number = 0;
-  row: number = 15;
+  row: number = 10;
+  pageOptions: any[] = [10, 20, 50, 100];
   page: number = 0;
   enterPage: number = 1;
   inputTimeout: any;
@@ -379,6 +380,13 @@ export class ReportContractReceiveComponent implements OnInit {
     this.export(false);
   }
 
+  changePageNumber(e: any){
+    this.page = 0;
+    this.row = e.target.value;
+    // sessionStorage.setItem('createdPageNum', this.page.toString());
+    this.export(false);
+  }
+  
   getValue(list: any,index: number,code: string) {
     if(list.participants[index]) {
       if(code == 'type')
