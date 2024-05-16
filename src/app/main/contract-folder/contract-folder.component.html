@@ -83,7 +83,11 @@
   <div class="contract_footer">
     <div class="footer_title"></div>
     <div class="footer_pagination">
-        <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; pageChange()" previousLabel="" nextLabel=""></pagination-controls>
+      <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; pageChange()" previousLabel="" nextLabel=""></pagination-controls>
+      <div class="enterPage" *ngIf="pageTotal > 0">
+          <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
+          <p>của {{countPage()}} trang</p>
+      </div>
     </div>
     <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}
     </div>
@@ -256,6 +260,7 @@
     <div class="contract_footer">
       <div class="footer_title"></div>
       <div class="footer_pagination">
+        <div>test3</div>
           <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; pageChange()" previousLabel="" nextLabel=""></pagination-controls>
       </div>
       <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}

@@ -69,7 +69,13 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
 
   typeList: Array<any> = [];
   contractInfo: string;
-
+  totalRecords: number = 0;
+  row: number = 10;
+  pageOptions: any[] = [10, 20, 50, 100];
+  page: number = 0;
+  enterPage: number = 1;
+  inputTimeout: any;
+  numberPage: number;
   @ViewChild('typeContract') typeContract: any;
   constructor(
     private appService: AppService,
@@ -258,7 +264,7 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
         '&to_date=' +
         to_date +
         '&status=' +
-        contractStatus + payload;
+        contractStatus + payload +`&pageNumber=`+this.page+`&pageSize=`+this.row;
     }
 
     this.reportService
@@ -354,10 +360,52 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
           });
 
           this.list = listFirst.concat(listSecond);
+          this.totalRecords = response.TotalElements;
+          this.numberPage = response.TotalPages;
         }
       });
   }
 
+  toRecord() {
+    return Math.min((this.page + 1) * this.row, this.totalRecords)
+  }
+
+  onPageChange(event: any) {
+    this.page = event.page;
+    this.enterPage = this.page + 1;
+    this.export(false);
+  }
+
+  validateInput(event: KeyboardEvent) {
+    const input = event.key;
+    if (input === ' ' || (isNaN(Number(input)) && input !== 'Backspace')) {
+      event.preventDefault();
+    }
+  }
+
+  onInput(event: any) {
+    clearTimeout(this.inputTimeout);
+    this.inputTimeout = setTimeout(() => {
+      this.autoSearchEnterPage(event);
+    }, 1000);
+  }
+
+  autoSearchEnterPage(event: any) {
+    if(event.target.value && event.target.value != 0 && event.target.value <= this.numberPage) {
+      this.page = this.enterPage - 1;
+    } else {
+      this.enterPage = this.page + 1;
+    }
+    this.export(false);
+  }
+
+  changePageNumber(e: any){
+    this.page = 0;
+    this.row = e.target.value;
+    // sessionStorage.setItem('createdPageNum', this.page.toString());
+    this.export(false);
+  }
+  
   convert(code: string) {
     return this.convertStatusService.convert(code.toLowerCase());
   }

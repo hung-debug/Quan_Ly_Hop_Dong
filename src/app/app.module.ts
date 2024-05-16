@@ -136,7 +136,7 @@ import { UploadContractFileComponent } from './main/contract-folder/current-fold
 import { AccountLinkDialogComponent } from './main/dialog/account-link-dialog/account-link-dialog.component';
 import { NgOtpInputModule } from  'ng-otp-input';
 import { environment } from 'src/environments/environment';
-
+import { PaginatorModule } from 'primeng/paginator';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -275,7 +275,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
   ],
   imports: [
     TranslateModule,
-
+    PaginatorModule,
     BrowserModule,
     AppRoutingModule,
     NgxChartsModule,

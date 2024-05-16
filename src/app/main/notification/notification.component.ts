@@ -15,6 +15,9 @@ export class NotificationComponent implements OnInit {
   pageStart:number = 0;
   pageEnd:number = 0;
   pageTotal:number = 0;
+  inputTimeout: any
+  numberPage: number;
+  enterPage: number = 1;
   constructor(private dashboardService: DashboardService,
     private appService: AppService) { }
   
@@ -34,6 +37,7 @@ export class NotificationComponent implements OnInit {
   }
 
   getNotification(){
+    this.enterPage = this.p;
     this.dashboardService.getNotification('', '', '', this.page, this.p).subscribe(data => {
       this.listNotification = data.entities;
       
@@ -63,4 +67,31 @@ export class NotificationComponent implements OnInit {
     }
   }
 
+  onInput(event: any) {
+    clearTimeout(this.inputTimeout);
+    this.inputTimeout = setTimeout(() => {
+      this.autoSearchEnterPage(event);
+    }, 1000);
+  }
+
+  validateInput(event: KeyboardEvent) {
+    const input = event.key;
+    if (input === ' ' || (isNaN(Number(input)) && input !== 'Backspace')) {
+      event.preventDefault();
+    }
+  }
+  
+  autoSearchEnterPage(event: any) {
+    if(event.target.value && event.target.value != 0 && event.target.value <= this.numberPage) {
+      this.p = this.enterPage;
+    } else {
+      this.enterPage = this.p;
+    }
+    this.getNotification();
+  }
+  
+  countPage() {
+    this.numberPage = Math.ceil(this.pageTotal / this.page);
+    return this.numberPage;
+  }
 }

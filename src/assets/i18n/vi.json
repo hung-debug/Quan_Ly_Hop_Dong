@@ -838,5 +838,6 @@
   "error.smtpServer.format": "SMTP Server sai định dạng",
   "error.smtpPort.format": "SMTP Port sai định dạng",
   "config.email.server.role": "Cấu hình Email Server",
-  "mail.server.infor.success": "Cấu hình mail server thành công"
+  "mail.server.infor.success": "Cấu hình mail server thành công",
+  "contract.enterPage": "Nhập số trang"
 }

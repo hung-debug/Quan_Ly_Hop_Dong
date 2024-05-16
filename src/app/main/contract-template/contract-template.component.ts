@@ -28,7 +28,9 @@ export class ContractTemplateComponent implements OnInit {
   pageStart:number = 0;
   pageEnd:number = 0;
   pageTotal:number = 0;
-
+  inputTimeout: any
+  numberPage: number;
+  enterPage: number = 1;
   isShare: string = 'off';
   stateOptions: any[];
   contractTypeList: any[] = [];
@@ -126,6 +128,7 @@ export class ContractTemplateComponent implements OnInit {
 
   
   async getContractTemplateList(){
+    this.enterPage = this.p;
     //get list contract template
     await this.contractTemplateService.getContractTemplateList(this.isShare, this.name, this.type, this.p, this.page).toPromise().then(response => {
       this.contractsTemplate = response.entities;
@@ -138,6 +141,34 @@ export class ContractTemplateComponent implements OnInit {
         this.setPage();
       }
     });
+  }
+
+  onInput(event: any) {
+    clearTimeout(this.inputTimeout);
+    this.inputTimeout = setTimeout(() => {
+      this.autoSearchEnterPage(event);
+    }, 1000);
+  }
+
+  validateInput(event: KeyboardEvent) {
+    const input = event.key;
+    if (input === ' ' || (isNaN(Number(input)) && input !== 'Backspace')) {
+      event.preventDefault();
+    }
+  }
+  
+  autoSearchEnterPage(event: any) {
+    if(event.target.value && event.target.value != 0 && event.target.value <= this.numberPage) {
+      this.p = this.enterPage;
+    } else {
+      this.enterPage = this.p;
+    }
+    this.getContractTemplateList();
+  }
+  
+  countPage() {
+    this.numberPage = Math.ceil(this.pageTotal / this.page);
+    return this.numberPage;
   }
 
   sortParticipant(list:any){

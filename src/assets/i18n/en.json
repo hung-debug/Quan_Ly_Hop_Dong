@@ -822,5 +822,6 @@
   "error.smtpServer.format": "Invalid SMTP Server",
   "error.smtpPort.format": "Invalid SMTP Port",
   "config.email.server.role": "Config eMail Server",
-  "mail.server.infor.success": "Config mail server success"
+  "mail.server.infor.success": "Config mail server success",
+  "contract.enterPage": "Enter page number"
 }
