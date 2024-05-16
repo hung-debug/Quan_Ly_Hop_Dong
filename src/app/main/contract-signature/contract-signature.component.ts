@@ -1857,7 +1857,7 @@ export class ContractSignatureComponent implements OnInit {
                     .getDataObjectSignatureLoadChange(idContract[i])
                     .toPromise();
                   dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i])
-                  let currentSigningStatus: any = this.checkCurrentSigningCall(recipientId[i])
+                  let currentSigningStatus: any = this.checkCurrentSigningCall(dataObjectSignature[0].recipient.id)
                   if (!currentSigningStatus) return
                   for (let j = 0; j < dataObjectSignature.length; j++) {
                     if (dataObjectSignature[j].recipient) {
@@ -2096,7 +2096,7 @@ export class ContractSignatureComponent implements OnInit {
           .getDataObjectSignatureLoadChange(idContract[i])
           .toPromise();
         dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i])
-        let currentSigningStatus: any = this.checkCurrentSigningCall(recipientId[i])
+        let currentSigningStatus: any = this.checkCurrentSigningCall(dataObjectSignature[0].recipient.id)
         if (!currentSigningStatus) return
         for (let j = 0; j < dataObjectSignature.length; j++) {
           if (dataObjectSignature[j].recipient) {
