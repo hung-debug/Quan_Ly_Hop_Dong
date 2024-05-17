@@ -41,8 +41,9 @@ th:nth-child(3) {
   
   #table th {
   //text-align: center;
-  background-color: #E2ECF6;
-  color: #106DB6;
+  background-color: #EBF2FB;
+  color: #8E9AB0;
+  font-weight: 500;
   }
   
   #table tr:last-child th:first-child {
@@ -133,7 +134,7 @@ th:nth-child(3) {
     width: 80px;
     box-sizing: border-box;
     color: white;
-    background-color: #106DB6;
+    background: var(--Primary, #0041C4);
     font-size: 13px;
     // margin: 0 10px;
 }
@@ -160,10 +161,14 @@ input[type="checkbox"] {
     margin-left: 15%;
 }
 
-// .horizontal-container {
-//     display: flex;
-//     flex-direction: row;
-// }
+.horizontal-container {
+    // display: flex;
+    // flex-direction: row;
+    background-color: #FFFFFF;
+    min-height: 88vh;
+    border-radius: 12px;
+    padding: 10px;
+}
 
 .input-expiration-date {
     box-sizing: border-box;

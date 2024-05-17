@@ -11,6 +11,7 @@
 
 .container-fluid{
   background-color: #FFFFFF;
+  border-radius: 12px;
 }
 
 input[type="file"] {
@@ -106,6 +107,10 @@ color: #106DB6;
     border-width: 0 !important;
     height: 26px !important;
     width: 50px !important;
+  }
+  
+  .p-paginator{
+    background-color: #F3F6FA !important;
   }
 
   .p-datatable-table, .p-datatable-table .ng-star-inserted, .p-paginator-pages .ng-star-inserted{

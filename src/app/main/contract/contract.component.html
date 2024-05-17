@@ -1,12 +1,17 @@
-<p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row" style="padding: 10px; ">
+<!-- <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row" style="padding: 10px; ">
     <ng-template #options let-item>
         <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
     </ng-template>
-</p-selectButton>
+</p-selectButton> -->
 
 <!--Truong hop dang xu ly va sap het han-->
 <div #mydiv *ngIf="(this.filter_status == 20 || this.filter_status == 33) && this.isOrg == 'off'" class="col-md-4" class="container-fluid">
   <div class="row container-fluid-bg">
+    <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row" style="padding: 10px; ">
+      <ng-template #options let-item>
+          <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
+      </ng-template>
+    </p-selectButton>
     <ng-template [ngIf]="!roleMess">
       <div class="row" style="padding-bottom: 20px;">
         <div class="col-md-8" style="padding-top: 20px;">
@@ -131,7 +136,7 @@
               <!--Cột 5: Ngày cập nhật-->
               <div class="col-md-2 calendar_create">
                 <!-- để tạm ngày tạo HĐ -->
-                <div><i class="fa fa_icon"></i><span class="item_date">{{item.created_at | date:
+                <div><i class="fa fa_icon"></i><span class="item_date">{{item.updated_at | date:
                   'dd/MM/yyyy HH:mm:ss'}}</span>
                 </div>
               </div>
@@ -241,6 +246,11 @@
                this.typeDisplay =='multiDeleteDraft' ||
                this.typeDisplay =='release') && this.isOrg == 'off') && status != 'complete'" class="container-fluid">
   <div class="row container-fluid-bg">
+    <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row" style="padding: 10px; ">
+      <ng-template #options let-item>
+          <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
+      </ng-template>
+    </p-selectButton>
     <ng-template [ngIf]="!roleMess">
       <div class="row" style="padding-bottom: 20px;">
         <div class="col-md-8" style="padding-top: 20px;">
@@ -358,7 +368,7 @@
                 <!--Cột 5: Ngày cập nhật-->
                 <div class="col-md-2 calendar_create">
                   <!-- để tạm ngày tạo HĐ -->
-                  <div><i class="fa fa_icon"></i><span class="item_date">{{item.created_at | date:
+                  <div><i class="fa fa_icon"></i><span class="item_date">{{item.updated_at | date:
                     'dd/MM/yyyy HH:mm:ss'}}</span>
                   </div>
                 </div>
@@ -484,6 +494,11 @@
               this.typeDisplay =='release') && this.isOrg == 'off')
               && this.typeDisplay !== 'downloadMany' && status == 'complete'" class="container-fluid">
   <div class="row container-fluid-bg">
+    <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row" style="padding: 10px; ">
+      <ng-template #options let-item>
+          <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
+      </ng-template>
+    </p-selectButton>
     <ng-template [ngIf]="!roleMess">
       <div class="row" style="padding-bottom: 20px;">
         <div class="col-md-8" style="padding-top: 20px;">
@@ -600,7 +615,7 @@
                 <!--Cột 5: Ngày cập nhật-->
                 <div class="col-md-2 calendar_create">
                   <!-- để tạm ngày tạo HĐ -->
-                  <div><i class="fa fa_icon"></i><span class="item_date">{{item.created_at | date:
+                  <div><i class="fa fa_icon"></i><span class="item_date">{{item.updated_at | date:
                     'dd/MM/yyyy HH:mm:ss'}}</span>
                   </div>
                 </div>
@@ -663,6 +678,11 @@
 <!-- HD Hoàn thành -->
 <div *ngIf="(this.filter_status == 30 && this.isOrg == 'off' && this.typeDisplay === 'view')" class="container-fluid">
   <div class="row container-fluid-bg">
+    <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row" style="padding: 10px; ">
+      <ng-template #options let-item>
+          <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
+      </ng-template>
+    </p-selectButton>
     <ng-template [ngIf]="!roleMess">
       <div class="row" style="padding-bottom: 20px;">
         <div class="col-md-8" style="padding-top: 20px;">
@@ -769,7 +789,7 @@
 
                 <!--Cột 5: Ngày cập nhật cuối-->
                 <div class="col-md-2 calendar_deadline">
-                    <div><i class="fa fa_icon"></i><span class="item_date">{{item.sign_time | date:
+                    <div><i class="fa fa_icon"></i><span class="item_date">{{item.updated_at | date:
                             'dd/MM/yyyy HH:mm:ss'}}</span></div>
                 </div>
 
@@ -888,6 +908,11 @@
 <!-- Hợp đồng hoàn thành -->
 <div *ngIf="(this.typeDisplay == 'downloadMany' && this.filter_status == 30)">
     <div class="container-fluid-bg">
+      <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row" style="padding: 10px; ">
+        <ng-template #options let-item>
+            <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
+        </ng-template>
+      </p-selectButton>
         <ng-template [ngIf]="!roleMess">
           <div class="row" style="padding-bottom: 20px;">
             <div class="col-md-8" style="padding-top: 20px;">
@@ -1011,7 +1036,7 @@
 
                     <!--Cột 5: Ngày cập nhật-->
                     <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa_icon"></i><span class="item_date">{{item.sign_time | date:
+                        <div><i class="fa fa_icon"></i><span class="item_date">{{item.updated_at | date:
                                 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
@@ -1072,6 +1097,11 @@
 <!--Phát hành hợp đồng-->
 <div *ngIf="(this.typeDisplay == 'release' && this.filter_status == 0)">
     <div class="container-fluid-bg">
+      <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row" style="padding: 10px; ">
+        <ng-template #options let-item>
+            <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
+        </ng-template>
+      </p-selectButton>
         <ng-template [ngIf]="!roleMess">
           <div class="row" style="padding-bottom: 20px;">
             <div class="col-md-8" style="padding-top: 20px;">
@@ -1195,7 +1225,7 @@
 
                     <!--Cột 5: Ngày cập nhật-->
                     <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa_icon"></i><span class="item_date">{{item.sign_time | date:
+                        <div><i class="fa fa_icon"></i><span class="item_date">{{item.updated_at | date:
                                 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
@@ -1252,6 +1282,11 @@
 <!-- Xóa nhiều bản nháp -->
 <div *ngIf="(this.typeDisplay == 'multiDeleteDraft' && this.filter_status == 0)">
   <div class="container-fluid-bg">
+    <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row" style="padding: 10px; ">
+      <ng-template #options let-item>
+          <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
+      </ng-template>
+    </p-selectButton>
       <ng-template [ngIf]="!roleMess">
         <div class="row" style="padding-bottom: 20px;">
           <div class="col-md-8" style="padding-top: 20px;">
@@ -1365,7 +1400,7 @@
 
                   <!--Cột 5: Ngày cập nhật-->
                   <div class="col-md-2 calendar_deadline">
-                      <div><i class="fa fa_icon"></i><span class="item_date">{{item.sign_time | date:
+                      <div><i class="fa fa_icon"></i><span class="item_date">{{item.updated_at | date:
                               'dd/MM/yyyy HH:mm:ss'}}</span></div>
                   </div>
 

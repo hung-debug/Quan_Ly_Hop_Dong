@@ -137,7 +137,7 @@ import { AccountLinkDialogComponent } from './main/dialog/account-link-dialog/ac
 import { NgOtpInputModule } from  'ng-otp-input';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { MatMenuModule } from '@angular/material/menu';
-
+import { PaginatorModule } from 'primeng/paginator';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -275,6 +275,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     AccountLinkDialogComponent
   ],
   imports: [
+    PaginatorModule,
     TranslateModule,
     BrowserModule,
     AppRoutingModule,

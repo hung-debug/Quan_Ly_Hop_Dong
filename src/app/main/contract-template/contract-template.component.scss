@@ -8,6 +8,8 @@
 
 .container-fluid{
   background-color: #FFFFFF;
+  border-radius: 12px;
+  padding-top: 15px;
 }
 
 .item_contract:hover{
@@ -18,13 +20,13 @@
 .item_contract_name {
   font-weight: 500;
   font-size: 16px;
-  color: #106DB6;
+  color: #001A4D;
   cursor: pointer;
   white-space: pre-wrap;
 }
 
 .item_contract_infor{
-  color: #666666;
+  color: #8E9AB0;
 }
 
 .status_blue{
@@ -32,7 +34,7 @@
 }
 
 .list_header{
-  color:#898989;
+  color:#8E9AB0;
   text-align: center;
   padding: 12px 12px 0;
   font-weight: 500;
@@ -48,9 +50,13 @@
   height: 35px;
   font-size: inherit;
 }
-.calendar_create, .contract_code{
+.calendar_create{
   text-align: center;
-  color:hsl(206, 84%, 39%)
+  color:#8E9AB0
+}
+
+.contract_code{
+  color: #2D6BE7;
 }
 .item_date{
   padding-left: 3px;
@@ -178,16 +184,33 @@
   border-radius: 5px;
   border: 1px solid #106DB6;
 }
-.btn_submit{
+.btn_add{
   border: 0px;
-  border-radius: 5px;
-  height: 33px;
+  border-radius: 8px;
+  height: 35px;
   box-sizing: border-box;
   color: white;
-  background-color: #106DB6;
+  background-color: #0041C4;
   font-size: 13px;
   margin: 0 10px;
+  font-style: normal;
+  font-weight: 700;
 }
+
+.btn_search1{
+  border: 1px solid rgba(0, 26, 77, 0.10);
+  border-radius: 8px;
+  height: 35px;
+  box-sizing: border-box;
+  color: #001A4D;
+  background-color: #FFFFFF;
+  font-size: 13px;
+  margin: 0 10px;
+  box-shadow: 0px 3px 12px 0px rgba(16, 85, 225, 0.10);
+  font-style: normal;
+  font-weight: 700;
+}
+
 .btn_search{
   align-self: flex-end;
 }

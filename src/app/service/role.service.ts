@@ -101,10 +101,10 @@ export class RoleService {
     return this.http.delete<any>(this.deleteRoleUrl + id, {headers}).pipe();
   }
 
-  public getRoleList(code:any, name:any): Observable<any> {
+  public getRoleList(code:any, name:any, row: number = 15, page: any = 0): Observable<any> {
     this.getCurrentUser();
     const headers = {'Authorization': 'Bearer ' + this.token}
-    let listRoleUrl = this.listRoleUrl + "?name=" + name.trim() + "&code=" + code.trim() + "&size=10000"
+    let listRoleUrl = this.listRoleUrl + "?name=" + name.trim() + "&code=" + code.trim() + "&size=" + row  +'&page=' + page;
     return this.http.get<any[]>(listRoleUrl, {headers}).pipe();
   }
 

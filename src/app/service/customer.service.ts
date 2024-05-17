@@ -60,7 +60,7 @@ export interface SignType{
   providedIn: 'root'
 })
 export class CustomerService {
-  getCustomerUrl: any = `${environment.apiUrl}/api/v1/customers/my-partner`;
+  getCustomerUrl: any = `${environment.apiUrl}/api/v1/customers/my-partner?`;
   deleteCustomerByIdUrl: any = `${environment.apiUrl}/api/v1/customers/my-partner/`;
   addCustomerUrl: any = `${environment.apiUrl}/api/v1/customers/my-partner`;
   editCustomerUrl: any = `${environment.apiUrl}/api/v1/customers/my-partner`;
@@ -79,12 +79,12 @@ export class CustomerService {
 
   constructor(private http: HttpClient,) { }
 
-  public getCustomerList(): Observable<any> {
+  public getCustomerList(row: number = 15, page: number = 0): Observable<any> {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<Customer[]>(this.getCustomerUrl, {headers}).pipe();
+    return this.http.get<Customer[]>(this.getCustomerUrl + "&size=" + row  +'&page=' + page, {headers}).pipe();
   }
 
   deleteCustomerById(id: any) {
