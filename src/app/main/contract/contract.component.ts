@@ -744,6 +744,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   private convertStatusStr() {
     // this.p = 1;
+    this.contracts = [];
     if (this.status == 'draft') {
       this.filter_status = 0;
     } else if (this.status == 'processing') {
