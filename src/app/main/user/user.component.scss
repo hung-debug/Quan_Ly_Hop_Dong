@@ -4,7 +4,7 @@
   height: 33px;
   box-sizing: border-box;
   color: white;
-  background-color: #106DB6;
+  background-color: #0041C4;
   font-size: 13px;
   margin: 0 10px;
 }
@@ -17,7 +17,7 @@ input[type="file"] {
   border: 0px;
   border-radius: 5px;
   box-sizing: border-box;
-  background-color: #106DB6;
+  background-color: #0041C4;
   display: inline-block;
   padding: 6px 12px;
   cursor: pointer;
@@ -49,12 +49,30 @@ padding: 8px;
 
 #table tr:nth-child(even){background-color: #f2f2f2;}
 
-#table tr:hover {background-color: #ddd;}
+#table tr:hover, #table td:hover {background-color: #f2f2f2;}
 
 #table th {
 //text-align: center;
-background-color: #E2ECF6;
-color: #106DB6;
+// background-color: #E2ECF6;
+// color: #106DB6;
+  background: #EBF2FB;
+  color: #8E9AB0;
+  font-family: 'Roboto';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.525px;
+}
+
+.table_col_not_bold {
+  color: #001A4D;
+  font-family: 'Roboto';
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: -0.45px;
 }
 
 #table tr:last-child th:first-child {

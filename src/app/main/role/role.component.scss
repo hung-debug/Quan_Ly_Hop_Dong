@@ -4,7 +4,7 @@
   height: 33px;
   box-sizing: border-box;
   color: white;
-  background-color: #106DB6;
+  background-color: #0041C4;
   font-size: 13px;
   margin: 0 10px;
 }
@@ -18,6 +18,19 @@
 }
 .btn_search{
   align-self: flex-end;
+}
+
+.btn_submit_search {
+  height: 35px;
+  border: 1px solid rgba(0, 26, 77, 0.10);
+  color: #001A4D;
+  background-color: #FFF;
+}
+
+.btn_submit_add {
+  height: 33px;
+  color: #FFF;
+  background-color: #0041C4;
 }
 
 #table {
@@ -36,9 +49,27 @@ padding: 8px;
 #table tr:hover {background-color: #ddd;}
 
 #table th {
-//text-align: center;
-background-color: #E2ECF6;
-color: #106DB6;
+  //text-align: center;
+  // background-color: #E2ECF6;
+  // color: #106DB6;
+  background: #EBF2FB;
+  color: #8E9AB0;
+  font-family: 'Roboto';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.525px;
+}
+
+.table_col_not_bold {
+  color: #001A4D;
+  font-family: 'Roboto';
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: -0.45px;
 }
 
 #table tr:last-child th:first-child {
