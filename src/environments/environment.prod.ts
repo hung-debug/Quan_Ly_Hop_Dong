@@ -10,7 +10,7 @@ export const environment = {
 
   //NB
   // apiUrl: 'https://econtract.mobifone.vn/service',
-  apiUrl: 'https://econtractnb.mobifone.ai/service',
+  apiUrl: 'https://econtract-vmec.mobifone.ai/service',
   flag: 'NB',
 
   //KD
