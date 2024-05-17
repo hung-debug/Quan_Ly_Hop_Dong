@@ -11,13 +11,20 @@
  align-self: flex-end;
 }
 
+.container-fluid{
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding-top: 15px;
+  min-height: 80vh;
+}
+
 .btn_submit{
   border: 0px;
   border-radius: 5px;
   height: 33px;
   box-sizing: border-box;
   color: white;
-  background-color: #106DB6;
+  background-color: #0041C4;
   font-size: 13px;
   margin: 0 10px;
 }
@@ -42,7 +49,7 @@
 border-collapse: collapse;
 width: 100%;
 font-size: 13px;
-font-family: font_lexend_deca;
+// font-family: font_lexend_deca;
 }
 #table td, #table th {
 //border: 1px solid #ddd;
@@ -55,8 +62,9 @@ padding: 8px;
 
 #table th {
 //text-align: center;
-background-color: #E2ECF6;
-color: #106DB6;
+background-color: #EBF2FB;
+color: #8E9AB0;
+font-weight: 500;
 }
 
 #table tr:last-child th:first-child {
@@ -75,7 +83,7 @@ border-bottom-right-radius: 10px;
 :host ::ng-deep {
 .p-calendar {
   font-size: 13px !important;
-  font-family: 'font_lexend_deca';
+  // font-family: 'font_lexend_deca';
   width: 100%;
 }
 .p-datepicker table td {
@@ -140,7 +148,7 @@ font-size: 12px;
 :host ::ng-deep {
 .p-calendar {
   font-size: 13px !important;
-  font-family: 'font_lexend_deca';
+  // font-family: 'font_lexend_deca';
   width: 100%;
 }
 .p-datepicker table td {
@@ -162,6 +170,10 @@ font-size: 12px;
   box-shadow: none !important;
   height: 33px;
   width: 50%;
+}
+
+.p-paginator{
+  background-color: #F3F6FA !important;
 }
 
 .pi-fw {
@@ -199,7 +211,7 @@ font-size: 12px;
 
 .p-datatable-table, .p-datatable-table .ng-star-inserted, .p-paginator-pages .ng-star-inserted{
   font-size: 13px;
-  font-family: font_lexend_deca;
+  // font-family: font_lexend_deca;
 }
 }
 
@@ -207,3 +219,73 @@ font-size: 12px;
   white-space: pre-wrap;
 }
 
+.footer_pagination {
+  display: grid;
+  margin-top: 10px;
+  grid-template-columns: 1fr 2fr 1fr;
+
+  @media (max-width: 1245px) {
+    display: block;
+  }
+}
+
+.footer_pagination_between {
+  display: flex;
+  margin: auto;
+
+  @media (max-width: 1520px) {
+    display: block;
+  }
+}
+
+.footer_pagination_between_input {
+  display: flex;
+  justify-content: center;
+}
+.enterPage input {
+  display: block;
+  margin: auto 0;
+  text-align:center;
+  margin-left: 5px;
+  margin-right: 5px;
+  height: 25px;
+  width: 50px; 
+  border-radius: 5px;
+  border: 1px solid #0160AE;
+}
+
+.text-enterPage::placeholder {
+  font-size: 10px;
+}
+
+.enterPage p {
+  display: block;
+  margin: auto 0;
+}
+
+.footer_contract_per_page{
+  display: flex;
+  margin: auto 0 auto 5px;
+  flex-wrap: nowrap;
+  color: #0160AE;
+  select{
+    height: 20px;
+    width: 50px;
+    border: 1px solid #0160AE;
+    border-radius: 5px;
+  }
+
+  @media (max-width: 1245px) {
+    justify-content: center;
+  }
+}
+
+.footer_pagination_quantity {
+  color: #0160AE !important;
+  margin: auto 0 auto auto;
+  @media (max-width: 1245px) {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+}

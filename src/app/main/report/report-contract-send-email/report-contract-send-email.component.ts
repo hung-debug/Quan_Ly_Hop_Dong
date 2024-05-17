@@ -37,6 +37,13 @@ export class ReportStatusSendEmailComponent implements OnInit {
   optionsStatus: any = [];
   contractStatus: any;
   maxSelectableDate: Date;
+  totalRecords: number = 0;
+  row: number = 10;
+  pageOptions: any[] = [10, 20, 50, 100];
+  page: number = 0;
+  enterPage: number = 1;
+  inputTimeout: any;
+  numberPage: number;
   constructor(
     private appService: AppService,
     private inputTreeService: InputTreeService,
@@ -206,7 +213,7 @@ export class ReportStatusSendEmailComponent implements OnInit {
       "endDate": to_date,
     }
 
-    let params = `?pageNumber=0&pageSize=10000`
+    let params = `?pageNumber=`+this.page+`&pageSize=`+this.row;
     try {
       if (!isExport) {
         this.spinner.show()
@@ -216,6 +223,8 @@ export class ReportStatusSendEmailComponent implements OnInit {
             this.list = [];
             this.spinner.hide()
             this.list = res.content
+            this.totalRecords = res.totalElements;
+            this.numberPage = res.totalPages;
           }
         )
       } else {
@@ -235,6 +244,47 @@ export class ReportStatusSendEmailComponent implements OnInit {
       this.spinner.hide()
       this.toastService.showErrorHTMLWithTimeout('error.get.contract.list.report','',3000)
     }
+  }
+
+  toRecord() {
+    return Math.min((this.page + 1) * this.row, this.totalRecords)
+  }
+
+  onPageChange(event: any) {
+    this.page = event.page;
+    this.enterPage = this.page + 1;
+    this.exportEmailReportCall(false);
+  }
+
+  validateInput(event: KeyboardEvent) {
+    const input = event.key;
+    if (input === ' ' || (isNaN(Number(input)) && input !== 'Backspace')) {
+      event.preventDefault();
+    }
+  }
+
+  onInput(event: any) {
+    clearTimeout(this.inputTimeout);
+    this.inputTimeout = setTimeout(() => {
+      this.autoSearchEnterPage(event);
+    }, 1000);
+  }
+
+  autoSearchEnterPage(event: any) {
+    if(event.target.value && event.target.value != 0 && event.target.value <= this.numberPage) {
+      this.page = this.enterPage - 1;
+    } else {
+      this.enterPage = this.page + 1;
+    }
+    this.exportEmailReportCall(false);
+  }
+
+  changePageNumber(e: any){
+    this.page = 0;
+    this.enterPage = 1;
+    this.row = e.target.value;
+    // sessionStorage.setItem('createdPageNum', this.page.toString());
+    this.exportEmailReportCall(false);
   }
 
   downloadFile(data: any) {

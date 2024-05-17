@@ -11,13 +11,20 @@
    align-self: flex-end;
 }
 
+.container-fluid{
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding-top: 15px;
+  min-height: 80vh;
+}
+
 .btn_submit{
     border: 0px;
     border-radius: 5px;
     height: 33px;
     box-sizing: border-box;
     color: white;
-    background-color: #106DB6;
+    background-color: #0041C4;
     font-size: 13px;
     margin: 0 10px;
 }
@@ -53,8 +60,9 @@
 
 #table th {
   //text-align: center;
-  background-color: #E2ECF6;
-  color: #106DB6;
+  background-color: #EBF2FB;
+  color: #8E9AB0;
+  font-weight: 500;
 }
 
 #table tr:last-child th:first-child {
