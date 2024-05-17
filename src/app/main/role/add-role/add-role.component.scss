@@ -3,9 +3,24 @@
     font-weight: bold
 }
 .label-header{
-    color: #106DB6; 
-    font-family: inherit;
+    // color: #106DB6; 
+    // font-family: inherit;
     text-transform: uppercase;
+    color: #001A4D;
+    font-family: 'Roboto';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 21px;
+    letter-spacing: -0.525px;
+}
+.label {
+    color: #2B3D60;
+    font-family: 'Roboto';
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px;
 }
 .required-title, .invalid {
     color: red;
@@ -17,6 +32,13 @@
     min-height: 33px;
     display: flex;
     align-items: center;
+    color: #AEC7E5;
+    font-family: 'Roboto';
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 21px;
+    letter-spacing: -0.525px;
 
     > img {
         padding-left: 14px;
@@ -40,7 +62,7 @@
     width: 100px;
     box-sizing: border-box;
     color: white;
-    background-color: #8B8B8B;
+    background-color: #8E9AB0;
     font-size: 13px;
     margin: 0 10px;
 }
@@ -51,7 +73,7 @@
     width: 100px;
     box-sizing: border-box;
     color: white;
-    background-color: #106DB6;
+    background-color: #0041C4;
     font-size: 13px;
     margin: 0 10px;
 }

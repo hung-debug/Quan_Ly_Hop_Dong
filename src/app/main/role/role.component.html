@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="col-md-6 btn_search">
-      <button *ngIf="isQLVT_04" class="btn btn-lg btn-block btn_submit" (click)="searchRole()">{{'btn.search' | translate }}</button>
+      <button *ngIf="isQLVT_04" class="btn btn-lg btn-block btn_submit_search" (click)="searchRole()">{{'btn.search' | translate }}</button>
       <button *ngIf="isQLVT_01" class="btn btn-lg btn-block btn_submit" (click)="addRole()">{{'btn.add' | translate }}</button>
     </div>
   </div>
@@ -22,16 +22,25 @@
     <p-table [value]="list" [paginator]="false" [rows]="15" id="table" [autoLayout]="true" [(first)]="first">
       <ng-template pTemplate="header" let-columns>
         <tr>
-            <th *ngFor="let col of cols" [style]='col.style'>
+            <th *ngFor="let col of cols" [style]='col.style' class="table_title">
               {{col.header | translate}}
             </th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-list>
           <tr>
-              <td><a (click)="isQLVT_05?detailRole(list.id):null" style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
-              <td>{{list.code}}</td>
-              <td style="text-align: center">
+              <td><a (click)="isQLVT_05?detailRole(list.id):null"
+                style="color: #001A4D;
+                  cursor: pointer;
+                  font-family: 'Roboto';
+                  font-size: 14px; font-style:normal;
+                  font-weight: 700;
+                  line-height: 21px;
+                  letter-spacing: -0.525px;">
+                    {{list.name}}
+                  </a></td>
+              <td class="table_col_not_bold">{{list.code}}</td>
+              <td class="table_col_not_bold" style="text-align: center">
                 <img *ngIf="isQLVT_02" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editRole(list.id)" style="cursor: pointer;"/>&nbsp;&nbsp;
                 <img *ngIf="isQLVT_03" src="../../../assets/img/icon_delete.svg" width="16px" (click)="deleteRole(list.id)" style="cursor: pointer;"/>
               </td>

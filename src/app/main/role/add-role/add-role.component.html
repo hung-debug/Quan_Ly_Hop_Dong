@@ -55,12 +55,23 @@
                         [checkbox]="true" [filter]="true" [multiple]="true" [listStyle]="{'max-height':'300px'}" [style]="{'width':'100%'}"
                         >
                         <ng-template let-group pTemplate="group">
-                            <div class="p-d-flex p-ai-center">
+                            <div class="p-d-flex p-ai-center"
+                                style="color: #001A4D;
+                                font-family: 'Roboto';
+                                font-style: normal;
+                                line-height: 20px;"
+                            >
                                 <span>{{group.label | translate}}</span>
                             </div>
                         </ng-template>
                         <ng-template let-group pTemplate="item">
-                            <div class="p-d-flex p-ai-center">
+                            <div class="p-d-flex p-ai-center"
+                                style="color: #001A4D;
+                                font-family: 'Roboto';
+                                font-style: normal;
+                                font-weight: 500;
+                                line-height: 21px;"
+                            >
                                 <span>{{group.label | translate}}</span>
                             </div>
                         </ng-template>

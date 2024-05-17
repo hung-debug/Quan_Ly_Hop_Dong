@@ -30,7 +30,7 @@
     </div> -->
 
     <div class="col-md-3 btn_search">
-      <button *ngIf="isQLND_03" class="btn btn-lg btn-block btn_submit" (click)="searchUser()">{{'btn.search' | translate }}</button>
+      <button *ngIf="isQLND_03" class="btn btn-lg btn-block btn_submit_search" (click)="searchUser()">{{'btn.search' | translate }}</button>
         <a *ngIf="isQLND_01" class="btn btn-lg btn-block btn_submit" [routerLink]="['/main/form-user/add']" (click)="addUser()">
           {{'btn.add' | translate }}
         </a>
@@ -40,14 +40,14 @@
   <div class="row" style="padding-top: 5px;">
     <div class="col-md-6">
     </div>
-    <div class="col-md-6 btn_search" style="padding-left: 22px">
-      <input *ngIf="isQLND_01" id="file-input" type="file" accept=".xls,.xlsx" (change)="fileChanged($event)" style="display: none"/>
+    <div class="col-md-6 btn_search" style="padding-left: 22px;">
+      <input *ngIf="isQLND_01" id="file-input" type="file" accept=".xls,.xlsx" (change)="fileChanged($event)" />
       <label for="file-input" class="custom-file-upload">
         <i class="fa fa-cloud-upload"></i> Import file
       </label>
 
       <a style="padding-left: 5px;">
-        {{'not.have.sample.file' | translate}} <a href="/assets/upload/import_nguoi_dung.xlsx" style="color: #106DB6; cursor: pointer;" (click)="downFileExample()">{{'download.sample.file' | translate}}</a>
+        {{'not.have.sample.file' | translate}} <a href="/assets/upload/import_nguoi_dung.xlsx" style="color: #0041C4; cursor: pointer;" (click)="downFileExample()">{{'download.sample.file' | translate}}</a>
       </a>
     </div>
   </div>
@@ -64,16 +64,28 @@
       </ng-template>
       <ng-template pTemplate="body" let-list>
           <tr>
-              <td><a (click)="isQLND_04?detailUser(list.id):null" [routerLink]="['/main/user-detail/', list.id]" style="color: #0160AE; cursor: pointer; text-decoration: none;">{{list.name}}</a></td>
-              <td>{{list.email}}</td>
-              <td>{{list.phone}}</td>
-              <td>{{list.organization.name}}</td>
+              <td><a (click)="isQLND_04?detailUser(list.id):null" [routerLink]="['/main/user-detail/', list.id]"
+                  style="
+                  cursor: pointer;
+                  text-decoration: none;
+                  color: #001A4D;
+                  cursor: pointer;
+                  font-family: 'Roboto';
+                  font-size: 14px; font-style:normal;
+                  font-weight: 700;
+                  line-height: 21px;
+                  letter-spacing: -0.525px;
+                  "
+                >{{list.name}}</a></td>
+              <td class="table_col_not_bold">{{list.email}}</td>
+              <td class="table_col_not_bold">{{list.phone}}</td>
+              <td class="table_col_not_bold">{{list.organization.name}}</td>
 
-              <td *ngIf="list.status == 1">{{'unit.active' | translate}}</td>
-              <td *ngIf="list.status != 1">{{'unit.inactive' | translate}}</td>
+              <td class="table_col_not_bold" *ngIf="list.status == 1">{{'unit.active' | translate}}</td>
+              <td class="table_col_not_bold" *ngIf="list.status != 1">{{'unit.inactive' | translate}}</td>
 
-              <td>{{list.role?.name}}</td>
-              <td style="text-align: center">
+              <td class="table_col_not_bold">{{list.role?.name}}</td>
+              <td class="table_col_not_bold" style="text-align: center">
                 <img *ngIf="isQLND_02 || list.email == this.myEmail" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
               </td>
           </tr>
