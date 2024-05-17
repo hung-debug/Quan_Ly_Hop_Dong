@@ -325,23 +325,24 @@ h3{
 .warning-container {
   overflow: hidden;
   display: flex;
-  // width: 66%;
+  width: 66%;
   margin-left: 10px;
 }
 
 .warning-scroll {
+  width: 100%;
   white-space: nowrap;
 }
 
 .RightToLeft {
-  animation: RightToLeft 40s infinite linear;
+  animation: RightToLeft 30s infinite linear;
   color: red;
-  font-size: 14px
+  font-size: 14px;
 }
 
 @keyframes RightToLeft {
   from {
-    transform: translateX(50%);
+    transform: translateX(100%);
   }
   to {
     transform: translateX(-100%);

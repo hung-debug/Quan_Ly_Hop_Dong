@@ -53,7 +53,9 @@ export class ContractComponent implements OnInit, AfterViewInit {
   notificationPopup: string = '';
   pageOptions: any[] = [10, 20, 50, 100];
   scrollY: any;
-
+  inputTimeout: any
+  numberPage: number;
+  enterPage: number = 1;
   title: any = "";
   id: any = "";
   notification: any = "";
@@ -693,7 +695,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
     if (!this.roleMess) {
       let isOrg = this.isOrg;
-
+      this.enterPage = this.p;
       if(!this.isQLHD_03 && !this.isQLHD_04) {
         isOrg ='off';
       }
@@ -738,7 +740,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   changeTab() {
-    // this.p = 1;
+    this.p = 1;
+    this.enterPage = 1;
     this.getContractList();
   }
 
@@ -824,6 +827,33 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.getContractList();
   }
 
+  onInput(event: any) {
+    clearTimeout(this.inputTimeout);
+    this.inputTimeout = setTimeout(() => {
+      this.autoSearchEnterPage(event);
+    }, 1000);
+  }
+
+  validateInput(event: KeyboardEvent) {
+    const input = event.key;
+    if (input === ' ' || (isNaN(Number(input)) && input !== 'Backspace')) {
+      event.preventDefault();
+    }
+  }
+  
+  autoSearchEnterPage(event: any) {
+    if(event.target.value && event.target.value != 0 && event.target.value <= this.numberPage) {
+      this.p = this.enterPage;
+    } else {
+      this.enterPage = this.p;
+    }
+    this.getContractList();
+  }
+  
+  countPage() {
+    this.numberPage = Math.ceil(this.pageTotal / this.page);
+    return this.numberPage;
+  }
 
   openDetail(id: number) {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {

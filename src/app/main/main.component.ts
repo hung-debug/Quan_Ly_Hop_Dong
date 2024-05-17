@@ -35,6 +35,7 @@ export class MainComponent implements OnInit {
   listNotification: any[] = [];
   getAlllistNotification: any[] = [];
   isSsoSync: boolean = false;
+  messageNotification: string;
   constructor(private router: Router,
               private appService: AppService,
               public sidebarservice: SidebarService,
@@ -76,7 +77,11 @@ export class MainComponent implements OnInit {
 
     //update title by component
     this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('type')));
-
+    this.dashboardService.getNotificationHeader().subscribe((res:any) =>{
+      if(res.result) {
+        this.messageNotification = res.result.content;
+      }
+    })
     this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
 
     this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
