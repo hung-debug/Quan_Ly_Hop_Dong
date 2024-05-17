@@ -1313,7 +1313,19 @@ export class ContractSignatureComponent implements OnInit {
         }
       }
 
-      for (let i = 0; i < idContract.length; i++) {
+      for (let i = 0; i < idContract.length; i++) {   
+        // check case ky song song
+        let dataObjectSignature: any = null;
+        dataObjectSignature = await this.contractServiceV1
+        .getDataObjectSignatureLoadChange(idContract[i])
+        .toPromise();
+        dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i])
+        let currentSigningStatus: any = await this.checkCurrentSigningCall(dataObjectSignature[0].recipient.id)
+        if (!currentSigningStatus) {
+          this.spinner.hide()
+          return
+        }
+        // check case ky song song  
         try {
           let fileContract = await this.contractServiceV1.getFileContract(idContract[i]).toPromise();
 
@@ -1852,12 +1864,13 @@ export class ContractSignatureComponent implements OnInit {
                 //Lấy chiều dài của các trang trong các hợp đồng ký
                 //Gọi api ký usb token nhiều lần
                 let dataSignMobi: any = null;
+                let currentSigningStatus: any = null;
                 for (let i = 0; i < fileC.length; i++) {
                   dataObjectSignature = await this.contractServiceV1
                     .getDataObjectSignatureLoadChange(idContract[i])
                     .toPromise();
                   dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i])
-                  let currentSigningStatus: any = this.checkCurrentSigningCall(dataObjectSignature[0].recipient.id)
+                  currentSigningStatus = await this.checkCurrentSigningCall(dataObjectSignature[0].recipient.id)
                   if (!currentSigningStatus) return
                   for (let j = 0; j < dataObjectSignature.length; j++) {
                     if (dataObjectSignature[j].recipient) {
@@ -2096,7 +2109,7 @@ export class ContractSignatureComponent implements OnInit {
           .getDataObjectSignatureLoadChange(idContract[i])
           .toPromise();
         dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i])
-        let currentSigningStatus: any = this.checkCurrentSigningCall(dataObjectSignature[0].recipient.id)
+        let currentSigningStatus: any = await this.checkCurrentSigningCall(dataObjectSignature[0].recipient.id)
         if (!currentSigningStatus) return
         for (let j = 0; j < dataObjectSignature.length; j++) {
           if (dataObjectSignature[j].recipient) {
