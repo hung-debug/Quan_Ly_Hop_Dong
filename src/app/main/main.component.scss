@@ -324,18 +324,17 @@ h3{
 
 .warning-container {
   overflow: hidden;
-  display: flex;
+  //display: flex;
   width: 66%;
   margin-left: 10px;
 }
 
-.warning-scroll {
-  width: 100%;
-  white-space: nowrap;
-}
+// .warning-scroll {
+//   width: 100%;
+//   white-space: nowrap;
+// }
 
 .RightToLeft {
-  animation: RightToLeft 30s infinite linear;
   color: red;
   font-size: 14px;
 }
