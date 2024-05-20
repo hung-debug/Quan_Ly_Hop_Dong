@@ -144,7 +144,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 function initializeKeycloak(keycloak: KeycloakService) {
   // const fullUrl = window.location.href
   // if (!fullUrl.includes('/login?type=mobifone-sso'))
-  if (environment.flag == 'KD') {
+  if (environment.flag == 'KD' && environment.usedSSO) {
     return () =>
       keycloak.init({
         config: {

@@ -184,7 +184,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.countLoginFail++;
         this.error = true;
         this.errorDetail = "Tài khoản của bạn chỉ hỗ trợ đăng nhập bằng SSO, vui lòng đăng nhập bằng SSO để sử dụng hệ thống";
-      } else if (data?.code == '11') {
+      } else if (data?.code == '11' && environment.usedSSO) {
         this.openAccountLinkDialog(data?.customer?.info)
       } else if (data?.code == '01') {
         this.countLoginFail++;
@@ -342,8 +342,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
   async ngOnInit() {
     if (environment.flag == "NB") {
       this.isNB = true
-    } else {
+    } else if(environment.flag != "NB" && environment.usedSSO) {
       this.isNB = false
+    } else {
+      this.isNB = true
     }
     if(Number(localStorage.getItem('fail')) >= 4) {
       this.captcha = true;
@@ -365,7 +367,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     } else {
       this.mobile = false;
     }
-    if (environment.flag == 'KD') {
+    if (environment.flag == 'KD' && environment.usedSSO) {
       const ssoToken: any = JSON.parse(JSON.stringify(localStorage.getItem('sso_token')) || '') ?? ''
       if ((this.keycloakService.getKeycloakInstance().authenticated || ssoToken) && (window.location.href.includes('realms/sso-mobifone') || window.localStorage.href.includes('/login?type=mobifone-sso')) ) {
         this.isSSOlogin = true

@@ -81,7 +81,7 @@ export class MainComponent implements OnInit {
 
     this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
       data => {
-        if (environment.flag == 'KD' && data.is_required_sso) {
+        if (environment.flag == 'KD' && data.is_required_sso && environment.usedSSO) {
           this.isSsoSync = true
         } else {
           this.isSsoSync = false
@@ -94,7 +94,7 @@ export class MainComponent implements OnInit {
 
     });
 
-    if (environment.flag == 'KD' && await this.keycloakService.isLoggedIn()) {
+    if (environment.flag == 'KD' && environment.usedSSO && await this.keycloakService.isLoggedIn()) {
       let accessToken: any = this.keycloakService.getKeycloakInstance().token
       let ssoIdToken: any = this.keycloakService.getKeycloakInstance().idToken
       localStorage.setItem('sso_id_token',ssoIdToken ?? '')
@@ -127,7 +127,7 @@ export class MainComponent implements OnInit {
   //click logout
   async logout() {
      //call api delete token
-     if (environment.flag == 'KD') {
+     if (environment.flag == 'KD' && environment.usedSSO) {
        this.contractService.deleteToken().subscribe((res:any) => {
       })
   
