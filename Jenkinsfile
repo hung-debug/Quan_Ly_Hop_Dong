@@ -26,9 +26,9 @@ pipeline {
         stage("Build"){
             steps {
                 echo '----------------------Start build----------------------'
-                // sh """
-                //    curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["${groupEChatWorkId}"],"announcement": "${message}"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement/group
-                // """
+                sh """
+                   curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["${groupEChatWorkId}"],"announcement": "${message}"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement/group
+                """
                 sh 'pwd'
                 sh 'ls -l'
                 sh 'test -d "builds/" && echo "Exist folder builds" || mkdir builds'
@@ -76,13 +76,13 @@ pipeline {
                     echo "-------------------Run backup.sh done-------------------"
 
                     echo "-------------------Start push file to server-------------------"
-                    sshPut remote: remote, from: 'builds/eContract-web-vmec/.', into: "${pathInServer}/"
+                    sshPut remote: remote, from: 'builds/eContract-web/.', into: "${pathInServer}/"
                     echo "-------------------Push file to server done-------------------"
 
-                    // sh """
-                    //   curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["${groupEChatWorkId}"],"announcement": "Hoàn thành deploy Front-end eContract-vmec. Truy cập link https://econtract-vmec.mobifone.ai để test"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement/group
+                    sh """
+                      curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["${groupEChatWorkId}"],"announcement": "Hoàn thành deploy Front-end eContract-vmec. Truy cập link https://econtract-vmec.mobifone.ai để test"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement/group
 
-                    // """
+                    """
                     echo "-------------------Deploy done-------------------"
                 }
             }
