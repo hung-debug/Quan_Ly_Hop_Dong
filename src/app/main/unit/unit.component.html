@@ -1,20 +1,20 @@
 <div *ngIf="isQLTC_01 || isQLTC_02 || isQLTC_03 || isQLTC_04" class="container-fluid">
   <div class="row">
     <div class="col-md-3" *ngIf="isQLTC_03">
-      <div>{{'unit.code' | translate}}</div>
+      <!-- <div>{{'unit.code' | translate}}</div> -->
       <div class="input-line">
-        <input type="text" [(ngModel)]="code" class="input_text"/>
+        <input type="text" [(ngModel)]="code" class="input_text" placeholder="Nhập mã tổ chức"/>
       </div>
     </div>
     <div class="col-md-3" *ngIf="isQLTC_03">
-      <div>{{'unit.name' | translate}}</div>
+      <!-- <div>{{'unit.name' | translate}}</div> -->
       <div class="input-line">
-        <input type="text" [(ngModel)]="name" class="input_text"/>
+        <input type="text" [(ngModel)]="name" class="input_text" placeholder="Nhập tên tổ chức"/>
       </div>
     </div>
     <div class="col-md-6 btn_search">
-      <button *ngIf="isQLTC_03" class="btn btn-lg btn-block btn_submit" (click)="searchUnit()">{{'btn.search' | translate }}</button>
-      <button *ngIf="isQLTC_01" class="btn btn-lg btn-block btn_submit" (click)="addUnit()">{{'btn.add' | translate }}</button>
+      <button *ngIf="isQLTC_03" class="btn btn-lg btn-block btn_submit btn_submit_search" (click)="searchUnit()">{{'btn.search' | translate }}</button>
+      <button *ngIf="isQLTC_01" class="btn btn-lg btn-block btn_submit btn_submit_add" (click)="addUnit()">{{'btn.add' | translate }}</button>
     </div>
   </div>
 
@@ -23,51 +23,61 @@
     </div>
     <div class="col-md-6 btn_search" style="padding-left: 22px">
       <input *ngIf="isQLTC_01" id="file-input" type="file" accept=".xls,.xlsx" (change)="fileChanged($event)" style="display: none"/>
-      <label for="file-input" class="custom-file-upload" >
+      <label for="file-input" class="custom-file-upload">
         <i class="fa fa-cloud-upload"></i> Import file
       </label>
 
       <a style="padding-left: 5px;">
-        {{'not.have.sample.file' | translate}} <a href="/assets/upload/import_to_chuc.xlsx" style="color: #106DB6; cursor: pointer;" (click)="downFileExample()">{{'download.sample.file' | translate}}</a>
+        {{'not.have.sample.file' | translate}} <a href="/assets/upload/import_to_chuc.xlsx" style="color: #0041C4; cursor: pointer;" (click)="downFileExample()">{{'download.sample.file' | translate}}</a>
       </a>
     </div>
   </div>
 
-
+  <div style="min-height: 75vh;">
   <div class="row" style="padding-top: 15px;">
     <p-treeTable [value]="list" id="table" [autoLayout]="true">
       <ng-template pTemplate="header" let-columns>
       <tr> 
-        <th *ngFor="let col of cols" [style]='col.style'>
+        <th *ngFor="let col of cols" [style]='col.style' class="table_title">
           {{col.header | translate}}
         </th>
       </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
         <tr>
-          <td><p-treeTableToggler [rowNode]="rowNode" style="color: #106DB6;"></p-treeTableToggler><a (click)="isQLTC_04?detailUnit(rowData.id):null" style="color: #0160AE; cursor: pointer;">{{rowData.name}}</a></td>
-          <td style="padding-right: 100px;">{{rowData.id}}</td>
-          <td>{{rowData.short_name}}</td>
-          <td>{{rowData.code}}</td>
-          <td *ngIf="rowData.status == 1">{{'unit.active' | translate}}</td>
-          <td *ngIf="rowData.status != 1">{{'unit.inactive' | translate}}</td>
+          <td><p-treeTableToggler [rowNode]="rowNode" style="color: #106DB6;"></p-treeTableToggler><a (click)="isQLTC_04?detailUnit(rowData.id):null"
+            style="color: #001A4D;
+              cursor: pointer;
+              font-family: 'Roboto';
+              font-size: 14px; font-style:normal;
+              font-weight: 700;
+              line-height: 21px;
+              letter-spacing: -0.525px;"
+              >
+                {{rowData.name}}
+            </a></td>
+          <td class="table_col_not_bold" style="padding-right: 100px;">{{rowData.id}}</td>
+          <td class="table_col_not_bold" >{{rowData.short_name}}</td>
+          <td class="table_col_not_bold" >{{rowData.code}}</td>
+          <td class="table_col_not_bold" *ngIf="rowData.status == 1">{{'unit.active' | translate}}</td>
+          <td class="table_col_not_bold" *ngIf="rowData.status != 1">{{'unit.inactive' | translate}}</td>
 
-          <td *ngIf="rowData.parent_id == null">{{'parent.unit' | translate}}</td>
-          <td *ngIf="rowData.parent_id != null">{{'child.unit' | translate}}</td>
+          <td class="table_col_not_bold" *ngIf="rowData.parent_id == null">{{'parent.unit' | translate}}</td>
+          <td class="table_col_not_bold" *ngIf="rowData.parent_id != null">{{'child.unit' | translate}}</td>
 
-          <td style="text-align: center">
+          <td class="table_col_not_bold" style="text-align: center">
             <img *ngIf="rowData.is_edit && isQLTC_02" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUnit(rowData.id)" style="cursor: pointer;"/>
           </td>
         </tr>
       </ng-template>
       
     </p-treeTable>
-    <div class="footer_page_number">
-      {{'chart.number' | translate}}: {{total}}
-    </div> 
   </div>
-  
 </div>
+</div>
+<div class="footer_page_number">
+  {{'chart.number' | translate}}: {{total}}
+</div> 
 <div *ngIf="!isQLTC_01 && !isQLTC_02 && !isQLTC_03 && !isQLTC_04">
   {{'no.role' | translate}}
 </div>

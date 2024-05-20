@@ -1,4 +1,5 @@
 <div *ngIf="isQLND_01 || isQLND_02 || isQLND_03 || isQLND_04" class="container-fluid">
+  <div style="background-color: #FFFFFF;">
   <div class="row">
     <div class="col-md-3" *ngIf="isQLND_03">
       <div>{{'unit.name' | translate}}</div>
@@ -29,7 +30,7 @@
     </div> -->
 
     <div class="col-md-3 btn_search">
-      <button *ngIf="isQLND_03" class="btn btn-lg btn-block btn_submit" (click)="searchUser()">{{'btn.search' | translate }}</button>
+      <button *ngIf="isQLND_03" class="btn btn-lg btn-block btn_submit_search" (click)="searchUser()">{{'btn.search' | translate }}</button>
         <a *ngIf="isQLND_01" class="btn btn-lg btn-block btn_submit" [routerLink]="['/main/form-user/add']" (click)="addUser()">
           {{'btn.add' | translate }}
         </a>
@@ -39,21 +40,21 @@
   <div class="row" style="padding-top: 5px;">
     <div class="col-md-6">
     </div>
-    <div class="col-md-6 btn_search" style="padding-left: 22px">
-      <input *ngIf="isQLND_01" id="file-input" type="file" accept=".xls,.xlsx" (change)="fileChanged($event)" style="display: none"/>
+    <div class="col-md-6 btn_search" style="padding-left: 22px;">
+      <input *ngIf="isQLND_01" id="file-input" type="file" accept=".xls,.xlsx" (change)="fileChanged($event)" />
       <label for="file-input" class="custom-file-upload">
         <i class="fa fa-cloud-upload"></i> Import file
       </label>
 
       <a style="padding-left: 5px;">
-        {{'not.have.sample.file' | translate}} <a href="/assets/upload/import_nguoi_dung.xlsx" style="color: #106DB6; cursor: pointer;" (click)="downFileExample()">{{'download.sample.file' | translate}}</a>
+        {{'not.have.sample.file' | translate}} <a href="/assets/upload/import_nguoi_dung.xlsx" style="color: #0041C4; cursor: pointer;" (click)="downFileExample()">{{'download.sample.file' | translate}}</a>
       </a>
     </div>
   </div>
 
-
+  <div style="min-height: 73vh;">
   <div class="row" style="padding-top: 20px;">
-    <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true" [(first)]="first">
+    <p-table [value]="list" [paginator]="false" [rows]="15" id="table" [autoLayout]="true" [(first)]="first">
       <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of cols" [style]='col.style'>
@@ -63,30 +64,50 @@
       </ng-template>
       <ng-template pTemplate="body" let-list>
           <tr>
-              <td><a (click)="isQLND_04?detailUser(list.id):null" [routerLink]="['/main/user-detail/', list.id]" style="color: #0160AE; cursor: pointer; text-decoration: none;">{{list.name}}</a></td>
-              <td>{{list.email}}</td>
-              <td>{{list.phone}}</td>
-              <td>{{list.organization.name}}</td>
+              <td><a (click)="isQLND_04?detailUser(list.id):null" [routerLink]="['/main/user-detail/', list.id]"
+                  style="
+                  cursor: pointer;
+                  text-decoration: none;
+                  color: #001A4D;
+                  cursor: pointer;
+                  font-family: 'Roboto';
+                  font-size: 14px; font-style:normal;
+                  font-weight: 700;
+                  line-height: 21px;
+                  letter-spacing: -0.525px;
+                  "
+                >{{list.name}}</a></td>
+              <td class="table_col_not_bold">{{list.email}}</td>
+              <td class="table_col_not_bold">{{list.phone}}</td>
+              <td class="table_col_not_bold">{{list.organization.name}}</td>
 
-              <td *ngIf="list.status == 1">{{'unit.active' | translate}}</td>
-              <td *ngIf="list.status != 1">{{'unit.inactive' | translate}}</td>
+              <td class="table_col_not_bold" *ngIf="list.status == 1">{{'unit.active' | translate}}</td>
+              <td class="table_col_not_bold" *ngIf="list.status != 1">{{'unit.inactive' | translate}}</td>
 
-              <td>{{list.role?.name}}</td>
-              <td style="text-align: center">
+              <td class="table_col_not_bold">{{list.role?.name}}</td>
+              <td class="table_col_not_bold" style="text-align: center">
                 <img *ngIf="isQLND_02 || list.email == this.myEmail" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
               </td>
           </tr>
       </ng-template>
-      <ng-template pTemplate="paginatorleft" let-state>
+      <!-- <ng-template pTemplate="paginatorleft" let-state>
         <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-      </ng-template>
+      </ng-template> -->
       <ng-template pTemplate="paginatorright" let-state>
         <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
       </ng-template>
     </p-table>
   </div>
-
+  </div>
+  </div>
 </div>
+
+<div style="display: grid;margin-top: 10px;grid-template-columns: repeat(3, 1fr)">
+  <div></div>
+  <p-paginator (onPageChange)="onPageChange($event)" [rows]="row" [totalRecords]="totalRecords"></p-paginator>
+  <div style="color: #0160AE !important;margin: auto 0 auto auto;">{{'chart.number' | translate}}: {{totalRecords === 0 ? 0 : page * row + 1}} - {{totalRecords > 0 ? toRecord() : 0}} / {{totalRecords > 0 ? totalRecords : 0}}</div>
+</div>
+
 <div *ngIf="!isQLND_01 && !isQLND_02 && !isQLND_03 && !isQLND_04">
   {{'no.role' | translate}}
 </div>

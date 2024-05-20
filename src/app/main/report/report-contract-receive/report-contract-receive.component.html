@@ -1,146 +1,166 @@
-<div>
-    <div class="row">
-        <!--Tổ chức-->
-        <div class="col-md-2">
-            <div>{{'organization' | translate}}</div>
-            <div class="input-line">
-            <p-treeSelect
-                [(ngModel)]="selectedNodeOrganization"
-                placeholder="{{'all' | translate}}"
-                [filter]="true"
-                filterBy="name"
-                [droppable]="true"
-                [options]="listOrgCombobox"
-            >
-          </p-treeSelect>
-            </div>
-        </div>
-        
-        <div class="col-md-2">
-          <div>{{'contract.information' | translate}}</div>
+<div class="container-fluid">
+  <div class="row">
+      <!--Tổ chức-->
+      <div class="col-md-2">
+          <div>{{'organization' | translate}}</div>
           <div class="input-line">
-            <input type="text" [(ngModel)]="contractInfo" class="input_text" placeholder="Tìm kiếm theo Mã HĐ, Số HĐ, Tên HĐ" />
+          <p-treeSelect
+              [(ngModel)]="selectedNodeOrganization"
+              placeholder="{{'all' | translate}}"
+              [filter]="true"
+              filterBy="name"
+              [droppable]="true"
+              [options]="listOrgCombobox"
+          >
+        </p-treeSelect>
           </div>
+      </div>
+      
+      <div class="col-md-2">
+        <div>{{'contract.information' | translate}}</div>
+        <div class="input-line">
+          <input type="text" [(ngModel)]="contractInfo" class="input_text" placeholder="Tìm kiếm theo Mã HĐ, Số HĐ, Tên HĐ" />
         </div>
+      </div>
 
-        <!--Ngày tạo hợp đồng-->
-        <div class="col-md-2">
-            <div>{{ 'create-date' | translate}} <span style="color: red"> *</span></div>
-            <div class="input-line">
-                <p-calendar selectionMode="range" [readonlyInput]="false" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"
+      <!--Ngày tạo hợp đồng-->
+      <div class="col-md-2">
+          <div>{{ 'create-date' | translate}} <span style="color: red"> *</span></div>
+          <div class="input-line">
+              <p-calendar selectionMode="range" [readonlyInput]="false" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"
 
-                ></p-calendar>
-            </div>
-        </div>
+              ></p-calendar>
+          </div>
+      </div>
 
-        <!--Trạng thái-->
-        <div class="col-md-2">
-            <div>{{'contract.status' | translate}}</div>
-            <div class="input-line">
-                <p-dropdown
-                    panelStyleClass="font"
-                    appendTo="body"
-                    optionLabel="name"
-                    optionValue="id"
-                    placeholder="{{'all' | translate}}"
-                    [showClear]="true"
-                    [options]="optionsStatus"
-                    [(ngModel)]="contractStatus"
-                    [autoDisplayFirst]="false"
-                ></p-dropdown>
-            </div>
-        </div>
+      <!--Trạng thái-->
+      <div class="col-md-2">
+          <div>{{'contract.status' | translate}}</div>
+          <div class="input-line">
+              <p-dropdown
+                  panelStyleClass="font"
+                  appendTo="body"
+                  optionLabel="name"
+                  optionValue="id"
+                  placeholder="{{'all' | translate}}"
+                  [showClear]="true"
+                  [options]="optionsStatus"
+                  [(ngModel)]="contractStatus"
+                  [autoDisplayFirst]="false"
+              ></p-dropdown>
+          </div>
+      </div>
 
-        <!--Button-->
-        <div class="col-md-4 btn_search">
-            <button class="btn btn-lg btn-block btn_submit" (click)="export(false)">{{'btn.report' | translate }}</button>
-            <button (click)="export(true)" class="btn btn-lg btn-block btn_submit">Export</button>
-        </div>
-    </div>
+      <!--Button-->
+      <div class="col-md-4 btn_search">
+          <button class="btn btn-lg btn-block btn_submit" (click)="export(false)">{{'btn.report' | translate }}</button>
+          <button (click)="export(true)" class="btn btn-lg btn-block btn_submit">Export</button>
+      </div>
+  </div>
 
 
-    <!--Bảng dữ liệu-->
-    <div class="row" style="padding-top: 20px;">
-        <p-table #dt [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true" [scrollable]="true"
-        scrollDirection="horizontal">
+  <!--Bảng dữ liệu-->
+  <div class="row" style="padding-top: 20px;">
+      <p-table #dt [value]="list" [paginator]="false" [rows]="row" id="table" [autoLayout]="true" [scrollable]="true"
+      scrollDirection="horizontal">
 
-            <!--header-->
-            <ng-template pTemplate="headergrouped">
-                <!--header 1-->
-                <tr>
-                    <th *ngFor="let col of cols" [(style)]='col.style' [(colSpan)]="col.colspan" [(rowSpan)]="col.rowspan">
+          <!--header-->
+          <ng-template pTemplate="headergrouped">
+              <!--header 1-->
+              <tr>
+                  <th *ngFor="let col of cols" [(style)]='col.style' [(colSpan)]="col.colspan" [(rowSpan)]="col.rowspan">
+                    {{col.header | translate}}
+                  </th>
+              </tr>
+
+              <!--header 2 bên đề nghị-->
+              <tr>
+                  <th *ngFor="let col of colsSuggest" [style]='col.style' [colSpan]="col.colspan" [rowSpan]="col.rowspan">
                       {{col.header | translate}}
-                    </th>
-                </tr>
+                  </th>
+              </tr>
+          </ng-template>
 
-                <!--header 2 bên đề nghị-->
-                <tr>
-                    <th *ngFor="let col of colsSuggest" [style]='col.style' [colSpan]="col.colspan" [rowSpan]="col.rowspan">
-                        {{col.header | translate}}
-                    </th>
-                </tr>
+          <ng-template pTemplate="body" let-list let-row="rowIndex">
+              <tr>
+                  <ng-container style="background-color: #EEF7FF;" *ngIf="row == 0">
+                      <td style="font-style: normal;font-weight: 800;font-size: 13px;">{{this.orgName}}</td>
+                      <td *ngFor="let i of Arr(mergeCol.length - 1).fill(1)"></td>
+                  </ng-container>
+
+                  <ng-container *ngIf="row > 0">
+                      <td class="row-word">{{list.name}}</td>
+                      <td class="row-word">{{list.typeName}}</td>
+                      <td class="row-word">{{list.contractNo}}</td>
+                      <td class="row-word">{{list.contractUid}}</td>
+                      <td *ngIf="list.refs.length == 0" class="row-word">
+                          {{'no' | translate}}
+                      </td>
+
+                      <td *ngIf="list.refs.length != 0" class="row-word">
+                          {{'yes' | translate}}
+                      </td>
+
+                      <td class="row-word">{{this.convertTime(list.createdAt)}}</td>
+                      <td class="row-word">{{this.convertTime(list.signTime)}}</td>
+                      <td class="row-word">{{this.convertStatus(list.status.toLowerCase())}}</td>
+
+                      <!-- <td *ngIf="list.status == 'CANCEL'" class="row-word">{{this.convertTime(list.cancelDate)}}</td>
+                      <td *ngIf="list.status != 'CANCEL'" class="row-word">{{this.convertTime(list.updatedAt)}}</td> -->
+
+                      <td class="row-word">{{list.customer.organization.name}}</td>
+                      <td class="row-word">{{list.customer.email}}</td>
+
+                      <td class="row-word">{{this.getValue(list,0,'type')}}</td>
+                      <td class="row-word">{{this.getValue(list,0,'name')}}</td>
+                      <td class="row-word">{{this.getName(list,0,'view')}}</td>
+                      <td class="row-word">{{this.getName(list,0,'sign')}}</td>
+                      <td class="row-word">{{this.getName(list,0,'doc')}}</td>
+
+                      <ng-container *ngFor="let i of getNumberArray(this.maxParticipants - 1)">
+                          <td class="row-word">{{this.getValue(list,i,'type')}}</td>
+                          <td class="row-word">{{this.getValue(list,i,'name')}}</td>
+                          <td class="row-word">{{this.getName(list,i,'coor')}}</td>
+                          <td class="row-word">{{this.getName(list,i,'view')}}</td>
+                          <td class="row-word">{{this.getName(list,i,'sign')}}</td>
+                          <td class="row-word">{{this.getName(list,i,'doc')}}</td>
+                      </ng-container>
+                  </ng-container>
+              </tr>
+          </ng-template>
+
+
+          <!-- <ng-template  pTemplate="paginatorleft" let-state>
+              <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ? (state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
             </ng-template>
+          <ng-template pTemplate="paginatorright" let-state>
+              <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ?(state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
+          </ng-template> -->
+      </p-table>
+  </div>
 
-            <ng-template pTemplate="body" let-list let-row="rowIndex">
-                <tr>
-                    <ng-container style="background-color: #EEF7FF;" *ngIf="row == 0">
-                        <td style="font-style: normal;font-weight: 800;font-size: 13px;">{{this.orgName}}</td>
-                        <td *ngFor="let i of Arr(mergeCol.length - 1).fill(1)"></td>
-                    </ng-container>
-
-                    <ng-container *ngIf="row > 0">
-                        <td class="row-word">{{list.name}}</td>
-                        <td class="row-word">{{list.typeName}}</td>
-                        <td class="row-word">{{list.contractNo}}</td>
-                        <td class="row-word">{{list.contractUid}}</td>
-                        <td *ngIf="list.refs.length == 0" class="row-word">
-                            {{'no' | translate}}
-                        </td>
-
-                        <td *ngIf="list.refs.length != 0" class="row-word">
-                            {{'yes' | translate}}
-                        </td>
-
-                        <td class="row-word">{{this.convertTime(list.createdAt)}}</td>
-                        <td class="row-word">{{this.convertTime(list.signTime)}}</td>
-                        <td class="row-word">{{this.convertStatus(list.status.toLowerCase())}}</td>
-
-                        <!-- <td *ngIf="list.status == 'CANCEL'" class="row-word">{{this.convertTime(list.cancelDate)}}</td>
-                        <td *ngIf="list.status != 'CANCEL'" class="row-word">{{this.convertTime(list.updatedAt)}}</td> -->
-
-                        <td class="row-word">{{list.customer.organization.name}}</td>
-                        <td class="row-word">{{list.customer.email}}</td>
-
-                        <td class="row-word">{{this.getValue(list,0,'type')}}</td>
-                        <td class="row-word">{{this.getValue(list,0,'name')}}</td>
-                        <td class="row-word">{{this.getName(list,0,'view')}}</td>
-                        <td class="row-word">{{this.getName(list,0,'sign')}}</td>
-                        <td class="row-word">{{this.getName(list,0,'doc')}}</td>
-
-                        <ng-container *ngFor="let i of getNumberArray(this.maxParticipants - 1)">
-                            <td class="row-word">{{this.getValue(list,i,'type')}}</td>
-                            <td class="row-word">{{this.getValue(list,i,'name')}}</td>
-                            <td class="row-word">{{this.getName(list,i,'coor')}}</td>
-                            <td class="row-word">{{this.getName(list,i,'view')}}</td>
-                            <td class="row-word">{{this.getName(list,i,'sign')}}</td>
-                            <td class="row-word">{{this.getName(list,i,'doc')}}</td>
-                        </ng-container>
-                    </ng-container>
-                </tr>
-            </ng-template>
-
-
-            <ng-template  pTemplate="paginatorleft" let-state>
-                <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ? (state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
-              </ng-template>
-            <ng-template pTemplate="paginatorright" let-state>
-                <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ?(state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
-            </ng-template>
-        </p-table>
-    </div>
 
 </div>
 
+<div class="footer_pagination">
+  <div class="footer_contract_per_page">
+      <div>Hiển thị&nbsp;</div>
+      <select [(ngModel)]="this.row" (change)="changePageNumber($event)">
+          <option value="" hidden>10</option>
+          <option *ngFor="let d of this.pageOptions">{{d}}</option>
+      </select>
+      <div>&nbsp;{{'contracts.per.page' | translate}}</div>
+  </div>
+  <div class = "footer_pagination_between">
+      <p-paginator class="footer_pagination_between_p_paginator" [first]="page * row"  (onPageChange)="onPageChange($event)" [rows]="row" [totalRecords]="totalRecords"></p-paginator>
+      <div *ngIf = "totalRecords" class="enterPage footer_pagination_between_input">
+          <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
+          <p>của {{numberPage}} trang</p>
+      </div>
+  </div>
+  <div class="footer_pagination_quantity">{{'chart.number' | translate}}: {{totalRecords === 0 ? 0 : page * row + 1}} - {{totalRecords > 0 ? toRecord() : 0}} / {{totalRecords > 0 ? totalRecords : 0}}</div>
+</div>
+
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
-    <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+  <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
 </ngx-spinner>

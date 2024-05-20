@@ -1,12 +1,33 @@
 .btn_submit{
   border: 0px;
-  border-radius: 5px;
-  height: 33px;
+  border-radius: 8px;
+  height: 35px;
   box-sizing: border-box;
   color: white;
-  background-color: #106DB6;
+  background-color: #0041C4;
   font-size: 13px;
   margin: 0 10px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.btn_submit_search {
+  border: 1px solid rgba(0, 26, 77, 0.10);
+  border-radius: 8px;
+  height: 35px;
+  box-sizing: border-box;
+  color: #001A4D;
+  background-color: #FFFFFF;
+  font-size: 13px;
+  margin: 0 10px;
+  box-shadow: 0px 3px 12px 0px rgba(16, 85, 225, 0.10);
+  font-style: normal;
+  font-weight: 700;
+}
+
+.container-fluid{
+  background-color: #FFFFFF;
+  border-radius: 12px;
 }
 
 input[type="file"] {
@@ -17,7 +38,7 @@ input[type="file"] {
   border: 0px;
   border-radius: 5px;
   box-sizing: border-box;
-  background-color: #106DB6;
+  background-color: #0041C4;
   display: inline-block;
   padding: 6px 12px;
   cursor: pointer;
@@ -31,6 +52,7 @@ input[type="file"] {
   width: 100%;
   border-radius: 5px;
   border: 1px solid #106DB6;
+  background: #F1F5FE;
 }
 .btn_search{
   align-self: flex-end;
@@ -49,12 +71,30 @@ padding: 8px;
 
 #table tr:nth-child(even){background-color: #f2f2f2;}
 
-#table tr:hover {background-color: #ddd;}
+#table tr:hover, #table td:hover {background-color: #f2f2f2;}
 
 #table th {
 //text-align: center;
-background-color: #E2ECF6;
-color: #106DB6;
+// background-color: #E2ECF6;
+// color: #106DB6;
+  background: #EBF2FB;
+  color: #8E9AB0;
+  font-family: 'Roboto';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.525px;
+}
+
+.table_col_not_bold {
+  color: #001A4D;
+  font-family: 'Roboto';
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: -0.45px;
 }
 
 #table tr:last-child th:first-child {
@@ -102,6 +142,10 @@ color: #106DB6;
     border-width: 0 !important;
     height: 26px !important;
     width: 50px !important;
+  }
+  
+  .p-paginator{
+    background-color: #F3F6FA !important;
   }
 
   .p-datatable-table, .p-datatable-table .ng-star-inserted, .p-paginator-pages .ng-star-inserted{

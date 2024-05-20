@@ -43,7 +43,7 @@ export class DigitalCertificateComponent implements OnInit {
   keystoreDateStart: any = '';
   keystoreDateEnd: any = '';
   number: number = 0;
-  page: number = 10;
+  page: number = 0;
   pageStart: number = 0;
   pageEnd: number = 0;
   pageTotal: number = 0;
@@ -57,6 +57,7 @@ export class DigitalCertificateComponent implements OnInit {
   serial_number: any;
   sub: any[];
   subject: any;
+  // row: number = 15;
 
   // listStatus: any[];
   // isQLDC_01: boolean = true; //them moi chung thu so
@@ -127,7 +128,7 @@ export class DigitalCertificateComponent implements OnInit {
       if (response.content) {
         this.list = response.content;
         this.totalRecords = response.totalElements;
-        console.log("res", response.content);
+        console.log("res", response);
         // const uidCert = this.getValueByKey(result.certInformation, "UID")
         // this.dataCardId = uidCert?.split(":")[1];
       } else {
@@ -135,6 +136,15 @@ export class DigitalCertificateComponent implements OnInit {
         this.toastService.showErrorHTMLWithTimeout('Không tìm thấy dữ liệu', '', 3000);
       }
     })
+  }
+  
+  toRecord() {
+    return Math.min((this.page + 1) * this.size, this.totalRecords)
+  }
+
+  onPageChange(event: any) {
+    this.page = event.page;
+    this.getFirstPageSearchData();
   }
 
   getPageableCert(event: LazyLoadEvent) {
