@@ -1,4 +1,5 @@
 def pathInServer = "/u01/app"
+def patheContractVmec = "/u01/app/eContract-web-vmec"
 def message = "*Start build FE eContract-vmec*"
 def groupEChatWorkId = "BvAhbsAPysvyv3yK2"
 pipeline {
@@ -26,9 +27,9 @@ pipeline {
         stage("Build"){
             steps {
                 echo '----------------------Start build----------------------'
-                sh """
-                   curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["${groupEChatWorkId}"],"announcement": "${message}"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement/group
-                """
+                // sh """
+                //    curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["${groupEChatWorkId}"],"announcement": "${message}"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement/group
+                // """
                 sh 'pwd'
                 sh 'ls -l'
                 sh 'test -d "builds/" && echo "Exist folder builds" || mkdir builds'
@@ -53,6 +54,7 @@ pipeline {
 
                     sh 'npm run build'
                     sh 'cp -r dist/eContract-web builds/'
+                    sh ' '
                     dir("builds"){
                       sh 'ls -l'
                     }
@@ -76,13 +78,13 @@ pipeline {
                     echo "-------------------Run backup.sh done-------------------"
 
                     echo "-------------------Start push file to server-------------------"
-                    sshPut remote: remote, from: 'builds/eContract-web/.', into: "${pathInServer}/"
+                    sshPut remote: remote, from: 'builds/eContract-web/.', into: "${patheContractVmec}/"
                     echo "-------------------Push file to server done-------------------"
 
-                    sh """
-                      curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["${groupEChatWorkId}"],"announcement": "Hoàn thành deploy Front-end eContract-vmec. Truy cập link https://econtract-vmec.mobifone.ai để test"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement/group
+                    // sh """
+                    //   curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["${groupEChatWorkId}"],"announcement": "Hoàn thành deploy Front-end eContract-vmec. Truy cập link https://econtract-vmec.mobifone.ai để test"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement/group
 
-                    """
+                    // """
                     echo "-------------------Deploy done-------------------"
                 }
             }
