@@ -26,6 +26,7 @@ export class CheckSignDigitalComponent implements OnInit {
 
   ngOnInit(): void {
     this.appService.setTitle("menu.check.sign.digital");
+    this.appService.setSubTitle("");
 
     this.cols = [
       {header: 'sign.username', style:'text-align: left;' },

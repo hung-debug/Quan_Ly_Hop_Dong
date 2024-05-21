@@ -75,7 +75,8 @@ export class ContractNumberFollowTypeComponent implements OnInit {
   ngOnInit(): void {
 
     this.spinner.hide();
-    this.appService.setTitle('report.number.contracts.contract-type.full');
+    this.appService.setTitle('report');
+    this.appService.setSubTitle('report.number.contracts.contract-type.full');
 
     this.optionsStatus = [
       // { id: -1, name: 'Tất cả' },
