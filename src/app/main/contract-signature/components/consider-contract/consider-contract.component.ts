@@ -2089,7 +2089,7 @@ export class ConsiderContractComponent
 
             if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
               let imageRender = null;
-              if (this.type == 4) {
+              if (signUpdate.type == 4) {
                 this.textSign = this.contractNoValueSign
               } else {
                 this.textSign = signUpdate.valueSign
@@ -2404,7 +2404,7 @@ export class ConsiderContractComponent
           };
 
           if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
-            if (this.type == 4) {
+            if (signUpdate.type == 4) {
               this.textSign = this.contractNoValueSign
             } else {
               this.textSign = signUpdate.valueSign
@@ -2660,7 +2660,7 @@ export class ConsiderContractComponent
             height: signUpdate.signDigitalHeight,
           };
           if (signUpdate.type == 1 || signUpdate.type == 4 || signUpdate.type == 5) {
-            if (this.type == 4) {
+            if (signUpdate.type == 4) {
               this.textSign = this.contractNoValueSign
             } else {
               this.textSign = signUpdate.valueSign
