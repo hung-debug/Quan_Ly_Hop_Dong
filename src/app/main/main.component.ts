@@ -83,9 +83,11 @@ export class MainComponent implements OnInit {
       if (this.scrollingTextElement && this.scrollingTextElement.nativeElement) {
         const scrollingTextWidth = this.scrollingTextElement.nativeElement.scrollWidth;
         const containerWidth = this.scrollingTextElement.nativeElement.parentElement.offsetWidth;
-        const speed = 100; // pixels per second, adjust as needed
+        const speed = 50;
         const duration = (scrollingTextWidth + containerWidth) / speed;
+        const initialDistance = (containerWidth / scrollingTextWidth) * 100
         if (scrollingTextWidth > containerWidth) {
+          this.scrollingTextElement.nativeElement.style.setProperty('--start-position', `${initialDistance}%`);
           this.scrollingTextElement.nativeElement.style.animation = `RightToLeft ${duration}s linear infinite`;
           this.scrollingTextElement.nativeElement.style.display = 'inline-block'
         } else {
