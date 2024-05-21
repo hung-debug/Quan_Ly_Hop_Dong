@@ -12,8 +12,8 @@ export const environment = {
   // apiUrl: 'https://econtractnb.mobifone.ai/service',
   // apiUrl: 'http://192.168.0.101:8762',
   // apiUrl: 'http://192.168.1.14:8762',
-  // flag: 'NB',
-  flag: 'KD',
+  flag: 'NB',
+  // flag: 'KD',
 
   //NB
   // apiUrl: 'https://econtract.mobifone.vn/service',
