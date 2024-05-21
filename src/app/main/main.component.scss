@@ -337,11 +337,12 @@ h3{
 .RightToLeft {
   color: red;
   font-size: 14px;
+  --start-position: 100%;
 }
 
 @keyframes RightToLeft {
   from {
-    transform: translateX(100%);
+    transform: translateX(var(--start-position));
   }
   to {
     transform: translateX(-100%);
