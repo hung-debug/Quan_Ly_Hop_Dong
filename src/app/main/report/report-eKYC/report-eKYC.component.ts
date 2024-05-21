@@ -67,7 +67,8 @@ export class ReportEKYCComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.spinner.hide();
 
-    this.appService.setTitle('report.ekyc');
+    this.appService.setTitle('report');
+    this.appService.setSubTitle('report.ekyc');
     
     if (sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';

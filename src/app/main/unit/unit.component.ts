@@ -44,7 +44,8 @@ export class UnitComponent implements OnInit {
   isQLTC_04:boolean=true;  //xem thong tin chi tiet to chuc
 
   ngOnInit(): void {
-    this.appService.setTitle("unit.list");
+    this.appService.setTitle("menu.manager.user");
+    this.appService.setSubTitle("unit.list");
     this.searchUnit();
 
     this.cols = [

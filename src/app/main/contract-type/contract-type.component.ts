@@ -41,7 +41,8 @@ export class ContractTypeComponent implements OnInit {
   ceca: boolean = false;
 
   ngOnInit(): void {
-    this.appService.setTitle("contract-type.list");
+    this.appService.setTitle("menu.config");
+    this.appService.setSubTitle("contract-type.list");
     this.searchContractType();
 
     this.cols = [

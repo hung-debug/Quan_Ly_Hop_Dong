@@ -80,7 +80,8 @@ export class ReportDetailComponent implements OnInit {
   ngOnInit(): void {
     this.spinner.hide();
 
-    this.appService.setTitle('report.detail.contract.full');
+    this.appService.setTitle('report');
+    this.appService.setSubTitle('report.detail.contract.full');
 
     this.formGroup = this.fbd.group({
       name: this.fbd.control(''),

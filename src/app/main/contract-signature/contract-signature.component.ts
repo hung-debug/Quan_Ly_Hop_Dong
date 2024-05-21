@@ -961,12 +961,15 @@ export class ContractSignatureComponent implements OnInit {
 
     if (this.status == 'wait-processing') {
       this.filter_status = 1;
+      this.appService.setSubTitle('contract.status.wait-processing');
     } else if (this.status == 'processed') {
       this.filter_status = 4;
       this.typeDisplay = 'signOne';
+      this.appService.setSubTitle('contract.status.processed');
     } else if (this.status == 'share') {
       this.filter_status = -1;
       this.typeDisplay = 'signOne';
+      this.appService.setSubTitle('contract.status.share');
     } else if (this.status == 'wait-processing-dashboard') {
       this.contractStatus = 20;
       this.filter_status = 11;

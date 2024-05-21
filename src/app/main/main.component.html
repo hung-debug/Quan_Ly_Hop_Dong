@@ -10,7 +10,15 @@
     <header [ngStyle]="getStyleSideBar()">
 
       <div class="search-wrapper">
-        <h3>{{title | translate}}</h3>
+        <div style="padding-right: 8px;">
+          <h3 class="search-wrapper-label" style="color: #002060;">{{title | translate}}</h3>
+        </div>
+        <div *ngIf="checkSubTitle()" style="display: flex; align-items: center; gap: 8px;">
+          <img src="../../assets/img/caret-down.svg" class="img_icon_caret-down" />
+        </div>
+        <div style="padding-left: 8px;">
+          <h3 class="search-wrapper-label" style="color: #0041C4;">{{subTitle | translate}}</h3>
+        </div>
       </div>
       <div *ngIf="getShowHideSideBar()">
         <div ngbDropdown class="d-inline-block">

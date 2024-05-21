@@ -75,7 +75,8 @@ export class DigitalCertificateComponent implements OnInit {
       this.lang = 'en';
     }
 
-    this.appService.setTitle("certificate.list");
+    this.appService.setTitle("menu.config");
+    this.appService.setSubTitle("certificate.list");
     this.cols = [
       { header: 'notation', style: 'text-align: left;' },
       { header: 'subject', style: 'text-align: left;' },

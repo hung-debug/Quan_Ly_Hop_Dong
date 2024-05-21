@@ -78,7 +78,8 @@ export class ReportContractReceiveComponent implements OnInit {
   ngOnInit(): void {
     this.spinner.hide();
 
-    this.appService.setTitle('report.contract.receive.full');
+    this.appService.setTitle('report');
+    this.appService.setSubTitle('report.contract.receive.full');
 
     this.formGroup = this.fbd.group({
       name: this.fbd.control(''),

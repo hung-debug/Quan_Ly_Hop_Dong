@@ -70,6 +70,7 @@ export class ContractTemplateComponent implements OnInit {
 
   ngOnInit(): void {
     this.appService.setTitle('contract-template.list');
+    this.appService.setSubTitle('');
     //lay id user
     let userId = this.userService.getAuthCurrentUser().id;
     this.userService.getUserById(userId).subscribe(

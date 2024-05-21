@@ -40,7 +40,8 @@ export class RoleComponent implements OnInit {
   isQLVT_05:boolean=true;  //xem thong tin chi tiet vai tro
 
   ngOnInit(): void {
-    this.appService.setTitle("role.list");
+    this.appService.setTitle("menu.manager.user");
+    this.appService.setSubTitle("role.list");
     this.searchRole();
 
     this.cols = [

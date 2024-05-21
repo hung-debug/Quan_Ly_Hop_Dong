@@ -68,7 +68,8 @@ export class ReportStatusSendEmailComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.spinner.hide();
 
-    this.appService.setTitle('role.report.history.send.email');
+    this.appService.setTitle('report');
+    this.appService.setSubTitle('role.report.history.send.email');
 
     if (sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';

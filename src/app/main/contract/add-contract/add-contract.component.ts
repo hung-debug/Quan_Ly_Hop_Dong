@@ -154,6 +154,7 @@ export class AddContractComponent implements OnInit {
 
   ngOnInit() {
 
+    this.appService.setSubTitle('add.contract.one.not.template');
     this.userService.checkServiceStatus().subscribe((response) => {
 
       if (response.status == 'Using' || environment.flag == 'NB') {
@@ -359,10 +360,13 @@ export class AddContractComponent implements OnInit {
   changeType(e: any) {
     if (this.type == 1) {
       this.step = variable.stepSampleContract.step1;
+      this.appService.setSubTitle("add.contract.one.not.template");
     } else if (this.type == 2) {
       this.stepForm = variable.stepSampleContractForm.step1;
+      this.appService.setSubTitle("add.contract.one.template");
     } else if (this.type == 3) {
       this.stepBatch = variable.stepSampleContractBatch.step1;
+      this.appService.setSubTitle("role.contract-template.create-batch");
     }
     if (this.type == 1) {
       this.datas = {

@@ -136,7 +136,8 @@ export class ConfigSmsEmailComponent implements OnInit {
     for (let i = 0; i < 5; i++) {
       // this.addFormGroup(this.dataBody[i]);
     }
-    this.appService.setTitle("menu.config-sms-email");
+    this.appService.setTitle("menu.config");
+    this.appService.setSubTitle("menu.config-sms-email");
 
     this.listStatus = [
       { id: 0, name: 'Người tạo' },
