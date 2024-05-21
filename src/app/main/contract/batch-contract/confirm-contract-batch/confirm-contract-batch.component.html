@@ -109,8 +109,7 @@
     </div>
     <div class="footer-sample-contract">
       <div class="col-md-3">
-        <button (click)="back($event, 'infor-contract-batch')" type="button" name="next" class="next action-button"
-            style="background-color: #8B8B8B">{{'btn.previous' | translate}}</button>
+        <button (click)="back($event, 'infor-contract-batch')" type="button" name="next" class="next action-button-previous">{{'btn.previous' | translate}}</button>
     </div>
     <div class="col-md-9">
         <div class="center">
@@ -142,7 +141,7 @@
     </div>
     <div  style="position: absolute;display: flex;width: 20%;justify-content: flex-end;margin-left: 62%;">
       <a style="position: relative;">
-        <button type="button" (click)="saveDraft()" name="next" class="next action-button" style="background-color: #FCAF17">{{'btn.save-draft' | translate}}</button>
+        <button type="button" (click)="saveDraft()" name="next" class="next draft-button">{{'btn.save-draft' | translate}}</button>
       </a>
       <a style="position: relative;">
         <button (click)="submit()" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button>

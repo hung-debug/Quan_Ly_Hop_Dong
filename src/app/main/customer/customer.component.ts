@@ -72,6 +72,7 @@ export class CustomerComponent implements OnInit {
       this.isOrg = 'off';
     }
     this.appService.setTitle("customer.list");
+    this.appService.setSubTitle("");
   }
 
 

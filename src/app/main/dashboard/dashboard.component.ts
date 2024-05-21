@@ -115,6 +115,7 @@ export class DashboardComponent implements OnInit {
     }
 
     this.appService.setTitle("menu.dashboard");
+    this.appService.setSubTitle("");
     this.search();
     let count = localStorage.getItem('countNoti')
     let userId = this.userService.getAuthCurrentUser().id;
@@ -657,6 +658,7 @@ export class DashboardComponent implements OnInit {
     this.router.navigate([
       '/main/form-contract/add',
     ]);
+    this.appService.setSubTitle('add.contract.one.not.template');
   }
   
   openEdit(id: number) {

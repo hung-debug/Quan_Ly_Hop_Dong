@@ -109,14 +109,14 @@
 
 .action-button-previous {
   width: 100px;
-  background: #C5C5F1;
+  background: #FFFFFF;
   font-weight: bold;
-  color: white;
-  border: 0 none;
-  border-radius: 5px;
+  color: #0041C4;
+  border: 1px solid var(--Primary, #0041C4);
+  border-radius: 6px;
   cursor: pointer;
-  padding: 10px 5px;
-  margin: 5px 5px;
+  padding: 9px 12px;
+  margin: 10px 5px;
 }
 
 
@@ -134,26 +134,26 @@
 //style button
 .action-button {
   width: 100px;
-  background: #106DB6;
+  background: #0041C4;
   //font-weight: bold;
   color: white;
   border: 0 none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  padding: 10px 5px;
-  margin: 5px 5px;
+  padding: 10px 12px;
+  margin: 10px 0px;
 }
 
 .action-button-previous {
   width: 100px;
-  background: #C5C5F1;
+  background: #FFFFFF;
   font-weight: bold;
-  color: white;
-  border: 0 none;
-  border-radius: 5px;
+  color: #0041C4;
+  border: 1px solid var(--Primary, #0041C4);
+  border-radius: 6px;
   cursor: pointer;
-  padding: 10px 5px;
-  margin: 5px 5px;
+  padding: 9px 12px;
+  margin: 10px 5px;
 }
 .footer-sample-contract {
   border-top: 1px solid #ddd;
@@ -252,15 +252,15 @@ box-sizing: border-box;
 }
 
 .action-button {
-  // width: 114px;
-  // height: 30px;
-  background: #106DB6;
+  width: 100px;
+  background: #0041C4;
   //font-weight: bold;
   color: white;
   border: 0 none;
-  border-radius: 7px;
+  border-radius: 6px;
   cursor: pointer;
-  margin: 5px 5px;
+  padding: 10px 12px;
+  margin: 10px 0px;
 }
 
 // .long-text-ellipsis {

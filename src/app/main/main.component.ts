@@ -21,6 +21,7 @@ import { AuthenticationService } from '../service/authentication.service';
 })
 export class MainComponent implements OnInit {
   title: string;
+  subTitle: string;
 
   isShowCopyRight: boolean = true;
   isRouterContractNew: boolean = true;
@@ -78,8 +79,14 @@ export class MainComponent implements OnInit {
     //update title by component
     this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('type')));
 
-    this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
-
+    this.appService.getTitle().subscribe(appTitle => {
+      console.log('this.title82: ', appTitle);
+      return this.title = appTitle.toString()});
+      
+    this.appService.getSubTitle().subscribe(appSubTitle => {
+      console.log('this.title82: ', appSubTitle);
+      return this.subTitle = appSubTitle.toString()});
+  
     this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
       data => {
         console.log("data",data);
@@ -100,6 +107,10 @@ export class MainComponent implements OnInit {
       localStorage.setItem('sso_token',accessToken ?? '')
     }
 
+  }
+
+  checkSubTitle() {
+    return this.subTitle.length > 0;
   }
 
   readAll(){

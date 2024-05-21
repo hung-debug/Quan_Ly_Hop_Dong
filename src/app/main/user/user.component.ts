@@ -82,7 +82,8 @@ export class UserComponent implements OnInit {
       this.lang = 'en';
     }
 
-    this.appService.setTitle("user.list");
+    this.appService.setTitle("menu.manager.user");
+    this.appService.setSubTitle("user.list");
     //lay id user
     this.organization_id_user_login = this.userService.getAuthCurrentUser().organizationId;
     //mac dinh se search theo ma to chuc minh

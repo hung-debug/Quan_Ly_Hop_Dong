@@ -86,13 +86,13 @@ input[type="file"] {
   // font-family: font_lexend_deca;`
 }
 #table td, #table th {
-  //border: 1px solid #ddd;
+  border: 0px;
   padding: 8px;
 }
 
-#table tr:nth-child(even){background-color: #f2f2f2;}
+#table tr:nth-child(even){background-color: #F8FAFF;}
 
-#table tr:hover, #table td:hover {background-color: #f2f2f2}
+#table tr:hover, #table td:hover {background-color: #F8FAFF}
 
 #table th {
   // text-align: center;

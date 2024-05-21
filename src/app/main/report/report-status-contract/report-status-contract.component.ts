@@ -96,7 +96,8 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.spinner.hide();
 
-    this.appService.setTitle('report.processing.status.contract.full');
+    this.appService.setTitle('report');
+    this.appService.setSubTitle('report.processing.status.contract.full');
 
     this.getTypeListContract();
 
