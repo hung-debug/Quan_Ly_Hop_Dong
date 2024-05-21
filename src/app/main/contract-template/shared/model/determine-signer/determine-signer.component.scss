@@ -146,23 +146,23 @@ input[type=number] {
 //style button
 .action-button {
   width: 100px;
-  background: #106DB6;
+  background: #0041C4;
   //font-weight: bold;
   color: white;
   border: 0 none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  padding: 10px 5px;
-  margin: 10px 5px;
+  padding: 10px 12px;
+  margin: 10px 0px;
 }
 
 .draft-button {
   width: 100px;
-  background: #FCAF17;
+  background: #F8AD41;
   //font-weight: bold;
   color: white;
   border: 0 none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
   padding: 10px 5px;
   margin: 10px 5px;
@@ -170,13 +170,13 @@ input[type=number] {
 
 .action-button-previous {
   width: 100px;
-  background: #C5C5F1;
+  background: #FFFFFF;
   font-weight: bold;
-  color: white;
-  border: 0 none;
-  border-radius: 5px;
+  color: #0041C4;
+  border: 1px solid var(--Primary, #0041C4);
+  border-radius: 6px;
   cursor: pointer;
-  padding: 10px 5px;
+  padding: 9px 12px;
   margin: 10px 5px;
 }
 
@@ -184,6 +184,7 @@ input[type=number] {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-top: 7vh;
 
   .content_footer {
     color: #0160AE;

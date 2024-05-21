@@ -124,11 +124,11 @@ button {
 //style button
 .action-button {
   width: 100px;
-  background: #106DB6;
+  background: #0041C4;
   //font-weight: bold;
   color: white;
   border: 0 none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
   padding: 10px 5px;
   margin: 10px 5px;
@@ -136,11 +136,11 @@ button {
 
 .draft-button {
   width: 100px;
-  background: #FCAF17;
+  background: #F8AD41;
   //font-weight: bold;
   color: white;
   border: 0 none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
   padding: 10px 5px;
   margin: 10px 5px;
@@ -150,6 +150,7 @@ button {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  padding-top: 14.5vh;
   .content_footer{
     //text-align: center;
     //margin: 10px;

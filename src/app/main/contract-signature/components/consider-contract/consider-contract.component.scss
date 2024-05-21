@@ -187,6 +187,16 @@
   }
 }
 
+.container-fluid{
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding-top: 15px;
+  min-height: 92vh;
+}
+
+.my-custom-cancel-button-class {
+  color: red !important; /* Thay đổi màu chữ theo ý bạn, ví dụ: màu đỏ */
+}
 // test
 .ck-da-keo {
   border: 1px solid #106DB6;
