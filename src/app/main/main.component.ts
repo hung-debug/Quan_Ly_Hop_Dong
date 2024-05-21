@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Router} from '@angular/router';
 import {AppService} from '../service/app.service';
 import {SidebarService} from './sidebar/sidebar.service';
@@ -36,6 +36,8 @@ export class MainComponent implements OnInit {
   getAlllistNotification: any[] = [];
   isSsoSync: boolean = false;
   messageNotification: string;
+  isMessageNotificationSet = false;
+  @ViewChild('scrollingText', { static: false }) scrollingTextElement: ElementRef<any>;
   constructor(private router: Router,
               private appService: AppService,
               public sidebarservice: SidebarService,
@@ -64,6 +66,35 @@ export class MainComponent implements OnInit {
     // });
   }
 
+
+  ngAfterViewInit() {
+    if (this.isMessageNotificationSet && this.scrollingTextElement && this.scrollingTextElement.nativeElement) {
+      this.updateAnimationDuration();
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.updateAnimationDuration();
+  }
+
+  private updateAnimationDuration() {
+    setTimeout(() => {
+      if (this.scrollingTextElement && this.scrollingTextElement.nativeElement) {
+        const scrollingTextWidth = this.scrollingTextElement.nativeElement.scrollWidth;
+        const containerWidth = this.scrollingTextElement.nativeElement.parentElement.offsetWidth;
+        const speed = 100; // pixels per second, adjust as needed
+        const duration = (scrollingTextWidth + containerWidth) / speed;
+        if (scrollingTextWidth > containerWidth) {
+          this.scrollingTextElement.nativeElement.style.animation = `RightToLeft ${duration}s linear infinite`;
+          this.scrollingTextElement.nativeElement.style.display = 'inline-block'
+        } else {
+          this.scrollingTextElement.nativeElement.style.animation = `RightToLeft ${duration}s linear infinite`;
+        }
+      }
+    }, 0);
+  }
+
   lang: any;
   async ngOnInit() {
     if(localStorage.getItem('lang') == 'vi') {
@@ -81,6 +112,9 @@ export class MainComponent implements OnInit {
       if(res.result) {
         this.messageNotification = res.result.content;
       }
+      this.isMessageNotificationSet = true;
+      this.changeDetectorRef.detectChanges();
+      this.updateAnimationDuration();
     })
     this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
 
