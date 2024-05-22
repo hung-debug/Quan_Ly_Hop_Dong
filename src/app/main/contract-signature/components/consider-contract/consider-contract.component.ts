@@ -747,7 +747,7 @@ export class ConsiderContractComponent
               if ((fieldRecipientId?.length == 0 || countNotBoxSign == 0) && this.recipient.sign_type[0].id !== 7) {
                 const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, image_base64).toPromise();
                 this.pdfSrcMobile = pdfMobile.filePath;
-              } else if (fieldRecipientId.length > 1) {
+              } else if (fieldRecipientId.length >= 1) {
                 this.multiSignInPdf = true;
                 alert('Hợp đồng có chứa ô text/ ô số hợp đồng. Vui lòng thực hiện xử lý trên web hoặc ứng dụng di động!');
               } else if (this.recipient.sign_type[0].id == 7) {
