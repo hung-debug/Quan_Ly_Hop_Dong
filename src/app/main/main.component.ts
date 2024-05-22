@@ -83,9 +83,11 @@ export class MainComponent implements OnInit {
       if (this.scrollingTextElement && this.scrollingTextElement.nativeElement) {
         const scrollingTextWidth = this.scrollingTextElement.nativeElement.scrollWidth;
         const containerWidth = this.scrollingTextElement.nativeElement.parentElement.offsetWidth;
-        const speed = 100; // pixels per second, adjust as needed
+        const speed = 50;
         const duration = (scrollingTextWidth + containerWidth) / speed;
+        const initialDistance = (containerWidth / scrollingTextWidth) * 100
         if (scrollingTextWidth > containerWidth) {
+          this.scrollingTextElement.nativeElement.style.setProperty('--start-position', `${initialDistance}%`);
           this.scrollingTextElement.nativeElement.style.animation = `RightToLeft ${duration}s linear infinite`;
           this.scrollingTextElement.nativeElement.style.display = 'inline-block'
         } else {
@@ -120,7 +122,7 @@ export class MainComponent implements OnInit {
 
     this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
       data => {
-        if (environment.flag == 'KD' && data.is_required_sso) {
+        if (environment.flag == 'KD' && data.is_required_sso && environment.usedSSO) {
           this.isSsoSync = true
         } else {
           this.isSsoSync = false
@@ -133,7 +135,7 @@ export class MainComponent implements OnInit {
 
     });
 
-    if (environment.flag == 'KD' && await this.keycloakService.isLoggedIn()) {
+    if (environment.flag == 'KD' && environment.usedSSO && await this.keycloakService.isLoggedIn()) {
       let accessToken: any = this.keycloakService.getKeycloakInstance().token
       let ssoIdToken: any = this.keycloakService.getKeycloakInstance().idToken
       localStorage.setItem('sso_id_token',ssoIdToken ?? '')
@@ -166,7 +168,7 @@ export class MainComponent implements OnInit {
   //click logout
   async logout() {
      //call api delete token
-     if (environment.flag == 'KD') {
+     if (environment.flag == 'KD' && environment.usedSSO) {
        this.contractService.deleteToken().subscribe((res:any) => {
       })
   
