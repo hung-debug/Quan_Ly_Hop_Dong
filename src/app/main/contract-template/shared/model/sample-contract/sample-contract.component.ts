@@ -408,9 +408,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let dataContractUserSign: any[] = [];
     this.datas.contract_user_sign.forEach((res: any, index: number) => {
 
-      if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
-        res.sign_config = res.sign_config.filter((element: any) => element.recipient ? (element.recipient.sign_type[0].id == 2 || element.recipient.sign_type[0].id == 4 || element.recipient.sign_type[0].id == 6 || element.recipient.sign_type[0].id == 8) : !element.recipient)
-      }
+      // if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
+      //   res.sign_config = res.sign_config.filter((element: any) => !element.recipient)
+      // }
 
       if (res.sign_config.length !== 0) {
         res.sign_config.forEach((element: any) => {
@@ -427,6 +427,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             element.isSupportMultiSignatureBox = false;
           } else {
             element.isSupportMultiSignatureBox = true;
+          }
+          if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id &&  [3,7,8].includes(data?.sign_type[0]?.id))?.length > 1) {
+            element.isNotSupportTextField = true
+          } else if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id &&  [2,4,6].includes(data?.sign_type[0]?.id))?.length > 0) {
+            element.isNotSupportTextField = false
           }
         }
       })
@@ -452,8 +457,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (dataContractUserSign.length > 0 && dataDetermine.length > 0) {
       dataDiffirent = dataContractUserSign.filter(val => !dataDetermine.some((data: any) =>
         (val.sign_unit == "chu_ky_anh" && data.sign_type.some((p: any) => p.id == 1 || p.id == 5) && val.recipient_id == data.id) ||
-        (val.sign_unit == 'text') ||
-        (val.sign_unit == 'so_tai_lieu') ||
+        (val.sign_unit == 'text' && !val.isNotSupportTextField) ||
+        (val.sign_unit == 'so_tai_lieu' && !val.isNotSupportTextField) ||
         (val.sign_unit == "chu_ky_so" && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8)) && val.recipient_id == data.id)
         // || ((val.recipient ? val.recipient_id as any : val.email as any) == (val.recipient ? data.id as any : data.email as any))
       )
