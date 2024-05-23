@@ -404,6 +404,11 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           } else {
             element.isSupportMultiSignatureBox = true;
           }
+          if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id &&  [3,7,8].includes(data?.sign_type[0]?.id))?.length > 1) {
+            element.isNotSupportTextField = true
+          } else if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id &&  [2,4,6].includes(data?.sign_type[0]?.id))?.length > 0) {
+            element.isNotSupportTextField = false
+          }
         }
       })
     })
@@ -414,8 +419,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     if (dataDetermine.length > 0) {
       dataDiffirent = dataContractUserSign.filter((val: any) => !dataDetermine.some((data: any) =>
         ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký"))) ||
-          (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id)) ||
-          (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id)) ||
+          (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id) && !val.isNotSupportTextField) ||
+          (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id && !val.isNotSupportTextField)) ||
           (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký"))))
         )
         || dataDetermine.some((data: any) => val.sign_unit == 'chu_ky_so' && val.isSupportMultiSignatureBox == false && val.recipient_id == data.id)
