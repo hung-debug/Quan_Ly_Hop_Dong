@@ -62,12 +62,12 @@ export class ContractFolderService {
     return this.http.delete(this.deleteContractFolderUrl + folderId + "/" + contractId, {headers}).pipe();
   }
 
-  getContractFoldersList() {    
+  getContractFoldersList(folderId: number) {    
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<Folder[]>(this.getContractFolderListUrl+'?sort=createdAt,desc', {headers}).pipe();
+    return this.http.get<Folder[]>(this.getContractFolderListUrl + `/${folderId}`, {headers}).pipe();
   }
 
   getContractFolderName(){

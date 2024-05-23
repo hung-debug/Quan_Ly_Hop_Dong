@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
     <!--Tổ chức-->
-    <div class="col-md-2">
+    <div class="col-xxl-3-5 col-lg-6 col-md-6">
       <div>{{'organization' | translate}}</div>
       <div class="input-line">
         <p-treeSelect #nameContract [(ngModel)]="selectedNodeOrganization" [filter]="true" filterBy="name"
@@ -11,7 +11,7 @@
     </div>
 
     <!-- Thông tin hợp đồng -->
-    <div class="col-md-2">
+    <div class="col-xxl-3-5 col-lg-6 col-md-6">
       <div>{{'contract.information' | translate}}</div>
       <div class="input-line">
         <input type="text" [(ngModel)]="contractInfo" class="input_text" placeholder="Tìm kiếm theo Mã HĐ, Số HĐ, Tên HĐ" />
@@ -37,7 +37,7 @@
     </div> -->
 
     <!--Thời gian gửi-->
-    <div class="col-md-2">
+    <div class="col-xxl-3-5 col-lg-6 col-md-6">
       <div>{{ 'time.send.date' | translate}}
         <!-- <span style="color: red"> *</span> -->
       </div>
@@ -51,9 +51,11 @@
 
 
     <!--Button-->
-    <div class="col-md-4 btn_search">
-      <button class="btn btn-lg btn-block btn_submit" (click)="exportSmsReportCall(false)">{{'btn.report' | translate
-        }}</button>
+    <div class="col-xxl-1 col-lg-2 col-md-3 btn_search">
+      <button class="btn btn-lg btn-block btn_submit" (click)="exportSmsReportCall(false)">{{'btn.report' | translate}}</button>
+    </div>
+
+    <div class="col-xxl-1 col-lg-2 col-md-3 btn_search">
       <button class="btn btn-lg btn-block btn_submit" (click)="exportSmsReportCall(true)">Export</button>
     </div>
   </div>

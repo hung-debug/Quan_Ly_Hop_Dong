@@ -846,5 +846,6 @@
   "status.ceca": "Trạng thái BCT",
   "create.contract.no.template":"Đơn lẻ không theo mẫu",
   "create.contract.batch": "Tạo theo lô",
-  "create.contract.template": "Đơn lẻ theo mẫu"
+  "create.contract.template": "Đơn lẻ theo mẫu",
+  "folder.search.placeholder": "Tìm kiếm theo tên thư mục, tên hợp đồng, mã hợp đồng, tên đối tác"
 }
