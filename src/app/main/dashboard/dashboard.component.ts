@@ -102,15 +102,6 @@ export class DashboardComponent implements OnInit {
       {label: "my.contract", value: 'off'},
       {label: "org.contract", value: 'on'},
     ];
-    
-    // Tính toán ngày kết thúc (hiện tại)
-    let endDate = new Date();
-    // Tính toán ngày bắt đầu (7 ngày trước ngày kết thúc)
-    let startDate = new Date();
-    startDate.setDate(startDate.getDate() - 30);
-    // Gán giá trị mặc định cho biến date
-
-    this.date = [startDate, endDate];
   }
 
   lang: any;
@@ -376,10 +367,7 @@ export class DashboardComponent implements OnInit {
         this.createChart("Đang xử lý","Hoàn thành","Từ chối","Huỷ bỏ", "Quá hạn", "Số lượng", newData);
       else if(localStorage.getItem('lang') == 'en' || sessionStorage.getItem('lang') == 'en')
         this.createChart("Processing","Complete","Reject","Cancel","Out of date", "Number", newData);
-        console.log("this.numContractUse", this.numContractUse);
-        console.log("numContractUnUsed",this.numContractBuy - this.numContractUse);
-      // if(this.numContractBuy > 0 && this.numContractBuy - this.numContractUse > 0 )
-      // console.log("loadd ",this.loadData1, this.loadData2);
+
       if (this.loadData1 &&  this.loadData2) {
         this.createPieChart(this.numContractUse, this.numContractBuy - this.numContractUse)
       }
@@ -499,15 +487,11 @@ export class DashboardComponent implements OnInit {
     let numContractBodyHeight = document.getElementById('num-contract-body')?.offsetHeight || 0;
     let notiHeight = document.getElementById('noti')?.offsetHeight || 450;
     this.chartHeight = numContractHeight + notiHeight + numContractBodyHeight - 37;
-    let numContractUnUsed = this.numContractBuy - this.numContractUse
-
-    
-    // this.createPieChart(this.numContractUse, numContractUnUsed);
+    let numContractUnUsed = this.numContractBuy - this.numContractUse;
 
   }
   
   
-  // 
   createPieChart(numContractUse: any, numContractUnUsed: any) {
     this.chartPieCreated = new Chart({
       colors: ['#CED3FF', '#4495F5'],
@@ -518,44 +502,49 @@ export class DashboardComponent implements OnInit {
         },
         height: 500,
         events: {
-          // load: this.addCenterText.bind(this)
-          render: function(this: any) {
+          render: function (this: any) {
             const chart = this;
             const textX = chart.plotLeft + (chart.series[0].center[0]);
             const textY = chart.plotTop + (chart.series[0].center[1]);
-    
+  
+            // Check if centerText exists, remove if it does
+            if (chart.centerText) {
+              chart.centerText.destroy();
+            }
+  
             chart.centerText = chart.renderer.text(numContractUse, textX, textY)
               .css({
                 fill: '#001A4D',
-                // @ts-ignore
-                fontSize: 24,
+                fontSize: '24px',
                 fontWeight: 'bold',
-                fontFamily: "ROBOTO",
-                // color: '#001A4D',
+                fontFamily: 'ROBOTO',
               })
-              .add()
-    
-              chart.centerText.attr({
-              x: textX - chart.centerText.getBBox().width / 2,
-            })
-            
-            
-            const numberContract = numContractUse + numContractUnUsed
-            const secondTextY = textY + 30;
-            const numContract = this.renderer.text('TỔNG '+ numberContract,textX, secondTextY)
-            .css({
-              fill: '#001A4D',
-              // @ts-ignore
-              fontSize: 18,
-              fontWeight: 'bold',
-              fontFamily: "ROBOTO",
-              // color: '#001A4D',
-            })
-            .add()
+              .add();
   
-            numContract.attr({
-            x: textX - numContract.getBBox().width / 2,
-          })
+            chart.centerText.attr({
+              x: textX - chart.centerText.getBBox().width / 2,
+            });
+  
+            const numberContract = numContractUse + numContractUnUsed;
+            const secondTextY = textY + 30;
+  
+            // Check if numContract exists, remove if it does
+            if (chart.numContract) {
+              chart.numContract.destroy();
+            }
+  
+            chart.numContract = chart.renderer.text('TỔNG ' + numberContract, textX, secondTextY)
+              .css({
+                fill: '#001A4D',
+                fontSize: '18px',
+                fontWeight: 'bold',
+                fontFamily: 'ROBOTO',
+              })
+              .add();
+  
+            chart.numContract.attr({
+              x: textX - chart.numContract.getBBox().width / 2,
+            });
           }
         }
       },
@@ -571,23 +560,8 @@ export class DashboardComponent implements OnInit {
         enabled: false
       },
       legend: {
-        enabled: false
+          enabled: false
       },
-      // plotOptions: {
-      //   pie: {
-      //     point: {
-      //       events: {
-      //         mouseOver: function () {
-      //           let chart = this.series.chart;
-      //           chart.title.attr({
-      //             text: `<span style="color:#e43761;" class="dealer-title" data-oa-qa="donut-total-count-text">Total<br/><b>${this.y}</b></span>`,
-      //           });
-      //         },
-      //       }
-      //     }
-      //   }
-
-      // },
       series: [
         {
           type: 'pie',
@@ -597,10 +571,10 @@ export class DashboardComponent implements OnInit {
             [this.translate.instant('package.unused'), numContractUnUsed],
             [this.translate.instant('package.used'), numContractUse],
           ]
-        }]
-    })
+        }
+      ]
+    });
   }
-  
 
   getNumberContractBoxHeight(){
     let chartHeight = document.getElementById('chart-column')?.offsetHeight || 0;
