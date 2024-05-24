@@ -8,11 +8,12 @@
       </div> -->
 
       <div class="sidebar-menu">
-        <ul>
-          <li *ngFor="let menu of menus" [ngClass]="{'active': menu.active, 'sidebar-dropdown':menu.type === 'dropdown', 'sidebar-dropdown-active':menu.type === 'dropdown' && menu.activeDrop , 'header-menu':menu.type === 'header'}">
+        <ul class="sidebar-menu-ul">
+          <li class="sidebar-menu-li" *ngFor="let menu of menus" [ngClass]="{'active': menu.active, 'sidebar-dropdown':menu.type === 'dropdown', 'sidebar-dropdown-active':menu.type === 'dropdown' && menu.activeDrop , 'header-menu':menu.type === 'header'}">
             <span *ngIf="menu.type === 'header'">{{menu.title | translate}}</span>
             <!-- Menu parent, click dropdown -->
             <a
+              class="sidebar-menu-a"
               *ngIf="menu.href === '#'"
               (click)='toggle(menu)'
               (mouseenter)="onMouseEnter(menu)"
@@ -24,6 +25,7 @@
             </a>
             <!-- Menu click link -->
             <a
+              class="sidebar-menu-a"
               *ngIf="menu.href !== '#' && menu.type != 'button'"
               (click)='clickLink(menu)'
               [routerLink]="menu.href"
@@ -46,10 +48,10 @@
             </span>
             <!-- Sub menu -->
             <div *ngIf="menu.type === 'dropdown'" class="sidebar-submenu" [@slide]="getState(menu)">
-              <ul>
-                <li *ngFor="let submenu of menu.submenus" [ngClass]="{'active':submenu.active}">
+              <ul class="sidebar-submenu-ul">
+                <li class="sidebar-submenu-li" *ngFor="let submenu of menu.submenus" [ngClass]="{'active':submenu.active}">
 
-                  <a (click)="clickLinkSub(menu, submenu, 'contract-signature')" [routerLink]="submenu.href">
+                  <a class="sidebar-submenu-a" (click)="clickLinkSub(menu, submenu, 'contract-signature')" [routerLink]="submenu.href">
                     <span class="sub_title">{{submenu.title | translate}}</span>
                     <span *ngIf="submenu.badge" class="badge badge-pill" [ngClass]="submenu.badge.class">{{submenu.badge.text}}</span>
                   </a>
