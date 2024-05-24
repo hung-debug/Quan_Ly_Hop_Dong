@@ -123,7 +123,7 @@ export class DashboardComponent implements OnInit {
       data => {
         this.currentName = data.name
         //lay id role
-        if (!data.is_request_sso) {
+        if (environment.flag == 'KD' && !data.is_required_sso && environment.usedSSO) {
           this.openAccountLinkDialog(data)
         }
         this.roleService.getRoleById(data?.role_id).subscribe(

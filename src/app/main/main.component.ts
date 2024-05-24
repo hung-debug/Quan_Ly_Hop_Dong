@@ -30,6 +30,7 @@ export class MainComponent implements OnInit {
   status: number = 1;
   notification: string = '';
   numberNotification:any=0;
+  isSsoSync: boolean = false;
 
   urlLoginType: any;
   nameCurrentUser:any;
@@ -89,7 +90,11 @@ export class MainComponent implements OnInit {
   
     this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
       data => {
-        console.log("data",data);
+        if (environment.flag == 'KD' && data.is_required_sso && environment.usedSSO) {
+          this.isSsoSync = true
+        } else {
+          this.isSsoSync = false
+        }
         
         this.nameCurrentUser = data?.name;
         this.phoneCurrentUser = data?.phone;
@@ -100,7 +105,7 @@ export class MainComponent implements OnInit {
 
     });
 
-    if (await this.keycloakService.isLoggedIn()) {
+    if (environment.flag == 'KD' && environment.usedSSO && await this.keycloakService.isLoggedIn()) {
       let accessToken: any = this.keycloakService.getKeycloakInstance().token
       let ssoIdToken: any = this.keycloakService.getKeycloakInstance().idToken
       localStorage.setItem('sso_id_token',ssoIdToken ?? '')
@@ -136,22 +141,34 @@ export class MainComponent implements OnInit {
 
   //click logout
   async logout() {
-     //call api delete token
-    let ssoIdToken: any = localStorage.getItem('sso_id_token') || ''
-    if (localStorage.getItem('sso_token')) {
-      await this.authenticationService.logoutSso(ssoIdToken)
-      localStorage.removeItem('sso_token');
-      localStorage.clear()
-      sessionStorage.clear();
-      this.authenticationService.deleteAllCookies()
-      this.router.navigate(['/login']);
+    //call api delete token
+    if (environment.flag == 'KD' && environment.usedSSO) {
+      this.contractService.deleteToken().subscribe((res:any) => {
+     })
+ 
+     sessionStorage.clear();
+     localStorage.removeItem('currentUser');
+     localStorage.removeItem('myTaxCode');
+     localStorage.removeItem('url');
+ 
+     this.router.navigate(['/login']);
     } else {
-      localStorage.removeItem('sso_token');
-      localStorage.clear()
-      sessionStorage.clear()
-      this.router.navigate(['/login']);
+     let ssoIdToken: any = localStorage.getItem('sso_id_token') || ''
+     if (localStorage.getItem('sso_token')) {
+       await this.authenticationService.logoutSso(ssoIdToken)
+       localStorage.removeItem('sso_token');
+       localStorage.clear()
+       sessionStorage.clear();
+       this.authenticationService.deleteAllCookies()
+       this.router.navigate(['/login']);
+     } else {
+       localStorage.removeItem('sso_token');
+       localStorage.clear()
+       sessionStorage.clear()
+       this.router.navigate(['/login']);
+     }
     }
-  }
+ }
 
   email: string;
   checkMailMbf() {

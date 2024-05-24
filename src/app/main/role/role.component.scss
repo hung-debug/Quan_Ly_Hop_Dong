@@ -7,7 +7,7 @@
   color: white;
   background-color: #0041C4;
   font-size: 13px;
-  margin: 0 8px;
+  margin: 0 20px;
   font-style: normal;
   font-weight: 600;
 }
@@ -42,7 +42,7 @@
   color: #001A4D;
   background-color: #FFFFFF;
   font-size: 13px;
-  margin: 0 8px;
+  margin: 0 0px;
   box-shadow: 0px 3px 12px 0px rgba(16, 85, 225, 0.10);
   font-style: normal;
   font-weight: 600;
@@ -150,4 +150,21 @@ border-bottom-right-radius: 10px;
 .p-datatable .p-paginator-bottom {
   border-width: 0;
 }
+}
+
+@media (min-width: 1400px) {
+  .col-xxl-5 {
+      flex: 0 0 auto;
+      width: 40%;
+  }
+  
+  .col-xxl-2{
+    flex: 0 0 auto;
+    width: 20%;
+  }
+  
+  .col-xxl-1 {
+    flex: 0 0 auto;
+    width: 10%;
+  }
 }

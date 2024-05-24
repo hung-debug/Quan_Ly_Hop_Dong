@@ -1,18 +1,18 @@
 <div *ngIf="isQLLHD_01 || isQLLHD_02 || isQLLHD_03 || isQLLHD_04 || isQLLHD_05" class="container-fluid">
   <div class="row">
-    <div class="col-md-3" *ngIf="isQLLHD_04">
+    <div class="col-xxl-5 col-md-3" *ngIf="isQLLHD_04">
       <div>{{'contract-type.code' | translate}}</div>
       <div class="input-line">
         <input type="text" [(ngModel)]="code" class="input_text"/>
       </div>
     </div>
-    <div class="col-md-3" *ngIf="isQLLHD_04">
+    <div class="col-xxl-5 col-md-3" *ngIf="isQLLHD_04">
       <div>{{'contract-type.name' | translate}}</div>
       <div class="input-line">
         <input type="text" [(ngModel)]="name" class="input_text"/>
       </div>
     </div>
-    <div class="col-md-6 btn_search">
+    <div class="col-xxl-2 btn_search">
       <button *ngIf="isQLLHD_04" class="btn btn-lg btn-block btn_search1" (click)="searchContractType()">{{'btn.search' | translate }}</button>
       <button *ngIf="isQLLHD_01" class="btn btn-lg btn-block btn_submit" (click)="addContractType()">{{'btn.add' | translate }}</button>
     </div>

@@ -187,6 +187,23 @@ padding: 8px;
   }
 }
 
+@media (min-width: 1400px) {
+  .col-xxl-5 {
+      flex: 0 0 auto;
+      width: 40%;
+  }
+  
+  .col-xxl-2{
+    flex: 0 0 auto;
+    width: 20%;
+  }
+  
+  .col-xxl-1 {
+    flex: 0 0 auto;
+    width: 10%;
+  }
+}
+
 @media screen and (min-width: 1224px) and (max-width:1280px){
   .custom-file-upload {
     margin-left: 20%;
