@@ -12,13 +12,24 @@
           <li *ngFor="let menu of menus" [ngClass]="{'active': menu.active, 'sidebar-dropdown':menu.type === 'dropdown', 'sidebar-dropdown-active':menu.type === 'dropdown' && menu.activeDrop , 'header-menu':menu.type === 'header'}">
             <span *ngIf="menu.type === 'header'">{{menu.title | translate}}</span>
             <!-- Menu parent, click dropdown -->
-            <a *ngIf="menu.href === '#'" (click)='toggle(menu)'>
+            <a
+              *ngIf="menu.href === '#'"
+              (click)='toggle(menu)'
+              (mouseenter)="onMouseEnter(menu)"
+              (mouseleave)="onMouseLeave(menu)"
+            >
               <img src="{{menu.icon}}" />
               <span style="margin-left: 8px;">{{menu.title | translate}}</span>
               <span *ngIf="menu.badge" class="badge badge-pill" [ngClass]="menu.badge.class">{{menu.badge.text}}</span>
             </a>
             <!-- Menu click link -->
-            <a *ngIf="menu.href !== '#' && menu.type != 'button'" (click)='clickLink(menu)' [routerLink]="menu.href" >
+            <a
+              *ngIf="menu.href !== '#' && menu.type != 'button'"
+              (click)='clickLink(menu)'
+              [routerLink]="menu.href"
+              (mouseenter)="onMouseEnter(menu)"
+              (mouseleave)="onMouseLeave(menu)"
+            >
               <img src="{{menu.icon}}" />
               <span style="margin-left: 8px;">{{menu.title | translate}}</span>
               <span *ngIf="menu.badge" class="badge badge-pill" [ngClass]="menu.badge.class">{{menu.badge.text}}</span>

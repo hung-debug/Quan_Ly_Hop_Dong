@@ -22,6 +22,9 @@ export class SidebarComponent implements OnInit {
   @Output() evenSelectSidebar = new EventEmitter<string>();
   menus: any = [];
   subMenus: any = [];
+  prevItem: any;
+  isHovered = false;
+  // prevItem: any = [];
 
   constructor(
     public sidebarservice: SidebarService,
@@ -29,6 +32,7 @@ export class SidebarComponent implements OnInit {
     private contractService: ContractService
   ) {
     this.menus = sidebarservice.getMenuList();
+    this.prevItem = undefined;
   }
 
   ngOnInit() {
@@ -43,15 +47,39 @@ export class SidebarComponent implements OnInit {
     return this.sidebarservice.getSidebarState();
   }
 
+  onMouseEnter(currentMenu: any) {
+    this.isHovered = true;
+    if (!currentMenu.active) {
+      currentMenu.icon = currentMenu.iconFill;
+    }
+  }
+
+  onMouseLeave(currentMenu: any) {
+    this.isHovered = false;
+    if (!currentMenu.active) {
+      currentMenu.icon = currentMenu.iconDefault;
+    }
+  }
+
+  // switchToFillIcon(icon: string) {
+  //   return icon.replaceAll('.svg', '_v2.svg');
+  // }
+
+  // switchToDefaultIcon(icon: string) {
+  //   return icon.replaceAll('_v2', '');
+  // }
 
   // set active dropdown
   toggle(currentMenu: any) {
+    console.log('currentMenu.icon71: ', currentMenu);
+    currentMenu.icon = currentMenu.icon;
     if (currentMenu.type === 'dropdown') {
       currentMenu.activeDrop = true;
       this.menus.forEach((element: any) => {
         if (element === currentMenu) {
           currentMenu.active = !currentMenu.active;
         } else {
+          currentMenu.icon = currentMenu.iconDefault;
           element.active = false;
           element.activeDrop = false;
         }
@@ -61,12 +89,15 @@ export class SidebarComponent implements OnInit {
 
   //set active link
   clickLink(currentMenu: any) {
-    
+    // currentMenu.icon = currentMenu.iconFill;
+    currentMenu.icon = currentMenu.icon;
+    console.log('currentMenu.icon102: ', currentMenu.icon);
     this.menus.forEach((element: any) => {
       if (element === currentMenu) {
         //currentMenu.active = !currentMenu.active;
         element.active = true;
       } else {
+        currentMenu.icon = currentMenu.iconDefault;
         element.active = false;
         element.activeDrop = false;
       }

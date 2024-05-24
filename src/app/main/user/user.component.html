@@ -10,7 +10,9 @@
             placeholder="{{'all' | translate}}"
             [filter]="true" filterBy="name"
             [droppable]="true"
-            (onNodeSelect)="changeOrg()">
+            (onNodeSelect)="changeOrg()"
+            class="selectedNodeOrganizationCombobox"
+            >
           </p-treeSelect>
       </div>
     </div>
@@ -31,9 +33,11 @@
 
     <div class="col-md-3 btn_search">
       <button *ngIf="isQLND_03" class="btn btn-lg btn-block btn_submit_search" (click)="searchUser()">{{'btn.search' | translate }}</button>
-        <a *ngIf="isQLND_01" class="btn btn-lg btn-block btn_submit" [routerLink]="['/main/form-user/add']" (click)="addUser()">
+      <button class="btn btn-lg btn-block btn_submit">
+        <a *ngIf="isQLND_01" [routerLink]="['/main/form-user/add']" (click)="addUser()">
           {{'btn.add' | translate }}
         </a>
+      </button>
     </div>
   </div>
 
