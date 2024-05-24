@@ -517,18 +517,26 @@ $img-shadow-color:rgba(0, 0, 0, 0.5);
   }
   
 
-  .sidebar-menu ul li:hover>a,
-  .sidebar-menu .active>a,
-  .sidebar-menu .sidebar-dropdown.active>a,
-  .sidebar-menu .sidebar-dropdown-active>a,
+  .sidebar-menu .sidebar-menu-ul .sidebar-menu-li:hover>.sidebar-menu-a,
+  .sidebar-menu .active>.sidebar-menu-a,
+  .sidebar-menu .sidebar-dropdown.active>.sidebar-menu-a,
+  .sidebar-menu .sidebar-dropdown-active>.sidebar-menu-a,
   .sidebar-profile .user-info,
-  .sidebar-footer>div>a:hover i,
+  .sidebar-footer>div>.sidebar-menu-a:hover i,
   #close-sidebar:hover {
     //color: $hover-color !important;
     background-color: #FFFFFF;
     font-weight: 700;
     color: var(--Primary, #0041C4) !important;
     border-radius: 8px;
+  }
+
+  .sidebar-submenu .sidebar-submenu-ul .sidebar-submenu-li:hover>.sidebar-submenu-a,
+  .sidebar-submenu .active>.sidebar-submenu-a
+  // .sidebar-submenu .sidebar-dropdown.active>.sidebar-submenu-a
+  {
+    color: #286CF5;
+    font-weight: 700;
   }
 
   // ul li:hover a i,
