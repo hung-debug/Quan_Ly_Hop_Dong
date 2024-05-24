@@ -78,7 +78,7 @@ export class SidebarComponent implements OnInit {
           element.icon = currentMenu.iconFill;
           currentMenu.active = !currentMenu.active;
         } else {
-          element.icon = currentMenu.iconDefault;
+          element.icon = element.iconDefault;
           element.active = false;
           element.activeDrop = false;
         }
