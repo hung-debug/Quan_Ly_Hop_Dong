@@ -16,8 +16,8 @@
     box-shadow: none !important;
   }
   .p-calendar-w-btn .p-datepicker-trigger {
-    background-color: #e4e5e4;
-    border: 1px solid #ced4da;
+    // background-color: #e4e5e4;
+    // border: 1px solid #ced4da;
   }
   .p-selectbutton .p-button {
     outline: 0 !important;
@@ -25,10 +25,13 @@
     height: 33px;
     width: 50%;
     font-weight: 700;
+    background-color: #F6F6F6;
+    color: var(--Text-Secondary, #8E9AB0);
+    border: 0px;
   }
   .p-selectbutton .p-button.p-highlight {
-    background: #F6F6F6;
-    border-color: #F6F6F6;
+    background: #FFFFFF;
+    border-color: #FFFFFF;
     color: #8E9AB0;
     font-weight: 700;
   }
@@ -75,6 +78,7 @@
 
 .container-fluid{
   // background-color: #F5F5F5;
+  // padding-right: var(--bs-gutter-x, 0rem) !important;
 }
 .item_contract_name1 {
   font-weight: 700;
@@ -211,6 +215,12 @@ h3{
   height: 100%;
 }
 
+.row_text{
+  display: flex;
+  background-color: #F7FAFD;
+  border-radius: 8px;
+}
+
 .row_text_1{
   display: flex;
   justify-content: space-between;
@@ -220,7 +230,7 @@ h3{
 .row_text_2{
   display: flex;
   background-color: #F7FAFD;
-  border: 0.5px solid #0041C41A;
+  border: 0.5px solid rgba(0, 65, 196, 0.10);
   border-radius: 8px;
 }
 
@@ -234,6 +244,24 @@ h3{
   background: #FFFFFF;
   font-size: 14px;
   font-weight: 700;
+}
+
+
+@media (min-width: 1400px) {
+  .col-xxl-6 {
+      flex: 0 0 auto;
+      width: 50%;
+  }
+  
+  .col-xxl-8 {
+    flex: 0 0 auto;
+    width: 70%;
+}
+  
+  .col-xxl-2 {
+    flex: 0 0 auto;
+    width: 10%;
+  }
 }
 
 @media only screen and (max-width: 768px) {

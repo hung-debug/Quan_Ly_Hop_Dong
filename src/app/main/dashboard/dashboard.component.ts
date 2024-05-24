@@ -102,6 +102,15 @@ export class DashboardComponent implements OnInit {
       {label: "my.contract", value: 'off'},
       {label: "org.contract", value: 'on'},
     ];
+    
+    // Tính toán ngày kết thúc (hiện tại)
+    let endDate = new Date();
+    // Tính toán ngày bắt đầu (7 ngày trước ngày kết thúc)
+    let startDate = new Date();
+    startDate.setDate(startDate.getDate() - 30);
+    // Gán giá trị mặc định cho biến date
+
+    this.date = [startDate, endDate];
   }
 
   lang: any;

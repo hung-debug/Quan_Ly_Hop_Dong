@@ -98,28 +98,28 @@
     <div *ngIf="this.typeDisplay === 'signOne'">
       <div class="row container-fluid-bg">
         <div class="row" style="padding-bottom: 20px;">
-          <div class="col-md-10" style="padding-top: 10px" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
+          <div class="col-xxl-10 col-md-10" style="padding-top: 20px" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
             <div class="input-line search">
                 <input #myInputRef [value]="filter_name" type="text" id="search"  class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
             </div>
           </div>
           
-          <div class="col-md-2 btn_search" >
+          <div class="col-xxl-2 col-md-2 btn_search" >
             <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
               {{'btn.advance' | translate}}
               <img src="../../assets/img/vector_advance.svg" class="input-img" />
             </button>
           </div>
           
-          <div *ngIf="this.typeDisplay === 'signOne' && filter_status == 1" class="col-md-2 btn_search" style="width: 12%;">
+          <div *ngIf="this.typeDisplay === 'signOne' && filter_status == 1" class="col-xxl-2 col-md-2 btn_search" style="padding-top: 20px;">
             <button (click)="viewMany()" class="btn btn-lg btn-block btn_consider">{{'contract.views'| translate}}</button>
           </div>
           
-          <div *ngIf="this.typeDisplay === 'signOne' && filter_status == 1" class="col-md-1 btn_search" style="width: 12%;">
+          <div *ngIf="this.typeDisplay === 'signOne' && filter_status == 1" class="col-xxl-2 col-md-1 btn_search" style="padding-top: 20px;">
             <button (click)="signMany()" class="btn btn-lg btn-block btn-multi">{{'sign.multi'| translate}}</button>
           </div>
           
-          <div *ngIf="this.typeDisplay === 'signOne' && filter_status == 4" class="col-md-1 btn_search" style="width: 12%;">
+          <div *ngIf="this.typeDisplay === 'signOne' && filter_status == 4" class="col-md-1 btn_search" style="padding-top: 20px;">
             <button (click)="downloadMany()" class="btn btn-lg btn-block btn-multi">{{'download.multi'| translate}}</button>
           </div>
         </div>
@@ -394,23 +394,23 @@
      <div *ngIf="this.typeDisplay === 'downloadMany'">
       <div class="row container-fluid-bg">
         <div class="row" style="padding-bottom: 20px;">
-          <div class="col-md-10" style="padding-top: 10px" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
+          <div class="col-xxl-10 col-md-10" style="padding-top: 20px" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
             <div class="input-line search">
                 <input #myInputRef [value]="filter_name" type="text" id="search"  class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
             </div>
           </div>
           
-          <div class="col-md-2 btn_search" >
+          <div class="col-xxl-2 col-md-2 btn_search" >
             <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
               {{'btn.advance' | translate}}
               <img src="../../assets/img/vector_advance.svg" class="input-img" />
             </button>
           </div>
           
-          <div *ngIf="this.typeDisplay === 'downloadMany' && filter_status == 4" style="padding-top: 10px;">
-            <button class="col-md-1 btn_sign" (click)="downloadManyContract()">{{'contract.down'| translate}}</button>
+          <div *ngIf="this.typeDisplay === 'downloadMany' && filter_status == 4" style="padding-top: 20px;">
+            <button class="col-xxl-2 col-md-1 btn_sign" (click)="downloadManyContract()">{{'contract.down'| translate}}</button>
 
-            <button class="col-md-1 btn_sign" (click)="cancelDownloadMany()">{{'cancel'| translate}}</button>
+            <button class="col-xxl-2 col-md-1 btn_cancel" (click)="cancelDownloadMany()">{{'cancel'| translate}}</button>
           </div>
         
         </div>
@@ -553,23 +553,23 @@
     <div *ngIf="this.typeDisplay === 'signMany'">
       <div class="row container-fluid-bg">
         <div class="row" style="padding-bottom: 20px;">
-          <div class="col-md-10" style="padding-top: 10px" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
+          <div class="col-xxl-10 col-md-10" style="padding-top: 2dvi" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
             <div class="input-line search">
                 <input #myInputRef [value]="filter_name" type="text" id="search"  class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
             </div>
           </div>
           
-          <div class="col-md-2 btn_search" >
+          <div class="col-xxl-2 col-md-2 btn_search" >
             <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
               {{'btn.advance' | translate}}
               <img src="../../assets/img/vector_advance.svg" class="input-img" />
             </button>
           </div>
           
-          <div *ngIf="this.typeDisplay === 'signMany' && filter_status == 1" style="padding-top: 10px;">
-            <button class="col-md-1 btn_sign" (click)="signManyContract()">{{'contract.sign'| translate}}</button>
+          <div *ngIf="this.typeDisplay === 'signMany' && filter_status == 1" style="padding-top: 20px;">
+            <button class="col-xxl-2 col-md-1 btn_sign" (click)="signManyContract()">{{'contract.sign'| translate}}</button>
 
-            <button class="col-md-1 btn_sign" (click)="cancelSignMany()">{{'cancel'| translate}}</button>
+            <button class="col-xxl-2 col-md-1 btn_cancel" (click)="cancelSignMany()">{{'cancel'| translate}}</button>
           </div>
         
         </div>
@@ -790,23 +790,23 @@
     <div *ngIf="this.typeDisplay === 'viewMany'">
       <div class="row container-fluid-bg">
         <div class="row" style="padding-bottom: 20px;">
-          <div class="col-md-10" style="padding-top: 10px" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
+          <div class="col-xxl-10 col-md-10" style="padding-top: 20px" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
             <div class="input-line search">
                 <input #myInputRef [value]="filter_name" type="text" id="search"  class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
             </div>
           </div>
           
-          <div class="col-md-2 btn_search" >
+          <div class="col-xxl-2 col-md-2 btn_search" >
             <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
               {{'btn.advance' | translate}}
               <img src="../../assets/img/vector_advance.svg" class="input-img" />
             </button>
           </div>
           
-          <div *ngIf="this.typeDisplay === 'viewMany' && filter_status == 1" style="padding-top: 10px;">
-            <button class="col-md-1 btn_consider" (click)="viewManyContract()">{{'contract.view'| translate}}</button>
+          <div *ngIf="this.typeDisplay === 'viewMany' && filter_status == 1" style="padding-top: 20px;">
+            <button class="col-xxl-2 col-md-1 btn_consider" (click)="viewManyContract()">{{'contract.view'| translate}}</button>
 
-            <button class="col-md-1 btn_consider" (click)="cancelViewMany()">{{'cancel'| translate}}</button>
+            <button class="col-xxl-2 col-md-1 btn_consider_cancel" (click)="cancelViewMany()">{{'cancel'| translate}}</button>
           </div>
   
         </div>

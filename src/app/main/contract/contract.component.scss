@@ -86,7 +86,7 @@
   text-align: left;
   width: 20px;
   height: 20px;
-  margin: 15px;
+  margin: 5px;
 }
 
 .input-group-text{
@@ -138,8 +138,6 @@
   color: #5e5e5e;
 }
 .search{
-  border: 1px solid #106DB6;
-  border-radius: 8px;
   height: 38px;
   
 }
@@ -149,7 +147,7 @@
   position: relative;
 }
 .input-img {
-  padding: 10px;
+  padding: 5px;
   cursor: pointer;
 }
 .input-img-calendar {
@@ -158,14 +156,16 @@
   position: absolute;
 }
 .input-text {
-  border: 0;
-  margin: 2px;
+  border: 0.5px solid #F1F5FE;
+  margin: 0px;
   width: 100%;
+  height: 38px;
   outline:0px;
   background-color: #F1F5FE;
   padding: 10px 16px 10px 16px;
   opacity: 0px;
-
+  border-radius: 8px;
+  font-weight: 400;
 }
 
 :host ::ng-deep {
@@ -212,11 +212,14 @@
     height: 33px;
     width: 50%;
     font-weight: 500;
+    background-color: #F6F6F6;
+    color: var(--Text-Secondary, #8E9AB0);
+    border: 0px;
   }
 
   .p-selectbutton .p-button.p-highlight {
-    background: #F6F6F6;
-    border-color: #F6F6F6;
+    background: #FFFFFF;
+    border-color: #FFFFFF;
     color: #001A4D;
     font-weight: 600;
   }
@@ -297,7 +300,7 @@
 .btn-block {
   background-color: #106DB6;
   color: white;
-  height: 40px;
+  height: 39px;
   font-size: 14px;
   width: 100%;
   border-radius: 5px;
@@ -342,7 +345,7 @@
   color: white;
   background-color: #106DB6;
   font-size: 13px;
-  margin: 0 10px;
+  // margin: 0 10px;
 }
 
 .btn_advanced{
@@ -355,7 +358,8 @@
   // margin: 0 10px;
   font-weight: 700;
   box-shadow: 0px 3px 12px 0px #1055E11A;
-  border: 1px solid #001A4D1A
+  border: 1px solid #001A4D1A;
+  // width: 140px;
 }
 
 .btn_cancel{
@@ -365,10 +369,27 @@
   color: #FFFFFF;
   background-color: #0041C4;
   font-size: 13px;
-  margin: 0 10px;
+  // margin: 0 10px;
   font-weight: 700;
+  // width: 140px;
 }
 
 #table td {
   white-space: pre-wrap;
+}
+@media (min-width: 1400px) {
+  .col-xxl-9 {
+      flex: 0 0 auto;
+      width: 80%;
+  }
+  
+  .col-xxl-8 {
+    flex: 0 0 auto;
+    width: 70%;
+}
+  
+  .col-xxl-1-5 {
+    flex: 0 0 auto;
+    width: 10%;
+  }
 }

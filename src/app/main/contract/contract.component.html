@@ -14,7 +14,7 @@
     </p-selectButton>
     <ng-template [ngIf]="!roleMess">
       <div class="row" style="padding-bottom: 20px;">
-        <div class="col-md-8" style="padding-top: 20px;">
+        <div class="col-xxl-9 col-md-9" style="padding-top: 20px;">
             <div class="input-line search">
                 <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
                 <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
@@ -22,13 +22,13 @@
             </div>
 
         </div>
-        <div class="col-md-2 btn_search" >
+        <div class="col-xxl-1-5 col-md-2 btn_search" >
           <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
             {{'btn.advance' | translate}}
             <img src="../../assets/img/vector_advance.svg" class="input-img" />
           </button>
         </div>
-        <div class="col-md-2 btn_search">
+        <div class="col-xxl-1-5 col-md-2 btn_search">
           <button (click)="cancelMany()" class="btn btn-lg btn-block btn_cancel">{{'cancel.multi'| translate}}</button>
         </div>
       </div>
@@ -253,27 +253,27 @@
     </p-selectButton>
     <ng-template [ngIf]="!roleMess">
       <div class="row" style="padding-bottom: 20px;">
-        <div class="col-md-8" style="padding-top: 20px;">
+        <div class="col-xxl-8 col-md-8" style="padding-top: 20px;">
             <div class="input-line search">
                 <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
                 <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                 <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
             </div>
         </div>
-        <div class="col-md-2 btn_search" >
+        <div class="col-xxl-1-5 col-md-2 btn_search" >
           <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
             {{'btn.advance' | translate}}
             <img src="../../assets/img/vector_advance.svg" class="input-img" />
           </button>
         </div>
-        
-        <div class="col-md-1 btn_search" >
+
+        <div class="col-xxl-1-5 col-md-1 btn_search" >
           <button class="btn btn-lg btn-block btn_cancel" (click)="release()" *ngIf="status == 'draft' && this.isOrg == 'off'">
             {{'release'|translate}}
           </button>
         </div>
-        
-        <div class="col-md-1 btn_search" >
+
+        <div class="col-xxl-1-5 col-md-1 btn_search" >
           <button class="btn btn-lg btn-block btn_cancel" (click)="multiDeleteDraft('multiDelete')" *ngIf="status == 'draft' && this.isOrg == 'off'">
             {{'btn.multi.delete'|translate}}
           </button>
@@ -302,7 +302,7 @@
 
         <div style="min-height: 65vh">
           <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
-          
+
             <div class="row">
                 <!--Cột 1-->
                 <div class="col-md-1 item_icon">
@@ -508,19 +508,19 @@
                 <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
             </div>
         </div>
-        
+
         <div class="col-md-2 btn_search" >
           <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
             {{'btn.advance' | translate}}
             <img src="../../assets/img/vector_advance.svg" class="input-img" />
           </button>
         </div>
-        
+
         <div class="col-md-2 btn_search">
           <button *ngIf="this.typeDisplay === 'view'" (click)="downloadMany()" class="btn btn-lg btn-block btn_cancel">{{'download.multi'|translate}}</button>
         </div>
       </div>
-      
+
       <div class="row list_header" *ngIf="pageTotal > 0;">
           <div class="col-md-1" style="text-align: left;">
             <!-- <input type="checkbox" style="width: 20px; height: 20px;"> -->
@@ -685,7 +685,7 @@
     </p-selectButton>
     <ng-template [ngIf]="!roleMess">
       <div class="row" style="padding-bottom: 20px;">
-        <div class="col-md-8" style="padding-top: 20px;">
+        <div class="col-xxl-9 col-md-8" style="padding-top: 20px;">
             <div class="input-line search">
                 <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
                 <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
@@ -693,18 +693,18 @@
             </div>
         </div>
 
-        <div class="col-md-2 btn_search" >
+        <div class="col-xxl-1-5 col-md-2 btn_search" >
           <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
             {{'btn.advance' | translate}}
             <img src="../../assets/img/vector_advance.svg" class="input-img" />
           </button>
         </div>
-        
-        <div class="col-md-2 btn_search">
+
+        <div class="col-xxl-1-5 col-md-2 btn_search">
           <button *ngIf="this.typeDisplay === 'view'" (click)="downloadMany()" class="btn btn-lg btn-block btn_cancel">{{'download.multi'|translate}}</button>
         </div>
       </div>
-      
+
         <div class="row list_header" *ngIf="pageTotal > 0;">
             <div class="col-md-1" style="text-align: left;">
               <!-- <input type="checkbox" style="width: 20px; height: 20px;"> -->
@@ -771,7 +771,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!--Cột 3: Trạng thái HĐ-->
                 <div class="col-md-2 calendar_create">
                   <div class="item_contract_infor">
@@ -780,7 +780,7 @@
                       <span class="status_blue" [ngStyle]="{'color': this.color, 'background-color': this.backgroundColor}">{{this.filter_status | pipe | translate}}</span>
                   </div>
                 </div>
-                
+
                 <!--Cột 4: Ngày tạo-->
                 <div class="col-md-2 calendar_create">
                     <div><i class="fa fa_icon"></i><span class="item_date">{{item.created_at | date:
@@ -915,26 +915,26 @@
       </p-selectButton>
         <ng-template [ngIf]="!roleMess">
           <div class="row" style="padding-bottom: 20px;">
-            <div class="col-md-8" style="padding-top: 20px;">
+            <div class="col-xxl-8 col-md-8" style="padding-top: 20px;">
                 <div class="input-line search">
                     <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
                     <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                     <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
                 </div>
             </div>
-            
-            <div class="col-md-2 btn_search" style="width: 15%;">
+
+            <div class="col-xxl-1-5 col-md-2 btn_search">
               <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
                 {{'btn.advance' | translate}}
                 <img src="../../assets/img/vector_advance.svg" class="input-img" />
               </button>
             </div>
-            
-            <div class="col-md-1 btn_search" *ngIf="this.typeDisplay === 'downloadMany'">
+
+            <div class="col-xxl-1-5 col-md-1 btn_search" *ngIf="this.typeDisplay === 'downloadMany'">
               <button (click)="downloadManyContract()" class="btn btn-lg btn-block btn_cancel">{{'contract.down'| translate}}</button>
             </div>
-            
-            <div class="col-md-1 btn_search" *ngIf="this.typeDisplay === 'downloadMany'">
+
+            <div class="col-xxl-1-5 col-md-1 btn_search" *ngIf="this.typeDisplay === 'downloadMany'">
               <button (click)="cancelDownloadMany()" class="btn btn-lg btn-block btn_cancel">{{'cancel'| translate}}</button>
             </div>
 
@@ -944,7 +944,7 @@
                 <button class="btn_submit" style="width: 90px;" (click)="cancelDownloadMany()">{{'cancel'| translate}}</button>
             </div> -->
           </div>
-          
+
           <div class="row list_header" *ngIf="pageTotal > 0;">
               <div class="col-md-1" style="text-align: left;" *ngIf="this.filter_status == 30">
                 <input type="checkbox" style="width: 20px; height: 20px;" id="allDownload" name="allDownload" [(ngModel)]="checkedAll" (click)="toggleDownload(checkedAll)">
@@ -1020,7 +1020,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!--Cột 3: Trạng thái HĐ-->
                     <div class="col-md-2 calendar_create">
                       <div class="item_contract_infor">
@@ -1104,30 +1104,30 @@
       </p-selectButton>
         <ng-template [ngIf]="!roleMess">
           <div class="row" style="padding-bottom: 20px;">
-            <div class="col-md-8" style="padding-top: 20px;">
+            <div class="col-xxl-8 col-md-8" style="padding-top: 20px;">
                 <div class="input-line search">
                     <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
                     <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                     <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
                 </div>
             </div>
-            
-            <div class="col-md-2 btn_search" style="width: 15%;">
+
+            <div class="col-xxl-1-5 col-md-2 btn_search">
               <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
                 {{'btn.advance' | translate}}
                 <img src="../../assets/img/vector_advance.svg" class="input-img" />
               </button>
             </div>
-            
-            <div class="col-md-1 btn_search">
+
+            <div class="col-xxl-1-5 col-md-1 btn_search">
               <button (click)="releaseMany()" class="btn btn-lg btn-block btn_cancel">{{'release'| translate}}</button>
             </div>
-            
-            <div class="col-md-1 btn_search">
+
+            <div class="col-xxl-1-5 col-md-1 btn_search">
               <button (click)="cancelDownloadMany()" class="btn btn-lg btn-block btn_cancel">{{'cancel'| translate}}</button>
             </div>
           </div>
-          
+
           <div class="row list_header" *ngIf="pageTotal > 0;">
               <!-- <div class="col-md-4"></div>
               <div class="col-md-2">{{'create-date' | translate}}</div>
@@ -1137,7 +1137,7 @@
               <div *ngIf="this.filter_status == 0" class="col-md-1">
                   <input style="margin-left: 4px;" id="allRelease" name="allRelease" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleReleaseAll(checkedAll)" />
               </div> -->
-              
+
               <div class="col-md-1" style="text-align: left;" *ngIf="this.filter_status == 0">
                 <input type="checkbox" style="width: 20px; height: 20px;" id="allRelease" name="allRelease" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleReleaseAll(checkedAll)">
               </div>
@@ -1156,7 +1156,7 @@
           <div style="min-height: 65vh">
             <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}">
                 <div class="row">
-                  
+
                     <!--Cột 1-->
                     <div class="col-md-1 item_icon" *ngIf="this.filter_status == 0">
                       <div style="display: flex;">
@@ -1209,7 +1209,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!--Cột 3: Trạng thái HĐ-->
                     <div class="col-md-2 calendar_create">
                       <div class="item_contract_infor">
@@ -1289,30 +1289,30 @@
     </p-selectButton>
       <ng-template [ngIf]="!roleMess">
         <div class="row" style="padding-bottom: 20px;">
-          <div class="col-md-8" style="padding-top: 20px;">
+          <div class="col-xxl-8 col-md-8" style="padding-top: 20px;">
               <div class="input-line search">
                   <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
                   <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                   <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
               </div>
           </div>
-          
-          <div class="col-md-2 btn_search" style="width: 15%;">
+
+          <div class="col-xxl-1-5 col-md-2 btn_search">
             <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
               {{'btn.advance' | translate}}
               <img src="../../assets/img/vector_advance.svg" class="input-img" />
             </button>
           </div>
-          
-          <div class="col-md-1 btn_search">
+
+          <div class="col-xxl-1-5 col-md-1 btn_search">
             <button (click)="multiDeleteDraftMany()" class="btn btn-lg btn-block btn_cancel">{{'btn.delete'| translate}}</button>
           </div>
-          
-          <div class="col-md-1 btn_search">
+
+          <div class="col-xxl-1-5 col-md-1 btn_search">
             <button (click)="cancelDeleteDraftMany()" class="btn btn-lg btn-block btn_cancel">{{'cancel'| translate}}</button>
           </div>
         </div>
-        
+
         <div class="row list_header" *ngIf="pageTotal > 0;">
             <div class="col-md-1" style="text-align: left;" *ngIf="this.filter_status == 0">
               <input type="checkbox" style="width: 20px; height: 20px;" id="allDeleteDraft" name="allDeleteDraft" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDeleteDraftAll(checkedAll)">
@@ -1384,7 +1384,7 @@
                           </div>
                       </div>
                   </div>
-                  
+
                   <!--Cột 3: Trạng thái HĐ-->
                   <div class="col-md-2 calendar_create">
                     <div class="item_contract_infor">
