@@ -15,7 +15,7 @@
     padding: 12px 12px 0;
     font-weight: 500;
   }
-  
+
   .pagination {
     display: inline-block;
   }
@@ -104,7 +104,16 @@
     padding: 10px;
     width: 100%;
     outline:0px;
+    background-color: #F1F5FE;
+    color:  #8E9AB0;
+    font-family: 'Roboto';
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.525px;
   }
+
   
   :host ::ng-deep {
     .ngx-pagination {
@@ -147,14 +156,28 @@
     .p-selectbutton .p-button {
       outline: 0 !important;
       box-shadow: none !important;
-      height: 33px;
+      height: 42px;
       width: 50%;
+      background-color: #F6F6F6;
+      border: none;
+      color: #8E9AB0;
+      font-family: 'Roboto';
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
     }
   
     .p-selectbutton .p-button.p-highlight {
-      background: #c5ebff;
+      background: #fff;
+      height: 42px;
       border-color: #c5ebff;
-      color: #106DB6;
+      color: #001A4D;
+      font-family: 'Roboto';
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
     }
 
     .pi-fw {
