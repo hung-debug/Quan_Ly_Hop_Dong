@@ -172,6 +172,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
       }
 
       this.sub = this.route.params.subscribe(params => {
+        this.contracts = [];
+        this.pageTotal = 0;
         this.action = params['action'];
         this.status = params['status'];
 
