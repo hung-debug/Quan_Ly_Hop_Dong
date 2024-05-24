@@ -1,7 +1,7 @@
 <div *ngIf="isQLND_01 || isQLND_02 || isQLND_03 || isQLND_04" class="container-fluid">
   <div style="background-color: #FFFFFF;">
   <div class="row">
-    <div class="col-md-3" *ngIf="isQLND_03">
+    <div class="col-xxl-5 col-md-3" *ngIf="isQLND_03">
       <div>{{'unit.name' | translate}}</div>
       <div>
           <p-treeSelect
@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div class="col-md-3" *ngIf="isQLND_03">
+    <div class="col-xxl-5 col-md-3" *ngIf="isQLND_03">
       <div>{{'unit.email.name' | translate}}</div>
       <div class="input-line">
         <input type="text" [(ngModel)]="nameOrEmail" class="input_text"/>
@@ -31,7 +31,7 @@
       </div>
     </div> -->
 
-    <div class="col-md-3 btn_search">
+    <div class="col-xxl-2 col-md-3 btn_search">
       <button *ngIf="isQLND_03" class="btn btn-lg btn-block btn_submit_search" (click)="searchUser()">{{'btn.search' | translate }}</button>
       <button class="btn btn-lg btn-block btn_submit">
         <a *ngIf="isQLND_01" [routerLink]="['/main/form-user/add']" (click)="addUser()">
@@ -41,7 +41,7 @@
     </div>
   </div>
 
-  <div class="row" style="padding-top: 5px;">
+  <div class="row" style="padding-top: 15px;">
     <div class="col-md-6">
     </div>
     <div class="col-md-6 btn_search" style="padding-left: 22px;">

@@ -19,7 +19,7 @@ export class DashboardService {
   listNotificationUrl: any = `${environment.apiUrl}/api/v1/notification/my-notice`;
   updateViewNotificationUrl:any = `${environment.apiUrl}/api/v1/notification/viewed/`;
   readAllViewNotificationUrl:any = `${environment.apiUrl}/api/v1/notification/view-all`;
-
+  getNotificationHeaderUrl:any = `${environment.apiUrl}/api/v1/notification/get_config_notification`;
   listUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
 
   token:any;
@@ -107,6 +107,13 @@ export class DashboardService {
 
   }
 
+  getNotificationHeader() {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any[]>(this.getNotificationHeaderUrl, {headers}).pipe(catchError(this.handleError));
+  }
 
   handleError(error: HttpErrorResponse) {
     if (error.status === 401 && error.error == 'Unauthorized') {

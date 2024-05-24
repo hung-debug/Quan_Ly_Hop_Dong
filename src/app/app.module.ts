@@ -138,7 +138,7 @@ import { NgOtpInputModule } from  'ng-otp-input';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { MatMenuModule } from '@angular/material/menu';
 import { PaginatorModule } from 'primeng/paginator';
-
+import { environment } from 'src/environments/environment';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -147,35 +147,37 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 function initializeKeycloak(keycloak: KeycloakService) {
   // const fullUrl = window.location.href
   // if (!fullUrl.includes('/login?type=mobifone-sso'))
-  return () =>
-    keycloak.init({
-      config: {
-        url: 'https://auth-sso.mobifone.vn:8080/oauth',
-        realm: 'sso-mobifone',
-        clientId: 'TTCNTT-ECONTRACT',
-      },
-      initOptions: {
-        checkLoginIframe: false,
-        // pkceMethod: "S256",
-        // onLoad: 'check-sso',
-      },
-      enableBearerInterceptor: false,
-    })
-    .then(
-      (authenticated: any) => {
-        const idToken: any = keycloak.getKeycloakInstance().idToken;
-        const ssoToken: any = keycloak.getKeycloakInstance().token;
-        localStorage.setItem('sso_id_token',idToken ?? '')
-        localStorage.setItem('sso_token',ssoToken ?? '')
-        if (!authenticated) {
-          const fullUrl = window.location.href
-          if (fullUrl.includes('/login?type=mobifone-sso')) {
-            keycloak.login()
-          }
-        } 
-      }, (err: any) => {
-      }
-    );
+  if (environment.flag == 'KD' && environment.usedSSO) {
+    return () =>
+      keycloak.init({
+        config: {
+          url: environment.SSO_URL,
+          realm: environment.SSO_REALM,
+          clientId: environment.SSO_CLIENTID,
+        },
+        initOptions: {
+          checkLoginIframe: false,
+          // pkceMethod: "S256",
+          // onLoad: 'check-sso',
+        },
+        enableBearerInterceptor: false,
+      })
+      .then(
+        (authenticated: any) => {
+          const idToken: any = keycloak.getKeycloakInstance().idToken;
+          const ssoToken: any = keycloak.getKeycloakInstance().token;
+          localStorage.setItem('sso_id_token',idToken ?? '')
+          localStorage.setItem('sso_token',ssoToken ?? '')
+          if (!authenticated) {
+            const fullUrl = window.location.href
+            if (fullUrl.includes('/login?type=mobifone-sso')) {
+              keycloak.login()
+            }
+          } 
+        }, (err: any) => {
+        }
+      );
+  } else return () => {}
 }
 
 @NgModule({

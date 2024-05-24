@@ -1,4 +1,4 @@
-<div class="container-fluid222222" style="margin-left: 14px;">
+<div class="container-fluid-background" style="margin-left: 14px;">
   <!-- <div class="row"> -->
     <!-- <div class="col-md-12">
       <h3>{{'dashboard.contract.received' | translate}}</h3>
@@ -75,7 +75,7 @@
   </div>
   
   <div class="row" style="padding-top: 24px;">
-    <div class="col-xxl- 6 col-md-6" style="background-color: #FFFFFF; border-radius: 12px; padding: 15px;">
+    <div class="col-xxl- 6 col-md-6" style="background-color: #FFFFFF; border-radius: 12px; padding: 16px;">
       <span style="font-size: 14px; font-weight: 700;">{{'menu.contract.receive.list' | translate}}</span>
       <div class="container overflow-hidden">
         <div class="row gy">
@@ -142,7 +142,7 @@
           <span style="color: #001A4D; font-weight: 600; font-size: 14px;">{{'request.process' | translate}}</span>
           <span style="color: #0041C4; cursor: pointer;"><b (click)="openLink('/main/c/receive/wait-processing')">Xem tất cả</b></span>
         </div>
-        <br>
+        <!-- <br> -->
         <div class="row_text_2" *ngFor="let item of contractRequestList; let i = index" [style.border-bottom]="i != listNotification.length-1 ? '1px solid #C7D0E9' : ''" style="padding: 4px; margin: 13px;">
           <div>
             <img src="../../assets/img/frame_contract.svg">
@@ -180,7 +180,7 @@
 
   <div class="row" style="padding-top: 24px;">
 
-    <div class="col-xxl-6 col-md-6" style="background-color: #FFFFFF; border-radius: 12px; padding: 15px;">
+    <div class="col-xxl-6 col-md-6" style="background-color: #FFFFFF; border-radius: 12px; padding: 16px;">
       <div class="row">
         <div class="col-md-6">
           <span style="font-size: 14px; font-weight: 700;">{{'dashboard.contract.created' | translate}}</span>
@@ -233,7 +233,7 @@
     </div>
     
     <div class="col-xxl-6 col-md-6" style="padding-left: 24px;">
-      <div class="package" style="background-color: #FFFFFF; border-radius: 12px; padding: 15px; height: 100%;">
+      <div class="package" style="background-color: #FFFFFF; border-radius: 12px; padding: 16px; height: 100%;">
         <div class="row">
           <div class="col-md-12">
             <span style="font-size: 14px; font-weight: 700;">{{'package.document' | translate}}</span>

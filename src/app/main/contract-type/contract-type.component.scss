@@ -6,9 +6,10 @@
   color: white;
   background: var(--Primary, #0041C4);
   font-size: 13px;
-  margin: 0 10px;
+  margin: 0 20px;
   font-style: normal;
   font-weight: 700;
+  width: 130px;
 }
 
 .btn_search1{
@@ -19,9 +20,10 @@
   color: #001A4D;
   background-color: #FFF;
   font-size: 13px;
-  margin: 0 10px;
+  margin: 0 0px;
   font-style: normal;
   font-weight: 700;
+  width: 130px;
 }
 
 .container-fluid{
@@ -30,12 +32,16 @@
 }
 
 .input_text {
-  padding-left: 10px;
-  outline: none;
-  height: 42px;
+  border: 0.5px solid #F1F5FE;
+  margin: 0px;
   width: 100%;
-  border-radius: 5px;
-  border: 1px solid #106DB6;
+  height: 35px;
+  outline:0px;
+  background-color: #F1F5FE;
+  padding: 10px 16px 10px 16px;
+  opacity: 0px;
+  border-radius: 8px;
+  font-weight: 400;
 }
 .btn_search{
   align-self: flex-end;
@@ -119,6 +125,23 @@
   }
   .p-datatable .p-paginator-bottom {
     border-width: 0;
+  }
+}
+
+@media (min-width: 1400px) {
+  .col-xxl-5 {
+      flex: 0 0 auto;
+      width: 40%;
+  }
+  
+  .col-xxl-2{
+    flex: 0 0 auto;
+    width: 20%;
+  }
+  
+  .col-xxl-1 {
+    flex: 0 0 auto;
+    width: 10%;
   }
 }
 
