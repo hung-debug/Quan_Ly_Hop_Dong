@@ -71,15 +71,14 @@ export class SidebarComponent implements OnInit {
 
   // set active dropdown
   toggle(currentMenu: any) {
-    console.log('currentMenu.icon71: ', currentMenu);
-    currentMenu.icon = currentMenu.icon;
     if (currentMenu.type === 'dropdown') {
       currentMenu.activeDrop = true;
       this.menus.forEach((element: any) => {
         if (element === currentMenu) {
+          element.icon = currentMenu.iconFill;
           currentMenu.active = !currentMenu.active;
         } else {
-          currentMenu.icon = currentMenu.iconDefault;
+          element.icon = currentMenu.iconDefault;
           element.active = false;
           element.activeDrop = false;
         }
@@ -90,14 +89,13 @@ export class SidebarComponent implements OnInit {
   //set active link
   clickLink(currentMenu: any) {
     // currentMenu.icon = currentMenu.iconFill;
-    currentMenu.icon = currentMenu.icon;
-    console.log('currentMenu.icon102: ', currentMenu.icon);
     this.menus.forEach((element: any) => {
       if (element === currentMenu) {
         //currentMenu.active = !currentMenu.active;
+        element.icon = currentMenu.iconFill;
         element.active = true;
       } else {
-        currentMenu.icon = currentMenu.iconDefault;
+        element.icon = element.iconDefault;
         element.active = false;
         element.activeDrop = false;
       }
