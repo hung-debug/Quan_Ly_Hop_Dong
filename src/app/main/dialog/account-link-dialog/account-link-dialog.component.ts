@@ -31,7 +31,7 @@ export class AccountLinkDialogComponent implements OnInit {
   datas: any;
   c:any;
   counter$: any;
-  count = 60;
+  count = 180;
   isSentOpt = false;
   submitted = false;
 
@@ -42,11 +42,13 @@ export class AccountLinkDialogComponent implements OnInit {
   smsContractBuy: any;
   ssoEmail: any = "";
   ssoOTP: any = "";
-  COUNT_TIME: number = 60;
+  COUNT_TIME: number = 180;
   isDisableSendOtp: boolean = false;
   isNextStep: boolean = false;
+  currentStep: 'infor' | 'otp' | 'sync' = 'infor';
   warningLinkSsoMsg: string = 'Kính gửi Quý khách hàng,\nNhằm nâng cao chất lượng dịch vụ, MobiFone tiến hành nâng cấp hệ thống Quản lý tài khoản tập trung (SSO) cho các khách hàng sử dụng hệ sinh thái giải pháp số của MobiFone.\nSau khi hoàn thành liên kết, Quý khách có thể đăng nhập toàn bộ các hệ thống thuộc hệ sinh thái giải pháp của MobiFone bằng một tài khoản duy nhất.\n<b>Thời gian liên kết từ ngày....đến ngày...</b>'
-
+  ssoSyncingTutorialLink: string = 'https://drive.google.com/drive/folders/13dy_0jrWMUAfwSYAHDtC4A8BQT6cd22n'
+  isDisable: boolean = false;
   @Output() confirmOtpForm = new EventEmitter();
 
   get f() { return this.addForm.controls; }
@@ -101,7 +103,8 @@ export class AccountLinkDialogComponent implements OnInit {
     }
   }
 
-  async onSubmit() {
+  async onSubmit(step: any) {
+    this.currentStep = step
     // @ts-ignore
     // document.getElementById("otp").focus();
     // this.submitted = true;
@@ -112,83 +115,70 @@ export class AccountLinkDialogComponent implements OnInit {
     // 
     // this.confirmOtpForm.emit(this.addForm.value.otp);
     // await this.signContractSubmit();
-    if (this.isNextStep && (this.count == 0 || this.ssoOTP.length < 6)) return
-    if (!this.isNextStep) {
-      this.userService.getSsoLinkOtp(this.ssoEmail).subscribe(
-        (res: any) => {
-          if (res.code == '00') {
-            this.toastService.showSuccessHTMLWithTimeout('Đã gửi OTP đến địa chỉ email: ' + this.ssoEmail, '', 3000)
-            this.isNextStep = true
-          } else {
-            this.toastService.showErrorHTMLWithTimeout('Gửi OTP thất bại','',3000)
-          }
-          // switch (res.code) {
-          //   case '00':
-          //     this.toastService.showSuccessHTMLWithTimeout('Đã gửi OTP đến địa chỉ email: ' + this.ssoEmail, '', 3000)
-          //     this.isNextStep = true
-          //     break;
-          //   case '01':
-          //     this.toastService.showErrorHTMLWithTimeout('Đồng bộ tài khoản SSO thất bại','',3000)
-          //     break;
-          //   case '02':
-          //     this.toastService.showErrorHTMLWithTimeout('OTP đã nhập không trùng khớp!','',3000)
-          //     break;
-          //   case '03':
-          //     this.toastService.showErrorHTMLWithTimeout('Tài khoản eContract không tồn tại','',3000)
-          //     break;
-          //   case '04':
-          //     this.toastService.showErrorHTMLWithTimeout('Gửi OTP thất bại','',3000)
-          //     this.router.navigate(['/'])
-          //     break;
-          //   case '05':
-          //     this.toastService.showErrorHTMLWithTimeout('Tên đăng nhập hoặc mật khẩu không được phép để trống','',3000)
-          //     break;
-          //   case '06':
-          //     this.toastService.showErrorHTMLWithTimeout('Lấy thông tin tài khoản trên SSO thất bại','',3000)
-          //     this.router.navigate(['/'])
-          //     break;
-          // }
-        }, (err: any) => {
-          this.toastService.showErrorHTMLWithTimeout('Gửi OTP thất bại','',3000)
-          console.log(err)
-        }
-      )
+    if (step == 'infor') {
+      this.currentStep = 'otp'
     } else {
-      this.userService.syncAccountSso(this.ssoEmail, this.ssoOTP).subscribe(
-        (res: any) => {
-          // this.toastService.showSuccessHTMLWithTimeout('Liên kết tài khoản SSO thành công','',3000)
-
-          switch (res.code) {
-            case '00':
-              this.toastService.showSuccessHTMLWithTimeout('Đồng bộ tài khoản SSO thành công, mật khẩu mới của bạn đã được gửi đến địa chỉ email: ' + this.ssoEmail, '', 3000)
+      if (this.isNextStep && (this.count == 0 || this.ssoOTP.length < 6)) return
+      if (!this.isNextStep && this.currentStep == 'otp') {
+        this.userService.getSsoLinkOtp(this.ssoEmail).subscribe(
+          (res: any) => {
+            if (res.code == '00') {
+              this.currentStep = 'sync'
+              this.toastService.showSuccessHTMLWithTimeout('Hệ thống đã gửi OTP đến địa chỉ email: ' + this.ssoEmail, '', 3000)
               this.isNextStep = true
-              this.dialogRef.close()
-              this.router.navigate(['/login']);
-              break;
-            case '01':
-              this.toastService.showErrorHTMLWithTimeout('OTP đã nhập không trùng khớp!','',3000)
-              break;
-            case '02':
-              this.toastService.showErrorHTMLWithTimeout('Đồng bộ tài khoản SSO thất bại','',3000)
-              break;
-            case '03':
-              this.toastService.showErrorHTMLWithTimeout('Tài khoản eContract không tồn tại','',3000)
-              break;
-            case '04':
+            } else {
               this.toastService.showErrorHTMLWithTimeout('Gửi OTP thất bại','',3000)
-              break;
-            case '05':
-              this.toastService.showErrorHTMLWithTimeout('Tên đăng nhập hoặc mật khẩu không được phép để trống','',3000)
-              break;
-            case '06':
-              this.toastService.showErrorHTMLWithTimeout('Lấy thông tin tài khoản trên SSO thất bại','',3000)
-              break;
+            }
+          }, (err: any) => {
+            this.toastService.showErrorHTMLWithTimeout('Gửi OTP thất bại','',3000)
+            console.log(err)
           }
-        }, (err: any) => {
-          this.toastService.showErrorHTMLWithTimeout('Liên kết tài khoản SSO thất bại','',3000)
-          console.log(err)
-        }
-      )
+        )
+      } else {
+        this.isDisable = true;
+        this.userService.syncAccountSso(this.ssoEmail, this.ssoOTP).subscribe(
+          (res: any) => {
+            switch (res.code) {
+              case '00':
+                this.toastService.showSuccessHTMLWithTimeout('Liên kết tài khoản SSO thành công, vui lòng kiểm tra email để xem chi tiết thông tin.','', 3000)
+                this.isNextStep = true
+                this.isDisable = true;
+                this.dialogRef.close()
+                this.router.navigate(['/login']);
+                break;
+              case '01':
+                this.toastService.showErrorHTMLWithTimeout('OTP đã nhập không chính xác','',3000)
+                break;
+              case '02':
+                this.toastService.showErrorHTMLWithTimeout('Liên kết tài khoản SSO thất bại','',3000)
+                break;
+              case '03':
+                this.toastService.showErrorHTMLWithTimeout('Thông tin tài khoản được liên kết không đúng','',3000)
+                break;
+              case '04':
+                this.toastService.showErrorHTMLWithTimeout('Gửi OTP thất bại','',3000)
+                break;
+              case '05':
+                this.toastService.showErrorHTMLWithTimeout('Tài khoản đã được liên kết SSO','',3000)
+                break;
+              case '06':
+                this.toastService.showErrorHTMLWithTimeout('Gửi thông báo về tài khoản qua email thất bại','',3000)
+                break;
+              case '100':
+                this.toastService.showErrorHTMLWithTimeout('Lỗi hệ thống','',3000)
+                break;
+              case '101':
+                this.toastService.showErrorHTMLWithTimeout('Kết nối SSO thất bại','',3000)
+                break;
+            }
+            this.isDisable = false;
+          }, (err: any) => {
+            this.toastService.showErrorHTMLWithTimeout('Liên kết tài khoản SSO thất bại','',3000)
+            this.isDisable = false;
+            console.log(err)
+          }
+        )
+      }
     }
   }
 
@@ -203,7 +193,8 @@ export class AccountLinkDialogComponent implements OnInit {
 
   transform(value: number): string {
     const minutes: number = Math.floor(value / 60);
-    return (value - minutes * 60).toString().padStart(2, '0');
+    return minutes.toString().padStart(2, '0') + ':' + 
+    (value - minutes * 60).toString().padStart(2, '0');
   }
 
   sendOtpAgain(contract_id:any, recipient_id?:any, phone?:any) {
@@ -520,5 +511,9 @@ export class AccountLinkDialogComponent implements OnInit {
   onOtpChange(event: any) {
     this.ssoOTP = event
     console.log()
+  }
+
+  openTutorialLink() {
+    window.open(this.ssoSyncingTutorialLink)
   }
 }
