@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
       <!--Tổ chức-->
-      <div class="col-md-2">
+      <div class="col-xxl-2-5 col-lg-4 col-md-6">
           <div>{{'organization' | translate}}</div>
           <div class="input-line">
           <p-treeSelect #nameContract
@@ -16,7 +16,7 @@
           </div>
       </div>
       
-      <div class="col-md-2">
+      <div class="col-xxl-2-5 col-lg-4 col-md-6">
         <div>{{'contract.information' | translate}}</div>
         <div class="input-line">
           <input type="text" [(ngModel)]="contractInfo" class="input_text" placeholder="Tìm kiếm theo Mã HĐ, Số HĐ, Tên HĐ" />
@@ -24,7 +24,7 @@
       </div>
 
       <!--Ngày tạo hợp đồng-->
-      <div class="col-md-2">
+      <div class="col-xxl-2-5 col-lg-4 col-md-6">
           <div>{{ 'create-date.soon' | translate}} <span style="color: red"> *</span></div>
           <div class="input-line">
               <p-calendar selectionMode="range" [readonlyInput]="false" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"
@@ -51,7 +51,7 @@
       </div> -->
 
       <!--Loại hợp đồng-->
-      <div class="col-md-2">
+      <div class="col-xxl-2-5 col-lg-4 col-md-6">
           <div>{{'contract.type' | translate}}</div>
           <div class="input-line">
             <p-dropdown #typeContract optionValue="name" [(ngModel)]="type_id" placeholder="{{'all' | translate}}" [showClear]="true" [filter]="true" filterBy="name" [options]="typeList" optionLabel="name" >
@@ -59,10 +59,14 @@
           </div>
       </div>
 
+
       <!--Button-->
-      <div class="col-md-4 btn_search">
-          <button class="btn btn-lg btn-block btn_submit" (click)="export(false)">{{'btn.report' | translate }}</button>
-          <button class="btn btn-lg btn-block btn_submit" (click)="export(true)">Export</button>
+      <div class="col-xxl-1 col-lg-2 col-md-3 btn_search">
+        <button class="btn btn-lg btn-block btn_submit" (click)="export(false)">{{'btn.report' | translate }}</button>
+      </div>
+
+      <div class="col-xxl-1 col-lg-2 col-md-3 btn_search">
+        <button class="btn btn-lg btn-block btn_submit" (click)="export(true)">Export</button>
       </div>
   </div>
 
