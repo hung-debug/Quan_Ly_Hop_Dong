@@ -23,7 +23,7 @@
 .login-form{
   padding-right: 40%;
   padding-left: 40%;
-  padding-top: 15%;
+  padding-top: 10.5%;
 }
 
 #login-form{
@@ -97,7 +97,7 @@
   border-radius: 0 5px 5px 0;
 }
 input::placeholder {
-  color: #F0F0F0; /* Màu của placeholder */
+  color: #8E9AB0; /* Màu của placeholder */
 }
 img {
   fill: #F0F0F0; /* Màu sắc bạn muốn thay đổi */
@@ -266,11 +266,12 @@ h
 
 .input-captcha {
   border: 0;
-  background: #EFF2F5;
+  background: #FFFFFF;
   padding: 10px;
   width: 90%;
   outline:0px;
-  border-radius: 0 5px 5px 0;
+  border-radius: 6px;
+  color: black;
 }
 
 .captcha-refresh {
@@ -292,6 +293,8 @@ h
   border: 1px solid #888;
   font-family: monospace;
   margin-bottom: 5px;
+  background: #FFFFFF;
+  border-radius: 6px;
 }
 
 .sso-btn {

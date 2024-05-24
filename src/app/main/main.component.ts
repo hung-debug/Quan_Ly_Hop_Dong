@@ -181,23 +181,26 @@ export class MainComponent implements OnInit {
   }
 
   resetPassword(){
-    // const data = {
-    //   title: 'ĐỔI MẬT KHẨU',
-    //   weakPass: false
-    // };
-    // // @ts-ignore
-    // const dialogRef = this.dialog.open(ResetPasswordDialogComponent, {
-    //   width: '420px',
-    //   backdrop: 'static',
-    //   keyboard: false,
-    //   data
-    // })
-    // dialogRef.afterClosed().subscribe((result: any) => {
-
-    //   let is_data = result
-    // })
-
-    window.open('https://auth-sso.mobifone.vn/vn/profile-information')
+    if ((environment.flag == 'KD' && !this.isSsoSync) || environment.flag == 'NB') {
+      const data = {
+        title: 'ĐỔI MẬT KHẨU',
+        weakPass: false
+      };
+      // @ts-ignore
+      const dialogRef = this.dialog.open(ResetPasswordDialogComponent, {
+        width: '420px',
+        backdrop: 'static',
+        keyboard: false,
+        data
+      })
+      dialogRef.afterClosed().subscribe((result: any) => {
+  
+        let is_data = result
+      })
+    } else {
+      window.open('https://auth-sso.mobifone.vn/vn/profile-information')
+    }
+    
   }
 
   //side bar menu
