@@ -178,7 +178,6 @@ export class CustomerComponent implements OnInit {
   }
 
   onSelect(e: any) {
-    console.log('event181: ', e);
     const selectedOption = e.value; // value of the selected option
     const selectedLabel = this.stateOptions.find(option => option.value === selectedOption).label; // label of the selected option
     if(selectedLabel=='organization.customer'){

@@ -49,7 +49,7 @@
 }
 
 .sidebar {
-  width: 220px;
+  width: 230px;
   height: 100%;
   max-height: 90%;
   position: fixed;
@@ -172,7 +172,7 @@
       padding-bottom: 10px;
       //styleName: Content/12 Medium;
       font-family: "Roboto";
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 400;
       line-height: 18px;
       text-align: left;
@@ -188,25 +188,38 @@
 
       ul {
         list-style-type: none;
-        padding: 0;
+        padding: 0 16px 0 0;
         margin: 0;
 
         li a {
           display: inline-block;
           width: 100%;
+          // width: 199px;
           text-decoration: none;
           position: relative;
-          padding: 8px 38px 8px 20px;
+          // padding: 8px 38px 8px 0;
+          padding: 8px 0;
+          // padding: 8px 38px 8px 0px;
           cursor: pointer;
+
+          button {
+            width: 100%;
+            text-align: center;
+          }
 
           img {
             // margin-right: 10px;
+            margin-left: 16px;
             font-size: 12px;
             width: 20px;
             height: 30px;
             line-height: 30px;
             text-align: center;
             border-radius: 4px;
+          }
+
+          .img_btn_add_contract_icon {
+            margin-left: 8px !important;
           }
 
           &:hover>i::before {
@@ -531,6 +544,10 @@ $img-shadow-color:rgba(0, 0, 0, 0.5);
     border-radius: 8px;
   }
 
+  .sidebar-menu-li {
+    padding-left: 16px;
+  }
+
   .sidebar-submenu .sidebar-submenu-ul .sidebar-submenu-li:hover>.sidebar-submenu-a,
   .sidebar-submenu .active>.sidebar-submenu-a
   // .sidebar-submenu .sidebar-dropdown.active>.sidebar-submenu-a
@@ -632,7 +649,7 @@ $img-shadow-color:rgba(0, 0, 0, 0.5);
 .btn_add_contract{
   border: 0px;
   border-radius: 6px;
-  width: 180px;
+  width: 198px;
   height: 38px;
   box-sizing: border-box;
   color: white;
