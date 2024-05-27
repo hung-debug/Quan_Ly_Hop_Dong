@@ -53,7 +53,7 @@
           </div>
           <div class="col-md-1"></div>
       </div>
-      <div style="min-height: 60vh">
+      <div *ngIf="pageTotal > 0" style="min-height: 60vh">
         <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
           <div class="row">
             <!--Cột 1-->
@@ -210,7 +210,7 @@
           </div>
         </div>
       </div>
-      <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+      <div *ngIf="pageTotal == 0" style="min-height: 65vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
           <div style="display: table-cell;vertical-align: middle;">
               <img src="../../../assets/img/empty_data.svg" />
               <div style="color: #94A7C6">{{'no.data' | translate}}</div>
@@ -304,7 +304,7 @@
             <div class="col-md-1"></div>
         </div>
 
-        <div style="min-height: 65vh">
+        <div *ngIf="pageTotal > 0" style="min-height: 65vh">
           <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
 
             <div class="row">
@@ -463,7 +463,7 @@
           </div>
         </div>
 
-        <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+        <div *ngIf="pageTotal == 0" style="min-height: 65vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
             <div style="display: table-cell;vertical-align: middle;">
                 <img src="../../../assets/img/empty_data.svg" />
                 <div style="color: #94A7C6">{{'no.data' | translate}}</div>
@@ -547,7 +547,7 @@
           <div class="col-md-1"></div>
       </div>
 
-      <div style="min-height: 65vh">
+      <div *ngIf="pageTotal > 0" style="min-height: 65vh">
         <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
             <div class="row">
                 <!--Cột 1-->
@@ -657,7 +657,7 @@
         </div>
 
       </div>
-      <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+      <div *ngIf="pageTotal == 0" style="min-height: 65vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
           <div style="display: table-cell;vertical-align: middle;">
               <img src="../../../assets/img/empty_data.svg" />
               <div style="color: #94A7C6">{{'no.data' | translate}}</div>
@@ -735,7 +735,7 @@
             </div>
             <div class="col-md-1"></div>
         </div>
-        <div style="min-height: 65vh">
+        <div *ngIf="pageTotal > 0" style="min-height: 65vh">
           <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
             <div class="row">
                 <!--Cột 1-->
@@ -891,7 +891,7 @@
             </div>
           </div>
         </div>
-        <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+        <div *ngIf="pageTotal == 0" style="min-height: 65vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
             <div style="display: table-cell;vertical-align: middle;">
                 <img src="../../../assets/img/empty_data.svg" />
                 <div style="color: #94A7C6">{{'no.data' | translate}}</div>
@@ -983,7 +983,7 @@
               </div>
               <div class="col-md-1"></div>
           </div>
-          <div style="min-height: 65vh">
+          <div *ngIf="pageTotal > 0" style="min-height: 65vh">
             <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}">
                 <div class="row">
                   <!--Cột 1-->
@@ -1092,7 +1092,7 @@
                 </div>
             </div>
           </div>
-          <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+          <div *ngIf="pageTotal == 0" style="min-height: 65vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
               <div style="display: table-cell;vertical-align: middle;">
                   <img src="../../../assets/img/empty_data.svg" />
                   <div style="color: #94A7C6">{{'no.data' | translate}}</div>
@@ -1179,7 +1179,7 @@
               </div>
               <div class="col-md-1"></div>
           </div>
-          <div style="min-height: 65vh">
+          <div *ngIf="pageTotal > 0" style="min-height: 65vh">
             <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}">
                 <div class="row">
 
@@ -1284,7 +1284,7 @@
                 </div>
               </div>
             </div>
-            <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+            <div *ngIf="pageTotal == 0" style="min-height: 65vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
                 <div style="display: table-cell;vertical-align: middle;">
                     <img src="../../../assets/img/empty_data.svg" />
                     <div style="color: #94A7C6">{{'no.data' | translate}}</div>
@@ -1355,7 +1355,7 @@
             </div>
             <div class="col-md-1"></div>
         </div>
-        <div style="min-height: 65vh">
+        <div *ngIf="pageTotal > 0" style="min-height: 65vh">
           <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}">
               <div class="row">
                   <!--Cột 1-->
@@ -1463,7 +1463,7 @@
               </div>
             </div>
           </div>
-          <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+          <div *ngIf="pageTotal == 0" style="min-height: 65vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
               <div style="display: table-cell;vertical-align: middle;">
                   <img src="../../../assets/img/empty_data.svg" />
                   <div style="color: #94A7C6">{{'no.data' | translate}}</div>

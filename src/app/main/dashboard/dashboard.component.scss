@@ -35,6 +35,9 @@
     color: #8E9AB0;
     font-weight: 700;
   }
+  .p-datepicker:not(.p-datepicker-inline){
+    box-shadow: 0px 3px 12px 0px rgba(16, 85, 225, 0.10)!important;
+  }
 }
 
 .icon_draft{
@@ -67,6 +70,7 @@
   width: 100%;
   border-radius: 8px;
   max-width: 230px !important;
+  box-shadow: 0px 3px 12px 0px #1055E11A;
 }
 
 
@@ -104,7 +108,7 @@
 }
 .header_card{
   border-radius: 8px; 
-  border: 0.5px solid #1487E14D
+  border: 0.5px solid rgba(20, 135, 225, 0.3)!important;
 }
 .header_card:hover{
   box-shadow: 0px 3px 12px 0px rgba(16, 85, 225, 0.10);
@@ -162,7 +166,7 @@ highcharts-chart {
 }
 .body_row_1{
   padding: 10px;
-  background-color: white;
+  // background-color: white;
   width: 100%;
 }
 
