@@ -502,7 +502,7 @@ export class DashboardComponent implements OnInit {
   
   createPieChart(numContractUse: any, numContractUnUsed: any) {
     this.chartPieCreated = new Chart({
-      colors: ['#CED3FF', '#4495F5'],
+      colors: ['#4495F5','#CED3FF'],
       chart: {
         type: 'pie',
         style: {
@@ -576,8 +576,8 @@ export class DashboardComponent implements OnInit {
           innerSize: '80%',
           name: this.translate.instant('contract.number'),
           data: [
-            [this.translate.instant('package.unused'), numContractUnUsed],
             [this.translate.instant('package.used'), numContractUse],
+            [this.translate.instant('package.unused'), numContractUnUsed],
           ]
         }
       ]

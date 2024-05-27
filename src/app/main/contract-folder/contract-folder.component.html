@@ -1,4 +1,5 @@
-<div class="col-md-4" class="container-fluid path-line">
+<div class="container-fluid-bg">
+<div class="col-md-4" class="container-fluid path-line" style="padding-top: 15px;">
   <button class="icon-button" (click)="back()">
       <i style="padding: 6px;" class="fa fa-home" aria-hidden="true"></i>
   </button>
@@ -13,16 +14,15 @@
 <div class="container-fluid" *ngIf="isViewFolder; else isViewChildFolder">
   <div class="col-md-12" style="padding-top: 20px;">
     <div class="input-line search" style="justify-content:left">
-        <img src="../../assets/img/icon_search.svg" class="input-img" />
-        <input [(ngModel)]="searchName" (keyup)="autoSearch($event)" placeholder="{{'folder.search.name.placeholder' | translate}}" type="text" id="filter_name" class="input-text" style="width: 90%!important"
-        />
+        <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
+        <input [(ngModel)]="searchName" (keyup)="autoSearch($event)" placeholder="{{'folder.search.name.placeholder' | translate}}" type="text" id="filter_name" class="input-text"/>
     </div>
   </div>
   <div style="display: flex">
-    <div class="" style="padding-top: 10px">
+    <div class="cod-md-1" style="padding-top: 20px">
       <button class="btn btn-lg btn-block btn_submit" (click)="addFolder()">Thêm thư mục</button>
     </div>
-    <div class="" style="padding-top: 10px">
+    <div class="cod-md-1" style="padding-top: 20px">
       <button (click)="multiDelete('multiDelete')" class="btn btn-lg btn-block btn_submit">{{'btn.multi.delete'|translate}}</button>
     </div>
   </div>
@@ -273,7 +273,7 @@
   </div>
 
 </ng-template>
-
+</div>
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
   <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
 </ngx-spinner>

@@ -760,7 +760,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     } else if (this.status == 'processing') {
       this.filter_status = 20;
       this.color = '#2D6BE7';
-      this.backgroundColor = '#D8E6FA';
+      this.backgroundColor = '#EEF5FF';
       this.appService.setSubTitle('contract.status.processing');
     } else if (this.status == 'expire') {
       this.filter_status = 33;

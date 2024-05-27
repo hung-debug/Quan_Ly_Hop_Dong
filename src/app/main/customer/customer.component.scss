@@ -347,3 +347,10 @@
     border-bottom-right-radius: 10px;
   }
   
+  @media (min-width: 1400px) {
+    .col-xxl-1 {
+      flex: 0 0 auto;
+      width: 10%;
+    }
+  }
+  

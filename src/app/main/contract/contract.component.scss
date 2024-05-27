@@ -4,29 +4,40 @@
 }
 
 .item_contract {
-  // border: 1px solid #106DB6;
+  border: 0.5px solid rgba(0, 65, 196, 0.10);
   border-radius: 8px;
   padding: 8px;
   margin-top: 5px;
-  line-height: 24px;
+  line-height: 21px;
+  margin-top: 8px;
 }
 
 .item_contract:hover{
   // background-color: rgb(255, 254, 254);
   box-shadow: 0px 3px 12px 0px rgba(16, 85, 225, 0.10);
+  border: 1px solid #C3D7FF;
 }
 
 .item_contract_name {
   font-weight: 500;
-  font-size: 16px;
+  font-size: 14px;
   color: #001A4D;
   cursor: pointer;
-  white-space: pre-wrap;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 
 .item_contract_infor{
   color: #8E9AB0;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.item_contract_status{
+  color: #8E9AB0;
+  font-size: 12px;
 }
 
 .item_contract_created{
@@ -42,7 +53,7 @@
   background-color: #D8E6FA;
   padding: 5px 16px 0px 16px;
   width: 110px;
-  height: 35px;
+  height: 32px;
   display: inline-block;
   border-radius: 4px;
   font-weight: 700;
@@ -86,7 +97,7 @@
   text-align: left;
   width: 20px;
   height: 20px;
-  margin: 5px;
+  margin: 15px;
 }
 
 .input-group-text{

@@ -66,7 +66,7 @@
                     </div>
                     <div class="col-md-1">
                       <div style="margin-left: 30px;">
-                        <img src="../../assets/img/frame_contract.svg">
+                        <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                       </div>
                     </div>
                 </div>
@@ -88,8 +88,8 @@
                                         }">{{item.name}}</a>
                           </div>
 
-                          <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
-                              <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                          <div class="row item_contract_infor" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
+                              <div>{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
                               </div>
                           </div>
 
@@ -111,7 +111,7 @@
 
               <!--Cột 3: Trạng thái HĐ-->
               <div class="col-md-2 calendar_create">
-                <div class="item_contract_infor">
+                <div class="item_contract_status">
                   <!-- <span class="status_blue">{{this.filter_status | pipe | translate}}
                     {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
                     translate}}</span> -->
@@ -313,7 +313,7 @@
                   <div style="display: flex;">
                       <div class="col-md-1">
                         <div style="margin-left: 30px;">
-                          <img src="../../assets/img/frame_contract.svg">
+                          <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                         </div>
                       </div>
                   </div>
@@ -358,7 +358,7 @@
 
                 <!--Cột 3: Trạng thái HĐ-->
                 <div class="col-md-2 calendar_create">
-                  <div class="item_contract_infor">
+                  <div class="item_contract_status">
                     <span class="status_blue" [ngStyle]="{'color': this.color, 'background-color': this.backgroundColor}">{{this.filter_status | pipe | translate}}</span>
                   </div>
                 </div>
@@ -555,7 +555,7 @@
                   <div style="display: flex;">
                       <div class="col-md-1">
                         <div style="margin-left: 30px;">
-                          <img src="../../assets/img/frame_contract.svg">
+                          <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                         </div>
                       </div>
                   </div>
@@ -600,7 +600,7 @@
 
                 <!--Cột 3: Trạng thái HĐ-->
                 <div class="col-md-2 calendar_create">
-                  <div class="item_contract_infor">
+                  <div class="item_contract_status">
                     <span class="status_blue" [ngStyle]="{'color': this.color, 'background-color': this.backgroundColor}">{{this.filter_status | pipe | translate}}
                     </span>
                   </div>
@@ -743,7 +743,7 @@
                   <div style="display: flex;">
                       <div class="col-md-1">
                         <div style="margin-left: 30px;">
-                          <img src="../../assets/img/frame_contract.svg">
+                          <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                         </div>
                       </div>
                   </div>
@@ -788,7 +788,7 @@
 
                 <!--Cột 3: Trạng thái HĐ-->
                 <div class="col-md-2 calendar_create">
-                  <div class="item_contract_infor">
+                  <div class="item_contract_status">
                     <!-- <span class="status_blue">{{this.filter_status | pipe | translate}}
                       {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) | translate}}</span> -->
                       <span class="status_blue" [ngStyle]="{'color': this.color, 'background-color': this.backgroundColor}">{{this.filter_status | pipe | translate}}</span>
@@ -997,7 +997,7 @@
                         </div>
                         <div class="col-md-1">
                           <div style="margin-left: 30px;">
-                            <img src="../../assets/img/frame_contract.svg">
+                            <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                           </div>
                         </div>
                     </div>
@@ -1042,7 +1042,7 @@
 
                     <!--Cột 3: Trạng thái HĐ-->
                     <div class="col-md-2 calendar_create">
-                      <div class="item_contract_infor">
+                      <div class="item_contract_status">
                         <span class="status_blue" [ngStyle]="{'color': this.color, 'background-color': this.backgroundColor}">{{this.filter_status | pipe | translate}}</span>
                       </div>
                     </div>
@@ -1193,7 +1193,7 @@
                           </div>
                           <div class="col-md-1">
                             <div style="margin-left: 30px;">
-                              <img src="../../assets/img/frame_contract.svg">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                             </div>
                           </div>
                       </div>
@@ -1238,7 +1238,7 @@
 
                     <!--Cột 3: Trạng thái HĐ-->
                     <div class="col-md-2 calendar_create">
-                      <div class="item_contract_infor">
+                      <div class="item_contract_status">
                         <span class="status_blue" [ngStyle]="{'color': this.color, 'background-color': this.backgroundColor}">{{this.filter_status | pipe | translate}}</span>
                       </div>
                     </div>
@@ -1368,7 +1368,7 @@
                         </div>
                         <div class="col-md-1">
                           <div style="margin-left: 30px;">
-                            <img src="../../assets/img/frame_contract.svg">
+                            <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                           </div>
                         </div>
                     </div>
@@ -1413,7 +1413,7 @@
 
                   <!--Cột 3: Trạng thái HĐ-->
                   <div class="col-md-2 calendar_create">
-                    <div class="item_contract_infor">
+                    <div class="item_contract_status">
                       <span class="status_blue" [ngStyle]="{'color': this.color, 'background-color': this.backgroundColor}">{{this.filter_status | pipe | translate}}</span>
                     </div>
                   </div>

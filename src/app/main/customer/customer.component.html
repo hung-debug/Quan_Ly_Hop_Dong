@@ -14,12 +14,12 @@
   </div>
 </div>
 <div *ngIf="this.isOrgCustomer" class="row" style="justify-content: flex-end;">
-  <div class="col-md-2 btn_search" style="padding-top: 10px; ">
+  <div class="col-xxl-1 btn_search" style="padding-top: 10px; ">
       <button (click)="organizationAdd()" class="btn btn-lg btn-block btn_submit">{{'organization.customer.add'| translate}}</button>
   </div>
 </div>
 <div *ngIf="!this.isOrgCustomer" class="row" style="justify-content: flex-end">
-  <div class="col-md-2 btn_search" style="padding-top: 10px;">
+  <div class="col-xxl-1 btn_search" style="padding-top: 10px;">
       <button (click)="personalAdd()" class="btn btn-lg btn-block btn_submit">{{'personal.customer.add'| translate}}</button>
   </div>
 </div>

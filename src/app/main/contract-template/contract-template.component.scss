@@ -154,6 +154,16 @@
   display: flex;
   justify-content: space-between;
 }
+.footer_contract_per_page{
+  position:absolute;
+  display: flex;
+  flex-wrap: nowrap;
+  color: #0160AE;
+  select{
+    border: 1px solid #0160AE;
+    border-radius: 5px;
+  }
+}
 .footer_title{
   width: 120px;
 }
