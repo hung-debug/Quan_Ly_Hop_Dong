@@ -129,6 +129,7 @@ export class ContractFolderComponent implements OnInit {
   }
 
   autoSearch(event: any) {
+    this.p = 1;
     this.foldersData = []
     this.getContractList(this.currentParentId)
     this.folders = this.list.filter((item: any) => item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(event.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")));

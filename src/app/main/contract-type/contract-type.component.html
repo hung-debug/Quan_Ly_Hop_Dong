@@ -1,24 +1,25 @@
 <div *ngIf="isQLLHD_01 || isQLLHD_02 || isQLLHD_03 || isQLLHD_04 || isQLLHD_05" class="container-fluid">
   <div class="row">
-    <div class="col-md-3" *ngIf="isQLLHD_04">
+    <div class="col-xxl-5 col-md-3" *ngIf="isQLLHD_04">
       <div>{{'contract-type.code' | translate}}</div>
       <div class="input-line">
         <input type="text" [(ngModel)]="code" class="input_text"/>
       </div>
     </div>
-    <div class="col-md-3" *ngIf="isQLLHD_04">
+    <div class="col-xxl-5 col-md-3" *ngIf="isQLLHD_04">
       <div>{{'contract-type.name' | translate}}</div>
       <div class="input-line">
         <input type="text" [(ngModel)]="name" class="input_text"/>
       </div>
     </div>
-    <div class="col-md-6 btn_search">
-      <button *ngIf="isQLLHD_04" class="btn btn-lg btn-block btn_submit" (click)="searchContractType()">{{'btn.search' | translate }}</button>
+    <div class="col-xxl-2 btn_search">
+      <button *ngIf="isQLLHD_04" class="btn btn-lg btn-block btn_search1" (click)="searchContractType()">{{'btn.search' | translate }}</button>
       <button *ngIf="isQLLHD_01" class="btn btn-lg btn-block btn_submit" (click)="addContractType()">{{'btn.add' | translate }}</button>
     </div>
   </div>
+  <div style="min-height: 77vh;">
   <div class="row" style="padding-top: 20px;">
-    <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
+    <p-table [value]="list" [paginator]="false" [rows]="15" id="table" [autoLayout]="true">
       <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of cols" [style]='col.style'>
@@ -28,7 +29,7 @@
       </ng-template>
       <ng-template pTemplate="body" let-list>
           <tr>
-              <td><a (click)="isQLLHD_05?detailContractType(list.id):null" style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
+              <td><a (click)="isQLLHD_05?detailContractType(list.id):null" style="color: #001A4D; cursor: pointer;font-weight: 700;">{{list.name}}</a></td>
               <td>{{list.code}}</td>
               <td style="text-align: center">
                 <img *ngIf="isQLLHD_02" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editContractType(list.id)" style="cursor: pointer;"/>&nbsp;&nbsp;
@@ -36,15 +37,15 @@
               </td>
           </tr>
       </ng-template>
-      <ng-template pTemplate="paginatorleft" let-state>
+      <!-- <ng-template pTemplate="paginatorleft" let-state>
         <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-      </ng-template>
+      </ng-template> -->
       <ng-template pTemplate="paginatorright" let-state>
         <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
       </ng-template> 
     </p-table>
   </div>
-
+  </div>
   <div *ngIf="list && list.length == 0" 
   style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
     <div style="display: table-cell;vertical-align: middle;">
@@ -53,6 +54,13 @@
     </div>
   </div>
 </div>
+
+<div style="display: grid;margin-top: 10px;grid-template-columns: repeat(3, 1fr)">
+  <div></div>
+  <p-paginator (onPageChange)="onPageChange($event)" [rows]="row" [totalRecords]="totalRecords"></p-paginator>
+  <div style="color: #0160AE !important;margin: auto 0 auto auto;">{{'chart.number' | translate}}: {{totalRecords === 0 ? 0 : page * row + 1}} - {{totalRecords > 0 ? toRecord() : 0}} / {{totalRecords > 0 ? totalRecords : 0}}</div>
+</div>
+
 <div *ngIf="!isQLLHD_01 && !isQLLHD_02 && !isQLLHD_03 && !isQLLHD_04 && !isQLLHD_05">
   {{'no.role' | translate}}
 </div>

@@ -21,6 +21,7 @@ import { AuthenticationService } from '../service/authentication.service';
 })
 export class MainComponent implements OnInit {
   title: string;
+  subTitle: string;
 
   isShowCopyRight: boolean = true;
   isRouterContractNew: boolean = true;
@@ -29,12 +30,13 @@ export class MainComponent implements OnInit {
   status: number = 1;
   notification: string = '';
   numberNotification:any=0;
+  isSsoSync: boolean = false;
 
   urlLoginType: any;
   nameCurrentUser:any;
+  phoneCurrentUser: any;
   listNotification: any[] = [];
   getAlllistNotification: any[] = [];
-  isSsoSync: boolean = false;
   messageNotification: string;
   isMessageNotificationSet = false;
   @ViewChild('scrollingText', { static: false }) scrollingTextElement: ElementRef<any>;
@@ -118,8 +120,17 @@ export class MainComponent implements OnInit {
       this.changeDetectorRef.detectChanges();
       this.updateAnimationDuration();
     })
-    this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
+    // this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
 
+
+    this.appService.getTitle().subscribe(appTitle => {
+      console.log('this.title82: ', appTitle);
+      return this.title = appTitle.toString()});
+      
+    this.appService.getSubTitle().subscribe(appSubTitle => {
+      console.log('this.title82: ', appSubTitle);
+      return this.subTitle = appSubTitle.toString()});
+  
     this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
       data => {
         if (environment.flag == 'KD' && data.is_required_sso && environment.usedSSO) {
@@ -127,7 +138,9 @@ export class MainComponent implements OnInit {
         } else {
           this.isSsoSync = false
         }
+        
         this.nameCurrentUser = data?.name;
+        this.phoneCurrentUser = data?.phone;
       });
 
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
@@ -142,6 +155,10 @@ export class MainComponent implements OnInit {
       localStorage.setItem('sso_token',accessToken ?? '')
     }
 
+  }
+
+  checkSubTitle() {
+    return this.subTitle.length > 0;
   }
 
   readAll(){
@@ -167,34 +184,34 @@ export class MainComponent implements OnInit {
 
   //click logout
   async logout() {
-     //call api delete token
-     if (environment.flag == 'KD' && environment.usedSSO) {
-       this.contractService.deleteToken().subscribe((res:any) => {
-      })
-  
-      sessionStorage.clear();
-      localStorage.removeItem('currentUser');
-      localStorage.removeItem('myTaxCode');
-      localStorage.removeItem('url');
-  
-      this.router.navigate(['/login']);
+    //call api delete token
+    if (environment.flag == 'KD' && environment.usedSSO) {
+      this.contractService.deleteToken().subscribe((res:any) => {
+     })
+ 
+     sessionStorage.clear();
+     localStorage.removeItem('currentUser');
+     localStorage.removeItem('myTaxCode');
+     localStorage.removeItem('url');
+ 
+     this.router.navigate(['/login']);
+    } else {
+     let ssoIdToken: any = localStorage.getItem('sso_id_token') || ''
+     if (localStorage.getItem('sso_token')) {
+       await this.authenticationService.logoutSso(ssoIdToken)
+       localStorage.removeItem('sso_token');
+       localStorage.clear()
+       sessionStorage.clear();
+       this.authenticationService.deleteAllCookies()
+       this.router.navigate(['/login']);
      } else {
-      let ssoIdToken: any = localStorage.getItem('sso_id_token') || ''
-      if (localStorage.getItem('sso_token')) {
-        await this.authenticationService.logoutSso(ssoIdToken)
-        localStorage.removeItem('sso_token');
-        localStorage.clear()
-        sessionStorage.clear();
-        this.authenticationService.deleteAllCookies()
-        this.router.navigate(['/login']);
-      } else {
-        localStorage.removeItem('sso_token');
-        localStorage.clear()
-        sessionStorage.clear()
-        this.router.navigate(['/login']);
-      }
+       localStorage.removeItem('sso_token');
+       localStorage.clear()
+       sessionStorage.clear()
+       this.router.navigate(['/login']);
      }
-  }
+    }
+ }
 
   email: string;
   checkMailMbf() {

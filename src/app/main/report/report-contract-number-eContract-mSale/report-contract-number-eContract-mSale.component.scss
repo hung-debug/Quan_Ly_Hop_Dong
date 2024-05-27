@@ -9,18 +9,35 @@
 
 .btn_search{
  align-self: flex-end;
+
+ @media (max-width: 992px) {
+  margin-top: 15px;
+}
 }
 
-.btn_submit{
+.btn_submit {
   border: 0px;
   border-radius: 5px;
   height: 33px;
   box-sizing: border-box;
   color: white;
-  background-color: #106DB6;
+  background-color: #0041c4;
   font-size: 13px;
-  margin: 0 10px;
+  // margin: 0 10px;
+  width: 100%;
+  @media (max-width: 1580px) {
+    font-size: 11px;
+  }
+
+  @media (max-width: 1485px) {
+    font-size: 9px;
+  }
+
+  @media (max-width: 1399px) {
+    font-size: 13px;
+  }
 }
+
 .row-word {
   width: 250px;
   word-break:break-word
@@ -284,3 +301,9 @@ font-size: 12px;
   white-space: pre-wrap;
 }
 
+@media (min-width: 1580px) {
+  .col-xxl-3-5 {
+    flex: 0 0 27.777777%;
+    max-width: 27.777777%;
+  }
+}

@@ -1,7 +1,7 @@
-<div>
+<div class="container-fluid">
     <div class="row">
         <!--Tổ chức-->
-        <div class="col-md-2">
+        <div class="col-xxl-3 col-lg-4 col-md-6">
             <div>{{'organization' | translate}}</div>
             <div class="input-line">
             <p-treeSelect
@@ -17,7 +17,7 @@
         </div>
 
         <!--Ngày tạo hợp đồng-->
-        <div class="col-md-2">
+        <div class="col-xxl-3 col-lg-4 col-md-6">
             <div>{{ 'create-date' | translate}} <span style="color: red"> *</span></div>
             <div class="input-line">
                 <p-calendar selectionMode="range" [readonlyInput]="false" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"
@@ -44,10 +44,19 @@
         </div> -->
 
         <!--Button-->
-        <div class="col-md-6 btn_search">
+
+        <div class="col-xxl-1 col-lg-2 col-md-3 btn_search">
             <button class="btn btn-lg btn-block btn_submit" (click)="export(false)">{{'btn.report' | translate }}</button>
+        </div>
+        
+        <div class="col-xxl-1 col-lg-2 col-md-3 btn_search">
             <button class="btn btn-lg btn-block btn_submit" (click)="export(true)">Export</button>
         </div>
+
+        <!-- <div class="col-md-6 btn_search">
+            <button class="btn btn-lg btn-block btn_submit" (click)="export(false)">{{'btn.report' | translate }}</button>
+            <button class="btn btn-lg btn-block btn_submit" (click)="export(true)">Export</button>
+        </div> -->
     </div>
 
     <!--Nút tick bao gồm tổ chức-->

@@ -16,20 +16,74 @@
     box-shadow: none !important;
   }
   .p-calendar-w-btn .p-datepicker-trigger {
-    background-color: #e4e5e4;
-    border: 1px solid #ced4da;
+    // background-color: #e4e5e4;
+    // border: 1px solid #ced4da;
   }
   .p-selectbutton .p-button {
     outline: 0 !important;
     box-shadow: none !important;
     height: 33px;
     width: 50%;
+    font-weight: 700;
+    background-color: #F6F6F6;
+    color: var(--Text-Secondary, #8E9AB0);
+    border: 0px;
+  }
+  .p-selectbutton .p-button.p-highlight {
+    background: #FFFFFF;
+    border-color: #FFFFFF;
+    color: #8E9AB0;
+    font-weight: 700;
   }
 }
-.item_contract_name {
-  font-weight: 500;
-  font-size: 15px;
-  color: #106DB6;
+
+.icon_draft{
+  border-radius: 6px;
+  border: 0.5px solid var(--Neutral-05, #C6D2EA);
+  padding: 6px;
+  width: 30px;
+  height: 30px;
+  margin-right: 16px;
+  display: flex;
+  margin-top: 10px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.ceate_contract{
+  cursor: pointer;
+}
+
+.ceate_contract_text{
+  margin: 5px;
+}
+
+::ng-deep .mat-menu-panel.popup_create_contract{
+
+  position: absolute;
+  top: -5.5% !important; 
+  left: 11.5% !important;
+  // height: 100%;
+  width: 100%;
+  border-radius: 8px;
+  max-width: 230px !important;
+}
+
+
+// ::ng-deep .cdk-overlay-container, .cdk-global-overlay-wrapper {
+//   position: absolute !important;
+//   left: 10% !important;
+//   top: 0px !important;
+// }
+
+.container-fluid{
+  // background-color: #F5F5F5;
+  // padding-right: var(--bs-gutter-x, 0rem) !important;
+}
+.item_contract_name1 {
+  font-weight: 700;
+  font-size: 14px;
+  color: #001A4D;
   cursor: pointer;
 }
 
@@ -49,32 +103,39 @@
   font-weight: 500;
 }
 .header_card{
-  border-radius: 30px; 
-  color: white;
+  border-radius: 8px; 
+  border: 0.5px solid #1487E14D
 }
 .header_card:hover{
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0px 3px 12px 0px rgba(16, 85, 225, 0.10);
   cursor: pointer;
 }
 .header_card_1{
-  background-color: #99E6FC;
+  background-color: #FFFFFF;
+  // width: 48%;
 }
 .header_card_2{
-  background-color: #EF854B;
+  background-color: #FFFFFF;
+  // width: 48%;
 }
 .header_card_3{
-  background-color: #4B71F0;
+  background-color: #FFFFFF;
+  // width: 45%;
 }
 .header_card_4{
-  background-color: #00D0C2;
+  background-color: #FFFFFF;
+  // width: 45%;
 }
 .text_header_card{
   padding: 27px;
   text-align: center;
+  font-weight: 700;
 }
 .number_header_card{
   font-size: 30px;
-  padding-top: 10px;
+  // padding-top: 10px;
+  color: #001A4D;
+  padding-bottom: 10px;
 }
 .img_header_card{
   padding: 20px;
@@ -86,6 +147,25 @@
   border-radius: 30px;
   border: 1px solid #C7D0E9;
 }
+
+highcharts-chart {
+  display: block;
+  width: 100%;
+}
+
+.body-chart{
+  padding: 10px;
+}
+
+.body-pie-chart{
+  padding: 10px;
+}
+.body_row_1{
+  padding: 10px;
+  background-color: white;
+  width: 100%;
+}
+
 h3{
   color: #106DB6;
   text-transform: uppercase;
@@ -106,6 +186,81 @@ h3{
   }
   .p-treeselect-label, .p-dropdown-label {
       padding: 5px 5px 5px 15px;
+      font-weight: 700;
+  }
+}
+
+.add-contract-theme{
+  background: url("../../../assets/img/frame_db1.svg");
+  background-size: cover;
+  width: 100%;
+  height: 200px;
+  color: #FFFFFF;
+  border-radius: 12px;
+  padding: 24px;
+  // display: flex;
+}
+
+.contract-processing{
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding: 16px;
+  height: 200px;
+}
+
+.contract-request{
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding: 16px;
+  height: 100%;
+}
+
+.row_text{
+  display: flex;
+  background-color: #F7FAFD;
+  border-radius: 8px;
+}
+
+.row_text_1{
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.row_text_2{
+  display: flex;
+  background-color: #F7FAFD;
+  border: 0.5px solid rgba(0, 65, 196, 0.10);
+  border-radius: 8px;
+}
+
+.btn_add_contract{
+  border: 0px;
+  border-radius: 6px;
+  width: 180px;
+  height: 38px;
+  box-sizing: border-box;
+  color: #001A4D;
+  background: #FFFFFF;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+@media (min-width: 1400px) {
+  .col-xxl-6 {
+      flex: 0 0 auto;
+      width: 50%;
+  }
+  
+  .col-xxl-8 {
+    flex: 0 0 auto;
+    width: 70%;
+}
+  
+  .col-xxl-2 {
+    flex: 0 0 auto;
+    width: 10%;
   }
 }
 

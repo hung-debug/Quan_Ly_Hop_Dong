@@ -33,6 +33,10 @@ export class UserComponent implements OnInit {
   orgListTmp: any[] = [];
   myEmail: string;
   name: string = "";
+  totalRecords: number = 0;
+  row: number = 15;
+  page: number = 0;
+
 
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
@@ -78,7 +82,8 @@ export class UserComponent implements OnInit {
       this.lang = 'en';
     }
 
-    this.appService.setTitle("user.list");
+    this.appService.setTitle("menu.manager.user");
+    this.appService.setSubTitle("user.list");
     //lay id user
     this.organization_id_user_login = this.userService.getAuthCurrentUser().organizationId;
     //mac dinh se search theo ma to chuc minh
@@ -194,12 +199,22 @@ export class UserComponent implements OnInit {
     this.first = 0;
 
     this.spinner.show();
-    this.userService.getUserList(this.organization_id? this.organization_id : '', this.nameOrEmail, this.name).subscribe(response => {
+    this.userService.getUserList(this.organization_id? this.organization_id : '', this.nameOrEmail, this.name, this.row, this.page).subscribe(response => {
       this.spinner.hide();
       this.list = response.entities;
       console.log("ressponse",response);
-
+      this.totalRecords = response.total_elements;
+      // log
     });
+  }
+  
+  toRecord() {
+    return Math.min((this.page + 1) * this.row, this.totalRecords)
+  }
+
+  onPageChange(event: any) {
+    this.page = event.page;
+    this.searchUser();
   }
 
   addUser() {

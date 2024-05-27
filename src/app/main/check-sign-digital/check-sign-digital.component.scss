@@ -4,8 +4,15 @@
     height: 33px;
     box-sizing: border-box;
     color: white;
-    background-color: #106DB6;
+    background-color: #0041C4;
     font-size: 13px;
+  }
+  
+  .container-fluid{
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    padding-top: 15px;
+    min-height: 85vh;
   }
   .btn_label{
     border: 0px;

@@ -1,7 +1,7 @@
-<div>
+<div class="container-fluid">
   <div class="row">
     <!--Tổ chức-->
-    <div class="col-md-2">
+    <div class="col-xxl-3-5 col-lg-6 col-md-6">
       <div>{{'organization' | translate}}</div>
       <div class="input-line">
         <p-treeSelect #nameContract [(ngModel)]="selectedNodeOrganization" [filter]="true" filterBy="name"
@@ -11,7 +11,7 @@
     </div>
 
     <!-- Thông tin hợp đồng -->
-    <div class="col-md-2">
+    <div class="col-xxl-3-5 col-lg-6 col-md-6">
       <div>{{'contract.information' | translate}}</div>
       <div class="input-line">
         <input type="text" [(ngModel)]="contractInfo" class="input_text" placeholder="Tìm kiếm theo Mã HĐ, Số HĐ, Tên HĐ" />
@@ -19,7 +19,7 @@
     </div>
 
     <!--Thời gian gửi-->
-    <div class="col-md-2">
+    <div class="col-xxl-3-5 col-lg-6 col-md-6">
       <div>{{ 'time.send.date' | translate}}
         <!-- <span style="color: red"> *</span> -->
       </div>
@@ -33,9 +33,11 @@
 
 
     <!--Button-->
-    <div class="col-md-4 btn_search">
-      <button class="btn btn-lg btn-block btn_submit" (click)="exportEmailReportCall(false)">{{'btn.report' | translate
-        }}</button>
+    <div class="col-xxl-1 col-lg-2 col-md-3 btn_search">
+      <button class="btn btn-lg btn-block btn_submit" (click)="exportEmailReportCall(false)">{{'btn.report' | translate}}</button>
+    </div>
+
+    <div class="col-xxl-1 col-lg-2 col-md-3 btn_search">
       <button class="btn btn-lg btn-block btn_submit" (click)="exportEmailReportCall(true)">Export</button>
     </div>
   </div>
@@ -106,6 +108,25 @@
     </div>
     <div class="footer_pagination_quantity">{{'chart.number' | translate}}: {{totalRecords === 0 ? 0 : page * row + 1}} - {{totalRecords > 0 ? toRecord() : 0}} / {{totalRecords > 0 ? totalRecords : 0}}</div>
   </div>
+</div>
+
+<div class="footer_pagination">
+  <div class="footer_contract_per_page">
+    <div>Hiển thị&nbsp;</div>
+    <select [(ngModel)]="this.row" (change)="changePageNumber($event)">
+        <option value="" hidden>10</option>
+        <option *ngFor="let d of this.pageOptions">{{d}}</option>
+    </select>
+    <div>&nbsp;{{'contracts.per.page' | translate}}</div>
+  </div>
+  <div class = "footer_pagination_between">
+      <p-paginator class="footer_pagination_between_p_paginator" [first]="page * row"  (onPageChange)="onPageChange($event)" [rows]="row" [totalRecords]="totalRecords"></p-paginator>
+      <div *ngIf = "totalRecords" class="enterPage footer_pagination_between_input">
+          <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
+          <p>của {{numberPage}} trang</p>
+      </div>
+  </div>
+  <div class="footer_pagination_quantity">{{'chart.number' | translate}}: {{totalRecords === 0 ? 0 : page * row + 1}} - {{totalRecords > 0 ? toRecord() : 0}} / {{totalRecords > 0 ? totalRecords : 0}}</div>
 </div>
 
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">

@@ -8,7 +8,7 @@
 <div style="padding-top: 20px;">
   <div class="row">
     <!--Tổ chức-->
-    <div class="col-md-2">
+    <div class="col-xxl-3-5 col-lg-6 col-md-6">
       <div>{{'organization' | translate}}</div>
       <div class="input-line">
         <p-treeSelect #nameContract [(ngModel)]="selectedNodeOrganization" [filter]="true" filterBy="name"
@@ -18,7 +18,7 @@
     </div>
 
     <!--Ngày hoàn thành hợp đồng-->
-    <div class="col-md-2">
+    <div class="col-xxl-3-5 col-lg-6 col-md-6">
       <div>{{'completed-date' | translate}} <span style="color: red"> *</span></div>
       <div class="input-line">
         <p-calendar selectionMode="range" [readonlyInput]="false" [(ngModel)]="date" [showIcon]="true"
@@ -27,7 +27,7 @@
     </div>
 
     <!--Loại hợp đồng-->
-    <div class="col-md-3" *ngIf="this.isReport == 'off'">
+    <div class="col-xxl-3-5 col-lg-6 col-md-6" *ngIf="this.isReport == 'off'">
       <div>{{'contract.group' | translate}}</div>
       <div class="input-line">
         <p-multiSelect panelStyleClass="font" appendTo="body" [options]="typeList" [(ngModel)]="type_id"
@@ -38,7 +38,7 @@
     </div>
 
     <!--Loại hợp đồng-->
-    <div class="col-md-3" *ngIf="this.isReport == 'on'">
+    <div class="col-xxl-3-5 col-lg-6 col-md-6" *ngIf="this.isReport == 'on'">
       <div>{{'contract.group' | translate}}</div>
       <div class="input-line">
         <p-multiSelect panelStyleClass="font" appendTo="body" [options]="typeListDetail" [(ngModel)]="type_id_detail"
@@ -49,16 +49,33 @@
     </div>
 
     <!--Button-->
-    <div class="col-md-4 btn_search" *ngIf="this.isReport == 'off'">
+    
+    <div class="col-xxl-1 col-lg-2 col-md-3 btn_search" *ngIf="this.isReport == 'off'">
       <button class="btn btn-lg btn-block btn_submit" (click)="export(false)">{{'btn.report' | translate }}</button>
+    </div>
+  
+    <div class="col-xxl-1 col-lg-2 col-md-3 btn_search" *ngIf="this.isReport == 'off'">
       <button class="btn btn-lg btn-block btn_submit" (click)="export(true)">Export</button>
     </div>
 
-    <div class="col-md-4 btn_search" *ngIf="this.isReport == 'on'">
+    <!-- <div class="col-md-4 btn_search" *ngIf="this.isReport == 'off'">
+      <button class="btn btn-lg btn-block btn_submit" (click)="export(false)">{{'btn.report' | translate }}</button>
+      <button class="btn btn-lg btn-block btn_submit" (click)="export(true)">Export</button>
+    </div> -->
+
+    <div class="col-xxl-1 col-lg-2 col-md-3 btn_search" *ngIf="this.isReport == 'on'">
+      <button class="btn btn-lg btn-block btn_submit" (click)="exportDetail(false)">{{'btn.report' | translate}}</button>
+    </div>
+  
+    <div class="col-xxl-1 col-lg-2 col-md-3 btn_search" *ngIf="this.isReport == 'on'">
+      <button class="btn btn-lg btn-block btn_submit" (click)="exportDetail(true)">Export</button>
+    </div>
+
+    <!-- <div class="col-md-4 btn_search" *ngIf="this.isReport == 'on'"></div>
       <button class="btn btn-lg btn-block btn_submit" (click)="exportDetail(false)">{{'btn.report' | translate
         }}</button>
       <button class="btn btn-lg btn-block btn_submit" (click)="exportDetail(true)">Export</button>
-    </div>
+    </div> -->
   </div>
 
   <!--Bảng dữ liệu báo cáo tổng quan-->

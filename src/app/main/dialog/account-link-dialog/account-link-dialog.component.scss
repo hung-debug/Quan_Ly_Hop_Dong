@@ -3,11 +3,13 @@
     .require_star {
       color: red;
     }
-    .form-control > input {
+
+    .form-control>input {
       border: none;
       outline: none;
       margin-left: 20px;
     }
+
     text-align: center;
   }
 
@@ -19,6 +21,7 @@
     justify-content: center;
     padding-top: 16px;
     width: 100%;
+
     button {
       width: 104px;
       height: 38px;
@@ -34,8 +37,14 @@
     }
 
     .link_sso__otp-btn {
-      color: #FFFFFF;
-      background-color: #0041C4 !important;
+      button:nth-last-child(1) {
+        // width: 104px;
+        // height: 38px;
+        // border-radius: 6px;
+        background-color: #0041C4;
+        color: #FFFFFF;
+        background-color: #0041C4 !important;
+      }
     }
   }
 }
@@ -92,7 +101,8 @@
   margin-top: 10px;
   float: right;
 }
-.invalid{
+
+.invalid {
   color: red;
 }
 
@@ -118,6 +128,7 @@
   margin-left: auto;
   margin-right: auto;
   margin-top: 12px;
+
   #title {
     font-weight: bold;
   }
@@ -134,7 +145,7 @@
   }
 }
 
-::ng-deep .wrapper .otp-input:not(:last-child){
+::ng-deep .wrapper .otp-input:not(:last-child) {
   margin-right: 23px !important;
 }
 
@@ -163,21 +174,24 @@
 }
 
 .sso-warning-time {
-  color: #E05050; 
+  color: #E05050;
   font-weight: bold;
 }
 
 .link_sso__guide-btn {
   margin-bottom: -10px;
+
   span {
     color: #286CF5;
     font-weight: bold;
   }
+
   img {
     width: 24px;
     height: 24px;
     padding: 3px 4px 2.42px 4px;
   }
+
   .back-btn {
     color: #286CF5;
     font-weight: bold;
@@ -186,6 +200,6 @@
   }
 }
 
-.row.link_sso__guide-btn > div:first-child {
+.row.link_sso__guide-btn>div:first-child {
   cursor: pointer;
 }

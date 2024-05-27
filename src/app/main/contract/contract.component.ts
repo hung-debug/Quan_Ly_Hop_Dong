@@ -30,7 +30,7 @@ import { ProcessingHandleEcontractComponent } from '../contract-signature/shared
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
-  styleUrls: ['./contract.component.scss']
+  styleUrls: ['./contract.component.scss'],
 })
 export class ContractComponent implements OnInit, AfterViewInit {
   datas: any;
@@ -84,6 +84,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
   checkedAll: boolean = false;
   typeDisplay: string = 'view';
   dataDeleteDraftChecked: any[] = [];
+  color: any;
+  backgroundColor: any;
 
   //phan quyen
   isQLHD_01: boolean = true;  //them moi hop dong
@@ -750,20 +752,44 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.contracts = [];
     if (this.status == 'draft') {
       this.filter_status = 0;
+      this.color = '#DDBC0A';
+      this.backgroundColor = '#DDBC0A1A';
+      this.appService.setSubTitle('contract.status.draft');
     } else if (this.status == 'processing') {
       this.filter_status = 20;
+      this.color = '#2D6BE7';
+      this.backgroundColor = '#D8E6FA';
+      this.appService.setSubTitle('contract.status.processing');
     } else if (this.status == 'expire') {
       this.filter_status = 33;
+      this.color = '#F6AA51';
+      this.backgroundColor = '#F6AA511A';
+      this.appService.setSubTitle('contract.status.expire');
     } else if (this.status == 'overdue') {
       this.filter_status = 34;
+      this.color = '#525963';
+      this.backgroundColor = '#5259631A';
+      this.appService.setSubTitle('contract.status.overdue');
     } else if (this.status == 'fail') {
       this.filter_status = 31;
+      this.color = '#F05046';
+      this.backgroundColor = '#F050461A';
+      this.appService.setSubTitle('contract.status.fail');
     } else if (this.status == 'cancel') {
       this.filter_status = 32;
+      this.color = '#EA328B';
+      this.backgroundColor = '#EA328B1A';
+      this.appService.setSubTitle('contract.status.cancel');
     } else if (this.status == 'complete') {
       this.filter_status = 30;
+      this.color = '#24BD33';
+      this.backgroundColor = '#24BD331A';
+      this.appService.setSubTitle('contract.status.complete');
     } else if (this.status =='liquidated') {
       this.filter_status = 40;
+      this.color = '#23D2EA';
+      this.backgroundColor = '#23D2EA1A';
+      this.appService.setSubTitle('contract.status.liquidated');
     }
   }
 
@@ -799,7 +825,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
     if (this.pageTotal <= this.pageEnd && this.pageTotal > 0) {
       this.pageEnd = this.pageTotal;
     }
-    return this.pageStart + '-' + this.pageEnd;
+    // return this.pageStart + '-' + this.pageEnd;
+    return this.pageEnd;
   }
 
   setPage() {

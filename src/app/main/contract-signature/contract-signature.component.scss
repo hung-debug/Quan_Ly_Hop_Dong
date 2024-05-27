@@ -1,15 +1,21 @@
 .item_contract {
-  border: 1px solid #106DB6;
-  border-radius: 10px;
+  // border: 1px solid #106DB6;
+  border-radius: 8px;
   padding: 8px;
   margin-top: 5px;
   line-height: 24px;
+  // border-bottom: 1px solid rgb(199, 208, 233);
+  // border: 0.5px solid #0041C41A;
 }
 
-
+.container-fluid-bg{
+  background-color: #FFFFFF;
+  width: 100%;
+  border-radius: 12px;
+}
 .item_contract:hover{
   background-color: rgb(255, 254, 254);
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0px 3px 12px 0px rgba(16, 85, 225, 0.10);
 }
 
 .item_contract_name {
@@ -33,7 +39,14 @@
 }
 
 .status_blue{
-  color: #027e21;
+  color: #2D6BE7;
+  background-color: #D8E6FA;
+  padding: 5px 16px 0px 16px;
+  width: 110px;
+  height: 35px;
+  display: inline-block;
+  border-radius: 6px;
+  font-weight: 700;
 }
 
 .header {
@@ -47,8 +60,13 @@
 .list_header{
   color:#898989;
   text-align: center;
-  padding: 60px 12px 12px 0;
+  padding: 12px 12px 0;
   font-weight: 500;
+  font-weight: 500;
+  background-color: #EBF2FB;
+  width: 100%;
+  margin-left: 0;
+  height: 44px;
 }
 
 .pagination {
@@ -82,11 +100,11 @@
 }
 .calendar_create{
   text-align: center;
-  color:#106DB6
+  color: #8E9AB0;
 }
 .calendar_deadline{
   text-align: center;
-  color:red
+  color: #8E9AB0;
 }
 .item_date{
   padding-left: 3px;
@@ -120,19 +138,20 @@
 .btn_submit{
   width: 90px;
   font-size: inherit;
-  background: #106DB6;
-  color: white;
-  border: 1px solid #87CAFF;
+  background: #0041C4;
+  color: #FFFFFF;
+  border: 1px solid #0041C4;
   margin: 0 5px;
   padding: 2px;
+  border-radius: 6px;
 }
 .label_item{
   padding: 10px 0px 5px;
   color: #5e5e5e;
 }
 .search{
-  border: 1px solid #106DB6;
-  border-radius: 15px;
+  // border: 1px solid #106DB6;
+  border-radius: 8px;
   height: 38px;
 }
 .input-line {
@@ -141,7 +160,7 @@
   position: relative;
 }
 .input-img {
-  padding: 10px;
+  padding: 5px;
   cursor: pointer;
 }
 .input-img-calendar {
@@ -150,10 +169,16 @@
   position: absolute;
 }
 .input-text {
-  border: 0;
-  padding: 10px;
+  border: 0.5px solid #F1F5FE;
+  margin: 0px;
   width: 100%;
+  height: 38px;
   outline:0px;
+  background-color: #F1F5FE;
+  padding: 10px 16px 10px 16px;
+  opacity: 0px;
+  border-radius: 8px; 
+  font-weight: 400;
 }
 
 :host ::ng-deep {
@@ -255,10 +280,10 @@
 .btn-block {
   background-color: #106DB6;
   color: white;
-  height: 40px;
+  height: 39px;
   font-size: 14px;
   width: 100%;
-  border-radius: 5px;
+  border-radius: 6px;
 }
 .div_icon{
   padding: 0 10px;
@@ -284,13 +309,14 @@
 
 .btn_submit{
   border: 0px;
-  border-radius: 5px;
+  border-radius: 6px;
   height: 33px;
   box-sizing: border-box;
-  color: white;
-  background-color: #106DB6;
+  background: #0041C4;
+  color: #FFFFFF;
+  border: 1px solid #0041C4;
   font-size: 13px;
-  margin: 0 10px;
+  margin: 0 24px;
 }
 
 .enterPage {
@@ -313,5 +339,103 @@
 }
 
 .enterPage p {
-  margin-top: 2px
+  margin-top: 2px;
+}
+.btn_consider{
+  border: 1px solid #0041C4;
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: #0041C4;
+  background-color: #FFFFFF;
+  font-size: 13px;
+  // margin: 0 10px;
+  font-weight: 700;
+  height: 40px;
+}
+
+.btn_consider_cancel{
+  border: 1px solid #0041C4;
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: #0041C4;
+  background-color: #FFFFFF;
+  font-size: 13px;
+  margin: 0 24px;
+  font-weight: 700;
+  height: 40px;
+}
+
+.btn_sign{
+  border: 0px;
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  background-color: #0041C4;
+  font-size: 13px;
+  // margin: 0 10px;
+  font-weight: 700;
+  height: 40px;
+}
+
+.btn_cancel{
+  border: 0px;
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  background-color: #0041C4;
+  font-size: 13px;
+  margin: 0 24px;
+  font-weight: 700;
+  height: 40px;
+}
+
+.btn_advanced{
+  border: 0px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #001A4D;
+  background-color: #FFFFFF;
+  font-size: 13px;
+  // margin: 0 10px;
+  font-weight: 700;
+  box-shadow: 0px 3px 12px 0px #1055E11A;
+  border: 1px solid #001A4D1A
+}
+
+.btn-multi{
+  border: 0px;
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  background-color: #0041C4;
+  font-size: 13px;
+  // margin: 0 10px;
+  font-weight: 700;
+  box-shadow: 0px 3px 12px 0px #1055E11A;
+  border: 1px solid #001A4D1A
+}
+
+.three_dot{
+  cursor: pointer;
+}
+
+.three_dot_text{
+  margin: 10px;
+}
+
+@media (min-width: 1400px) {
+  .col-xxl-10 {
+      flex: 0 0 auto;
+      width: 90%;
+  }
+  
+  .col-xxl-8 {
+    flex: 0 0 auto;
+    width: 70%;
+}
+  
+  .col-xxl-2 {
+    flex: 0 0 auto;
+    width: 10%;
+  }
 }

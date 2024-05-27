@@ -1,18 +1,18 @@
 <div *ngIf="isQLDSCTS_01 || isQLDSCTS_02 || isQLDSCTS_03 || isQLDSCTS_04" class="container-fluid">
   <div class="row">
-    <div class="col-md-3" *ngIf="isQLDSCTS_04">
+    <div class="col-xxl-4 col-md-3" *ngIf="isQLDSCTS_04">
       <div>{{'notation' | translate}}</div>
       <div class="input-line">
         <input type="text" [(ngModel)]="serial_number" class="input_text"/>
       </div>
     </div>
-    <div class="col-md-3" *ngIf="isQLDSCTS_04">
+    <div class="col-xxl-4 col-md-3" *ngIf="isQLDSCTS_04">
       <div>{{'subject' | translate}}</div>
       <div class="input-line">
         <input type="text" [(ngModel)]="subject" class="input_text"/>
       </div>
     </div>
-    <div class="col-md-3" *ngIf="isQLDSCTS_04">
+    <div class="col-xxl-4 col-md-3" *ngIf="isQLDSCTS_04">
       <div>{{'contract.status' | translate}}</div>
       <div>
           <p-treeSelect placeholder="{{'all' | translate}}"
@@ -22,14 +22,14 @@
       </div>
     </div>
 
-    <div class="col-md-3 btn_search">
-      <button *ngIf="isQLDSCTS_04" class="btn btn-lg btn-block btn_submit" (click)="getFirstPageSearchData()">{{'btn.search' | translate }}</button>
+    <div class="col-xxl-2 btn_search">
+      <button *ngIf="isQLDSCTS_04" class="btn btn-lg btn-block btn_search1" (click)="getFirstPageSearchData()">{{'btn.search' | translate }}</button>
         <button *ngIf="isQLDSCTS_01" class="btn btn-lg btn-block btn_submit" (click)="addUnit()">{{'btn.add' | translate }}</button>
     </div>
   </div>
-
+  <div style="min-height: 74vh;">
   <div class="row" style="padding-top: 20px;">
-    <p-table [value]="list" [paginator]="true" [lazy]="true" (onLazyLoad)="getPageableCert($event)" [totalRecords]="totalRecords" [rows]="size" id="table" [autoLayout]="true" [(first)]="first">
+    <p-table [value]="list" [paginator]="false" [lazy]="true" (onLazyLoad)="getPageableCert($event)" [totalRecords]="totalRecords" [rows]="size" id="table" [autoLayout]="true" [(first)]="first">
       <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of cols" [style]='col.style'>
@@ -39,7 +39,7 @@
       </ng-template>
       <ng-template pTemplate="body" let-list>
           <tr>
-              <td><span (click)="isQLDSCTS_03?detailUser(list.id):null" style="cursor: pointer; color:#0160AE;">{{list.keystoreSerialNumber}}</span></td>
+              <td><span (click)="isQLDSCTS_03?detailUser(list.id):null" style="cursor: pointer; font-weight: 700;color: #001A4D;">{{list.keystoreSerialNumber}}</span></td>
               <td>{{getValueByKey(list.certInformation, "CN")}}</td>
               <td>{{getValue(list.certInformation, "UID")}}</td>
               <td>{{list.keystoreDateStart | date:'dd/MM/yyyy HH:mm'}}</td>
@@ -52,18 +52,24 @@
               </td>
           </tr>
       </ng-template>
-      <ng-template pTemplate="paginatorleft" let-state>
+      <!-- <ng-template pTemplate="paginatorleft" let-state>
         <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-      </ng-template>
+      </ng-template> -->
       <ng-template pTemplate="paginatorright" let-state>
         <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
       </ng-template>
     </p-table>
   </div>
-
+  </div>
 </div>
 <div *ngIf="!isQLDSCTS_01 && !isQLDSCTS_02 && !isQLDSCTS_03 && !isQLDSCTS_04">
   {{'no.role' | translate}}
+</div>
+
+<div style="display: grid;margin-top: 10px;grid-template-columns: repeat(3, 1fr)">
+  <div></div>
+  <p-paginator (onPageChange)="onPageChange($event)" [rows]="size" [totalRecords]="totalRecords"></p-paginator>
+  <div style="color: #0160AE !important;margin: auto 0 auto auto;">{{'chart.number' | translate}}: {{totalRecords === 0 ? 0 : page * size + 1}} - {{totalRecords > 0 ? toRecord() : 0}} / {{totalRecords > 0 ? totalRecords : 0}}</div>
 </div>
 
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">

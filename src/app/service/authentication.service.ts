@@ -29,7 +29,6 @@ export interface User {
 })
 export class AuthenticationService {
 
-  // loginUrl:any = `${environment.apiUrl}/api/v1/auth`;
   loginUrl:any = (environment.flag == 'KD' && environment.usedSSO) ? `${environment.apiUrl}/api/v1/auth/login/web_app` : `${environment.apiUrl}/api/v1/auth`;
   getAuthenTokenUrl:any = `${environment.apiUrl}/api/v1/auth/login-sso`;
 

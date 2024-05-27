@@ -103,12 +103,12 @@ export class ContractTypeService {
     return this.http.get<ContractType>(this.getContractTypeByIdUrl + id, {headers}).pipe();
   }
 
-  public getContractTypeList(code:any, name:any,idOrg?: number): Observable<any> {
+  public getContractTypeList(code:any, name:any,idOrg?: number, row: number = 15, page: any = 0): Observable<any> {
     this.getCurrentUser();
-    let listContractTypeUrl = this.listContractTypeUrl + this.organization_id + "?name=" + name.trim() + "&code=" + code.trim();
+    let listContractTypeUrl = this.listContractTypeUrl + this.organization_id + "?name=" + name.trim() + "&code=" + code.trim() + "&size=" + row  +'&page=' + page;
 
     if(idOrg) {
-      listContractTypeUrl = this.listContractTypeUrl + idOrg + "?name=" + name.trim() + "&code=" + code.trim();
+      listContractTypeUrl = this.listContractTypeUrl + idOrg + "?name=" + name.trim() + "&code=" + code.trim() + "&size=" + row  +'&page=' + page;
     }
 
 

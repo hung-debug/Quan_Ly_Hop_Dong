@@ -1,20 +1,47 @@
 .btn_submit{
-  border: 0px;
-  border-radius: 5px;
-  height: 33px;
+  border: 1px solid rgba(0, 26, 77, 0.10);
+  border-radius: 8px;
+  height: 35px;
   box-sizing: border-box;
   color: white;
-  background-color: #106DB6;
+  background: var(--Primary, #0041C4);
   font-size: 13px;
-  margin: 0 10px;
+  margin: 0 20px;
+  font-style: normal;
+  font-weight: 700;
+  width: 130px;
 }
+
+.btn_search1{
+  border-radius: 8px;
+  border: 1px solid rgba(0, 26, 77, 0.10);
+  height: 35px;
+  box-sizing: border-box;
+  color: #001A4D;
+  background-color: #FFF;
+  font-size: 13px;
+  margin: 0 0px;
+  font-style: normal;
+  font-weight: 700;
+  width: 130px;
+}
+
+.container-fluid{
+  background-color: #FFFFFF;
+  border-radius: 12px;
+}
+
 .input_text {
-  padding-left: 10px;
-  outline: none;
-  height: 33px;
+  border: 0.5px solid #F1F5FE;
+  margin: 0px;
   width: 100%;
-  border-radius: 5px;
-  border: 1px solid #106DB6;
+  height: 35px;
+  outline:0px;
+  background-color: #F1F5FE;
+  padding: 10px 16px 10px 16px;
+  opacity: 0px;
+  border-radius: 8px;
+  font-weight: 400;
 }
 .btn_search{
   align-self: flex-end;
@@ -24,7 +51,7 @@
   border-collapse: collapse;
   width: 100%;
   font-size: 13px;
-  font-family: font_lexend_deca;
+  // font-family: font_lexend_deca;
 }
 #table td, #table th {
   //border: 1px solid #ddd;
@@ -37,8 +64,9 @@
 
 #table th {
   //text-align: center;
-  background-color: #E2ECF6;
-  color: #106DB6;
+  background-color: #EBF2FB;
+  color: #8E9AB0;
+  font-weight: 500;
 }
 
 #table tr:last-child th:first-child {
@@ -58,6 +86,10 @@
   .pi-fw {
     color:  #106DB6;
     margin-right: 5px;
+  }
+  
+  .p-paginator{
+    background-color: #F3F6FA !important;
   }
 
   .p-paginator .p-paginator-pages .p-paginator-page{
@@ -89,10 +121,27 @@
 
   .p-datatable-table, .ng-star-inserted{
     font-size: 13px;
-    font-family: font_lexend_deca;
+    // font-family: font_lexend_deca;
   }
   .p-datatable .p-paginator-bottom {
     border-width: 0;
+  }
+}
+
+@media (min-width: 1400px) {
+  .col-xxl-5 {
+      flex: 0 0 auto;
+      width: 40%;
+  }
+  
+  .col-xxl-2{
+    flex: 0 0 auto;
+    width: 20%;
+  }
+  
+  .col-xxl-1 {
+    flex: 0 0 auto;
+    width: 10%;
   }
 }
 

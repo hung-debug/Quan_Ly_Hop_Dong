@@ -1,13 +1,24 @@
 <div class="page-wrapper" [ngClass]="{'toggled' : getSideBarState()}">
 
-
-  <app-sidebar *ngIf="getShowHideSideBar() && this.mobile === false" (evenSelectSidebar)="getName($event)"></app-sidebar>
-
   <main class="page-content" [ngStyle]="getStyleWithSideBar()" style="padding-bottom: 25px;">
+    <div class="sidebar-header sidebar-header-custom">
+      <a>
+        <img src="assets/img/logo_eContract_db.svg" alt="Logo" class="img-responsive" width="150px" height="auto" style="position: absolute; top: 8px; left: 27px;" />
+      </a>
+    </div>
+    <app-sidebar *ngIf="getShowHideSideBar() && this.mobile === false" (evenSelectSidebar)="getName($event)"></app-sidebar>
     <header [ngStyle]="getStyleSideBar()">
 
       <div class="search-wrapper">
-        <h3>{{title | translate}}</h3>
+        <div style="padding-right: 8px;">
+          <h3 class="search-wrapper-label" style="color: #002060; font-size: 14px;">{{title | translate}}</h3>
+        </div>
+        <div *ngIf="checkSubTitle()" style="display: flex; align-items: center; gap: 8px;">
+          <img src="../../assets/img/caret-down.svg" class="img_icon_caret-down" />
+        </div>
+        <div style="padding-left: 8px;">
+          <h3 class="search-wrapper-label" style="color: #0041C4;font-size: 14px;">{{subTitle | translate}}</h3>
+        </div>
       </div>
       <div class="warning-container">
         <div class="warning-scroll">
@@ -16,12 +27,89 @@
           </div>
         </div>
       </div>
-      <div *ngIf="getShowHideSideBar()">
+      <div *ngIf="getShowHideSideBar()"  style="display: flex;align-items: center;">
+        <div ngbDropdown class="d-inline-block">
+          <div class="social-icons" ngbDropdownToggle>
+            <span class="user_login"></span>
+            <div style="display: flex; flex-direction: column;">
+              <div class="label" style="color: #001A4D;">Ông/ Bà {{nameCurrentUser}}</div>
+              <div class="label" style="color: #A8B5CE;">{{phoneCurrentUser}}</div>
+            </div>
+            <div style="margin-left: 16px;">
+              <img style="width: 20px; height: 20px;" src="../../assets/img/arrow-down.svg"/>
+            </div>
+          </div>
+
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu" style="cursor: pointer">
+            <a ngbDropdownItem class="drop" (click)="infoUserDetail()" [routerLink]="['/main/user-infor']">
+              <div style="display: flex; align-items: center;">
+                <div class="db_user">
+                  <div class="db_user_detail"></div>
+                </div>
+                <div>{{'user.information' | translate }}</div>
+              </div>
+            </a>
+
+            <button *ngIf="!checkMailMbf()" ngbDropdownItem class="drop" (click)="resetPassword()">
+              <div style="display: flex; align-items: center;">
+                <div class="db_user">
+                  <div class="db_password"></div>
+                </div>
+                <div>{{'login.reset_password_new' | translate }}
+                  <a href="https://auth-sso.mobifone.vn/vn/profile-information" ></a
+                >
+                </div>
+              </div>
+            </button>
+
+            <!-- <button *ngIf="!checkMailMbf()" ngbDropdownItem class="drop">
+              <div style="display: flex; align-items: center;">
+                <div class="db_user">
+                  <div class="db_password"></div>
+                </div>
+                <div>
+                  <a href="https://auth-sso.mobifone.vn/vn/profile-information" 
+                  >{{'login.reset_password_new' | translate }}</a>
+                </div>
+              </div>
+            </button> -->
+            
+            <button ngbDropdownItem class="drop" (click)="viewLink()">
+              <a style="color: inherit; text-decoration: none;" href="https://drive.google.com/drive/folders/1NHaCYOMCMsLvrw1uPbX2ezsC-Uo9huW3">
+              <div style="display: flex; align-items: center;">
+                <div class="db_user">
+                  <div class="db_document_use"></div>
+                </div>
+                <div>{{'document.user.use' | translate }}</div></div>
+              </a>
+            </button>
+
+            <button ngbDropdownItem class="drop">
+              <a href="/assets/upload/mobi_token_sign_setup.zip" style="color: inherit; text-decoration: none;">
+              <div style="display: flex; align-items: center;">
+                <div class="db_user">
+                  <div class="db_document_use"></div>
+                </div>
+                <div>{{'document.plugin.pki' | translate }}</div></div>
+              </a>
+            </button>
+            
+            <button ngbDropdownItem class="drop_red" routerLink="/login" (click)="logout()">
+              <div style="display: flex; align-items: center;">
+                <div class="db_user">
+                  <div class="db_log_out"></div>
+                </div>
+                <div>{{'logout' | translate }}</div>
+              </div>
+            </button>
+          </div>
+        </div>
+        
         <div *ngIf="!this.mobile" ngbDropdown class="d-inline-block">
           <div class="social-icons" ngbDropdownToggle (click)="loadDataNotification()">
-            <i *ngIf="numberNotification == 0" class="pi pi-bell p-mr-4 p-text-secondary"></i>
-            <i *ngIf="numberNotification > 0" class="pi pi-bell p-mr-4 p-text-secondary" pBadge value="{{numberNotification}}"></i>
-            <div class="label">{{'notification' | translate }}</div>
+            <i *ngIf="numberNotification == 0" class="icon-pi p-mr-4 p-text-secondary"><img src="../../assets/img/bell-filled.svg"></i>
+            <i *ngIf="numberNotification > 0" class="icon-pi p-mr-4 p-text-secondary" pBadge value="{{numberNotification}}"><img src="../../assets/img/bell-filled.svg"></i>
+            <!-- <div class="label">{{'notification' | translate }}</div> -->
           </div>
 
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu" style="width: 500px;overflow: hidden auto;max-height: 315px;">
@@ -77,82 +165,15 @@
         <div *ngIf="!this.mobile" ngbDropdown class="d-inline-block">
           <div class="social-icons" ngbDropdownToggle>
               <span class="document"></span>
-              <div class="label">{{'document' | translate }}</div>
+              <!-- <div class="label">{{'document' | translate }}</div> -->
           </div>
 
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
-            <button ngbDropdownItem class="drop" (click)="viewLink()">
-              <a style="color: inherit; text-decoration: none;" href="https://drive.google.com/drive/folders/1NHaCYOMCMsLvrw1uPbX2ezsC-Uo9huW3">
-              <div style="display: flex; align-items: center;">
-                <div class="db_user">
-                  <div class="db_document_use"></div>
-                </div>
-                <div>{{'document.user.use' | translate }}</div></div>
-              </a>
-            </button>
+          <!-- <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
 
-            <button ngbDropdownItem class="drop">
-              <a href="/assets/upload/mobi_token_sign_setup.zip" style="color: inherit; text-decoration: none;">
-              <div style="display: flex; align-items: center;">
-                <div class="db_user">
-                  <div class="db_document_use"></div>
-                </div>
-                <div>{{'document.plugin.pki' | translate }}</div></div>
-              </a>
-            </button>
-          </div>
+          </div> -->
         </div>
 
-        <div ngbDropdown class="d-inline-block">
-          <div class="social-icons" ngbDropdownToggle>
-            <span class="user_login"></span>
-            <div class="label">{{nameCurrentUser}}</div>
-          </div>
 
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu" style="cursor: pointer">
-            <a ngbDropdownItem class="drop" (click)="infoUserDetail()" [routerLink]="['/main/user-infor']">
-              <div style="display: flex; align-items: center;">
-                <div class="db_user">
-                  <div class="db_user_detail"></div>
-                </div>
-                <div>{{'user.information' | translate }}</div>
-              </div>
-            </a>
-
-            <button *ngIf="!checkMailMbf()" ngbDropdownItem class="drop" (click)="resetPassword()">
-              <div style="display: flex; align-items: center;">
-                <div class="db_user">
-                  <div class="db_password"></div>
-                </div>
-                <div>{{'login.reset_password_new' | translate }}
-                  <!-- <a href="https://auth-sso.mobifone.vn/vn/profile-information" ></a -->
-                <!-- > -->
-                </div>
-              </div>
-            </button>
-
-            <!-- <button *ngIf="!checkMailMbf()" ngbDropdownItem class="drop">
-              <div style="display: flex; align-items: center;">
-                <div class="db_user">
-                  <div class="db_password"></div>
-                </div>
-                <div>
-                  <a href="https://auth-sso.mobifone.vn/vn/profile-information" 
-                  >{{'login.reset_password_new' | translate }}</a>
-                </div>
-              </div>
-            </button> -->
-
-            <button ngbDropdownItem class="drop_red" routerLink="/login" (click)="logout()">
-              <div style="display: flex; align-items: center;">
-                <div class="db_user">
-                  <div class="db_log_out"></div>
-                </div>
-                <div>{{'logout' | translate }}</div>
-              </div>
-            </button>
-          </div>
-        </div>
       </div>
     </header>
 
@@ -164,8 +185,8 @@
       </div>
     </div>
 
-    <div class="content_footer">
-        <div>@Copyright 2023 - MobiFone | v1.19.1</div>
-    </div>
+    <!-- <div class="content_footer">
+        <div>@Copyright 2023 - MobiFone | v1.17.0</div>
+    </div> -->
   </main>
 </div>

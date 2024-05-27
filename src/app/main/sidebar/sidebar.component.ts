@@ -22,6 +22,9 @@ export class SidebarComponent implements OnInit {
   @Output() evenSelectSidebar = new EventEmitter<string>();
   menus: any = [];
   subMenus: any = [];
+  prevItem: any;
+  isHovered = false;
+  // prevItem: any = [];
 
   constructor(
     public sidebarservice: SidebarService,
@@ -29,6 +32,7 @@ export class SidebarComponent implements OnInit {
     private contractService: ContractService
   ) {
     this.menus = sidebarservice.getMenuList();
+    this.prevItem = undefined;
   }
 
   ngOnInit() {
@@ -43,6 +47,27 @@ export class SidebarComponent implements OnInit {
     return this.sidebarservice.getSidebarState();
   }
 
+  onMouseEnter(currentMenu: any) {
+    this.isHovered = true;
+    if (!currentMenu.active) {
+      currentMenu.icon = currentMenu.iconFill;
+    }
+  }
+
+  onMouseLeave(currentMenu: any) {
+    this.isHovered = false;
+    if (!currentMenu.active) {
+      currentMenu.icon = currentMenu.iconDefault;
+    }
+  }
+
+  // switchToFillIcon(icon: string) {
+  //   return icon.replaceAll('.svg', '_v2.svg');
+  // }
+
+  // switchToDefaultIcon(icon: string) {
+  //   return icon.replaceAll('_v2', '');
+  // }
 
   // set active dropdown
   toggle(currentMenu: any) {
@@ -50,8 +75,10 @@ export class SidebarComponent implements OnInit {
       currentMenu.activeDrop = true;
       this.menus.forEach((element: any) => {
         if (element === currentMenu) {
+          element.icon = currentMenu.iconFill;
           currentMenu.active = !currentMenu.active;
         } else {
+          element.icon = element.iconDefault;
           element.active = false;
           element.activeDrop = false;
         }
@@ -61,12 +88,14 @@ export class SidebarComponent implements OnInit {
 
   //set active link
   clickLink(currentMenu: any) {
-    
+    // currentMenu.icon = currentMenu.iconFill;
     this.menus.forEach((element: any) => {
       if (element === currentMenu) {
         //currentMenu.active = !currentMenu.active;
+        element.icon = currentMenu.iconFill;
         element.active = true;
       } else {
+        element.icon = element.iconDefault;
         element.active = false;
         element.activeDrop = false;
       }

@@ -14,6 +14,9 @@ import * as moment from 'moment';
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { AccountLinkDialogComponent } from '../dialog/account-link-dialog/account-link-dialog.component';
+import { ContractSignatureService } from 'src/app/service/contract-signature.service';
+import { sideList } from 'src/app/config/variable';
+import { DeleteContractDialogComponent } from './../contract/dialog/delete-contract-dialog/delete-contract-dialog.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,6 +27,7 @@ export class DashboardComponent implements OnInit {
 
   translations: any;
   chartCreated: any;
+  chartPieCreated: any;
   chartReceived: any;
 
   menuDashboard: string;
@@ -49,6 +53,9 @@ export class DashboardComponent implements OnInit {
   stateOptions: any[];
 
   listNotification: any[] = [];
+  contractConnectList: any[] = [];
+  contractRequestList: any[] = [];
+  contractRecipienteList: any[] = [];
   orgList: any[] = [];
   orgListTmp: any[] = [];
   organization_id: any = "";
@@ -73,6 +80,9 @@ export class DashboardComponent implements OnInit {
   OrgId: any;
   enviroment: any = "";
   site: string;
+  currentName: any;
+  loadData1: boolean = false;
+  loadData2: boolean = false;
 
   constructor(
     private appService: AppService,
@@ -85,6 +95,8 @@ export class DashboardComponent implements OnInit {
     private toastService: ToastService,
     private roleService: RoleService,
     private dialog: MatDialog,
+    private contractService : ContractService,
+    private contractSignature: ContractSignatureService,
   ) {
     this.stateOptions = [
       {label: "my.contract", value: 'off'},
@@ -103,11 +115,13 @@ export class DashboardComponent implements OnInit {
     }
 
     this.appService.setTitle("menu.dashboard");
+    this.appService.setSubTitle("");
     this.search();
     let count = localStorage.getItem('countNoti')
     let userId = this.userService.getAuthCurrentUser().id;
     this.userService.getUserById(userId).subscribe(
       data => {
+        this.currentName = data.name
         //lay id role
         if (environment.flag == 'KD' && !data.is_required_sso && environment.usedSSO) {
           this.openAccountLinkDialog(data)
@@ -162,7 +176,10 @@ export class DashboardComponent implements OnInit {
 
       this.unitService.getNumberContractUseOriganzation(this.userService.getInforUser().organization_id).toPromise().then(
         data => {
+          console.log("dataaaaaanumContractUse",data);
+          this.search()
           this.numContractUse = data.contract;
+          this.loadData1 = true;
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
         }
@@ -171,7 +188,10 @@ export class DashboardComponent implements OnInit {
       //lay so luong hop dong da mua
       this.unitService.getNumberContractBuyOriganzation(this.userService.getInforUser().organization_id).toPromise().then(
         data => {
+          console.log("dataaaaaanumContractBuy",data);
           this.numContractBuy = data.contract;
+          this.loadData2 = true;
+          this.search()
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
         }
@@ -179,6 +199,7 @@ export class DashboardComponent implements OnInit {
 
       this.orgList = this.orgListTmp;
       this.convertData();
+      this.getDataPieChart();
     });
   }
 
@@ -303,7 +324,7 @@ export class DashboardComponent implements OnInit {
 
   detailContract(id: any) {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-      this.router.navigate(['/main/contract/create/processing']);
+      this.router.navigate(['/main/form-contract/detail/' + id]);
     });
   }
 
@@ -327,6 +348,8 @@ export class DashboardComponent implements OnInit {
     this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
     this.dashboardService.countContractCreate(this.isOrg, this.organization_id, this.filter_from_date, this.filter_to_date).subscribe(data => {
       let newData = Object.assign( {}, data)
+      // console.log("newData",newData);
+      
       newData.isOrg = this.isOrg;
       newData.organization_id = this.organization_id;
       newData.from_date = this.filter_from_date;
@@ -344,12 +367,16 @@ export class DashboardComponent implements OnInit {
         this.createChart("Đang xử lý","Hoàn thành","Từ chối","Huỷ bỏ", "Quá hạn", "Số lượng", newData);
       else if(localStorage.getItem('lang') == 'en' || sessionStorage.getItem('lang') == 'en')
         this.createChart("Processing","Complete","Reject","Cancel","Out of date", "Number", newData);
+
+      if (this.loadData1 &&  this.loadData2) {
+        this.createPieChart(this.numContractUse, this.numContractBuy - this.numContractUse)
+      }
     });
   }
 
   createChart(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string,so_luong: string, data: any) {
     this.chartCreated = new Chart({
-      colors: ['#4B71F0', '#58A55C', '#ED1C24', '#717070', '#FF710B'],
+      colors: ['#639AED', '#FAC485', '#F56B6E', '#50E0AC', '#8B8B8B'],
       chart: {
         type: 'column',
         style: {
@@ -434,7 +461,7 @@ export class DashboardComponent implements OnInit {
               }
             }
           },
-        }
+        }    
       },
 
 
@@ -453,6 +480,101 @@ export class DashboardComponent implements OnInit {
         }]
     });
   }
+  
+  getDataPieChart(){
+    
+    let numContractHeight = document.getElementById('num-contract')?.offsetHeight || 0;
+    let numContractBodyHeight = document.getElementById('num-contract-body')?.offsetHeight || 0;
+    let notiHeight = document.getElementById('noti')?.offsetHeight || 450;
+    this.chartHeight = numContractHeight + notiHeight + numContractBodyHeight - 37;
+    let numContractUnUsed = this.numContractBuy - this.numContractUse;
+
+  }
+  
+  
+  createPieChart(numContractUse: any, numContractUnUsed: any) {
+    this.chartPieCreated = new Chart({
+      colors: ['#CED3FF', '#4495F5'],
+      chart: {
+        type: 'pie',
+        style: {
+          fontFamily: 'Roboto'
+        },
+        height: 500,
+        events: {
+          render: function (this: any) {
+            const chart = this;
+            const textX = chart.plotLeft + (chart.series[0].center[0]);
+            const textY = chart.plotTop + (chart.series[0].center[1]);
+  
+            // Check if centerText exists, remove if it does
+            if (chart.centerText) {
+              chart.centerText.destroy();
+            }
+  
+            chart.centerText = chart.renderer.text(numContractUse, textX, textY)
+              .css({
+                fill: '#001A4D',
+                fontSize: '24px',
+                fontWeight: 'bold',
+                fontFamily: 'ROBOTO',
+              })
+              .add();
+  
+            chart.centerText.attr({
+              x: textX - chart.centerText.getBBox().width / 2,
+            });
+  
+            const numberContract = numContractUse + numContractUnUsed;
+            const secondTextY = textY + 30;
+  
+            // Check if numContract exists, remove if it does
+            if (chart.numContract) {
+              chart.numContract.destroy();
+            }
+  
+            chart.numContract = chart.renderer.text('TỔNG ' + numberContract, textX, secondTextY)
+              .css({
+                fill: '#001A4D',
+                fontSize: '18px',
+                fontWeight: 'bold',
+                fontFamily: 'ROBOTO',
+              })
+              .add();
+  
+            chart.numContract.attr({
+              x: textX - chart.numContract.getBBox().width / 2,
+            });
+          }
+        }
+      },
+      title: {
+        text: this.chartContractCreated,
+        style: {
+          fontSize: '16px',
+          fontWeight: '500',
+        },
+        verticalAlign: 'bottom',
+      },
+      credits: {
+        enabled: false
+      },
+      legend: {
+          enabled: false
+      },
+      series: [
+        {
+          type: 'pie',
+          innerSize: '80%',
+          name: this.translate.instant('contract.number'),
+          data: [
+            [this.translate.instant('package.unused'), numContractUnUsed],
+            [this.translate.instant('package.used'), numContractUse],
+          ]
+        }
+      ]
+    });
+  }
 
   getNumberContractBoxHeight(){
     let chartHeight = document.getElementById('chart-column')?.offsetHeight || 0;
@@ -464,6 +586,16 @@ export class DashboardComponent implements OnInit {
       'height': notiHeight + 'px',
       'overflow': 'auto'
     };
+  }
+  sortParticipant(list: any) {
+    // return list.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
+    return list;
+  }
+
+  getNameOrganization(item: any, index: any) {
+    if(item.type == 3 && item.recipients.length > 0)
+      return sideList[index].name + " : " + item.recipients[0].name;
+    return sideList[index].name + " : " + item.name;
   }
 
   search() {
@@ -479,8 +611,71 @@ export class DashboardComponent implements OnInit {
 
     this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
       this.listNotification = data.entities;
-
+      // console.log("this.listNotification",data);
     });
+    
+    this.dashboardService.getNotification(0, '', '', 1, '').subscribe(data => {
+      // this.contractConnectList = data.entities;
+     
+      
+    });
+    this.contractService.getContractList('off','','','','','','',0,'',1,'').subscribe(data => {
+      console.log("this.contractConnectListlllllll",data);
+      this.contractConnectList = data.entities;
+    })
+    this.contractSignature.getContractMyProcessList('','','','','',1,'',2,'').subscribe(data => {
+      console.log("this.contractRequestList",data);
+      this.contractRequestList = data.entities;
+      // console.log("this.contractRequestList",this.contractRequestList);
+      // this.contractRecipienteList = data.entities.participant;
+      this.contractRecipienteList.forEach((item: any) => {
+        // console.log("item",item);
+        
+      })
+      // console.log("this.contractRecipienteList",this.contractRecipienteList);
+      
+    })
+  }
+  
+  clickAddContract(){
+    this.router.navigate([
+      '/main/form-contract/add',
+    ]);
+    this.appService.setSubTitle('add.contract.one.not.template');
+  }
+  
+  openEdit(id: number) {
+    setTimeout(() => {
+      void this.router.navigate(['main/form-contract/edit/' + id]);
+    }, 100)
+  }
+  
+  deleteContract(id: any) {
+    let data: any = "";
+
+    if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
+      data = {
+        title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
+        id: id
+      };
+    } else if (sessionStorage.getItem('lang') == 'en') {
+      data = {
+        title: 'CONTRACT DELETE CONFIRMATION',
+        id: id
+      };
+    }
+
+    // @ts-ignore
+    const dialogRef = this.dialog.open(DeleteContractDialogComponent, {
+      width: '480px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      let is_data = result
+    })
   }
 
   openAccountLinkDialog(userData: any) {
@@ -493,5 +688,21 @@ export class DashboardComponent implements OnInit {
       disableClose: true,
       autoFocus: false
     })
+  }
+  
+  addCenterText() {
+    const series = this.chartPieCreated.series[0];
+    const centerX = series.center[0];
+    const centerY = series.center[1];
+
+    this.chartPieCreated.renderer.text('Center Text', centerX, centerY)
+      .css({
+        color: '#000', // Change color as needed
+        fontSize: '16px' // Change font size as needed
+      })
+      .attr({
+        zIndex: 5
+      })
+      .add();
   }
 }

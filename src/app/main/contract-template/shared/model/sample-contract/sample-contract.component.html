@@ -22,7 +22,7 @@
 
                         <div *ngIf="d.sign_unit == 'chu_ky_anh'" class="content-drag" id="element-drag" [ngStyle]="setWidth(d)">
                             <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : ''" [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
-                            <span *ngIf="d.sign_unit == 'chu_ky_anh'">{{'sign.image.ekyc' |translate}}</span>
+                            <span *ngIf="d.sign_unit == 'chu_ky_anh'">{{'sign.image.ekyc1' |translate}}</span>
                         </div>
                     </div>
                 </div>
@@ -138,8 +138,7 @@
 </div>
 <div class="footer-sample-contract">
     <div class="col-md-3">
-        <button (click)="back($event, 'determine-contract')" type="button" name="next" class="next action-button"
-            style="background-color: #8B8B8B">{{'btn.previous' | translate}}</button>
+        <button (click)="back($event, 'determine-contract')" type="button" name="next" class="next action-button-previous">{{'btn.previous' | translate}}</button>
     </div>
     <div class="col-md-9">
         <div class="center">

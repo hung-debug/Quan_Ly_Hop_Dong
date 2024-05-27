@@ -1621,7 +1621,7 @@ export class ConsiderContractComponent
                               'Vui lòng bật tool ký số hoặc tải ' +
                               `<a href='/assets/upload/VGCAServices.zip' target='_blank'>Tại đây</a> và cài đặt`,
                             icon: 'warning',
-                            confirmButtonColor: '#3085d6',
+                            confirmButtonColor: '#0041C4',
                             cancelButtonColor: '#b0bec5',
                             confirmButtonText: 'Xác nhận',
                           });
@@ -1977,7 +1977,7 @@ export class ConsiderContractComponent
         title: this.getTextAlertConfirm(),
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#0041C4',
         cancelButtonColor: '#b0bec5',
         confirmButtonText: this.translate.instant('confirm'),
         cancelButtonText: this.translate.instant('contract.status.canceled'),
@@ -1994,7 +1994,7 @@ export class ConsiderContractComponent
         title: this.getTextAlertConfirm(),
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#0041C4',
         cancelButtonColor: '#b0bec5',
         confirmButtonText: this.translate.instant('confirm'),
         cancelButtonText: this.translate.instant('contract.status.canceled'),
@@ -3333,7 +3333,7 @@ export class ConsiderContractComponent
           'Vui lòng bật tool ký số hoặc tải ' +
           `<a href='/assets/upload/mobi_token_sign_setup.zip' target='_blank'>Tại đây</a>  và cài đặt`,
         icon: 'warning',
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#0041C4',
         cancelButtonColor: '#b0bec5',
         confirmButtonText: 'Xác nhận',
       });
@@ -3408,7 +3408,7 @@ export class ConsiderContractComponent
             Swal.fire({
               title: `Mã số thuế/CMT/CCCD trên chữ ký số không trùng khớp`,
               icon: 'warning',
-              confirmButtonColor: '#3085d6',
+              confirmButtonColor: '#0041C4',
               cancelButtonColor: '#b0bec5',
               confirmButtonText: 'Xác nhận',
             });
@@ -3419,7 +3419,7 @@ export class ConsiderContractComponent
       Swal.fire({
         title: `Vui lòng cắm USB Token hoặc chọn chữ ký số!`,
         icon: 'warning',
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#0041C4',
         cancelButtonColor: '#b0bec5',
         confirmButtonText: 'Xác nhận',
       });
@@ -3570,7 +3570,7 @@ export class ConsiderContractComponent
       Swal.fire({
         title: `Mã số thuế trên chữ ký số không trùng mã số thuế của tổ chức`,
         icon: 'warning',
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#0041C4',
         cancelButtonColor: '#b0bec5',
         confirmButtonText: 'Xác nhận',
       });
@@ -4230,7 +4230,7 @@ export class ConsiderContractComponent
       input: 'textarea',
       inputValue: inputValue,
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
+      confirmButtonColor: '#0041C4',
       cancelButtonColor: '#b0bec5',
       confirmButtonText: confirm,
       cancelButtonText: cancel,
@@ -5092,7 +5092,7 @@ export class ConsiderContractComponent
       title: this.getTextAlertRemoteSigningProcess(code),
       icon: code == 'HOAN_THANH' ? 'success' : 'warning',
       showCancelButton: false,
-      confirmButtonColor: '#3085d6',
+      confirmButtonColor: '#0041C4',
       // cancelButtonColor: '#b0bec5',
       confirmButtonText: this.translate.instant('confirm'),
       // cancelButtonText: this.translate.instant('contract.status.canceled'),
@@ -5117,7 +5117,7 @@ export class ConsiderContractComponent
       title: "Hệ thống <b>không hỗ trợ</b> loại ký của bạn <b>nhập ô text/số hợp đồng</b>. Nếu đồng ý với điều khoản hợp đồng, bấm <b>Đồng ý</b>, <b>bỏ qua ô text/số hợp đồng</b> và bấm <b>Xác nhận</b> với điều khoản.",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
+      confirmButtonColor: '#0041C4',
       // cancelButtonColor: '#b0bec5',
       confirmButtonText: this.translate.instant('Đồng ý'),
       cancelButtonText: this.translate.instant('contract.status.canceled'),

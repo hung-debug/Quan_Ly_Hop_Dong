@@ -44,11 +44,12 @@ export class UnitComponent implements OnInit {
   isQLTC_04:boolean=true;  //xem thong tin chi tiet to chuc
 
   ngOnInit(): void {
-    this.appService.setTitle("unit.list");
+    this.appService.setTitle("menu.manager.user");
+    this.appService.setSubTitle("unit.list");
     this.searchUnit();
 
     this.cols = [
-      { field: 'name', header: 'unit.name', style:'text-align: left;' },
+      { field: 'name', header: 'unit.name', style:'text-align: center;' },
       { field: 'id', header: 'unit.id', style:'text-align: left; padding-right: 100px' },
       { field: 'short_name', header: 'unit.short-name', style:'text-align: left;' },
       { field: 'code', header: 'unit.code', style:'text-align: left;' },

@@ -51,9 +51,9 @@
 .sidebar {
   width: 220px;
   height: 100%;
-  max-height: 100%;
+  max-height: 90%;
   position: fixed;
-  top: 0;
+  top: 75px;
   left: 0px;
   z-index: 999;
   transition: left .3s ease;
@@ -61,6 +61,28 @@
   a {
     text-decoration: none;
     transition: color .3s ease;
+  }
+
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 59px;
+    background-color: #FFFFFF;
+
+    >a {
+      text-transform: uppercase;
+      font-weight: bold;
+      flex-grow: 1;
+      text-decoration: none;
+    }
+
+    #close-sidebar {
+      cursor: pointer;
+      font-size: 20px;
+      transition: color .3s ease;
+    }
   }
 
   .sidebar-content {
@@ -75,6 +97,7 @@
       justify-content: center;
       text-align: center;
       height: 59px;
+      background-color: #FFFFFF;
 
       >a {
         text-transform: uppercase;
@@ -147,6 +170,13 @@
 
     .sidebar-menu {
       padding-bottom: 10px;
+      //styleName: Content/12 Medium;
+      font-family: "Roboto";
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 18px;
+      text-align: left;
+
 
       .header-menu span {
         font-weight: bold;
@@ -166,11 +196,11 @@
           width: 100%;
           text-decoration: none;
           position: relative;
-          padding: 8px 30px 8px 20px;
+          padding: 8px 38px 8px 20px;
           cursor: pointer;
 
           img {
-            margin-right: 10px;
+            // margin-right: 10px;
             font-size: 12px;
             width: 20px;
             height: 30px;
@@ -182,6 +212,7 @@
           &:hover>i::before {
             display: inline-block;
             animation: swing ease-in-out .5s 1 alternate;
+            color: #0041C4;
           }
 
           span.label,
@@ -197,7 +228,8 @@
         >a:after {
           font-family: 'FontAwesome';
           font-weight: 900;
-          content: "\f105";
+          // content: "\f105";
+          content: url("../../../assets/img/arrow-right.svg");
           display: inline-block;
           font-style: normal;
           font-variant: normal;
@@ -207,8 +239,8 @@
           text-align: center;
           background: 0 0;
           position: absolute;
-          right: 15px;
-          top: 14px;
+          right: 10px;
+          top: 10px;
           transition: transform .3s ease;
 
         }
@@ -259,6 +291,29 @@
     }
 
 
+  }
+
+  .sidebar-footer-custom {
+    height: 59px;
+    .sidebar-footer-logo {
+      margin: 10px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-left: 16px;
+      margin-right: 0;
+    }
+
+    .sidebar-footer-version {
+      display: flex;
+      align-items: center;
+      vertical-align: middle;
+      color: #A8B5CE;
+      span {
+        font-size: 13px;
+        margin-top: 3px;
+      }
+    }
   }
 
   .sidebar-footer {
@@ -417,18 +472,18 @@
 
 
 /*------------------------------default theme---------------------------------*/
-$bg-sidebar-wrapper : #F9FDFF;
+// $bg-sidebar-wrapper : (--BG, #F3F6FA);
 $border-color : #2b2b2b;
 $footer-top-border-color :#3a3a3a;
-$color:#106DB6;
+$color:#001A4D;
 $header-menu-color :#6c7b88;
 $hover-color:#f70707;
 $shadow-color:#131212;
 $bg-scrollbar :#636363;
 
 // colors with backgound image
-$img-bg-sidebar-wrapper : rgba(183, 206, 250, 0.1);
-$img-border-color : #b4b2b226;
+// $img-bg-sidebar-wrapper : rgba(183, 206, 250, 0.1);
+$img-border-color : #F3F6FA;
 $img-bg-footer :rgba(43, 43, 43, 0.5);
 $img-shadow-color:rgba(0, 0, 0, 0.5);
 
@@ -436,7 +491,7 @@ $img-shadow-color:rgba(0, 0, 0, 0.5);
 
 .sidebar {
 
-  background-color: $bg-sidebar-wrapper;
+  
 
   .sidebar-profile,
   .sidebar-search,
@@ -460,33 +515,45 @@ $img-shadow-color:rgba(0, 0, 0, 0.5);
   #close-sidebar {
     color: $color;
   }
+  
 
-  .sidebar-menu ul li:hover>a,
-  .sidebar-menu .active>a,
-  .sidebar-menu .sidebar-dropdown.active>a,
-  .sidebar-menu .sidebar-dropdown-active>a,
+  .sidebar-menu .sidebar-menu-ul .sidebar-menu-li:hover>.sidebar-menu-a,
+  .sidebar-menu .active>.sidebar-menu-a,
+  .sidebar-menu .sidebar-dropdown.active>.sidebar-menu-a,
+  .sidebar-menu .sidebar-dropdown-active>.sidebar-menu-a,
   .sidebar-profile .user-info,
-  .sidebar-footer>div>a:hover i,
+  .sidebar-footer>div>.sidebar-menu-a:hover i,
   #close-sidebar:hover {
     //color: $hover-color !important;
-    background-color: #c5ebff;
-    font-weight: 500;
+    background-color: #FFFFFF;
+    font-weight: 700;
+    color: var(--Primary, #0041C4) !important;
+    border-radius: 8px;
+  }
+
+  .sidebar-submenu .sidebar-submenu-ul .sidebar-submenu-li:hover>.sidebar-submenu-a,
+  .sidebar-submenu .active>.sidebar-submenu-a
+  // .sidebar-submenu .sidebar-dropdown.active>.sidebar-submenu-a
+  {
+    color: #286CF5;
+    font-weight: 700;
   }
 
   // ul li:hover a i,
   // .sidebar-dropdown .sidebar-submenu li a:hover:before,
   // .sidebar-search input.search-menu:focus+span,
   // .sidebar-menu .sidebar-dropdown.active a i {
-  //   color: $hover-color;
+  //   color: #286CF5 !important;
   // }
 
   .sidebar-menu ul li a i,
   .sidebar-menu .sidebar-dropdown div,
   .sidebar-search input.search-menu,
-  .sidebar-search .input-group-text {
-    background-color: $border-color;
+  .sidebar-search .input-group-text{
+    // background-color: $border-color;
     border: none;
     margin-left: 1px;
+    color: #286CF5;
   }
 
   .sidebar-menu .header-menu span {
@@ -509,7 +576,7 @@ $img-shadow-color:rgba(0, 0, 0, 0.5);
 
   // styles with background image
   &.sidebar-bg {
-
+    // background-color: var(--BG, #F3F6FA);
     //background-image: url(/assets/img/bg1.jpg);
     background-size: cover;
     background-position: center;
@@ -522,7 +589,7 @@ $img-shadow-color:rgba(0, 0, 0, 0.5);
       right: 0;
       bottom: 0;
       left: 0;
-      background-color: $img-bg-sidebar-wrapper;
+      // background-color: $img-bg-sidebar-wrapper;
     }
 
     .sidebar-profile,
@@ -564,24 +631,26 @@ $img-shadow-color:rgba(0, 0, 0, 0.5);
 
 .btn_add_contract{
   border: 0px;
-  border-radius: 12px;
-  width: 150px;
-  height: 33px;
+  border-radius: 6px;
+  width: 180px;
+  height: 38px;
   box-sizing: border-box;
   color: white;
-  background-color: #1487E1;
+  background-color: #0041C4;
   font-size: 13px;
 }
 .sub_title{
   padding-left: 35px;
-  display: flex
+  display: flex;
+  // color: #286CF5 !important;
 }
 .sub_title_add{
   display: inline-block;
   width: 100%;
   position: relative;
-  padding: 10px;
+  padding: 0px;
   text-align: center;
+  margin-bottom: 10%;
 }
 .icon_add{
   padding-right: 5px;

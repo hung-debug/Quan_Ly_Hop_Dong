@@ -334,11 +334,12 @@ export class UserService {
   public getUserList(
     filter_organization_id: any,
     filter_nameOrEmail: any,
-    filter_email: any
+    filter_email: any,
+    row: number = 15, page: any = 0
   ): Observable<any> {
     this.getCurrentUser();
 
-    let listUserUrl = this.listUserUrl + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email.trim() + '&size=10000';
+    let listUserUrl = this.listUserUrl + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email.trim() + '&size=' + row  +'&page=' + page;
     const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<User[]>(listUserUrl, { headers }).pipe();
   }

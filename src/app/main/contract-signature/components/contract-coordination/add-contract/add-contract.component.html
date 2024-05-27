@@ -1,5 +1,5 @@
 <!--xử lý gọi các component trong các step theo từng điều kiện-->
-<div>
+<div class="container-fluid">
   <app-contract-header #contractHeader [AddComponent]="this" [datas]="datas" [step]="stepLast"></app-contract-header>
   <ng-container>
     <app-determine-signer #determineSigner *ngIf="stepLast == 'determine-contract'" [datas]="datas" [step]="stepLast"

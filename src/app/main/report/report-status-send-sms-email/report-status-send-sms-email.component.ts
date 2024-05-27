@@ -75,7 +75,8 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.spinner.hide();
 
-    this.appService.setTitle('role.report.history.send.sms');
+    this.appService.setTitle('report');
+    this.appService.setSubTitle('role.report.history.send.sms');
 
     // this.optionsStatus = [
     //   { id: 20, name: 'Đang xử lý' },

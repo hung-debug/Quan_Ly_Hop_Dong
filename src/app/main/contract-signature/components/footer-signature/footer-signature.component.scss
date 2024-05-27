@@ -1,12 +1,24 @@
 .action-button {
-  width: 114px;
-  height: 30px;
-  background: #106DB6;
+  width: 100px;
+  background: #0041C4;
   //font-weight: bold;
   color: white;
   border: 0 none;
-  border-radius: 7px;
+  border-radius: 6px;
   cursor: pointer;
+  padding: 10px 5px;
+  margin: 5px 5px;
+}
+
+.action-button-previous {
+  width: 100px;
+  background: #FFFFFF;
+  font-weight: bold;
+  color: #0041C4;
+  border: 1px solid var(--Primary, #0041C4);
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 9px 5px;
   margin: 5px 5px;
 }
 
@@ -38,6 +50,7 @@
   //add css 16022022
   float: right;
   width: 75%;
+  padding-top: 2vh;
   .content_footer {
     color:#0160AE;
     font-size: 13px;

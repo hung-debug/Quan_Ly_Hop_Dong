@@ -1,15 +1,15 @@
-<p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (onChange)="onSelect($event)">
-  <ng-template #options let-item>
-      <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
-  </ng-template>
-</p-selectButton>
+
 
 <div class="container-fluid">
-
+  <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (onChange)="onSelect($event)">
+    <ng-template #options let-item>
+      <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
+    </ng-template>
+  </p-selectButton>
 <div class="col-md-12" style="padding-top: 20px;">
-  <div class="input-line search" style="justify-content:left">
-      <img src="../../assets/img/icon_search.svg" class="input-img" />
-      <input type="text" id="filter_name" [value]="filter_name" class="input-text" style="width: 90%!important"
+  <div class="input-line search" style="justify-content:left; border: none; background-color: #F1F5FE;">
+      <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
+      <input type="text" id="filter_name" [value]="filter_name" class="input-text" style=" width: 90%!important"
       placeholder="{{getPlaceholderFind() | translate}}" (keyup)="autoSearch($event)" />
   </div>
 </div>
@@ -24,7 +24,7 @@
   </div>
 </div>
 <div class="row" style="padding-top: 20px;">
-  <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
+  <p-table [value]="list" [paginator]="false" [rows]="15" id="table" [autoLayout]="true">
     <ng-template pTemplate="header" let-columns>
       <tr>
           <th *ngFor="let col of cols" [style]='col.style' [ngClass]="col.class">
@@ -35,7 +35,7 @@
     <ng-template pTemplate="body" let-list>
         <tr>
             <td><a (click)="openDetail(list.id,list.type)" [routerLink]="['/main/form-customer/customer-detail/organization', list.id]"  
-              style="color: #0160AE; cursor: pointer; text-decoration: none;">{{list.name}}</a></td>
+              style="color: #001A4D; cursor: pointer; text-decoration: none; font-weight: 700;">{{list.name}}</a></td>
             <td *ngIf="isOrgCustomer">{{list.taxCode}}</td>
             <td *ngIf="!isOrgCustomer">{{list.phone}}</td>
             <td *ngIf="!isOrgCustomer">{{list.email}}</td>
@@ -48,9 +48,9 @@
     </ng-template>
 
     <!-- <div *ngIf="state.totalRecords>0"> -->
-    <ng-template pTemplate="paginatorleft" let-state>
+    <!-- <ng-template pTemplate="paginatorleft" let-state>
       <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-    </ng-template>
+    </ng-template> -->
     <ng-template pTemplate="paginatorright" let-state>
       <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
     </ng-template> 
@@ -65,6 +65,13 @@ style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: cente
   </div>
 </div>
 </div>
+
+<div style="display: grid;margin-top: 10px;grid-template-columns: repeat(3, 1fr)">
+  <div></div>
+  <p-paginator (onPageChange)="onPageChange($event)" [rows]="row" [totalRecords]="totalRecords"></p-paginator>
+  <div style="color: #0160AE !important;margin: auto 0 auto auto;">{{'chart.number' | translate}}: {{totalRecords === 0 ? 0 : page * row + 1}} - {{totalRecords > 0 ? toRecord() : 0}} / {{totalRecords > 0 ? totalRecords : 0}}</div>
+</div>
+
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
   <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
 </ngx-spinner>

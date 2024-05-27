@@ -30,6 +30,11 @@ export class ContractTypeComponent implements OnInit {
   name:any = "";
   list: any[] = [];
   cols: any[];
+  totalRecords: number = 0;
+  row: number = 15;
+  page: number = 0;
+  first: number = 0;
+  idOrg: any;
 
   //phan quyen
   isQLLHD_01:boolean=true;  //them moi loai hop dong
@@ -41,7 +46,8 @@ export class ContractTypeComponent implements OnInit {
   ceca: boolean = false;
 
   ngOnInit(): void {
-    this.appService.setTitle("contract-type.list");
+    this.appService.setTitle("menu.config");
+    this.appService.setSubTitle("contract-type.list");
     this.searchContractType();
 
     this.cols = [
@@ -52,6 +58,9 @@ export class ContractTypeComponent implements OnInit {
 
     //lay id user
     let userId = this.userService.getAuthCurrentUser().id;
+    this.idOrg = this.userService.getAuthCurrentUser().organization_id;
+    console.log("log",this.idOrg);
+    
     this.userService.getUserById(userId).subscribe(
       data => {
         //lay id role
@@ -82,9 +91,21 @@ export class ContractTypeComponent implements OnInit {
   }
 
   searchContractType(){
-    this.contractTypeService.getContractTypeList(this.code, this.name).subscribe(response => {
-      this.list = response;
+    this.contractTypeService.getContractTypeList(this.code, this.name, this.idOrg, this.row, this.page).subscribe(response => {
+      console.log("row",this.row);
+      this.list = response.content;
+      console.log("res",response);
+      this.totalRecords = response.totalElements;
     });
+  }
+  
+  toRecord() {
+    return Math.min((this.page + 1) * this.row, this.totalRecords)
+  }
+
+  onPageChange(event: any) {
+    this.page = event.page;
+    this.searchContractType();
   }
 
   addContractType() {

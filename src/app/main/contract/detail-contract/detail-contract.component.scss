@@ -2,7 +2,12 @@
 //  font-family: 'SF_Dexend_deca';
 //  src: url('assets/scss/font/LexendDeca-VariableFont_wght.ttf') format('ttf');
 //}
-
+.container-fluid{
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding-top: 15px;
+  min-height: 92vh;
+}
 
 .sample-contract {
   //height: calc(100vh - 104px);
@@ -284,15 +289,15 @@
   height: 85px!important;
 }
 .action-button {
-  width: 114px;
-  height: 30px;
-  background: #106DB6;
+  width: 100px;
+  background: #0041C4;
   //font-weight: bold;
   color: white;
   border: 0 none;
-  border-radius: 7px;
+  border-radius: 6px;
   cursor: pointer;
-  margin: 5px 5px;
+  padding: 10px 5px;
+  margin: 5px 18px;
 }
 
 .action-button1 {

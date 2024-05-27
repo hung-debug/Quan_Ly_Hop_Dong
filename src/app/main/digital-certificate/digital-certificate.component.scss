@@ -1,17 +1,41 @@
-.btn_submit{
-  border: 0px;
-  border-radius: 5px;
-  height: 33px;
+.btn_submit {
+  border: 1px solid rgba(0, 26, 77, 0.10);
+  border-radius: 8px;
+  height: 35px;
   box-sizing: border-box;
   color: white;
-  background-color: #106DB6;
+  background: var(--Primary, #0041C4);
   font-size: 13px;
-  margin: 0 10px;
+  margin: 0 20px;
+  font-style: normal;
+  font-weight: 700;
+  width: 130px;
+}
+
+.btn_search1 {
+  border-radius: 8px;
+  border: 1px solid rgba(0, 26, 77, 0.10);
+  height: 35px;
+  box-sizing: border-box;
+  color: #001A4D;
+  background-color: #FFF;
+  font-size: 13px;
+  margin: 0 0px;
+  font-style: normal;
+  font-weight: 700;
+  width: 130px;
+}
+
+.container-fluid {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding-top: 15px;
 }
 
 input[type="file"] {
   display: none;
 }
+
 .custom-file-upload {
   color: white;
   border: 0px;
@@ -25,59 +49,78 @@ input[type="file"] {
 }
 
 .input_text {
-  padding-left: 10px;
-  outline: none;
-  height: 33px;
+  border: 0.5px solid #F1F5FE;
+  margin: 0px;
   width: 100%;
-  border-radius: 5px;
-  border: 1px solid #106DB6;
+  height: 35px;
+  outline:0px;
+  background-color: #F1F5FE;
+  padding: 10px 16px 10px 16px;
+  opacity: 0px;
+  border-radius: 8px;
+  font-weight: 400;
 }
-.btn_search{
+
+.btn_search {
   align-self: flex-end;
 }
 
 #table {
-border-collapse: collapse;
-width: 100%;
-font-size: 13px;
-font-family: font_lexend_deca;
-}
-#table td, #table th {
-//border: 1px solid #ddd;
-padding: 8px;
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+  // font-family: font_lexend_deca;
 }
 
-#table tr:nth-child(even){background-color: #f2f2f2;}
+#table td,
+#table th {
+  //border: 1px solid #ddd;
+  padding: 8px;
+}
 
-#table tr:hover {background-color: #ddd;}
+#table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#table tr:hover {
+  background-color: #ddd;
+}
 
 #table th {
-//text-align: center;
-background-color: #E2ECF6;
-color: #106DB6;
+  //text-align: center;
+  background-color: #EBF2FB;
+  color: #8E9AB0;
+  font-weight: 500;
 }
 
 #table tr:last-child th:first-child {
   border-top-left-radius: 10px;
 }
+
 #table tr:last-child th:last-child {
   border-top-right-radius: 10px;
 }
+
 #table tr:last-child td:first-child {
   border-bottom-left-radius: 10px;
 }
+
 #table tr:last-child td:last-child {
   border-bottom-right-radius: 10px;
 }
 
 :host ::ng-deep {
   .pi-fw {
-    color:  #106DB6;
+    color: #106DB6;
     margin-right: 5px;
     font-size: 10px;
   }
 
-  .p-paginator .p-paginator-pages .p-paginator-page{
+  .p-paginator {
+    background-color: #F3F6FA !important;
+  }
+
+  .p-paginator .p-paginator-pages .p-paginator-page {
     color: black;
     float: left;
     padding: 8px 16px;
@@ -97,32 +140,58 @@ color: #106DB6;
     border: 1px solid #2199e8;
   }
 
-  .p-paginator-bottom .p-ripple{
+  .p-paginator-bottom .p-ripple {
     padding: 10px;
     border-width: 0 !important;
     height: 26px !important;
     width: 50px !important;
   }
 
-  .p-datatable-table, .p-datatable-table .ng-star-inserted, .p-paginator-pages .ng-star-inserted{
+  .p-datatable-table,
+  .p-datatable-table .ng-star-inserted,
+  .p-paginator-pages .ng-star-inserted {
     font-size: 13px;
-    font-family: font_lexend_deca;
+    // font-family: font_lexend_deca;
   }
+
   .p-datatable .p-paginator-bottom {
     border-width: 0;
   }
 }
+
 :host ::ng-deep {
-  .p-treeselect, .p-dropdown {
-      border: 1px solid #106DB6;
-      border-radius: 5px;
-      height: 33px;
-      width: 100%;
-      outline: 0;
-      color: black !important;
+
+  .p-treeselect,
+  .p-dropdown {
+    border: 0.5px solid #F1F5FE;
+    margin: 0px;
+    width: 100%;
+    height: 35px;
+    outline:0px;
+    background-color: #F1F5FE;
+    border-radius: 8px;
+    font-weight: 400;
   }
-  .p-treeselect-label, .p-dropdown-label {
-      padding: 5px 5px 5px 15px;
+
+  .p-treeselect-label,
+  .p-dropdown-label {
+    padding: 5px 5px 5px 15px;
   }
 }
 
+@media (min-width: 1400px) {
+  .col-xxl-4 {
+    flex: 0 0 auto;
+    width: 26.6666666667%;
+  }
+
+  .col-xxl-2 {
+    flex: 0 0 auto;
+    width: 20%;
+  }
+
+  .col-xxl-1 {
+    flex: 0 0 auto;
+    width: 10%;
+  }
+}

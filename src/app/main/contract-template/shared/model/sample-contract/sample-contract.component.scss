@@ -265,27 +265,27 @@
 
 //style button
 .action-button {
-    width: 100px;
-    background: #106DB6;
-    //font-weight: bold;
-    color: white;
-    border: 0 none;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 10px 5px;
-    margin: 5px 5px;
+  width: 100px;
+  background: #0041C4;
+  //font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 10px 12px;
+  margin: 10px 0px;
 }
 
 .action-button-previous {
-    width: 100px;
-    background: #C5C5F1;
-    font-weight: bold;
-    color: white;
-    border: 0 none;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 10px 5px;
-    margin: 5px 5px;
+  width: 100px;
+  background: #FFFFFF;
+  font-weight: bold;
+  color: #0041C4;
+  border: 1px solid var(--Primary, #0041C4);
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 9px 12px;
+  margin: 10px 5px;
 }
 
 .footer-sample-contract {

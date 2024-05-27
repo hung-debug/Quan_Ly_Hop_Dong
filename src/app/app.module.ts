@@ -135,8 +135,11 @@ import { DeleteContractFolderComponent } from './main/contract-folder/current-fo
 import { UploadContractFileComponent } from './main/contract-folder/current-folder/upload-contract-file/upload-contract-file.component';
 import { AccountLinkDialogComponent } from './main/dialog/account-link-dialog/account-link-dialog.component';
 import { NgOtpInputModule } from  'ng-otp-input';
-import { environment } from 'src/environments/environment';
+import { HighchartsChartModule } from 'highcharts-angular';
+import { MatMenuModule } from '@angular/material/menu';
 import { PaginatorModule } from 'primeng/paginator';
+import { environment } from 'src/environments/environment';
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -274,8 +277,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     AccountLinkDialogComponent
   ],
   imports: [
-    TranslateModule,
     PaginatorModule,
+    TranslateModule,
     BrowserModule,
     AppRoutingModule,
     NgxChartsModule,
@@ -300,6 +303,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     // ContractSignatureModule,
     MatDialogModule,
     NgxSelectModule,
+    MatMenuModule,
     SweetAlert2Module.forRoot(
       {
         provideSwal: () => import('sweetalert2').then(({ default: swal }) => swal.mixin({
@@ -329,7 +333,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     WebcamModule,
     PdfViewerModule,
     KeycloakAngularModule,
-    NgOtpInputModule
+    NgOtpInputModule,
+    HighchartsChartModule
   ],
   providers: [ AppService, DatePipe,CurrencyPipe,KeycloakAngularModule, KeycloakService,
     {

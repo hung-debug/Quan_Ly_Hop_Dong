@@ -1,6 +1,11 @@
+.container-fluid-bg{
+  background-color: #FFFFFF !important;
+  border-radius: 12px;
+}
+
 .item_contract {
-  border: 1px solid #106DB6;
-  border-radius: 10px;
+  // border: 1px solid #106DB6;
+  border-radius: 8px;
   padding: 8px;
   margin-top: 5px;
   line-height: 24px;
@@ -8,13 +13,13 @@
 
 .item_contract:hover{
   background-color: rgb(255, 254, 254);
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0px 3px 12px 0px rgba(16, 85, 225, 0.10);
 }
 
 .item_contract_name {
   font-weight: 500;
   font-size: 16px;
-  color: #106DB6;
+  color: #001A4D;
   cursor: pointer;
   white-space: pre-wrap;
 }
@@ -33,7 +38,14 @@
 }
 
 .status_blue{
-  color: #027e21;
+  color: #2D6BE7;
+  background-color: #D8E6FA;
+  padding: 5px 16px 0px 16px;
+  width: 110px;
+  height: 35px;
+  display: inline-block;
+  border-radius: 4px;
+  font-weight: 700;
 }
 
 .list_header{
@@ -41,6 +53,11 @@
   text-align: center;
   padding: 12px 12px 0;
   font-weight: 500;
+  // padding-top: 20px;
+  background-color: #EBF2FB;
+  width: 100%;
+  margin-left: 0;
+  height: 44px;
 }
 
 .pagination {
@@ -65,6 +82,12 @@
 
 .pagination a:hover:not(.active) {background-color: #ddd;}
 
+.input-checkbox{
+  text-align: left;
+  width: 20px;
+  height: 20px;
+  margin: 5px;
+}
 
 .input-group-text{
   padding: 8.5px;
@@ -74,11 +97,11 @@
 }
 .calendar_create{
   text-align: center;
-  color:#106DB6
+  color: #8E9AB0;
 }
 .calendar_deadline{
   text-align: center;
-  color:red
+  color: #8E9AB0;
 }
 .item_date{
   padding-left: 3px;
@@ -115,9 +138,8 @@
   color: #5e5e5e;
 }
 .search{
-  border: 1px solid #106DB6;
-  border-radius: 15px;
   height: 38px;
+  
 }
 .input-line {
   display: flex;
@@ -125,7 +147,7 @@
   position: relative;
 }
 .input-img {
-  padding: 10px;
+  padding: 5px;
   cursor: pointer;
 }
 .input-img-calendar {
@@ -134,10 +156,16 @@
   position: absolute;
 }
 .input-text {
-  border: 0;
-  padding: 10px;
+  border: 0.5px solid #F1F5FE;
+  margin: 0px;
   width: 100%;
+  height: 38px;
   outline:0px;
+  background-color: #F1F5FE;
+  padding: 10px 16px 10px 16px;
+  opacity: 0px;
+  border-radius: 8px;
+  font-weight: 400;
 }
 
 :host ::ng-deep {
@@ -183,18 +211,40 @@
     box-shadow: none !important;
     height: 33px;
     width: 50%;
+    font-weight: 500;
+    background-color: #F6F6F6;
+    color: var(--Text-Secondary, #8E9AB0);
+    border: 0px;
   }
 
   .p-selectbutton .p-button.p-highlight {
-    background: #c5ebff;
-    border-color: #c5ebff;
-    color: #106DB6;
+    background: #FFFFFF;
+    border-color: #FFFFFF;
+    color: #001A4D;
+    font-weight: 600;
   }
+}
+
+// .long-text-ellipsis {
+//   overflow: hidden;
+//   white-space: nowrap;
+//   // width: inherit;
+//   text-overflow: ellipsis;
+//   // max-width: 113px;
+// }
+
+.three_dot{
+  cursor: pointer;
+}
+
+.three_dot_text{
+  margin: 10px;
 }
 
 .fa_icon{
   font-size: 17px;
   cursor: pointer;
+  color: #8E9AB0;
 }
 .contract_footer{
   padding-top: 10px;
@@ -205,9 +255,9 @@
   position:absolute;
   display: flex;
   flex-wrap: nowrap;
-  color: #0160AE;
+  color: #A5AAB6;
   select{
-    border: 1px solid #0160AE;
+    border: 1px solid #A5AAB6;
     border-radius: 5px;
   }
 }
@@ -220,7 +270,7 @@
   text-align: center;
 }
 .footer_page_number{
-  color: #0160AE
+  color: #A5AAB6
 }
 .col-md-100-1{
   width: 100%;
@@ -251,7 +301,7 @@
 .btn-block {
   background-color: #106DB6;
   color: white;
-  height: 40px;
+  height: 39px;
   font-size: 14px;
   width: 100%;
   border-radius: 5px;
@@ -296,7 +346,33 @@
   color: white;
   background-color: #106DB6;
   font-size: 13px;
-  margin: 0 10px;
+  // margin: 0 10px;
+}
+
+.btn_advanced{
+  border: 0px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #001A4D;
+  background-color: #FFFFFF;
+  font-size: 13px;
+  // margin: 0 10px;
+  font-weight: 700;
+  box-shadow: 0px 3px 12px 0px #1055E11A;
+  border: 1px solid #001A4D1A;
+  // width: 140px;
+}
+
+.btn_cancel{
+  border: 0px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  background-color: #0041C4;
+  font-size: 13px;
+  // margin: 0 10px;
+  font-weight: 700;
+  // width: 140px;
 }
 
 #table td {
@@ -323,5 +399,21 @@
 }
 
 .enterPage p {
-  margin-top: 2px
+  margin-top: 2px;
+}
+@media (min-width: 1400px) {
+  .col-xxl-9 {
+      flex: 0 0 auto;
+      width: 80%;
+  }
+  
+  .col-xxl-8 {
+    flex: 0 0 auto;
+    width: 70%;
+}
+  
+  .col-xxl-1-5 {
+    flex: 0 0 auto;
+    width: 10%;
+  }
 }

@@ -2,6 +2,13 @@
   color: red;
 }
 
+.container-fluid{
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  min-height: 85vh;
+  padding-top: 15px;
+}
+
 .input-data {
   border: 1px solid #106DB6;
   border-radius: 5px;
@@ -51,7 +58,7 @@
   width: 100px;
   box-sizing: border-box;
   color: white;
-  background-color: #106DB6;
+  background-color: #0041C4;
   font-size: 13px;
   margin: 0 10px;
 }

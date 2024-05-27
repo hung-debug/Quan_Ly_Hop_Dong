@@ -9,17 +9,40 @@
 
 .btn_search{
    align-self: flex-end;
+
+   @media (max-width: 992px) {
+    margin-top: 15px;
+  }
 }
 
-.btn_submit{
-    border: 0px;
-    border-radius: 5px;
-    height: 33px;
-    box-sizing: border-box;
-    color: white;
-    background-color: #106DB6;
+.container-fluid{
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding-top: 15px;
+  min-height: 80vh;
+}
+
+.btn_submit {
+  border: 0px;
+  border-radius: 5px;
+  height: 33px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #0041c4;
+  font-size: 13px;
+  // margin: 0 10px;
+  width: 100%;
+  @media (max-width: 1580px) {
+    font-size: 11px;
+  }
+
+  @media (max-width: 1485px) {
+    font-size: 9px;
+  }
+
+  @media (max-width: 1399px) {
     font-size: 13px;
-    margin: 0 10px;
+  }
 }
 
 :host ::ng-deep {
@@ -53,8 +76,9 @@
 
 #table th {
   //text-align: center;
-  background-color: #E2ECF6;
-  color: #106DB6;
+  background-color: #EBF2FB;
+  color: #8E9AB0;
+  font-weight: 500;
 }
 
 #table tr:last-child th:first-child {

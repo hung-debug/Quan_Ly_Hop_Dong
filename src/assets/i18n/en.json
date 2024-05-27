@@ -8,6 +8,7 @@
   "notification": "Notification",
   "account": "Account",
   "login": "Login",
+  "infor.login": "Fill account information to login",
   "login.username": "Username",
   "login.password": "Password",
   "login.note.user": "Please login with the account and password provided in your email",

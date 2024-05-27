@@ -181,6 +181,7 @@ input[type=number] {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  min-height: 4vh;
 
   .content_footer {
     color: #0160AE;

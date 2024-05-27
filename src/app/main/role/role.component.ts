@@ -31,6 +31,10 @@ export class RoleComponent implements OnInit {
   list: any[] = [];
   cols: any[];
   files:any[];
+  totalRecords: number = 0;
+  row: number = 15;
+  page: number = 0;
+  first: number = 0;
 
   //phan quyen
   isQLVT_01:boolean=true;  //them moi vai tro
@@ -40,7 +44,8 @@ export class RoleComponent implements OnInit {
   isQLVT_05:boolean=true;  //xem thong tin chi tiet vai tro
 
   ngOnInit(): void {
-    this.appService.setTitle("role.list");
+    this.appService.setTitle("menu.manager.user");
+    this.appService.setSubTitle("role.list");
     this.searchRole();
 
     this.cols = [
@@ -81,11 +86,21 @@ export class RoleComponent implements OnInit {
   
 
   searchRole(){
-    this.roleService.getRoleList(this.code, this.name).subscribe(response => {
+    this.roleService.getRoleList(this.code, this.name, this.row, this.page).subscribe(response => {
       
       this.list = response.entities;
       
+      this.totalRecords = response.total_elements;
     });
+  }
+  
+  toRecord() {
+    return Math.min((this.page + 1) * this.row, this.totalRecords)
+  }
+
+  onPageChange(event: any) {
+    this.page = event.page;
+    this.searchRole();
   }
 
   addRole() {

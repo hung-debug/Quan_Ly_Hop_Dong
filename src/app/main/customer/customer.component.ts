@@ -26,6 +26,10 @@ export class CustomerComponent implements OnInit {
   name:any = "";
   list: any[] = [];
   cols: any[];
+  row: number = 15;
+  page: number = 0;
+  first: number = 0;
+  totalRecords: number = 0;
 
     //filter customer
     searchObj: any = {
@@ -68,6 +72,7 @@ export class CustomerComponent implements OnInit {
       this.isOrg = 'off';
     }
     this.appService.setTitle("customer.list");
+    this.appService.setSubTitle("");
   }
 
 
@@ -82,38 +87,42 @@ export class CustomerComponent implements OnInit {
 
   getCustomerList(){
     if(this.isOrgCustomer){
-      this.customerService.getCustomerList().subscribe((res: any) => {
+      this.customerService.getCustomerList(this.row, this.page).subscribe((res: any) => {
+        console.log("res",res);
         let filterList: any[] = [];
-        res.forEach((item: any) => {
+        res.content.forEach((item: any) => {
           if(item.type === "ORGANIZATION" && item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(this.filter_name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))){
             filterList.push(item);
           }
         });
 
-        res.forEach((item: any) => {
+        res.content.forEach((item: any) => {
           if(item.type === "ORGANIZATION" && item.taxCode.includes(this.filter_name) && !filterList.includes(item)){
             filterList.push(item);
           }
         });
         this.list = filterList.sort(
         );
+        this.totalRecords = this.list.length;
+        
       });
     }else {
       this.customerService.getCustomerList().subscribe((res: any) => {
         let filterList: any[]=[];
-        res.forEach((item: any) => {
+        //this.totalRecords = res.totalElements;
+        res.content.forEach((item: any) => {
           if(item.type === "PERSONAL" && item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(this.filter_name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))){
             filterList.push(item);
           }
         });
 
-        res.forEach((item: any) => {
+        res.content.forEach((item: any) => {
           if(item.type === "PERSONAL" && item.phone.includes(this.filter_name) && !filterList.includes(item)){
             filterList.push(item);
           }
         });
 
-        res.forEach((item: any) => {
+        res.content.forEach((item: any) => {
           if(item.card_id != null)
           if(item.type === "PERSONAL" && item.card_id.includes(this.filter_name) && !filterList.includes(item)){
             
@@ -122,8 +131,21 @@ export class CustomerComponent implements OnInit {
         });
         this.list = filterList.sort(
         );
+        this.totalRecords = this.list.length;
       });
     }
+  }
+  
+  toRecord() {
+    if(this.isOrgCustomer){
+      
+    }
+    return Math.min((this.page + 1) * this.row, this.totalRecords)
+  }
+
+  onPageChange(event: any) {
+    this.page = event.page;
+    this.getCustomerList();
   }
 
   changeTab(){
@@ -156,6 +178,7 @@ export class CustomerComponent implements OnInit {
   }
 
   onSelect(e: any) {
+    console.log('event181: ', e);
     const selectedOption = e.value; // value of the selected option
     const selectedLabel = this.stateOptions.find(option => option.value === selectedOption).label; // label of the selected option
     if(selectedLabel=='organization.customer'){

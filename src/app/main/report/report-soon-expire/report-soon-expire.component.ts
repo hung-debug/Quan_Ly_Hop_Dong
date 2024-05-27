@@ -74,7 +74,8 @@ export class ReportSoonExpireComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.spinner.hide();
 
-    this.appService.setTitle('report.expires-soon.contract.full');
+    this.appService.setTitle('report');
+    this.appService.setSubTitle('report.expires-soon.contract.full');
 
     this.contractService.getDataNotifyOriganzation().subscribe((res: any) => {
       this.orgName = res.name;
