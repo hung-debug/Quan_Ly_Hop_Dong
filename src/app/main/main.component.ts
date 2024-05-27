@@ -81,11 +81,9 @@ export class MainComponent implements OnInit {
     this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('type')));
 
     this.appService.getTitle().subscribe(appTitle => {
-      console.log('this.title82: ', appTitle);
       return this.title = appTitle.toString()});
       
     this.appService.getSubTitle().subscribe(appSubTitle => {
-      console.log('this.title82: ', appSubTitle);
       return this.subTitle = appSubTitle.toString()});
   
     this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(

@@ -859,7 +859,6 @@ export class ConfirmContractBatchComponent
   }
 
   async nextDraft(isCeCA: any) {
-    console.log('nextDraft861');
     const isAllow = await this.checkNumber(this.datasBatch.ceca_push, this.convertToSignConfig().length);
     if (isAllow) {
       this.spinner.show();

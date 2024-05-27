@@ -69,6 +69,7 @@ export class ContractFolderComponent implements OnInit {
   ngOnInit(): void {
     this.isViewFolder = true;
     this.appService.setTitle("contract.folder");
+    this.appService.setSubTitle("");
     this.cols = [
       {header: 'Tên', style:'text-align: left;', class:'col-md-5' },
       {header: 'Ngày tạo', style:'text-align: left;', class:'col-md-5'},
