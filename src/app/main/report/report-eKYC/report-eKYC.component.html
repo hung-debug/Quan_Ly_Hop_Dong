@@ -97,25 +97,6 @@
       </ng-template> -->
     </p-table>
   </div>
-
-  <div class="footer_pagination">
-    <div class="footer_contract_per_page">
-      <div>Hiển thị&nbsp;</div>
-      <select [(ngModel)]="this.row" (change)="changePageNumber($event)">
-          <option value="" hidden>10</option>
-          <option *ngFor="let d of this.pageOptions">{{d}}</option>
-      </select>
-      <div>&nbsp;{{'contracts.per.page' | translate}}</div>
-    </div>
-    <div class = "footer_pagination_between">
-        <p-paginator class="footer_pagination_between_p_paginator" [first]="page * row"  (onPageChange)="onPageChange($event)" [rows]="row" [totalRecords]="totalRecords"></p-paginator>
-        <div *ngIf = "totalRecords" class="enterPage footer_pagination_between_input">
-            <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-            <p>của {{numberPage}} trang</p>
-        </div>
-    </div>
-    <div class="footer_pagination_quantity">{{'chart.number' | translate}}: {{totalRecords === 0 ? 0 : page * row + 1}} - {{totalRecords > 0 ? toRecord() : 0}} / {{totalRecords > 0 ? totalRecords : 0}}</div>
-  </div>
 </div>
 
 <div class="footer_pagination">

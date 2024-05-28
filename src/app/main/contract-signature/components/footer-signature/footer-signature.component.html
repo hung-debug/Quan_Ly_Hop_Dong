@@ -33,7 +33,8 @@
 
     <div>
       <button *ngIf="!this.is_show_coordination && ![2,3,4].includes(this.datas.roleContractReceived) && !view" type="button" name="next" class="next action-button-previous" (click)="refuseContract()">{{'contract.status.fail' | translate}}</button>
-      <button class="next action-button" (click)="autoScroll()">{{'auto.scroll' | translate}}</button>
+      <button class="next find-sign-box-btn" (click)="findSignBox()">{{'Tìm ô ký' | translate}} <span *ngIf="this.confirmSignature == 1">({{this.signBoxes}})</span></button>
+      <button class="next find-infor-box-btn" (click)="autoScroll()">{{'auto.scroll' | translate}} <span *ngIf="this.confirmSignature == 1">({{this.inforBoxes}})</span></button>
       <button *ngIf="this.is_show_coordination"  type="button" name="next" class="next action-button" (click)="endContract()">{{'end' | translate}}</button>
       <button *ngIf="((!this.is_show_coordination && !view) || this.datas.roleContractReceived) && this.lang == 'vi'  || !this.lang" (click)="action()" type="button" name="next" class="next action-button">{{this.datas.action_title == 'dieu_phoi' ? 'Điều phối' : 'Xác nhận'}}</button>
       <button *ngIf="((!this.is_show_coordination && !view) || this.datas.roleContractReceived) && this.lang == 'en'" (click)="action()" type="button" name="next" class="next action-button">{{this.datas.action_title == 'dieu_phoi' ? 'Coordinator' : 'Confirm'}}</button>

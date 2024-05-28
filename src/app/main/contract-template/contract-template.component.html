@@ -7,13 +7,13 @@
   </p-selectButton>
 
   <div class="row" style="padding-top: 10px;">
-    <div class="col-md-3" *ngIf="isQLMHD_06">
+    <div class="col-xxl-3 col-md-3" *ngIf="isQLMHD_06">
       <div>{{'contract-template.name' | translate}}</div>
       <div class="input-line">
         <input type="text" [(ngModel)]="name" class="input_text"/>
       </div>
     </div>
-    <div class="col-md-3" *ngIf="isQLMHD_06">
+    <div class="col-xxl-3 col-md-3" *ngIf="isQLMHD_06">
       <div>{{'contract.type' | translate}}</div>
       <div>
         <p-dropdown 
@@ -29,16 +29,17 @@
           ></p-dropdown>
       </div>
     </div>
-    <div class="col-md-6 btn_search">
+    <div class="col-xxl-2 col-md-6 btn_search">
       <button *ngIf="isQLMHD_06" class="btn cod-md-1 btn-lg btn-block btn_search1" (click)="searchContract()">{{'btn.search' | translate }}</button>
       <button *ngIf="isQLMHD_01" class="btn cod-md-1 btn-lg btn-block btn_add" (click)="add()">{{'btn.add' | translate }}</button>
     </div>
   </div>
 
   <div class="row list_header" *ngIf="pageTotal > 0;">
-    <div class="col-md-5"></div>
-    <div class="col-md-2">{{'create-date' | translate}}</div>
+    <div class="col-md-1" style="text-align: left;"></div>
+    <div class="col-md-4" style="text-align: left !important;">{{'contract-template.name' | translate}}</div>
     <div class="col-md-2">{{'contract-template.code' | translate}}</div>
+    <div class="col-md-2">{{'create-date.soon' | translate}}</div>
     <div class="col-md-3">{{'action' | translate}}</div>
   </div>
 
@@ -46,7 +47,18 @@
   <div class="item_contract" *ngFor="let item of contractsTemplate  | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
     
     <div class="row">
-      <div class="col-md-5">
+      <div class="col-xxl-1 col-md-1 item_icon">
+        <div style="display: flex;">
+            <div class="col-xxl-1 col-md-1 calendar_create" style="display: flex;">
+            </div>
+            <div class="col-xxl-1 col-md-1">
+              <div style="margin-left: 16px;">
+                <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="col-md-4">
         <div class="row">
           <div class="col-md-12 item_contract_name col-cell-ellipsis">
             <a  class="item_contract_name" style="text-decoration: none;" 
@@ -62,13 +74,15 @@
           <div class="col-md-12 item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
         </div>
       </div>
-      <div class="col-md-2 calendar_create">
-        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span></div>
-      </div>
-
-      <div class="col-md-2 contract_code col-cell-ellipsis">
+      
+      <div class="col-md-2 contract_code col-cell-ellipsis" style="text-align: left;">
         <span class="item_date" ngbTooltip="{{item.code}}">{{item.code}}</span>
       </div>
+      
+      <div class="col-md-2 calendar_create">
+        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.end_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
+      </div>
+
 
       <div class="col-md-3 item_icon">
         <div style="display: flex; justify-content: center;">

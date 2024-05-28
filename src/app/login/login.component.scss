@@ -392,3 +392,7 @@ h
   background: #FFFFFF1A;
 
 }
+
+input:-internal-autofill-selected{
+  background-color: #FFFFFF1F!important;
+}
