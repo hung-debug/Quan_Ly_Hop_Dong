@@ -405,7 +405,7 @@
                         <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'view.processing.flow' | translate}}</span>
                       </button>
-                      <button mat-menu-item class="div_icon" *ngIf="!(status == 'fail' || status == 'cancel') && this.isOrg == 'off'" (click)="openEditExpiration(item)">
+                      <button mat-menu-item class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'overdue') && this.isOrg == 'off'" (click)="openEditExpiration(item)">
                         <mat-icon><img src="../../assets/img/timer-start.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'edit.sign.time' | translate}}</span>
                       </button>
