@@ -94,10 +94,10 @@
            </div>
           </div>
           <div class="col-6">
-            <div class="p-1 border header_card header_card_2" (click)="openLink('/main/c/receive/wait-processing-prepare-expires-dashboard')">
-              <a [routerLink]="['/main/c/receive/wait-processing-prepare-expires-dashboard']" style="color: white; text-decoration: none;">
+            <div class="p-1 border header_card header_card_2" (click)="openLink('/main/c/receive/processed-waiting-dashboard')">
+              <a [routerLink]="['/main/c/receive/processed-waiting-dashboard']" style="color: white; text-decoration: none;">
                 <div class="text_header_card">
-                  <div class="number_header_card">{{numberExpire}}</div>
+                  <div class="number_header_card">{{numberWaitComplete}}</div>
                   <div style="justify-content: center; display: flex;">
                     <img src="../../../assets/img/Ellipse_yellow.svg" width="12px"/>
                     <div style="color: #A5AEC0; margin-left: 2%;">{{'contract.status.wait-response' | translate}}</div>
@@ -107,7 +107,7 @@
             </div>
           </div>
           <div class="col-6">
-            <div class="p-1 border header_card header_card_3" (click)="openLink('/main/c/receive/processed-waiting-dashboard')">
+            <div class="p-1 border header_card header_card_3" (click)="openLink('/main/c/receive/wait-processing-prepare-expires-dashboard')">
               <a [routerLink]="['/main/c/receive/wait-processing-prepare-expires-dashboard']" style="color: white; text-decoration: none;">
                 <div class="text_header_card">
                   <div class="number_header_card">{{numberExpire}}</div>

@@ -17,6 +17,7 @@ import { AccountLinkDialogComponent } from '../dialog/account-link-dialog/accoun
 import { ContractSignatureService } from 'src/app/service/contract-signature.service';
 import { sideList } from 'src/app/config/variable';
 import { DeleteContractDialogComponent } from './../contract/dialog/delete-contract-dialog/delete-contract-dialog.component';
+import { variable } from '../../../app/config/variable';
 
 @Component({
   selector: 'app-dashboard',
@@ -83,6 +84,43 @@ export class DashboardComponent implements OnInit {
   currentName: any;
   loadData1: boolean = false;
   loadData2: boolean = false;
+  step: any;
+  //type = 1 => Hop dong don le khong theo mau
+  //type = 2 => Hop dong don le theo mau
+  //type = 3 => Hop dong theo lo
+  type: number = 1;
+  stepForm: any;
+  stepBatch: any;
+  datas: any = {
+    stepLast: variable.stepSampleContract.step1,
+    save_draft: {
+      infor_contract: false,
+      determine_signer: false,
+      sample_contract: false,
+      confirm_infor_contract: false,
+    },
+    flagDigitalSign: false,
+    isUploadNewFile: false,
+    countUploadContractFile : 0,
+  };
+
+  datasForm: any = {
+    stepFormLast: variable.stepSampleContractForm.step1,
+    save_draft_form: {
+      'infor-contract-form': false,
+      'party-contract-form': false,
+      'sample-contract-form': false,
+      'confirm-contract-form': false,
+    },
+  };
+
+  datasBatch: any = {
+    stepBatchLast: variable.stepSampleContractBatch.step1,
+    save_draft_batch: {
+      'infor-contract-batch': false,
+      'confirm-contract-batch': false,
+    },
+  };
 
   constructor(
     private appService: AppService,
@@ -650,6 +688,38 @@ export class DashboardComponent implements OnInit {
       '/main/form-contract/add',
     ]);
     this.appService.setSubTitle('add.contract.one.not.template');
+    
+    // if (this.type == 1) {
+    //   this.step = variable.stepSampleContract.step1;
+    //   this.appService.setSubTitle("add.contract.one.not.template");
+    // } else if (this.type == 2) {
+    //   this.stepForm = variable.stepSampleContractForm.step1;
+    //   this.appService.setSubTitle("add.contract.one.template");
+    // } else if (this.type == 3) {
+    //   this.stepBatch = variable.stepSampleContractBatch.step1;
+    //   this.appService.setSubTitle("role.contract-template.create-batch");
+    // }
+    // if (this.type == 1) {
+    //   this.datas = {
+    //     stepLast: variable.stepSampleContract.step1,
+    //     save_draft: {
+    //       infor_contract: false,
+    //       determine_signer: false,
+    //       sample_contract: false,
+    //       confirm_infor_contract: false,
+    //     },
+    //   };
+    // } else if (this.type == 2) {
+    //   this.datasForm = {
+    //     stepFormLast: variable.stepSampleContractForm.step1,
+    //     save_draft_form: {
+    //       'infor-contract-form': false,
+    //       'party-contract-form': false,
+    //       'sample-contract-form': false,
+    //       'confirm-contract-form': false,
+    //     },
+    //   };
+    // }
   }
   
   openEdit(id: number) {
@@ -712,5 +782,39 @@ export class DashboardComponent implements OnInit {
         zIndex: 5
       })
       .add();
+  }
+  
+  changeType(e: any) {
+    if (this.type == 1) {
+      this.step = variable.stepSampleContract.step1;
+      this.appService.setSubTitle("add.contract.one.not.template");
+    } else if (this.type == 2) {
+      this.stepForm = variable.stepSampleContractForm.step1;
+      this.appService.setSubTitle("add.contract.one.template");
+    } else if (this.type == 3) {
+      this.stepBatch = variable.stepSampleContractBatch.step1;
+      this.appService.setSubTitle("role.contract-template.create-batch");
+    }
+    if (this.type == 1) {
+      this.datas = {
+        stepLast: variable.stepSampleContract.step1,
+        save_draft: {
+          infor_contract: false,
+          determine_signer: false,
+          sample_contract: false,
+          confirm_infor_contract: false,
+        },
+      };
+    } else if (this.type == 2) {
+      this.datasForm = {
+        stepFormLast: variable.stepSampleContractForm.step1,
+        save_draft_form: {
+          'infor-contract-form': false,
+          'party-contract-form': false,
+          'sample-contract-form': false,
+          'confirm-contract-form': false,
+        },
+      };
+    }
   }
 }
