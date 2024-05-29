@@ -504,6 +504,15 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
+  signTime(item: any) {
+    if(item.participant.recipients.length) {
+      let email = item.email;
+      let listRecipients = item.participant.recipients;
+      let recipient = listRecipients.find((item: { email: any; }) => item.email === email);
+      return recipient.process_at;
+    }
+  }
+
   getContractList() {
     if (this.filter_status % 10 == 1) {
       this.filter_status = 1;
@@ -2604,7 +2613,6 @@ export class ContractSignatureComponent implements OnInit {
     });
 
     json_req = window.btoa(json_req);
-    console.log('hello 3384');
     try {
       const callServiceDCSigner = await this.contractServiceV1.signUsbToken(
         'request=' + json_req
