@@ -26,6 +26,7 @@
   white-space: nowrap; 
   overflow: hidden;
   text-overflow: ellipsis;
+  width: 400px;
 }
 
 
@@ -95,9 +96,9 @@
 
 .input-checkbox{
   text-align: left;
-  width: 20px;
-  height: 20px;
-  margin: 15px;
+  width: 16px;
+  height: 16px;
+  margin: 5px;
 }
 
 .input-group-text{
@@ -426,5 +427,10 @@
   .col-xxl-1-5 {
     flex: 0 0 auto;
     width: 10%;
+  }
+  
+  .col-xxl-1{
+    flex: 0 0 auto;
+    width: 1.333333333%;
   }
 }

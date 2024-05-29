@@ -417,7 +417,7 @@
         
         <div class="row list_header" *ngIf="pageTotal > 0">       
           <div *ngIf="this.typeDisplay === 'downloadMany'" class="col-md-1" style="text-align: left;">
-            <input id="all" name="all" type="checkbox" (click)="toggleDownload(checkedAll)" [(ngModel)]="checkedAll" style="width: 20px; height: 20px; margin: -2px;"/>
+            <input id="all" name="all" type="checkbox" (click)="toggleDownload(checkedAll)" [(ngModel)]="checkedAll" style="width: 16px; height: 16px; margin: -2px;"/>
           </div>
           
           <div *ngIf="!(this.typeDisplay === 'downloadMany')" class="col-md-1"></div>
@@ -442,7 +442,7 @@
                       <div style="display: flex; align-items: center;">
                           <!-- <div class="col-md-1 calendar_create" style="display: flex;"> -->
                             <div>
-                              <input style="width: 20px; height: 20px;" id="all" name="all" type="checkbox" (click)="toggleOneDownload(item, index1)" [(ngModel)]="item.checked" (change)="selectContract(item)"/>
+                              <input style="width: 16px; height: 16px;" id="all" name="all" type="checkbox" (click)="toggleOneDownload(item, index1)" [(ngModel)]="item.checked" (change)="selectContract(item)"/>
                             </div>
                           <!-- </div> -->
                           <div class="col-md-1">
@@ -581,7 +581,7 @@
             {{'multi.sign.warning' | translate}}
           </div>      
           <div *ngIf="this.typeDisplay === 'signMany'" class="col-md-1" style="text-align: left;">
-            <input id="all" name="all" type="checkbox" (click)="toggle()" style="width: 20px; height: 20px; margin: -2px;"/>
+            <input id="all" name="all" type="checkbox" (click)="toggle()" style="width: 16px; height: 16px; margin: -2px;"/>
           </div>
           
           <div *ngIf="!(this.typeDisplay === 'signMany' )" class="col-md-1"></div>
@@ -606,7 +606,7 @@
                       <div style="display: flex; align-items: center;">
                           <!-- <div class="col-md-1 calendar_create" style="display: flex;"> -->
                             <div>
-                              <input style="width: 20px; height: 20px;" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" />
+                              <input style="width: 16px; height: 16px;" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" />
                             </div>
                           <!-- </div> -->
                           <div class="col-md-1">
@@ -813,7 +813,7 @@
         
         <div class="row list_header" *ngIf="pageTotal > 0"> 
           <div *ngIf="this.typeDisplay === 'viewMany'" class="col-md-1" style="text-align: left;">
-            <input id="allView" name="allView" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleView(checkedAll)" style="width: 20px; height: 20px;" />
+            <input id="allView" name="allView" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleView(checkedAll)" style="width: 16px; height: 16px;" />
           </div>
           
           <div *ngIf="!(this.typeDisplay === 'viewMany' )" class="col-md-1"></div>
@@ -838,7 +838,7 @@
                       <div style="display: flex; align-items: center;">
                           <!-- <div class="col-md-1 calendar_create" style="display: flex;"> -->
                             <div>
-                              <input style="width: 20px; height: 20px;" id="allView" name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneView(item, index1)" />
+                              <input style="width: 16px; height: 16px;" id="allView" name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneView(item, index1)" />
                             </div>
                           <!-- </div> -->
                           <div class="col-md-1">

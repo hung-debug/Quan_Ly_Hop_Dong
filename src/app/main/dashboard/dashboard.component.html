@@ -157,7 +157,7 @@
                 <div style="display: flex; justify-content: space-between;">
                   <div style="padding-top: 20px;">
                     <img src="../../../assets/img/path.svg"/>
-                    <span *ngIf="item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
+                    <span *ngIf="item.sign_type.length > 0" class="name_required">{{item.sign_type[0]?.name}}</span>
                     <span *ngIf="item.role == 1" style="color: #EE7200; padding: 5px;">{{'Đang điều phối' | translate}}</span>
                     <span *ngIf="item.role == 2" style="color: #EE7200; padding: 5px;">{{'Đang xem xét' | translate}}</span>
                   </div>

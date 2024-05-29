@@ -35,10 +35,10 @@
 
       <div class="row list_header" *ngIf="pageTotal > 0;" >
           <!-- <div *ngIf="this.filter_status == 20 || this.filter_status == 33" class="col-md-4">{{'contract.process' | translate}}</div> -->
-          <div class="col-md-1" style="text-align: left;">
+          <div class="col-xxl-1 col-md-1" style="text-align: left;">
             <!-- <input type="checkbox" style="width: 20px; height: 20px;"> -->
           </div>
-          <div class="col-md-4" style="text-align: left !important;">{{'contract.process' | translate}}</div>
+          <div class="col-md-4">{{'contract.process' | translate}}</div>
           <div class="col-md-2">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
@@ -57,24 +57,26 @@
         <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
           <div class="row">
             <!--Cột 1-->
-              <div class="col-md-1 item_icon">
+              <div class="col-xxl-1 col-md-1 item_icon">
                 <div style="display: flex;">
                     <div class="col-md-1 calendar_create" style="display: flex;">
                       <div>
                         <input class="input-checkbox" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked"/>
                       </div>
                     </div>
-                    <div class="col-md-1">
+                    <!-- <div class="col-md-1">
                       <div style="margin-left: 35px;">
                         <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                       </div>
-                    </div>
+                    </div> -->
                 </div>
               </div>
               <!--Cột 2-->
               <div class="col-md-4">
                   <div class="row">
-                      <div class="col-md-11">
+                      <div class="col-md-11" style="display: flex;margin-left: 12px;">
+                        <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                        <div style="margin-left: 12px;">
                           <div class="item_contract_name">
                               <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                           'page': this.p,
@@ -92,7 +94,7 @@
                               <div>{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
                               </div>
                           </div>
-
+                        </div>
                           <!-- <div class="row">
                               <div class="item_contract_infor">{{'contract.status' | translate}}:
                                   <span class="status_blue">{{this.filter_status | pipe | translate}}
@@ -100,12 +102,8 @@
                                       translate}}</span>
                               </div>
                           </div> -->
-                          <!-- <div class="row">
-                            <div class="item_contract_infor">
-                              <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
-                            </div>
-                          </div> -->
                       </div>
+
                   </div>
               </div>
 
@@ -149,7 +147,7 @@
                     <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                   </button>
                   <mat-menu #menu="matMenu">
-                    <button mat-menu-item  class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08 && this.isOrg == 'off'" (click)="openCopy(item.id)">
+                    <button mat-menu-item  class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue' || status == 'complete') && isQLHD_08 && this.isOrg == 'off'" (click)="openCopy(item.id)">
                       <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
                       <span class="three_dot_text">{{'contract.copy' | translate}}</span>
                     </button>
@@ -161,7 +159,7 @@
                       <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon"/></mat-icon>
                       <span class="three_dot_text">{{'view.processing.flow' | translate}}</span>
                     </button>
-                    <button mat-menu-item class="div_icon" (click)="openEditExpiration(item)" *ngIf="this.isOrg == 'off' && (status == 'processing' || status == 'expire' || status == 'overdue')">
+                    <button mat-menu-item class="div_icon" (click)="openEditExpiration(item)" *ngIf="this.isOrg == 'off' && (status == 'processing' || status == 'expire' || status == 'overdue' || status == 'liquidated')">
                       <mat-icon><img src="../../assets/img/timer-start.svg" class="img_icon"/></mat-icon>
                       <span class="three_dot_text">{{'edit.sign.time' | translate}}</span>
                     </button>
@@ -285,10 +283,10 @@
       </div>
 
         <div class="row list_header" *ngIf="pageTotal > 0;">
-            <div class="col-md-1" style="text-align: left;">
+            <div class="col-xxl-1 col-md-1" style="text-align: left;">
               <!-- <input type="checkbox" style="width: 20px; height: 20px;"> -->
             </div>
-            <div class="col-md-4" style="text-align: left !important;">{{'contract.process' | translate}}</div>
+            <div class="col-md-4">{{'contract.process' | translate}}</div>
             <!-- <div class="col-md-1" *ngIf="this.filter_status == 30 || this.filter_status == 40">{{'status.ceca' | translate}}
               <img src="../../assets/img/sort.svg"/>
             </div> -->
@@ -309,19 +307,21 @@
 
             <div class="row">
                 <!--Cột 1-->
-                <div class="col-md-1 item_icon">
+                <div class="col-xxl-1 col-md-1 item_icon">
                   <div style="display: flex;">
-                      <div class="col-md-1">
+                      <!-- <div class="col-md-1">
                         <div style="margin-left: 35px;">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                         </div>
-                      </div>
+                      </div> -->
                   </div>
                 </div>
                 <!--Cột 2-->
                 <div class="col-md-4">
                     <div class="row">
-                        <div class="col-md-11">
+                      <div class="col-md-11" style="display: flex;margin-left: 12px;">
+                          <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                          <div style="margin-left: 12px;">
                             <div class="item_contract_name">
                                 <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                         'page': this.p,
@@ -353,6 +353,7 @@
                               </div>
                             </div> -->
                         </div>
+                      </div>
                     </div>
                 </div>
 
@@ -393,7 +394,7 @@
                       <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
-                      <button mat-menu-item  class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08 && this.isOrg == 'off'" (click)="openCopy(item.id)">
+                      <button mat-menu-item  class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue' || status == 'complete') && isQLHD_08 && this.isOrg == 'off'" (click)="openCopy(item.id)">
                         <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.copy' | translate}}</span>
                       </button>
@@ -405,7 +406,7 @@
                         <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'view.processing.flow' | translate}}</span>
                       </button>
-                      <button mat-menu-item class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'overdue') && this.isOrg == 'off'" (click)="openEditExpiration(item)">
+                      <button mat-menu-item class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'overdue' || status == 'liquidated') && this.isOrg == 'off'" (click)="openEditExpiration(item)">
                         <mat-icon><img src="../../assets/img/timer-start.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'edit.sign.time' | translate}}</span>
                       </button>
@@ -531,10 +532,10 @@
       </div>
 
       <div class="row list_header" *ngIf="pageTotal > 0;">
-          <div class="col-md-1" style="text-align: left;">
+          <div class="col-xxl-1 col-md-1" style="text-align: left;">
             <!-- <input type="checkbox" style="width: 20px; height: 20px;"> -->
           </div>
-          <div class="col-md-4" style="text-align: left !important;">{{'contract.process' | translate}}</div>
+          <div class="col-md-4">{{'contract.process' | translate}}</div>
           <div class="col-md-2">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
@@ -551,19 +552,21 @@
         <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
             <div class="row">
                 <!--Cột 1-->
-                <div class="col-md-1 item_icon">
+                <div class="col-xxl-1 col-md-1 item_icon">
                   <div style="display: flex;">
-                      <div class="col-md-1">
+                      <!-- <div class="col-md-1">
                         <div style="margin-left: 35px;">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                         </div>
-                      </div>
+                      </div> -->
                   </div>
                 </div>
                 <!--Cột 2-->
                 <div class="col-md-4">
                     <div class="row">
-                        <div class="col-md-11">
+                        <div class="col-md-11" style="display: flex; margin-left: 12px;">
+                          <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                          <div style="margin-left: 12px;">
                             <div class="item_contract_name">
                                 <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                         'page': this.p,
@@ -595,6 +598,7 @@
                               </div>
                             </div> -->
                         </div>
+                      </div>
                     </div>
                 </div>
 
@@ -720,10 +724,10 @@
       </div>
 
         <div class="row list_header" *ngIf="pageTotal > 0;">
-            <div class="col-md-1" style="text-align: left;">
+            <div class="col-xxl-1 col-md-1" style="text-align: left;">
               <!-- <input type="checkbox" style="width: 20px; height: 20px;"> -->
             </div>
-            <div class="col-md-4" style="text-align: left !important;">{{'contract.process' | translate}}</div>
+            <div class="col-md-4">{{'contract.process' | translate}}</div>
             <div class="col-md-2">{{'report.status.contract' | translate}}
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
@@ -739,19 +743,21 @@
           <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
             <div class="row">
                 <!--Cột 1-->
-                <div class="col-md-1 item_icon">
+                <div class="col-xxl-1 col-md-1 item_icon">
                   <div style="display: flex;">
-                      <div class="col-md-1">
+                      <!-- <div class="col-md-1">
                         <div style="margin-left: 35px;">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                         </div>
-                      </div>
+                      </div> -->
                   </div>
                 </div>
                 <!--Cột 2-->
                 <div class="col-md-4">
                     <div class="row">
-                        <div class="col-md-11">
+                        <div class="col-md-11" style="display: flex; margin-left: 12px;">
+                          <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                          <div style="margin-left: 12px;">
                             <div class="item_contract_name">
                                 <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                         'page': this.p,
@@ -783,6 +789,7 @@
                               </div>
                             </div> -->
                         </div>
+                      </div>
                     </div>
                 </div>
 
@@ -814,7 +821,7 @@
                       <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
-                      <button mat-menu-item  class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08 && this.isOrg == 'off'" (click)="openCopy(item.id)">
+                      <button mat-menu-item  class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue' || status == 'complete') && isQLHD_08 && this.isOrg == 'off'" (click)="openCopy(item.id)">
                         <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.copy' | translate}}</span>
                       </button>
@@ -965,10 +972,10 @@
           </div>
 
           <div class="row list_header" *ngIf="pageTotal > 0;">
-              <div class="col-md-1" style="text-align: left;" *ngIf="this.filter_status == 30">
-                <input type="checkbox" style="width: 20px; height: 20px;" id="allDownload" name="allDownload" [(ngModel)]="checkedAll" (click)="toggleDownload(checkedAll)">
+              <div class="col-xxl-1 col-md-1" style="text-align: left;" *ngIf="this.filter_status == 30">
+                <input type="checkbox" style="width: 16px; height: 16px;" id="allDownload" name="allDownload" [(ngModel)]="checkedAll" (click)="toggleDownload(checkedAll)">
               </div>
-              <div class="col-md-4" style="text-align: left !important;">{{'contract.process' | translate}}</div>
+              <div class="col-md-4">{{'contract.process' | translate}}</div>
               <div class="col-md-2">{{'report.status.contract' | translate}}
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
@@ -984,10 +991,10 @@
               <div class="col-md-1"></div>
           </div>
           <div *ngIf="pageTotal > 0" style="min-height: 65vh">
-            <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}">
+            <div class="item_contract" style="margin: 12px;" *ngFor="let item of contracts | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}">
                 <div class="row">
                   <!--Cột 1-->
-                  <div class="col-md-1 item_icon">
+                  <div class="col-xxl-1 col-md-1 item_icon">
                     <div style="display: flex;">
                         <div class="col-md-1 calendar_create" style="display: flex;">
                           <div>
@@ -995,17 +1002,19 @@
                             <input class="input-checkbox" name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneDownload(item)"(change)="selectContract(item)" />
                           </div>
                         </div>
-                        <div class="col-md-1">
+                        <!-- <div class="col-md-1">
                           <div style="margin-left: 35px;">
                             <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                           </div>
-                        </div>
+                        </div> -->
                     </div>
                   </div>
                     <!--Cột 2-->
                     <div class="col-md-4">
                         <div class="row">
-                            <div class="col-md-11">
+                            <div class="col-md-11" style="display: flex;margin-left: 12px;">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                              <div style="margin-left: 12px;">
                                 <div class="item_contract_name">
                                     <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                             'page': this.p,
@@ -1037,6 +1046,7 @@
                                   </div>
                                 </div> -->
                             </div>
+                          </div>
                         </div>
                     </div>
 
@@ -1164,10 +1174,10 @@
                   <input style="margin-left: 4px;" id="allRelease" name="allRelease" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleReleaseAll(checkedAll)" />
               </div> -->
 
-              <div class="col-md-1" style="text-align: left;" *ngIf="this.filter_status == 0">
-                <input type="checkbox" style="width: 20px; height: 20px;" id="allRelease" name="allRelease" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleReleaseAll(checkedAll)">
+              <div class="col-xxl-1 col-md-1" style="text-align: left;" *ngIf="this.filter_status == 0">
+                <input type="checkbox" style="width: 16px; height: 16px;" id="allRelease" name="allRelease" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleReleaseAll(checkedAll)">
               </div>
-              <div class="col-md-4" style="text-align: left !important;">{{'contract.process' | translate}}</div>
+              <div class="col-md-4">{{'contract.process' | translate}}</div>
               <div class="col-md-2">{{'report.status.contract' | translate}}
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
@@ -1180,28 +1190,30 @@
               <div class="col-md-1"></div>
           </div>
           <div *ngIf="pageTotal > 0" style="min-height: 65vh">
-            <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}">
+            <div class="item_contract" style="margin: 12px;" *ngFor="let item of contracts | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}">
                 <div class="row">
 
                     <!--Cột 1-->
-                    <div class="col-md-1 item_icon" *ngIf="this.filter_status == 0">
+                    <div class="col-xxl-1 col-md-1 item_icon" *ngIf="this.filter_status == 0">
                       <div style="display: flex;">
                           <div class="col-md-1 calendar_create" style="display: flex;">
                             <div>
                               <input class="input-checkbox" name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneRelease(item)" (change)="selectContract(item)" />
                             </div>
                           </div>
-                          <div class="col-md-1">
+                          <!-- <div class="col-md-1">
                             <div style="margin-left: 35px;">
                               <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                             </div>
-                          </div>
+                          </div> -->
                       </div>
                     </div>
                     <!--Cột 2-->
                     <div class="col-md-4">
                         <div class="row">
-                            <div class="col-md-11">
+                            <div class="col-md-11" style="display: flex;margin-left: 12px;">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                              <div style="margin-left: 12px;">
                                 <div class="item_contract_name">
                                     <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                             'page': this.p,
@@ -1233,6 +1245,7 @@
                                   </div>
                                 </div> -->
                             </div>
+                          </div>
                         </div>
                     </div>
 
@@ -1262,7 +1275,7 @@
                           <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                         </button>
                         <mat-menu #menu="matMenu">
-                          <button mat-menu-item  class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08 && this.isOrg == 'off'" (click)="openCopy(item.id)">
+                          <button mat-menu-item  class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue' || status == 'complete') && isQLHD_08 && this.isOrg == 'off'" (click)="openCopy(item.id)">
                             <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
                             <span class="three_dot_text">{{'contract.copy' | translate}}</span>
                           </button>
@@ -1340,10 +1353,10 @@
         </div>
 
         <div class="row list_header" *ngIf="pageTotal > 0;">
-            <div class="col-md-1" style="text-align: left;" *ngIf="this.filter_status == 0">
-              <input type="checkbox" style="width: 20px; height: 20px;" id="allDeleteDraft" name="allDeleteDraft" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDeleteDraftAll(checkedAll)">
+            <div class="col-xxl-1 col-md-1" style="text-align: left;" *ngIf="this.filter_status == 0">
+              <input type="checkbox" style="width: 16px; height: 16px;" id="allDeleteDraft" name="allDeleteDraft" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDeleteDraftAll(checkedAll)">
             </div>
-            <div class="col-md-4" style="text-align: left !important;">{{'contract.process' | translate}}</div>
+            <div class="col-md-4">{{'contract.process' | translate}}</div>
             <div class="col-md-2">{{'report.status.contract' | translate}}
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
@@ -1356,27 +1369,29 @@
             <div class="col-md-1"></div>
         </div>
         <div *ngIf="pageTotal > 0" style="min-height: 65vh">
-          <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}">
+          <div class="item_contract" style="margin: 12px;" *ngFor="let item of contracts | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}">
               <div class="row">
                   <!--Cột 1-->
-                  <div class="col-md-1 item_icon" *ngIf="this.filter_status == 0">
+                  <div class="col-xxl-1 col-md-1 item_icon" *ngIf="this.filter_status == 0">
                     <div style="display: flex;">
                         <div class="col-md-1 calendar_create" style="display: flex;">
                           <div>
                             <input class="input-checkbox" name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneDraft(item)" (change)="selectContract(item)" (change)="selectContract(item)"/>
                           </div>
                         </div>
-                        <div class="col-md-1">
+                        <!-- <div class="col-md-1">
                           <div style="margin-left: 35px;">
                             <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                           </div>
-                        </div>
+                        </div> -->
                     </div>
                   </div>
                   <!--Cột 2-->
                   <div class="col-md-4">
                       <div class="row">
-                          <div class="col-md-11">
+                          <div class="col-md-11" style="display: flex;margin-left: 12px;">
+                            <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                            <div style="margin-left: 12px;">
                               <div class="item_contract_name">
                                   <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                           'page': this.p,
@@ -1408,6 +1423,7 @@
                                 </div>
                               </div> -->
                           </div>
+                        </div>
                       </div>
                   </div>
 
