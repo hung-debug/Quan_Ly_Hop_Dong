@@ -130,15 +130,18 @@
           <div class="col-md-2">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
-          <div class="col-md-2">{{'create-date' | translate}}
+          <div class="col-md-2">{{'create-time' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
-          <div class="col-md-2">{{'day.update' | translate}}
-            <!-- <img src="../../assets/img/sort.svg"/> -->
-          </div>
+          <ng-container [ngSwitch]="filter_status">
+            <div *ngSwitchCase="1" class="col-md-2">{{'sign-expired-time' | translate}}</div>
+            <div *ngSwitchCase="4" class="col-md-2">{{'sign-time' | translate}}</div>
+            <div *ngSwitchCase="-1" class="col-md-2">{{'share-time' | translate}}</div>
+            <div *ngSwitchDefault class="col-md-2">{{'day.update' | translate}}</div>
+          </ng-container>
           <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1"></div>
         </div>
-        <div style="min-height: 66vh" *ngIf="filter_status == 1 || filter_status == 4">
+        <div style="min-height: 66vh" *ngIf="pageTotal > 0 && (filter_status == 1 || filter_status == 4)">
           <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
             <div *ngIf="filter_status == 1 || filter_status == 4">
                 <div class="row">
@@ -166,7 +169,7 @@
                                   <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}}</div>
                                   <div>
                                     <img src="../../../assets/img/path.svg"/>
-                                    <span *ngIf="item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
+                                    <span *ngIf="item.sign_type && item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
                                     <span *ngIf="item.role == 1" style="color: #EE7200; padding: 5px;">{{'Đang điều phối' | translate}}</span>
                                     <span *ngIf="item.role == 2" style="color: #EE7200; padding: 5px;">{{'Đang xem xét' | translate}}</span>
                                   </div>
@@ -242,7 +245,11 @@
                     </div>
 
                     <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa_icon"></i><span class="item_date">{{item.participant.contract.updated_at | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
+                        <div><i class="fa fa_icon"></i>
+                          <span *ngIf = "item.participant && filter_status == 1" class="item_date">{{ item.participant.contract.sign_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
+                          <span *ngIf = "item.participant && filter_status == 4" class="item_date">{{ signTime(item) | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
+                          <!-- <span class="item_date">{{item.participant.contract.updated_at | date: 'dd/MM/yyyy HH:mm:ss'}}</span> -->
+                        </div>
                     </div>
 
                     <div class="col-md-1 item_icon">
@@ -325,7 +332,7 @@
         </div>
         </div>
         
-        <div style="min-height: 71vh" *ngIf="filter_status == -1">
+        <div style="min-height: 71vh" *ngIf="pageTotal > 0 && filter_status == -1">
           <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
             <div *ngIf="filter_status == -1">
               <div class="row">
@@ -368,7 +375,7 @@
                   </div>
 
                   <div class="col-md-2 calendar_deadline">
-                      <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.updated_at | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
+                      <div><i class="fa fa-calendar fa_icon"></i><span *ngIf ="item.share" class="item_date">{{item.share.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                   </div>
 
                   <div class="col-md-1 item_icon">
@@ -425,15 +432,15 @@
           <div class="col-md-2">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
-          <div class="col-md-2">{{'create-date' | translate}}
+          <div class="col-md-2">{{'create-time' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
-          <div class="col-md-2">{{'day.update' | translate}}
+          <div class="col-md-2">{{'sign-time' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
         </div>
         
-        <div style="min-height: 66vh">
+        <div *ngIf="pageTotal > 0" style="min-height: 66vh">
           <div class="item_contract" *ngFor="let item of contractDownloadList | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}; let index1 = index">
             <div *ngIf="filter_status == 4">
                 <div class="row">
@@ -518,7 +525,7 @@
                     </div>
 
                     <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa_icon"></i><span class="item_date">{{item.participant.contract.updated_at | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
+                        <div><i class="fa fa_icon"></i><span *ngIf ="item.participant" class="item_date">{{signTime(item) | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
                     <div class="col-md-1 item_icon">
@@ -589,15 +596,15 @@
           <div class="col-md-2">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
-          <div class="col-md-2">{{'create-date' | translate}}
+          <div class="col-md-2">{{'create-time' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
-          <div class="col-md-2">{{'day.update' | translate}}
+          <div class="col-md-2">{{'sign-expired-time' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
         </div>
         
-        <div style="min-height: 66vh">
+        <div *ngIf="pageTotal > 0" style="min-height: 66vh">
           <div class="item_contract" *ngFor="let item of contractsSignMany; let index1 = index">
             <div *ngIf="filter_status == 1 || filter_status == 4">
                 <div class="row">
@@ -624,7 +631,7 @@
                                   <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}}</div>
                                   <div>
                                     <img src="../../../assets/img/path.svg"/>
-                                    <span *ngIf="item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
+                                    <span *ngIf="item.sign_type && item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
                                     <span *ngIf="item.role == 1" style="color: #EE7200; padding: 5px;">{{'Đang điều phối' | translate}}</span>
                                     <span *ngIf="item.role == 2" style="color: #EE7200; padding: 5px;">{{'Đang xem xét' | translate}}</span>
                                   </div>
@@ -690,7 +697,7 @@
                     </div>
 
                     <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.participant.contract.updated_at | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
+                        <div><i class="fa fa-calendar fa_icon"></i><span *ngIf = "item.participant" class="item_date">{{item.participant.contract.sign_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
                     <div style="cursor: pointer;" class="col-md-1 item_icon" (click)="toggleOne(item, index1)">
@@ -821,15 +828,15 @@
           <div class="col-md-2">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
-          <div class="col-md-2">{{'create-date' | translate}}
+          <div class="col-md-2">{{'create-time' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
-          <div class="col-md-2">{{'day.update' | translate}}
+          <div class="col-md-2">{{'sign-expired-time' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
         </div>
         
-        <div style="min-height: 66vh">
+        <div *ngIf="pageTotal > 0" style="min-height: 66vh">
           <div class="item_contract" *ngFor="let item of contractViewList | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}; let index1 = index">
             <div *ngIf="filter_status == 1">
                 <div class="row">
@@ -927,7 +934,7 @@
                     </div>
 
                     <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.participant.contract.updated_at | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
+                        <div><i class="fa fa-calendar fa_icon"></i><span *ngIf = "item.participant" class="item_date">{{item.participant.contract.sign_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
                     <div class="col-md-1 item_icon">
@@ -958,11 +965,12 @@
       </div>
     </div>
 
-    <div *ngIf="pageTotal == 0 && !(this.typeDisplay == 'signMany' || this.typeDisplay == 'viewMany')" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 90px">
-        <div style="display: table-cell;vertical-align: middle;">
-            <img src="../../../assets/img/empty_data.svg" />
-            <div style="color: #94A7C6">{{'no.data' | translate}}</div>
-        </div>
+    <div *ngIf="pageTotal == 0 && !(this.typeDisplay == 'signMany' || this.typeDisplay == 'viewMany')" 
+      [ngStyle]="{'min-height': filter_status != -1 ? '66vh' : '71vh', 'display': 'table', 'top': '0', 'left': '0', 'width': '100%', 'text-align': 'center'}">
+      <div style="display: table-cell; vertical-align: middle;">
+          <img src="../../../assets/img/empty_data.svg" />
+          <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+      </div>
     </div>
 
     <div *ngIf="this.typeDisplay === 'signOne'|| this.typeDisplay === 'downloadMany'" class="contract_footer">

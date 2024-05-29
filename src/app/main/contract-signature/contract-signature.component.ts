@@ -211,7 +211,8 @@ export class ContractSignatureComponent implements OnInit {
     this.sub = this.route.params.subscribe((params) => {
       // this.action = params['action'];
       this.status = params['status'];
-
+      this.contracts = [];
+      this.pageTotal = 0;
       //set title
       this.convertStatusStr();
       this.action = 'receive';
@@ -501,6 +502,15 @@ export class ContractSignatureComponent implements OnInit {
     }
     else if (this.typeDisplay == 'downloadMany') {
       this.downloadMany();
+    }
+  }
+
+  signTime(item: any) {
+    if(item.participant.recipients.length) {
+      let email = item.email;
+      let listRecipients = item.participant.recipients;
+      let recipient = listRecipients.find((item: { email: any; }) => item.email === email);
+      return recipient.process_at;
     }
   }
 
@@ -2604,7 +2614,6 @@ export class ContractSignatureComponent implements OnInit {
     });
 
     json_req = window.btoa(json_req);
-    console.log('hello 3384');
     try {
       const callServiceDCSigner = await this.contractServiceV1.signUsbToken(
         'request=' + json_req

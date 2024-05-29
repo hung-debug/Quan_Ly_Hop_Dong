@@ -42,13 +42,13 @@
           <div class="col-md-2">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
-          <div class="col-md-2">{{'create-date' | translate}}
+          <div class="col-md-2">{{'create-time' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <!-- <div class="col-md-2">{{'expiration-date' | translate}}
             <img src="../../assets/img/sort.svg"/>
           </div> -->
-          <div class="col-md-2">{{'day.update' | translate}}
+          <div class="col-md-2">{{'sign-expired-time' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <div class="col-md-1"></div>
@@ -293,12 +293,21 @@
             <div class="col-md-2">{{'report.status.contract' | translate}}
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
-            <div class="col-md-2">{{'create-date' | translate}}
+            <div class="col-md-2">{{'create-time' | translate}}
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
-            <div class="col-md-2">{{'day.update' | translate}}
-              <!-- <img src="../../assets/img/sort.svg"/> -->
-            </div>
+
+            <ng-container [ngSwitch]="filter_status">
+              <div *ngSwitchCase="0" class="col-md-2">{{'time.update' | translate}}</div>
+              <div *ngSwitchCase="20" class="col-md-2">{{'sign-expired-time' | translate}}</div>
+              <div *ngSwitchCase="33" class="col-md-2">{{'sign-expired-time' | translate}}</div>
+              <div *ngSwitchCase="34" class="col-md-2">{{'sign-expired-time' | translate}}</div>
+              <div *ngSwitchCase="31" class="col-md-2">{{'refuse-time' | translate}}</div>
+              <div *ngSwitchCase="32" class="col-md-2">{{'cancel-time' | translate}}</div>
+              <div *ngSwitchCase="40" class="col-md-2">{{'liquidated-time' | translate}}</div>
+              <div *ngSwitchDefault class="col-md-2">{{'day.update' | translate}}</div>
+            </ng-container>
+
             <div class="col-md-1"></div>
         </div>
 
@@ -373,8 +382,13 @@
                 <!--Cột 5: Ngày cập nhật-->
                 <div class="col-md-2 calendar_create">
                   <!-- để tạm ngày tạo HĐ -->
-                  <div><i class="fa fa_icon"></i><span class="item_date">{{item.updated_at | date:
-                    'dd/MM/yyyy HH:mm:ss'}}</span>
+                  <div><i class="fa fa_icon"></i>
+                    <span *ngIf = "this.filter_status == 31 || this.filter_status == 32 || this.filter_status == 40" class="item_date">
+                      {{item.sign_time | date:'dd/MM/yyyy HH:mm:ss'}}
+                    </span>
+                    <span *ngIf = "this.filter_status != 31 && this.filter_status != 32 && this.filter_status != 40" class="item_date">
+                      {{item.updated_at | date:'dd/MM/yyyy HH:mm:ss'}}
+                    </span>
                   </div>
                 </div>
                 <!-- <div class="col-md-2 calendar_deadline">
@@ -539,10 +553,10 @@
           <div class="col-md-2">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
-          <div class="col-md-2">{{'create-date' | translate}}
+          <div class="col-md-2">{{'create-time' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
-          <div class="col-md-2">{{'day.update' | translate}}
+          <div class="col-md-2">{{'complete-time' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
           <div class="col-md-1"></div>
@@ -628,7 +642,7 @@
                 <!--Cột 5: Ngày cập nhật-->
                 <div class="col-md-2 calendar_create">
                   <!-- để tạm ngày tạo HĐ -->
-                  <div><i class="fa fa_icon"></i><span class="item_date">{{item.updated_at | date:
+                  <div><i class="fa fa_icon"></i><span class="item_date">{{item.sign_time | date:
                     'dd/MM/yyyy HH:mm:ss'}}</span>
                   </div>
                 </div>
@@ -731,10 +745,10 @@
             <div class="col-md-2">{{'report.status.contract' | translate}}
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
-            <div class="col-md-2">{{'create-date' | translate}}
+            <div class="col-md-2">{{'create-time' | translate}}
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
-            <div class="col-md-2">{{'day.update' | translate}}
+            <div class="col-md-2">{{'complete-time' | translate}}
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
             <div class="col-md-1"></div>
@@ -810,7 +824,7 @@
 
                 <!--Cột 5: Ngày cập nhật cuối-->
                 <div class="col-md-2 calendar_deadline">
-                    <div><i class="fa fa_icon"></i><span class="item_date">{{item.updated_at | date:
+                    <div><i class="fa fa_icon"></i><span class="item_date">{{item.sign_time | date:
                             'dd/MM/yyyy HH:mm:ss'}}</span></div>
                 </div>
 
@@ -979,13 +993,13 @@
               <div class="col-md-2">{{'report.status.contract' | translate}}
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
-              <div class="col-md-2">{{'create-date' | translate}}
+              <div class="col-md-2">{{'create-time' | translate}}
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
               <!-- <div class="col-md-2">{{'expiration-date' | translate}}
                 <img src="../../assets/img/sort.svg"/>
               </div> -->
-              <div class="col-md-2">{{'day.update' | translate}}
+              <div class="col-md-2">{{'complete-time' | translate}}
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
               <div class="col-md-1"></div>
@@ -1065,7 +1079,7 @@
 
                     <!--Cột 5: Ngày cập nhật-->
                     <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa_icon"></i><span class="item_date">{{item.updated_at | date:
+                        <div><i class="fa fa_icon"></i><span class="item_date">{{item.sign_time | date:
                                 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
@@ -1181,10 +1195,10 @@
               <div class="col-md-2">{{'report.status.contract' | translate}}
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
-              <div class="col-md-2">{{'create-date' | translate}}
+              <div class="col-md-2">{{'create-time' | translate}}
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
-              <div class="col-md-2">{{'day.update' | translate}}
+              <div class="col-md-2">{{'time.update' | translate}}
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
               <div class="col-md-1"></div>
@@ -1360,10 +1374,10 @@
             <div class="col-md-2">{{'report.status.contract' | translate}}
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
-            <div class="col-md-2">{{'create-date' | translate}}
+            <div class="col-md-2">{{'create-time' | translate}}
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
-            <div class="col-md-2">{{'day.update' | translate}}
+            <div class="col-md-2">{{'time.update' | translate}}
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
             <div class="col-md-1"></div>
