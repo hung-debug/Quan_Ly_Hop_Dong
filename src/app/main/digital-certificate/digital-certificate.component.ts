@@ -92,16 +92,12 @@ export class DigitalCertificateComponent implements OnInit {
     // this.getData();
         //lay id user
         let userId = this.userService.getAuthCurrentUser().id;
-        console.log("userId",userId);
-
         this.userService.getUserById(userId).subscribe(
           data => {
             //lay id role
             this.roleService.getRoleById(data?.role_id).subscribe(
               data => {
                 let listRole: any[];
-                console.log("data",data);
-
                 listRole = data.permissions;
                 this.isQLDSCTS_01 = listRole.some(element => element.code == 'QLDSCTS_01');
                 this.isQLDSCTS_02 = listRole.some(element => element.code == 'QLDSCTS_02');
@@ -124,12 +120,11 @@ export class DigitalCertificateComponent implements OnInit {
     this.first = 0;
 
     this.spinner.show();
-    this.DigitalCertificateService.searchCertificate(this.subject, this.serial_number, this.status.value, this.keystoreDateStart, this.keystoreDateEnd, 0, this.size).subscribe(response => {
+    this.DigitalCertificateService.searchCertificate(this.subject, this.serial_number, this.status.value, this.keystoreDateStart, this.keystoreDateEnd, this.page, this.size).subscribe(response => {
       this.spinner.hide();
       if (response.content) {
         this.list = response.content;
         this.totalRecords = response.totalElements;
-        console.log("res", response);
         // const uidCert = this.getValueByKey(result.certInformation, "UID")
         // this.dataCardId = uidCert?.split(":")[1];
       } else {
@@ -144,7 +139,7 @@ export class DigitalCertificateComponent implements OnInit {
   }
 
   onPageChange(event: any) {
-    this.page = event.page;
+    this.page = event.page + 1;
     this.getFirstPageSearchData();
   }
 
