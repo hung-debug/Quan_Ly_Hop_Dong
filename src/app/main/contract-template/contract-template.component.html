@@ -1,4 +1,5 @@
-<div *ngIf="loaded">
+<!-- <div *ngIf="loaded"> -->
+<div>
 <div *ngIf="isQLMHD_01 || isQLMHD_02 || isQLMHD_03 || isQLMHD_04 || isQLMHD_05 || isQLMHD_06 || isQLMHD_07 || isQLMHD_08 || isQLHD_14 || isQLHD_15" class="container-fluid">
   <p-selectButton [options]="stateOptions" [(ngModel)]="isShare" optionLabel="label" optionValue="value" (click)="searchContract()">
     <ng-template #options let-item>
@@ -43,7 +44,7 @@
     <div class="col-md-3">{{'action' | translate}}</div>
   </div>
 
-  <div style="min-height: 67vh;">
+  <div *ngIf="pageTotal > 0" style="min-height: 67vh;">
   <div class="item_contract" *ngFor="let item of contractsTemplate  | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
     
     <div class="row">
@@ -155,8 +156,9 @@
     </div>
   </div>
   </div>
+
   <div *ngIf="pageTotal == 0" 
-  style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+  style="min-height: 67vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
     <div style="display: table-cell;vertical-align: middle;"> 
       <img src="../../../assets/img/empty_data.svg"/>
       <div style="color: #94A7C6">{{'no.data' | translate}}</div>
