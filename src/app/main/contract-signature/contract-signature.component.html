@@ -169,7 +169,7 @@
                                   <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}}</div>
                                   <div>
                                     <img src="../../../assets/img/path.svg"/>
-                                    <span *ngIf="item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
+                                    <span *ngIf="item.sign_type && item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
                                     <span *ngIf="item.role == 1" style="color: #EE7200; padding: 5px;">{{'Đang điều phối' | translate}}</span>
                                     <span *ngIf="item.role == 2" style="color: #EE7200; padding: 5px;">{{'Đang xem xét' | translate}}</span>
                                   </div>
@@ -246,8 +246,8 @@
 
                     <div class="col-md-2 calendar_deadline">
                         <div><i class="fa fa_icon"></i>
-                          <span *ngIf = "filter_status == 1" class="item_date">{{ item.participant.contract.sign_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
-                          <span *ngIf = "filter_status == 4" class="item_date">{{ signTime(item) | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
+                          <span *ngIf = "item.participant && filter_status == 1" class="item_date">{{ item.participant.contract.sign_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
+                          <span *ngIf = "item.participant && filter_status == 4" class="item_date">{{ signTime(item) | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
                           <!-- <span class="item_date">{{item.participant.contract.updated_at | date: 'dd/MM/yyyy HH:mm:ss'}}</span> -->
                         </div>
                     </div>
@@ -375,7 +375,7 @@
                   </div>
 
                   <div class="col-md-2 calendar_deadline">
-                      <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.share.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
+                      <div><i class="fa fa-calendar fa_icon"></i><span *ngIf ="item.share" class="item_date">{{item.share.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                   </div>
 
                   <div class="col-md-1 item_icon">
@@ -525,7 +525,7 @@
                     </div>
 
                     <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa_icon"></i><span class="item_date">{{signTime(item) | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
+                        <div><i class="fa fa_icon"></i><span *ngIf ="item.participant" class="item_date">{{signTime(item) | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
                     <div class="col-md-1 item_icon">
@@ -631,7 +631,7 @@
                                   <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}}</div>
                                   <div>
                                     <img src="../../../assets/img/path.svg"/>
-                                    <span *ngIf="item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
+                                    <span *ngIf="item.sign_type && item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
                                     <span *ngIf="item.role == 1" style="color: #EE7200; padding: 5px;">{{'Đang điều phối' | translate}}</span>
                                     <span *ngIf="item.role == 2" style="color: #EE7200; padding: 5px;">{{'Đang xem xét' | translate}}</span>
                                   </div>
@@ -697,7 +697,7 @@
                     </div>
 
                     <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.participant.contract.sign_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
+                        <div><i class="fa fa-calendar fa_icon"></i><span *ngIf = "item.participant" class="item_date">{{item.participant.contract.sign_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
                     <div style="cursor: pointer;" class="col-md-1 item_icon" (click)="toggleOne(item, index1)">
@@ -934,7 +934,7 @@
                     </div>
 
                     <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.participant.contract.sign_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
+                        <div><i class="fa fa-calendar fa_icon"></i><span *ngIf = "item.participant" class="item_date">{{item.participant.contract.sign_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
                     <div class="col-md-1 item_icon">
