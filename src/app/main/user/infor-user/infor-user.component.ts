@@ -109,6 +109,7 @@ export class InforUserComponent implements OnInit {
     this.networkList = networkList;
     this.user = this.userService.getInforUser();
     this.appService.setTitle('user.information');
+    this.appService.setSubTitle('');
 
     this.id = this.user.customer_id;
     this.userService.getUserById(this.id).subscribe(
