@@ -33,6 +33,7 @@ export class NotificationComponent implements OnInit {
     
 
     this.appService.setTitle("no.list");
+    this.appService.setSubTitle("");
     this.getNotification();
   }
 
