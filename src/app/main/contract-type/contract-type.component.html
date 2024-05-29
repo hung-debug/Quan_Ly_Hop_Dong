@@ -17,7 +17,7 @@
       <button *ngIf="isQLLHD_01" class="btn btn-lg btn-block btn_submit" (click)="addContractType()">{{'btn.add' | translate }}</button>
     </div>
   </div>
-  <div style="min-height: 77vh;">
+  <div *ngIf="list && list.length > 0" style="min-height: 77vh;">
   <div class="row" style="padding-top: 20px;">
     <p-table [value]="list" [paginator]="false" [rows]="15" id="table" [autoLayout]="true">
       <ng-template pTemplate="header" let-columns>
@@ -47,7 +47,7 @@
   </div>
   </div>
   <div *ngIf="list && list.length == 0" 
-  style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+  style="min-height: 77vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
     <div style="display: table-cell;vertical-align: middle;">
       <img src="../../../assets/img/empty_data.svg"/>
       <div style="color: #94A7C6">{{'no.data' | translate}}</div>

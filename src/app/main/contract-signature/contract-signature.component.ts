@@ -211,7 +211,8 @@ export class ContractSignatureComponent implements OnInit {
     this.sub = this.route.params.subscribe((params) => {
       // this.action = params['action'];
       this.status = params['status'];
-
+      this.contracts = [];
+      this.pageTotal = 0;
       //set title
       this.convertStatusStr();
       this.action = 'receive';
