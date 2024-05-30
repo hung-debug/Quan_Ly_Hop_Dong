@@ -134,7 +134,7 @@
               <!--Cột 5: Ngày cập nhật-->
               <div class="col-md-2 calendar_create">
                 <!-- để tạm ngày tạo HĐ -->
-                <div><i class="fa fa_icon"></i><span class="item_date">{{item.updated_at | date:
+                <div><i class="fa fa_icon"></i><span class="item_date">{{item.sign_time | date:
                   'dd/MM/yyyy HH:mm:ss'}}</span>
                 </div>
               </div>
@@ -383,10 +383,19 @@
                 <div class="col-md-2 calendar_create">
                   <!-- để tạm ngày tạo HĐ -->
                   <div><i class="fa fa_icon"></i>
-                    <span *ngIf = "this.filter_status == 31 || this.filter_status == 32 || this.filter_status == 40" class="item_date">
+                    <span *ngIf = "this.filter_status == 20 || this.filter_status == 33 || this.filter_status == 34" class="item_date">
                       {{item.sign_time | date:'dd/MM/yyyy HH:mm:ss'}}
                     </span>
-                    <span *ngIf = "this.filter_status != 31 && this.filter_status != 32 && this.filter_status != 40" class="item_date">
+                    <span *ngIf = "this.filter_status == 31" class="item_date">
+                      {{item.reject_time | date:'dd/MM/yyyy HH:mm:ss'}}
+                    </span>
+                    <span *ngIf = "this.filter_status == 32" class="item_date">
+                      {{item.cancelDate | date:'dd/MM/yyyy HH:mm:ss'}}
+                    </span>
+                    <span *ngIf = "this.filter_status == 40" class="item_date">
+                      {{item.sign_time | date:'dd/MM/yyyy HH:mm:ss'}}
+                    </span>
+                    <span *ngIf = "this.filter_status != 20 && this.filter_status != 33 && this.filter_status != 34 && this.filter_status != 31 && this.filter_status != 32 && this.filter_status != 40" class="item_date">
                       {{item.updated_at | date:'dd/MM/yyyy HH:mm:ss'}}
                     </span>
                   </div>
@@ -642,7 +651,7 @@
                 <!--Cột 5: Ngày cập nhật-->
                 <div class="col-md-2 calendar_create">
                   <!-- để tạm ngày tạo HĐ -->
-                  <div><i class="fa fa_icon"></i><span class="item_date">{{item.sign_time | date:
+                  <div><i class="fa fa_icon"></i><span class="item_date">{{item.success_time | date:
                     'dd/MM/yyyy HH:mm:ss'}}</span>
                   </div>
                 </div>
@@ -824,7 +833,7 @@
 
                 <!--Cột 5: Ngày cập nhật cuối-->
                 <div class="col-md-2 calendar_deadline">
-                    <div><i class="fa fa_icon"></i><span class="item_date">{{item.sign_time | date:
+                    <div><i class="fa fa_icon"></i><span class="item_date">{{item.success_time | date:
                             'dd/MM/yyyy HH:mm:ss'}}</span></div>
                 </div>
 
@@ -1079,7 +1088,7 @@
 
                     <!--Cột 5: Ngày cập nhật-->
                     <div class="col-md-2 calendar_deadline">
-                        <div><i class="fa fa_icon"></i><span class="item_date">{{item.sign_time | date:
+                        <div><i class="fa fa_icon"></i><span class="item_date">{{item.success_time | date:
                                 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                     </div>
 
