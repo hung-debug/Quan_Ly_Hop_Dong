@@ -12,7 +12,26 @@
           <span>{{'text.dashboard.theme' | translate}}</span>
         </div>
         <br>
-        <div class="ceate_contract">
+        <div class="ceate_contract" (click)="clickAddContract()">
+          <button class="btn_add_contract">{{'menu.contract.add' | translate}}
+            <img src="../../assets/img/add-square_db.svg"/>
+          </button>
+          <!-- <mat-menu #menu="matMenu" style="margin-left: 50px;" class="popup_create_contract" xPosition = "after">
+            <button mat-menu-item class="div_icon" (click)="clickAddContract()">
+              <mat-icon><img src="../../assets/img/document.svg" class="img_icon"/></mat-icon>
+              <span class="ceate_contract_text">{{'create.contract.no.template' | translate}}</span>
+            </button>
+            <button mat-menu-item class="div_icon" (click)="clickAddContract()">
+              <mat-icon><img src="../../assets/img/document-copy.svg" class="img_icon"/></mat-icon>
+              <span class="ceate_contract_text">{{'create.contract.batch' | translate}}</span>
+            </button>
+            <button mat-menu-item class="div_icon" (click)="clickAddContract()">
+              <mat-icon><img src="../../assets/img/document-code-2.svg" class="img_icon"/></mat-icon>
+              <span class="ceate_contract_text">{{'create.contract.template' | translate}}</span>
+            </button>
+          </mat-menu> -->
+        </div>
+        <!-- <div class="ceate_contract" (click)="clickAddContract()">
           <button class="btn_add_contract" mat-icon-button [matMenuTriggerFor]="menu">{{'menu.contract.add' | translate}}
             <img src="../../assets/img/add-square_db.svg"/>
           </button>
@@ -30,7 +49,7 @@
               <span class="ceate_contract_text">{{'create.contract.template' | translate}}</span>
             </button>
           </mat-menu>
-        </div>
+        </div> -->
       </div>
     </div>
     
@@ -157,7 +176,7 @@
                 <div style="display: flex; justify-content: space-between;">
                   <div style="padding-top: 20px;">
                     <img src="../../../assets/img/path.svg"/>
-                    <span *ngIf="item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
+                    <span *ngIf="item.sign_type.length > 0" class="name_required">{{item.sign_type[0]?.name}}</span>
                     <span *ngIf="item.role == 1" style="color: #EE7200; padding: 5px;">{{'Đang điều phối' | translate}}</span>
                     <span *ngIf="item.role == 2" style="color: #EE7200; padding: 5px;">{{'Đang xem xét' | translate}}</span>
                   </div>

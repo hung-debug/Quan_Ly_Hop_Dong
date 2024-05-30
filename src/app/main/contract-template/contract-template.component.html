@@ -87,7 +87,7 @@
 
       <div class="col-md-3 item_icon">
         
-        <div class="three_dot" style="display: flex; justify-content: center;">
+        <div class="three_dot" style="display: flex; justify-content: center;" *ngIf="item.releaseState=='CON_HIEU_LUC'">
           <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
             <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
           </button>
