@@ -104,7 +104,7 @@
             </div>
           </div>
 
-          <div class="col-xxl-2 col-md-2 btn_search" >
+          <div class="col-xxl-2 col-md-2 btn_search" *ngIf="filter_status !== 12 && filter_status !== 13 && filter_status !== 14" >
             <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
               {{'btn.advance' | translate}}
               <img src="../../assets/img/vector_advance.svg" class="input-img" />
@@ -331,7 +331,7 @@
             </div>
         </div>
         </div>
-        
+
         <div style="min-height: 71vh" *ngIf="pageTotal > 0 && filter_status == -1">
           <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
             <div *ngIf="filter_status == -1">
@@ -470,7 +470,7 @@
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
         </div>
-        
+
         <div *ngIf="pageTotal > 0" style="min-height: 66vh">
           <div class="item_contract" *ngFor="let item of contractDownloadList | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}; let index1 = index">
             <div *ngIf="filter_status == 4">
@@ -634,7 +634,7 @@
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
         </div>
-        
+
         <div *ngIf="pageTotal > 0" style="min-height: 66vh">
           <div class="item_contract" *ngFor="let item of contractsSignMany; let index1 = index">
             <div *ngIf="filter_status == 1 || filter_status == 4">
@@ -866,7 +866,7 @@
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
         </div>
-        
+
         <div *ngIf="pageTotal > 0" style="min-height: 66vh">
           <div class="item_contract" *ngFor="let item of contractViewList | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}; let index1 = index">
             <div *ngIf="filter_status == 1">
@@ -996,7 +996,7 @@
       </div>
     </div>
 
-    <div *ngIf="pageTotal == 0 && !(this.typeDisplay == 'signMany' || this.typeDisplay == 'viewMany')" 
+    <div *ngIf="pageTotal == 0 && !(this.typeDisplay == 'signMany' || this.typeDisplay == 'viewMany')"
       [ngStyle]="{'min-height': filter_status != -1 ? '66vh' : '71vh', 'display': 'table', 'top': '0', 'left': '0', 'width': '100%', 'text-align': 'center'}">
       <div style="display: table-cell; vertical-align: middle;">
           <img src="../../../assets/img/empty_data.svg" />
