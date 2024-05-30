@@ -683,11 +683,20 @@ export class DashboardComponent implements OnInit {
     })
   }
   
-  clickAddContract(){
-    this.router.navigate([
-      '/main/form-contract/add',
-    ]);
-    this.appService.setSubTitle('add.contract.one.not.template');
+  clickAddContract(type: number){
+    if (type === 1) {
+      this.router.navigate([
+        '/main/form-contract/add',
+      ]);
+    } else if (type === 2) {
+      this.router.navigate([
+        '/main/form-contract/add-form',
+      ]);
+    } else if (type === 3) {
+      this.router.navigate([
+        '/main/form-contract/add-batch'
+      ]);
+    }
     
     // if (this.type == 1) {
     //   this.step = variable.stepSampleContract.step1;

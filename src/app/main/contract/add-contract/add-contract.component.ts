@@ -153,8 +153,6 @@ export class AddContractComponent implements OnInit {
   isQLHD_11: boolean = true;
 
   ngOnInit() {
-
-    this.appService.setSubTitle('add.contract.one.not.template');
     this.userService.checkServiceStatus().subscribe((response) => {
 
       if (response.status == 'Using' || environment.flag == 'NB') {
@@ -187,11 +185,14 @@ export class AddContractComponent implements OnInit {
 
                   if (this.action == 'add' && this.isQLHD_01) {
                     this.type = 1;
+                    this.appService.setSubTitle('add.contract.one.not.template');
                   } else if ((this.action == 'add' || this.action == 'add-form') && this.isQLHD_14) {
                     this.type = 2;
+                    this.appService.setSubTitle('add.contract.one.template');
                     this.stepForm = variable.stepSampleContractForm.step1;
                   } else if ((this.action == 'add' || this.action == 'add-batch') && this.isQLHD_15) {
                     this.type = 3;
+                    this.appService.setSubTitle('role.contract-template.create-batch');
                     this.stepBatch = variable.stepSampleContractBatch.step1;
                   }
                 },
@@ -369,15 +370,15 @@ export class AddContractComponent implements OnInit {
       this.appService.setSubTitle("role.contract-template.create-batch");
     }
     if (this.type == 1) {
-      this.datas = {
-        stepLast: variable.stepSampleContract.step1,
-        save_draft: {
-          infor_contract: false,
-          determine_signer: false,
-          sample_contract: false,
-          confirm_infor_contract: false,
-        },
-      };
+      // this.datas = {
+      //   stepLast: variable.stepSampleContract.step1,
+      //   save_draft: {
+      //     infor_contract: false,
+      //     determine_signer: false,
+      //     sample_contract: false,
+      //     confirm_infor_contract: false,
+      //   },
+      // };
     } else if (this.type == 2) {
       this.datasForm = {
         stepFormLast: variable.stepSampleContractForm.step1,
