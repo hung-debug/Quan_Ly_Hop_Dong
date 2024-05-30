@@ -38,7 +38,7 @@
           <div class="col-xxl-1 col-md-1" style="text-align: left;">
             <!-- <input type="checkbox" style="width: 20px; height: 20px;"> -->
           </div>
-          <div class="col-md-4">{{'contract.process' | translate}}</div>
+          <div class="col-xxl-5 col-md-4">{{'contract.process' | translate}}</div>
           <div class="col-md-2">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
@@ -72,7 +72,7 @@
                 </div>
               </div>
               <!--Cột 2-->
-              <div class="col-md-4">
+              <div class="col-xxl-5 col-md-5">
                   <div class="row">
                       <div class="col-md-11" style="display: flex;margin-left: 12px;">
                         <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
@@ -141,7 +141,7 @@
 
               <!--Cột 6: Thao tác-->
               <div class="col-md-1 item_icon">
-                <div class="three_dot" *ngIf="isOrg=='off'" style="display: flex; justify-content: center;">
+                <div class="three_dot" *ngIf="isOrg=='off'" style="display: flex; justify-content: flex-end;">
                   <!-- <img src="../../assets/img/lets-icons_meatballs-menu.svg"/> -->
                   <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
                     <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
@@ -159,7 +159,7 @@
                       <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon"/></mat-icon>
                       <span class="three_dot_text">{{'view.processing.flow' | translate}}</span>
                     </button>
-                    <button mat-menu-item class="div_icon" (click)="openEditExpiration(item)" *ngIf="this.isOrg == 'off' && (status == 'processing' || status == 'expire' || status == 'overdue' || status == 'liquidated')">
+                    <button mat-menu-item class="div_icon" (click)="openEditExpiration(item)" *ngIf="this.isOrg == 'off' && (status == 'processing' || status == 'expire' || status == 'overdue')">
                       <mat-icon><img src="../../assets/img/timer-start.svg" class="img_icon"/></mat-icon>
                       <span class="three_dot_text">{{'edit.sign.time' | translate}}</span>
                     </button>
@@ -264,7 +264,7 @@
         </div>
         <div class="col-xxl-1-5 col-md-2 btn_search" >
           <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
-            {{'btn.advance' | translate}}
+            {{'btn.advance1' | translate}}
             <img src="../../assets/img/vector_advance.svg" class="input-img" />
           </button>
         </div>
@@ -283,10 +283,10 @@
       </div>
 
         <div class="row list_header" *ngIf="pageTotal > 0;">
-            <div class="col-xxl-1 col-md-1" style="text-align: left;">
+            <!-- <div class="col-xxl-1 col-md-1" style="text-align: left;"> -->
               <!-- <input type="checkbox" style="width: 20px; height: 20px;"> -->
-            </div>
-            <div class="col-md-4">{{'contract.process' | translate}}</div>
+            <!-- </div> -->
+            <div class="col-xxl-5 col-md-4">{{'contract.process' | translate}}</div>
             <!-- <div class="col-md-1" *ngIf="this.filter_status == 30 || this.filter_status == 40">{{'status.ceca' | translate}}
               <img src="../../assets/img/sort.svg"/>
             </div> -->
@@ -316,19 +316,19 @@
 
             <div class="row">
                 <!--Cột 1-->
-                <div class="col-xxl-1 col-md-1 item_icon">
-                  <div style="display: flex;">
+                <!-- <div class="col-xxl-1 col-md-1 item_icon"> -->
+                  <!-- <div style="display: flex;"> -->
                       <!-- <div class="col-md-1">
                         <div style="margin-left: 35px;">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                         </div>
                       </div> -->
-                  </div>
-                </div>
+                  <!-- </div>
+                </div> -->
                 <!--Cột 2-->
-                <div class="col-md-4">
+                <div class="col-xxl-5 col-md-4">
                     <div class="row">
-                      <div class="col-md-11" style="display: flex;margin-left: 12px;">
+                      <div class="col-md-11" style="display: flex;margin-left: 6px;">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                           <div style="margin-left: 12px;">
                             <div class="item_contract_name">
@@ -402,8 +402,8 @@
                 </div> -->
 
                 <!--Cột 6: Thao tác-->
-                <div class="col-md-1 item_icon">
-                  <div class="three_dot" style="display: flex; justify-content: center;">
+                <div class="col-xxl-2 col-md-1 item_icon">
+                  <div class="three_dot" style="display: flex; justify-content: flex-end;">
                     <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
                       <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                     </button>
@@ -420,7 +420,7 @@
                         <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'view.processing.flow' | translate}}</span>
                       </button>
-                      <button mat-menu-item class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'overdue' || status == 'liquidated') && this.isOrg == 'off'" (click)="openEditExpiration(item)">
+                      <button mat-menu-item class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'overdue') && this.isOrg == 'off'" (click)="openEditExpiration(item)">
                         <mat-icon><img src="../../assets/img/timer-start.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'edit.sign.time' | translate}}</span>
                       </button>
@@ -549,7 +549,7 @@
           <div class="col-xxl-1 col-md-1" style="text-align: left;">
             <!-- <input type="checkbox" style="width: 20px; height: 20px;"> -->
           </div>
-          <div class="col-md-4">{{'contract.process' | translate}}</div>
+          <div class="col-xxl-5 col-md-4">{{'contract.process' | translate}}</div>
           <div class="col-md-2">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
@@ -576,7 +576,7 @@
                   </div>
                 </div>
                 <!--Cột 2-->
-                <div class="col-md-4">
+                <div class="col-xxl-5 col-md-4">
                     <div class="row">
                         <div class="col-md-11" style="display: flex; margin-left: 12px;">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
@@ -654,8 +654,8 @@
                     </div>
                 </div> -->
                 <!--Cột 6: Thao tác-->
-                <div class="col-md-1 item_icon">
-                  <div class="three_dot" style="display: flex; justify-content: center;">
+                <div class="col-xxl-2 col-md-1 item_icon">
+                  <div class="three_dot" style="display: flex; justify-content: flex-end;">
                     <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
                       <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                     </button>
@@ -741,7 +741,7 @@
             <div class="col-xxl-1 col-md-1" style="text-align: left;">
               <!-- <input type="checkbox" style="width: 20px; height: 20px;"> -->
             </div>
-            <div class="col-md-4">{{'contract.process' | translate}}</div>
+            <div class="col-xxl-5 col-md-4">{{'contract.process' | translate}}</div>
             <div class="col-md-2">{{'report.status.contract' | translate}}
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
@@ -767,7 +767,7 @@
                   </div>
                 </div>
                 <!--Cột 2-->
-                <div class="col-md-4">
+                <div class="col-xxl-5 col-md-4">
                     <div class="row">
                         <div class="col-md-11" style="display: flex; margin-left: 12px;">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
@@ -829,8 +829,8 @@
                 </div>
 
                 <!--Cột 6: Thao tác-->
-                <div class="col-md-1 item_icon">
-                  <div class="three_dot" style="display: flex; justify-content: center;">
+                <div class="col-xxl-2 col-md-1 item_icon">
+                  <div class="three_dot" style="display: flex; justify-content: flex-end;">
                     <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
                       <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                     </button>
@@ -989,7 +989,7 @@
               <div class="col-xxl-1 col-md-1" style="text-align: left;" *ngIf="this.filter_status == 30">
                 <input type="checkbox" style="width: 16px; height: 16px;" id="allDownload" name="allDownload" [(ngModel)]="checkedAll" (click)="toggleDownload(checkedAll)">
               </div>
-              <div class="col-md-4">{{'contract.process' | translate}}</div>
+              <div class="col-xxl-5 col-md-4">{{'contract.process' | translate}}</div>
               <div class="col-md-2">{{'report.status.contract' | translate}}
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
@@ -1024,7 +1024,7 @@
                     </div>
                   </div>
                     <!--Cột 2-->
-                    <div class="col-md-4">
+                    <div class="col-xxl-5 col-md-4">
                         <div class="row">
                             <div class="col-md-11" style="display: flex;margin-left: 12px;">
                               <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
@@ -1084,8 +1084,8 @@
                     </div>
 
                     <!--Cột 6: Thao tác-->
-                    <div class="col-md-1 item_icon">
-                      <div class="three_dot" style="display: flex; justify-content: center;">
+                    <div class="col-xxl-2 col-md-1 item_icon">
+                      <div class="three_dot" style="display: flex; justify-content: flex-end;">
                         <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
                           <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                         </button>
@@ -1191,7 +1191,7 @@
               <div class="col-xxl-1 col-md-1" style="text-align: left;" *ngIf="this.filter_status == 0">
                 <input type="checkbox" style="width: 16px; height: 16px;" id="allRelease" name="allRelease" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleReleaseAll(checkedAll)">
               </div>
-              <div class="col-md-4">{{'contract.process' | translate}}</div>
+              <div class="col-xxl-5 col-md-4">{{'contract.process' | translate}}</div>
               <div class="col-md-2">{{'report.status.contract' | translate}}
                 <!-- <img src="../../assets/img/sort.svg"/> -->
               </div>
@@ -1223,7 +1223,7 @@
                       </div>
                     </div>
                     <!--Cột 2-->
-                    <div class="col-md-4">
+                    <div class="col-xxl-5 col-md-4">
                         <div class="row">
                             <div class="col-md-11" style="display: flex;margin-left: 12px;">
                               <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
@@ -1283,8 +1283,8 @@
                     </div>
 
                     <!--Cột 6: Thao tác-->
-                    <div class="col-md-1 item_icon">
-                      <div class="three_dot" style="display: flex; justify-content: center;">
+                    <div class="col-xxl-2 col-md-1 item_icon">
+                      <div class="three_dot" style="display: flex; justify-content: flex-end;">
                         <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
                           <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                         </button>
@@ -1370,7 +1370,7 @@
             <div class="col-xxl-1 col-md-1" style="text-align: left;" *ngIf="this.filter_status == 0">
               <input type="checkbox" style="width: 16px; height: 16px;" id="allDeleteDraft" name="allDeleteDraft" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDeleteDraftAll(checkedAll)">
             </div>
-            <div class="col-md-4">{{'contract.process' | translate}}</div>
+            <div class="col-xxl-5 col-md-4">{{'contract.process' | translate}}</div>
             <div class="col-md-2">{{'report.status.contract' | translate}}
               <!-- <img src="../../assets/img/sort.svg"/> -->
             </div>
@@ -1401,7 +1401,7 @@
                     </div>
                   </div>
                   <!--Cột 2-->
-                  <div class="col-md-4">
+                  <div class="col-xxl-5 col-md-4">
                       <div class="row">
                           <div class="col-md-11" style="display: flex;margin-left: 12px;">
                             <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
@@ -1461,8 +1461,8 @@
                   </div>
 
                   <!--Cột 6: Thao tác-->
-                  <div class="col-md-1 item_icon">
-                    <div class="three_dot" style="display: flex; justify-content: center;">
+                  <div class="col-xxl-2 col-md-1 item_icon">
+                    <div class="three_dot" style="display: flex; justify-content: flex-end;">
                       <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
                         <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                       </button>

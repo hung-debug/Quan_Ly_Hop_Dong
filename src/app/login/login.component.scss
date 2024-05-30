@@ -114,6 +114,7 @@ img {
     color: #F0F0F0;
     font-weight: 500;;
     cursor: pointer;
+    text-decoration-line: underline;
   }
 }
 .sub-login{
@@ -135,7 +136,7 @@ img {
   align-items: center;
   cursor: pointer;
   padding: 10px;
-  border: 1px solid #C2E4FF;
+  // border: 1px solid #C2E4FF;
   border-radius: 5px;
 }
 .social-icons .label{
@@ -149,7 +150,7 @@ img {
   display:none;
 }
 .drop_menu{
-  border-color: #C2E4FF;
+  // border-color: #C2E4FF;
   padding: 0;
   font-size: inherit;
   right: 10px;

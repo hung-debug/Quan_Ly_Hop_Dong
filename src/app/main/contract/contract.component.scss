@@ -21,7 +21,7 @@
 .item_contract_name {
   font-weight: 500;
   font-size: 14px;
-  color: #001A4D;
+  color: #00186D;
   cursor: pointer;
   white-space: nowrap; 
   overflow: hidden;
@@ -433,4 +433,15 @@
     flex: 0 0 auto;
     width: 1.333333333%;
   }
+  
+  .col-xxl-5{
+    flex: 0 0 auto;
+    width: 39.666667%;
+  }
+  
+  .col-xxl-2{
+    flex: 0 0 auto;
+    width: 8.666667%;
+  }
+  
 }

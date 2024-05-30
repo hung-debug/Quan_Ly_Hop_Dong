@@ -38,10 +38,10 @@
 
   <div class="row list_header" *ngIf="pageTotal > 0;">
     <div class="col-md-1" style="text-align: left;"></div>
-    <div class="col-md-4" style="text-align: left !important;">{{'contract-template.name' | translate}}</div>
+    <div class="col-md-6" style="text-align: left !important;">{{'contract-template.name' | translate}}</div>
     <div class="col-md-2">{{'contract-template.code' | translate}}</div>
     <div class="col-md-2">{{'create-date.soon' | translate}}</div>
-    <div class="col-md-3">{{'action' | translate}}</div>
+    <div class="col-md-1"></div>
   </div>
 
   <div *ngIf="pageTotal > 0" style="min-height: 67vh;">
@@ -53,14 +53,14 @@
             <div class="col-xxl-1 col-md-1 calendar_create" style="display: flex;">
             </div>
             <div class="col-xxl-1 col-md-1">
-              <div style="margin-left: 16px;">
+              <div>
                 <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
               </div>
             </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="row">
+      <div class="col-md-6">
+        <div class="row" style="width: 70%;">
           <div class="col-md-12 item_contract_name col-cell-ellipsis">
             <a  class="item_contract_name" style="text-decoration: none;" 
             (click)="isQLMHD_08?openDetail(item.id):null" 
@@ -85,9 +85,9 @@
       </div>
 
 
-      <div class="col-md-3 item_icon">
+      <div class="col-md-1 item_icon">
         
-        <div class="three_dot" style="display: flex; justify-content: center;" *ngIf="item.releaseState=='CON_HIEU_LUC'">
+        <div class="three_dot" style="display: flex; justify-content: flex-end;" *ngIf="item.releaseState=='CON_HIEU_LUC'">
           <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
             <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
           </button>
