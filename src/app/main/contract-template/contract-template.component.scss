@@ -24,6 +24,11 @@
   color: #001A4D;
   cursor: pointer;
   white-space: pre-wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .item_contract_infor{
@@ -266,7 +271,7 @@
   margin-left: 5px;
   margin-right: 5px;
   height: 25px;
-  width: 50px; 
+  width: 50px;
   border-radius: 5px;
   border: 1px solid #0160AE;
 }
@@ -284,15 +289,15 @@
     flex: 0 0 auto;
     width: 80%;
   }
-  
+
   .col-xxl-3 {
     flex: 0 0 auto;
     width: 40%;
 }
-  
+
   .col-xxl-1 {
     flex: 0 0 auto;
     width: 6.3333333333%;
   }
-  
+
 }
