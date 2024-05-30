@@ -370,15 +370,15 @@ export class AddContractComponent implements OnInit {
       this.appService.setSubTitle("role.contract-template.create-batch");
     }
     if (this.type == 1) {
-      // this.datas = {
-      //   stepLast: variable.stepSampleContract.step1,
-      //   save_draft: {
-      //     infor_contract: false,
-      //     determine_signer: false,
-      //     sample_contract: false,
-      //     confirm_infor_contract: false,
-      //   },
-      // };
+      this.datas = {
+        stepLast: variable.stepSampleContract.step1,
+        save_draft: {
+          infor_contract: false,
+          determine_signer: false,
+          sample_contract: false,
+          confirm_infor_contract: false,
+        },
+      };
     } else if (this.type == 2) {
       this.datasForm = {
         stepFormLast: variable.stepSampleContractForm.step1,
