@@ -764,6 +764,7 @@ export class SidebarService {
       if (element.href != '#') {
         if (this.router.url.includes(element.href)) {
           element.active = true;
+          element.icon = element.iconFill;
         }
       } else {
         this.subMenus = element.submenus;
@@ -774,6 +775,7 @@ export class SidebarService {
             element.activeDrop = true;
             element.active = true;
             elementSub.active = true;
+            element.icon = element.iconFill;
           } else {
             elementSub.active = false;
           }
