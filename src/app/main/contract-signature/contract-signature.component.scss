@@ -11,6 +11,7 @@
   background-color: #FFFFFF;
   width: 100%;
   border-radius: 12px;
+  margin-left: 8px;
 }
 .item_contract:hover{
   box-shadow: 0px 3px 12px 0px rgba(16, 85, 225, 0.10);
@@ -50,7 +51,7 @@
 
 .status_blue{
   color: #2D6BE7;
-  background-color: #D8E6FA;
+  background-color: #EEF5FF;
   padding: 5px 16px 0px 16px;
   width: 110px;
   height: 32px;
@@ -68,7 +69,7 @@
 }
 
 .list_header{
-  color:#898989;
+  color:#0041C4;
   text-align: center;
   padding: 12px 12px 0;
   font-weight: 500;
@@ -348,6 +349,10 @@
   font-size: 10px;
 }
 
+input::placeholder{
+  color: #8E9AB0;
+}
+
 .enterPage p {
   margin-top: 2px;
 }
@@ -447,5 +452,15 @@
   .col-xxl-2 {
     flex: 0 0 auto;
     width: 10%;
+  }
+  
+  .col-xxl-5{
+    flex: 0 0 auto;
+    width: 39.666667%;
+  }
+  
+  .col-xxl-1{
+    flex: 0 0 auto;
+    width: 1.333333333%;
   }
 }

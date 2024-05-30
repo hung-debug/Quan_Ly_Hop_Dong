@@ -264,7 +264,7 @@
         </div>
         <div class="col-xxl-1-5 col-md-2 btn_search" >
           <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
-            {{'btn.advance1' | translate}}
+            {{'btn.advance' | translate}}
             <img src="../../assets/img/vector_advance.svg" class="input-img" />
           </button>
         </div>
@@ -442,11 +442,11 @@
                         <span class="three_dot_text">{{'reasson.cancel.contract' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" *ngIf="status == 'draft' && isQLHD_02 && this.isOrg == 'off'" (click)="openEdit(item.id)">
-                        <mat-icon><img src="../../assets/img/icon_edit.svg" class="img_icon"/></mat-icon>
+                        <mat-icon><img src="../../assets/img/edit.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.edit' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" *ngIf="status == 'draft' && this.isOrg == 'off'" (click)="deleteContract(item.id)">
-                        <mat-icon><img src="../../assets/img/icon_delete.svg" class="img_icon"/></mat-icon>
+                        <mat-icon><img src="../../assets/img/trash_contract.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.delete' | translate}}</span>
                       </button>
                     </mat-menu>
@@ -555,9 +555,9 @@
       </div>
 
       <div class="row list_header" *ngIf="pageTotal > 0;">
-          <div class="col-xxl-1 col-md-1" style="text-align: left;">
+          <!-- <div class="col-xxl-1 col-md-1" style="text-align: left;"> -->
             <!-- <input type="checkbox" style="width: 20px; height: 20px;"> -->
-          </div>
+          <!-- </div> -->
           <div class="col-xxl-5 col-md-4">{{'contract.process' | translate}}</div>
           <div class="col-md-2">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
@@ -575,15 +575,15 @@
         <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
             <div class="row">
                 <!--Cột 1-->
-                <div class="col-xxl-1 col-md-1 item_icon">
-                  <div style="display: flex;">
+                <!-- <div class="col-xxl-1 col-md-1 item_icon"> -->
+                  <!-- <div style="display: flex;"> -->
                       <!-- <div class="col-md-1">
                         <div style="margin-left: 35px;">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                         </div>
                       </div> -->
-                  </div>
-                </div>
+                  <!-- </div>
+                </div> -->
                 <!--Cột 2-->
                 <div class="col-xxl-5 col-md-4">
                     <div class="row">
@@ -670,7 +670,7 @@
                     </button>
                     <mat-menu #menu="matMenu">
                       <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'on'" (click)="downloadContract(item.id);">
-                        <mat-icon><img src="../../assets/img/icon_download.svg" class="img_icon"/></mat-icon>
+                        <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.download' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" (click)="processHandleContract(item.id)">
@@ -747,9 +747,9 @@
       </div>
 
         <div class="row list_header" *ngIf="pageTotal > 0;">
-            <div class="col-xxl-1 col-md-1" style="text-align: left;">
+            <!-- <div class="col-xxl-1 col-md-1" style="text-align: left;"> -->
               <!-- <input type="checkbox" style="width: 20px; height: 20px;"> -->
-            </div>
+            <!-- </div> -->
             <div class="col-xxl-5 col-md-4">{{'contract.process' | translate}}</div>
             <div class="col-md-2">{{'report.status.contract' | translate}}
               <!-- <img src="../../assets/img/sort.svg"/> -->
@@ -766,19 +766,19 @@
           <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
             <div class="row">
                 <!--Cột 1-->
-                <div class="col-xxl-1 col-md-1 item_icon">
-                  <div style="display: flex;">
+                <!-- <div class="col-xxl-1 col-md-1 item_icon">
+                  <div style="display: flex;"> -->
                       <!-- <div class="col-md-1">
                         <div style="margin-left: 35px;">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                         </div>
                       </div> -->
-                  </div>
-                </div>
+                  <!-- </div>
+                </div> -->
                 <!--Cột 2-->
                 <div class="col-xxl-5 col-md-4">
                     <div class="row">
-                        <div class="col-md-11" style="display: flex; margin-left: 12px;">
+                        <div class="col-md-11" style="display: flex;">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                           <div style="margin-left: 12px;">
                             <div class="item_contract_name">
@@ -853,23 +853,23 @@
                         <span class="three_dot_text">{{'contract.connect.view' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && isQLHD_11 && this.isOrg == 'off'" (click)="addContractConnectNew(item.id)">
-                        <mat-icon><img src="../../assets/img/icon_add_connect.svg" class="img_icon"/></mat-icon>
+                        <mat-icon><img src="../../assets/img/add_contract_dup.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.connect.add' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="downloadContract(item.id);">
-                        <mat-icon><img src="../../assets/img/icon_download.svg" class="img_icon"/></mat-icon>
+                        <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.download' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && isQLHD_13 && this.isOrg == 'off'" (click)="shareContract(item.id);">
-                        <mat-icon><img src="../../assets/img/icon_share.svg" class="img_icon"/></mat-icon>
+                        <mat-icon><img src="../../assets/img/share_contract.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.share' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="uploadAttachFiles(item);">
-                        <mat-icon><img src="../../assets/img/upload_file.svg" class="img_icon"/></mat-icon>
+                        <mat-icon><img src="../../assets/img/attach-square.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'upload_attach_files' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off' && item.liquidationContractId == null && item.originalContractId == null && this.isQLHD_16" (click)="addContractLiquidationNew(item.id);">
-                        <mat-icon><img src="../../assets/img/contract-liquidation.svg" class="img_icon"/></mat-icon>
+                        <mat-icon><img src="../../assets/img/clipboard-tick.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.liquidation' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" (click)="processHandleContract(item.id)">
@@ -1104,15 +1104,15 @@
                             <span class="three_dot_text">{{'contract.connect.view' | translate}}</span>
                           </button>
                           <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && isQLHD_11 && this.isOrg == 'off'" (click)="addContractConnectNew(item.id)">
-                            <mat-icon><img src="../../assets/img/icon_add_connect.svg" class="img_icon"/></mat-icon>
+                            <mat-icon><img src="../../assets/img/add_contract_dup.svg" class="img_icon"/></mat-icon>
                             <span class="three_dot_text">{{'contract.connect.add' | translate}}</span>
                           </button>
                           <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="downloadContract(item.id);">
-                            <mat-icon><img src="../../assets/img/icon_download.svg" class="img_icon"/></mat-icon>
+                            <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                             <span class="three_dot_text">{{'contract.download' | translate}}</span>
                           </button>
                           <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && isQLHD_13 && this.isOrg == 'off'" (click)="shareContract(item.id);">
-                            <mat-icon><img src="../../assets/img/icon_share.svg" class="img_icon"/></mat-icon>
+                            <mat-icon><img src="../../assets/img/share_contract.svg" class="img_icon"/></mat-icon>
                             <span class="three_dot_text">{{'contract.share' | translate}}</span>
                           </button>
                           <button mat-menu-item class="div_icon" (click)="processHandleContract(item.id)">
@@ -1307,11 +1307,11 @@
                             <span class="three_dot_text">{{'view.processing.flow' | translate}}</span>
                           </button>
                           <button mat-menu-item class="div_icon" *ngIf="status == 'draft' && isQLHD_02 && this.isOrg == 'off'" (click)="openEdit(item.id)">
-                            <mat-icon><img src="../../assets/img/icon_edit.svg" class="img_icon"/></mat-icon>
+                            <mat-icon><img src="../../assets/img/edit.svg" class="img_icon"/></mat-icon>
                             <span class="three_dot_text">{{'contract.edit' | translate}}</span>
                           </button>
                           <button mat-menu-item class="div_icon" *ngIf="status == 'draft' && this.isOrg == 'off'" (click)="deleteContract(item.id)">
-                            <mat-icon><img src="../../assets/img/icon_delete.svg" class="img_icon"/></mat-icon>
+                            <mat-icon><img src="../../assets/img/trash_contract.svg" class="img_icon"/></mat-icon>
                             <span class="three_dot_text">{{'contract.delete' | translate}}</span>
                           </button>
                         </mat-menu>
@@ -1481,15 +1481,15 @@
                           <span class="three_dot_text">{{'contract.connect.view' | translate}}</span>
                         </button>
                         <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && isQLHD_11 && this.isOrg == 'off'" (click)="addContractConnectNew(item.id)">
-                          <mat-icon><img src="../../assets/img/icon_add_connect.svg" class="img_icon"/></mat-icon>
+                          <mat-icon><img src="../../assets/img/add_contract_dup.svg" class="img_icon"/></mat-icon>
                           <span class="three_dot_text">{{'contract.connect.add' | translate}}</span>
                         </button>
                         <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="downloadContract(item.id);">
-                          <mat-icon><img src="../../assets/img/icon_download.svg" class="img_icon"/></mat-icon>
+                          <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                           <span class="three_dot_text">{{'contract.download' | translate}}</span>
                         </button>
                         <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && isQLHD_13 && this.isOrg == 'off'" (click)="shareContract(item.id);">
-                          <mat-icon><img src="../../assets/img/icon_share.svg" class="img_icon"/></mat-icon>
+                          <mat-icon><img src="../../assets/img/share_contract.svg" class="img_icon"/></mat-icon>
                           <span class="three_dot_text">{{'contract.share' | translate}}</span>
                         </button>
                         <button mat-menu-item class="div_icon" (click)="processHandleContract(item.id)">

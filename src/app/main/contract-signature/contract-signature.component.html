@@ -125,8 +125,8 @@
         </div>
         <div class="row list_header" *ngIf="pageTotal > 0">
 
-          <div class="col-md-1"></div>
-          <div class="col-md-4" style="text-align: left !important;">{{'contract.process' | translate}}</div>
+          <!-- <div class="col-md-1"></div> -->
+          <div class="col-xxl-5 col-md-5">{{'contract.process' | translate}}</div>
           <div class="col-md-2">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
@@ -146,11 +146,10 @@
             <div *ngIf="filter_status == 1 || filter_status == 4">
                 <div class="row">
                     <!--Cột 1-->
-                    <div class="col-md-1 item_icon">
+                    <!-- <div class="col-md-1 item_icon">
                       <div style="display: flex;">
                           <div class="col-md-1 calendar_create" style="display: flex;">
                             <div>
-                              <!-- <input class="input-checkbox" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked"/> -->
                             </div>
                           </div>
                           <div class="col-md-1">
@@ -159,10 +158,12 @@
                             </div>
                           </div>
                       </div>
-                    </div>
-                    <div class="col-md-4">
+                    </div> -->
+                    <div class="col-xxl-5 col-md-4">
                         <div class="row">
-                            <div class="col-md-11">
+                            <div class="col-md-11" style="display: flex;">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                              <div style="margin-left: 12px;">
                                 <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
 
                                 <div class="row">
@@ -225,6 +226,7 @@
                                     <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.contractId)">{{'contract_processing_flow' | translate}}</u>
                                   </div>
                                 </div>
+                              </div>
                             </div>
                         </div>
                     </div>
@@ -252,14 +254,14 @@
                         </div>
                     </div>
 
-                    <div class="col-md-1 item_icon">
-                      <div class="three_dot" style="display: flex; justify-content: center;" *ngIf="filter_status == 4">
+                    <div class="col-xxl-2 col-md-1 item_icon">
+                      <div class="three_dot" style="display: flex; justify-content: flex-end;" *ngIf="filter_status == 4">
                         <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
                           <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                         </button>
                         <mat-menu #menu="matMenu">
                           <button mat-menu-item class="div_icon" *ngIf="item.contractStatus == 30" (click)="downloadContract(item.contractId);">
-                            <mat-icon><img src="../../assets/img/icon_download.svg" class="img_icon"/></mat-icon>
+                            <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                             <span class="three_dot_text">{{'contract.download' | translate}}</span>
                           </button>
                           <button mat-menu-item class="div_icon" *ngIf="item.contractStatus == 32" (click)="ViewReasonCancel(item.contractId);">
@@ -272,7 +274,7 @@
                           </button>
                         </mat-menu>
                       </div>
-                      <div style="display: flex; justify-content: center;">
+                      <div style="display: flex; justify-content: flex-end;">
                           <div class="div_icon" *ngIf="item.status == 1 && item.role == 1 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                               <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item)">{{'contract.lead' | translate}}</button>
                           </div>
@@ -337,11 +339,10 @@
             <div *ngIf="filter_status == -1">
               <div class="row">
                   <!--Cột 1-->
-                  <div class="col-md-1 item_icon">
+                  <!-- <div class="col-md-1 item_icon">
                     <div style="display: flex;">
                         <div class="col-md-1 calendar_create" style="display: flex;">
                           <div>
-                            <!-- <input class="input-checkbox" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked"/> -->
                           </div>
                         </div>
                         <div class="col-md-1">
@@ -350,18 +351,20 @@
                           </div>
                         </div>
                     </div>
-                  </div>
-                  <div class="col-md-4">
+                  </div> -->
+                  <div class="col-xxl-5 col-md-4">
+                    <div  style="display: flex;">
+                    <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                       <div class="row">
+                        <div style="margin-left: 12px;">
                           <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
                           <div class="item_contract_infor">{{'created.user' | translate}}: {{item.nameUserCreate}}</div>
-                      </div>
-
-                      <div class="row">
-                        <div class="item_contract_infor">
-                          <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
+                          <div class="item_contract_infor">
+                            <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
+                          </div>
                         </div>
                       </div>
+                    </div>
                   </div>
 
                   <!--Trang thai hop dong-->
@@ -378,14 +381,14 @@
                       <div><i class="fa fa-calendar fa_icon"></i><span *ngIf ="item.share" class="item_date">{{item.share.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
                   </div>
 
-                  <div class="col-md-1 item_icon">
-                    <div class="three_dot" style="display: flex; justify-content: center;" *ngIf="filter_status == -1">
+                  <div class="col-xxl-2 col-md-1 item_icon">
+                    <div class="three_dot" style="display: flex; justify-content: flex-end;" *ngIf="filter_status == -1">
                       <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
                         <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                       </button>
                       <mat-menu #menu="matMenu">
                         <button mat-menu-item class="div_icon" (click)="downloadContract(item.id);">
-                          <mat-icon><img src="../../assets/img/icon_download.svg" class="img_icon"/></mat-icon>
+                          <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                           <span class="three_dot_text">{{'contract.download' | translate}}</span>
                         </button>
                       </mat-menu>
@@ -420,9 +423,9 @@
                 <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy'}}</span></div>
               </div>
 
-                                    <div class="col-md-3 item_icon">
+              <div class="col-md-3 item_icon">
 
-                                    </div>
+              </div>
             </div>
           </div>
         </div>
@@ -485,7 +488,7 @@
                           <!-- </div> -->
                           <div class="col-md-1">
                             <div style="margin-left: 20px;">
-                              <img src="../../assets/img/frame_contract.svg">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                             </div>
                           </div>
                       </div>
@@ -618,12 +621,12 @@
             style="text-align: left; color: #027e21; font-size: 14px; margin-left: 9px; font-weight: bold;">
             {{'multi.sign.warning' | translate}}
           </div>
-          <div *ngIf="this.typeDisplay === 'signMany'" class="col-md-1" style="text-align: left;">
+          <div *ngIf="this.typeDisplay === 'signMany'" class="col-xxl-1 col-md-1" style="text-align: left;">
             <input id="all" name="all" type="checkbox" (click)="toggle()" style="width: 16px; height: 16px; margin: -2px;"/>
           </div>
 
           <div *ngIf="!(this.typeDisplay === 'signMany' )" class="col-md-1"></div>
-          <div class="col-md-4" style="text-align: left !important;">{{'contract.process' | translate}}</div>
+          <div class="col-xxl-5 col-md-4">{{'contract.process' | translate}}</div>
           <div class="col-md-2">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
@@ -640,23 +643,25 @@
             <div *ngIf="filter_status == 1 || filter_status == 4">
                 <div class="row">
                     <!--Cột 1-->
-                    <div class="col-md-1 item_icon" *ngIf="item.status == 1 && (item.role == 3 || item.role == 4) && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
+                    <div class="col-xxl-1 col-md-1 item_icon" *ngIf="item.status == 1 && (item.role == 3 || item.role == 4) && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                       <div style="display: flex; align-items: center;">
                           <!-- <div class="col-md-1 calendar_create" style="display: flex;"> -->
                             <div>
                               <input style="width: 16px; height: 16px;" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" />
                             </div>
                           <!-- </div> -->
-                          <div class="col-md-1">
+                          <!-- <div class="col-md-1">
                             <div style="margin-left: 20px;">
-                              <img src="../../assets/img/frame_contract.svg">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                             </div>
-                          </div>
+                          </div> -->
                       </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-xxl-5 col-md-4">
                         <div class="row">
-                            <div class="col-md-11">
+                            <div class="col-md-11" style="display: flex;">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                              <div style="margin-left: 12px;">
                                 <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
                                 <div class="row">
                                   <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}}</div>
@@ -709,6 +714,7 @@
                                     <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.contractId)">{{'contract_processing_flow' | translate}}</u>
                                   </div>
                                 </div>
+                              </div>
                             </div>
                         </div>
                     </div>
@@ -748,7 +754,7 @@
                             </div> -->
 
                             <div class="div_icon" *ngIf="item.contractStatus == 30">
-                                <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.contractId);" />
+                                <img src="../../assets/img/download_contract.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.contractId);" />
                             </div>
                         </div>
                     </div>
@@ -786,7 +792,7 @@
                     <div class="col-md-3 item_icon">
                         <div style="display: flex; justify-content: center;">
                             <div class="div_icon">
-                                <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
+                                <img src="../../assets/img/download_contract.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
                             </div>
                         </div>
                     </div>
@@ -850,12 +856,12 @@
         </div>
 
         <div class="row list_header" *ngIf="pageTotal > 0">
-          <div *ngIf="this.typeDisplay === 'viewMany'" class="col-md-1" style="text-align: left;">
+          <div *ngIf="this.typeDisplay === 'viewMany'" class="col-xxl-1 col-md-1" style="text-align: left;">
             <input id="allView" name="allView" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleView(checkedAll)" style="width: 16px; height: 16px;" />
           </div>
 
           <div *ngIf="!(this.typeDisplay === 'viewMany' )" class="col-md-1"></div>
-          <div class="col-md-4" style="text-align: left !important;">{{'contract.process' | translate}}</div>
+          <div class="col-xxl-5 col-md-4">{{'contract.process' | translate}}</div>
           <div class="col-md-2">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
@@ -872,23 +878,25 @@
             <div *ngIf="filter_status == 1">
                 <div class="row">
                     <!--Cột 1-->
-                    <div class="col-md-1 item_icon" *ngIf="this.typeDisplay == 'viewMany'">
+                    <div class="col-xxl-1 col-md-1 item_icon" *ngIf="this.typeDisplay == 'viewMany'">
                       <div style="display: flex; align-items: center;">
                           <!-- <div class="col-md-1 calendar_create" style="display: flex;"> -->
                             <div>
                               <input style="width: 16px; height: 16px;" id="allView" name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneView(item, index1)" />
                             </div>
                           <!-- </div> -->
-                          <div class="col-md-1">
+                          <!-- <div class="col-md-1">
                             <div style="margin-left: 20px;">
-                              <img src="../../assets/img/frame_contract.svg">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                             </div>
-                          </div>
+                          </div> -->
                       </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-xxl-5 col-md-4">
                         <div class="row">
-                            <div class="col-md-11">
+                            <div class="col-md-11" style="display: flex;">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                              <div style="margin-left: 12px;">
                                 <div class="item_contract_name">
                                     <a  class="item_contract_name" style="text-decoration: none;"
                                         (click)="openDetail(item.contractId)"
@@ -946,6 +954,7 @@
                                     <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.contractId)">{{'contract_processing_flow' | translate}}</u>
                                   </div>
                                 </div>
+                              </div>
                             </div>
                         </div>
                     </div>

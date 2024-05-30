@@ -54,7 +54,7 @@
 
 .status_blue{
   color: #2D6BE7;
-  background-color: #D8E6FA;
+  background-color: #EEF5FF;
   padding: 5px 16px 0px 16px;
   width: 110px;
   height: 32px;
@@ -64,7 +64,7 @@
 }
 
 .list_header{
-  color:#898989;
+  color:#0041C4;
   text-align: center;
   padding: 12px 12px 0;
   font-weight: 500;
@@ -226,16 +226,16 @@
     box-shadow: none !important;
     height: 33px;
     width: 50%;
-    font-weight: 500;
-    background-color: #F6F6F6;
-    color: var(--Text-Secondary, #8E9AB0);
+    font-weight: 600;
+    background: var(--BG, #F3F6FA);
+    color: #A8B5CE;
     border: 0px;
   }
 
   .p-selectbutton .p-button.p-highlight {
     background: #FFFFFF;
     border-color: #FFFFFF;
-    color: #001A4D;
+    color: #00186D;
     font-weight: 600;
   }
 }
@@ -330,7 +330,7 @@
   padding: 0 10px;
 }
 .img_icon{
-  width: 18px;
+  width: 20px;
   cursor: pointer;
 }
 .img_icon:hover{
@@ -411,6 +411,9 @@
 
 .text-enterPage::placeholder {
   font-size: 10px;
+}
+input::placeholder{
+  color: #8E9AB0;
 }
 
 .enterPage p {

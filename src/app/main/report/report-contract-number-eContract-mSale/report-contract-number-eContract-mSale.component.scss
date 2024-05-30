@@ -61,7 +61,7 @@
 border-collapse: collapse;
 width: 100%;
 font-size: 13px;
-font-family: font_lexend_deca;
+// font-family: font_lexend_deca;
 }
 #table td, #table th {
 //border: 1px solid #ddd;
@@ -74,8 +74,8 @@ padding: 8px;
 
 #table th {
 //text-align: center;
-background-color: #E2ECF6;
-color: #106DB6;
+background-color: #EBF2FB;
+color: #0041C4;
 }
 
 #table tr:last-child th:first-child {
@@ -125,11 +125,19 @@ border-bottom-right-radius: 10px;
     box-shadow: none !important;
     height: 33px;
     width: 50%;
+    font-weight: 500;
+    background-color: #F6F6F6;
+    color: var(--Text-Secondary, #8E9AB0);
+    border: 0px;
   }
   .p-selectbutton .p-button.p-highlight {
-    background: #c5ebff;
-    border-color: #c5ebff;
-    color: #106DB6;
+    // background: #c5ebff;
+    // border-color: #c5ebff;
+    // color: #106DB6;
+    background: #FFFFFF;
+    border-color: #FFFFFF;
+    color: #001A4D;
+    font-weight: 600;
   }
   .p-paginator .p-paginator-pages .p-paginator-page{
     color: black;
