@@ -108,7 +108,7 @@
         <div *ngIf="!this.mobile" ngbDropdown class="d-inline-block">
           <div class="social-icons" ngbDropdownToggle (click)="loadDataNotification()">
             <i *ngIf="numberNotification == 0" class="icon-pi p-mr-4 p-text-secondary"><img src="../../assets/img/bell-filled.svg"></i>
-            <i *ngIf="numberNotification > 0" class="icon-pi p-mr-4 p-text-secondary" pBadge value="{{numberNotification}}"><img src="../../assets/img/bell-filled.svg"></i>
+            <i *ngIf="numberNotification > 0" class="icon-pi p-mr-4 p-text-secondary" style="font: caption;" pBadge value="{{numberNotification}}"><img src="../../assets/img/bell-filled.svg"></i>
             <!-- <div class="label">{{'notification' | translate }}</div> -->
           </div>
 

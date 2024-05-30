@@ -305,7 +305,7 @@
 
             <div *ngIf="filter_status == 11 || filter_status == 12 || filter_status == 13 || filter_status == 14">
                 <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-xxl-5 col-md-5">
                         <div class="row">
                             <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
                         </div>
@@ -402,7 +402,7 @@
         <div *ngIf="filter_status == 11 || filter_status == 12 || filter_status == 13 || filter_status == 14">
           <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
             <div class="row">
-              <div class="col-md-5">
+              <div class="col-xxl-5 col-md-5">
                 <div class="row">
                   <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
                 </div>
@@ -801,7 +801,7 @@
 
             <div *ngIf="filter_status == 11 || filter_status == 12 || filter_status == 13 || filter_status == 14">
                 <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-xxl-5 col-md-5">
                         <div class="row">
                             <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
                         </div>
