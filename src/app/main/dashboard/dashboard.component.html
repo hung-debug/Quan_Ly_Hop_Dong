@@ -36,17 +36,17 @@
             <img src="../../assets/img/add-square_db.svg"/>
           </button>
           <mat-menu #menu="matMenu" style="margin-left: 50px;" class="popup_create_contract" xPosition = "after">
-            <button mat-menu-item class="div_icon" (click)="clickAddContract()">
+            <button mat-menu-item class="div_icon" (click)="clickAddContract(1);">
               <mat-icon><img src="../../assets/img/document.svg" class="img_icon"/></mat-icon>
               <span class="ceate_contract_text">{{'create.contract.no.template' | translate}}</span>
             </button>
-            <button mat-menu-item class="div_icon" (click)="clickAddContract()">
-              <mat-icon><img src="../../assets/img/document-copy.svg" class="img_icon"/></mat-icon>
-              <span class="ceate_contract_text">{{'create.contract.batch' | translate}}</span>
-            </button>
-            <button mat-menu-item class="div_icon" (click)="clickAddContract()">
+            <button mat-menu-item class="div_icon" (click)="clickAddContract(2);">
               <mat-icon><img src="../../assets/img/document-code-2.svg" class="img_icon"/></mat-icon>
               <span class="ceate_contract_text">{{'create.contract.template' | translate}}</span>
+            </button>
+            <button mat-menu-item class="div_icon" (click)="clickAddContract(3);">
+              <mat-icon><img src="../../assets/img/document-copy.svg" class="img_icon"/></mat-icon>
+              <span class="ceate_contract_text">{{'create.contract.batch' | translate}}</span>
             </button>
           </mat-menu>
         </div> -->

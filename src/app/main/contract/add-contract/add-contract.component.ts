@@ -153,8 +153,6 @@ export class AddContractComponent implements OnInit {
   isQLHD_11: boolean = true;
 
   ngOnInit() {
-
-    this.appService.setSubTitle('add.contract.one.not.template');
     this.userService.checkServiceStatus().subscribe((response) => {
 
       if (response.status == 'Using' || environment.flag == 'NB') {
@@ -187,11 +185,14 @@ export class AddContractComponent implements OnInit {
 
                   if (this.action == 'add' && this.isQLHD_01) {
                     this.type = 1;
+                    this.appService.setSubTitle('add.contract.one.not.template');
                   } else if ((this.action == 'add' || this.action == 'add-form') && this.isQLHD_14) {
                     this.type = 2;
+                    this.appService.setSubTitle('add.contract.one.template');
                     this.stepForm = variable.stepSampleContractForm.step1;
                   } else if ((this.action == 'add' || this.action == 'add-batch') && this.isQLHD_15) {
                     this.type = 3;
+                    this.appService.setSubTitle('role.contract-template.create-batch');
                     this.stepBatch = variable.stepSampleContractBatch.step1;
                   }
                 },
