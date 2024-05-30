@@ -86,7 +86,48 @@
 
 
       <div class="col-md-3 item_icon">
-        <div style="display: flex; justify-content: center;">
+        
+        <div class="three_dot" style="display: flex; justify-content: center;">
+          <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
+            <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && isQLMHD_09" (click)="cloneContractTemplateCall(item.id)">
+              <mat-icon><img src="../../assets/img/icon_copy.svg" class="img_icon"/></mat-icon>
+              <span class="three_dot_text">{{'role.contract-template.copy' | translate}}</span>
+            </button>
+            <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && isQLMHD_02" (click)="openEdit(item.id)">
+              <mat-icon><img src="../../assets/img/icon_edit.svg" class="img_icon"/></mat-icon>
+              <span class="three_dot_text">{{'role.contract-template.edit' | translate}}</span>
+            </button>
+            <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && item.releaseState=='CON_HIEU_LUC' && isQLMHD_03 && item.status == 10" (click)="stopContractTemplate(item.id)">
+              <mat-icon><img src="../../assets/img/icon_stop_release.svg" class="img_icon"/></mat-icon>
+              <span class="three_dot_text">{{'stop.releasing' | translate}}</span>
+            </button>
+            <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && item.releaseState=='CON_HIEU_LUC' && item.status == 32 && isQLMHD_04" (click)="releaseContractTemplate(item.id)">
+              <mat-icon><img src="../../assets/img/icon_open_release.svg" class="img_icon"/></mat-icon>
+              <span class="three_dot_text">{{'Mở phát hành' | translate}}</span>
+            </button>
+            <button mat-menu-item class="div_icon" *ngIf="item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLHD_14" (click)="addContractForm(item.id)">
+              <mat-icon><img src="../../assets/img/icon_file.svg" class="img_icon"/></mat-icon>
+              <span class="three_dot_text">{{'role.contract-template.create-contract' | translate}}</span>
+            </button>
+            <button mat-menu-item class="div_icon" *ngIf="item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLHD_15" (click)="addContractBatch(item.id)">
+              <mat-icon><img src="../../assets/img/icon_add_connect.svg" class="img_icon"/></mat-icon>
+              <span class="three_dot_text">{{'role.contract-template.create-batch' | translate}}</span>
+            </button>
+            <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLMHD_05" (click)="shareContractTemplate(item.id)">
+              <mat-icon><img src="../../assets/img/icon_share.svg" class="img_icon"/></mat-icon>
+              <span class="three_dot_text">{{'btn.share' | translate}}</span>
+            </button>
+            <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && isQLMHD_07" (click)="deleteContractTemplate(item.id)">
+              <mat-icon><img src="../../assets/img/icon_delete.svg" class="img_icon"/></mat-icon>
+              <span class="three_dot_text">{{'role.contract-template.delete' | translate}}</span>
+            </button>
+          </mat-menu>
+        </div>
+        
+        <!-- <div style="display: flex; justify-content: center;">
           <div class="div_icon" *ngIf="isShare=='off' && isQLMHD_09">
             <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'role.contract-template.copy' | translate}}" (click)="cloneContractTemplateCall(item.id)" />
           </div>
@@ -110,7 +151,7 @@
           <div class="div_icon" *ngIf="isShare=='off' && isQLMHD_07">
             <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'role.contract-template.delete' | translate}}" (click)="deleteContractTemplate(item.id)" />
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
