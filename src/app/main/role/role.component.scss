@@ -61,8 +61,8 @@ font-size: 13px;
 // font-family: font_lexend_deca;
 }
 #table td, #table th {
-border: 0px;
-padding: 8px;
+  border: 0px;
+  padding: 12px 8px;
 }
 
 #table tr:nth-child(even){background-color: #F8FAFF;}
@@ -70,17 +70,15 @@ padding: 8px;
 #table tr:hover {background-color: #F8FAFF;}
 
 #table th {
-  //text-align: center;
-  // background-color: #E2ECF6;
-  // color: #106DB6;
   background: #EBF2FB;
-  color: #8E9AB0;
+  color: #0041C4;
   font-family: 'Roboto';
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
   letter-spacing: -0.525px;
+  height: 44px;
 }
 
 .table_col_not_bold {

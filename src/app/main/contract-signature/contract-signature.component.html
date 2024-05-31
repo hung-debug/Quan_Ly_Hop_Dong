@@ -167,12 +167,20 @@
                                 <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
 
                                 <div class="row">
-                                  <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}}</div>
+                                  <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}} ({{item.participant.contract.organization_create_contract}})</div>
                                   <div>
                                     <img src="../../../assets/img/path.svg"/>
-                                    <span *ngIf="item.sign_type && item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
-                                    <span *ngIf="item.role == 1" style="color: #EE7200; padding: 5px;">{{'Đang điều phối' | translate}}</span>
-                                    <span *ngIf="item.role == 2" style="color: #EE7200; padding: 5px;">{{'Đang xem xét' | translate}}</span>
+                                    <span *ngIf="item.sign_type && item.sign_type.length > 0 && (item.status == 0 || item.status == 1 || item.status == 3)" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
+                                    <span *ngIf="item.role == 1 && (item.status == 0 || item.status == 1)" style="color: #EE7200; padding: 5px;">{{'Đang điều phối' | translate}}</span>
+                                    <span *ngIf="item.role == 1 && item.status == 2" style="color: #EE7200; padding: 5px;">{{'contract.leaded' | translate}}</span>
+                                    <span *ngIf="item.role == 2 && (item.status == 0 || item.status == 1)" style="color: #EE7200; padding: 5px;">{{'Đang xem xét' | translate}}</span>
+                                    <span *ngIf="item.role == 2 && item.status == 2" style="color: #EE7200; padding: 5px;">{{'contract.viewed' | translate}}</span>
+                                    <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 3" style="color: #EE7200; padding: 5px;">{{'signed.pki' | translate}}</span>
+                                    <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 4" style="color: #EE7200; padding: 5px;">{{'signed.hsm' | translate}}</span>
+                                    <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 2" style="color: #EE7200; padding: 5px;">{{'signed.usb.token' | translate}}</span>
+                                    <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 6" style="color: #EE7200; padding: 5px;">{{'signed.cert.server' | translate}}</span>
+                                    <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 7" style="color: #EE7200; padding: 5px;">{{'signed.usb.bcy' | translate}}</span>
+                                    <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 8" style="color: #EE7200; padding: 5px;">{{'signed.romote.signing' | translate}}</span>
                                   </div>
                                 </div>
 
@@ -358,7 +366,7 @@
                       <div class="row">
                         <div style="margin-left: 12px;">
                           <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
-                          <div class="item_contract_infor">{{'created.user' | translate}}: {{item.nameUserCreate}}</div>
+                          <div class="item_contract_infor">{{'created.user' | translate}}: {{item.nameUserCreate}} ({{item.organization_create_contract}})</div>
                           <div class="item_contract_infor">
                             <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
                           </div>
@@ -457,12 +465,12 @@
         </div>
 
         <div class="row list_header" *ngIf="pageTotal > 0">
-          <div *ngIf="this.typeDisplay === 'downloadMany'" class="col-md-1" style="text-align: left;">
+          <div *ngIf="this.typeDisplay === 'downloadMany'" class="col-xxl-1 col-md-1" style="text-align: left;">
             <input id="all" name="all" type="checkbox" (click)="toggleDownload(checkedAll)" [(ngModel)]="checkedAll" style="width: 16px; height: 16px; margin: -2px;"/>
           </div>
 
           <div *ngIf="!(this.typeDisplay === 'downloadMany')" class="col-md-1"></div>
-          <div class="col-md-4" style="text-align: left !important;">{{'contract.process' | translate}}</div>
+          <div class="col-xxl-5 col-md-4">{{'contract.process' | translate}}</div>
           <div class="col-md-2">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
@@ -479,68 +487,33 @@
             <div *ngIf="filter_status == 4">
                 <div class="row">
                     <!--Cột 1-->
-                    <div class="col-md-1 item_icon">
+                    <div class="col-xxl-1 col-md-1 item_icon">
                       <div style="display: flex; align-items: center;">
                           <!-- <div class="col-md-1 calendar_create" style="display: flex;"> -->
                             <div>
                               <input style="width: 16px; height: 16px;" id="all" name="all" type="checkbox" (click)="toggleOneDownload(item, index1)" [(ngModel)]="item.checked" (change)="selectContract(item)"/>
                             </div>
                           <!-- </div> -->
-                          <div class="col-md-1">
+                          <!-- <div class="col-md-1">
                             <div style="margin-left: 20px;">
                               <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                             </div>
-                          </div>
+                          </div> -->
                       </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-xxl-5 col-md-4">
                         <div class="row">
-                            <div class="col-md-11">
+                            <div class="col-md-11" style="display: flex;">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                              <div style="margin-left: 12px;">
                                 <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
-
-                                <!--Cac ben ky-->
-                                <!-- <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
-                                    <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
-                                </div> -->
-
-                                <!--Trang thai hop dong-->
-                                <!-- <div class="row">
-                                    <div class="item_contract_infor">{{'contract.status.v2' | translate}}:
-                                        <span class="status_blue">{{item.contractStatus | pipe | translate}} {{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
-                                    </div>
-                                </div> -->
-
-                                <!--Trạng thái-->
-                                <!-- <div class="row">
-                                    <div class="item_contract_infor">{{'contract.status' | translate}}:
-                                        <span class="status_blue" *ngIf="item.status == 1 && item.role == 1">{{'contract.wait-lead' | translate}}</span>
-                                        <span class="status_blue" *ngIf="item.status == 1 && item.role == 2">{{'contract.wait-view' | translate}}</span>
-                                        <span class="status_blue" *ngIf="item.status == 1 && item.role == 3">{{'contract.wait-sign' | translate}}</span>
-                                        <span class="status_blue" *ngIf="item.status == 1 && item.role == 4">{{'contract.wait-document' | translate}}</span>
-                                        <span class="status_blue" *ngIf="item.status == 2 && item.role == 1">{{'contract.leaded' | translate}}</span>
-                                        <span class="status_blue" *ngIf="item.status == 2 && item.role == 2">{{'contract.viewed' | translate}}</span>
-                                        <span class="status_blue" *ngIf="item.status == 2 && item.role == 3">{{'contract.signed' | translate}}</span>
-                                        <span class="status_blue" *ngIf="item.status == 2 && item.role == 4">{{'contract.documented' | translate}}</span>
-                                        <span class="status_blue" *ngIf="item.status == 3 && item.role == 1">{{'contract.lead-refused' | translate}}</span>
-                                        <span class="status_blue" *ngIf="item.status == 3 && item.role == 2">{{'contract.view-refused' | translate}}</span>
-                                        <span class="status_blue" *ngIf="item.status == 3 && item.role == 3">{{'contract.sign-refused' | translate}}</span>
-                                        <span class="status_blue" *ngIf="item.status == 3 && item.role == 4">{{'contract.document-refused' | translate}}</span>
-                                    </div>
-                                </div> -->
-
-                                <!--user.sign-type-->
-                                <!-- <div class="row">
-                                    <div *ngIf="this.filter_status === 1" class="col-md-11 item_contract_infor">{{'user.sign-type' | translate}}:
-                                        <span class="status_blue">{{item.sign_type[0].name}}</span>
-                                    </div>
-                                </div> -->
-
                                 <div class="row">
                                   <div class="item_contract_infor">
                                     <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.contractId)">{{'contract_processing_flow' | translate}}</u>
                                   </div>
                                 </div>
                             </div>
+                          </div>
                         </div>
                     </div>
 

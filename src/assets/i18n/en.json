@@ -833,5 +833,11 @@
   "error.smtpPort.format": "Invalid SMTP Port",
   "config.email.server.role": "Config eMail Server",
   "mail.server.infor.success": "Config mail server success",
-  "contract.enterPage": "Enter page number"
+  "contract.enterPage": "Enter page number",
+  "signed.pki": "Signed by PKI",
+  "signed.hsm": "Signed by HSM",
+  "signed.usb.token": "Signed by USB token",
+  "signed.cert.server": "Signed by cert server",
+  "signed.usb.bcy": "Signed by USB token BCY",
+  "signed.romote.signing": "Signed by Remote Signing"
 }

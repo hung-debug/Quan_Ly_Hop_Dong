@@ -74,7 +74,7 @@
               </div>
             </button> -->
             
-            <button ngbDropdownItem class="drop" (click)="viewLink()">
+            <!-- <button ngbDropdownItem class="drop" (click)="viewLink()">
               <a style="color: inherit; text-decoration: none;" href="https://drive.google.com/drive/folders/1NHaCYOMCMsLvrw1uPbX2ezsC-Uo9huW3">
               <div style="display: flex; align-items: center;">
                 <div class="db_user">
@@ -82,7 +82,7 @@
                 </div>
                 <div>{{'document.user.use' | translate }}</div></div>
               </a>
-            </button>
+            </button> -->
 
             <button ngbDropdownItem class="drop">
               <a href="/assets/upload/mobi_token_sign_setup.zip" style="color: inherit; text-decoration: none;">
@@ -103,6 +103,17 @@
               </div>
             </button>
           </div>
+        </div>
+        
+        <div *ngIf="!this.mobile" ngbDropdown class="d-inline-block" (click)="viewLink()">
+          <div class="social-icons" ngbDropdownToggle>
+            <div><img src="../../assets/img/document_bashboard.svg" style="width: 20px;"></div>
+              <div class="label" style="color: #00186D; font-weight: 500;">{{'document' | translate }}</div>
+          </div>
+
+          <!-- <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
+
+          </div> -->
         </div>
         
         <div *ngIf="!this.mobile" ngbDropdown class="d-inline-block">
@@ -162,16 +173,7 @@
           </div>
         </div>
 
-        <!-- <div *ngIf="!this.mobile" ngbDropdown class="d-inline-block">
-          <div class="social-icons" ngbDropdownToggle>
-              <span class="document"></span> -->
-              <!-- <div class="label">{{'document' | translate }}</div> -->
-          <!-- </div> -->
 
-          <!-- <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
-
-          </div> -->
-        <!-- </div> -->
 
 
       </div>

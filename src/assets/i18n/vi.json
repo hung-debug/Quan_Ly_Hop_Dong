@@ -866,5 +866,11 @@
   "status.ceca": "Trạng thái BCT",
   "create.contract.no.template":"Đơn lẻ không theo mẫu",
   "create.contract.batch": "Tạo theo lô",
-  "create.contract.template": "Đơn lẻ theo mẫu"
+  "create.contract.template": "Đơn lẻ theo mẫu",
+  "signed.pki": "Đã ký số bằng sim PKI",
+  "signed.hsm": "Đã ký số bằng HSM",
+  "signed.usb.token": "Đã ký số bằng USB token",
+  "signed.cert.server": "Đã ký bằng chứng thư số server",
+  "signed.usb.bcy": "Đã ký số bằng USB token Ban Cơ Yếu",
+  "signed.romote.signing": "Đã ký số Remote Signing"
 }

@@ -2,9 +2,8 @@
   border: 0.5px solid rgba(0, 65, 196, 0.10);
   border-radius: 8px;
   padding: 8px;
-  margin-top: 5px;
   line-height: 21px;
-  margin-top: 8px;
+  margin-top: 12px;
 }
 
 .container-fluid{
@@ -45,6 +44,11 @@
   text-align: center;
   padding: 12px 12px 0;
   font-weight: 500;
+  // padding-top: 20px;
+  background-color: #EBF2FB;
+  width: 100%;
+  margin-left: 0;
+  height: 44px;
 }
 
 .input-group-text{
