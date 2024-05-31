@@ -267,7 +267,7 @@
             </div>
         </div>
 
-        <div [ngClass]="{'btn-padding-right': status === 'draft' && isOrg === 'off', 'col-lg-1-1': true, 'col-md-4': true, 'btn_search': true, 'btn-padding-left': true}">
+        <div [ngClass]="{'btn-padding-right': status === 'draft' && isOrg === 'off', 'col-lg-1-1': true, 'col-md-4': status === 'draft' && isOrg === 'off', 'btn_search': true, 'btn-padding-left': true}">
           <button class="btn btn-lg btn-block btn_advanced" (click)="searchContract()" >
             {{'btn.advance' | translate}}
             <img src="../../assets/img/vector_advance.svg" class="input-img" />
