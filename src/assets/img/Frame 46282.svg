@@ -1,0 +1,28 @@
+<svg width="86" height="86" viewBox="0 0 86 86" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame 46282">
+<rect width="86" height="86" rx="8" fill="#F3FAFF"/>
+<g id="Group 5544">
+<path id="Vector 51" d="M50.9712 19.834L59.7454 28.2427C60.3359 28.8085 60.6697 29.5908 60.6697 30.4086V64C60.6697 65.6569 59.3266 67 57.6697 67H28C26.3431 67 25 65.6569 25 64V22C25 20.3431 26.3431 19 28 19H48.8955C49.6691 19 50.4127 19.2988 50.9712 19.834Z" fill="url(#paint0_linear_4402_8283)" stroke="url(#paint1_linear_4402_8283)" stroke-width="2.5"/>
+<g id="Group 5556">
+<path id="Vector 52" d="M30.2844 28.8086H43.9357" stroke="#A9BCEE" stroke-width="2" stroke-linecap="round"/>
+<path id="Vector 55" d="M38.2107 49.5059H54.0639" stroke="#A9BCEE" stroke-width="2" stroke-linecap="round"/>
+<path id="Vector 53" d="M30.2844 35.4141H54.0642" stroke="#A9BCEE" stroke-width="2" stroke-linecap="round"/>
+<path id="Vector 54" d="M30.2844 42.46H54.0642" stroke="#A9BCEE" stroke-width="2" stroke-linecap="round"/>
+</g>
+<g id="Group 5557">
+<rect id="Rectangle 126" x="29.1034" y="55.0498" width="11.4896" height="6.56547" rx="1" fill="#E2EBFE"/>
+<rect id="Rectangle 127" x="45.517" y="55.0498" width="11.4896" height="6.56547" rx="1" fill="#E2EBFE"/>
+</g>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_4402_8283" x1="42.8349" y1="19" x2="42.8349" y2="67" gradientUnits="userSpaceOnUse">
+<stop stop-color="#E4F3FF"/>
+<stop offset="1" stop-color="#C6E5FF" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="paint1_linear_4402_8283" x1="25" y1="19" x2="66.8549" y2="76.4479" gradientUnits="userSpaceOnUse">
+<stop stop-color="#969FEE"/>
+<stop offset="1" stop-color="#81E3F9"/>
+</linearGradient>
+</defs>
+</svg>
