@@ -669,7 +669,7 @@ export class DashboardComponent implements OnInit {
       console.log("this.contractConnectListlllllll",data);
       this.contractConnectList = data.entities;
     })
-    this.contractSignature.getContractMyProcessList('','','','','',1,'',2,'').subscribe(data => {
+    this.contractSignature.getContractMyProcessList('','','','','',1,'',4,'').subscribe(data => {
       console.log("this.contractRequestList",data);
       this.contractRequestList = data.entities;
       // console.log("this.contractRequestList",this.contractRequestList);
@@ -681,6 +681,12 @@ export class DashboardComponent implements OnInit {
       // console.log("this.contractRecipienteList",this.contractRecipienteList);
       
     })
+  }
+  
+  clickOpenDraft(){
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/main/contract/create/draft']);
+    });
   }
   
   clickAddContract(type: number){
@@ -697,38 +703,6 @@ export class DashboardComponent implements OnInit {
         '/main/form-contract/add-batch'
       ]);
     }
-    
-    // if (this.type == 1) {
-    //   this.step = variable.stepSampleContract.step1;
-    //   this.appService.setSubTitle("add.contract.one.not.template");
-    // } else if (this.type == 2) {
-    //   this.stepForm = variable.stepSampleContractForm.step1;
-    //   this.appService.setSubTitle("add.contract.one.template");
-    // } else if (this.type == 3) {
-    //   this.stepBatch = variable.stepSampleContractBatch.step1;
-    //   this.appService.setSubTitle("role.contract-template.create-batch");
-    // }
-    // if (this.type == 1) {
-    //   this.datas = {
-    //     stepLast: variable.stepSampleContract.step1,
-    //     save_draft: {
-    //       infor_contract: false,
-    //       determine_signer: false,
-    //       sample_contract: false,
-    //       confirm_infor_contract: false,
-    //     },
-    //   };
-    // } else if (this.type == 2) {
-    //   this.datasForm = {
-    //     stepFormLast: variable.stepSampleContractForm.step1,
-    //     save_draft_form: {
-    //       'infor-contract-form': false,
-    //       'party-contract-form': false,
-    //       'sample-contract-form': false,
-    //       'confirm-contract-form': false,
-    //     },
-    //   };
-    // }
   }
   
   openEdit(id: number) {
