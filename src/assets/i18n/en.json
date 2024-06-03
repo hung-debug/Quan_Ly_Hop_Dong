@@ -13,7 +13,7 @@
   "login.password": "Password",
   "login.note.user": "Please login with the account and password provided in your email",
   "login.forgot_password": "Forgot password",
-  "login.forgot_password.note": "Enter the email address you used to register on MobiFone eContract",
+  "login.forgot_password.note": "Please enter your registered email account",
   "signup": "Signup",
   "signup.not_account": "Do not have an account",
   "login.reset_password": "Reset password",
@@ -839,5 +839,6 @@
   "signed.usb.token": "Signed by USB token",
   "signed.cert.server": "Signed by cert server",
   "signed.usb.bcy": "Signed by USB token BCY",
-  "signed.romote.signing": "Signed by Remote Signing"
+  "signed.romote.signing": "Signed by Remote Signing",
+  "footer_text":"Copyright belong to MobiFone Corporation"
 }
