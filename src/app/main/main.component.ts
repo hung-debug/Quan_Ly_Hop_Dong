@@ -183,7 +183,7 @@ export class MainComponent implements OnInit {
   //click logout
   async logout() {
     //call api delete token
-    if (environment.flag == 'KD' && environment.usedSSO) {
+    if (environment.flag == 'NB' && environment.usedSSO) {
       this.contractService.deleteToken().subscribe((res:any) => {
      })
  

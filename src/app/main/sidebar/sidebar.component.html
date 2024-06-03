@@ -6,11 +6,10 @@
           <img src="assets/img/logo_eContract_db.svg" alt="Logo" class="img-responsive" width="150px" height="auto" />
         </a>
       </div> -->
-
       <div class="sidebar-menu">
         <ul class="sidebar-menu-ul">
-          <li class="sidebar-menu-li" *ngFor="let menu of menus" [ngClass]="{'active': menu.active, 'sidebar-dropdown':menu.type === 'dropdown', 'sidebar-dropdown-active':menu.type === 'dropdown' && menu.activeDrop , 'header-menu':menu.type === 'header'}">
-            <span *ngIf="menu.type === 'header'">{{menu.title | translate}}</span>
+          <li class="sidebar-menu-li" *ngFor="let menu of menus" [ngClass]="{'active': menu.active && menu.isActive, 'sidebar-dropdown':menu.type === 'dropdown', 'sidebar-dropdown-active':menu.type === 'dropdown' && menu.activeDrop &&  menu.isActive , 'header-menu':menu.type === 'header'}">
+            <span *ngIf="menu.type === 'header'">{{menu.title | translate}} </span>
             <!-- Menu parent, click dropdown -->
             <a
               class="sidebar-menu-a"
@@ -41,7 +40,7 @@
               <button class="btn_add_contract">{{menu.title | translate}}
                 <img class="img_btn_add_contract_icon" src="../../assets/img/add-square.svg"/>
                 <!-- <span class="icon_add">
-                  
+
                 </span> -->
               </button>
             </a>
@@ -49,7 +48,7 @@
             <!-- Sub menu -->
             <div *ngIf="menu.type === 'dropdown'" class="sidebar-submenu" [@slide]="getState(menu)">
               <ul class="sidebar-submenu-ul">
-                <li class="sidebar-submenu-li" *ngFor="let submenu of menu.submenus" [ngClass]="{'active':submenu.active}">
+                <li class="sidebar-submenu-li" *ngFor="let submenu of menu.submenus" [ngClass]="{'active':submenu.active && this.router.url !== '/main/dashboard'}">
 
                   <a class="sidebar-submenu-a" (click)="clickLinkSub(menu, submenu, 'contract-signature')" [routerLink]="submenu.href">
                     <span class="sub_title">{{submenu.title | translate}}</span>
@@ -65,7 +64,7 @@
         <img src="../../../assets/img/logo-mobifone.svg"/>
       </div> -->
     </perfect-scrollbar>
-    
+
 
   </div>
   <div class="sidebar-footer-custom">

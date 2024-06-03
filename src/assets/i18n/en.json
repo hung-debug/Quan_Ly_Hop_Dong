@@ -840,5 +840,6 @@
   "signed.cert.server": "Signed by cert server",
   "signed.usb.bcy": "Signed by USB token BCY",
   "signed.romote.signing": "Signed by Remote Signing",
-  "footer_text":"Copyright belong to MobiFone Corporation"
+  "footer_text":"Copyright belong to MobiFone Corporation",
+  "text.dashboard.theme": "If you have documents/contracts in progress, please continue to complete them to the signing process is not delayed!"
 }
