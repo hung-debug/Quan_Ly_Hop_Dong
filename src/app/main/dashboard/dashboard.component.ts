@@ -259,11 +259,11 @@ export class DashboardComponent implements OnInit {
     let numberExpMessage = ""
     let numberExpArr = []
     if (isSoonExp){
-      messageSoonExp = `Thời gian sử dụng dịch vụ sẽ hết hạn vào ngày ${moment(this.endLicense).format("DD/MM/YYYY")}, 
+      messageSoonExp = `Thời gian sử dụng dịch vụ sẽ hết hạn vào ngày ${moment(this.endLicense).format("DD/MM/YYYY")},
       Quý khách vui lòng đóng phí duy trì dịch vụ hàng năm để tiếp tục sử dụng sau ngày ${moment(this.endLicense).format("DD/MM/YYYY")}. Trân trọng cảm ơn!`
     }
     if (isExp){
-      messageExp = `Thời gian sử dụng dịch vụ đã hết. 
+      messageExp = `Thời gian sử dụng dịch vụ đã hết.
       Quý khách vui lòng đóng phí duy trì dịch vụ hàng năm để tiếp tục sử dụng sau ngày ${moment(this.endLicense).format("DD/MM/YYYY")}. Trân trọng cảm ơn!`
     }
     if (isContractExp){
@@ -395,7 +395,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.countContractCreate(this.isOrg, this.organization_id, this.filter_from_date, this.filter_to_date).subscribe(data => {
       let newData = Object.assign( {}, data)
       // console.log("newData",newData);
-      
+
       newData.isOrg = this.isOrg;
       newData.organization_id = this.organization_id;
       newData.from_date = this.filter_from_date;
@@ -428,7 +428,7 @@ export class DashboardComponent implements OnInit {
         style: {
           fontFamily: 'inherit',
         },
-        height: 500
+        height: 350
       },
       title: {
         text: this.chartContractCreated,
@@ -507,7 +507,7 @@ export class DashboardComponent implements OnInit {
               }
             }
           },
-        }    
+        }
       },
 
 
@@ -526,9 +526,9 @@ export class DashboardComponent implements OnInit {
         }]
     });
   }
-  
+
   getDataPieChart(){
-    
+
     let numContractHeight = document.getElementById('num-contract')?.offsetHeight || 0;
     let numContractBodyHeight = document.getElementById('num-contract-body')?.offsetHeight || 0;
     let notiHeight = document.getElementById('noti')?.offsetHeight || 450;
@@ -536,8 +536,8 @@ export class DashboardComponent implements OnInit {
     let numContractUnUsed = this.numContractBuy - this.numContractUse;
 
   }
-  
-  
+
+
   createPieChart(numContractUse: any, numContractUnUsed: any) {
     this.chartPieCreated = new Chart({
       colors: ['#4495F5','#CED3FF'],
@@ -546,18 +546,18 @@ export class DashboardComponent implements OnInit {
         style: {
           fontFamily: 'Roboto'
         },
-        height: 500,
+        height: 350,
         events: {
           render: function (this: any) {
             const chart = this;
             const textX = chart.plotLeft + (chart.series[0].center[0]);
             const textY = chart.plotTop + (chart.series[0].center[1]);
-  
+
             // Check if centerText exists, remove if it does
             if (chart.centerText) {
               chart.centerText.destroy();
             }
-  
+
             chart.centerText = chart.renderer.text(numContractUse, textX, textY)
               .css({
                 fill: '#001A4D',
@@ -566,19 +566,19 @@ export class DashboardComponent implements OnInit {
                 fontFamily: 'ROBOTO',
               })
               .add();
-  
+
             chart.centerText.attr({
               x: textX - chart.centerText.getBBox().width / 2,
             });
-  
+
             const numberContract = numContractUse + numContractUnUsed;
             const secondTextY = textY + 30;
-  
+
             // Check if numContract exists, remove if it does
             if (chart.numContract) {
               chart.numContract.destroy();
             }
-  
+
             chart.numContract = chart.renderer.text('TỔNG: ' + numberContract, textX, secondTextY)
               .css({
                 fill: '#001A4D',
@@ -587,7 +587,7 @@ export class DashboardComponent implements OnInit {
                 fontFamily: 'ROBOTO',
               })
               .add();
-  
+
             chart.numContract.attr({
               x: textX - chart.numContract.getBBox().width / 2,
             });
@@ -659,11 +659,11 @@ export class DashboardComponent implements OnInit {
       this.listNotification = data.entities;
       // console.log("this.listNotification",data);
     });
-    
+
     this.dashboardService.getNotification(0, '', '', 1, '').subscribe(data => {
       // this.contractConnectList = data.entities;
-     
-      
+
+
     });
     this.contractService.getContractList('off','','','','','','',0,'',1,'').subscribe(data => {
       console.log("this.contractConnectListlllllll",data);
@@ -676,13 +676,13 @@ export class DashboardComponent implements OnInit {
       // this.contractRecipienteList = data.entities.participant;
       this.contractRecipienteList.forEach((item: any) => {
         // console.log("item",item);
-        
+
       })
       // console.log("this.contractRecipienteList",this.contractRecipienteList);
-      
+
     })
   }
-  
+
   clickAddContract(type: number){
     if (type === 1) {
       this.router.navigate([
@@ -697,7 +697,7 @@ export class DashboardComponent implements OnInit {
         '/main/form-contract/add-batch'
       ]);
     }
-    
+
     // if (this.type == 1) {
     //   this.step = variable.stepSampleContract.step1;
     //   this.appService.setSubTitle("add.contract.one.not.template");
@@ -730,13 +730,13 @@ export class DashboardComponent implements OnInit {
     //   };
     // }
   }
-  
+
   openEdit(id: number) {
     setTimeout(() => {
       void this.router.navigate(['main/form-contract/edit/' + id]);
     }, 100)
   }
-  
+
   deleteContract(id: any) {
     let data: any = "";
 
@@ -776,7 +776,7 @@ export class DashboardComponent implements OnInit {
       autoFocus: false
     })
   }
-  
+
   addCenterText() {
     const series = this.chartPieCreated.series[0];
     const centerX = series.center[0];
@@ -792,7 +792,7 @@ export class DashboardComponent implements OnInit {
       })
       .add();
   }
-  
+
   changeType(e: any) {
     if (this.type == 1) {
       this.step = variable.stepSampleContract.step1;

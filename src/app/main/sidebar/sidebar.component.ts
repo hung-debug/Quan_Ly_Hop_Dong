@@ -28,7 +28,7 @@ export class SidebarComponent implements OnInit {
 
   constructor(
     public sidebarservice: SidebarService,
-    private router: Router,
+    public router: Router,
     private contractService: ContractService
   ) {
     this.menus = sidebarservice.getMenuList();
@@ -40,7 +40,7 @@ export class SidebarComponent implements OnInit {
       this.changeSubMenu();
     });
     //this.menus = this.sidebarservice.getMenuList();
-    
+
   }
 
   getSideBarState() {
@@ -77,10 +77,12 @@ export class SidebarComponent implements OnInit {
         if (element === currentMenu) {
           element.icon = currentMenu.iconFill;
           currentMenu.active = !currentMenu.active;
+          element.isActive = true ;
         } else {
           element.icon = element.iconDefault;
           element.active = false;
           element.activeDrop = false;
+          element.isActive = true ;
         }
       });
     }
@@ -94,10 +96,20 @@ export class SidebarComponent implements OnInit {
         //currentMenu.active = !currentMenu.active;
         element.icon = currentMenu.iconFill;
         element.active = true;
+        const objIndex = this.menus.findIndex((obj: { id: number; }) => obj.id == 2);
+        if (objIndex) {
+          this.menus[objIndex].isActive = false;
+        }
       } else {
         element.icon = element.iconDefault;
-        element.active = false;
-        element.activeDrop = false;
+        if ((element.id == 2 && this.router.url === '/main/dashboard') || (element.id == 2 && this.router.url.includes('/main/contract/create'))) {
+          element.active = true;
+          element.activeDrop = true;
+        } else {
+          element.active = false;
+          element.activeDrop = false;
+        }
+
       }
     });
     // if (sessionStorage.getItem('copy_right_show')) {
@@ -121,6 +133,10 @@ export class SidebarComponent implements OnInit {
         this.subMenus.forEach((elementSub: any) => {
           if (elementSub === currentSubMenu) {
             //currentSubMenu.active = !currentSubMenu.active;
+            const objIndex = this.menus.findIndex((obj: { id: number; }) => obj.id == 1);
+            if (objIndex) {
+              this.menus[objIndex].active = false;
+            }
             elementSub.active = true;
           } else {
             elementSub.active = false;
