@@ -145,7 +145,7 @@
           <div>
             <img src="../../assets/img/frame_contract.svg">
           </div>
-          <div class="body_row_1"  id="noti" > 
+          <div class="body_row_1"  id="noti" >
             <div style="padding: 4px;">
               <a (click)="detailContract(item.id)" style="text-decoration: none;">
                 <div class="row">
@@ -188,10 +188,10 @@
       </div>
       <div class="body-chart" id="chart-column">
         <div class="row" >
-          <div class="col-md-6" style="text-align: center;">
+          <div class="col-md-6" style="text-align: center; padding-bottom: 12px;">
             <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="search()">
               <ng-template  #options let-item>
-                <span style="vertical-align:middle">{{item.label | translate}}</span>
+                <span style="vertical-align:middle; margin: 0 auto">{{item.label | translate}}</span>
              </ng-template>
             </p-selectButton>
           </div>
@@ -201,7 +201,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="row" *ngIf="this.isOrg == 'off' || (this.isOrg == 'on' && (this.isQLHD_03 || this.isQLHD_04))">
           <div class="col-md-12">
             <div *ngIf="totalCreate == 0"
@@ -213,7 +213,7 @@
             </div>
             <div *ngIf="totalCreate > 0  && (this.isOrg == 'off' || (this.isOrg == 'on' && (this.isQLHD_03 || this.isQLHD_04)))" >
               <div [chart]="chartCreated"></div>
-              <div style="text-align: center;">{{'chart.contract.created' | translate}}</div>
+<!--              <div style="text-align: center;">{{'chart.contract.created' | translate}}</div>-->
             </div>
 
             <div *ngIf="totalCreate > 0  && (this.isOrg == 'on' && !this.isQLHD_03 && !this.isQLHD_04)">
@@ -228,7 +228,7 @@
 
       </div>
     </div>
-    
+
     <div class="col-xxl-6 col-md-6" style="padding-left: 24px;">
       <div class="package" style="background-color: #FFFFFF; border-radius: 12px; padding: 16px; height: 100%;">
         <div class="row">
@@ -236,23 +236,22 @@
             <span style="font-size: 14px; font-weight: 700;">{{'package.document' | translate}}</span>
           </div>
         </div>
-        
-        <div class="row">
-          <div class="col-md-12">
-            <div *ngIf="this.loadData1 && this.loadData2" [chart]="chartPieCreated">TỔNG</div>
-          </div>
-        </div>
-        
-        <div style="display: flex; justify-content: space-evenly;">
-          <div>
-            <img src="../../../assets/img/contractused.svg"/>
-            <span style="margin-left: 10px;">{{'package.used' | translate}}</span>
-          </div>
-          <div>
-            <img src="../../../assets/img/contractunused.svg"/>
-            <span style="margin-left: 10px;">{{'package.unused' | translate}}</span>
-          </div>
-        </div>
+
+       <div class="row item-center" style="align-items: center">
+         <div class="col-md-8">
+             <div *ngIf="this.loadData1 && this.loadData2" [chart]="chartPieCreated">TỔNG</div>
+         </div>
+
+         <div class="col-md-4">
+           <div class="mb-5">
+             <img src="../../../assets/img/contractused.svg"/>
+             <span style="margin-left: 10px;">{{'package.used' | translate}}</span>
+           </div>
+           <div>
+             <img src="../../../assets/img/contractunused.svg"/>
+             <span style="margin-left: 10px;">{{'package.unused' | translate}}</span>
+           </div>
+         </div>
 
       </div>
     </div>

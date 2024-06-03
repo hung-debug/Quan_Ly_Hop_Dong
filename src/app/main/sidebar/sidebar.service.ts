@@ -113,7 +113,7 @@ export class SidebarService {
   menus: any[] = [];
   getMenuList() {
     this.menus = [];
-    
+
     if (this.isQLHD_01 || this.isQLHD_14 || this.isQLHD_15) {
       this.menus.push({
         title: 'menu.contract.add',
@@ -133,6 +133,7 @@ export class SidebarService {
         type: 'simple',
         href: '/main/dashboard',
         id: 1,
+        isActive: true
       },
     );
 
@@ -311,7 +312,7 @@ export class SidebarService {
             this.isBaoCaoTrangThaiGuiEmail = listRole.some(
               (element) => element.code == 'BAOCAO_TRANGTHAIGUI_EMAIL'
             )
-            
+
             this.isBaoCaoEKYC = listRole.some(
               (element) => element.code == 'BAOCAO_EKYC'
             )
@@ -323,9 +324,9 @@ export class SidebarService {
             this.isConfigSms = listRole.some((element) => element.code == 'CAUHINH_SMS');
 
             this.isConfigSoonExpireDay = listRole.some((element) => element.code == 'CAUHINH_NGAYSAPHETHAN');
-            
+
             this.isConfigBrandname = listRole.some((element) => element.code == 'CAUHINH_BRANDNAME');
-            
+
             this.isConfigMailServer = listRole.some((element) => element.code == 'CAUHINH_MAILSERVER');
 
             this.buildMenu(currentUserC);
@@ -431,6 +432,7 @@ export class SidebarService {
         href: '#',
         submenus: submenusCreate,
         id: 2,
+        isActive: true
       });
     }
 
@@ -700,7 +702,7 @@ export class SidebarService {
         href: '/main/report/status-send-email'
       })
     }
-    
+
     if(this.isBaoCaoEKYC) {
       submenusReport.push({
         title: 'report.ekyc',
@@ -768,8 +770,15 @@ export class SidebarService {
         }
       } else {
         this.subMenus = element.submenus;
-        element.activeDrop = false;
-        element.active = false;
+        if (element.id == 2 && this.router.url === '/main/dashboard') {
+          element.activeDrop = true;
+          element.active = true;
+          element.isActive = false;
+        } else {
+          element.activeDrop = false;
+          element.active = false;
+        }
+
         this.subMenus.forEach((elementSub: any) => {
           if (this.router.url.includes(elementSub.href)) {
             element.activeDrop = true;
