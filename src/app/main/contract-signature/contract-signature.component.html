@@ -245,7 +245,10 @@
                         <!-- <span class="status_blue">{{this.filter_status | pipe | translate}}
                           {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
                           translate}}</span> -->
-                        <span class="status_blue">{{item.contractStatus | pipe | translate}}</span>
+                        <span class="status_blue"
+                              [ngClass]="{'draft-status' : item?.contractStatus == 0, 'processing-status' : item?.contractStatus == 20,'expire-status' : item?.contractStatus == 33,
+                              'overdue-status' : item?.contractStatus == 34,'fail-status' : item?.contractStatus == 31,'cancel-status' : item?.contractStatus == 32,
+                              'complete-status' : item?.contractStatus == 30,'liquidated-status' : item?.contractStatus == 40}">{{item.contractStatus | pipe | translate}}</span>
                       </div>
                     </div>
 
@@ -378,7 +381,10 @@
                   <!--Trang thai hop dong-->
                   <div class="col-md-2 calendar_create">
                     <div class="item_contract_status">
-                      <span class="status_blue">{{item.status | pipe | translate}}</span>
+                      <span class="status_blue"
+                            [ngClass]="{'draft-status' : item?.status == 0, 'processing-status' : item?.status == 20,'expire-status' : item?.status == 33,
+                              'overdue-status' : item?.status == 34,'fail-status' : item?.status == 31,'cancel-status' : item?.status == 32,
+                              'complete-status' : item?.status == 30,'liquidated-status' : item?.status == 40}">{{item.status | pipe | translate}}</span>
                     </div>
                   </div>
                   <div class="col-md-2 calendar_create">
