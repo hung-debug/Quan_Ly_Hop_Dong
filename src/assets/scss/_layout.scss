@@ -1,0 +1,107 @@
+
+:root {
+  --text-primary: #00186D;
+  --text-secondary: #8E9AB0;
+  --text-white: #FFFFFF;
+  --color-primary: #0041C4;
+  --color-primary-bg: #F3F6FA;
+  --color-secondary: #2C62CC;
+  --color-secondary-bg: #D9D9D9;
+  --color-semantic: #DE0C0C;
+  --color-semantic-bg: #E89040;
+  --color-neutral: #00186D;
+  --color-neutral-02: #2B3D60;
+  --color-neutral-03: #677694;
+  --color-neutral-04: #A8B5CE;
+  --color-neutral-05: #C6D2EA;
+  --color-neutral-06: #E6EDFA;
+  --color-neutral-07: #CED4E1;
+  --color-status: #D9D9D9;
+  --fw700: 700;
+  --fw600: 600;
+  --fw400: 400;
+  --fs10: 10px;
+  --fs12: 12px;
+  --fs13: 13px;
+  --fs14: 14px;
+  --fs16: 16px;
+  --fs18: 18px;
+  --fs24: 24px;
+  --fs32: 32px;
+}
+
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
+  font-size: var(--fs13) !important;
+  background-color: var(--BG, #F3F6FA);
+}
+
+/* tab table */
+
+/* search table  table */
+.btn_advanced {
+  border-radius: 8px !important;
+  box-sizing: border-box;
+  width: 100%;
+  color: var(--text-primary) !important;
+  background-color: #FFFFFF !important;
+  font-size: var(--fs13) !important;
+  font-weight: 700 !important;
+  box-shadow: 0px 3px 12px 0px #1055E11A;
+  border: 1px solid #001A4D1A;
+}
+
+
+.btn_cancel {
+  border: 0px;
+  border-radius: 8px !important;
+  height: 39px;
+  box-sizing: border-box;
+  width: 100%;
+  color: var(--text-white) !important;
+  background-color: var(--color-primary) !important;
+  font-size: var(--fs13) !important;
+  font-weight: 700;
+}
+
+/* content table */
+/* header*/
+.list_header{
+  color: var(--color-primary);
+  text-align: center;
+  font-weight: 500;
+  width: 100%;
+  margin-left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: var(--fs14);
+}
+
+.item_contract_name {
+  font-weight: 700;
+  font-size: var(--fs14);
+  color: var(--text-primary);
+  cursor: pointer;
+  overflow: hidden;
+  line-height: 21px;
+  text-overflow: ellipsis;
+  width: 400px;
+  white-space: pre-wrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.item_contract_infor {
+  color: var(--text-secondary);
+  font-size: var(--fs12);
+  line-height: 18px;
+}
+
