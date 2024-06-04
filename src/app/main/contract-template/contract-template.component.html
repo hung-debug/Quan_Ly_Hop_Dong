@@ -87,7 +87,7 @@
 
       <div class="col-md-1 item_icon">
         
-        <div class="three_dot" style="display: flex; justify-content: flex-end;" *ngIf="item.releaseState=='CON_HIEU_LUC'">
+        <div class="three_dot" style="display: flex; justify-content: flex-end;" *ngIf="(isShare=='off') || (isShare=='on' && item.releaseState=='CON_HIEU_LUC')">
           <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
             <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
           </button>
