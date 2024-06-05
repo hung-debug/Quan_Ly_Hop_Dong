@@ -8,8 +8,7 @@
 
 @import '~material-icons/iconfont/material-icons.css';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif !important; font-size: 13px !important; background-color: var(--BG, #F3F6FA);}
+@import url('../src/assets/scss/_layout.scss');
 
 @font-face {
   font-family: Roboto;
