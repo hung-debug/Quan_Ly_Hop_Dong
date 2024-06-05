@@ -121,6 +121,7 @@ export class SidebarService {
         type: 'button',
         href: '/main/form-contract/add',
         id: 0,
+        isActive: true
       });
     }
     this.menus.push(
@@ -466,6 +467,7 @@ export class SidebarService {
       href: '#',
       submenus: submenusReceive,
       id: 3,
+      isActive: true
     });
 
     if (
@@ -487,6 +489,7 @@ export class SidebarService {
         type: 'simple',
         href: '/main/contract-template',
         id: 4,
+        isActive: true
       });
     }
 
@@ -566,6 +569,7 @@ export class SidebarService {
       type: 'simple',
       href: '/main/customer',
       id: 11,
+      isActive: true
     })
 
     if(this.isQLLHD_01 || this.isQLLHD_02 || this.isQLLHD_03 || this.isQLLHD_04 || this.isQLLHD_05 ||
@@ -613,6 +617,7 @@ export class SidebarService {
         type: 'simple',
         href: '/main/contract-folder',
         id: 12,
+        isActive: true
       })
 
     // if (this.isQLLHD_01 || this.isQLLHD_02 || this.isQLLHD_03 || this.isQLLHD_04 || this.isQLLHD_05)
@@ -724,6 +729,7 @@ export class SidebarService {
         href: '#',
         submenus: submenusReport,
         id: 10,
+        isActive: true
       })
     }
 
@@ -736,6 +742,7 @@ export class SidebarService {
       type: 'simple',
       href: '/main/check-sign-digital',
       id: 9,
+      isActive: true
     });
     // if (this.QLDSCTS_01 || this.QLDSCTS_02 || this.QLDSCTS_03 || this.QLDSCTS_04) {
     //   this.menus.push({
