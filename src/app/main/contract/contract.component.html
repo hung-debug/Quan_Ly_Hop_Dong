@@ -58,7 +58,7 @@
       </div>
       <div *ngIf="pageTotal > 0" class="table-contract" style="min-height: 60vh">
         <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
-          <div class="row">
+          <div class="row" (click)="isQLHD_07?openDetail(item.id):null">
             <!--Cột 1-->
               <!-- <div class="col-sm-0-5 item_icon">
                 <div style="display: flex;">

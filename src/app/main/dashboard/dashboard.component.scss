@@ -102,8 +102,8 @@
 }
 
 .item_contract_infor{
-  font-size: 11px;
-  color: #666666;
+  font-size: 12px;
+  color: var(--Text-Secondary, #8E9AB0);
 }
 
 .status_blue{
@@ -141,7 +141,8 @@
   // width: 45%;
 }
 .text_header_card{
-  padding: 27px;
+  // padding: 27px;
+  padding: 27px 0px 26px 0px;
   text-align: center;
   font-weight: 700;
 }
@@ -319,3 +320,187 @@ h3{
   align-items: center;
   height: 100%;
 }
+
+// @media (min-width: 1025px) {
+//   .row {
+//     display: flex;
+//     flex-wrap: wrap;
+//     margin-right: -14px;
+//     margin-left: -14px;
+//   }
+
+//   .col-md-6, .col-xxl-6, .col-xxl-8, .col-xxl-2 {
+//     position: relative;
+//     width: 100%;
+//     padding-right: 14px;
+//     padding-left: 14px;
+//   }
+
+//   .col-md-6 {
+//     flex: 0 0 auto;
+//     width: 50%;
+//   }
+
+//   .col-xxl-6 {
+//     flex: 0 0 auto;
+//     width: 50%;
+//   }
+
+//   .col-xxl-8 {
+//     flex: 0 0 auto;
+//     width: 66.66667%;
+//   }
+
+//   .col-xxl-2 {
+//     flex: 0 0 auto;
+//     width: 16.66667%;
+//   }
+// }
+
+// /* Specific adjustments for header cards */
+// .header_card {
+//   border-radius: 8px;
+//   border: 0.5px solid rgba(20, 135, 225, 0.3) !important;
+//   transition: box-shadow 0.3s ease;
+// }
+
+// .header_card:hover {
+//   box-shadow: 0px 3px 12px 0px rgba(16, 85, 225, 0.10);
+//   cursor: pointer;
+// }
+
+// .header_card_1, .header_card_2, .header_card_3, .header_card_4 {
+//   background-color: #FFFFFF;
+//   width: 100%;
+//   margin-bottom: 14px;
+// }
+
+// .text_header_card {
+//   padding: 15px 0;
+//   text-align: center;
+//   font-weight: 700;
+// }
+
+// .number_header_card {
+//   font-size: 30px;
+//   color: #002060;
+//   padding-bottom: 10px;
+// }
+
+// /* Adjustments for main containers and cards */
+// .add-contract-theme {
+//   background: url("../../../assets/img/frame_db1.svg");
+//   background-size: cover;
+//   width: 100%;
+//   height: 170px;
+//   color: #FFFFFF;
+//   border-radius: 12px;
+//   padding: 24px;
+//   margin-bottom: 24px;
+// }
+
+// .contract-request, .contract-processing, .package {
+//   background-color: #FFFFFF;
+//   border-radius: 12px;
+//   padding: 16px;
+//   height: 100%;
+// }
+
+// /* Button adjustments */
+// .btn_add_contract {
+//   border: 0px;
+//   border-radius: 6px;
+//   width: 130px;
+//   height: 38px;
+//   box-sizing: border-box;
+//   color: #0041C4;
+//   background: #FFFFFF;
+//   font-size: 12px;
+//   font-weight: 700;
+// }
+
+// /* Adjustments for row text */
+// .row_text_1 {
+//   display: flex;
+//   justify-content: space-between;
+//   font-size: 14px;
+//   padding-bottom: 10px;
+// }
+
+// .row_text_2 {
+//   display: flex;
+//   background-color: #F7FAFD;
+//   border: 0.5px solid rgba(0, 65, 196, 0.10);
+//   border-radius: 8px;
+//   padding: 4px;
+//   margin-bottom: 16px;
+//   transition: box-shadow 0.3s ease, border 0.3s ease;
+// }
+
+// .row_text_2:hover {
+//   box-shadow: 0px 3px 12px 0px rgba(16, 85, 225, 0.10);
+//   border: 0.5px solid #C3D7FF;
+// }
+
+// .row_text {
+//   display: flex;
+//   background-color: #F7FAFD;
+//   border-radius: 8px;
+// }
+
+// .item_contract_name1 {
+//   font-weight: 700;
+//   font-size: 14px;
+//   color: #001A4D;
+//   cursor: pointer;
+//   white-space: pre-wrap;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   display: -webkit-box;
+//   -webkit-line-clamp: 2;
+//   -webkit-box-orient: vertical;
+// }
+
+// .item_contract_infor {
+//   font-size: 12px;
+//   color: var(--Text-Secondary, #8E9AB0);
+// }
+
+// .item-center {
+//   align-items: center;
+//   height: 100%;
+// }
+
+// /* Specific adjustments for media queries */
+// @media (min-width: 1400px) {
+//   .col-xxl-6 {
+//     flex: 0 0 auto;
+//     width: 50%;
+//   }
+
+//   .col-xxl-8 {
+//     flex: 0 0 auto;
+//     width: 70%;
+//   }
+
+//   .col-xxl-2 {
+//     flex: 0 0 auto;
+//     width: 10%;
+//   }
+// }
+
+// @media only screen and (max-width: 768px) {
+//   #num-contract {
+//     position: relative;
+//   }
+//   #num-contract-body {
+//     position: relative;
+//     padding-bottom: 10%;
+//   }
+//   .first-col {
+//     width: 80% !important;
+//   }
+//   #noti {
+//     height: 90% !important;
+//   }
+// }
