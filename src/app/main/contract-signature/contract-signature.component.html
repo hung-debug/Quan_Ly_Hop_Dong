@@ -1003,7 +1003,14 @@
                 <p>của {{countPage()}} trang</p>
             </div>
         </div>
-        <div class="footer_page_number">{{'chart.number' | translate}}: {{getPageStartEnd()}} / {{pageTotal}}</div>
+        <div class="footer_page_number">
+          <span class="footer_page_number_chart_number">
+            {{'chart.number' | translate}}:
+          </span>
+          <span>
+            {{getPageStartEnd()}} / {{pageTotal}}
+          </span>
+        </div>
     </div>
     <div *ngIf="this.typeDisplay === 'signOne'|| this.typeDisplay === 'downloadMany'" class="contract_footer_responsive">
         <div class="contract_footer_per_page_responsive">
