@@ -1,7 +1,7 @@
 :host ::ng-deep {
   .p-calendar {
     font-size: 13px !important;
-    font-family: 'font_lexend_deca';
+    // font-family: 'font_lexend_deca';
     width: 100%;
   }
   .p-datepicker table td {
@@ -16,8 +16,8 @@
     box-shadow: none !important;
   }
   .p-calendar-w-btn .p-datepicker-trigger {
-    // background-color: #e4e5e4;
-    // border: 1px solid #ced4da;
+    background-color: #0041C4;
+    border: 1px solid #0041C4;
   }
   .p-selectbutton .p-button {
     outline: 0 !important;
