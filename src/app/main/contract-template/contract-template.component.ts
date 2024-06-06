@@ -122,7 +122,7 @@ export class ContractTemplateComponent implements OnInit {
     
   }
   async getContractType(){
-    await this.contractTypeService.getContractTypeList("", "").toPromise().then(response => {
+    await this.contractTypeService.getContractTemplateTypeList("", "").toPromise().then(response => {
       this.contractTypeList = response;
     });
   }
