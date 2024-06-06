@@ -60,10 +60,9 @@
         </div>
       </div>
       <div class="col-md-6">
-        <div class="row" style="width: 70%;">
+        <div class="row" style="width: 70%; cursor: pointer;" (click)="isQLMHD_08?openDetail(item.id):null">
           <div class="col-md-12 item_contract_name col-cell-ellipsis">
-            <a  class="item_contract_name" style="text-decoration: none;" 
-            (click)="isQLMHD_08?openDetail(item.id):null" 
+            <a  class="item_contract_name" style="text-decoration: none;"  
             [routerLink]="['/main/contract-template/form/detail/', item.id]"
             [queryParams]="{'page': this.p}"
             ngbTooltip="{{item.name}}">
