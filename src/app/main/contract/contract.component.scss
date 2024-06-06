@@ -301,7 +301,7 @@
   cursor: pointer;
   color: #8E9AB0;
 }
-.contract_footer, .contract_footer_wide{
+.contract_footer {
   padding-top: 10px;
   display: flex;
   justify-content: space-between;
@@ -320,7 +320,7 @@
 .footer_title{
   width: 120px;
 }
-.footer_pagination{
+.footer_pagination, .contract_footer_pagination_responsive {
   display: flex;
   text-align: center;
 }
@@ -522,9 +522,9 @@ input::placeholder{
   }
 }
 
-#contract-footer-responsive {
+.contract_footer_responsive {
   justify-content: space-between;
-  #contract-footer-per-page-responsive {
+  .contract_footer_per_page_responsive {
     color: #A5AAB6;
     display: flex;
     flex-direction: row;
@@ -547,25 +547,25 @@ input::placeholder{
 }
 
 @media (max-width: 1014px) {
-  #contract_footer_pagination_responsive {
+  .contract_footer_pagination_responsive {
     margin-top: 12px;
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
   }
-  #contract-footer-responsive .footer_pagination {
+  .contract_footer_responsive .footer_pagination {
     display: none;
   }
-  #contract-footer-responsive {
+  .contract_footer_responsive {
     margin-top: 12px;
   }
 }
 
 @media (min-width: 1014px) {
-  #contract_footer_pagination_responsive {
+  .contract_footer_pagination_responsive {
     display: none;
   }
-  #contract-footer-responsive .footer_pagination {
+  .contract_footer_responsive .footer_pagination {
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
@@ -573,39 +573,45 @@ input::placeholder{
 }
 
 @media (max-width: 692px) {
-  #contract-footer-responsive {
+  .contract_footer_responsive {
     flex-direction: column;
     align-items: center;
   }
-  #contract-footer-per-page-responsive,
-  #contract-footer-responsive .enterPage,
-  #contract-footer-responsive .footer_page_number {
+  .contract_footer_per_page_responsive,
+  .contract_footer_responsive .enterPage,
+  .contract_footer_responsive .footer_page_number {
     margin-bottom: 12px;
   }
 
-  #contract_footer_pagination_responsive {
+  .contract_footer_pagination_responsive {
     margin: 0;
   }
-  #contract-footer-per-page-responsive {
+  .contract_footer_per_page_responsive {
     align-items: center;
   }
 }
 
 @media (min-width: 1300px) {
-  #contract-footer-wide {
+  .contract_footer {
     display: flex;
   }
-  #contract-footer-responsive {
+  .contract_footer_responsive {
     display: none;
   }
 }
 
 @media (max-width: 1300px) {
-  #contract-footer-wide {
+  .contract_footer {
     display: none;
   }
-  #contract-footer-responsive {
+  .contract_footer_responsive {
     display: flex;
+  }
+}
+
+@media (min-width: 1014px) and (max-width: 1300px) {
+  .contract_footer_responsive {
+    padding-top: 10px;
   }
 }
 
