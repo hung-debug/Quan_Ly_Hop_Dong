@@ -195,28 +195,54 @@
   .ngx-pagination {
     padding: 0;
   }
+  .ngx-pagination .current {
+    background: #0041C4;
+  }
   .ngx-pagination a, .ngx-pagination button {
     text-decoration: none;
-    background: #f3f3f3;
+    background: #F3F6FA;
+    color: #A8B5CE;
+  }
+  .ngx-pagination a:hover, .ngx-pagination button:hover {
+    background-color: #F3F6FA;
+  }
+  .ngx-pagination ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
   }
   .ngx-pagination li {
-    width: 50px;
-    border-radius: 5px;
+    border-radius: 5.8px;
+    margin: 0 4px;
+    // width: 50px;
+    // background-color: #0041C4;
+    // width: 24px;
+    // height: 24px;
+    // text-align: center;
+    // vertical-align: middle;
+  }
+  .ngx-pagination li span {
+    display: block;
+  }
+  .ngx-pagination button {
+    background-color: #0041C4;
   }
   .ngx-pagination .pagination-previous a::before,
   .ngx-pagination .pagination-previous.disabled::before {
     font-family: 'Material Icons';
-    content: 'keyboard_arrow_left';
+    content: url('../../../assets/img/Vector_left.svg');
     vertical-align: middle;
-    display: inline;
+    display: flex;
+    align-items: center;
     margin: 0;
   }
   .ngx-pagination .pagination-next a::after,
   .ngx-pagination .pagination-next.disabled::after {
     font-family: 'Material Icons';
-    content: 'keyboard_arrow_right';
+    content: url('../../../assets/img/Vector_right.svg');
     vertical-align: middle;
-    display: inline;
+    display: flex;
+    align-items: center;
     margin: 0;
   }
 
@@ -244,22 +270,27 @@
   position:absolute;
   display: flex;
   flex-wrap: nowrap;
-  color: #0160AE;
+  color: #A5AAB6;
   select{
     border: 1px solid #0160AE;
     border-radius: 5px;
   }
 }
-
+.contract_footer, .contract_footer_responsive {
+  padding-top: 10px;
+  padding-left: 20px;
+  display: flex;
+  justify-content: space-between;
+}
 .footer_title{
   width: 120px;
 }
-.footer_pagination{
+.footer_pagination, .contract_footer_pagination_responsive{
   display: flex;
   text-align: center;
 }
-.footer_page_number{
-  color: #0160AE
+.footer_page_number .footer_page_number_chart_number {
+  color: #A5AAB6;
 }
 .col-md-100-1{
   width: 100%;
@@ -302,9 +333,9 @@
   width: 18px;
   cursor: pointer;
 }
-.img_icon:hover{
-  width: 30px;
-}
+// .img_icon:hover{
+//   width: 30px;
+// }
 .calendar_create, .calendar_deadline, .item_icon{
   display: flex;
   flex-direction: column;
@@ -461,5 +492,98 @@ input::placeholder{
   .col-xxl-1{
     flex: 0 0 auto;
     width: 1.333333333%;
+  }
+}
+
+.contract_footer_responsive {
+  justify-content: space-between;
+  .contract_footer_per_page_responsive {
+    color: #A5AAB6;
+    display: flex;
+    flex-direction: row;
+    select{
+      height: 20px;
+      border: 1px solid #A5AAB6;
+      border-radius: 5px;
+    }
+  }
+  pagination-controls {
+    margin-top: 12px;
+  }
+  .footer_pagination {
+    @media (min-width: 794px) {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+    }
+  }
+}
+
+@media (max-width: 898px) {
+  .contract_footer_pagination_responsive {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+  .contract_footer_responsive .footer_pagination {
+    display: none;
+  }
+  .contract_footer_responsive .footer_pagination {
+    display: none;
+  }
+}
+
+@media (min-width: 898px) {
+  .contract_footer_pagination_responsive {
+    display: none;
+  }
+  .contract_footer_responsive .footer_pagination {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+}
+
+@media (max-width: 577px) {
+  .contract_footer_responsive {
+    flex-direction: column;
+    align-items: center;
+  }
+  .contract_footer_per_page_responsive,
+  .contract_footer_responsive .enterPage,
+  .contract_footer_responsive .footer_page_number {
+    margin-bottom: 12px;
+  }
+
+  .contract_footer_pagination_responsive {
+    margin: 0;
+  }
+  .contract_footer_per_page_responsive {
+    align-items: center;
+  }
+}
+
+@media (min-width: 1300px) {
+  .contract_footer {
+    display: flex;
+  }
+  .contract_footer_responsive {
+    display: none;
+  }
+}
+
+@media (max-width: 1300px) {
+  .contract_footer {
+    display: none;
+  }
+  .contract_footer_responsive {
+    display: flex;
+  }
+}
+
+@media (min-width: 1014px) and (max-width: 1300px) {
+  .contract_footer_responsive {
+    padding-top: 10px;
   }
 }
