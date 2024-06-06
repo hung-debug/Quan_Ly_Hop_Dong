@@ -427,3 +427,35 @@ input::placeholder{
 .table-contract {
   margin-bottom: 16px;
 }
+
+.col-lg-8-7 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: calc(100% - var(--width-button) * 3) !important;
+  }
+}
+
+.col-lg-10-9 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: calc(100% - var(--width-button)) !important;
+  }
+}
+
+.col-lg-9-8 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: calc(100% - var(--width-button) * 2) !important;
+  }
+}
+
+.col-lg-1-1 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: var(--width-button) !important;
+  }
+
+  @media (max-width: 991px) {
+    margin-top: 16px !important;
+  }
+}
