@@ -56,11 +56,24 @@ export class SidebarComponent implements OnInit {
 
   onMouseLeave(currentMenu: any) {
     this.isHovered = false;
-    if (!currentMenu.active) {
+    if (!currentMenu.active || !currentMenu.isActive) {
       currentMenu.icon = currentMenu.iconDefault;
     }
   }
 
+  onMouseEnterSub(currentMenu: any) {
+    this.isHovered = true;
+    if (!currentMenu.active || !currentMenu.isActive) {
+      currentMenu.icon = currentMenu.iconFill;
+    }
+  }
+
+  onMouseLeaveSub(currentMenu: any) {
+    this.isHovered = false;
+    if (!currentMenu.active || !currentMenu.isActive) {
+      currentMenu.icon = currentMenu.iconDefault;
+    }
+  }
   // switchToFillIcon(icon: string) {
   //   return icon.replaceAll('.svg', '_v2.svg');
   // }
@@ -143,6 +156,8 @@ export class SidebarComponent implements OnInit {
     //find parent
     this.menus.forEach((element: any) => {
       if (element === currentMenu) {
+        element.active = true;
+        element.isActive = true;
         this.subMenus = element.submenus;
         //set active child
         this.subMenus.forEach((elementSub: any) => {
