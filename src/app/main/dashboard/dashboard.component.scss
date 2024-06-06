@@ -102,8 +102,8 @@
 }
 
 .item_contract_infor{
-  font-size: 11px;
-  color: #666666;
+  font-size: 12px;
+  color: var(--Text-Secondary, #8E9AB0);
 }
 
 .status_blue{
@@ -141,7 +141,8 @@
   // width: 45%;
 }
 .text_header_card{
-  padding: 27px;
+  // padding: 27px;
+  padding: 27px 0px 26px 0px;
   text-align: center;
   font-weight: 700;
 }
@@ -214,12 +215,14 @@ h3{
 .add-contract-theme{
   background: url("../../../assets/img/frame_db1.svg");
   background-size: cover;
-  width: 100%;
-  height: 170px;
+  max-width: 100%;
+  // height: 170px;
   color: #FFFFFF;
   border-radius: 12px;
   padding: 24px;
   margin-bottom: 24px;
+  height: auto;
+  object-fit: contain;
 }
 
 .contract-processing{
@@ -233,7 +236,7 @@ h3{
   background-color: #FFFFFF;
   border-radius: 12px;
   padding: 16px;
-  height: 100%;
+  // height: 100%;
 }
 
 .row_text{
@@ -318,4 +321,42 @@ h3{
 .item-center {
   align-items: center;
   height: 100%;
+}
+
+@media screen and (min-width:1224px) and (max-width:1280px){
+  .overflow-hidden{
+    padding: 16px;
+  }
+  
+  .add-contract-theme{
+    background: url("../../../assets/img/FrameMini.svg");
+    background-size: cover;
+    max-width: 100%;
+    // height: 170px;
+    color: #FFFFFF;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    height: auto;
+    object-fit: contain;
+  }
+}
+
+@media screen and (min-width:1280px) and (max-width:1357px){
+  .overflow-hidden{
+    padding: 16px;
+  }
+  
+  .add-contract-theme{
+    background: url("../../../assets/img/FrameMini.svg");
+    background-size: cover;
+    max-width: 100%;
+    // height: 170px;
+    color: #FFFFFF;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    height: auto;
+    object-fit: contain;
+  }
 }

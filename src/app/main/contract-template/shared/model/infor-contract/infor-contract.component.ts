@@ -167,8 +167,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
        }
        this.convertData(this.datas);
 
-       this.contractTypeService.getContractTypeList('', '').subscribe(data => {   
-         this.typeList = data.content
+       this.contractTypeService.getContractTemplateTypeList('', '').subscribe(data => {        
+         this.typeList = data
        } );
 
        this.contract_no_old = this.contract_no;

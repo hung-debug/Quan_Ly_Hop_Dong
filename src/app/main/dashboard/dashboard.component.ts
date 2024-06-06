@@ -467,7 +467,7 @@ export class DashboardComponent implements OnInit {
               link = "/main/contract/create/overdue"
             }
             link = link + "?isOrg=" + data.isOrg + "&organization_id=" + data.organization_id + "&filter_from_date=" + data.from_date + "&filter_to_date=" + data.to_date;
-            return '<a style="cursor: pointer; color: #106db6; text-decoration: none"; href="' + link + '">' + this.value + '</a>';
+            return '<a style="cursor: pointer; color: #00186D; text-decoration: none"; href="' + link + '">' + this.value + '</a>';
           },
           useHTML: true
         }

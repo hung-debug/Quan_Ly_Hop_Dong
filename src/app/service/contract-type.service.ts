@@ -115,6 +115,19 @@ export class ContractTypeService {
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<ContractType[]>(listContractTypeUrl, {headers}).pipe();
   }
+  
+  public getContractTemplateTypeList(code:any, name:any,idOrg?: number): Observable<any> {
+    this.getCurrentUser();
+    let listContractTypeUrl = this.listContractTypeUrl + this.organization_id + "?name=" + name.trim() + "&code=" + code.trim();
+
+    if(idOrg) {
+      listContractTypeUrl = this.listContractTypeUrl + idOrg + "?name=" + name.trim() + "&code=" + code.trim();
+    }
+
+
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<ContractType[]>(listContractTypeUrl, {headers}).pipe();
+  }
 
   public getContractTypeListV2(code:any, name:any,idOrg?: number): Observable<any> {
     this.getCurrentUser();

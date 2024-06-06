@@ -75,13 +75,12 @@
                 </div>
               </div> -->
               <div class="col-md-7">
-                <div class="flex-container" style="width: 70%;">
+                <div class="flex-container" style="width: 70%; cursor: pointer;" (click)="isQLMHD_08?openDetail(item.id):null">
                   <div>
                     <img src="../../assets/img/Frame 46282.svg" style="width: 72px;">
                   </div>
                   <div class="item_contract_name col-cell-ellipsis">
                     <a  class="item_contract_name" style="text-decoration: none;" 
-                    (click)="isQLMHD_08?openDetail(item.id):null" 
                     [routerLink]="['/main/contract-template/form/detail/', item.id]"
                     [queryParams]="{'page': this.p}"
                     ngbTooltip="{{item.name}}">

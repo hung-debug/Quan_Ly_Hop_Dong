@@ -76,7 +76,7 @@
                         <input class="input-checkbox col-md-1" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked"/>
                       </div>
 
-                      <div class="col-md-11" style="display: flex;margin-left: 12px;">
+                      <div class="col-md-11" style="display: flex;margin-left: 12px;cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                         <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                         <div style="margin-left: 12px;">
                           <div class="item_contract_name">
@@ -137,7 +137,7 @@
               <div class="col-sm-2 calendar_create">
                 <!-- để tạm ngày tạo HĐ -->
                 <div><i class="fa fa_icon"></i><span class="item_date">{{item.sign_time | date:
-                  'dd/MM/yyyy HH:mm:ss'}}</span>
+                  'dd/MM/yyyy'}}</span>
                 </div>
               </div>
 
@@ -333,11 +333,11 @@
                 <!--Cột 2-->
                 <div class="col-sm-5">
                     <div class="row">
-                      <div class="col-md-11" style="display: flex;margin-left: 6px;">
+                      <div class="col-md-11" style="display: flex;margin-left: 6px; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                           <div style="margin-left: 12px;">
                             <div class="item_contract_name">
-                                <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
+                                <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                         'page': this.p,
                                         'filter_type': this.filter_type,
                                         'filter_contract_no': this.filter_contract_no,
@@ -388,8 +388,11 @@
                 <div class="col-sm-2 calendar_create">
                   <!-- để tạm ngày tạo HĐ -->
                   <div><i class="fa fa_icon"></i>
-                    <span *ngIf = "this.filter_status == 20 || this.filter_status == 33 || this.filter_status == 34" class="item_date">
+                    <span *ngIf = "this.filter_status == 20 || this.filter_status == 33" class="item_date">
                       {{item.sign_time | date:'dd/MM/yyyy HH:mm:ss'}}
+                    </span>
+                    <span *ngIf = "this.filter_status == 34" class="item_date">
+                      {{item.sign_time | date:'dd/MM/yyyy'}}
                     </span>
                     <span *ngIf = "this.filter_status == 31" class="item_date">
                       {{item.reject_time | date:'dd/MM/yyyy HH:mm:ss'}}
@@ -398,7 +401,7 @@
                       {{item.cancelDate | date:'dd/MM/yyyy HH:mm:ss'}}
                     </span>
                     <span *ngIf = "this.filter_status == 40" class="item_date">
-                      {{item.sign_time | date:'dd/MM/yyyy HH:mm:ss'}}
+                      {{item.sign_time | date:'dd/MM/yyyy'}}
                     </span>
                     <span *ngIf = "this.filter_status != 20 && this.filter_status != 33 && this.filter_status != 34 && this.filter_status != 31 && this.filter_status != 32 && this.filter_status != 40" class="item_date">
                       {{item.updated_at | date:'dd/MM/yyyy HH:mm:ss'}}
@@ -594,11 +597,11 @@
                 <!--Cột 2-->
                 <div class="col-sm-5">
                     <div class="row">
-                        <div class="col-md-11" style="display: flex; margin-left: 12px;">
+                        <div class="col-md-11" style="display: flex; margin-left: 12px; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                           <div style="margin-left: 12px;">
                             <div class="item_contract_name">
-                                <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
+                                <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                         'page': this.p,
                                         'filter_type': this.filter_type,
                                         'filter_contract_no': this.filter_contract_no,
@@ -787,11 +790,11 @@
                 <!--Cột 2-->
                 <div class="col-sm-5">
                     <div class="row">
-                        <div class="col-md-11" style="display: flex;">
+                        <div class="col-md-11" style="display: flex; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                           <div style="margin-left: 12px;">
                             <div class="item_contract_name">
-                                <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
+                                <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                         'page': this.p,
                                         'filter_type': this.filter_type,
                                         'filter_contract_no': this.filter_contract_no,
@@ -1059,11 +1062,11 @@
                               <input class="input-checkbox" name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneDownload(item)"(change)="selectContract(item)" />
                             </div>
 
-                            <div class="col-md-11" style="display: flex;margin-left: 12px;">
+                            <div class="col-md-11" style="display: flex;margin-left: 12px; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                               <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                               <div style="margin-left: 12px;">
                                 <div class="item_contract_name">
-                                    <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
+                                    <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                             'page': this.p,
                                             'filter_type': this.filter_type,
                                             'filter_contract_no': this.filter_contract_no,
@@ -1266,11 +1269,11 @@
                               <input class="input-checkbox" name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneRelease(item)" (change)="selectContract(item)" />
                             </div>
 
-                            <div class="col-md-11" style="display: flex;margin-left: 12px;">
+                            <div class="col-md-11" style="display: flex;margin-left: 12px; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                               <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                               <div style="margin-left: 12px;">
                                 <div class="item_contract_name">
-                                    <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
+                                    <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                             'page': this.p,
                                             'filter_type': this.filter_type,
                                             'filter_contract_no': this.filter_contract_no,
@@ -1451,11 +1454,11 @@
                           <div>
                             <input class="input-checkbox" name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneDraft(item)" (change)="selectContract(item)" (change)="selectContract(item)"/>
                           </div>
-                          <div class="col-md-11" style="display: flex;margin-left: 12px;">
+                          <div class="col-md-11" style="display: flex;margin-left: 12px; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                             <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
                             <div style="margin-left: 12px;">
                               <div class="item_contract_name">
-                                  <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
+                                  <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                           'page': this.p,
                                           'filter_type': this.filter_type,
                                           'filter_contract_no': this.filter_contract_no,

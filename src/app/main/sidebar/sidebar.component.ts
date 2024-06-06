@@ -102,13 +102,28 @@ export class SidebarComponent implements OnInit {
         }
       } else {
         element.icon = element.iconDefault;
-        if ((element.id == 2 && this.router.url === '/main/dashboard') || (element.id == 2 && this.router.url.includes('/main/contract/create'))) {
-          element.active = true;
-          element.activeDrop = true;
-        } else {
-          element.active = false;
-          element.activeDrop = false;
-        }
+        setTimeout(() => {
+          if ((element.id == 2 && this.router.url === '/main/dashboard') || (element.id == 2 && this.router.url.includes('/main/contract/create'))) {
+            if (this.router.url !== '/main/dashboard') {
+              element.active = false;
+              element.activeDrop = false;
+            } else {
+              element.active = true;
+              element.activeDrop = true;
+            }
+
+          } else {
+            element.active = false;
+            element.activeDrop = false;
+          }
+          let currentMenu1 = this.menus.find((menu: any) => menu.active);
+          if(currentMenu1?.submenus){
+            currentMenu1.submenus.forEach((submenu: any) => {
+              submenu.active = false;
+            });
+          }
+        })
+
 
       }
     });
