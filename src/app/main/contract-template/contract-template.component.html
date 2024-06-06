@@ -1,180 +1,200 @@
 <!-- <div *ngIf="loaded"> -->
-<div>
-<div *ngIf="isQLMHD_01 || isQLMHD_02 || isQLMHD_03 || isQLMHD_04 || isQLMHD_05 || isQLMHD_06 || isQLMHD_07 || isQLMHD_08 || isQLHD_14 || isQLHD_15" class="container-fluid">
-  <p-selectButton [options]="stateOptions" [(ngModel)]="isShare" optionLabel="label" optionValue="value" (click)="searchContract()">
-    <ng-template #options let-item>
-      <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
-    </ng-template>
-  </p-selectButton>
+  <div>
+    <div class="container-fluid" *ngIf="isQLMHD_01 || isQLMHD_02 || isQLMHD_03 || isQLMHD_04 || isQLMHD_05 || isQLMHD_06 || isQLMHD_07 || isQLMHD_08 || isQLHD_14 || isQLHD_15">
+      <div class="row">
+        <div class="margin-top-16 cancel-padding">
+          <p-selectButton class="row" [options]="stateOptions" [(ngModel)]="isShare" optionLabel="label" optionValue="value" (click)="searchContract()">
+            <ng-template #options let-item>
+              <span class="button-classify">{{item.label | translate}}</span>
+            </ng-template>
+          </p-selectButton>
+        </div>
 
-  <div class="row" style="padding-top: 20px; padding-bottom: 20px;">
-    <div class="col-xxl-3 col-md-3" *ngIf="isQLMHD_06">
-      <div>{{'contract-template.name' | translate}}</div>
-      <div class="input-line">
-        <input type="text" [(ngModel)]="name" class="input_text"/>
-      </div>
-    </div>
-    <div class="col-xxl-3 col-md-3" *ngIf="isQLMHD_06">
-      <div>{{'contract.type' | translate}}</div>
-      <div>
-        <p-dropdown 
-          panelStyleClass="font"
-          [options]="contractTypeList" 
-          [(ngModel)]="type" 
-          optionLabel="name" 
-          optionValue="id" 
-          [filter]="true" 
-          filterBy="name" 
-          [showClear]="type?true:false"
-          placeholder="{{'all' | translate}}"
-          ></p-dropdown>
-      </div>
-    </div>
-    <div class="col-xxl-2 col-md-6 btn_search">
-      <button *ngIf="isQLMHD_06" class="btn cod-md-1 btn-lg btn-block btn_search1" (click)="searchContract()">{{'btn.search' | translate }}</button>
-      <button *ngIf="isQLMHD_01" class="btn cod-md-1 btn-lg btn-block btn_add" (click)="add()">{{'btn.add' | translate }}</button>
-    </div>
-  </div>
+        <div class="cancel-padding">
+          <div *ngIf="isQLMHD_06 || isQLMHD_01" class="row margin-contract-template">
+            <!-- <div class="col-lg-4" *ngIf="isQLMHD_06">
+              <div>{{'contract-template.name' | translate}}</div>
+              <div class="input-line">
+                <input type="text" [(ngModel)]="name" class="input_text"/>
+              </div>
+            </div> -->
 
-  <div class="row list_header" *ngIf="pageTotal > 0;">
-    <div class="col-md-1" style="text-align: left;"></div>
-    <div class="col-md-6" style="text-align: left !important;">{{'contract-template.name' | translate}}</div>
-    <div class="col-md-2" style="text-align: left">{{'contract-template.code' | translate}}</div>
-    <div class="col-md-2">{{'create-date.soon' | translate}}</div>
-    <div class="col-md-1"></div>
-  </div>
-
-  <div *ngIf="pageTotal > 0" style="min-height: 67vh;">
-  <div class="item_contract" *ngFor="let item of contractsTemplate  | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
-    
-    <div class="row">
-      <div class="col-xxl-1 col-md-1 item_icon">
-        <div style="display: flex;">
-            <div class="col-xxl-1 col-md-1 calendar_create" style="display: flex;">
-            </div>
-            <div class="col-xxl-1 col-md-1">
-              <div>
-                <img src="../../assets/img/Frame 46282.svg" style="width: 72px;">
+            <div [ngClass] = "{'col-lg-5-45' : !isQLMHD_01}" class="col-lg-4-9 btn-padding-right" *ngIf="isQLMHD_06">
+              <div class="input-line">
+                  <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
+                  <input type="text" [(ngModel)]="name" class="input_text" placeholder="{{'contract-template.name' | translate}}"/>
+                  <!-- <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract-template.name' | translate}}" (keyup)="autoSearch($event)" /> -->
+                  <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
               </div>
             </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="row" style="width: 70%;">
-          <div class="col-md-12 item_contract_name col-cell-ellipsis">
-            <a  class="item_contract_name" style="text-decoration: none;" 
-            (click)="isQLMHD_08?openDetail(item.id):null" 
-            [routerLink]="['/main/contract-template/form/detail/', item.id]"
-            [queryParams]="{'page': this.p}"
-            ngbTooltip="{{item.name}}">
-            {{item.name}}
-            </a>
+
+            <div [ngClass] = "{'col-lg-5-45' : !isQLMHD_01}" class="col-lg-4-9 btn-padding-right btn-padding-left" *ngIf="isQLMHD_06">
+              <div class="dropdown-container">
+                <p-dropdown 
+                  panelStyleClass="font"
+                  [options]="contractTypeList" 
+                  [(ngModel)]="type" 
+                  optionLabel="name" 
+                  optionValue="id" 
+                  [filter]="true" 
+                  filterBy="name" 
+                  [showClear]="type?true:false"
+                  placeholder="{{'contract.type' | translate}}"
+                  ></p-dropdown>
+              </div>
+            </div>
+            <div [ngClass] = "{'col-md-6' : isQLMHD_06 && isQLMHD_01}" class="col-lg-1-1 col-md-6 btn-padding-right btn-padding-left" *ngIf="isQLMHD_06">
+              <button class="btn-block btn_advanced" (click)="searchContract()">{{'btn.search' | translate }}</button>
+            </div>
+
+            <div [ngClass] = "{'btn-padding-right' : !isQLMHD_06, 'btn-padding-left': isQLMHD_06, 'col-md-6' : isQLMHD_06 && isQLMHD_01}" class="col-lg-1-1 btn-padding-left" *ngIf="isQLMHD_01" >
+              <button class="btn-block btn_cancel" (click)="add()">{{'btn.add' | translate }}</button>
+            </div>
           </div>
-        </div>
-        <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
-          <div class="col-md-12 item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
-        </div>
-      </div>
-      
-      <div class="col-md-2 contract_code col-cell-ellipsis" style="text-align: left;">
-        <span class="item_date" ngbTooltip="{{item.code}}">{{item.code}}</span>
-      </div>
-      
-      <div class="col-md-2 calendar_create">
-        <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.end_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
-      </div>
-
-
-      <div class="col-md-1 item_icon">
         
-        <div class="three_dot" style="display: flex; justify-content: flex-end;" *ngIf="item.releaseState=='CON_HIEU_LUC'">
-          <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
-            <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
-          </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && isQLMHD_09" (click)="cloneContractTemplateCall(item.id)">
-              <mat-icon><img src="../../assets/img/icon_copy.svg" class="img_icon"/></mat-icon>
-              <span class="three_dot_text">{{'role.contract-template.copy' | translate}}</span>
-            </button>
-            <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && isQLMHD_02" (click)="openEdit(item.id)">
-              <mat-icon><img src="../../assets/img/icon_edit.svg" class="img_icon"/></mat-icon>
-              <span class="three_dot_text">{{'role.contract-template.edit' | translate}}</span>
-            </button>
-            <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && item.releaseState=='CON_HIEU_LUC' && isQLMHD_03 && item.status == 10" (click)="stopContractTemplate(item.id)">
-              <mat-icon><img src="../../assets/img/icon_stop_release.svg" class="img_icon"/></mat-icon>
-              <span class="three_dot_text">{{'stop.releasing' | translate}}</span>
-            </button>
-            <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && item.releaseState=='CON_HIEU_LUC' && item.status == 32 && isQLMHD_04" (click)="releaseContractTemplate(item.id)">
-              <mat-icon><img src="../../assets/img/icon_open_release.svg" class="img_icon"/></mat-icon>
-              <span class="three_dot_text">{{'Mở phát hành' | translate}}</span>
-            </button>
-            <button mat-menu-item class="div_icon" *ngIf="item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLHD_14" (click)="addContractForm(item.id)">
-              <mat-icon><img src="../../assets/img/icon_file.svg" class="img_icon"/></mat-icon>
-              <span class="three_dot_text">{{'role.contract-template.create-contract' | translate}}</span>
-            </button>
-            <button mat-menu-item class="div_icon" *ngIf="item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLHD_15" (click)="addContractBatch(item.id)">
-              <mat-icon><img src="../../assets/img/icon_add_connect.svg" class="img_icon"/></mat-icon>
-              <span class="three_dot_text">{{'role.contract-template.create-batch' | translate}}</span>
-            </button>
-            <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLMHD_05" (click)="shareContractTemplate(item.id)">
-              <mat-icon><img src="../../assets/img/share_contract.svg" class="img_icon"/></mat-icon>
-              <span class="three_dot_text">{{'btn.share' | translate}}</span>
-            </button>
-            <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && isQLMHD_07" (click)="deleteContractTemplate(item.id)">
-              <mat-icon><img src="../../assets/img/icon_delete.svg" class="img_icon"/></mat-icon>
-              <span class="three_dot_text">{{'role.contract-template.delete' | translate}}</span>
-            </button>
-          </mat-menu>
-        </div>
+          <div class="row list_header" *ngIf="pageTotal > 0;" style="padding: 0px; margin-top: 16px;">
+            <div class="col-sm-7 bg-header" style="text-align: left !important;">{{'contract-template.name' | translate}}</div>
+            <div class="col-sm-2 bg-header" style="text-align: left">{{'contract-template.code' | translate}}</div>
+            <div class="col-sm-2 bg-header">{{'create-date.soon' | translate}}</div>
+            <div class="col-sm-1 bg-header"></div>
+          </div>
         
-        <!-- <div style="display: flex; justify-content: center;">
-          <div class="div_icon" *ngIf="isShare=='off' && isQLMHD_09">
-            <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'role.contract-template.copy' | translate}}" (click)="cloneContractTemplateCall(item.id)" />
-          </div>
-          <div class="div_icon" *ngIf="isShare=='off' && isQLMHD_02">
-            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'role.contract-template.edit' | translate}}" (click)="openEdit(item.id)" />
-          </div>
-          <div class="div_icon" *ngIf="isShare=='off' && item.releaseState=='CON_HIEU_LUC' && (isQLMHD_03 || isQLMHD_04)">
-            <img *ngIf="item.status == 10 && isQLMHD_03" src="../../assets/img/icon_stop_release.svg" class="img_icon" ngbTooltip="{{'stop.releasing' | translate}}" (click)="stopContractTemplate(item.id)"/>
-            <img *ngIf="item.status == 32 && isQLMHD_04" src="../../assets/img/icon_open_release.svg" class="img_icon" ngbTooltip="Mở phát hành" (click)="releaseContractTemplate(item.id)"/>
-          </div>
+          <div style="padding: 0px !important;" *ngIf="pageTotal > 0" style="min-height: 67vh; padding: 0px !important;">
+          <div  class="item_contract" *ngFor="let item of contractsTemplate  | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
+            
+            <div class="row">
+              <!-- <div class="col-xxl-1 col-md-1 item_icon">
+                <div style="display: flex;">
+                    <div class="col-xxl-1 col-md-1 calendar_create" style="display: flex;">
+                    </div>
+                    <div class="col-xxl-1 col-md-1">
+                      <div>
+                        <img src="../../assets/img/Frame 46282.svg" style="width: 72px;">
+                      </div>
+                    </div>
+                </div>
+              </div> -->
+              <div class="col-md-7">
+                <div class="flex-container" style="width: 70%;">
+                  <div>
+                    <img src="../../assets/img/Frame 46282.svg" style="width: 72px;">
+                  </div>
+                  <div class="item_contract_name col-cell-ellipsis">
+                    <a  class="item_contract_name" style="text-decoration: none;" 
+                    (click)="isQLMHD_08?openDetail(item.id):null" 
+                    [routerLink]="['/main/contract-template/form/detail/', item.id]"
+                    [queryParams]="{'page': this.p}"
+                    ngbTooltip="{{item.name}}">
+                    {{item.name}}
+                    </a>
 
-          <div class="div_icon" *ngIf="item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLHD_14">
-            <img src="../../assets/img/icon_file.svg" class="img_icon" ngbTooltip="{{'role.contract-template.create-contract' | translate}}" (click)="addContractForm(item.id)"/>
+                    <div *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
+                      <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-2 contract_code col-cell-ellipsis" style="text-align: left;">
+                <span class="item_date" ngbTooltip="{{item.code}}">{{item.code}}</span>
+              </div>
+              
+              <div class="col-md-2 calendar_create">
+                <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.end_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
+              </div>
+        
+        
+              <div class="col-md-1 item_icon">
+                
+                <div class="three_dot" style="display: flex; justify-content: flex-end;" *ngIf="item.releaseState=='CON_HIEU_LUC'">
+                  <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
+                    <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && isQLMHD_09" (click)="cloneContractTemplateCall(item.id)">
+                      <mat-icon><img src="../../assets/img/icon_copy.svg" class="img_icon"/></mat-icon>
+                      <span class="three_dot_text">{{'role.contract-template.copy' | translate}}</span>
+                    </button>
+                    <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && isQLMHD_02" (click)="openEdit(item.id)">
+                      <mat-icon><img src="../../assets/img/icon_edit.svg" class="img_icon"/></mat-icon>
+                      <span class="three_dot_text">{{'role.contract-template.edit' | translate}}</span>
+                    </button>
+                    <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && item.releaseState=='CON_HIEU_LUC' && isQLMHD_03 && item.status == 10" (click)="stopContractTemplate(item.id)">
+                      <mat-icon><img src="../../assets/img/icon_stop_release.svg" class="img_icon"/></mat-icon>
+                      <span class="three_dot_text">{{'stop.releasing' | translate}}</span>
+                    </button>
+                    <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && item.releaseState=='CON_HIEU_LUC' && item.status == 32 && isQLMHD_04" (click)="releaseContractTemplate(item.id)">
+                      <mat-icon><img src="../../assets/img/icon_open_release.svg" class="img_icon"/></mat-icon>
+                      <span class="three_dot_text">{{'Mở phát hành' | translate}}</span>
+                    </button>
+                    <button mat-menu-item class="div_icon" *ngIf="item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLHD_14" (click)="addContractForm(item.id)">
+                      <mat-icon><img src="../../assets/img/icon_file.svg" class="img_icon"/></mat-icon>
+                      <span class="three_dot_text">{{'role.contract-template.create-contract' | translate}}</span>
+                    </button>
+                    <button mat-menu-item class="div_icon" *ngIf="item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLHD_15" (click)="addContractBatch(item.id)">
+                      <mat-icon><img src="../../assets/img/icon_add_connect.svg" class="img_icon"/></mat-icon>
+                      <span class="three_dot_text">{{'role.contract-template.create-batch' | translate}}</span>
+                    </button>
+                    <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLMHD_05" (click)="shareContractTemplate(item.id)">
+                      <mat-icon><img src="../../assets/img/share_contract.svg" class="img_icon"/></mat-icon>
+                      <span class="three_dot_text">{{'btn.share' | translate}}</span>
+                    </button>
+                    <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && isQLMHD_07" (click)="deleteContractTemplate(item.id)">
+                      <mat-icon><img src="../../assets/img/icon_delete.svg" class="img_icon"/></mat-icon>
+                      <span class="three_dot_text">{{'role.contract-template.delete' | translate}}</span>
+                    </button>
+                  </mat-menu>
+                </div>
+                
+                <!-- <div style="display: flex; justify-content: center;">
+                  <div class="div_icon" *ngIf="isShare=='off' && isQLMHD_09">
+                    <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'role.contract-template.copy' | translate}}" (click)="cloneContractTemplateCall(item.id)" />
+                  </div>
+                  <div class="div_icon" *ngIf="isShare=='off' && isQLMHD_02">
+                    <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'role.contract-template.edit' | translate}}" (click)="openEdit(item.id)" />
+                  </div>
+                  <div class="div_icon" *ngIf="isShare=='off' && item.releaseState=='CON_HIEU_LUC' && (isQLMHD_03 || isQLMHD_04)">
+                    <img *ngIf="item.status == 10 && isQLMHD_03" src="../../assets/img/icon_stop_release.svg" class="img_icon" ngbTooltip="{{'stop.releasing' | translate}}" (click)="stopContractTemplate(item.id)"/>
+                    <img *ngIf="item.status == 32 && isQLMHD_04" src="../../assets/img/icon_open_release.svg" class="img_icon" ngbTooltip="Mở phát hành" (click)="releaseContractTemplate(item.id)"/>
+                  </div>
+        
+                  <div class="div_icon" *ngIf="item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLHD_14">
+                    <img src="../../assets/img/icon_file.svg" class="img_icon" ngbTooltip="{{'role.contract-template.create-contract' | translate}}" (click)="addContractForm(item.id)"/>
+                  </div>
+                  <div class="div_icon" *ngIf="item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLHD_15">
+                    <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'role.contract-template.create-batch' | translate}}" (click)="addContractBatch(item.id)"/>
+                  </div>
+                  <div class="div_icon" *ngIf="isShare=='off' && item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLMHD_05">
+                    <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'btn.share' | translate}}" (click)="shareContractTemplate(item.id)"/>
+                  </div>
+                  <div class="div_icon" *ngIf="isShare=='off' && isQLMHD_07">
+                    <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'role.contract-template.delete' | translate}}" (click)="deleteContractTemplate(item.id)" />
+                  </div>
+                </div> -->
+              </div>
+            </div>
           </div>
-          <div class="div_icon" *ngIf="item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLHD_15">
-            <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'role.contract-template.create-batch' | translate}}" (click)="addContractBatch(item.id)"/>
           </div>
-          <div class="div_icon" *ngIf="isShare=='off' && item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLMHD_05">
-            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'btn.share' | translate}}" (click)="shareContractTemplate(item.id)"/>
+        
+          <div *ngIf="pageTotal == 0" 
+          style="min-height: 67vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+            <div style="display: table-cell;vertical-align: middle;"> 
+              <img src="../../../assets/img/empty_data.svg"/>
+              <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+            </div>
           </div>
-          <div class="div_icon" *ngIf="isShare=='off' && isQLMHD_07">
-            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'role.contract-template.delete' | translate}}" (click)="deleteContractTemplate(item.id)" />
-          </div>
-        </div> -->
+        </div>
       </div>
     </div>
-  </div>
-  </div>
-
-  <div *ngIf="pageTotal == 0" 
-  style="min-height: 67vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
-    <div style="display: table-cell;vertical-align: middle;"> 
-      <img src="../../../assets/img/empty_data.svg"/>
-      <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+    <div class="contract_footer">
+      <div class="footer_title"></div>
+      <div class="footer_pagination">
+        <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractTemplateList()" previousLabel="" nextLabel=""></pagination-controls>
+        <div class="enterPage" *ngIf="pageTotal > 0">
+          <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
+          <p>của {{countPage()}} trang</p>
+      </div>
+      </div>
+      <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
     </div>
-  </div>
-
-</div>
-<div class="contract_footer">
-  <div class="footer_title"></div>
-  <div class="footer_pagination">
-    <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractTemplateList()" previousLabel="" nextLabel=""></pagination-controls>
-    <div class="enterPage" *ngIf="pageTotal > 0">
-      <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-      <p>của {{countPage()}} trang</p>
-  </div>
-  </div>
-  <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
-</div>
-</div>
+    </div>

@@ -40,12 +40,12 @@ export class ContractTemplateComponent implements OnInit {
   loaded:boolean=false;
 
   //phan quyen
-  isQLMHD_01:boolean=true;  //them moi mau hop dong
+  isQLMHD_01:boolean=false;  //them moi mau hop dong
   isQLMHD_02:boolean=true;  //sua mau hop dong
   isQLMHD_03:boolean=true;  //ngung phat hanh mau hop dong
   isQLMHD_04:boolean=true;  //phat hanh mau hop dong
   isQLMHD_05:boolean=true;  //chia se mau hop dong
-  isQLMHD_06:boolean=true;  //tim kiem mau hop dong
+  isQLMHD_06:boolean=false;  //tim kiem mau hop dong
   isQLMHD_07:boolean=true;  //xoa mau hop dong
   isQLMHD_08:boolean=true;  //xem thong tin chi tiet mau hop dong
   isQLMHD_09:boolean=true;  //Clone mau hop dong

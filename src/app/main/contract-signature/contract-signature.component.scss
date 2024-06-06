@@ -67,18 +67,6 @@
   height: 100px;
 }
 
-.list_header{
-  color:#0041C4;
-  text-align: center;
-  padding: 12px 12px 0;
-  font-weight: 500;
-  font-weight: 500;
-  background-color: #EBF2FB;
-  width: 100%;
-  margin-left: 0;
-  height: 44px;
-}
-
 .pagination {
   display: inline-block;
 }
@@ -182,7 +170,7 @@
   border: 0.5px solid #F1F5FE;
   margin: 0px;
   width: 100%;
-  height: 38px;
+  height: 42px;
   outline:0px;
   background-color: #F1F5FE;
   padding: 10px 16px 10px 16px;
@@ -287,14 +275,6 @@
   outline: 0;
 }
 
-.btn-block {
-  background-color: #106DB6;
-  color: white;
-  height: 39px;
-  font-size: 14px;
-  width: 100%;
-  border-radius: 6px;
-}
 .div_icon{
   padding: 0 10px;
 }
@@ -313,7 +293,7 @@
 }
 
 .btn_search{
-  padding-top: 10px;
+  height: 42px;
   align-self: flex-end;
 }
 
@@ -364,7 +344,6 @@ input::placeholder{
   font-size: 13px;
   // margin: 0 10px;
   font-weight: 700;
-  height: 40px;
 }
 
 .btn_consider_cancel{
@@ -379,29 +358,18 @@ input::placeholder{
   height: 40px;
 }
 
-.btn_sign{
-  border: 0px;
-  border-radius: 6px;
-  box-sizing: border-box;
-  color: #FFFFFF;
-  background-color: #0041C4;
-  font-size: 13px;
-  // margin: 0 10px;
-  font-weight: 700;
-  height: 40px;
-}
+// .btn_sign{
+//   border: 0px;
+//   border-radius: 6px;
+//   box-sizing: border-box;
+//   color: #FFFFFF;
+//   background-color: #0041C4;
+//   font-size: 13px;
+//   // margin: 0 10px;
+//   font-weight: 700;
+//   height: 40px;
+// }
 
-.btn_cancel{
-  border: 0px;
-  border-radius: 6px;
-  box-sizing: border-box;
-  color: #FFFFFF;
-  background-color: #0041C4;
-  font-size: 13px;
-  margin: 0 24px;
-  font-weight: 700;
-  height: 40px;
-}
 
 .btn_advanced{
   border: 0px;
@@ -437,61 +405,25 @@ input::placeholder{
   margin: 10px;
 }
 
-@media (min-width: 1400px) {
-  .col-xxl-10 {
-      flex: 0 0 auto;
-      width: 90%;
-  }
 
-  .col-xxl-8 {
-    flex: 0 0 auto;
-    width: 70%;
+.cancel-padding {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
 }
 
-  .col-xxl-2 {
-    flex: 0 0 auto;
-    width: 10%;
-  }
+.bg-header {
+  height: 42px;
+  background-color: #EBF2FB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .col-xxl-5{
-    flex: 0 0 auto;
-    width: 39.666667%;
-  }
+.flex-container {
+  display: flex !important;
+  align-items: center;
+}
 
-  .col-xxl-1{
-    flex: 0 0 auto;
-    width: 1.333333333%;
-  }
-}
-.draft-status {
-  color: #DDBC0A;
-  background: #DDBC0A1A;
-}
-.processing-status {
-  color: #2D6BE7;
-  background: #EEF5FF;
-}
-.expire-status {
-  color: #F6AA51;
-  background: #F6AA511A;
-}
-.overdue-status {
-  color: #525963;
-  background: #5259631A;
-}
-.fail-status {
-  color: #F05046;
-  background: #F050461A;
-}
-.cancel-status {
-  color: #EA328B;
-  background: #EA328B1A;
-}
-.complete-status {
-  color: #24BD33;
-  background: #24BD331A;
-}
-.liquidated-status {
-  color: #23D2EA;
-  background: #23D2EA1A;
+.table-contract {
+  margin-bottom: 16px;
 }

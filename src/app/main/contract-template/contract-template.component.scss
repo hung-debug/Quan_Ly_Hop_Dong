@@ -9,7 +9,6 @@
 .container-fluid{
   background-color: #FFFFFF;
   border-radius: 12px;
-  padding-top: 15px;
 }
 
 .item_contract:hover{
@@ -39,17 +38,6 @@
   color: #027e21;
 }
 
-.list_header{
-  color:#0041C4;
-  text-align: center;
-  padding: 12px 12px 0;
-  font-weight: 500;
-  // padding-top: 20px;
-  background-color: #EBF2FB;
-  width: 100%;
-  margin-left: 0;
-  height: 44px;
-}
 
 .input-group-text{
   padding: 8.5px;
@@ -134,7 +122,7 @@
   .p-selectbutton .p-button {
     outline: 0 !important;
     box-shadow: none !important;
-    height: 33px;
+    height: 42px;
     width: 50%;
     font-weight: 500;
     background-color: #F6F6F6;
@@ -212,14 +200,7 @@
 .img_icon:hover{
   width: 30px;
 }
-.input_text {
-  padding-left: 10px;
-  outline: none;
-  height: 33px;
-  width: 100%;
-  border-radius: 5px;
-  border: 1px solid #106DB6;
-}
+
 .btn_add{
   border: 0px;
   border-radius: 8px;
@@ -263,7 +244,7 @@
   white-space: nowrap;
   overflow: hidden;
   display: block;
-  margin: auto;
+  margin: auto 0 auto 16px;
 }
 
 .enterPage {
@@ -289,20 +270,57 @@
   margin-top: 2px
 }
 
-@media (min-width: 1400px) {
-  .col-xxl-9 {
-    flex: 0 0 auto;
-    width: 80%;
-  }
-
-  .col-xxl-3 {
-    flex: 0 0 auto;
-    width: 40%;
+.button-classify {
+  margin: auto;
+  width: 50%;
 }
 
-  .col-xxl-1 {
-    flex: 0 0 auto;
-    width: 5.3333333333%;
-  }
+.input-line {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
 
+.input_text {
+  border: 0.5px solid #F1F5FE !important;
+  margin: 0px;
+  width: 100%;
+  height: 42px;
+  outline:0px;
+  background-color: #F1F5FE !important;
+  padding: 10px 16px 10px 16px;
+  opacity: 0px;
+  border-radius: 8px;
+  font-weight: 400;
+}
+
+:host ::ng-deep {
+  .p-dropdown {
+    border: 0.5px solid #F1F5FE !important;
+    background-color: #F1F5FE !important;
+      border-radius: 5px;
+      height: 42px;
+      width: 100%;
+      outline: 0;
+      color: black !important;
+  }
+  // .p-dropdown-label {
+  //     padding: 5px 5px 5px 15px;
+  // }
+  .p-multiselect .p-multiselect-label.p-placeholder, .p-dropdown .p-dropdown-label.p-placeholder {
+      color: #6c757d !important;
+      margin: auto;
+  }
+}
+
+.margin-contract-template {
+  margin-top: 16px !important;
+  @media (max-width: 991px) {
+    margin-top: 0px !important;
+  }
+}
+
+.flex-container {
+  display: flex !important;
+  align-items: center;
 }

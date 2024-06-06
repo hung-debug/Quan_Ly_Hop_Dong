@@ -28,8 +28,9 @@
   --fs18: 18px;
   --fs24: 24px;
   --fs32: 32px;
+  --width-button: 136px;
+  --height-button-glb: 42px;
 }
-
 
 html, body {
   height: 100%;
@@ -57,11 +58,21 @@ body {
   border: 1px solid #001A4D1A;
 }
 
+.btn-block {
+  background-color: #106DB6;
+  color: white;
+  height: var(--height-button-glb);
+  font-size: 14px !important;
+  width: 100%;
+  border-radius: 5px;
+}
+
+
 
 .btn_cancel {
   border: 0px;
   border-radius: 8px !important;
-  height: 39px;
+  height: var(--height-button-glb);
   box-sizing: border-box;
   width: 100%;
   color: var(--text-white) !important;
@@ -77,11 +88,19 @@ body {
   text-align: center;
   font-weight: 500;
   width: 100%;
-  margin-left: 0;
+  margin-left: initial !important;
   display: flex;
   align-items: center;
   justify-content: space-around;
   font-size: var(--fs14);
+}
+
+.bg-header {
+  height: 42px;
+  background-color: #EBF2FB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .item_contract_name {
@@ -105,3 +124,75 @@ body {
   line-height: 18px;
 }
 
+.margin-top-16 {
+  margin-top: 16px !important;
+}
+
+.col-lg-8-7 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: calc(100% - var(--width-button) * 3) !important;
+  }
+}
+
+.col-lg-10-9 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: calc(100% - var(--width-button)) !important;
+  }
+}
+
+.col-lg-9-8 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: calc(100% - var(--width-button) * 2) !important;
+  }
+}
+
+.col-lg-4-9 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: calc((100% - var(--width-button) * 2) / 2) !important
+  }
+
+  @media (max-width: 991px) {
+    margin-top: 16px !important;
+  }
+}
+
+.col-lg-5-45 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: calc((100% - var(--width-button)) / 2) !important
+  }
+
+  @media (max-width: 991px) {
+    margin-top: 16px !important;
+  }
+}
+
+.col-lg-1-1 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: var(--width-button) !important;
+  }
+
+  @media (max-width: 991px) {
+    margin-top: 16px !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .btn-padding-right {
+    padding-right: 12 !important;
+  }
+
+  .btn-padding-left {
+    padding-left: 4px !important;
+  }
+}
+
+.cancel-padding {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
