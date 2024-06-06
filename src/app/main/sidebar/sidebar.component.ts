@@ -49,18 +49,31 @@ export class SidebarComponent implements OnInit {
 
   onMouseEnter(currentMenu: any) {
     this.isHovered = true;
-    if (!currentMenu.active) {
+    if (!currentMenu.active || !currentMenu.isActive) {
       currentMenu.icon = currentMenu.iconFill;
     }
   }
 
   onMouseLeave(currentMenu: any) {
     this.isHovered = false;
-    if (!currentMenu.active) {
+    if (!currentMenu.active || !currentMenu.isActive) {
       currentMenu.icon = currentMenu.iconDefault;
     }
   }
 
+  onMouseEnterSub(currentMenu: any) {
+    this.isHovered = true;
+    if (!currentMenu.active || !currentMenu.isActive) {
+      currentMenu.icon = currentMenu.iconFill;
+    }
+  }
+
+  onMouseLeaveSub(currentMenu: any) {
+    this.isHovered = false;
+    if (!currentMenu.active || !currentMenu.isActive) {
+      currentMenu.icon = currentMenu.iconDefault;
+    }
+  }
   // switchToFillIcon(icon: string) {
   //   return icon.replaceAll('.svg', '_v2.svg');
   // }
@@ -143,14 +156,18 @@ export class SidebarComponent implements OnInit {
     //find parent
     this.menus.forEach((element: any) => {
       if (element === currentMenu) {
+        element.active = true;
+        element.isActive = true;
         this.subMenus = element.submenus;
         //set active child
         this.subMenus.forEach((elementSub: any) => {
           if (elementSub === currentSubMenu) {
+            element.icon = currentMenu.iconFill;
             //currentSubMenu.active = !currentSubMenu.active;
             const objIndex = this.menus.findIndex((obj: { id: number; }) => obj.id == 1);
             if (objIndex) {
               this.menus[objIndex].active = false;
+              this.menus[objIndex].icon =  this.menus[objIndex].iconDefault;
             }
             elementSub.active = true;
           } else {
