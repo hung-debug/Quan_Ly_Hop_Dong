@@ -37,10 +37,10 @@ export class RoleComponent implements OnInit {
   first: number = 0;
 
   //phan quyen
-  isQLVT_01:boolean=true;  //them moi vai tro
+  isQLVT_01:boolean=false;  //them moi vai tro
   isQLVT_02:boolean=true;  //sua vai tro
   isQLVT_03:boolean=true;  //xoa vai tro
-  isQLVT_04:boolean=true;  //tim kiem vai tro
+  isQLVT_04:boolean=false;  //tim kiem vai tro
   isQLVT_05:boolean=true;  //xem thong tin chi tiet vai tro
 
   ngOnInit(): void {

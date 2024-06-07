@@ -137,7 +137,7 @@
               <div class="col-sm-2 calendar_create">
                 <!-- để tạm ngày tạo HĐ -->
                 <div><i class="fa fa_icon"></i><span class="item_date">{{item.sign_time | date:
-                  'dd/MM/yyyy'}}</span>
+                  'dd/MM/yyyy HH:mm:ss'}}</span>
                 </div>
               </div>
 
@@ -418,7 +418,7 @@
                       {{item.sign_time | date:'dd/MM/yyyy HH:mm:ss'}}
                     </span>
                     <span *ngIf = "this.filter_status == 34" class="item_date">
-                      {{item.sign_time | date:'dd/MM/yyyy'}}
+                      {{item.sign_time | date:'dd/MM/yyyy HH:mm:ss'}}
                     </span>
                     <span *ngIf = "this.filter_status == 31" class="item_date">
                       {{item.reject_time | date:'dd/MM/yyyy HH:mm:ss'}}
@@ -427,7 +427,7 @@
                       {{item.cancelDate | date:'dd/MM/yyyy HH:mm:ss'}}
                     </span>
                     <span *ngIf = "this.filter_status == 40" class="item_date">
-                      {{item.sign_time | date:'dd/MM/yyyy'}}
+                      {{item.success_time | date:'dd/MM/yyyy HH:mm:ss'}}
                     </span>
                     <span *ngIf = "this.filter_status != 20 && this.filter_status != 33 && this.filter_status != 34 && this.filter_status != 31 && this.filter_status != 32 && this.filter_status != 40" class="item_date">
                       {{item.updated_at | date:'dd/MM/yyyy HH:mm:ss'}}

@@ -28,6 +28,35 @@
   font-weight: 600;
 }
 
+.btn_consider{
+  border: 1px solid #0041C4 !important;
+  border-radius: 8px !important;
+  height: var(--height-button-glb);
+  box-sizing: border-box;
+  width: 100%;
+  color: #0041C4 !important;
+  background-color: #FFFFFF !important;
+  font-size: var(--fs13) !important;
+  font-weight: 700;
+}
+
+.input_text {
+  width: 420px;
+  padding-left: 16px !important;
+  outline: none;
+  height: 42px;
+  width: 100%;
+  border-radius: 8px;
+  // border: 1px solid #106DB6;
+  border: none;
+  background: #F1F5FE;
+}
+
+.btn-add {
+  text-decoration: none;
+  color: #F1F5FE;
+}
+
 .selectedNodeOrganizationCombobox {
   background-color: red;
 }
@@ -35,7 +64,7 @@
 .container-fluid{
   background-color: #FFFFFF;
   border-radius: 12px;
-  padding-top: 16px;
+  // padding-top: 16px;
 }
 
 input[type="file"] {
@@ -225,6 +254,51 @@ font-size: 13px;
 @media screen and (min-width: 1824px){
   .custom-file-upload {
     margin-left: 50%;
+  }
+}
+
+.col-lg-4-9 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: calc((100% - var(--width-button) * 2) / 2) !important
+  }
+
+  @media (max-width: 991px) {
+    margin-top: 16px !important;
+  }
+}
+
+.col-lg-4-35 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: calc((100% - var(--width-button) * 3) / 2) !important
+  }
+
+  @media (max-width: 991px) {
+    margin-top: 16px !important;
+  }
+}
+
+
+.col-lg-5-45 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: calc((100% - var(--width-button)) / 2) !important
+  }
+
+  @media (max-width: 991px) {
+    margin-top: 16px !important;
+  }
+}
+
+.col-lg-1-1 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: var(--width-button) !important;
+  }
+
+  @media (max-width: 991px) {
+    margin-top: 16px !important;
   }
 }
 
