@@ -1,143 +1,139 @@
 <div class="container-fluid-bg">
-<div class="col-md-4" class="container-fluid path-line" style="padding-top: 15px;">
-  <button class="icon-button" (click)="back()">
-      <i style="padding: 6px;" class="fa fa-home" aria-hidden="true"></i>
-  </button>
-  &nbsp;&nbsp;<span *ngIf="this.pathData.length > 0" style="color: black;">></span>&nbsp;&nbsp;
-  <span *ngFor="let item of this.pathData">
-    <span id="path-custom" style="cursor: pointer;" (click)="backToFolder(item.id)">
-      {{item.name}}
-    </span>/
-  </span>
-</div>
-
-<div class="container-fluid" *ngIf="isViewFolder; else isViewChildFolder">
-  <div class="col-md-12" style="padding-top: 20px;">
-    <div class="input-line search" style="justify-content:left">
-        <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
-        <input [(ngModel)]="searchName" (keyup)="autoSearch($event)" placeholder="{{'folder.search.name.placeholder' | translate}}" type="text" id="filter_name" class="input-text"/>
-    </div>
-  </div>
-  <div style="display: flex">
-    <div class="cod-md-1" style="padding-top: 20px">
-      <button class="btn btn-lg btn-block btn_submit" (click)="addFolder()">{{'folder.add' | translate}}</button>
-    </div>
-    <div class="cod-md-1" style="padding-top: 20px;margin-left: 23px;">
-      <button (click)="multiDelete('multiDelete')" class="btn btn-lg btn-block btn_submit">{{'btn.multi.delete'|translate}}</button>
-    </div>
+  <div>
+    <button style="margin-left: 16px;" class="icon-button margin-top-16" (click)="back()">
+        <i style="padding: 6px;" class="fa fa-home" aria-hidden="true"></i>
+    </button>
+    &nbsp;&nbsp;<span *ngIf="this.pathData.length > 0" style="color: black;">></span>&nbsp;&nbsp;
+    <span *ngFor="let item of this.pathData">
+      <span id="path-custom" style="cursor: pointer;" (click)="backToFolder(item.id)">
+        {{item.name}}
+      </span>
+    </span>
   </div>
 
-  <div class="row list_header" *ngIf="this.foldersData?.length > 0">
-    <div class="col-md-4"></div>
-    <div class="col-md-3">{{'create-date' | translate}}</div>
-    <div class="col-md-3">Cập nhật lần cuối</div>
-    <div class="col-md-1">{{'action' | translate}}</div>
-    <div class="col-md-1">
-      <input style="margin-left: 4px;" id="allDownload" name="allDownload" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDownload(checkedAll)" />
-    </div>
-  </div>
-
-  <div class="item_folder" *ngFor="let item of foldersData | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}">
-    
+  <div *ngIf="isViewFolder; else isViewChildFolder" class="cancel-padding mg-button-tools" style="margin-left: 16px; margin-right: 16px;">
     <div class="row">
-      <div class="col-md-4">
-        <div class="row">
-          <div class="col-md-12 item_folder_name" (click)="openFolder(item)">
-            <img src = "../../../assets/img/contract.svg" height="24px">
-            <a>
-            {{item.name}}
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 calendar_create">
-        <div><i class="fa fa-calendar fa_icon"></i>
-          <span class="item_date">{{getDateTime(item.createdAt) | date: 'dd/MM/yyyy HH:mm'}}</span>
-        </div>
-      </div>
-      <div class="col-md-3 calendar_last_updated">
-        <div><i class="fa fa-calendar fa_icon"></i>
-          <span class="item_date">{{getDateTime(item.updatedAt) | date: 'dd/MM/yyyy HH:mm'}}</span>
-        </div>
+      <div class="col-lg-9-8 btn-padding-right">
+        <input [(ngModel)]="searchName" (keyup)="autoSearch($event)" placeholder="{{'folder.search.name.placeholder' | translate}}" type="text" id="filter_name" class="input-text"/>
       </div>
 
-      <div class="col-md-1 item_icon">
-        <div class="actions-field-items">
-          <div class="div_icon">
-            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'role.contract-folder.edit' | translate}}" (click)="editFolder(item)" />
-          </div>
-          <div class="div_icon">
-            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'role.contract-folder.delete' | translate}}" (click)="deleteFolder([item])" />
-          </div>
-          <div class="div_icon">
-            <img src="../../../assets/img/view-folder.svg" class="img_icon" ngbTooltip="{{'role.contract-folder.detail' | translate}}" (click)=" openDetailFolder(item)" />
-          </div>
-        </div>
+      <div class="col-lg-1-1 col-md-6 btn-padding-right btn-padding-left">
+        <button class="btn-block btn_cancel" (click)="addFolder()">{{'folder.add' | translate}}</button>
       </div>
 
-      <div class="col-md-1 item_icon">
-        <input type="checkbox" [(ngModel)]="item.checked" (change)="selectItem(item)" />
+      <div class="col-lg-1-1 col-md-6 btn-padding-left">
+        <button (click)="multiDelete('multiDelete')" class="btn-block btn_cancel">{{'btn.multi.delete'|translate}}</button>
+      </div>
+    </div>
+
+    <div class="margin-top-16">
+      <div class="row list_header" *ngIf="this.foldersData?.length > 0">
+        <div class="col-md-4 bg-header"></div>
+        <div class="col-md-3 bg-header">{{'create-date' | translate}}</div>
+        <div class="col-md-3 bg-header">Cập nhật lần cuối</div>
+        <div class="col-md-1 bg-header">{{'action' | translate}}</div>
+        <div class="col-md-1 bg-header">
+          <input style="margin-left: 4px;" id="allDownload" name="allDownload" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDownload(checkedAll)" />
+        </div>
+      </div>
+    </div>
+
+    <div class="item_folder" *ngFor="let item of foldersData | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}"> 
+      <div class="row">
+        <div class="col-md-4">
+          <div class="row">
+            <div class="col-md-12 item_folder_name" (click)="openFolder(item)">
+              <img src = "../../../assets/img/contract.svg" height="24px">
+              <a>
+              {{item.name}}
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 calendar_create">
+          <div><i class="fa fa-calendar fa_icon"></i>
+            <span class="item_date">{{getDateTime(item.createdAt) | date: 'dd/MM/yyyy HH:mm'}}</span>
+          </div>
+        </div>
+        <div class="col-md-3 calendar_last_updated">
+          <div><i class="fa fa-calendar fa_icon"></i>
+            <span class="item_date">{{getDateTime(item.updatedAt) | date: 'dd/MM/yyyy HH:mm'}}</span>
+          </div>
+        </div>
+
+        <div class="col-md-1 item_icon">
+          <div class="actions-field-items">
+            <div class="div_icon">
+              <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'role.contract-folder.edit' | translate}}" (click)="editFolder(item)" />
+            </div>
+            <div class="div_icon">
+              <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'role.contract-folder.delete' | translate}}" (click)="deleteFolder([item])" />
+            </div>
+            <div class="div_icon">
+              <img src="../../../assets/img/view-folder.svg" class="img_icon" ngbTooltip="{{'role.contract-folder.detail' | translate}}" (click)=" openDetailFolder(item)" />
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-1 item_icon">
+          <input type="checkbox" [(ngModel)]="item.checked" (change)="selectItem(item)" />
+        </div>
+      </div>
+    </div>
+
+    <div class="contract_footer">
+      <div class="footer_title"></div>
+      <div class="footer_pagination">
+        <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; pageChange()" previousLabel="" nextLabel=""></pagination-controls>
+        <div class="enterPage" *ngIf="pageTotal > 0">
+            <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
+            <p>của {{countPage()}} trang</p>
+        </div>
+      </div>
+      <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}
+      </div>
+    </div>
+
+    <div *ngIf="foldersData && foldersData.length == 0" 
+    style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+      <div style="display: table-cell;vertical-align: middle;">
+        <img src="../../../assets/img/no_data.svg"/>
+        <div style="color: #94A7C6">{{'no.data' | translate}}</div>
       </div>
     </div>
   </div>
-  <div class="contract_footer">
-    <div class="footer_title"></div>
-    <div class="footer_pagination">
-      <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; pageChange()" previousLabel="" nextLabel=""></pagination-controls>
-      <div class="enterPage" *ngIf="pageTotal > 0">
-          <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-          <p>của {{countPage()}} trang</p>
-      </div>
-    </div>
-    <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}
-    </div>
-  </div>
-
-  <div *ngIf="foldersData && foldersData.length == 0" 
-  style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
-    <div style="display: table-cell;vertical-align: middle;">
-      <img src="../../../assets/img/no_data.svg"/>
-      <div style="color: #94A7C6">{{'no.data' | translate}}</div>
-    </div>
-  </div>
-</div>
-
 <!-- Children -->
 <ng-template #isViewChildFolder>
-  <div class="col-md-4" class="container-fluid">
+  <div class="mg-button-tools" style="margin-left: 16px; margin-right: 16px;">
     <ng-template [ngIf]="isOrg">
-        <div class="col-md-12" style="padding-top: 20px;">
-            <div class="input-line search">
-                <img src="../../assets/img/icon_search.svg" class="input-img" />
-                <input [(ngModel)]="searchName" (keyup)="autoSearch($event)" type="text" id="filter_name" class="input-text" placeholder="{{'folder.search.placeholder' | translate}}" />
-            </div>
+      <div class="row">
+        <div class="col-lg-7-6 btn-padding-right">
+          <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
+          <input [(ngModel)]="searchName" (keyup)="autoSearch($event)" type="text" id="filter_name" class="input-text" placeholder="{{'folder.search.placeholder' | translate}}" />
         </div>
-
-        <div style="display: flex;">
-          <div class="" style="padding-top: 10px">
-            <button class="btn btn-lg btn-block btn_submit" (click)="addFolder()">Thêm thư mục</button>
-          </div>
-          <div class="" style="padding-top: 10px">
-            <button (click)="addContract()" class="btn btn-lg btn-block btn_submit">Thêm hợp đồng</button>
-          </div>
-          <div class="" style="padding-top: 10px">
-              <button (click)="uploadContract()" class="btn btn-lg btn-block btn_submit">Tải lên</button>
-          </div>
-          <div class="" style="padding-top: 10px">
-            <button (click)="multiDelete('multiDelete')" class="btn btn-lg btn-block btn_submit">{{'btn.multi.delete'|translate}}</button>
-          </div>
+  
+        <div class="col-lg-1-1 col-md-3 btn-padding-right btn-padding-left">
+          <button class="btn-block btn_cancel" (click)="addFolder()">Thêm thư mục</button>
         </div>
-       
+        <div class="col-lg-1-1 col-md-3 btn-padding-right btn-padding-left">
+          <button (click)="addContract()" class="btn-block btn_cancel">Thêm hợp đồng</button>
+        </div>
+        <div class="col-lg-1-1 col-md-3 btn-padding-right btn-padding-left">
+            <button (click)="uploadContract()" class="btn-block btn_cancel">Tải lên</button>
+        </div>
+        <div class="col-lg-1-1 col-md-3 btn-padding-left">
+          <button (click)="multiDelete('multiDelete')" class="btn-block btn_cancel">{{'btn.multi.delete'|translate}}</button>
+        </div>  
+      </div>  
     </ng-template>
 
-    <div class="folder-container">
-    
+    <div class="margin-top-16">
       <div class="row list_header" *ngIf="this.foldersData.length > 0;">
-        <div class="col-md-4"></div>
-        <div class="col-md-3">{{'create-date' | translate}}</div>
-        <div class="col-md-3">Cập nhật lần cuối</div>
-        <div class="col-md-1">{{'action' | translate}}</div>
-        <div class="col-md-1">
+        <div class="col-md-4 bg-header"></div>
+        <div class="col-md-3 bg-header">{{'create-date' | translate}}</div>
+        <div class="col-md-3 bg-header">Cập nhật lần cuối</div>
+        <div class="col-md-1 bg-header">{{'action' | translate}}</div>
+        <div class="col-md-1 bg-header">
           <input style="margin-left: 4px;" id="allDownload" name="allDownload" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDownload(checkedAll)" />
         </div>
       </div>
