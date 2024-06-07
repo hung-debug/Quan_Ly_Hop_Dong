@@ -364,5 +364,11 @@ export class MainComponent implements OnInit {
   viewLink(){
     window.open("https://drive.google.com/drive/folders/1NHaCYOMCMsLvrw1uPbX2ezsC-Uo9huW3");
   }
+  
+  backToDashboard(){
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/main/dashboard']);
+    });
+  }
 
 }

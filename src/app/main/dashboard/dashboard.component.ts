@@ -60,6 +60,12 @@ export class DashboardComponent implements OnInit {
   orgList: any[] = [];
   orgListTmp: any[] = [];
   organization_id: any = "";
+  contract_signatures: any = 'c';
+  signatures: any = 's9';
+
+  consider: any = 'c9';
+  secretary: any = 's8';
+  coordinates: any = 'c8';
 
   selectedNodeOrganization: any;
   isQLHD_03: boolean | undefined;
@@ -135,6 +141,8 @@ export class DashboardComponent implements OnInit {
     private dialog: MatDialog,
     private contractService : ContractService,
     private contractSignature: ContractSignatureService,
+    private contractServiceV1: ContractService,
+    public isContractService: ContractService,
   ) {
     this.stateOptions = [
       {label: "my.contract", value: 'off'},
@@ -222,7 +230,6 @@ export class DashboardComponent implements OnInit {
 
       this.unitService.getNumberContractUseOriganzation(this.userService.getInforUser().organization_id).toPromise().then(
         data => {
-          console.log("dataaaaaanumContractUse",data);
           this.search()
           this.numContractUse = data.contract;
           this.loadData1 = true;
@@ -234,7 +241,6 @@ export class DashboardComponent implements OnInit {
       //lay so luong hop dong da mua
       this.unitService.getNumberContractBuyOriganzation(this.userService.getInforUser().organization_id).toPromise().then(
         data => {
-          console.log("dataaaaaanumContractBuy",data);
           this.numContractBuy = data.contract;
           this.loadData2 = true;
           this.search()
@@ -373,6 +379,77 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(['/main/form-contract/detail/' + id]);
     });
   }
+  
+  processContract(item: any){
+    if(item.participant.contract.status == 20 && item.role == 3 && item.status == 1){
+      this.contractServiceV1.getStatusSignImageOtp(item.id).subscribe(
+        (data) => {       
+          if (!data.locked) {
+            this.router.navigate(
+              [
+                'main/' +
+                this.contract_signatures +
+                '/' +
+                this.signatures +
+                '/' +
+                item.participant.contract.id,
+              ],
+              {
+                queryParams: {
+                  recipientId: item.id,
+                },
+              }
+            );
+          } else {
+            this.toastService.showErrorHTMLWithTimeout(
+              'Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' +
+              this.datepipe.transform(data.nextAttempt, 'dd/MM/yyyy HH:mm'),
+              '',
+              3000
+            );
+          }
+        },
+        (error) => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi', '', 3000);
+        }
+      );
+    } else if(item.participant.contract.status == 20 && item.role == 4 && item.status == 1){
+      this.router.navigate(['main/c/s8/' + item.participant.contract.id], {
+        queryParams: {
+          recipientId: item.id,
+        },
+      });
+    } else if(item.participant.contract.status == 20 && item.role == 1 && item.status == 1){
+      this.isContractService.getListDataCoordination(item.participant.contract.id).subscribe(
+        (res: any) => {
+          if (res) {
+            if (localStorage.getItem('data_coordinates_contract_id')) {
+              localStorage.removeItem('data_coordinates_contract_id');
+            }
+            localStorage.setItem(
+              'data_coordinates_contract_id',
+              JSON.stringify({ data_coordinates_id: res.id })
+            );
+  
+            this.router.navigate(
+              ['main/c/' + this.coordinates + '/' + item.participant.contract.id],
+              {
+              }
+            );
+          }
+        },
+        (res: any) => {
+          alert('Vui lòng liên hệ đội hỗ trợ để được xử lý!');
+        }
+      );
+    } else if(item.participant.contract.status == 20 && item.role == 2 && item.status == 1) {
+      this.router.navigate(['main/c/c9/' + item.participant.contract.id], {
+        queryParams: { 
+          recipientId: item.id 
+        },
+      });
+    }
+  }
 
   openLinkNotification(link: any, id: any) {
     window.location.href = link.replace('&type=1', '').replace('&type=', '').replace('?id','?recipientId').replace('contract-signature','c').replace('signatures','s9').replace('consider','c9').replace('secretary','s8').replace('coordinates','c8');
@@ -394,7 +471,6 @@ export class DashboardComponent implements OnInit {
     this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
     this.dashboardService.countContractCreate(this.isOrg, this.organization_id, this.filter_from_date, this.filter_to_date).subscribe(data => {
       let newData = Object.assign( {}, data)
-      // console.log("newData",newData);
 
       newData.isOrg = this.isOrg;
       newData.organization_id = this.organization_id;
@@ -657,28 +733,20 @@ export class DashboardComponent implements OnInit {
 
     this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
       this.listNotification = data.entities;
-      // console.log("this.listNotification",data);
     });
 
     this.dashboardService.getNotification(0, '', '', 1, '').subscribe(data => {
-      // this.contractConnectList = data.entities;
 
 
     });
     this.contractService.getContractList('off','','','','','','',0,'',1,'').subscribe(data => {
-      console.log("this.contractConnectListlllllll",data);
       this.contractConnectList = data.entities;
     })
     this.contractSignature.getContractMyProcessList('','','','','',1,'',4,'').subscribe(data => {
-      console.log("this.contractRequestList",data);
       this.contractRequestList = data.entities;
-      // console.log("this.contractRequestList",this.contractRequestList);
-      // this.contractRecipienteList = data.entities.participant;
       this.contractRecipienteList.forEach((item: any) => {
-        // console.log("item",item);
 
       })
-      // console.log("this.contractRecipienteList",this.contractRecipienteList);
 
     })
   }
