@@ -93,29 +93,52 @@
 :host ::ng-deep {
   .ngx-pagination {
     padding: 0;
+    font-family: 'Roboto';
+  }
+  .ngx-pagination .current {
+    background: #0041C4;
   }
   .ngx-pagination a, .ngx-pagination button {
     text-decoration: none;
-    background: #f3f3f3;
+    background: #F3F6FA;
+    color: #A8B5CE;
+  }
+  .ngx-pagination a:hover, .ngx-pagination button:hover {
+    background-color: #F3F6FA;
+  }
+  .ngx-pagination ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
   }
   .ngx-pagination li {
-    width: 50px;
-    border-radius: 5px;
+    border-radius: 5.8px;
+    margin: 0 4px;
+    // width: 50px;
+    // border-radius: 5px;
+  }
+  .ngx-pagination li span {
+    display: block;
+  }
+  .ngx-pagination button {
+    background-color: #0041C4;
   }
   .ngx-pagination .pagination-previous a::before,
   .ngx-pagination .pagination-previous.disabled::before {
     font-family: 'Material Icons';
-    content: 'keyboard_arrow_left';
+    content: url('../../../assets/img/Vector_left.svg');
     vertical-align: middle;
-    display: inline;
+    display: flex;
+    align-items: center;
     margin: 0;
   }
   .ngx-pagination .pagination-next a::after,
   .ngx-pagination .pagination-next.disabled::after {
     font-family: 'Material Icons';
-    content: 'keyboard_arrow_right';
+    content: url('../../../assets/img/Vector_right.svg');
     vertical-align: middle;
-    display: inline;
+    display: flex;
+    align-items: center;
     margin: 0;
   }
 
@@ -157,7 +180,7 @@
   color: red;
 }
 
-.contract_footer{
+.contract_footer, .contract_footer_responsive {
   padding-top: 10px;
   display: flex;
   justify-content: space-between;
@@ -180,7 +203,9 @@
   text-align: center;
 }
 .footer_page_number{
-  color: #0160AE
+  .footer_page_number_chart_number {
+    color: #A5AAB6;
+  }
 }
 
 ::ng-deep .multiselect-dropdown {
@@ -197,10 +222,17 @@
   width: 20px;
   cursor: pointer;
 }
-.img_icon:hover{
-  width: 30px;
+// .img_icon:hover{
+//   width: 30px;
+// }
+.input_text {
+  padding-left: 10px;
+  outline: none;
+  height: 33px;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid #106DB6;
 }
-
 .btn_add{
   border: 0px;
   border-radius: 8px;
@@ -355,5 +387,113 @@
 
   @media (max-width: 991px) {
     margin-top: 16px !important;
+  }
+}
+.contract_footer_responsive {
+  justify-content: space-between;
+  .contract_footer_per_page_responsive {
+    color: #A5AAB6;
+    display: flex;
+    flex-direction: row;
+    select{
+      height: 20px;
+      border: 1px solid #A5AAB6;
+      border-radius: 5px;
+    }
+  }
+  pagination-controls {
+    margin-top: 12px;
+  }
+  .footer_pagination {
+    @media (min-width: 794px) {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+    }
+  }
+}
+
+.enter_page_responsive {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+@media (max-width: 980px) {
+  .footer_page_number {
+    margin-top: 2px;
+  }
+}
+
+@media (min-width: 980px) {
+  .contract_footer {
+    display: flex;
+  }
+  .contract_footer_responsive {
+    display: none;
+  }
+}
+
+@media (max-width: 980px) and (min-width: 809px) {
+  .contract_footer {
+    display: none;
+  }
+  .footer_title {
+    display: none;
+  }
+  .contract_footer_responsive {
+    display: flex;
+    justify-content: center;
+  }
+  .contract_footer_pagination_responsive {
+    display: none;
+  }
+  .contract_footer_responsive .footer_pagination {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+}
+
+@media (max-width: 809px) {
+  .contract_footer {
+    display: none;
+  }
+  .contract_footer_pagination_responsive {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+
+  .contract_footer_responsive {
+    display: flex;
+    flex-direction: column;
+    .footer_title {
+      display: none;
+    }
+    .footer_page_number {
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+    .footer_pagination {
+      flex-direction: column-reverse;
+    }
+    .enterPage, .footer_page_number {
+      justify-content: center;
+    }
+  }
+}
+
+@media (max-width: 980px) and (min-width: 520px) {
+  .footer_page_number {
+    margin-left: 10px;
+  }
+}
+
+@media (max-width: 520px) {
+  .enterPage {
+    margin: 0;
+    flex-direction: column;
   }
 }
