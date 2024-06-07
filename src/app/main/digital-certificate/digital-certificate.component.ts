@@ -65,10 +65,10 @@ export class DigitalCertificateComponent implements OnInit {
   // isQLDC_03: boolean = true; //tim kiem thong tin
   // isQLDC_04: boolean = true; //xem thong tin chung thu so
 
-  isQLDSCTS_01: boolean = true; //them moi chung thu so
+  isQLDSCTS_01: boolean = false; //them moi chung thu so
   isQLDSCTS_02: boolean = true; //sua thong tin chung thu so
   isQLDSCTS_03: boolean = true; //xem thong tin chung thu so
-  isQLDSCTS_04: boolean = true; //tim kiem thong tin
+  isQLDSCTS_04: boolean = false; //tim kiem thong tin
   async ngOnInit(): Promise<void> {
     if (sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
