@@ -80,16 +80,19 @@
                     <img src="../../assets/img/Frame 46282.svg" style="width: 72px;">
                   </div>
                   <div class="item_contract_name col-cell-ellipsis">
-                    <a  class="item_contract_name" style="text-decoration: none;" 
+                    <div style="margin: 12px;">
+                    <a  class="item_contract_name" style="text-decoration: none;margin-left: -4px;" 
                     [routerLink]="['/main/contract-template/form/detail/', item.id]"
                     [queryParams]="{'page': this.p}"
                     ngbTooltip="{{item.name}}">
                     {{item.name}}
                     </a>
+                    
 
                     <div *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
                       <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
                     </div>
+                  </div>
                   </div>
                 </div>
               </div>
@@ -99,13 +102,13 @@
               </div>
               
               <div class="col-md-2 calendar_create">
-                <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.end_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
+                <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.end_time | date: 'dd/MM/yyyy'}}</span></div>
               </div>
         
         
               <div class="col-md-1 item_icon">
                 
-                <div class="three_dot" style="display: flex; justify-content: flex-end;" *ngIf="item.releaseState=='CON_HIEU_LUC'">
+                <div class="three_dot" style="display: flex; justify-content: flex-end;" *ngIf="(isShare=='off') || (isShare=='on' && item.releaseState=='CON_HIEU_LUC')">
                   <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
                     <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                   </button>
@@ -178,7 +181,7 @@
           <div *ngIf="pageTotal == 0" 
           style="min-height: 67vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
             <div style="display: table-cell;vertical-align: middle;"> 
-              <img src="../../../assets/img/empty_data.svg"/>
+              <img src="../../../assets/img/no_data.svg"/>
               <div style="color: #94A7C6">{{'no.data' | translate}}</div>
             </div>
           </div>
