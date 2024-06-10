@@ -98,7 +98,7 @@ export class ConfigSmsEmailComponent implements OnInit {
       userNameMailServer: this.fbd.control(this.userNameMailServer, [Validators.required, Validators.pattern(parttern.email)]),
       aliasMailServer: this.fbd.control(this.aliasMailServer, [Validators.required]),
       passwordMailServer: this.fbd.control("", [Validators.required]),
-      hostMailServer: this.fbd.control("", [Validators.required, Validators.pattern(parttern.hostMailServer)]),
+      hostMailServer: this.fbd.control("", [Validators.required]),
       portMailServer: this.fbd.control("", [Validators.required, Validators.pattern(parttern.portMailServer)]),
       tlsMailServer: this.fbd.control("", [Validators.required]),
     });

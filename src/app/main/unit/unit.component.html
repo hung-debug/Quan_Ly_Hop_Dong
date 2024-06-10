@@ -16,7 +16,15 @@
               <input type="text" [(ngModel)]="name" class="input_text" placeholder="Nhập tên tổ chức"/>
             </div>
           </div>
+
+          <div class="col-lg-1-1 col-md-4 btn-padding-right btn-padding-left" *ngIf="isQLTC_03">
+            <button class="btn-block btn_advanced" (click)="searchUnit()">{{'btn.search' | translate }}</button>
+          </div >
     
+          <div [ngClass] = "{'col-md-6' : !isQLTC_03}" class="col-lg-1-1 col-md-4 btn-padding-left" *ngIf="isQLTC_01">
+            <button class="btn-block btn_cancel" (click)="addUnit()">{{'btn.add' | translate }}</button>
+          </div>
+          
           <div [ngClass] = "{'col-md-6' : !isQLTC_03}" *ngIf="isQLTC_01" class="col-lg-1-1 col-md-4 btn-padding-left btn-padding-right">
             <input id="file-input" type="file" accept=".xls,.xlsx" (change)="fileChanged($event)" style="display: none"/>
             <label for="file-input" class="btn_consider" style="display: flex;">
@@ -25,19 +33,11 @@
             </label>
           </div>
 
-          <div class="col-lg-1-1 col-md-4 btn-padding-right btn-padding-left" *ngIf="isQLTC_03">
-            <button class="btn-block btn_advanced" (click)="searchUnit()">{{'btn.search' | translate }}</button>
-          </div >
-    
-          <div [ngClass] = "{'col-md-6' : !isQLTC_03}" class="col-lg-1-1 col-md-4 btn-padding-left" *ngIf="isQLTC_01">
-            <button class="btn-block btn_cancel" (click)="addUnit()">{{'btn.add' | translate }}</button>
-          </div >
-
         </div>
       </div>
 
 
-      <a style="padding: 0px; margin: 8px auto">
+      <a style="padding: 0px; margin: 8px auto; display: flex; justify-content: flex-end;">
         {{'not.have.sample.file' | translate}} <a href="/assets/upload/import_to_chuc.xlsx" style="color: #0041C4; cursor: pointer;" (click)="downFileExample()">{{'download.sample.file' | translate}}</a>
       </a>
 

@@ -31,14 +31,6 @@
           </div>
         </div> -->
     
-        <div *ngIf="isQLND_01" class="col-lg-1-1 col-md-4 btn-padding-left btn-padding-right">
-          <input id="file-input" type="file" accept=".xls,.xlsx" (change)="fileChanged($event)" />
-          <label class="btn_consider" for="file-input" style="display: flex;">
-            <i class="fa fa-cloud-upload" style="margin: auto 0 auto auto"></i>
-            <span class="btn-text" style="margin: auto auto auto 2px">Import file</span>
-          </label>
-        </div>
-    
         <div *ngIf="isQLND_03" class="col-lg-1-1 col-md-4 btn-padding-right btn-padding-left">
           <button class="btn-block btn_advanced" (click)="searchUser()">{{'btn.search' | translate }}</button>
         </div>
@@ -50,9 +42,17 @@
             </a>
           </button>
         </div>
+        
+        <div *ngIf="isQLND_01" class="col-lg-1-1 col-md-4 btn-padding-left btn-padding-right">
+          <input id="file-input" type="file" accept=".xls,.xlsx" (change)="fileChanged($event)" />
+          <label class="btn_consider" for="file-input" style="display: flex;">
+            <i class="fa fa-cloud-upload" style="margin: auto 0 auto auto"></i>
+            <span class="btn-text" style="margin: auto auto auto 2px">Import file</span>
+          </label>
+        </div>
       </div>
 
-      <a style="display: block !important; margin: 8px auto">
+      <a style="margin: 8px auto;display: flex; justify-content: flex-end;">
         {{'not.have.sample.file' | translate}} <a href="/assets/upload/import_nguoi_dung.xlsx" style="color: #0041C4; cursor: pointer;" (click)="downFileExample()">{{'download.sample.file' | translate}}</a>
       </a>
     </div>

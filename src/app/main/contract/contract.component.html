@@ -5,7 +5,8 @@
 </p-selectButton> -->
 
 <!--Truong hop dang xu ly va sap het han-->
-<div #mydiv *ngIf="(this.filter_status == 20 || this.filter_status == 33) && this.isOrg == 'off'" class="col-md-4" class="container-fluid">
+<!-- <div #mydiv *ngIf="(this.filter_status == 20 || this.filter_status == 33) && this.isOrg == 'off'" class="col-md-4" class="container-fluid"> -->
+<div #mydiv *ngIf="(this.filter_status == 20 || this.filter_status == 33)" class="col-md-4" class="container-fluid">
   <div class="row container-fluid-bg">
     <div class="margin-top-16">
       <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row">
@@ -30,7 +31,7 @@
             <img src="../../assets/img/vector_advance.svg" class="input-img" />
           </button>
         </div>
-        <div class="col-lg-1-1 col-md-6 btn_search btn-padding-left">
+        <div class="col-lg-1-1 col-md-6 btn_search btn-padding-left" *ngIf="this.isOrg == 'off'">
           <button (click)="cancelMany()" class="btn-block btn_cancel">{{'cancel.multi'| translate}}</button>
         </div>
       </div>
@@ -137,7 +138,7 @@
               <div class="col-sm-2 calendar_create">
                 <!-- để tạm ngày tạo HĐ -->
                 <div><i class="fa fa_icon"></i><span class="item_date">{{item.sign_time | date:
-                  'dd/MM/yyyy HH:mm:ss'}}</span>
+                  'dd/MM/yyyy'}}</span>
                 </div>
               </div>
 
@@ -418,7 +419,7 @@
                       {{item.sign_time | date:'dd/MM/yyyy HH:mm:ss'}}
                     </span>
                     <span *ngIf = "this.filter_status == 34" class="item_date">
-                      {{item.sign_time | date:'dd/MM/yyyy HH:mm:ss'}}
+                      {{item.sign_time | date:'dd/MM/yyyy'}}
                     </span>
                     <span *ngIf = "this.filter_status == 31" class="item_date">
                       {{item.reject_time | date:'dd/MM/yyyy HH:mm:ss'}}
@@ -779,7 +780,7 @@
 </div>
 
 <!-- HD Hoàn thành -->
-<div *ngIf="(this.filter_status == 30 && this.isOrg == 'off' && this.typeDisplay === 'view')" class="container-fluid">
+<div *ngIf="(this.filter_status == 30 && this.typeDisplay === 'view')" class="container-fluid">
   <div class="row container-fluid-bg">
     <div class="margin-top-16">
       <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row">
@@ -805,7 +806,7 @@
           </button>
         </div>
 
-        <div class="col-lg-1-1 col-md-6 btn_search btn-padding-left">
+        <div class="col-lg-1-1 col-md-6 btn_search btn-padding-left" *ngIf="this.isOrg == 'off'">
           <button *ngIf="this.typeDisplay === 'view'" (click)="downloadMany()" class="btn-block btn_cancel">{{'download.multi'|translate}}</button>
         </div>
       </div>
@@ -908,17 +909,21 @@
                       <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
-                      <button mat-menu-item  class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue' || status == 'complete') && isQLHD_08 && this.isOrg == 'off'" (click)="openCopy(item.id)">
-                        <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
-                        <span class="three_dot_text">{{'contract.copy' | translate}}</span>
+                      <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off' && item.liquidationContractId == null && item.originalContractId == null && this.isQLHD_16" (click)="addContractLiquidationNew(item.id);">
+                        <mat-icon><img src="../../assets/img/clipboard-tick.svg" class="img_icon"/></mat-icon>
+                        <span class="three_dot_text">{{'contract.liquidation' | translate}}</span>
                       </button>
-                      <button mat-menu-item class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12 && this.isOrg == 'off'" (click)="contractConnect(item.id)">
-                        <mat-icon><img src="../../assets/img/document-text.svg" class="img_icon"/></mat-icon>
-                        <span class="three_dot_text">{{'contract.connect.view' | translate}}</span>
+                      <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="uploadAttachFiles(item);">
+                        <mat-icon><img src="../../assets/img/attach-square.svg" class="img_icon"/></mat-icon>
+                        <span class="three_dot_text">{{'upload_attach_files' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && isQLHD_11 && this.isOrg == 'off'" (click)="addContractConnectNew(item.id)">
                         <mat-icon><img src="../../assets/img/add_contract_dup.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.connect.add' | translate}}</span>
+                      </button>
+                      <button mat-menu-item class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12 && this.isOrg == 'off'" (click)="contractConnect(item.id)">
+                        <mat-icon><img src="../../assets/img/document-text.svg" class="img_icon"/></mat-icon>
+                        <span class="three_dot_text">{{'contract.connect.view' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="downloadContract(item.id);">
                         <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
@@ -928,13 +933,9 @@
                         <mat-icon><img src="../../assets/img/share_contract.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.share' | translate}}</span>
                       </button>
-                      <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="uploadAttachFiles(item);">
-                        <mat-icon><img src="../../assets/img/attach-square.svg" class="img_icon"/></mat-icon>
-                        <span class="three_dot_text">{{'upload_attach_files' | translate}}</span>
-                      </button>
-                      <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off' && item.liquidationContractId == null && item.originalContractId == null && this.isQLHD_16" (click)="addContractLiquidationNew(item.id);">
-                        <mat-icon><img src="../../assets/img/clipboard-tick.svg" class="img_icon"/></mat-icon>
-                        <span class="three_dot_text">{{'contract.liquidation' | translate}}</span>
+                      <button mat-menu-item  class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue' || status == 'complete') && isQLHD_08 && this.isOrg == 'off'" (click)="openCopy(item.id)">
+                        <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
+                        <span class="three_dot_text">{{'contract.copy' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" (click)="processHandleContract(item.id)">
                         <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon"/></mat-icon>

@@ -202,11 +202,11 @@
               <span class="required-title">*</span>
             </div>
             <div class="input-data">
-              <input style="width: 100%;" type="text" maxlength = '20' formControlName="hostMailServer" placeholder="Nhập SMTP Server">
+              <input style="width: 100%;" type="text" formControlName="hostMailServer" placeholder="Nhập SMTP Server">
             </div>
             <div *ngIf="e.hostMailServer.errors" class="invalid">
               <div *ngIf="e.hostMailServer?.errors?.required">{{'error.smtpServer.required' | translate}}</div>
-              <div *ngIf="e.hostMailServer?.errors?.pattern">{{'error.smtpServer.format' | translate}}</div>
+              <!-- <div *ngIf="e.hostMailServer?.errors?.pattern">{{'error.smtpServer.format' | translate}}</div> -->
             </div>
           </div>
           
