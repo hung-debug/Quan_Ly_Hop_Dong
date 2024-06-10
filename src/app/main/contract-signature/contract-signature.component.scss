@@ -389,6 +389,15 @@ input::placeholder{
   height: 40px;
 }
 
+.btn_cancel_sign_many{
+  border: 1px solid var(--Neutral-05, #C6D2EA);
+  background: var(--White, #FFF);
+  border-radius: 8px;
+  color: var(--Neutral-03, #677694);
+  font-weight: 700;
+  font-size: 13px;
+}
+
 // .btn_sign{
 //   border: 0px;
 //   border-radius: 6px;

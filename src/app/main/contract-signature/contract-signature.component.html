@@ -585,12 +585,12 @@
             </button>
           </div>
 
+          <div class="col-lg-1-1 col-md-4 btn-padding-left" *ngIf="this.typeDisplay === 'signMany' && filter_status == 1">
+            <button class="btn-block btn_cancel_sign_many" (click)="cancelSignMany()">{{'cancel'| translate}}</button>
+          </div>
+          
           <div class="col-lg-1-1 col-md-4 btn_search btn-padding-left btn-padding-right" *ngIf="this.typeDisplay === 'signMany' && filter_status == 1">
             <button class="btn-block btn_cancel" (click)="signManyContract()">{{'contract.sign'| translate}}</button>
-          </div>
-
-          <div class="col-lg-1-1 col-md-4 btn-padding-left" *ngIf="this.typeDisplay === 'signMany' && filter_status == 1">
-            <button class="btn-block btn_cancel" (click)="cancelSignMany()">{{'cancel'| translate}}</button>
           </div>
 
         </div>
@@ -825,12 +825,12 @@
             </button>
           </div>
 
-          <div class="col-lg-1-1 col-md-4 btn_search btn-padding-left btn-padding-right" *ngIf="this.typeDisplay === 'viewMany' && filter_status == 1">
-            <button class="btn-block btn_consider" (click)="viewManyContract()">{{'contract.view'| translate}}</button>
-          </div>
-
           <div class="col-lg-1-1 col-md-4 btn-padding-left" *ngIf="this.typeDisplay === 'viewMany' && filter_status == 1">
-            <button class="btn-block btn_consider" (click)="cancelViewMany()">{{'cancel'| translate}}</button>
+            <button class="btn-block btn_cancel_sign_many" (click)="cancelViewMany()">{{'cancel'| translate}}</button>
+          </div>
+          
+          <div class="col-lg-1-1 col-md-4 btn_search btn-padding-left btn-padding-right" *ngIf="this.typeDisplay === 'viewMany' && filter_status == 1">
+            <button class="btn-block btn_cancel" (click)="viewManyContract()">{{'contract.view'| translate}}</button>
           </div>
 
         </div>
