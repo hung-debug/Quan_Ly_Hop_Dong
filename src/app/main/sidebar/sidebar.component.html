@@ -50,7 +50,8 @@
               <ul class="sidebar-submenu-ul">
                 <li class="sidebar-submenu-li" *ngFor="let submenu of menu.submenus" [ngClass]="{'active':submenu.active && this.router.url !== '/main/dashboard'}">
 
-                  <a class="sidebar-submenu-a" (click)="clickLinkSub(menu, submenu, 'contract-signature')" [routerLink]="submenu.href">
+                  <a  (mouseenter)="menu.id == 2 && onMouseEnterSub(menu)"
+                      (mouseleave)="menu.id == 2 && onMouseLeaveSub(menu)"   class="sidebar-submenu-a" (click)="clickLinkSub(menu, submenu, 'contract-signature')" [routerLink]="submenu.href">
                     <span class="sub_title">{{submenu.title | translate}}</span>
                     <span *ngIf="submenu.badge" class="badge badge-pill" [ngClass]="submenu.badge.class">{{submenu.badge.text}}</span>
                   </a>
