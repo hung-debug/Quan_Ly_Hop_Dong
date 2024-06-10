@@ -703,7 +703,7 @@
   "currency": "Số tiền",
   "default": "Mặc định",
   "find.partner": "Tìm kiếm đối tác",
-  "config.sms":"Cấu hình SMS",
+  "config.sms":"Cấu hình SMS/Email",
   "config.sms.email":"Cấu hình trạng thái gửi SMS/EMAIL",
   "config.type": "Loại cấu hình",
   "noti.sms": "Thông báo qua SMS",

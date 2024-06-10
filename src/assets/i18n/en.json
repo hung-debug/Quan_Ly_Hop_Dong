@@ -682,7 +682,7 @@
   "verified.cardid": "Verified by ID card",
   "choose.font": "Choose font",
   "reject.question": "Are you sure you want to reject this contract? Please enter the reason for rejection",
-  "config.sms":"Config SMS",
+  "config.sms":"Config SMS/Email",
   "config.sms.email":"Config status send SMS/EMAIL",
   "config.type": "Type config",
   "noti.sms": "Notification via sms",
