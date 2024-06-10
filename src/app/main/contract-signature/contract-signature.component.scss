@@ -468,6 +468,39 @@ input::placeholder{
   margin-bottom: 16px;
 }
 
+css .draft-status {
+  color: #DDBC0A;
+  background: #DDBC0A1A;
+}
+.processing-status {
+  color: #2D6BE7;
+  background: #EEF5FF;
+}
+.expire-status {
+  color: #F6AA51;
+  background: #F6AA511A;
+}
+.overdue-status {
+  color: #525963;
+  background: #5259631A;
+}
+.fail-status {
+  color: #F05046;
+  background: #F050461A;
+}
+.cancel-status {
+  color: #EA328B;
+  background: #EA328B1A;
+}
+.complete-status {
+  color: #24BD33;
+  background: #24BD331A;
+}
+.liquidated-status {
+  color: #23D2EA;
+  background: #23D2EA1A;
+}
+
 .col-lg-8-7 {
   @media (min-width: 992px) {
     flex: 0 0 auto !important;
