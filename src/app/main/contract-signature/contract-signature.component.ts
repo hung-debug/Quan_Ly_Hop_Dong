@@ -1028,6 +1028,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   changePageNumber(e: any) {
+    this.enterPage = 1;
     this.spinner.show();
     this.p = 1;
     this.page = e.target.value;
