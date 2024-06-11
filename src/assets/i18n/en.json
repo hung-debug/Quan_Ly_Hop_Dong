@@ -683,7 +683,7 @@
   "choose.font": "Choose font",
   "reject.question": "Are you sure you want to reject this contract? Please enter the reason for rejection",
   "config.sms":"Config SMS/Email",
-  "config.sms.email":"Config status send SMS/EMAIL",
+  "config.sms.email":"Configure SMS/EMAIL sending status",
   "config.type": "Type config",
   "noti.sms": "Notification via sms",
   "noti.email": "Notification via email",

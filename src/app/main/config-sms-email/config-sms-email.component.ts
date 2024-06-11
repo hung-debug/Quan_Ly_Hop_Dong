@@ -109,7 +109,6 @@ export class ConfigSmsEmailComponent implements OnInit {
     let userId = this.userService.getAuthCurrentUser().id;
 
     const infoUser = await this.userService.getUserById(userId).toPromise();   
-    console.log("infoUser",infoUser);
      
     this.listConfigEmailServer = infoUser.organization;
     this.listConfigBrandname = infoUser.organization;
@@ -137,7 +136,6 @@ export class ConfigSmsEmailComponent implements OnInit {
     }
     
     this.ValidConfigBrandName();
-    console.log("this.ConfigEmailServerForm.patchValue",this.ConfigEmailServerForm);
     
     this.ConfigEmailServerForm.patchValue({
       userNameMailServer: !infoUser.organization.userNameMailServer ? this.userNameMailServer : infoUser.organization.userNameMailServer, // Cập nhật giá trị userNameMailServer

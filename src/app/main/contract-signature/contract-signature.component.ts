@@ -515,6 +515,8 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   getContractList() {
+    this.spinner.show();
+    this.contracts = [];
     if (this.filter_status % 10 == 1) {
       this.filter_status = 1;
     }

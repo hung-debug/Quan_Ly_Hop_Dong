@@ -812,7 +812,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
   setPageDownload() {
     this.pageStart = (this.p - 1) * this.page + 1;
     this.pageEnd = (this.p) * this.page;
-
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
     }
