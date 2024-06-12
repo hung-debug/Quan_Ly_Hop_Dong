@@ -2372,6 +2372,13 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               }
             }
           }
+
+          if (error_organization > 0) {
+            this.spinner.hide();
+            if(!isSaveDraft)
+            this.toastService.showWarningHTMLWithTimeout((this.translate.instant('miss.digital.sig')) + " " + `${nameSign_organization.name}` + " " + (this.translate.instant('off.org.please')), "", 3000);
+            return false;
+          }
   
           // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
           if (arrSign_organization.length < data_organization.length) {
@@ -2431,6 +2438,13 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                 break
               }
             }
+          }
+
+          if (error_organization > 0) {
+            this.spinner.hide();
+            if(!isSaveDraft)
+            this.toastService.showWarningHTMLWithTimeout((this.translate.instant('miss.digital.sig')) + " " + `${nameSign_organization.name}` + " " + (this.translate.instant('off.org.please')), "", 3000);
+            return false;
           }
 
           // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
