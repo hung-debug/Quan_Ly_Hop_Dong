@@ -876,7 +876,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
     } else {
       this.enterPage = this.p;
     }
-    this.getContractList();
+    if(this.typeDisplay == 'downloadMany'){
+      this.downloadMany();
+    } else {
+      this.getContractList();
+    }
   }
   
   countPage() {
