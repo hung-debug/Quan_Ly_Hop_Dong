@@ -66,7 +66,7 @@ export class FilterListDialogComponent implements OnInit {
     )
 
     //lay danh sach to chuc
-    this.contractTypeService.getContractTypeList("", "").subscribe(data => {
+    this.contractTypeService.getContractTemplateTypeList("", "").subscribe(data => {
       this.contractTypeList = data;
     });
 
