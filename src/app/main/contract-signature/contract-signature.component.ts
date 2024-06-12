@@ -347,7 +347,7 @@ export class ContractSignatureComponent implements OnInit {
   downloadMany() {
     this.spinner.show();
     this.typeDisplay = 'downloadMany';
-
+    this.enterPage = this.p;
     this.contractService.getContractMyProcessList(this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status,
       this.p, this.page, 30).subscribe((data) => {
         this.checkedAll = false;
@@ -766,7 +766,12 @@ export class ContractSignatureComponent implements OnInit {
     } else {
       this.enterPage = this.p;
     }
-    this.getContractList();
+    if (this.typeDisplay == 'signOne') {
+      this.getContractList();
+    }
+    else if (this.typeDisplay == 'downloadMany') {
+      this.downloadMany();
+    }
   }
 
   countPage() {
