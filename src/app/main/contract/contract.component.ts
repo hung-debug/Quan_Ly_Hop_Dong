@@ -335,10 +335,12 @@ export class ContractComponent implements OnInit, AfterViewInit {
     } else {
       for (let i = 0; i < this.contracts.length; i++){
         this.contracts[i].checked = true;
-        this.dataChecked.push({
-          id: this.contracts[i].participants[0]?.contract_id,
-          selectedId : this.contracts[i].id
-        })
+        if(this.contracts[i].participants && this.contracts[i].participants.length) {
+          this.dataChecked.push({
+            id: this.contracts[i].participants[0]?.contract_id,
+            selectedId : this.contracts[i].id
+          })
+        }
       }
     }
   }
@@ -363,7 +365,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     )
   }
 
-  downloadManyContract() {
+  async downloadManyContract() {
     if (this.dataChecked.length === 0) {
       this.toastService.showErrorHTMLWithTimeout('not.select.contract','',3000);
       return
@@ -372,7 +374,9 @@ export class ContractComponent implements OnInit, AfterViewInit {
     const myDate = new Date();
     // Replace 'yyyy-MM-dd' with your desired date format
     const formattedDate = this.datePipe.transform(myDate, 'ddMMyyyy');
-    const ids = this.dataChecked.map(el => el.id).toString();
+    const ids = await this.dataChecked.map(el => el.id).toString();
+    console.log("ids",ids);
+    
     this.ContractSignatureService.getContractMyProcessListDownloadMany(ids).subscribe(
       (data) => {
         const file = new Blob([data], {type: 'application/zip'});
