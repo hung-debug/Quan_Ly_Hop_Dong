@@ -1921,8 +1921,8 @@ export class ContractSignatureComponent implements OnInit {
                     .getDataObjectSignatureLoadChange(idContract[i])
                     .toPromise();
                   dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i])
-                  currentSigningStatus = await this.checkCurrentSigningCall(dataObjectSignature[0].recipient.id)
-                  if (!currentSigningStatus) return
+                  // currentSigningStatus = await this.checkCurrentSigningCall(dataObjectSignature[0].recipient.id)
+                  // if (!currentSigningStatus) return
                   for (let j = 0; j < dataObjectSignature.length; j++) {
                     if (dataObjectSignature[j].recipient) {
                       if (recipientId[i] == dataObjectSignature[j].recipient.id) {
@@ -1994,8 +1994,12 @@ export class ContractSignatureComponent implements OnInit {
 
                     let sign: any = null;
                     try {
+                      // sign = await this.contractServiceV1.updateDigitalSignatured(
+                      //   dataObjectSignature[j].id,
+                      //   dataSignMobi.data.FileDataSigned
+                      // );
                       sign = await this.contractServiceV1.updateDigitalSignatured(
-                        dataObjectSignature[j].id,
+                        idSignMany[i],
                         dataSignMobi.data.FileDataSigned
                       );
 
@@ -2160,8 +2164,8 @@ export class ContractSignatureComponent implements OnInit {
           .getDataObjectSignatureLoadChange(idContract[i])
           .toPromise();
         dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i])
-        let currentSigningStatus: any = await this.checkCurrentSigningCall(dataObjectSignature[0].recipient.id)
-        if (!currentSigningStatus) return
+        // let currentSigningStatus: any = await this.checkCurrentSigningCall(dataObjectSignature[0].recipient.id)
+        // if (!currentSigningStatus) return
         for (let j = 0; j < dataObjectSignature.length; j++) {
           if (dataObjectSignature[j].recipient) {
             if (recipientId[i] == dataObjectSignature[j].recipient.id) {
@@ -2403,8 +2407,12 @@ export class ContractSignatureComponent implements OnInit {
             const filePdfSigned = mergeTimeStamp.base64Data;
 
 
+            // const sign = await this.contractServiceV1.updateDigitalSignatured(
+            //   dataObjectSignature[j].id,
+            //   filePdfSigned
+            // );
             const sign = await this.contractServiceV1.updateDigitalSignatured(
-              dataObjectSignature[j].id,
+              idSignMany[i],
               filePdfSigned
             );
 

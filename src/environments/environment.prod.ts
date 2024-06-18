@@ -3,7 +3,7 @@ export const environment = {
   usedSSO: true,
   // apiUrl: 'http://192.168.0.115:8762',
   // apiUrl: 'http://14.160.91.174:1387',
-  // apiUrl: 'https://econtractdev.mobifone.ai/service',
+  apiUrl: 'https://econtractdev.mobifone.ai/service',
   // apiUrl: 'https://econtract-demo.mobifone.ai/service',
 
   // apiUrl: 'http://192.168.1.14:8762',
@@ -19,7 +19,7 @@ export const environment = {
   // flag: 'NB',
 
   //KD
-  apiUrl: 'https://mobifone-econtract.vn/service',
+  // apiUrl: 'https://mobifone-econtract.vn/service',
   flag: 'KD',
 
   url_file_content: "http://118.70.81.203:8530/api/dowload-file?id=BAB61E62-DFE0-4420-A208-386D83ED19E1&view=1",
