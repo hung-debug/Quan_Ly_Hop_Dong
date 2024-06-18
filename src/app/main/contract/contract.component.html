@@ -1,19 +1,19 @@
-<p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row" style="padding: 10px; ">
+<!-- <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row" style="padding: 10px; ">
     <ng-template #options let-item>
         <span class="button-classify">{{item.label | translate}}</span>
     </ng-template>
-</p-selectButton>
+</p-selectButton> -->
 
 <!--Truong hop dang xu ly va sap het han-->
 <!-- <div #mydiv *ngIf="(this.filter_status == 20 || this.filter_status == 33) && this.isOrg == 'off'" class="col-md-4" class="container-fluid"> -->
 <div #mydiv *ngIf="(this.filter_status == 20 || this.filter_status == 33) && this.isOrg == 'off'" class="col-md-4" class="container-fluid">
   <div class="row container-fluid-bg">
     <div class="margin-top-16">
-      <!-- <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row">
+      <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (ngModelChange)="changeTab()" class="row">
         <ng-template #options let-item>
             <span class="button-classify">{{ item.label | translate}}</span>
         </ng-template>
-      </p-selectButton> -->
+      </p-selectButton>
     </div>
     <ng-template [ngIf]="!roleMess">
       <div class="row cancel-padding" style="margin: 16px auto;">
@@ -278,11 +278,11 @@
                this.typeDisplay =='release') && this.isOrg == 'off') && status != 'complete'" class="container-fluid">
   <div class="row container-fluid-bg">
     <div class="margin-top-16">
-      <!-- <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row">
+      <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (ngModelChange)="changeTab()" class="row">
         <ng-template #options let-item>
             <span class="button-classify">{{item.label | translate}}</span>
         </ng-template>
-      </p-selectButton> -->
+      </p-selectButton>
     </div>
     <ng-template [ngIf]="!roleMess">
       <div class="row cancel-padding" style="margin: 16px auto;">
@@ -589,11 +589,11 @@
               && this.typeDisplay !== 'downloadMany' && status == 'complete'" class="container-fluid">
   <div class="row container-fluid-bg">
     <div class="margin-top-16">
-      <!-- <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row">
+      <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (ngModelChange)="changeTab()" class="row">
         <ng-template #options let-item>
             <span class="button-classify">{{item.label | translate}}</span>
         </ng-template>
-      </p-selectButton> -->
+      </p-selectButton>
     </div>
     <ng-template [ngIf]="!roleMess">
       <div class="row cancel-padding" style="margin: 16px auto;">
@@ -783,11 +783,11 @@
 <div *ngIf="(this.filter_status == 30 && this.isOrg == 'off' && this.typeDisplay === 'view')" class="container-fluid">
   <div class="row container-fluid-bg">
     <div class="margin-top-16">
-      <!-- <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row">
+      <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (ngModelChange)="changeTab()" class="row">
         <ng-template #options let-item>
             <span class="button-classify">{{item.label | translate}}</span>
         </ng-template>
-      </p-selectButton> -->
+      </p-selectButton>
     </div>
     <ng-template [ngIf]="!roleMess">
       <div class="row cancel-padding" style="margin: 16px auto;">
@@ -1048,11 +1048,11 @@
 <div *ngIf="(this.typeDisplay == 'downloadMany' && this.filter_status == 30)">
     <div class="row container-fluid-bg">
       <div class="margin-top-16">
-        <!-- <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row">
+        <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (ngModelChange)="changeTab()" class="row">
           <ng-template #options let-item>
               <span class="button-classify">{{item.label | translate}}</span>
           </ng-template>
-        </p-selectButton> -->
+        </p-selectButton>
       </div>
         <ng-template [ngIf]="!roleMess">
           <div class="row cancel-padding" style="margin: 16px auto;">
@@ -1293,11 +1293,11 @@
 <div *ngIf="(this.typeDisplay == 'release' && this.filter_status == 0)">
     <div class="row container-fluid-bg">
       <div class="margin-top-16">
-        <!-- <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row">
+        <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (ngModelChange)="changeTab()" class="row">
           <ng-template #options let-item>
               <span class="button-classify">{{item.label | translate}}</span>
           </ng-template>
-        </p-selectButton> -->
+        </p-selectButton>
       </div>
         <ng-template [ngIf]="!roleMess">
           <div class="row cancel-padding" style="margin: 16px auto;">
@@ -1489,11 +1489,11 @@
 <div *ngIf="(this.typeDisplay == 'multiDeleteDraft' && this.filter_status == 0)">
   <div class="row container-fluid-bg">
       <div class="margin-top-16">
-        <!-- <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row">
+        <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (ngModelChange)="changeTab()" class="row">
           <ng-template #options let-item>
               <span class="button-classify">{{item.label | translate}}</span>
           </ng-template>
-        </p-selectButton> -->
+        </p-selectButton>
       </div>
       <ng-template [ngIf]="!roleMess">
         <div class="row cancel-padding" style="margin: 16px auto;">
