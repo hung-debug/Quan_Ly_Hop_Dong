@@ -277,6 +277,8 @@ export class ConsiderContractComponent
   }
 
   async getCurrentFieldsData() {
+    console.log("1");
+    
     let res = await this.contractService.getDetermineCoordination(this.recipientId).toPromise()
     let recipData: any = []
     recipData = res?.recipients.filter((item: any) => item.email == this.currentUser.email)
@@ -732,6 +734,8 @@ export class ConsiderContractComponent
 
           if (this.mobile && this.recipient.status < 2) {
             if (image_base64) {
+              console.log("2");
+              
               const recipient = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
 
               let fieldRecipientId: any = [];
@@ -1396,6 +1400,8 @@ export class ConsiderContractComponent
             this.remoteSigningProcessingStatusSwalfire(res.status)
             this.countReject++
           } else {
+            console.log("3");
+            
             this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
               this.ArrRecipientsNew = response.recipients.filter(
                 (x: any) => x.email === this.currentUser.email
@@ -1592,8 +1598,9 @@ export class ConsiderContractComponent
                 this.ArrRecipientsNew.length > 0 
               ) {
                 let swalfire = null;
-        
-                if (typeSignDigital && typeSignDigital != 3) {
+                console.log("typeDigital",typeSignDigital);
+                
+                if (typeSignDigital) {
                   swalfire = this.getSwalFire('digital');
                 } else {
                   swalfire = this.getSwalFire('image');
@@ -1630,6 +1637,7 @@ export class ConsiderContractComponent
                     }
                     let determineCoordination: any
                     try {
+                      console.log("4");
                       determineCoordination = await this.contractService.getDetermineCoordination(this.recipientId).toPromise();
                     } catch (error) {
                       return this.toastService.showErrorHTMLWithTimeout("Lỗi lấy thông tin người ký","",3000)
@@ -1677,7 +1685,7 @@ export class ConsiderContractComponent
                     this.currentUser = JSON.parse(
                       localStorage.getItem('currentUser') || ''
                     ).customer.info;
-
+                    console.log("5");
                     this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
                       //  = response.recipients[0].email
                       this.ArrRecipientsNew = response.recipients.filter(
@@ -1746,8 +1754,13 @@ export class ConsiderContractComponent
                                   [2, 3, 4].includes(this.datas.roleContractReceived) &&
                                   haveSignPKI
                                 ) {
-                                  this.pkiDialogSignOpen();
-                                  this.spinner.hide();
+                                  if(this.markImage){
+                                    this.openMarkSign('pki');
+                                  }else{
+                                    this.pkiDialogSignOpen();
+                                    this.spinner.hide();
+                                  }
+
                                 } else if (
                                   [2, 3, 4].includes(this.datas.roleContractReceived) &&
                                   haveSignHsm
@@ -1840,6 +1853,8 @@ export class ConsiderContractComponent
   }
 
   imageDialogSignOpen(e: any, haveSignImage: boolean) {
+    console.log("123");
+    
     const data = {
       title: 'KÝ HỢP ĐỒNG ',
       is_content: 'forward_contract',
@@ -1941,6 +1956,7 @@ export class ConsiderContractComponent
       markSignAcc: this.datas.markSignAcc,
       mark: true,
     };
+    console.log("345",data);
 
     // @ts-ignore
     const dialogRef = this.dialog.open(ImageDialogSignComponent, {
@@ -1949,14 +1965,17 @@ export class ConsiderContractComponent
       data: data,
       code: code
     });
-
+    console.log("dialogRef",dialogRef);
 
     dialogRef.afterClosed().subscribe((res: any) => {
       if (res) {
+        console.log("res",res);
+        
         this.srcMark = res;
 
         this.spinner.show();
-
+        console.log("showw");
+        
         if (code == 'hsm')
           this.hsmDialogSignOpen(this.recipientId);
         else if (code == 'cert')
@@ -1967,12 +1986,18 @@ export class ConsiderContractComponent
           this.getSessionId(this.taxCodePartnerStep2, signUpdatePayload, notContainSignImage);
         else if (code == 'remote')
           this.remoteDialogSignOpen(this.recipientId);
+        else if (code == 'pki')
+        console.log("pki");
+        
+          this.pkiDialogSignOpen();
       }
     });
   }
 
   getSwalFire(code: string) {
     if ((code == 'digital' && !this.mobile && this.recipient.sign_type.some((item: any) => item.id !== 7) && this.isContainSignField)) {
+      console.log("code",code);
+      
       return Swal.fire({
         title: this.getTextAlertConfirm(),
         icon: 'warning',
@@ -1990,6 +2015,7 @@ export class ConsiderContractComponent
         inputLabel: this.translate.instant('stamp.contract.questions'),
       });
     } else {
+      console.log("code",code);
       return Swal.fire({
         title: this.getTextAlertConfirm(),
         icon: 'warning',
@@ -2011,6 +2037,8 @@ export class ConsiderContractComponent
   }
 
   getTextAlertConfirm() {
+    console.log("this.datas",this.datas);
+    
     if (this.datas.roleContractReceived == 2) {
       if (this.confirmConsider == 1) {
         return 'Bạn có chắc chắn xác nhận hợp đồng này?';
@@ -2636,6 +2664,8 @@ export class ConsiderContractComponent
           //for test
           let inforCert: any
           try {
+            console.log("1");
+            
             inforCert = await this.contractService
               .certInfoCert(this.cert_id)
               .toPromise();
@@ -3550,7 +3580,7 @@ export class ConsiderContractComponent
       this.certInfoBase64 = cert.certInfo.Base64Encode;
     } else {
       this.toastService.showErrorHTMLWithTimeout(
-        'Lỗi không lấy được thông tin usb token ' + cert.ResponseMsg,
+        'Lỗi không lấy được thông tin usb token 3' + cert.ResponseMsg,
         '',
         3000
       );
@@ -3673,9 +3703,12 @@ export class ConsiderContractComponent
   }
 
   async createEmptySignature(signUpdate: any, signDigital: any, image: any) {
+    console.log("signDigital",signDigital);
+    
     let boxType = signDigital.type
     const emptySignature = await this.contractService.createEmptySignature(this.recipientId, signUpdate, signDigital, image, this.certInfoBase64, boxType).toPromise();
-
+    console.log("emptySignature",emptySignature);
+    
     const base64TempData = emptySignature.base64TempData;
     const hexDigestTempFile = emptySignature.hexDigestTempFile;
     const fieldName = emptySignature.fieldName;
@@ -4579,6 +4612,7 @@ export class ConsiderContractComponent
       recipientId: recipientId,
       dataContract: this.recipient,
     };
+    console.log("6");
     const determineCoordination = await this.contractService.getDetermineCoordination(recipientId).toPromise();
 
     let isInRecipient = false;
@@ -4777,6 +4811,8 @@ export class ConsiderContractComponent
   }
 
   pkiDialogSignOpen() {
+    console.log("pki");
+    this.spinner.hide();
     const data = {
       title: 'CHỮ KÝ PKI',
       type: 3,
