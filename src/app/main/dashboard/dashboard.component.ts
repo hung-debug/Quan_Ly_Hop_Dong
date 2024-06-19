@@ -743,7 +743,7 @@ export class DashboardComponent implements OnInit {
       this.contractConnectList = data.entities;
     })
     this.contractSignature.getContractMyProcessList('','','','','',1,'',4,'').subscribe(data => {
-      this.contractRequestList = data.entities;
+      this.contractRequestList = data.entities;  
       this.contractRecipienteList.forEach((item: any) => {
 
       })
