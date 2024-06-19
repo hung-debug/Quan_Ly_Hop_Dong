@@ -71,9 +71,9 @@
       </div>
   </div>
 
-  <!--Bảng dữ liệu-->
-  <div class="row" style="padding-top: 20px;">
-      <p-table #dt [value]="list" [paginator]="false" [rows]="row" id="table" [autoLayout]="true" [scrollable]="true" scrollDirection="horizontal">
+    <!--Bảng dữ liệu-->
+    <div class="row" style="padding-top: 20px;">
+        <p-table #dt [value]="list" [paginator]="false" [rows]="row" id="table" [autoLayout]="true">
 
           <!--header-->
           <ng-template pTemplate="header">
@@ -85,31 +85,31 @@
               </tr>
           </ng-template>
 
-          <ng-template pTemplate="body" let-list let-row="rowIndex">
-              <tr>
-                  <ng-container style="background-color: #EEF7FF;" *ngIf="row == 0">
-                      <td style="font-style: normal;font-weight: 800;font-size: 13px;">{{this.orgName}}</td>
-                      <td *ngFor="let i of Arr(cols.length - 1).fill(1)"></td>
-                  </ng-container>
+            <ng-template pTemplate="body" let-list let-row="rowIndex">
+                <tr>
+                    <ng-container style="background-color: #EEF7FF;" *ngIf="row == 0">
+                        <td style="font-style: normal;font-weight: 800;font-size: 13px;">{{this.orgName}}</td>
+                        <td *ngFor="let i of Arr(cols.length - 1).fill(1)"></td>
+                    </ng-container>
 
-                  <ng-container *ngIf="row > 0">
-                      <td class="custom-table-td">{{list.name}}</td>
-                      <td class="custom-table-td">{{list.contractNo}}</td>
-                      <td class="custom-table-td">{{list.typeName}}</td>
-                      <td class="custom-table-td">{{list.organization?.name}}</td>
-                      <td class="custom-table-td">{{list.participants[0].name}}</td>
-                      <td class="custom-table-td" *ngFor="let i of getNumberArray(this.maxParticipants - 1)">
-                          <span *ngIf="list.participants[i]">
-                              {{ list.participants[i].name }}
-                          </span>
-                      </td>
-                      <td class="custom-table-td">{{this.convert(list.status)}}</td>
-                      <td class="custom-table-td">{{list.processedUser}}</td>
-                      <td class="custom-table-td">{{list.processingUser}}</td>
-                     <td class=custom-table-td>{{list.notProcessedYet}}</td>
-                  </ng-container>
-              </tr>
-          </ng-template>
+                    <ng-container *ngIf="row > 0">
+                        <td>{{list.name}}</td>
+                        <td>{{list.contractNo}}</td>
+                        <td>{{list.typeName}}</td>
+                        <td>{{list.organization?.name}}</td>
+                        <td>{{list.participants[0].name}}</td>
+                        <td *ngFor="let i of getNumberArray(this.maxParticipants - 1)">
+                            <span *ngIf="list.participants[i]">
+                                {{ list.participants[i].name }}
+                            </span>
+                        </td>
+                        <td>{{this.convert(list.status)}}</td>
+                        <td>{{list.processedUser}}</td>
+                        <td>{{list.processingUser}}</td>
+                        <td>{{list.notProcessedYet}}</td>
+                    </ng-container>
+                </tr>
+            </ng-template>
 
           <!-- <ng-template  pTemplate="paginatorleft" let-state>
               <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first <= 0 && state.totalRecords <= 1? 0:state.first + 1}} - {{(state.first+state.rows)> state.totalRecords ? (state.totalRecords > 0 ? state.totalRecords - 1 : 0) : state.first+state.rows}} / {{state.totalRecords > 0 ? state.totalRecords - 1 : 0}}</span>
