@@ -15,7 +15,7 @@
         </p-treeSelect>
           </div>
       </div>
-      
+
       <div class="col-xxl-2 col-lg-4 col-md-6">
         <div>{{'contract.information' | translate}}</div>
         <div class="input-line">
@@ -93,20 +93,20 @@
                   </ng-container>
 
                   <ng-container *ngIf="row > 0">
-                      <td>{{list.name}}</td>
-                      <td>{{list.contractNo}}</td>
-                      <td>{{list.typeName}}</td>
-                      <td>{{list.organization?.name}}</td>
-                      <td>{{list.participants[0].name}}</td>
-                      <td *ngFor="let i of getNumberArray(this.maxParticipants - 1)">
+                      <td class="custom-table-td">{{list.name}}</td>
+                      <td class="custom-table-td">{{list.contractNo}}</td>
+                      <td class="custom-table-td">{{list.typeName}}</td>
+                      <td class="custom-table-td">{{list.organization?.name}}</td>
+                      <td class="custom-table-td">{{list.participants[0].name}}</td>
+                      <td class="custom-table-td" *ngFor="let i of getNumberArray(this.maxParticipants - 1)">
                           <span *ngIf="list.participants[i]">
                               {{ list.participants[i].name }}
                           </span>
                       </td>
-                      <td>{{this.convert(list.status)}}</td>
-                      <td>{{list.processedUser}}</td>
-                      <td>{{list.processingUser}}</td>
-                      <td>{{list.notProcessedYet}}</td>
+                      <td class="custom-table-td">{{this.convert(list.status)}}</td>
+                      <td class="custom-table-td">{{list.processedUser}}</td>
+                      <td class="custom-table-td">{{list.processingUser}}</td>
+                     <td class=custom-table-td>{{list.notProcessedYet}}</td>
                   </ng-container>
               </tr>
           </ng-template>
