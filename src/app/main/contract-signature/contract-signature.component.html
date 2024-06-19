@@ -161,12 +161,12 @@
                     </div> -->
                     <div class="col-sm-5">
                         <div class="row">
-                            <div class="col-md-11" style="display: flex; cursor: pointer;" (click)="openDetail(item.contractId)">
-                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                            <div class="col-md-11" style="display: flex; cursor: pointer;">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;" (click)="openDetail(item.contractId)">
                               <div style="margin-left: 12px;">
-                                <div class="item_contract_name">{{item.contractName}}</div>
+                                <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
 
-                                <div class="row">
+                                <div class="row" (click)="openDetail(item.contractId)">
                                   <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}} ({{item.participant.contract.organization_create_contract}})</div>
                                   <div>
                                     <img src="../../../assets/img/path.svg"/>
@@ -364,13 +364,13 @@
                         </div>
                     </div>
                   </div> -->
-                  <div class="col-sm-5" (click)="openDetail(item.id)">
+                  <div class="col-sm-5">
                     <div  style="display: flex;">
-                    <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                    <img src="../../assets/img/frame_contract.svg" style="width: 72px;" (click)="openDetail(item.id)">
                       <div class="row">
                         <div style="margin-left: 12px;">
-                          <div class="col-md-12 item_contract_name">{{item.name}}</div>
-                          <div class="item_contract_infor">{{'created.user' | translate}}: {{item.nameUserCreate}} ({{item.organization_create_contract}})</div>
+                          <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
+                          <div class="item_contract_infor" (click)="openDetail(item.id)">{{'created.user' | translate}}: {{item.nameUserCreate}} ({{item.organization_create_contract}})</div>
                           <div class="item_contract_infor">
                             <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
                           </div>
@@ -516,10 +516,10 @@
                               <input style="width: 16px; height: 16px;" id="all" name="all" type="checkbox" (click)="toggleOneDownload(item, index1)" [(ngModel)]="item.checked" (change)="selectContract(item)"/>
                             </div>
 
-                            <div class="col-md-11" style="display: flex; margin-left: 12px;cursor: pointer" (click)="openDetail(item.contractId)">
-                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                            <div class="col-md-11" style="display: flex; margin-left: 12px;cursor: pointer">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;" (click)="openDetail(item.contractId)">
                               <div style="margin-left: 12px;">
-                                <div class="item_contract_name">{{item.participant.contract.name}}</div>
+                                <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
                                 <div class="row">
                                   <div class="item_contract_infor">
                                     <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.contractId)">{{'contract_processing_flow' | translate}}</u>
@@ -536,7 +536,7 @@
                         <!-- <span class="status_blue">{{this.filter_status | pipe | translate}}
                           {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
                           translate}}</span> -->
-                        <span class="status_blue">{{item.participant.contract.status| pipe | translate}}</span>
+                        <span class="status_blue" [ngClass]="{'complete-status' : item?.contractStatus == 30}">{{item.participant.contract.status| pipe | translate}}</span>
                       </div>
                     </div>
 
@@ -645,11 +645,11 @@
                               <input style="width: 16px; height: 16px;" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" />
                             </div>
 
-                            <div class="col-md-11" style="display: flex;margin-left: 12px; cursor: pointer;" (click)="openDetail(item.contractId)">
-                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                            <div class="col-md-11" style="display: flex;margin-left: 12px; cursor: pointer;">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;" (click)="openDetail(item.contractId)">
                               <div style="margin-left: 12px;">
-                                <div class="item_contract_name">{{item.participant.contract.name}}</div>
-                                <div class="row">
+                                <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
+                                <div class="row" (click)="openDetail(item.contractId)">
                                   <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}}</div>
                                   <div>
                                     <img src="../../../assets/img/path.svg"/>
@@ -749,14 +749,14 @@
 
             <div *ngIf="filter_status == -1">
                 <div class="row">
-                    <div class="col-sm-6" (click)="openDetail(item.id)">
+                    <div class="col-sm-6">
                         <div class="row">
-                            <div class="col-md-12 item_contract_name" >{{item.name}}</div>
+                            <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
                         </div>
-                        <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
+                        <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index" (click)="openDetail(item.id)">
                             <div class="col-md-12 item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
                         </div>
-                        <div class="row">
+                        <div class="row" (click)="openDetail(item.id)">
                             <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
                                 <span class="status_blue">{{'contract.status.complete' | translate}} {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) | translate}}</span>
                             </div>
@@ -887,10 +887,10 @@
                             <div>
                               <input style="width: 16px; height: 16px;" id="allView" name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneView(item, index1)" />
                             </div>
-                            <div class="col-md-11" style="display: flex; cursor: pointer;" (click)="openDetail(item.contractId)">
-                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                            <div class="col-md-11" style="display: flex; cursor: pointer;">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;" (click)="openDetail(item.contractId)">
                               <div style="margin-left: 12px;">
-                                <div class="item_contract_name">
+                                <div class="item_contract_name" (click)="openDetail(item.contractId)">
                                     <a  class="item_contract_name" style="text-decoration: none;"
                                         [routerLink]="['/main/form-contract/detail', item.contractId]"
                                         [queryParams]="{
@@ -935,7 +935,7 @@
                                         <span class="status_blue" *ngIf="item.status == 3 && item.role == 4">{{'contract.document-refused' | translate}}</span>
                                     </div>
                                 </div> -->
-                                <div class="row">
+                                <div class="row" (click)="openDetail(item.contractId)">
                                   <div>
                                     <img src="../../../assets/img/path.svg"/>
                                     <span *ngIf="item.role == 2" style="color: #EE7200; padding: 5px;">{{'Đang xem xét' | translate}}</span>
