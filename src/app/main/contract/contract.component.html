@@ -98,9 +98,9 @@
                               </div>
                           </div>
                         </div>
-                          <!-- <div class="row">
-                              <div class="item_contract_infor">{{'contract.status' | translate}}:
-                                  <span class="status_blue">{{this.filter_status | pipe | translate}}
+                          <!-- <div class="row" *ngIf="item.ceca_push == 1">
+                              <div class="item_contract_infor">{{'contract.status.ceca' | translate}}:
+                                  <span class="status_blue_ceca">{{this.filter_status | pipe | translate}}
                                       {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
                                       translate}}</span>
                               </div>
@@ -864,14 +864,14 @@
                                 </div>
                             </div>
 
-                            <!-- <div class="row">
-                                <div class="item_contract_infor">{{'contract.status' | translate}}:
-                                    <span class="status_blue">{{this.filter_status | pipe | translate}}
-                                        {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
-                                        translate}}</span>
-                                </div>
+                            <div class="row" *ngIf="item.ceca_push == 1">
+                              <div class="item_contract_infor">{{'contract.status.ceca' | translate}}:
+                                  <span class="status_blue_ceca">{{this.filter_status | pipe | translate}}
+                                      {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
+                                      translate}}</span>
+                              </div>
                             </div>
-                            <div class="row">
+                            <!-- <div class="row">
                               <div class="item_contract_infor">
                                 <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
                               </div>

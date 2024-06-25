@@ -84,6 +84,7 @@
   "contract.side.a": "Side A",
   "contract.side.b": "Side B",
   "contract.status": "Status",
+  "contract.status.ceca": "Status ceca",
   "contract.status.v2": "Contract status",
   "contract.person-process": "Handler",
   "contract.delete": "Delete contract",

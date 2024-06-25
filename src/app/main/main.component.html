@@ -74,18 +74,21 @@
                 </div>
 
                 <div class="col-md-6 item_contract_infor">{{'contract.status' | translate}}:
-                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_coordinator'">{{'contract.lead' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_reject'">{{'contract.status.fail' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_review'">{{'contract.view' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_sign'">{{'contract.sign' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_publish'">{{'contract.document' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_finish'">{{'contract.status.complete' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_cancel'">{{'contract.status.cancel' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='contract_exprire'">{{'contract.status.overdue' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire'">{{'contract.status.expire' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire_createdby'">{{'contract.status.expire' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='contract_exprire_createdby'">{{'contract.status.overdue' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='contract_exprire_time'">{{'expire.status' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_coordinator' || item.message_code=='sign_flow_coordinator_config'">{{'contract.lead' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_reject' || item.message_code=='sign_flow_reject_config'">{{'contract.status.fail' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_review' || item.message_code=='sign_flow_review_config'">{{'contract.view' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_sign' || item.message_code=='sign_flow_sign_config'">{{'contract.sign' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_publish' || item.message_code=='sign_flow_publish_config'">{{'contract.document' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_finish' || item.message_code=='sign_flow_finish_config'">{{'contract.status.complete' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_cancel' || item.message_code=='sign_flow_cancel_config'">{{'contract.status.cancel' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='contract_exprire' || item.message_code=='contract_exprire_config'">{{'contract.status.overdue' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire' || item.message_code=='contract_about_exprire_config'">{{'contract.status.expire' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire_createdby' || item.message_code=='contract_about_exprire_createdby_config'">{{'contract.status.expire' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='contract_exprire_createdby' || item.message_code=='contract_exprire_createdby_config'">{{'contract.status.overdue' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='contract_exprire_time' || item.message_code=='contract_exprire_time_config'">{{'expire.status' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='contract_share_notice' || item.message_code=='contract_share_notice_config'">{{'contract.share.notice' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='contract_transfer' || item.message_code=='contract_transfer_config'">{{'contract.transfer.config' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='contract_share_template' || item.message_code=='contract_share_template_config'">{{'contract.share.template.config' | translate}}</span>
                 </div>
               </div>
               <!-- </a> -->

@@ -84,6 +84,7 @@
   "contract.side.a": "Bên A",
   "contract.side.b": "Bên B",
   "contract.status": "Trạng thái",
+  "contract.status.ceca": "Trạng thái ceca",
   "contract.status.v2": "Trạng thái hợp đồng",
   "contract.person-process": "Người xử lý",
   "contract.delete": "Xóa hợp đồng",
@@ -872,5 +873,8 @@
   "signed.usb.token": "Đã ký số bằng USB token",
   "signed.cert.server": "Đã ký bằng chứng thư số server",
   "signed.usb.bcy": "Đã ký số bằng USB token Ban Cơ Yếu",
-  "signed.romote.signing": "Đã ký số Remote Signing"
+  "signed.romote.signing": "Đã ký số Remote Signing",
+  "contract.share.notice": "Chia sẻ hợp đồng",
+  "contract.transfer.config": "Hợp đồng đã được xử lý",
+  "contract.share.template.config":"Chia sẻ mẫu hợp đồng"
 }

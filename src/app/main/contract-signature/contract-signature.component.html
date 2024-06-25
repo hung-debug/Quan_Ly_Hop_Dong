@@ -190,11 +190,11 @@
                                 </div> -->
 
                                 <!--Trang thai hop dong-->
-                                <!-- <div class="row">
-                                    <div class="item_contract_infor">{{'contract.status.v2' | translate}}:
-                                        <span class="status_blue">{{item.contractStatus | pipe | translate}} {{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
+                                <div class="row" *ngIf="item.ceca_push == 1">
+                                    <div class="item_contract_infor">{{'contract.status.ceca' | translate}}:
+                                        <span class="status_blue_ceca">{{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
                                     </div>
-                                </div> -->
+                                </div>
 
                                 <!--Trạng thái-->
                                 <!-- <div class="row">
@@ -664,11 +664,11 @@
                                 </div> -->
 
                                 <!--Trang thai hop dong-->
-                                <!-- <div class="row">
-                                    <div class="item_contract_infor">{{'contract.status.v2' | translate}}:
-                                        <span class="status_blue">{{item.contractStatus | pipe | translate}} {{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
-                                    </div>
-                                </div> -->
+                                <div class="row" *ngIf="item.ceca_push == 1">
+                                  <div class="item_contract_infor">{{'contract.status.ceca' | translate}}:
+                                      <span class="status_blue_ceca"> {{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
+                                  </div>
+                              </div>
 
                                 <!--Trạng thái-->
                                 <!-- <div class="row">
