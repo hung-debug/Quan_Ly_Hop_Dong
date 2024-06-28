@@ -1,22 +1,19 @@
 export const environment = {
   production: true,
   usedSSO: false,
-  // apiUrl: 'http://192.168.0.115:8762',
-  // apiUrl: 'http://14.160.91.174:1387',
-  // apiUrl: 'https://econtractdev.mobifone.ai/service',
+
+  apiUrl: 'https://econtractdev.mobifone.ai/service',
   // apiUrl: 'https://econtract-demo.mobifone.ai/service',
 
-  // apiUrl: 'http://192.168.1.14:8762',
   // flag: 'NB',
-  // flag: 'KD',
+  flag: 'KD',
   SSO_URL: 'https://auth-sso.mobifone.vn:8080/oauth',
   SSO_REALM: 'sso-mobifone',
-  SSO_CLIENTID: 'TTCNTT-ECONTRACT',
+  SSO_CLIENTID: 'TTCNTT-ECONTRACT-STAGING',
 
   //NB
-  apiUrl: 'https://econtract.mobifone.vn/service',
-  // apiUrl: 'https://econtractnb.mobifone.ai/service',
-  flag: 'NB',
+  // apiUrl: 'https://econtract.mobifone.vn/service',
+  // flag: 'NB',
 
   //KD
   // apiUrl: 'https://mobifone-econtract.vn/service',
