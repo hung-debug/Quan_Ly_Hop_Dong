@@ -20,7 +20,7 @@ export class FilterListDialogComponent implements OnInit {
   contractTypeList: Array<any> = [];
   contractStatusProcessedList: { id: number, name: string }[] = [
     { "id": 20, "name": this.translate.instant('sys.processing') },
-    { "id": 2, "name": this.translate.instant('contract.status.overdue') },
+    // { "id": 2, "name": this.translate.instant('contract.status.overdue') },
     { "id": 31, "name": this.translate.instant('contract.status.fail') },
     { "id": 32, "name": this.translate.instant('contract.status.cancel') },
     { "id": 30, "name": this.translate.instant('contract.status.complete') }
