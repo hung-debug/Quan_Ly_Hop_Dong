@@ -872,5 +872,8 @@
   "signed.usb.token": "Đã ký số bằng USB token",
   "signed.cert.server": "Đã ký bằng chứng thư số server",
   "signed.usb.bcy": "Đã ký số bằng USB token Ban Cơ Yếu",
-  "signed.romote.signing": "Đã ký số Remote Signing"
+  "signed.romote.signing": "Đã ký số Remote Signing",
+  "time.end.date.used.service": "Thời gian hết hạn sử dụng dịch vụ",
+  "end.date.service": "Ngày hết hạn sử dụng dịch vụ",
+  "contract.status.ceca": "Trạng thái CECA"
 }

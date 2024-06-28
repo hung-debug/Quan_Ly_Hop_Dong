@@ -182,6 +182,11 @@
                                     <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 7" style="color: #EE7200; padding: 5px;">{{'signed.usb.bcy' | translate}}</span>
                                     <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 8" style="color: #EE7200; padding: 5px;">{{'signed.romote.signing' | translate}}</span>
                                   </div>
+                                  <div *ngIf="item.ceca_push == 1">
+                                    <div class="item_contract_infor">{{'contract.status.ceca' | translate}}:
+                                      <span class="status_blue_ceca">{{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
+                                    </div>
+                                  </div>
                                 </div>
 
                                 <!--Cac ben ky-->
@@ -190,11 +195,6 @@
                                 </div> -->
 
                                 <!--Trang thai hop dong-->
-                                <!-- <div class="row">
-                                    <div class="item_contract_infor">{{'contract.status.v2' | translate}}:
-                                        <span class="status_blue">{{item.contractStatus | pipe | translate}} {{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
-                                    </div>
-                                </div> -->
 
                                 <!--Trạng thái-->
                                 <!-- <div class="row">
@@ -657,6 +657,14 @@
                                     <span *ngIf="item.role == 1" style="color: #EE7200; padding: 5px;">{{'Đang điều phối' | translate}}</span>
                                     <span *ngIf="item.role == 2" style="color: #EE7200; padding: 5px;">{{'Đang xem xét' | translate}}</span>
                                   </div>
+                                  
+                                  <div *ngIf="item.ceca_push == 1">
+                                    <div class="item_contract_infor">{{'contract.status.ceca' | translate}}:
+                                      <span class="status_blue_ceca">{{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
+                                    </div>
+                                  </div>
+                                  
+                                  
                                 </div>
                                 <!--Cac ben ky-->
                                 <!-- <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">

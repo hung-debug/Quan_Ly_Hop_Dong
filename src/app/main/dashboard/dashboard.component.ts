@@ -91,6 +91,7 @@ export class DashboardComponent implements OnInit {
   loadData1: boolean = false;
   loadData2: boolean = false;
   step: any;
+  endDateService: any;
   //type = 1 => Hop dong don le khong theo mau
   //type = 2 => Hop dong don le theo mau
   //type = 3 => Hop dong theo lo
@@ -176,6 +177,7 @@ export class DashboardComponent implements OnInit {
     this.userService.getUserById(userId).subscribe(
       data => {
         this.currentName = data.name
+        this.endDateService = data.organization.endLicense
         //lay id role
         if (environment.flag == 'KD' && !data.is_required_sso && environment.usedSSO) {
           this.openAccountLinkDialog(data)
@@ -190,6 +192,7 @@ export class DashboardComponent implements OnInit {
         });
         this.OrgId = data.organization.id;
         this.userService.getOrgIdChildren(this.OrgId).subscribe(dataOrg => {
+
           let countNotiWarning: number = localStorage.getItem('countNoti') as any
           countNotiWarning++;
           localStorage.setItem("countNoti",countNotiWarning.toString())
@@ -207,7 +210,8 @@ export class DashboardComponent implements OnInit {
 
     }, error => {}
     )
-
+    console.log("this.endDateService",this.endDateService);
+    
     this.user = this.userService.getInforUser();
 
     if(localStorage.getItem('lang') == 'vi') {

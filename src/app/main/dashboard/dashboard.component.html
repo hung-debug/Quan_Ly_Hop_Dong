@@ -207,18 +207,25 @@
              <div *ngIf="this.loadData1 && this.loadData2" [chart]="chartPieCreated">TỔNG</div>
          </div>
 
-         <div class="col-md-4">
-           <div class="mb-5">
-             <img src="../../../assets/img/contractused.svg"/>
-             <span style="margin-left: 10px;">{{'package.used' | translate}}</span>
-           </div>
-           <div>
-             <img src="../../../assets/img/contractunused.svg"/>
-             <span style="margin-left: 10px;">{{'package.unused' | translate}}</span>
-           </div>
-         </div>
-
+        <div class="col-md-4">
+          <div class="mb-5">
+            <img src="../../../assets/img/contractused.svg"/>
+            <span style="margin-left: 10px;">{{'package.used' | translate}}</span>
+          </div>
+          <div>
+            <img src="../../../assets/img/contractunused.svg"/>
+            <span style="margin-left: 10px;">{{'package.unused' | translate}}</span>
+          </div>
+        </div>
+         
+        <div class="login_methods__title1">
+          <div class="col" style="display: flex; justify-content: space-between; padding: 0px; margin-top: 24px">
+            <span class="end_license">{{'end.date.service' | translate}}:</span>
+            <span class="date_license">{{this.endDateService | date:'dd/MM/yyyy'}}</span>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 </div>

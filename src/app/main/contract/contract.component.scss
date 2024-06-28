@@ -31,6 +31,13 @@
   -webkit-box-orient: vertical;
 }
 
+.status_blue_ceca{
+  color: #2D6BE7;
+  height: 32px;
+  display: inline-block;
+  border-radius: 4px;
+  font-weight: 700;
+}
 
 .item_contract_infor{
   color: #8E9AB0;
@@ -66,7 +73,9 @@
   font-weight: 700;
 }
 
-
+.mat-elevation-z4{
+  box-shadow: 0px 3px 12px 0px rgba(16, 85, 225, 0.10)!important;
+}
 
 
 .pagination {

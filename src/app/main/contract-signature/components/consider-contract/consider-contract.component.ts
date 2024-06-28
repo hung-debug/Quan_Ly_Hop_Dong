@@ -1592,8 +1592,7 @@ export class ConsiderContractComponent
                 this.ArrRecipientsNew.length > 0 
               ) {
                 let swalfire = null;
-        
-                if (typeSignDigital && typeSignDigital != 3) {
+                if (typeSignDigital) {
                   swalfire = this.getSwalFire('digital');
                 } else {
                   swalfire = this.getSwalFire('image');
@@ -1746,8 +1745,12 @@ export class ConsiderContractComponent
                                   [2, 3, 4].includes(this.datas.roleContractReceived) &&
                                   haveSignPKI
                                 ) {
-                                  this.pkiDialogSignOpen();
-                                  this.spinner.hide();
+                                  if(this.markImage){
+                                    this.openMarkSign('pki');
+                                  }else{
+                                    this.pkiDialogSignOpen();
+                                    this.spinner.hide();
+                                  }
                                 } else if (
                                   [2, 3, 4].includes(this.datas.roleContractReceived) &&
                                   haveSignHsm
@@ -1805,7 +1808,7 @@ export class ConsiderContractComponent
                         if (
                           [2, 3, 4].includes(this.datas.roleContractReceived) &&
                           haveSignPKI
-                        ) {
+                        ) {                      
                           this.pkiDialogSignOpen();
                           this.spinner.hide();
                         } else if (
@@ -1957,16 +1960,24 @@ export class ConsiderContractComponent
 
         this.spinner.show();
 
-        if (code == 'hsm')
+        if (code == 'hsm'){
           this.hsmDialogSignOpen(this.recipientId);
-        else if (code == 'cert')
+        }
+        else if (code == 'cert'){
           this.certDialogSignOpen(this.recipientId);
-        else if (code == 'usb1')
+        }
+        else if (code == 'usb1'){
           this.signTokenVersion1(signUpdatePayload, notContainSignImage);
-        else if (code == 'usb2')
+        }
+        else if (code == 'usb2'){
           this.getSessionId(this.taxCodePartnerStep2, signUpdatePayload, notContainSignImage);
-        else if (code == 'remote')
+        }
+        else if (code == 'remote'){
           this.remoteDialogSignOpen(this.recipientId);
+        }
+        else if (code == 'pki'){        
+          this.pkiDialogSignOpen();  
+        }
       }
     });
   }
@@ -2056,7 +2067,6 @@ export class ConsiderContractComponent
     let typeSignDigital = this.typeSignDigital;
     let checkCurrentSigningStatus: any = false;
     checkCurrentSigningStatus = await this.checkCurrentSigningCall()
-    console.log("checkCurrentSigningStatus",checkCurrentSigningStatus);
     if (!checkCurrentSigningStatus) return false;
     if (typeSignDigital == 2) {
       if (this.signCertDigital) {
@@ -2327,28 +2337,52 @@ export class ConsiderContractComponent
         const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
         image_base64 = this.textSignBase64Gen = textSignB.split(',')[1];
       }
-
+       
       if (fileC && objSign.length) {
-        const checkSign = await this.contractService.signPkiDigital(
-          this.dataNetworkPKI.phone,
-          this.dataNetworkPKI.networkCode.toLowerCase(),
-          this.recipientId,
-          this.datas.is_data_contract.name,
-          image_base64,
-          this.isTimestamp,
-          this.dataNetworkPKI.hidden_phone ? false : true,
-        );
-        // await this.signContractSimKPI();
-        if (!checkSign || (checkSign && !checkSign.success)) {
-          this.toastService.showErrorHTMLWithTimeout(
-            'Ký số không thành công!',
-            '',
-            3000
+        if(this.markImage == true){
+          const checkSign = await this.contractService.signPkiDigital(
+            this.dataNetworkPKI.phone,
+            this.dataNetworkPKI.networkCode.toLowerCase(),
+            this.recipientId,
+            this.datas.is_data_contract.name,
+            image_base64,
+            this.isTimestamp,
+            this.dataNetworkPKI.hidden_phone ? false : true,
           );
-          return false;
-        } else {
-          return true;
+          // await this.signContractSimKPI();
+          if (!checkSign || (checkSign && !checkSign.success)) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'Ký số không thành công!',
+              '',
+              3000
+            );
+            return false;
+          } else {
+            return true;
+          }
+        } else{
+          const checkSign = await this.contractService.signPkiDigital(
+            this.dataNetworkPKI.phone,
+            this.dataNetworkPKI.networkCode.toLowerCase(),
+            this.recipientId,
+            this.datas.is_data_contract.name,
+            "",
+            this.isTimestamp,
+            this.dataNetworkPKI.hidden_phone ? false : true,
+          );
+          // await this.signContractSimKPI();
+          if (!checkSign || (checkSign && !checkSign.success)) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'Ký số không thành công!',
+              '',
+              3000
+            );
+            return false;
+          } else {
+            return true;
+          }
         }
+        
       }
     } else if (typeSignDigital == 4) {
       // HSM SIGN
@@ -2466,8 +2500,7 @@ export class ConsiderContractComponent
               username: this.dataHsm.username,
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
-              imageBase64: (!this.markImage && signUpdate.type==3) ? null :
-                            (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
+              imageBase64: (!this.markImage && signUpdate.type==3) ? null : (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
           } else {
             this.dataHsm = {
@@ -4777,6 +4810,7 @@ export class ConsiderContractComponent
   }
 
   pkiDialogSignOpen() {
+    this.spinner.hide();
     const data = {
       title: 'CHỮ KÝ PKI',
       type: 3,
@@ -4784,7 +4818,6 @@ export class ConsiderContractComponent
       data: this.datas,
       recipientId: this.recipientId,
     };
-
     const dialogConfig = new MatDialogConfig();
     dialogConfig.panelClass = 'custom-dialog-container';
     dialogConfig.width = '497px';
@@ -4984,7 +5017,6 @@ export class ConsiderContractComponent
   otpValueSign: any = "";
   contractNoValueChange($event: any) {
     this.contractNoValueSign = $event;
-    console.log("this.contractNoValueSign",this.contractNoValueSign);
   }
 
   otpValueChange($event: any) {
