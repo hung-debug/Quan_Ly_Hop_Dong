@@ -842,5 +842,7 @@
   "signed.usb.bcy": "Signed by USB token BCY",
   "signed.romote.signing": "Signed by Remote Signing",
   "footer_text":"Copyright belong to MobiFone Corporation",
-  "text.dashboard.theme": "If you have documents/contracts in progress, please continue to complete them to the signing process is not delayed!"
+  "text.dashboard.theme": "If you have documents/contracts in progress, please continue to complete them to the signing process is not delayed!",
+  "time.end.date.used.service": "Service expiration time",
+  "end.date.service": "Service expiration date"
 }

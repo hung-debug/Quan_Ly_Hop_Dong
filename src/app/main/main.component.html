@@ -27,7 +27,36 @@
           </div>
         </div>
       </div>
-      <div *ngIf="getShowHideSideBar()"  style="display: flex;align-items: center;">
+      <div *ngIf="getShowHideSideBar()" style="display: flex;align-items: center;">
+        <div ngbDropdown class="d-inline-block header_language">
+          <div class="social-language" ngbDropdownToggle>
+            <!-- <span class="{{ 'language_icon' | translate }}"></span> -->
+            <div class="label-language">{{ "language" | translate }}</div>
+            <div style="margin-left: 8px;">
+              <img style="width: 20px; height: 20px;" src="../../assets/img/arrow-down.svg"/>
+            </div>
+          </div>
+
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu_language">
+            <button ngbDropdownItem class="drop_language" (click)="switchLang('vi')">
+              <div style="display: flex; align-items: center">
+                <!-- <div class="db_user">
+                  <div class="db_icon_vietnam"></div>
+                </div> -->
+                <div>VI</div>
+              </div>
+            </button>
+            <button ngbDropdownItem class="drop_language" (click)="switchLang('en')">
+              <div style="display: flex; align-items: center">
+                <!-- <div class="db_user">
+                  <div class="db_icon_english"></div>
+                </div> -->
+                <div>EN</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
         <div *ngIf="!this.mobile" ngbDropdown class="d-inline-block" (click)="viewLink()">
           <div class="social-icons" ngbDropdownToggle>
             <div><img src="../../assets/img/document_bashboard.svg" style="width: 20px;"></div>
@@ -38,7 +67,7 @@
 
           </div> -->
         </div>
-        
+
         <div *ngIf="!this.mobile" ngbDropdown class="d-inline-block">
           <div class="social-icons" ngbDropdownToggle (click)="loadDataNotification()">
             <i *ngIf="numberNotification == 0" class="icon-pi p-mr-4 p-text-secondary"><img src="../../assets/img/bell-filled.svg"></i>
@@ -89,6 +118,7 @@
                   <span class="status_blue" *ngIf="item.message_code=='contract_share_notice' || item.message_code=='contract_share_notice_config'">{{'contract.share.notice' | translate}}</span>
                   <span class="status_blue" *ngIf="item.message_code=='contract_transfer' || item.message_code=='contract_transfer_config'">{{'contract.transfer.config' | translate}}</span>
                   <span class="status_blue" *ngIf="item.message_code=='contract_share_template' || item.message_code=='contract_share_template_config'">{{'contract.share.template.config' | translate}}</span>
+
                 </div>
               </div>
               <!-- </a> -->
@@ -102,7 +132,7 @@
           <div class="social-icons" ngbDropdownToggle>
             <span class="user_login"></span>
             <div style="display: flex; flex-direction: column;">
-              <div class="label" style="color: #001A4D;">Ông/ Bà {{nameCurrentUser}}</div>
+              <div class="label" style="color: #001A4D;">{{nameCurrentUser}}</div>
               <div class="label" style="color: #A8B5CE;">{{phoneCurrentUser}}</div>
             </div>
             <div style="margin-left: 16px;">
@@ -138,12 +168,12 @@
                   <div class="db_password"></div>
                 </div>
                 <div>
-                  <a href="https://auth-sso.mobifone.vn/vn/profile-information" 
+                  <a href="https://auth-sso.mobifone.vn/vn/profile-information"
                   >{{'login.reset_password_new' | translate }}</a>
                 </div>
               </div>
             </button> -->
-            
+
             <!-- <button ngbDropdownItem class="drop" (click)="viewLink()">
               <a style="color: inherit; text-decoration: none;" href="https://drive.google.com/drive/folders/1NHaCYOMCMsLvrw1uPbX2ezsC-Uo9huW3">
               <div style="display: flex; align-items: center;">
@@ -163,7 +193,7 @@
                 <div>{{'document.plugin.pki' | translate }}</div></div>
               </a>
             </button>
-            
+
             <button ngbDropdownItem class="drop_red" routerLink="/login" (click)="logout()">
               <div style="display: flex; align-items: center;">
                 <div class="db_user">
@@ -174,7 +204,7 @@
             </button>
           </div>
         </div>
-        
+
 
       </div>
     </header>

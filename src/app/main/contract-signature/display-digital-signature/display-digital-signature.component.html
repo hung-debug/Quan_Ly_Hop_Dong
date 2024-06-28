@@ -122,6 +122,20 @@
     </div> -->
 </div>
 
+<!--Pki có ảnh đóng dấu-->
+<div class="signature-container" id="export-html-pki-image" style="width: 250px;min-height: 80px; display: flex; font-size: 9px;max-width: 300px">
+  <div style="position: relative;">
+      <img [src]='this.srcMark' style="width: 70%; height: 100%;z-index: 1; object-fit: contain">
+  </div>
+  <!-- <div class="signature-content" style="color: #6cc449; background-size: 40px 40px; display: flex; justify-content: space-between;align-items: center; width: 100%;">
+      <div style="width: 165px;">
+          <div style="z-index: 2;text-align: left;">{{'user.sign-type' | translate}}: {{'sign_by_hsm' | translate}}</div>
+          <div style="z-index: 2;text-align: left;">{{'tax_code' | translate}}: {{cardId}}</div>
+          <div style="z-index: 2;text-align: left;">{{'sign.day' | translate}}: {{isDateTime | date: 'dd/MM/YYYY HH:mm:ss'}}</div>
+      </div>
+  </div> -->
+</div>
+
 <!-- Remote signing đóng dấu -->
 <div class="signature-container" id="export-remote-signing-remote-image" style="width: 250px;min-height: 80px; display: flex; font-size: 9px;max-width: 300px">
     <div style="position: relative;">

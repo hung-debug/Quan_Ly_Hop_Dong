@@ -452,6 +452,14 @@
                       <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
+                      <button mat-menu-item class="div_icon" *ngIf="status == 'draft' && isQLHD_02 && this.isOrg == 'off'" (click)="openEdit(item.id)">
+                        <mat-icon><img src="../../assets/img/edit.svg" class="img_icon"/></mat-icon>
+                        <span class="three_dot_text">{{'contract.edit' | translate}}</span>
+                      </button>
+                      <button mat-menu-item class="div_icon" (click)="processHandleContract(item.id)">
+                        <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon"/></mat-icon>
+                        <span class="three_dot_text">{{'view.processing.flow' | translate}}</span>
+                      </button>
                       <button mat-menu-item  class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue' || status == 'complete') && isQLHD_08 && this.isOrg == 'off'" (click)="openCopy(item.id)">
                         <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.copy' | translate}}</span>
@@ -459,10 +467,6 @@
                       <button mat-menu-item class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12 && this.isOrg == 'off'" (click)="contractConnect(item.id)">
                         <mat-icon><img src="../../assets/img/document-text.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.connect.view' | translate}}</span>
-                      </button>
-                      <button mat-menu-item class="div_icon" (click)="processHandleContract(item.id)">
-                        <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon"/></mat-icon>
-                        <span class="three_dot_text">{{'view.processing.flow' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'overdue') && this.isOrg == 'off'" (click)="openEditExpiration(item)">
                         <mat-icon><img src="../../assets/img/timer-start.svg" class="img_icon"/></mat-icon>
@@ -475,10 +479,6 @@
                       <button mat-menu-item class="div_icon" *ngIf="status == 'cancel' && this.isOrg == 'off'" (click)="ViewReasonCancel(item.id)">
                         <mat-icon><img src="../../assets/img/cancel_notes.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'reasson.cancel.contract' | translate}}</span>
-                      </button>
-                      <button mat-menu-item class="div_icon" *ngIf="status == 'draft' && isQLHD_02 && this.isOrg == 'off'" (click)="openEdit(item.id)">
-                        <mat-icon><img src="../../assets/img/edit.svg" class="img_icon"/></mat-icon>
-                        <span class="three_dot_text">{{'contract.edit' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" *ngIf="status == 'draft' && this.isOrg == 'off'" (click)="deleteContract(item.id)">
                         <mat-icon><img src="../../assets/img/trash_contract.svg" class="img_icon"/></mat-icon>
@@ -866,9 +866,9 @@
 
                             <div class="row" *ngIf="item.ceca_push == 1">
                               <div class="item_contract_infor">{{'contract.status.ceca' | translate}}:
-                                  <span class="status_blue_ceca">{{this.filter_status | pipe | translate}}
-                                      {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
-                                      translate}}</span>
+                                <span class="status_blue_ceca">
+                                    {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) | translate}}
+                                </span>
                               </div>
                             </div>
                             <!-- <div class="row">
@@ -1260,7 +1260,7 @@
         <div class="footer_page_number">Hiển thị <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> kết quả
         </div>
     </div>
-    
+
     <div class="contract_footer_responsive">
       <div class="contract_footer_per_page_responsive">
           <div>Số lượng hiển thị&nbsp;</div>

@@ -23,7 +23,8 @@ export class DetailUnitComponent implements OnInit {
   status: any = "";
   parent_id: any = "";
   id: any = "";
-
+  datas: any;
+  endLicense: any;
   numContractUse: number = 0;
   numContractCreate: number = 0;
   numContractBuy: number = 0;
@@ -67,19 +68,20 @@ export class DetailUnitComponent implements OnInit {
 
   async getData() {
     await this.unitService.getUnitById(this.data.id).toPromise().then(
-      data => {
+      data => {      
         
         this.name = data.name,
-          this.short_name = data.short_name,
-          this.code = data.code,
-          this.email = data.email,
-          this.phone = data.phone,
-          this.fax = data.fax,
-          this.status = data.status,
-          this.parent_id = data.parent_id,
-          this.taxCode = data.tax_code,
-          this.cEcAPushMode = this.convert(data.ceca_push_mode),
-          this.id = data.id
+        this.short_name = data.short_name,
+        this.code = data.code,
+        this.email = data.email,
+        this.phone = data.phone,
+        this.fax = data.fax,
+        this.status = data.status,
+        this.parent_id = data.parent_id,
+        this.taxCode = data.tax_code,
+        this.cEcAPushMode = this.convert(data.ceca_push_mode),
+        this.id = data.id
+        this.endLicense = data.endLicense
 
         if (data.parent_id != null) {
           this.unitService.getUnitById(data.parent_id).subscribe(

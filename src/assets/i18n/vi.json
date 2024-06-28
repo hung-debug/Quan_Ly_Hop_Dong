@@ -84,7 +84,6 @@
   "contract.side.a": "Bên A",
   "contract.side.b": "Bên B",
   "contract.status": "Trạng thái",
-  "contract.status.ceca": "Trạng thái ceca",
   "contract.status.v2": "Trạng thái hợp đồng",
   "contract.person-process": "Người xử lý",
   "contract.delete": "Xóa hợp đồng",
@@ -876,5 +875,8 @@
   "signed.romote.signing": "Đã ký số Remote Signing",
   "contract.share.notice": "Chia sẻ hợp đồng",
   "contract.transfer.config": "Hợp đồng đã được xử lý",
-  "contract.share.template.config":"Chia sẻ mẫu hợp đồng"
+  "contract.share.template.config":"Chia sẻ mẫu hợp đồng",
+  "time.end.date.used.service": "Thời gian hết hạn sử dụng dịch vụ",
+  "end.date.service": "Ngày hết hạn sử dụng dịch vụ",
+  "contract.status.ceca": "Trạng thái CECA"
 }
