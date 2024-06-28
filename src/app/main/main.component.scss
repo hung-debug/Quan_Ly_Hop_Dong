@@ -183,7 +183,9 @@ h3 {
   padding: 0;
   font-size: inherit;
   right: 0px;
+  width: 59px;
   z-index: -99;
+  min-width: 0 !important;
   position: fixed;
 }
 
@@ -193,6 +195,7 @@ h3 {
 
 .drop_language{
   color: #000;
+  padding:4px 10px !important;
 }
 .drop {
   padding: 10px;

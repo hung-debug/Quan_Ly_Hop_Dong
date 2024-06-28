@@ -370,12 +370,9 @@ export class MainComponent implements OnInit {
       this.router.navigate(['/main/dashboard']);
     });
   }
-  
   switchLang(lang: string) {
     this.translate.use(lang);
     this.translate.currentLang = lang;
-
-
     localStorage.setItem('lang', lang);
     sessionStorage.setItem('lang', lang);
   }

@@ -176,8 +176,7 @@ export class DashboardComponent implements OnInit {
     let userId = this.userService.getAuthCurrentUser().id;
     this.userService.getUserById(userId).subscribe(
       data => {
-        this.currentName = data.name
-        this.endDateService = data.organization.endLicense
+        this.currentName = data.name       
         //lay id role
         if (environment.flag == 'KD' && !data.is_required_sso && environment.usedSSO) {
           this.openAccountLinkDialog(data)
@@ -192,7 +191,8 @@ export class DashboardComponent implements OnInit {
         });
         this.OrgId = data.organization.id;
         this.userService.getOrgIdChildren(this.OrgId).subscribe(dataOrg => {
-
+                   
+          this.endDateService = dataOrg.endLicense
           let countNotiWarning: number = localStorage.getItem('countNoti') as any
           countNotiWarning++;
           localStorage.setItem("countNoti",countNotiWarning.toString())

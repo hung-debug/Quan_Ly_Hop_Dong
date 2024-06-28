@@ -56,7 +56,7 @@
         <pagination-controls *ngIf="listNotification.length > 0;" (pageChange)="p=$event; getNotification()" previousLabel="" nextLabel=""></pagination-controls>
         <div class="enterPage" *ngIf="pageTotal > 0">
             <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-            <p>của {{countPage()}} trang</p>
+            <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
         </div>
       </div>
       <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>

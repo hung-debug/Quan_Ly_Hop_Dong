@@ -1020,7 +1020,7 @@
 
     <div *ngIf="this.typeDisplay === 'signOne'|| this.typeDisplay === 'downloadMany'" class="contract_footer">
         <div class="footer_contract_per_page">
-            <div>Hiển thị&nbsp;</div>
+            <div>{{'num.display' | translate}}&nbsp;</div>
             <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
                 <option value="" hidden>10</option>
                 <option *ngFor="let d of this.pageOptions">{{d}}</option>
@@ -1032,7 +1032,7 @@
             <pagination-controls *ngIf="pageTotal > 0" (pageChange)="p=$event; getPageData()" previousLabel="" nextLabel=""></pagination-controls>
             <div class="enterPage" *ngIf="pageTotal > 0">
                 <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-                <p>của {{countPage()}} trang</p>
+                <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
             </div>
         </div>
         <div class="footer_page_number">
@@ -1046,7 +1046,7 @@
     </div>
     <div *ngIf="this.typeDisplay === 'signOne'|| this.typeDisplay === 'downloadMany'" class="contract_footer_responsive">
         <div class="contract_footer_per_page_responsive">
-            <div>Hiển thị&nbsp;</div>
+            <div>{{'num.display' | translate}}&nbsp;</div>
             <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
                 <option value="" hidden>10</option>
                 <option *ngFor="let d of this.pageOptions">{{d}}</option>
@@ -1057,7 +1057,7 @@
             <pagination-controls *ngIf="pageTotal > 0" (pageChange)="p=$event; getPageData()" previousLabel="" nextLabel=""></pagination-controls>
             <div class="enterPage" *ngIf="pageTotal > 0">
                 <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-                <p>của {{countPage()}} trang</p>
+                <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
             </div>
         </div>
         <div class="footer_page_number">
@@ -1073,7 +1073,7 @@
       <pagination-controls *ngIf="pageTotal > 0" (pageChange)="p=$event; getPageData()" previousLabel="" nextLabel=""></pagination-controls>
       <div class="enterPage" *ngIf="pageTotal > 0">
           <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-          <p>của {{countPage()}} trang</p>
+          <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
       </div>
     </div>
 

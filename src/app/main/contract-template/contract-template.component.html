@@ -194,7 +194,7 @@
         <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractTemplateList()" previousLabel="" nextLabel=""></pagination-controls>
         <div class="enterPage" *ngIf="pageTotal > 0">
           <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-          <p>của {{countPage()}} trang</p>
+          <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
       </div>
       </div>
       <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
@@ -208,7 +208,7 @@
     <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractTemplateList()" previousLabel="" nextLabel=""></pagination-controls>
     <div class="enterPage" *ngIf="pageTotal > 0">
       <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-      <p>của {{countPage()}} trang</p>
+      <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
   </div>
   </div>
   <div class="footer_page_number">
@@ -228,7 +228,7 @@
     <div class="enterPage" *ngIf="pageTotal > 0">
       <div class="enter_page_responsive">
         <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-        <p>của {{countPage()}} trang</p>
+        <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
       </div>
       <div class="footer_page_number">
         <span class="footer_page_number_chart_number">

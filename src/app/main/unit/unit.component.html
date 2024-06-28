@@ -7,13 +7,13 @@
           <div [ngClass] = "{'col-lg-5-45' : !isQLTC_01}" class="col-lg-4-35 btn-padding-right" *ngIf="isQLTC_03">
             <!-- <div>{{'unit.code' | translate}}</div> -->
             <div>
-              <input type="text" [(ngModel)]="code" class="input_text" placeholder="Nhập mã tổ chức"/>
+              <input type="text" [(ngModel)]="code" class="input_text" placeholder="{{ 'enter.code.org' | translate }}"/>
             </div>
           </div>
           <div [ngClass] = "{'col-lg-5-45' : !isQLTC_01}" class="col-lg-4-35 btn-padding-right btn-padding-left" *ngIf="isQLTC_03">
             <!-- <div>{{'unit.name' | translate}}</div> -->
             <div>
-              <input type="text" [(ngModel)]="name" class="input_text" placeholder="Nhập tên tổ chức"/>
+              <input type="text" [(ngModel)]="name" class="input_text" placeholder="{{ 'enter.name.org' | translate }}"/>
             </div>
           </div>
 
