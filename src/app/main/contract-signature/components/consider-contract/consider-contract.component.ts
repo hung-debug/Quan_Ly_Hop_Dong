@@ -2322,7 +2322,7 @@ export class ConsiderContractComponent
       if(!this.isDateTime) this.isDateTime = new Date();
       await of(null).pipe(delay(120)).toPromise();
 
-      let imageRender = null;
+      let imageRender: HTMLElement | null = null;
 
       if (this.markImage) {
         imageRender = <HTMLElement>(

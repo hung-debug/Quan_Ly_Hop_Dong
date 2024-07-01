@@ -1992,8 +1992,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               count++;
               currentElement = element
               break
-            } else if (element.sign_unit == 'so_tai_lieu' && (element.length > 1)) {
-              count_number++;
+            } else if (element.sign_unit == 'so_tai_lieu' && (element.length > 1)) {          
+            count_number++;
               currentElement = element
               break;
             } else if(element.sign_unit == 'so_tai_lieu' && !element.id_have_data && !element.name && !element.value && !this.datasForm.contract_no) {
@@ -2347,8 +2347,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         this.spinner.hide();
         if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng nhập nội dung ô: ${currentElement.text_attribute_name} (trang ${currentElement.page})`, "", 3000);
         return false;
-      } else if (count_null_input > 0) {
-        if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng nhập nội dung ô text/số hợp đồng! (trang ${currentElement.page})`, "", 3000);
+      } else if (count_null_input > 0) {   
+        if(!this.isCheckRelease  && !isSaveDraft) 
+        this.toastService.showWarningHTMLWithTimeout(`Vui lòng nhập nội dung ô text/số hợp đồng! (trang ${currentElement.page})`, "", 3000);
         return false;
       }
       else {
