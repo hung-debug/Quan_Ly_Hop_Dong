@@ -841,5 +841,15 @@
   "signed.usb.bcy": "Signed by USB token BCY",
   "signed.romote.signing": "Signed by Remote Signing",
   "footer_text":"Copyright belong to MobiFone Corporation",
-  "text.dashboard.theme": "If you have documents/contracts in progress, please continue to complete them to the signing process is not delayed!"
+  "text.dashboard.theme": "If you have documents/contracts in progress, please continue to complete them to the signing process is not delayed!",
+  "contract.info": "Contract information",
+  "drag.contract.file": "Drag and drop or upload document/contract files",
+  "drag.contract.here": "Here",
+  "drag.contract.note": "Support docx, pdf files",
+  "xoa_doi_tac": "Delete partner",
+  "componentsnew":"INGREDIENT",
+  "sign.imagenew":"Photo signature",
+  "btn.add.user.delete": "Delete",
+  "drop.doc": "Drag and drop the information fields below to add an input or signature box to the document",
+  "location_size" : "Location and size"
 }

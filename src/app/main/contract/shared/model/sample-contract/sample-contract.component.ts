@@ -1056,7 +1056,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   setWidth(d: any) {
     return {
-      'width.px': (this.widthDrag / 2)
+      'width.px': (this.widthDrag)
     }
   }
 
