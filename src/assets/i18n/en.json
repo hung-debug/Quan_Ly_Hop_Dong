@@ -867,5 +867,9 @@
   "enter.code.org": "Enter organization code",
   "enter.name.org": "Enter organization name",
   "update.last": "Last updated",
-  "seach.report.ekyc": "Search Full name,CMT/CCCD,Name-Code-Number of Contract" 
+  "seach.report.ekyc": "Search Full name,CMT/CCCD,Name-Code-Number of Contract",
+  "code.contract": "Contract code",
+  "phone": "Phone number",
+  "content":"Content",
+  "status.sms.email":"Status SMS/EMAIL sending"
 }
