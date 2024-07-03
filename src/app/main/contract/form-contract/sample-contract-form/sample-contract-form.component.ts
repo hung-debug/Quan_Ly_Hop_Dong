@@ -453,7 +453,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               if (dataDetermine.some((p: any) => p.id == element.recipient_id)) {
                 this.removeDataSignChange(element.id_have_data);
                 delete res.sign_config[index]
-              } 
+              }
             } else if (dataDiffirent.some((p: any) => p.id == element.id && p.recipient_id == element.recipient_id)) {
               if (dataDetermine.some((p: any) => p.id == element.recipient_id)) {
                 delete res.sign_config[index]
@@ -1403,7 +1403,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         }
       } else arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
-
     //
     return arrSignConfig;
   }
@@ -1592,12 +1591,21 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
   contractNo: any;
   getValueText(e: any, d: any) {
-    const num = e;
-    d.value = num;
-
+    d.value = e;
     if (d.sign_unit == 'so_tai_lieu') {
-      this.datasForm.contract_no = e;
-      this.contractNo = e;
+      if (e) {
+        this.datasForm.contract_no = e;
+        this.contractNo = e;
+      }
+      this.datasForm.contract_user_sign.forEach((dataForm: any) => {
+        if (dataForm.sign_config.length > 0) {
+          for (let i = 0; i < dataForm.sign_config.length; i++) {
+            if(dataForm.sign_config[i].sign_unit == 'so_tai_lieu'){
+              dataForm.sign_config[i].value = this.datasForm.contract_no;
+            }
+          }
+        }
+      })
     }
   }
 
@@ -1777,8 +1785,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
         if(!this.datasForm.contract_no || !this.datasForm.code) {
           if(this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0]) {
-            this.datasForm.contract_no = this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0].value?.trim();
-            this.datasForm.code = this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0].value?.trim();
+            // this.datasForm.contract_no = this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0].value?.trim();
+            // this.datasForm.code = this.convertToSignConfig().filter((p: any) => p.sign_unit == 'so_tai_lieu')[0].value?.trim();
+            if (!this.datasForm.contract_no) {
+              this.datasForm.contract_no = this.contractNo;
+              this.datasForm.code = this.contractNo;
+            }
           }
         }
         this.checkNumber(this.datasForm.ceca_push, this.convertToSignConfig().length)
@@ -1992,8 +2004,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               count++;
               currentElement = element
               break
-            } else if (element.sign_unit == 'so_tai_lieu' && (element.length > 1)) {          
-            count_number++;
+            } else if (element.sign_unit == 'so_tai_lieu' && (element.length > 1)) {
+              count_number++;
               currentElement = element
               break;
             } else if(element.sign_unit == 'so_tai_lieu' && !element.id_have_data && !element.name && !element.value && !this.datasForm.contract_no) {
@@ -2347,8 +2359,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         this.spinner.hide();
         if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Vui lòng nhập nội dung ô: ${currentElement.text_attribute_name} (trang ${currentElement.page})`, "", 3000);
         return false;
-      } else if (count_null_input > 0) {   
-        if(!this.isCheckRelease  && !isSaveDraft) 
+      } else if (count_null_input > 0) {
+        if(!this.isCheckRelease  && !isSaveDraft)
         this.toastService.showWarningHTMLWithTimeout(`Vui lòng nhập nội dung ô text/số hợp đồng! (trang ${currentElement.page})`, "", 3000);
         return false;
       }
@@ -2381,14 +2393,14 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             this.toastService.showWarningHTMLWithTimeout((this.translate.instant('miss.digital.sig')) + " " + `${nameSign_organization.name}` + " " + (this.translate.instant('off.org.please')), "", 3000);
             return false;
           }
-  
+
           // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
           if (arrSign_organization.length < data_organization.length) {
             this.spinner.hide();
             if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout("Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!", "", 3000);
             return false;
           }
-  
+
           // valid đối tượng ký của đối tác
           let data_partner = this.list_sign_name.filter((p: any) => p.type_unit == "partner" && p.role != 2);
           let countError_partner = 0;
@@ -2413,14 +2425,14 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               }
             }
           }
-  
+
           if (countError_partner > 0) {
             this.spinner.hide();
             if(!this.isCheckRelease && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Thiếu đối tượng ${nameSign_partner.sign_type == 'chu_ky_so' ? 'ký số' : 'ký ảnh'} của đối tác ${nameSign_partner.name}, vui lòng chọn đủ người ký!`, "", 3000);
             return false;
           }
-  
-  
+
+
           // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
           if (arrSign_partner.length < data_partner.length) {
             // alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!');
@@ -2455,7 +2467,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             if(!this.isCheckRelease  && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout("Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!", "", 3000);
             return false;
           }
-  
+
           // valid đối tượng ký của đối tác
           let data_partner = this.list_sign_name.filter((p: any) => p.type_unit == "partner" && p.role != 2);
           let countError_partner = 0;
@@ -2480,13 +2492,13 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               }
             }
           }
-  
+
           if (countError_partner > 0) {
             this.spinner.hide();
             if(!this.isCheckRelease && !isSaveDraft) this.toastService.showWarningHTMLWithTimeout(`Thiếu đối tượng ${nameSign_partner.sign_type == 'chu_ky_so' ? 'ký số' : 'ký ảnh'} của đối tác ${nameSign_partner.name}, vui lòng chọn đủ người ký!`, "", 3000);
             return false;
           }
-  
+
           // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
           if (arrSign_partner.length < data_partner.length || !this.validateVanThuData(arrSign_partner, data_partner)) {
             // alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!');
