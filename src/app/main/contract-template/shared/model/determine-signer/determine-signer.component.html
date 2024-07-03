@@ -34,7 +34,7 @@
               [disabled]="getOriganzationReviewer().length == 1 && !isEditOrdering">
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-              <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
+              <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
                   <div class="label_detail text-color">
@@ -44,7 +44,7 @@
                         [value]="email" [(ngModel)]="d.login_by" />
                     </div>&nbsp;
                     <div>
-                      {{'Đăng nhập bằng email' | translate}}
+                      {{'typeOfSignEmail' | translate}}
                     </div>
                   </div>
                 </div>
@@ -55,7 +55,7 @@
                         [(ngModel)]="d.login_by" [value]="phone" />
                     </div>&nbsp;
                     <div>
-                      {{'Đăng nhập bằng số điện thoại' | translate}}
+                      {{'typeOfSignPhone' | translate}}
                     </div>
                   </div>
                 </div>
@@ -258,7 +258,7 @@
               [disabled]="getOriganzationSignature().length == 1 && !isEditOrdering">
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-              <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi ký to chuc-->
+              <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại cho nguoi ký to chuc-->
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
                   <div class="label_detail text-color">
@@ -268,7 +268,7 @@
                         [value]="email" [(ngModel)]="d.login_by" />
                     </div>&nbsp;
                     <div>
-                      {{'Đăng nhập bằng email' | translate}}
+                      {{'typeOfSignEmail' | translate}}
                     </div>
                   </div>
                 </div>
@@ -279,7 +279,7 @@
                         [(ngModel)]="d.login_by" [value]="phone" />
                     </div>&nbsp;
                     <div>
-                      {{'Đăng nhập bằng số điện thoại' | translate}}
+                      {{'typeOfSignPhone' | translate}}
                     </div>
                   </div>
                 </div>
@@ -775,14 +775,14 @@
                   <input type="checkbox" style="width: 17px; height: 17px;"
                     *ngIf="getPartnerCoordination(item).length > 0" checked
                     (change)="changeIsCoordination($event, item, id)">
-                  <div style="padding: 0 20px 0 5px">Có người điều phối</div>
+                  <div style="padding: 0 20px 0 5px">{{'coordinator' |translate }}</div>
 
                   <div *ngIf="getPartnerCoordination(item).length > 0 && this.site === 'NB'" style="display: flex">
                     <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="getPartnerCoordination(item)[0].is_otp != 1"
                     (change)="changeIsSmsCoordination($event, item, 0)">
                     <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="getPartnerCoordination(item)[0].is_otp == 1" checked
                     (change)="changeIsSmsCoordination($event, item, 0)">
-                    <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
+                    <div style="padding: 0 20px 0 5px">{{'notify.sms' | translate}}</div>
                   </div>
 
                   <div class="participants--content" *ngFor="let d of getPartnerCoordination(item); let index = index">
@@ -830,7 +830,7 @@
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
               <div class="col-md-10 participants--input" style="display: flex; flex-direction: column">
 
-                <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
+                <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label_detail text-color">
@@ -840,7 +840,7 @@
                           [value]="email" [(ngModel)]="d.login_by" />
                       </div>&nbsp;
                       <div>
-                        {{'Đăng nhập bằng email' | translate}}
+                        {{'typeOfSignEmail' | translate}}
                       </div>
                     </div>
                   </div>
@@ -851,7 +851,7 @@
                           [(ngModel)]="d.login_by" [value]="phone" />
                       </div>&nbsp;
                       <div>
-                        {{'Đăng nhập bằng số điện thoại' | translate}}
+                        {{'typeOfSignPhone' | translate}}
                       </div>
                     </div>
                   </div>
@@ -995,7 +995,7 @@
                 [disabled]="getPartnerSignature(item).length == 1 && !isEditOrdering">
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-                <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi ky to chuc-->
+                <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại cho nguoi ky to chuc-->
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label_detail text-color">
@@ -1006,7 +1006,7 @@
                           [(ngModel)]="d.login_by" />
                       </div>&nbsp;
                       <div>
-                        {{'Đăng nhập bằng email' | translate}}
+                        {{'typeOfSignEmail' | translate}}
                       </div>
                     </div>
                   </div>
@@ -1018,7 +1018,7 @@
                           [value]="phone" />
                       </div>&nbsp;
                       <div>
-                        {{'Đăng nhập bằng số điện thoại' | translate}}
+                        {{'typeOfSignPhone' | translate}}
                       </div>
                     </div>
                   </div>
@@ -1264,7 +1264,7 @@
               <div class="col-md-10 participants__content--input"
                 style="display: flex; flex-direction: column;margin-bottom: 14px">
 
-                <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi ky ca nhan-->
+                <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại cho nguoi ky ca nhan-->
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label_detail text-color">
@@ -1274,7 +1274,7 @@
                           [value]="email" [(ngModel)]="d.login_by" />
                       </div>&nbsp;
                       <div>
-                        {{'Đăng nhập bằng email' | translate}}
+                        {{'typeOfSignEmail' | translate}}
                       </div>
                     </div>
                   </div>
@@ -1285,7 +1285,7 @@
                           [(ngModel)]="d.login_by" [value]="phone" />
                       </div>&nbsp;
                       <div>
-                        {{'Đăng nhập bằng số điện thoại' | translate}}
+                        {{'typeOfSignPhone' | translate}}
                       </div>
                     </div>
                   </div>

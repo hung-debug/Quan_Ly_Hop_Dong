@@ -892,5 +892,22 @@
   "enter.code.org": "Nhập mã tổ chức",
   "enter.name.org": "Nhập tên tổ chức",
   "update.last": "Cập nhật lần cuối",
-  "seach.report.ekyc": "Tìm kiếm theo Họ tên, CMT/CCCD, Tên HĐ, Mã HĐ, Số HĐ"
+  "seach.report.ekyc": "Tìm kiếm theo Họ tên, CMT/CCCD, Tên HĐ, Mã HĐ, Số HĐ",
+  "contract.change.status": "Chuyển xử lý hợp đồng",
+  "contract.cancel.status": "Hủy hợp đồng",
+  "contract.deny.status": "Từ chối hợp đồng",
+  "contract.expire.status": "Hợp đồng sắp hết hạn",
+  "contract.end.status": "Hợp đồng quá hạn",
+  "contract.complete.status": "Hợp đồng hoàn thành",
+  "share.contract": "CHIA SẺ MẪU HỢP ĐỒNG",
+  "select.email": "Chọn email",
+  "btn.list": "Danh sách",
+  "coordinator": "Có người điều phối",
+  "notify.sms": "Nhận SMS thông báo khi xử lý hợp đồng",
+  "enter.smtp": "Nhập SMTP Server",
+  "enter.alias": "Nhập bí danh",
+  "enter.brandname": "Nhập Brandname",
+  "creators.processing": "Người tạo và những người đang xử lý",
+  "creators.processed": "Người tạo và những người đã xử lý",
+  "creators.processing.processed": "Người đang xử lý và những người đã xử lý"
 }

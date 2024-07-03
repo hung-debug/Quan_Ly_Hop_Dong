@@ -97,28 +97,28 @@ export class AddContractTemplateComponent implements OnInit {
           }, error => {
             setTimeout(() => this.router.navigate(['/login']));
             this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-            
+
           }
         );
 
       }, error => {
         setTimeout(() => this.router.navigate(['/login']));
         this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-        
+
       })
 
       //set title
       if (this.action == 'add') {
-        this.appService.setTitle('Thêm mới mẫu hợp đồng');
+        this.appService.setTitle('contract-template.add');
       } else if (this.action == 'add-contract-connect') {
         this.appService.setTitle('contract.add');
         const array_empty: any [] = [];
         array_empty.push({ref_id: Number(params['id'])});
         this.datas.contractConnect = array_empty;
-        
+
       } else if (this.action == 'edit') {
         this.id = params['id'];
-        this.appService.setTitle('Sửa mẫu hợp đồng');
+        this.appService.setTitle('contract-template.edit');
       } else if (this.action == 'copy') {
         this.id = params['id'];
         this.appService.setTitle('contract.copy');
@@ -147,7 +147,7 @@ export class AddContractTemplateComponent implements OnInit {
   }
 
   getDataContractCreated(data: any) {
-    
+
     // this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
     if (data) {
       let fileName = data.i_data_file_contract.filter((p: any) => p.type == 1 && p.status == 1)[0];
@@ -158,7 +158,7 @@ export class AddContractTemplateComponent implements OnInit {
         data.is_data_contract['document_id'] = fileName.id;
       }
       if (fileNameAttach) {
-        data.is_data_contract['file_name_attach'] = fileNameAttach.map((p: any) => 
+        data.is_data_contract['file_name_attach'] = fileNameAttach.map((p: any) =>
         ({filename :p.filename, id: p.id}));
         data.is_data_contract['attachFile'] = fileNameAttach.map((p: any) => p.path);
       }
@@ -173,9 +173,9 @@ export class AddContractTemplateComponent implements OnInit {
       this.datas.start_time = data.is_data_contract.start_time;
       this.datas.end_time = data.is_data_contract.end_time;
 
-      
-      
-  
+
+
+
       this.datas = Object.assign(this.datas, data.is_data_contract);
       this.step = variable.stepSampleContract.step1;
     }
@@ -183,7 +183,7 @@ export class AddContractTemplateComponent implements OnInit {
 
 
   receiveMessage(event: any) {
-    
+
     this.shareData = event;
   }
 
