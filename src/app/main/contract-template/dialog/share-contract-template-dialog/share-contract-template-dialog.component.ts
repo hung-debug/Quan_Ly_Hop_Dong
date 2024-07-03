@@ -11,7 +11,7 @@ import { UserService } from 'src/app/service/user.service';
   selector: 'app-share-contract-template-dialog',
   templateUrl: './share-contract-template-dialog.component.html',
   styleUrls: ['./share-contract-template-dialog.component.scss']
-})  
+})
 export class ShareContractTemplateDialogComponent implements OnInit {
 
   type:any;
@@ -25,7 +25,7 @@ export class ShareContractTemplateDialogComponent implements OnInit {
 
   isList: string = 'off';
   stateOptions: any[];
-  cols: any[]; 
+  cols: any[];
   list: any[] = [];
   orgListTmp:any[] = [];
 
@@ -38,9 +38,9 @@ export class ShareContractTemplateDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<ShareContractTemplateDialogComponent>,
     public router: Router,
     public dialog: MatDialog,
-    private unitService: UnitService, 
+    private unitService: UnitService,
     private userService: UserService,
-    private contractTemplateService: ContractTemplateService) { 
+    private contractTemplateService: ContractTemplateService) {
 
       this.addFormUser = this.fbd.group({
         orgId: "",
@@ -48,28 +48,28 @@ export class ShareContractTemplateDialogComponent implements OnInit {
       });
 
       this.stateOptions = [
-        { label: 'Chia sẻ', value: 'off' },
-        { label: 'Danh sách', value: 'on' },
+        { label: 'btn.share', value: 'off' },
+        { label: 'btn.list', value: 'on' },
       ];
     }
 
   organization_id_user_login:any;
   orgId:any="";
   ngOnInit(): void {
-    
+
 
     if(this.isList == 'off'){
       //lay danh sach to chuc
       this.unitService.getUnitList('', '').subscribe(data => {
-        
+
         this.orgList = data.entities;
       });
 
       //lay id user
       this.organization_id_user_login = this.userService.getAuthCurrentUser().organizationId;
-      
+
       this.datas = this.data;
-      
+
       //mac dinh lay danh sach user to chuc cua ng truy cap
       this.getUserByOrg(this.organization_id_user_login);
 
@@ -80,13 +80,13 @@ export class ShareContractTemplateDialogComponent implements OnInit {
     }else{
       //lay danh sach to chuc
       this.unitService.getUnitList('', '').subscribe(data => {
-        
+
         this.orgListTmp.push({name: "Tất cả", id:""});
         let dataUnit = data.entities.sort((a:any,b:any) => a.name.toString().localeCompare(b.name.toString()));
         for(var i = 0; i < dataUnit.length; i++){
           this.orgListTmp.push(dataUnit[i]);
         }
-        
+
         this.orgList = this.orgListTmp;
       });
 
@@ -101,40 +101,40 @@ export class ShareContractTemplateDialogComponent implements OnInit {
 
   getDataShareByOrgId(){
     this.contractTemplateService.getEmailShareList(this.data.id, this.orgId).subscribe(response => {
-      
+
       this.list = response;
     });
   }
 
   getUserByOrg(orgId:any){
-    
+
     let emailLogin = this.userService.getAuthCurrentUser().email;
-    
+
     //lay danh sach email da duoc chia se
     this.contractTemplateService.getEmailShareList(this.data.id, orgId).subscribe(listShared => {
       this.userService.getUserList(orgId, "","").subscribe(data => {
-        
+
         let dataFilter = data.entities.filter((p: any) => p.email != emailLogin && p.status == 1);
         //chi lay danh sach user chua duoc chia se
         this.userList = dataFilter.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
       });
     });
 
-    
+
   }
 
   //email:any;
   checkEmailError:boolean;
-  onSubmit() {    
-    
+  onSubmit() {
+
     this.submittedUser = true;
     // stop here if form is invalid
     if (this.addFormUser.invalid) {
       return;
     }
-    
+
     this.contractTemplateService.shareContract(this.addFormUser.value.email, this.data.id).subscribe(data => {
-      
+
       if(data.contract_id != null){
         this.dialogRef.close();
         this.toastService.showSuccessHTMLWithTimeout('Chia sẻ mẫu hợp đồng thành công', "", 3000);

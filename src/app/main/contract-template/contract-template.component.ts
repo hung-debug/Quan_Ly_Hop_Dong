@@ -62,7 +62,7 @@ export class ContractTemplateComponent implements OnInit {
               private toastService: ToastService,
               private route: ActivatedRoute,
               private spinner: NgxSpinnerService,
-              ) { 
+              ) {
 
     this.stateOptions = [
       { label: 'contract-template.create', value: 'off' },
@@ -99,18 +99,18 @@ export class ContractTemplateComponent implements OnInit {
             this.getContractType();
 
             this.loaded = true;
-            
+
           }, error => {
             setTimeout(() => this.router.navigate(['/login']));
             this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-           
+
           }
-        ); 
-      
+        );
+
       }, error => {
         setTimeout(() => this.router.navigate(['/login']));
         this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-        
+
       }
     )
 
@@ -119,7 +119,7 @@ export class ContractTemplateComponent implements OnInit {
         this.p = params.page;
       }
     });
-    
+
   }
   async getContractType(){
     await this.contractTypeService.getContractTemplateTypeList("", "").toPromise().then(response => {
@@ -127,7 +127,7 @@ export class ContractTemplateComponent implements OnInit {
     });
   }
 
-  
+
   async getContractTemplateList(){
     this.enterPage = this.p;
     //get list contract template
@@ -157,7 +157,7 @@ export class ContractTemplateComponent implements OnInit {
       event.preventDefault();
     }
   }
-  
+
   autoSearchEnterPage(event: any) {
     if(event.target.value && event.target.value != 0 && event.target.value <= this.numberPage) {
       this.p = this.enterPage;
@@ -166,7 +166,7 @@ export class ContractTemplateComponent implements OnInit {
     }
     this.getContractTemplateList();
   }
-  
+
   countPage() {
     this.numberPage = Math.ceil(this.pageTotal / this.page);
     return this.numberPage;
@@ -204,7 +204,7 @@ export class ContractTemplateComponent implements OnInit {
       }
       return sideList[index].name + " : " + side;
     }
-    
+
   }
 
 
@@ -229,7 +229,7 @@ export class ContractTemplateComponent implements OnInit {
   cloneContractTemplateCall(id: number) {
       this.spinner.show();
       this.contractTemplateService.cloneContractTemplate(id).subscribe((res: any) => {
-        // 
+        //
         this.toastService.showSuccessHTMLWithTimeout(`Sao chép mẫu hợp đồng ${res.name} thành công!`, "", 3000)
         this.getContractTemplateList();
 
@@ -277,7 +277,7 @@ export class ContractTemplateComponent implements OnInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+
       let is_data = result
     })
   }
@@ -296,7 +296,7 @@ export class ContractTemplateComponent implements OnInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+
       let is_data = result
     })
   }
@@ -315,14 +315,14 @@ export class ContractTemplateComponent implements OnInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+
       let is_data = result
     })
   }
 
   shareContractTemplate(id:any){
     const data = {
-      title: 'CHIA SẺ MẪU HỢP ĐỒNG',
+      title: 'share.contract',
       id: id
     };
     // @ts-ignore
@@ -334,7 +334,7 @@ export class ContractTemplateComponent implements OnInit {
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+
       let is_data = result
     })
   }
