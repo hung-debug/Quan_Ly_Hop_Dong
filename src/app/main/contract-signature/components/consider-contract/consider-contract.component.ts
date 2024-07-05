@@ -270,7 +270,7 @@ export class ConsiderContractComponent
       this.type = 1;
     } else this.type = 0;
 
-    let recipientIdParam: any 
+    let recipientIdParam: any
     this.activeRoute.queryParams.subscribe((param: any) => recipientIdParam = param.recipientId)
     await this.getRemoteSigningCurrentStatusCall(recipientIdParam)
     await this.getCurrentFieldsData()
@@ -356,7 +356,7 @@ export class ConsiderContractComponent
       );
     });
   }
-  
+
   changeScale(values: any){
     switch (values){
       case "-":
@@ -390,9 +390,9 @@ export class ConsiderContractComponent
         break;
     }
   }
-  
+
   changeRotate(values: any){
-    
+
   }
 
   page1: boolean = false;
@@ -1013,16 +1013,16 @@ export class ConsiderContractComponent
       this.activeScroll();
     });
   }
-  
+
   resetToDefault(){
     if(this.scale != 1){
       this.scale = this.defaultScale;
       this.defaultValue = this.scale * 100
       this.getPage();
     }
-    
+
   }
-  
+
   // rotateCanvas() {
   //   const canvas = this.pdfCanvas.nativeElement;
   //   const context = canvas.getContext('2d');
@@ -1056,7 +1056,7 @@ export class ConsiderContractComponent
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
-    let style: any = 
+    let style: any =
     (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
     {
       transform:
@@ -1075,7 +1075,7 @@ export class ConsiderContractComponent
     if (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so' && this.isNotTextSupport) {
       style.backgroundColor = "#eff2f5"
       style.cursor = "not-allowed"
-    } 
+    }
 
     // style.backgroundColor = d.valueSign ? '' : backgroundColor;
     style.display =
@@ -1361,7 +1361,7 @@ export class ConsiderContractComponent
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.info;
-    
+
     this.contractService.getRemoteSigningCurrentStatus(this.recipientId).subscribe(
       (res) => {
         if (res.isPresent && res.status == "DANG_XU_LY") {
@@ -1570,11 +1570,11 @@ export class ConsiderContractComponent
                   }
 
                 }
-        
+
                 if (typeSignImage && typeSignImage == 1) {
                   haveSignImage = true;
                 }
-        
+
                 if (typeSignImage && typeSignImage == 4) {
                   haveSignImage = true;
                 }
@@ -1589,7 +1589,7 @@ export class ConsiderContractComponent
                     this.confirmSignature == 2) ||
                   (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
                 ) &&
-                this.ArrRecipientsNew.length > 0 
+                this.ArrRecipientsNew.length > 0
               ) {
                 let swalfire = null;
                 if (typeSignDigital) {
@@ -1597,7 +1597,7 @@ export class ConsiderContractComponent
                 } else {
                   swalfire = this.getSwalFire('image');
                 }
-        
+
                 swalfire.then(async (result) => {
                   if (result.isConfirmed) {
                     if (result.value == 'yes') {
@@ -1808,7 +1808,7 @@ export class ConsiderContractComponent
                         if (
                           [2, 3, 4].includes(this.datas.roleContractReceived) &&
                           haveSignPKI
-                        ) {                      
+                        ) {
                           this.pkiDialogSignOpen();
                           this.spinner.hide();
                         } else if (
@@ -1975,8 +1975,8 @@ export class ConsiderContractComponent
         else if (code == 'remote'){
           this.remoteDialogSignOpen(this.recipientId);
         }
-        else if (code == 'pki'){        
-          this.pkiDialogSignOpen();  
+        else if (code == 'pki'){
+          this.pkiDialogSignOpen();
         }
       }
     });
@@ -2063,7 +2063,7 @@ export class ConsiderContractComponent
   font: any;
   font_size: any;
   currentBoxSignType: any
-  async signDigitalDocument() {
+  async signDigitalDocument(isVnptSmartCa = false) {
     let typeSignDigital = this.typeSignDigital;
     let checkCurrentSigningStatus: any = false;
     checkCurrentSigningStatus = await this.checkCurrentSigningCall()
@@ -2337,7 +2337,7 @@ export class ConsiderContractComponent
         const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
         image_base64 = this.textSignBase64Gen = textSignB.split(',')[1];
       }
-       
+
       if (fileC && objSign.length) {
         if(this.markImage == true){
           const checkSign = await this.contractService.signPkiDigital(
@@ -2382,7 +2382,7 @@ export class ConsiderContractComponent
             return true;
           }
         }
-        
+
       }
     } else if (typeSignDigital == 4) {
       // HSM SIGN
@@ -2994,7 +2994,8 @@ export class ConsiderContractComponent
                   this.dataCert,
                   this.recipientId,
                   this.isTimestamp,
-                  signUpdate.type
+                  signUpdate.type,
+                  isVnptSmartCa
                 );
                 if (!checkSign || (checkSign && !checkSign.success)) {
                   if (!checkSign.message) {
@@ -3042,7 +3043,8 @@ export class ConsiderContractComponent
                     this.dataCert,
                     this.recipientId,
                     this.isTimestamp,
-                    signUpdate.type
+                    signUpdate.type,
+                    isVnptSmartCa
                   );
                   if (!checkSign || (checkSign && !checkSign.success)) {
                     if (!checkSign.message) {
@@ -3132,7 +3134,7 @@ export class ConsiderContractComponent
   }
 
   otp: boolean = false;
-  async signContractSubmit() {
+  async signContractSubmit(isVnptSmartCa = false) {
     this.spinner.show();
     const signUploadObs$ = [];
     let indexSignUpload: any[] = [];
@@ -3212,11 +3214,11 @@ export class ConsiderContractComponent
     );
 
     if (signUploadObs$.length == 0 || eKYC == 1) {
-      await this.signContract(true);
+      await this.signContract(true, isVnptSmartCa);
     }
   }
 
-  async signContract(notContainSignImage?: boolean) {
+  async signContract(notContainSignImage?: boolean, isVnptSmartCa = false) {
     const signUpdateTemp = JSON.parse(
       JSON.stringify(this.isDataObjectSignature)
     );
@@ -3350,7 +3352,7 @@ export class ConsiderContractComponent
         }
       }
     } else {
-      await this.signImageC(signUpdatePayload, notContainSignImage);
+      await this.signImageC(signUpdatePayload, notContainSignImage, isVnptSmartCa);
     }
   }
 
@@ -3792,13 +3794,13 @@ export class ConsiderContractComponent
   }
 
   filePath: any = '';
-  async signImageC(signUpdatePayload: any, notContainSignImage: any) {
+  async signImageC(signUpdatePayload: any, notContainSignImage: any, isVnptSmartCa = false) {
     let signDigitalStatus = null;
     let signUpdateTempN: any[] = [];
     if (signUpdatePayload) {
       signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
       if (notContainSignImage) {
-        signDigitalStatus = await this.signDigitalDocument();
+        signDigitalStatus = await this.signDigitalDocument(isVnptSmartCa);
 
         if (this.eKYC == false) {
           signUpdateTempN = signUpdateTempN
@@ -3869,7 +3871,7 @@ export class ConsiderContractComponent
             this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
               async (result) => {
                 if (!notContainSignImage) {
-                  await this.signDigitalDocument();
+                  await this.signDigitalDocument(isVnptSmartCa);
                 }
 
                 this.router
@@ -3936,7 +3938,7 @@ export class ConsiderContractComponent
       this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
         async (result) => {
           if (!notContainSignImage) {
-            await this.signDigitalDocument();
+            await this.signDigitalDocument(isVnptSmartCa);
           }
 
           this.router.navigateByUrl('/', { skipLocationChange: true })
@@ -4012,7 +4014,7 @@ export class ConsiderContractComponent
             } else {
               if (!notContainSignImage) {
                 //Ký số
-                await this.signDigitalDocument();
+                await this.signDigitalDocument(isVnptSmartCa);
               }
 
               this.router
@@ -4064,7 +4066,7 @@ export class ConsiderContractComponent
       }
       if (this.currentBoxSignType == 8) {
         this.spinner.hide()
-        this.remoteDialogSuccessOpen().then(result => {
+        this.remoteDialogSuccessOpen(isVnptSmartCa).then(result => {
           if (result.isDismissed) {
             // this.router.navigate([
             //   'main/form-contract/detail/' + this.idContract,
@@ -4694,7 +4696,7 @@ export class ConsiderContractComponent
         let signI = null;
         let imageRender = null;
 
-        this.cardId = result.ma_dvcs.trim();
+        this.cardId = result?.ma_dvcs?.trim();
 
         if (result) {
           this.dataHsm.supplier = result.supplier
@@ -4798,12 +4800,16 @@ export class ConsiderContractComponent
         let signI = null;
         let imageRender = null;
 
-        this.cardId = result.ma_dvcs.trim();
+        this.cardId = result?.ma_dvcs?.trim();
+        let isVnptSmartCA = false
+        if (result?.type == '1') {
+          isVnptSmartCA = true;
+        }
 
         if (result) {
           this.dataCert.cert_id = result.ma_dvcs;
 
-          await this.signContractSubmit();
+          await this.signContractSubmit(isVnptSmartCA);
         }
       });
     })
@@ -5086,19 +5092,34 @@ export class ConsiderContractComponent
     })
   }
 
-  remoteDialogSuccessOpen() {
-    return Swal.fire({
-      title: "THÔNG BÁO",
-      text: "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký hợp đồng!",
-      icon: 'info',
-      showCancelButton: true,
-      showConfirmButton: false,
-      cancelButtonColor: '#b0bec5',
-      cancelButtonText: "Thoát",
-      customClass: {
-        title: 'my-custom-title-class',
-      },
-    });
+  remoteDialogSuccessOpen(isVnptSmartCa = false) {
+    if(isVnptSmartCa) {
+      return Swal.fire({
+        title: "THÔNG BÁO",
+        text: "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký hợp đồng!",
+        icon: 'info',
+        showCancelButton: true,
+        showConfirmButton: false,
+        cancelButtonColor: '#b0bec5',
+        cancelButtonText: "Thoát",
+        customClass: {
+          title: 'my-custom-title-class',
+        },
+      });
+    } else  {
+      return Swal.fire({
+        title: "THÔNG BÁO",
+        text: "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký hợp đồng!",
+        icon: 'info',
+        showCancelButton: true,
+        showConfirmButton: false,
+        cancelButtonColor: '#b0bec5',
+        cancelButtonText: "Thoát",
+        customClass: {
+          title: 'my-custom-title-class',
+        },
+      });
+    }
   }
 
   async getRemoteSigningCurrentStatusCall(recipId: any) {

@@ -1045,7 +1045,7 @@ export class ContractService {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);    
+      .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       name: datas.name,
       type: is_type ? is_type : 1,
@@ -1056,7 +1056,7 @@ export class ContractService {
       ordering: 1,
       status: is_status ? is_status : 1,
       contract_id: datas.id,
-    });  
+    });
     return this.http.post<Contract>(this.documentUrl, body, {
       headers: headers,
     });
@@ -1278,7 +1278,7 @@ export class ContractService {
       .toPromise();
   }
 
-  signRemote(datas: any, recipientId: number, isTimestamp: any, boxType: any) {
+  signRemote(datas: any, recipientId: number, isTimestamp: any, boxType: any, isVnptSmartCa= false) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -1291,6 +1291,7 @@ export class ContractService {
       isTimestamp: isTimestamp,
       type: boxType,
       field: datas.field,
+      supplier: isVnptSmartCa ? 'vnpt' : 'nacencomm',
     });
 
     return this.http
@@ -1298,7 +1299,7 @@ export class ContractService {
       .toPromise();
   }
 
-  signRemoteMulti(datas: any, recipientIds: [], isTimestamp: any, boxType: any) {
+  signRemoteMulti(datas: any, recipientIds: [], isTimestamp: any, boxType: any, isVnptSmartCa?: any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -1311,6 +1312,7 @@ export class ContractService {
       isTimestamp: false,
       type: boxType,
       field: datas.field,
+      supplier: isVnptSmartCa ? 'vnpt' : 'nacencomm',
     });
 
     return this.http
