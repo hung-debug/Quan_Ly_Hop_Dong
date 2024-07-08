@@ -847,8 +847,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 if (!this.objDrag[this.signCurent['id']].count) {
                   // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                   if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
-                    element['width'] = rect_location.width;
-                    element['height'] = rect_location.height;
+                    // element['width'] = rect_location.width;
+                    // element['height'] = rect_location.height;          
+                    if (event.target.className.includes('da-keo')){
+                      element['width'] = event.target.offsetWidth;
+                      element['height'] = event.target.offsetHeight;
+                    } else {
+                      element['width'] = '135';
+                      element['height'] = '28';
+                    }
+                    
                   } else {
                     if (event.target.className.includes('da-keo')){
                       element['width'] = event.target.offsetWidth;
