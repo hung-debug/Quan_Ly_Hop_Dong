@@ -1366,7 +1366,7 @@ export class ConsiderContractComponent
       (res) => {
         if (res.isPresent && res.status == "DANG_XU_LY") {
           // this.toastService.showWarningHTMLWithTimeout("Hợp đồng đang được xử lý, vui lòng ký hợp đồng trên app CA2 RS và reload lại trang!","",3000)
-          this.remoteSigningProcessingStatusSwalfire(res.status)
+          this.remoteSigningProcessingStatusSwalfire(res.status, res?.supplier)
           return
           // this.toastService.showWarningHTMLWithTimeout("Vui lòng ký hợp đồng trên app CA2 RS và reload lại trang!","",3000)
         } else if (res.status == "HOAN_THANH") {
@@ -1393,7 +1393,7 @@ export class ConsiderContractComponent
         }
         else {
           if (res.status == "TU_CHOI" && this.countReject == 0) {
-            this.remoteSigningProcessingStatusSwalfire(res.status)
+            this.remoteSigningProcessingStatusSwalfire(res.status, res?.supplier)
             this.countReject++
           } else {
             this.contractService.getDetermineCoordination(this.recipientId).subscribe(async (response) => {
@@ -4068,9 +4068,9 @@ export class ConsiderContractComponent
         this.spinner.hide()
         this.remoteDialogSuccessOpen(isVnptSmartCa).then(result => {
           if (result.isDismissed) {
-            // this.router.navigate([
-            //   'main/form-contract/detail/' + this.idContract,
-            // ]);
+            this.router.navigate([
+              'main/form-contract/detail/' + this.idContract,
+            ]);
           }
         })
       }
@@ -5093,33 +5093,19 @@ export class ConsiderContractComponent
   }
 
   remoteDialogSuccessOpen(isVnptSmartCa = false) {
-    if(isVnptSmartCa) {
-      return Swal.fire({
-        title: "THÔNG BÁO",
-        text: "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký hợp đồng!",
-        icon: 'info',
-        showCancelButton: true,
-        showConfirmButton: false,
-        cancelButtonColor: '#b0bec5',
-        cancelButtonText: "Thoát",
-        customClass: {
-          title: 'my-custom-title-class',
-        },
-      });
-    } else  {
-      return Swal.fire({
-        title: "THÔNG BÁO",
-        text: "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký hợp đồng!",
-        icon: 'info',
-        showCancelButton: true,
-        showConfirmButton: false,
-        cancelButtonColor: '#b0bec5',
-        cancelButtonText: "Thoát",
-        customClass: {
-          title: 'my-custom-title-class',
-        },
-      });
-    }
+    return Swal.fire({
+      title: "THÔNG BÁO",
+      text: isVnptSmartCa ?  "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký hợp đồng!" :
+        "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký hợp đồng!",
+      icon: 'info',
+      showCancelButton: true,
+      showConfirmButton: false,
+      cancelButtonColor: '#b0bec5',
+      cancelButtonText: "Thoát",
+      customClass: {
+        title: 'my-custom-title-class',
+      },
+    });
   }
 
   async getRemoteSigningCurrentStatusCall(recipId: any) {
@@ -5134,15 +5120,15 @@ export class ConsiderContractComponent
           this.isRemoteSigningProcessing = true
         }
         if (res?.status == "QUA_THOI_GIAN_KY" || res?.status == "DANG_XU_LY" || res?.status == "TU_CHOI") {
-          this.remoteSigningProcessingStatusSwalfire(res?.status)
+          this.remoteSigningProcessingStatusSwalfire(res?.status, res?.supplier)
         }
       }
     )
   }
 
-  remoteSigningProcessingStatusSwalfire(code: string) {
+  remoteSigningProcessingStatusSwalfire(code: string, supplier?: any) {
     return Swal.fire({
-      title: this.getTextAlertRemoteSigningProcess(code),
+      title: this.getTextAlertRemoteSigningProcess(code, supplier),
       icon: code == 'HOAN_THANH' ? 'success' : 'warning',
       showCancelButton: false,
       confirmButtonColor: '#0041C4',
@@ -5152,16 +5138,19 @@ export class ConsiderContractComponent
     });
   }
 
-  getTextAlertRemoteSigningProcess(code: any) {
+  getTextAlertRemoteSigningProcess(code: any, supplier?: any) {
     switch (code) {
       case "QUA_THOI_GIAN_KY":
-        return "Hợp đồng đã quá thời gian ký trên app CA2 RS, vui lòng thực hiện ký lại trên web!"
+        return supplier == 'vnpt' ? "Hợp đồng đã quá thời gian ký trên app VNPT SmartCA, vui lòng thực hiện ký lại trên web!"
+          :  "Hợp đồng đã quá thời gian ký trên app CA2 RS, vui lòng thực hiện ký lại trên web!"
       case "DANG_XU_LY":
-        return "Hợp đồng đang được xử lý, vui lòng thực hiện ký trên app CA2 RS và reload lại trang!"
+        return supplier == 'vnpt' ?  "Hợp đồng đang được xử lý, vui lòng thực hiện ký trên app VNPT SmartCA và reload lại trang!" :
+          "Hợp đồng đang được xử lý, vui lòng thực hiện ký trên app CA2 RS và reload lại trang!"
       case "HOAN_THANH":
         return "Hợp đồng đã ký thành công!"
       case "TU_CHOI":
-        return "Đã từ chối ký hợp đồng trên app CA2 RS, vui lòng thực hiện ký lại trên web!"
+        return supplier == 'vnpt' ? "Đã từ chối ký hợp đồng trên app VNPT SmartCA, vui lòng thực hiện ký lại trên web!" :
+          "Đã từ chối ký hợp đồng trên app CA2 RS, vui lòng thực hiện ký lại trên web!"
     }
   }
 

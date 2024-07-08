@@ -1808,33 +1808,19 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   remoteDialogSuccessOpen(isVnptSmartCa = false) {
-    if (isVnptSmartCa) {
-      return Swal.fire({
-        title: "THÔNG BÁO",
-        text: "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký hợp đồng!",
-        icon: 'info',
-        showCancelButton: true,
-        showConfirmButton: false,
-        cancelButtonColor: '#b0bec5',
-        cancelButtonText: "Thoát",
-        customClass: {
-          title: 'my-custom-title-class',
-        },
-      });
-    } else {
-      return Swal.fire({
-        title: "THÔNG BÁO",
-        text: "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký hợp đồng!",
-        icon: 'info',
-        showCancelButton: true,
-        showConfirmButton: false,
-        cancelButtonColor: '#b0bec5',
-        cancelButtonText: "Thoát",
-        customClass: {
-          title: 'my-custom-title-class',
-        },
-      });
-    }
+    return Swal.fire({
+      title: "THÔNG BÁO",
+      text: isVnptSmartCa ? "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký hợp đồng!" :
+        "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký hợp đồng!",
+      icon: 'info',
+      showCancelButton: true,
+      showConfirmButton: false,
+      cancelButtonColor: '#b0bec5',
+      cancelButtonText: "Thoát",
+      customClass: {
+        title: 'my-custom-title-class',
+      },
+    });
   }
 
   getValueByKey(inputString: string, key: string) {
