@@ -1,9 +1,10 @@
-.content {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  padding: 4px;
-}
+// .content {
+//   //height: 102px;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   flex-direction: column;
+// }
 
 .text-sign span {
   width: 125px;
@@ -11,6 +12,23 @@
   height: 25px;
   outline: none;
   color: #106DB6;
+}
+
+.main-digital-sign-box {
+  display: flex;
+  width: 100%;
+  padding: 4px;
+}
+.content {
+  //height: 102px;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
+  // flex-direction: column;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  // padding: 4px;
 }
 
 .stamp-content {

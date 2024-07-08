@@ -888,5 +888,15 @@
   "enter.brandname": "Enter Brandname",
   "creators.processing": "Creators and those who are processing",
   "creators.processed": "Creators and those who processed",
-  "creators.processing.processed": "People who are processing and those who have processed"
+  "creators.processing.processed": "People who are processing and those who have processed",
+  "contract.info": "Contract information",
+  "drag.contract.file": "Drag and drop or upload document/contract files",
+  "drag.contract.here": "Here",
+  "drag.contract.note": "Support docx, pdf files",
+  "xoa_doi_tac": "Delete partner",
+  "componentsnew":"INGREDIENT",
+  "sign.imagenew":"Photo signature",
+  "btn.add.user.delete": "Delete",
+  "drop.doc": "Drag and drop the information fields below to add an input or signature box to the document",
+  "location_size" : "Location and size"
 }
