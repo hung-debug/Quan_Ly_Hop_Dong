@@ -909,5 +909,15 @@
   "enter.brandname": "Nhập Brandname",
   "creators.processing": "Người tạo và những người đang xử lý",
   "creators.processed": "Người tạo và những người đã xử lý",
-  "creators.processing.processed": "Người đang xử lý và những người đã xử lý"
+  "creators.processing.processed": "Người đang xử lý và những người đã xử lý",
+  "contract.info": "Thông tin hợp đồng",
+  "drag.contract.file": "Kéo thả hoặc tải lên file tài liệu/hợp đồng",
+  "drag.contract.here": "Tại đây",
+  "drag.contract.note": "Hỗ trợ file docx, pdf",
+  "xoa_doi_tac": "Xóa đối tác",
+  "componentsnew":"THÀNH PHẦN",
+  "sign.imagenew":"Chữ ký ảnh",
+  "btn.add.user.delete": "Xóa",
+  "drop.doc": "Kéo thả các trường thông tin dưới đây để thêm ô nhập hoặc ô ký vào tài liệu",
+  "location_size" : "Vị trí và kích thước"
 }

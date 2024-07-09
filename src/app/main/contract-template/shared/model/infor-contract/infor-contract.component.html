@@ -1,5 +1,40 @@
 <!-- form step 1 -->
-<div>
+<div style="margin: 32px 24px;">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <input id="file-input" type="file" accept=".pdf,.docx" (change)="fileChanged($event)" style="display: none;" />
+        <div class="file-contract" (click)="addFile()">
+          <img src="assets/img/document-upload.png" alt="mobifone.contract">
+          <div class="mt-7px">
+            <span class="drag-contract" *ngIf="this.datas.file_name==null">{{'drag.contract.file' | translate }} 
+              <span style="color: #286CF5">{{'drag.contract.here' | translate }}</span>
+              <br/>
+              <span class="note-drag-contract">{{'drag.contract.note' | translate }}</span>
+            </span>
+            <span class="drag-contract" *ngIf="this.datas.file_name">
+              {{datas.file_name}}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="form-group">
+        <div class="label_item">{{'drag.contract.file1' | translate}} <span class="require_star">*</span></div>
+        <input id="file-input" type="file" accept=".pdf,.docx" (change)="fileChanged($event)" style="display: none;"/>
+        <div class="file-contract" (click)="addFile()">
+          <img src="assets/img/upload_file.svg" alt="mobifone.contract">
+          <div style="padding-top: 7px;"><span style="color: #798693;" *ngIf="this.datas.file_name==null">{{'choose.contract.file' | translate }}</span>{{this.datas.file_name}}</div>
+        </div>
+      </div> -->
+      <div class="form-group">
+        <div class="invalid" *ngIf="errorContractFile!=''">
+          {{errorContractFile | translate}}
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-md-12">
       <div class="form-group">
@@ -17,25 +52,7 @@
   </div>
 
   <div class="row">
-    <div class="col-md-12">
-      <div class="form-group">
-        <div class="label_item">{{'contract-template.file' | translate}} <span class="require_star">*</span></div>
-        <input id="file-input" type="file" accept=".pdf,.docx" (change)="fileChanged($event)" style="display: none;"/>
-        <div class="file-contract" (click)="addFile()">
-          <img src="assets/img/upload_file.svg" alt="mobifone.contract">
-          <div style="padding-top: 7px;"><span style="color: #798693;" *ngIf="this.datas.file_name==null">{{'choose.contract.file' | translate }}</span>{{this.datas.file_name}}</div>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="invalid" *ngIf="errorContractFile!=''">
-          {{errorContractFile | translate}}
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-6">
       <div class="form-group">
         <div class="label_item">{{'contract-template.code' | translate}} <span class="require_star">*</span></div>
         <div class="input-group">
@@ -50,8 +67,7 @@
       </div>
     </div>
 
-    <div class="col-md-2"></div>
-    <div class="col-md-5">
+    <div class="col-md-6">
       <div class="form-group">
         <div class="label_item">{{'contract.type' | translate}}
           <span *ngIf="this.environment.flag=='NB'" class="require_star">*</span>
@@ -78,8 +94,39 @@
     </div>
   </div>
 
+  <div class="row">    
+    <div class="col-md-6">
+      <div class="form-group">
+        <div class="label_item">{{'effective-start-date' | translate}} <span class="require_star">*</span></div>
+        <div>
+          <p-calendar *ngIf="this.templateIsUse" [(ngModel)]="start_time" [disabled]="true" [showIcon]="true" [readonlyInput]="false" dateFormat="dd/mm/yy" (onSelect)="startTimeRequired();"></p-calendar>
+          <p-calendar *ngIf="!this.templateIsUse" [(ngModel)]="start_time" [disabled]="false" [showIcon]="true" [readonlyInput]="false" dateFormat="dd/mm/yy" (onSelect)="startTimeRequired();"></p-calendar>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="invalid" *ngIf="errorStartTime!=''">
+          {{errorStartTime | translate}}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <div class="label_item">{{'effective-end-date' | translate}} <span class="require_star">*</span></div>
+        <div>
+          <p-calendar [(ngModel)]="end_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="false" dateFormat="dd/mm/yy" (onSelect)="endTimeValid();"></p-calendar>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="invalid" *ngIf="errorEndTime!=''">
+          {{errorEndTime | translate}}
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-6">
       <div class="form-group">
         <div class="select-file-contract">
           <div class="file-approve">
@@ -88,47 +135,14 @@
                   (change)="fileChangedAttach($event)" style="display: none;" multiple/>
             <div class="select-contract" >
               <div class="div_file_attach">
-                <div *ngIf="!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length == 0" style="color:gray">{{'choose.contract.file.attach' | translate }}</div>
+                <div *ngIf="!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length == 0" style="color: #AEC7E5; font-size: 12px; font-weight: 500; line-height: 21px;">{{'choose.contract.file.attach' | translate }}</div>
                 <div *ngFor="let item of this.datas.attachFileNameArr; let i = index" style="width: 80%;">{{item.filename}} <img *ngIf="item" style="cursor: pointer;" (click)="deleteFileAttach(item, i)" src="../../../../../../assets/img/icon_close.svg"></div>
               </div>
-              <img src="assets/img/attachment.svg" alt="mobifone.contract" (click)="addFileAttach()">
+              <img src="assets/img/attach-square.png" alt="mobifone.contract" (click)="addFileAttach()">
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-md-2"></div>
-
-    <div class="col-md-5">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <div class="label_item">{{'effective-start-date' | translate}} <span class="require_star">*</span></div>
-            <div>
-              <p-calendar *ngIf="this.templateIsUse" [(ngModel)]="start_time" [disabled]="true" [showIcon]="true" [readonlyInput]="false" dateFormat="dd/mm/yy" (onSelect)="startTimeRequired();"></p-calendar>
-              <p-calendar *ngIf="!this.templateIsUse" [(ngModel)]="start_time" [disabled]="false" [showIcon]="true" [readonlyInput]="false" dateFormat="dd/mm/yy" (onSelect)="startTimeRequired();"></p-calendar>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="invalid" *ngIf="errorStartTime!=''">
-              {{errorStartTime | translate}}
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="form-group">
-            <div class="label_item">{{'effective-end-date' | translate}} <span class="require_star">*</span></div>
-            <div>
-              <p-calendar [(ngModel)]="end_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="false" dateFormat="dd/mm/yy" (onSelect)="endTimeValid();"></p-calendar>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="invalid" *ngIf="errorEndTime!=''">
-              {{errorEndTime | translate}}
-            </div>
-          </div>
-        </div>
     </div>
   </div>
 </div>
