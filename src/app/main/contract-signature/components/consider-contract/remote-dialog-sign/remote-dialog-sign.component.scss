@@ -102,4 +102,9 @@ input.pw {
   select:invalid {
     color: gray;
   }
+  .form-select-custom {
+    width: 100%;
+    height: 33px;
+    border-radius: 5px;
+  }
 }
