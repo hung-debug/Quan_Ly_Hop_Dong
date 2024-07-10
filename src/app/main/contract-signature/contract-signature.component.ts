@@ -759,7 +759,7 @@ export class ContractSignatureComponent implements OnInit {
       event.preventDefault();
     }
   }
-  
+
   autoSearchEnterPage(event: any) {
     if(event.target.value && event.target.value != 0 && event.target.value <= this.numberPage) {
       this.p = this.enterPage;
@@ -1364,7 +1364,7 @@ export class ContractSignatureComponent implements OnInit {
         }
       }
 
-      for (let i = 0; i < idContract.length; i++) {   
+      for (let i = 0; i < idContract.length; i++) {
         // check case ky song song
         let dataObjectSignature: any = null;
         dataObjectSignature = await this.contractServiceV1
@@ -1376,7 +1376,7 @@ export class ContractSignatureComponent implements OnInit {
           this.spinner.hide()
           return
         }
-        // check case ky song song  
+        // check case ky song song
         try {
           let fileContract = await this.contractServiceV1.getFileContract(idContract[i]).toPromise();
 
@@ -1469,13 +1469,13 @@ export class ContractSignatureComponent implements OnInit {
               this.dataHsm,
               idSignMany
             );
-  
+
             let countSuccess = 0;
-  
+
             for (let i = 0; i < checkSign.length; i++) {
               if (checkSign[i].result.success == false) {
                 this.spinner.hide();
-  
+
                 if (checkSign[i].result.message == 'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng') {
                   this.toastService.showErrorHTMLWithTimeout(
                     'taxcode.not.match.hsm',
@@ -1504,7 +1504,7 @@ export class ContractSignatureComponent implements OnInit {
                     '',
                     3000
                   );
-                } 
+                }
                 else if (checkSign[i].result.message == "false") {
                   this.toastService.showErrorHTMLWithTimeout(
                     "Lấy thông tin chứng thư số thất bại",
@@ -1523,7 +1523,7 @@ export class ContractSignatureComponent implements OnInit {
                 countSuccess++;
               }
             }
-  
+
             if (countSuccess == checkSign.length) {
               this.spinner.hide();
               this.toastService.showSuccessHTMLWithTimeout(
@@ -1531,14 +1531,14 @@ export class ContractSignatureComponent implements OnInit {
                 '',
                 3000
               );
-  
+
               this.router
                 .navigateByUrl('/', { skipLocationChange: true })
                 .then(() => {
                   this.router.navigate(['main/c/receive/processed']);
                 });
             }
-            
+
           } catch (error) {
             this.spinner.hide()
             return this.toastService.showErrorHTMLWithTimeout("Lấy thông tin chứng thư số thất bại","",3000)
@@ -1703,6 +1703,10 @@ export class ContractSignatureComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(async (resultRS: any) => {
         if (resultRS) {
+          let isVnptSmartCa = false;
+          if (resultRS?.type == '1') {
+            isVnptSmartCa = true
+          }
           this.nameCompany = resultRS.ma_dvcs;
 
           try {
@@ -1733,7 +1737,8 @@ export class ContractSignatureComponent implements OnInit {
             manyRemoteSignData,
             recipientIds,
             null,
-            3
+            3,
+            isVnptSmartCa
           ).then(
             (res: any) => {
               this.spinner.hide();
@@ -1781,7 +1786,7 @@ export class ContractSignatureComponent implements OnInit {
 
               if (countSuccess == checkSign.length) {
                 this.spinner.hide();
-                this.remoteDialogSuccessOpen().then((res) => {
+                this.remoteDialogSuccessOpen(isVnptSmartCa).then((res) => {
                   if (res.isDismissed) {
                     this.router
                       .navigateByUrl('/', { skipLocationChange: true })
@@ -1802,10 +1807,11 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
-  remoteDialogSuccessOpen() {
+  remoteDialogSuccessOpen(isVnptSmartCa = false) {
     return Swal.fire({
       title: "THÔNG BÁO",
-      text: "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký hợp đồng!",
+      text: isVnptSmartCa ? "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký hợp đồng!" :
+        "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký hợp đồng!",
       icon: 'info',
       showCancelButton: true,
       showConfirmButton: false,
@@ -1946,10 +1952,10 @@ export class ContractSignatureComponent implements OnInit {
                   for (let j = 0; j < dataObjectSignature.length; j++) {
                     try {
                       // w[j] = x[j] + w[j];
-  
+
                       // // //Tính lại h, y theo chiều dài của các trang trong hợp đồng ký
                       // y[j] = heightPage[i] - (y[j] - dataObjectSignature[j].currentHeight) - h[j];
-    
+
                       // h[j] = y[j] + h[j];
                       w[j] = 0
                       x[j] = 0
@@ -1963,10 +1969,10 @@ export class ContractSignatureComponent implements OnInit {
                       h[j] = dataObjectSignature[j].height
 
                       w[j] = x[j] + w[j];
-  
+
                       // //Tính lại h, y theo chiều dài của các trang trong hợp đồng ký
                       y[j] = dataObjectSignature[j].heightPage - (y[j] - dataObjectSignature[j].currentHeight) - h[j] + dataObjectSignature[j].page*5;
-    
+
                       h[j] = y[j] + h[j];
                       // calculate new coordinates
                       dataSignMobi =
@@ -2012,7 +2018,7 @@ export class ContractSignatureComponent implements OnInit {
                       );
                       return false;
                     }
-                    
+
                     if (!sign.recipient_id || !sign) {
                       this.spinner.hide()
                       this.toastService.showErrorHTMLWithTimeout(
@@ -2116,7 +2122,7 @@ export class ContractSignatureComponent implements OnInit {
     return options;
   }
 
-  async signTokenVersion2(fileC: any, idContract: any, recipientId: any, documentId: any, taxCode: any, idSignMany: any, isMark: boolean) { 
+  async signTokenVersion2(fileC: any, idContract: any, recipientId: any, documentId: any, taxCode: any, idSignMany: any, isMark: boolean) {
     //ky bang usb token
     let base64String: any = [];
 
@@ -2185,7 +2191,7 @@ export class ContractSignatureComponent implements OnInit {
         const infoPage = await this.contractServiceV1
           .getInfoPage(documentId[i])
           .toPromise();
-  
+
         for (let j = 0; j < infoPage.length; j++) {
           if (infoPage[j].page < page[i]) {
             currentHeight[i] += infoPage[j].height;
@@ -2195,12 +2201,12 @@ export class ContractSignatureComponent implements OnInit {
             break;
           }
         }
-  
+
         //Lấy trạng thái ceca của từng hợp đồng
         const cecaContract = await this.contractServiceV1
           .getListDataCoordination(idContract[i])
           .toPromise();
-  
+
         if (cecaContract.ceca_push == 1) {
           ceca_push.push(true);
         } else {
@@ -2942,7 +2948,7 @@ export class ContractSignatureComponent implements OnInit {
       }
     })
   }
-  
+
   async checkCurrentSigningCall(recipientId: any) {
     let currentSigningStatus: any = null;
     try {
