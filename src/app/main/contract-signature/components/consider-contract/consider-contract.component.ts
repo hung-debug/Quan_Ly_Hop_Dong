@@ -4070,7 +4070,7 @@ export class ConsiderContractComponent
           if (result.isDismissed) {
             this.router.navigate([
               'main/form-contract/detail/' + this.idContract,
-            ]);
+            ], {queryParams:{recipientId: this.recipientId, remoteSinging: 1}});
           }
         })
       }
