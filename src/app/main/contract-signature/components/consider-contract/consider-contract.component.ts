@@ -1081,7 +1081,7 @@ export class ConsiderContractComponent
     style.display =
       (this.confirmConsider && this.confirmConsider == 1) ||
         (this.confirmSignature && this.confirmSignature == 1 && !this.isRemoteSigningType) ||
-        (this.confirmSignature == 1 && this.isRemoteSigningType && !this.isRemoteSigningExpired && !this.isRemoteSigningProcessing)
+        (this.confirmSignature == 1 && this.isRemoteSigningType  && !this.isRemoteSigningProcessing)
         ? ''
         : 'none';
     if (d['width']) {
