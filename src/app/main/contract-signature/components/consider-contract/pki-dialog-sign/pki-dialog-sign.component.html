@@ -1,44 +1,66 @@
 <div class="container-fluid">
   <div style="text-align: center; font-weight: bold">
-    <h3 style="color: #106DB6; font-weight: bold">{{this.datas.title}}</h3>
+    <h3 class="title-popup">{{this.datas.title}}</h3>
   </div>
   <div class="content">
-    <div class="name-item">
-      <div class="label_item">{{'user.phone' | translate}}: <span class="require_star">*</span></div>
-      <div class="form-control input-line">
-        <input style="font-size: 14px;" autocomplete="off" type="text" [(ngModel)]="phoneNum" class="input-text" placeholder="{{ 'nhap_sdt' | translate }}" autofocus>
+    <div><span class="title-content">{{'account.sign' | translate}}</span></div>
+    <div class="form-group" style="padding-bottom: 15px; padding-top: 10px;">
+      <div class="input-line" [ngClass]="{'invalid' : isError || isErrorInvalid}">
+        <img src="../../assets/img/call.svg" class="input-img" />
+        <input
+          autocomplete="off" type="text" [(ngModel)]="phoneNum"
+          id="phone_number"
+          placeholder="{{ 'nhap_sdt' | translate }}"
+          class="input-text"
+        />
+        <img src="../../assets/img/eye.svg" class="icon-eye" />
+      </div>
+      <div *ngIf="isError || isErrorInvalid" class="invalid-text">
+        <div *ngIf="isError">
+          {{ "Vui lòng nhập số điện thoại" | translate }}
+        </div>
+        <div *ngIf="isErrorInvalid">
+          {{ "Vui lòng nhập đúng định dạng số điện thoại" | translate }}
+        </div>
       </div>
     </div>
+    <div class="form-group" style="padding-bottom: 15px; padding-top: 10px;">
+      <div class="input-line1">
+        <img src="../../assets/img/global.svg" class="input-img" />
 
-    <div class="name-item">
-      <div class="label_item">{{'network.operator' | translate}}: <span class="require_star">*</span></div>
-      <p-dropdown
-        panelStyleClass="font" class="pki-dialog"
-        [options]="nl"
-        [(ngModel)]="networkCode"
-        optionLabel="name"
-        optionValue="id"
-        placeholder="{{'choose.network' | translate}}"
-        [showClear]="true"
-      ></p-dropdown>
-      <!--<ngx-select [items]="optionsNetworkCompany" [placeholder]="{{'choose.network' | translate}}" [(ngModel)]="networkCompany" optionValueField="item_id" optionTextField="item_text"></ngx-select>-->
+              <p-dropdown
+                panelStyleClass="font" class="pki-dialog"
+                [options]="nl"
+                [(ngModel)]="networkCode"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="{{'choose.network' | translate}}"
+                [showClear]="false"
+                [dropdownIcon]="'none'"
+                [style]="{'color': 'red'}"
+              >
+                <ng-template let-selectedItem pTemplate="selectedItem">
+                  <p class="option-custom">{{selectedItem.name}}</p>
+                </ng-template>
+              </p-dropdown>
+        <img src="../../assets/img/arrow-down1.svg" class="icon-eye" />
+      </div>
     </div>
-    
     <div style="padding-top: 10px;">
-      <input type="checkbox" value="hidden_phone" [(ngModel)]="hidden_phone"/> 
-      <span style="margin-left: 2%; font-size: 14px;">{{'confirm.public.phone.pki' | translate}}</span>
+      <input type="checkbox" value="hidden_phone" [(ngModel)]="hidden_phone"/>
+      <span style="margin-left: 2%; font-size: 13px; color:#00186D">{{'confirm.public.phone.pki' | translate}}</span>
     </div>
 
     <div class="select-option">
       <button
-        class="dx-button-form dx-button-close dx-button-90 cancel-button"
+        class="dx-button-form dx-button-close dx-button-90 cancel-button mr-4"
         (click)="dialogRef.close()"
-        type="button">{{'exit' | translate}}
+        type="button">{{'btn.close' | translate}}
       </button>
       <button
         class="dx-button-form dx-button-submit dx-button-90" (click)="onSubmit()"
-        type="default">{{'confirm' | translate}}
+        type="default">{{'contract.sign' | translate}}
       </button>
-    </div>   
+    </div>
   </div>
 </div>

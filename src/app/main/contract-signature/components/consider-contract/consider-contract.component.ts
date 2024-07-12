@@ -4818,7 +4818,7 @@ export class ConsiderContractComponent
   pkiDialogSignOpen() {
     this.spinner.hide();
     const data = {
-      title: 'CHỮ KÝ PKI',
+      title: 'KÝ SIM PKI',
       type: 3,
       sign: this.signInfoPKIU,
       data: this.datas,

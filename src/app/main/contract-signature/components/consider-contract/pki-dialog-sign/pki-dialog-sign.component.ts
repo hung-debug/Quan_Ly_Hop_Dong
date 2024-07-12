@@ -27,7 +27,9 @@ export class PkiDialogSignComponent implements OnInit {
   type: any = 0;
   hidden_phone: boolean = true;
   environment: any = '';
-  
+  isError = false;
+  isErrorInvalid = false;
+  patternPhone = /^[0-9]*$/;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -51,12 +53,12 @@ export class PkiDialogSignComponent implements OnInit {
   }
 
   onSubmit() {
-    
+
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
     this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
-      
+
       const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-      
+
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
@@ -65,10 +67,10 @@ export class PkiDialogSignComponent implements OnInit {
           return
         }
       });
-      
+
 
       if (!ArrRecipientsNew) {
-        
+
         this.toastService.showErrorHTMLWithTimeout(
           'Bạn không có quyền xử lý hợp đồng này!',
           '',
@@ -86,32 +88,38 @@ export class PkiDialogSignComponent implements OnInit {
           return
         }
       };
-      
+
 
     this.contractService.getCheckSignatured(this.data.recipientId).subscribe((res: any) => {
       if (res && res.status == 2) {
         this.toastService.showErrorHTMLWithTimeout('contract_signature_success', "", 3000);
         return;
-      } 
+      }
     }, (error: HttpErrorResponse) => {
       this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
     })
 
-    
-    const pattern = /^[0-9]*$/;
 
-    if (!this.phoneNum || (this.phoneNum && this.phoneNum.length < 9 || this.phoneNum.length > 11) || (this.phoneNum && !pattern.test(this.phoneNum))) {
+
+
+    if (!this.phoneNum || (this.phoneNum && this.phoneNum.length < 9 || this.phoneNum.length > 11) || (this.phoneNum && !this.patternPhone.test(this.phoneNum))) {
       if(!this.phoneNum) {
-        this.toastService.showErrorHTMLWithTimeout('Vui lòng nhập số điện thoại', '', 3000);
+        this.isError = true;
+        this.isErrorInvalid = false
+        // this.toastService.showErrorHTMLWithTimeout('Vui lòng nhập số điện thoại', '', 3000);
         return;
       } else {
-        this.toastService.showErrorHTMLWithTimeout('Vui lòng nhập đúng định dạng số điện thoại', '', 3000);
+        this.isErrorInvalid = true;
+        this.isError = false
+        // this.toastService.showErrorHTMLWithTimeout('Vui lòng nhập đúng định dạng số điện thoại', '', 3000);
         return;
       }
     }
+        this.isError = false
+        this.isErrorInvalid = false
 
     if(!this.networkCode) {
-      
+
       this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn nhà mạng', '', 3000);
       return;
     }
@@ -123,7 +131,7 @@ export class PkiDialogSignComponent implements OnInit {
     }
     const itemNameNetwork = this.nl.find((nc: any) => nc.id == this.networkCode);
     if (itemNameNetwork) {
-      
+
 
 
       this.networkCompany = itemNameNetwork.id == 'bcy' ? 'bcy' : itemNameNetwork.name;
@@ -136,7 +144,7 @@ export class PkiDialogSignComponent implements OnInit {
       hidden_phone: this.hidden_phone,
     };
 
-    
+
 
     this.dialogRef.close(resDialog);
   }

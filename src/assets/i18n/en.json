@@ -898,5 +898,6 @@
   "sign.imagenew":"Photo signature",
   "btn.add.user.delete": "Delete",
   "drop.doc": "Drag and drop the information fields below to add an input or signature box to the document",
-  "location_size" : "Location and size"
+  "location_size" : "Location and size",
+  "account.sign" : "Please enter account information to sign"
 }

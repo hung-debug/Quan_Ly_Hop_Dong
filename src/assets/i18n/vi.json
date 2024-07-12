@@ -919,5 +919,6 @@
   "sign.imagenew":"Chữ ký ảnh",
   "btn.add.user.delete": "Xóa",
   "drop.doc": "Kéo thả các trường thông tin dưới đây để thêm ô nhập hoặc ô ký vào tài liệu",
-  "location_size" : "Vị trí và kích thước"
+  "location_size" : "Vị trí và kích thước",
+  "account.sign" : "Vui lòng nhập thông tin tài khoản để thực hiện ký"
 }
