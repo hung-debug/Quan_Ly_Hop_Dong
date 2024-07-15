@@ -218,7 +218,7 @@
           </div>
         </div>
          
-        <div class="login_methods__title1">
+        <div class="login_methods__title1" *ngIf="enviroment.flag =='KD'">
           <div class="col" style="display: flex; justify-content: space-between; padding: 0px; margin-top: 24px">
             <span class="end_license">{{'end.date.service' | translate}}:</span>
             <span class="date_license">{{this.endDateService | date:'dd/MM/yyyy'}}</span>
