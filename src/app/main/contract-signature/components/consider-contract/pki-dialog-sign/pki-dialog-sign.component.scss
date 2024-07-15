@@ -124,3 +124,6 @@ p-dropdown{
   margin-bottom: 0px;
   margin-top: 2px;
 }
+::ng-deep .pki-dialog .p-dropdown.p-component {
+  width: 99%;
+}

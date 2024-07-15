@@ -29,6 +29,7 @@ export class PkiDialogSignComponent implements OnInit {
   environment: any = '';
   isError = false;
   isErrorInvalid = false;
+  isErrorNetwork = false;
   patternPhone = /^[0-9]*$/;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -53,7 +54,11 @@ export class PkiDialogSignComponent implements OnInit {
   }
 
   onSubmit() {
-
+    this.toastService.showSuccessHTMLWithTimeout(
+      'Bạn vừa thực hiện ký thành công. Hợp đồng đã được chuyển tới người tiếp theo!',
+      'Thực hiện ký thành công!',
+      3000
+    );
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
     this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
 
@@ -119,10 +124,10 @@ export class PkiDialogSignComponent implements OnInit {
         this.isErrorInvalid = false
 
     if(!this.networkCode) {
-
-      this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn nhà mạng', '', 3000);
+      this.isErrorNetwork = true;
       return;
     }
+        this.isErrorNetwork = false;
 
     const firstChar = this.phoneNum.charAt(0);
     let resPhone = this.phoneNum;
@@ -150,4 +155,9 @@ export class PkiDialogSignComponent implements OnInit {
   }
   )
 }
+  onChangeSelect(event?: any): void {
+    if (event.value) {
+      this.isErrorNetwork = false;
+    }
+  }
 }

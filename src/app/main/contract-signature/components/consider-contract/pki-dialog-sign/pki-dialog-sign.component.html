@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="form-group" style="padding-bottom: 15px; padding-top: 10px;">
-      <div class="input-line1">
+      <div class="input-line1" [ngClass]="{'invalid' : isErrorNetwork}">
         <img src="../../assets/img/global.svg" class="input-img" />
 
               <p-dropdown
@@ -37,6 +37,7 @@
                 placeholder="{{'choose.network' | translate}}"
                 [showClear]="false"
                 [dropdownIcon]="'none'"
+                (onChange)="onChangeSelect($event)"
                 [style]="{'color': 'red'}"
               >
                 <ng-template let-selectedItem pTemplate="selectedItem">
@@ -44,6 +45,11 @@
                 </ng-template>
               </p-dropdown>
         <img src="../../assets/img/arrow-down1.svg" class="icon-eye" />
+      </div>
+      <div *ngIf="isErrorNetwork" class="invalid-text">
+        <div>
+          {{ "Vui lòng chọn nhà mạng" | translate }}
+        </div>
       </div>
     </div>
     <div style="padding-top: 10px;">

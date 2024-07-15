@@ -415,6 +415,7 @@
   "email.valid":"Địa chỉ email không hợp lệ",
   "typeOfSignPhone":"Đăng nhập bằng số điện thoại",
   "success_sign":"Ký hợp đồng thành công",
+  "success_sign_update":"Bạn vừa thực hiện ký thành công. Hợp đồng đã được chuyển tới người tiếp theo!",
   "success_watch":"Xem xét hợp đồng thành công",
   "my.contract":"HĐ của tôi",
   "org.contract":"HĐ của tổ chức",

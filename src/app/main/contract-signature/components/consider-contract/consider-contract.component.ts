@@ -2352,8 +2352,8 @@ export class ConsiderContractComponent
           // await this.signContractSimKPI();
           if (!checkSign || (checkSign && !checkSign.success)) {
             this.toastService.showErrorHTMLWithTimeout(
-              'Ký số không thành công!',
-              '',
+              'Bạn vừa thực hiện ký số không thành công. Vui lòng kiểm tra thông tin tài khoản hoặc yêu cầu ký trên thiết bị!',
+              'Thực hiện ký không thành công!',
               3000
             );
             return false;
@@ -2373,8 +2373,8 @@ export class ConsiderContractComponent
           // await this.signContractSimKPI();
           if (!checkSign || (checkSign && !checkSign.success)) {
             this.toastService.showErrorHTMLWithTimeout(
-              'Ký số không thành công!',
-              '',
+              'Bạn vừa thực hiện ký số không thành công. Vui lòng kiểm tra thông tin tài khoản hoặc yêu cầu ký trên thiết bị!',
+              'Thực hiện ký không thành công!',
               3000
             );
             return false;
@@ -3960,9 +3960,9 @@ export class ConsiderContractComponent
             if (!this.mobile) {
               this.toastService.showSuccessHTMLWithTimeout(
                 [3, 4].includes(this.datas.roleContractReceived)
-                  ? 'success_sign'
+                  ? 'success_sign_update'
                   : 'success_watch',
-                '',
+                [3, 4].includes(this.datas.roleContractReceived) ? 'Thực hiện ký thành công!' : '',
                 3000
               );
             } else {
