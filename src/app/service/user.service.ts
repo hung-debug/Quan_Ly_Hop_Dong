@@ -343,6 +343,17 @@ export class UserService {
     const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<User[]>(listUserUrl, { headers }).pipe();
   }
+  public getUserListShare(
+    filter_organization_id: any,
+    filter_nameOrEmail: any,
+    filter_email: any,
+  ): Observable<any> {
+    this.getCurrentUser();
+
+    let listUserUrl = this.listUserUrl + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email.trim();
+    const headers = { Authorization: 'Bearer ' + this.token };
+    return this.http.get<User[]>(listUserUrl, { headers }).pipe();
+  }
 
   getSignatureUserById(id: any) {
     this.getCurrentUser();
@@ -468,8 +479,8 @@ export class UserService {
       headers: headers,
     });
   }
-  
-  
+
+
   updateConfigBrandname(data: any, orgId: any) {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -485,13 +496,13 @@ export class UserService {
       headers: headers,
     });
   }
-  
+
   updateConfigEmailServer(data: any, orgId: any) {
     const headers = new HttpHeaders()
     .append('Content-Type', 'application/json')
     .append('Authorization', 'Bearer ' + this.token);
     console.log("data",data);
-    
+
   const body = JSON.stringify({
     userNameMailServer: data.userNameMailServer,
     aliasMailServer: data.aliasMailServer,
