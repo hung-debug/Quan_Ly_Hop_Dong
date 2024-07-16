@@ -402,6 +402,7 @@
   "typeOfSignEmail": "Login by email",
   "typeOfSignPhone": "Login by phone",
   "success_sign": "Success sign",
+  "success_sign_update": "You have just signed successfully. The contract has been forwarded to the next person!",
   "success_watch": "Success watch",
   "unit.id": "ID",
   "my.contract": "My contract",
@@ -898,5 +899,7 @@
   "sign.imagenew":"Photo signature",
   "btn.add.user.delete": "Delete",
   "drop.doc": "Drag and drop the information fields below to add an input or signature box to the document",
-  "location_size" : "Location and size"
+  "location_size" : "Location and size",
+  "account.sign" : "Please enter account information to sign",
+  "hsm.title" : "Select a signature or seal image"
 }

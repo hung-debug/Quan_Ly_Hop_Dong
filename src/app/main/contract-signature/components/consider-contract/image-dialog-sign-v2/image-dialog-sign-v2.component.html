@@ -1,0 +1,82 @@
+<div class="container-fluid" style="min-height: 60vh;max-height: 80vh;">
+  <div style="text-align: center; font-weight: bold">
+    <h3 class="title-popup">{{this.datas.title}}</h3>
+  </div>
+  <div class="mb-2"><span class="title-content">{{'hsm.title' | translate}}</span></div>
+  <div class="content">
+    <div class="name-item">
+      <div class="row">
+        <div (click)="t(1)" class="col-md-6" style="text-align: center; cursor: pointer">
+          <img
+            [src]="typeImageSignatureRadio == '1' ? '../../../../assets/img/checkbox_active.svg' : '../../../../assets/img/checkbox_inactive.svg'"
+          />
+          <label [ngClass]="typeImageSignatureRadio == '1' ? 'text-primary' : 'text-inactive'" class="ml-2">Ảnh từ tài
+            khoản</label>
+        </div>
+        <div (click)="t(2)" class="col-md-6" style="text-align: center; cursor: pointer">
+          <img
+            [src]="typeImageSignatureRadio == '2' ? '../../../../assets/img/checkbox_active.svg' : '../../../../assets/img/checkbox_inactive.svg'"
+          />
+          <label [ngClass]="typeImageSignatureRadio == '2' ? 'text-primary' : 'text-inactive'" class="ml-2"> Tải ảnh
+            lên</label>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="image-sign" style="min-height: 50vh; background: #F3F6FA; border-radius: 12px">
+      <!--TH dialog chữ ký ảnh-->
+      <div *ngIf="typeImageSignatureRadio == 1 && !this.data.mark">
+        <label class="align-select">Chữ ký đã tạo trên hệ thống:</label>
+        <div class="image-sign-acc-2 mt-4 d-flex justify-content-center align-items-center" style="max-height: 600px;">
+          <img *ngIf="imgSignAccountSelect" [src]="imgSignAccountSelect" alt="" style="max-height: 600px;">
+          <div *ngIf="!datas.imgSignAcc" style="margin-top: 12rem; color: #A8B5CE">
+            Chưa có ảnh từ tài khoản
+          </div>
+        </div>
+      </div>
+
+      <!--TH dialog chữ ký có con dấu-->
+      <div *ngIf="typeImageSignatureRadio == 1 && this.data.mark">
+        <!--        <label class="align-select">Con dấu đã tạo trên hệ thống:</label>-->
+        <div class="image-sign-acc-2 mt-4 d-flex justify-content-center align-items-center" style="max-height: 600px;">
+          <img *ngIf="markSignAccountSelect" [src]="markSignAccountSelect" alt="" style="max-height: 600px;">
+          <div style="margin-top: 12rem; color: #A8B5CE">
+            Chưa có ảnh từ tài khoản
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="typeImageSignatureRadio == 2">
+        <div class="form-group">
+          <div class="select-file-contract" [hidden]="imgSignPCSelect">
+            <div style="text-align: center" class="file-approve">
+              <input (change)="fileChangedAttach($event)" accept="image/*" type="file" id="attachFileSignature"
+                     style="display:none;"/>
+              <label style="margin-top: 12rem" class="btn-up" (click)="addFileAttach()">Tải ảnh lên</label>
+            </div>
+          </div>
+        </div>
+        <div class="image-sign-acc-2 mt-4" style="max-height: 600px;">
+          <img *ngIf="imgSignPCSelect && !this.mobile" (click)="addFileAttach()" [src]="imgSignPCSelect" alt=""
+               style="display: block;margin: 0 auto;max-height: 600px; background-size: cover;background-position: center;width: 100%;height: 100%;">
+
+          <img *ngIf="imgSignPCSelect && this.mobile" (click)="addFileAttach()" [src]="imgSignPCSelect" alt=""
+               style="display: block;margin: 0 auto;max-height: 600px; max-width: 210px ;background-size: cover;background-position: center;width: 100%;height: 100%;">
+        </div>
+      </div>
+
+      <div *ngIf="typeImageSignatureRadio == 3">
+        <signature-pad *ngIf="typeImageSignatureRadio == 3" #signature [options]="signaturePadOptions"
+                       (drawStart)="drawStart($event)" (drawEnd)="drawComplete($event)"></signature-pad>
+      </div>
+    </div>
+    <div class="row" style="justify-content: center;padding-top: 25px;padding-bottom: 10px;">
+      <button *ngIf="typeImageSignatureRadio != 1" class="cancel-button" (click)="dialog.closeAll();clearImage()"
+              type="button">{{'btn.close' | translate}}</button>
+      <button
+        *ngIf="(typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc))|| (typeImageSignatureRadio != 1)"
+        class="save-button" (click)="uploadImage()">{{'confirm' | translate}}</button>
+    </div>
+  </div>
+</div>

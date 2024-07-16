@@ -10,51 +10,46 @@ import {
   QueryList,
   ViewChild,
 } from '@angular/core';
-import { ContractService } from '../../../../service/contract.service';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import {ContractService} from '../../../../service/contract.service';
+import {MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material/dialog';
 import * as $ from 'jquery';
-import { ProcessingHandleEcontractComponent } from '../../shared/model/processing-handle-econtract/processing-handle-econtract.component';
+import {
+  ProcessingHandleEcontractComponent
+} from '../../shared/model/processing-handle-econtract/processing-handle-econtract.component';
 import interact from 'interactjs';
-import { variable } from '../../../../config/variable';
-import { ActivatedRoute, Router } from '@angular/router';
+import {chu_ky_anh, chu_ky_so, networkList, variable} from '../../../../config/variable';
+import {ActivatedRoute, Router} from '@angular/router';
 import Swal from 'sweetalert2';
-import { AppService } from '../../../../service/app.service';
-import { ConfirmSignOtpComponent } from './confirm-sign-otp/confirm-sign-otp.component';
-import { ImageDialogSignComponent } from './image-dialog-sign/image-dialog-sign.component';
-import { PkiDialogSignComponent } from './pki-dialog-sign/pki-dialog-sign.component';
-import { HsmDialogSignComponent } from './hsm-dialog-sign/hsm-dialog-sign.component';
-import { CertDialogSignComponent } from './cert-dialog-sign/cert-dialog-sign.component';
-import { forkJoin, from, throwError, timer } from 'rxjs';
-import { ToastService } from '../../../../service/toast.service';
-import { UploadService } from '../../../../service/upload.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { encode } from 'base64-arraybuffer';
-import { UserService } from '../../../../service/user.service';
+import {AppService} from '../../../../service/app.service';
+import {ConfirmSignOtpComponent} from './confirm-sign-otp/confirm-sign-otp.component';
+import {ImageDialogSignComponent} from './image-dialog-sign/image-dialog-sign.component';
+import {PkiDialogSignComponent} from './pki-dialog-sign/pki-dialog-sign.component';
+import {HsmDialogSignComponent} from './hsm-dialog-sign/hsm-dialog-sign.component';
+import {CertDialogSignComponent} from './cert-dialog-sign/cert-dialog-sign.component';
+import {forkJoin, from, of, throwError, timer} from 'rxjs';
+import {ToastService} from '../../../../service/toast.service';
+import {UploadService} from '../../../../service/upload.service';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {encode} from 'base64-arraybuffer';
+import {UserService} from '../../../../service/user.service';
 // @ts-ignore
 import domtoimage from 'dom-to-image';
-import { concatMap, delay, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
-import {
-  networkList,
-  chu_ky_anh,
-  chu_ky_so,
-} from '../../../../config/variable';
-import { HttpErrorResponse } from '@angular/common/http';
-import { DatePipe } from '@angular/common';
-import { DeviceDetectorService } from 'ngx-device-detector';
-import { EkycDialogSignComponent } from './ekyc-dialog-sign/ekyc-dialog-sign.component';
-import { UnitService } from 'src/app/service/unit.service';
-import { Helper } from 'src/app/core/Helper';
-import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
-import { TranslateService } from '@ngx-translate/core';
-import { DowloadPluginService } from 'src/app/service/dowload-plugin.service';
-import { DetectCoordinateService } from 'src/app/service/detect-coordinate.service';
-import { TimeService } from 'src/app/service/time.service';
-import { vgca_sign_issued } from 'src/assets/plugins/vgcaplugin';
-import { WebSocketSubject } from "rxjs/webSocket";
-import { WebsocketService } from 'src/app/service/websocket.service';
-import { environment } from 'src/environments/environment';
-import { RemoteDialogSignComponent } from './remote-dialog-sign/remote-dialog-sign.component';
+import {concatMap, delay, tap} from 'rxjs/operators';
+import {HttpErrorResponse} from '@angular/common/http';
+import {DatePipe} from '@angular/common';
+import {DeviceDetectorService} from 'ngx-device-detector';
+import {EkycDialogSignComponent} from './ekyc-dialog-sign/ekyc-dialog-sign.component';
+import {UnitService} from 'src/app/service/unit.service';
+import {CheckViewContractService} from 'src/app/service/check-view-contract.service';
+import {TranslateService} from '@ngx-translate/core';
+import {DowloadPluginService} from 'src/app/service/dowload-plugin.service';
+import {DetectCoordinateService} from 'src/app/service/detect-coordinate.service';
+import {TimeService} from 'src/app/service/time.service';
+import {vgca_sign_issued} from 'src/assets/plugins/vgcaplugin';
+import {WebsocketService} from 'src/app/service/websocket.service';
+import {environment} from 'src/environments/environment';
+import {RemoteDialogSignComponent} from './remote-dialog-sign/remote-dialog-sign.component';
+import {ImageDialogSignV2Component} from "./image-dialog-sign-v2/image-dialog-sign-v2.component";
 
 @Component({
   selector: 'app-consider-contract',
@@ -1939,15 +1934,15 @@ export class ConsiderContractComponent
   openMarkSign(code: string, signUpdatePayload?: any, notContainSignImage?: any) {
     this.spinner.hide();
     const data = {
-      title: this.translate.instant('mark.contract').toUpperCase(),
+      title: code =='hsm' ? 'KÝ SỐ HSM' : this.translate.instant('mark.contract').toUpperCase(),
       is_content: 'forward_contract',
       markSignAcc: this.datas.markSignAcc,
       mark: true,
     };
 
     // @ts-ignore
-    const dialogRef = this.dialog.open(ImageDialogSignComponent, {
-      width: '1024px',
+    const dialogRef = this.dialog.open(code =='hsm' ? ImageDialogSignV2Component : ImageDialogSignComponent, {
+      width: code == 'hsm' ? '580px' : '1024px',
       backdrop: 'static',
       data: data,
       code: code
@@ -2352,8 +2347,8 @@ export class ConsiderContractComponent
           // await this.signContractSimKPI();
           if (!checkSign || (checkSign && !checkSign.success)) {
             this.toastService.showErrorHTMLWithTimeout(
-              'Ký số không thành công!',
-              '',
+              'Bạn vừa thực hiện ký số không thành công. Vui lòng kiểm tra thông tin tài khoản hoặc yêu cầu ký trên thiết bị!',
+              'Thực hiện ký không thành công!',
               3000
             );
             return false;
@@ -2373,8 +2368,8 @@ export class ConsiderContractComponent
           // await this.signContractSimKPI();
           if (!checkSign || (checkSign && !checkSign.success)) {
             this.toastService.showErrorHTMLWithTimeout(
-              'Ký số không thành công!',
-              '',
+              'Bạn vừa thực hiện ký số không thành công. Vui lòng kiểm tra thông tin tài khoản hoặc yêu cầu ký trên thiết bị!',
+              'Thực hiện ký không thành công!',
               3000
             );
             return false;
@@ -3960,9 +3955,9 @@ export class ConsiderContractComponent
             if (!this.mobile) {
               this.toastService.showSuccessHTMLWithTimeout(
                 [3, 4].includes(this.datas.roleContractReceived)
-                  ? 'success_sign'
+                  ? 'success_sign_update'
                   : 'success_watch',
-                '',
+                [3, 4].includes(this.datas.roleContractReceived) ? 'Thực hiện ký thành công!' : '',
                 3000
               );
             } else {
@@ -4609,7 +4604,7 @@ export class ConsiderContractComponent
   async hsmDialogSignOpen(recipientId: number) {
     this.spinner.hide();
     const data = {
-      title: 'CHỮ KÝ HSM',
+      title: 'KÝ SỐ HSM',
       is_content: 'forward_contract',
       recipientId: recipientId,
       dataContract: this.recipient,
@@ -4818,7 +4813,7 @@ export class ConsiderContractComponent
   pkiDialogSignOpen() {
     this.spinner.hide();
     const data = {
-      title: 'CHỮ KÝ PKI',
+      title: 'KÝ SIM PKI',
       type: 3,
       sign: this.signInfoPKIU,
       data: this.datas,

@@ -1,96 +1,117 @@
 <div class="container-fluid">
   <div class="header">
-    <h3 class="label-header">{{this.datas.title | translate}}</h3>
+    <h3 class="title-popup">{{this.datas.title | translate}}</h3>
   </div>
+  <div><span class="title-content">{{'account.sign' | translate}}</span></div>
   <form [formGroup]="myForm" class="content">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="label text-color">{{'hsm.dialog.supplier' | translate}} <span class="required-title">*</span></div>
-          <p-dropdown
-            panelStyleClass="font"
-            [options]="suppliers"
-            formControlName="hsmSupplier"
-            optionLabel="name"
-            optionValue="id"
-            placeholder="{{'choose.network' | translate}}"
-          ></p-dropdown>
-        </div>
-      </div>
-      <div class="row" style="padding-top: 10px;">
-          <div class="col-md-12">
-              <div class="label text-color">{{'tax_code.cardId' | translate}} <span class="required-title">*</span></div>
-              <div class="input-data">
-                  <input type="text" formControlName="taxCode" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" autofocus>
-              </div>
-              <div *ngIf="submitted && f.taxCode.errors" class="invalid">
-                <div *ngIf="f.taxCode.errors.required">{{'taxcode.blank' | translate}}</div>
-                <div *ngIf="f.taxCode.errors.pattern">{{'taxcode.format' | translate}}</div>
-              </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group" style="padding-top: 10px;">
+          <div class="input-line1">
+            <img src="../../assets/img/global.svg" class="input-img"/>
+            <p-dropdown
+              panelStyleClass="font"
+              [options]="suppliers"
+              formControlName="hsmSupplier"
+              optionLabel="name"
+              optionValue="id"
+              [dropdownIcon]="'none'"
+              placeholder="{{'choose.network' | translate}}">
+              <ng-template let-selectedItem pTemplate="selectedItem">
+                <p class="option-custom">{{selectedItem.name}}</p>
+              </ng-template>
+            </p-dropdown>
+            <img src="../../assets/img/arrow-down1.svg" class="icon-eye" />
           </div>
+        </div>
       </div>
+    </div>
+    <div class="row" style="padding-top: 10px;">
+      <div class="col-md-12">
+        <div class="input-line border-none" [ngClass]="{'invalid': submitted && f.username.errors}">
+          <img src="../../assets/img/user_hsm.svg" class="input-img"/>
+          <input
+            type="text" formControlName="username"
+            placeholder="{{'username' | translate}}"
+            class="input-text"
+          />
+        </div>
+        <div *ngIf="submitted && f.username.errors" class="invalid-text">
+          <div *ngIf="f.username.errors.required">{{'user.blank' | translate}}</div>
+        </div>
+      </div>
+    </div>
 
-      <div class="row" style="padding-top: 10px;">
-          <div class="col-md-12">
-              <div class="label text-color">{{'username' | translate}} <span class="required-title">*</span></div>
-              <div class="input-data">
-                  <input type="text" formControlName="username">
-              </div>
-              <div *ngIf="submitted && f.username.errors" class="invalid">
-                <div *ngIf="f.username.errors.required">{{'user.blank' | translate}}</div>
-              </div>
+    <div class="row" style="padding-top: 10px;">
+      <div class="col-md-12">
+        <div class="input-line border-none" [ngClass]="{'invalid': submitted && f.taxCode.errors}">
+          <img src="../../assets/img/bar_code.svg" class="input-img"/>
+          <input
+            type="text" formControlName="taxCode"
+            oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
+            autofocus
+            placeholder="{{'tax_code.cardId' | translate}}"
+            class="input-text"
+          />
+        </div>
+        <div *ngIf="submitted && f.taxCode.errors" class="invalid-text">
+          <div *ngIf="f.taxCode.errors.required">{{'taxcode.blank' | translate}}</div>
+          <div *ngIf="f.taxCode.errors.pattern">{{'taxcode.format' | translate}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 10px;">
+      <div class="col-md-12">
+        <div class="input-line border-none" [ngClass]="{'invalid': submitted && f.pass1.errors}">
+          <img src="../../assets/img/pass.svg" class="input-img"/>
+          <input *ngIf="this.fieldTextType1 === false" type="text" formControlName="pass1" id="pass1"
+                 placeholder="{{(isHsmIcorp ? 'login.password' : 'password.level1') | translate}}"
+                 class="input-text pw"/>
+          <input *ngIf="this.fieldTextType1 === true" type="text" formControlName="pass1" id="pass1"
+            placeholder="{{(isHsmIcorp ? 'login.password' : 'password.level1') | translate}}"
+            class="input-text"/>
+          <div class="icon-password">
+            <i class="fa mt-2"
+               [ngClass]="{'fa-eye-slash': !fieldTextType1, 'fa-eye': fieldTextType1}"
+               (click)="toggleFieldTextType1()"
+               style="color: #106DB6;"
+            ></i>
           </div>
-      </div>
-
-      <div class="row" style="padding-top: 10px;">
-        <div class="col-md-12">
-            <div class="label text-color">{{(isHsmIcorp ? 'login.password' : 'password.level1') | translate}} <span class="required-title">*</span></div>
-            <div class="input-line">
-              <input class="input-text pw" *ngIf="this.fieldTextType1 === false" type="text" formControlName="pass1" id="pass1">
-              <input class="input-text" *ngIf="this.fieldTextType1 === true" type="text" formControlName="pass1" id="pass1"/>
-                <div class="icon-password">
-                  <i class="fa"
-                    [ngClass]="{
-                      'fa-eye-slash': !fieldTextType1,
-                      'fa-eye': fieldTextType1
-                    }"
-                    (click)="toggleFieldTextType1()"
-                    style="color: #106DB6;"
-                  ></i>
-                </div>
-            </div>
-            <div *ngIf="submitted && f.pass1.errors" class="invalid">
-              <div *ngIf="f.pass1.errors.required">{{(isHsmIcorp ? 'password.blank' : 'password.level1.blank') | translate}}</div>
-            </div>
+        </div>
+        <div *ngIf="submitted && f.pass1.errors" class="invalid-text">
+          <div
+            *ngIf="f.pass1.errors.required">{{(isHsmIcorp ? 'password.blank' : 'password.level1.blank') | translate}}</div>
         </div>
       </div>
-
-      <div *ngIf="!isHsmIcorp" class="row" style="padding-top: 10px;">
-        <div class="col-md-12">
-            <div class="label text-color">{{'password.level2' | translate}} <span class="required-title">*</span></div>
-            <div class="input-line">
-              <input  *ngIf="this.fieldTextType2 === false" class="input-text pw" type="text" formControlName="pass2" id="pass2">
-              <input class="input-text" *ngIf="this.fieldTextType2 === true" type="text" formControlName="pass2" id="pass2"/>
-                <div class="icon-password">
-                  <i class="fa"
-                    [ngClass]="{
-                      'fa-eye-slash': !fieldTextType2,
-                      'fa-eye': fieldTextType2
-                    }"
-                    (click)="toggleFieldTextType2()"
-                    style="color: #106DB6;"
-                  ></i>
-                </div>
-            </div>
-            <div *ngIf="submitted && f.pass2.errors" class="invalid">
-              <div *ngIf="f.pass2.errors.required">{{'password.level2.blank' | translate}}</div>
-            </div>
+    </div>
+    <div *ngIf="!isHsmIcorp" class="row" style="padding-top: 10px;">
+      <div class="col-md-12">
+        <div class="input-line border-none" [ngClass]="{'invalid': submitted && f.pass2.errors}">
+          <img src="../../assets/img/pass.svg" class="input-img"/>
+          <input *ngIf="this.fieldTextType2 === false" class="input-text pw" type="text" formControlName="pass2"
+                 id="pass2"
+                 placeholder="{{'password.level2' | translate}}"/>
+          <input
+            class="input-text" *ngIf="this.fieldTextType2 === true" type="text" formControlName="pass2" id="pass2"
+            placeholder="{{'password.level2' | translate}}"/>
+          <div class="icon-password">
+            <i class="fa mt-2"
+               [ngClass]="{'fa-eye-slash': !fieldTextType2,'fa-eye': fieldTextType2}"
+               (click)="toggleFieldTextType2()"
+               style="color: #106DB6;"
+            ></i>
+          </div>
+        </div>
+        <div *ngIf="submitted && f.pass2.errors" class="invalid-text">
+          <div *ngIf="f.pass2.errors.required">{{'password.level2.blank' | translate}}</div>
         </div>
       </div>
-  
-      <div class="row" style="justify-content: center;padding-top: 10px;">
-          <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'exit' | translate}}</button>
-          <button class="save-button" (click)="onSubmit()">{{'confirm' | translate}}</button>
-      </div>
+    </div>
+    <div class="row" style="justify-content: center;padding-top: 25px;padding-bottom: 10px;">
+      <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
+      <button class="save-button" (click)="onSubmit()">{{'confirm' | translate}}</button>
+    </div>
   </form>
 </div>
 

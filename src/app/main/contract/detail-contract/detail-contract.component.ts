@@ -1283,7 +1283,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   pkiDialogSignOpen() {
     const data = {
-      title: 'CHỮ KÝ PKI',
+      title: 'KÝ SIM PKI',
       is_content: 'forward_contract',
     };
 

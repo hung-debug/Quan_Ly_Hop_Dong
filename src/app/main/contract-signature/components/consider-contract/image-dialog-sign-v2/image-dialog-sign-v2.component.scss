@@ -1,0 +1,195 @@
+.content {
+  .name-item {
+    .require_star {
+      color: red;
+    }
+    .form-control > input {
+      border: none;
+      outline: none;
+      margin-left: 20px;
+    }
+  }
+
+  .name-item:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  .select-option {
+    display: flex;
+    justify-content: center;
+    margin-top: 29px;
+    button {
+      width: 91px;
+      height: 31px;
+      border-radius: 5px;
+      border: none;
+      color: white;
+      // background-color: #8B8B8B;
+      background-color: #106DB6;
+      cursor: pointer;
+    }
+    button:nth-last-child(1) {
+      background-color: #106DB6;
+    }
+  }
+}
+
+.image-sign-acc {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #E9F4FD;
+  height: 42vh;
+}
+
+.image-sign-acc {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 42vh;
+}
+
+.select-signature-acc {
+  width: 30%;
+}
+
+.align-select {
+  margin-left: 2%;
+}
+::ng-deep .multiselect-dropdown {
+  .dropdown-btn {
+    border: 1px solid #87CAFF !important;
+    min-height: 38px;
+    height: auto;
+  }
+}
+
+//upload file
+input[type="file"] {
+  display: none;
+}
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  color: #106DB6;
+  width: 100%;
+  border-radius: 20px;
+}
+
+//label type contract
+.label_type{
+  text-align: center;
+  font-weight: 500;
+  padding: 10px;
+}
+
+//label item form
+.label_item{
+  padding: 12px 0px 3px;
+}
+
+.require_star{
+  color: red;
+}
+
+
+.input-line {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+.input-img {
+  top: 10px;
+  right: 25px;
+  position: absolute;
+}
+.input-text {
+  border: 0;
+  width: 100%;
+  outline:0px;
+}
+
+.container-img-file {
+  height: 47vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #E9F4FD;
+}
+
+.container-img-file-1 {
+  justify-content: center;
+  align-items: center;
+}
+
+.text-choose-file {
+  margin-top: 32px;
+  font-size: 18px;
+  color: #106DB6;
+}
+
+.text-support-extension {
+  margin-top: 8px;
+  color: #ED1C24;
+  font-weight: 500;
+}
+.cancel-button{
+  border: 1px solid #8B8B8B;
+  border-radius: 5px;
+  height: 40px;
+  width: 100px;
+  box-sizing: border-box;
+  color: #677694;
+  background-color: white;
+  font-size: 13px;
+  margin: 0 10px;
+  font-weight: 700;
+}
+.save-button{
+  border: 0px;
+  border-radius: 5px;
+  height: 40px;
+  width: 100px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #0041C4;
+  font-size: 13px;
+  margin: 0 10px;
+  font-weight: 700;
+}
+.title-popup {
+  font-size: var(--fs14);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.title-content {
+  font-size: var(--fs13);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.text-primary {
+  color: #00186D !important;
+  font-weight: 400;
+}
+.text-inactive {
+  color: #677694 !important;
+  font-weight: 400;
+}
+.btn-up {
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  background-color: white;
+  color: #0041C4;
+  border: 1px solid #0041C4;
+  border-radius: 15px;
+  font-weight: 700;
+}
