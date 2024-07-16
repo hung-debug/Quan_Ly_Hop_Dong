@@ -1703,6 +1703,15 @@ export class ContractSignatureComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(async (resultRS: any) => {
         if (resultRS) {
+          // check điều kiện mst không trùng với mst nhập
+          if (taxCode[0] !== resultRS.ma_dvcs) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng',
+              '',
+              3000
+            );
+            return;
+          }
           let isVnptSmartCa = false;
           if (resultRS?.type == '1') {
             isVnptSmartCa = true
