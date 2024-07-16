@@ -1,30 +1,33 @@
 <div class="container-fluid">
-    <h3 style="text-align: center; color: #106DB6">{{'contract_processing_flow' | translate}}</h3>
+    <h3 style="text-align: center; color: #00186D; font-size: 14px; font-weight: 700">{{'contract_processing_flow1' | translate}}</h3>
     <div style="max-height: 405px; overflow: auto;font-size: 14px">
-        <div style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
-            <div class="col-md-6" style="flex-direction: column;text-align: left;">
-                <span>{{this.personCreate}}</span>&nbsp;
+        <div style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px;padding-left: 15px;
+            border-left: 3px solid #0041C4">
+            <div class="col-md-6" style="text-align: left;">
+                <span style="font-size: 14px; color: #001A4D; font-weight: 700">{{this.personCreate}}</span>&nbsp;<br>
                 <span style="color: #8B8B8B">({{this.emailCreate}})</span>
             </div>
-            <div class="col-md-4" style="display: flex; flex-direction: column;text-align: center">
-                <span style="color: '#106DB6'">{{'orginator' | translate}}</span>
+            <div class="col-md-4" style="display: flex; flex-direction: column;text-align: end">
+                <span style="color: #0041C4; font-weight: 700">{{'created' | translate}}</span>
                 <span style="color: #8B8B8B">({{this.timeCreate}})</span>
             </div>
-            <div  *ngIf ="!this.reasonCancel && listCheckSmsEmail && isEndDate && isHiddenButton" class="col-md-2" style="display: flex; flex-direction: column;text-align: center">
-                <span style="color: '#106DB6'">{{'action' | translate}}</span>
-            </div>
+<!--            <div  *ngIf ="!this.reasonCancel && listCheckSmsEmail && isEndDate && isHiddenButton" class="col-md-2" style="display: flex; flex-direction: column;text-align: center">-->
+<!--                <span style="color: '#106DB6'">{{'action' | translate}}</span>-->
+<!--            </div>-->
         </div>
         <div *ngFor="let d of is_list_name">
-            <div *ngIf = "!this.reasonCancel" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
+            <div *ngIf = "!this.reasonCancel" style="display: flex; justify-content: space-between; text-align: end; margin-bottom: 10px;padding-left: 15px;
+            border-left: 3px solid #0041C4">
 
                 <div class="col-md-6" style="display: flex; flex-direction: column;text-align: left;">
-                    <div *ngIf="d.name" style="display: flex;">
+                    <div *ngIf="d.name" style="display: flex;font-size: 14px; color: #001A4D; font-weight: 700">
                     <!--Tên người trong luồng hợp đồng-->
                         <span>{{d.name}}</span>&nbsp;
-                        <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span>
+
                     </div>
+                  <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span>
                     <!-- <span style="color: #8B8B8B" *ngIf="d.type != 3 && d.name_company">{{d.name_company}}</span> -->
-                    <span style="color: #8B8B8B" *ngIf="d.type == 1 && d.user_in_organization">{{d.user_in_organization}}</span>
+                    <span style="color: #EE7200" *ngIf="d.type == 1 && d.user_in_organization">{{d.user_in_organization}}</span>
                     <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'vi' || !this.lang">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name : ''}}</span>
 
                     <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'en'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name.replace("Ký ảnh và OTP"," Sign by OTP").replace("Ký eKYC","Sign eKYC").replace("Ký số bằng","Sign by").replace("và","and"): ''}}</span>
@@ -32,10 +35,18 @@
                 </div>
 
 
-                <div class="col-md-4" style="display: flex; flex-direction: column;text-align: center">
-                    <div style="display: flex; justify-content: center;align-items: center;">
+                <div class="col-md-4" style="">
+                  <div class="col-md-2 mb-1" style=" display: flex;justify-content: flex-end;margin-left: auto;margin-right: 0;" *ngIf = "isHiddenButton && listCheckSmsEmail && isEndDate ">
+                    <div *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4 && (d.change_num < 5 || !d.change_num)" class="div_icon">
+                      <img src="../../assets/img/edit_process.svg" class="img_icon" ngbTooltip="{{'update_person_process' | translate}}" (click)="openEdit(d.id)"/>
+                    </div>
+                    <div *ngIf = "d.statusNumber != 0 && d.statusNumber !== 4">
+                      <img src="../../assets/img/sms_tracking.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d.id)"/>
+                    </div>
+                  </div>
+                    <div style="display: flex; justify-content: end;align-items: center;">
 
-                        <span [style.color]="d.status === ('rejected' | translate) ? '#d11919' : d.status !== 0 ? '#106DB6' : '#545252'">{{d.status}}</span> &nbsp;
+                        <span style="font-weight: 700" [style.color]="d.status === ('rejected' | translate) ? '#d11919' : d.status.includes('Chưa') ? '#8E9AB0' : '#0041C4'">{{d.status}}</span> &nbsp;
                         <div class="div_icon " style="width: 90px;display: flex;margin-left:10px"  *ngIf="d.statusNumber === 3" >
                             <div class="img_icon button" ngbTooltip="{{'contract.reject' | translate}}" (click)="viewReasonRejected(d.id)">{{'view.reason' | translate}}</div>
                         </div>
@@ -44,16 +55,16 @@
                 </div>
 
 
-                <div class="col-md-2" style="text-align: center;display: flex;justify-content: center" *ngIf = "isHiddenButton && listCheckSmsEmail && isEndDate ">
-                        <div *ngIf = "d.statusNumber != 0 && d.statusNumber !== 4">
-                            <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d.id)"/>
-                        </div>
+<!--                <div class="col-md-2" style="text-align: center;display: flex;justify-content: center" *ngIf = "isHiddenButton && listCheckSmsEmail && isEndDate ">-->
+<!--                        <div *ngIf = "d.statusNumber != 0 && d.statusNumber !== 4">-->
+<!--                            <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d.id)"/>-->
+<!--                        </div>-->
 
-                        <div *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4 && (d.change_num < 5 || !d.change_num)" class="div_icon">
-                        <!-- <div *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4" class="div_icon"> -->
-                             <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update_person_process' | translate}}" (click)="openEdit(d.id)"/>
-                        </div>
-                </div>
+<!--                        <div *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4 && (d.change_num < 5 || !d.change_num)" class="div_icon">-->
+<!--                        &lt;!&ndash; <div *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4" class="div_icon"> &ndash;&gt;-->
+<!--                             <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update_person_process' | translate}}" (click)="openEdit(d.id)"/>-->
+<!--                        </div>-->
+<!--                </div>-->
             </div>
 
             <div *ngIf = "this.reasonCancel && (d.statusNumber == 2 || d.statusNumber == 3 || d.statusNumber == 4)" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
@@ -83,26 +94,27 @@
                     <span style="color: #8B8B8B" *ngIf="d.process_at">({{d.process_at}})</span>
                 </div>
 
-                <div class="col-md-2" style="text-align: center; display: flex;justify-content: center"
-                *ngIf = " isHiddenButton && listCheckSmsEmail && isEndDate ">
-                    <div *ngIf = "d.statusNumber !== 0 && d.statusNumber !== 4">
-                        <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d.id)"/>
-                    </div>
-                    <div class="div_icon" *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4 && (d.change_num === 0 || !d.change_num)">
-                    <!-- <div class="div_icon" *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4"> -->
-                        <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update_person_process' | translate}}" (click)="openEdit(d.id)"/>
-                    </div>
-                </div>
+<!--                <div class="col-md-2" style="text-align: center; display: flex;justify-content: center"-->
+<!--                *ngIf = " isHiddenButton && listCheckSmsEmail && isEndDate ">-->
+<!--                    <div *ngIf = "d.statusNumber !== 0 && d.statusNumber !== 4">-->
+<!--                        <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d.id)"/>-->
+<!--                    </div>-->
+<!--                    <div class="div_icon" *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4 && (d.change_num === 0 || !d.change_num)">-->
+<!--                    &lt;!&ndash; <div class="div_icon" *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4"> &ndash;&gt;-->
+<!--                        <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update_person_process' | translate}}" (click)="openEdit(d.id)"/>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
         </div>
 
         <div *ngIf="this.reasonCancel" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
-            <div class="col-md-6" style="flex-direction: column;text-align: left;">
-                <span>{{this.personCreate}}</span>&nbsp;
+            <div class="col-md-6" style="flex-direction: column;text-align: left; margin-bottom: 10px;padding-left: 15px;
+            border-left: 3px solid #0041C4">
+                <span style="font-size: 14px; color: #001A4D; font-weight: 700">{{this.personCreate}}</span>&nbsp;<br>
                 <span style="color: #8B8B8B">({{this.emailCreate}})</span>
             </div>
-            <div class="col-md-4" style="display: flex; flex-direction: column;text-align: center">
-                <span style="color: '#106DB6'">{{'canceller' | translate}}</span>
+            <div class="col-md-4" style="display: flex; flex-direction: column;text-align: end">
+                <span style="color: #0041C4; font-weight: 700">{{'canceled' | translate}}</span>
                 <span style="color: #8B8B8B">({{this.cancelDate}})</span>
             </div>
         </div>
@@ -111,5 +123,5 @@
 </div>
 
 <div class="footer-btn" style="text-align: center; margin-top: 20px">
-    <button style="width: 120px; height: 40px; background-color: #8B8B8B; border-radius: 5px; outline: none; color: white; border: 1px solid #8B8B8B" (click)="acceptRequest()">{{"exit" | translate}}</button>
+    <button style="width: 120px; font-weight: 700; height: 40px; background-color: white; border-radius: 5px; outline: none; color: #0041C4; border: 1px solid #0041C4" (click)="acceptRequest()">{{"btn.close" | translate}}</button>
 </div>

@@ -106,12 +106,7 @@ p-dropdown{
   border: none;
   background: #F7F9FE;
 }
-::ng-deep.p-dropdown-filter, .p-dropdown-label, .p-dropdown-panel, .p-multiselect-label, .p-multiselect-token-label {
-  color: red !important;
-}
-.p-dropdown-label {
-  color: red; /* Đổi màu chữ thành màu đỏ */
-}
+
 .invalid {
   border: 1px solid red;
 }
@@ -126,4 +121,7 @@ p-dropdown{
 }
 ::ng-deep .pki-dialog .p-dropdown.p-component {
   width: 99%;
+}
+::ng-deep .p-dropdown .p-dropdown-label.p-placeholder {
+  color: #00186D !important;
 }
