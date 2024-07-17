@@ -34,8 +34,8 @@
     <div class="image-sign" style="background: #F3F6FA; border-radius: 12px">
       <!--TH dialog chữ ký ảnh-->
       <div *ngIf="typeImageSignatureRadio == 1 && !this.data.mark">
-        <label class="align-select">Chữ ký đã tạo trên hệ thống:</label>
-        <div class="image-sign-acc-2 mt-4 d-flex justify-content-center align-items-center" style="max-height: 450px;">
+<!--        <label class="align-select">Chữ ký đã tạo trên hệ thống:</label>-->
+        <div class="image-sign-acc-2 mt-4 d-flex justify-content-center align-items-center" style="height: 450px;">
           <img *ngIf="imgSignAccountSelect" [src]="imgSignAccountSelect" alt="" style="max-height: 450px;">
           <div *ngIf="!datas.imgSignAcc" style="margin-top: 12rem; color: #A8B5CE">
             Chưa có ảnh từ tài khoản
@@ -46,7 +46,7 @@
       <!--TH dialog chữ ký có con dấu-->
       <div *ngIf="typeImageSignatureRadio == 1 && this.data.mark" style="height: 450px">
         <!--        <label class="align-select">Con dấu đã tạo trên hệ thống:</label>-->
-        <div class="image-sign-acc-2 mt-4 d-flex justify-content-center align-items-center" style="max-height: 450px;">
+        <div class="image-sign-acc-2 mt-4 d-flex justify-content-center align-items-center" style="height: 450px;">
           <img *ngIf="markSignAccountSelect" [src]="markSignAccountSelect" alt="" style="max-height: 450px;">
           <div *ngIf="!datas.markSignAcc"  style="margin-top: 12rem; color: #A8B5CE">
             Chưa có ảnh từ tài khoản
@@ -70,11 +70,13 @@
           </div>
         </div>
         <div class="image-sign-acc-2 mt-4" style="max-height: 600px;">
-          <img *ngIf="imgSignPCSelect && !this.mobile" (click)="addFileAttach()" [src]="imgSignPCSelect" alt=""
-               style="display: block;margin: 0 auto;max-height: 600px;object-fit: cover; background-size: cover;background-position: center;width: 100%;height: 100%;">
+          <div style="max-height: 450px">
+            <img *ngIf="imgSignPCSelect && !this.mobile" (click)="addFileAttach()" [src]="imgSignPCSelect" alt=""
+                 style="display: block;margin: 0 auto;max-height: 450px;object-fit: contain; background-size: cover;background-position: center;width: 100%;height: 100%;">
 
-          <img *ngIf="imgSignPCSelect && this.mobile" (click)="addFileAttach()" [src]="imgSignPCSelect" alt=""
-               style="display: block;margin: 0 auto;max-height: 600px; max-width: 210px ;background-size: cover;object-fit: cover;background-position: center;width: 100%;height: 100%;">
+            <img *ngIf="imgSignPCSelect && this.mobile" (click)="addFileAttach()" [src]="imgSignPCSelect" alt=""
+                 style="display: block;margin: 0 auto;max-height: 450px; max-width: 210px ;background-size: cover;object-fit: contain;background-position: center;width: 100%;height: 100%;">
+          </div>
         </div>
       </div>
 

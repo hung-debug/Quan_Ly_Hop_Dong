@@ -72,7 +72,7 @@ export class AccountLinkDialogComponent implements OnInit {
 
 
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.count = this.COUNT_TIME;
     this.countTimeOtp();
     this.datasOtp = this.data;
@@ -112,7 +112,7 @@ export class AccountLinkDialogComponent implements OnInit {
     //   return;
     // }
     //this.dialogRef.close(this.addForm.value.otp);
-    // 
+    //
     // this.confirmOtpForm.emit(this.addForm.value.otp);
     // await this.signContractSubmit();
     if (step == 'infor') {
@@ -188,12 +188,12 @@ export class AccountLinkDialogComponent implements OnInit {
       take(this.count),
       map(() => this.transform(--this.count))
     );
-    
+
   }
 
   transform(value: number): string {
     const minutes: number = Math.floor(value / 60);
-    return minutes.toString().padStart(2, '0') + ':' + 
+    return minutes.toString().padStart(2, '0') + ':' +
     (value - minutes * 60).toString().padStart(2, '0');
   }
 
@@ -222,7 +222,7 @@ export class AccountLinkDialogComponent implements OnInit {
     this.contractService.sendOtpContractProcess(contract_id, recipient_id, phone).subscribe(
       data => {
         if(!data.success){
-          
+
           if(data.message == 'You have entered wrong otp 5 times in a row'){
             if(!this.mobile)
               this.toastService.showErrorHTMLWithTimeout('Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' + this.datepipe.transform(data.nextAttempt, "dd/MM/yyyy HH:mm"), "", 3000);
@@ -282,12 +282,12 @@ export class AccountLinkDialogComponent implements OnInit {
 
     if(!this.mobile) {
       for (const signUpdate of this.datas.is_data_object_signature) {
-        
+
         if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived)
           && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
           && signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
-    
+
           const formData = {
             "name": "image_" + new Date().getTime() + ".jpg",
             "content": signUpdate.valueSign,
@@ -295,9 +295,9 @@ export class AccountLinkDialogComponent implements OnInit {
             signType: '',
             ocrResponseName: ''
           }
-          
+
           signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
-    
+
           indexSignUpload.push(iu);
         }
         iu++;
@@ -316,15 +316,15 @@ export class AccountLinkDialogComponent implements OnInit {
             ocrResponseName: ''
           }
 
-  
+
           signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
-    
+
           indexSignUpload.push(iu);
         }
         iu++;
       }
     }
-    
+
 
     forkJoin(signUploadObs$).subscribe(async results => {
       let bucket = results[0].file_object.bucket;
@@ -376,20 +376,20 @@ export class AccountLinkDialogComponent implements OnInit {
     }else{
       this.userOtp = this.datasOtp.name;
       this.phoneOtp = this.datasOtp.phone;
-      
+
       let http = null;
 
       this.isDateTime = await this.timeService.getRealTime().toPromise();
       await of(null).pipe(delay(100)).toPromise();
-      
+
       const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
-      
+
       let signI:any;
       if (imageRender) {
         const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
         signI = textSignB.split(",")[1];
       }
-     
+
 
       signUpdatePayload = signUpdateTemp.filter(
         (item: any) => item?.recipient?.email === this.datasOtp.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
@@ -413,7 +413,7 @@ export class AccountLinkDialogComponent implements OnInit {
         signUpdatePayload = signUpdatePayload[0];
       }
     }
-    
+
     let typeSignDigital = null;
     for (const signUpdate of this.datas.is_data_object_signature) {
       if (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)
@@ -457,13 +457,13 @@ export class AccountLinkDialogComponent implements OnInit {
       if (notContainSignImage) {
       }
     }
-    
+
     if (notContainSignImage && !signDigitalStatus && this.datas.roleContractReceived != 2) {
       this.spinner.hide();
       return;
     }
     if(notContainSignImage){
-   
+
     }else{
       this.contractService.updateInfoContractConsiderImg(signUpdateTempN, this.datasOtp.recipient_id).subscribe(
         async (result) => {
@@ -479,7 +479,7 @@ export class AccountLinkDialogComponent implements OnInit {
               this.dialog.closeAll();
               this.spinner.hide();
               this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
-              
+
             } else{
               this.toastService.showErrorHTMLWithTimeout('Ký hợp đồng không thành công', '', 3000);
               this.dialog.closeAll();
@@ -489,23 +489,23 @@ export class AccountLinkDialogComponent implements OnInit {
             if (!notContainSignImage) {
             }
             setTimeout(() => {
-              
+
               this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
               this.toastService.showSuccessHTMLWithTimeout(
-                [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
-                , '', 3000);
+                [3, 4].includes(this.datas.roleContractReceived) ? 'Bạn vừa thực hiện ký thành công. Hợp đồng đã được chuyển tới người tiếp theo!' : 'Xem xét hợp đồng thành công'
+                , [3,4].includes(this.datas.roleContractReceived) ? 'Thực hiện ký thành công!' : '', 3000);
                 this.dialog.closeAll();
                 this.spinner.hide();
             }, 1000);
           }
-          
+
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
           this.spinner.hide();
         }
       )
     }
-    
+
   }
 
   onOtpChange(event: any) {

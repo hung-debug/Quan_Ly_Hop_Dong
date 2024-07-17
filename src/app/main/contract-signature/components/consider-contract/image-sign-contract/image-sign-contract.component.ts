@@ -114,7 +114,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   imageDialogSignOpen() {
     const data = {
-      title: 'KÝ HỢP ĐỒNG ',
+      title: 'KÝ ẢNH VÀ OTP',
       is_content: 'forward_contract',
       imgSignAcc: this.datas.imgSignAcc
     };
