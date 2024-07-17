@@ -127,7 +127,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     { value: 3, text: 'Option 3' },
     // Add more options here
   ];
-
+  isDropdownVisibleChuKySo: boolean = false;
   selectedOption: DropdownOption | undefined;
   showDropdown: boolean = false;
 
@@ -292,8 +292,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.checkDifferent();
   }
 
-  toggleDropdown() {
-    this.showDropdown = !this.showDropdown;
+  toggleDropdownChuKySo() {
+    this.isDropdownVisibleChuKySo = !this.isDropdownVisibleChuKySo;
   }
 
   selectOption(option: DropdownOption) {
@@ -728,6 +728,27 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         id = event.target.id.replace("chua-keo-", "");
         // this.datas.documents.document_user_sign_clone.forEach((element, index) => {
         this.datas.contract_user_sign.forEach((element: any, index: any) => {
+          if (element.sign_unit === 'chu_ky_so_new') {
+            for (let i = 0; i < element.type.length; i++) {
+              if (element.type[i].id == id) {
+                let _obj: any = {
+                  sign_unit: element.type[i].sign_unit,
+                  name: element.type[i].name,
+                  text_attribute_name: element.type[i].text_attribute_name,
+                  required: 1,
+                  font: element.type[i].font,
+                  font_size: element.type[i].font_size
+                };
+                if (element.type[i].sign_config.length == 0) {
+                  _obj['id'] = 'signer-' + index + '-index-0_' + element.type[i].id; // Add id for the signature in the contract
+                } else {
+                  _obj['id'] = 'signer-' + index + '-index-' + (element.type[i].sign_config.length) + '_' + element.type[i].id;
+                }
+                element.type[i]['sign_config'].push(_obj);
+              }
+            }
+          }
+        
           if (element.id == id) {
             let _obj: any = {
               sign_unit: element.sign_unit,
@@ -802,119 +823,238 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
         // lay lai danh sach signer sau khi keo vao hop dong
         this.datas.contract_user_sign.forEach((res: any) => {
-          if (res.sign_config.length > 0) {
-            let arrSignConfigItem = res.sign_config;
-            arrSignConfigItem.forEach((element: any) => {
-              if (element.id == this.signCurent['id']) {
-                let _arrPage = event.relatedTarget.id.split("-");
-                // gán hình thức kéo thả => disable element trong list sign
-                name_accept_signature = res.sign_unit;
-                // hiển thị ô nhập tên trường khi kéo thả đối tượng Text
-                if (res.sign_unit == 'text') {
-                  this.isEnableText = true;
-                  setTimeout(() => {
-                    //@ts-ignore
-                    document.getElementById('text-input-element').focus();
-                  }, 10)
-                } else this.isEnableText = false;
-
-                if (res.sign_unit == 'so_tai_lieu') {
-                  // let flag = false;
-
-                  if (this.soHopDong && this.soHopDong.role == 4) {
-                    element.name = this.soHopDong.name;
-
-                    element.signature_party = this.soHopDong.type_unit;
-                    element.recipient_id = this.soHopDong.id;
-                    element.status = this.soHopDong.status;
-                    element.type = this.soHopDong.type;
-                    element.email = this.soHopDong.email;
-                    element.phone = this.soHopDong.phone;
-                  } else if (res.sign_config.length > 0) {
-                    this.soHopDong = {
-
-                    };
-
-                    for (let i = 0; i < res.sign_config.length; i++) {
-                      let element1 = res.sign_config[i];
-
-                      if (element1.name) {
-                        this.soHopDong.name = element1.name;
-                        this.soHopDong.type_unit = element1.signature_party;
-                        this.soHopDong.id = element1.recipient_id;
-                        this.soHopDong.status = element1.status;
-                        this.soHopDong.type = element1.type;
-                        this.soHopDong.email = element1.email;
-                        this.soHopDong.phone = element1.phone;
-                        break;
+          if(res.sign_unit == 'chu_ky_so_new') {
+            for (let i = 0; i < res.type.length; i++) { 
+              if (res.type[i].sign_config.length > 0) {
+                let arrSignConfigItem = res.type[i].sign_config;
+                arrSignConfigItem.forEach((element: any) => {
+                  if (element.id == this.signCurent['id']) {
+                    let _arrPage = event.relatedTarget.id.split("-");
+                    // gán hình thức kéo thả => disable element trong list sign
+                    name_accept_signature = res.type[i].sign_unit;
+                    // hiển thị ô nhập tên trường khi kéo thả đối tượng Text
+                    if (res.type[i].sign_unit == 'text') {
+                      this.isEnableText = true;
+                      setTimeout(() => {
+                        //@ts-ignore
+                        document.getElementById('text-input-element').focus();
+                      }, 10)
+                    } else this.isEnableText = false;
+    
+                    if (res.type[i].sign_unit == 'so_tai_lieu') {
+                      // let flag = false;
+    
+                      if (this.soHopDong && this.soHopDong.role == 4) {
+                        element.name = this.soHopDong.name;
+    
+                        element.signature_party = this.soHopDong.type_unit;
+                        element.recipient_id = this.soHopDong.id;
+                        element.status = this.soHopDong.status;
+                        element.type = this.soHopDong.type;
+                        element.email = this.soHopDong.email;
+                        element.phone = this.soHopDong.phone;
+                      } else if (res.type[i].sign_config.length > 0) {
+                        this.soHopDong = {
+    
+                        };
+    
+                        for (let i = 0; i < res.type[i].sign_config.length; i++) {
+                          let element1 = res.type[i].sign_config[i];
+    
+                          if (element1.name) {
+                            this.soHopDong.name = element1.name;
+                            this.soHopDong.type_unit = element1.signature_party;
+                            this.soHopDong.id = element1.recipient_id;
+                            this.soHopDong.status = element1.status;
+                            this.soHopDong.type = element1.type;
+                            this.soHopDong.email = element1.email;
+                            this.soHopDong.phone = element1.phone;
+                            break;
+                          }
+                        }
+    
+                        if (this.soHopDong && this.soHopDong.name) {
+                          element.name = this.soHopDong.name;
+    
+                          element.signature_party = this.soHopDong.type_unit;
+                          element.recipient_id = this.soHopDong.id;
+                          element.status = this.soHopDong.status;
+                          element.type = this.soHopDong.type;
+                          element.email = this.soHopDong.email;
+                          element.phone = this.soHopDong.phone;
+                        }
+    
                       }
+    
+                      this.isChangeText = true;
+                    } else {
+                      this.isChangeText = false;
                     }
-
-                    if (this.soHopDong && this.soHopDong.name) {
+    
+                    // element['number'] = _arrPage[_arrPage.length - 1];
+                    element['page'] = _arrPage[_arrPage.length - 1];
+                    element['position'] = this.signCurent['position'];
+                    element['coordinate_x'] = this.signCurent['coordinate_x'];
+                    element['coordinate_y'] = this.signCurent['coordinate_y'];
+                    element['dif_x'] = this.signCurent['dif_x'];
+                    if (!this.objDrag[this.signCurent['id']].count) {
+                      // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
+                      if (res.type[i].sign_unit == 'text' || res.type[i].sign_unit == 'so_tai_lieu') {
+                        if (res.type[i].sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
+                          element['width'] = rect_location.width;
+                          element['height'] = rect_location.height;
+                        } else {
+                          if (event.target.className.includes('da-keo')){
+                            element['width'] = event.target.offsetWidth;
+                            element['height'] = event.target.offsetHeight;
+                          } else {
+                            element['width'] = '135';
+                            element['height'] = '28';
+                          }
+                        }
+                      } else {
+                        // set size ô ký
+                        if (event.target.className.includes('da-keo')){
+                          element['width'] = event.target.offsetWidth;
+                          element['height'] = event.target.offsetHeight;
+                        } else {
+                          element['width'] = '180';
+                          element['height'] = '66';
+                        }
+                      }
+    
+                      this.objSignInfo.width = element['height'];
+                      this.objSignInfo.height = element['width'];
+                      this.objSignInfo.text_attribute_name = '';
+                      this.list_sign_name.forEach((item: any) => {
+                        item['selected'] = false;
+                      })
+                      // @ts-ignore
+                      document.getElementById('select-dropdown').value = "";
+                      this.objDrag[this.signCurent['id']].count = 2;
+                    } else {
+                      element['width'] = event.target.offsetWidth;
+                      element['height'] = event.target.offsetHeight;
+                    }
+                  }
+                })
+              }
+            }
+          } else {
+            if (res.sign_config.length > 0) {
+              let arrSignConfigItem = res.sign_config;
+              arrSignConfigItem.forEach((element: any) => {
+                if (element.id == this.signCurent['id']) {
+                  let _arrPage = event.relatedTarget.id.split("-");
+                  // gán hình thức kéo thả => disable element trong list sign
+                  name_accept_signature = res.sign_unit;
+                  // hiển thị ô nhập tên trường khi kéo thả đối tượng Text
+                  if (res.sign_unit == 'text') {
+                    this.isEnableText = true;
+                    setTimeout(() => {
+                      //@ts-ignore
+                      document.getElementById('text-input-element').focus();
+                    }, 10)
+                  } else this.isEnableText = false;
+  
+                  if (res.sign_unit == 'so_tai_lieu') {
+                    // let flag = false;
+  
+                    if (this.soHopDong && this.soHopDong.role == 4) {
                       element.name = this.soHopDong.name;
-
+  
                       element.signature_party = this.soHopDong.type_unit;
                       element.recipient_id = this.soHopDong.id;
                       element.status = this.soHopDong.status;
                       element.type = this.soHopDong.type;
                       element.email = this.soHopDong.email;
                       element.phone = this.soHopDong.phone;
+                    } else if (res.sign_config.length > 0) {
+                      this.soHopDong = {
+  
+                      };
+  
+                      for (let i = 0; i < res.sign_config.length; i++) {
+                        let element1 = res.sign_config[i];
+  
+                        if (element1.name) {
+                          this.soHopDong.name = element1.name;
+                          this.soHopDong.type_unit = element1.signature_party;
+                          this.soHopDong.id = element1.recipient_id;
+                          this.soHopDong.status = element1.status;
+                          this.soHopDong.type = element1.type;
+                          this.soHopDong.email = element1.email;
+                          this.soHopDong.phone = element1.phone;
+                          break;
+                        }
+                      }
+  
+                      if (this.soHopDong && this.soHopDong.name) {
+                        element.name = this.soHopDong.name;
+  
+                        element.signature_party = this.soHopDong.type_unit;
+                        element.recipient_id = this.soHopDong.id;
+                        element.status = this.soHopDong.status;
+                        element.type = this.soHopDong.type;
+                        element.email = this.soHopDong.email;
+                        element.phone = this.soHopDong.phone;
+                      }
+  
                     }
-
+  
+                    this.isChangeText = true;
+                  } else {
+                    this.isChangeText = false;
                   }
-
-                  this.isChangeText = true;
-                } else {
-                  this.isChangeText = false;
-                }
-
-                // element['number'] = _arrPage[_arrPage.length - 1];
-                element['page'] = _arrPage[_arrPage.length - 1];
-                element['position'] = this.signCurent['position'];
-                element['coordinate_x'] = this.signCurent['coordinate_x'];
-                element['coordinate_y'] = this.signCurent['coordinate_y'];
-                element['dif_x'] = this.signCurent['dif_x'];
-                if (!this.objDrag[this.signCurent['id']].count) {
-                  // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
-                  if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
-                    if (res.sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
-                      element['width'] = rect_location.width;
-                      element['height'] = rect_location.height;
+  
+                  // element['number'] = _arrPage[_arrPage.length - 1];
+                  element['page'] = _arrPage[_arrPage.length - 1];
+                  element['position'] = this.signCurent['position'];
+                  element['coordinate_x'] = this.signCurent['coordinate_x'];
+                  element['coordinate_y'] = this.signCurent['coordinate_y'];
+                  element['dif_x'] = this.signCurent['dif_x'];
+                  if (!this.objDrag[this.signCurent['id']].count) {
+                    // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
+                    if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
+                      if (res.sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
+                        element['width'] = rect_location.width;
+                        element['height'] = rect_location.height;
+                      } else {
+                        if (event.target.className.includes('da-keo')){
+                          element['width'] = event.target.offsetWidth;
+                          element['height'] = event.target.offsetHeight;
+                        } else {
+                          element['width'] = '135';
+                          element['height'] = '28';
+                        }
+                      }
                     } else {
+                      // set size ô ký
                       if (event.target.className.includes('da-keo')){
                         element['width'] = event.target.offsetWidth;
                         element['height'] = event.target.offsetHeight;
                       } else {
-                        element['width'] = '135';
-                        element['height'] = '28';
+                        element['width'] = '180';
+                        element['height'] = '66';
                       }
                     }
+  
+                    this.objSignInfo.width = element['height'];
+                    this.objSignInfo.height = element['width'];
+                    this.objSignInfo.text_attribute_name = '';
+                    this.list_sign_name.forEach((item: any) => {
+                      item['selected'] = false;
+                    })
+                    // @ts-ignore
+                    document.getElementById('select-dropdown').value = "";
+                    this.objDrag[this.signCurent['id']].count = 2;
                   } else {
-                    // set size ô ký
-                    if (event.target.className.includes('da-keo')){
-                      element['width'] = event.target.offsetWidth;
-                      element['height'] = event.target.offsetHeight;
-                    } else {
-                      element['width'] = '180';
-                      element['height'] = '66';
-                    }
+                    element['width'] = event.target.offsetWidth;
+                    element['height'] = event.target.offsetHeight;
                   }
-
-                  this.objSignInfo.width = element['height'];
-                  this.objSignInfo.height = element['width'];
-                  this.objSignInfo.text_attribute_name = '';
-                  this.list_sign_name.forEach((item: any) => {
-                    item['selected'] = false;
-                  })
-                  // @ts-ignore
-                  document.getElementById('select-dropdown').value = "";
-                  this.objDrag[this.signCurent['id']].count = 2;
-                } else {
-                  element['width'] = event.target.offsetWidth;
-                  element['height'] = event.target.offsetHeight;
                 }
-              }
-            })
+              })
+            }
           }
         });
         this.getCheckSignature(name_accept_signature);
@@ -1270,7 +1410,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any) {
     let style: any =
-    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
+    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so' && d.sign_unit != 'chu_ky_so_con_dau_va_thong_tin' && d.sign_unit != 'chu_ky_so_con_dau' && d.sign_unit != 'chu_ky_so_thong_tin') ?
     {
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
@@ -1474,11 +1614,22 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // this.signCurent.height = 0;
       }
       this.datas.contract_user_sign.forEach((element: any, user_sign_index: any) => {
-        if (element.sign_config.length > 0) {
-          element.sign_config = element.sign_config.filter((item: any) => item.id != data.id)
-          element.sign_config.forEach((itemSign: any, sign_config_index: any) => {
-            itemSign['id'] = 'signer-' + user_sign_index + '-index-' + sign_config_index + '_' + element.id;
-          })
+        if(element.sign_unit === 'chu_ky_so_new') {
+          for (let i = 0; i < element.type.length; i++) {
+            if (element.type[i].sign_config.length > 0) {
+              element.type[i].sign_config = element.type[i].sign_config.filter((item: any) => item.id != data.id)
+              element.type[i].sign_config.forEach((itemSign: any, sign_config_index: any) => {
+                itemSign['id'] = 'signer-' + user_sign_index + '-index-' + sign_config_index + '_' + element.type[i].id;
+              })
+            }
+          }
+        } else {
+          if (element.sign_config.length > 0) {
+            element.sign_config = element.sign_config.filter((item: any) => item.id != data.id)
+            element.sign_config.forEach((itemSign: any, sign_config_index: any) => {
+              itemSign['id'] = 'signer-' + user_sign_index + '-index-' + sign_config_index + '_' + element.id;
+            })
+          }
         }
       });
       this.eventMouseover();
@@ -1497,6 +1648,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           arrSignConfig = arrSignConfig.concat(element.sign_config);
         }
       } else arrSignConfig = arrSignConfig.concat(element.sign_config);
+
+      if ((element.sign_unit === 'chu_ky_so_new') && element.type) {
+        element.type.forEach((subConfig: { sign_config: any; }) => {
+            arrSignConfig = arrSignConfig.concat(subConfig.sign_config);
+        });
+      }
     })
 
     //
@@ -1693,10 +1850,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
 
   back(e: any, step?: any) {
+    this.isDropdownVisibleChuKySo = false;
     this.nextOrPreviousStep(step);
   }
 
   async next(action: string) {
+    this.isDropdownVisibleChuKySo = false;
     if (action == 'next_step' && !this.validData()) {
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
 

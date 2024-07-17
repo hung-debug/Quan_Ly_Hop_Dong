@@ -8,12 +8,14 @@
                     <div  class="text-describe mt-3px">{{'drop.doc'|translate}}</div>
                 </div>
                 <div style="margin: 0px 16px;">
-                    <div  *ngFor="let d of this.datas.contract_user_sign" class="show-list-name-class">
-                        <div *ngIf="!d.sign_config.position" [ngClass]="setClass(d)" (click)="showThumbnail()"
-                            [id]=getIdSignChuaKeo(d.id)>
+                    <div *ngFor="let d of this.datas.contract_user_sign" class="show-list-name-class">
+                        <div *ngIf="!d.sign_config.position" 
+                             [ngClass]="{'resize-drag': d.sign_unit !== 'chu_ky_so_new'}" 
+                             [id]="getIdSignChuaKeo(d.id)" 
+                             (click)="showThumbnail()">
                             <div style="position: relative; display: contents;">
                                 <!-- sửa lại nên bỏ [ngStyle]="setWidth(d)" -->
-                                <div *ngIf="d.sign_unit == 'so_tai_lieu'" class="content-drag mt-12px d-flex align-items-center justify-content-start" id="element-drag-text">
+                                <div *ngIf="d.sign_unit == 'so_tai_lieu'" class="content-drag mt-12px d-flex align-items-center justify-content-start hover-item-o-ky" id="element-drag-text">
                                     <div style="width: 24px; height: 24px;">
                                       <img style="object-fit: cover; width: 100%; height: 100%;" src="assets/img/soHopDong.png">
                                     </div>
@@ -23,7 +25,7 @@
                                 </div>
                                 
                                 
-                                <div  *ngIf="d.sign_unit == 'text'" class="content-drag mt-12px d-flex align-items-center justify-content-start" id="element-drag-text">
+                                <div  *ngIf="d.sign_unit == 'text'" class="content-drag mt-12px d-flex align-items-center justify-content-start hover-item-o-ky" id="element-drag-text">
                                     <div style="width: 24px; height: 24px;">
                                         <img style="object-fit: cover; width: 100%; height: 100%;" src="assets/img/text.png">
                                     </div>
@@ -33,16 +35,16 @@
                                     </div>
                                 </div>
                                                         
-                                <div *ngIf="d.sign_unit == 'chu_ky_so'" class="content-drag1 mt-12px" 
+                                <!-- <div *ngIf="d.sign_unit == 'chu_ky_so'" class="content-drag1 mt-12px" 
                                     id="element-drag">
                                     <img style="width: 24px; height: 24px;" [src]="d.sign_unit == 'chu_ky_so' ? 'assets/img/designtools.png' : ''">
                                     <div class="mt-8px">
                                         <span class="text-so-hop-dong" *ngIf="d.sign_unit == 'chu_ky_so'">{{'sign.digital'|translate}}</span>
                                     </div>
-                                </div>
+                                </div> -->
     
-                                <div *ngIf="d.sign_unit == 'chu_ky_anh'" class="content-drag1 mt-12px"
-                                    id="element-drag">
+                                <div *ngIf="d.sign_unit == 'chu_ky_anh'" class="content-drag1 mt-12px hover-item-o-ky"
+                                    id="element-drag" style="width: calc(100% - 24px);">
                                     <img style="width: 24px; height: 24px;" [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/imagesign.png' : ''"
                                         [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" 
                                         alt="ck.mobifone">
@@ -51,7 +53,39 @@
                                         <span class="text-so-hop-dong" *ngIf="d.sign_unit == 'chu_ky_anh'">{{'sign.imagenew' |translate}}</span>
                                     </div>
                                 </div>
-    
+                                                        
+                                <div *ngIf="d.sign_unit == 'chu_ky_so_new'" class="flex mt-12px" (click)="toggleDropdownChuKySo()" id="element-drag">
+                                    <div  class="content-drag1 content-chu_ky_so_new hover-item-o-ky">
+                                        <div class="flex">
+                                            <div class="content-item-ky">
+                                                <img style="width: 24px; height: 24px;" src="assets/img/designtools.png">
+                                                <span class="text-so-hop-dong mt-8px">{{'sign.digital' | translate}}</span>
+                                            </div>
+                                            <div *ngIf="this.isDropdownVisibleChuKySo" class="horizontal-dropdown horizontal-dropdown-right">
+                                                <ng-container *ngFor="let t of d.type">
+                                                    <div class="item-ky" *ngIf="t.sign_unit == 'chu_ky_so_con_dau_va_thong_tin'">
+                                                        <img loading="lazy" class="resize-drag" [id]="getIdSignChuaKeo(t.id)" style="object-fit: cover; width: 201px; height: 100%;" src="assets/img/con-dau-va-thong-tin.png">
+                                                        <div class="text-ky">Chữ ký có con dấu và thông tin</div>
+                                                    </div>
+                                            
+                                                    <div class="item-ky" *ngIf="t.sign_unit == 'chu_ky_so_con_dau'">
+                                                        <img loading="lazy" class="resize-drag" [id]="getIdSignChuaKeo(t.id)" style="object-fit: cover; width: 201px; height: 100%;" src="assets/img/con-dau.png">
+                                                        <div class="text-ky">Chỉ có con dấu/ chữ ký</div>
+                                                    </div>
+                                            
+                                                    <div class="item-ky" *ngIf="t.sign_unit == 'chu_ky_so_thong_tin'">
+                                                        <img loading="lazy" class="resize-drag" [id]="getIdSignChuaKeo(t.id)" style="object-fit: cover; width: 201px; height: 100%;" src="assets/img/thong-tin.png">
+                                                        <div class="text-ky">Chỉ có thông tin</div>
+                                                    </div>
+                                                </ng-container>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+
+                                    <div class="imgage-ky">
+                                        <img  style="width: 24px; height: 24px;" src="assets/img/mui-ten-dropdown.png">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -62,50 +96,31 @@
     
         <!--  file content-->
         <div class="col-lg-7">
-            <div style="height: 48px; background-color: #EBF2FB; display: flex; justify-content: space-between;">
+            <div style="height: 48px; background-color: #EBF2FB; display: flex; justify-content: center;">
                 <div style="margin: auto 0 auto 45px">
-                    <button class="call-page" (click)="firstPage()">
-                        <img  width="16px" height="20px" *ngIf="!this.page1" src="assets/img/firstpage.svg">
-                        <img  width="16px" height="20px" *ngIf="this.page1" src="assets/img/previousbold.svg">
+                    <button class="call-page input1" (click)="firstPage()">
+                        <img  width="16px" height="16px" *ngIf="!this.page1" src="assets/img/First.png">
+                        <img  width="16px" height="16px" *ngIf="this.page1" src="assets/img/First.png">
                     </button>
-                    <button style="margin-right: 5px;" class="call-page1" (click)="previousPage()">
-                        <img width="12px" height="16px" *ngIf="this.page1" src="assets/img/firstpagebold.svg">
-                        <img width="12px" height="16px" *ngIf="!this.page1" src="assets/img/previous.svg">
-                    </button>
-                
-                    <input class="input1" [(ngModel)]="pageNum" type="text" (keyup.enter)="onEnter($event)" />&nbsp;/ &nbsp;{{this.pageNumber}}
-                    <button class="call-page1" (click)="onNextPage()" id="prev">
-                        <img width="12px" height="16px" *ngIf="this.pageLast" src="assets/img/next.svg">
-                        <img width="12px" height="16px" *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
+                    <button style="margin: 0px 8px;" class="call-page input1" (click)="previousPage()">
+                        <img width="16px" height="16px" *ngIf="this.page1" src="assets/img/Prev.png">
+                        <img width="16px" height="16px" *ngIf="!this.page1" src="assets/img/Prev.png">
                     </button>
                 
-                    <button class="call-page1" (click)="lastPage()" id="prev">
-                        <img width="16px" height="20px" *ngIf="this.pageLast" src="assets/img/lastpage.svg">
-                        <img width="16px" height="20px" *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
+                    <input class="input1 no-focus" [(ngModel)]="pageNum" type="text" (keyup.enter)="onEnter($event)" />
+                    &nbsp;/&nbsp;
+                    <span class="page-number">{{ this.pageNumber }}</span>
+
+                    <button style="margin: 0px 8px;" class="call-page input1" (click)="onNextPage()" id="prev">
+                        <img width="6px" height="9px" *ngIf="this.pageLast" src="assets/img/Vector1.png">
+                        <img width="6px" height="9px" *ngIf="!this.pageLast" src="assets/img/Vector1.png">
+                    </button>
+                
+                    <button class="call-page input1" (click)="lastPage()" id="prev">
+                        <img width="16px" height="16px" *ngIf="this.pageLast" src="assets/img/Last.png">
+                        <img width="16px" height="16px" *ngIf="!this.pageLast" src="assets/img/Last.png">
                     </button>  
                 </div>
-                
-                <div style="margin: auto 45px auto 0px">
-                    <button class="call-page" (click)="firstPage()">
-                        <img  width="16px" height="20px" *ngIf="!this.page1" src="assets/img/firstpage.svg">
-                        <img  width="16px" height="20px" *ngIf="this.page1" src="assets/img/previousbold.svg">
-                    </button>
-                    <button style="margin-right: 5px;" class="call-page1" (click)="previousPage()">
-                        <img width="12px" height="16px" *ngIf="this.page1" src="assets/img/firstpagebold.svg">
-                        <img width="12px" height="16px" *ngIf="!this.page1" src="assets/img/previous.svg">
-                    </button>
-                
-                    <input class="input1" [(ngModel)]="pageNum" type="text" (keyup.enter)="onEnter($event)" />&nbsp;/ &nbsp;{{this.pageNumber}}
-                    <button class="call-page1" (click)="onNextPage()" id="prev">
-                        <img width="12px" height="16px" *ngIf="this.pageLast" src="assets/img/next.svg">
-                        <img width="12px" height="16px" *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
-                    </button>
-                
-                    <button class="call-page1" (click)="lastPage()" id="prev">
-                        <img width="16px" height="20px" *ngIf="this.pageLast" src="assets/img/lastpage.svg">
-                        <img width="16px" height="20px" *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
-                    </button>  
-                </div> 
             </div>
             
             <div (scroll)="scroll($event)" id="pdf-full" class="sample-contract__file viewer-pdf isDrag" style="background-color: #f3f7f9; position: relative">
@@ -136,13 +151,13 @@
     
                         <div class="name-text mt-8px" *ngIf="isEnableText">
                             <label class="label-require">{{'attribute.name' | translate}}: <span style="color: red">*</span></label>
-                            <input style="padding: 10px;" id="text-input-element" type="text" [(ngModel)]="this.objSignInfo.text_attribute_name"
+                            <input placeholder="{{ 'attribute.name' | translate }}" class="hover-item input_text" style="padding: 10px;" id="text-input-element" type="text" [(ngModel)]="this.objSignInfo.text_attribute_name"
                                 (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
                         </div>
     
                         <div class="sign-unit-select mt-8px" *ngIf="isEnableText">
                             <label class="label-require">{{'attribute.text.type' | translate}}: <span style="color: red">*</span></label>
-                            <select class="form-select" id="select-dropdown-text" aria-label="Default select example"
+                            <select class="form-select hover-item" id="select-dropdown-text" aria-label="Default select example"
                                 (change)="changePositionSign($event, 'text_type', 'text')" [disabled]="isEnableSelect"
                                 [(ngModel)]="selectedTextType">
                                 <option value="" hidden>{{'choose.text.type'| translate}}
@@ -154,7 +169,7 @@
     
                         <div class="sign-unit-select mt-8px">
                             <label class="label-require">{{isEnableText || isChangeText ? ('user.import' | translate) : ('user.sign' | translate)}}: <span style="color: red">*</span></label>
-                            <select class="form-select" id="select-dropdown" aria-label="Default select example"
+                            <select class="form-select hover-item" id="select-dropdown" aria-label="Default select example"
                                 (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
                                 <option value="" hidden>{{isEnableText || isChangeText ? ('choose.importer' | translate) : ('choose.signer' | translate)}}
                                 </option>
@@ -167,15 +182,15 @@
                         <div class="row sign-unit-select mt-8px">
                             <div class="col-md-8-5" style="padding-right: 0px;">
                                 <label class="label-require">Font</label>
-                                <select (change)="changePositionSign($event, null, 'font')" class="form-select" id="select-dropdown" aria-label="Default select example" [(ngModel)]="this.objSignInfo.font">
+                                <select (change)="changePositionSign($event, null, 'font')" class="form-select hover-item" id="select-dropdown" aria-label="Default select example" [(ngModel)]="this.objSignInfo.font">
                                     <option value="" hidden>{{'choose.font' | translate}}</option>
                                     <option *ngFor="let d of this.list_font, let i = index" [selected]="d.selected" value="{{d}}">{{d}}</option>
                                 </select>
                             </div>
                             <div class="col-md-3-5">
                                 <label class="label-require">Size</label>
-                                <input *ngIf="this.textSign" class="form-control" [(ngModel)]="this.objSignInfo.font_size" (change)="changePositionSign($event, null, 'font_size')"/>
-                                <input *ngIf="!this.textSign" class="form-control" [(ngModel)]="this.objSignInfo.font_size" (change)="changePositionSign($event, null, 'font_size')" readonly/>
+                                <input *ngIf="this.textSign" class="no-focus form-control hover-item input_text" [(ngModel)]="this.objSignInfo.font_size" (change)="changePositionSign($event, null, 'font_size')"/>
+                                <input *ngIf="!this.textSign" class="no-focus form-control hover-item input_text" [(ngModel)]="this.objSignInfo.font_size" (change)="changePositionSign($event, null, 'font_size')" readonly/>
                             </div>
                         </div>
     
@@ -189,12 +204,12 @@
                     <div class="row location">
                         <div class="location-drag col-md-6 mt-8px" style="padding-right: 6px">
                             <div class="label-require">X:</div>
-                            <input class="input-position-size" type="number" (ngModelChange)="changePositionSign($event, 'x', 'location')"
+                            <input class="no-focus input-position-size hover-item input_text" type="number" (ngModelChange)="changePositionSign($event, 'x', 'location')"
                                 [ngModel]="getTrafX()" [readOnly]="false">
                         </div>
                         <div class="location-drag col-md-6 mt-8px" style="padding-left: 6px">
                             <div class="label-require">Y:</div>
-                            <input class="input-position-size" type="number" (ngModelChange)="changePositionSign($event, 'y', 'location')"
+                            <input class="no-focus input-position-size hover-item input_text" type="number" (ngModelChange)="changePositionSign($event, 'y', 'location')"
                                 [ngModel]="getTrafY()" [readOnly]="false">
                         </div>
                     </div>
@@ -202,12 +217,12 @@
                     <div class="location row">
                         <div class="location-drag col-md-6 mt-8px" style="padding-right: 6px">
                             <div class="label-require">{{'height' | translate}}</div>
-                            <input class="input-position-size" type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')"
+                            <input class="no-focus input-position-size hover-item input_text" type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')"
                                 [(ngModel)]="objSignInfo.height" [readOnly]="false">
                         </div>
                         <div class="location-drag col-md-6 mt-8px" style="padding-left: 6px">
                             <div class="label-require">{{'width' | translate}}</div>
-                            <input class="input-position-size" type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')"
+                            <input class="no-focus input-position-size hover-item input_text" type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')"
                                 [(ngModel)]="objSignInfo.width" [readOnly]="false">
                         </div>
                     </div>
