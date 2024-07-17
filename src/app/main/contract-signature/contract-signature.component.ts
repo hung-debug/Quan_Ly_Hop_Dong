@@ -1120,7 +1120,20 @@ export class ContractSignatureComponent implements OnInit {
       }
     }
   }
+  getValue(signId?: any) {
+    if (signId == 4) {
+      return 'KÝ SỐ HSM'
+    } else if(signId == 8) {
+      return 'KÝ SỐ REMOTE SIGNING'
+    }  else if(signId ==2) {
+      return 'KÝ USB TOKEN'
+    }  else if(signId == 6) {
+      return 'KÝ CHỨNG THƯ SỐ SERVER'
+    } else {
+      return 'ĐÓNG DẤU HỢP ĐỒNG'
+    }
 
+  }
   viewManyContract() {
     this.dialogViewManyComponentComponent();
   }
@@ -1295,7 +1308,7 @@ export class ContractSignatureComponent implements OnInit {
 
         if (result.mark) {
           const data = {
-            title: signId == 4 ? 'KÝ SỐ HSM' : 'ĐÓNG DẤU HỢP ĐỒNG ',
+            title: this.getValue(signId),
             is_content: 'forward_contract',
             markSignAcc: this.datas.markSignAcc,
             mark: true,

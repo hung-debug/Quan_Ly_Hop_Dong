@@ -1370,7 +1370,7 @@ export class ConsiderContractComponent
           //     window.location.reload()
           //   }
           // })
-          this.toastService.showSuccessHTMLWithTimeout('success_sign','',3000)
+          this.toastService.showSuccessHTMLWithTimeout('success_sign','Thực hiện ký thành công!',3000)
           this.router.navigateByUrl('/', { skipLocationChange: true })
             .then(() => {
               this.router.navigate(
@@ -1931,11 +1931,27 @@ export class ConsiderContractComponent
       }
     });
   }
+  getValue(code?: any) {
+    if (code == 'hsm') {
+      return 'KÝ SỐ HSM'
+    } else if(code =='remote') {
+      return 'KÝ SỐ REMOTE SIGNING'
+    } else if(code =='pki') {
+      return 'KÝ SIM PKI'
+    } else if(code =='usb2') {
+      return 'KÝ USB TOKEN'
+    }  else if(code =='cert') {
+      return 'KÝ CHỨNG THƯ SỐ SERVER'
+    } else {
+      return 'ĐÓNG DẤU HỢP ĐỒNG'
+    }
+
+  }
 
   openMarkSign(code: string, signUpdatePayload?: any, notContainSignImage?: any) {
     this.spinner.hide();
     const data = {
-      title: code =='hsm' ? 'KÝ SỐ HSM' : this.translate.instant('mark.contract').toUpperCase(),
+      title: this.getValue(code),
       is_content: 'forward_contract',
       markSignAcc: this.datas.markSignAcc,
       mark: true,
@@ -3897,9 +3913,9 @@ export class ConsiderContractComponent
                   if (!this.mobile) {
                     this.toastService.showSuccessHTMLWithTimeout(
                       [3, 4].includes(this.datas.roleContractReceived)
-                        ? 'Ký hợp đồng thành công'
+                        ? 'Bạn vừa thực hiện ký thành công. Hợp đồng đã được chuyển tới người tiếp theo!'
                         : 'Xem xét hợp đồng thành công',
-                      '',
+                      [3,4].includes(this.datas.roleContractReceived) ? 'Thực hiện ký thành công!': '',
                       3000
                     );
                   } else {
@@ -4042,7 +4058,7 @@ export class ConsiderContractComponent
                     [3, 4].includes(this.datas.roleContractReceived)
                       ? 'success_sign'
                       : 'success_watch',
-                    '',
+                    [3,4].includes(this.datas.roleContractReceived) ? 'Thực hiện ký thành công!' : '',
                     3000
                   );
                 } else {
@@ -5071,9 +5087,9 @@ export class ConsiderContractComponent
                 if (!this.mobile) {
                   this.toastService.showSuccessHTMLWithTimeout(
                     [3, 4].includes(this.datas.roleContractReceived)
-                      ? 'Ký hợp đồng thành công'
+                      ? 'Bạn vừa thực hiện ký thành công. Hợp đồng đã được chuyển tới người tiếp theo!'
                       : 'Xem xét hợp đồng thành công',
-                    '',
+                    [3,4].includes(this.datas.roleContractReceived) ? 'Thực hiện ký thành công!' : '',
                     3000
                   );
                 } else {
