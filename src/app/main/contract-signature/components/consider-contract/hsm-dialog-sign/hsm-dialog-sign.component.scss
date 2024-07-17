@@ -103,10 +103,12 @@ input.pw {
   position: relative;
   background: #F7F9FE;
   border-radius: 8px;
+  border: 1px solid #E6EDFA;
 }
 .input-line1 {
   display: flex;
   //justify-content: space-between;
+  border: 1px solid #E6EDFA;
   position: relative;
   background: #F7F9FE;
   border-radius: 8px;
@@ -159,4 +161,11 @@ p-dropdown{
   top: 10px;
   right: 20px;
   position: absolute;
+}
+::ng-deep input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+input[data-autocompleted] {
+  background-color: transparent !important;
 }

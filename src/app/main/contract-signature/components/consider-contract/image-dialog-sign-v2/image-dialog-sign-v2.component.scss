@@ -118,7 +118,7 @@ input[type="file"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #E9F4FD;
+  background: #F3F6FA;
 }
 
 .container-img-file-1 {
@@ -134,7 +134,7 @@ input[type="file"] {
 
 .text-support-extension {
   margin-top: 8px;
-  color: #ED1C24;
+  color: #A8B5CE;
   font-weight: 500;
 }
 .cancel-button{
@@ -192,4 +192,75 @@ input[type="file"] {
   border: 1px solid #0041C4;
   border-radius: 15px;
   font-weight: 700;
+}
+.checkbox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  margin-top: 10px;
+}
+
+.checkbox input {
+  position: absolute;
+  width: 0;
+  left: 50px;
+  height: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkbox .checkmark {
+  position: relative;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 3px;
+  outline: 1px solid #acacac;
+  transition: all 0.2s ease;
+}
+
+.checkbox:hover .checkmark {
+  background: #f4f4f5;
+  transition: all 0.2s ease;
+}
+
+.checkbox input:checked ~.checkmark {
+  background: #3f7fed;
+  outline: 1px solid rgb(95, 126, 240);
+}
+
+.checkbox input[type="radio"] ~ .checkmark {
+  border-radius: 50%;
+}
+
+.checkbox .checkmark::after {
+  position: absolute;
+  display: block;
+  content: "";
+  left: 50%;
+  top: 40%;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -50%) rotate(45deg);
+  -webkit-transform: translate(-50%, -50%) rotate(45deg);
+  -moz-transform: translate(-50%, -50%) rotate(45deg);
+  -ms-transform: translate(-50%, -50%) rotate(45deg);
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.checkbox input:checked~.checkmark::after {
+  opacity: 1;
+  transition: all 0.2s ease;
 }
