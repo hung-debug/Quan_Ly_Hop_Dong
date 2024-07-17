@@ -28,7 +28,7 @@
     </div>
     <div class="row" style="padding-top: 10px;">
       <div class="col-md-12">
-        <div class="input-line border-none" [ngClass]="{'invalid': submitted && f.username.errors}">
+        <div class="input-line" [ngClass]="{'invalid': submitted && f.username.errors}">
           <img src="../../assets/img/user_hsm.svg" class="input-img"/>
           <input
             type="text" formControlName="username"
@@ -44,7 +44,7 @@
 
     <div class="row" style="padding-top: 10px;">
       <div class="col-md-12">
-        <div class="input-line border-none" [ngClass]="{'invalid': submitted && f.taxCode.errors}">
+        <div class="input-line" [ngClass]="{'invalid': submitted && f.taxCode.errors}">
           <img src="../../assets/img/bar_code.svg" class="input-img"/>
           <input
             type="text" formControlName="taxCode"
@@ -63,7 +63,7 @@
 
     <div class="row" style="padding-top: 10px;">
       <div class="col-md-12">
-        <div class="input-line border-none" [ngClass]="{'invalid': submitted && f.pass1.errors}">
+        <div class="input-line" [ngClass]="{'invalid': submitted && f.pass1.errors}">
           <img src="../../assets/img/pass.svg" class="input-img"/>
           <input *ngIf="this.fieldTextType1 === false" type="text" formControlName="pass1" id="pass1"
                  placeholder="{{(isHsmIcorp ? 'login.password' : 'password.level1') | translate}}"
@@ -72,11 +72,7 @@
             placeholder="{{(isHsmIcorp ? 'login.password' : 'password.level1') | translate}}"
             class="input-text"/>
           <div class="icon-password">
-            <i class="fa mt-2"
-               [ngClass]="{'fa-eye-slash': !fieldTextType1, 'fa-eye': fieldTextType1}"
-               (click)="toggleFieldTextType1()"
-               style="color: #106DB6;"
-            ></i>
+            <img class="mt-1" (click)="toggleFieldTextType1()" [src]="!fieldTextType1 ? '../../assets/img/password_not_view.svg': '../../assets/img/password_view.svg'" />
           </div>
         </div>
         <div *ngIf="submitted && f.pass1.errors" class="invalid-text">
@@ -87,7 +83,7 @@
     </div>
     <div *ngIf="!isHsmIcorp" class="row" style="padding-top: 10px;">
       <div class="col-md-12">
-        <div class="input-line border-none" [ngClass]="{'invalid': submitted && f.pass2.errors}">
+        <div class="input-line" [ngClass]="{'invalid': submitted && f.pass2.errors}">
           <img src="../../assets/img/pass.svg" class="input-img"/>
           <input *ngIf="this.fieldTextType2 === false" class="input-text pw" type="text" formControlName="pass2"
                  id="pass2"
@@ -96,11 +92,7 @@
             class="input-text" *ngIf="this.fieldTextType2 === true" type="text" formControlName="pass2" id="pass2"
             placeholder="{{'password.level2' | translate}}"/>
           <div class="icon-password">
-            <i class="fa mt-2"
-               [ngClass]="{'fa-eye-slash': !fieldTextType2,'fa-eye': fieldTextType2}"
-               (click)="toggleFieldTextType2()"
-               style="color: #106DB6;"
-            ></i>
+            <img class="mt-1" (click)="toggleFieldTextType2()" [src]="!fieldTextType2 ? '../../assets/img/password_not_view.svg': '../../assets/img/password_view.svg'" />
           </div>
         </div>
         <div *ngIf="submitted && f.pass2.errors" class="invalid-text">

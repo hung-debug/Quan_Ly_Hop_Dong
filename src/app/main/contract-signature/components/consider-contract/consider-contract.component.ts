@@ -1849,7 +1849,8 @@ export class ConsiderContractComponent
     dialogConfig.panelClass = 'custom-dialog-container';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
-    const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
+    // const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
+    const dialogRef = this.dialog.open(ImageDialogSignV2Component, dialogConfig);
     dialogRef.afterClosed().subscribe(async (result: any) => {
 
       let is_data = result;
@@ -1941,12 +1942,19 @@ export class ConsiderContractComponent
     };
 
     // @ts-ignore
-    const dialogRef = this.dialog.open(code =='hsm' ? ImageDialogSignV2Component : ImageDialogSignComponent, {
-      width: code == 'hsm' ? '580px' : '1024px',
+    const dialogRef = this.dialog.open( ImageDialogSignV2Component , {
+      width: '725px',
       backdrop: 'static',
       data: data,
       code: code
     });
+    // const dialogRef = this.dialog.open(ImageDialogSignComponent, {
+    //   width: '1024px',
+    //   backdrop: 'static',
+    //   data: data,
+    //   code: code
+    // });
+
 
 
     dialogRef.afterClosed().subscribe((res: any) => {
