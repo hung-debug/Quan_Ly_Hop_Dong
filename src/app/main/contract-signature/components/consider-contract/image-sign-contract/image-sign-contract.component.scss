@@ -3,13 +3,8 @@
   height: 100%;
 }
 .content .skeleton-sign {
-  //height: 102px;
-  display: flex;
   width: 100%;
   height: 100%;
-  // align-items: center;
-  // justify-content: center;
-  // flex-direction: column;
 }
 
 
@@ -34,13 +29,21 @@
 }
 
 .stamp-content {
-  flex-basis: 33.33%;
-  background-color: #106DB6;
-  border-radius: 6px;
-  margin-right: 4px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  flex-basis: 33.33%;
+  background-color: #E6EDFA;
+  border-radius: 6px;
+  height: 100%;
+}
+.stamp-content1 {
+  align-items: center;
+  justify-content: center;
+  flex-basis: 33.33%;
+  background-color: #f4f6f9;
+  border-radius: 6px;
+  height: 100%;
 }
 
 .sign-info-content {
@@ -55,4 +58,30 @@
   font-size: 9px;
   font-weight: 400;
   letter-spacing: 0px;
+}
+.stamp-type {
+  background: #C7E8FA !important;
+}
+.left-stamp {
+  width: 40% ;
+  background: #C7E8FA;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  flex: 1 1 auto;
+  margin: 2px;
+}
+.right-stamp {
+  width: 60%;display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  flex: 1 1 auto;
+  margin: 2px;
+  background: #E6EDFA;
+}
+.text-stamp {
+  color: #286CF5;
+  font-size: 6px
 }
