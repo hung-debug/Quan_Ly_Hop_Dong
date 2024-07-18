@@ -1,14 +1,50 @@
-  <div *ngIf="sign.sign_unit == 'chu_ky_so' || sign.sign_unit == 'chu_ky_anh'" class="content">
-    <div class="stamp-content">
-      <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/new-icon-chu-ky-so.svg' : 'assets/img/new-icon-chu-ky-so.svg'"
-        alt="mobifone.contract">
-    </div>
-    <div class="sign-info-content">
-      <span style="color: #106DB6;" *ngIf="sign.sign_unit == 'chu_ky_anh'; then content else other_content"></span>
-      <ng-template #content>Thông tin chữ ký ảnh 1</ng-template>
-      <ng-template #other_content>Thông tin chữ ký số 2</ng-template>
-    </div>
+<div *ngIf="sign.sign_unit == 'chu_ky_so' || sign.sign_unit == 'chu_ky_anh'" class="content">
+  <div class="stamp-content">
+    <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/new-icon-chu-ky-so.svg' : 'assets/img/new-icon-chu-ky-so.svg'"
+      alt="mobifone.contract">
   </div>
+  <div class="sign-info-content">
+    <span style="color: #106DB6;" *ngIf="sign.sign_unit == 'chu_ky_anh'; then content else other_content"></span>
+    <ng-template #content>Thông tin chữ ký ảnh 1</ng-template>
+    <ng-template #other_content>Thông tin chữ ký số 2</ng-template>
+  </div>
+</div>
+
+<div *ngIf="sign.sign_unit == 'chu_ky_so_con_dau_va_thong_tin' || sign.sign_unit == 'chu_ky_anh_con_dau_va_thong_tin'" class="content">
+  <div class="stamp-content">
+    <img [src]="sign.sign_unit == 'chu_ky_so_con_dau_va_thong_tin' ? 'assets/img/new-icon-chu-ky-so.svg' : 'assets/img/new-icon-chu-ky-so.svg'"
+      alt="mobifone.contract">
+  </div>
+  <div class="sign-info-content">
+    <span style="color: #106DB6;" *ngIf="sign.sign_unit == 'chu_ky_so_con_dau_va_thong_tin'; then content else other_content"></span>
+    <ng-template #content>Chữ ký con dấu và thông tin số</ng-template>
+    <ng-template #other_content>Chữ ký con dấu và thông tin ảnh</ng-template>
+  </div>
+</div>
+
+<div *ngIf="sign.sign_unit == 'chu_ky_so_con_dau' || sign.sign_unit == 'chu_ky_anh_con_dau'" class="content">
+  <div class="stamp-content">
+    <img [src]="sign.sign_unit == 'chu_ky_so_con_dau' ? 'assets/img/new-icon-chu-ky-so.svg' : 'assets/img/new-icon-chu-ky-so.svg'"
+      alt="mobifone.contract">
+  </div>
+  <div class="sign-info-content">
+    <span style="color: #106DB6;" *ngIf="sign.sign_unit == 'chu_ky_so_con_dau'; then content else other_content"></span>
+    <ng-template #content>Chỉ có con dấu/ chữ ký số</ng-template>
+    <ng-template #other_content>hỉ có con dấu/ chữ ký ảnh</ng-template>
+  </div>
+</div>
+
+<div *ngIf="sign.sign_unit == 'chu_ky_so_thong_tin' || sign.sign_unit == 'chu_ky_anh_thong_tin'" class="content">
+  <div class="stamp-content">
+    <img [src]="sign.sign_unit == 'chu_ky_so_thong_tin' ? 'assets/img/new-icon-chu-ky-so.svg' : 'assets/img/new-icon-chu-ky-so.svg'"
+      alt="mobifone.contract">
+  </div>
+  <div class="sign-info-content">
+    <span style="color: #106DB6;" *ngIf="sign.sign_unit == 'thong_tin'; then content else other_content"></span>
+    <ng-template #content>Chỉ có thông tin số</ng-template>
+    <ng-template #other_content>Chỉ có thông tin ảnh</ng-template>
+  </div>
+</div>
 
 <div class="text-sign-not-template-text" *ngIf="(sign.sign_unit == 'text') && !signTemplate">
   <span [ngStyle]="getStyleText(sign)" class="font-style" id="input-text">{{getText(sign)}}</span>
