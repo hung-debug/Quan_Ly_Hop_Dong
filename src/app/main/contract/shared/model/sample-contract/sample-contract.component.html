@@ -97,7 +97,7 @@
         <!--  file content-->
         <div class="col-lg-7">
             <div style="height: 48px; background-color: #EBF2FB; display: flex; justify-content: center;">
-                <div style="margin: auto 0 auto 45px">
+                <div style="margin: auto 0 auto">
                     <button class="call-page input1" (click)="firstPage()">
                         <img  width="16px" height="16px" *ngIf="!this.page1" src="assets/img/First.png">
                         <img  width="16px" height="16px" *ngIf="this.page1" src="assets/img/First.png">
@@ -157,7 +157,7 @@
     
                         <div class="sign-unit-select mt-8px" *ngIf="isEnableText">
                             <label class="label-require">{{'attribute.text.type' | translate}}: <span style="color: red">*</span></label>
-                            <select class="form-select hover-item" id="select-dropdown-text" aria-label="Default select example"
+                            <select class="form-select hover-item no-focus" id="select-dropdown-text" aria-label="Default select example"
                                 (change)="changePositionSign($event, 'text_type', 'text')" [disabled]="isEnableSelect"
                                 [(ngModel)]="selectedTextType">
                                 <option value="" hidden>{{'choose.text.type'| translate}}
@@ -169,7 +169,7 @@
     
                         <div class="sign-unit-select mt-8px">
                             <label class="label-require">{{isEnableText || isChangeText ? ('user.import' | translate) : ('user.sign' | translate)}}: <span style="color: red">*</span></label>
-                            <select class="form-select hover-item" id="select-dropdown" aria-label="Default select example"
+                            <select class="form-select hover-item no-focus" id="select-dropdown" aria-label="Default select example"
                                 (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
                                 <option value="" hidden>{{isEnableText || isChangeText ? ('choose.importer' | translate) : ('choose.signer' | translate)}}
                                 </option>
@@ -182,7 +182,7 @@
                         <div class="row sign-unit-select mt-8px">
                             <div class="col-md-8-5" style="padding-right: 0px;">
                                 <label class="label-require">Font</label>
-                                <select (change)="changePositionSign($event, null, 'font')" class="form-select hover-item" id="select-dropdown" aria-label="Default select example" [(ngModel)]="this.objSignInfo.font">
+                                <select (change)="changePositionSign($event, null, 'font')" class="form-select hover-item no-focus" id="select-dropdown" aria-label="Default select example" [(ngModel)]="this.objSignInfo.font">
                                     <option value="" hidden>{{'choose.font' | translate}}</option>
                                     <option *ngFor="let d of this.list_font, let i = index" [selected]="d.selected" value="{{d}}">{{d}}</option>
                                 </select>

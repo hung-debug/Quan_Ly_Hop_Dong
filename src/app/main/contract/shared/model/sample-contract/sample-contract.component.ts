@@ -384,8 +384,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (res.type == 2) {
               res['sign_unit'] = 'chu_ky_anh'
             }
-            if (res.type == 3) {
+            if (res.type == 3 && !res.type_image_signature) {
               res['sign_unit'] = 'chu_ky_so'
+            } if (res.type == 3 && res.type_image_signature) {
+              res['sign_unit'] = 'chu_ky_so_new'
             }
             if (res.type == 4) {
               res['sign_unit'] = 'so_tai_lieu'
@@ -432,6 +434,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   setDataSignContract() {
     let data_sign_config_cks = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_so');
+    let data_sign_config_cks_new = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_so_new');
     let data_sign_config_cka = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_anh');
     let data_sign_config_text = this.dataSignPosition.filter((p: any) => p.sign_unit == 'text');
     var data_sign_config_num_document = this.dataSignPosition.filter((p: any) => p.sign_unit == 'so_tai_lieu');
@@ -445,10 +448,30 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         Array.prototype.push.apply(element.sign_config, data_sign_config_text);
       } else if (element.sign_unit == 'chu_ky_anh') {
         Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
+      } if (element.sign_unit == 'chu_ky_so_new') { 
+        let targetObject1 = element.type.find((item: any) => item.sign_unit === "chu_ky_so_con_dau_va_thong_tin");
+        let targetObject2 = element.type.find((item: any) => item.sign_unit === "chu_ky_so_con_dau");
+        let targetObject3 = element.type.find((item: any) => item.sign_unit === "chu_ky_so_thong_tin");
+  
+        data_sign_config_cks_new.forEach((data: any) => {
+            if (data.type_image_signature === 1) {
+                data.sign_unit = 'chu_ky_so_con_dau_va_thong_tin'
+                targetObject1.sign_config.push(data);
+            }
+
+            if (data.type_image_signature === 2) {
+              data.sign_unit = 'chu_ky_so_con_dau'
+              targetObject2.sign_config.push(data);
+            }
+
+            if (data.type_image_signature === 3) {
+              data.sign_unit = 'chu_ky_so_thong_tin'
+              targetObject3.sign_config.push(data);
+            }
+        });
       }
+      
     })
-
-
   }
 
   defindDataContract() {
@@ -1872,14 +1895,27 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           //
           let isUserSign_clone = _.cloneDeep(this.datas.contract_user_sign)
           isUserSign_clone.forEach((res: any) => {
-            res.sign_config.forEach((element: any) => {
-              if (element.id_have_data) {
-                isHaveFieldId.push(element)
-              } else isNotFieldId.push(element);
-              if (element.name && element.text_attribute_name) {
-                element.name = element.text_attribute_name
-              }
-            })
+            if(res.sign_unit == "chu_ky_so_new") {
+              res.type.forEach((element: any) => {
+                element.sign_config.forEach((item: any) => {
+                  if (item.id_have_data) {
+                    isHaveFieldId.push(item)
+                  } else isNotFieldId.push(item);
+                  if (item.name && item.text_attribute_name) {
+                    item.name = item.text_attribute_name
+                  }
+                })
+              })
+            } else {
+              res.sign_config.forEach((element: any) => {
+                if (element.id_have_data) {
+                  isHaveFieldId.push(element)
+                } else isNotFieldId.push(element);
+                if (element.name && element.text_attribute_name) {
+                  element.name = element.text_attribute_name
+                }
+              })
+            }
           })
           this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId, action);
         } else {
@@ -2016,6 +2052,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           if(item.text_type == 'currency'){
             item['type'] = 5; } else {
             item['type'] = 1;}
+        } else if (item.sign_unit == 'chu_ky_so_con_dau_va_thong_tin') {
+          item['type'] = 3;
+          item['type_image_signature'] = 1;
+        } else if (item.sign_unit == 'chu_ky_so_con_dau') {
+          item['type'] = 3;
+          item['type_image_signature'] = 2;
+        } else if (item.sign_unit == 'chu_ky_so_thong_tin') {
+          item['type'] = 3;
+          item['type_image_signature'] = 3;
         }
 
         data_remove_arr_request.forEach((item_remove: any) => {
@@ -2128,7 +2173,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   validData(isSaveDraft?: any) {
-    let data_not_drag = this.datas.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
+    let data_not_drag = this.datas.contract_user_sign.find((item: any) => {
+      if (item.sign_unit === 'chu_ky_so_new') {
+          return item.type.find((subItem: any) => subItem.sign_config.length > 0);
+      }
+      return item.sign_config.length > 0;
+    });
+   
     if (!data_not_drag) {
       this.spinner.hide();
       if(!isSaveDraft)
@@ -2209,6 +2260,72 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             }
           }
           if (count > 0 || count_text > 0 || count_number > 0) break
+        }
+        if (this.datas.contract_user_sign[i].sign_unit === 'chu_ky_so_new') {
+          let itemType = this.datas.contract_user_sign[i].type;
+          for (let j = 0; j < itemType.length; j++) {
+            let signConfigArray = itemType[j].sign_config;
+
+            for (let n = 0; n < signConfigArray.length; n++) {
+              let element = signConfigArray[n];
+              if (!element.name && element.sign_unit != 'so_tai_lieu') { // element.sign_unit != 'so_tai_lieu'
+                // if(isSaveDraft && element.sign_unit == 'text'){
+                //   currentElement = element
+                //   break;
+                // }
+                currentElement = element
+                count++;
+                break
+              } else if (element.sign_unit == 'so_tai_lieu' && element.length > 1) {
+                count_number++;
+                currentElement = element
+                break;
+              } else if (element.sign_unit == 'so_tai_lieu' && !this.datas.contract_no && (!element.email && !element.phone)) {
+                count++;
+                currentElement = element
+                break
+              } else if (element.sign_unit == 'text' && !element.text_attribute_name && !isSaveDraft) {
+                if (element.text_type == 'currency') {
+                  count_text++;
+                  currentElement = element
+                  break;
+                } else {
+                  count_text++;
+                  currentElement = element
+                  break
+                }
+              }
+              // else if (element.sign_unit == 'text' && !element.text_type  && !isSaveDraft){
+              //   count_type_text++;
+              //   currentElement = element
+              //   break
+              // }
+              else {
+                let data_sign = {
+                  name: element.name,
+                  signature_party: element.signature_party,
+                  recipient_id: element.recipient_id,
+                  email: element.email || (element.recipient && element.recipient.email) || "",
+                  phone: element.phone || (element.recipient && element.recipient.phone) || "",
+                  sign_unit: element.sign_unit
+                }
+                if (element.signature_party == "organization" || element.is_type_party == 1)
+                  arrSign_organization.push(data_sign);
+                else arrSign_partner.push(data_sign);
+
+              }
+
+              if (element.coordinate_x) {
+                coordinate_x.push(Number(element.coordinate_x));
+                coordinate_y.push(Number(element.coordinate_y));
+                width.push(Number(element.width));
+                height.push(Number(element.height));
+                boxElements.push(element)
+              }
+            }
+
+            if (count > 0 || count_text > 0 || count_number > 0) break
+          }
         }
       }
       //Trường hợp 1: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2 thuộc (y1 đến y1+h) = góc phải dưới
@@ -2469,13 +2586,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
         if (environment.flag == "KD") {
           // valid ký kéo thiếu ô ký cho từng loại ký
-          console.log("data_organization",data_organization);
           for (const element of data_organization) {
             if (element.sign_type.length > 0) {
               if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && arrSign_organization.filter((item: any) => ((item.email && item.email == element.email) || (item.phone && item.phone == element.phone)) && item.sign_unit == 'chu_ky_so').length == 0) {
                 error_organization++;
                 nameSign_organization.name = element.name;
-                nameSign_organization.sign_type = 'chu_ky_so';
+                nameSign_organization.sign_type = 'chu_ky_so_new';
                 break
               }
             }
@@ -2504,10 +2620,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           // valid ký kéo thiếu ô ký cho từng loại ký
           for (const element of data_partner) {
             if (element.sign_type.length > 0) {
-              if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && arrSign_partner.filter((item: any) => (item.email == element.email || item.phone == element.phone) && item.sign_unit == 'chu_ky_so').length == 0) {
+              if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && arrSign_partner.filter((item: any) => (item.email == element.email || item.phone == element.phone) 
+                && (item.sign_unit == 'chu_ky_so_con_dau_va_thong_tin' || item.sign_unit == 'chu_ky_so_con_dau' || item.sign_unit == 'chu_ky_so_thong_tin')).length == 0) {
                 countError_partner++;
                 nameSign_partner.name = element.name;
-                nameSign_partner.sign_type = 'chu_ky_so';
+                nameSign_partner.sign_type = 'chu_ky_so_new';
                 break
               }
               if (element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && arrSign_partner.filter((item: any) => (item.email == element.email || item.phone == element.phone) && item.sign_unit == 'chu_ky_anh').length == 0) {
@@ -2522,7 +2639,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           if (countError_partner > 0) {
             this.spinner.hide();
             if(!isSaveDraft)
-            this.toastService.showWarningHTMLWithTimeout(`Thiếu đối tượng ${nameSign_partner.sign_type == 'chu_ky_so' ? 'ký số' : 'ký ảnh hoặc eKYC'} của đối tác ${nameSign_partner.name}, vui lòng chọn đủ người ký!`, "", 3000);
+            this.toastService.showWarningHTMLWithTimeout(`Thiếu đối tượng ${nameSign_partner.sign_type == 'chu_ky_so_new' ? 'ký số' : 'ký ảnh hoặc eKYC'} của đối tác ${nameSign_partner.name}, vui lòng chọn đủ người ký!`, "", 3000);
             return false;
           }
   
@@ -2541,10 +2658,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (element.sign_type.length > 0) {
               if (element.sign_type.some((p: any) => [3,7,8].includes(p.id) || ([2,4,6].includes(p.id) && element.role !==4)) && 
               arrSign_organization.filter((item: any) => ((item.email && item.email == element.email) || (item.phone && item.phone == element.phone)) 
-              && item.sign_unit == 'chu_ky_so').length == 0) {
+              && (item.sign_unit == 'chu_ky_so_con_dau_va_thong_tin' || item.sign_unit == 'chu_ky_so_con_dau' || item.sign_unit == 'chu_ky_so_thong_tin')).length == 0) {
                 error_organization++;
                 nameSign_organization.name = element.name;
-                nameSign_organization.sign_type = 'chu_ky_so';
+                nameSign_organization.sign_type = 'chu_ky_so_new';
                 break
               }
             }
@@ -2556,7 +2673,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             return false;
           }
           // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.off.org.please
-  
           if (arrSign_organization.length < data_organization.length || !this.validateVanThuData(arrSign_organization, data_organization)) {
             this.spinner.hide();
             if(!isSaveDraft)
@@ -2577,7 +2693,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               if (element.sign_type.some((p: any) => [3,7,8].includes(p.id) || ([2,4,6].includes(p.id) && element.role !==4)) && arrSign_partner.filter((item: any) => ((element.email && item.email == element.email) || (element.phone && item.phone == element.phone)) && item.sign_unit == 'chu_ky_so').length == 0) {
                 countError_partner++;
                 nameSign_partner.name = element.name;
-                nameSign_partner.sign_type = 'chu_ky_so';
+                nameSign_partner.sign_type = 'chu_ky_so_new';
                 break
               }
               if (element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && arrSign_partner.filter((item: any) => (item.email == element.email || item.phone == element.phone) && item.sign_unit == 'chu_ky_anh').length == 0) {
@@ -2592,7 +2708,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           if (countError_partner > 0) {
             this.spinner.hide();
             if(!isSaveDraft)
-            this.toastService.showWarningHTMLWithTimeout(`Thiếu đối tượng ${nameSign_partner.sign_type == 'chu_ky_so' ? 'ký số' : 'ký ảnh hoặc eKYC'} của đối tác ${nameSign_partner.name}, vui lòng chọn đủ người ký!`, "", 3000);
+            this.toastService.showWarningHTMLWithTimeout(`Thiếu đối tượng ${nameSign_partner.sign_type == 'chu_ky_so_new' ? 'ký số' : 'ký ảnh hoặc eKYC'} của đối tác ${nameSign_partner.name}, vui lòng chọn đủ người ký!`, "", 3000);
             return false;
           }
   
