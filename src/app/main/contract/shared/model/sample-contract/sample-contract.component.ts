@@ -1118,7 +1118,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             } else {
               element.is_disable = !(element.sign_type.some((p: any) => [2,4,6].includes(p.id)) || element.role == 4)
             }
-          }else if (isSignType == 'chu_ky_so') {
+          }else if (isSignType == 'chu_ky_so' || isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
             element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
           } else if (isSignType == 'chu_ky_anh') {
             element.is_disable = false
@@ -1131,7 +1131,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       } else {
         if (isSignType == 'chu_ky_anh') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
-        } else if (isSignType == 'chu_ky_so') {
+        } else if (isSignType == 'chu_ky_so' || isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && element.role != 2);
         } else if (isSignType == 'text') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 ) || (element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3 && p.id != 7))); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
@@ -2588,7 +2588,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           // valid ký kéo thiếu ô ký cho từng loại ký
           for (const element of data_organization) {
             if (element.sign_type.length > 0) {
-              if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && arrSign_organization.filter((item: any) => ((item.email && item.email == element.email) || (item.phone && item.phone == element.phone)) && item.sign_unit == 'chu_ky_so').length == 0) {
+              if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && arrSign_organization.filter((item: any) => ((item.email && item.email == element.email) || (item.phone && item.phone == element.phone)) && 
+              (item.sign_unit == 'chu_ky_so_con_dau_va_thong_tin' || item.sign_unit == 'chu_ky_so_con_dau' || item.sign_unit == 'chu_ky_so_thong_tin')).length == 0) {
                 error_organization++;
                 nameSign_organization.name = element.name;
                 nameSign_organization.sign_type = 'chu_ky_so_new';
