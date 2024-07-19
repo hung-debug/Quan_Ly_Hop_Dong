@@ -924,5 +924,7 @@
   "drop.doc": "Kéo thả các trường thông tin dưới đây để thêm ô nhập hoặc ô ký vào tài liệu",
   "location_size" : "Vị trí và kích thước",
   "account.sign" : "Vui lòng nhập thông tin tài khoản để thực hiện ký",
-  "hsm.title" : "Chọn hình ảnh chữ ký hoặc con dấu"
+  "hsm.title" : "Chọn hình ảnh chữ ký hoặc con dấu",
+  "drag.contract.theo_lo": "Hỗ trợ file XLS, XLSX",
+  "errorSignTime": "Ngày hết hạn ký"
 }

@@ -5,7 +5,7 @@
         <div class="row mt-8px">
             <div class="col-md-12">
                 <div class="label_item">{{'contract.file.name' | translate}}</div>
-                <div class="content-input mt-6px">
+                <div class="content-input mt-6px hover-item">
                     <div [innerHTML]="this.datas.file_name"></div>
                 </div>
             </div>
@@ -14,14 +14,14 @@
         <div class="row mt-8px">
             <div class="col-md-9" style="padding-right: 8px;">
                 <div class="label_item">{{'note' | translate}}</div>
-                <div class="content-input mt-6px">
+                <div class="content-input mt-6px hover-item">
                     <div [innerHTML]="this.datas.notes"></div>
                 </div>
             </div>
 
             <div class="col-md-3" style="padding-left: 7px;">
                 <div class="label_item">{{'expiration-date' | translate}}</div>
-                <div class="content-input mt-6px">
+                <div class="content-input mt-6px hover-item">
                     <div [innerHTML]="this.datas.sign_time | date: 'dd/MM/yyyy'"></div>
                 </div>
             </div>
@@ -32,7 +32,7 @@
 
     <div>
         <div *ngFor="let item of this.datas.is_determine_clone">
-            <div class="boder-info flex mt-8px">
+            <div class="boder-info flex mt-8px hover-item">
                 <div class="ordering"> 
                     <div class="content-index">
                         {{item.ordering}}
@@ -43,7 +43,11 @@
                     <div class="name-info">{{item.name}}</div>
 
                     <div class="mt-16px" *ngIf="item.type == 2">
-                        <div class="label">{{'user.lead' | translate}}</div>
+                        <div class="label">{{'user.lead' | translate}}
+                            <span *ngIf="getPartnerCoordinationer(item).length > 0">
+                                &nbsp;({{ getPartnerCoordinationer(item).length }})
+                            </span>
+                        </div>
                 
                         <div *ngFor="let reviewer of item.recipients">
                             <div *ngIf="reviewer.role == 1" class="flex mt-16px">
@@ -54,7 +58,11 @@
                     </div> 
 
                     <div class="mt-16px" *ngIf="item.type == 1 || item.type == 2">
-                        <div class="label">{{'user.view' | translate}}</div>
+                        <div class="label">{{'user.view' | translate}}
+                            <span *ngIf="getPartnerReviewer(item).length > 0">
+                                &nbsp;({{ getPartnerReviewer(item).length }})
+                            </span>
+                        </div>
                 
                         <div *ngFor="let reviewer of item.recipients">
                             <div *ngIf="reviewer.role == 2" class="flex mt-16px">
@@ -65,7 +73,11 @@
                     </div>   
                 
                     <div class="mt-16px">
-                        <div class="label">{{'user.sign' | translate}}</div>
+                        <div class="label">{{'user.sign' | translate}}
+                            <span *ngIf="getPartnerSignature(item).length > 0">
+                                &nbsp;({{ getPartnerSignature(item).length }})
+                            </span>
+                        </div>
                 
                         <div *ngFor="let reviewer of item.recipients">
                             <div *ngIf="reviewer.role == 3" class="flex mt-16px">
@@ -76,7 +88,11 @@
                     </div>  
                 
                     <div class="mt-16px" *ngIf="item.type == 1 || item.type == 2">
-                        <div class="label">{{'user.doc' | translate}}</div>
+                        <div class="label">{{'user.doc' | translate}}
+                            <span *ngIf="getPartnerDocument(item).length > 0">
+                                &nbsp;({{ getPartnerDocument(item).length }})
+                            </span>
+                        </div>
                 
                         <div *ngFor="let reviewer of item.recipients">
                             <div *ngIf="reviewer.role == 4" class="flex mt-16px">

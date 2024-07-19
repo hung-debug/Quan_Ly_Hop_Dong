@@ -338,7 +338,8 @@ input[type=number] {
       }
       
       .checkbox-hide-processing-thread:checked {
-        background-color: #fff;
+        // background-color: #fff;
+        background-color: #0041C4;
       }
       
       .checkbox-hide-processing-thread:checked::after {
@@ -643,7 +644,8 @@ input[type=number] {
   background-color: #F7FAFD;
   border-radius: 6px;
   padding: 10px;
-  font-size: 12px;
+  font-size: 14px;
+  color: #00186D !important;
   font-weight: 500;
   line-height: 21px;
 
@@ -728,7 +730,10 @@ input[type=number] {
 .input-nhap-sdt {
   border: none;
   background-color: #F7FAFD;
-
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #00186D;
   &:focus {
     outline: none;
   }
@@ -768,6 +773,10 @@ input[type=number] {
   background-repeat: no-repeat;
   background-position: right 10px center;
   background-size: 24px 24px;
+
+  &:hover {
+    border: 1px solid #286CF5 !important;
+  }
 }
 
 ::ng-deep .multiselect-dropdown .dropdown-btn::before,
@@ -824,4 +833,15 @@ input[type=number] {
       outline: none; /* Xóa bỏ viền khi focus */
     }
   }
+}
+
+.hover-item:hover {
+  border: 1px solid #286CF5 !important; /* Thay đổi màu viền khi hover */
+}
+
+.input1::placeholder {
+  color: #AEC7E5;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 21px;
 }

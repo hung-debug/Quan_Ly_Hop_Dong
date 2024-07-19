@@ -170,25 +170,38 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       let isNotFieldId: any[] = [];
       let isUserSign_clone = _.cloneDeep(this.datas.contract_user_sign);
       isUserSign_clone.forEach((res: any) => {
-        res.sign_config.forEach((element: any) => {
-          if(!element.type) {
-            if(element.sign_unit == 'chu_ky_anh') {
-              element.type = 2;
-            } else if(element.sign_unit == 'chu_ky_so') {
-              element.type = 3;
-            } else if(element.sign_unit == 'so_tai_lieu') {
-              element.type = 4;
-            } else {
-              element.type = 1;
+        if(res.sign_unit == "chu_ky_so_new") {
+          res.type.forEach((element: any) => {
+            element.sign_config.forEach((item: any) => {
+              if (item.id_have_data) {
+                isHaveFieldId.push(item)
+              } else isNotFieldId.push(item);
+              if (item.name && item.text_attribute_name) {
+                item.name = item.text_attribute_name
+              }
+            })
+          })
+        } else {
+          res.sign_config.forEach((element: any) => {
+            if(!element.type) {
+              if(element.sign_unit == 'chu_ky_anh') {
+                element.type = 2;
+              } else if(element.sign_unit == 'chu_ky_so') {
+                element.type = 3;
+              } else if(element.sign_unit == 'so_tai_lieu') {
+                element.type = 4;
+              } else {
+                element.type = 1;
+              }
             }
-          }
-          if (element.id_have_data) {
-            isHaveFieldId.push(element);
-          } else isNotFieldId.push(element);
-          if (element.name && element.text_attribute_name) {
-            element.name = element.text_attribute_name
-          }
-        });
+            if (element.id_have_data) {
+              isHaveFieldId.push(element);
+            } else isNotFieldId.push(element);
+            if (element.name && element.text_attribute_name) {
+              element.name = element.text_attribute_name
+            }
+          });
+        }
       });
 
       this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId, action);
@@ -214,50 +227,83 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       ];
       let isContractUserSign_clone = _.cloneDeep(this.datas.contract_user_sign);
       isContractUserSign_clone.forEach((element: any) => {
-        if (element.sign_config.length > 0) {
-          element.sign_config.forEach((item: any) => {
-            item['font'] = item.font ? item.font : 'Times New Roman';
-            item['font_size'] =  item.size ? item.size : 13;
-            item['contract_id'] = this.datas.contract_id;
-            item['document_id'] = this.datas.document_id;
-            if (item.text_attribute_name) {
-              item.name = item.text_attribute_name;
-            }
-
-            if (item.sign_unit == 'chu_ky_anh') {
-              item['type'] = 2;
-            } else if (item.sign_unit == 'chu_ky_so') {
-              item['type'] = 3;
-            } else if (item.sign_unit == 'so_tai_lieu') {
-              item['type'] = 4;
-              if (this.datas.contract_no) {
-                if (!item.name) item.name = '';
-
-                if (!item.recipient_id) item.recipient_id = '';
-
-                if (!item.status) item.status = 0;
-
-                if(item.contract_no) item.contract_no = item.contract_no.trim();
+        if(element.sign_unit == "chu_ky_so_new") {
+          element.type.forEach((res: any) => {
+            res.sign_config.forEach((item: any) => {
+              item['font'] = item.font ? item.font : 'Times New Roman';
+              item['font_size'] =  item.size ? item.size : 13;
+              item['contract_id'] = this.datas.contract_id;
+              item['document_id'] = this.datas.document_id;
+              if (item.text_attribute_name) {
+                item.name = item.text_attribute_name;
               }
-            } else if(item.sign_unit == 'text'){
-              if(item.text_type == "currency"){
-                item['type'] = 5;} else {
-              item['type'] = 1;}
-            }
 
-            data_remove_arr_request.forEach((item_remove: any) => {
-              delete item[item_remove];
+              if (item.sign_unit == 'chu_ky_so_con_dau_va_thong_tin') {
+                item['type'] = 3;
+                item['type_image_signature'] = 1;
+              } else if (item.sign_unit == 'chu_ky_so_con_dau') {
+                item['type'] = 3;
+                item['type_image_signature'] = 2;
+              } else if (item.sign_unit == 'chu_ky_so_thong_tin') {
+                item['type'] = 3;
+                item['type_image_signature'] = 3;
+              }
+
+              data_remove_arr_request.forEach((item_remove: any) => {
+                delete item[item_remove];
+              });
+            })
+
+            Array.prototype.push.apply(
+              this.data_sample_contract,
+              res.sign_config
+            );
+          })
+        } else {
+          if (element.sign_config.length > 0) {
+            element.sign_config.forEach((item: any) => {
+              item['font'] = item.font ? item.font : 'Times New Roman';
+              item['font_size'] =  item.size ? item.size : 13;
+              item['contract_id'] = this.datas.contract_id;
+              item['document_id'] = this.datas.document_id;
+              if (item.text_attribute_name) {
+                item.name = item.text_attribute_name;
+              }
+  
+              if (item.sign_unit == 'chu_ky_anh') {
+                item['type'] = 2;
+              } else if (item.sign_unit == 'chu_ky_so') {
+                item['type'] = 3;
+              } else if (item.sign_unit == 'so_tai_lieu') {
+                item['type'] = 4;
+                if (this.datas.contract_no) {
+                  if (!item.name) item.name = '';
+  
+                  if (!item.recipient_id) item.recipient_id = '';
+  
+                  if (!item.status) item.status = 0;
+  
+                  if(item.contract_no) item.contract_no = item.contract_no.trim();
+                }
+              } else if(item.sign_unit == 'text'){
+                if(item.text_type == "currency"){
+                  item['type'] = 5;} else {
+                item['type'] = 1;}
+              }
+  
+              data_remove_arr_request.forEach((item_remove: any) => {
+                delete item[item_remove];
+              });
             });
-          });
-          Array.prototype.push.apply(
-            this.data_sample_contract,
-            element.sign_config
-          );
+            Array.prototype.push.apply(
+              this.data_sample_contract,
+              element.sign_config
+            );
+          }
         }
       });
 
       this.spinner.show();
-
       this.data_sample_contract.forEach((element: any) => {
         if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
           element.coordinate_x = element.coordinate_x - this.datas.difX;
@@ -414,6 +460,15 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           if(item.text_type == "currency"){
             item['type'] = 5;} else {
           item['type'] = 1;}
+        } else if (item.sign_unit == 'chu_ky_so_con_dau_va_thong_tin') {
+          item['type'] = 3;
+          item['type_image_signature'] = 1;
+        } else if (item.sign_unit == 'chu_ky_so_con_dau') {
+          item['type'] = 3;
+          item['type_image_signature'] = 2;
+        } else if (item.sign_unit == 'chu_ky_so_thong_tin') {
+          item['type'] = 3;
+          item['type_image_signature'] = 3;
         }
 
         data_remove_arr_request.forEach((item_remove: any) => {

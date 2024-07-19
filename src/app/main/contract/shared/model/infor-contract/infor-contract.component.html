@@ -21,13 +21,12 @@
       </div>
 
       <div class="form-group">
-        <div class="invalid" *ngIf="errorContractName!=''">
-          {{errorContractName | translate}}
+        <div class="invalid" *ngIf="errorContractFile!=''">
+          {{errorContractFile | translate}}
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="row">
     <div class="col-md-12">
       <div class="form-group">
         <div class="label_item">{{'contract.name' | translate}} <span class="require_star">*</span></div>
@@ -37,55 +36,23 @@
         </div>
       </div>
       <div class="form-group">
-        <div class="invalid" *ngIf="errorContractFile!=''">
-          {{errorContractFile | translate}}
+        <div class="invalid" *ngIf="errorContractName!=''">
+          {{errorContractName| translate}}
+        </div>
       </div>
     </div>
-  </div>
 
-  <!--Số hợp đồng-->
-  <div class="row">
+    <!--Số hợp đồng-->
     <div class="col-md-6">
       <div class="form-group">
         <div class="label_item">{{'contract.number' | translate}}</div>
         <div class="input-group">
           <input placeholder="{{'contract.number' | translate}}" type="text" [(ngModel)]="contract_no" (click)="reverseInput($event)" (ngxInputSearch)="changeInput($event)" (blur)="changeInput($event)" maxlength="100" class="input_text" />
-        </div>
+        </div>        
       </div>
       <div class="form-group">
         <div class="invalid" *ngIf="errorContractNumber!=''">
           {{errorContractNumber | translate}}
-        </div>
-      </div>
-    </div>
-
-    <!--Loại hợp đồng-->
-    <div class="col-md-6">
-      <div class="form-group">
-        <div class="label_item">{{'contract.type' | translate }}
-          <span *ngIf="this.environment.flag =='NB'" class="require_star">*</span>
-        </div>
-        <div>
-          <p-dropdown (onChange)="changeTypeContract()" panelStyleClass="font" [options]="typeList" [(ngModel)]="type_id" optionLabel="name"
-            optionValue="id" placeholder="{{ 'choose.contract.type' | translate }}" [filter]="true" filterBy="name" [showClear]="true">
-          </p-dropdown>
-        </div>
-      </div>
-      <div *ngIf="this.environment.flag == 'NB'" class="form-group">
-        <div class="invalid" *ngIf="errorContractType != ''">
-          {{ errorContractType | translate }}
-        </div>
-      </div>
-    </div>    
-  </div>
-
-  <div class="row">
-    <div class="col-md-6">
-      <div class="form-group">
-        <div class="label_item">{{'contract.connect' | translate}}</div>
-        <div>
-          <p-multiSelect styleClass="font" [options]="contractConnectList" [(ngModel)]="contractConnect"
-            optionLabel="name" optionValue="id" display="chip" placeholder="{{'choose.contract' | translate}}"></p-multiSelect>
         </div>
       </div>
     </div>
@@ -110,9 +77,36 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <div class="label_item">{{'contract.connect' | translate}}</div>
+        <div>
+          <p-multiSelect styleClass="font" [options]="contractConnectList" [(ngModel)]="contractConnect"
+            optionLabel="name" optionValue="id" display="chip" placeholder="{{'choose.contract' | translate}}"></p-multiSelect>
+        </div>
+      </div>
+    </div>
+
+    <!--Loại hợp đồng-->
+    <div class="col-md-6">
+      <div class="form-group">
+        <div class="label_item">{{'contract.type' | translate }}
+          <span *ngIf="this.environment.flag =='NB'" class="require_star">*</span>
+        </div>
+        <div>
+          <p-dropdown (onChange)="changeTypeContract()" panelStyleClass="font" [options]="typeList" [(ngModel)]="type_id" optionLabel="name"
+            optionValue="id" placeholder="{{ 'choose.contract.type' | translate }}" [filter]="true" filterBy="name" [showClear]="true">
+          </p-dropdown>
+        </div>
+      </div>
+      <div *ngIf="this.environment.flag == 'NB'" class="form-group">
+        <div class="invalid" *ngIf="errorContractType != ''">
+          {{ errorContractType | translate }}
+        </div>
+      </div>
+    </div>  
+
     <div class="col-md-6">
       <div class="form-group">
         <div class="label_item">{{'note' | translate}}</div>
@@ -132,14 +126,11 @@
       </div>
       <div class="form-group">
         <div class="invalid" *ngIf="errorSignTime!=''">
-          {{errorSignTime}}
+          {{errorSignTime | translate}}
         </div>
       </div>
     </div>
-  </div>
 
-
-  <div class="row">
     <div class="col-md-6">
       <div class="form-group">
         <div class="label_item">{{'expire.date.contract' | translate}}</div>
@@ -168,7 +159,6 @@
     </div>
   </div>
 </div>
-
 <div class="footer-infor-contract">
   <button (click)="saveDraft()" type="button" name="next" class="next draft-button">{{'btn.save-draft' | translate
     }}</button>
