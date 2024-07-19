@@ -4021,8 +4021,8 @@ export class ConsiderContractComponent
               } else {
                 if (!this.mobile) {
                   this.toastService.showErrorHTMLWithTimeout(
-                    'Ký hợp đồng không thành công',
-                    '',
+                    'Bạn vừa thực hiện ký số không thành công. Vui lòng kiểm tra thông tin tài khoản hoặc yêu cầu ký trên thiết bị!',
+                    'Thực hiện ký không thành công!',
                     3000
                   );
                 } else {

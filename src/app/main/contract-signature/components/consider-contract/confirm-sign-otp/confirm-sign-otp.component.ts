@@ -394,7 +394,8 @@ export class ConfirmSignOtpComponent implements OnInit {
               this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
 
             } else{
-              this.toastService.showErrorHTMLWithTimeout('Ký hợp đồng không thành công', '', 3000);
+              this.toastService.showErrorHTMLWithTimeout('Bạn vừa thực hiện ký số không thành công. Vui lòng kiểm tra thông tin tài khoản hoặc yêu cầu ký trên thiết bị!',
+                'Thực hiện ký không thành công!', 3000);
               this.dialog.closeAll();
               this.spinner.hide();
             }
