@@ -8,6 +8,7 @@ import {PkiDialogSignComponent} from "../pki-dialog-sign/pki-dialog-sign.compone
 import {HsmDialogSignComponent} from "../hsm-dialog-sign/hsm-dialog-sign.component";
 import { ToastService } from 'src/app/service/toast.service';
 import { Output, EventEmitter } from '@angular/core';
+import {ImageDialogSignV2Component} from "../image-dialog-sign-v2/image-dialog-sign-v2.component";
 
 
 @Component({
@@ -113,7 +114,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   imageDialogSignOpen() {
     const data = {
-      title: 'KÝ HỢP ĐỒNG ',
+      title: 'KÝ ẢNH VÀ OTP',
       is_content: 'forward_contract',
       imgSignAcc: this.datas.imgSignAcc
     };
@@ -122,7 +123,8 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     dialogConfig.width = '1024px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
-    const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
+    // const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
+    const dialogRef = this.dialog.open(ImageDialogSignV2Component, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
         this.countOtpBox++
