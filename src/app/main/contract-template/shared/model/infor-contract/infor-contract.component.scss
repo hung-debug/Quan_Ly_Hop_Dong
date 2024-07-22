@@ -6,6 +6,7 @@
   }
 }
 .input_text {
+  color: #00186D;
   background-color: #F7FAFD;
   padding-left: 10px;
   outline: none;
@@ -13,6 +14,10 @@
   width: 100%;
   border-radius: 6px;
   border: 1px solid #E6EDFA;
+
+  &:hover {
+    border: 1px solid #286CF5;
+  }
 }
 
 //upload file
@@ -92,8 +97,19 @@ input[type="file"] {
         border: 1px solid #E6EDFA;
         padding: 12px 10px;
         //cursor: pointer;
-        max-height: 113px;
-        overflow: auto;
+        max-height: 48px;
+        overflow-y: auto;
+
+        &:hover {
+          border: 1px solid #286CF5;
+        }
+      }
+
+      .div_file_attach div {
+        color: #00186D;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 21px;
       }
       >img {
         width: 24px;
@@ -122,6 +138,10 @@ input[type="file"] {
   img {
     height: 36px;
     width: 36px;
+  }
+
+  &:hover {
+    border: 1px solid #286CF5;
   }
 }
 
@@ -193,12 +213,21 @@ button {
   .p-calendar-w-btn, .p-calendar-w-btn .p-inputtext {
     height: 48px;
   }
-  .p-calendar-w-btn .p-inputtext{
-    border: 6px;
+
+  .p-calendar-w-btn .p-inputtext {
+    color: #00186D;
+    font-size: 14px !important;
+    font-weight: 500;
+    line-height: 21px;
     background-color: #F7FAFD;
     border: 1px solid #E6EDFA !important;
     outline: 0 !important;
     box-shadow: none !important;
+    transition: border 0.3s;
+
+    &:hover {
+      border: 1px solid #286CF5 !important;
+    }
   }
   
   // .p-calendar-w-btn .p-datepicker-trigger {
@@ -238,7 +267,7 @@ button {
     height: 48px;
     width: 100%;
     outline: 0;
-    color: black !important;
+    color: #00186D !important;
     position: relative;
   }
   .p-dropdown-label {
@@ -261,6 +290,7 @@ button {
     transform: translateY(-50%);
     width: 24px;
     height: 24px;
+    color: #00186D !important;
   }
   
   .p-dropdown .p-dropdown-trigger, .p-multiselect .p-multiselect-trigger {
@@ -277,6 +307,9 @@ button {
 
 .invalid{
   color: red;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 21px;
 }
 
 .drag-contract {
@@ -291,4 +324,34 @@ button {
   font-size: 12px; 
   font-weight: 400;
   line-height: 18px;
+}
+
+.input-group {
+  color: #00186D;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+
+}
+
+.input-group .input_text {
+  font-weight: 500;
+}
+
+::ng-deep .p-multiselect-panel .p-multiselect-items .p-multiselect-item,
+::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item,
+::ng-deep .p-multiselect-token-label,
+::ng-deep .p-multiselect-label,
+::ng-deep .p-dropdown-label,
+::ng-deep .p-dropdown-filter {
+  color: #00186D !important;
+  font-size: 14px !important;
+  font-weight: 500;
+  line-height: 21px;
+}
+
+:host ::ng-deep {
+  .p-disabled, .p-component:disabled {
+    opacity: 1 !important;
+  }
 }

@@ -1,19 +1,3 @@
-// .content {
-//   //height: 102px;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   flex-direction: column;
-// }
-
-.text-sign span {
-  width: 125px;
-  border: 0px;
-  height: 25px;
-  outline: none;
-  color: #106DB6;
-}
-
 .main-digital-sign-box {
   display: flex;
   width: 100%;
@@ -53,4 +37,114 @@
   font-size: 9px;
   font-weight: 400;
   letter-spacing: 0px;
+}
+
+.text-sign span {
+  width: 125px;
+  border: 0px;
+  height: 25px;
+  outline: none;
+  color: #106DB6;
+}
+
+// .font-style {
+//   font-size: 11px !important;
+// }
+textarea {
+  margin: 0;
+  overflow-y: hidden;
+  resize: none;
+  position: relative;
+}
+
+textarea::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  background-color: #ddd;
+  border: 1px solid #999;
+  border-radius: 3px;
+  pointer-events: all;
+  cursor: nwse-resize;
+}
+
+#input-text-value, #input-number-value {
+  width: 100%;
+  height: 100%;
+  background-color: rgb(235, 248, 255);
+  border: none;
+  outline: none;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+}
+
+.text-sign-not-template-text {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  outline: none;
+  color: #106DB6;
+  text-align: left;
+}
+
+.text-sign-not-template-contract-code {
+  position: absolute;
+  top: 6px;
+  left: 0px;
+  outline: none;
+  color: #106DB6;
+  width: 150px;
+}
+
+.set-center {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-item {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.item-left, .item-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.item-left {
+  background-color: #C7E8FA !important;
+}
+
+.item-right {
+  background-color: #E6EDFA !important;
+}
+
+.item img {
+  max-width: 100%; /* Đặt kích thước ảnh phù hợp */
+}
+
+.font-sign {
+  font-size: 6px;
+  font-weight: 400;
+  line-height: 18px;
+  color: #286CF5;
 }

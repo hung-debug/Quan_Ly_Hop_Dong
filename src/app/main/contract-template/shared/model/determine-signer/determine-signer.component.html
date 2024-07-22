@@ -10,22 +10,27 @@
         <div class="organization-me">{{ "organization.me" | translate }}&nbsp;<span style="color: red">*</span>
         </div>
 
-        <input class="input1" type="text" [(ngModel)]="data_organization.name" />
+        <input class="input1 hover-item" type="text" [(ngModel)]="data_organization.name" />
 
         <!--Ẩn luồng xử lý-->
-        <div class="hide-processing-thread">
+        <div class="hide-processing-thread hover-item">
           <div class="text-processing-thread">
             {{ "hide.processing.thread" | translate }}
           </div>
-          <input class="checkbox-hide-processing-thread" type="checkbox" [(ngModel)]="data_organization.hideFlow" />
+          <input class="checkbox-hide-processing-thread hover-item" type="checkbox" [(ngModel)]="data_organization.hideFlow" />
         </div>
       </div>
 
       <!--Người xem xét tổ chức-->
       <div>
-        <div class="label">{{'user.view' | translate}}</div>
+        <div class="label">
+          {{ 'user.view' | translate }}
+          <span *ngIf="getOriganzationReviewer().length > 0">
+            &nbsp;({{ getOriganzationReviewer().length }})
+          </span>
+        </div> 
         <div class="participants--content" *ngFor="let d of getOriganzationReviewer(); let index = index">
-          <div class="participants-border">
+          <div class="participants-border hover-item">
             <div style="margin: 0 16px 16px 16px">
               <div class="header-user-view row">
                 <div class="col-md-6 flex">
@@ -36,12 +41,12 @@
                   [disabled]="getOriganzationReviewer().length == 1 && !isEditOrdering">
 
                   <div class="text-header-user-view">
-                    {{ "user.view" | translate }}
+                    {{ "user.view" | translate }}<span>&nbsp;{{ index + 1 }}</span>
                   </div>
                 </div>
 
                 <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
+                <!-- <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div class="flex">
@@ -64,6 +69,25 @@
                       </div>
                     </div>
                   </div>
+                </div> -->
+                <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                  <div class="participants__name">
+                    <div class="label_detail text-color">
+                      <div class="flex">
+                        <input
+                          class="checkbox-hide-processing-thread hover-item"
+                          type="checkbox"
+                          name="checkPhoneMailOrgViewer_{{index}}"
+                          (change)="changeTypeSign(d, index)"
+                          [checked]="d.login_by === 'phone'"
+                        />
+                      </div>
+                      &nbsp;
+                      <div class="text-check-box-contract">
+                        {{ "typeOfSignPhone" | translate }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -71,11 +95,11 @@
                 <div class="col-md-6" style="padding-right: 7px">
                   <div class="label-text">{{ "user.name" | translate }}&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
-                    <input class="content-input" *ngIf="d.login_by === 'email'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
+                    <input class="content-input hover-item" *ngIf="d.login_by === 'email'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
                       (focusin)="onFocusIn($event, index, 'view')" (ngxInputSearch)="doTheSearch($event, index, 'view')"
                       [(ngModel)]="d.name" (focusout)="onFocusOut($event, d)">
 
-                    <input class="content-input" *ngIf="d.login_by === 'phone'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
+                    <input class="content-input hover-item" *ngIf="d.login_by === 'phone'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
                       (focusin)="onFocusIn($event, index, 'view')" [(ngModel)]="d.name"
                       (focusout)="onFocusOut($event, d)">
                   </div>
@@ -93,7 +117,7 @@
                     <span class="required-title">*</span>
                   </div>
                   <div class="input-data">
-                    <input class="content-input" type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                    <input class="content-input hover-item" type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
                   </div>
                 </div>
 
@@ -101,7 +125,7 @@
                   <div class="label-text">{{'user.phone' | translate}}&nbsp;
                     <span class="required-title">*</span>
                   </div>
-                  <div class="content-input flex">
+                  <div class="content-input flex hover-item">
                     <input class="input-nhap-sdt" style="width: 95%;" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
 
                     <div class="participants__name" style="width: 5%;">
@@ -139,7 +163,7 @@
                     <span class="required-title">*</span>
                   </div>
                   <div class="input-data">
-                    <input class="content-input" type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                    <input class="content-input hover-item" type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
                   </div>
                 </div>
 
@@ -148,7 +172,7 @@
                     <div class="label-text">{{'user.phone' | translate}}&nbsp;
                       <span class="required-title">*</span>
                     </div>
-                    <div class="content-input flex">
+                    <div class="content-input flex hover-item">
                       <input class="input-nhap-sdt" style="width: 95%;" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
 
                       <div class="participants__name" style="width: 5%;">
@@ -189,7 +213,7 @@
                   <div class="label-text flex">{{'user.phone' | translate}}&nbsp;
                     <div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div>
                   </div>
-                  <div class="content-input">
+                  <div class="content-input hover-item">
                     <input class="input-nhap-sdt" style="width: 95%;" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
 
                     <div style="width: 5%;" ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
@@ -261,9 +285,14 @@
 
       <!--Người ký tổ chức-->
       <div class="mt-20px">
-        <div class="label">{{'user.sign' | translate}}</div>
+        <div class="label">
+          {{ 'user.sign' | translate }}
+          <span *ngIf="getOriganzationSignature().length > 0">
+            &nbsp;({{ getOriganzationSignature().length }})
+          </span>
+        </div> 
         <div class="participants--content" *ngFor="let d of getOriganzationSignature(); let index = index">
-          <div class="participants-border">
+          <div class="participants-border hover-item">
             <div style="margin: 0 16px 16px 16px">
               <div class="header-user-view row">
                 <div class="col-md-6 flex">
@@ -274,16 +303,16 @@
                   [disabled]="getOriganzationSignature().length == 1 && !isEditOrdering">
 
                   <div class="text-header-user-view">
-                    {{ "user.sign" | translate }}
+                    {{ "user.sign" | translate }}<span>&nbsp;{{ index + 1 }}</span>
                   </div>
                 </div>
 
-                  <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại cho nguoi ký to chuc-->
-                <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
+                <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại cho nguoi ký to chuc-->
+                <!-- <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div class="flex">
-                        <input (change)="changeTypeSign(d, index,null,'signer')" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
+                        <input (change)="changeTypeSign(d,index,null,'signer')" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
                           [value]="email" [(ngModel)]="d.login_by" />
                       </div>&nbsp;
                       <div class="text-check-box-contract">
@@ -294,11 +323,30 @@
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div class="flex">
-                        <input (change)="changeTypeSign(d,index, null, 'signer')" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
+                        <input (change)="changeTypeSign(d,index,null,'signer')" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
                           [(ngModel)]="d.login_by" [value]="phone" />
                       </div>&nbsp;
                       <div class="text-check-box-contract">
                         {{'typeOfSignPhone' | translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+                <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                  <div class="participants__name">
+                    <div class="label_detail text-color">
+                      <div class="flex">
+                        <input
+                          class="checkbox-hide-processing-thread hover-item"
+                          type="checkbox"
+                          name="checkPhoneMailOrgSigner_{{index}}"
+                          (change)="changeTypeSign(d,index,null,'signer')"
+                          [checked]="d.login_by === 'phone'"
+                        />
+                      </div>
+                      &nbsp;
+                      <div class="text-check-box-contract">
+                        {{ "typeOfSignPhone" | translate }}
                       </div>
                     </div>
                   </div>
@@ -309,12 +357,12 @@
                 <div class="col-md-6" style="padding-right: 7px">
                   <div class="label-text">{{'user.name' | translate}}&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
-                    <input class="content-input" *ngIf="d.login_by === 'email' || !d.login_by" type="text"
+                    <input class="content-input hover-item" *ngIf="d.login_by === 'email' || !d.login_by" type="text"
                       placeholder="{{'nhap_ho_va_ten' | translate}}" (focusin)="onFocusIn($event, index, 'signature')"
                       (ngxInputSearch)="doTheSearch($event, index, 'signature')" [(ngModel)]="d.name"
                       (focusout)="onFocusOut($event, d)">
 
-                    <input class="content-input" *ngIf="d.login_by === 'phone'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
+                    <input class="content-input hover-item" *ngIf="d.login_by === 'phone'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
                       (focusin)="onFocusIn($event, index, 'signature')" [(ngModel)]="d.name"
                       (focusout)="onFocusOut($event, d)">
                   </div>
@@ -350,7 +398,7 @@
                   <div *ngIf="d.login_by === 'email'" class="participants__name">
                     <div class="label-text">Email&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
-                      <input class="content-input" type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                      <input class="content-input hover-item" type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
                     </div>
                   </div>
 
@@ -358,7 +406,7 @@
                     <div class="label-text">{{'user.phone' | translate}}&nbsp;
                       <span class="required-title">*</span>
                     </div>
-                    <div class="content-input flex">
+                    <div class="content-input flex hover-item">
                       <input style="width: 95%;" class="input-nhap-sdt" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
 
                       <div class="input-data" style="width: 5%;">
@@ -398,7 +446,7 @@
                         <div style="color: #ffc107;">({{'info.token' | translate}})</div>
                       </div>
                       <div class="input-data">
-                        <input class="content-input" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
                           oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                       </div>
                     </div>
@@ -412,7 +460,7 @@
                         <div style="color: #ffc107;">({{'info.hsm' | translate}})</div>
                       </div>
                       <div class="input-data">
-                        <input class="content-input" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
                           oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                       </div>
                     </div>
@@ -422,7 +470,7 @@
                     <div class="participants__name">
                       <div class="label-text">CMT/CCCD&nbsp;<span class="required-title">*</span></div>
                       <div class="input-data">
-                        <input class="content-input" type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id"
+                        <input class="content-input hover-item" type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id"
                           oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                       </div>
                     </div>
@@ -436,7 +484,7 @@
                         <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
                       </div>
                       <div class="input-data">
-                        <input class="content-input" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
                           oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                       </div>
                     </div>
@@ -451,7 +499,7 @@
                       <span class="required-title">*</span>
                     </div>
                     <div class="input-data">
-                      <input class="content-input" type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                      <input class="content-input hover-item" type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
                     </div>
                   </div>
 
@@ -459,7 +507,7 @@
                     <div class="label-text flex">{{'user.phone' | translate}}&nbsp;<div style="color: #ffc107;">
                         ({{'receive.contract.process' | translate}})</div>
                     </div>
-                    <div class="content-input flex">
+                    <div class="content-input flex hover-item">
                       <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
                       <input style="width: 95%;" class="input-nhap-sdt" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
 
@@ -499,7 +547,7 @@
                         <div style="color: #ffc107;">({{'info.token' | translate}})</div>
                       </div>
                       <div class="input-data">
-                        <input class="content-input" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
                           oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                       </div>
                     </div>
@@ -513,7 +561,7 @@
                         <div style="color: #ffc107;">({{'info.hsm' | translate}})</div>
                       </div>
                       <div class="input-data">
-                        <input class="content-input" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
                           oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                       </div>
                     </div>
@@ -523,7 +571,7 @@
                     <div class="participants__name">
                       <div class="label-text">CMT/CCCD&nbsp;<span class="required-title">*</span></div>
                       <div class="input-data">
-                        <input class="content-input" type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id"
+                        <input class="content-input hover-item" type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id"
                           oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                       </div>
                     </div>
@@ -537,7 +585,7 @@
                         <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
                       </div>
                       <div class="input-data">
-                        <input class="content-input" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                        <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
                           oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                       </div>
                     </div>
@@ -548,7 +596,7 @@
                     <div class="participants__name">
                       <div class="label-text">{{'user.phone' | translate}}&nbsp;<span
                           class="required-title">*</span></div>
-                      <div class="content-input flex">
+                      <div class="content-input flex hover-item">
                         <input class="input-nhap-sdt" style="width: 95%;" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
 
                         <div style="width: 5%">
@@ -626,9 +674,14 @@
 
       <!--Văn thư tổ chức-->
       <div class="mt-20px">
-        <div class="label">{{'user.doc' | translate}}</div>
+        <div class="label">
+          {{ 'user.doc' | translate }}
+          <span *ngIf="getOriganzationDocument().length > 0">
+            &nbsp;({{ getOriganzationDocument().length }})
+          </span>
+        </div>
         <div class="participants--content" *ngFor="let d of getOriganzationDocument(); let index = index">
-          <div class="participants-border">
+          <div class="participants-border hover-item">
             <div style="margin: 0 16px 16px 16px">
               <div class="header-user-view row">
                 <div class="col-md-6 flex">
@@ -638,7 +691,7 @@
                   oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
 
                   <div class="text-header-user-view">
-                    {{ "user.doc" | translate }}
+                    {{ "user.doc" | translate }}<span>&nbsp;{{ index + 1 }}</span>
                   </div>
                 </div>
               </div>
@@ -648,7 +701,7 @@
                   <div class="label-text">{{'user.name' | translate}}&nbsp;<span
                       class="required-title">*</span></div>
                   <div class="input-data">
-                    <input class="content-input" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
+                    <input class="content-input hover-item" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
                       (focusin)="onFocusIn($event, index, 'doc')" (ngxInputSearch)="doTheSearch($event, index, 'doc')"
                       [(ngModel)]="d.name" (focusout)="onFocusOut($event, d)">
                   </div>
@@ -687,7 +740,7 @@
                     <span class="required-title">*</span>
                   </div>
                   <div class="input-data">
-                    <input class="content-input" type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                    <input class="content-input hover-item" type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
                   </div>
                 </div>
 
@@ -695,7 +748,7 @@
                   <div class="label-text flex">{{'user.phone' | translate}}&nbsp;
                     <div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div>
                   </div>
-                  <div class="content-input flex">
+                  <div class="content-input flex hover-item">
                     <input style="width: 95%;" class="input-nhap-sdt" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
 
                     <div style="width: 5%;" ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
@@ -729,7 +782,7 @@
                   <div class="participants__name">
                     <div class="label-text">CMT/CCCD&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
-                      <input class="content-input" type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id"
+                      <input class="content-input hover-item" type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id"
                         oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
@@ -743,7 +796,7 @@
                       <div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div>
                     </div>
                     <div class="input-data">
-                      <input class="content-input" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
                         oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
@@ -756,7 +809,7 @@
                       <span class="required-title">*</span>
                     </div>
                     <div class="input-data">
-                      <input class="content-input" type="text" placeholder="{{'enter.tax.code' | translate}}" [(ngModel)]="d.card_id"
+                      <input class="content-input hover-item" type="text" placeholder="{{'enter.tax.code' | translate}}" [(ngModel)]="d.card_id"
                         oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
@@ -770,7 +823,7 @@
                       <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
                     </div>
                     <div class="input-data">
-                      <input class="content-input" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
                         oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
@@ -782,7 +835,7 @@
                 <div class="col-md-6" style="padding-right: 7px;">
                   <div class="label-text">Email&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
-                    <input class="content-input" type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                    <input class="content-input hover-item" type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
                   </div>
                 </div>
 
@@ -790,7 +843,7 @@
                   <div class="participants__name">
                     <div class="label-text">CMT/CCCD&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
-                      <input class="content-input" type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id"
+                      <input class="content-input hover-item" type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id"
                         oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
@@ -804,7 +857,7 @@
                       <div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div>
                     </div>
                     <div class="input-data">
-                      <input class="content-input" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
                         oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
@@ -817,7 +870,7 @@
                       <span class="required-title">*</span>
                     </div>
                     <div class="input-data">
-                      <input class="content-input" type="text" placeholder="{{'enter.tax.code' | translate}}" [(ngModel)]="d.card_id"
+                      <input class="content-input hover-item" type="text" placeholder="{{'enter.tax.code' | translate}}" [(ngModel)]="d.card_id"
                         oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
@@ -831,7 +884,7 @@
                       <div style="color: #ffc107;">({{'info.cert' | translate}})</div>
                     </div>
                     <div class="input-data">
-                      <input class="content-input" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
+                      <input class="content-input hover-item" type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id"
                         oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
@@ -898,16 +951,16 @@
           </label>
         </div>
 
-        <input class="input1" type="text" placeholder="{{
+        <input class="input1 hover-item" type="text" placeholder="{{
           (item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate}}" [(ngModel)]="item.name" [disabled]="item.type == 3" />
 
-        <div class="hide-processing-thread">
+        <div class="hide-processing-thread hover-item">
           <div class="text-processing-thread">{{ "hide.processing.thread" | translate }}
           </div>
-          <input class="checkbox-hide-processing-thread" type="checkbox" [(ngModel)]="item.hideFlow" />
+          <input class="checkbox-hide-processing-thread hover-item" type="checkbox" [(ngModel)]="item.hideFlow" />
         </div>
 
-        <div class="delete-doi-tac-div" *ngIf="this.dataParnterOrganization().length >= 1">
+        <div class="delete-doi-tac-div hover-item" *ngIf="this.dataParnterOrganization().length >= 1">
           <div class="label-text text-delete-doi-tac" (click)="deletePartner(id, item)">
             {{(item.type == 2 ? "xoa_doi_tac" : "xoa_doi_tac") | translate}}
           </div>
@@ -919,7 +972,6 @@
         <div *ngIf="item.type == 2">
           <div>
             <div class="label"><div>{{'user.lead' | translate}}</div></div>
-
             <div class="participants--add">
               <div class="participants-otp" style="display: flex;margin: 15px;" >
                 <input type="checkbox" style="width: 17px; height: 17px;"
@@ -973,9 +1025,14 @@
 
           <!--Người xem xét-->
           <div class="mt-7px">
-            <div class="label">{{'user.view' | translate}}</div>
+            <div class="label">
+              {{ 'user.view' | translate }}
+              <span *ngIf="getPartnerReviewer(item).length > 0">
+                &nbsp;({{ getPartnerReviewer(item).length }})
+              </span>
+            </div> 
             <div class="participants--content" *ngFor="let d of getPartnerReviewer(item); let index = index">
-              <div class="participants-border">
+              <div class="participants-border hover-item">
                 <div style="margin: 0 16px 16px 16px">
                   <div class="header-user-view row">
                     <div class="col-md-6 flex">
@@ -985,12 +1042,12 @@
                       oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
 
                       <div class="text-header-user-view">
-                        {{ "user.view" | translate }}
+                        {{ "user.view" | translate }}<span>&nbsp;{{ index + 1 }}</span>
                       </div>
                     </div>
 
                     <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                    <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
+                    <!-- <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
                       <div class="participants__name">
                         <div class="label_detail text-color">
                           <div class="flex">
@@ -1013,6 +1070,25 @@
                           </div>
                         </div>
                       </div>
+                    </div> -->
+                    <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                      <div class="participants__name">
+                        <div class="label_detail text-color">
+                          <div class="flex">
+                            <input
+                              class="checkbox-hide-processing-thread hover-item"
+                              type="checkbox"
+                              name="checkPhoneMailOrgViewer_{{index}}_{{id}}"
+                              (change)="changeTypeSign(d)"
+                              [checked]="d.login_by === 'phone'"
+                            />
+                          </div>
+                          &nbsp;
+                          <div class="text-check-box-contract">
+                            {{ "typeOfSignPhone" | translate }}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -1024,7 +1100,7 @@
                             class="required-title">*</span>
                         </div>
                         <div class="input-data">
-                          <input class="content-input" [id]="'signature-partner-' + d.ordering" type="text"
+                          <input class="content-input hover-item" [id]="'signature-partner-' + d.ordering" type="text"
                             placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name" disabled>
                         </div>
                       </div>
@@ -1080,7 +1156,7 @@
                             class="required-title">*</span>
                         </div>
                         <div class="input-data">
-                          <input class="content-input" [id]="'signature-partner-' + d.ordering" type="text"
+                          <input class="content-input hover-item" [id]="'signature-partner-' + d.ordering" type="text"
                             placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name" disabled>
                         </div>
                       </div>
@@ -1092,7 +1168,7 @@
                         <div class="label-text">{{'user.name' | translate}}&nbsp;<span
                             class="required-title">*</span></div>
                         <div class="input-data">
-                          <input class="content-input" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name" disabled>
+                          <input class="content-input hover-item" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name" disabled>
                         </div>
                       </div>
                     </div>
@@ -1101,7 +1177,7 @@
                       <div class="label-text">{{'sms.locale' | translate}}&nbsp;
                         <span class="required-title">*</span>
                       </div>
-                      <div class="content-input flex">
+                      <div class="content-input flex hover-item">
                         <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
                           <div *ngIf="d.locale =='vi'">
                             <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
@@ -1173,9 +1249,14 @@
 
           <!--Người ký-->
           <div class="mt-7px">
-            <div class="label">{{'user.sign' | translate}}</div>
+            <div class="label">
+              {{ 'user.sign' | translate }}
+              <span *ngIf="getPartnerSignature(item).length > 0">
+                &nbsp;({{ getPartnerSignature(item).length }})
+              </span>
+            </div>
             <div class="participants--content" *ngFor="let d of getPartnerSignature(item); let index = index">
-              <div class="participants-border">
+              <div class="participants-border hover-item">
                 <div style="margin: 0 16px 16px 16px">
                   <div class="header-user-view row">
                     <div class="col-md-6 flex">
@@ -1186,12 +1267,12 @@
                       [disabled]="getPartnerSignature(item).length == 1 && !isEditOrdering">
 
                       <div class="text-header-user-view">
-                        {{ "user.sign" | translate }}
+                        {{ "user.sign" | translate }}<span>&nbsp;{{ index + 1 }}</span>
                       </div>
                     </div>
 
                     <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi ky to chuc-->
-                    <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
+                    <!-- <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
                       <div class="participants__name">
                         <div class="label_detail text-color">
                           <div class="flex">
@@ -1216,6 +1297,25 @@
                           </div>
                         </div>
                       </div>
+                    </div> -->
+                    <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                      <div class="participants__name">
+                        <div class="label_detail text-color">
+                          <div class="flex">
+                            <input
+                              class="checkbox-hide-processing-thread hover-item"
+                              type="checkbox"
+                              name="checkPhoneMailParticipantSigner_{{index}}_{{id}}"
+                              (change)="changeTypeSign(d, index,id, 'sign_partner')"
+                              [checked]="d.login_by === 'phone'"
+                            />
+                          </div>
+                          &nbsp;
+                          <div class="text-check-box-contract">
+                            {{ "typeOfSignPhone" | translate }}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -1225,7 +1325,7 @@
                           class="required-title">*</span>
                       </div>
                       <div class="input-data">
-                        <input class="content-input" [id]="'signature-partner-' + d.ordering" type="text"
+                        <input class="content-input hover-item" [id]="'signature-partner-' + d.ordering" type="text"
                           placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name" disabled>
                       </div>
                     </div>
@@ -1256,7 +1356,7 @@
                       <div class="label-text">{{'sms.locale' | translate}}&nbsp;
                         <span class="required-title">*</span>
                       </div>
-                      <div class="content-input flex">
+                      <div class="content-input flex hover-item">
                         <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
                           <div *ngIf="d.locale =='vi'">
                             <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
@@ -1374,9 +1474,14 @@
 
           <!-- Văn thư -->
           <div class="mt-7px">
-            <div class="label">{{'user.doc' | translate}}</div>
+            <div class="label">
+              {{ 'user.doc' | translate }}
+              <span *ngIf="getPartnerDocument(item).length > 0">
+                &nbsp;({{ getPartnerDocument(item).length }})
+              </span>
+            </div>
             <div class="participants--content" *ngFor="let d of getPartnerDocument(item); let index = index">
-              <div class="participants-border">
+              <div class="participants-border hover-item">
                 <div style="margin: 0 16px 16px 16px">
                   <div class="header-user-view row">
                     <div class="col-md-6 flex">
@@ -1387,7 +1492,7 @@
                       [disabled]="getPartnerDocument(item).length == 1 && !isEditOrdering">
 
                       <div class="text-header-user-view">
-                        {{ "user.doc" | translate }}
+                        {{ "user.doc" | translate }}<span>&nbsp;{{ index + 1 }}</span>
                       </div>
                     </div>
                   </div>
@@ -1398,7 +1503,7 @@
                           *</span>
                       </div>
                       <div class="input-data">
-                        <input class="content-input" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name" disabled>
+                        <input class="content-input hover-item" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name" disabled>
                       </div>
                     </div>
 
@@ -1514,9 +1619,14 @@
         <!--Ca nhan ky-->
         <div *ngIf="item.type == 3">
           <div>
-            <div class="label">{{'user.sign' | translate}}</div>
+            <div class="label">
+              {{ 'user.sign' | translate }}
+              <span *ngIf="getPartnerSignature(item).length > 0">
+                &nbsp;({{ getPartnerSignature(item).length }})
+              </span>
+            </div>
             <div class="participants--content" *ngFor="let d of getPartnerSignature(item); let index = index">
-              <div class="participants-border">
+              <div class="participants-border hover-item">
                 <div style="margin: 0 16px 16px 16px">
                   <div class="header-user-view row">
                     <div class="col-md-6 flex">
@@ -1527,12 +1637,12 @@
                       [(ngModel)]="d.ordering" [disabled]="getPartnerSignature(item).length == 1">
 
                       <div class="text-header-user-view">
-                        {{ "user.sign" | translate }}
+                        {{ "user.sign" | translate }}<span>&nbsp;{{ index + 1 }}</span>
                       </div>
                     </div>
 
                     <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi ky ca nhan-->
-                    <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
+                    <!-- <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
                       <div class="participants__name">
                         <div class="label_detail text-color">
                           <div class="flex">
@@ -1555,6 +1665,25 @@
                           </div>
                         </div>
                       </div>
+                    </div> -->
+                    <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                      <div class="participants__name">
+                        <div class="label_detail text-color">
+                          <div class="flex">
+                            <input
+                              class="checkbox-hide-processing-thread hover-item"
+                              type="checkbox"
+                              name="checkPhoneMailOrgViewer_{{index}}_{{id}}"
+                              (change)="changeTypeSign(d, index,null,'personal')"
+                              [checked]="d.login_by === 'phone'"
+                            />
+                          </div>
+                          &nbsp;
+                          <div class="text-check-box-contract">
+                            {{ "typeOfSignPhone" | translate }}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -1564,7 +1693,7 @@
                           class="required-title">*</span>
                       </div>
                       <div class="input-data">
-                        <input class="content-input" [id]="'signature-partner-' + d.ordering" type="text"
+                        <input class="content-input hover-item" [id]="'signature-partner-' + d.ordering" type="text"
                           placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name" disabled>
                       </div>
                     </div>
@@ -1592,7 +1721,7 @@
                           translate}}&nbsp;
                           <span class="required-title">*</span>
                         </div>
-                        <div class="content-input flex">
+                        <div class="content-input flex hover-item">
                           <div ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
                             <div *ngIf="d.locale =='vi'">
                               <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
@@ -1626,7 +1755,7 @@
                         translate}}&nbsp;
                         <span class="required-title">*</span>
                       </div>
-                      <div class="content-input flex">
+                      <div class="content-input flex hover-item">
                         <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
                           <div *ngIf="d.locale =='vi'">
                             <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
