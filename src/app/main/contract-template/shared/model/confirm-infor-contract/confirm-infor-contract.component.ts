@@ -120,16 +120,29 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
 
       isUserSign_clone.forEach((res: any) => {
-        res.sign_config.forEach((element: any) => {
+        if(res.sign_unit == "chu_ky_so") {
+          res.type.forEach((element: any) => {
+            element.sign_config.forEach((item: any) => {
+              if (item.id_have_data) {
+                isHaveFieldId.push(item)
+              } else isNotFieldId.push(item);
+              if(element.sign_unit == 'text') {
+                item.name = item.text_attribute_name
+              }
+            })
+          })
+        } else {
+          res.sign_config.forEach((element: any) => {
 
-          if(element.sign_unit == 'text') {
-            element.name = element.text_attribute_name;
-          }
-
-          if (element.id_have_data) {
-            isHaveFieldId.push(element)
-          } else isNotFieldId.push(element);
-        })
+            if(element.sign_unit == 'text') {
+              element.name = element.text_attribute_name;
+            }
+  
+            if (element.id_have_data) {
+              isHaveFieldId.push(element)
+            } else isNotFieldId.push(element);
+          })
+        }
       })
 
 
@@ -139,44 +152,76 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
       let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
       isContractUserSign_clone.forEach((element: any) => {
-        if (element.sign_config.length > 0) {
-          element.sign_config.forEach((item: any) => {
-            item['font'] = item.font ? item.font : 'Times New Roman';
-            item['font_size'] = item.font_size ? item.font_size : 13;
-            item['contract_id'] = this.datas.contract_id;
-            item['document_id'] = this.datas.document_id;
-            if (item.text_attribute_name) {
-              item.name = item.text_attribute_name;
-            }
-
-            if (item.sign_unit == 'chu_ky_anh') {
-              item['type'] = 2;
-            } else if (item.sign_unit == 'chu_ky_so') {
-              item['type'] = 3;
-            } else if (item.sign_unit == 'so_tai_lieu') {
-              item['type'] = 4;
-              if (this.datas.contract_no) {
-                if (!item.name) 
-                item.name = null;
-            
-              if (!item.recipient_id) 
-                item.recipient_id = null;
-            
-              if (!item.status) 
-                item.status = 0;
+        if(element.sign_unit == "chu_ky_so") {
+          element.type.forEach((res: any) => {
+            res.sign_config.forEach((item: any) => {
+              item['font'] = item.font ? item.font : 'Times New Roman';
+              item['font_size'] = item.font_size ? item.font_size : 13;
+              item['contract_id'] = this.datas.contract_id;
+              item['document_id'] = this.datas.document_id;
+              if (item.text_attribute_name) {
+                item.name = item.text_attribute_name;
               }
 
-            } else if(item.sign_unit == 'text'){
-              if(item.text_type == "currency"){
-                item['type'] = 5;} else {
-              item['type'] = 1;}
-            }
+              if (item.sign_unit == 'chu_ky_so_con_dau_va_thong_tin') {
+                item['type'] = 3;
+                item['type_image_signature'] = 3;
+              } else if (item.sign_unit == 'chu_ky_so_con_dau') {
+                item['type'] = 3;
+                item['type_image_signature'] = 2;
+              } else if (item.sign_unit == 'chu_ky_so_thong_tin') {
+                item['type'] = 3;
+                item['type_image_signature'] = 1;
+              }
 
-            data_remove_arr_request.forEach((item_remove: any) => {
-              delete item[item_remove]
+              data_remove_arr_request.forEach((item_remove: any) => {
+                delete item[item_remove];
+              });
             })
+
+            Array.prototype.push.apply(
+              this.data_sample_contract,
+              res.sign_config
+            );
           })
-          Array.prototype.push.apply(this.data_sample_contract, element.sign_config);
+        } else {
+          if (element.sign_config.length > 0) {
+            element.sign_config.forEach((item: any) => {
+              item['font'] = item.font ? item.font : 'Times New Roman';
+              item['font_size'] = item.font_size ? item.font_size : 13;
+              item['contract_id'] = this.datas.contract_id;
+              item['document_id'] = this.datas.document_id;
+              if (item.text_attribute_name) {
+                item.name = item.text_attribute_name;
+              }
+  
+              if (item.sign_unit == 'chu_ky_anh') {
+                item['type'] = 2;
+              } else if (item.sign_unit == 'so_tai_lieu') {
+                item['type'] = 4;
+                if (this.datas.contract_no) {
+                  if (!item.name) 
+                  item.name = null;
+              
+                if (!item.recipient_id) 
+                  item.recipient_id = null;
+              
+                if (!item.status) 
+                  item.status = 0;
+                }
+  
+              } else if(item.sign_unit == 'text'){
+                if(item.text_type == "currency"){
+                  item['type'] = 5;} else {
+                item['type'] = 1;}
+              }
+  
+              data_remove_arr_request.forEach((item_remove: any) => {
+                delete item[item_remove]
+              })
+            })
+            Array.prototype.push.apply(this.data_sample_contract, element.sign_config);
+          }
         }
       })
 
@@ -275,6 +320,15 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           if(item.text_type == "currency"){
             item['type'] = 5;} else {
           item['type'] = 1;}
+        } else if (item.sign_unit == 'chu_ky_so_con_dau_va_thong_tin') {
+          item['type'] = 3;
+          item['type_image_signature'] = 3;
+        } else if (item.sign_unit == 'chu_ky_so_con_dau') {
+          item['type'] = 3;
+          item['type_image_signature'] = 2;
+        } else if (item.sign_unit == 'chu_ky_so_thong_tin') {
+          item['type'] = 3;
+          item['type_image_signature'] = 1;
         }
 
         data_remove_arr_request.forEach((item_remove: any) => {

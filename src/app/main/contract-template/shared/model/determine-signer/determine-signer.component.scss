@@ -338,7 +338,8 @@ input[type=number] {
       }
       
       .checkbox-hide-processing-thread:checked {
-        background-color: #fff;
+        // background-color: #fff;
+        background-color: #0041C4;
       }
       
       .checkbox-hide-processing-thread:checked::after {
@@ -346,8 +347,8 @@ input[type=number] {
         position: absolute;
         top: 50%;
         left: 50%;
-        width: 10px; /* Kích thước ảnh */
-        height: 7px; /* Kích thước ảnh */
+        width: 13px; /* Kích thước ảnh */
+        height: 10px; /* Kích thước ảnh */
         background-image: url('../../../../../../assets/img/Vector.png'); /* Replace with your image URL */
         background-size: cover; /* Đảm bảo ảnh bao phủ toàn bộ vùng */
         transform: translate(-50%, -50%);
@@ -403,7 +404,7 @@ input[type=number] {
           .input-data {
             border: 1px solid #106DB6;
             border-radius: 5px;
-            // height: 38px;
+            height: 38px;
             display: flex;
             align-items: center;
 
@@ -443,7 +444,7 @@ input[type=number] {
           .input-data {
             border: 1px solid #106DB6;
             border-radius: 5px;
-            // height: 38px;
+            height: 38px;
             display: flex;
             align-items: center;
 
@@ -478,7 +479,7 @@ input[type=number] {
           input {
             border: 1px solid #106DB6;
             border-radius: 5px;
-            // height: 38px;
+            height: 38px;
             display: flex;
             align-items: center;
           }
@@ -643,7 +644,8 @@ input[type=number] {
   background-color: #F7FAFD;
   border-radius: 6px;
   padding: 10px;
-  font-size: 12px;
+  font-size: 14px;
+  color: #00186D !important;
   font-weight: 500;
   line-height: 21px;
 
@@ -728,7 +730,10 @@ input[type=number] {
 .input-nhap-sdt {
   border: none;
   background-color: #F7FAFD;
-
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #00186D;
   &:focus {
     outline: none;
   }
@@ -767,6 +772,10 @@ input[type=number] {
   background-repeat: no-repeat;
   background-position: right 10px center;
   background-size: 24px 24px;
+
+  &:hover {
+    border: 1px solid #286CF5 !important;
+  }
 }
 
 ::ng-deep .multiselect-dropdown .dropdown-btn::before,
@@ -824,3 +833,46 @@ input[type=number] {
     }
   }
 }
+
+.hover-item:hover {
+  border: 1px solid #286CF5 !important; /* Thay đổi màu viền khi hover */
+}
+
+.input1::placeholder {
+  color: #AEC7E5;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 21px;
+}
+
+.checkbox-hide-processing-thread {
+  -webkit-appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  -moz-appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  width: 24px;
+  height: 24px;
+  margin: auto 8px auto 0;
+  border-radius: 6px;
+  display: block;
+  border: 1px solid #A8B5CE; /* Thêm border */
+  position: relative;
+  cursor: pointer;
+  background-color: #fff; /* Màu nền mặc định */
+}
+
+.checkbox-hide-processing-thread:checked {
+  // background-color: #fff;
+  background-color: #0041C4;
+}
+
+.checkbox-hide-processing-thread:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 13px; /* Kích thước ảnh */
+  height: 10px; /* Kích thước ảnh */
+  background-image: url('../../../../../../assets/img/Vector.png'); /* Replace with your image URL */
+  background-size: cover; /* Đảm bảo ảnh bao phủ toàn bộ vùng */
+  transform: translate(-50%, -50%);
+}  

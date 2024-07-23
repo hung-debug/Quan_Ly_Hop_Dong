@@ -142,6 +142,7 @@ export class DetermineSignerComponent implements OnInit {
   // }
 
   changeTypeSign(d: any,index?: any,id?: any,role?: any) {
+    d.login_by = d.login_by === 'phone' ? 'email' : 'phone';
     if (d.login_by == 'phone' || d.login_by == 'email') {
       d.email = '';
       d.phone = '';
