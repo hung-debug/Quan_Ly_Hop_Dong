@@ -347,8 +347,8 @@ input[type=number] {
         position: absolute;
         top: 50%;
         left: 50%;
-        width: 10px; /* Kích thước ảnh */
-        height: 7px; /* Kích thước ảnh */
+        width: 13px; /* Kích thước ảnh */
+        height: 10px; /* Kích thước ảnh */
         background-image: url('../../../../../assets/img/Vector.png'); /* Replace with your image URL */
         background-size: cover; /* Đảm bảo ảnh bao phủ toàn bộ vùng */
         transform: translate(-50%, -50%);
@@ -845,3 +845,35 @@ input[type=number] {
   font-weight: 500;
   line-height: 21px;
 }
+
+.checkbox-hide-processing-thread {
+  -webkit-appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  -moz-appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  width: 24px;
+  height: 24px;
+  margin: auto 8px auto 0;
+  border-radius: 6px;
+  display: block;
+  border: 1px solid #A8B5CE; /* Thêm border */
+  position: relative;
+  cursor: pointer;
+  background-color: #fff; /* Màu nền mặc định */
+}
+
+.checkbox-hide-processing-thread:checked {
+  // background-color: #fff;
+  background-color: #0041C4;
+}
+
+.checkbox-hide-processing-thread:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 13px; /* Kích thước ảnh */
+  height: 10px; /* Kích thước ảnh */
+  background-image: url('../../../../../assets/img/Vector.png'); /* Replace with your image URL */
+  background-size: cover; /* Đảm bảo ảnh bao phủ toàn bộ vùng */
+  transform: translate(-50%, -50%);
+}  

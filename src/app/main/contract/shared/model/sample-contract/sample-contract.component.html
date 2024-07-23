@@ -10,7 +10,7 @@
                 <div style="margin: 0px 16px;">
                     <div *ngFor="let d of this.datas.contract_user_sign" class="show-list-name-class">
                         <div *ngIf="!d.sign_config.position" 
-                             [ngClass]="{'resize-drag': d.sign_unit !== 'chu_ky_so_new'}" 
+                             [ngClass]="{'resize-drag': d.sign_unit !== 'chu_ky_so'}" 
                              [id]="getIdSignChuaKeo(d.id)" 
                              (click)="showThumbnail()">
                             <div style="position: relative; display: contents;">
@@ -54,7 +54,7 @@
                                     </div>
                                 </div>
                                                         
-                                <div *ngIf="d.sign_unit == 'chu_ky_so_new'" class="flex mt-12px" (click)="toggleDropdownChuKySo()" id="element-drag">
+                                <div *ngIf="d.sign_unit == 'chu_ky_so'" class="flex mt-12px" (click)="toggleDropdownChuKySo()" id="element-drag">
                                     <div  class="content-drag1 content-chu_ky_so_new hover-item-o-ky">
                                         <div class="flex">
                                             <div class="content-item-ky">

@@ -49,7 +49,7 @@
                 </div>
 
                 <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                <div class="participants--input col-md-6"
+                <!-- <div class="participants--input col-md-6"
                   style="display: flex; justify-content: space-between; padding-left: 7px;">
                   <div class="participants__name">
                     <div class="label_detail text-color">
@@ -68,6 +68,25 @@
                       <div class="flex">
                         <input (change)="changeTypeSign(d, index)" type="radio"
                           name="checkPhoneMailOrgViewer_{{ index }}" [(ngModel)]="d.login_by" [value]="phone" />
+                      </div>
+                      &nbsp;
+                      <div class="text-check-box-contract">
+                        {{ "typeOfSignPhone" | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+                <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                  <div class="participants__name">
+                    <div class="label_detail text-color">
+                      <div class="flex">
+                        <input
+                          class="checkbox-hide-processing-thread hover-item"
+                          type="checkbox"
+                          name="checkPhoneMailOrgViewer_{{index}}"
+                          (change)="changeTypeSign(d, index)"
+                          [checked]="d.login_by === 'phone'"
+                        />
                       </div>
                       &nbsp;
                       <div class="text-check-box-contract">
@@ -318,9 +337,8 @@
                   </div>
                 </div>
 
-                <div class="participants--input col-md-6"
+                <!-- <div class="participants--input col-md-6"
                   style="display: flex; justify-content: space-between; padding-left: 7px;">
-                  <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}}-->
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div class="flex">
@@ -346,6 +364,25 @@
                     </div>
                   </div>
 
+                </div> -->
+                <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                  <div class="participants__name">
+                    <div class="label_detail text-color">
+                      <div class="flex">
+                        <input
+                          class="checkbox-hide-processing-thread hover-item"
+                          type="checkbox"
+                          name="checkPhoneMailOrgSigner_{{index}}"
+                          (change)="changeTypeSign(d, index, null, 'signer')"
+                          [checked]="d.login_by === 'phone'"
+                        />
+                      </div>
+                      &nbsp;
+                      <div class="text-check-box-contract">
+                        {{ "typeOfSignPhone" | translate }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -1219,7 +1256,7 @@
                     </div>
 
                     <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}} cho nguoi xem xet doi tac-->
-                    <div class="participants--input col-md-6"
+                    <!-- <div class="participants--input col-md-6"
                       style="display: flex; justify-content: space-between; padding-left: 7px;">
                       <div class="participants__name">
                         <div class="label_detail text-color">
@@ -1240,6 +1277,25 @@
                             <input (change)="changeTypeSign(d, index)" type="radio"
                               name="checkPhoneMailParticipantViewer_{{ index }}" [(ngModel)]="d.login_by"
                               [value]="phone" />
+                          </div>
+                          &nbsp;
+                          <div class="text-check-box-contract">
+                            {{ "typeOfSignPhone" | translate }}
+                          </div>
+                        </div>
+                      </div>
+                    </div> -->
+                    <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                      <div class="participants__name">
+                        <div class="label_detail text-color">
+                          <div class="flex">
+                            <input
+                              class="checkbox-hide-processing-thread hover-item"
+                              type="checkbox"
+                              name="checkPhoneMailParticipantViewer_{{index}}"
+                              (change)="changeTypeSign(d, index)"
+                              [checked]="d.login_by === 'phone'"
+                            />
                           </div>
                           &nbsp;
                           <div class="text-check-box-contract">
@@ -1507,7 +1563,7 @@
                       </div>
                     </div>
 
-                    <div class="participants--input col-md-6"
+                    <!-- <div class="participants--input col-md-6"
                       style="display: flex; justify-content: space-between; padding-left: 7px;">
                       <div class="participants__name">
                         <div class="label_detail text-color">
@@ -1524,6 +1580,25 @@
                           <div class="flex">
                             <input (change)="changeTypeSign(d, index, id, 'sign_partner')" name="checkPhoneMailParticipantSigner_{{ index }}_{{id}}" type="radio" [value]="phone" [(ngModel)]="d.login_by" />
                           </div>&nbsp;
+                          <div class="text-check-box-contract">
+                            {{ "typeOfSignPhone" | translate }}
+                          </div>
+                        </div>
+                      </div>
+                    </div> -->
+                    <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                      <div class="participants__name">
+                        <div class="label_detail text-color">
+                          <div class="flex">
+                            <input
+                              class="checkbox-hide-processing-thread hover-item"
+                              type="checkbox"
+                              name="checkPhoneMailParticipantSigner_{{index}}"
+                              (change)="changeTypeSign(d, index, id, 'sign_partner')"
+                              [checked]="d.login_by === 'phone'"
+                            />
+                          </div>
+                          &nbsp;
                           <div class="text-check-box-contract">
                             {{ "typeOfSignPhone" | translate }}
                           </div>
@@ -2173,7 +2248,7 @@
                     </div>
 
                     <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}} đối với người ký là cá nhân-->
-                    <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
+                    <!-- <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
                       <div class="participants__name">
                         <div class="label_detail text-color">
                           <div class="flex">
@@ -2193,6 +2268,25 @@
                             <input (change)="changeTypeSign(d, index, null, 'personal')"
                               name="checkPhoneMailPerson_{{ index }}_{{ id }}" type="radio" [value]="phone"
                               [(ngModel)]="d.login_by" />
+                          </div>
+                          &nbsp;
+                          <div class="text-check-box-contract">
+                            {{ "typeOfSignPhone" | translate }}
+                          </div>
+                        </div>
+                      </div>
+                    </div> -->
+                    <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                      <div class="participants__name">
+                        <div class="label_detail text-color">
+                          <div class="flex">
+                            <input
+                              class="checkbox-hide-processing-thread hover-item"
+                              type="checkbox"
+                              name="checkPhoneMailPerson_{{index}}"
+                              (change)="changeTypeSign(d, index, null, 'personal')"
+                              [checked]="d.login_by === 'phone'"
+                            />
                           </div>
                           &nbsp;
                           <div class="text-check-box-contract">

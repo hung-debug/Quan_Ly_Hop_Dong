@@ -56,28 +56,6 @@
       </div>
     </div>
 
-    <div class="col-md-6">
-      <div class="form-group">
-        <div class="label_item">{{'note' | translate}} </div>
-        <div class="input-group">
-          <input type="text" [(ngModel)]="datasForm.notes" class="input_text" />
-
-          <!-- <textarea name="" placeholder="{{'enter.note' | translate}}"
-            style="width: 100%; ;border: 1px solid #2196F3; border-radius: 5px; padding-left: 11px;outline: none;" [(ngModel)]="datasForm.notes"
-            id="" cols="30" rows="10"></textarea> -->
-        </div>
-      </div>
-    </div>
-
-   <div class="col-md-6">
-    <div *ngIf=" environment.flag == 'NB' ? true : this.ceca" class="form-group">
-      <div class="label_item">{{'contract-type.ceca' | translate}}<span class="require_star">*</span></div>
-        <p-dropdown panelStyleClass="font" [options]="optionsCeCa" [(ngModel)]="optionsCeCaValue" optionLabel="name"
-          optionValue="id" [showClear]="true">
-        </p-dropdown>
-    </div>
-   </div> 
-
    <div class="col-md-6">
       <!--Loại hợp đồng-->
       <div class="form-group">
@@ -122,6 +100,28 @@
       </div>
     </div>
    </div>
+
+   <div class="col-md-6">
+    <div class="form-group">
+      <div class="label_item">{{'note' | translate}} </div>
+      <div class="input-group">
+        <input type="text" [(ngModel)]="datasForm.notes" class="input_text" />
+
+        <!-- <textarea name="" placeholder="{{'enter.note' | translate}}"
+          style="width: 100%; ;border: 1px solid #2196F3; border-radius: 5px; padding-left: 11px;outline: none;" [(ngModel)]="datasForm.notes"
+          id="" cols="30" rows="10"></textarea> -->
+      </div>
+    </div>
+   </div>
+
+    <div class="col-md-6">
+      <div *ngIf=" environment.flag == 'NB' ? true : this.ceca" class="form-group">
+        <div class="label_item">{{'contract-type.ceca' | translate}}<span class="require_star">*</span></div>
+          <p-dropdown panelStyleClass="font" [options]="optionsCeCa" [(ngModel)]="optionsCeCaValue" optionLabel="name"
+            optionValue="id" [showClear]="true">
+          </p-dropdown>
+      </div>
+    </div> 
   </div>
 </div>
 

@@ -130,7 +130,10 @@
         select {
           height: 48px;
           background-color: #F7FAFD;
-          color: #333333;
+          color: #00186D;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 21px;
           border: 1px solid #E6EDFA;
           outline: none;
 
@@ -352,13 +355,17 @@
 }
 
 .input1 {
+  color: #00186D;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 19px;
   box-sizing: border-box; 
   text-align: center; 
-  width: 40px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   background: #FFFFFF;
-  border: 1px solid #87CAFF;
-  border-radius: 5px; 
+  border: none;
+  border-radius: 3px; 
 }
 
 .handle {
@@ -736,14 +743,6 @@
 .call-page {
   padding: 0;
   border: none;
-  background: none;
-}
-
-.call-page1 {
-  padding: 0;
-  border: none;
-  background: none; 
-  margin-left: 5px
 }
 
 .text-ellipsis {
@@ -859,4 +858,131 @@
   height: 48px;
   width: 100% !important;
   padding: 10px;
+}
+
+@media (max-width: 991px) {
+  .horizontal-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: auto;
+    margin-top: 95px;
+    width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .horizontal-dropdown {
+    right: -270px;
+  }
+}
+
+.horizontal-dropdown {
+  list-style: none;
+  padding: 0px 16px;
+  position: absolute;
+  top: 0%; /* Position it below the span */
+  z-index: 1000;
+  background: #FFFFFF;
+  box-shadow: 0px 3px 12px 0px #1055E11A;
+  border-radius: 12px;
+}
+
+.item-ky {
+  display: block;
+  margin: 16px 0px;
+  background: #FFFFFF;
+}
+
+.text-ky {
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 400;
+  color: #00186D;
+  line-height: 18px;
+  margin-top: 5px;
+  text-align: justify;
+}
+
+.content-chu_ky_so_new {
+  position: relative; /* Ensure dropdown is positioned relative to this container */
+  height: 100%;
+}
+
+.imgage-ky {
+  display: flex;
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  height: 100%; /* Đảm bảo div có chiều cao để căn giữa */
+}
+
+.hover-item-o-ky:hover {
+  border: 1px solid #286CF5 !important;
+  background-color: #E4F0FC !important;
+}
+
+.hover-item:hover {
+  border: 1px solid #286CF5 !important;
+}
+
+.content-item-ky {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.content-drag1 {
+  width: 100%;
+  color: #106DB6;
+  display: flex;
+}
+
+.input_text {
+  color: #00186D;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+}
+
+.name-text {
+  .input_text::placeholder {
+    color: #AEC7E5;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21px;
+  }
+}
+
+.sign-unit-select {
+  .form-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    position: relative;
+    background-color: #F7FAFD; /* Giữ màu nền */
+    color: #00186D;
+    font-size: 14px;
+    font-weight: 500;
+    padding-right: 30px; /* Đảm bảo có khoảng trống cho icon */
+    border: 1px solid #E6EDFA;
+    background-image: url('../../../../../assets/img/mui-ten-xuong.png'); /* Đường dẫn tới icon tùy chỉnh */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px; /* Điều chỉnh kích thước của icon nếu cần */
+  }
+}
+
+.no-focus {
+  &:focus {
+    outline: none; /* Ensure no outline on focus */
+    box-shadow: none; /* Remove box-shadow */
+  }
+}
+
+.page-number {
+  color: #00186D;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 19px;
 }

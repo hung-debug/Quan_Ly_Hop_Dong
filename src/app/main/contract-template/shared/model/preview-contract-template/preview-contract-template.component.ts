@@ -61,11 +61,22 @@ export class PreviewContractTemplateComponent implements OnInit {
     if(this.datas.isFirstLoadPreview != true){
       this.datas.isFirstLoadPreview = true;
       cloneUserSign.forEach((element: any) => {
-        element.sign_config.forEach((item: any) => {
-        if(this.datas.arrDifPage[Number(item.page)-1] == 'max'){
-          item.coordinate_x = item.coordinate_x - this.datas.difX;
+        if(element.sign_unit == "chu_ky_so") {
+          let type = element.type;
+          for (let i = 0; i < type.length; i++) {
+            type[i].sign_config.forEach((item: any) => {
+              if(this.datas.arrDifPage[Number(item.page)-1] == 'max'){
+                item.coordinate_x = item.coordinate_x - this.datas.difX;
+              }
+            }) 
+          }
+        } else {
+          element.sign_config.forEach((item: any) => {
+            if(this.datas.arrDifPage[Number(item.page)-1] == 'max'){
+              item.coordinate_x = item.coordinate_x - this.datas.difX;
+            }
+          }) 
         }
-      })
       })
     }
     cloneUserSign.forEach(element => {
@@ -75,7 +86,13 @@ export class PreviewContractTemplateComponent implements OnInit {
         }
       } else {
         arrSignConfig = arrSignConfig.concat(element.sign_config);
-      } 
+      }
+
+      if ((element.sign_unit === 'chu_ky_so') && element.type) {
+        element.type.forEach((subConfig: { sign_config: any; }) => {
+          arrSignConfig = arrSignConfig.concat(subConfig.sign_config);
+        });
+      }
     })
 
     return arrSignConfig;

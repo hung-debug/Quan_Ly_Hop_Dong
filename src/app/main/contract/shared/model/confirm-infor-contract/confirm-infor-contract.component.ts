@@ -170,7 +170,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       let isNotFieldId: any[] = [];
       let isUserSign_clone = _.cloneDeep(this.datas.contract_user_sign);
       isUserSign_clone.forEach((res: any) => {
-        if(res.sign_unit == "chu_ky_so_new") {
+        if(res.sign_unit == "chu_ky_so") {
           res.type.forEach((element: any) => {
             element.sign_config.forEach((item: any) => {
               if (item.id_have_data) {
@@ -227,7 +227,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       ];
       let isContractUserSign_clone = _.cloneDeep(this.datas.contract_user_sign);
       isContractUserSign_clone.forEach((element: any) => {
-        if(element.sign_unit == "chu_ky_so_new") {
+        if(element.sign_unit == "chu_ky_so") {
           element.type.forEach((res: any) => {
             res.sign_config.forEach((item: any) => {
               item['font'] = item.font ? item.font : 'Times New Roman';
@@ -240,13 +240,13 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
               if (item.sign_unit == 'chu_ky_so_con_dau_va_thong_tin') {
                 item['type'] = 3;
-                item['type_image_signature'] = 1;
+                item['type_image_signature'] = 3;
               } else if (item.sign_unit == 'chu_ky_so_con_dau') {
                 item['type'] = 3;
                 item['type_image_signature'] = 2;
               } else if (item.sign_unit == 'chu_ky_so_thong_tin') {
                 item['type'] = 3;
-                item['type_image_signature'] = 3;
+                item['type_image_signature'] = 1;
               }
 
               data_remove_arr_request.forEach((item_remove: any) => {
@@ -452,8 +452,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         }
         if (item.sign_unit == 'chu_ky_anh') {
           item['type'] = 2;
-        } else if (item.sign_unit == 'chu_ky_so') {
-          item['type'] = 3;
         } else if (item.sign_unit == 'so_tai_lieu') {
           item['type'] = 4;
         } else if(item.sign_unit == 'text'){
@@ -462,13 +460,13 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           item['type'] = 1;}
         } else if (item.sign_unit == 'chu_ky_so_con_dau_va_thong_tin') {
           item['type'] = 3;
-          item['type_image_signature'] = 1;
+          item['type_image_signature'] = 3;
         } else if (item.sign_unit == 'chu_ky_so_con_dau') {
           item['type'] = 3;
           item['type_image_signature'] = 2;
         } else if (item.sign_unit == 'chu_ky_so_thong_tin') {
           item['type'] = 3;
-          item['type_image_signature'] = 3;
+          item['type_image_signature'] = 1;
         }
 
         data_remove_arr_request.forEach((item_remove: any) => {
