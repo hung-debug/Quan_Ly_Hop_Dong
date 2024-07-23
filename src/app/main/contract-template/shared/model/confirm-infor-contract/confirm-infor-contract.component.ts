@@ -126,7 +126,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
               if (item.id_have_data) {
                 isHaveFieldId.push(item)
               } else isNotFieldId.push(item);
-              if(element.sign_unit == 'text') {
+              if(item.sign_unit == 'text') {
                 item.name = item.text_attribute_name
               }
             })
@@ -314,8 +314,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         }
         if (item.sign_unit == 'chu_ky_anh') {
           item['type'] = 2;
-        } else if (item.sign_unit == 'chu_ky_so') {
-          item['type'] = 3;
         } else if (item.sign_unit == 'so_tai_lieu') {
           item['type'] = 4;
         } else if(item.sign_unit == 'text'){
