@@ -35,7 +35,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
   contractType:any='';
   data_sample_contract: any = [];
-  
+
   data_organization:any;
   is_origanzation_reviewer: any = [];
   is_origanzation_signature: any = [];
@@ -71,7 +71,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
     this.data_parnter_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
 
-    
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -137,7 +137,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
             if(element.sign_unit == 'text') {
               element.name = element.text_attribute_name;
             }
-  
+
             if (element.id_have_data) {
               isHaveFieldId.push(element)
             } else isNotFieldId.push(element);
@@ -194,28 +194,28 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
               if (item.text_attribute_name) {
                 item.name = item.text_attribute_name;
               }
-  
+
               if (item.sign_unit == 'chu_ky_anh') {
                 item['type'] = 2;
               } else if (item.sign_unit == 'so_tai_lieu') {
                 item['type'] = 4;
                 if (this.datas.contract_no) {
-                  if (!item.name) 
+                  if (!item.name)
                   item.name = null;
-              
-                if (!item.recipient_id) 
+
+                if (!item.recipient_id)
                   item.recipient_id = null;
-              
-                if (!item.status) 
+
+                if (!item.status)
                   item.status = 0;
                 }
-  
+
               } else if(item.sign_unit == 'text'){
                 if(item.text_type == "currency"){
                   item['type'] = 5;} else {
                 item['type'] = 1;}
               }
-  
+
               data_remove_arr_request.forEach((item_remove: any) => {
                 delete item[item_remove]
               })
@@ -273,17 +273,19 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
       dataSignId.forEach((element: any) => {
         if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
-          element.coordinate_x = element.coordinate_x - this.datas.difX;
+          if (element?.type !== 3) {
+            element.coordinate_x = element.coordinate_x - this.datas.difX;
+          }
         }
       })
       for (let i = 0; i < dataSignId.length; i++) {
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
-        if(!dataSignId[i].type) 
+        if(!dataSignId[i].type)
           dataSignId[i].type = 4
 
         if(dataSignId[i].text_type == "currency") {
-            dataSignId[i].type = 5; 
+            dataSignId[i].type = 5;
         }
 
         await this.contractTemplateService.editContractSample(dataSignId[i], id).toPromise().then((data: any) => {
@@ -296,7 +298,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         if (countIsSignId > 0) {
           break;
         }
-      }    
+      }
     }
 
     let isErrorNotId = false;
@@ -336,7 +338,9 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
       dataSignNotId.forEach((element: any) => {
         if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
-          element.coordinate_x = element.coordinate_x - this.datas.difX;
+          if (element?.type !== 3) {
+            element.coordinate_x = element.coordinate_x - this.datas.difX;
+          }
         }
       })
       await this.contractTemplateService.getContractSample(dataSignNotId).toPromise().then((data) => {
@@ -366,7 +370,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           this.router.navigate(['/main/contract-template']);
         });
         this.toastService.showSuccessHTMLWithTimeout("Sửa mẫu hợp đồng thành công!", "", 3000);
-        
+
       } else {
         if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
           this.save_draft_infor.close_header = false;
@@ -400,12 +404,12 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
             }
           })
         })
-    }) 
+    })
   }
 
   convertToSignConfig() {
-    
+
   }
 
- 
+
 }
