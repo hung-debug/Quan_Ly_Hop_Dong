@@ -1358,7 +1358,7 @@ export class DetermineSignerComponent implements OnInit {
             }
             arrEmail.push(items);
 
-            if (isParty == "only_party_partner" && element[j].type_unit == "partner" && element[j].role == 4) {
+            if (isParty == "only_party_partner") {
               if (listEmailInMyPartNer[i]?.role == 4 || listEmailInMyPartNer[j]?.role == 4 || listEmailInMyPartNer?.role == 4) {
                 emailCheckInMyPartNer.push(listEmailInMyPartNer)
               }
