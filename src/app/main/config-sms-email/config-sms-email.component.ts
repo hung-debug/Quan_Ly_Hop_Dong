@@ -93,7 +93,7 @@ export class ConfigSmsEmailComponent implements OnInit {
       smsPass: this.fbd.control("", [Validators.required]),
       contractSupplier: this.fbd.control("MOBIFONE", [Validators.required]),
     });
-    
+
     this.ConfigEmailServerForm = this.fbd.group({
       userNameMailServer: this.fbd.control(this.userNameMailServer, [Validators.required, Validators.pattern(parttern.email)]),
       aliasMailServer: this.fbd.control(this.aliasMailServer, [Validators.required]),
@@ -105,38 +105,38 @@ export class ConfigSmsEmailComponent implements OnInit {
    }
 
   async ngOnInit(): Promise<void> {
-          
+
     let userId = this.userService.getAuthCurrentUser().id;
 
-    const infoUser = await this.userService.getUserById(userId).toPromise();   
-     
+    const infoUser = await this.userService.getUserById(userId).toPromise();
+
     this.listConfigEmailServer = infoUser.organization;
     this.listConfigBrandname = infoUser.organization;
     if(this.listConfigBrandname.smsSendMethor == 'API'){
       this.listConfigBrandname.contractSupplier = 'MOBIFONE'
     } else{
       this.listConfigBrandname.contractSupplier = 'VNPT'
-    }   
-    
+    }
+
     this.brandnameForm.patchValue({
       brandName: !infoUser.organization.brandName && infoUser.organization.smsSendMethor == "API" ? this.brandname : infoUser.organization.brandName, // Cập nhật giá trị cho brandName
       contractSupplier: infoUser.organization.smsSendMethor == "API" ? "MOBIFONE" : "VNPT", // Cập nhật giá trị contractSupplier
       smsUser:  infoUser.organization.smsUser, // Cập nhật giá trị cho smsUser
       smsPass:  infoUser.organization.smsPass, // Cập nhật giá trị cho smsPass
     });
-    
+
     if(this.brandnameForm.value.brandName === this.brandname && this.brandnameForm.value.contractSupplier == "MOBIFONE"){
       this.brandnameForm.get('smsUser')?.disable();
       this.brandnameForm?.get('smsPass')?.disable();
-      
+
       this.brandnameForm.patchValue({
         smsUser:  "", // Cập nhật giá trị cho smsUser
         smsPass:  "", // Cập nhật giá trị cho smsPass
       });
     }
-    
+
     this.ValidConfigBrandName();
-    
+
     this.ConfigEmailServerForm.patchValue({
       userNameMailServer: !infoUser.organization.userNameMailServer ? this.userNameMailServer : infoUser.organization.userNameMailServer, // Cập nhật giá trị userNameMailServer
       aliasMailServer: !infoUser.organization.aliasMailServer ? this.aliasMailServer : infoUser.organization.aliasMailServer, // Cập nhật giá trị aliasMailServer
@@ -145,33 +145,33 @@ export class ConfigSmsEmailComponent implements OnInit {
       portMailServer: infoUser.organization.portMailServer, // Cập nhật giá trị cho portMailServer
       tlsMailServer: infoUser.organization.tlsMailServer, // Cập nhật giá trị cho tlsMailServer
     });
-    
+
     if(this.ConfigEmailServerForm.value.userNameMailServer === this.userNameMailServer){
       this.ConfigEmailServerForm?.get('tlsMailServer')?.disable();
       this.ConfigEmailServerForm?.get('aliasMailServer')?.disable();
       this.ConfigEmailServerForm?.get('passwordMailServer')?.disable();
       this.ConfigEmailServerForm?.get('hostMailServer')?.disable();
       this.ConfigEmailServerForm?.get('portMailServer')?.disable();
-      
+
       this.ConfigEmailServerForm.patchValue({
         passwordMailServer:  "", // Cập nhật giá trị cho passwordMailServer
         hostMailServer:  "", // Cập nhật giá trị cho hostMailServer
         portMailServer: "", // Cập nhật giá trị cho portMailServer
       });
     }
-    
+
     this.ValidConfigEmailServer();
     this.orgId = infoUser.organization.id;
     const inforRole = await this.roleService.getRoleById(infoUser.role_id).toPromise();
     const listRole = inforRole.permissions;
-    
+
     this.listConfig = [
-      { smsTypeId: 6, name: 'Chuyển xử lý hợp đồng', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 0, },
-      { smsTypeId: 1, name: 'Hủy hợp đồng', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 3 },
-      { smsTypeId: 2, name: 'Từ chối hợp đồng', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 1 },
-      { smsTypeId: 3, name: 'Hợp đồng sắp hết hạn', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 2 },
-      { smsTypeId: 4, name: 'Hợp đồng quá hạn', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 2 },
-      { smsTypeId: 5, name: 'Hợp đồng hoàn thành', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 1 },
+      { smsTypeId: 6, name: 'contract.change.status', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 0, },
+      { smsTypeId: 1, name: 'contract.cancel.status', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 3 },
+      { smsTypeId: 2, name: 'contract.deny.status', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 1 },
+      { smsTypeId: 3, name: 'contract.expire.status', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 2 },
+      { smsTypeId: 4, name: 'contract.end.status', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 2 },
+      { smsTypeId: 5, name: 'contract.complete.status', organizationId: this.orgId, emailConfig: false, smsConfig: false, userSendNotification: 1 },
     ];
 
     for (let i = 0; i < 5; i++) {
@@ -181,17 +181,17 @@ export class ConfigSmsEmailComponent implements OnInit {
     this.appService.setSubTitle("menu.config-sms-email");
 
     this.listStatus = [
-      { id: 0, name: 'Người tạo' },
-      { id: 1, name: 'Người tạo và những người đã xử lý' },
+      { id: 0, name: 'created.user' },
+      { id: 1, name: 'creators.processed' },
     ]
-    
+
     this.listStatus1 = [
-      { id: 0, name: 'Người tạo' },
-      { id: 2, name: 'Người tạo và những người đang xử lý' },
+      { id: 0, name: 'created.user' },
+      { id: 2, name: 'creators.processing' },
     ]
-    
+
     this.listStatus2 = [
-      { id: 3, name: 'Người đang xử lý và những người đã xử lý' },
+      { id: 3, name: 'creators.processing.processed' },
     ]
 
     this.cols = [
@@ -200,7 +200,7 @@ export class ConfigSmsEmailComponent implements OnInit {
       { header: 'noti.email', style: 'text-align: left;' },
       { header: 'sub.send.noti', style: 'text-align: left;' },
     ];
-    
+
     this.optionsSupplier = [
       { id: 'MOBIFONE', name: 'MobiFone' },
       { id: 'VNPT', name: 'VNPT' },
@@ -217,7 +217,7 @@ export class ConfigSmsEmailComponent implements OnInit {
     this.isRoleConfigExpirationDay = listRole.some((element: any) => element.code == 'CAUHINH_NGAYSAPHETHAN');
     this.isRoleConfigBrandname = listRole.some((element: any) => element.code == 'CAUHINH_BRANDNAME');
     this.isRoleConfigEmailServer = listRole.some((element: any) => element.code == 'CAUHINH_MAILSERVER');
-    
+
     //gọi api thông tin cấu hình sms của tổ chức
     this.infoConfigSms();
 
@@ -243,9 +243,9 @@ export class ConfigSmsEmailComponent implements OnInit {
         userSendNotification: new FormControl(3),
         organizationId: new FormControl(value.organizationId),
         nameConfig: new FormControl(value.name),
-      });      
+      });
       this.groupArray.push(newGroup);
-      
+
     }else{
       const newGroup = this.fb.group({
         smsTypeId: new FormControl(value.smsTypeId),
@@ -260,11 +260,11 @@ export class ConfigSmsEmailComponent implements OnInit {
     }
 
   }
-  
-  ValidConfigSmsEmail(): void{  
+
+  ValidConfigSmsEmail(): void{
     this.infoConfigSms().then(() =>{
       this.isDisableConfigSmsEmail = true;
-        this.myForm.valueChanges.subscribe(value => { 
+        this.myForm.valueChanges.subscribe(value => {
           this.isDisableConfigSmsEmail = false;
         })
     })
@@ -299,10 +299,10 @@ export class ConfigSmsEmailComponent implements OnInit {
       resolve(); // Khi functionA thực hiện xong, gọi resolve()
     });
   }
-  
+
   onSoonExpireDayChange(value: any){
     this.soonExpireDay = value
-    this.isDisableSoonExpireDay = false;   
+    this.isDisableSoonExpireDay = false;
   }
 
   updateSoonExpireDay() {
@@ -314,7 +314,7 @@ export class ConfigSmsEmailComponent implements OnInit {
         value: this.soonExpireDay
       }]
 
-      this.contractService.editConfigExpirationDate(body).subscribe((response: any) => {      
+      this.contractService.editConfigExpirationDate(body).subscribe((response: any) => {
         this.spinner.hide();
         this.toastService.showSuccessHTMLWithTimeout('update.success', '', 3000);
       })
@@ -335,9 +335,9 @@ export class ConfigSmsEmailComponent implements OnInit {
       })
     }
   }
-  
+
   updateSmsEmail() {
-    this.contractService.updateConfigSmsOrg(this.groupArray.value).subscribe((response: any) => { 
+    this.contractService.updateConfigSmsOrg(this.groupArray.value).subscribe((response: any) => {
       if (response.status == 200) {
         // this.infoConfigSms();
         this.toastService.showSuccessHTMLWithTimeout('update.success', '', 3000);
@@ -347,7 +347,7 @@ export class ConfigSmsEmailComponent implements OnInit {
       }
     })
   }
-  
+
   onSubmit(){
     try {
       this.spinner.show();
@@ -371,7 +371,7 @@ export class ConfigSmsEmailComponent implements OnInit {
   }
 
 
-  mapData(dataBody: any) { 
+  mapData(dataBody: any) {
     this.groupArray.clear();
     let dataId = [6, 1, 2, 3, 4, 5]
     dataId.forEach((value: any, index: any) => {
@@ -397,40 +397,40 @@ export class ConfigSmsEmailComponent implements OnInit {
 
     }
   }
-  
+
   toggleFieldTextType() {
     this.fieldTextType = !this.fieldTextType;
   }
-  
+
   onChangeBrandname(){
     if(this.brandnameForm.value.brandName == this.brandname && this.brandnameForm.value.contractSupplier == "MOBIFONE"){
-      this.brandnameForm?.get('smsUser')?.disable();    
+      this.brandnameForm?.get('smsUser')?.disable();
       this.brandnameForm?.get('smsPass')?.disable();
       this.brandnameForm.controls['smsUser'].setValue("");
       this.brandnameForm.controls['smsPass'].setValue("");
     }else{
-      this.brandnameForm?.get('smsUser')?.enable();    
+      this.brandnameForm?.get('smsUser')?.enable();
       this.brandnameForm?.get('smsPass')?.enable();
     }
   }
-  
+
   onChangeSupplier(){
     if(this.brandnameForm.value.brandName == this.brandname && this.brandnameForm.value.contractSupplier == "MOBIFONE"){
-      this.brandnameForm?.get('smsUser')?.disable();    
+      this.brandnameForm?.get('smsUser')?.disable();
       this.brandnameForm?.get('smsPass')?.disable();
       this.brandnameForm.controls['smsUser'].setValue("");
       this.brandnameForm.controls['smsPass'].setValue("");
     }else{
-      this.brandnameForm?.get('smsUser')?.enable();    
+      this.brandnameForm?.get('smsUser')?.enable();
       this.brandnameForm?.get('smsPass')?.enable();
     }
   }
-  
+
   onChangeEmailServer(){
     if(this.ConfigEmailServerForm.value.userNameMailServer == this.userNameMailServer){
       this.ConfigEmailServerForm?.get('tlsMailServer')?.disable();
       this.ConfigEmailServerForm?.get('aliasMailServer')?.disable();
-      this.ConfigEmailServerForm?.get('passwordMailServer')?.disable();    
+      this.ConfigEmailServerForm?.get('passwordMailServer')?.disable();
       this.ConfigEmailServerForm?.get('hostMailServer')?.disable();
       this.ConfigEmailServerForm?.get('portMailServer')?.disable();
       this.ConfigEmailServerForm.controls['aliasMailServer'].setValue(this.aliasMailServer);
@@ -440,32 +440,32 @@ export class ConfigSmsEmailComponent implements OnInit {
     }else{
       this.ConfigEmailServerForm?.get('tlsMailServer')?.enable();
       this.ConfigEmailServerForm?.get('aliasMailServer')?.enable();
-      this.ConfigEmailServerForm?.get('passwordMailServer')?.enable();    
+      this.ConfigEmailServerForm?.get('passwordMailServer')?.enable();
       this.ConfigEmailServerForm?.get('hostMailServer')?.enable();
       this.ConfigEmailServerForm?.get('portMailServer')?.enable();
     }
   }
 
   ValidConfigBrandName(){
-    this.brandnameForm.valueChanges.subscribe(value => {    
+    this.brandnameForm.valueChanges.subscribe(value => {
       this.isDisable = false;
       if((this.listConfigBrandname.brandName == value.brandName && this.brandnameForm.value.contractSupplier == this.listConfigBrandname.contractSupplier && this.listConfigBrandname.smsUser == value.smsUser && this.listConfigBrandname.smsPass == value.smsPass)){
         this.isDisable = true;
-      }      
+      }
     })
   }
-  
+
   configBrandname(){
     if (this.brandnameForm.invalid) {
       return;
     }
-         
-    this.userService.updateConfigBrandname(this.brandnameForm.value,this.orgId).subscribe((res: any) =>{    
-      this.isDisable = true;   
-      this.toastService.showSuccessHTMLWithTimeout('update.success', '', 3000); 
+
+    this.userService.updateConfigBrandname(this.brandnameForm.value,this.orgId).subscribe((res: any) =>{
+      this.isDisable = true;
+      this.toastService.showSuccessHTMLWithTimeout('update.success', '', 3000);
     })
   }
-  
+
   ValidConfigEmailServer(){
     this.ConfigEmailServerForm.valueChanges.subscribe(value => {
       this.isDisableConfigEmailServer = false;
@@ -474,12 +474,12 @@ export class ConfigSmsEmailComponent implements OnInit {
       }
     })
   }
-  
+
   configEmailServer(){
     if (this.ConfigEmailServerForm.invalid) {
       return;
     }
-    
+
     this.userService.updateConfigEmailServer(this.ConfigEmailServerForm.value, this.orgId).subscribe((res: any) => {
       this.isDisableConfigEmailServer = true;
       this.toastService.showSuccessHTMLWithTimeout('update.success', '', 3000);

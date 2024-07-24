@@ -1,165 +1,212 @@
-<div class="labelOrg" style="text-transform: uppercase;">{{'contract-template' | translate}}</div>
-<div class="infor_contact">
-    <div class="row">
-        <div class="col-md-5">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <div class="label_item">{{'contract-template.name' | translate}}</div>
-                        <div>
-                            <div [innerHTML]="this.datas.name" class="input_text"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <div class="label_item">{{'contract-template.file' | translate}}</div>
-                        <div>
-                            <div [innerHTML]="this.datas.file_name" class="input_text"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <div class="label_item">{{'effective-date' | translate}}</div>
-                        <div class="input_text" style="display: flex;">
-                            <div [innerHTML]="this.datas.start_time | date: 'dd/MM/yyyy'"></div>
-                            <div> - </div>
-                            <div [innerHTML]="this.datas.end_time | date: 'dd/MM/yyyy'"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2"></div>
-        <div class="col-md-5">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <div class="label_item">{{'contract-template.code' | translate}}</div>
-                        <div>
-                            <div [innerHTML]="this.datas.contract_no" class="input_text"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <div class="label_item">{{'contract-template.type' | translate}}</div>
-                        <div>
-                            <div [innerHTML]="contractType" class="input_text"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="labelOrg" style="text-transform: uppercase;">{{'side.sign' | translate}}</div>
-<div class="determine_contact">
-    <div class="user_contact">
-        <div class="label" style="text-transform: uppercase;">{{'organization.me' | translate}}</div>
-        <div class="content_determine">
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <div class="label_item">{{'user.view' | translate}}</div>
-                        <div class="input_text">
-                            <div *ngFor="let item of this.is_origanzation_reviewer">
-                                <div>{{item.name}} - {{item.email}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2"></div>
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <div class="label_item">{{'user.sign' | translate}}</div>
-                        <div class="input_text">
-                            <div *ngFor="let item of this.is_origanzation_signature">
-                                <div>{{item.name}} - {{item.email}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <div class="label_item">{{'user.doc' | translate}}</div>
-                        <div class="input_text">
-                            <div *ngFor="let item of this.is_origanzation_document">
-                                <div>{{item.name}} - {{item.email}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="partner_contact" *ngFor="let record of this.data_parnter_organization;">
-        <div class="label" style="text-transform: uppercase;">{{record.name}}</div>
-        <div class="content_determine">
-            <div class="row" *ngIf="record.type == 2">
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <div class="label_item">{{'user.lead' | translate}}</div>
-                        <div class="input_text">
-                            <div>{{getPartnerCoordinationer(record).length}}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2"></div>
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <div class="label_item">{{'user.view' | translate}}</div>
-                        <div class="input_text">
-                            <div>{{getPartnerReviewer(record).length}}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <div class="label_item">{{'user.sign' | translate}}</div>
-                        <div class="input_text">
-                            <div>{{getPartnerSignature(record).length}}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2"></div>
-                <div class="col-md-5" *ngIf="record.type == 2">
-                    <div class="form-group">
-                        <div class="label_item">{{'user.doc' | translate}}</div>
-                        <div class="input_text">
-                            <div>{{getPartnerDocument(record).length}}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="footer-infor-contract">
-    <div style="width: 200px;">
-        <button (click)="back($event, 'sample-contract')" type="button" name="next" class="next action-button-previous">{{'btn.previous' | translate}}</button>
-    </div>
-    <div class="content_footer"></div>
+<div class="container-fluid" style="padding: 16px;">
+    <div class="labelOrg">{{'contract-template' | translate}}</div>
     <div>
-        <button (click)="preview()" type="button" name="next" class="next action-button-preview">{{'preview' | translate}}</button>
-        <button (click)="SaveContract('finish_contract')" type="button" name="next" class="next action-button pull-right">{{'btn.done' | translate}}</button>
+        <div class="row mt-8px">
+            <div class="col-md-12">
+                <div class="label_item">{{'contract-template.name' | translate}}</div>
+                <div class="content-input mt-6px">
+                    <div [innerHTML]="this.datas.name"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-8px">
+            <div class="col-md-6">
+                <div class="label_item">{{'contract-template.file' | translate}}</div>
+                <div class="content-input mt-6px">
+                    <div [innerHTML]="this.datas.file_name"></div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="label_item">{{'effective-date' | translate}}</div>
+                <div class="content-input mt-6px" style="display: flex;">
+                    <div [innerHTML]="this.datas.start_time | date: 'dd/MM/yyyy'"></div>
+                    <div> - </div>
+                    <div [innerHTML]="this.datas.end_time | date: 'dd/MM/yyyy'"></div>
+                </div>         
+            </div>
+        </div>
+
+        <div class="row mt-8px">
+            <div class="col-md-6">
+                <div class="label_item">{{'contract-template.code' | translate}}</div>
+                <div class="content-input mt-6px">
+                    <div [innerHTML]="this.datas.contract_no"></div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="label_item">{{'contract-template.type' | translate}}</div>
+                <div class="content-input mt-6px">
+                    <div [innerHTML]="contractType"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="labelOrg" style="margin-top: 20px;">{{'side.sign' | translate}}</div>
+
+    <div>
+        <div *ngFor="let item of this.datas.is_determine_clone">
+            <div class="boder-info flex mt-8px">
+                <div class="ordering"> 
+                    <div class="content-index">
+                        {{item.ordering}}
+                    </div>
+                </div>
+
+                <div style="padding: 16px 16px 16px 0px; width: 100%;">
+                    <div class="name-info">{{item.name}}</div>
+
+                    <div class="mt-16px" *ngIf="item.type == 2">
+                        <div class="label">{{'user.lead' | translate}}</div>
+                
+                        <div *ngFor="let reviewer of item.recipients">
+                            <div *ngIf="reviewer.role == 1" class="flex mt-16px">
+                                <div class="content-index">{{reviewer.ordering}}</div>
+                                <div class="item-name">{{reviewer.name}} - {{reviewer.email}}</div>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div class="mt-16px" *ngIf="item.type == 1 || item.type == 2">
+                        <div class="label">{{'user.view' | translate}}</div>
+                
+                        <div *ngFor="let reviewer of item.recipients">
+                            <div *ngIf="reviewer.role == 2" class="flex mt-16px">
+                                <div class="content-index">{{reviewer.ordering}}</div>
+                                <div class="item-name">{{reviewer.name}} - {{reviewer.email}}</div>
+                            </div>
+                        </div>
+                    </div>   
+                
+                    <div class="mt-16px">
+                        <div class="label">{{'user.sign' | translate}}</div>
+                
+                        <div *ngFor="let reviewer of item.recipients">
+                            <div *ngIf="reviewer.role == 3" class="flex mt-16px">
+                                <div class="content-index">{{reviewer.ordering}}</div>
+                                <div class="item-name">{{reviewer.name}} - {{reviewer.email}}</div>
+                            </div>
+                        </div>
+                    </div>  
+                
+                    <div class="mt-16px" *ngIf="item.type == 1 || item.type == 2">
+                        <div class="label">{{'user.doc' | translate}}</div>
+                
+                        <div *ngFor="let reviewer of item.recipients">
+                            <div *ngIf="reviewer.role == 4" class="flex mt-16px">
+                                <div class="content-index">{{reviewer.ordering}}</div>
+                                <div class="item-name">{{reviewer.name}} - {{reviewer.email}}</div>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="determine_contact">
+        <div class="user_contact">
+            <div class="label" style="text-transform: uppercase;">{{'organization.me' | translate}}</div>
+            <div class="content_determine">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <div class="label_item">{{'user.view' | translate}}</div>
+                            <div class="input_text">
+                                <div *ngFor="let item of this.is_origanzation_reviewer">
+                                    <div>{{item.name}} - {{item.email}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <div class="label_item">{{'user.sign' | translate}}</div>
+                            <div class="input_text">
+                                <div *ngFor="let item of this.is_origanzation_signature">
+                                    <div>{{item.name}} - {{item.email}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <div class="label_item">{{'user.doc' | translate}}</div>
+                            <div class="input_text">
+                                <div *ngFor="let item of this.is_origanzation_document">
+                                    <div>{{item.name}} - {{item.email}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="partner_contact" *ngFor="let record of this.data_parnter_organization;">
+            <div class="label" style="text-transform: uppercase;">{{record.name}}</div>
+            <div class="content_determine">
+                <div class="row" *ngIf="record.type == 2">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <div class="label_item">{{'user.lead' | translate}}</div>
+                            <div class="input_text">
+                                <div>{{getPartnerCoordinationer(record).length}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <div class="label_item">{{'user.view' | translate}}</div>
+                            <div class="input_text">
+                                <div>{{getPartnerReviewer(record).length}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <div class="label_item">{{'user.sign' | translate}}</div>
+                            <div class="input_text">
+                                <div>{{getPartnerSignature(record).length}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-5" *ngIf="record.type == 2">
+                        <div class="form-group">
+                            <div class="label_item">{{'user.doc' | translate}}</div>
+                            <div class="input_text">
+                                <div>{{getPartnerDocument(record).length}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+
+    <div class="footer-infor-contract">
+        <div style="width: 200px;">
+            <button (click)="back($event, 'sample-contract')" type="button" name="next" class="next action-button-previous">{{'btn.previous' | translate}}</button>
+        </div>
+        <div class="content_footer"></div>
+        <div>
+            <button (click)="preview()" type="button" name="next" class="next action-button">{{'preview' | translate}}</button>
+            <button (click)="SaveContract('finish_contract')" type="button" name="next" class="next action-button pull-right">{{'btn.done' | translate}}</button>
+        </div>
     </div>
 </div>
 
