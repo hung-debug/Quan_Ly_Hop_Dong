@@ -1082,12 +1082,20 @@ export class ConsiderContractComponent
         ? ''
         : 'none';
     if (d['width']) {
-      style.width = parseInt(d['width']) + 'px';
+      if (d?.sign_unit == 'chu_ky_so' && d?.type_image_signature == 2 && d['width'] == 180) {
+        style.width = 66 + 'px';
+      } else {
+        style.width = parseInt(d['width']) + 'px';
+      }
+
     }
     if (d['height']) {
-      style.height = parseInt(d['height']) + 'px';
+      if (d?.sign_unit == 'chu_ky_so'&& d?.type_image_signature == 2 && d['height'] == 66) {
+        style.height = 66 + 'px';
+      } else {
+        style.height = parseInt(d['height']) + 'px';
+      }
     }
-
     return style;
   }
 

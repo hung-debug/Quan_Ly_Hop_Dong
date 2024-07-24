@@ -367,11 +367,11 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         Array.prototype.push.apply(element.sign_config, data_sign_config_text);
       } else if (element.sign_unit == 'chu_ky_anh') {
         Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
-      } if (element.sign_unit == 'chu_ky_so') { 
+      } if (element.sign_unit == 'chu_ky_so') {
         let targetObject1 = element.type.find((item: any) => item.sign_unit === "chu_ky_so_con_dau_va_thong_tin");
         let targetObject2 = element.type.find((item: any) => item.sign_unit === "chu_ky_so_con_dau");
         let targetObject3 = element.type.find((item: any) => item.sign_unit === "chu_ky_so_thong_tin");
-  
+
         data_sign_config_cks.forEach((data: any) => {
             if (data.type_image_signature === 3) {
                 data.sign_unit = 'chu_ky_so_con_dau_va_thong_tin'
@@ -803,7 +803,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         this.datasForm.contract_user_sign.forEach((res: any) => {
           console.log("res", res)
           if(res.sign_unit == 'chu_ky_so') {
-            for (let i = 0; i < res.type.length; i++) { 
+            for (let i = 0; i < res.type.length; i++) {
               if (res.type[i].sign_config.length > 0) {
                 let arrSignConfigItem = res.type[i].sign_config;
                 arrSignConfigItem.forEach((element: any) => {
@@ -819,12 +819,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                         document.getElementById('text-input-element').focus();
                       }, 10)
                     } else this.isEnableText = false;
-    
+
                     if (res.sign_unit == 'so_tai_lieu') {
-    
+
                       if(this.soHopDong && this.soHopDong.role == 4) {
                         element.name = this.soHopDong.name;
-    
+
                         element.signature_party = this.soHopDong.type_unit;
                         element.recipient_id = this.soHopDong.id;
                         element.status = this.soHopDong.status;
@@ -833,12 +833,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                         element.phone = this.soHopDong.phone;
                       } else if(res.sign_config.length > 0)  {
                         this.soHopDong = {
-    
+
                         };
-    
+
                         for(let j = 0; i < res.type[i].sign_config.length; j++) {
                           let element1 = res.type[i].sign_config[j];
-    
+
                           if(element1.name) {
                             this.soHopDong.name = element1.name;
                             this.soHopDong.type_unit = element1.signature_party;
@@ -850,10 +850,10 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                             break;
                           }
                         }
-    
+
                         if(this.soHopDong && this.soHopDong.name) {
                           element.name = this.soHopDong.name;
-    
+
                           element.signature_party = this.soHopDong.type_unit;
                           element.recipient_id = this.soHopDong.id;
                           element.status = this.soHopDong.status;
@@ -866,7 +866,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                     } else {
                       this.isChangeText = false;
                     }
-    
+
                     // element['number'] = _arrPage[_arrPage.length - 1];
                     element['page'] = _arrPage[_arrPage.length - 1];
                     element['position'] = this.signCurent['position'];
@@ -889,7 +889,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                           element['height'] = '66';
                         }
                       }
-    
+
                       this.objSignInfo.width = element['width'];
                       this.objSignInfo.height = element['height'];
                       this.objSignInfo.text_attribute_name = '';
@@ -924,12 +924,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                       document.getElementById('text-input-element').focus();
                     }, 10)
                   } else this.isEnableText = false;
-  
+
                   if (res.sign_unit == 'so_tai_lieu') {
-  
+
                     if(this.soHopDong && this.soHopDong.role == 4) {
                       element.name = this.soHopDong.name;
-  
+
                       element.signature_party = this.soHopDong.type_unit;
                       element.recipient_id = this.soHopDong.id;
                       element.status = this.soHopDong.status;
@@ -938,12 +938,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                       element.phone = this.soHopDong.phone;
                     } else if(res.sign_config.length > 0)  {
                       this.soHopDong = {
-  
+
                       };
-  
+
                       for(let i = 0; i < res.sign_config.length; i++) {
                         let element1 = res.sign_config[i];
-  
+
                         if(element1.name) {
                           this.soHopDong.name = element1.name;
                           this.soHopDong.type_unit = element1.signature_party;
@@ -955,10 +955,10 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                           break;
                         }
                       }
-  
+
                       if(this.soHopDong && this.soHopDong.name) {
                         element.name = this.soHopDong.name;
-  
+
                         element.signature_party = this.soHopDong.type_unit;
                         element.recipient_id = this.soHopDong.id;
                         element.status = this.soHopDong.status;
@@ -971,7 +971,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                   } else {
                     this.isChangeText = false;
                   }
-  
+
                   // element['number'] = _arrPage[_arrPage.length - 1];
                   element['page'] = _arrPage[_arrPage.length - 1];
                   element['position'] = this.signCurent['position'];
@@ -994,7 +994,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                         element['height'] = '66';
                       }
                     }
-  
+
                     this.objSignInfo.width = element['width'];
                     this.objSignInfo.height = element['height'];
                     this.objSignInfo.text_attribute_name = '';
@@ -1899,12 +1899,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                   } else if (item.sign_unit == 'chu_ky_so_thong_tin') {
                     item['type_image_signature'] = 1;
                   }
-    
+
                   data_remove_arr_request.forEach((item_remove: any) => {
                     delete item[item_remove];
                   });
                 })
-    
+
                 Array.prototype.push.apply(
                   this.data_sample_contract,
                   res.sign_config
@@ -2321,13 +2321,14 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         }
 
         if (this.datasForm.contract_user_sign[i].sign_unit == 'chu_ky_so') {
+          console.log(this.datasForm.contract_user_sign);
           let itemType = this.datasForm.contract_user_sign[i].type;
           console.log("itemType", itemType)
           for (let j = 0; j < itemType.length; j++) {
             let signConfigArray = itemType[j].sign_config;
             for (let n = 0; n < signConfigArray.length; n++) {
               let element = signConfigArray[n];
-  
+
               if(isSaveDraft && element.sign_unit == 'text'){
                 if(element.recipient_id == null && !element.value)
                 count++;
@@ -2397,6 +2398,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                   else arrSign_partner.push(data_sign);
                 }
                 else {
+                  console.log("element.recipient.email", element.email)
                   let data_sign = {
                     name: element.name,
                     signature_party: element.signature_party,
@@ -2410,7 +2412,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                   else arrSign_partner.push(data_sign);
                 }
               }
-  
+
               if(element.coordinate_x) {
                 coordinate_x.push(Number(element.coordinate_x));
                 coordinate_y.push(Number(element.coordinate_y));
@@ -2418,7 +2420,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                 height.push(Number(element.height));
                 boxElements.push(element)
               }
-  
+
             }
             if (count > 0 || count_number > 0 || count_text > 0 || count_text_number > 0 || count_null_input > 0 || count_text_number_null > 0) {
               break;
@@ -2427,7 +2429,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           console.log("arrSign_organization", arrSign_organization)
         }
 
-        
+
       }
 
        //Trường hợp 1: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2 thuộc (y1 đến y1+h) = góc phải dưới
@@ -2717,7 +2719,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             if (element.sign_type.length > 0) {
               console.log("aaa")
               if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) &&
-              arrSign_organization.filter((item: any) => (item.email == element.email || item.phone == element.phone) && 
+              arrSign_organization.filter((item: any) => (item.email == element.email || item.phone == element.phone) &&
               (item.sign_unit == 'chu_ky_so_con_dau_va_thong_tin' || item.sign_unit == 'chu_ky_so_con_dau' || item.sign_unit == 'chu_ky_so_thong_tin')).length == 0) {
                 error_organization++;
                 nameSign_organization.name = element.name;
@@ -2753,7 +2755,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           for (const element of data_partner) {
             if (element.sign_type.length > 0) {
               console.log("bbb")
-              if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && arrSign_partner.filter((item: any) => (item.email == element.email || item.phone == element.phone) && 
+              if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && arrSign_partner.filter((item: any) => (item.email == element.email || item.phone == element.phone) &&
               (item.sign_unit == 'chu_ky_so_con_dau_va_thong_tin' || item.sign_unit == 'chu_ky_so_con_dau' || item.sign_unit == 'chu_ky_so_thong_tin')).length == 0) {
                 countError_partner++;
                 nameSign_partner.name = element.name;
@@ -2789,7 +2791,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           for (const element of data_organization) {
             if (element.sign_type.length > 0) {
               if (element.sign_type.some((p: any) => [3,7,8].includes(p.id) || ([2,4,6].includes(p.id) && element.role !==4)) &&
-              arrSign_organization.filter((item: any) => ((item.email && item.email == element.email) || (item.phone && item.phone == element.phone)) && 
+              arrSign_organization.filter((item: any) => ((item.email && item.email == element.email) || (item.phone && item.phone == element.phone)) &&
               (item.sign_unit == 'chu_ky_so_con_dau_va_thong_tin' || item.sign_unit == 'chu_ky_so_con_dau' || item.sign_unit == 'chu_ky_so_thong_tin')).length == 0) {
                 error_organization++;
                 nameSign_organization.name = element.name;
@@ -2823,7 +2825,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           // valid ký kéo thiếu ô ký cho từng loại ký
           for (const element of data_partner) {
             if (element.sign_type.length > 0) {
-              if (element.sign_type.some((p: any) => [3,7,8].includes(p.id) || ([2,4,6].includes(p.id) && element.role !==4)) && arrSign_partner.filter((item: any) => ((element.email && item.email == element.email) || (element.phone && item.phone == element.phone)) && 
+              if (element.sign_type.some((p: any) => [3,7,8].includes(p.id) || ([2,4,6].includes(p.id) && element.role !==4)) && arrSign_partner.filter((item: any) => ((element.email && item.email == element.email) || (element.phone && item.phone == element.phone)) &&
               (item.sign_unit == 'chu_ky_so_con_dau_va_thong_tin' || item.sign_unit == 'chu_ky_so_con_dau' || item.sign_unit == 'chu_ky_so_thong_tin')).length == 0) {
                 countError_partner++;
                 nameSign_partner.name = element.name;
