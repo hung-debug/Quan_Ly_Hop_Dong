@@ -801,6 +801,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         let field_data = [];
         // lay lai danh sach signer sau khi keo vao hop dong
         this.datasForm.contract_user_sign.forEach((res: any) => {
+          console.log("res", res)
           if(res.sign_unit == 'chu_ky_so') {
             for (let i = 0; i < res.type.length; i++) { 
               if (res.type[i].sign_config.length > 0) {
@@ -835,8 +836,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     
                         };
     
-                        for(let i = 0; i < res.sign_config.length; i++) {
-                          let element1 = res.sign_config[i];
+                        for(let j = 0; i < res.type[i].sign_config.length; j++) {
+                          let element1 = res.type[i].sign_config[j];
     
                           if(element1.name) {
                             this.soHopDong.name = element1.name;
@@ -875,8 +876,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                     if (!this.objDrag[this.signCurent['id']].count) {
                       // element['width'] = this.datasForm.configs.e_document.format_signature_image.signature_width;
                       if (!element.width && !element.height) {
-                        if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
-                          if (res.sign_unit == 'so_tai_lieu' && this.datasForm.contract_no) {
+                        if (res.type[i].sign_unit == 'text' || res.type[i].sign_unit == 'so_tai_lieu') {
+                          if (res.type[i].sign_unit == 'so_tai_lieu' && this.datasForm.contract_no) {
                             element['width'] = '';
                             element['height'] = '';
                           } else {
@@ -2319,8 +2320,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           }
         }
 
-        if (this.datasForm.contract_user_sign[i].sign_unit === 'chu_ky_so') {
+        if (this.datasForm.contract_user_sign[i].sign_unit == 'chu_ky_so') {
           let itemType = this.datasForm.contract_user_sign[i].type;
+          console.log("itemType", itemType)
           for (let j = 0; j < itemType.length; j++) {
             let signConfigArray = itemType[j].sign_config;
             for (let n = 0; n < signConfigArray.length; n++) {
@@ -2422,6 +2424,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               break;
             }
           }
+          console.log("arrSign_organization", arrSign_organization)
         }
 
         
