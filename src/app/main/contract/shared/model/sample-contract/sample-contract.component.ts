@@ -1807,7 +1807,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             isObjSign.status = data_name.status;
             signElement.setAttribute("status", isObjSign.status);
 
-            isObjSign.type = data_name.type;
+            isObjSign.type = data_name.type ? data_name.type : (data_name.fields ? data_name?.fields[0]?.type : '');
             signElement.setAttribute("type", isObjSign.type);
 
             isObjSign.email = data_name.email;
@@ -1894,6 +1894,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               res.type.forEach((element: any) => {
                 element.sign_config.forEach((item: any) => {
                   if (item.id_have_data) {
+                    item.type = 3
                     isHaveFieldId.push(item)
                   } else isNotFieldId.push(item);
                   if (item.name && item.text_attribute_name) {
