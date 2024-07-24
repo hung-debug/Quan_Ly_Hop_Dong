@@ -149,6 +149,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngOnInit() {
     this.onResize();
+    console.log("datas",this.datas);
 
     this.spinner.hide();
 
@@ -641,7 +642,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           if (item.role == 3 || item.role == 4 || item.role == 2) {
             item['type_unit'] = 'organization';
             item['selected'] = false;
-            item['is_disable'] = false;
+            // item['is_disable'] = false;
+            item['is_disable'] = !element?.sign_type?.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6));
             this.list_sign_name.push(item);
           }
         })
@@ -1098,9 +1100,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     }
   }
-
+  countDuplicate: any = 0;
   getCheckSignature(isSignType: any, listSelect?: string) {
+    let arrSign : any = [];
     this.list_sign_name.forEach((element: any) => {
+      console.log("element",element);
       if (this.convertToSignConfig().some((p: any) => (
         (element.login_by == 'phone' ? (p.recipient ? p.recipient.phone : p.phone) == element.phone :
         ((p.recipient ? p.recipient.email : p.email) == element.email)) && p.sign_unit == isSignType) ||
@@ -1114,7 +1118,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               element.is_disable = !(element.sign_type.some((p: any) => [2,4,6].includes(p.id)) || element.role == 4)
             }
           }else if (isSignType == 'chu_ky_so' || isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
-            element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
+            // element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6) || element.sign_type.some((p:any) => element.role == 4 && ![2,4,6].includes(p.id)))
+            if(element.sign_type.some((p:any) => [2,4,6].includes(p.id))){
+              element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6))
+            }
+            
           } else if (isSignType == 'chu_ky_anh') {
             element.is_disable = false
           } else {
@@ -1597,6 +1605,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.isChangeText = false;
     this.soHopDong = {
     };
+    
+    const objIndex = this.list_sign_name.findIndex((obj: any) => obj.id == data.recipient_id);
+    if (objIndex != -1 ) {
+      this.list_sign_name[objIndex].is_disable = false;
+    }
 
     if (data.id_have_data) {
       this.spinner.show();
@@ -1682,7 +1695,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         });
       }
     })
-
     //
     return arrSignConfig;
   }
@@ -1711,6 +1723,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   soHopDong: any;
   changePositionSign(e: any, locationChange: any, property: any) {
+    
+    const objIndex = this.list_sign_name.findIndex((obj: any) => obj.id == e.target.value);
+    this.list_sign_name[objIndex].is_disable = true;
+
     let signElement = document.getElementById(this.objSignInfo.id);
 
     if (signElement) {
@@ -2777,21 +2793,56 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   getName(data: any) {
     let name = ''
+ 
+    const arrOrganization = this.list_sign_name.filter((p:any) =>  p.type_unit == "organization");
+    const arrPartner = this.list_sign_name.filter((p:any) => p.type_unit == "partner");
 
+    const checkEmailOrg = arrOrganization.reduce((acc :any, curr: any) => {
+      const key = curr.email;
+      if (acc[key]) {
+        acc[key].push(curr);
+      } else {
+        acc[key] = [curr];
+      }
+      return acc;
+    });
+    console.log(checkEmailOrg);
+    
+    // const checkEmailPartner = arrPartner.reduce((acc :any, curr: any) => {
+    //   const key = curr.email;
+    //   if (acc[key]) {
+    //     acc[key].push(curr);
+    //   } else {
+    //     acc[key] = [curr];
+    //   }
+    //   return acc;
+    // });
+    // console.log(checkEmailPartner);
+    
     if (data.type_unit == 'organization') {
       if (data.name.length>27) {
         name = data.name.substring(0, 27) + ' ...'
       } else {
         name = data.name
       }
-      return 'Tổ chức của tôi - ' + name;
+      if(data.role != 4){
+        return 'Tổ chức của tôi - ' + name;
+      }
+      else{
+        return 'Tổ chức của tôi - Văn thư - ' + name;
+      }
     } else if (data.type_unit == 'partner') {
       if (data.name.length>35) {
         name = data.name.substring(0, 35) + ' ...'
       } else {
         name = data.name
       }
-      return 'Đối tác - ' + name;
+
+      if(data.role != 4){
+        return 'Đối tác - ' + name;
+      }else{
+        return 'Đối tác - Văn thư - ' + name;
+      }
     }
   }
 

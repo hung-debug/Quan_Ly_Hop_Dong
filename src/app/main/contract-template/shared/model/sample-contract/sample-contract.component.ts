@@ -595,7 +595,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           if (item.role == 3 || item.role == 4 || item.role == 2) {
             item['type_unit'] = 'organization';
             item['selected'] = false;
-            item['is_disable'] = false;
+            // item['is_disable'] = false;
+            item['is_disable'] = !element?.sign_type?.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6));
             item['org_name'] = element.name;
             this.list_sign_name.push(item);
           }
@@ -1083,8 +1084,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (isSignType != 'text' && this.convertToSignConfig().some((p: any) => ((element.email && p.email == element.email) || (element.id && p.recipient_id == element.id)) && p.sign_unit == isSignType)) {
           if (isSignType == 'so_tai_lieu') {
             element.is_disable = false;
-          }else if (isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
-            element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
+          } else if (isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
+            // element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
+            if(element.sign_type.some((p:any) => [2,4,6].includes(p.id))){
+              element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6))
+            }
           } else if (isSignType == 'chu_ky_anh') {
             element.is_disable = false
           } else {
@@ -1541,6 +1545,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let dataHaveId = true;
     this.isChangeText = false;
     this.soHopDong = null;
+    
+    const objIndex = this.list_sign_name.findIndex((obj: any) => obj.id == data.recipient_id);
+    if (objIndex != -1 ) {
+      this.list_sign_name[objIndex].is_disable = false;
+    }
 
     if (data.id_have_data) {
       this.spinner.show();
@@ -1680,6 +1689,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // edit location doi tuong ky
   changePositionSign(e: any, locationChange: any, property: any) {
+    const objIndex = this.list_sign_name.findIndex((obj: any) => obj.id == e.target.value);
+    this.list_sign_name[objIndex].is_disable = true;
+    
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
@@ -2700,14 +2712,24 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       } else {
         name = data.name
       }
-      return 'Tổ chức của tôi - ' + name;
+      if(data.role != 4){
+        return 'Tổ chức của tôi - ' + name;
+      }
+      else{
+        return 'Tổ chức của tôi - Văn thư - ' + name;
+      }
     } else if (data.type_unit == 'partner') {
       if (data.name.length>32) {
         name = data.name.substring(0, 32) + ' ...'
       } else {
         name = data.name
       }
-      return 'Đối tác - ' + name;
+      
+      if(data.role != 4){
+        return 'Đối tác - ' + name;
+      }else{
+        return 'Đối tác - Văn thư - ' + name;
+      }
     }
   }
 

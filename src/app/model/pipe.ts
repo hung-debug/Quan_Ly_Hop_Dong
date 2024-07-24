@@ -34,6 +34,8 @@ export class PipeTrs implements PipeTransform {
       return 'contract.status.processed';
     } else if(value == -1){
       return 'contract.status.share';
+    } else if(value == 2){
+      return 'contract.status.overdue';
     }
     return 'contract.status.undefined';
   }

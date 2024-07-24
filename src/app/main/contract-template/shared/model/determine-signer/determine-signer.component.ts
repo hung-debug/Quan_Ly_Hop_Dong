@@ -775,19 +775,104 @@ export class DetermineSignerComponent implements OnInit {
 
   getCheckDuplicateEmail(isParty: string, dataValid?: any) {
     let arrCheckEmail = [];
+    let arrPartyOriganzation = [];
+    
+    if (isParty == "allCheckEmail") {
+      function removeDuplicatesKeepRole4(arr: any) {
+        const emailTracker: any = {};
+        const result: any = [];
+
+        for (const item of arr) {
+          const { email, role } = item;
+
+          if (!emailTracker[email]) {
+            // Email chưa tồn tại trong emailTracker
+            emailTracker[email] = item;
+            result.push(item);
+          } else if (role === 4 && emailTracker[email].role !== 4) {
+            // Email đã tồn tại nhưng role của item hiện tại là 4
+            // và role của item đã được lưu trước đó không phải là 4
+            // Cập nhật phần tử trong result
+            const index = result.indexOf(emailTracker[email]);
+            result[index] = item;
+            emailTracker[email] = item;
+          }
+        }
+        return result;
+      }
+
+      let dta: any = []
+      dataValid.map((y: any) => {
+        dta = [...dta, { ...y, recipients: removeDuplicatesKeepRole4(y.recipients) }];
+      })
+      let dt: any = []
+      dta.map((x: any) => {
+        dt = [...dt, ...x.recipients]
+      })
+
+      const dataVT = dt.filter((y: any) => y.role === 4)
+      const dataNVT = dt.filter((y: any) => y.role !== 4)
+
+      //kiểm tra xem có văn thư trùng mail nào không trong mảng VT
+      function hasDuplicateEmails(dataVT: any) {
+        const emailTracker: any = {};
+        for (const item of dataVT) {
+          if (emailTracker[item.email]) {
+            return true; // Đã tìm thấy email trùng
+          }
+          emailTracker[item.email] = true;
+        }
+
+        return false; // Không tìm thấy email trùng
+      }
+      hasDuplicateEmails(dataVT)
+      if (hasDuplicateEmails(dataVT)) {
+        return true;
+      }
+
+      //kiểm tra có phần tử nào mảng VT trùng với phần tử trong mảng không VT hay không
+      var commonEmails = dataVT.filter((item1: any) =>
+        dataNVT.some((item2: any) => item1.email === item2.email)
+      );
+      if (commonEmails.length > 0) {
+        return true;
+      }
+    }
+    
     // valid email đối tác và các bên tham gia
     if (isParty != 'only_party_origanzation') {
       let arrEmail = [];
+      let emailCheckInMyPartNer = [];
+      let countCheck_duplicate_emailPartner = 0;
+      
       for (let i = 0; i < dataValid.length; i++) {
         const element = dataValid[i].recipients;
+        let listEmailInMyPartNer = dataValid[i].recipients.filter((p: any) => p.role === 4)
+        
         for (let j = 0; j < element.length; j++) {
-          if (element[j].email) {
+          if (element[j].email && element[j].role != 4) {
             let items = {
               email: element[j].email,
               role: element[j].role
             }
             // arrCheckEmail.push(element[j].email);
             arrEmail.push(items);
+            if (isParty == "only_party_partner" && element[j].type_unit == "partner" && element[j].role == 4) {
+              if (listEmailInMyPartNer[i]?.role == 4 || listEmailInMyPartNer[j]?.role == 4 || listEmailInMyPartNer?.role == 4) {
+                emailCheckInMyPartNer.push(listEmailInMyPartNer)
+              }
+
+              for (const dataMypartNer of emailCheckInMyPartNer) {
+                for (const d of dataMypartNer) {
+                  if (listEmailInMyPartNer[i]?.email == d?.email && listEmailInMyPartNer[i]?.role == d?.role) {
+                    countCheck_duplicate_emailPartner++;
+                  }
+                }
+              }
+              if (countCheck_duplicate_emailPartner >= 2) {
+                return true;
+              }
+            }
           }
         }
       }
@@ -802,9 +887,28 @@ export class DetermineSignerComponent implements OnInit {
 
     } else {
       // valid email tổ chức của tôi
+      let emailCheckInMyOrg = [];
+      let lstEmailInMyOrg = dataValid.filter((p: any) => p.role == 4);
+      let countCheck_duplicate = 0;
+      
+      arrPartyOriganzation.push(dataValid);
       for (let i = 0; i < dataValid.length; i++) {
-        if (dataValid[i].email) {
+        if (dataValid[i].email && dataValid[i].role != 4) {
           arrCheckEmail.push(dataValid[i].email);
+        }
+      }
+      
+      for (let i = 0; i < lstEmailInMyOrg.length; i++) {
+        if (lstEmailInMyOrg[i].role == 4) {
+          emailCheckInMyOrg.push(lstEmailInMyOrg[i]);
+        }
+        for (const d of emailCheckInMyOrg) {
+          if (lstEmailInMyOrg[i].email == d.email && lstEmailInMyOrg[i].role == d.role) {
+            countCheck_duplicate++;
+          }
+        }
+        if (countCheck_duplicate >= 2) {
+          return true;
         }
       }
     }

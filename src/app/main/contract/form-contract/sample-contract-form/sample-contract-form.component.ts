@@ -611,7 +611,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           if (item.role == 3 || item.role == 4 || item.role == 2) {
             item['type_unit'] = 'organization';
             item['selected'] = false;
-            item['is_disable'] = false;
+            // item['is_disable'] = false;
+            item['is_disable'] = !element?.sign_type?.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6));
             // item['id'] = item.id;
             this.list_sign_name.push(item);
           }
@@ -1051,8 +1052,11 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             if (isSignType != 'text') {
               if(isSignType == 'so_tai_lieu') {
                 element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role == 4)
-              }else if (isSignType == 'chu_ky_so' || isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
-                element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
+              } else if (isSignType == 'chu_ky_so' || isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
+                // element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
+                if(element.sign_type.some((p:any) => [2,4,6].includes(p.id))){
+                  element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6))
+                }
               } else if (isSignType == 'chu_ky_anh') {
                 element.is_disable = false
               } else {
@@ -1489,6 +1493,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   async onCancel(e: any, data: any) {
     let dataHaveId = true;
     this.isChangeText = false;
+    
+    const objIndex = this.list_sign_name.findIndex((obj: any) => obj.id == data.recipient_id);
+    if (objIndex != -1 ) {
+      this.list_sign_name[objIndex].is_disable = false;
+    }
+    
     if (data.id_have_data && this.router.url.includes("edit")) {
       this.spinner.show();
       await this.contractService.deleteInfoContractSignature(data.id_have_data).toPromise().then((res: any) => {
@@ -1627,6 +1637,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   // edit location doi tuong ky
   soHopDong: any;
   changePositionSign(e: any, locationChange: any, property: any) {
+    const objIndex = this.list_sign_name.findIndex((obj: any) => obj.id == e.target.value);
+    this.list_sign_name[objIndex].is_disable = true;
+    
     let signElement = document.getElementById(this.objSignInfo.id);
 
     if (signElement) {
