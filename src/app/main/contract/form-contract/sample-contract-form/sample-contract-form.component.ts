@@ -2881,22 +2881,73 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   }
 
   getName(data: any) {
-    let name = ''
-
+    let name = '';
+    
+    const arrOrganization = this.list_sign_name.filter((p:any) =>  p.type_unit == "organization");
+    const arrPartner = this.list_sign_name.filter((p:any) => p.type_unit == "partner");
+    
+    const duplicatesOrg : any = [];
+    arrOrganization.forEach((el: any, i: any) => {
+      arrOrganization.forEach((element: any, index: any) => {
+        if (i === index) return null;
+          if (element.email === el.email) {
+            if (!duplicatesOrg.includes(el)) duplicatesOrg.push(el);
+          }
+      });
+    });
+    
+    const duplicatesPartner : any = [];
+    arrPartner.forEach((el1: any, i1: any) => {
+      arrPartner.forEach((element1: any, index1: any) => {
+        if (i1 === index1) return null;
+          if (element1.email === el1.email) {
+            if (!duplicatesPartner.includes(el1)) duplicatesPartner.push(el1);
+          }
+      });
+    });
+    
     if (data.type_unit == 'organization') {
       if (data.name.length>27) {
         name = data.name.substring(0, 27) + ' ...'
       } else {
         name = data.name
       }
-      return 'Tổ chức của tôi - ' + name;
+      if(data.role == 3){
+        return 'Tổ chức của tôi - ' + name;
+      }
+      else if(data.role == 4 && duplicatesOrg.length == 2){
+        return 'Tổ chức của tôi - Văn thư - ' + name;
+      } 
+      else if(data.role == 4 && duplicatesOrg.length != 2){
+        return 'Tổ chức của tôi - ' + name;
+      } 
+      else if(data.role == 2){
+        return 'Tổ chức của tôi - ' + name;
+      }
+      else if(data.role == 1){
+        return 'Tổ chức của tôi - ' + name;
+      }
+      
     } else if (data.type_unit == 'partner') {
       if (data.name.length>35) {
         name = data.name.substring(0, 35) + ' ...'
       } else {
         name = data.name
       }
-      return 'Đối tác - ' + name;
+
+      if(data.role == 3){
+        return 'Đối tác - ' + name;
+      }else if(data.role == 4 && duplicatesPartner.length == 2){
+        return 'Đối tác - Văn thư - ' + name;
+      }else if(data.role == 4 && duplicatesOrg.length != 2){
+        return 'Đối tác - ' + name;
+      }
+      else if(data.role == 2){
+        return 'Đối tác - ' + name;
+      }
+      else if(data.role == 1){
+        return 'Đối tác - ' + name;
+      }
     }
   }
 
