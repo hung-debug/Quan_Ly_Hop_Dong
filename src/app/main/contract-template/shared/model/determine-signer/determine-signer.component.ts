@@ -857,19 +857,20 @@ export class DetermineSignerComponent implements OnInit {
             }
             // arrCheckEmail.push(element[j].email);
             arrEmail.push(items);
-            if (isParty == "only_party_partner" && element[j].type_unit == "partner" && element[j].role == 4) {
-              if (listEmailInMyPartNer[i]?.role == 4 || listEmailInMyPartNer[j]?.role == 4 || listEmailInMyPartNer?.role == 4) {
-                emailCheckInMyPartNer.push(listEmailInMyPartNer)
-              }
-
-              for (const dataMypartNer of emailCheckInMyPartNer) {
-                for (const d of dataMypartNer) {
-                  if (listEmailInMyPartNer[i]?.email == d?.email && listEmailInMyPartNer[i]?.role == d?.role) {
-                    countCheck_duplicate_emailPartner++;
-                  }
-                }
-              }
-              if (countCheck_duplicate_emailPartner >= 2) {
+            
+            if (isParty == "only_party_partner") {
+              const duplicatesPartner : any = [];
+              listEmailInMyPartNer.forEach((el: any, i: any) => {
+                listEmailInMyPartNer.forEach((element: any, index: any) => {
+                  if (i === index) return null;
+                    if (element.email === el.email) {
+                      if (!duplicatesPartner.includes(el)) duplicatesPartner.push(el);
+                    }
+                });
+              });
+              
+              console.log("duplicatesPartner",duplicatesPartner);
+              if (duplicatesPartner.length >= 2) {
                 return true;
               }
             }
@@ -898,18 +899,17 @@ export class DetermineSignerComponent implements OnInit {
         }
       }
       
-      for (let i = 0; i < lstEmailInMyOrg.length; i++) {
-        if (lstEmailInMyOrg[i].role == 4) {
-          emailCheckInMyOrg.push(lstEmailInMyOrg[i]);
-        }
-        for (const d of emailCheckInMyOrg) {
-          if (lstEmailInMyOrg[i].email == d.email && lstEmailInMyOrg[i].role == d.role) {
-            countCheck_duplicate++;
-          }
-        }
-        if (countCheck_duplicate >= 2) {
-          return true;
-        }
+      const duplicatesOrg : any = [];
+      lstEmailInMyOrg.forEach((el: any, i: any) => {
+        lstEmailInMyOrg.forEach((element: any, index: any) => {
+          if (i === index) return null;
+            if (element.email === el.email) {
+              if (!duplicatesOrg.includes(el)) duplicatesOrg.push(el);
+            }
+        });
+      });
+      if (duplicatesOrg.length >= 2) {
+        return true;
       }
     }
 
