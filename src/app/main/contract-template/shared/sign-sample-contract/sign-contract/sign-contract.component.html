@@ -1,12 +1,11 @@
 <div *ngIf="sign.sign_unit === 'chu_ky_anh'" class="content">
-  <div class="stamp-content">
-    <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/new-icon-chu-ky-so.svg' : 'assets/img/new-icon-chu-ky-so.svg'"
-      alt="mobifone.contract">
+  <div class="stamp-content item-left">
+    <img src='assets/img/stamp.svg' alt="mobifone.contract">
+    <div class="font-sign">Chữ ký ảnh</div>
   </div>
-  <div class="sign-info-content">
-    <span style="color: #106DB6;" *ngIf="sign.sign_unit == 'chu_ky_anh'; then content else other_content"></span>
-    <ng-template #content>Thông tin chữ ký ảnh</ng-template>
-    <ng-template #other_content>Thông tin chữ ký số</ng-template>
+  <div class="sign-info-content item-right">
+    <img src='assets/img/only_info.svg' alt="mobifone.contract">
+    <div class="font-sign">Thông tin chữ ký</div>
   </div>
 </div>
 

@@ -204,7 +204,10 @@ export class ConsiderContractComponent
   signBoxData: any = {};
 
   defaultValue: number = 100;
-  objectSignUnit: any;
+  objectSignOnlyInfo: any;
+  objectText: any;
+  objectContractNo: any;
+  arrayImage: any;
 
 
   constructor(
@@ -535,7 +538,10 @@ export class ConsiderContractComponent
         await this.getVersionUsbToken(this.orgId);
 
         this.datas = this.data_contract;
-        this.objectSignUnit = this.datas?.is_data_object_signature?.find((data: any) => data?.type_image_signature == 1)
+        this.objectSignOnlyInfo = this.datas?.is_data_object_signature?.find((data: any) => data.type == 3 && data?.type_image_signature == 1)
+        this.objectText = this.datas?.is_data_object_signature?.find((data: any) => data.type == 1)
+        this.objectContractNo = this.datas?.is_data_object_signature?.find((data: any) => data.type == 4)
+        this.arrayImage = this.datas?.is_data_object_signature?.filter((data: any) => data.type !== 4 && data.type !== 1 && (data.type == 3 && data?.type_image_signature !== 1))
         if (this.datas?.is_data_contract?.type_id) {
           this.contractService.getContractTypes(this.datas?.is_data_contract?.type_id).subscribe((data) => {
             if (this.datas?.is_data_contract) {
@@ -1598,7 +1604,7 @@ export class ConsiderContractComponent
               ) {
                 let swalfire = null;
                 if (typeSignDigital) {
-                  if (this.objectSignUnit && this.objectSignUnit?.type_image_signature == 1) {
+                  if (this.arrayImage?.length == 0) {
                     this.markImage = false;
                      this.checkPopup(haveSignPKI, haveSignImage, haveSignHsm, haveSignCert, haveSignRemote);
                   } else {
