@@ -28,9 +28,14 @@
                   <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span>
                     <!-- <span style="color: #8B8B8B" *ngIf="d.type != 3 && d.name_company">{{d.name_company}}</span> -->
                     <span style="color: #EE7200" *ngIf="d.type == 1 && d.user_in_organization">{{d.user_in_organization}}</span>
-                    <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'vi' || !this.lang">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name : ''}}</span>
-
+                  <ng-template [ngIf]="d.role !== 1 && d.role !== 2">
+                    <span style="color: dimgray"
+                          *ngIf="d.typeOfSign && this.lang == 'vi' || !this.lang">{{'user.sign-type' | translate}}
+                      : {{d.typeOfSign.name ? d.typeOfSign.name : ''}}</span>
+                  </ng-template>
+                  <ng-template [ngIf]="d.role !== 1 && d.role !== 2">
                     <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'en'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name.replace("Ký ảnh và OTP"," Sign by OTP").replace("Ký eKYC","Sign eKYC").replace("Ký số bằng","Sign by").replace("và","and"): ''}}</span>
+                  </ng-template>
                     <span style="color: dimgray" *ngIf="d.card_id && !(d.typeOfSign.id == 1 || d.typeOfSign.id == 3 || d.typeOfSign.id == 7) ">MST/CCCD: {{d.card_id}}</span>
                 </div>
 
@@ -77,10 +82,12 @@
                     <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span>
                     </div>
                     <span style="color: #8B8B8B" *ngIf="d.type != 3 && d.name_company">{{d.name_company}}</span>
-
+                  <ng-template [ngIf]="d.role !== 1 && d.role !== 2">
                     <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'vi'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name}}</span>
-
+                  </ng-template>
+                  <ng-template [ngIf]="d.role !== 1 && d.role !== 2">
                     <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'en'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name.replace("Ký số bằng","Sign by").replace("và","and").replace("ảnh","OTP")}}</span>
+                  </ng-template>
                 </div>
 
                 <div class="col-md-4" style="display: flex; flex-direction: column;text-align: center">
