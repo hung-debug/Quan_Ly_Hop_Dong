@@ -42,7 +42,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   @Output() stepChangeInfoContract = new EventEmitter<string>();
   @ViewChild('nameContract') nameContract: ElementRef;
-
+  @ViewChild('divFileAttach') divFileAttach: ElementRef;
+  @ViewChild('contractImg') contractImg: ElementRef;
 
   //upload file
   selectedFiles?: FileList;
@@ -193,6 +194,25 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     setTimeout(() => {
       this.nameContract.nativeElement.focus();
     }, 0)
+
+    this.adjustImagePosition();
+    this.divFileAttach.nativeElement.addEventListener('scroll', () => this.adjustImagePosition());
+    new MutationObserver(() => this.adjustImagePosition()).observe(this.divFileAttach.nativeElement, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+  }
+
+  adjustImagePosition() {
+    const divFileAttach = this.divFileAttach.nativeElement;
+    const contractImg = this.contractImg.nativeElement;
+    
+    if (divFileAttach.scrollHeight > divFileAttach.clientHeight) {
+      contractImg.classList.add('shifted');
+    } else {
+      contractImg.classList.remove('shifted');
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {

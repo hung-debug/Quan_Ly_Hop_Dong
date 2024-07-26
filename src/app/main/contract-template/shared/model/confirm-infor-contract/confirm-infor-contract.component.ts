@@ -124,6 +124,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           res.type.forEach((element: any) => {
             element.sign_config.forEach((item: any) => {
               if (item.id_have_data) {
+                item.type = 3;
                 isHaveFieldId.push(item)
               } else isNotFieldId.push(item);
               if(item.sign_unit == 'text') {

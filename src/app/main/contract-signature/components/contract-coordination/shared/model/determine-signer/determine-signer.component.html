@@ -9,7 +9,7 @@
     </div>
     <div class="col-md-11 contract--content">
       <div class="contract__content--title">
-        <div style="width: 72px">{{ "doi_tac" | translate | uppercase }} -</div>
+        <div style="width: 72px">{{ "doi_tac" | translate }}</div>
         <input type="text" placeholder="{{
             (item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate
           }}" [(ngModel)]="item.name" [disabled]="item.type == 3" />

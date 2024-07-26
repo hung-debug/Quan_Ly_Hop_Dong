@@ -742,7 +742,7 @@
       </div>
 
       <!-- to chuc cua toi - nguoi van thu -->
-      <div>
+      <div class="mt-20px">
         <div class="label">
           {{ 'user.doc' | translate }}
           <span *ngIf="getOriganzationDocument().length > 0">
@@ -1065,7 +1065,7 @@
           [(ngModel)]="item.ordering"
           oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
 
-        <div class="organization-me">{{ "doi_tac" | translate | uppercase }}&nbsp;<span style="color: red">*</span>
+        <div class="organization-me">{{ "doi_tac" | translate }}&nbsp;<span style="color: red">*</span>
         </div>
 
         <div style="margin-right: 10px;">
@@ -1142,7 +1142,7 @@
 
                     <div class="col-md-6" style="padding-left: 7px;">
                       <div class="label-text flex">
-                        Email&nbsp;<span class="required-title">*</span>&nbsp;-&nbsp;
+                        Email&nbsp;<span class="required-title">*</span>&nbsp;&nbsp;
                         <div style="color: #ffc107">
                           ({{
                           "Chỉ được trùng với email trong cùng tổ chức"
@@ -1231,7 +1231,7 @@
           </div>
 
           <!-- doi tac - nguoi xem xet -->
-          <div class="mt-7px">
+          <div class="mt-20px">
             <div class="label">
               {{ 'user.view' | translate }}
               <span *ngIf="getPartnerReviewer(item).length > 0">
@@ -1537,7 +1537,7 @@
           </div>
 
           <!-- doi tac - nguoi ky -->
-          <div class="mt-7px">
+          <div class="mt-20px">
             <div class="label">
               {{ 'user.sign' | translate }}
               <span *ngIf="getPartnerSignature(item).length > 0">
@@ -1970,7 +1970,7 @@
           </div>
 
           <!-- doi tac - nguoi van thu -->
-          <div class="mt-7px">
+          <div class="mt-20px">
             <div class="label">
               {{ 'user.doc' | translate }}
               <span *ngIf="getPartnerDocument(item).length > 0">
