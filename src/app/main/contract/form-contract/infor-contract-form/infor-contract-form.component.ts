@@ -45,6 +45,9 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   @Output() stepChangeInfoContractForm = new EventEmitter<string>();
   @Input() save_draft_infor_form: any;
   @ViewChild('nameContract') nameContract: ElementRef;
+  @ViewChild('divFileAttach') divFileAttach: ElementRef;
+  @ViewChild('contractImg') contractImg: ElementRef;
+  
   typeList: Array<any> = [];
   typeListForm: Array<any> = [];
   type_id: any;
@@ -235,6 +238,25 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.nameContract.nativeElement.focus();
     }, 0);
+
+    this.adjustImagePosition();
+    this.divFileAttach.nativeElement.addEventListener('scroll', () => this.adjustImagePosition());
+    new MutationObserver(() => this.adjustImagePosition()).observe(this.divFileAttach.nativeElement, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+  }
+
+  adjustImagePosition() {
+    const divFileAttach = this.divFileAttach.nativeElement;
+    const contractImg = this.contractImg.nativeElement;
+    
+    if (divFileAttach.scrollHeight > divFileAttach.clientHeight) {
+      contractImg.classList.add('shifted');
+    } else {
+      contractImg.classList.remove('shifted');
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
