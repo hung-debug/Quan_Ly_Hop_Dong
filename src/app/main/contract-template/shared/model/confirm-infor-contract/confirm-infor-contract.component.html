@@ -4,7 +4,7 @@
         <div class="row mt-8px">
             <div class="col-md-12">
                 <div class="label_item">{{'contract-template.name' | translate}}</div>
-                <div class="content-input mt-6px">
+                <div class="content-input mt-6px hover-item">
                     <div [innerHTML]="this.datas.name"></div>
                 </div>
             </div>
@@ -13,14 +13,14 @@
         <div class="row mt-8px">
             <div class="col-md-6">
                 <div class="label_item">{{'contract-template.file' | translate}}</div>
-                <div class="content-input mt-6px">
+                <div class="content-input mt-6px hover-item">
                     <div [innerHTML]="this.datas.file_name"></div>
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="label_item">{{'effective-date' | translate}}</div>
-                <div class="content-input mt-6px" style="display: flex;">
+                <div class="content-input mt-6px hover-item" style="display: flex;">
                     <div [innerHTML]="this.datas.start_time | date: 'dd/MM/yyyy'"></div>
                     <div> - </div>
                     <div [innerHTML]="this.datas.end_time | date: 'dd/MM/yyyy'"></div>
@@ -31,14 +31,14 @@
         <div class="row mt-8px">
             <div class="col-md-6">
                 <div class="label_item">{{'contract-template.code' | translate}}</div>
-                <div class="content-input mt-6px">
+                <div class="content-input mt-6px hover-item">
                     <div [innerHTML]="this.datas.contract_no"></div>
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="label_item">{{'contract-template.type' | translate}}</div>
-                <div class="content-input mt-6px">
+                <div class="content-input mt-6px hover-item">
                     <div [innerHTML]="contractType"></div>
                 </div>
             </div>
@@ -60,45 +60,69 @@
                     <div class="name-info">{{item.name}}</div>
 
                     <div class="mt-16px" *ngIf="item.type == 2">
-                        <div class="label">{{'user.lead' | translate}}</div>
+                        <div class="label">{{'user.lead' | translate}}
+                            <span *ngIf="getPartnerCoordinationer(item).length > 0">
+                                &nbsp;({{ getPartnerCoordinationer(item).length }})
+                            </span>
+                        </div>
                 
                         <div *ngFor="let reviewer of item.recipients">
                             <div *ngIf="reviewer.role == 1" class="flex mt-16px">
                                 <div class="content-index">{{reviewer.ordering}}</div>
-                                <div class="item-name">{{reviewer.name}} - {{reviewer.email}}</div>
+                                <div class="item-name">
+                                    {{ reviewer.name }} <span *ngIf="reviewer.email" class="color-email-or-phone">({{ reviewer.email }})</span>
+                                </div>
                             </div>
                         </div>
                     </div> 
 
                     <div class="mt-16px" *ngIf="item.type == 1 || item.type == 2">
-                        <div class="label">{{'user.view' | translate}}</div>
+                        <div class="label">{{'user.view' | translate}}
+                            <span *ngIf="getPartnerReviewer(item).length > 0">
+                                &nbsp;({{ getPartnerReviewer(item).length }})
+                            </span>
+                        </div>
                 
                         <div *ngFor="let reviewer of item.recipients">
                             <div *ngIf="reviewer.role == 2" class="flex mt-16px">
                                 <div class="content-index">{{reviewer.ordering}}</div>
-                                <div class="item-name">{{reviewer.name}} - {{reviewer.email}}</div>
+                                <div class="item-name">
+                                    {{ reviewer.name }} <span *ngIf="reviewer.email" class="color-email-or-phone">({{ reviewer.email }})</span>
+                                </div>
                             </div>
                         </div>
                     </div>   
                 
                     <div class="mt-16px">
-                        <div class="label">{{'user.sign' | translate}}</div>
+                        <div class="label">{{'user.sign' | translate}}
+                            <span *ngIf="getPartnerSignature(item).length > 0">
+                                &nbsp;({{ getPartnerSignature(item).length }})
+                            </span>
+                        </div>
                 
                         <div *ngFor="let reviewer of item.recipients">
                             <div *ngIf="reviewer.role == 3" class="flex mt-16px">
                                 <div class="content-index">{{reviewer.ordering}}</div>
-                                <div class="item-name">{{reviewer.name}} - {{reviewer.email}}</div>
+                                <div class="item-name">
+                                    {{ reviewer.name }} <span *ngIf="reviewer.email" class="color-email-or-phone">({{ reviewer.email }})</span>
+                                </div>
                             </div>
                         </div>
                     </div>  
                 
                     <div class="mt-16px" *ngIf="item.type == 1 || item.type == 2">
-                        <div class="label">{{'user.doc' | translate}}</div>
+                        <div class="label">{{'user.doc' | translate}}
+                            <span *ngIf="getPartnerDocument(item).length > 0">
+                                &nbsp;({{ getPartnerDocument(item).length }})
+                            </span>
+                        </div>
                 
                         <div *ngFor="let reviewer of item.recipients">
                             <div *ngIf="reviewer.role == 4" class="flex mt-16px">
                                 <div class="content-index">{{reviewer.ordering}}</div>
-                                <div class="item-name">{{reviewer.name}} - {{reviewer.email}}</div>
+                                <div class="item-name">
+                                    {{ reviewer.name }} <span *ngIf="reviewer.email" class="color-email-or-phone">({{ reviewer.email }})</span>
+                                </div>
                             </div>
                         </div>
                     </div>  

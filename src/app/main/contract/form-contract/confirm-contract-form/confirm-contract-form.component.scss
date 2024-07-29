@@ -157,3 +157,11 @@
   line-height: 21px;
   margin: auto 0px auto 16px;
 }
+
+.hover-item:hover {
+  border: 1px solid #286CF5 !important; /* Thay đổi màu viền khi hover */
+}
+
+.color-email-or-phone {
+  color: #A8B5CE !important;
+}

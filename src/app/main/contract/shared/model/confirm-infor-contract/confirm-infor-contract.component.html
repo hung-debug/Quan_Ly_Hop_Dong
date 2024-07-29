@@ -52,7 +52,9 @@
                         <div *ngFor="let reviewer of item.recipients">
                             <div *ngIf="reviewer.role == 1" class="flex mt-16px">
                                 <div class="content-index">{{reviewer.ordering}}</div>
-                                <div class="item-name">{{reviewer.name}} - {{reviewer.email}}</div>
+                                <div class="item-name">
+                                    {{ reviewer.name }} <span *ngIf="reviewer.email" class="color-email-or-phone">({{ reviewer.email }})</span>
+                                </div>      
                             </div>
                         </div>
                     </div> 
@@ -67,7 +69,9 @@
                         <div *ngFor="let reviewer of item.recipients">
                             <div *ngIf="reviewer.role == 2" class="flex mt-16px">
                                 <div class="content-index">{{reviewer.ordering}}</div>
-                                <div class="item-name">{{reviewer.name}} - {{reviewer.email}}</div>
+                                <div class="item-name">
+                                    {{ reviewer.name }} <span *ngIf="reviewer.email" class="color-email-or-phone">({{ reviewer.email }})</span>
+                                </div>                                  
                             </div>
                         </div>
                     </div>   
@@ -82,7 +86,9 @@
                         <div *ngFor="let reviewer of item.recipients">
                             <div *ngIf="reviewer.role == 3" class="flex mt-16px">
                                 <div class="content-index">{{reviewer.ordering}}</div>
-                                <div class="item-name">{{reviewer.name}} - {{reviewer.email}}</div>
+                                <div class="item-name">
+                                    {{ reviewer.name }} <span *ngIf="reviewer.email" class="color-email-or-phone">({{ reviewer.email }})</span>
+                                </div>                                  
                             </div>
                         </div>
                     </div>  
@@ -97,7 +103,9 @@
                         <div *ngFor="let reviewer of item.recipients">
                             <div *ngIf="reviewer.role == 4" class="flex mt-16px">
                                 <div class="content-index">{{reviewer.ordering}}</div>
-                                <div class="item-name">{{reviewer.name}} - {{reviewer.email}}</div>
+                                <div class="item-name">
+                                    {{ reviewer.name }} <span *ngIf="reviewer.email" class="color-email-or-phone">({{ reviewer.email }})</span>
+                                </div>                                  
                             </div>
                         </div>
                     </div>  
