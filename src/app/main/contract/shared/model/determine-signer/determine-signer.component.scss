@@ -876,3 +876,74 @@ input[type=number] {
   background-size: cover; /* Đảm bảo ảnh bao phủ toàn bộ vùng */
   transform: translate(-50%, -50%);
 }  
+
+.dropdown-container {
+  display: flex;
+  align-items: center; /* Align items vertically in the center */
+  width: 106px; /* Fixed width for dropdown container */
+  margin-left: 7px; /* Adjust margin to fit the layout */
+}
+
+:host ::ng-deep {
+  .p-dropdown, .p-multiselect {
+    border: 1px solid #E6EDFA;
+    border-radius: 5px;
+    height: 24px;
+    width: 100%;
+    outline: 0;
+    color: #00186D !important;
+    position: relative;
+    display: flex; /* Ensure proper alignment */
+    align-items: center; /* Vertically align items */
+  }
+
+  .p-dropdown-label {
+    display: flex; /* Ensure alignment of label content */
+    align-items: center; /* Center the text vertically */
+    padding: 0 10px; /* Adjust padding as needed */
+    height: 100%; /* Ensure the height is consistent */
+  }
+
+  .p-dropdown-label::after, .p-multiselect-label::after {
+    content: '';
+    background-image: url('../../../../../../assets/img/arrow-down.png'); /* Replace with your image URL */
+    background-size: 24px 24px;
+    background-repeat: no-repeat;
+    position: absolute;
+    right: 5px; /* Adjust to position the icon correctly */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+  }
+
+  .p-dropdown .p-dropdown-trigger, .p-multiselect .p-multiselect-trigger {
+    display: none; /* Hide the default dropdown icon */
+  }
+  
+  .p-multiselect .p-multiselect-label.p-placeholder, .p-dropdown .p-dropdown-label.p-placeholder {
+    color: #AEC7E5 !important;
+    font-size: 12px !important;
+    font-weight: 500;
+    line-height: 21px; /* Adjust line-height for proper vertical alignment */
+  }
+}
+
+.col-md-6-tru {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: calc(50% - 130px); /* Trừ đi 106px từ chiều rộng của cột col-md-6 */
+  }
+
+  @media (max-width: 991px) {
+    margin-top: 16px !important;
+    width: 100%; /* Đảm bảo cột chiếm 100% chiều rộng trên màn hình nhỏ hơn */
+  }
+}
+
+.no-focus {
+  &:focus {
+    outline: none; /* Ensure no outline on focus */
+    box-shadow: none; /* Remove box-shadow */
+  }
+}

@@ -97,7 +97,7 @@ input[type="file"] {
         border: 1px solid #E6EDFA;
         padding: 12px 10px;
         //cursor: pointer;
-        max-height: 48px;
+        max-height: 113px;
         overflow-y: auto;
 
         &:hover {
@@ -118,9 +118,14 @@ input[type="file"] {
         position: absolute;
         top: 12px;
         right: 10px;
-      }
-      >img:hover{
-        cursor: pointer;
+
+        &.shifted {
+          right: 26px;
+        }
+
+        &:hover{
+          cursor: pointer;
+        }
       }
     }
   }
@@ -299,7 +304,7 @@ button {
   
   .p-multiselect .p-multiselect-label.p-placeholder, .p-dropdown .p-dropdown-label.p-placeholder {
     color: #AEC7E5 !important;
-    font-size: 12px;
+    font-size: 12px !important;
     font-weight: 500;
     line-height: 21px;
   }

@@ -87,7 +87,10 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   eKYCContractBuy: any;
   smsContractBuy: any;
   isButtonDisabled: boolean = false;
-
+  localeList = [
+    { id: 'vi', name: 'Tiếng Việt' },
+    { id: 'en', name: 'Tiếng Anh' }
+  ];
   site: string;
   isOrderValueValid: boolean = true
   get determineContract() {
@@ -161,6 +164,16 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     })
   }
 
+  changeLocale(event: any, d: any) {
+    d.locale = event.value;
+    this.updateDropdownButtonText(d);
+  }
+
+  updateDropdownButtonText(d: any) {
+    const selectedLocale = this.localeList.find(locale => locale.id === d.locale);
+    d.dropdownButtonText = selectedLocale ? selectedLocale.name : '';
+  }
+  
   changeTypeSign(d: any,index?: any,id?: any,role?: any) {
     d.login_by = d.login_by === 'phone' ? 'email' : 'phone';
     if (d.login_by == 'phone' || d.login_by == 'email') {

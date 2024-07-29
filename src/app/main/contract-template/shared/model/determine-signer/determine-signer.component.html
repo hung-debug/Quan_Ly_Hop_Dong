@@ -45,32 +45,13 @@
                   </div>
                 </div>
 
-                <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                <!-- <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
-                  <div class="participants__name">
-                    <div class="label_detail text-color">
-                      <div class="flex">
-                        <input (change)="changeTypeSign(d, index)" type="radio" name="checkPhoneMailOrgViewer_{{index}}"
-                          [value]="email" [(ngModel)]="d.login_by" />
-                      </div>&nbsp;
-                      <div class="text-check-box-contract">
-                        {{'typeOfSignEmail' | translate}}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="participants__name">
-                    <div class="label_detail text-color">
-                      <div class="flex">
-                        <input (change)="changeTypeSign(d, index)" type="radio" name="checkPhoneMailOrgViewer_{{index}}"
-                          [(ngModel)]="d.login_by" [value]="phone" />
-                      </div>&nbsp;
-                      <div class="text-check-box-contract">
-                        {{'typeOfSignPhone' | translate}}
-                      </div>
-                    </div>
-                  </div>
-                </div> -->
-                <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                <div [ngClass]="{
+                  'col-md-6-tru': (d.login_by == 'phone' && this.site == 'NB') || 
+                              (d.login_by === 'phone' && this.site == 'KD') || 
+                              (this.site == 'NB' && d.login_by === 'email'),
+                  'col-md-6': !((d.login_by == 'phone' && this.site == 'NB') || 
+                                (d.login_by === 'phone' && this.site == 'KD') || 
+                                (this.site == 'NB' && d.login_by === 'email'))}" class="participants--input" style="display: flex; justify-content: flex-end; padding-left: 7px;">
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div class="flex">
@@ -87,6 +68,22 @@
                         {{ "typeOfSignPhone" | translate }}
                       </div>
                     </div>
+                  </div>
+                </div>
+
+                <div *ngIf="(d.login_by == 'phone' && this.site == 'NB') || (d.login_by === 'phone' && this.site == 'KD') || (this.site == 'NB' && d.login_by === 'email')" style="width: 130px;">
+                  <div>
+                    <p-dropdown 
+                      class="no-focus"
+                      (onChange)="changeLocale($event, d)" 
+                      panelStyleClass="font" 
+                      [options]="localeList" 
+                      [(ngModel)]="d.locale" 
+                      optionLabel="name"
+                      optionValue="id" 
+                      placeholder="{{ 'choose.language' | translate }}"  
+                      filterBy="name">
+                    </p-dropdown>
                   </div>
                 </div>
               </div>
@@ -125,10 +122,10 @@
                   <div class="label-text">{{'user.phone' | translate}}&nbsp;
                     <span class="required-title">*</span>
                   </div>
-                  <div class="content-input flex hover-item">
-                    <input class="input-nhap-sdt" style="width: 95%;" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                  <div class="input-data">
+                    <input class="content-input flex hover-item" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
 
-                    <div class="participants__name" style="width: 5%;">
+                    <!-- <div class="participants__name" style="width: 5%;">
                       <div class="input-data">
                         <div ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
                           <div *ngIf="d.locale =='vi'">
@@ -153,7 +150,7 @@
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
 
@@ -172,10 +169,10 @@
                     <div class="label-text">{{'user.phone' | translate}}&nbsp;
                       <span class="required-title">*</span>
                     </div>
-                    <div class="content-input flex hover-item">
-                      <input class="input-nhap-sdt" style="width: 95%;" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                    <div class="input-data">
+                      <input class="content-input flex hover-item" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
 
-                      <div class="participants__name" style="width: 5%;">
+                      <!-- <div class="participants__name" style="width: 5%;">
                         <div class="input-data">
                           <div ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
                             <div *ngIf="d.locale =='vi'">
@@ -200,7 +197,7 @@
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div> -->
                     </div>
                   </div>
                 </div>
@@ -213,10 +210,10 @@
                   <div class="label-text flex">{{'user.phone' | translate}}&nbsp;
                     <div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div>
                   </div>
-                  <div class="content-input hover-item">
-                    <input class="input-nhap-sdt" style="width: 95%;" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                  <div class="input-data">
+                    <input class="content-input hover-item" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
 
-                    <div style="width: 5%;" ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
+                    <!-- <div style="width: 5%;" ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
                       <div *ngIf="d.locale =='vi'">
                         <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
                           id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
@@ -237,7 +234,7 @@
                           </button>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
@@ -307,32 +304,13 @@
                   </div>
                 </div>
 
-                <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại cho nguoi ký to chuc-->
-                <!-- <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
-                  <div class="participants__name">
-                    <div class="label_detail text-color">
-                      <div class="flex">
-                        <input (change)="changeTypeSign(d,index,null,'signer')" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
-                          [value]="email" [(ngModel)]="d.login_by" />
-                      </div>&nbsp;
-                      <div class="text-check-box-contract">
-                        {{'typeOfSignEmail' | translate}}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="participants__name">
-                    <div class="label_detail text-color">
-                      <div class="flex">
-                        <input (change)="changeTypeSign(d,index,null,'signer')" type="radio" name="checkPhoneMailOrgSigner_{{index}}"
-                          [(ngModel)]="d.login_by" [value]="phone" />
-                      </div>&nbsp;
-                      <div class="text-check-box-contract">
-                        {{'typeOfSignPhone' | translate}}
-                      </div>
-                    </div>
-                  </div>
-                </div> -->
-                <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                <div [ngClass]="{
+                  'col-md-6-tru': (this.site == 'KD' && d.login_by === 'phone') || 
+                                  (this.site == 'NB' && d.login_by === 'email') || 
+                                  (this.site == 'NB' && d.login_by === 'phone'),
+                  'col-md-6': !((this.site == 'KD' && d.login_by === 'phone') || 
+                                (this.site == 'NB' && d.login_by === 'email') || 
+                                (this.site == 'NB' && d.login_by === 'phone'))}" class="participants--input" style="display: flex; justify-content: flex-end; padding-left: 7px;">
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div class="flex">
@@ -351,6 +329,22 @@
                     </div>
                   </div>
                 </div>
+
+                <div *ngIf="(this.site == 'KD' && d.login_by === 'phone') || (this.site == 'NB' && d.login_by === 'email') || (this.site == 'NB' && d.login_by === 'phone')" style="width: 130px;">
+                  <div >
+                    <p-dropdown 
+                      class="no-focus"
+                      (onChange)="changeLocale($event, d)" 
+                      panelStyleClass="font" 
+                      [options]="localeList" 
+                      [(ngModel)]="d.locale" 
+                      optionLabel="name"
+                      optionValue="id" 
+                      placeholder="{{ 'choose.language' | translate }}"  
+                      filterBy="name">
+                    </p-dropdown>
+                  </div>
+                </div> 
               </div>
 
               <div class="row mt-7px">
@@ -406,10 +400,10 @@
                     <div class="label-text">{{'user.phone' | translate}}&nbsp;
                       <span class="required-title">*</span>
                     </div>
-                    <div class="content-input flex hover-item">
-                      <input style="width: 95%;" class="input-nhap-sdt" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                    <div class="input-data">
+                      <input class="content-input flex hover-item" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
 
-                      <div class="input-data" style="width: 5%;">
+                      <!-- <div class="input-data" style="width: 5%;">
                         <div ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
                           <div *ngIf="d.locale =='vi'">
                             <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
@@ -432,7 +426,7 @@
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div> -->
                     </div>
                   </div>
                 </div>
@@ -507,11 +501,11 @@
                     <div class="label-text flex">{{'user.phone' | translate}}&nbsp;<div style="color: #ffc107;">
                         ({{'receive.contract.process' | translate}})</div>
                     </div>
-                    <div class="content-input flex hover-item">
+                    <div class="input-data">
                       <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
-                      <input style="width: 95%;" class="input-nhap-sdt" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                      <input class="content-input flex hover-item" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
 
-                      <div style="width: 5%;" ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
+                      <!-- <div style="width: 5%;" ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
                         <div *ngIf="d.locale =='vi'">
                           <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
                             id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
@@ -532,7 +526,7 @@
                             </button>
                           </div>
                         </div>
-                      </div>
+                      </div> -->
                     </div>
                   </div>
 
@@ -596,10 +590,10 @@
                     <div class="participants__name">
                       <div class="label-text">{{'user.phone' | translate}}&nbsp;<span
                           class="required-title">*</span></div>
-                      <div class="content-input flex hover-item">
-                        <input class="input-nhap-sdt" style="width: 95%;" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                      <div class="input-data">
+                        <input class="content-input flex hover-item" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
 
-                        <div style="width: 5%">
+                        <!-- <div style="width: 5%">
                           <div class="input-data">
                             <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" [(ngModel)]="d.locale">
                               <div *ngIf="d.locale =='vi'">
@@ -624,7 +618,7 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>
@@ -694,6 +688,25 @@
                     {{ "user.doc" | translate }}<span>&nbsp;{{ index + 1 }}</span>
                   </div>
                 </div>
+
+                <div class="col-md-6-tru">
+                </div>
+
+                <div *ngIf="this.site == 'NB'" style="width: 130px;">
+                  <div>
+                    <p-dropdown 
+                      class="no-focus"
+                      (onChange)="changeLocale($event, d)" 
+                      panelStyleClass="font" 
+                      [options]="localeList" 
+                      [(ngModel)]="d.locale" 
+                      optionLabel="name"
+                      optionValue="id" 
+                      placeholder="{{ 'choose.language' | translate }}"  
+                      filterBy="name">
+                    </p-dropdown>
+                  </div>
+                </div> 
               </div>
 
               <div class="row mt-7px">
@@ -748,10 +761,10 @@
                   <div class="label-text flex">{{'user.phone' | translate}}&nbsp;
                     <div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div>
                   </div>
-                  <div class="content-input flex hover-item">
-                    <input style="width: 95%;" class="input-nhap-sdt" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
+                  <div class="input-data">
+                    <input class="content-input flex hover-item" type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
 
-                    <div style="width: 5%;" ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
+                    <!-- <div style="width: 5%;" ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
                       <div *ngIf="d.locale =='vi'">
                         <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
                           id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
@@ -772,7 +785,7 @@
                           </button>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
@@ -940,7 +953,7 @@
         (focusout)="onChangeValue($event,'ordering-partner-' + id)" style="width: 32px; height: 32px" type="number"
         [(ngModel)]="item.ordering">
 
-        <div class="organization-me">{{ "doi_tac" | translate | uppercase }}&nbsp;<span style="color: red">*</span>-</div>
+        <div class="organization-me">{{ "doi_tac" | translate }}&nbsp;<span style="color: red">*</span></div>
 
         <div style="margin-right: 10px;">
           <label class="custom-select-wrapper">
@@ -993,38 +1006,54 @@
                   <!-- <div class="label_detail text-color" style="margin-right: 5px; margin-top: -10px;">{{'sms.locale' | translate}}&nbsp;
                     <span class="required-title">*</span>
                   </div> -->
-                <div class="input-data" style="width: 13%; margin-top: -5px;" *ngIf="getPartnerCoordination(item)[0].is_otp == 1">
-                  <div ngbDropdown class="d-inline-block" style="margin-left: 6px;">
-                    <div>
-                      <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
-                        id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
-                    </div>
-                    <div>
-                      <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
-                        id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
-                    </div>
-                    <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
-                      <div class="switch-language">
-                        <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
-                          <div class="language">{{ "vie" | translate }}</div>
-                        </button>
+                  <!-- <div class="input-data" style="width: 13%; margin-top: -5px;" *ngIf="getPartnerCoordination(item)[0].is_otp == 1">
+                    <div ngbDropdown class="d-inline-block" style="margin-left: 6px;">
+                      <div>
+                        <button *ngIf="d.locale =='vi'" class="btn btn-outline-primary db_icon_vietnam"
+                          id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
                       </div>
-                      <div class="switch-language">
-                        <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
-                          <div class="language">{{ "eng" | translate }}</div>
-                        </button>
+                      <div>
+                        <button *ngIf="d.locale =='en'" class="btn btn-outline-primary db_icon_english"
+                          id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
+                      </div>
+                      <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
+                        <div class="switch-language">
+                          <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
+                            <div class="language">{{ "vie" | translate }}</div>
+                          </button>
+                        </div>
+                        <div class="switch-language">
+                          <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
+                            <div class="language">{{ "eng" | translate }}</div>
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
+
+                  <div *ngIf="getPartnerCoordination(item)[0].is_otp == 1" style="width: 130px;">
+                    <div>
+                      <p-dropdown 
+                        class="no-focus"
+                        (onChange)="changeLocale($event, d)" 
+                        panelStyleClass="font" 
+                        [options]="localeList" 
+                        [(ngModel)]="d.locale" 
+                        optionLabel="name"
+                        optionValue="id" 
+                        placeholder="{{ 'choose.language' | translate }}"  
+                        filterBy="name">
+                      </p-dropdown>
+                    </div>
+                  </div> 
                 </div>
-              </div>
 
               </div>
             </div>
           </div>
 
           <!--Người xem xét-->
-          <div class="mt-7px">
+          <div class="mt-20px">
             <div class="label">
               {{ 'user.view' | translate }}
               <span *ngIf="getPartnerReviewer(item).length > 0">
@@ -1046,32 +1075,9 @@
                       </div>
                     </div>
 
-                    <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                    <!-- <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
-                      <div class="participants__name">
-                        <div class="label_detail text-color">
-                          <div class="flex">
-                            <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}_{{id}}"
-                              [value]="email" [(ngModel)]="d.login_by" />
-                          </div>&nbsp;
-                          <div class="text-check-box-contract">
-                            {{'typeOfSignEmail' | translate}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="participants__name">
-                        <div class="label_detail text-color">
-                          <div class="flex">
-                            <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}_{{id}}"
-                              [(ngModel)]="d.login_by" [value]="phone" />
-                          </div>&nbsp;
-                          <div class="text-check-box-contract">
-                            {{'typeOfSignPhone' | translate}}
-                          </div>
-                        </div>
-                      </div>
-                    </div> -->
-                    <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                    <div [ngClass]="{
+                      'col-md-6-tru': (this.site === 'NB' && d.login_by === 'email' && d.is_otp == 1) || (d.login_by === 'phone'),
+                      'col-md-6': !((this.site === 'NB' && d.login_by === 'email' && d.is_otp == 1) || (d.login_by === 'phone'))}" class="participants--input" style="display: flex; justify-content: flex-end; padding-left: 7px;">
                       <div class="participants__name">
                         <div class="label_detail text-color">
                           <div class="flex">
@@ -1090,6 +1096,22 @@
                         </div>
                       </div>
                     </div>
+
+                    <div *ngIf="(this.site === 'NB' && d.login_by === 'email' && d.is_otp == 1) || (d.login_by === 'phone')" style="width: 130px;">
+                      <div>
+                        <p-dropdown 
+                          class="no-focus"
+                          (onChange)="changeLocale($event, d)" 
+                          panelStyleClass="font" 
+                          [options]="localeList" 
+                          [(ngModel)]="d.locale" 
+                          optionLabel="name"
+                          optionValue="id" 
+                          placeholder="{{ 'choose.language' | translate }}"  
+                          filterBy="name">
+                        </p-dropdown>
+                      </div>
+                    </div> 
                   </div>
 
                   <div class="mt-7px">
@@ -1114,7 +1136,7 @@
                             (change)="changeIsSmsReviewer($event, item, index)">
                           <div class="label-text" style="padding: 0 20px 0 5px; margin: auto 0;">Nhận SMS thông báo khi xử lý hợp đồng</div>
 
-                          <div *ngIf="d.is_otp == 1" style="margin: auto 0;">
+                          <!-- <div *ngIf="d.is_otp == 1" style="margin: auto 0;">
                             <div ngbDropdown class="d-inline-block" style="margin-left: 6px;">
                               <div>
                                 <button *ngIf="d.locale == 'vi'" class="btn btn-outline-primary db_icon_vietnam"
@@ -1125,8 +1147,6 @@
                                   id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
                               </div>
 
-
-                              <!--Ko vào lần đầu-->
                               <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
                                 <div class="switch-language">
                                   <button class="db_icon_vietnam" ngbDropdownItem (click)="setLocale(d,'vi')">
@@ -1139,9 +1159,8 @@
                                   </button>
                                 </div>
                               </div>
-                              <!-- </div> -->
                             </div>
-                          </div>
+                          </div> -->
 
                         </div>
                       </div>
@@ -1173,7 +1192,7 @@
                       </div>
                     </div>
 
-                    <div *ngIf="d.login_by === 'phone'" class="col-md-6" style="padding-left: 7px">
+                    <!-- <div *ngIf="d.login_by === 'phone'" class="col-md-6" style="padding-left: 7px">
                       <div class="label-text">{{'sms.locale' | translate}}&nbsp;
                         <span class="required-title">*</span>
                       </div>
@@ -1201,7 +1220,7 @@
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
@@ -1248,7 +1267,7 @@
           </div>
 
           <!--Người ký-->
-          <div class="mt-7px">
+          <div class="mt-20px">
             <div class="label">
               {{ 'user.sign' | translate }}
               <span *ngIf="getPartnerSignature(item).length > 0">
@@ -1271,34 +1290,9 @@
                       </div>
                     </div>
 
-                    <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi ky to chuc-->
-                    <!-- <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
-                      <div class="participants__name">
-                        <div class="label_detail text-color">
-                          <div class="flex">
-                            <input (change)="changeTypeSign(d, index,id, 'sign_partner')" type="radio"
-                              name="checkPhoneMailParticipantSigner_{{index}}_{{id}}" [value]="email"
-                              [(ngModel)]="d.login_by" />
-                          </div>&nbsp;
-                          <div class="text-check-box-contract">
-                            {{'typeOfSignEmail' | translate}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="participants__name">
-                        <div class="label_detail text-color">
-                          <div class="flex">
-                            <input (change)="changeTypeSign(d, index,id, 'sign_partner')" type="radio"
-                              name="checkPhoneMailParticipantSigner_{{index}}_{{id}}" [(ngModel)]="d.login_by"
-                              [value]="phone" />
-                          </div>&nbsp;
-                          <div class="text-check-box-contract">
-                            {{'typeOfSignPhone' | translate}}
-                          </div>
-                        </div>
-                      </div>
-                    </div> -->
-                    <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                    <div [ngClass]="{
+                      'col-md-6-tru': (this.site === 'NB' && d.login_by === 'email' && d.is_otp == 1) || (d.login_by === 'phone'),
+                      'col-md-6': !((this.site === 'NB' && d.login_by === 'email' && d.is_otp == 1) || (d.login_by === 'phone'))}" class="participants--input" style="display: flex; justify-content: flex-end; padding-left: 7px;">
                       <div class="participants__name">
                         <div class="label_detail text-color">
                           <div class="flex">
@@ -1317,6 +1311,22 @@
                         </div>
                       </div>
                     </div>
+
+                    <div *ngIf="(this.site === 'NB' && d.login_by === 'email' && d.is_otp == 1) || (d.login_by === 'phone')" style="width: 130px;">
+                      <div>
+                        <p-dropdown 
+                          class="no-focus"
+                          (onChange)="changeLocale($event, d)" 
+                          panelStyleClass="font" 
+                          [options]="localeList" 
+                          [(ngModel)]="d.locale" 
+                          optionLabel="name"
+                          optionValue="id" 
+                          placeholder="{{ 'choose.language' | translate }}"  
+                          filterBy="name">
+                        </p-dropdown>
+                      </div>
+                    </div> 
                   </div>
 
                   <div class="mt-7px row">
@@ -1350,8 +1360,7 @@
                     </div>
                   </div>
 
-                  <div class="mt-7px row">
-                    <!--Lựa chọn tiếng anh tiếng việt cho người ký đối tác trường hợp đăng nhập bằng sđt-->
+                  <!-- <div class="mt-7px row">
                     <div *ngIf="d.login_by === 'phone'" class="col-md-6" style="padding-right: 7px">
                       <div class="label-text">{{'sms.locale' | translate}}&nbsp;
                         <span class="required-title">*</span>
@@ -1383,7 +1392,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
 
                   <div class="mt-7px row">
                     <div *ngIf="this.site === 'NB' && d.login_by === 'email'" class="col-md-6" style="padding-right: 7px">
@@ -1396,7 +1405,7 @@
                           <div class="label-text" style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
 
                           <!--Lựa chọn tiếng anh tiếng việt cho người ký đối tác trường hợp đăng nhập bằng email nội bộ-->
-                          <div class="input-data" style="width: 6%;" *ngIf="d.is_otp == 1">
+                          <!-- <div class="input-data" style="width: 6%;" *ngIf="d.is_otp == 1">
                             <div ngbDropdown class="d-inline-block" style="margin-left: 6px;">
                               <div>
                                 <button *ngIf="d.locale == 'vi'" class="btn btn-outline-primary db_icon_vietnam"
@@ -1407,7 +1416,6 @@
                                   id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
                               </div>
 
-                              <!--Ko vào lần đầu-->
                               <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
                                 <div class="switch-language">
                                   <button class="db_icon_vietnam" ngbDropdownItem (click)="setLocale(d,'vi')">
@@ -1420,10 +1428,8 @@
                                   </button>
                                 </div>
                               </div>
-                              <!-- </div> -->
-
                             </div>
-                          </div>
+                          </div> -->
                         </div>
                       </div>
                     </div>
@@ -1441,7 +1447,7 @@
                   <u class="text-color" (click)="addPartnerSignature(item, id)">{{"btn.add.user.sign" | translate}}</u>
                 </div>
 
-                <div *ngIf="getPartnerSignature(item).length > 1 || getPartnerCoordination(item).length > 0"
+                <div *ngIf="getPartnerSignature(item).length > 1"
                   class="delete-element" (click)="deletePartnerSignature(index, item)">
                   {{ "btn.add.user.delete" | translate }}
                 </div>
@@ -1473,7 +1479,7 @@
           </div>
 
           <!-- Văn thư -->
-          <div class="mt-7px">
+          <div class="mt-20px">
             <div class="label">
               {{ 'user.doc' | translate }}
               <span *ngIf="getPartnerDocument(item).length > 0">
@@ -1495,6 +1501,24 @@
                         {{ "user.doc" | translate }}<span>&nbsp;{{ index + 1 }}</span>
                       </div>
                     </div>
+
+                    <div class="col-md-6-tru"></div>
+
+                    <div *ngIf="(this.site === 'NB' && d.login_by === 'email' && d.is_otp == 1)" style="width: 130px;">
+                      <div>
+                        <p-dropdown 
+                          class="no-focus"
+                          (onChange)="changeLocale($event, d)" 
+                          panelStyleClass="font" 
+                          [options]="localeList" 
+                          [(ngModel)]="d.locale" 
+                          optionLabel="name"
+                          optionValue="id" 
+                          placeholder="{{ 'choose.language' | translate }}"  
+                          filterBy="name">
+                        </p-dropdown>
+                      </div>
+                    </div> 
                   </div>
 
                   <div class="mt-7px row">
@@ -1538,7 +1562,7 @@
                             (change)="changeIsSmsDocument($event, item, index)">
                           <div class="label-text" style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
 
-                          <div class="input-data" style="width: 6%;" *ngIf="d.is_otp == 1">
+                          <!-- <div class="input-data" style="width: 6%;" *ngIf="d.is_otp == 1">
                             <div ngbDropdown class="d-inline-block" style="margin-left: 6px;">
                               <div>
                                 <button *ngIf="d.locale == 'vi'" class="btn btn-outline-primary db_icon_vietnam"
@@ -1549,8 +1573,6 @@
                                   id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
                               </div>
 
-
-                                <!--Ko vào lần đầu-->
                                 <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
                                   <div class="switch-language">
                                     <button class="db_icon_vietnam" ngbDropdownItem (click)="setLocale(d,'vi')">
@@ -1563,11 +1585,8 @@
                                     </button>
                                   </div>
                                 </div>
-                              <!-- </div> -->
-
                             </div>
-                          </div>
-
+                          </div> -->
                         </div>
                       </div>
                     </div>
@@ -1641,32 +1660,9 @@
                       </div>
                     </div>
 
-                    <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi ky ca nhan-->
-                    <!-- <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
-                      <div class="participants__name">
-                        <div class="label_detail text-color">
-                          <div class="flex">
-                            <input (change)="changeTypeSign(d, index,null,'personal')" type="radio" name="checkPhoneMailOrgViewer_{{index}}_{{id}}"
-                              [value]="email" [(ngModel)]="d.login_by" />
-                          </div>&nbsp;
-                          <div class="text-check-box-contract">
-                            {{'typeOfSignEmail' | translate}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="participants__name">
-                        <div class="label_detail text-color">
-                          <div class="flex">
-                            <input (change)="changeTypeSign(d, index,null,'personal')" type="radio" name="checkPhoneMailOrgViewer_{{index}}_{{id}}"
-                              [(ngModel)]="d.login_by" [value]="phone" />
-                          </div>&nbsp;
-                          <div class="text-check-box-contract">
-                            {{'typeOfSignPhone' | translate}}
-                          </div>
-                        </div>
-                      </div>
-                    </div> -->
-                    <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                    <div [ngClass]="{
+                      'col-md-6-tru': (this.site === 'NB' && d.login_by === 'email' && d.is_otp == 1 && getDataSignCka(d).length === 0) || (d.login_by === 'phone') || (d.login_by == 'email' && getDataSignCka(d).length > 0),
+                      'col-md-6': !((this.site === 'NB' && d.login_by === 'email' && d.is_otp == 1 && getDataSignCka(d).length === 0) || (d.login_by === 'phone') || (d.login_by == 'email' && getDataSignCka(d).length > 0))}" class="participants--input" style="display: flex; justify-content: flex-end; padding-left: 7px;">
                       <div class="participants__name">
                         <div class="label_detail text-color">
                           <div class="flex">
@@ -1685,6 +1681,22 @@
                         </div>
                       </div>
                     </div>
+
+                    <div *ngIf="(this.site === 'NB' && d.login_by === 'email' && d.is_otp == 1 && getDataSignCka(d).length === 0) || (d.login_by == 'phone') || (d.login_by == 'email' && getDataSignCka(d).length > 0)" style="width: 130px;">
+                      <div>
+                        <p-dropdown 
+                          class="no-focus"
+                          (onChange)="changeLocale($event, d)" 
+                          panelStyleClass="font" 
+                          [options]="localeList" 
+                          [(ngModel)]="d.locale" 
+                          optionLabel="name"
+                          optionValue="id" 
+                          placeholder="{{ 'choose.language' | translate }}"  
+                          filterBy="name">
+                        </p-dropdown>
+                      </div>
+                    </div> 
                   </div>
 
                   <div class="mt-7px row">
@@ -1715,7 +1727,7 @@
                       </ng-multiselect-dropdown>
                     </div>
 
-                    <div *ngIf="d.login_by == 'phone'" class="mt-7px">
+                    <!-- <div *ngIf="d.login_by == 'phone'" class="mt-7px">
                       <div class="col-md-6" style="padding-right: 7px;">
                         <div class="label-text">{{'sms.locale' |
                           translate}}&nbsp;
@@ -1746,11 +1758,11 @@
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
 
                   <div class="row mt-7px">
-                    <div *ngIf="d.login_by == 'email' && getDataSignCka(d).length > 0" class="col-md-6" style="padding-right: 7px;">
+                    <!-- <div *ngIf="d.login_by == 'email' && getDataSignCka(d).length > 0" class="col-md-6" style="padding-right: 7px;">
                       <div class="label-text">{{'sms.locale' |
                         translate}}&nbsp;
                         <span class="required-title">*</span>
@@ -1779,7 +1791,7 @@
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
 
                     <div *ngIf="this.site === 'NB' && d.login_by === 'email'" class="col-md-6">
                       <div *ngIf = "getDataSignCka(d).length > 0" style="height: 21px;"></div>
@@ -1790,7 +1802,7 @@
                           (change)="changeIsSmsSignature($event, item, index)">
                         <div class="label-text" style="margin: auto 6px;">Nhận SMS thông báo khi xử lý hợp đồng</div>
 
-                        <div class="input-data" style="margin: auto 0;" *ngIf="d.is_otp == 1 && getDataSignCka(d).length === 0">
+                        <!-- <div class="input-data" style="margin: auto 0;" *ngIf="d.is_otp == 1 && getDataSignCka(d).length === 0">
                           <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" >
                             <div>
                               <button *ngIf="d.locale == 'vi'" class="btn btn-outline-primary db_icon_vietnam"
@@ -1801,7 +1813,6 @@
                                 id="dropdownMenu1" ngbDropdownToggle>{{dropdownButtonText}}</button>
                             </div>
 
-                            <!--Ko vào lần đầu-->
                             <div ngbDropdownMenu aria-labelledby="dropdownMenu1" style="min-width: 6rem;">
                               <div class="switch-language">
                                 <button class="db_icon_vietnam" ngbDropdownItem (click)="setLocale(d,'vi')">
@@ -1814,10 +1825,8 @@
                                 </button>
                               </div>
                             </div>
-                            <!-- </div> -->
-
                           </div>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>
