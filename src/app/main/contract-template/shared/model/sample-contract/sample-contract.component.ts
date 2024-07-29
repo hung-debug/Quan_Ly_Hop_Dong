@@ -2706,68 +2706,134 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   getName(data: any) {
     let name = '';
     
-    const arrOrganization = this.list_sign_name.filter((p:any) =>  p.type_unit == "organization");
-    const arrPartner = this.list_sign_name.filter((p:any) => p.type_unit == "partner");
-    
-    const duplicatesOrg : any = [];
-    arrOrganization.forEach((el: any, i: any) => {
-      arrOrganization.forEach((element: any, index: any) => {
-        if (i === index) return null;
-          if (element.email === el.email) {
-            if (!duplicatesOrg.includes(el)) duplicatesOrg.push(el);
-          }
-      });
-    });
-    
-    const duplicatesPartner : any = [];
-    arrPartner.forEach((el1: any, i1: any) => {
-      arrPartner.forEach((element1: any, index1: any) => {
-        if (i1 === index1) return null;
-          if (element1.email === el1.email) {
-            if (!duplicatesPartner.includes(el1)) duplicatesPartner.push(el1);
-          }
-      });
-    });
+    const signerOrg = this.list_sign_name.filter((p:any) =>  p.type_unit == "organization" && p.role == 3);
+    const documentOrg = this.list_sign_name.filter((p:any) =>  p.type_unit == "organization" && p.role == 4);
+    const considerOrg = this.list_sign_name.filter((p:any) =>  p.type_unit == "organization" && p.role == 2);
+    const signerPartner = this.list_sign_name.filter((p:any) =>  p.type_unit == "partner" && p.role == 3);
+    const documentPartner = this.list_sign_name.filter((p:any) =>  p.type_unit == "partner" && p.role == 4);
+    const considerPartner = this.list_sign_name.filter((p:any) =>  p.type_unit == "partner" && p.role == 2 );
 
     if (data.type_unit == 'organization') {
+      // so sánh email ở mảng người ký và văn thư
+      let dataArrSignerDocumentOrg: any = []
+      signerOrg.forEach((x: any) => {
+        documentOrg.forEach((y: any) => {
+          if (x.email === y.email) {
+            dataArrSignerDocumentOrg = [...dataArrSignerDocumentOrg, { email: x.email }]
+          }
+        });
+      });
+      
+      // so sánh email ở mảng người xem xét và văn thư
+      let dataArrConsiderDocumentOrg: any = []
+      considerOrg.forEach((x: any) => {
+        documentOrg.forEach((y: any) => {
+          if (x.email === y.email) {
+            dataArrConsiderDocumentOrg = [...dataArrConsiderDocumentOrg, { email: x.email }]
+          }
+        });
+      });
+      ///////////////////////
+      
       if (data.name.length>24) {
         name = data.name.substring(0, 24) + ' ...'
       } else {
         name = data.name
       }
-      if(data.role == 3){
+      
+      if(data.role == 3 && dataArrSignerDocumentOrg.some((y: any) => y.email === data.email)){
+        return 'Tổ chức của tôi - Người ký - ' + name;
+      }
+      else if(data.role == 3 && dataArrSignerDocumentOrg.some((y: any) => y.email !== data.email)){
         return 'Tổ chức của tôi - ' + name;
       }
-      else if(data.role == 4 && duplicatesOrg.length == 2){
+      else if(data.role == 4 && dataArrConsiderDocumentOrg.some((y: any) => y.email === data.email)){
         return 'Tổ chức của tôi - Văn thư - ' + name;
-      } 
-      else if(data.role == 4 && duplicatesOrg.length != 2){
+      }
+      else if(data.role == 4 && dataArrSignerDocumentOrg.some((y: any) => y.email === data.email)){
+        return 'Tổ chức của tôi - Văn thư - ' + name;
+      }
+      else if(data.role == 4 && dataArrSignerDocumentOrg.some((y: any) => y.email !== data.email)){
         return 'Tổ chức của tôi - ' + name;
       } 
+      else if(data.role == 2 && dataArrConsiderDocumentOrg.some((y: any) => y.email === data.email)){
+        return 'Tổ chức của tôi - Người xem xét - ' + name;
+      } 
+      else if(data.role == 2 && dataArrConsiderDocumentOrg.some((y: any) => y.email !== data.email)){
+        return 'Tổ chức của tôi - ' + name;
+      }
+      else if(data.role == 4 && dataArrConsiderDocumentOrg.some((y: any) => y.email !== data.email)){
+        return 'Tổ chức của tôi - ' + name;
+      }
+      else if(data.role == 3){
+        return 'Tổ chức của tôi - ' + name;
+      }
+      else if(data.role == 4){
+        return 'Tổ chức của tôi - ' + name;
+      }
       else if(data.role == 2){
         return 'Tổ chức của tôi - ' + name;
       }
-      else if(data.role == 1){
-        return 'Tổ chức của tôi - ' + name;
-      }
+      
     } else if (data.type_unit == 'partner') {
+      // so sánh email ở mảng người ký và văn thư
+      let dataArrSignerDocumentPartner: any = []
+      signerPartner.forEach((x: any) => {
+        documentPartner.forEach((y: any) => {
+          if (x.email === y.email) {
+            dataArrSignerDocumentPartner = [...dataArrSignerDocumentPartner, { email: x.email }]
+          }
+        });
+      });
+      
+      // so sánh email ở mảng người xem xét và văn thư
+      let dataArrConsiderDocumentPartner: any = []
+      considerPartner.forEach((x: any) => {
+        documentPartner.forEach((y: any) => {
+          if (x.email === y.email) {
+            dataArrConsiderDocumentPartner = [...dataArrConsiderDocumentPartner, { email: x.email }]
+          }
+        });
+      });
+      ///////////////////////
+            
       if (data.name.length>32) {
         name = data.name.substring(0, 32) + ' ...'
       } else {
         name = data.name
       }
       
-      if(data.role == 3){
+      if(data.role == 3 && dataArrSignerDocumentPartner.some((y: any) => y.email === data.email)){
+        return 'Đối tác - Người ký - ' + name;
+      }
+      else if(data.role == 3 && dataArrSignerDocumentPartner.some((y: any) => y.email !== data.email)){
         return 'Đối tác - ' + name;
-      }else if(data.role == 4 && duplicatesPartner.length == 2){
+      }
+      else if(data.role == 4 && dataArrConsiderDocumentPartner.some((y: any) => y.email === data.email)){
         return 'Đối tác - Văn thư - ' + name;
-      }else if(data.role == 4 && duplicatesOrg.length != 2){
+      }
+      else if(data.role == 4 && dataArrSignerDocumentPartner.some((y: any) => y.email === data.email)){
+        return 'Đối tác - Văn thư - ' + name;
+      }
+      else if(data.role == 4 && dataArrSignerDocumentPartner.some((y: any) => y.email !== data.email)){
+        return 'Đối tác - ' + name;
+      }
+      else if(data.role == 2 && dataArrConsiderDocumentPartner.some((y: any) => y.email === data.email)){
+        return 'Đối tác - Người xem xét - ' + name;
+      }
+      else if(data.role == 2 && dataArrConsiderDocumentPartner.some((y: any) => y.email !== data.email)){
+        return 'Đối tác - ' + name;
+      }
+      else if(data.role == 4 && dataArrConsiderDocumentPartner.some((y: any) => y.email !== data.email)){
+        return 'Đối tác - ' + name;
+      }
+      else if(data.role == 3){
+        return 'Đối tác - ' + name;
+      }
+      else if(data.role == 4){
         return 'Đối tác - ' + name;
       }
       else if(data.role == 2){
-        return 'Đối tác - ' + name;
-      }
-      else if(data.role == 1){
         return 'Đối tác - ' + name;
       }
     }
