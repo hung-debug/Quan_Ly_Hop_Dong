@@ -120,6 +120,7 @@ export class ContractSignatureComponent implements OnInit {
   numberPage: number;
   enterPage: number = 1;
   arrContract: any = [];
+  dataObjectSignatureArr: any = [];
   constructor(
     private appService: AppService,
     private contractServiceV1: ContractService,
@@ -2184,14 +2185,10 @@ export class ContractSignatureComponent implements OnInit {
     //tao mang currentHeight toan so 0;
     for (let i = 0; i < fileC.length; i++) {
       currentHeight[i] = 0;
-      const dataContract = await this.contractServiceV1
-        .getDataObjectSignatureLoadChange(idContract[i])
-        .toPromise();
-      this.arrContract = this.arrContract.concat(dataContract)
     }
 
     // token v2 - prepare info - optimizing
-    // let dataObjectSignature: any;
+    let dataObjectSignature: any;
     try {
       let preparePromises = fileC.map( async (_: any, i: any) => {
         const base64StringPdf = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
@@ -2201,21 +2198,28 @@ export class ContractSignatureComponent implements OnInit {
         //Lấy toạ độ ô ký của từng hợp đồng
         // let currentSigningStatus: any = await this.checkCurrentSigningCall(dataObjectSignature[0].recipient.id)
         // if (!currentSigningStatus) return
-        for (let j = 0; j < this.arrContract.length; j++) {
-          if (this.arrContract[j].recipient) {
-            if (recipientId[i] == this.arrContract[j].recipient.id) {
-              x.push(this.arrContract[j].coordinate_x);
-              y.push(this.arrContract[j].coordinate_y);
-              h.push(this.arrContract[j].height);
-              w.push(this.arrContract[j].width);
+        dataObjectSignature = await this.contractServiceV1
+          .getDataObjectSignatureLoadChange(idContract[i])
+          .toPromise();
+        dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i])
+        for (let j = 0; j < dataObjectSignature.length; j++) {
+          this.arrContract.push(dataObjectSignature[j].recipient.id)
+          this.dataObjectSignatureArr.push(dataObjectSignature[j])
+
+          if (dataObjectSignature[j].recipient) {
+            if (recipientId[i] == dataObjectSignature[j].recipient.id) {
+              x.push(dataObjectSignature[j].coordinate_x);
+              y.push(dataObjectSignature[j].coordinate_y);
+              h.push(dataObjectSignature[j].height);
+              w.push(dataObjectSignature[j].width);
 
               //Lấy ra trang ký của từng file hợp đồng
-              page.push(this.arrContract[j].page);
-              boxTypes.push(this.arrContract[j].type)
+              page.push(dataObjectSignature[j].page);
+              boxTypes.push(dataObjectSignature[j].type)
+
             }
           }
         }
-
         //Lấy thông tin page của hợp đồng
         const infoPage = await this.contractServiceV1
           .getInfoPage(documentId[i])
@@ -2231,17 +2235,8 @@ export class ContractSignatureComponent implements OnInit {
           }
         }
 
-        //Lấy trạng thái ceca của từng hợp đồng
-        const cecaContract = await this.contractServiceV1
-          .getListDataCoordination(idContract[i])
-          .toPromise();
-
-        if (cecaContract.ceca_push == 1) {
-          ceca_push.push(true);
-        } else {
-          ceca_push.push(false);
-        }
       })
+
       await Promise.all(preparePromises)
       // token v2 - prepare info - optimizing
       //Lay thong tin cua usb token
@@ -2381,23 +2376,36 @@ export class ContractSignatureComponent implements OnInit {
           signI = this.srcMark.split(',')[1];
         }
       // token v2 - optimizing
-      let promises = this.arrContract.map(async (_: any, i: any) => {
-        signDigital.page = page[i];
-        let emptySignature: any;
-          signUpdate.id = this.arrContract[i].id;
-          y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
-          signDigital.signDigitalX = x[i];
-          signDigital.signDigitalY = y[i];
-          signDigital.signDigitalWidth = w[i];
-          signDigital.signDigitalHeight = h[i];
+        let promises = this.dataObjectSignatureArr.map(async (_: any, j: any) => {
+          //Lấy trạng thái ceca của từng hợp đồng
+          const cecaContract = await this.contractServiceV1
+            .getListDataCoordination(this.dataObjectSignatureArr[j].contract_id)
+            .toPromise();
+
+          if (cecaContract.ceca_push == 1) {
+            ceca_push.push(true);
+          } else {
+            ceca_push.push(false);
+          }
+          signDigital.page = page[j];
+          let emptySignature: any;
+          console.log(999, recipientId);
+          // for (let j = 0; j< this.dataObjectSignatureArr.length; j++) {
+            console.log('for', this.dataObjectSignatureArr[j].id);
+            signUpdate.id = this.dataObjectSignatureArr[j].id;
+            y[j] = heightPage[j] - (y[j] - currentHeight[j]) - h[j];
+            signDigital.signDigitalX = x[j];
+            signDigital.signDigitalY = y[j];
+            signDigital.signDigitalWidth = w[j];
+            signDigital.signDigitalHeight = h[j];
           emptySignature = await this.contractServiceV1
             .createEmptySignature(
-              recipientId[i],
+              this.arrContract[j],
               signUpdate,
               signDigital,
               signI,
               certInfoBase64,
-              boxTypes[i]
+              boxTypes[j]
             )
             .toPromise();
           const base64TempData = emptySignature.base64TempData;
@@ -2428,13 +2436,13 @@ export class ContractSignatureComponent implements OnInit {
 
             const mergeTimeStamp = await this.contractServiceV1
               .meregeTimeStamp(
-                recipientId[i],
-                idContract[i],
+                this.arrContract[j],
+                this.dataObjectSignatureArr[j].contract_id,
                 signatureToken,
                 fieldName,
                 certInfoBase64,
                 hexDigestTempFile,
-                ceca_push[i]
+                ceca_push[j]
               )
               .toPromise();
             const filePdfSigned = mergeTimeStamp.base64Data;
@@ -2445,7 +2453,7 @@ export class ContractSignatureComponent implements OnInit {
             //   filePdfSigned
             // );
             const sign = await this.contractServiceV1.updateDigitalSignatured(
-              idSignMany[i],
+              this.dataObjectSignatureArr[j].id,
               filePdfSigned
             );
 
@@ -2463,7 +2471,7 @@ export class ContractSignatureComponent implements OnInit {
                 [{
                   processAt: this.isDateTime
                 }],
-                recipientId[i]
+                this.arrContract[j]
               );
 
             if (!updateInfo.id) {
