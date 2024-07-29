@@ -1001,8 +1001,21 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                             element['height'] = '28';
                           }
                         } else {
-                          element['width'] = '180';
-                          element['height'] = '66';
+                          if (event.target.className.includes('da-keo')){
+                            element['width'] = event.target.offsetWidth;
+                            element['height'] = event.target.offsetHeight;
+                          } else {
+                            if(res.type[i].sign_unit == "chu_ky_so_con_dau") {
+                              element['width'] = '66';
+                              element['height'] = '66';
+                            } else if (res.type[i].sign_unit == "chu_ky_so_thong_tin") {
+                              element['width'] = '120';
+                              element['height'] = '66';
+                            } else {
+                              element['width'] = '180';
+                              element['height'] = '66';
+                            }
+                          }
                         }
                       }
 
@@ -1486,9 +1499,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       "min-height": "50px"
     }
     if (d['width']) {
-      if (d?.sign_unit == 'chu_ky_so_con_dau' && d['width'] == 180) {
+      if (d?.sign_unit == 'chu_ky_so_con_dau' && d['width'] == 66) {
         style.width = 66 + "px";
-      } else if (d?.sign_unit == 'chu_ky_so_thong_tin' && d['width'] == 180) {
+      } else if (d?.sign_unit == 'chu_ky_so_thong_tin' && d['width'] == 120) {
         style.width = 120 + "px";
       } else {
         style.width = parseInt(d['width']) + "px";

@@ -183,6 +183,9 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         if (environment.flag == 'NB') {
           this.optionsCeCaValue = 1
         }
+      } else {
+        this.ceca = false
+        this.optionsCeCaValue = 0
       }
 
       this.getContractTemplateForm(); // ham lay mau hop dong

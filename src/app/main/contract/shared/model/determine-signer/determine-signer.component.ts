@@ -105,6 +105,10 @@ export class DetermineSignerComponent implements OnInit {
   smsContractBuy: any;
   site: string;
   isOrderValueValid: boolean = true;
+  localeList = [
+    { id: 'vi', name: 'Tiếng Việt' },
+    { id: 'en', name: 'Tiếng Anh' }
+  ];
 
   get determineContract() {
     return this.determineDetails.controls;
@@ -171,6 +175,17 @@ export class DetermineSignerComponent implements OnInit {
       limitSelection: 1,
       disabledField: 'item_disable',
     };
+  }
+
+
+  changeLocale(event: any, d: any) {
+    d.locale = event.value;
+    this.updateDropdownButtonText(d);
+  }
+
+  updateDropdownButtonText(d: any) {
+    const selectedLocale = this.localeList.find(locale => locale.id === d.locale);
+    d.dropdownButtonText = selectedLocale ? selectedLocale.name : '';
   }
 
   dropdownButtonText = '';

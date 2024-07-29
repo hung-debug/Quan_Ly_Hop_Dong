@@ -48,35 +48,14 @@
                   </div>
                 </div>
 
-                <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                <!-- <div class="participants--input col-md-6"
-                  style="display: flex; justify-content: space-between; padding-left: 7px;">
-                  <div class="participants__name">
-                    <div class="label_detail text-color">
-                      <div class="flex">
-                        <input (change)="changeTypeSign(d, index)" type="radio"
-                          name="checkPhoneMailOrgViewer_{{ index }}" [value]="email" [(ngModel)]="d.login_by" />
-                      </div>
-                      &nbsp;
-                      <div class="text-check-box-contract">
-                        {{ "typeOfSignEmail" | translate }}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="participants__name">
-                    <div class="label_detail text-color">
-                      <div class="flex">
-                        <input (change)="changeTypeSign(d, index)" type="radio"
-                          name="checkPhoneMailOrgViewer_{{ index }}" [(ngModel)]="d.login_by" [value]="phone" />
-                      </div>
-                      &nbsp;
-                      <div class="text-check-box-contract">
-                        {{ "typeOfSignPhone" | translate }}
-                      </div>
-                    </div>
-                  </div>
-                </div> -->
-                <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                <div [ngClass]="{
+                  'col-md-6-tru': (d.login_by == 'phone' && this.site == 'NB') || 
+                              (d.login_by === 'phone' && this.site == 'KD') || 
+                              (this.site == 'NB' && d.login_by === 'email'),
+                  'col-md-6': !((d.login_by == 'phone' && this.site == 'NB') || 
+                                (d.login_by === 'phone' && this.site == 'KD') || 
+                                (this.site == 'NB' && d.login_by === 'email'))}" 
+                  class="participants--input" style="display: flex; justify-content: flex-end; padding-left: 7px;">
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div class="flex">
@@ -95,6 +74,22 @@
                     </div>
                   </div>
                 </div>
+                
+                <div *ngIf="(d.login_by == 'phone' && this.site == 'NB') || (d.login_by === 'phone' && this.site == 'KD') || (this.site == 'NB' && d.login_by === 'email')" style="width: 130px;">
+                  <div>
+                    <p-dropdown 
+                      class="no-focus"
+                      (onChange)="changeLocale($event, d)" 
+                      panelStyleClass="font" 
+                      [options]="localeList" 
+                      [(ngModel)]="d.locale" 
+                      optionLabel="name"
+                      optionValue="id" 
+                      placeholder="{{ 'choose.language' | translate }}"  
+                      filterBy="name">
+                    </p-dropdown>
+                  </div>
+                </div>             
               </div>
 
               <div class="row mt-7px">
@@ -132,45 +127,8 @@
                 <div style="padding-left: 7px" class="col-md-6" *ngIf="d.login_by == 'phone' && this.site == 'NB'">
                   <div class="label-text">{{ "user.phone" | translate }}&nbsp;<span class="required-title">*</span>
                   </div>
-                  <div class="content-input flex hover-item">
-
-                    <input class="input-nhap-sdt" style="width: 95%;" type="text"
-                      placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
-
-                    <div style="width: 5%;" class="participants__name">
-                      <div class="input-data">
-                        <div ngbDropdown class="d-inline-block" style="margin-left: 6px" [(ngModel)]="d.locale">
-                          <div *ngIf="d.locale == 'vi'">
-                            <button *ngIf="d.locale == 'vi'" class="btn btn-outline-primary db_icon_vietnam"
-                              id="dropdownMenu1" ngbDropdownToggle>
-                              {{ dropdownButtonText }}
-                            </button>
-                          </div>
-                          <div *ngIf="d.locale == 'en'">
-                            <button *ngIf="d.locale == 'en'" class="btn btn-outline-primary db_icon_english"
-                              id="dropdownMenu1" ngbDropdownToggle>
-                              {{ dropdownButtonText }}
-                            </button>
-                          </div>
-                          <div ngbDropdownMenu aria-labelledby="dropdownMenu1">
-                            <div class="switch-language">
-                              <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
-                                <div class="language">
-                                  {{ "vie" | translate }}
-                                </div>
-                              </button>
-                            </div>
-                            <div class="switch-language">
-                              <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
-                                <div class="language">
-                                  {{ "eng" | translate }}
-                                </div>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  <div class="input-data">
+                    <input class="content-input hover-item" type="text" placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
                   </div>
                 </div>
 
@@ -192,42 +150,8 @@
                     </div>
                   </div>
 
-                  <div class="content-input flex hover-item">
-                    <input class="input-nhap-sdt" style="width: 95%;" type="text"
-                      placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
-
-                    <div style="width: 5%;" class="input-data">
-                      <div ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
-                        <div *ngIf="d.locale == 'vi'">
-                          <button *ngIf="d.locale == 'vi'" class="btn btn-outline-primary db_icon_vietnam"
-                            id="dropdownMenu1" ngbDropdownToggle>
-                            {{ dropdownButtonText }}
-                          </button>
-                        </div>
-                        <div *ngIf="d.locale == 'en'">
-                          <button *ngIf="d.locale == 'en'" class="btn btn-outline-primary db_icon_english"
-                            id="dropdownMenu1" ngbDropdownToggle>
-                            {{ dropdownButtonText }}
-                          </button>
-                        </div>
-                        <div ngbDropdownMenu aria-labelledby="dropdownMenu1">
-                          <div class="switch-language">
-                            <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
-                              <div class="language">
-                                {{ "vie" | translate }}
-                              </div>
-                            </button>
-                          </div>
-                          <div class="switch-language">
-                            <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
-                              <div class="language">
-                                {{ "eng" | translate }}
-                              </div>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  <div class="input-data">
+                    <input class="content-input hover-item" type="text" placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
                   </div>
 
                 </div>
@@ -243,37 +167,8 @@
                       ({{ "receive.contract.process" | translate }})
                     </div>
                   </div>
-                  <div class="content-input hover-item">
-                    <input class="input-nhap-sdt" style="width: 95%;" type="text"
-                      placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
-
-                    <div style="width: 5%;" ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
-                      <div *ngIf="d.locale == 'vi'">
-                        <button *ngIf="d.locale == 'vi'" class="btn db_icon_vietnam" id="dropdownMenu1"
-                          ngbDropdownToggle>
-                          {{ dropdownButtonText }}
-                        </button>
-                      </div>
-                      <div *ngIf="d.locale == 'en'">
-                        <button *ngIf="d.locale == 'en'" class="btn db_icon_english" id="dropdownMenu1"
-                          ngbDropdownToggle>
-                          {{ dropdownButtonText }}
-                        </button>
-                      </div>
-                      <div ngbDropdownMenu aria-labelledby="dropdownMenu1">
-                        <div class="switch-language">
-                          <button class="db_icon_vietnam" ngbDropdownItem (click)="d.locale = 'vi'">
-                            <div class="language">{{ "vie" | translate }}</div>
-                          </button>
-                        </div>
-                        <div class="switch-language">
-                          <button class="db_icon_english" ngbDropdownItem (click)="d.locale = 'en'">
-                            <div class="language">{{ "eng" | translate }}</div>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
+                  <div class="input-data">
+                    <input class="content-input hover-item" type="text" placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
                   </div>
                 </div>
               </div>
@@ -337,35 +232,14 @@
                   </div>
                 </div>
 
-                <!-- <div class="participants--input col-md-6"
-                  style="display: flex; justify-content: space-between; padding-left: 7px;">
-                  <div class="participants__name">
-                    <div class="label_detail text-color">
-                      <div class="flex">
-                        <input (change)="changeTypeSign(d, index, null, 'signer')" type="radio"
-                          name="checkPhoneMailOrgSigner_{{ index }}" [value]="email" [(ngModel)]="d.login_by" />
-                      </div>
-                      &nbsp;
-                      <div class="text-check-box-contract">
-                        {{ "typeOfSignEmail" | translate }}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="participants__name">
-                    <div class="label_detail text-color">
-                      <div class="flex">
-                        <input (change)="changeTypeSign(d, index, null, 'signer')" type="radio"
-                          name="checkPhoneMailOrgSigner_{{ index }}" [(ngModel)]="d.login_by" [value]="phone" />
-                      </div>
-                      &nbsp;
-                      <div class="text-check-box-contract">
-                        {{ "typeOfSignPhone" | translate }}
-                      </div>
-                    </div>
-                  </div>
-
-                </div> -->
-                <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                <div [ngClass]="{
+                  'col-md-6-tru': (this.site == 'KD' && d.login_by === 'phone') || 
+                                  (this.site == 'NB' && d.login_by === 'email') || 
+                                  (this.site == 'NB' && d.login_by === 'phone'),
+                  'col-md-6': !((this.site == 'KD' && d.login_by === 'phone') || 
+                                (this.site == 'NB' && d.login_by === 'email') || 
+                                (this.site == 'NB' && d.login_by === 'phone'))}" 
+                  class="participants--input" style="display: flex; justify-content: flex-end; padding-left: 7px;">
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div class="flex">
@@ -384,6 +258,22 @@
                     </div>
                   </div>
                 </div>
+
+                <div *ngIf="(this.site == 'KD' && d.login_by === 'phone') || (this.site == 'NB' && d.login_by === 'email') || (this.site == 'NB' && d.login_by === 'phone')" style="width: 130px;">
+                  <div >
+                    <p-dropdown 
+                      class="no-focus"
+                      (onChange)="changeLocale($event, d)" 
+                      panelStyleClass="font" 
+                      [options]="localeList" 
+                      [(ngModel)]="d.locale" 
+                      optionLabel="name"
+                      optionValue="id" 
+                      placeholder="{{ 'choose.language' | translate }}"  
+                      filterBy="name">
+                    </p-dropdown>
+                  </div>
+                </div> 
               </div>
 
               <div class="row mt-7px">
@@ -463,11 +353,11 @@
                   <div *ngIf="d.login_by === 'phone'" class="participants__name">
                     <div class="label-text">{{ "user.phone" | translate }}&nbsp;<span class="required-title">*</span>
                     </div>
-                    <div class="content-input flex hover-item">
-                      <input style="width: 95%;" class="input-nhap-sdt" type="text"
+                    <div class="input-data">
+                      <input class="content-input flex hover-item" type="text"
                         placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
 
-                      <div style="width: 5%;" class="input-data">
+                      <!-- <div style="width: 5%;" class="input-data">
                         <div ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
                           <div *ngIf="d.locale == 'vi'">
                             <button *ngIf="d.locale == 'vi'" class="btn btn-outline-primary db_icon_vietnam"
@@ -498,7 +388,7 @@
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div> -->
                     </div>
                   </div>
                 </div>
@@ -573,11 +463,11 @@
                         ({{ "receive.contract.process" | translate }})
                       </div>
                     </div>
-                    <div class="content-input flex hover-item">
-                      <input style="width: 95%;" class="input-nhap-sdt" type="text"
+                    <div class="input-data">
+                      <input class="content-input flex hover-item" type="text"
                         placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
 
-                      <div style="width: 5%;" class="participants__name">
+                      <!-- <div style="width: 5%;" class="participants__name">
                         <div class="input-data">
                           <div ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
                             <div *ngIf="d.locale == 'vi'">
@@ -606,7 +496,7 @@
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div> -->
                     </div>
                   </div>
                 </div>
@@ -671,11 +561,11 @@
                         {{ "user.phone" | translate }}&nbsp;
                         <span class="required-title">*</span>
                       </div>
-                      <div class="content-input flex hover-item">
-                        <input class="input-nhap-sdt" style="width: 95%;" type="text"
+                      <div class="input-data">
+                        <input class="content-input flex hover-item" type="text"
                           placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
 
-                        <div class="participants__name" style="width: 5%">
+                        <!-- <div class="participants__name" style="width: 5%">
                           <div class="input-data">
                             <div ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
                               <div *ngIf="d.locale == 'vi'">
@@ -704,7 +594,7 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>
@@ -764,6 +654,25 @@
                     {{ "user.doc" | translate }}<span>&nbsp;{{ index + 1 }}</span>
                   </div>
                 </div>
+
+                <div class="col-md-6-tru">
+                </div>
+
+                <div *ngIf="this.site == 'NB'" style="width: 130px;">
+                  <div>
+                    <p-dropdown 
+                      class="no-focus"
+                      (onChange)="changeLocale($event, d)" 
+                      panelStyleClass="font" 
+                      [options]="localeList" 
+                      [(ngModel)]="d.locale" 
+                      optionLabel="name"
+                      optionValue="id" 
+                      placeholder="{{ 'choose.language' | translate }}"  
+                      filterBy="name">
+                    </p-dropdown>
+                  </div>
+                </div> 
               </div>
 
               <div class="row mt-7px">
@@ -839,11 +748,11 @@
                       ({{ "receive.contract.process" | translate }})
                     </div>
                   </div>
-                  <div class="content-input flex hover-item">
-                    <input style="width: 95%;" class="input-nhap-sdt" type="text"
+                  <div class="input-data">
+                    <input class="content-input flex hover-item" type="text"
                       placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
 
-                    <div style="width: 5%;" class="participants__name">
+                    <!-- <div style="width: 5%;" class="participants__name">
                       <div class="input-data">
                         <div ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
                           <div *ngIf="d.locale == 'vi'">
@@ -872,7 +781,7 @@
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
@@ -1127,6 +1036,24 @@
                         {{ "user.lead" | translate }}<span>&nbsp;{{ index + 1 }}</span>
                       </div>
                     </div>
+
+                    <div class="col-md-6-tru"></div>
+
+                    <div *ngIf="this.site == 'NB'" style="width: 130px;">
+                      <div>
+                        <p-dropdown 
+                          class="no-focus"
+                          (onChange)="changeLocale($event, d)" 
+                          panelStyleClass="font" 
+                          [options]="localeList" 
+                          [(ngModel)]="d.locale" 
+                          optionLabel="name"
+                          optionValue="id" 
+                          placeholder="{{ 'choose.language' | translate }}"  
+                          filterBy="name">
+                        </p-dropdown>
+                      </div>
+                    </div> 
                   </div>
 
                   <div class="row mt-7px">
@@ -1160,17 +1087,17 @@
                   <div class="row mt-7px" *ngIf="this.site == 'NB'">
                     <div class="col-md-6" style="padding-right: 7px">
                       <div class="label-text flex">
-                        {{ "user.phone" | translate }}&nbsp;-&nbsp;
+                        {{ "user.phone" | translate }}&nbsp;&nbsp;
                         <div style="color: #ffc107">
                           ({{ "Nhận thông báo khi xử lý hợp đồng" | translate }})
                         </div>
                       </div>
-                      <div class="content-input flex hover-item">
-                        <input class="input-nhap-sdt" style="width: 95%;" type="text"
+                      <div class="input-data">
+                        <input class="content-input flex hover-item" type="text"
                           placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone"
                           oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
 
-                        <div style="width: 5%" class="participants__name">
+                        <!-- <div style="width: 5%" class="participants__name">
                           <div class="input-data">
                             <div ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
                               <div *ngIf="d.locale == 'vi'">
@@ -1203,7 +1130,7 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>
@@ -1255,37 +1182,14 @@
                       </div>
                     </div>
 
-                    <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}} cho nguoi xem xet doi tac-->
-                    <!-- <div class="participants--input col-md-6"
-                      style="display: flex; justify-content: space-between; padding-left: 7px;">
-                      <div class="participants__name">
-                        <div class="label_detail text-color">
-                          <div class="flex">
-                            <input (change)="changeTypeSign(d, index)" type="radio"
-                              name="checkPhoneMailParticipantViewer_{{ index }}" [value]="email"
-                              [(ngModel)]="d.login_by" />
-                          </div>
-                          &nbsp;
-                          <div class="text-check-box-contract">
-                            {{ "typeOfSignEmail" | translate }}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="participants__name">
-                        <div class="label_detail text-color">
-                          <div class="flex">
-                            <input (change)="changeTypeSign(d, index)" type="radio"
-                              name="checkPhoneMailParticipantViewer_{{ index }}" [(ngModel)]="d.login_by"
-                              [value]="phone" />
-                          </div>
-                          &nbsp;
-                          <div class="text-check-box-contract">
-                            {{ "typeOfSignPhone" | translate }}
-                          </div>
-                        </div>
-                      </div>
-                    </div> -->
-                    <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                    <div [ngClass]="{
+                      'col-md-6-tru': (d.login_by == 'phone' && this.site == 'NB') || 
+                                  (d.login_by == 'phone' && this.site == 'KD') || 
+                                  (this.site == 'NB' && d.login_by === 'email'),
+                      'col-md-6': !((d.login_by == 'phone' && this.site == 'NB') || 
+                                        (d.login_by == 'phone' && this.site == 'KD') || 
+                                        (this.site == 'NB' && d.login_by === 'email'))
+                    }" class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
                       <div class="participants__name">
                         <div class="label_detail text-color">
                           <div class="flex">
@@ -1304,6 +1208,20 @@
                         </div>
                       </div>
                     </div>
+
+                    <div *ngIf="(d.login_by == 'phone' && this.site == 'NB') || (d.login_by == 'phone' && this.site == 'KD') || (this.site == 'NB' && d.login_by === 'email')" style="width: 130px;">
+                      <p-dropdown 
+                        class="no-focus"
+                        (onChange)="changeLocale($event, d)" 
+                        panelStyleClass="font" 
+                        [options]="localeList" 
+                        [(ngModel)]="d.locale" 
+                        optionLabel="name"
+                        optionValue="id" 
+                        placeholder="{{ 'choose.language' | translate }}"  
+                        filterBy="name">
+                      </p-dropdown>
+                    </div> 
                   </div>
 
                   <div class="row mt-7px">
@@ -1334,11 +1252,11 @@
                         {{ "user.phone" | translate }}&nbsp;
                         <span class="required-title">*</span>
                       </div>
-                      <div class="content-input flex hover-item">
-                        <input style="width: 95%;" class="input-nhap-sdt" type="text"
+                      <div class="input-data">
+                        <input class="content-input flex hover-item" type="text"
                           placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
 
-                        <div style="width: 5%;" class="participants__name">
+                        <!-- <div style="width: 5%;" class="participants__name">
                           <div class="input-data">
                             <div ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
                               <div *ngIf="d.locale == 'vi'">
@@ -1371,7 +1289,7 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
 
@@ -1392,11 +1310,11 @@
                         {{ "user.phone" | translate }}&nbsp;
                         <span class="required-title">*</span>
                       </div>
-                      <div class="content-input flex hover-item">
-                        <input style="width: 95%;" class="input-nhap-sdt" type="text"
+                      <div class="input-data">
+                        <input class="content-input flex hover-item" type="text"
                           placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
 
-                        <div style="width: 5%;" class="participants__name">
+                        <!-- <div style="width: 5%;" class="participants__name">
                           <div class="label_detail text-color">
                             <span class="required-title"></span>
                           </div>
@@ -1432,7 +1350,7 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>
@@ -1447,11 +1365,11 @@
                           ({{ "receive.contract.process" | translate }})
                         </div>
                       </div>
-                      <div class="content-input flex hover-item">
-                        <input style="width: 95%;" class="input-nhap-sdt" type="text"
+                      <div class="input-data">
+                        <input class="content-input flex hover-item" type="text"
                           placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
 
-                        <div style="width: 5%" class="participants__name">
+                        <!-- <div style="width: 5%" class="participants__name">
                           <div class="label_detail text-color">
                             <span class="required-title"></span>
                           </div>
@@ -1487,7 +1405,7 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>
@@ -1563,30 +1481,14 @@
                       </div>
                     </div>
 
-                    <!-- <div class="participants--input col-md-6"
-                      style="display: flex; justify-content: space-between; padding-left: 7px;">
-                      <div class="participants__name">
-                        <div class="label_detail text-color">
-                          <div class="flex">
-                            <input (change)="changeTypeSign(d, index, id, 'sign_partner')" name="checkPhoneMailParticipantSigner_{{ index }}_{{id}}" type="radio" [value]="email" [(ngModel)]="d.login_by" />
-                          </div>&nbsp;
-                          <div class="text-check-box-contract">
-                            {{ "typeOfSignEmail" | translate }}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="participants__name">
-                        <div class="label_detail text-color">
-                          <div class="flex">
-                            <input (change)="changeTypeSign(d, index, id, 'sign_partner')" name="checkPhoneMailParticipantSigner_{{ index }}_{{id}}" type="radio" [value]="phone" [(ngModel)]="d.login_by" />
-                          </div>&nbsp;
-                          <div class="text-check-box-contract">
-                            {{ "typeOfSignPhone" | translate }}
-                          </div>
-                        </div>
-                      </div>
-                    </div> -->
-                    <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                    <div [ngClass]="{
+                      'col-md-6-tru': (d.login_by == 'phone' && this.site == 'NB') || 
+                                  (d.login_by == 'phone' && this.site == 'KD') || 
+                                  (this.site == 'NB' && d.login_by === 'email'),
+                      'col-md-6': !((d.login_by == 'phone' && this.site == 'NB') || 
+                                        (d.login_by == 'phone' && this.site == 'KD') || 
+                                        (this.site == 'NB' && d.login_by === 'email'))
+                    }" class="participants--input" style="display: flex; justify-content: flex-end; padding-left: 7px;">
                       <div class="participants__name">
                         <div class="label_detail text-color">
                           <div class="flex">
@@ -1604,6 +1506,20 @@
                           </div>
                         </div>
                       </div>
+                    </div>
+
+                    <div *ngIf="(d.login_by == 'phone' && this.site == 'KD') || (this.site == 'NB' && d.login_by === 'email') || (this.site == 'NB' && d.login_by === 'phone')" style="width: 130px;">
+                      <p-dropdown 
+                        class="no-focus"
+                        (onChange)="changeLocale($event, d)" 
+                        panelStyleClass="font" 
+                        [options]="localeList" 
+                        [(ngModel)]="d.locale" 
+                        optionLabel="name"
+                        optionValue="id" 
+                        placeholder="{{ 'choose.language' | translate }}"  
+                        filterBy="name">
+                      </p-dropdown>
                     </div>
                   </div>
 
@@ -1671,11 +1587,11 @@
                         {{ "user.phone" | translate }}&nbsp;
                         <span class="required-title">*</span>
                       </div>
-                      <div class="content-input flex hover-item">
-                        <input class="input-nhap-sdt" style="width: 95%;" type="text"
+                      <div class="input-data">
+                        <input class="content-input flex hover-item" type="text"
                           placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
 
-                        <div class="input-data" style="width: 5%">
+                        <!-- <div class="input-data" style="width: 5%">
                           <div ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
                             <div *ngIf="d.locale == 'vi'">
                               <button *ngIf="d.locale == 'vi'" class="btn btn-outline-primary db_icon_vietnam"
@@ -1706,7 +1622,7 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
 
@@ -1786,11 +1702,11 @@
                           ({{ "receive.contract.process" | translate }})
                         </div>
                       </div>
-                      <div class="content-input flex hover-item">
-                        <input class="input-nhap-sdt" style="width: 95%;" type="text"
+                      <div class="input-data">
+                        <input class="content-input flex hover-item" type="text"
                           placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
 
-                        <div style="width: 5%;" class="participants__name">
+                        <!-- <div style="width: 5%;" class="participants__name">
                           <div class="input-data">
                             <div ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
                               <div *ngIf="d.locale == 'vi'">
@@ -1823,7 +1739,7 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>
@@ -1836,12 +1752,12 @@
                         <div class="label-text">
                           {{ "user.phone" | translate }}&nbsp;<span class="required-title">*</span>
                         </div>
-                        <div class="content-input flex hover-item">
+                        <div class="input-data">
                           <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
-                          <input class="input-nhap-sdt" style="width: 95%;" type="text"
+                          <input class="content-input flex hover-item" type="text"
                             placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
 
-                          <div class="participants__name" style="width: 5%">
+                          <!-- <div class="participants__name" style="width: 5%">
                             <div class="label_detail text-color">
                               <span class="required-title"></span>
                             </div>
@@ -1877,7 +1793,7 @@
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          </div> -->
                         </div>
                       </div>
                     </div>
@@ -1950,7 +1866,7 @@
                   <u class="text-color" (click)="addPartnerSignature(item, id)">{{"btn.add.user.sign" | translate}}</u>
                 </div>
 
-                <div *ngIf="getPartnerSignature(item).length > 1 || getPartnerCoordination(item).length > 0"
+                <div *ngIf="getPartnerSignature(item).length > 1"
                   class="delete-element" (click)="deletePartnerSignature(index, item)">
                   {{ "btn.add.user.delete" | translate }}
                 </div>
@@ -1995,6 +1911,25 @@
                         {{ "user.doc" | translate }}<span>&nbsp;{{ index + 1 }}</span>
                       </div>
                     </div>
+
+                    <div class="col-md-6-tru">
+                    </div>
+    
+                    <div *ngIf="this.site == 'NB'" style="width: 130px;">
+                      <div>
+                        <p-dropdown 
+                          class="no-focus"
+                          (onChange)="changeLocale($event, d)" 
+                          panelStyleClass="font" 
+                          [options]="localeList" 
+                          [(ngModel)]="d.locale" 
+                          optionLabel="name"
+                          optionValue="id" 
+                          placeholder="{{ 'choose.language' | translate }}"  
+                          filterBy="name">
+                        </p-dropdown>
+                      </div>
+                    </div> 
                   </div>
 
 
@@ -2060,10 +1995,10 @@
                           ({{ "receive.contract.process" | translate }})
                         </div>
                       </div>
-                      <div class="content-input flex hover-item">
-                        <input class="input-nhap-sdt" style="width: 95%;" type="text" placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
+                      <div class="input-data">
+                        <input class="content-input flex hover-item" type="text" placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
 
-                        <div class="participants__name" style="width: 5%;">
+                        <!-- <div class="participants__name" style="width: 5%;">
                           <div class="input-data">
                             <div ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
                               <div *ngIf="d.locale == 'vi'">
@@ -2096,7 +2031,7 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>
@@ -2247,36 +2182,15 @@
                       </div>
                     </div>
 
-                    <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}} đối với người ký là cá nhân-->
-                    <!-- <div class="participants--input col-md-6" style="display: flex; justify-content: space-between; padding-left: 7px;">
-                      <div class="participants__name">
-                        <div class="label_detail text-color">
-                          <div class="flex">
-                            <input (change)="changeTypeSign(d, index, null, 'personal')"
-                              name="checkPhoneMailPerson_{{ index }}_{{ id }}" type="radio" [value]="email"
-                              [(ngModel)]="d.login_by" />
-                          </div>
-                          &nbsp;
-                          <div class="text-check-box-contract">
-                            {{ "typeOfSignEmail" | translate }}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="participants__name">
-                        <div class="label_detail text-color">
-                          <div class="flex">
-                            <input (change)="changeTypeSign(d, index, null, 'personal')"
-                              name="checkPhoneMailPerson_{{ index }}_{{ id }}" type="radio" [value]="phone"
-                              [(ngModel)]="d.login_by" />
-                          </div>
-                          &nbsp;
-                          <div class="text-check-box-contract">
-                            {{ "typeOfSignPhone" | translate }}
-                          </div>
-                        </div>
-                      </div>
-                    </div> -->
-                    <div class="participants--input col-md-6" style="display: flex; justify-content: flex-end; padding-left: 7px;">
+                    <div [ngClass]="{
+                      'col-md-6-tru': (d.login_by == 'phone' && this.site == 'NB') || 
+                                  (d.login_by == 'phone' && this.site == 'KD') || 
+                                  (this.site == 'NB' && d.login_by === 'email') ||
+                                  (this.site === 'KD' && getDataSignCka(d).length > 0 && d.login_by == 'email'),
+                      'col-md-6': !((d.login_by == 'phone' && this.site == 'NB') || 
+                                    (d.login_by == 'phone' && this.site == 'KD') || 
+                                    (this.site == 'NB' && d.login_by === 'email') ||
+                                    (this.site === 'KD' && getDataSignCka(d).length > 0 && d.login_by == 'email'))}" class="participants--input" style="display: flex; justify-content: flex-end; padding-left: 7px;">
                       <div class="participants__name">
                         <div class="label_detail text-color">
                           <div class="flex">
@@ -2294,6 +2208,21 @@
                           </div>
                         </div>
                       </div>
+                    </div>
+
+                    <div *ngIf="(d.login_by == 'phone' && this.site == 'KD') || (this.site == 'NB' && d.login_by === 'email') || (this.site == 'NB' && d.login_by === 'phone') ||
+                        (this.site === 'KD' && getDataSignCka(d).length > 0 && d.login_by == 'email')" style="width: 130px;">
+                      <p-dropdown 
+                        class="no-focus"
+                        (onChange)="changeLocale($event, d)" 
+                        panelStyleClass="font" 
+                        [options]="localeList" 
+                        [(ngModel)]="d.locale" 
+                        optionLabel="name"
+                        optionValue="id" 
+                        placeholder="{{ 'choose.language' | translate }}"  
+                        filterBy="name">
+                      </p-dropdown>
                     </div>
                   </div>
 
@@ -2349,11 +2278,11 @@
                             ({{ "receive.contract.process" | translate }})
                           </div>
                         </div>
-                        <div class="content-input flex hover-item">
+                        <div class="input-data">
                           <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
-                          <input class="input-nhap-sdt" style="width: 95%;" type="text" placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
+                          <input class="content-input flex hover-item" type="text" placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
 
-                          <div class="participants__name" style="width: 5%">
+                          <!-- <div class="participants__name" style="width: 5%">
                             <div class="label_detail text-color">
                               <span class="required-title"></span>
                             </div>
@@ -2389,7 +2318,7 @@
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          </div> -->
                         </div>
                       </div>
                     </div>
@@ -2402,10 +2331,10 @@
                           {{ "user.phone" | translate }}&nbsp;
                           <span class="required-title">*</span>
                         </div>
-                        <div class="content-input flex hover-item">
-                          <input class="input-nhap-sdt" style="width: 95%;" type="text" placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
+                        <div class="input-data">
+                          <input class="content-input flex hover-item" type="text" placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
 
-                          <div style="width: 5%;" class="input-data">
+                          <!-- <div style="width: 5%;" class="input-data">
                             <div ngbDropdown class="d-inline-block" [(ngModel)]="d.locale">
                               <div *ngIf="d.locale == 'vi'">
                                 <button *ngIf="d.locale == 'vi'" class="btn btn-outline-primary db_icon_vietnam"
@@ -2436,7 +2365,7 @@
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          </div> -->
                         </div>
                       </div>
     
@@ -2456,11 +2385,11 @@
                         <div class="label-text">
                           {{ "user.phone" | translate }}&nbsp;<span class="required-title">*</span>
                         </div>
-                        <div class="content-input flex hover-item">
+                        <div class="input-data">
                           <!-- <img src="assets/img/login_email.svg" class="input-img"> -->
-                          <input class="input-nhap-sdt" style="width: 95%;" type="text" placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
+                          <input class="content-input flex hover-item" type="text" placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" />
 
-                          <div class="participants__name" style="width: 5%">
+                          <!-- <div class="participants__name" style="width: 5%">
                             <div class="label_detail text-color">
                               <span class="required-title"></span>
                             </div>
@@ -2496,7 +2425,7 @@
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          </div> -->
                         </div>
                       </div>
                     </div>
@@ -2577,11 +2506,11 @@
                           {{ "user.phone" | translate }}&nbsp;
                           <span class="required-title">*</span>
                         </div>
-                        <div class="content-input flex hover-item">
-                          <input class="input-nhap-sdt" style="width: 95%;" type="text" placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone"
+                        <div class="input-data">
+                          <input class="content-input flex hover-item" type="text" placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone"
                             oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
 
-                          <div class="participants__name" style="width: 5%">
+                          <!-- <div class="participants__name" style="width: 5%">
                             <div class="label_detail text-color">
                               <span class="required-title"></span>
                             </div>
@@ -2617,7 +2546,7 @@
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          </div> -->
                         </div>
                       </div>
                     </div>
