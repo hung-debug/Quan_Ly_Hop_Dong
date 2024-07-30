@@ -67,7 +67,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     let timeNow = moment(new Date(), "YYYY/MM/DD").format("YYYY/MM/DD")
     this.isEndDate = this.endDate >= timeNow ? true : false;
     let participants = detailContract[0].participants;
-    
+
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
       this.personCreate = response.createdBy.name;
 
@@ -99,11 +99,12 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           phone: element.phone,
           change_num: this.checkChangeNum(participants, element.id),
           card_id: element.cardId,
-          user_in_organization: element.user_in_organization
+          user_in_organization: element.user_in_organization,
+          role: element.role,
         }
 
         this.is_list_name.push(data);
-        
+
       })
 
       this.is_list_name.map((x: any) => {
@@ -257,7 +258,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   openEdit(recipient: any) {
-    this.contractService.getInforPersonProcess(recipient).subscribe((response) => {    
+    this.contractService.getInforPersonProcess(recipient).subscribe((response) => {
       let data: any;
       data = response;
       data["contract_id"] = this.data.is_data_contract.id
@@ -269,7 +270,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         data,
       })
 
-      dialogRef.afterClosed().subscribe((result: any) => {  
+      dialogRef.afterClosed().subscribe((result: any) => {
         this.is_list_name = this.is_list_name.map((x: any) => {
           if (x?.id === result?.id) {
             return {
@@ -283,7 +284,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
             }
           }
           return x
-        })  
+        })
       })
     })
   }

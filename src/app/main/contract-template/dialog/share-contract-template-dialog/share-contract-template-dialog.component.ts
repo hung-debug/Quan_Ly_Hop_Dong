@@ -112,9 +112,8 @@ export class ShareContractTemplateDialogComponent implements OnInit {
 
     //lay danh sach email da duoc chia se
     this.contractTemplateService.getEmailShareList(this.data.id, orgId).subscribe(listShared => {
-      this.userService.getUserList(orgId, "","").subscribe(data => {
-
-        let dataFilter = data.entities.filter((p: any) => p.email != emailLogin && p.status == 1);
+      this.userService.getUserListShare(orgId, "","").subscribe(data => {
+        let dataFilter = data?.filter((p: any) => p.email != emailLogin && p.status == 1);
         //chi lay danh sach user chua duoc chia se
         this.userList = dataFilter.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
       });
