@@ -155,6 +155,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   folderName: any;
   defaultValue: number = 100;
   liquidationContractData: any;
+  remoteSinging: any;
   constructor(
     private contractService: ContractService,
     private checkViewContractService: CheckViewContractService,
@@ -181,6 +182,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
     this.route.queryParams.subscribe((params) => {
       this.pageBefore = params.page;
+      this.remoteSinging = params?.remoteSinging;
 
       if (params.action == 'sign') {
         this.signBefore = true;
@@ -361,10 +363,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         };
 
         this.datas = this.data_contract;
-        
+
         if(this.datas.is_data_contract.originalContractId)
         this.contractService.getDataCoordination(this.datas.is_data_contract.originalContractId).subscribe((item) =>{
-      
+
           this.datas.is_data_contract.original_contract_name =  item.name;
         })
 
@@ -1211,8 +1213,19 @@ export class DetailContractComponent implements OnInit, OnDestroy {
               });
             });
           } else {
-            this.router.navigate(['/login']);
-            this.contractService.deleteToken().subscribe();
+            if (this.remoteSinging =='1') {
+                this.contractService.getRemoteSigningCurrentStatus(this.recipientId).subscribe(
+                  (res) => {
+                    if(res?.status == "QUA_THOI_GIAN_KY" || res?.status == "DANG_XU_LY" || res?.status == "TU_CHOI") {
+                      this.router.navigate(['/main/c/receive/wait-processing']);
+                    } else {
+                      this.router.navigate(['/main/c/receive/processed']);
+                    }
+                  })
+            } else {
+              this.router.navigate(['/login']);
+              this.contractService.deleteToken().subscribe();
+            }
           }
 
         }
