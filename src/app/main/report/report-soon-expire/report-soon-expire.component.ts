@@ -136,7 +136,7 @@ export class ReportSoonExpireComponent implements OnInit {
 
   async getTypeListContract(typeId?: number) {
     const inforType = await this.contractTypeService
-      .getContractTypeList('', '', typeId)
+      .getContractTemplateTypeList('', '', typeId)
       .toPromise();
     this.typeList = inforType;
   }
