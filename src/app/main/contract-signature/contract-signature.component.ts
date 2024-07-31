@@ -2918,20 +2918,20 @@ export class ContractSignatureComponent implements OnInit {
         return '';
       } else if (ceca_push == 1) {
         if (ceca_status == -1) {
-          return '[Gửi lên CeCA thất bại]';
+          return 'Gửi lên CeCA thất bại';
         } else if (ceca_status == 1) {
-          return '[Chờ BCT xác thực]';
+          return 'Chờ BCT xác thực';
         } else if (ceca_status == -2) {
-          return '[Xác thực thất bại]';
+          return 'Xác thực thất bại';
         } else if (ceca_status == 0) {
-          return '[BCT xác thực thành công]';
+          return 'BCT xác thực thành công';
         } else {
-          return '[Chưa gửi lên CeCA]';
+          return 'Chưa gửi lên CeCA';
         }
       }
-      return '[Không xác định]';
+      return 'Không xác định';
     }
-    return '';
+    return 'Không xác định';
   }
 
   getNewCoordinateTokenV1(heightPages: any, fields: any[]) {

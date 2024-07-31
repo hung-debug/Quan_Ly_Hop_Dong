@@ -54,7 +54,7 @@ export class AddPartnerDialogComponent implements OnInit {
   ngOnInit(): void {
     this.type = this.data.type;
     this.customerService.getCustomerList().subscribe((res: any) => {
-      this.list = res.filter((item: any) => {
+      this.list = res.content.filter((item: any) => {
           return item.type === this.type; 
       });
       
