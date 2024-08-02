@@ -277,6 +277,10 @@ export class ConfirmContractFormComponent implements OnInit {
         if(res.sign_unit == "chu_ky_so") {
           res.type.forEach((element: any) => {
             element.sign_config.forEach((item: any) => {
+              if(item.sign_unit == "chu_ky_so_con_dau") {
+                item.width = item.width - 10;
+                item.height = item.height - 10;
+              }
               if (item.id_have_data) {
                 item.type = 3;
                 isHaveFieldId.push(item);
@@ -327,6 +331,8 @@ export class ConfirmContractFormComponent implements OnInit {
                   item['type'] = 3;
                   item['type_image_signature'] = 3;
                 } else if (item.sign_unit == 'chu_ky_so_con_dau') {
+                  item.width = item.width - 10;
+                  item.height = item.height - 10;
                   item['type'] = 3;
                   item['type_image_signature'] = 2;
                 } else if (item.sign_unit == 'chu_ky_so_thong_tin') {

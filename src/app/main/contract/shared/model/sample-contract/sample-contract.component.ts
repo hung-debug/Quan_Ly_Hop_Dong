@@ -149,8 +149,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngOnInit() {
     this.onResize();
-    console.log("datas",this.datas);
-
     this.spinner.hide();
 
     this.list_font = ["Arial", "Calibri", "Times New Roman"];
@@ -287,7 +285,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
 
     this.synchronized1(this.imageSign);
-    this.synchronized1(this.digitalSign);
+    this.synchronized2(this.digitalSign);
     this.synchronized1(this.textUnit);
 
     this.checkDifferent();
@@ -345,6 +343,29 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
+  synchronized2(numberSign: number) {
+    for (let i = 0; i < this.datas.is_determine_clone.length; i++) {
+      const clone = this.datas.is_determine_clone[i];
+  
+      for (let j = 0; j < this.datas.contract_user_sign[numberSign].type.length; j++) {
+        const signImage = this.datas.contract_user_sign[numberSign].type[j];
+  
+        signImage.sign_config.forEach((item: any) => {
+          for (let k = 0; k < clone.recipients.length; k++) {
+            if (clone.recipients[k].id === item.recipient_id) {
+              item.email = clone.recipients[k].email;
+              item.phone = clone.recipients[k].phone;
+              if (item.recipient) {
+                item.recipient.email = clone.recipients[k].email;
+                item.recipient.phone = clone.recipients[k].phone;
+              }
+              item.name = clone.recipients[k].name;
+            }
+          }
+        });
+      }
+    }
+  }
 
   checkDifferent() {
     //Lấy tất cả recipientId trong clone
@@ -352,11 +373,23 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     //Check mảng sign_config có id recipient trên thì giữ lại; còn lại xoá hết
     for(let i = 0; i < 4; i++) {
-      for(let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
-        const sign_config = this.datas.contract_user_sign[i].sign_config[j];
-
-        if(sign_config.recipient_id && !recipientIds.includes(sign_config.recipient_id) && sign_config.sign_unit != 'text_currency') {
-          this.datas.contract_user_sign[i].sign_config.splice(j,1);
+      if(this.datas.contract_user_sign[i].sign_unit == "chu_ky_so") {
+        for(let j = 0; j < this.datas.contract_user_sign[i].type.length; j++) {      
+          this.datas.contract_user_sign[i].type.forEach((element: any) => {
+            element.sign_config.forEach((item: any) => {
+              const sign_config = item;
+              if(sign_config.recipient_id && !recipientIds.includes(sign_config.recipient_id) && sign_config.sign_unit != 'text_currency') {
+                this.datas.contract_user_sign[i].sign_config.splice(j,1);
+              }
+            })
+          })
+        }
+      } else {
+        for(let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
+          const sign_config = this.datas.contract_user_sign[i].sign_config[j];
+          if(sign_config.recipient_id && !recipientIds.includes(sign_config.recipient_id) && sign_config.sign_unit != 'text_currency') {
+            this.datas.contract_user_sign[i].sign_config.splice(j,1);
+          }
         }
       }
     }
@@ -456,6 +489,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             }
 
             if (data.type_image_signature === 2) {
+              data.height = data.height + 10;
+              data.width = data.width + 10;
               data.sign_unit = 'chu_ky_so_con_dau'
               targetObject2.sign_config.push(data);
             }
@@ -1186,12 +1221,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
   countDuplicate: any = 0;
   getCheckSignature(isSignType: any, listSelect?: string) {
+    if(isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
+      isSignType = 'chu_ky_so'
+    }
     let arrSign : any = [];
     this.list_sign_name.forEach((element: any) => {
-      console.log("element",element);
       if (this.convertToSignConfig().some((p: any) => (
         (element.login_by == 'phone' ? (p.recipient ? p.recipient.phone : p.phone) == element.phone :
-        ((p.recipient ? p.recipient.email : p.email) == element.email)) && p.sign_unit == isSignType) ||
+        ((p.recipient ? p.recipient.email : p.email) == element.email)) && (p.sign_unit == isSignType || p.sign_unit.includes('chu_ky_so'))) ||
         (isSignType == 'so_tai_lieu' && (p.recipient ? p?.recipient?.email : p.email ? p?.recipient?.phone : p.phone) && p.sign_unit == 'so_tai_lieu'))) {
         if (isSignType != 'text') {
           if (isSignType == 'so_tai_lieu') {
@@ -1201,7 +1238,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             } else {
               element.is_disable = !(element.sign_type.some((p: any) => [2,4,6].includes(p.id)) || element.role == 4)
             }
-          }else if (isSignType == 'chu_ky_so' || isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
+          }else if (isSignType.includes('chu_ky_so')) {
             // element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6) || element.sign_type.some((p:any) => element.role == 4 && ![2,4,6].includes(p.id)))
             if(element.sign_type.some((p:any) => [2,4,6].includes(p.id))){
               element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6))
@@ -1218,7 +1255,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       } else {
         if (isSignType == 'chu_ky_anh') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
-        } else if (isSignType == 'chu_ky_so' || isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
+        } else if (isSignType.includes('chu_ky_so')) {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && element.role != 2);
         } else if (isSignType == 'text') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 ) || (element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3 && p.id != 7))); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
@@ -1811,9 +1848,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   soHopDong: any;
   changePositionSign(e: any, locationChange: any, property: any) {
-    
-    const objIndex = this.list_sign_name.findIndex((obj: any) => obj.id == e.target.value);
-    this.list_sign_name[objIndex].is_disable = true;
+    if(property != 'text') {
+      const objIndex = this.list_sign_name.findIndex((obj: any) => obj.id == e.target.value);
+      this.list_sign_name[objIndex].is_disable = true;
+    }
 
     let signElement = document.getElementById(this.objSignInfo.id);
 
@@ -2006,6 +2044,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if(res.sign_unit == "chu_ky_so") {
               res.type.forEach((element: any) => {
                 element.sign_config.forEach((item: any) => {
+                  if(item.sign_unit == "chu_ky_so_con_dau") {
+                    item.width = item.width - 10;
+                    item.height = item.height - 10;
+                  }
                   if (item.id_have_data) {
                     item.type = 3
                     isHaveFieldId.push(item)
@@ -2047,6 +2089,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     item['type'] = 3;
                     item['type_image_signature'] = 3;
                   } else if (item.sign_unit == 'chu_ky_so_con_dau') {
+                    item.width = item.width - 10;
+                    item.height = item.height - 10;              
                     item['type'] = 3;
                     item['type_image_signature'] = 2;
                   } else if (item.sign_unit == 'chu_ky_so_thong_tin') {

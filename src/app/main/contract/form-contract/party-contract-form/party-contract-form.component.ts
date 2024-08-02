@@ -1205,7 +1205,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                 });
               });
               
-              console.log("duplicatesPartner",duplicatesPartner);
               if (duplicatesPartner.length >= 2) {
                 return true;
               }

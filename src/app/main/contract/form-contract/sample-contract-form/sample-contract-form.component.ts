@@ -274,7 +274,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     }
 
     this.synchronized1(this.imageSign);
-    this.synchronized1(this.digitalSign);
+    this.synchronized2(this.digitalSign);
     this.synchronized1(this.textUnit);
 
     this.checkDifferent();
@@ -324,6 +324,29 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     }
   }
 
+  synchronized2(numberSign: number) {
+    for (let i = 0; i < this.datasForm.is_determine_clone.length; i++) {
+      const clone = this.datasForm.is_determine_clone[i];
+  
+      for (let j = 0; j < this.datasForm.contract_user_sign[numberSign].type.length; j++) {
+        const signImage = this.datasForm.contract_user_sign[numberSign].type[j];
+  
+        signImage.sign_config.forEach((item: any) => {
+          for (let k = 0; k < clone.recipients.length; k++) {
+            if (clone.recipients[k].id === item.recipient_id) {
+              item.email = clone.recipients[k].email;
+              item.phone = clone.recipients[k].phone;
+              if (item.recipient) {
+                item.recipient.email = clone.recipients[k].email;
+                item.recipient.phone = clone.recipients[k].phone;
+              }
+              item.name = clone.recipients[k].name;
+            }
+          }
+        });
+      }
+    }
+  }
 
   checkDifferent() {
     //Lấy tất cả recipientId trong clone
@@ -331,11 +354,24 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
     //Check mảng sign_config có id recipient trên thì giữ lại; còn lại xoá hết
     for(let i = 0; i < 4; i++) {
-      for(let j = 0; j < this.datasForm.contract_user_sign[i].sign_config.length; j++) {
-        const sign_config = this.datasForm.contract_user_sign[i].sign_config[j];
+      if(this.datasForm.contract_user_sign[i].sign_unit == "chu_ky_so") {
+        for(let j = 0; j < this.datasForm.contract_user_sign[i].type.length; j++) {      
+          this.datasForm.contract_user_sign[i].type.forEach((element: any) => {
+            element.sign_config.forEach((item: any) => {
+              const sign_config = item;
+              if(sign_config.recipient_id && !recipientIds.includes(sign_config.recipient_id) && sign_config.sign_unit != 'text_currency') {
+                this.datasForm.contract_user_sign[i].sign_config.splice(j,1);
+              }
+            })
+          })
+        }
+      } else {
+        for(let j = 0; j < this.datasForm.contract_user_sign[i].sign_config.length; j++) {
+          const sign_config = this.datasForm.contract_user_sign[i].sign_config[j];
 
-        if(sign_config.recipient_id && !recipientIds.includes(sign_config.recipient_id) && sign_config.sign_unit != 'text_currency') {
-          this.datasForm.contract_user_sign[i].sign_config.splice(j,1);
+          if(sign_config.recipient_id && !recipientIds.includes(sign_config.recipient_id) && sign_config.sign_unit != 'text_currency') {
+            this.datasForm.contract_user_sign[i].sign_config.splice(j,1);
+          }
         }
       }
     }
@@ -380,6 +416,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
 
             if (data.type_image_signature === 2) {
               data.sign_unit = 'chu_ky_so_con_dau'
+              data.height = data.height + 10;
+              data.width = data.width + 10;
               targetObject2.sign_config.push(data);
             }
 
@@ -774,11 +812,21 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         this.objSignInfo.traf_y = y;
         this.signCurent.width = event.rect.width;
         this.signCurent.height = event.rect.height;
-        if (this.signCurent.sign_unit == 'chu_ky_so' || this.signCurent.sign_unit == 'chu_ky_anh'){
+        if (this.signCurent.sign_unit == 'chu_ky_so_con_dau_va_thong_tin' || this.signCurent.sign_unit == 'chu_ky_anh'){
           this.signCurent.width <= 140 ? this.signCurent.width = 140 : this.signCurent.width = event.rect.width
           this.signCurent.height <= 50 ? this.signCurent.height = 50 : this.signCurent.height = event.rect.height
-          this.objSignInfo.width = this.signCurent.height
-          this.objSignInfo.height = this.signCurent.width
+          this.objSignInfo.width = this.signCurent.width
+          this.objSignInfo.height = this.signCurent.height
+        } else if(this.signCurent.sign_unit.includes('chu_ky_so_con_dau')) {
+          this.signCurent.width <= 66 ? this.signCurent.width = 66 : this.signCurent.width = event.rect.width;
+          this.signCurent.height <= 50 ? this.signCurent.height = 50 : this.signCurent.height = event.rect.height;
+          this.objSignInfo.width = this.signCurent.width
+          this.objSignInfo.height = this.signCurent.height
+        } else if(this.signCurent.sign_unit.includes('chu_ky_so_thong_tin')) {
+          this.signCurent.width <= 114 ? this.signCurent.width = 114 : this.signCurent.width = event.rect.width;
+          this.signCurent.height <= 50 ? this.signCurent.height = 50 : this.signCurent.height = event.rect.height;
+          this.objSignInfo.width = this.signCurent.width
+          this.objSignInfo.height = this.signCurent.height
         } else {
           this.objSignInfo.width = event.rect.width;
           this.objSignInfo.height = event.rect.height;
@@ -1009,7 +1057,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                               element['width'] = '66';
                               element['height'] = '66';
                             } else if (res.type[i].sign_unit == "chu_ky_so_thong_tin") {
-                              element['width'] = '120';
+                              element['width'] = '114';
                               element['height'] = '66';
                             } else {
                               element['width'] = '180';
@@ -1168,6 +1216,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   }
 
   getCheckSignature(isSignType: any, listSelect?: string, value?: any) {
+    if(isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
+      isSignType = 'chu_ky_so'
+    }
     // p.recipient_id == element.id && p.sign_unit == isSignType)
     this.list_sign_name.forEach((element: any) => {
       if (isSignType == 'text' && value) {
@@ -1176,11 +1227,11 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           if (this.convertToSignConfig().some((p: any) => (
             element.login_by == 'phone' ? (p.recipient ? p.recipient.phone : p.phone) == element.phone :
             (p.recipient ? p.recipient.email : p.email) == element.email
-          ) && (p.sign_unit == isSignType))) {
+          ) && (p.sign_unit == isSignType || p.sign_unit.includes('chu_ky_so')))) {
             if (isSignType != 'text') {
               if(isSignType == 'so_tai_lieu') {
                 element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role == 4)
-              } else if (isSignType == 'chu_ky_so' || isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
+              } else if (isSignType.includes('chu_ky_so')) {
                 // element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
                 if(element.sign_type.some((p:any) => [2,4,6].includes(p.id))){
                   element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6))
@@ -1194,7 +1245,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           } else {
             if (isSignType == 'chu_ky_anh') {
               element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
-            }else if (isSignType == 'chu_ky_so' || isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
+            }else if (isSignType.includes('chu_ky_so')) {
               element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && element.role != 2);
             } else if (isSignType == 'text') {
               element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || (element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3 && p.id != 7)));
@@ -1501,7 +1552,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     if (d['width']) {
       if (d?.sign_unit == 'chu_ky_so_con_dau' && d['width'] == 66) {
         style.width = 66 + "px";
-      } else if (d?.sign_unit == 'chu_ky_so_thong_tin' && d['width'] == 120) {
+      } else if (d?.sign_unit == 'chu_ky_so_thong_tin' && d['width'] == 114) {
         style.width = 120 + "px";
       } else {
         style.width = parseInt(d['width']) + "px";
@@ -1775,8 +1826,10 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   // edit location doi tuong ky
   soHopDong: any;
   changePositionSign(e: any, locationChange: any, property: any) {
-    const objIndex = this.list_sign_name.findIndex((obj: any) => obj.id == e.target.value);
-    this.list_sign_name[objIndex].is_disable = true;
+    if(property != 'text') {
+      const objIndex = this.list_sign_name.findIndex((obj: any) => obj.id == e.target.value);
+      this.list_sign_name[objIndex].is_disable = true;
+    }
     
     let signElement = document.getElementById(this.objSignInfo.id);
 
@@ -2010,6 +2063,11 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             if(res.sign_unit == "chu_ky_so") {
               res.type.forEach((element: any) => {
                 element.sign_config.forEach((item: any) => {
+                  if(item.sign_unit == "chu_ky_so_con_dau") {
+                    item.width = item.width - 10;
+                    item.height = item.height - 10;
+                  }
+
                   if (item.id_have_data) {
                     item.type = 3;
                     isHaveFieldId.push(item)
@@ -2047,6 +2105,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                   if (item.sign_unit == 'chu_ky_so_con_dau_va_thong_tin') {
                     item['type_image_signature'] = 3;
                   } else if (item.sign_unit == 'chu_ky_so_con_dau') {
+                    item.width = item.width - 10;
+                    item.height = item.height - 10;
                     item['type_image_signature'] = 2;
                   } else if (item.sign_unit == 'chu_ky_so_thong_tin') {
                     item['type_image_signature'] = 1;
