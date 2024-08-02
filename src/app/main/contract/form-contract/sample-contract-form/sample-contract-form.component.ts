@@ -1937,25 +1937,25 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               this.soHopDong = data_name;
 
               //Gán lại tất cả số hợp đồng cho một người ký
-              this.datasForm.contract_user_sign.forEach((res: any) => {
-                if (res.sign_config.length > 0) {
-                  let arrSignConfigItem: any = "";
+              // this.datasForm.contract_user_sign.forEach((res: any) => {
+              //   if (res.sign_config.length > 0) {
+              //     let arrSignConfigItem: any = "";
 
-                  if(res.sign_unit == 'so_tai_lieu') {
-                    arrSignConfigItem = res.sign_config;
+              //     if(res.sign_unit == 'so_tai_lieu') {
+              //       arrSignConfigItem = res.sign_config;
 
-                    arrSignConfigItem.forEach((element: any) => {
-                      element.name = this.soHopDong.name;
-                      element.signature_party = data_name.type_unit;
-                      element.recipient_id = data_name.id;
-                      element.status = data_name.status;
-                      element.type = data_name.type;
-                      element.email = data_name.email;
-                      element.phone = data_name.phone;
-                    })
-                  }
-                }
-              });
+              //       arrSignConfigItem.forEach((element: any) => {
+              //         element.name = this.soHopDong.name;
+              //         element.signature_party = data_name.type_unit;
+              //         element.recipient_id = data_name.id;
+              //         element.status = data_name.status;
+              //         element.type = data_name.type;
+              //         element.email = data_name.email;
+              //         element.phone = data_name.phone;
+              //       })
+              //     }
+              //   }
+              // });
             }
           }
         }
