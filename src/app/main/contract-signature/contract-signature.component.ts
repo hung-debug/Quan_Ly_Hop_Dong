@@ -2358,14 +2358,24 @@ export class ContractSignatureComponent implements OnInit {
         }
       // token v2 - optimizing
       let promises = fileC.map(async (_: any, i: any) => {
-          y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
-          signUpdate.id = idSignMany[i];
-          signDigital.signDigitalX = x[i];
-          signDigital.signDigitalY = y[i];
-          signDigital.signDigitalWidth = w[i];
-          signDigital.signDigitalHeight = h[i];
-          signDigital.page = page[i];
-          const emptySignature = await this.contractServiceV1
+        signDigital.page = page[i];
+        let emptySignature: any;
+
+        let dataObjectSignature = await this.contractServiceV1
+        .getDataObjectSignatureLoadChange(idContract[i])
+        .toPromise();
+        dataObjectSignature = dataObjectSignature.filter(
+          (item: any) => item.type == 3 && item.recipient.id == recipientId[i]
+        );
+
+        for (let j = 0; j< dataObjectSignature.length; j++) {
+          signUpdate.id = dataObjectSignature[j].id;
+          y[j] = heightPage[j] - (y[j] - currentHeight[j]) - h[j];
+          signDigital.signDigitalX = x[j];
+          signDigital.signDigitalY = y[j];
+          signDigital.signDigitalWidth = w[j];
+          signDigital.signDigitalHeight = h[j];
+          emptySignature = await this.contractServiceV1
             .createEmptySignature(
               recipientId[i],
               signUpdate,
@@ -2468,6 +2478,7 @@ export class ContractSignatureComponent implements OnInit {
             );
             return;
           }
+        }
       })
       await Promise.all(promises)
       // token v2 - optimizing
