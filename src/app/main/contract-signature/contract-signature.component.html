@@ -195,7 +195,7 @@
                                 </div> -->
 
                                 <!--Trang thai hop dong-->
-                                <div class="row" *ngIf="item.participant.contract.ceca_push == 1 && filter_status == 4">
+                                <div class="row" *ngIf="item.participant.contract.ceca_push == 1 && filter_status == 4 && item.participant.contract.status == 30">
                                     <div class="item_contract_infor">{{'contract.status.ceca' | translate}}:
                                         <span class="status_blue_ceca">{{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
                                     </div>
@@ -677,7 +677,7 @@
                                 </div> -->
 
                                 <!--Trang thai hop dong-->
-                                <div class="row" *ngIf="item.participant.contract.ceca_push == 1 && filter_status == 4">
+                                <div class="row" *ngIf="item.participant.contract.ceca_push == 1 && filter_status == 4 && item.participant.contract.status == 30">
                                   <div class="item_contract_infor">{{'contract.status.ceca' | translate}}:
                                       <span class="status_blue_ceca"> {{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
                                   </div>
