@@ -2419,7 +2419,7 @@ export class ContractSignatureComponent implements OnInit {
             //   filePdfSigned
             // );
             const sign = await this.contractServiceV1.updateDigitalSignatured(
-              idSignMany[i],
+              dataObjectSignature[j].id,
               filePdfSigned
             );
 
