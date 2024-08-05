@@ -63,7 +63,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
         if(this.action == 'edit'){
           this.appService.setTitle("organization.customer.edit");
           this.customerService.getCustomerList().subscribe((res: any) => {
-            this.orgCustomer = res.filter((item: any) => {
+            this.orgCustomer = res.content.filter((item: any) => {
                  return item.id.toString() === this.id;
              })[0]})
         }
@@ -79,7 +79,7 @@ export class CustomerAddComponent implements OnInit, OnDestroy {
       } else {
         this.appService.setTitle("personal.customer.edit");
         this.customerService.getCustomerList().subscribe((res: any) => {
-          this.personalCustomer = res.filter((item: any) => {
+          this.personalCustomer = res.content.filter((item: any) => {
 
                return item.id.toString() === this.id;
            })[0]})
