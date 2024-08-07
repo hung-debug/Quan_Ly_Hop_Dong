@@ -2479,10 +2479,121 @@ export class ContractSignatureComponent implements OnInit {
             return;
           }
         }
+
+        // refactoring ========================
+        // const base64TempData = emptySignature.base64TempData;
+        // const fieldName = emptySignature.fieldName;
+        // const hexDigestTempFile = emptySignature.hexDigestTempFile;
+
+        // var json_req = JSON.stringify({
+        //   OperationId: 5,
+        //   SessionId: sessionId,
+        //   DataToBeSign: base64TempData,
+        //   checkOCSP: 0,
+        //   reqDigest: 0,
+        //   algDigest: 'SHA_256',
+        // });
+
+        // json_req = window.btoa(json_req);
+
+        // try {
+        //   const callServiceDCSigner = await this.contractServiceV1.signUsbToken(
+        //     'request=' + json_req
+        //   );
+
+        //   const dataSignatureToken = JSON.parse(
+        //     window.atob(callServiceDCSigner.data)
+        //   );
+
+        //   const signatureToken = dataSignatureToken.Signature;
+
+        //   const mergeTimeStamp = await this.contractServiceV1
+        //     .meregeTimeStamp(
+        //       recipientId[i],
+        //       idContract[i],
+        //       signatureToken,
+        //       fieldName,
+        //       certInfoBase64,
+        //       hexDigestTempFile,
+        //       ceca_push[i]
+        //     )
+        //     .toPromise();
+        //   const filePdfSigned = mergeTimeStamp.base64Data;
+
+
+        //   const sign = await this.contractServiceV1.updateDigitalSignatured(
+        //     idSignMany[i],
+        //     filePdfSigned
+        //   );
+
+        //   if (!sign.recipient_id) {
+        //     this.toastService.showErrorHTMLWithTimeout(
+        //       'Lỗi ký usb token không cập nhật được recipient id',
+        //       '',
+        //       3000
+        //     );
+        //     return false;
+        //   }
+
+        //   const updateInfo =
+        //     await this.contractServiceV1.updateInfoContractConsiderPromise(
+        //       [{
+        //         processAt: this.isDateTime
+        //       }],
+        //       recipientId[i]
+        //     );
+
+        //   if (!updateInfo.id) {
+        //     this.toastService.showErrorHTMLWithTimeout(
+        //       'Lỗi cập nhật trạng thái hợp đồng ',
+        //       '',
+        //       3000
+        //     );
+        //   }
+
+        //   if (i == fileC.length - 1) {
+        //     this.spinner.hide();
+        //     this.toastService.showSuccessHTMLWithTimeout(
+        //       'sign.success',
+        //       '',
+        //       3000
+        //     );
+
+        //     this.router
+        //       .navigateByUrl('/', { skipLocationChange: true })
+        //       .then(() => {
+        //         this.router.navigate(['main/c/receive/processed']);
+        //       });
+        //   }
+        // } catch (err) {
+        //   this.spinner.hide()
+        //   this.toastService.showErrorHTMLWithTimeout(
+        //     'Lỗi ký usb token ',
+        //     '',
+        //     3000
+        //   );
+        //   return;
+        // }
+        // refactoring ========================
+
+      })
+      await Promise.all(promises).then((results: any) => {
+        this.toastService.showSuccessHTMLWithTimeout(
+          'sign.success',
+          '',
+          3000
+        );
+
+        this.router
+          .navigateByUrl('/', { skipLocationChange: true })
+          .then(() => {
+            this.router.navigate(['main/c/receive/processed']);
+          });
       })
       await Promise.all(promises)
       // token v2 - optimizing
       await this.signV2FixingProcess()
+      this.spinner.hide();
       } else {
         this.spinner.hide();
         Swal.fire({
@@ -2510,9 +2621,9 @@ export class ContractSignatureComponent implements OnInit {
     try {
       const checkV2Infor = await this.contractServiceV1.checkTokenV2Infor().toPromise()
       if (checkV2Infor.status == false) {
-        console.log('bye bye');
+        //console.log('bye bye');
       } else {
-        console.log('multi processing');
+        //console.log('multi processing');
         this.fixingRecipientIds = checkV2Infor.listRecipientId
         if (this.fixingRecipientIds.length > 0) {
           for (const recipId of this.fixingRecipientIds) {
