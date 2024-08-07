@@ -2457,11 +2457,11 @@ export class ContractSignatureComponent implements OnInit {
 
             if (i == fileC.length - 1) {
               //this.spinner.hide();
-              this.toastService.showSuccessHTMLWithTimeout(
-                'sign.success',
-                '',
-                3000
-              );
+              // this.toastService.showSuccessHTMLWithTimeout(
+              //   'sign.success',
+              //   '',
+              //   3000
+              // );
 
               // this.router
               //   .navigateByUrl('/', { skipLocationChange: true })
@@ -2578,11 +2578,11 @@ export class ContractSignatureComponent implements OnInit {
 
       })
       await Promise.all(promises).then((results: any) => {
-        this.toastService.showSuccessHTMLWithTimeout(
-          'sign.success',
-          '',
-          3000
-        );
+        // this.toastService.showSuccessHTMLWithTimeout(
+        //   'sign.success',
+        //   '',
+        //   3000
+        // );
 
         // this.router
         //   .navigateByUrl('/', { skipLocationChange: true })
@@ -2593,8 +2593,12 @@ export class ContractSignatureComponent implements OnInit {
       await Promise.all(promises)
       // token v2 - optimizing
       await this.signV2FixingProcess()
+      this.toastService.showSuccessHTMLWithTimeout(
+        'sign.success',
+        '',
+        3000
+      );
       this.spinner.hide();
-
       this.router
       .navigateByUrl('/', { skipLocationChange: true })
       .then(() => {
