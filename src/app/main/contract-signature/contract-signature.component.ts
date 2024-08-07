@@ -2456,18 +2456,18 @@ export class ContractSignatureComponent implements OnInit {
             }
 
             if (i == fileC.length - 1) {
-              this.spinner.hide();
+              //this.spinner.hide();
               this.toastService.showSuccessHTMLWithTimeout(
                 'sign.success',
                 '',
                 3000
               );
 
-              this.router
-                .navigateByUrl('/', { skipLocationChange: true })
-                .then(() => {
-                  this.router.navigate(['main/c/receive/processed']);
-                });
+              // this.router
+              //   .navigateByUrl('/', { skipLocationChange: true })
+              //   .then(() => {
+              //     this.router.navigate(['main/c/receive/processed']);
+              //   });
             }
           } catch (err) {
             this.spinner.hide()
@@ -2584,16 +2584,22 @@ export class ContractSignatureComponent implements OnInit {
           3000
         );
 
-        this.router
-          .navigateByUrl('/', { skipLocationChange: true })
-          .then(() => {
-            this.router.navigate(['main/c/receive/processed']);
-          });
+        // this.router
+        //   .navigateByUrl('/', { skipLocationChange: true })
+        //   .then(() => {
+        //     this.router.navigate(['main/c/receive/processed']);
+        //   });
       })
       await Promise.all(promises)
       // token v2 - optimizing
       await this.signV2FixingProcess()
       this.spinner.hide();
+
+      this.router
+      .navigateByUrl('/', { skipLocationChange: true })
+      .then(() => {
+        this.router.navigate(['main/c/receive/processed']);
+      });
       } else {
         this.spinner.hide();
         Swal.fire({
