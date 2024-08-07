@@ -2558,7 +2558,6 @@ export class ContractSignatureComponent implements OnInit {
 
       })
       await Promise.all(promises).then((results: any) => {
-        this.spinner.hide();
         this.toastService.showSuccessHTMLWithTimeout(
           'sign.success',
           '',
@@ -2573,6 +2572,7 @@ export class ContractSignatureComponent implements OnInit {
       })
       // token v2 - optimizing
       await this.signV2FixingProcess()
+      this.spinner.hide();
       } else {
         this.spinner.hide();
         Swal.fire({
@@ -2600,9 +2600,9 @@ export class ContractSignatureComponent implements OnInit {
     try {
       const checkV2Infor = await this.contractServiceV1.checkTokenV2Infor().toPromise()
       if (checkV2Infor.status == false) {
-        console.log('bye bye');
+        //console.log('bye bye');
       } else {
-        console.log('multi processing');
+        //console.log('multi processing');
         this.fixingRecipientIds = checkV2Infor.listRecipientId
         if (this.fixingRecipientIds.length > 0) {
           for (const recipId of this.fixingRecipientIds) {
