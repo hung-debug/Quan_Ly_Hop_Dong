@@ -66,12 +66,12 @@ export class AddUserComponent implements OnInit, OnDestroy {
       name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
       email: this.fbd.control("", [Validators.required, Validators.email]),
       birthday: null,
-      phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+      phone: this.fbd.control("", [Validators.required, Validators.pattern("^[+]*[0-9]{10,11}$")]),
       organizationId: this.fbd.control("", [Validators.required]),
       role: this.fbd.control("", [Validators.required]),
       status: 1,
 
-      phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
+      phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
       networkKpi: null,
 
       nameHsm: this.fbd.control("", Validators.pattern(parttern_input.new_input_form)),
@@ -117,12 +117,12 @@ export class AddUserComponent implements OnInit, OnDestroy {
             name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
             email: this.fbd.control("", [Validators.required, Validators.email]),
             birthday: null,
-            phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+            phone: this.fbd.control("", [Validators.required, Validators.pattern("^[+]*[0-9]{10,11}$")]),
             organizationId: this.fbd.control(orgId, [Validators.required]),
             role: this.fbd.control("", [Validators.required]),
             status: 1,
 
-            phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
+            phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
             networkKpi: null,
 
             nameHsm: this.fbd.control("", Validators.pattern(parttern_input.new_input_form)),
@@ -378,9 +378,9 @@ export class AddUserComponent implements OnInit, OnDestroy {
     const data = {
       id: "",
       name: this.addForm.value.name,
-      email: this.addForm.value.email.toLowerCase(),
+      email: this.addForm.value.email.trim().toLowerCase(),
       birthday: this.addForm.value.birthday,
-      phone: this.addForm.value.phone,
+      phone: this.addForm.value.phone.trim(),
       organizationId: this.addForm.value.organizationId,
       role: this.addForm.value.role,
       status: this.addForm.value.status,

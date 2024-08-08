@@ -951,7 +951,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      let is_data = result
+      let is_data = result;
+      this.getContractList();
     })
   }
 

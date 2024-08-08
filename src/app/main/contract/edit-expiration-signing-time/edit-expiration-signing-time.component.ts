@@ -108,7 +108,7 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
       const editContract = await this.contractService.editContract(data, this.data.contractId).toPromise();
 
       if(editContract.id) {
-        window.location.reload();
+        // window.location.reload();
 
         this.toastService.showSuccessHTMLWithTimeout('update.success','',3000);
         this.dialog.closeAll();
