@@ -1,14 +1,95 @@
-  <div *ngIf="sign.sign_unit == 'chu_ky_so' || sign.sign_unit == 'chu_ky_anh'" class="content">
-    <div class="stamp-content">
-      <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/new-icon-chu-ky-so.svg' : 'assets/img/new-icon-chu-ky-so.svg'"
-        alt="mobifone.contract">
+<div *ngIf="sign.sign_unit == 'chu_ky_so'" class="content">
+  <div class="skeleton-sign">
+  <div  [ngClass]="{
+                      'stamp-type' : sign.type_image_signature == 2,
+                       'd-unset' : sign.type_image_signature == 3}"  class="stamp-content">
+    <div
+         *ngIf="sign.type_image_signature == 1 || sign.type_image_signature == 2">
+      <div *ngIf="sign.type_image_signature == 1">
+        <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/only_info.svg' : 'assets/img/only_info.svg'"
+             alt="mobifone.contract">
+        <br>
+        <span class="text-stamp">Thông tin chữ ký số</span>
+      </div>
+      <div *ngIf="sign.type_image_signature == 2">
+        <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/stamp.svg' : 'assets/img/stamp.svg'"
+             alt="mobifone.contract">
+        <br>
+        <span class="text-stamp">Con dấu/ chữ ký</span>
+      </div>
     </div>
-    <div class="sign-info-content">
-      <span style="color: #106DB6;" *ngIf="sign.sign_unit == 'chu_ky_anh'; then content else other_content"></span>
-      <ng-template #content>Thông tin chữ ký ảnh</ng-template>
-      <ng-template #other_content>Thông tin chữ ký số</ng-template>
+    <div *ngIf="sign.type_image_signature == 3|| sign.type_image_signature == null" class="stamp-content1">
+      <div style="display: flex;height: inherit;">
+        <div class="left-stamp">
+          <div>
+            <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/stamp.svg' : 'assets/img/stamp.svg'"
+                 alt="mobifone.contract">
+            <br>
+            <span class="text-stamp">Con dấu/ chữ ký</span>
+          </div>
+        </div>
+        <div class="right-stamp">
+          <div>
+            <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/only_info.svg' : 'assets/img/only_info.svg'"
+                 alt="mobifone.contract">
+            <br>
+            <span class="text-stamp">Thông tin chữ ký số</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+  </div>
+</div>
+<div style="display: unset" *ngIf="sign.sign_unit == 'chu_ky_anh'" class="content">
+  <div style="display: unset" class="stamp-content">
+    <div  class="stamp-content1">
+      <div style="display: flex;height: inherit;">
+        <div class="left-stamp">
+          <div>
+            <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/stamp.svg' : 'assets/img/stamp.svg'"
+                 alt="mobifone.contract">
+            <br>
+            <span class="text-stamp">Chữ ký ảnh</span>
+          </div>
+        </div>
+        <div class="right-stamp">
+          <div>
+            <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/only_info.svg' : 'assets/img/only_info.svg'"
+                 alt="mobifone.contract">
+            <br>
+            <span class="text-stamp">Thông tin chữ ký ảnh</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="sign.sign_unit == 'chu_ky_so_con_dau_va_thong_tin'" class="content">
+  <div class="stamp-content item-left">
+    <img src='assets/img/stamp.svg' alt="mobifone.contract">
+    <div class="font-sign">Con dấu/ Chữ ký</div>
+  </div>
+  <div class="sign-info-content item-right" style="margin-left: 5px;">
+    <img src='assets/img/only_info.svg' alt="mobifone.contract">
+    <div class="font-sign">Thông tin chữ ký số</div>
+  </div>
+</div>
+
+<div *ngIf="sign.sign_unit == 'chu_ky_so_con_dau'" class="content">
+  <div class="stamp-content item-left" style="flex-basis: 100% !important; margin-right: 0px !important">
+    <img src='assets/img/stamp.svg' alt="mobifone.contract">
+    <div class="font-sign">Con dấu/ Chữ ký</div>
+  </div>
+</div>
+
+<div *ngIf="sign.sign_unit == 'chu_ky_so_thong_tin'" class="content">
+  <div class="sign-info-content item-right" style="flex-basis: 100% !important;">
+    <img src='assets/img/only_info.svg' alt="mobifone.contract">
+    <div class="font-sign">Thông tin chữ ký số</div>
+  </div>
+</div>
 
 <div class="text-sign-not-template-text" *ngIf="(sign.sign_unit == 'text') && !signTemplate">
   <span [ngStyle]="getStyleText(sign)" class="font-style" id="input-text">{{getText(sign)}}</span>

@@ -113,6 +113,8 @@ export class InforContractBatchComponent implements OnInit {
         if (environment.flag == 'NB') {
           this.optionsCeCaValue = 1
         } 
+      } else {
+        this.ceca = true
       }
     })
 

@@ -1,37 +1,90 @@
-<div id="image-sign-contract-component" *ngIf="sign.sign_unit == 'chu_ky_so' || sign.sign_unit == 'chu_ky_anh'" class="content">
+<div id="image-sign-contract-component" *ngIf="sign.sign_unit == 'chu_ky_so'"
+     class="content">
   <div class="skeleton-sign" (click)="doSign()" *ngIf="(!checkShowEdit && !sign.valueSign) && !otpValueSign">
-    <div class="stamp-content">
-      <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/new-icon-chu-ky-so.svg' : 'assets/img/new-icon-chu-ky-so.svg'"
-        alt="mobifone.contract">
+    <div [ngClass]="{'stamp-type' : sign.type_image_signature == 2}" class="stamp-content"
+         *ngIf="sign.type_image_signature == 1 || sign.type_image_signature == 2">
+      <div *ngIf="sign.type_image_signature == 1">
+        <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/only_info.svg' : 'assets/img/only_info.svg'"
+             alt="mobifone.contract">
+        <br>
+        <span class="text-stamp">Thông tin chữ ký số</span>
+      </div>
+      <div *ngIf="sign.type_image_signature == 2">
+        <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/stamp.svg' : 'assets/img/stamp.svg'"
+             alt="mobifone.contract">
+        <br>
+        <span class="text-stamp">Con dấu/ chữ ký</span>
+      </div>
     </div>
-    <div class="sign-info-content">
-      <span style="color: #106DB6;" *ngIf="sign.sign_unit == 'chu_ky_anh'; then content else other_content"></span>
-      <ng-template #content>Thông tin chữ ký ảnh</ng-template>
-      <ng-template #other_content>Thông tin chữ ký số</ng-template>
+    <div *ngIf="sign.type_image_signature == 3|| sign.type_image_signature == null" class="stamp-content1">
+      <div style="display: flex;height: inherit;">
+        <div class="left-stamp">
+          <div>
+            <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/stamp.svg' : 'assets/img/stamp.svg'"
+                 alt="mobifone.contract">
+            <br>
+            <span class="text-stamp">Con dấu/ chữ ký</span>
+          </div>
+        </div>
+        <div class="right-stamp">
+          <div>
+            <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/only_info.svg' : 'assets/img/only_info.svg'"
+                 alt="mobifone.contract">
+            <br>
+            <span class="text-stamp">Thông tin chữ ký số</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="skeleton-sign" (click)="doSign()" *ngIf="checkShowEdit && !sign.valueSign && !otpValueSign">
-    <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'" alt="mobifone.contract">
+    <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'"
+         alt="mobifone.contract">
   </div>
 
   <div *ngIf="otpValueSign || countOtpBox > 0" (click)="doSign()">
-    <img [src]="otpValueSign" alt="mobifone.contract" style="width: auto" [width]="sign.width ? sign.width : '100px'" [height]="sign.height ? sign.height : '54px'">
+    <img [src]="otpValueSign" alt="mobifone.contract" style="width: auto" [width]="sign.width ? sign.width : '100px'"
+         [height]="sign.height ? sign.height : '54px'">
+  </div>
+</div>
+<div *ngIf="sign.sign_unit == 'chu_ky_anh'" class="content">
+  <div style="display: unset" class="stamp-content">
+    <div  class="stamp-content1">
+      <div style="display: flex;height: inherit;">
+        <div class="left-stamp">
+          <div>
+            <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/stamp.svg' : 'assets/img/stamp.svg'"
+                 alt="mobifone.contract">
+            <br>
+            <span class="text-stamp">Chữ ký ảnh</span>
+          </div>
+        </div>
+        <div class="right-stamp">
+          <div>
+            <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/only_info.svg' : 'assets/img/only_info.svg'"
+                 alt="mobifone.contract">
+            <br>
+            <span class="text-stamp">Thông tin chữ ký</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- ô text -->
 <div *ngIf="sign.sign_unit == 'text' && sign.text_type != 'currency'" [ngStyle]="getStyle(sign)">
-  
+
   <div class="skeleton-sign" (click)="doEditText()" *ngIf="!checkShowEdit && !sign.valueSign">
     <span style="text-align: left;" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
   </div>
 
   <div class="skeleton-sign-value" (click)="doEditText()" *ngIf="!checkShowEdit && sign.valueSign">
-    <span  id="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
+    <span id="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
   </div>
 
-  <div  class="skeleton-sign" *ngIf="checkShowEdit">
+  <div class="skeleton-sign" *ngIf="checkShowEdit">
     <input type="text" class="input-edit-text" [(ngModel)]="sign.valueSign" (blur)="doneEditTextSign()" #inputEditText>
   </div>
 </div>
@@ -39,7 +92,7 @@
 
 <!-- Ô tiền -->
 <div class="text-sign" *ngIf="sign.sign_unit == 'text' && sign.text_type == 'currency'">
-  
+
   <div class="skeleton-sign" (click)="doEditText()" *ngIf="!checkShowEdit && !sign.valueSign">
     <span [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
   </div>
@@ -48,13 +101,15 @@
     <span id="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
   </div>
   <div *ngIf="checkShowEdit">
-    <input type="text" oninput="this.value = this.value.replace(/\D/g, '');" class="input-edit-text" [(ngModel)]="sign.valueSign" (blur)="doneEditTextSign($event)" #inputEditText>
+    <input type="text" oninput="this.value = this.value.replace(/\D/g, '');" class="input-edit-text"
+           [(ngModel)]="sign.valueSign" (blur)="doneEditTextSign($event)" #inputEditText>
   </div>
 </div>
 
 <!--Số hợp đồng-->
 <div *ngIf="sign.sign_unit == 'so_tai_lieu'" [ngStyle]="getStyle(sign)">
-  <div class="skeleton-sign" (click)="doEditContractNo()" *ngIf="!contractNoValue && count == 0 && (!sign.valueSign && !sign.value && !contractNoValueSign) && !view">
+  <div class="skeleton-sign" (click)="doEditContractNo()"
+       *ngIf="!contractNoValue && count == 0 && (!sign.valueSign && !sign.value && !contractNoValueSign) && !view">
     <span style="text-align: left;" id="input-text" *ngIf="!sign.valueSign">{{getText(sign)}}</span>
   </div>
 
@@ -62,14 +117,16 @@
     <span style="text-align: left;" id="input-text" *ngIf="!sign.valueSign">{{getText(sign)}}</span>
   </div>
 
-  <div class="skeleton-sign-value" (click)="doEditContractNo()" *ngIf="!contractNoValue && count == 0 && (this.contractNoValueSign || sign.value || sign.valueSign) && !view">
+  <div class="skeleton-sign-value" (click)="doEditContractNo()"
+       *ngIf="!contractNoValue && count == 0 && (this.contractNoValueSign || sign.value || sign.valueSign) && !view">
     <span style="text-align: left;" class="input-text">{{getText(sign)}}</span>
   </div>
 
   <div class="skeleton-sign" *ngIf="contractNoValue || count > 0 && !view">
-    <input [ngStyle]="getStyle(sign)" type="text" class="input-edit-text" [(ngModel)]="contractNoValueSign" (blur)="doneEditContractNoSign(sign, $event)" #inputEditContractNo>
+    <input [ngStyle]="getStyle(sign)" type="text" class="input-edit-text" [(ngModel)]="contractNoValueSign"
+           (blur)="doneEditContractNoSign(sign, $event)" #inputEditContractNo>
   </div>
-</div> 
+</div>
 
 
 

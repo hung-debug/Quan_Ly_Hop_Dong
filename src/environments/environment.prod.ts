@@ -9,11 +9,10 @@ export const environment = {
   SSO_REALM: 'sso-mobifone',
   SSO_CLIENTID: 'TTCNTT-ECONTRACT-STAGING',
 
-
   // SSO_URL: 'https://auth-sso.mobifone.vn:8080/oauth',
   // SSO_REALM: 'sso-mobifone',
   // SSO_CLIENTID: 'TTCNTT-ECONTRACT',
-  // usedSSO: false,
+  // usedSSO: true,
 
   //NB
   // apiUrl: 'https://econtract.mobifone.vn/service',

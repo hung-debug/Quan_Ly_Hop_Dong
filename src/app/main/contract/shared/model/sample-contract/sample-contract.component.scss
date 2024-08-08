@@ -1,6 +1,6 @@
 .sample-contract {
   // height: calc(100vh - 246px);
-  height: calc(100vh - 287px);
+  height: calc(100vh - 239px);
 
   &__file {
     //position: relative;
@@ -51,29 +51,29 @@
   &__information {
     &--drag {
        #element-drag{
-        height: 100px;
+        height: 86px;
       }
       .content-drag {
-        //cursor: pointer;
         width: 100%;
-        height: 30px;
-        background-color: #EBF8FF;
-        border-radius: 5px;
-        border: 1px solid #106DB6;
+        height: 42px;
+        background-color: #F7FAFD;
+        border-radius: 6px;
+        border: 1px solid #E6EDFA;
         color: #106DB6;
         text-align: center;
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-direction: column;
+        padding-left: 16px;
+        padding-right: 16px;
       }
       .content-drag1 {
         //cursor: pointer;
         width: 100%;
-        height: 30px;
-        background-color: #EBF8FF;
+        // height: 86px;
+        background-color: #F7FAFD;
         border-radius: 5px;
-        border: 1px solid #106DB6;
+        border: 1px solid #E6EDFA;
         color: #106DB6;
         text-align: center;
         display: flex;
@@ -81,19 +81,19 @@
         align-items: center;
         flex-direction: column;
       }
-      .show-list-name-class{
-        display: inline-block; 
-        margin-bottom: 15px;
-      }
+      // .show-list-name-class{
+      //   // display: inline-block;
+      //   margin-bottom: 15px;
+      // }
 
-      .show-list-name-class:nth-last-child(4) {
-        //float: left;
-        margin-right: 11px;
-      }
+      // .show-list-name-class:nth-last-child(4) {
+      //   //float: left;
+      //   margin-right: 11px;
+      // }
 
-      .show-list-name-class:nth-last-child(2) {
-        margin-right: 11px;
-      }
+      // .show-list-name-class:nth-last-child(2) {
+      //   margin-right: 11px;
+      // }
     }
 
     &--user-sign {
@@ -114,9 +114,10 @@
         }
 
         input {
+          background-color: #F7FAFD;
           border-radius: 5px;
-          border: 1px solid #87CAFF;
-          height: 40px;
+          border: 1px solid #E6EDFA;
+          height: 48px;
           outline: none;
         }
       }
@@ -127,8 +128,13 @@
         }
 
         select {
-          color: #333333;
-          border: 1px solid #87CAFF;
+          height: 48px;
+          background-color: #F7FAFD;
+          color: #00186D;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 21px;
+          border: 1px solid #E6EDFA;
           outline: none;
 
           &.form-select:disabled {
@@ -144,36 +150,34 @@
 
     .flex-column {
       .location {
-        display: flex;
-        justify-content: space-around;
+          display: flex;
+          justify-content: space-around;
       }
 
       .location-drag {
-        //display: flex;
-        float: left;
-        align-items: center;
-
-        div {
-          //padding-right: 20px;
-          //width: 88px;
-          width: 56px;
-          //font-size: 13px;
-          color: #666666;
-          text-align: center;
+          display: flex;
+          align-items: center;
           float: left;
-          padding-right: 15px;
-          padding-top: 10px;
-        }
 
-        input {
-          outline: none;
-          width: 88px;
-          height: 40px;
-          border-radius: 5px;
-          border: 1px solid #87CAFF;
-        }
+          .label {
+              width: 56px;
+              color: #666666;
+              text-align: center;
+              float: left;
+              padding-right: 15px;
+              padding-top: 10px;
+          }
+
+          input {
+              outline: none;
+              width: 88px;
+              height: 40px;
+              border-radius: 5px;
+              border: 1px solid #87CAFF;
+          }
       }
-    }
+  }
+
 
     @media screen and (max-height: 781px) {
       .location-change {
@@ -188,13 +192,15 @@
     color: #106DB6;
     font-style: normal;
     font-weight: normal;
+    padding-bottom: 5px;
   }
 
   .label-require {
-    font-size: 13px;
-    font-style: normal;
-    font-weight: normal;
-    color: #F48465;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 18px;
+    color: var(--text-primary) !important;
+    text-transform: uppercase;
   }
 }
 
@@ -264,7 +270,9 @@
     padding: 0 4px;
     border: 1px solid #ddd;
   }
-
+.t-15 {
+  top: -15px;
+}
   .sig-img-daky {
     cursor: pointer;
 
@@ -308,7 +316,7 @@
   border-radius: 6px;
   cursor: pointer;
   padding: 10px 12px;
-  margin: 10px 5px;
+  margin: 0px 0px 0px 5px;
 }
 
 .draft-button {
@@ -330,16 +338,16 @@
   color: #0041C4;
   border: 1px solid var(--Primary, #0041C4);
   border-radius: 6px;
-  cursor: pointer;
+  // cursor: pointer;
   padding: 9px 12px;
-  margin: 10px 5px;
+  // margin: 10px 5px;
 }
 
 .footer-sample-contract {
-  border-top: 1px solid #ddd;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  // border-top: 1px solid #ddd;
+  // display: flex;
+  // justify-content: space-between;
+  // align-items: center;
 
   .content_footer {
     color: #0160AE;
@@ -349,13 +357,17 @@
 }
 
 .input1 {
-  box-sizing: border-box; 
-  text-align: center; 
-  width: 40px;
-  height: 22px;
+  color: #00186D;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 19px;
+  box-sizing: border-box;
+  text-align: center;
+  width: 24px;
+  height: 24px;
   background: #FFFFFF;
-  border: 1px solid #87CAFF;
-  border-radius: 5px; 
+  border: none;
+  border-radius: 3px;
 }
 
 .handle {
@@ -419,18 +431,18 @@
           font-size: 14px;
         }
         .viewer-pdf.isDrag{
-          background-color: #f3f7f9; 
+          background-color: #f3f7f9;
           position: relative;
         }
         &__information{
             &--drag {
                 .content-drag {
                     //cursor: pointer;
-                    width: 100%;
-                    height: 30px;
-                    background-color: #EBF8FF;
+                    width: 100% !important;
+                    // height: 30px;
+                    background-color: #F7FAFD;
                     border-radius: 5px;
-                    border: 1px solid #106DB6;
+                    border: 1px solid #E6EDFA;
                     color: #106DB6;
                     text-align: center;
                     display: flex;
@@ -444,10 +456,10 @@
                 }
                 .content-drag1 {
                     width: 100%;
-                    height: 30px;
-                    background-color: #EBF8FF;
+                    // height: 30px;
+                    background-color: #F7FAFD;
                     border-radius: 5px;
-                    border: 1px solid #106DB6;
+                    border: 1px solid #E6EDFA;
                     color: #106DB6;
                     text-align: center;
                     display: flex;
@@ -456,7 +468,7 @@
                     flex-direction: row;
                 }
                 .content-drag1 span{
-                    width: 50px;            
+                    width: 50px;
                 }
             }
             .flex-column{
@@ -494,7 +506,7 @@
         font-size: 14px;
       }
       .viewer-pdf.isDrag{
-        background-color: #f3f7f9; 
+        background-color: #f3f7f9;
         position: relative;
       }
       &__information{
@@ -502,10 +514,10 @@
               .content-drag {
                   //cursor: pointer;
                   width: 100%;
-                  height: 30px;
-                  background-color: #EBF8FF;
+                  // height: 30px;
+                  background-color: #F7FAFD;
                   border-radius: 5px;
-                  border: 1px solid #106DB6;
+                  border: 1px solid #E6EDFA;
                   color: #106DB6;
                   text-align: center;
                   display: flex;
@@ -519,10 +531,10 @@
               }
               .content-drag1 {
                   width: 100%;
-                  height: 30px;
-                  background-color: #EBF8FF;
+                  // height: 30px;
+                  background-color: #F7FAFD;
                   border-radius: 5px;
-                  border: 1px solid #106DB6;
+                  border: 1px solid #E6EDFA;
                   color: #106DB6;
                   text-align: center;
                   display: flex;
@@ -531,7 +543,7 @@
                   flex-direction: row;
               }
               .content-drag1 span{
-                  width: 50px;            
+                  width: 50px;
               }
           }
           .flex-column{
@@ -570,10 +582,10 @@
         .content-drag {
           //cursor: pointer;
           width: 100%;
-          height: 30px;
-          background-color: #EBF8FF;
+          // height: 30px;
+          background-color: #F7FAFD;
           border-radius: 5px;
-          border: 1px solid #106DB6;
+          border: 1px solid #E6EDFA;
           color: #106DB6;
           text-align: center;
           display: flex;
@@ -587,10 +599,10 @@
         }
         .content-drag1 {
           width: 100%;
-          height: 30px;
-          background-color: #EBF8FF;
+          // height: 30px;
+          background-color: #F7FAFD;
           border-radius: 5px;
-          border: 1px solid #106DB6;
+          border: 1px solid #E6EDFA;
           color: #106DB6;
           text-align: center;
           display: flex;
@@ -599,7 +611,7 @@
           flex-direction: row;
         }
         .content-drag1 span{
-          width: 50px;            
+          width: 50px;
         }
       }
       .flex-column{
@@ -619,7 +631,7 @@
             padding-right: 15px;
             padding-top: 10px;
           }
-    
+
           input {
             width: 80px;
             height: 40px;
@@ -638,10 +650,10 @@
         .content-drag {
           //cursor: pointer;
           width: 100%;
-          height: 30px;
-          background-color: #EBF8FF;
+          // height: 30px;
+          background-color: #F7FAFD;
           border-radius: 5px;
-          border: 1px solid #106DB6;
+          border: 1px solid #E6EDFA;
           color: #106DB6;
           text-align: center;
           display: flex;
@@ -656,10 +668,10 @@
         .content-drag1 {
           //cursor: pointer;
           width: 100%;
-          height: 30px;
-          background-color: #EBF8FF;
+          // height: 30px;
+          background-color: #F7FAFD;
           border-radius: 5px;
-          border: 1px solid #106DB6;
+          border: 1px solid #E6EDFA;
           color: #106DB6;
           text-align: center;
           display: flex;
@@ -668,7 +680,7 @@
           flex-direction: row;
         }
         .content-drag1 span{
-          width: 50px;            
+          width: 50px;
         }
       }
       .flex-column{
@@ -688,7 +700,7 @@
             padding-right: 15px;
             padding-top: 10px;
           }
-    
+
           input {
             width: 80px;
             height: 40px;
@@ -733,14 +745,6 @@
 .call-page {
   padding: 0;
   border: none;
-  background: none;
-}
-
-.call-page1 {
-  padding: 0;
-  border: none;
-  background: none; 
-  margin-left: 5px
 }
 
 .text-ellipsis {
@@ -840,4 +844,147 @@
 
 .options-list li:hover {
   background-color: #f0f0f0;
+}
+
+.form-control {
+  height: 48px;
+  background-color: #F7FAFD;
+  border: 1px solid #E6EDFA;
+}
+
+.input-position-size {
+  display: block;
+  background-color: #F7FAFD;
+  border: 1px solid #E6EDFA;
+  border-radius: 6px;
+  height: 48px;
+  width: 100% !important;
+  padding: 10px;
+}
+
+@media (max-width: 991px) {
+  .horizontal-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: auto;
+    margin-top: 95px;
+    width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .horizontal-dropdown {
+    right: -270px;
+  }
+}
+
+.horizontal-dropdown {
+  list-style: none;
+  padding: 0px 16px;
+  position: absolute;
+  top: 0%; /* Position it below the span */
+  z-index: 1000;
+  background: #FFFFFF;
+  box-shadow: 0px 3px 12px 0px #1055E11A;
+  border-radius: 12px;
+}
+
+.item-ky {
+  display: block;
+  margin: 16px 0px;
+  background: #FFFFFF;
+}
+
+.text-ky {
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 400;
+  color: #00186D;
+  line-height: 18px;
+  margin-top: 5px;
+  text-align: justify;
+}
+
+.content-chu_ky_so_new {
+  position: relative; /* Ensure dropdown is positioned relative to this container */
+  height: 100%;
+}
+
+.imgage-ky {
+  display: flex;
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  height: 100%; /* Đảm bảo div có chiều cao để căn giữa */
+}
+
+.hover-item-o-ky:hover {
+  border: 1px solid #286CF5 !important;
+  background-color: #E4F0FC !important;
+}
+
+.hover-item:hover {
+  border: 1px solid #286CF5 !important;
+}
+
+.content-item-ky {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.content-drag1 {
+  width: 100%;
+  color: #106DB6;
+  display: flex;
+}
+
+.input_text {
+  color: #00186D;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+}
+
+.name-text {
+  .input_text::placeholder {
+    color: #AEC7E5;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21px;
+  }
+}
+
+.sign-unit-select {
+  .form-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    position: relative;
+    background-color: #F7FAFD; /* Giữ màu nền */
+    color: #00186D;
+    font-size: 14px;
+    font-weight: 500;
+    padding-right: 30px; /* Đảm bảo có khoảng trống cho icon */
+    border: 1px solid #E6EDFA;
+    background-image: url('../../../../../../assets/img/mui-ten-xuong.png'); /* Đường dẫn tới icon tùy chỉnh */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px; /* Điều chỉnh kích thước của icon nếu cần */
+  }
+}
+
+.no-focus {
+  &:focus {
+    outline: none; /* Ensure no outline on focus */
+    box-shadow: none; /* Remove box-shadow */
+  }
+}
+
+.page-number {
+  color: #00186D;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 19px;
 }

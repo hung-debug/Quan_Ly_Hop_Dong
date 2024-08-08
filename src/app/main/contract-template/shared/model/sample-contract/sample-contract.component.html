@@ -1,176 +1,258 @@
-<div   (window:resize)="onResize($event)" class="sample-contract row">
-    <div class="col-md-3 sample-contract__information" style="background-color: white; z-index: 10">
-        <div class="sample-contract__information--drag" id="width-element-info" style="position: relative">
-            <div style="padding-bottom: 10px" class="label">{{'components'|translate}} (<span style="color: red">{{'drag-drop'|translate}}</span>)</div>
-            <div *ngFor="let d of this.datas.contract_user_sign" class="show-list-name-class" style="display: inline-block; margin-bottom: 15px">
-                <div *ngIf="!d.sign_config.position" class="resize-drag" (click)="showThumbnail()" [id]=getIdSignChuaKeo(d.id)>
-                    <div class="signature-sample-drag" style="position: relative">
-         
+<div>
+    <div (window:resize)="onResize($event)" class="sample-contract row" style="margin: 32px 0px 0px 0px !important;">
+        <div class="col-lg-2-5 sample-contract__information cancel-padding" style="background-color: white; z-index: 10">
+            <div class="sample-contract__information--drag" id="width-element-info"  style="position: relative; padding: 16px">
+                <div style="margin: 0px 16px;">
+                    <div  class="text-title">{{'componentsnew'|translate}}</div>
+                    <div  class="text-describe mt-3px">{{'drop.doc'|translate}}</div>
+                </div>
 
-                        <div *ngIf="d.sign_unit == 'so_tai_lieu'" [ngStyle]="setWidth(d)" class="content-drag" id="element-drag-text">
-                            <p *ngIf="d.sign_unit == 'so_tai_lieu'" style="margin: 0px;">{{'contract.number'|translate}}</p>
-                        </div>
+                <div style="margin: 0px 16px;">
+                    <div *ngFor="let d of this.datas.contract_user_sign" class="show-list-name-class">
+                        <div *ngIf="!d.sign_config.position" [ngClass]="{'resize-drag': d.sign_unit !== 'chu_ky_so'}" (click)="showThumbnail()" [id]=getIdSignChuaKeo(d.id)>
+                            <div style="position: relative; display: contents;">
+                                <div *ngIf="d.sign_unit == 'so_tai_lieu'" class="content-drag mt-12px d-flex align-items-center justify-content-start hover-item-o-ky" id="element-drag-text">
+                                    <div style="width: 24px; height: 24px;">
+                                      <img style="object-fit: cover; width: 100%; height: 100%;" src="assets/img/soHopDong.png">
+                                    </div>
+                                    <div style="flex-grow: 1; margin-left: 8px; text-align: left;">
+                                      <p class="text-so-hop-dong" style="margin: 0;">{{'contract.number'|translate}}</p>
+                                    </div>
+                                </div>
 
-                        <div *ngIf="d.sign_unit == 'text'" [ngStyle]="setWidth(d)" class="content-drag" id="element-drag-text">
-                            <p *ngIf="d.sign_unit == 'text'" style="margin: 0px;">{{'Text'|translate}}</p>
-                        </div>
 
-                        <div *ngIf="d.sign_unit == 'chu_ky_so'" class="content-drag1" id="element-drag" style="height: 102px;" [ngStyle]="setWidth(d)">
-                            <img [src]="d.sign_unit == 'chu_ky_so' ? 'assets/img/img_sign_number.svg' : ''">
-                            <span *ngIf="d.sign_unit == 'chu_ky_so'">{{'sign.digital'|translate}}</span>
-                        </div>
+                                <div  *ngIf="d.sign_unit == 'text'" class="content-drag mt-12px d-flex align-items-center justify-content-start hover-item-o-ky" id="element-drag-text">
+                                    <div style="width: 24px; height: 24px;">
+                                        <img style="object-fit: cover; width: 100%; height: 100%;" src="assets/img/text.png">
+                                    </div>
 
-                        <div *ngIf="d.sign_unit == 'chu_ky_anh'" class="content-drag" id="element-drag" [ngStyle]="setWidth(d)">
-                            <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : ''" [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
-                            <span *ngIf="d.sign_unit == 'chu_ky_anh'">{{'sign.image.ekyc' |translate}}</span>
+                                    <div style="flex-grow: 1; margin-left: 8px; text-align: left;">
+                                        <p class="text-so-hop-dong" style="margin: 0px;">{{'Text'|translate}}</p>
+                                    </div>
+                                </div>
+
+                                <!-- <div *ngIf="d.sign_unit == 'chu_ky_so'" class="content-drag1 mt-12px"
+                                    id="element-drag">
+                                    <img style="width: 24px; height: 24px;" [src]="d.sign_unit == 'chu_ky_so' ? 'assets/img/designtools.png' : ''">
+                                    <div class="mt-8px">
+                                        <span class="text-so-hop-dong" *ngIf="d.sign_unit == 'chu_ky_so'">{{'sign.digital'|translate}}</span>
+                                    </div>
+                                </div> -->
+
+                                <div *ngIf="d.sign_unit == 'chu_ky_so'" class="flex mt-12px" (click)="toggleDropdownChuKySo()" id="element-drag">
+                                    <div  class="content-drag1 content-chu_ky_so_new hover-item-o-ky">
+                                        <div class="flex">
+                                            <div class="content-item-ky">
+                                                <img style="width: 24px; height: 24px;" src="assets/img/designtools.png">
+                                                <span class="text-so-hop-dong mt-8px">{{'sign.digital' | translate}}</span>
+                                            </div>
+                                            <div *ngIf="this.isDropdownVisibleChuKySo" class="horizontal-dropdown horizontal-dropdown-right">
+                                                <ng-container *ngFor="let t of d.type">
+                                                    <div class="item-ky" *ngIf="t.sign_unit == 'chu_ky_so_con_dau_va_thong_tin'">
+                                                        <img loading="lazy" class="resize-drag" [id]="getIdSignChuaKeo(t.id)" style="object-fit: cover; width: 201px; height: 100%;" src="assets/img/con-dau-va-thong-tin.png">
+                                                        <div class="text-ky">Chữ ký có con dấu và thông tin</div>
+                                                    </div>
+
+                                                    <div class="item-ky" *ngIf="t.sign_unit == 'chu_ky_so_con_dau'">
+                                                        <img loading="lazy" class="resize-drag" [id]="getIdSignChuaKeo(t.id)" style="object-fit: cover; width: 201px; height: 100%;" src="assets/img/con-dau.png">
+                                                        <div class="text-ky">Chỉ có con dấu/ chữ ký</div>
+                                                    </div>
+
+                                                    <div class="item-ky" *ngIf="t.sign_unit == 'chu_ky_so_thong_tin'">
+                                                        <img loading="lazy" class="resize-drag" [id]="getIdSignChuaKeo(t.id)" style="object-fit: cover; width: 201px; height: 100%;" src="assets/img/thong-tin.png">
+                                                        <div class="text-ky">Chỉ có thông tin</div>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="imgage-ky">
+                                        <img  style="width: 24px; height: 24px;" src="assets/img/mui-ten-dropdown.png">
+                                    </div>
+                                </div>
+
+                                <div *ngIf="d.sign_unit == 'chu_ky_anh'" class="content-drag1 mt-12px hover-item-o-ky"
+                                    id="element-drag" style="width: calc(100% - 24px);">
+                                    <img style="width: 24px; height: 24px;" [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/imagesign.png' : ''"
+                                        [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''"
+                                        alt="ck.mobifone">
+
+                                    <div class="mt-8px">
+                                        <span class="text-so-hop-dong" *ngIf="d.sign_unit == 'chu_ky_anh'">{{'sign.imagenew' |translate}}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <hr>
 
-        <div class="location-change" [ngStyle]="changeDisplay()">
-            <div class="sample-contract__information--user-sign">
-                <label class="label">{{'attribute' | translate}}</label>
-                <div class="name-text" *ngIf="isEnableText">
-                    <label class="label-require">{{'attribute.name' | translate}}: *</label>
-                    <input id="text-input-element" type="text" [(ngModel)]="this.objSignInfo.text_attribute_name" (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
+        <!--  file content-->
+        <div class="col-lg-7">
+            <div style="height: 48px; background-color: #EBF2FB; display: flex; justify-content: center;">
+                <div style="margin: auto 0 auto">
+                    <button class="call-page input1" (click)="firstPage()">
+                        <img  width="16px" height="16px" *ngIf="!this.page1" src="assets/img/First.png">
+                        <img  width="16px" height="16px" *ngIf="this.page1" src="assets/img/First.png">
+                    </button>
+                    <button style="margin: 0px 8px;" class="call-page input1" (click)="previousPage()">
+                        <img width="16px" height="16px" *ngIf="this.page1" src="assets/img/Prev.png">
+                        <img width="16px" height="16px" *ngIf="!this.page1" src="assets/img/Prev.png">
+                    </button>
+
+                    <input class="input1 no-focus" [(ngModel)]="pageNum" type="text" (keyup.enter)="onEnter($event)" />
+                    &nbsp;/&nbsp;
+                    <span class="page-number">{{ this.pageNumber }}</span>
+
+                    <button style="margin: 0px 8px;" class="call-page input1" (click)="onNextPage()" id="prev">
+                        <img width="6px" height="9px" *ngIf="this.pageLast" src="assets/img/Vector1.png">
+                        <img width="6px" height="9px" *ngIf="!this.pageLast" src="assets/img/Vector1.png">
+                    </button>
+
+                    <button class="call-page input1" (click)="lastPage()" id="prev">
+                        <img width="16px" height="16px" *ngIf="this.pageLast" src="assets/img/Last.png">
+                        <img width="16px" height="16px" *ngIf="!this.pageLast" src="assets/img/Last.png">
+                    </button>
                 </div>
+            </div>
 
-                <!--Option chọn loại text-->
-                <div class="sign-unit-select" *ngIf="isEnableText">
-                    <label class="label-require">{{'attribute.text.type' | translate}}: *</label>
-                    <select class="form-select" id="select-dropdown-text" aria-label="Default select example"
-                        (change)="changePositionSign($event, 'text_type', 'text')" [disabled]="isEnableSelect"
-                        [(ngModel)]="selectedTextType">
-                        <option value="" hidden>{{'choose.text.type'| translate}}
-                        </option>
-                        <option *ngFor="let d of this.list_text_type, let i = index" [selected]="d.selected"
-                            value="{{d.id}}" [disabled]="d.is_disable">{{d.name | translate}}</option>
-                    </select>
-                </div>
-
-                <!--Người ký/người nhập-->
-                <div class="sign-unit-select">
-                    <label class="label-require">{{isEnableText || isChangeText ? ('user.import' | translate) : ('user.sign' | translate)+': *'}}</label>
-                    <div style="position: relative;">
-                        <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
-                          <option value="" hidden>{{isEnableText || isChangeText ? ('choose.importer' | translate) : ('choose.signer' | translate)}}</option>
-                          <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}" [disabled]="d.is_disable">{{getName(d)}}</option>
-                        </select>
-                        <div *ngIf="(isEnableText || isChangeText) && showSignClear" style="position: absolute; top: 50%; right: 32px; transform: translateY(-50%); display: flex; align-items: center; cursor: pointer" (click)="clearSign()">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="15px" stroke="#000000" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 6L6 18M6 6l12 12"></path>
-                          </svg>
+            <div (scroll)="scroll($event)" id="pdf-full" class="sample-contract__file viewer-pdf isDrag" style="background-color: #f3f7f9; position: relative">
+                <div id="pdf-viewer-step-3">
+                    <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+                        <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
+                            <div *ngIf="d.sign_unit != 'text'" class="name-sig-img-daky long-text-ellipsis">{{d.name ? d.name : ''}}</div>
+                            <div *ngIf="d.sign_unit == 'text'" class="name-sig-img-daky long-text-ellipsis">{{d.text_attribute_name ? d.text_attribute_name  : ''}}</div>
+                            <div class="sig-img-daky" (click)="onCancel($event, d)">
+                                <!-- <img src="assets/img/clear.svg" alt=""> -->
+                                <img src="assets/img/border-clear.svg" alt="">
+                            </div>
+                            <app-sign-contract-template
+                            style="display: flex; width: 100%; padding: 4px;"
+                            [ngClass]="(d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh') ? 'main-sign-box': ''"
+                            [datas]="datas"
+                            [sign]="d"></app-sign-contract-template>
                         </div>
-                    </div>
-                      
-                </div>
-
-                <!--Option chọn font + size chữ-->
-                <div class="row sign-unit-select">
-                    <div class="col-md-9">
-                        <label class="label-require">Font</label>
-                        <select (change)="changePositionSign($event, null, 'font')" class="form-select" id="select-dropdown" aria-label="Default select example" [(ngModel)]="this.objSignInfo.font">
-                            <option value="" hidden>{{'choose.font' | translate}}</option>
-                            <option *ngFor="let d of this.list_font, let i = index" [selected]="d.selected" value="{{d}}">{{d}}</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="label-require">Size</label>
-                        <input *ngIf="this.textSign" class="form-control" [(ngModel)]="this.objSignInfo.font_size" (change)="changePositionSign($event, null, 'font_size')"/>
-                        <input *ngIf="!this.textSign" class="form-control" [(ngModel)]="this.objSignInfo.font_size" (change)="changePositionSign($event, null, 'font_size')" readonly/>
-                    </div>
-                </div>
-
-            </div>
-            <hr>
-            <div class="flex-column">
-                <label class="label-require">{{'position.coordinate' | translate}}</label>
-                <div class="location">
-                    <div class="location-drag">
-                        <div class="label" style="text-align: center">X:</div>
-                        <input type="number" (ngModelChange)="changePositionSign($event, 'x', 'location')" [ngModel]="getTrafX()" [readOnly]="false">
-                    </div>
-                    <div class="location-drag">
-                        <div class="label" style="text-align: center">Y:</div>
-                        <input type="number" (ngModelChange)="changePositionSign($event, 'y', 'location')" [ngModel]="getTrafY()" [readOnly]="false">
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <div class="flex-column">
-                <label class="label-require">{{'size' | translate}}</label>
-                <div class="location">
-                    <div class="location-drag">
-                        <div class="label">{{'height' | translate}}</div>
-                        <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')" [ngModel]="objSignInfo.height" [readOnly]="false">
-                    </div>
-                    <div class="location-drag">
-                        <div class="label">{{'width' | translate}}</div>
-                        <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')" [ngModel]="objSignInfo.width" [readOnly]="false">
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!--  file content-->
-    <div (scroll)="scroll($event)" id="pdf-full" class="col-md-9 sample-contract__file viewer-pdf isDrag" style="background-color: #f3f7f9; position: relative">
-        <div id="pdf-viewer-step-3">
-            <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-                <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
-                    <div *ngIf="d.sign_unit != 'text'" class="name-sig-img-daky long-text-ellipsis">{{d.name ? d.name : ''}}</div>
-                    <div *ngIf="d.sign_unit == 'text'" class="name-sig-img-daky long-text-ellipsis">{{d.text_attribute_name ? d.text_attribute_name  : ''}}</div>
-                    <div class="sig-img-daky" (click)="onCancel($event, d)">
-                        <!-- <img src="assets/img/clear.svg" alt=""> -->
-                        <img src="assets/img/border-clear.svg" alt="">
+        <div class="col-lg-2-5 cancel-padding">
+            <div class="location-change" [ngStyle]="changeDisplay()" style="padding: 16px">
+                <div class="sample-contract__information--user-sign">
+                    <div style="margin: 0px 16px;">
+                        <div class="text-title">{{'attribute' | translate}}</div>
+
+                        <div class="name-text mt-8px" *ngIf="isEnableText">
+                            <label class="label-require">{{'attribute.name' | translate}}: <span style="color: red">*</span></label>
+                            <input placeholder="{{ 'attribute.name' | translate }}" class="hover-item input_text" style="padding: 10px;" id="text-input-element" type="text" [(ngModel)]="this.objSignInfo.text_attribute_name" (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
+                        </div>
+
+                        <!--Option chọn loại text-->
+                        <div class="sign-unit-select mt-8px" *ngIf="isEnableText">
+                            <label class="label-require">{{'attribute.text.type' | translate}}: <span style="color: red">*</span></label>
+                            <select class="form-select hover-item no-focus" id="select-dropdown-text" aria-label="Default select example"
+                                (change)="changePositionSign($event, 'text_type', 'text')" [disabled]="isEnableSelect"
+                                [(ngModel)]="selectedTextType">
+                                <option value="" hidden>{{'choose.text.type'| translate}}
+                                </option>
+                                <option *ngFor="let d of this.list_text_type, let i = index" [selected]="d.selected"
+                                    value="{{d.id}}" [disabled]="d.is_disable">{{d.name | translate}}</option>
+                            </select>
+                        </div>
+
+                        <!--Người ký/người nhập-->
+                        <div class="sign-unit-select mt-8px">
+                            <label class="label-require">{{isEnableText || isChangeText ? ('user.import' | translate) : ('user.sign' | translate)}}: <span style="color: red">*</span></label>
+                            <div style="position: relative;">
+                                <select class="form-select hover-item no-focus" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
+                                <option value="" hidden>{{isEnableText || isChangeText ? ('choose.importer' | translate) : ('choose.signer' | translate)}}</option>
+                                <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}" [disabled]="d.is_disable">{{getName(d)}}</option>
+                                </select>
+                                <div *ngIf="(isEnableText || isChangeText) && showSignClear" style="position: absolute; top: 50%; right: 32px; transform: translateY(-50%); display: flex; align-items: center; cursor: pointer" (click)="clearSign()">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="15px" stroke="#000000" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 6L6 18M6 6l12 12"></path>
+                                </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Option chọn font + size chữ-->
+                        <div class="row sign-unit-select mt-8px">
+                            <div class="col-md-8-5" style="padding-right: 0px;">
+                                <label class="label-require">Font</label>
+                                <select (change)="changePositionSign($event, null, 'font')" class="form-select hover-item no-focus" id="select-dropdown" aria-label="Default select example" [(ngModel)]="this.objSignInfo.font">
+                                    <option value="" hidden>{{'choose.font' | translate}}</option>
+                                    <option *ngFor="let d of this.list_font, let i = index" [selected]="d.selected" value="{{d}}">{{d}}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3-5">
+                                <label class="label-require">Size</label>
+                                <input *ngIf="this.textSign" class="no-focus form-control hover-item input_text" [(ngModel)]="this.objSignInfo.font_size" (change)="changePositionSign($event, null, 'font_size')"/>
+                                <input *ngIf="!this.textSign" class="no-focus form-control hover-item input_text" [(ngModel)]="this.objSignInfo.font_size" (change)="changePositionSign($event, null, 'font_size')" readonly/>
+                            </div>
+                        </div>
                     </div>
-                    <app-sign-contract-template 
-                    [ngClass]="(d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh') ? 'main-sign-box': ''"  
-                    [datas]="datas" 
-                    [sign]="d"></app-sign-contract-template>
+
                 </div>
+
+                <div class="flex-column" style="margin: 32px 16px 0 16px;">
+                    <label class="label-require">{{'position.coordinate' | translate}}</label>
+                    <div class="row location">
+                        <div class="location-drag col-md-6 mt-8px" style="padding-right: 6px">
+                            <div class="label-require">X:</div>
+                            <input class="no-focus input-position-size hover-item input_text" type="number" (ngModelChange)="changePositionSign($event, 'x', 'location')" [ngModel]="getTrafX()" [readOnly]="false">
+                        </div>
+                        <div class="location-drag col-md-6 mt-8px" style="padding-left: 6px">
+                            <div class="label-require">Y:</div>
+                            <input class="no-focus input-position-size hover-item input_text" type="number" (ngModelChange)="changePositionSign($event, 'y', 'location')" [ngModel]="getTrafY()" [readOnly]="false">
+                        </div>
+                    </div>
+
+                    <div class="location row">
+                        <div class="location-drag col-md-6 mt-8px" style="padding-right: 6px">
+                            <div class="label-require">{{'height' | translate}}</div>
+                            <input class="no-focus input-position-size hover-item input_text" type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')" [ngModel]="objSignInfo.height" [readOnly]="false">
+                        </div>
+                        <div class="location-drag col-md-6 mt-8px" style="padding-left: 6px">
+                            <div class="label-require">{{'width' | translate}}</div>
+                            <input class="no-focus input-position-size hover-item input_text" type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')" [ngModel]="objSignInfo.width" [readOnly]="false">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <hr>
+                <div class="flex-column">
+                    <label class="label-require">{{'size' | translate}}</label>
+                    <div class="location">
+                        <div class="location-drag">
+                            <div class="label">{{'height' | translate}}</div>
+                            <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')" [ngModel]="objSignInfo.height" [readOnly]="false">
+                        </div>
+                        <div class="location-drag">
+                            <div class="label">{{'width' | translate}}</div>
+                            <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')" [ngModel]="objSignInfo.width" [readOnly]="false">
+                        </div>
+                    </div>
+                </div> -->
             </div>
         </div>
     </div>
 </div>
-<div class="footer-sample-contract">
-    <div class="col-md-3">
+
+<div class="row footer-sample-contract" style="margin: 0px 16px;">
+    <div class="col-md-9 cancel-padding" style="padding: 10px 5px;">
         <button (click)="back($event, 'determine-contract')" type="button" name="next" class="next action-button-previous">{{'btn.previous' | translate}}</button>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-3 cancel-padding" style="display: flex; justify-content: flex-end;">
         <div class="center">
-           
-            <a style="text-align: center">
-                <button class="call-page" (click)="firstPage()">
-                  <!-- <img width="16px" height="20px" *ngIf="this.page1" src="assets/img/previousbold.svg"> -->
-                  <img  width="16px" height="20px" *ngIf="!this.page1" src="assets/img/firstpage.svg">
-                  <img  width="16px" height="20px" *ngIf="this.page1" src="assets/img/previousbold.svg">
-                </button>
-                <button style="margin-right: 5px;" class="call-page1" (click)="previousPage()">
-                  <img width="12px" height="16px" *ngIf="this.page1" src="assets/img/firstpagebold.svg">
-                  <img width="12px" height="16px" *ngIf="!this.page1" src="assets/img/previous.svg">
-                </button>
-          
-                <input class="input1" [(ngModel)]="pageNum" type="text" (keyup.enter)="onEnter($event)" />&nbsp;/ &nbsp;{{this.pageNumber}}
-                <button class="call-page1" (click)="onNextPage()" id="prev">
-                  <img width="12px" height="16px" *ngIf="this.pageLast" src="assets/img/next.svg">
-                  <img width="12px" height="16px" *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
-                </button>
-          
-                <button class="call-page1" (click)="lastPage()" id="prev">
-                  <img width="16px" height="20px" *ngIf="this.pageLast" src="assets/img/lastpage.svg">
-                  <img width="16px" height="20px" *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
-                </button>
-
-                <div style="position: absolute;right: 5px;margin-top: -35px;">
-                    <!-- <button (click)="next('save_draft')" type="button" name="saveDocument" class="next action-button"
-                    style="background-color: #FCAF17">{{'btn.save-draft' | translate}}</button> -->
-                    <button (click)="next('next_step')" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button>
-                </div>
-            </a>
+            <div>
+                <!-- <button (click)="next('save_draft')" type="button" name="saveDocument" class="next action-button"
+                style="background-color: #FCAF17">{{'btn.save-draft' | translate}}</button> -->
+                <button (click)="next('next_step')" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button>
+            </div>
         </div>
     </div>
 </div>

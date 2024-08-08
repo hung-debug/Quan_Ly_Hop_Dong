@@ -1,86 +1,76 @@
-<div class="row col-md-12">
-  <div class="col-md-5" style="display: flex; flex-direction: column">
-    <div class="form-group">
-      <div class="label_item">{{'menu.contract.template.list' | translate}} <span class="require_star">*</span></div>
-      <div [style.background]="action == 'edit' ? '#ddd' : ''">
-        <p-dropdown panelStyleClass="font" [options]="typeListForm" [(ngModel)]="this.datasForm.template_contract_id" optionLabel="name"
-          optionValue="id" placeholder="{{'choose.contract' | translate}}" [filter]="true" filterBy="name" [showClear]="true" [disabled]="action == 'edit'"
-          (onChange)="onChangeForm($event)">
-        </p-dropdown>
+<div style="margin: 32px 24px;">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <div class="label_item">{{'menu.contract.template.list' | translate}} <span class="require_star">*</span></div>
+        <!-- <div [style.background]="action == 'edit' ? '#ddd' : ''"> -->
+        <div>
+          <p-dropdown panelStyleClass="font" [options]="typeListForm" [(ngModel)]="this.datasForm.template_contract_id" optionLabel="name"
+            optionValue="id" placeholder="{{'choose.contract' | translate}}" [filter]="true" filterBy="name" [showClear]="true" [disabled]="action == 'edit'"
+            (onChange)="onChangeForm($event)">
+          </p-dropdown>
+        </div>
       </div>
     </div>
 
-    <div class="form-group">
-      <div class="label_item">{{'contract.number' | translate}}</div>
-      <div class="input-group">
-        <input type="text" [(ngModel)]="this.datasForm.contract_no" (click)="reverseInput($event)" (ngxInputSearch)="changeInput($event)" (blur)="changeInput($event)" maxlength="100" class="input_text" placeholder="{{'enter.contract.no' | translate}}" />
+    <!--Tên hợp đồng-->
+    <div class="col-md-6">
+      <div class="form-group">
+        <div class="label_item">{{'contract.name' | translate}} <span class="require_star">*</span></div>
+        <div class="input-group">
+          <input class="input_text" #nameContract type="text" [(ngModel)]="datasForm.name" placeholder="{{'enter.contract.name' | translate}}" />
+        </div>
       </div>
     </div>
 
-    <div class="form-group">
-      <div class="select-file-contract">
-        <div class="file-approve">
-          <div class="label_item">{{'file.attach' | translate}}</div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <div class="label_item">{{'contract.number' | translate}}</div>
+        <div class="input-group">
+          <input type="text" [(ngModel)]="this.datasForm.contract_no" (click)="reverseInput($event)" (ngxInputSearch)="changeInput($event)" (blur)="changeInput($event)" maxlength="100" class="input_text" placeholder="{{'enter.contract.no' | translate}}" />
+        </div>
+      </div>
+    </div>
 
-          <input id="attachFile" type="file" accept=".pdf, .doc, .docx, .png, .jpg, .jpeg, .zip, .rar, .txt, .xls, .xlsx" (change)="uploadFileAttachForm($event)"
-            style="display: none;" multiple />
-
-          <div class="select-contract">
-            <div class="div_file_attach">
-              <div *ngIf="!datasForm.fileAttachForm || datasForm.fileAttachForm.length == 0" style="color:gray">{{'choose.contract.file.attach' |
-                translate }}</div>
-              <div *ngFor="let item of datasForm.fileAttachForm; let i = index" style="width: 80%;">
-                {{item.filename ? item.filename : item.name}} <img *ngIf="item" style="cursor: pointer;" (click)="deleteFileAttach(item, i)"
-                  src="../../../../../../assets/img/icon_close.svg"></div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <div class="select-file-contract">
+          <div class="file-approve">
+            <div class="label_item">{{'file.attach' | translate}}</div>
+  
+            <input id="attachFile" type="file" accept=".pdf, .doc, .docx, .png, .jpg, .jpeg, .zip, .rar, .txt, .xls, .xlsx" (change)="uploadFileAttachForm($event)"
+              multiple />
+  
+            <div class="select-contract">
+              <div class="div_file_attach" #divFileAttach>
+                <div *ngIf="!datasForm.fileAttachForm || datasForm.fileAttachForm.length == 0" style="color: #AEC7E5; font-size: 12px; font-weight: 500; line-height: 21px;">{{'choose.contract.file.attach' |
+                  translate }}</div>
+                <div *ngFor="let item of datasForm.fileAttachForm; let i = index" style="width: 80%;">
+                  {{item.filename ? item.filename : item.name}} <img *ngIf="item" style="cursor: pointer;" (click)="deleteFileAttach(item, i)"
+                    src="../../../../../../assets/img/icon_close.svg"></div>
+              </div>
+              <img src="assets/img/attach-square.png" alt="mobifone.contract" (click)="addFileAttach()" #contractImg class="contract-img">
             </div>
-            <img src="assets/img/attachment.svg" alt="mobifone.contract" (click)="addFileAttach()">
           </div>
         </div>
       </div>
     </div>
 
-
-    <div class="form-group">
-      <div class="label_item">{{'note' | translate}} </div>
-      <div class="input-group">
-        <textarea name="" placeholder="{{'enter.note' | translate}}"
-          style="width: 100%; height: 117px;border: 1px solid #2196F3; border-radius: 5px; padding-left: 11px;outline: none;" [(ngModel)]="datasForm.notes"
-          id="" cols="30" rows="10"></textarea>
+   <div class="col-md-6">
+      <!--Loại hợp đồng-->
+      <div class="form-group">
+        <div class="label_item">{{'contract.type' | translate}}
+          <span *ngIf="this.environment.flag == 'NB'" class="require_star">*</span>
+        </div>
+        <div>
+          <p-dropdown (onChange)="changeTypeContract($event)" panelStyleClass="font" [options]="typeList" [(ngModel)]="datasForm.type_id" optionLabel="name"
+            optionValue="id" placeholder="{{'choose.contract.type' | translate}}" [filter]="true" filterBy="name" [showClear]="true"
+            ></p-dropdown>
+        </div>
       </div>
-    </div>
+   </div>
 
-    <div *ngIf=" environment.flag == 'NB' ? true : this.ceca" class="form-group">
-      <div class="label_item">{{'contract-type.ceca' | translate}}<span class="require_star">*</span></div>
-        <p-dropdown panelStyleClass="font" [options]="optionsCeCa" [(ngModel)]="optionsCeCaValue" optionLabel="name"
-          optionValue="id" [showClear]="true">
-        </p-dropdown>
-    </div>
-  </div>
-
-  <div class="col-md-2"></div>
-
-  <div class="col-md-5" style="display: flex; flex-direction: column">
-
-    <!--Tên hợp đồng-->
-    <div class="form-group">
-      <div class="label_item">{{'contract.name' | translate}} <span class="require_star">*</span></div>
-      <div class="input-group">
-        <input #nameContract type="text" [(ngModel)]="datasForm.name" class="input_text" placeholder="{{'enter.contract.name' | translate}}" />
-      </div>
-    </div>
-
-    <!--Loại hợp đồng-->
-    <div class="form-group">
-      <div class="label_item">{{'contract.type' | translate}}
-        <span *ngIf="this.environment.flag == 'NB'" class="require_star">*</span>
-      </div>
-      <div>
-        <p-dropdown (onChange)="changeTypeContract($event)" panelStyleClass="font" [options]="typeList" [(ngModel)]="datasForm.type_id" optionLabel="name"
-          optionValue="id" placeholder="{{'choose.contract.type' | translate}}" [filter]="true" filterBy="name" [showClear]="true"
-          ></p-dropdown>
-      </div>
-    </div>
-
+   <div class="col-md-6">
     <div class="form-group">
       <div class="label_item">{{'contract.connect' | translate}}</div>
       <div>
@@ -89,8 +79,9 @@
         </p-multiSelect>
       </div>
     </div>
+   </div>
 
-
+   <div class="col-md-6">
     <div class="form-group">
       <div class="label_item">{{'expiration-date' | translate}} <span class="require_star">*</span></div>
       <div>
@@ -98,7 +89,9 @@
           aria-placeholder="{{'choose.expire.date'| translate}}" dateFormat="dd/mm/yy"></p-calendar>
       </div>
     </div>
+   </div>
 
+   <div class="col-md-6">
     <div class="form-group">
       <div class="label_item">{{'expire.date.contract' | translate}}</div>
       <div>
@@ -106,15 +99,40 @@
           aria-placeholder="chọn ngày hết hạn hợp đồng" dateFormat="dd/mm/yy"></p-calendar>
       </div>
     </div>
-  </div>
+   </div>
 
-  <div class="footer-infor-contract">
-    <button (click)="next('luu_nhap')" type="button" name="next" class="next draft-button">{{'btn.save-draft' | translate
-      }}</button>
-    <button (click)="next('chuyen_buoc')" type="button" name="next" class="next action-button pull-right">{{'btn.next' | translate
-      }}</button>
-  </div>
+   <div class="col-md-6">
+    <div class="form-group">
+      <div class="label_item">{{'note' | translate}} </div>
+      <div class="input-group">
+        <input type="text" [(ngModel)]="datasForm.notes" class="input_text" />
 
-  <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
-    <p style="font-size: 18px; color: white">{{'sys.processing'| translate}}...</p>
-  </ngx-spinner>
+        <!-- <textarea name="" placeholder="{{'enter.note' | translate}}"
+          style="width: 100%; ;border: 1px solid #2196F3; border-radius: 5px; padding-left: 11px;outline: none;" [(ngModel)]="datasForm.notes"
+          id="" cols="30" rows="10"></textarea> -->
+      </div>
+    </div>
+   </div>
+
+    <div class="col-md-6">
+      <div *ngIf=" environment.flag == 'NB' ? true : this.ceca" class="form-group">
+        <div class="label_item">{{'contract-type.ceca' | translate}}<span class="require_star">*</span></div>
+          <p-dropdown panelStyleClass="font" [options]="optionsCeCa" [(ngModel)]="optionsCeCaValue" optionLabel="name"
+            optionValue="id" [showClear]="true">
+          </p-dropdown>
+      </div>
+    </div> 
+  </div>
+</div>
+
+<div class="footer-infor-contract">
+  <button (click)="next('luu_nhap')" type="button" name="next" class="next draft-button">{{'btn.save-draft' | translate
+    }}</button>
+  <button (click)="next('chuyen_buoc')" type="button" name="next" class="next action-button pull-right">{{'btn.next' | translate
+    }}</button>
+</div>
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+  <p style="font-size: 18px; color: white">{{'sys.processing'| translate}}...</p>
+</ngx-spinner>
+

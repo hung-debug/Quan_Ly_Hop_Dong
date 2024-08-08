@@ -1283,7 +1283,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   pkiDialogSignOpen() {
     const data = {
-      title: 'CHỮ KÝ PKI',
+      title: 'KÝ SIM PKI',
       is_content: 'forward_contract',
     };
 
@@ -1408,9 +1408,9 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         (result) => {
           this.toastService.showSuccessHTMLWithTimeout(
             this.datas?.roleContractReceived == 3
-              ? 'Ký hợp đồng thành công'
+              ? 'Bạn vừa thực hiện ký thành công. Hợp đồng đã được chuyển tới người tiếp theo!'
               : 'Xem xét hợp đồng thành công',
-            '',
+            [3,4].includes(this.datas.roleContractReceived) ? 'Thực hiện ký thành công!' : '',
             1000
           );
           this.router.navigate(['/main/contract-signature/receive/processed']);

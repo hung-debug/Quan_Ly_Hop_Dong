@@ -402,6 +402,7 @@
   "typeOfSignEmail": "Login by email",
   "typeOfSignPhone": "Login by phone",
   "success_sign": "Success sign",
+  "success_sign_update": "You have just signed successfully. The contract has been forwarded to the next person!",
   "success_watch": "Success watch",
   "unit.id": "ID",
   "my.contract": "My contract",
@@ -888,5 +889,18 @@
   "enter.brandname": "Enter Brandname",
   "creators.processing": "Creators and those who are processing",
   "creators.processed": "Creators and those who processed",
-  "creators.processing.processed": "People who are processing and those who have processed"
+  "creators.processing.processed": "People who are processing and those who have processed",
+  "contract.info": "Contract information",
+  "drag.contract.file": "Drag and drop or upload document/contract files",
+  "drag.contract.here": "Here",
+  "drag.contract.note": "Support docx, pdf files",
+  "xoa_doi_tac": "Delete partner",
+  "componentsnew":"INGREDIENT",
+  "sign.imagenew":"Photo signature",
+  "btn.add.user.delete": "Delete",
+  "drop.doc": "Drag and drop the information fields below to add an input or signature box to the document",
+  "location_size" : "Location and size",
+  "account.sign" : "Please enter account information to sign",
+  "hsm.title" : "Select a signature or seal image",
+  "drag.contract.theo_lo": "Hỗ trợ file XLS, XLSX"
 }

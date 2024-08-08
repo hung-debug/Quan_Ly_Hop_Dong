@@ -21,9 +21,10 @@
   }
 
   .select-option {
-    display: flex;
-    justify-content: space-evenly;
-    margin-top: 60px;
+    //display: flex;
+    text-align: center;
+    //justify-content: space-evenly;
+    margin-top: 30px;
     button {
       width: 91px;
       height: 31px;
@@ -48,3 +49,81 @@
 //   color: #677694;
 //   cursor: pointer;
 // }
+.title-popup {
+  font-size: var(--fs14);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.title-content {
+  font-size: var(--fs13);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.input-line {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  background: #F7F9FE;
+  border: 1px solid #E6EDFA;
+  border-radius: 8px;
+}
+.input-line1 {
+  border: 1px solid #E6EDFA;
+  display: flex;
+  //justify-content: space-between;
+  position: relative;
+  background: #F7F9FE;
+  border-radius: 8px;
+}
+.input-img {
+  padding: 10px;
+  background: #FFFFFF1F;
+  border-radius: 5px 0 0 5px;
+}
+.input-text {
+  border: 0;
+  background: #FFFFFF1F;
+  font-size: var(--fs14);
+  color: var(--text-primary);
+  padding: 10px;
+  width: 100%;
+  outline:0px;
+  border-radius: 0 5px 5px 0;
+}
+input::placeholder {
+  color: #8E9AB0; /* Màu của placeholder */
+}
+//img {
+//  fill: #F0F0F0; /* Màu sắc bạn muốn thay đổi */
+//}
+.icon-eye{
+  top: 10px;
+  right: 20px;
+  position: absolute;
+}
+p-dropdown{
+  width: -webkit-fill-available !important;
+}
+::ng-deep.p-component {
+  border: none;
+  background: #F7F9FE;
+}
+
+.invalid {
+  border: 1px solid red;
+}
+.invalid-text {
+  color:  red;
+}
+.option-custom {
+  font-size: var(--fs14);
+  color: #00186D;
+  margin-bottom: 0px;
+  margin-top: 2px;
+}
+::ng-deep .pki-dialog .p-dropdown.p-component {
+  width: 99%;
+}
+::ng-deep .p-dropdown .p-dropdown-label.p-placeholder {
+  color: #00186D !important;
+}

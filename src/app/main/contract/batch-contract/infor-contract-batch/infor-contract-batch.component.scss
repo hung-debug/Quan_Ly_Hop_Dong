@@ -1,203 +1,304 @@
 ::ng-deep .multiselect-dropdown {
-    .dropdown-btn {
-      border: 1px solid #106DB6 !important;
-      min-height: 38px;
-      height: auto;
-    }
+  .dropdown-btn {
+    border: 1px solid #106DB6 !important;
+    min-height: 38px;
+    height: auto;
   }
-  :host ::ng-deep {
-    .p-dropdown, .p-multiselect {
-        border: 1px solid #106DB6;
-        border-radius: 5px;
-        height: 38px;
-        width: 100%;
-        outline: 0;
-        color: black !important;
-    }
-    .p-dropdown-label, .p-multiselect-label {
-        padding: 7px 7px 5px 10px;
-    }
-    .p-multiselect .p-multiselect-label.p-placeholder, .p-dropdown .p-dropdown-label.p-placeholder {
-      color: #6c757d !important;
-    }
+}
+// :host ::ng-deep {
+//   .p-dropdown, .p-multiselect {
+//       border: 1px solid #106DB6;
+//       border-radius: 5px;
+//       height: 38px;
+//       width: 100%;
+//       outline: 0;
+//       color: black !important;
+//   }
+//   .p-dropdown-label, .p-multiselect-label {
+//       padding: 7px 7px 5px 10px;
+//   }
+//   .p-multiselect .p-multiselect-label.p-placeholder, .p-dropdown .p-dropdown-label.p-placeholder {
+//     color: #6c757d !important;
+//   }
+// }
+
+.invalid{
+  color: red;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 21px;
+}
+//upload file
+input[type="file"] {
+  display: none;
+}
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  color: #106DB6;
+  width: 100%;
+  border-radius: 20px;
+}
+
+//label type contract
+.label_type{
+  text-align: center;
+  font-weight: 500;
+  padding: 10px;
+}
+
+//label item form
+.label_item{
+  padding: 12px 0px 3px;
+  color: #0160AE;
+}
+
+.require_star{
+  color: red;
+}
+
+:host ::ng-deep {
+  .selected-item {
+    max-width: 100% !important;
   }
-  
-  .invalid{
-    color: red;
-  }
-  //upload file
-  input[type="file"] {
-    display: none;
-  }
-  .custom-file-upload {
-    border: 1px solid #ccc;
-    display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;
-    color: #106DB6;
-    width: 100%;
-    border-radius: 20px;
-  }
-  
-  //label type contract
-  .label_type{
-    text-align: center;
-    font-weight: 500;
-    padding: 10px;
-  }
-  
-  //label item form
-  .label_item{
-    padding: 12px 0px 3px;
-    color: #0160AE;
-  }
-  
-  .require_star{
-    color: red;
-  }
-  
-  :host ::ng-deep {
-    .selected-item {
-      max-width: 100% !important;
-    }
-  }
-  
-  .select-file-contract {
-    display: flex;
-    justify-content: space-between;
+}
+
+.select-file-contract {
+  display: flex;
+  justify-content: space-between;
+  width : 100%;
+  .file-approve {
     width : 100%;
-    .file-approve {
-      width : 100%;
-      .select-contract {
-        position: relative;
-        width: 100%;
-        input {
-          outline: none;
-          width: 100%;
-          height: 38px;
-          border-radius: 5px;
-          border: 1px solid #87CAFF;
-          padding-left: 10px;
-          cursor: pointer;
-        }
-        img {
-          cursor: pointer;
-          position: absolute;
-          top: 10px;
-          right: 25px;
-        }
-      }
-    }
-  }
-  
-  .file-contract{
-    min-height: 120px;
-    border: 1px solid #106DB6;
-    cursor: pointer;
-    padding: 10px;
-    text-align: center;
-    border-radius: 5px;
-  }
-  
-  .form-control{
-    border: 1px solid #106DB6;
-  }
-  
-  button {
-    //padding: 15px;
-    border: 0px;
-    border-radius: 12px;
-    margin-bottom: 10px;
-    width: 120px;
-    height: 40px;
-    box-sizing: border-box;
-    color: white;
-    background-color: #106DB6;
-    font-size: 13px;
-  }
-  
-  //style button
-  .action-button {
-    width: 100px;
-    background: #0041C4;
-    //font-weight: bold;
-    color: white;
-    border: 0 none;
-    border-radius: 6px;
-    cursor: pointer;
-    padding: 10px 12px;
-    margin: 10px 5px;
-  }
-  
-  .draft-button {
-    width: 100px;
-    background: #FCAF17;
-    //font-weight: bold;
-    color: white;
-    border: 0 none;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 10px 5px;
-    margin: 10px 5px;
-  }
-  
-  .footer-infor-contract {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    .content_footer{
-      //text-align: center;
-      //margin: 10px;
-      color:#0160AE;
-      font-size: 13px;
-      font-weight: 500;
-    }
-  }
-  
-  ::ng-deep .date-picker {
-    width: 100%;
-    outline:0px;
-    .datepicker-container{
+    .select-contract {
+      position: relative;
       width: 100%;
+      border-radius: 5px;
       input {
-        display: block !important;
-        width: 100% !important;
-        height: 38px !important;
-        padding: .375rem .75rem !important;
-        font-size: inherit !important;
-        line-height: 1.5 !important;
-        color: #495057 !important;
-        background-color: #fff !important;
-        background-clip: padding-box !important;
-        border: 1px solid #87CAFF !important;
-        border-radius: .25rem !important;
-        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
-        outline:0px !important;
+        background-color: #F7FAFD;
+        outline: none;
+        width: 100%;
+        height: 48px;
+        border-radius: 5px;
+        border: 1px solid #E6EDFA;
+        padding-left: 10px;
+        cursor: pointer;
+      }
+      .div_file_attach {
+        background-color: #F7FAFD;
+        outline: none;
+        width: 100%;
+        min-height: 48px;
+        border-radius: 5px;
+        border: 1px solid #E6EDFA;
+        padding: 12px 10px;
+        //cursor: pointer;
+        max-height: 113px;
+        overflow: auto;
+      }
+      >img {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        position: absolute;
+        top: 12px;
+        right: 10px;
+      }
+      >img:hover{
+        cursor: pointer;
       }
     }
   }
-  
-  .error-detail{
-    font-size: inherit;
-    padding: 7px;
-    margin-top: 5px;
-    margin-bottom: 0;
+}
+
+.file-contract{
+  background-color: #F7FAFD;
+  height: 140px;
+  border: 1px solid #E6EDFA;
+  cursor: pointer;
+  padding: 24px;
+  text-align: center;
+  border-radius: 5px;
+
+  img {
+    height: 36px;
+    width: 36px;
   }
-  
-  
-  .input-line {
-    display: flex;
-    justify-content: space-between;
+}
+
+.form-control{
+  border: 1px solid #106DB6;
+}
+
+button {
+  //padding: 15px;
+  border: 0px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  width: 120px;
+  height: 40px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #106DB6;
+  font-size: 13px;
+}
+
+//style button
+.action-button {
+  width: 100px;
+  background: #0041C4;
+  //font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 10px 12px;
+  margin: 10px 5px;
+}
+
+.draft-button {
+  width: 100px;
+  background: #FCAF17;
+  //font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 10px 5px;
+}
+
+.footer-infor-contract {
+  margin-top: 300px;
+  display: flex;
+  justify-content: flex-end;
+  .content_footer{
+    //text-align: center;
+    //margin: 10px;
+    color:#0160AE;
+    font-size: 13px;
+    font-weight: 500;
+  }
+}
+
+::ng-deep .date-picker {
+  width: 100%;
+  outline:0px;
+  .datepicker-container{
+    width: 100%;
+    input {
+      display: block !important;
+      width: 100% !important;
+      height: 38px !important;
+      padding: .375rem .75rem !important;
+      font-size: inherit !important;
+      line-height: 1.5 !important;
+      color: #495057 !important;
+      background-color: #fff !important;
+      background-clip: padding-box !important;
+      border: 1px solid #87CAFF !important;
+      border-radius: .25rem !important;
+      transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
+      outline:0px !important;
+    }
+  }
+}
+
+.error-detail{
+  font-size: inherit;
+  padding: 7px;
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+
+.input-line {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+.input-img {
+  top: 10px;
+  right: 25px;
+  position: absolute;
+}
+.input-text {
+  border: 0;
+  width: 100%;
+  outline:0px;
+}
+
+.container-infor-contract-batch {
+  margin: 24px;
+}
+
+.label-text {
+  color: #2B3D60;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 21px;
+}
+
+:host ::ng-deep {
+  .p-dropdown, .p-multiselect {
+    background-color: #F7FAFD;
+    border: 1px solid #E6EDFA;
+    border-radius: 5px;
+    height: 48px;
+    width: 100%;
+    outline: 0;
+    color: black !important;
     position: relative;
   }
-  .input-img {
-    top: 10px;
-    right: 25px;
-    position: absolute;
+  .p-dropdown-label {
+    padding: 12px 10px 5px 7px;
+    position: relative;
   }
-  .input-text {
-    border: 0;
-    width: 100%;
-    outline:0px;
+
+  .p-multiselect-label {
+    padding: 12px 10px 5px 7px;
+  }
+
+  .p-dropdown-label::after, .p-multiselect-label::after {
+    content: '';
+    background-image: url('../../../../../assets/img/arrow-down.png'); /* Replace with your image URL */
+    background-size: 24px 24px;
+    background-repeat: no-repeat;
+    position: absolute;
+    right: 10px; /* Adjust to position the icon correctly */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
   }
   
+  .p-dropdown .p-dropdown-trigger, .p-multiselect .p-multiselect-trigger {
+    display: none; /* Hide the default dropdown icon */
+  }
+  
+  .p-multiselect .p-multiselect-label.p-placeholder, .p-dropdown .p-dropdown-label.p-placeholder {
+    color: #AEC7E5 !important;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 21px;
+  }
+}
+
+.drag-contract {
+  color: #00186D; 
+  font-size: 14px; 
+  font-weight: 700;
+  line-height: 21px;
+}
+
+.note-drag-contract {
+  color: #A8B5CE; 
+  font-size: 12px; 
+  font-weight: 400;
+  line-height: 18px;
+}
+
+.hover-item:hover {
+  border: 1px solid #286CF5 !important;
+}

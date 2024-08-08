@@ -13,7 +13,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    
+
   }
 
   getStyleText(sign: any) {

@@ -30,6 +30,9 @@ import { CertDialogSignComponent } from './components/consider-contract/cert-dia
 import { TimeService } from 'src/app/service/time.service';
 import { ProcessingHandleEcontractComponent } from '../contract-signature/shared/model/processing-handle-econtract/processing-handle-econtract.component';
 import { RemoteDialogSignComponent } from './components/consider-contract/remote-dialog-sign/remote-dialog-sign.component';
+import {
+  ImageDialogSignV2Component
+} from "./components/consider-contract/image-dialog-sign-v2/image-dialog-sign-v2.component";
 // import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
@@ -116,6 +119,8 @@ export class ContractSignatureComponent implements OnInit {
   inputTimeout: any
   numberPage: number;
   enterPage: number = 1;
+  arrContract: any = [];
+  dataObjectSignatureArr: any = [];
   constructor(
     private appService: AppService,
     private contractServiceV1: ContractService,
@@ -1117,7 +1122,20 @@ export class ContractSignatureComponent implements OnInit {
       }
     }
   }
+  getValue(signId?: any) {
+    if (signId == 4) {
+      return 'KÝ SỐ HSM'
+    } else if(signId == 8) {
+      return 'KÝ SỐ REMOTE SIGNING'
+    }  else if(signId ==2) {
+      return 'KÝ USB TOKEN'
+    }  else if(signId == 6) {
+      return 'KÝ CHỨNG THƯ SỐ SERVER'
+    } else {
+      return 'ĐÓNG DẤU HỢP ĐỒNG'
+    }
 
+  }
   viewManyContract() {
     this.dialogViewManyComponentComponent();
   }
@@ -1292,21 +1310,24 @@ export class ContractSignatureComponent implements OnInit {
 
         if (result.mark) {
           const data = {
-            title: 'ĐÓNG DẤU HỢP ĐỒNG ',
+            title: this.getValue(signId),
             is_content: 'forward_contract',
             markSignAcc: this.datas.markSignAcc,
             mark: true,
           };
-
           const dialogConfig = new MatDialogConfig();
-          dialogConfig.width = '1024px';
+          dialogConfig.width = '725px';
           dialogConfig.hasBackdrop = true;
           dialogConfig.data = data;
-
-          const dialogRef = this.dialog.open(
-            ImageDialogSignComponent,
+          let dialogRef;
+          dialogRef = this.dialog.open(
+            ImageDialogSignV2Component,
             dialogConfig
           );
+          // dialogRef = this.dialog.open(
+          //   ImageDialogSignComponent,
+          //   dialogConfig
+          // );
 
           dialogRef.afterClosed().subscribe((res: any) => {
             if (res) {
@@ -2178,6 +2199,9 @@ export class ContractSignatureComponent implements OnInit {
           .getDataObjectSignatureLoadChange(idContract[i])
           .toPromise();
         for (let j = 0; j < dataObjectSignature.length; j++) {
+          this.arrContract.push(dataObjectSignature[j].recipient.id)
+          this.dataObjectSignatureArr.push(dataObjectSignature[j])
+
           if (dataObjectSignature[j].recipient) {
             if (recipientId[i] == dataObjectSignature[j].recipient.id) {
               x.push(dataObjectSignature[j].coordinate_x);
@@ -2188,10 +2212,10 @@ export class ContractSignatureComponent implements OnInit {
               //Lấy ra trang ký của từng file hợp đồng
               page.push(dataObjectSignature[j].page);
               boxTypes.push(dataObjectSignature[j].type)
+
             }
           }
         }
-
         //Lấy thông tin page của hợp đồng
         const infoPage = await this.contractServiceV1
           .getInfoPage(documentId[i])
@@ -2218,6 +2242,7 @@ export class ContractSignatureComponent implements OnInit {
           ceca_push.push(false);
         }
       })
+
       await Promise.all(preparePromises)
       // token v2 - prepare info - optimizing
       //Lay thong tin cua usb token
@@ -2377,12 +2402,12 @@ export class ContractSignatureComponent implements OnInit {
           signDigital.signDigitalHeight = h[j];
           emptySignature = await this.contractServiceV1
             .createEmptySignature(
-              recipientId[i],
+              this.arrContract[j],
               signUpdate,
               signDigital,
               signI,
               certInfoBase64,
-              boxTypes[i]
+              boxTypes[j]
             )
             .toPromise();
           const base64TempData = emptySignature.base64TempData;
@@ -2413,13 +2438,13 @@ export class ContractSignatureComponent implements OnInit {
 
             const mergeTimeStamp = await this.contractServiceV1
               .meregeTimeStamp(
-                recipientId[i],
-                idContract[i],
+                this.arrContract[j],
+                this.dataObjectSignatureArr[j].contract_id,
                 signatureToken,
                 fieldName,
                 certInfoBase64,
                 hexDigestTempFile,
-                ceca_push[i]
+                ceca_push[j]
               )
               .toPromise();
             const filePdfSigned = mergeTimeStamp.base64Data;
@@ -2444,7 +2469,7 @@ export class ContractSignatureComponent implements OnInit {
                 [{
                   processAt: this.isDateTime
                 }],
-                recipientId[i]
+                this.arrContract[j]
               );
 
             if (!updateInfo.id) {
@@ -2478,103 +2503,7 @@ export class ContractSignatureComponent implements OnInit {
             );
             return;
           }
-        }
-
-        // refactoring ========================
-        // const base64TempData = emptySignature.base64TempData;
-        // const fieldName = emptySignature.fieldName;
-        // const hexDigestTempFile = emptySignature.hexDigestTempFile;
-
-        // var json_req = JSON.stringify({
-        //   OperationId: 5,
-        //   SessionId: sessionId,
-        //   DataToBeSign: base64TempData,
-        //   checkOCSP: 0,
-        //   reqDigest: 0,
-        //   algDigest: 'SHA_256',
-        // });
-
-        // json_req = window.btoa(json_req);
-
-        // try {
-        //   const callServiceDCSigner = await this.contractServiceV1.signUsbToken(
-        //     'request=' + json_req
-        //   );
-
-        //   const dataSignatureToken = JSON.parse(
-        //     window.atob(callServiceDCSigner.data)
-        //   );
-
-        //   const signatureToken = dataSignatureToken.Signature;
-
-        //   const mergeTimeStamp = await this.contractServiceV1
-        //     .meregeTimeStamp(
-        //       recipientId[i],
-        //       idContract[i],
-        //       signatureToken,
-        //       fieldName,
-        //       certInfoBase64,
-        //       hexDigestTempFile,
-        //       ceca_push[i]
-        //     )
-        //     .toPromise();
-        //   const filePdfSigned = mergeTimeStamp.base64Data;
-
-
-        //   const sign = await this.contractServiceV1.updateDigitalSignatured(
-        //     idSignMany[i],
-        //     filePdfSigned
-        //   );
-
-        //   if (!sign.recipient_id) {
-        //     this.toastService.showErrorHTMLWithTimeout(
-        //       'Lỗi ký usb token không cập nhật được recipient id',
-        //       '',
-        //       3000
-        //     );
-        //     return false;
-        //   }
-
-        //   const updateInfo =
-        //     await this.contractServiceV1.updateInfoContractConsiderPromise(
-        //       [{
-        //         processAt: this.isDateTime
-        //       }],
-        //       recipientId[i]
-        //     );
-
-        //   if (!updateInfo.id) {
-        //     this.toastService.showErrorHTMLWithTimeout(
-        //       'Lỗi cập nhật trạng thái hợp đồng ',
-        //       '',
-        //       3000
-        //     );
-        //   }
-
-        //   if (i == fileC.length - 1) {
-        //     this.spinner.hide();
-        //     this.toastService.showSuccessHTMLWithTimeout(
-        //       'sign.success',
-        //       '',
-        //       3000
-        //     );
-
-        //     this.router
-        //       .navigateByUrl('/', { skipLocationChange: true })
-        //       .then(() => {
-        //         this.router.navigate(['main/c/receive/processed']);
-        //       });
-        //   }
-        // } catch (err) {
-        //   this.spinner.hide()
-        //   this.toastService.showErrorHTMLWithTimeout(
-        //     'Lỗi ký usb token ',
-        //     '',
-        //     3000
-        //   );
-        //   return;
         // }
-        // refactoring ========================
 
       })
       await Promise.all(promises).then((results: any) => {
