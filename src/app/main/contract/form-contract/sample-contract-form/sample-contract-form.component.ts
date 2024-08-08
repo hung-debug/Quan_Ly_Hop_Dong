@@ -766,8 +766,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           if (item.role == 3 || item.role == 4 || item.role == 2) {
             item['type_unit'] = 'organization';
             item['selected'] = false;
-            // item['is_disable'] = false;
-            item['is_disable'] = !element?.sign_type?.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6));
+            item['is_disable'] = false;
+            // item['is_disable'] = !element?.sign_type?.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6));
             // item['id'] = item.id;
             this.list_sign_name.push(item);
           }
@@ -1232,10 +1232,10 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               if(isSignType == 'so_tai_lieu') {
                 element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role == 4)
               } else if (isSignType.includes('chu_ky_so')) {
-                // element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
-                if(element.sign_type.some((p:any) => [2,4,6].includes(p.id))){
-                  element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6))
-                }
+                element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
+                // if(element.sign_type.some((p:any) => [2,4,6].includes(p.id))){
+                //   element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6))
+                // }
               } else if (isSignType == 'chu_ky_anh') {
                 element.is_disable = false
               } else {
@@ -1683,10 +1683,10 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     let dataHaveId = true;
     this.isChangeText = false;
     
-    const objIndex = this.list_sign_name.findIndex((obj: any) => obj.id == data.recipient_id);
-    if (objIndex != -1 ) {
-      this.list_sign_name[objIndex].is_disable = false;
-    }
+    // const objIndex = this.list_sign_name.findIndex((obj: any) => obj.id == data.recipient_id);
+    // if (objIndex != -1 ) {
+    //   this.list_sign_name[objIndex].is_disable = false;
+    // }
     
     if (data.id_have_data && this.router.url.includes("edit")) {
       this.spinner.show();
@@ -1826,10 +1826,10 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   // edit location doi tuong ky
   soHopDong: any;
   changePositionSign(e: any, locationChange: any, property: any) {
-    if(property != 'text') {
-      const objIndex = this.list_sign_name.findIndex((obj: any) => obj.id == e.target.value);
-      this.list_sign_name[objIndex].is_disable = true;
-    }
+    // if(property != 'text') {
+    //   const objIndex = this.list_sign_name.findIndex((obj: any) => obj.id == e.target.value);
+    //   this.list_sign_name[objIndex].is_disable = true;
+    // }
     
     let signElement = document.getElementById(this.objSignInfo.id);
 
@@ -3071,137 +3071,22 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   }
 
   getName(data: any) {
-    let name = '';
-    
-    const signerOrg = this.list_sign_name.filter((p:any) =>  p.type_unit == "organization" && p.role == 3);
-    const documentOrg = this.list_sign_name.filter((p:any) =>  p.type_unit == "organization" && p.role == 4);
-    const considerOrg = this.list_sign_name.filter((p:any) =>  p.type_unit == "organization" && p.role == 2);
-    const signerPartner = this.list_sign_name.filter((p:any) =>  p.type_unit == "partner" && p.role == 3);
-    const documentPartner = this.list_sign_name.filter((p:any) =>  p.type_unit == "partner" && p.role == 4);
-    const considerPartner = this.list_sign_name.filter((p:any) =>  p.type_unit == "partner" && p.role == 2 );
-    
-    
+    let name = ''
+
     if (data.type_unit == 'organization') {
-      
-      // so sánh email ở mảng người ký và văn thư
-      let dataArrSignerDocumentOrg: any = []
-      signerOrg.forEach((x: any) => {
-        documentOrg.forEach((y: any) => {
-          if (x.email === y.email) {
-            dataArrSignerDocumentOrg = [...dataArrSignerDocumentOrg, { email: x.email }]
-          }
-        });
-      });
-      
-      // so sánh email ở mảng người xem xét và văn thư
-      let dataArrConsiderDocumentOrg: any = []
-      considerOrg.forEach((x: any) => {
-        documentOrg.forEach((y: any) => {
-          if (x.email === y.email) {
-            dataArrConsiderDocumentOrg = [...dataArrConsiderDocumentOrg, { email: x.email }]
-          }
-        });
-      });
-      ///////////////////////
       if (data.name.length>27) {
         name = data.name.substring(0, 27) + ' ...'
       } else {
         name = data.name
       }
-      if(data.role == 3 && dataArrSignerDocumentOrg.some((y: any) => y.email === data.email)){
-        return 'Tổ chức của tôi - Người ký - ' + name;
-      }
-      else if(data.role == 3 && dataArrSignerDocumentOrg.some((y: any) => y.email !== data.email)){
-        return 'Tổ chức của tôi - ' + name;
-      }
-      else if(data.role == 4 && dataArrConsiderDocumentOrg.some((y: any) => y.email === data.email)){
-        return 'Tổ chức của tôi - Văn thư - ' + name;
-      }
-      else if(data.role == 4 && dataArrSignerDocumentOrg.some((y: any) => y.email === data.email)){
-        return 'Tổ chức của tôi - Văn thư - ' + name;
-      }
-      else if(data.role == 4 && dataArrSignerDocumentOrg.some((y: any) => y.email !== data.email)){
-        return 'Tổ chức của tôi - ' + name;
-      } 
-      else if(data.role == 2 && dataArrConsiderDocumentOrg.some((y: any) => y.email === data.email)){
-        return 'Tổ chức của tôi - Người xem xét - ' + name;
-      } 
-      else if(data.role == 2 && dataArrConsiderDocumentOrg.some((y: any) => y.email !== data.email)){
-        return 'Tổ chức của tôi - ' + name;
-      }
-      else if(data.role == 4 && dataArrConsiderDocumentOrg.some((y: any) => y.email !== data.email)){
-        return 'Tổ chức của tôi - ' + name;
-      }
-      else if(data.role == 3){
-        return 'Tổ chức của tôi - ' + name;
-      }
-      else if(data.role == 4){
-        return 'Tổ chức của tôi - ' + name;
-      }
-      else if(data.role == 2){
-        return 'Tổ chức của tôi - ' + name;
-      }
-      
+      return 'Tổ chức của tôi - ' + name;
     } else if (data.type_unit == 'partner') {
-      // so sánh email ở mảng người ký và văn thư
-      let dataArrSignerDocumentPartner: any = []
-      signerPartner.forEach((x: any) => {
-        documentPartner.forEach((y: any) => {
-          if (x.email === y.email) {
-            dataArrSignerDocumentPartner = [...dataArrSignerDocumentPartner, { email: x.email }]
-          }
-        });
-      });
-      
-      // so sánh email ở mảng người xem xét và văn thư
-      let dataArrConsiderDocumentPartner: any = []
-      considerPartner.forEach((x: any) => {
-        documentPartner.forEach((y: any) => {
-          if (x.email === y.email) {
-            dataArrConsiderDocumentPartner = [...dataArrConsiderDocumentPartner, { email: x.email }]
-          }
-        });
-      });
-      ///////////////////////
       if (data.name.length>35) {
         name = data.name.substring(0, 35) + ' ...'
       } else {
         name = data.name
       }
-      
-      if(data.role == 3 && dataArrSignerDocumentPartner.some((y: any) => y.email === data.email)){
-        return 'Đối tác - Người ký - ' + name;
-      }
-      else if(data.role == 3 && dataArrSignerDocumentPartner.some((y: any) => y.email !== data.email)){
-        return 'Đối tác - ' + name;
-      }
-      else if(data.role == 4 && dataArrConsiderDocumentPartner.some((y: any) => y.email === data.email)){
-        return 'Đối tác - Văn thư - ' + name;
-      }
-      else if(data.role == 4 && dataArrSignerDocumentPartner.some((y: any) => y.email === data.email)){
-        return 'Đối tác - Văn thư - ' + name;
-      }
-      else if(data.role == 4 && dataArrSignerDocumentPartner.some((y: any) => y.email !== data.email)){
-        return 'Đối tác - ' + name;
-      }
-      else if(data.role == 2 && dataArrConsiderDocumentPartner.some((y: any) => y.email === data.email)){
-        return 'Đối tác - Người xem xét - ' + name;
-      }
-      else if(data.role == 2 && dataArrConsiderDocumentPartner.some((y: any) => y.email !== data.email)){
-        return 'Đối tác - ' + name;
-      }
-      else if(data.role == 4 && dataArrConsiderDocumentPartner.some((y: any) => y.email !== data.email)){
-        return 'Đối tác - ' + name;
-      }
-      else if(data.role == 3){
-        return 'Đối tác - ' + name;
-      }
-      else if(data.role == 4){
-        return 'Đối tác - ' + name;
-      }
-      else if(data.role == 2){
-        return 'Đối tác - ' + name;
-      }
+      return 'Đối tác - ' + name;
     }
   }
 

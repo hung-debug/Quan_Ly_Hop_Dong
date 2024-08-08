@@ -1110,81 +1110,13 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   getCheckDuplicateEmail(isParty: string, dataValid?: any) {
     let arrCheckEmail = [];
-    
-    if (isParty == "allCheckEmail") {
-      function removeDuplicatesKeepRole4(arr: any) {
-        const emailTracker: any = {};
-        const result: any = [];
-
-        for (const item of arr) {
-          const { email, role } = item;
-
-          if (!emailTracker[email]) {
-            // Email chưa tồn tại trong emailTracker
-            emailTracker[email] = item;
-            result.push(item);
-          } else if (role === 4 && emailTracker[email].role !== 4) {
-            // Email đã tồn tại nhưng role của item hiện tại là 4
-            // và role của item đã được lưu trước đó không phải là 4
-            // Cập nhật phần tử trong result
-            const index = result.indexOf(emailTracker[email]);
-            result[index] = item;
-            emailTracker[email] = item;
-          }
-        }
-        return result;
-      }
-
-      let dta: any = []
-      dataValid.map((y: any) => {
-        dta = [...dta, { ...y, recipients: removeDuplicatesKeepRole4(y.recipients) }];
-      })
-      let dt: any = []
-      dta.map((x: any) => {
-        dt = [...dt, ...x.recipients]
-      })
-
-      const dataVT = dt.filter((y: any) => y.role === 4)
-      const dataNVT = dt.filter((y: any) => y.role !== 4)
-
-      //kiểm tra xem có văn thư trùng mail nào không trong mảng VT
-      function hasDuplicateEmails(dataVT: any) {
-        const emailTracker: any = {};
-        for (const item of dataVT) {
-          if (emailTracker[item.email]) {
-            return true; // Đã tìm thấy email trùng
-          }
-          emailTracker[item.email] = true;
-        }
-
-        return false; // Không tìm thấy email trùng
-      }
-      hasDuplicateEmails(dataVT)
-      if (hasDuplicateEmails(dataVT)) {
-        return true;
-      }
-
-      //kiểm tra có phần tử nào mảng VT trùng với phần tử trong mảng không VT hay không
-      var commonEmails = dataVT.filter((item1: any) =>
-        dataNVT.some((item2: any) => item1.email === item2.email)
-      );
-      if (commonEmails.length > 0) {
-        return true;
-      }
-    }
-    
     // valid email đối tác và các bên tham gia
     if (isParty != 'only_party_origanzation') {
       let arrEmail = [];
-      let emailCheckInMyPartNer = [];
-      let countCheck_duplicate_emailPartner = 0;
-      
       for (let i = 0; i < dataValid.length; i++) {
         const element = dataValid[i].recipients;
-        let listEmailInMyPartNer = dataValid[i].recipients.filter((p: any) => p.role === 4)
-        
         for (let j = 0; j < element.length; j++) {
-          if (element[j].email && element[j].role != 4) {
+          if (element[j].email) {
             let items = {
               email: element[j].email,
               role: element[j].role,
@@ -1193,22 +1125,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
             }
             // arrCheckEmail.push(element[j].email);
             arrEmail.push(items);
-            
-            if (isParty == "only_party_partner") {
-              const duplicatesPartner : any = [];
-              listEmailInMyPartNer.forEach((el: any, i: any) => {
-                listEmailInMyPartNer.forEach((element: any, index: any) => {
-                  if (i === index) return null;
-                    if (element.email === el.email) {
-                      if (!duplicatesPartner.includes(el)) duplicatesPartner.push(el);
-                    }
-                });
-              });
-              
-              if (duplicatesPartner.length >= 2) {
-                return true;
-              }
-            }
           }
         }
       }
@@ -1235,27 +1151,10 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
     } else {
       // valid email tổ chức của tôi
-      let emailCheckInMyOrg = [];
-      let lstEmailInMyOrg = dataValid.filter((p: any) => p.role == 4);
-      let countCheck_duplicate = 0;
-      
       for (let i = 0; i < dataValid.length; i++) {
-        if (dataValid[i].email && dataValid[i].login_by=='email' && dataValid[i].role != 4) {
+        if (dataValid[i].email && dataValid[i].login_by=='email') {
           arrCheckEmail.push(dataValid[i].email);
         }
-      }
-      
-      const duplicatesOrg : any = [];
-      lstEmailInMyOrg.forEach((el: any, i: any) => {
-        lstEmailInMyOrg.forEach((element: any, index: any) => {
-          if (i === index) return null;
-            if (element.email === el.email) {
-              if (!duplicatesOrg.includes(el)) duplicatesOrg.push(el);
-            }
-        });
-      });
-      if (duplicatesOrg.length >= 2) {
-        return true;
       }
     }
 
