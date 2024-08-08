@@ -226,7 +226,7 @@ export class DetermineSignerComponent implements OnInit {
             break;
           }
 
-          if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email)) {
+          if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email.trim())) {
             this.getNotificationValid("Email" + this.getNameObject(3) + "của đối tác không hợp lệ!")
             count++;
             break;
@@ -287,7 +287,7 @@ export class DetermineSignerComponent implements OnInit {
           }
 
        
-          if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email) && dataArrPartner[j].recipients[k].role == 3) {
+          if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email.trim()) && dataArrPartner[j].recipients[k].role == 3) {
             this.getNotificationValid("Email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân không hợp lệ!")
             count++;
             break;
