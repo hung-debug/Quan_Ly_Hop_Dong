@@ -959,12 +959,10 @@ export class ContractComponent implements OnInit, AfterViewInit {
         status: 'one'
       }
     } else {
-      const localTime = new Date();
-      const adjustedTime = new Date(localTime.getTime() + 7 * 60 * 60 * 1000);
-      const adjustedTimeISO = adjustedTime.toISOString();
+      const currentTime = new Date().toISOString();
       data = {
         title: title,
-        expirationSign: adjustedTimeISO,
+        expirationSign: currentTime,
         contractId: this.idCheckBox,
         scrollY: this.scrollY,
         status: 'multi'
