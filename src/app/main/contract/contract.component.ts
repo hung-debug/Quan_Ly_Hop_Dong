@@ -84,6 +84,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   checkedAll: boolean = false;
   typeDisplay: string = 'view';
   dataDeleteDraftChecked: any[] = [];
+  idCheckBox: any[] = [];
   color: any;
   backgroundColor: any;
 
@@ -288,6 +289,18 @@ export class ContractComponent implements OnInit, AfterViewInit {
     }
   }
 
+  onCheckboxChange(item: any) {
+    if (item.checked) {
+      this.idCheckBox.push(item.id);  
+    } else {
+      const index = this.idCheckBox.indexOf(item.id);
+      if (index > -1) {
+        this.idCheckBox.splice(index, 1);
+      }
+    }
+    console.log('this.idCheckBox', this.idCheckBox)
+  }
+
   selectContract(item: any){
     if(!item.checked) this.checkedAll = false;
     else {
@@ -375,7 +388,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
     // Replace 'yyyy-MM-dd' with your desired date format
     const formattedDate = this.datePipe.transform(myDate, 'ddMMyyyy');
     const ids = await this.dataChecked.map(el => el.id).toString();
-    console.log("ids",ids);
     
     this.ContractSignatureService.getContractMyProcessListDownloadMany(ids).subscribe(
       (data) => {
@@ -691,7 +703,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.scrollY = 0;
     this.roleMess = "";
     this.typeDisplay="view";
-    this.contracts = []
+    this.contracts = [];
+    this.idCheckBox = [];
     this.contractService.sidebarContractEvent.subscribe((event: any) => {
       if(event='contract-signature')
       this.p = 1;
@@ -936,11 +949,26 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   openEditExpiration(item: any) {
     let title = this.translate.instant('edit.exp.sign.time')
-    const data = {
-      title: title,
-      expirationSign: item.sign_time,
-      contractId: item.id,
-      scrollY: this.scrollY
+    let data;
+    if (item && item !== '') {
+      data = {
+        title: title,
+        expirationSign: item.sign_time,
+        contractId: item.id,
+        scrollY: this.scrollY,
+        status: 'one'
+      }
+    } else {
+      const localTime = new Date();
+      const adjustedTime = new Date(localTime.getTime() + 7 * 60 * 60 * 1000);
+      const adjustedTimeISO = adjustedTime.toISOString();
+      data = {
+        title: title,
+        expirationSign: adjustedTimeISO,
+        contractId: this.idCheckBox,
+        scrollY: this.scrollY,
+        status: 'multi'
+      }
     }
 
      // @ts-ignore

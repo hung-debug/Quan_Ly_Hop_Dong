@@ -55,6 +55,7 @@ export class ContractService {
   processAuthorizeContractUrl: any = `${environment.apiUrl}/api/v1/processes/authorize`;
 
   addGetDataContract: any = `${environment.apiUrl}/api/v1/contracts/`;
+  editSignTimeMuti: any = `${environment.apiUrl}/api/v1/contracts/update-sign-time`;
 
   addGetFileContract: any = `${environment.apiUrl}/api/v1/documents/by-contract/`;
   addGetObjectSignature: any = `${environment.apiUrl}/api/v1/fields/by-contract/`;
@@ -461,6 +462,16 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
 
     return this.http.put<Contract>(this.addGetDataContract + contractId, body, { headers: headers })
+  }
+
+  editSignTimeMutiContract(body: any) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.put<Contract>(this.editSignTimeMuti, body, { headers: headers })
   }
 
   getSignPositionCoordinatesForm(id_contract_form: number) {

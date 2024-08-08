@@ -83,29 +83,45 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
     this.spinner.show();
 
     //Gọi api lấy thông tin contractId
-    const inforContract = await this.contractService.getDataCoordination(this.data.contractId).toPromise();
+    let data;
+    if(this.data.status == 'multi') {
+      data = {
+        sign_time: this.datepipe.transform(
+          this.expirationSign,
+          "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        )?.slice(0,11).concat("00:00:00Z"),
+        contract_ids: this.data.contractId
+      }
+    } else {
+      const inforContract = await this.contractService.getDataCoordination(this.data.contractId).toPromise();
 
-    const data = {
-      alias_url: inforContract.alias_url,
-      ceca_push: inforContract.ceca_push,
-      code: inforContract.code,
-      contract_no: inforContract.contract_no,
-      is_template: inforContract.is_template,
-      name: inforContract.name,
-      notes: inforContract.notes,
-      originalContractId: inforContract.originalContractId,
-      refs: inforContract.refs,
-      sign_time: this.datepipe.transform(
-        this.expirationSign,
-        "yyyy-MM-dd'T'HH:mm:ss'Z'"
-      )?.slice(0,11).concat("00:00:00Z"),
-      template_contract_id: inforContract.template_contract_id,
-      type_id: inforContract.type_id
+      data = {
+        alias_url: inforContract.alias_url,
+        ceca_push: inforContract.ceca_push,
+        code: inforContract.code,
+        contract_no: inforContract.contract_no,
+        is_template: inforContract.is_template,
+        name: inforContract.name,
+        notes: inforContract.notes,
+        originalContractId: inforContract.originalContractId,
+        refs: inforContract.refs,
+        sign_time: this.datepipe.transform(
+          this.expirationSign,
+          "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        )?.slice(0,11).concat("00:00:00Z"),
+        template_contract_id: inforContract.template_contract_id,
+        type_id: inforContract.type_id
+      }
     }
 
     //Gọi api edit contract
     try {
-      const editContract = await this.contractService.editContract(data, this.data.contractId).toPromise();
+      let editContract: any;
+      if(this.data.status == 'multi') {
+        editContract = await this.contractService.editSignTimeMutiContract(data).toPromise();
+      } else {
+        editContract = await this.contractService.editContract(data, this.data.contractId).toPromise();
+      }
 
       if(editContract.id) {
         // window.location.reload();
