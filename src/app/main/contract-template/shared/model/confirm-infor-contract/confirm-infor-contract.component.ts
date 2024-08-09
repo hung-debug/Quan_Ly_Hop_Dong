@@ -281,9 +281,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
       dataSignId.forEach((element: any) => {
         if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
-          if (element?.type !== 3) {
             element.coordinate_x = element.coordinate_x - this.datas.difX;
-          }
         }
       })
       for (let i = 0; i < dataSignId.length; i++) {
@@ -346,9 +344,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
       dataSignNotId.forEach((element: any) => {
         if(this.datas.arrDifPage[Number(element.page)-1] == 'max'){
-          if (element?.type !== 3) {
             element.coordinate_x = element.coordinate_x - this.datas.difX;
-          }
         }
       })
       await this.contractTemplateService.getContractSample(dataSignNotId).toPromise().then((data) => {
@@ -406,11 +402,22 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     dialogRef.afterClosed().subscribe((result: any) => {
         this.datas.isFirstLoadPreview = false;
         this.datas.contract_user_sign.forEach((element: any) => {
-          element.sign_config.forEach((item: any) => {
-            if(this.datas.arrDifPage[Number(item.page)-1] == 'max'){
-              item.coordinate_x = item.coordinate_x + this.datas.difX;
+          if(element.sign_unit == "chu_ky_so") {
+            let type = element.type;
+            for (let i = 0; i < type.length; i++) {
+              type[i].sign_config.forEach((item: any) => {
+                if(this.datas.arrDifPage[Number(item.page)-1] == 'max'){
+                  item.coordinate_x = item.coordinate_x + this.datas.difX;
+                }
+              }) 
             }
-          })
+          } else {
+            element.sign_config.forEach((item: any) => {
+              if(this.datas.arrDifPage[Number(item.page)-1] == 'max'){
+                item.coordinate_x = item.coordinate_x + this.datas.difX;
+              }
+            })
+          }
         })
     })
   }

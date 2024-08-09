@@ -351,19 +351,38 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.datas.isFirstLoadDrag = true;
     let i = 0;
     this.datas.contract_user_sign.forEach((element: any) => {
-      element.sign_config.forEach((item: any) => {
-        if (this.arrDifPage[Number(item.page) - 1] == 'max') {
-          const htmlElement: HTMLElement | null = document.getElementById(item.id);
-          if (htmlElement) {
-            var oldX = Number(htmlElement.getAttribute('data-x'));
-            if (oldX) {
-              var newX = oldX + this.difX;
-              htmlElement.setAttribute('data-x', newX.toString());
+      if(element.sign_unit == "chu_ky_so") {
+        let type = element.type;
+        for (let i = 0; i < type.length; i++) {
+          type[i].sign_config.forEach((item: any) => {
+            if (this.arrDifPage[Number(item.page) - 1] == 'max') {
+              const htmlElement: HTMLElement | null = document.getElementById(item.id);
+              if (htmlElement) {
+                var oldX = Number(htmlElement.getAttribute('data-x'));
+                if (oldX) {
+                  var newX = oldX + this.difX;
+                  htmlElement.setAttribute('data-x', newX.toString());
+                }
+              }
+              item.coordinate_x += this.difX;
             }
-          }
-          item.coordinate_x += this.difX;
+          }) 
         }
-      })
+      } else {
+        element.sign_config.forEach((item: any) => {
+          if (this.arrDifPage[Number(item.page) - 1] == 'max') {
+            const htmlElement: HTMLElement | null = document.getElementById(item.id);
+            if (htmlElement) {
+              var oldX = Number(htmlElement.getAttribute('data-x'));
+              if (oldX) {
+                var newX = oldX + this.difX;
+                htmlElement.setAttribute('data-x', newX.toString());
+              }
+            }
+            item.coordinate_x += this.difX;
+          }
+        })
+      }
     })
   }
 
@@ -655,15 +674,29 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       } else if (this.datas?.storedFields?.length > 0 || this.datas.pagePdfFileNew < this.datas.pagePdfFileOld) {
         this.datas.contract_user_sign.forEach((res: any) => {
-          if (res.sign_config.length > 0) {
-            res.sign_config.forEach((element: any) => {
-              if (element.id_have_data && element.page > this.datas.pagePdfFileNew) {
-                this.removeDataSignChange(element.id_have_data);
-                res.sign_config = res.sign_config.filter((item: any) => item.page <= this.datas.pagePdfFileNew)
-              } else if (element.page > this.datas.pagePdfFileNew) {
-                res.sign_config = res.sign_config.filter((item: any) => item.page <= this.datas.pagePdfFileNew)
-              }
-            })
+          if(res.sign_unit == "chu_ky_so") {
+            let type = res.type;
+            for (let i = 0; i < type.length; i++) {
+              type[i].sign_config.forEach((item: any) => {
+                if (item.id_have_data && item.page > this.datas.pagePdfFileNew) {
+                  this.removeDataSignChange(item.id_have_data);
+                  res.sign_config = res.sign_config.filter((item: any) => item.page <= this.datas.pagePdfFileNew)
+                } else if (item.page > this.datas.pagePdfFileNew) {
+                  res.sign_config = res.sign_config.filter((item: any) => item.page <= this.datas.pagePdfFileNew)
+                }
+              }) 
+            }
+          } else {
+            if (res.sign_config.length > 0) {
+              res.sign_config.forEach((element: any) => {
+                if (element.id_have_data && element.page > this.datas.pagePdfFileNew) {
+                  this.removeDataSignChange(element.id_have_data);
+                  res.sign_config = res.sign_config.filter((item: any) => item.page <= this.datas.pagePdfFileNew)
+                } else if (element.page > this.datas.pagePdfFileNew) {
+                  res.sign_config = res.sign_config.filter((item: any) => item.page <= this.datas.pagePdfFileNew)
+                }
+              })
+            }
           }
         })
       }
@@ -1412,16 +1445,30 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.objDrag = {};
       let count_total = 0;
       this.datas.contract_user_sign.forEach((element: any) => {
-        if (element.sign_config.length > 0) {
-          let arrSignConfigItem = element.sign_config;
-          arrSignConfigItem.forEach((item: any) => {
-            if (item['position']) {
-              this.objDrag[item.id] = {
-                count: 2
+        if(element.sign_unit == "chu_ky_so") {
+          let type = element.type;
+          for (let i = 0; i < type.length; i++) {
+            type[i].sign_config.forEach((item: any) => {
+              if (item['position']) {
+                this.objDrag[item.id] = {
+                  count: 2
+                }
+                count_total++;
               }
-              count_total++;
-            }
-          })
+            }) 
+          }
+        } else {
+          if (element.sign_config.length > 0) {
+            let arrSignConfigItem = element.sign_config;
+            arrSignConfigItem.forEach((item: any) => {
+              if (item['position']) {
+                this.objDrag[item.id] = {
+                  count: 2
+                }
+                count_total++;
+              }
+            })
+          }
         }
       });
       if (count_total == 0) {
