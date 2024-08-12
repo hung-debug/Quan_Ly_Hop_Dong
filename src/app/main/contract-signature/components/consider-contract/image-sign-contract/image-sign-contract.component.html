@@ -1,75 +1,36 @@
-<div id="image-sign-contract-component" *ngIf="sign.sign_unit == 'chu_ky_so'"
-     class="content">
-  <div class="skeleton-sign" (click)="doSign()" *ngIf="(!checkShowEdit && !sign.valueSign) && !otpValueSign">
-    <div [ngClass]="{'stamp-type' : sign.type_image_signature == 2}" class="stamp-content"
-         *ngIf="sign.type_image_signature == 1 || sign.type_image_signature == 2">
-      <div *ngIf="sign.type_image_signature == 1">
-        <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/only_info.svg' : 'assets/img/only_info.svg'"
-             alt="mobifone.contract">
-        <br>
-        <span class="text-stamp">Thông tin chữ ký số</span>
-      </div>
-      <div *ngIf="sign.type_image_signature == 2">
-        <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/stamp.svg' : 'assets/img/stamp.svg'"
-             alt="mobifone.contract">
-        <br>
-        <span class="text-stamp">Con dấu/ chữ ký</span>
-      </div>
-    </div>
-    <div *ngIf="sign.type_image_signature == 3|| sign.type_image_signature == null" class="stamp-content1">
-      <div style="display: flex;height: inherit;">
-        <div class="left-stamp">
-          <div>
-            <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/stamp.svg' : 'assets/img/stamp.svg'"
-                 alt="mobifone.contract">
-            <br>
-            <span class="text-stamp">Con dấu/ chữ ký</span>
-          </div>
-        </div>
-        <div class="right-stamp">
-          <div>
-            <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/only_info.svg' : 'assets/img/only_info.svg'"
-                 alt="mobifone.contract">
-            <br>
-            <span class="text-stamp">Thông tin chữ ký số</span>
-          </div>
-        </div>
-      </div>
-    </div>
+<div (click)="doSign()" *ngIf="sign.sign_unit == 'chu_ky_anh'" class="content">
+  <div class="stamp-content item-left">
+    <img src='assets/img/stamp.svg' alt="mobifone.contract">
+    <div class="font-sign">Chữ ký ảnh</div>
   </div>
-
-  <div class="skeleton-sign" (click)="doSign()" *ngIf="checkShowEdit && !sign.valueSign && !otpValueSign">
-    <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'"
-         alt="mobifone.contract">
-  </div>
-
-  <div *ngIf="otpValueSign || countOtpBox > 0" (click)="doSign()">
-    <img [src]="otpValueSign" alt="mobifone.contract" style="width: auto" [width]="sign.width ? sign.width : '100px'"
-         [height]="sign.height ? sign.height : '54px'">
+  <div class="sign-info-content item-right" style="margin-left: 5px;">
+    <img src='assets/img/only_info.svg' alt="mobifone.contract">
+    <div class="font-sign">Thông tin chữ ký ảnh</div>
   </div>
 </div>
-<div *ngIf="sign.sign_unit == 'chu_ky_anh'" class="content">
-  <div style="display: unset" class="stamp-content">
-    <div  class="stamp-content1">
-      <div style="display: flex;height: inherit;">
-        <div class="left-stamp">
-          <div>
-            <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/stamp.svg' : 'assets/img/stamp.svg'"
-                 alt="mobifone.contract">
-            <br>
-            <span class="text-stamp">Chữ ký ảnh</span>
-          </div>
-        </div>
-        <div class="right-stamp">
-          <div>
-            <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/only_info.svg' : 'assets/img/only_info.svg'"
-                 alt="mobifone.contract">
-            <br>
-            <span class="text-stamp">Thông tin chữ ký</span>
-          </div>
-        </div>
-      </div>
-    </div>
+
+<div (click)="doSign()" *ngIf="sign.sign_unit == 'chu_ky_so' && (sign.type_image_signature == 3|| sign.type_image_signature == null)" class="content">
+  <div class="stamp-content item-left">
+    <img src='assets/img/stamp.svg' alt="mobifone.contract">
+    <div class="font-sign">Con dấu/ Chữ ký</div>
+  </div>
+  <div class="sign-info-content item-right" style="margin-left: 5px;">
+    <img src='assets/img/only_info.svg' alt="mobifone.contract">
+    <div class="font-sign">Thông tin chữ ký số</div>
+  </div>
+</div>
+
+<div (click)="doSign()" *ngIf="sign.sign_unit == 'chu_ky_so' && sign.type_image_signature == 2" style="width: 100%;">
+  <div class="stamp-content item-left" style="flex-basis: 100% !important; margin-right: 0px !important">
+    <img src='assets/img/stamp.svg' alt="mobifone.contract">
+    <div class="font-sign">Con dấu/ Chữ ký</div>
+  </div>
+</div>
+
+<div (click)="doSign()" *ngIf="sign.sign_unit == 'chu_ky_so' && sign.type_image_signature == 1">
+  <div class="sign-info-content item-right" style="flex-basis: 100% !important;">
+    <img src='assets/img/only_info.svg' alt="mobifone.contract">
+    <div class="font-sign">Thông tin chữ ký số</div>
   </div>
 </div>
 
