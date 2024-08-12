@@ -125,7 +125,7 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
 
       if(this.data.status == 'multi') {
         if(editContract.status) {
-          window.location.reload();
+          // window.location.reload();
           this.toastService.showSuccessHTMLWithTimeout('update.success','',3000);
           this.dialog.closeAll();
         } else {
@@ -133,7 +133,7 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
         }
       } else {
         if(editContract.id) {
-          window.location.reload();
+          // window.location.reload();
   
           this.toastService.showSuccessHTMLWithTimeout('update.success','',3000);
           this.dialog.closeAll();
