@@ -782,8 +782,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           if (item.role == 3 || item.role == 4 || item.role == 2) {
             item['type_unit'] = 'organization';
             item['selected'] = false;
-            item['is_disable'] = false;
-            // item['is_disable'] = !element?.sign_type?.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6));
+            //item['is_disable'] = false;
+            item['is_disable'] = !element?.sign_type?.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6));
             item['org_name'] = element.name;
             this.list_sign_name.push(item);
           }
@@ -832,11 +832,21 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.objSignInfo.traf_y = y;
       this.signCurent.width = event.rect.width;
       this.signCurent.height = event.rect.height;
-      if (this.signCurent.sign_unit == 'chu_ky_so' || this.signCurent.sign_unit == 'chu_ky_anh'){
-        this.signCurent.width <= 140 ? this.signCurent.width = 140 : this.signCurent.width = event.rect.width
-        this.signCurent.height <= 50 ? this.signCurent.height = 50 : this.signCurent.height = event.rect.height
-        this.objSignInfo.width = this.signCurent.height
-        this.objSignInfo.height = this.signCurent.width
+      if (this.signCurent.sign_unit == 'chu_ky_so_con_dau_va_thong_tin' || this.signCurent.sign_unit == 'chu_ky_anh'){
+        this.signCurent.width <= 180 ? this.signCurent.width = 180 : this.signCurent.width = event.rect.width;
+        this.signCurent.height <= 66 ? this.signCurent.height = 66 : this.signCurent.height = event.rect.height;
+        this.objSignInfo.width = this.signCurent.width
+        this.objSignInfo.height = this.signCurent.height
+      } else if (this.signCurent.sign_unit == 'chu_ky_so_thong_tin') {
+        this.signCurent.width <= 120 ? this.signCurent.width = 120 : this.signCurent.width = event.rect.width;
+        this.signCurent.height <= 66 ? this.signCurent.height = 66 : this.signCurent.height = event.rect.height;
+        this.objSignInfo.width = this.signCurent.width
+        this.objSignInfo.height = this.signCurent.height
+      } else if (this.signCurent.sign_unit == 'chu_ky_so_con_dau') {
+        this.signCurent.width <= 66 ? this.signCurent.width = 66 : this.signCurent.width = event.rect.width;
+        this.signCurent.height <= 66 ? this.signCurent.height = 66 : this.signCurent.height = event.rect.height;
+        this.objSignInfo.width = this.signCurent.width
+        this.objSignInfo.height = this.signCurent.height
       } else {
         this.objSignInfo.width = event.rect.width;
         this.objSignInfo.height = event.rect.height;
@@ -1288,7 +1298,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             //   element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6))
             // }
           } else if (isSignType == 'chu_ky_anh') {
-            element.is_disable = false
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
           } else {
             element.is_disable = true
           }
@@ -1602,29 +1612,41 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       "border": "1px dashed #6B6B6B",
       "border-radius": "6px",
       "min-width": "66px",
-      "min-height": "50px"
+      "min-height": "66px"
     }
     if (d['width']) {
-      if (d?.sign_unit == 'chu_ky_so_con_dau' && d['width'] == 66) {
-        style.width = 66 + "px";
-      } else if (d?.sign_unit == 'chu_ky_so_thong_tin' && d['width'] == 120) {
-        style.width = 120 + "px";
-      } else {
-        style.width = parseInt(d['width']) + "px";
-      }
+      style.width = parseInt(d['width']) + "px";
     }
     if (d['height']) {
-      if (d?.sign_unit == 'chu_ky_so_con_dau' && d['height'] == 66) {
-        style.height = 66 + "px";
-      } else {
-        style.height = parseInt(d['height']) + "px";
-      }
-
+      style.height = parseInt(d['height']) + "px";
     }
     if (this.datas.contract_no && d.sign_unit == 'so_tai_lieu') {
       style.padding = '6px';
     }
-    return style;
+    return style
+  }
+
+  changePositionSignature(d?: any, e?: any, sizeChange?: any) {
+      // new-signature-box-style-v2
+      let style: any = {
+        "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+        "position": "absolute",
+        "backgroundColor": '#FFFFFF',
+        "border": "1px dashed #6B6B6B",
+        "border-radius": "6px",
+        "min-width": "180px",
+        "min-height": "66px"
+      }
+      if (d['width']) {
+        style.width = parseInt(d['width']) + "px";
+      }
+      if (d['height']) {
+        style.height = parseInt(d['height']) + "px";
+      }
+      if (this.datas.contract_no && d.sign_unit == 'so_tai_lieu') {
+        style.padding = '6px';
+      }
+      return style
   }
 
   getAddSignUnit() {

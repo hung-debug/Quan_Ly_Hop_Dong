@@ -223,9 +223,7 @@ export class ConfirmContractBatchComponent
 
     this.datasBatch.contract_user_sign.forEach((element: any) => {
       // console.log(element.sign_unit, element.sign_config);
-      if (element.sign_unit == 'chu_ky_so') {
-        Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
-      } else if (element.sign_unit == 'chu_ky_anh') {
+      if (element.sign_unit == 'chu_ky_anh') {
         Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
       } else if (element.sign_unit == 'text') {
         Array.prototype.push.apply(element.sign_config, data_sign_config_text);
@@ -234,6 +232,28 @@ export class ConfirmContractBatchComponent
           element.sign_config,
           data_sign_config_so_tai_lieu
         );
+      } else if (element.sign_unit == 'chu_ky_so') {
+        let targetObject1 = element.type.find((item: any) => item.sign_unit === "chu_ky_so_con_dau_va_thong_tin");
+        let targetObject2 = element.type.find((item: any) => item.sign_unit === "chu_ky_so_con_dau");
+        let targetObject3 = element.type.find((item: any) => item.sign_unit === "chu_ky_so_thong_tin");
+        data_sign_config_cks.forEach((data: any) => {
+          if (data.type_image_signature === 3) {
+              data.sign_unit = 'chu_ky_so_con_dau_va_thong_tin';
+              targetObject1.sign_config.push(data);
+          }
+
+          if (data.type_image_signature === 2) {
+            data.height = data.height + 10;
+            data.width = data.width + 10;
+            data.sign_unit = 'chu_ky_so_con_dau'
+            targetObject2.sign_config.push(data);
+          }
+
+          if (data.type_image_signature === 1) {
+            data.sign_unit = 'chu_ky_so_thong_tin'
+            targetObject3.sign_config.push(data);
+          }
+        });
       }
     });
     this.scale = 1;
@@ -423,19 +443,38 @@ export class ConfirmContractBatchComponent
     this.datasBatch.isFirstLoadDrag = true;
     let i = 0;
     this.datasBatch.contract_user_sign.forEach((element: any) => {
-      element.sign_config.forEach((item: any) => {
-        const htmlElement: HTMLElement | null = document.getElementById(item.id);
-        if(htmlElement) {
-          var oldX = Number(htmlElement.getAttribute('data-x'));
-          if(oldX) {
-            var newX = oldX + this.difX;
-            htmlElement.setAttribute('data-x', newX.toString());
+      if(element.sign_unit == "chu_ky_so") {
+        let type = element.type;
+        for (let i = 0; i < type.length; i++) {
+          type[i].sign_config.forEach((item: any) => {
+            const htmlElement: HTMLElement | null = document.getElementById(item.id);
+            if(htmlElement) {
+              var oldX = Number(htmlElement.getAttribute('data-x'));
+              if(oldX) {
+                var newX = oldX + this.difX;
+                htmlElement.setAttribute('data-x', newX.toString());
+              }
+            }
+            if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+              item.coordinate_x += this.difX;
+            }
+          }) 
+        }
+      } else {
+        element.sign_config.forEach((item: any) => {
+          const htmlElement: HTMLElement | null = document.getElementById(item.id);
+          if(htmlElement) {
+            var oldX = Number(htmlElement.getAttribute('data-x'));
+            if(oldX) {
+              var newX = oldX + this.difX;
+              htmlElement.setAttribute('data-x', newX.toString());
+            }
           }
-        }
-        if(this.arrDifPage[Number(item.page)-1] == 'max' ){
-          item.coordinate_x += this.difX;
-        }
-      })
+          if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+            item.coordinate_x += this.difX;
+          }
+        })
+      }
     })
   }
 
@@ -559,7 +598,7 @@ export class ConfirmContractBatchComponent
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
     let style: any =
-    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
+    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so' && d.sign_unit != 'chu_ky_so_con_dau_va_thong_tin' && d.sign_unit != 'chu_ky_so_con_dau' && d.sign_unit != 'chu_ky_so_thong_tin') ?
     {
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
@@ -570,7 +609,9 @@ export class ConfirmContractBatchComponent
       "position": "absolute",
       "backgroundColor": '#FFFFFF',
       "border": "1px dashed #6B6B6B",
-      "border-radius": "6px"
+      "border-radius": "6px",
+      "min-width": "66px",
+      "min-height": "66px"
     }
     // style.backgroundColor = d.value ? '' : '#EBF8FF';
     if (d['width']) {
@@ -580,6 +621,26 @@ export class ConfirmContractBatchComponent
       style.height = parseInt(d['height']) + 'px';
     }
     return style;
+  }
+
+  changePositionSignature(d?: any, e?: any, sizeChange?: any) {
+      // new-signature-box-style-v2
+      let style: any = {
+        "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+        "position": "absolute",
+        "backgroundColor": '#FFFFFF',
+        "border": "1px dashed #6B6B6B",
+        "border-radius": "6px",
+        "min-width": "180px",
+        "min-height": "66px"
+      }
+      if (d['width']) {
+        style.width = parseInt(d['width']) + "px";
+      }
+      if (d['height']) {
+        style.height = parseInt(d['height']) + "px";
+      }
+      return style
   }
 
   // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính

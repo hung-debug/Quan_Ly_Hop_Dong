@@ -288,19 +288,38 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     this.datasForm.isFirstLoadDrag = true;
     let i = 0;
     this.datasForm.contract_user_sign.forEach((element: any) => {
-      element.sign_config.forEach((item: any) => {
-        if(this.arrDifPage[Number(item.page)-1] == 'max' ){
-          const htmlElement: HTMLElement | null = document.getElementById(item.id);
-          if(htmlElement) {
-            var oldX = Number(htmlElement.getAttribute('data-x'));
-            if(oldX) {
-              var newX = oldX + this.difX;
-              htmlElement.setAttribute('data-x', newX.toString());
+      if(element.sign_unit == "chu_ky_so") {
+        let type = element.type;
+        for (let i = 0; i < type.length; i++) {
+          type[i].sign_config.forEach((item: any) => {
+            if (this.arrDifPage[Number(item.page) - 1] == 'max') {
+              const htmlElement: HTMLElement | null = document.getElementById(item.id);
+              if (htmlElement) {
+                var oldX = Number(htmlElement.getAttribute('data-x'));
+                if (oldX) {
+                  var newX = oldX + this.difX;
+                  htmlElement.setAttribute('data-x', newX.toString());
+                }
+              }
+              item.coordinate_x += this.difX;
             }
-          }
-          item.coordinate_x += this.difX;
+          }) 
         }
-      })
+      } else {
+        element.sign_config.forEach((item: any) => {
+          if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+            const htmlElement: HTMLElement | null = document.getElementById(item.id);
+            if(htmlElement) {
+              var oldX = Number(htmlElement.getAttribute('data-x'));
+              if(oldX) {
+                var newX = oldX + this.difX;
+                htmlElement.setAttribute('data-x', newX.toString());
+              }
+            }
+            item.coordinate_x += this.difX;
+          }
+        })
+      }
     })
   }
 
@@ -766,8 +785,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           if (item.role == 3 || item.role == 4 || item.role == 2) {
             item['type_unit'] = 'organization';
             item['selected'] = false;
-            item['is_disable'] = false;
-            // item['is_disable'] = !element?.sign_type?.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6));
+            //item['is_disable'] = false;
+            item['is_disable'] = !element?.sign_type?.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6));
             // item['id'] = item.id;
             this.list_sign_name.push(item);
           }
@@ -813,18 +832,18 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         this.signCurent.width = event.rect.width;
         this.signCurent.height = event.rect.height;
         if (this.signCurent.sign_unit == 'chu_ky_so_con_dau_va_thong_tin' || this.signCurent.sign_unit == 'chu_ky_anh'){
-          this.signCurent.width <= 140 ? this.signCurent.width = 140 : this.signCurent.width = event.rect.width
-          this.signCurent.height <= 50 ? this.signCurent.height = 50 : this.signCurent.height = event.rect.height
+          this.signCurent.width <= 180 ? this.signCurent.width = 180 : this.signCurent.width = event.rect.width
+          this.signCurent.height <= 66 ? this.signCurent.height = 66 : this.signCurent.height = event.rect.height
           this.objSignInfo.width = this.signCurent.width
           this.objSignInfo.height = this.signCurent.height
-        } else if(this.signCurent.sign_unit.includes('chu_ky_so_con_dau')) {
+        } else if (this.signCurent.sign_unit == 'chu_ky_so_thong_tin') {
+          this.signCurent.width <= 120 ? this.signCurent.width = 120 : this.signCurent.width = event.rect.width;
+          this.signCurent.height <= 66 ? this.signCurent.height = 66 : this.signCurent.height = event.rect.height;
+          this.objSignInfo.width = this.signCurent.width
+          this.objSignInfo.height = this.signCurent.height
+        } else if (this.signCurent.sign_unit == 'chu_ky_so_con_dau') {
           this.signCurent.width <= 66 ? this.signCurent.width = 66 : this.signCurent.width = event.rect.width;
-          this.signCurent.height <= 50 ? this.signCurent.height = 50 : this.signCurent.height = event.rect.height;
-          this.objSignInfo.width = this.signCurent.width
-          this.objSignInfo.height = this.signCurent.height
-        } else if(this.signCurent.sign_unit.includes('chu_ky_so_thong_tin')) {
-          this.signCurent.width <= 114 ? this.signCurent.width = 114 : this.signCurent.width = event.rect.width;
-          this.signCurent.height <= 50 ? this.signCurent.height = 50 : this.signCurent.height = event.rect.height;
+          this.signCurent.height <= 66 ? this.signCurent.height = 66 : this.signCurent.height = event.rect.height;
           this.objSignInfo.width = this.signCurent.width
           this.objSignInfo.height = this.signCurent.height
         } else {
@@ -1237,7 +1256,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                 //   element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6))
                 // }
               } else if (isSignType == 'chu_ky_anh') {
-                element.is_disable = false
+                element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
               } else {
                 element.is_disable = true
               }
@@ -1407,16 +1426,30 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       this.objDrag = {};
       let count_total = 0;
       this.datasForm.contract_user_sign.forEach((element: any) => {
-        if (element.sign_config.length > 0) {
-          let arrSignConfigItem = element.sign_config;
-          arrSignConfigItem.forEach((item: any) => {
-            if (item['position']) {
-              this.objDrag[item.id] = {
-                count: 2
+        if(element.sign_unit == "chu_ky_so") {
+          let type = element.type;
+          for (let i = 0; i < type.length; i++) {
+            type[i].sign_config.forEach((item: any) => {
+              if (item['position']) {
+                this.objDrag[item.id] = {
+                  count: 2
+                }
+                count_total++;
               }
-              count_total++;
-            }
-          })
+            }) 
+          }
+        } else {
+          if (element.sign_config.length > 0) {
+            let arrSignConfigItem = element.sign_config;
+            arrSignConfigItem.forEach((item: any) => {
+              if (item['position']) {
+                this.objDrag[item.id] = {
+                  count: 2
+                }
+                count_total++;
+              }
+            })
+          }
         }
       });
       if (count_total == 0) {
@@ -1547,23 +1580,13 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       "border": "1px dashed #6B6B6B",
       "border-radius": "6px",
       "min-width": "66px",
-      "min-height": "50px"
+      "min-height": "66px"
     }
     if (d['width']) {
-      if (d?.sign_unit == 'chu_ky_so_con_dau' && d['width'] == 66) {
-        style.width = 66 + "px";
-      } else if (d?.sign_unit == 'chu_ky_so_thong_tin' && d['width'] == 114) {
-        style.width = 120 + "px";
-      } else {
-        style.width = parseInt(d['width']) + "px";
-      }
+      style.width = parseInt(d['width']) + "px";
     }
     if (d['height']) {
-      if (d?.sign_unit == 'chu_ky_so_con_dau' && d['height'] == 66) {
-        style.height = 66 + "px";
-      } else {
-        style.height = parseInt(d['height']) + "px";
-      }
+      style.height = parseInt(d['height']) + "px";
     }
     if (this.datasForm.contract_no && d.sign_unit == 'so_tai_lieu') {
       style.padding = '6px';
@@ -1571,6 +1594,28 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     return style;
   }
 
+  changePositionSignature(d?: any, e?: any, sizeChange?: any) {
+      // new-signature-box-style-v2
+      let style: any = {
+        "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+        "position": "absolute",
+        "backgroundColor": '#FFFFFF',
+        "border": "1px dashed #6B6B6B",
+        "border-radius": "6px",
+        "min-width": "180px",
+        "min-height": "66px"
+      }
+      if (d['width']) {
+        style.width = parseInt(d['width']) + "px";
+      }
+      if (d['height']) {
+        style.height = parseInt(d['height']) + "px";
+      }
+      if (this.datasForm.contract_no && d.sign_unit == 'so_tai_lieu') {
+        style.padding = '6px';
+      }
+      return style
+  }
   getAddSignUnit() {
     this.datasForm.is_data_object_signature.forEach((element: any) => {
       if (element.type == 1) {

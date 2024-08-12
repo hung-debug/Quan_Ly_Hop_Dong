@@ -1,4 +1,4 @@
-<div (click)="doSign()" *ngIf="sign.sign_unit == 'chu_ky_anh'" class="content">
+<div (click)="doSign()" *ngIf="sign.sign_unit == 'chu_ky_anh' && ((!checkShowEdit && !sign.valueSign) && !otpValueSign)" class="content">
   <div class="stamp-content item-left">
     <img src='assets/img/stamp.svg' alt="mobifone.contract">
     <div class="font-sign">Chữ ký ảnh</div>
@@ -7,6 +7,14 @@
     <img src='assets/img/only_info.svg' alt="mobifone.contract">
     <div class="font-sign">Thông tin chữ ký ảnh</div>
   </div>
+</div>
+
+<div class="skeleton-sign" (click)="doSign()" *ngIf="sign.sign_unit == 'chu_ky_anh' && (checkShowEdit && !sign.valueSign && !otpValueSign)">
+  <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/stamp.svg' : 'assets/img/img_sign_number.svg'" alt="mobifone.contract">
+</div>
+
+<div *ngIf="sign.sign_unit == 'chu_ky_anh' && (otpValueSign || countOtpBox > 0)" (click)="doSign()">
+  <img [src]="otpValueSign" alt="mobifone.contract" style="width: auto" [width]="sign.width ? sign.width : '100px'" [height]="sign.height ? sign.height : '54px'">
 </div>
 
 <div (click)="doSign()" *ngIf="sign.sign_unit == 'chu_ky_so' && (sign.type_image_signature == 3|| sign.type_image_signature == null)" class="content">
@@ -27,7 +35,7 @@
   </div>
 </div>
 
-<div (click)="doSign()" *ngIf="sign.sign_unit == 'chu_ky_so' && sign.type_image_signature == 1">
+<div (click)="doSign()" *ngIf="sign.sign_unit == 'chu_ky_so' && sign.type_image_signature == 1" style="width: 100%;">
   <div class="sign-info-content item-right" style="flex-basis: 100% !important;">
     <img src='assets/img/only_info.svg' alt="mobifone.contract">
     <div class="font-sign">Thông tin chữ ký số</div>

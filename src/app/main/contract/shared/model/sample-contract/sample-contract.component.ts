@@ -828,18 +828,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       if (this.signCurent.sign_unit == 'chu_ky_so_con_dau_va_thong_tin' || this.signCurent.sign_unit == 'chu_ky_anh'){
         this.signCurent.width <= 180 ? this.signCurent.width = 180 : this.signCurent.width = event.rect.width;
         this.signCurent.height <= 66 ? this.signCurent.height = 66 : this.signCurent.height = event.rect.height;
-        this.objSignInfo.width = this.signCurent.height
-        this.objSignInfo.height = this.signCurent.width
+        this.objSignInfo.width = this.signCurent.width
+        this.objSignInfo.height = this.signCurent.height
       } else if (this.signCurent.sign_unit == 'chu_ky_so_thong_tin') {
         this.signCurent.width <= 120 ? this.signCurent.width = 120 : this.signCurent.width = event.rect.width;
         this.signCurent.height <= 66 ? this.signCurent.height = 66 : this.signCurent.height = event.rect.height;
-        this.objSignInfo.width = this.signCurent.height
-        this.objSignInfo.height = this.signCurent.width
+        this.objSignInfo.width = this.signCurent.width
+        this.objSignInfo.height = this.signCurent.height
       } else if (this.signCurent.sign_unit == 'chu_ky_so_con_dau') {
         this.signCurent.width <= 66 ? this.signCurent.width = 66 : this.signCurent.width = event.rect.width;
         this.signCurent.height <= 66 ? this.signCurent.height = 66 : this.signCurent.height = event.rect.height;
-        this.objSignInfo.width = this.signCurent.height
-        this.objSignInfo.height = this.signCurent.width
+        this.objSignInfo.width = this.signCurent.width
+        this.objSignInfo.height = this.signCurent.height
       } else {
         this.objSignInfo.width = event.rect.width;
         this.objSignInfo.height = event.rect.height;
