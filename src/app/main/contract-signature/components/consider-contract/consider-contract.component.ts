@@ -625,6 +625,14 @@ export class ConsiderContractComponent
         this.datas.contract_user_sign.forEach((element: any) => {
           //
           if (element.sign_unit == 'chu_ky_so') {
+            if(data_sign_config_cks.length) {
+              data_sign_config_cks.forEach((resItem: any) => {
+                if (resItem.type_image_signature == '2') {
+                  resItem.width = resItem.width + 9;
+                  resItem.height = resItem.height + 9;
+                }
+              })
+            }
             Array.prototype.push.apply(
               element.sign_config,
               data_sign_config_cks
