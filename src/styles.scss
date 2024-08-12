@@ -112,6 +112,14 @@
   max-width: 113px;
 }
 
+.long-text-ellipsis-con-dau {
+  overflow: hidden;
+  white-space: nowrap;
+  // width: inherit;
+  text-overflow: ellipsis;
+  max-width: 85px;
+}
+
 .my-custom-title-class {
   color: #3085d6 !important;
 }
