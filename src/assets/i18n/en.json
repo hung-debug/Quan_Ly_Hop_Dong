@@ -902,5 +902,6 @@
   "location_size" : "Location and size",
   "account.sign" : "Please enter account information to sign",
   "hsm.title" : "Select a signature or seal image",
-  "drag.contract.theo_lo": "Hỗ trợ file XLS, XLSX"
+  "drag.contract.theo_lo": "Hỗ trợ file XLS, XLSX",
+  "many.extensions": "Many extensions"
 }

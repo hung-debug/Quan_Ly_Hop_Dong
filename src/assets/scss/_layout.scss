@@ -54,7 +54,7 @@ body {
   background-color: #FFFFFF !important;
   font-size: var(--fs13) !important;
   font-weight: 700 !important;
-  box-shadow: 0px 3px 12px 0px #1055E11A;
+  /* box-shadow: 0px 3px 12px 0px #1055E11A; */
   border: 1px solid #001A4D1A;
 }
 
@@ -305,4 +305,14 @@ body {
       flex: 0 0 auto !important;
       width: 70.833333% !important; /* 8.5/12 * 100 */
   }
+}
+
+.btn_consider{
+  border: 1px solid #0041C4;
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: #0041C4;
+  background-color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 700;
 }

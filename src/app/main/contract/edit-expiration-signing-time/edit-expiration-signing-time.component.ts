@@ -85,9 +85,13 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
     //Gọi api lấy thông tin contractId
     let data;
     if(this.data.status == 'multi') {
+      let currentTime;
+      if(!this.expirationSign) {
+        currentTime = new Date().toISOString();
+      }
       data = {
         sign_time: this.datepipe.transform(
-          this.expirationSign,
+          this.expirationSign ? this.expirationSign : currentTime,
           "yyyy-MM-dd'T'HH:mm:ss'Z'"
         )?.slice(0,11).concat("00:00:00Z"),
         contract_ids: this.data.contractId
