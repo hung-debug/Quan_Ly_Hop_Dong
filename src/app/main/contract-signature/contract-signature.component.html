@@ -164,7 +164,7 @@
                             <div class="col-md-11" style="display: flex; cursor: pointer;">
                               <img src="../../assets/img/frame_contract.svg" style="width: 72px;" (click)="openDetail(item.contractId)">
                               <div style="margin-left: 12px;">
-                                <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
+                                <div matTooltip="{{item.contractName}}" matTooltipPosition="above" matTooltipClass="custom-tooltip" class="item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
 
                                 <div class="row" (click)="openDetail(item.contractId)">
                                   <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}} ({{item.participant.contract.organization_create_contract}})</div>
@@ -323,7 +323,7 @@
             <div *ngIf="filter_status == 11 || filter_status == 12 || filter_status == 13 || filter_status == 14">
                 <div class="row">
                     <div class="col-sm-5" (click)="openDetail(item.id)">
-                        <div class="row">
+                        <div class="row" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                             <div class="col-md-12 item_contract_name">{{item.name}}</div>
                         </div>
                         <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
@@ -374,7 +374,7 @@
                     <img src="../../assets/img/frame_contract.svg" style="width: 72px;" (click)="openDetail(item.id)">
                       <div class="row">
                         <div style="margin-left: 12px;">
-                          <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
+                          <div matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip" class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
                           <div class="item_contract_infor" (click)="openDetail(item.id)">{{'created.user' | translate}}: {{item.nameUserCreate}} ({{item.organization_create_contract}})</div>
                           <div class="item_contract_infor">
                             <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
@@ -424,7 +424,7 @@
           <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
             <div class="row">
               <div class="col-sm-5" (click)="openDetail(item.id)">
-                <div class="row">
+                <div matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip" class="row">
                   <div class="col-md-12 item_contract_name">{{item.name}}</div>
                 </div>
                 <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
@@ -523,7 +523,7 @@
 
                             <div class="col-md-11" style="display: flex; margin-left: 12px;cursor: pointer">
                               <img src="../../assets/img/frame_contract.svg" style="width: 72px;" (click)="openDetail(item.contractId)">
-                              <div style="margin-left: 12px;">
+                              <div style="margin-left: 12px;" matTooltip="{{item.participant.contract.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                                 <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
                                 <div class="row">
                                   <div class="item_contract_infor">
@@ -653,7 +653,7 @@
                             <div class="col-md-11" style="display: flex;margin-left: 12px; cursor: pointer;">
                               <img src="../../assets/img/frame_contract.svg" style="width: 72px;" (click)="openDetail(item.contractId)">
                               <div style="margin-left: 12px;">
-                                <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
+                                <div matTooltip="{{item.participant.contract.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip" class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
                                 <div class="row" (click)="openDetail(item.contractId)">
                                   <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}}</div>
                                   <div>
@@ -763,7 +763,7 @@
             <div *ngIf="filter_status == -1">
                 <div class="row">
                     <div class="col-sm-6">
-                        <div class="row">
+                        <div matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip" class="row">
                             <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
                         </div>
                         <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index" (click)="openDetail(item.id)">
@@ -801,7 +801,7 @@
             <div *ngIf="filter_status == 11 || filter_status == 12 || filter_status == 13 || filter_status == 14">
                 <div class="row">
                     <div class="col-sm-6" (click)="openDetail(item.id)">
-                        <div class="row">
+                        <div class="row" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                             <div class="col-md-12 item_contract_name">{{item.name}}</div>
                         </div>
                         <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">

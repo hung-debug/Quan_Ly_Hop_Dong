@@ -1611,7 +1611,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       "backgroundColor": '#FFFFFF',
       "border": "1px dashed #6B6B6B",
       "border-radius": "6px",
-      "min-width": "66px",
+      "min-width": d.sign_unit == 'chu_ky_so_thong_tin' ? "120px" : "66px",
       "min-height": "66px"
     }
     if (d['width']) {

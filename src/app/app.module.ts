@@ -139,6 +139,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { MatMenuModule } from '@angular/material/menu';
 import { PaginatorModule } from 'primeng/paginator';
 import { environment } from 'src/environments/environment';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -304,6 +305,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     MatDialogModule,
     NgxSelectModule,
     MatMenuModule,
+    MatTooltipModule,
     SweetAlert2Module.forRoot(
       {
         provideSwal: () => import('sweetalert2').then(({ default: swal }) => swal.mixin({

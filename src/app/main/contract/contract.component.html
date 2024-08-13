@@ -32,11 +32,11 @@
           </button>
         </div>
         <div class="col-lg-1-1 col-md-4 btn_search btn-padding-right btn-padding-left" *ngIf="this.isOrg == 'off' && this.idCheckBox.length > 0">
-          <button (click)="cancelMany()" class="btn-block btn_cancel">{{"cancel.multi"| translate}}</button>
+          <button (click)="cancelMany()" class="btn-block btn_consider">{{"cancel.multi"| translate}}</button>
         </div>
 
         <div class="col-lg-1-1 col-md-4 btn_search btn-padding-left" *ngIf="this.isOrg == 'off' && this.idCheckBox.length > 0">
-          <button (click)="openEditExpiration('')" class="btn-block btn_cancel">{{"Gia hạn nhiều"| translate}}</button>
+          <button (click)="openEditExpiration('')" class="btn-block btn_cancel">{{"many.extensions"| translate}}</button>
         </div>
       </div>
 
@@ -83,7 +83,7 @@
 
                       <div class="col-md-11" style="display: flex;margin-left: 12px;cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                         <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
-                        <div style="margin-left: 12px;">
+                        <div style="margin-left: 12px;" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                           <div class="item_contract_name">
                               <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                           'page': this.p,
@@ -318,7 +318,7 @@
         </div>
 
         <div class="col-lg-1-1 btn_search btn-padding-left" *ngIf="this.filter_status == 34 && this.isOrg == 'off' && this.idCheckBox.length > 0">
-          <button (click)="openEditExpiration('')" class="btn-block btn_cancel">{{"Gia hạn nhiều"| translate}}</button>
+          <button (click)="openEditExpiration('')" class="btn-block btn_consider">{{"many.extensions"| translate}}</button>
         </div>
       </div>
 
@@ -374,7 +374,7 @@
 
                       <div class="col-md-11" style="display: flex;margin-left: 6px; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
-                          <div style="margin-left: 12px;">
+                          <div style="margin-left: 12px;" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                             <div class="item_contract_name">
                                 <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                         'page': this.p,
@@ -664,7 +664,7 @@
                     <div class="row">
                         <div class="col-md-11" style="display: flex; margin-left: 12px; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
-                          <div style="margin-left: 12px;">
+                          <div style="margin-left: 12px;" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                             <div class="item_contract_name">
                                 <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                         'page': this.p,
@@ -857,7 +857,7 @@
                     <div class="row">
                         <div class="col-md-11" style="display: flex; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
-                          <div style="margin-left: 12px;">
+                          <div style="margin-left: 12px;" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                             <div class="item_contract_name">
                                 <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                         'page': this.p,
@@ -1154,7 +1154,7 @@
 
                             <div class="col-md-11" style="display: flex;margin-left: 12px; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                               <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
-                              <div style="margin-left: 12px;">
+                              <div style="margin-left: 12px;" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                                 <div class="item_contract_name">
                                     <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                             'page': this.p,
@@ -1392,7 +1392,7 @@
 
                             <div class="col-md-11" style="display: flex;margin-left: 12px; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                               <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
-                              <div style="margin-left: 12px;">
+                              <div style="margin-left: 12px;" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                                 <div class="item_contract_name">
                                     <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                             'page': this.p,
@@ -1577,7 +1577,7 @@
                           </div>
                           <div class="col-md-11" style="display: flex;margin-left: 12px; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                             <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
-                            <div style="margin-left: 12px;">
+                            <div style="margin-left: 12px;" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                               <div class="item_contract_name">
                                   <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                           'page': this.p,

@@ -62,7 +62,7 @@
                style="z-index: -1;"
                #itemElement
 
-               [ngStyle]="changePosition(d)">
+               [ngStyle]="(d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so_con_dau_va_thong_tin') ? changePosition(d) : changePositionSignature(d)">
             <div class="name-sig-img-daky long-text-ellipsis">{{d.name}}</div>
             <app-image-sign-contract-template-detail [style]="d.type==2 || d.type==3 ? 'display: flex; width: 100%; height: 100%; padding: 4px;' : ''"  [datas]="datas" [sign]="d"></app-image-sign-contract-template-detail>
           </div>
