@@ -125,8 +125,8 @@
                     <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag"
                         [style.width]="this.canvasWidth">
                         <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement
-                            (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
-                            <div *ngIf="d.name || d.recipient" class="name-sig-img-daky long-text-ellipsis">{{d.name ? d.name : d.recipient.name}}</div>
+                            (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="(d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so_con_dau_va_thong_tin') ? changePosition(d) : changePositionSignature(d)">
+                            <div *ngIf="d.name || d.recipient" [ngClass]="{'long-text-ellipsis': d.sign_unit != 'chu_ky_so_con_dau', 'long-text-ellipsis-con-dau': d.sign_unit == 'chu_ky_so_con_dau' }" class="name-sig-img-daky">{{d.name ? d.name : d.recipient.name}}</div>
                             <div *ngIf="(d.recipient!= null && d.sign_unit == 'text') || (d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu') || (d.sign_unit == 'text' && d.value === undefined)
                             || (d.recipient!= null && d.sign_unit == 'so_tai_lieu') || (d.sign_unit == 'so_tai_lieu' && d.value === undefined)" class="sig-img-daky" (click)="onCancel($event, d)">                    
                                 <!-- <img src="assets/img/clear.svg" alt=""> -->

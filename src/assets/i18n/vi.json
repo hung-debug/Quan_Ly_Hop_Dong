@@ -926,5 +926,6 @@
   "account.sign" : "Vui lòng nhập thông tin tài khoản để thực hiện ký",
   "hsm.title" : "Chọn hình ảnh chữ ký hoặc con dấu",
   "drag.contract.theo_lo": "Hỗ trợ file XLS, XLSX",
-  "errorSignTime": "Ngày hết hạn ký"
+  "errorSignTime": "Ngày hết hạn ký",
+  "not.draw.sign": "Hiển thị chữ ký OTP sau khi thao tác vẽ tay/ upload ảnh"
 }
