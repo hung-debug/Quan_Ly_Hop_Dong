@@ -903,5 +903,6 @@
   "account.sign" : "Please enter account information to sign",
   "hsm.title" : "Select a signature or seal image",
   "drag.contract.theo_lo": "Hỗ trợ file XLS, XLSX",
-  "many.extensions": "Many extensions"
+  "many.extensions": "Many extensions",
+  "error.notTime": "Please select a signature expiration date"
 }

@@ -209,7 +209,7 @@ export class ConsiderContractComponent
   signBoxData: any = {};
 
   defaultValue: number = 100;
-
+  isCheck: number = 3;
 
   constructor(
     private contractService: ContractService,
@@ -1600,15 +1600,25 @@ export class ConsiderContractComponent
                 this.ArrRecipientsNew.length > 0
               ) {
                 let swalfire = null;
+                let value: string;
+                let isDigital = false;
                 if (typeSignDigital) {
                   swalfire = this.getSwalFire('digital');
+                  isDigital = true;
                 } else {
                   swalfire = this.getSwalFire('image');
                 }
 
                 swalfire.then(async (result) => {
                   if (result.isConfirmed) {
-                    if (result.value == 'yes') {
+                    if(isDigital && this.isCheck == 2) {
+                      value = 'yes';
+                    } else if (isDigital && this.isCheck == 1) {
+                      value = 'no';
+                    } else {
+                      value = result.value;
+                    }
+                    if (value == 'yes') {
                       this.markImage = true;
                     } else {
                       this.markImage = false;
@@ -1992,7 +2002,19 @@ export class ConsiderContractComponent
 
   getSwalFire(code: string) {
     if ((code == 'digital' && !this.mobile && this.recipient.sign_type.some((item: any) => item.id !== 7) && this.isContainSignField)) {
-      return Swal.fire({
+      const allType3 = this.recipient.fields.every((itemCheck: any) => itemCheck.type === 3);
+      const allTypeImageSignature1 = this.recipient.fields.every((itemCheck: any) => itemCheck.type_image_signature === 1);
+      const allTypeImageSignature2 = this.recipient.fields.every((itemCheck: any) => itemCheck.type_image_signature === 2);
+  
+      if (allType3 && allTypeImageSignature1) {
+        this.isCheck = 1;
+      } else if (allType3 && allTypeImageSignature2) {
+        this.isCheck = 2;
+      } else {
+        this.isCheck = 3;
+      }
+  
+      let swalOptions: any = {
         title: this.getTextAlertConfirm(),
         icon: 'warning',
         showCancelButton: true,
@@ -2000,14 +2022,18 @@ export class ConsiderContractComponent
         cancelButtonColor: '#b0bec5',
         confirmButtonText: this.translate.instant('confirm'),
         cancelButtonText: this.translate.instant('contract.status.canceled'),
-        input: 'select',
-        inputOptions: {
+        inputLabel: this.translate.instant('stamp.contract.questions'),
+      };
+  
+      if (this.isCheck === 3) {
+        swalOptions.input = 'select';
+        swalOptions.inputOptions = {
           no: this.translate.instant('no'),
           yes: this.translate.instant('yes'),
-        },
-
-        inputLabel: this.translate.instant('stamp.contract.questions'),
-      });
+        };
+      }
+      
+      return Swal.fire(swalOptions);;
     } else {
       return Swal.fire({
         title: this.getTextAlertConfirm(),
