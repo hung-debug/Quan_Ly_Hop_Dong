@@ -640,3 +640,9 @@ css .draft-status {
     padding-top: 10px;
   }
 }
+
+::ng-deep .custom-tooltip.mat-tooltip {
+  margin-bottom: 10px !important;
+  white-space: normal !important;
+  max-width: 400px;
+}

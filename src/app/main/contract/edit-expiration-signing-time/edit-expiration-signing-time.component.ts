@@ -80,18 +80,18 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
   }
 
   async save() {
+    if(!this.expirationSign) {
+      this.toastService.showErrorHTMLWithTimeout('error.notTime','',3000);
+      return;
+    } 
     this.spinner.show();
 
     //Gọi api lấy thông tin contractId
     let data;
     if(this.data.status == 'multi') {
-      let currentTime;
-      if(!this.expirationSign) {
-        currentTime = new Date().toISOString();
-      }
       data = {
         sign_time: this.datepipe.transform(
-          this.expirationSign ? this.expirationSign : currentTime,
+          this.expirationSign,
           "yyyy-MM-dd'T'HH:mm:ss'Z'"
         )?.slice(0,11).concat("00:00:00Z"),
         contract_ids: this.data.contractId
