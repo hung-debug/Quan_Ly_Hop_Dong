@@ -642,15 +642,7 @@ css .draft-status {
 }
 
 ::ng-deep .custom-tooltip.mat-tooltip {
-  margin-bottom: 10px !important; /* Khoảng cách từ phần tử chứa đến tooltip */
-  transform: translateY(-100%) !important; /* Đưa tooltip lên trên phần tử */
-  left: 0 !important; /* Căn chỉnh tooltip bắt đầu từ bên trái */
-  white-space: nowrap !important; /* Đảm bảo tooltip hiển thị trên một dòng, không bị gãy */
-  width: auto !important; /* Đặt độ rộng tự động theo nội dung */
-  max-width: none !important; /* Loại bỏ giới hạn độ rộng */
-}
-
-::ng-deep .mat-tooltip-trigger {
-  position: relative; /* Đặt trigger tooltip để tính toán vị trí tương đối */
-  display: inline-block; /* Giữ nguyên kích thước phần tử */
+  margin-bottom: 10px !important;
+  white-space: normal !important;
+  max-width: 400px;
 }
