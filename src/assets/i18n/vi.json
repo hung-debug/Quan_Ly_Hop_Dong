@@ -301,7 +301,7 @@
   "error.contract-template.name.required": "Tên mẫu hợp đồng không được để trống",
   "error.contract-template.code.required": "Mã mẫu hợp đồng không được để trống",
   "error.contract-template.effective-start-date": "Ngày bắt đầu hiệu lực không được để trống",
-  "error.contract-template.effective-end-date": "Ngày kết thúc hiệu lực đến ngày không được để trống",
+  "error.contract-template.effective-end-date": "Ngày kết thúc hiệu lực không được để trống",
   "error.contract-template.effective-end-date.compare": "Ngày kết thúc không được nhỏ hơn ngày bắt đầu",
   "error.partner.name.required": "Tên đối tác không được để trống",
   "error.contract.file.type": "File Hợp đồng lỗi, vui lòng sử dụng file khác",

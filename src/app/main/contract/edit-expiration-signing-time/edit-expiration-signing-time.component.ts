@@ -132,6 +132,7 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
           // window.location.reload();
           this.toastService.showSuccessHTMLWithTimeout('update.success','',3000);
           this.dialog.closeAll();
+          this.data.refreshContractList();
         } else {
           this.toastService.showErrorHTMLWithTimeout('error.server','',3000)
         }
@@ -141,6 +142,7 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
   
           this.toastService.showSuccessHTMLWithTimeout('update.success','',3000);
           this.dialog.closeAll();
+          this.data.refreshContractList();
         } else {
           this.toastService.showErrorHTMLWithTimeout('error.server','',3000)
         }
