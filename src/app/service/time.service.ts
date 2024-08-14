@@ -16,7 +16,8 @@ export class TimeService {
     private http: HttpClient,
   ) { }
 
-  getRealTime(): Observable<any> {
+  getRealTime() {
+    return new Date();
     if (window.location.protocol === 'https:') {
       return this.http.get<any>(this.apiUrlHTTPS)
       .pipe(

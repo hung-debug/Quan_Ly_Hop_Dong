@@ -1976,6 +1976,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               isObjSign.width = 135;
               signElement.setAttribute("height", isObjSign.width);
             }
+
+            if(isObjSign.recipient) {
+              isObjSign.recipient.id = data_name.id;
+              isObjSign.recipient.name = data_name.name;
+              isObjSign.recipient.email = data_name.email;
+            }
             let idTypeSign = data_name.sign_type[0].id;
 
             if(data_name.role == 4 && this.isChangeText || (idTypeSign == 2 || idTypeSign == 4 || idTypeSign == 6)) {

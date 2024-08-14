@@ -1404,6 +1404,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             isObjSign.phone = data_name.phone;
             signElement.setAttribute("phone", isObjSign.phone);
+
+            if(isObjSign.recipient) {
+              isObjSign.recipient.id = data_name.id;
+              isObjSign.recipient.name = data_name.name;
+              isObjSign.recipient.email = data_name.email;
+            }
           }
 
           let idTypeSign = data_name.sign_type[0].id;

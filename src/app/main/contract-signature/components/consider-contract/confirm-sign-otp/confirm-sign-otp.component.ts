@@ -287,7 +287,7 @@ export class ConfirmSignOtpComponent implements OnInit {
 
       let http = null;
 
-      // this.isDateTime = await this.timeService.getRealTime().toPromise();
+      this.isDateTime = this.timeService.getRealTime();
       await of(null).pipe(delay(100)).toPromise();
 
       const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');

@@ -1383,6 +1383,7 @@ export class ConsiderContractComponent
           //     window.location.reload()
           //   }
           // })
+          console.log("111111")
           this.toastService.showSuccessHTMLWithTimeout('success_sign','',3000)
           this.router.navigateByUrl('/', { skipLocationChange: true })
             .then(() => {
@@ -2169,7 +2170,7 @@ export class ConsiderContractComponent
               let imageRender: any = '';
 
               try {
-                this.isDateTime = await this.timeService.getRealTime().toPromise();
+                this.isDateTime = this.timeService.getRealTime();
               } catch(err) {
                 this.isDateTime = new Date();
               }
@@ -2348,7 +2349,7 @@ export class ConsiderContractComponent
       this.nameCompany = this.recipient.name;
 
       try {
-        this.isDateTime = await this.timeService.getRealTime().toPromise();
+        this.isDateTime = this.timeService.getRealTime();
       } catch(err) {
         this.isDateTime = new Date();
       }
@@ -2495,7 +2496,7 @@ export class ConsiderContractComponent
           } else if (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) {
 
             try {
-              this.isDateTime = await this.timeService.getRealTime().toPromise();
+              this.isDateTime = this.timeService.getRealTime();
             } catch(err) {
               this.isDateTime = new Date();
             }
@@ -2757,7 +2758,7 @@ export class ConsiderContractComponent
             this.heightSign = signUpdate.height;
 
             try {
-              this.isDateTime = await this.timeService.getRealTime().toPromise();
+              this.isDateTime = this.timeService.getRealTime();
             } catch(err) {
               this.isDateTime = new Date();
             }
@@ -2984,7 +2985,7 @@ export class ConsiderContractComponent
           } else if (signUpdate.type == 3) {
 
             try {
-              this.isDateTime = await this.timeService.getRealTime().toPromise();
+              this.isDateTime = this.timeService.getRealTime();
             } catch(err) {
               this.isDateTime = new Date();
             }
@@ -3420,7 +3421,7 @@ export class ConsiderContractComponent
 
       let isInRecipient = false;
       const participants = this.datas?.is_data_contract?.participants;
-
+      console.log("participants", participants)
       for (const participant of participants) {
         for (const card of participant.recipients) {
           for (const item of determineCoordination.recipients) {
@@ -3856,7 +3857,7 @@ export class ConsiderContractComponent
             });
         } else {
           try {
-            this.isDateTime = await this.timeService.getRealTime().toPromise();
+            this.isDateTime = this.timeService.getRealTime();
           } catch(err) {
             this.isDateTime = new Date();
           }
@@ -3989,7 +3990,13 @@ export class ConsiderContractComponent
                 }
               );
             });
+            let checkSign = this.datas?.is_data_contract?.participants;
+            if(checkSign.length) {
 
+            }
+            // console.log("a", a)
+            // console.log("result", result)
+            // console.log("22222")
           setTimeout(() => {
             if (!this.mobile) {
               this.toastService.showSuccessHTMLWithTimeout(
@@ -4066,7 +4073,7 @@ export class ConsiderContractComponent
                     }
                   );
                 });
-
+                console.log("333333")
               setTimeout(() => {
                 if (!this.mobile) {
                   this.toastService.showSuccessHTMLWithTimeout(
