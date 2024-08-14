@@ -1110,6 +1110,14 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   getCheckDuplicateEmail(isParty: string, dataValid?: any) {
     let arrCheckEmail = [];
+    
+    //bỏ check trùng mst/cccd khi 2 văn thư có loại ký pki
+    for (let i = 0; i < dataValid.length; i++) {
+      if(dataValid[i].sign_type && dataValid[i].sign_type.length > 0 && dataValid[i].sign_type[0]?.id == 3 ){
+        dataValid[i].card_id = ''
+      }   
+    }
+    
     // valid email đối tác và các bên tham gia
     if (isParty != 'only_party_origanzation') {
       let arrEmail = [];
@@ -1150,6 +1158,14 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       })
 
     } else {
+      
+      //bỏ check trùng mst/cccd khi 2 văn thư có loại ký pki
+      for (let i = 0; i < dataValid.length; i++) {
+        if(dataValid[i].sign_type && dataValid[i].sign_type.length > 0 && dataValid[i].sign_type[0]?.id == 3 ){
+          dataValid[i].card_id = ''
+        }   
+      }
+
       // valid email tổ chức của tôi
       for (let i = 0; i < dataValid.length; i++) {
         if (dataValid[i].email && dataValid[i].login_by=='email') {
