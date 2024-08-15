@@ -956,7 +956,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
         expirationSign: item.sign_time,
         contractId: item.id,
         scrollY: this.scrollY,
-        status: 'one'
+        status: 'one',
+        refreshContractList: this.getContractList.bind(this) 
       }
     } else {
       const currentTime = new Date().toISOString();
@@ -965,7 +966,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
         expirationSign: currentTime,
         contractId: this.idCheckBox,
         scrollY: this.scrollY,
-        status: 'multi'
+        status: 'multi',
+        refreshContractList: this.getContractList.bind(this) 
       }
     }
 
@@ -978,7 +980,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     })
     dialogRef.afterClosed().subscribe((result: any) => {
       let is_data = result;
-      this.getContractList();
+      //this.getContractList();
     })
   }
 

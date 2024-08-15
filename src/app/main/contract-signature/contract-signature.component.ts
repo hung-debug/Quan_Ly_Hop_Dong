@@ -1429,7 +1429,7 @@ export class ContractSignatureComponent implements OnInit {
           let imageRender = null;
 
           try {
-            this.isDateTime = await this.timeService.getRealTime().toPromise();
+            this.isDateTime = this.timeService.getRealTime();
           } catch(err) {
             this.isDateTime = new Date();
           }
@@ -1719,7 +1719,7 @@ export class ContractSignatureComponent implements OnInit {
           this.nameCompany = resultRS.ma_dvcs;
 
           try {
-            this.isDateTime = await this.timeService.getRealTime().toPromise();
+            this.isDateTime = this.timeService.getRealTime();
           } catch(err) {
             this.isDateTime = new Date();
           }
@@ -1895,7 +1895,7 @@ export class ContractSignatureComponent implements OnInit {
                 let imageRender = null;
 
                 try {
-                  this.isDateTime = await this.timeService.getRealTime().toPromise();
+                  this.isDateTime = this.timeService.getRealTime();
                 } catch(err) {
                   this.isDateTime = new Date();
                 }
@@ -2331,7 +2331,7 @@ export class ContractSignatureComponent implements OnInit {
         let signI: any = '';
 
         try {
-          this.isDateTime = await this.timeService.getRealTime().toPromise();
+          this.isDateTime = this.timeService.getRealTime();
         } catch(err) {
           this.isDateTime = new Date();
         }
