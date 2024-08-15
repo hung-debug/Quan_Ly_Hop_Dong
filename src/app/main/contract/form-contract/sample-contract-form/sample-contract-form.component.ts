@@ -1249,12 +1249,17 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           ) && (p.sign_unit == isSignType || p.sign_unit.includes('chu_ky_so')))) {
             if (isSignType != 'text') {
               if(isSignType == 'so_tai_lieu') {
-                // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role == 4)
-                element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))
+                if (this.datasForm.contract_no) {
+                  element.is_disable = true;
+                } else {
+                  element.is_disable = !element.sign_type.some(((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role != 4)
+                }
               } else if (isSignType.includes('chu_ky_so')) {
+                element.is_disable = !element.sign_type.some(((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role != 4) || 
+                element.sign_type.some((p:any) => element.role == 4 && ![2,4,6].includes(p.id))
                 // element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
                 // element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6) || element.role != 4)
-                element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
+                // element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
                 // if(element.sign_type.some((p:any) => [2,4,6].includes(p.id))){
                 //   element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6))
                 // }
@@ -1987,29 +1992,29 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             }
             let idTypeSign = data_name.sign_type[0].id;
 
-            if(data_name.role == 4 && this.isChangeText || (idTypeSign == 2 || idTypeSign == 4 || idTypeSign == 6)) {
+            if((data_name.role == 4 || (idTypeSign == 2 || idTypeSign == 4 || idTypeSign == 6)) && this.isChangeText) {   
               this.soHopDong = data_name;
 
               //Gán lại tất cả số hợp đồng cho một người ký
-              // this.datasForm.contract_user_sign.forEach((res: any) => {
-              //   if (res.sign_config.length > 0) {
-              //     let arrSignConfigItem: any = "";
+              this.datasForm.contract_user_sign.forEach((res: any) => {
+                if (res.sign_config.length > 0) {
+                  let arrSignConfigItem: any = "";
 
-              //     if(res.sign_unit == 'so_tai_lieu') {
-              //       arrSignConfigItem = res.sign_config;
+                  if(res.sign_unit == 'so_tai_lieu' || this.datasForm.contract_no) {
+                    arrSignConfigItem = res.sign_config;
 
-              //       arrSignConfigItem.forEach((element: any) => {
-              //         element.name = this.soHopDong.name;
-              //         element.signature_party = data_name.type_unit;
-              //         element.recipient_id = data_name.id;
-              //         element.status = data_name.status;
-              //         element.type = data_name.type;
-              //         element.email = data_name.email;
-              //         element.phone = data_name.phone;
-              //       })
-              //     }
-              //   }
-              // });
+                    arrSignConfigItem.forEach((element: any) => {
+                      element.name = this.soHopDong.name;
+                      element.signature_party = data_name.type_unit;
+                      element.recipient_id = data_name.id;
+                      element.status = data_name.status;
+                      element.type = data_name.type;
+                      element.email = data_name.email;
+                      element.phone = data_name.phone;
+                    })
+                  }
+                }
+              });
             }
           }
         }
