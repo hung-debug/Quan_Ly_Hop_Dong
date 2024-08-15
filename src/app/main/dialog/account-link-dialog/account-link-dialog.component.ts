@@ -379,7 +379,7 @@ export class AccountLinkDialogComponent implements OnInit {
 
       let http = null;
 
-      this.isDateTime = this.timeService.getRealTime();
+      this.isDateTime = new Date();
       await of(null).pipe(delay(100)).toPromise();
 
       const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
