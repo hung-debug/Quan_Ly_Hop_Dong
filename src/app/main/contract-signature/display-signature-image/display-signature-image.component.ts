@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 })
 export class DisplaySignatureImageComponent implements OnInit {
 
-  @Input() isDateTime: string | undefined | null;
+  @Input() isDateTime: any;
   @Input() phoneOtp: string | undefined | null;
   @Input() userOtp: string | undefined | null;
 
@@ -24,9 +24,8 @@ export class DisplaySignatureImageComponent implements OnInit {
       http = "https";
     }
 
-    const date = await fetch(http+"://worldtimeapi.org/api/ip").then(response => response.json());
-
-    this.isDateTime = date.datetime;
+    //const date = await fetch(http+"://worldtimeapi.org/api/ip").then(response => response.json());
+    this.isDateTime = new Date();
   }
 
 

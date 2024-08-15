@@ -2170,7 +2170,7 @@ export class ConsiderContractComponent
               let imageRender: any = '';
 
               try {
-                this.isDateTime = this.timeService.getRealTime();
+                this.isDateTime = new Date();
               } catch(err) {
                 this.isDateTime = new Date();
               }
@@ -2349,7 +2349,7 @@ export class ConsiderContractComponent
       this.nameCompany = this.recipient.name;
 
       try {
-        this.isDateTime = this.timeService.getRealTime();
+        this.isDateTime = new Date();
       } catch(err) {
         this.isDateTime = new Date();
       }
@@ -2496,7 +2496,7 @@ export class ConsiderContractComponent
           } else if (signUpdate.type == 3 || ((signUpdate?.recipient?.role == 4 && this.isNB))) {
 
             try {
-              this.isDateTime = this.timeService.getRealTime();
+              this.isDateTime = new Date();
             } catch(err) {
               this.isDateTime = new Date();
             }
@@ -2758,7 +2758,7 @@ export class ConsiderContractComponent
             this.heightSign = signUpdate.height;
 
             try {
-              this.isDateTime = this.timeService.getRealTime();
+              this.isDateTime = new Date();
             } catch(err) {
               this.isDateTime = new Date();
             }
@@ -2985,7 +2985,7 @@ export class ConsiderContractComponent
           } else if (signUpdate.type == 3) {
 
             try {
-              this.isDateTime = this.timeService.getRealTime();
+              this.isDateTime = new Date();
             } catch(err) {
               this.isDateTime = new Date();
             }
@@ -3857,7 +3857,7 @@ export class ConsiderContractComponent
             });
         } else {
           try {
-            this.isDateTime = this.timeService.getRealTime();
+            this.isDateTime = new Date();
           } catch(err) {
             this.isDateTime = new Date();
           }
