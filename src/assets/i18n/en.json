@@ -402,6 +402,7 @@
   "typeOfSignEmail": "Login by email",
   "typeOfSignPhone": "Login by phone",
   "success_sign": "Success sign",
+  "sign_next_person":"You have just signed successfully. The contract has been forwarded to the next person!",
   "success_sign_update": "You have just signed successfully. The contract has been forwarded to the next person!",
   "success_watch": "Success watch",
   "unit.id": "ID",

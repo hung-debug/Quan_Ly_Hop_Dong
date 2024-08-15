@@ -45,7 +45,13 @@
           <!-- <div class="col-sm-0-5 bg-header" style="text-align: left;"> -->
             <!-- <input type="checkbox" style="width: 20px; height: 20px;"> -->
           <!-- </div> -->
-          <div class="col-sm-5 bg-header">{{'contract.process' | translate}}
+          <div class="col-sm-5 bg-header">
+            <div class="col-sm-1" style="text-align: justify;">
+              <input type="checkbox" style="width: 16px; height: 16px;" id="allDeleteDraft" name="allDeleteDraft" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDeleteDraftAll(checkedAll)">
+            </div>
+            <div class="col-sm-11">
+              {{'contract.process' | translate}}
+            </div>
           </div>
           <div class="col-sm-2 bg-header">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
@@ -326,7 +332,14 @@
             <!-- <div class="col-xxl-1 col-md-1" style="text-align: left;"> -->
               <!-- <input type="checkbox" style="width: 20px; height: 20px;"> -->
             <!-- </div> -->
-            <div class="col-sm-5 bg-header">{{'contract.process' | translate}}</div>
+            <div class="col-sm-5 bg-header">
+              <div *ngIf = "this.filter_status == 34 &&  this.isOrg == 'off'" class="col-sm-1" style="text-align: justify;">
+                <input type="checkbox" style="width: 16px; height: 16px;" id="allDeleteDraft" name="allDeleteDraft" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDeleteDraftAll(checkedAll)">
+              </div>
+              <div class="col-sm-11">
+                {{'contract.process' | translate}}
+              </div>
+            </div>
             <!-- <div class="col-md-1" *ngIf="this.filter_status == 30 || this.filter_status == 40">{{'status.ceca' | translate}}
               <img src="../../assets/img/sort.svg"/>
             </div> -->
