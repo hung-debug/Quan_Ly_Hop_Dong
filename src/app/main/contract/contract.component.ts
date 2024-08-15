@@ -612,6 +612,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   toggleDeleteDraftAll(checkedAll: boolean){
     this.dataDeleteDraftChecked = [];
+    this.idCheckBox = [];
 
     if(checkedAll){
       for(let i = 0; i < this.contracts.length; i++){
@@ -620,6 +621,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     } else {
       for (let i = 0; i < this.contracts.length; i++){
         this.contracts[i].checked = true;
+        this.idCheckBox.push(this.contracts[i].id);
         this.dataDeleteDraftChecked.push({
           id: this.contracts[i].participants[0]?.contract_id,
           selectedId : this.contracts[i].id

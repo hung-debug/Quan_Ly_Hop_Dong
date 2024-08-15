@@ -3977,31 +3977,37 @@ export class ConsiderContractComponent
           }
 
           this.router.navigateByUrl('/', { skipLocationChange: true })
-            .then(() => {
-              this.router.navigate(
-                ['/main/form-contract/detail/' + this.idContract],
-                {
-                  queryParams: {
-                    recipientId: this.recipientId,
-                    consider: true,
-                    action: 'sign',
-                  },
-                  skipLocationChange: true,
-                }
-              );
+          .then(() => {
+            this.router.navigate(
+              ['/main/form-contract/detail/' + this.idContract],
+              {
+                queryParams: {
+                  recipientId: this.recipientId,
+                  consider: true,
+                  action: 'sign',
+                },
+                skipLocationChange: true,
+              }
+            );
+          });
+          let isCheckSing = true;
+          let checkSign = this.datas?.is_data_contract?.participants;
+          if(checkSign.length) {
+            checkSign.forEach((check: any) => {
+              check.recipients = check.recipients.filter((recipient: any) => {
+                  if (recipient.id !== result.id) {
+                      if (recipient.status !== 2) {
+                          isCheckSing = false;
+                      }
+                  }
+              });
             });
-            let checkSign = this.datas?.is_data_contract?.participants;
-            if(checkSign.length) {
-
-            }
-            // console.log("a", a)
-            // console.log("result", result)
-            // console.log("22222")
+          }
           setTimeout(() => {
             if (!this.mobile) {
               this.toastService.showSuccessHTMLWithTimeout(
                 [3, 4].includes(this.datas.roleContractReceived)
-                  ? 'success_sign'
+                  ? (isCheckSing ? 'success_sign' : 'sign_next_person')
                   : 'success_watch',
                 '',
                 3000
@@ -4059,26 +4065,38 @@ export class ConsiderContractComponent
               }
 
               this.router
-                .navigateByUrl('/', { skipLocationChange: true })
-                .then(() => {
-                  this.router.navigate(
-                    ['/main/form-contract/detail/' + this.idContract],
-                    {
-                      queryParams: {
-                        recipientId: this.recipientId,
-                        consider: true,
-                        action: 'sign',
-                      },
-                      skipLocationChange: true,
-                    }
-                  );
+              .navigateByUrl('/', { skipLocationChange: true })
+              .then(() => {
+                this.router.navigate(
+                  ['/main/form-contract/detail/' + this.idContract],
+                  {
+                    queryParams: {
+                      recipientId: this.recipientId,
+                      consider: true,
+                      action: 'sign',
+                    },
+                    skipLocationChange: true,
+                  }
+                );
+              });
+              let isCheckSing = true;
+              let checkSign = this.datas?.is_data_contract?.participants;
+              if(checkSign.length) {
+                checkSign.forEach((check: any) => {
+                  check.recipients = check.recipients.filter((recipient: any) => {
+                      if (recipient.id !== result.id) {
+                          if (recipient.status !== 2) {
+                              isCheckSing = false;
+                          }
+                      }
+                  });
                 });
-                console.log("333333")
+              }
               setTimeout(() => {
                 if (!this.mobile) {
                   this.toastService.showSuccessHTMLWithTimeout(
                     [3, 4].includes(this.datas.roleContractReceived)
-                      ? 'success_sign'
+                      ? (isCheckSing ? 'success_sign' : 'sign_next_person')
                       : 'success_watch',
                     '',
                     3000
