@@ -1291,7 +1291,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       } else {
         if (isSignType != 'text' && this.convertToSignConfig().some((p: any) => ((element.email && p.email == element.email) || (element.id && p.recipient_id == element.id)) && (p.sign_unit == isSignType || p.sign_unit.includes('chu_ky_so')))) {
           if (isSignType == 'so_tai_lieu') {
-            element.is_disable = false;
+            // element.is_disable = false;
+            element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
           } else if (isSignType.includes('chu_ky_so')) {
             element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
             // if(element.sign_type.some((p:any) => [2,4,6].includes(p.id))){

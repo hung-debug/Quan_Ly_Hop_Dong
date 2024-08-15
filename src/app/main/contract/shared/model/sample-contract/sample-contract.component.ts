@@ -1265,10 +1265,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (this.datas.contract_no) {
               element.is_disable = true;
             } else {
-              element.is_disable = !(element.sign_type.some((p: any) => [2,4,6].includes(p.id)) || element.role == 4)
+              // element.is_disable = !(element.sign_type.some((p: any) => [2,4,6].includes(p.id)) || element.role == 4)
+              element.is_disable = !element.sign_type.some(((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role == 4)
             }
           }else if (isSignType.includes('chu_ky_so')) {
-             element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6) || element.sign_type.some((p:any) => element.role == 4 && ![2,4,6].includes(p.id)))
+             element.is_disable = !element.sign_type.some(((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role != 4) || element.sign_type.some((p:any) => element.role == 4 && ![2,4,6].includes(p.id))
             //element.is_disable = !element.sign_type.some(p: any) => (p.id == 2 || p.id == 4 || p.id == 6)
             // if(element.sign_type.some((p:any) => [2,4,6].includes(p.id))){
             //   element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6))

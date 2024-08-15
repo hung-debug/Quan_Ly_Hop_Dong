@@ -895,6 +895,14 @@ export class DetermineSignerComponent implements OnInit {
 
   getCheckDuplicateCardId(isParty: string, dataValid?: any) {
     let arrCheckCardId = [];
+    
+    //bỏ check trùng mst/cccd khi 2 văn thư có loại ký pki
+    for (let i = 0; i < dataValid.length; i++) {
+      if(dataValid[i].sign_type && dataValid[i].sign_type.length > 0 && dataValid[i].sign_type[0]?.id == 3 ){
+        dataValid[i].card_id = ''
+      }   
+    }
+    
     // valid card_id đối tác và các bên tham gia
     if (isParty != 'only_party_origanzation') {
       let arrCardId = [];
@@ -934,6 +942,14 @@ export class DetermineSignerComponent implements OnInit {
       })
 
     } else {
+
+      //bỏ check trùng mst/cccd khi 2 văn thư có loại ký pki
+      for (let i = 0; i < dataValid.length; i++) {
+        if(dataValid[i].sign_type && dataValid[i].sign_type.length > 0 && dataValid[i].sign_type[0]?.id == 3 ){
+          dataValid[i].card_id = ''
+        }   
+      }
+      
       // valid card_id tổ chức của tôi
       for (let i = 0; i < dataValid.length; i++) {
         if (dataValid[i].card_id) {
