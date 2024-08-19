@@ -257,7 +257,6 @@ export class ContractService {
     size: any,
     issue?: any
   ): Observable<any> {
-    console.log("iss ", isOrg);
     this.getCurrentUser();
 
     if (filter_from_date != '') {
@@ -1972,7 +1971,7 @@ export class ContractService {
       .pipe();
   }
 
-  getSignatureInfoTokenV1(base64Cert: any, base64Img: any) {
+  getSignatureInfoTokenV1(base64Cert: any, base64Img: any, type: number) {
       this.getCurrentUser();
       const headers = new HttpHeaders()
         .append('Content-Type', 'application/json')
@@ -1980,6 +1979,7 @@ export class ContractService {
       const body = JSON.stringify({
         base64_cert: base64Cert,
         base64_image: base64Img,
+        type_image_signature: type
       });
       return this.http.post<any>(
         this.getSignatureInfoTokenV1Url,

@@ -2201,9 +2201,14 @@ export class ConsiderContractComponent
 
                   }
                 }
+                if(signUpdate.type == 3 && signUpdate.type_image_signature == 2) {
+                  signUpdate.signDigitalWidth = signUpdate.signDigitalWidth - 10;
+                  signUpdate.signDigitalHeight = signUpdate.signDigitalHeight - 10;
+                }
+                let type = signUpdate.type_image_signature
                 try {
                   const getSignatureInfoTokenV1Data: any = await this.contractService.getSignatureInfoTokenV1(
-                    this.signCertDigital.Base64, signI
+                    this.signCertDigital.Base64, signI, type
                   ).toPromise()
                   signI = getSignatureInfoTokenV1Data.data
                 } catch (error) {

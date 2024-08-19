@@ -1891,41 +1891,41 @@ export class ContractSignatureComponent implements OnInit {
                 this.signCertDigital = data.data;
                 this.nameCompany = data.data.CN;
 
-                let signI: any = '';
-                let imageRender = null;
+                // let signI: any = '';
+                // let imageRender = null;
 
-                try {
-                  this.isDateTime = new Date();
-                } catch(err) {
-                  this.isDateTime = new Date();
-                }
+                // try {
+                //   this.isDateTime = new Date();
+                // } catch(err) {
+                //   this.isDateTime = new Date();
+                // }
 
-                if(!this.isDateTime) this.isDateTime = new Date();
-                await of(null).pipe(delay(100)).toPromise();
+                // if(!this.isDateTime) this.isDateTime = new Date();
+                // await of(null).pipe(delay(100)).toPromise();
 
-                if (isMark) {
-                  imageRender = <HTMLElement>(document.getElementById('export-html-image'));
-                } else {
-                  // imageRender = <HTMLElement>(document.getElementById('export-html'));
-                  imageRender = null
-                  signI = null
-                }
+                // if (isMark) {
+                //   imageRender = <HTMLElement>(document.getElementById('export-html-image'));
+                // } else {
+                //   // imageRender = <HTMLElement>(document.getElementById('export-html'));
+                //   imageRender = null
+                //   signI = null
+                // }
 
-                if (imageRender) {
-                  // const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
-                  // signI = textSignB.split(',')[1];
-                  signI = this.srcMark.split(',')[1]
-                }
-                try {
-                  const getSignatureInfoTokenV1Data: any = await this.contractServiceV1.getSignatureInfoTokenV1(
-                    this.signCertDigital.Base64, signI
-                  ).toPromise()
-                  signI = getSignatureInfoTokenV1Data.data
-                } catch (error) {
-                  this.spinner.hide()
-                  console.log(error);
-                  return this.toastService.showErrorHTMLWithTimeout("sign.token.err","",3000)
-                }
+                // if (imageRender) {
+                //   // const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
+                //   // signI = textSignB.split(',')[1];
+                //   signI = this.srcMark.split(',')[1]
+                // }
+                // try {
+                //   const getSignatureInfoTokenV1Data: any = await this.contractServiceV1.getSignatureInfoTokenV1(
+                //     this.signCertDigital.Base64, signI
+                //   ).toPromise()
+                //   signI = getSignatureInfoTokenV1Data.data
+                // } catch (error) {
+                //   this.spinner.hide()
+                //   console.log(error);
+                //   return this.toastService.showErrorHTMLWithTimeout("sign.token.err","",3000)
+                // }
 
                 //Lấy chiều dài của các trang trong các hợp đồng ký
                 //Gọi api ký usb token nhiều lần
@@ -1959,6 +1959,46 @@ export class ContractSignatureComponent implements OnInit {
                   })
                   this.getNewCoordinateTokenV1(infoPage, dataObjectSignature)
                   for (let j = 0; j < dataObjectSignature.length; j++) {
+
+                    let signI: any = '';
+                    let imageRender = null;
+    
+                    try {
+                      this.isDateTime = new Date();
+                    } catch(err) {
+                      this.isDateTime = new Date();
+                    }
+    
+                    if(!this.isDateTime) this.isDateTime = new Date();
+                    await of(null).pipe(delay(100)).toPromise();
+    
+                    if (isMark) {
+                      imageRender = <HTMLElement>(document.getElementById('export-html-image'));
+                    } else {
+                      // imageRender = <HTMLElement>(document.getElementById('export-html'));
+                      imageRender = null
+                      signI = null
+                    }
+    
+                    if (imageRender) {
+                      // const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
+                      // signI = textSignB.split(',')[1];
+                      //signI = this.srcMark.split(',')[1]
+                      signI = null;
+                    }
+                    
+                    let type = dataObjectSignature[j].type_image_signature
+                    try {
+                      const getSignatureInfoTokenV1Data: any = await this.contractServiceV1.getSignatureInfoTokenV1(
+                        this.signCertDigital.Base64, signI, type
+                      ).toPromise()
+                      signI = getSignatureInfoTokenV1Data.data
+                    } catch (error) {
+                      this.spinner.hide()
+                      console.log(error);
+                      return this.toastService.showErrorHTMLWithTimeout("sign.token.err","",3000)
+                    }
+                    
                     try {
                       // w[j] = x[j] + w[j];
 
@@ -2014,7 +2054,7 @@ export class ContractSignatureComponent implements OnInit {
                       //   dataSignMobi.data.FileDataSigned
                       // );
                       sign = await this.contractServiceV1.updateDigitalSignatured(
-                        idSignMany[i],
+                        dataObjectSignature[j].id,
                         dataSignMobi.data.FileDataSigned
                       );
 

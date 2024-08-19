@@ -701,6 +701,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   getContractList() {
+    this.spinner.show();
     this.pageTotal = 0;
     this.scrollY = 0;
     this.roleMess = "";
@@ -933,13 +934,12 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.contractService.getContractCopy(id).subscribe((res: any) => {
       //
       this.toastService.showSuccessHTMLWithTimeout(`Sao chép hợp đồng ${res.name} thành công!`, "", 3000)
-      this.getContractList();
 
     }, (error: HttpErrorResponse) => {
       this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000)
       this.spinner.hide();
     }, () => {
-      this.spinner.hide();
+      this.getContractList();
     })
   }
 
