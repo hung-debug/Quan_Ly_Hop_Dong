@@ -300,7 +300,10 @@ export class ContractService {
           '&page=' +
           page +
           '&size=' +
-          size + '&handler_name=' + handlerName + '&name_or_email_customer=' + nameOrEmailCustomer;
+          size + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
+          if(handlerName != ""){
+            listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
+          }
       } else {
         listContractUrl =
           this.listContractUrl +
@@ -321,7 +324,10 @@ export class ContractService {
           '&page=' +
           page +
           '&size=' +
-          size + '&handler_name=' + handlerName + '&name_or_email_customer=' + nameOrEmailCustomer;
+          size + '&name_or_email_customer=' + nameOrEmailCustomer.trim() ;
+          if(handlerName != ""){
+            listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
+          }
       }
     } else {
       if (organization_id == '') {
@@ -346,11 +352,17 @@ export class ContractService {
           '&page=' +
           page +
           '&size=' +
-          size + '&handler_name=' + handlerName + '&name_or_email_customer=' + nameOrEmailCustomer;
+          size + '&name_or_email_customer=' + nameOrEmailCustomer;
+          if(handlerName != ""){
+            listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
+          }
       } else {
         listContractUrl = this.listContractOrgUrl + '?organization_id=' + organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' +
           filter_contract_no.trim() + '&from_date=' + filter_from_date + '&to_date=' + filter_to_date + '&status=' + filter_status + '&remain_day=' + remain_day +
-          '&page=' + page + '&size=' + size + '&handler_name=' + handlerName + '&name_or_email_customer=' + nameOrEmailCustomer;
+          '&page=' + page + '&size=' + size + '&name_or_email_customer=' + nameOrEmailCustomer;
+          if(handlerName != ""){
+            listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
+          }
       }
     }
 
