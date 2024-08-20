@@ -49,7 +49,7 @@ export class ContractSignatureService {
     if(page != ""){
       page = page - 1;
     }
-    let listContractMyProcessUrl = this.listContractMyProcessUrl + '?keyword=' + filter_name.trim() + '&type=' + filter_type + '&status=' + filter_status + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size + "&contractStatus=" + contractStatus + "&name_or_email_customer=" + nameOrEmailCustomer + "&organization_id=" + orgId;
+    let listContractMyProcessUrl = this.listContractMyProcessUrl + '?keyword=' + filter_name.trim() + '&type=' + filter_type + '&status=' + filter_status + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size + "&contractStatus=" + contractStatus + "&name_or_email_customer=" + nameOrEmailCustomer.trim() + "&organization_id=" + orgId;
     console.log("A");
     
     const headers = {'Authorization': 'Bearer ' + this.token}
