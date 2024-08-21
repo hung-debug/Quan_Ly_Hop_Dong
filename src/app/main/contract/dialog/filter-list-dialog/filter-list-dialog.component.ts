@@ -51,7 +51,6 @@ export class FilterListDialogComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    console.log("dataâ",this.data);
     
     this.organization_id = Number(this.data.organization_id);
 
@@ -122,7 +121,6 @@ export class FilterListDialogComponent implements OnInit {
       isOrg: this.isOrg,
       organization_id: this.organization_id
     }
-    console.log("data",data);
     
     this.dialogRef.close();
     
