@@ -1996,7 +1996,7 @@ export class ContractSignatureComponent implements OnInit {
                       // const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
                       // signI = textSignB.split(',')[1];
                       //signI = this.srcMark.split(',')[1]
-                      signI = null;
+                      signI = this.srcMark.split(',')[1]
                     }
                     
                     let type = dataObjectSignature[j].type_image_signature
