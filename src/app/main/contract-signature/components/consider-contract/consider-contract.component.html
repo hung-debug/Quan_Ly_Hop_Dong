@@ -120,30 +120,28 @@
     <div [ngClass] = "{'col-md-9-tru': this.show_information, 'col-md-12-tru': !this.show_information}" *ngIf="!this.mobile">
       <div [ngStyle]="{'justify-content': confirmSignature !== 1 ? 'space-between' : 'center'}" style="height: 48px; background-color: #EBF2FB; display: flex;">
           <div style="margin: auto 0px auto 34px">
-            <div style="margin: auto 0px auto 34px">
-              <button class="call-page input1" (click)="firstPage()">
-                  <img  width="16px" height="16px" *ngIf="!this.page1" src="assets/img/First.png">
-                  <img  width="16px" height="16px" *ngIf="this.page1" src="assets/img/First.png">
-              </button>
-              <button style="margin: 0px 8px;" class="call-page input1" (click)="previousPage()">
-                  <img width="16px" height="16px" *ngIf="this.page1" src="assets/img/Prev.png">
-                  <img width="16px" height="16px" *ngIf="!this.page1" src="assets/img/Prev.png">
-              </button>
-          
-              <input class="input1 no-focus" [(ngModel)]="pageNum" type="text" (keyup.enter)="onEnter($event)" />
-              &nbsp;/&nbsp;
-              <span class="page-number">{{ this.pageNumber }}</span>
-  
-              <button style="margin: 0px 8px;" class="call-page input1" (click)="onNextPage()" id="prev">
-                  <img width="6px" height="9px" *ngIf="this.pageLast" src="assets/img/Vector1.png">
-                  <img width="6px" height="9px" *ngIf="!this.pageLast" src="assets/img/Vector1.png">
-              </button>
-          
-              <button class="call-page input1" (click)="lastPage()" id="prev">
-                  <img width="16px" height="16px" *ngIf="this.pageLast" src="assets/img/Last.png">
-                  <img width="16px" height="16px" *ngIf="!this.pageLast" src="assets/img/Last.png">
-              </button>  
-            </div>
+            <button class="call-page input1" (click)="firstPage()">
+                <img  width="16px" height="16px" *ngIf="!this.page1" src="assets/img/First.png">
+                <img  width="16px" height="16px" *ngIf="this.page1" src="assets/img/First.png">
+            </button>
+            <button style="margin: 0px 8px;" class="call-page input1" (click)="previousPage()">
+                <img width="16px" height="16px" *ngIf="this.page1" src="assets/img/Prev.png">
+                <img width="16px" height="16px" *ngIf="!this.page1" src="assets/img/Prev.png">
+            </button>
+        
+            <input class="input1 no-focus" [(ngModel)]="pageNum" type="text" (keyup.enter)="onEnter($event)" />
+            &nbsp;/&nbsp;
+            <span class="page-number">{{ this.pageNumber }}</span>
+
+            <button style="margin: 0px 8px;" class="call-page input1" (click)="onNextPage()" id="prev">
+                <img width="6px" height="9px" *ngIf="this.pageLast" src="assets/img/Vector1.png">
+                <img width="6px" height="9px" *ngIf="!this.pageLast" src="assets/img/Vector1.png">
+            </button>
+        
+            <button class="call-page input1" (click)="lastPage()" id="prev">
+                <img width="16px" height="16px" *ngIf="this.pageLast" src="assets/img/Last.png">
+                <img width="16px" height="16px" *ngIf="!this.pageLast" src="assets/img/Last.png">
+            </button>  
           </div>
 
           <div style="margin: auto 34px auto 0px;" *ngIf="confirmSignature !== 1">
