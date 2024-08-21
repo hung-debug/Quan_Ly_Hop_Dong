@@ -210,7 +210,14 @@ export class ConsiderContractComponent
 
   defaultValue: number = 100;
   isCheck: number = 3;
-
+  show_information: boolean = true;
+  defaultValueSelect: any = 1.0;
+  zoomOptions = [
+    { percent: '100%', value: 1.0 },
+    { percent: '150%', value: 1.5 },
+    { percent: '200%', value: 2.0 },
+    { percent: '250%', value: 2.5 }
+  ];
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -357,39 +364,51 @@ export class ConsiderContractComponent
     });
   }
 
-  changeScale(values: any){
-    switch (values){
-      case "-":
-        if(this.scale > 0.25){
-          this.scale = this.scale - 0.25;
-          this.defaultValue = this.scale * 100
-          // for (let page = 1; page <= this.pageNumber; page++) {
-          //   let canvas = document.getElementById('canvas-step3-' + page);
-          //   this.renderPageZoomInOut(page, canvas);
-          // }
-          this.getPage();
-
-        }else{
-          break;
-        }
-        break;
-      case "+":
-        if(this.scale < 5){
-          this.scale = this.scale + 0.25;
-          this.defaultValue = this.scale * 100
-          // for (let page = 1; page <= this.pageNumber; page++) {
-          //   let canvas = document.getElementById('canvas-step3-' + page);
-          //   this.renderPageZoomInOut(page, canvas);
-          // }
-          this.getPage();
-        }else{
-          break;
-        }
-        break;
-      default:
-        break;
-    }
+  onZoomChange(event: any) {
+    const zoomLevel = event.value;
+    this.changeScale(zoomLevel);
   }
+
+  changeScale(scale: number) {
+    this.scale = scale;
+    this.defaultValueSelect = scale;
+    // Add logic to apply zoom level, e.g., re-render pages
+    this.getPage();
+  }
+
+  // changeScale(values: any){
+  //   switch (values){
+  //     case "-":
+  //       if(this.scale > 0.25){
+  //         this.scale = this.scale - 0.25;
+  //         this.defaultValue = this.scale * 100
+  //         // for (let page = 1; page <= this.pageNumber; page++) {
+  //         //   let canvas = document.getElementById('canvas-step3-' + page);
+  //         //   this.renderPageZoomInOut(page, canvas);
+  //         // }
+  //         this.getPage();
+
+  //       }else{
+  //         break;
+  //       }
+  //       break;
+  //     case "+":
+  //       if(this.scale < 5){
+  //         this.scale = this.scale + 0.25;
+  //         this.defaultValue = this.scale * 100
+  //         // for (let page = 1; page <= this.pageNumber; page++) {
+  //         //   let canvas = document.getElementById('canvas-step3-' + page);
+  //         //   this.renderPageZoomInOut(page, canvas);
+  //         // }
+  //         this.getPage();
+  //       }else{
+  //         break;
+  //       }
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
 
   changeRotate(values: any){
 
@@ -539,6 +558,8 @@ export class ConsiderContractComponent
         await this.getVersionUsbToken(this.orgId);
 
         this.datas = this.data_contract;
+        this.datas.showPage = false;
+        this.datas.hideInfo = false;
         if (this.datas?.is_data_contract?.type_id) {
           this.contractService.getContractTypes(this.datas?.is_data_contract?.type_id).subscribe((data) => {
             if (this.datas?.is_data_contract) {
@@ -1025,7 +1046,7 @@ export class ConsiderContractComponent
   resetToDefault(){
     if(this.scale != 1){
       this.scale = this.defaultScale;
-      this.defaultValue = this.scale * 100
+      this.defaultValueSelect = this.scale * 100
       this.getPage();
     }
 
@@ -5274,5 +5295,86 @@ export class ConsiderContractComponent
     } else if (currentSigningStatus.success) {
       return true
     }
+  }
+
+  showInformation() {
+    this.pageNum = 1;
+    this.removePage();
+    this.show_information = !this.show_information;
+    this.datas.hideInfo = !this.datas.hideInfo;
+    this.getPage();
+  }
+
+  firstPage() {
+    let pdffull: any = document.getElementById('pdf-full');
+
+    pdffull.scrollTo(0, 0);
+
+    this.pageNum = 1;
+  }
+
+  lastPage() {
+    let canvas: any = document.getElementById(
+      'canvas-step3-' + this.pageNumber
+    );
+
+    let canvas1: any = document.getElementById('pdf-viewer-step-3');
+
+    let pdffull: any = document.getElementById('pdf-full');
+
+    pdffull.scrollTo(
+      0,
+      canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top
+    );
+
+    this.pageNum = this.pageNumber;
+  }
+
+  onNextPage() {
+    if (this.pageNum >= this.thePDF?.numPages) {
+      return;
+    }
+    this.pageNum++;
+    this.queueRenderPage(this.pageNum);
+  }
+
+  previousPage() {
+    if (this.pageNum <= 1) {
+      return;
+    }
+    this.pageNum--;
+    this.queueRenderPage(this.pageNum);
+  }
+
+  queueRenderPage(num: any) {
+    if (this.pageRendering) {
+      this.pageNumPending = num;
+    } else {
+      let canvas: any = document.getElementById('canvas-step3-' + num);
+
+      let canvas1: any = document.getElementById('pdf-viewer-step-3');
+
+      let pdffull: any = document.getElementById('pdf-full');
+
+      pdffull.scrollTo(
+        0,
+        canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top
+      );
+    }
+  }
+
+  onEnter(event: any) {
+    let canvas: any = document.getElementById(
+      'canvas-step3-' + event.target.value
+    );
+
+    let canvas1: any = document.getElementById('pdf-viewer-step-3');
+
+    let pdffull: any = document.getElementById('pdf-full');
+
+    pdffull.scrollTo(
+      0,
+      canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top
+    );
   }
 }

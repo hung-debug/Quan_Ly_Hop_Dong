@@ -69,6 +69,7 @@
   "contract.name": "Contract name",
   "contract.file": "File contract",
   "contract.connect": "Contract connection",
+  "contract.connect.detail": "Contract connection",
   "contract.type": "Contract type",
   "contract.number": "Contract number",
   "contract.information": "Contract information",

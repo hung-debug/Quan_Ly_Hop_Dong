@@ -1,74 +1,266 @@
 
 <meta name='viewport' content='width=device-width' />
 <div class="container-fluid">
-<div class="sample-contract row" *ngIf="loaded && valid && this.mobile === false">
-  <div class="col-md-3 sample-contract__information" style="background-color: white;">
-    <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
-      <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label">{{'contract.detail' | translate}}</div>
-      <div style="line-height: 25px">
-        <div>
-          <span class="title-contract">{{'contract.uid' | translate}}:</span>
-          <span>{{datas?.is_data_contract?.contract_uid}}</span>
-        </div>
-        <div>
-          <span class="title-contract">{{'menu.contract.type.list' | translate}}:</span>
-          <span>{{datas?.is_data_contract?.type_name}}</span>
-        </div>
-        <div>
-          <span class="title-contract">{{'contract.name' | translate}}:</span>
-          <span>{{datas.is_data_contract.name}}</span>
-        </div>
-        <div>
-          <span class="title-contract">{{'contract.number' | translate}}:</span>
-          <span>{{datas.is_data_contract.contract_no}}</span>
-        </div>
-        <div>
-          <span class="title-contract">{{'file.attach' | translate}}:</span>
-          <span *ngFor="let d of allFileAttachment;let i = index">
-            <span *ngIf="i != 0">, </span>
-            <a rel="noopener noreferrer" style="color: #106DB6" rel="stylesheet" [href]="d.path.includes('.txt') ? d.path : d.path.replace('/tmp/','/tmp/v2/')" target="_blank">{{d.filename}}</a>
-          </span>
-        </div>
+  <div class="sample-contract row" *ngIf="loaded && valid && this.mobile === false">
+    <div [ngClass] = "{'col-md-3': this.show_information}" class="sample-contract__information" style="background-color: white; padding-right: 0px;">
+      <div *ngIf="this.show_information == true">
+        <div id="width-element-info">
+          <div class="label">
+            {{'contract.detail' | translate}}
+          </div>  
+          <div>
+            <div class="row mt-12px">
+              <div class="col-xl-3 col-lg-12 title-contract">{{'Tên hợp đồng' | translate}}:</div>
+              <div class="col-xl-9 col-lg-12 info-contract contract-name mt-lg-5px">{{datas?.is_data_contract?.name}}</div>
+            </div>
+            <div class="row mt-12px">
+              <div class="col-xl-3 col-lg-12 title-contract">{{'contract.uid' | translate}}:</div>
+              <div class="col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.contract_uid}}</div>
+            </div>
+            <div class="row mt-12px">
+              <div class="col-xl-3 col-lg-12 title-contract">{{'menu.contract.type.list' | translate}}:</div>
+              <div class="col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.type_name}}</div>
+            </div>
+            <div class="row mt-12px">
+              <div class="col-xl-3 col-lg-12 title-contract">{{'contract.number' | translate}}:</div>
+              <div class="col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas.is_data_contract.contract_no}}</div>
+            </div>
+            <div class="row mt-12px" *ngIf = "allFileAttachment.length > 0">
+              <div class="col-xl-3 col-lg-12 title-contract">{{'file.attach' | translate}}:</div>
+                <div class="col-xl-9 col-lg-12 mt-lg-5px">
+                  <div *ngFor="let d of allFileAttachment; let i = index" style="margin-right: 5px;" class="content-info-contract">
+                    <a class="info-contract" rel="stylesheet" [href]="d.path" target="_blank">{{d.filename}}</a>
+                </div>
+              </div>
+            </div> 
+  
+            <div class="row mt-12px" *ngIf="originalContractName">
+              <span class="col-xl-3 col-lg-12 title-contract">{{'contract.original' | translate}}:</span>
+              <span class="col-xl-9 col-lg-12 info-contract mt-lg-5px" (click)="openDetailOriginalContract(this.datas.is_data_contract)">
+                {{originalContractName}}
+              </span>
+            </div>
 
-        <!-- HD GỐC -->
-        <div *ngIf="originalContractName">
-          <span class="title-contract">{{'contract.original' | translate}}:</span>
-          <span style="cursor: pointer; color:#106DB6" (click)="openDetailOriginalContract(this.datas.is_data_contract)">
-            {{originalContractName}}
-          </span>
+            <div class="row mt-12px" *ngIf = "datas?.is_data_contract?.refs.length > 0">
+              <div class="col-xl-3 col-lg-12 title-contract">{{'file.connect' | translate}}:</div>
+                <div class="col-xl-9 col-lg-12 mt-lg-5px">
+                  <div *ngFor="let d of datas?.is_data_contract?.refs;let i = index" style="margin-right: 5px;" class="content-info-contract">
+                    <a class="info-contract" rel="stylesheet" [href]="d.path" target="_blank" (click)="openPdf(d.path, $event)">{{d.filename}}</a>
+                </div>
+              </div>
+            </div>   
+          </div>
         </div>
-        <!-- HD GỐC -->
-        <div>
-          <span class="title-contract">{{'contract.connect' | translate}}:
-          </span>
-          <span *ngFor="let d of datas?.is_data_contract?.refs;let i = index">
-            <span *ngIf="i != 0">, </span>
-            <a style="color: #106DB6;"  [href]="d.path" target="_blank" (click)="openPdf(d.path, $event)">{{d.ref_name}}</a>
-          </span>
-        </div>
+  
+        <div class="location-change mt-28px">
+          <div class="sample-contract__information--user-sign">
+            <div class="label">{{'relate.party' | translate}}</div>
+            <div *ngFor="let d of this.datas?.is_data_contract?.participants">
+              <div *ngIf = "d.type != 3" class="row mt-12px">
+                <div class="col-xl-3 col-lg-12 title-contract">{{'organization.me' | translate}}:</div>
+                <div class="col-xl-9 col-lg-12 info-contract mt-lg-5px">{{d.type != 3 ? d.name : d.recipients[0].name}}</div>
+              </div>
 
+              <div *ngIf = "d.type == 3" class="row mt-12px">
+                <div class="col-xl-3 col-lg-12 title-contract">{{'doi_tac' | translate}}:</div>
+                <div class="col-xl-9 col-lg-12 info-contract mt-lg-5px">{{d.type != 3 ? d.name : d.recipients[0].name}}</div>
+              </div>
+            </div>  
+          </div>
+
+          <div class="mt-28px process-handle-contract" (click)="processHandleContract()">
+            <div>
+              {{'contract_processing_flow' | translate}}
+            </div>
+            <img src="/assets/img/arrow-right.svg"/>
+          </div>
+  
+          <div class="flex-column mt-28px" *ngIf="![2,3].includes(recipient?.status)">
+            <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2 && this.isDataContract.release_state== 'CON_HIEU_LUC'">
+              <p class="d-flex justify-content-center mb-4">XEM XÉT HỢP ĐỒNG</p>
+              <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
+              <div class="confirm-radio d-flex justify-content-between mx-4">
+                <div class="radio-confirm">
+                  <input id="radio-confirm-consider" type="radio" name="confirm-radio-consider" [value]="1" [(ngModel)]="confirmConsider">
+                  <label for="radio-confirm-consider" class="ms-2">{{'btn.accept' | translate}}</label>
+                </div>
+                <div class="radio-refuse">
+                  <input id="radio-refuse-consider" type="radio" name='confirm-radio-consider' [value]="2" [(ngModel)]="confirmConsider">
+                  <label for="radio-refuse-consider" class="ms-2">{{'btn.not.accept' | translate}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="label" style="text-align: center; font-weight: bold;" *ngIf="(this.datas.roleContractReceived == 3 || this.datas.roleContractReceived == 4) && this.isDataContract.release_state == 'CON_HIEU_LUC'">
+              <p class="d-flex justify-content-center mb-4 text-uppercase">{{'contract.sign.confirm' | translate}}</p>
+              <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
+              <div class="confirm-radio d-flex justify-content-between mx-4">
+                <div class="radio-confirm">
+                  <input id="radio-confirm-secretary" type="radio" name="confirm-radio-secretary" [value]="1" [(ngModel)]='confirmSignature' (click)="resetToDefault()">
+                  <label for="radio-confirm-secretary" class="ms-2">{{'btn.accept' | translate}}</label>
+                </div>
+                <div class="radio-refuse">
+                  <input id="radio-refuse-secretary" type="radio" name='confirm-radio-secretary' [value]="2" [(ngModel)]='confirmSignature'>
+                  <label for="radio-refuse-secretary" class="ms-2">{{'btn.not.accept' | translate}}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <hr>
 
-    <div class="location-change">
-      <div class="sample-contract__information--user-sign" style="line-height: 25px">
-        <div style="text-align: center; font-weight: bold" class="label">{{'relate.party' | translate}}</div>
+    <div *ngIf="!this.mobile && this.show_information" style="width: 24px; padding: 0px;">
+      <img style="width: 24px; height: 24px;" src="../../assets/img/dong_lai.png" (click)="showInformation()" />
+    </div>
 
-        <div *ngFor="let d of this.datas?.is_data_contract?.participants">
-          <div *ngIf="d.type != 3">{{d.name}}</div>
-          <div *ngIf="d.type == 3">{{d.recipients[0].name}}</div>
+    <div *ngIf="!this.mobile && !this.show_information" style="width: 24px; padding: 0px;">
+      <img style="width: 24px; height: 24px;" src="../../assets/img/mo_ra.png" (click)="showInformation()" />
+    </div>
+
+    <div [ngClass] = "{'col-md-9-tru': this.show_information, 'col-md-12-tru': !this.show_information}" *ngIf="!this.mobile">
+      <div [ngStyle]="{'justify-content': confirmSignature !== 1 ? 'space-between' : 'center'}" style="height: 48px; background-color: #EBF2FB; display: flex;">
+          <div style="margin: auto 0px auto 34px">
+            <div style="margin: auto 0px auto 34px">
+              <button class="call-page input1" (click)="firstPage()">
+                  <img  width="16px" height="16px" *ngIf="!this.page1" src="assets/img/First.png">
+                  <img  width="16px" height="16px" *ngIf="this.page1" src="assets/img/First.png">
+              </button>
+              <button style="margin: 0px 8px;" class="call-page input1" (click)="previousPage()">
+                  <img width="16px" height="16px" *ngIf="this.page1" src="assets/img/Prev.png">
+                  <img width="16px" height="16px" *ngIf="!this.page1" src="assets/img/Prev.png">
+              </button>
+          
+              <input class="input1 no-focus" [(ngModel)]="pageNum" type="text" (keyup.enter)="onEnter($event)" />
+              &nbsp;/&nbsp;
+              <span class="page-number">{{ this.pageNumber }}</span>
+  
+              <button style="margin: 0px 8px;" class="call-page input1" (click)="onNextPage()" id="prev">
+                  <img width="6px" height="9px" *ngIf="this.pageLast" src="assets/img/Vector1.png">
+                  <img width="6px" height="9px" *ngIf="!this.pageLast" src="assets/img/Vector1.png">
+              </button>
+          
+              <button class="call-page input1" (click)="lastPage()" id="prev">
+                  <img width="16px" height="16px" *ngIf="this.pageLast" src="assets/img/Last.png">
+                  <img width="16px" height="16px" *ngIf="!this.pageLast" src="assets/img/Last.png">
+              </button>  
+            </div>
+          </div>
+
+          <div style="margin: auto 34px auto 0px;" *ngIf="confirmSignature !== 1">
+            <div style="width: 80px;">
+              <p-dropdown
+                class="no-focus"
+                (onChange)="onZoomChange($event)"
+                panelStyleClass="font"
+                [options]="zoomOptions"
+                [(ngModel)]="defaultValueSelect"
+                optionLabel="percent"
+                optionValue="value"
+                filterBy="percent">
+              </p-dropdown>
+            </div>
+          </div>
+      </div>
+  
+      <div (scroll)="scroll($event)" id="pdf-full" class="sample-contract__file viewer-pdf isDrag"
+          style="background-color: #F2F2F2; position: relative">
+        <div id="pdf-viewer-step-3">
+          <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+            <div class="resize-drag not-out-drop" *ngIf="![2,3].includes(recipient?.status)"
+                [id]="d.id"
+                style="z-index: -1;"
+                #itemElement
+                (click)="getSignSelect(d)"
+                [ngClass]="changeColorDrag(null, d, true)"
+                [ngStyle]="changePosition(d,null,null,'#EBF8FF')">
+              <app-image-sign-contract 
+                [ngClass]="(d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh') ? 'main-sign-box': ''"  
+                id="image-sign-contract" 
+                (contractNoValue)="contractNoValueChange($event)" 
+                (otpValueChange)="otpValueChange($event)" 
+                [contractNoValue]="contractNoValue"
+                [contractNoValueSign]="contractNoValueSign"
+                [otpValueSign]="otpValueSign"
+                (checkedChange)="switchesValueChange($event)" 
+                *ngIf="![2,3].includes(recipient?.status)" 
+                [datas]="datas" [view]="[2,3].includes(recipient?.status)" 
+                [sign]="d"
+                [isNotTextSupport]="isNotTextSupport"
+              >
+              </app-image-sign-contract>
+              <div *ngIf="this.flagFocus && d.sign_unit == 'text'" class="name-sig-img-daky long-text-ellipsis">{{(d.recipient && !d.valueSign) ? d.recipient?.name : ''}}</div>
+              <div *ngIf="d.sign_unit != 'text' && !this.flagFocus && !this.otpValueSign" class="name-sig-img-daky long-text-ellipsis">{{(d.recipient && !d.valueSign) ? d.recipient?.name : ''}}</div>
+            </div>
+          </div>
+          <div class="skeleton-sign position-absolute opacity-0">
+            <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId" [phonePKI]="phonePKI" [srcMark]="srcMark" [isDateTime]="isDateTime"></app-display-digital-signature>
+          </div>
+          <div class="skeleton-sign position-absolute opacity-0">
+            <app-text-signature-image [font]="font" [font_size]="font_size" [datas]="datas" [textSign]="textSign" [width]="width"></app-text-signature-image>
+          </div>
+        </div>
+      </div>
+    </div>  
+  </div>
+
+  <div *ngIf="this.mobile && !this.multiSignInPdf">
+
+        <div style="margin:auto;padding: 10px">
+          <pdf-viewer *ngIf="![2,3].includes(recipient?.status)" [src]="pdfSrcMobile"
+          [render-text]="true"
+          style="width: 95%; height: calc(70vh); border: 1px;"
+          [fit-to-page]="true"
+          [show-borders]="true"
+          [show-all]="true"
+          [(page)]="pageMobile"
+          [stick-to-page]="true"
+          (after-load-complete)="afterLoadComplete($event)"
+          (pagechanging)="pagechanging($event)"
+          ></pdf-viewer>
         </div>
 
-      </div>
-      <div>
-        <u style="color: #106DB6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">{{'contract_processing_flow' | translate}}</u>
-      </div>
-      <hr>
+      <div class="flex-column" style="text-align: center;margin-top: 2px;">
+        <button class="call-page" (click)="firstPageMobile()">
+          <img width="14px" height="18px" *ngIf="this.page1" src="assets/img/previousbold.svg">
+          <img width="14px" height="18px" *ngIf="!this.page1" src="assets/img/firstpage.svg">
+        </button>
+        <button class="call-page1" (click)="previousPageMobile()">
+          <img width="10px" height="14px" *ngIf="this.page1" src="assets/img/firstpagebold.svg">
+          <img width="10px" height="14px" *ngIf="!this.page1" src="assets/img/previous.svg">
+        </button>
 
-      <div class="flex-column" *ngIf="![2,3].includes(recipient?.status)">
-        <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2 && this.isDataContract.release_state== 'CON_HIEU_LUC'">
-          <p class="d-flex justify-content-center mb-4">XEM XÉT HỢP ĐỒNG</p>
+        <input class="input-mobile" [(ngModel)]="pageMobile" type="text"/>&nbsp;/ &nbsp;{{this.pageNumber}}
+
+        <button class="call-page1" id="prev" (click)="onNextPageMobile()">
+          <img width="10px" height="14px" *ngIf="this.pageLast" src="assets/img/next.svg">
+          <img width="10px" height="14px" *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
+        </button>
+
+        <button class="call-page1" id="prev" (click)="lastPageMobile()">
+          <img width="14px" height="18px" *ngIf="this.pageLast" src="assets/img/lastpage.svg">
+          <img width="14px" height="18px" *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
+        </button>
+      </div>
+
+      <div style="display: none;" *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+        <app-image-sign-contract 
+          *ngIf="![2,3].includes(recipient?.status)" 
+          id="image-sign-contract-mobile" 
+          [datas]="datas" 
+          [view]="[2,3].includes(recipient?.status)"
+          (otpValueChange)="otpValueChange($event)" 
+          [otpValueSign]="otpValueSign"
+          (checkedChange)="switchesValueChange($event)" 
+          [sign]="d"></app-image-sign-contract>
+      </div>
+
+      <div style="position: absolute;top: -1000px">
+        <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId" [phonePKI]="phonePKI" [srcMark]="srcMark" [isDateTime]="isDateTime"></app-display-digital-signature>
+      </div>
+
+      <div class="flex-column" *ngIf="![2,3].includes(recipient?.status)" style="margin-top: 5px">
+        <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2 && this.isDataContract.release_state == 'CON_HIEU_LUC'">
+          <p class="d-flex justify-content-center mb-4">{{'contract.review' | translate}}</p>
           <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
           <div class="confirm-radio d-flex justify-content-between mx-4">
             <div class="radio-confirm">
@@ -86,7 +278,7 @@
           <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
           <div class="confirm-radio d-flex justify-content-between mx-4">
             <div class="radio-confirm">
-              <input id="radio-confirm-secretary" type="radio" name="confirm-radio-secretary" [value]="1" [(ngModel)]='confirmSignature' (click)="resetToDefault()">
+              <input id="radio-confirm-secretary" type="radio" name="confirm-radio-secretary" [value]="1" [(ngModel)]='confirmSignature'>
               <label for="radio-confirm-secretary" class="ms-2">{{'btn.accept' | translate}}</label>
             </div>
             <div class="radio-refuse">
@@ -96,170 +288,33 @@
           </div>
         </div>
       </div>
-    </div>
   </div>
 
-  <div (scroll)="scroll($event)" id="pdf-full" class="col-md-9 sample-contract__file viewer-pdf isDrag"
-       style="background-color: #F2F2F2; position: relative">
-    <div class="zoom-in-out" *ngIf="confirmSignature !== 1">
-        <img src="../../assets/img/minus.png" style="margin-bottom:3px;height: 30px; width: 30px;" (click)="changeScale('-')" />&nbsp;
-        <input class="input-web" type="text" style="width: 50px;height: 30px" [value]="defaultValue + '%'" disabled>&nbsp;
-        <img src="../../assets/img/plus.png" style="margin-bottom:3px; height: 30px; width: 30px;" (click)="changeScale('+')" />
-    </div>
-    <!-- <div class="rotate" *ngIf="confirmSignature === 1">
-      <img src="../../assets/img/rotate-left.svg" style="margin-bottom:3px;height: 30px; width: 30px;" (click)="changeRotate('-')"/>&nbsp;
-      <img src="../../assets/img/rotate-right.svg" style="margin-bottom:3px; height: 30px; width: 30px;" (click)="changeRotate('+')" />
-    </div> -->
-    <div id="pdf-viewer-step-3">
-      <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-        <div class="resize-drag not-out-drop" *ngIf="![2,3].includes(recipient?.status)"
-             [id]="d.id"
-             style="z-index: -1;"
-             #itemElement
-             (click)="getSignSelect(d)"
-             [ngClass]="changeColorDrag(null, d, true)"
-             [ngStyle]="changePosition(d,null,null,'#EBF8FF')">
-          <app-image-sign-contract 
-            [ngClass]="(d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh') ? 'main-sign-box': ''"  
-            id="image-sign-contract" 
-            (contractNoValue)="contractNoValueChange($event)" 
-            (otpValueChange)="otpValueChange($event)" 
-            [contractNoValue]="contractNoValue"
-            [contractNoValueSign]="contractNoValueSign"
-            [otpValueSign]="otpValueSign"
-            (checkedChange)="switchesValueChange($event)" 
-            *ngIf="![2,3].includes(recipient?.status)" 
-            [datas]="datas" [view]="[2,3].includes(recipient?.status)" 
-            [sign]="d"
-            [isNotTextSupport]="isNotTextSupport"
-          >
-          </app-image-sign-contract>
-          <div *ngIf="this.flagFocus && d.sign_unit == 'text'" class="name-sig-img-daky long-text-ellipsis">{{(d.recipient && !d.valueSign) ? d.recipient?.name : ''}}</div>
-          <div *ngIf="d.sign_unit != 'text' && !this.flagFocus && !this.otpValueSign" class="name-sig-img-daky long-text-ellipsis">{{(d.recipient && !d.valueSign) ? d.recipient?.name : ''}}</div>
-        </div>
-      </div>
-      <div class="skeleton-sign position-absolute opacity-0">
-        <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId" [phonePKI]="phonePKI" [srcMark]="srcMark" [isDateTime]="isDateTime"></app-display-digital-signature>
-      </div>
-      <div class="skeleton-sign position-absolute opacity-0">
-        <app-text-signature-image [font]="font" [font_size]="font_size" [datas]="datas" [textSign]="textSign" [width]="width"></app-text-signature-image>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div *ngIf="this.mobile && !this.multiSignInPdf">
-
-      <div style="margin:auto;padding: 10px">
-        <pdf-viewer *ngIf="![2,3].includes(recipient?.status)" [src]="pdfSrcMobile"
-        [render-text]="true"
-        style="width: 95%; height: calc(70vh); border: 1px;"
-        [fit-to-page]="true"
-        [show-borders]="true"
-        [show-all]="true"
-        [(page)]="pageMobile"
-        [stick-to-page]="true"
-        (after-load-complete)="afterLoadComplete($event)"
-        (pagechanging)="pagechanging($event)"
-        ></pdf-viewer>
-      </div>
-
-    <div class="flex-column" style="text-align: center;margin-top: 2px;">
-      <button class="call-page" (click)="firstPageMobile()">
-        <img width="14px" height="18px" *ngIf="this.page1" src="assets/img/previousbold.svg">
-        <img width="14px" height="18px" *ngIf="!this.page1" src="assets/img/firstpage.svg">
-      </button>
-      <button class="call-page1" (click)="previousPageMobile()">
-        <img width="10px" height="14px" *ngIf="this.page1" src="assets/img/firstpagebold.svg">
-        <img width="10px" height="14px" *ngIf="!this.page1" src="assets/img/previous.svg">
-      </button>
-
-      <input class="input-mobile" [(ngModel)]="pageMobile" type="text"/>&nbsp;/ &nbsp;{{this.pageNumber}}
-
-      <button class="call-page1" id="prev" (click)="onNextPageMobile()">
-        <img width="10px" height="14px" *ngIf="this.pageLast" src="assets/img/next.svg">
-        <img width="10px" height="14px" *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
-      </button>
-
-      <button class="call-page1" id="prev" (click)="lastPageMobile()">
-        <img width="14px" height="18px" *ngIf="this.pageLast" src="assets/img/lastpage.svg">
-        <img width="14px" height="18px" *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
-      </button>
-    </div>
-
-    <div style="display: none;" *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-      <app-image-sign-contract 
-        *ngIf="![2,3].includes(recipient?.status)" 
-        id="image-sign-contract-mobile" 
-        [datas]="datas" 
-        [view]="[2,3].includes(recipient?.status)"
-        (otpValueChange)="otpValueChange($event)" 
-        [otpValueSign]="otpValueSign"
-        (checkedChange)="switchesValueChange($event)" 
-        [sign]="d"></app-image-sign-contract>
-    </div>
-
-    <div style="position: absolute;top: -1000px">
-      <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId" [phonePKI]="phonePKI" [srcMark]="srcMark" [isDateTime]="isDateTime"></app-display-digital-signature>
-    </div>
-
-    <div class="flex-column" *ngIf="![2,3].includes(recipient?.status)" style="margin-top: 5px">
-      <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2 && this.isDataContract.release_state == 'CON_HIEU_LUC'">
-        <p class="d-flex justify-content-center mb-4">{{'contract.review' | translate}}</p>
-        <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
-        <div class="confirm-radio d-flex justify-content-between mx-4">
-          <div class="radio-confirm">
-            <input id="radio-confirm-consider" type="radio" name="confirm-radio-consider" [value]="1" [(ngModel)]="confirmConsider">
-            <label for="radio-confirm-consider" class="ms-2">{{'btn.accept' | translate}}</label>
-          </div>
-          <div class="radio-refuse">
-            <input id="radio-refuse-consider" type="radio" name='confirm-radio-consider' [value]="2" [(ngModel)]="confirmConsider">
-            <label for="radio-refuse-consider" class="ms-2">{{'btn.not.accept' | translate}}</label>
-          </div>
-        </div>
-      </div>
-      <div class="label" style="text-align: center; font-weight: bold;" *ngIf="(this.datas.roleContractReceived == 3 || this.datas.roleContractReceived == 4) && this.isDataContract.release_state == 'CON_HIEU_LUC'">
-        <p class="d-flex justify-content-center mb-4 text-uppercase">{{'contract.sign.confirm' | translate}}</p>
-        <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
-        <div class="confirm-radio d-flex justify-content-between mx-4">
-          <div class="radio-confirm">
-            <input id="radio-confirm-secretary" type="radio" name="confirm-radio-secretary" [value]="1" [(ngModel)]='confirmSignature'>
-            <label for="radio-confirm-secretary" class="ms-2">{{'btn.accept' | translate}}</label>
-          </div>
-          <div class="radio-refuse">
-            <input id="radio-refuse-secretary" type="radio" name='confirm-radio-secretary' [value]="2" [(ngModel)]='confirmSignature'>
-            <label for="radio-refuse-secretary" class="ms-2">{{'btn.not.accept' | translate}}</label>
-          </div>
-        </div>
-      </div>
-    </div>
-</div>
-
-<app-footer-signature *ngIf="loaded  && (!this.mobile || (this.mobile && !this.multiSignInPdf))" 
-  [pageNum]="pageNum" 
-  [pageLast]="pageLast" 
-  [page1]="page1" 
-  [pageNumber]="pageNumber" 
-  [thePDF]="thePDF" 
-  [idElement]="idElement" 
-  [coordinateY]="coordinateY" 
-  [confirmSignature]="confirmSignature" 
-  [signBoxData]="signBoxData"
-  [datas]="datas" 
-  [view]="[2,3].includes(recipient?.status)" 
-  [recipientId]="recipientId" 
-  [pageBefore]="pageBefore"
-  [status]="status"
-  (submitChanges)="submitEvents($event)"
-></app-footer-signature>
-<ngx-spinner
-  bdColor="rgba(51,51,51,0.8)"
-  size="medium"
-  color="#fff"
-  type="ball-spin-clockwise"
->
-  <p style="font-size: 18px; color: white; text-align: center;white-space: pre-line;">{{loadingText}}</p>
-</ngx-spinner>
+  <app-footer-signature *ngIf="loaded  && (!this.mobile || (this.mobile && !this.multiSignInPdf))" 
+    [pageNum]="pageNum" 
+    [pageLast]="pageLast" 
+    [page1]="page1" 
+    [pageNumber]="pageNumber" 
+    [thePDF]="thePDF" 
+    [idElement]="idElement" 
+    [coordinateY]="coordinateY" 
+    [confirmSignature]="confirmSignature" 
+    [signBoxData]="signBoxData"
+    [datas]="datas" 
+    [view]="[2,3].includes(recipient?.status)" 
+    [recipientId]="recipientId" 
+    [pageBefore]="pageBefore"
+    [status]="status"
+    (submitChanges)="submitEvents($event)"
+  ></app-footer-signature>
+  <ngx-spinner
+    bdColor="rgba(51,51,51,0.8)"
+    size="medium"
+    color="#fff"
+    type="ball-spin-clockwise"
+  >
+    <p style="font-size: 18px; color: white; text-align: center;white-space: pre-line;">{{loadingText}}</p>
+  </ngx-spinner>
 </div>
 
  
