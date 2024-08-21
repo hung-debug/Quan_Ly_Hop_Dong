@@ -547,7 +547,9 @@ export class ContractSignatureComponent implements OnInit {
           this.filter_status,
           this.p,
           this.page,
-          this.contractStatus
+          this.contractStatus,
+          this.name_or_email_customer,
+          this.organization_id
         )
         .subscribe(
           (data) => {
