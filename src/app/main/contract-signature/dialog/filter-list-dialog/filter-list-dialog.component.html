@@ -46,8 +46,8 @@
             </div>
         </div>
 
-        <div class="row" *ngIf="this.data.status != 'wait-processing' && this.data.status != 'share' && this.data.status != 'wait-processing-dashboard'">
-            <div class="col-md-6">
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6" *ngIf="this.data.status != 'wait-processing' && this.data.status != 'share' && this.data.status != 'wait-processing-dashboard'">
                 <div class="label text-color">{{'contract.status.v2' | translate}}</div>
                 <!--Chờ xử lý-->
                 <div>
@@ -63,15 +63,13 @@
                     ></p-dropdown>
                 </div>
             </div>
-        </div>
-        
-        <div class="row" style="padding-top: 10px;">   
-          <div class="col-md-6">
-            <div class="label text-color">{{'name.email.create.contract' | translate}}</div>
-            <div class="input-data">
-                <input type="text" formControlName="name_or_email_customer">
+            
+            <div class="col-md-6">
+              <div class="label text-color">{{'name.email.create.contract' | translate}}</div>
+              <div class="input-data">
+                  <input type="text" formControlName="name_or_email_customer">
+              </div>
             </div>
-          </div>
         </div>
     
         <div class="row" style="justify-content: center;padding-top: 10px;">

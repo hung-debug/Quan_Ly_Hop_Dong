@@ -167,7 +167,7 @@
                                 <div matTooltip="{{item.contractName}}" matTooltipPosition="above" matTooltipClass="custom-tooltip" class="item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
 
                                 <div class="row" (click)="openDetail(item.contractId)">
-                                  <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}} ({{item.participant.contract.organization_create_contract}})</div>
+                                  <div class="item_contract_infor">{{'created.user' | translate}}: {{item.participant.contract.nameUserCreate}} ({{item.participant.contract.organization_create_contract}})</div>
                                   <div>
                                     <img src="../../../assets/img/path.svg"/>
                                     <span *ngIf="item.sign_type && item.sign_type.length > 0 && (item.status == 0 || item.status == 1 || item.status == 3)" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
@@ -655,7 +655,7 @@
                               <div style="margin-left: 12px;">
                                 <div matTooltip="{{item.participant.contract.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip" class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
                                 <div class="row" (click)="openDetail(item.contractId)">
-                                  <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}}</div>
+                                  <div class="item_contract_infor">{{'created.user' | translate}}: {{item.participant.contract.nameUserCreate}}</div>
                                   <div>
                                     <img src="../../../assets/img/path.svg"/>
                                     <span *ngIf="item.sign_type && item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>

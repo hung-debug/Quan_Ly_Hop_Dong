@@ -64,7 +64,6 @@ export class FilterListDialogComponent implements OnInit {
       this.contractTypeList = data;
     });
 
-    console.log("this.data.filter_type",this.data.filter_type);
     this.addForm = this.fbd.group({
       filter_type: this.data.filter_type!=""?this.fbd.control(Number(this.data.filter_type)):"",
       filter_contract_no:this.fbd.control(this.data.filter_contract_no),
@@ -74,8 +73,7 @@ export class FilterListDialogComponent implements OnInit {
       organization_id: this.fbd.control(this.data.organization_id),
       status:this.data.status,
       contractStatus: this.fbd.control(this.data.contractStatus),
-    });
-    console.log("addddd form",this.addForm);    
+    });   
   }
 
   onSubmit() {
@@ -95,9 +93,7 @@ export class FilterListDialogComponent implements OnInit {
       contractStatus: this.addForm.value.contractStatus
     }
     this.dialogRef.close();
-    console.log("dataaaaaaaa",data);
-    // console.log("contractStatus",contractStatus);
-    
+
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['main/c/receive/' + data.status],
       {

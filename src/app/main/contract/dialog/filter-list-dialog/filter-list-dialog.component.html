@@ -65,7 +65,7 @@
           </div>
         </div>
         
-        <div class="row" style="padding-top: 10px;"  *ngIf="isOrg=='on'">
+        <div class="row" style="padding-top: 10px;"  *ngIf="isOrg=='on' && (this.data.status == 'processing' || this.data.status == 'expire' || this.data.status == 'overdue')">
           <div class="col-md-6">
             <div class="label text-color">{{'person.processing.contract' | translate}}</div>
             <div class="input-data">

@@ -2807,7 +2807,8 @@ export class ContractSignatureComponent implements OnInit {
       name_or_email_customer:this.name_or_email_customer,
       organization_id: this.organization_id,
       status: this.status,
-      type_display: this.typeDisplay
+      type_display: this.typeDisplay,
+      refreshContractList: this.getContractList.bind(this) 
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(FilterListDialogComponent, {
