@@ -85,7 +85,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   isEnableText: boolean = false;
   isChangeText: boolean = false;
   loaded: boolean = false;
-
+  show_information: boolean = true;
   isPartySignature: any = [
     {id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam'},
     {id: 2, name: 'Công ty newEZ Việt Nam'},
@@ -969,5 +969,12 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
         this.pageNum = Number(i+2);
       }
     }
+  }
+
+  showInformation() {
+    this.pageNum = 1;
+    this.removePage();
+    this.show_information = !this.show_information;
+    this.getPage();
   }
 }

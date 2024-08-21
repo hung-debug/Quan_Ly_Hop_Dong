@@ -105,7 +105,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   isEnableText: boolean = false;
   isChangeText: boolean = false;
   loaded: boolean = false;
-
+  show_information: boolean = true;
   isPartySignature: any = [
     { id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam' },
     { id: 2, name: 'Công ty newEZ Việt Nam' },
@@ -153,9 +153,16 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   signBefore: boolean = false;
   folderId: any;
   folderName: any;
-  defaultValue: number = 100;
+  defaultValue: any = 100;
+  defaultValueSelect: any = 1.0;
   liquidationContractData: any;
   remoteSinging: any;
+  zoomOptions = [
+    { percent: '100%', value: 1.0 },
+    { percent: '150%', value: 1.5 },
+    { percent: '200%', value: 2.0 },
+    { percent: '250%', value: 2.5 }
+  ];
   constructor(
     private contractService: ContractService,
     private checkViewContractService: CheckViewContractService,
@@ -722,39 +729,52 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     });
   }
 
-  changeScale(values: any){
-    switch (values){
-      case "-":
-        if(this.scale > 0.25){
-          this.scale = this.scale - 0.25;
-          this.defaultValue = this.scale * 100
-          // for (let page = 1; page <= this.pageNumber; page++) {
-          //   let canvas = document.getElementById('canvas-step3-' + page);
-          //   this.renderPageZoomInOut(page, canvas);
-          // }
-          this.getPage();
-
-        }else{
-          break;
-        }
-        break;
-      case "+":
-        if(this.scale < 5){
-          this.scale = this.scale + 0.25;
-          this.defaultValue = this.scale * 100
-          // for (let page = 1; page <= this.pageNumber; page++) {
-          //   let canvas = document.getElementById('canvas-step3-' + page);
-          //   this.renderPageZoomInOut(page, canvas);
-          // }
-          this.getPage();
-        }else{
-          break;
-        }
-        break;
-      default:
-        break;
-    }
+  onZoomChange(event: any) {
+    const zoomLevel = event.value;
+    this.changeScale(zoomLevel);
   }
+
+  changeScale(scale: number) {
+    this.scale = scale;
+    this.defaultValueSelect = scale;
+    // Add logic to apply zoom level, e.g., re-render pages
+    this.getPage();
+  }
+
+  // changeScale(values: any){
+  //   console.log("this.scale", this.scale)
+  //   switch (values){
+  //     case "-":
+  //       if(this.scale > 0.25){
+  //         this.scale = this.scale - 0.25;
+  //         this.defaultValue = this.scale * 100
+  //         // for (let page = 1; page <= this.pageNumber; page++) {
+  //         //   let canvas = document.getElementById('canvas-step3-' + page);
+  //         //   this.renderPageZoomInOut(page, canvas);
+  //         // }
+  //         this.getPage();
+
+  //       }else{
+  //         break;
+  //       }
+  //       break;
+  //     case "+":
+  //       if(this.scale < 5){
+  //         this.scale = this.scale + 0.25;
+  //         this.defaultValue = this.scale * 100
+  //         // for (let page = 1; page <= this.pageNumber; page++) {
+  //         //   let canvas = document.getElementById('canvas-step3-' + page);
+  //         //   this.renderPageZoomInOut(page, canvas);
+  //         // }
+  //         this.getPage();
+  //       }else{
+  //         break;
+  //       }
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
 
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
@@ -1487,6 +1507,13 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   t() {
 
+  }
+
+  showInformation() {
+    this.pageNum = 1;
+    this.removePage();
+    this.show_information = !this.show_information;
+    this.getPage();
   }
 
   downloadContract(id: any) {

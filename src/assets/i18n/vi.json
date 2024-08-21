@@ -69,6 +69,7 @@
   "contract.name": "Tên hợp đồng",
   "contract.file": "File hợp đồng",
   "contract.connect": "Hợp đồng liên quan",
+  "contract.connect.detail": "HĐ liên quan",
   "contract.type": "Loại hợp đồng",
   "contract.number": "Số hợp đồng",
   "contract.information": "Thông tin hợp đồng",

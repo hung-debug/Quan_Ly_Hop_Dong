@@ -151,7 +151,7 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
       this.toastService.showErrorHTMLWithTimeout(err,'',3000)
     }
 
-    this.spinner.hide();
+    //this.spinner.hide();
   }
 
 }
