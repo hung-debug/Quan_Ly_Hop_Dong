@@ -617,3 +617,13 @@ a.info-contract {
 .process-handle-contract img {
   width: 24px; /* Maintain aspect ratio */
 }
+
+@media (min-width: 1200px) {
+  .custom-xl-width-col-xl-3 {
+    width: 120px;
+  }
+
+  .custom-xl-width-col-xl-9 {
+    width: calc(100% - 120px);
+  }
+}
