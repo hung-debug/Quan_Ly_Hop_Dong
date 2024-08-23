@@ -56,14 +56,14 @@
           <div class="sample-contract__information--user-sign">
             <div class="label">{{'relate.party' | translate}}</div>
             <div *ngFor="let d of this.datas?.is_data_contract?.participants">
-              <div *ngIf = "d.type != 3" class="row mt-12px">
+              <div *ngIf = "d.type != 2 && d.type != 3" class="row mt-12px">
                 <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'organization.me' | translate}}:</div>
-                <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{d.type != 3 ? d.name : d.recipients[0].name}}</div>
+                <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{d.name}}</div>
               </div>
 
-              <div *ngIf = "d.type == 3" class="row mt-12px">
+              <div *ngIf = "d.type == 2 || d.type == 3" class="row mt-12px">
                 <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'doi_tac' | translate}}:</div>
-                <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{d.type != 3 ? d.name : d.recipients[0].name}}</div>
+                <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{d.recipients[0].name}}</div>
               </div>
             </div>  
           </div>

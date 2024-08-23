@@ -213,6 +213,8 @@ export class ConsiderContractComponent
   show_information: boolean = true;
   defaultValueSelect: any = 1.0;
   zoomOptions = [
+    { percent: '25%', value: 0.25 },
+    { percent: '50%', value: 0.5 },
     { percent: '100%', value: 1.0 },
     { percent: '150%', value: 1.5 },
     { percent: '200%', value: 2.0 },
