@@ -158,6 +158,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   liquidationContractData: any;
   remoteSinging: any;
   zoomOptions = [
+    { percent: '25%', value: 0.25 },
+    { percent: '50%', value: 0.5 },
     { percent: '100%', value: 1.0 },
     { percent: '150%', value: 1.5 },
     { percent: '200%', value: 2.0 },
@@ -634,6 +636,11 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           // canvas.style.paddingLeft = '15px';
           // canvas.style.border = '9px solid transparent';
           // canvas.style.borderImage = 'url(assets/img/shadow.png) 9 9 repeat';
+          // if(this.defaultValueSelect < 1) {
+          //   canvas.style.width = '100%'
+          // } else {
+          //   canvas.style.width = this.defaultValueSelect * 100 + '%'
+          // }
           let idPdf = 'pdf-viewer-step-3';
           let viewer = document.getElementById(idPdf);
           if (viewer) {

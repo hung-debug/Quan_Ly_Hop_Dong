@@ -9,32 +9,32 @@
           </div>
           <div>
             <div class="row mt-12px">
-              <div class="col-xl-3 col-lg-12 title-contract">{{'Tên hợp đồng' | translate}}:</div>
-              <div class="col-xl-9 col-lg-12 info-contract contract-name mt-lg-5px">{{datas?.is_data_contract?.name}}</div>
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'Tên hợp đồng' | translate}}:</div>
+              <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract contract-name mt-lg-5px">{{datas?.is_data_contract?.name}}</div>
             </div>
             <div class="row mt-12px">
-              <div class="col-xl-3 col-lg-12 title-contract">{{'contract.uid' | translate}}:</div>
-              <div class="col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.contract_uid}}</div>
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'contract.uid' | translate}}:</div>
+              <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.contract_uid}}</div>
             </div>
             <div class="row mt-12px">
-              <div class="col-xl-3 col-lg-12 title-contract">{{'menu.contract.type.list' | translate}}:</div>
-              <div class="col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.type_name}}</div>
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'menu.contract.type.list' | translate}}:</div>
+              <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.type_name}}</div>
             </div>
             <div class="row mt-12px" *ngIf = "allFileAttachment.length > 0">
-              <div class="col-xl-3 col-lg-12 title-contract">{{'file.attach' | translate}}:</div>
-                <div class="col-xl-9 col-lg-12 mt-lg-5px">
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'file.attach' | translate}}:</div>
+                <div class="custom-xl-width-col-xl-9 col-lg-12 mt-lg-5px">
                   <div *ngFor="let d of allFileAttachment; let i = index" style="margin-right: 5px;" class="content-info-contract">
                     <a class="info-contract" rel="stylesheet" [href]="d.path" target="_blank">{{d.filename}}</a>
                 </div>
               </div>
             </div>
             <div class="row mt-12px">
-              <span class="col-xl-3 col-lg-12 title-contract">Thời gian tạo:</span>
-              <span class="col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
+              <span class="custom-xl-width-col-xl-3 col-lg-12 title-contract">Thời gian tạo:</span>
+              <span class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
             </div>
             <div class="row mt-12px">
-              <span class="col-xl-3 col-lg-12 title-contract">Hiệu lực:</span>
-              <span class="col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.start_time | date: 'dd/MM/yyyy'}} - {{datas?.is_data_contract?.end_time | date: 'dd/MM/yyyy'}}</span>
+              <span class="custom-xl-width-col-xl-3 col-lg-12 title-contract">Thời gian hiệu lực:</span>
+              <span class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.start_time | date: 'dd/MM/yyyy'}} - {{datas?.is_data_contract?.end_time | date: 'dd/MM/yyyy'}}</span>
             </div>
           </div>
         </div>

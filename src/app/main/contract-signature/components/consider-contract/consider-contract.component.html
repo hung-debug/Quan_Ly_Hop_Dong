@@ -10,24 +10,24 @@
           </div>  
           <div>
             <div class="row mt-12px">
-              <div class="col-xl-3 col-lg-12 title-contract">{{'Tên hợp đồng' | translate}}:</div>
-              <div class="col-xl-9 col-lg-12 info-contract contract-name mt-lg-5px">{{datas?.is_data_contract?.name}}</div>
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'Tên hợp đồng' | translate}}:</div>
+              <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract contract-name mt-lg-5px">{{datas?.is_data_contract?.name}}</div>
             </div>
             <div class="row mt-12px">
-              <div class="col-xl-3 col-lg-12 title-contract">{{'contract.uid' | translate}}:</div>
-              <div class="col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.contract_uid}}</div>
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'contract.uid' | translate}}:</div>
+              <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.contract_uid}}</div>
             </div>
             <div class="row mt-12px">
-              <div class="col-xl-3 col-lg-12 title-contract">{{'menu.contract.type.list' | translate}}:</div>
-              <div class="col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.type_name}}</div>
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'menu.contract.type.list' | translate}}:</div>
+              <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.type_name}}</div>
             </div>
             <div class="row mt-12px">
-              <div class="col-xl-3 col-lg-12 title-contract">{{'contract.number' | translate}}:</div>
-              <div class="col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas.is_data_contract.contract_no}}</div>
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'contract.number' | translate}}:</div>
+              <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas.is_data_contract.contract_no}}</div>
             </div>
             <div class="row mt-12px" *ngIf = "allFileAttachment.length > 0">
-              <div class="col-xl-3 col-lg-12 title-contract">{{'file.attach' | translate}}:</div>
-                <div class="col-xl-9 col-lg-12 mt-lg-5px">
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'file.attach' | translate}}:</div>
+                <div class="custom-xl-width-col-xl-9 col-lg-12 mt-lg-5px">
                   <div *ngFor="let d of allFileAttachment; let i = index" style="margin-right: 5px;" class="content-info-contract">
                     <a class="info-contract" rel="stylesheet" [href]="d.path" target="_blank">{{d.filename}}</a>
                 </div>
@@ -35,15 +35,15 @@
             </div> 
   
             <div class="row mt-12px" *ngIf="originalContractName">
-              <span class="col-xl-3 col-lg-12 title-contract">{{'contract.original' | translate}}:</span>
-              <span class="col-xl-9 col-lg-12 info-contract mt-lg-5px" (click)="openDetailOriginalContract(this.datas.is_data_contract)">
+              <span class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'contract.original' | translate}}:</span>
+              <span class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px" (click)="openDetailOriginalContract(this.datas.is_data_contract)">
                 {{originalContractName}}
               </span>
             </div>
 
             <div class="row mt-12px" *ngIf = "datas?.is_data_contract?.refs.length > 0">
-              <div class="col-xl-3 col-lg-12 title-contract">{{'file.connect' | translate}}:</div>
-                <div class="col-xl-9 col-lg-12 mt-lg-5px">
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'file.connect' | translate}}:</div>
+                <div class="custom-xl-width-col-xl-9 col-lg-12 mt-lg-5px">
                   <div *ngFor="let d of datas?.is_data_contract?.refs;let i = index" style="margin-right: 5px;" class="content-info-contract">
                     <a class="info-contract" rel="stylesheet" [href]="d.path" target="_blank" (click)="openPdf(d.path, $event)">{{d.filename}}</a>
                 </div>
@@ -56,14 +56,14 @@
           <div class="sample-contract__information--user-sign">
             <div class="label">{{'relate.party' | translate}}</div>
             <div *ngFor="let d of this.datas?.is_data_contract?.participants">
-              <div *ngIf = "d.type != 3" class="row mt-12px">
-                <div class="col-xl-3 col-lg-12 title-contract">{{'organization.me' | translate}}:</div>
-                <div class="col-xl-9 col-lg-12 info-contract mt-lg-5px">{{d.type != 3 ? d.name : d.recipients[0].name}}</div>
+              <div *ngIf = "d.type != 2 && d.type != 3" class="row mt-12px">
+                <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'organization.me' | translate}}:</div>
+                <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{d.name}}</div>
               </div>
 
-              <div *ngIf = "d.type == 3" class="row mt-12px">
-                <div class="col-xl-3 col-lg-12 title-contract">{{'doi_tac' | translate}}:</div>
-                <div class="col-xl-9 col-lg-12 info-contract mt-lg-5px">{{d.type != 3 ? d.name : d.recipients[0].name}}</div>
+              <div *ngIf = "d.type == 2 || d.type == 3" class="row mt-12px">
+                <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'doi_tac' | translate}}:</div>
+                <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{d.recipients[0].name}}</div>
               </div>
             </div>  
           </div>
