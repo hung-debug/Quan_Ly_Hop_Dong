@@ -22,6 +22,7 @@ import { ConfirmUploadNewFileDialogComponent } from './../../../../contract/shar
 import * as pdfjsLib from 'pdfjs-dist';
 import { MatDialog } from '@angular/material/dialog';
 import {ContractService} from 'src/app/service/contract.service';
+import { SysService } from 'src/app/service/sys.service';
 export class ContractConnectArr {
   ref_id: number;
   constructor(ref_id: number) {
@@ -120,6 +121,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     private activeRoute: ActivatedRoute,
     private dialog: MatDialog,
     private contractService: ContractService,
+    private sysService: SysService,
   ) {
     this.step = variable.stepSampleContract.step1;
   }
@@ -230,7 +232,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       }
       
       // giới hạn file upload lên là 5mb
-      if (e.target.files[0].size <= 10*(Math.pow(1024, 2))) {
+      let checkSizeFile = this.sysService.checkSizeFile(file)
+      if (checkSizeFile.result) {
         this.spinner.show();
         const file_name = file.name;
         const extension = file.name.split('.').pop();
@@ -282,7 +285,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         }
       } else {
         this.spinner.hide()
-        this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu tối đa 10MB", "", 3000);
+        this.toastService.showErrorHTMLWithTimeout(checkSizeFile.message, "", 3000);
       }
     }
   }

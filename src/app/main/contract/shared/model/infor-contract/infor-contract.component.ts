@@ -26,6 +26,7 @@ import { CheckSignDigitalService } from 'src/app/service/check-sign-digital.serv
 import Swal from 'sweetalert2';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
+import { SysService } from 'src/app/service/sys.service';
 import { Validators } from '@angular/forms';
 import { parttern_input } from 'src/app/config/parttern';
 import { NgxInputSearchModule } from "ngx-input-search";
@@ -130,6 +131,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     private checkViewContractService: CheckViewContractService,
     private activeRoute: ActivatedRoute,
     private dialog: MatDialog,
+    private sysService: SysService,
   ) {
     this.step = variable.stepSampleContract.step1;
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
@@ -287,7 +289,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         this.datas.pagePdfFileOld = this.datas.pagePdfFileNew;
       }   
       // giới hạn file upload lên là 10mb     
-      if (e.target.files[0].size <= 10*(Math.pow(1024, 2))) {
+      let checkSizeFile = this.sysService.checkSizeFile(file)
+      if (checkSizeFile.result) {
         this.spinner.show();
         const file_name = file.name
         const extension = file.name.split('.').pop();
@@ -344,7 +347,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         }
       } else {
         this.spinner.hide()
-        this.toastService.showWarningHTMLWithTimeout("File hợp đồng yêu cầu tối đa 10MB", "", 3000);
+        this.toastService.showWarningHTMLWithTimeout(checkSizeFile.message, "", 3000);
       }
     }
   }
