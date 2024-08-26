@@ -189,7 +189,7 @@ export class HsmDialogSignComponent implements OnInit {
       }
       if (!isInRecipient) {
         this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
+          'Bạn không có quyền xử lý tài liệu này!',
           '',
           3000
         );
@@ -226,7 +226,7 @@ export class HsmDialogSignComponent implements OnInit {
         if (!ArrRecipientsNew) {
           
           this.toastService.showErrorHTMLWithTimeout(
-            'Bạn không có quyền xử lý hợp đồng này!',
+            'Bạn không có quyền xử lý tài liệu này!',
             '',
             3000
           );
@@ -269,7 +269,7 @@ export class HsmDialogSignComponent implements OnInit {
           if (data.ma_dvcs === this.taxCode) {
             this.dialogRef.close(data);
           } else {
-            this.toastService.showErrorHTMLWithTimeout('Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng', '', 3000);
+            this.toastService.showErrorHTMLWithTimeout('Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu', '', 3000);
           }
         }
   

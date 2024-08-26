@@ -10,7 +10,7 @@
           </div>  
           <div>
             <div class="row mt-12px">
-              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'Tên hợp đồng' | translate}}:</div>
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'Tên tài liệu' | translate}}:</div>
               <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract contract-name mt-lg-5px">{{datas?.is_data_contract?.name}}</div>
             </div>
             <div class="row mt-12px">
@@ -77,7 +77,7 @@
   
           <div class="flex-column mt-28px" *ngIf="![2,3].includes(recipient?.status)">
             <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2 && this.isDataContract.release_state== 'CON_HIEU_LUC'">
-              <p class="d-flex justify-content-center mb-4">XEM XÉT HỢP ĐỒNG</p>
+              <p class="d-flex justify-content-center mb-4">XEM XÉT TÀI LIỆU</p>
               <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
               <div class="confirm-radio d-flex justify-content-between mx-4">
                 <div class="radio-confirm">

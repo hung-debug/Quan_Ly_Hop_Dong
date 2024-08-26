@@ -29,7 +29,7 @@
                 </div>
                 <div *ngIf="submitted && f.code.errors" class="invalid">
                     <div *ngIf="f.code.errors.required">{{'error.contract-type.code.required' | translate}}</div>
-                    <div *ngIf="f.code.errors.pattern">{{'Mã loại hợp đồng không được chứa ký tự đặc biệt, ký tự có dấu' | translate}}</div>
+                    <div *ngIf="f.code.errors.pattern">{{'Mã loại tài liệu không được chứa ký tự đặc biệt, ký tự có dấu' | translate}}</div>
                 </div>
             </div>
         </div>
@@ -42,7 +42,7 @@
                 </div>
                 <div *ngIf="submitted && f.name.errors" class="invalid">
                     <div *ngIf="f.name.errors.required">{{'error.contract-type.name.required' | translate}}</div>
-                    <div *ngIf="f.name.errors.pattern">{{'Tên loại hợp đồng không được chứa ký tự đặc biệt' | translate}}</div>
+                    <div *ngIf="f.name.errors.pattern">{{'Tên loại tài liệu không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
             </div>
         </div>
@@ -63,7 +63,7 @@
 
               <!-- <div *ngIf="submitted && f.name.errors" class="invalid">
                   <div *ngIf="f.name.errors.required">{{'error.contract-type.name.required' | translate}}</div>
-                  <div *ngIf="f.name.errors.pattern">{{'Tên loại hợp đồng không được chứa ký tự đặc biệt' | translate}}</div>
+                  <div *ngIf="f.name.errors.pattern">{{'Tên loại tài liệu không được chứa ký tự đặc biệt' | translate}}</div>
               </div> -->
           </div>
         </div>

@@ -137,7 +137,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.appService.setTitle('Thông tin chi tiết mẫu hợp đồng');
+    this.appService.setTitle('Thông tin chi tiết mẫu tài liệu');
     this.getDataContractSignature();
   }
 
@@ -241,18 +241,18 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
           this.roleAccess = true;
         }else{
           if(!this.roleAccess){
-            this.roleMess = "Mẫu hợp đồng không còn được chia sẻ đến bạn";
+            this.roleMess = "Mẫu tài liệu không còn được chia sẻ đến bạn";
           }else if(this.datas?.is_data_contract?.status==32){
-            this.roleMess = "Mẫu hợp đồng đã ngừng phát hành";
+            this.roleMess = "Mẫu tài liệu đã ngừng phát hành";
           }else if(this.datas?.is_data_contract?.releaseState=='CHUA_CO_HIEU_LUC'){
-            this.roleMess = "Mẫu hợp đồng chưa có hiệu lực";
+            this.roleMess = "Mẫu tài liệu chưa có hiệu lực";
           }else if(this.datas?.is_data_contract?.releaseState=='HET_HIEU_LUC'){
-            this.roleMess = "Mẫu hợp đồng hết hiệu lực";
+            this.roleMess = "Mẫu tài liệu hết hiệu lực";
           }
         }
 
         if(!this.datas?.is_data_contract){
-          this.roleMess = "Mẫu hợp đồng không còn tồn tại trên hệ thống";
+          this.roleMess = "Mẫu tài liệu không còn tồn tại trên hệ thống";
         }
 
         this.datas.is_data_object_signature.forEach((element: any) => {
@@ -607,7 +607,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   }
 
 
-  // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
+  // hàm set kích thước cho đối tượng khi được kéo thả vào trong tài liệu
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
     let style: any =
     (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so' && d.sign_unit != 'chu_ky_so_con_dau_va_thong_tin' && d.sign_unit != 'chu_ky_so_con_dau' && d.sign_unit != 'chu_ky_so_thong_tin') ?
@@ -754,7 +754,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   }
 
   processHandleContract() {
-    // alert('Luồng xử lý hợp đồng!');
+    // alert('Luồng xử lý tài liệu!');
     const data = this.datas;
     // @ts-ignore
     const dialogRef = this.dialog.open(ProcessingHandleComponent, {

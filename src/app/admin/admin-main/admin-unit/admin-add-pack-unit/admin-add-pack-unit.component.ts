@@ -180,7 +180,7 @@ export class AdminAddPackUnitComponent implements OnInit {
       return 'Theo thời gian';
     } else if (calculatorMethod == 'BY_CONTRACT_NUMBERS') {
       this.flagTime = 2;
-      return 'Theo số lượng hợp đồng';
+      return 'Theo số lượng tài liệu';
     }
     return '';
   }
@@ -273,7 +273,7 @@ export class AdminAddPackUnitComponent implements OnInit {
           this.endDate = '';
 
           
-          this.calculatorMethod = 'Theo số lượng hợp đồng';
+          this.calculatorMethod = 'Theo số lượng tài liệu';
           this.numberOfContracts = this.listDichVu[i].numberOfContracts;
           this.duration = '';
 
@@ -399,7 +399,7 @@ export class AdminAddPackUnitComponent implements OnInit {
         for (let i = 0; i < response.services.length; i++) {
           //Check xem tổ chức đã sử dụng dịch vụ nào chưa
           //Nếu đang sử dụng dịch vụ theo thời gian => Không add dịch vụ theo thời gian
-          //Nếu đang sử dụng dịch vụ theo số lượng hợp đồng => Không add dịch vụ theo số lượng hợp đồng
+          //Nếu đang sử dụng dịch vụ theo số lượng tài liệu => Không add dịch vụ theo số lượng tài liệu
           if(response.services[i].calculatorMethod == 'BY_TIME' && response.services[i].usageStatus == 'USING') {
             flagServiceTime = 1;
           } else if(response.services[i].calculatorMethod == 'BY_CONTRACT_NUMBERS' && response.services[i].usageStatus == 'USING') {
@@ -412,8 +412,8 @@ export class AdminAddPackUnitComponent implements OnInit {
         if(flagServiceTime == 1 && this.calculatorMethod == 'Theo thời gian') {
           
           this.toastService.showErrorHTMLWithTimeout('Tổ chức vẫn đang sử dụng một gói dịch vụ theo thời gian','',3000);
-        } else if(flagServiceContract == 1 && this.calculatorMethod == 'Theo số lượng hợp đồng') {
-          this.toastService.showErrorHTMLWithTimeout('Tổ chức vẫn đang sử dụng một gói dịch vụ theo số lượng hợp đồng','',3000);
+        } else if(flagServiceContract == 1 && this.calculatorMethod == 'Theo số lượng tài liệu') {
+          this.toastService.showErrorHTMLWithTimeout('Tổ chức vẫn đang sử dụng một gói dịch vụ theo số lượng tài liệu','',3000);
         } else {
         this.addPackUnit(dataForm);
         }

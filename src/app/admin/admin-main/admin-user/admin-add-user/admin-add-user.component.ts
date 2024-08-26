@@ -454,7 +454,7 @@ export class AdminAddUserComponent implements OnInit {
             
           } else {
             this.toastService.showErrorHTMLWithTimeout(
-              'File hợp đồng yêu cầu định dạng JPG, PNG, JPGE',
+              'File tài liệu yêu cầu định dạng JPG, PNG, JPGE',
               '',
               3000
             );

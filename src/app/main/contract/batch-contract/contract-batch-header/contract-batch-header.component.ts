@@ -112,7 +112,7 @@ export class ContractBatchHeaderComponent implements OnInit {
         // this.datas.inforDetails = dataInfo;
 
         if (!this.datas.file_content) {
-          alert('Vui lòng chọn file hợp đồng!');
+          alert('Vui lòng chọn file tài liệu!');
           return false;
         }
         break;

@@ -104,7 +104,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   isQLHD_11: boolean = true;  //tao hop dong lien quan
   isQLHD_12: boolean = true;  //xem hop dong lien quan
   isQLHD_13: boolean = true;  //chia se hop dong
-  isQLHD_16: boolean = true;  //thanh lý hợp đồng
+  isQLHD_16: boolean = true;  //thanh lý tài liệu
 
 
   constructor(private appService: AppService,
@@ -430,7 +430,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.typeDisplay = 'downloadMany';
     this.roleMess = "";
     if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
-      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền";
+      this.roleMess = "Danh sách tài liệu tổ chức chưa được phân quyền";
     }
 
     if (!this.roleMess) {
@@ -484,7 +484,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.roleMess = "";
 
     if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
-      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền";
+      this.roleMess = "Danh sách tài liệu tổ chức chưa được phân quyền";
     }
 
     if (!this.roleMess) {
@@ -537,10 +537,10 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.typeDisplay = 'multiDeleteDraft';
     this.roleMess = "";
     if (this.isOrg == 'off' && !this.isQLHD_05) {
-      this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
+      this.roleMess = "Danh sách tài liệu của tôi chưa được phân quyền";
 
     } else if (this.isOrg == 'on' && !this.isQLHD_04) {
-      this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
+      this.roleMess = "Danh sách tài liệu tổ chức của tôi chưa được phân quyền";
     }
     if (!this.roleMess) {
 
@@ -600,7 +600,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     let selectedContracts = this.dataDeleteDraftChecked.map((item: any) => item.selectedId)
     if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       data = {
-        title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
+        title: 'XÁC NHẬN XÓA TÀI LIỆU',
         contractIds: selectedContracts
       };
     } else if (sessionStorage.getItem('lang') == 'en') {
@@ -729,7 +729,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     })
 
     if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
-      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền";
+      this.roleMess = "Danh sách tài liệu tổ chức chưa được phân quyền";
     }
 
     if (!this.roleMess) {
@@ -948,7 +948,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     this.contractService.getContractCopy(id).subscribe((res: any) => {
       //
-      this.toastService.showSuccessHTMLWithTimeout(`Sao chép hợp đồng ${res.name} thành công!`, "", 3000)
+      this.toastService.showSuccessHTMLWithTimeout(`Sao chép tài liệu ${res.name} thành công!`, "", 3000)
 
     }, (error: HttpErrorResponse) => {
       this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000)
@@ -1011,7 +1011,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   deleteItem(id: number) {
     this.statusPopup = 1;
-    this.notificationPopup = "Xóa hợp đồng thành công";
+    this.notificationPopup = "Xóa tài liệu thành công";
   }
 
   searchContract() {
@@ -1020,7 +1020,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     if (sessionStorage.getItem('lang') == 'en') {
       title = "CONTRACT SEARCH"
     } else if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
-      title = "TÌM KIẾM HỢP ĐỒNG";
+      title = "TÌM KIẾM TÀI LIỆU";
     }
 
     const data = {
@@ -1053,7 +1053,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
     if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       data = {
-        title: 'XÁC NHẬN HỦY HỢP ĐỒNG',
+        title: 'XÁC NHẬN HỦY TÀI LIỆU',
         id: id
       };
     } else {
@@ -1077,7 +1077,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   contractConnect(id: any) {
     const data = {
-      title: 'XEM HỢP ĐỒNG LIÊN QUAN',
+      title: 'XEM TÀI LIỆU LIÊN QUAN',
       id: id
     };
     // @ts-ignore
@@ -1096,7 +1096,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   addContractConnect(id: any) {
     const data = {
-      title: 'THÊM HỢP ĐỒNG LIÊN QUAN',
+      title: 'THÊM TÀI LIỆU LIÊN QUAN',
       id: id
     };
     // @ts-ignore
@@ -1115,7 +1115,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   shareContract(id: any) {
     const data = {
-      title: 'CHIA SẺ HỢP ĐỒNG',
+      title: 'CHIA SẺ TÀI LIỆU',
       id: id
     };
     // @ts-ignore
@@ -1136,7 +1136,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
     if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       data = {
-        title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
+        title: 'XÁC NHẬN XÓA TÀI LIỆU',
         id: id
       };
     } else if (sessionStorage.getItem('lang') == 'en') {

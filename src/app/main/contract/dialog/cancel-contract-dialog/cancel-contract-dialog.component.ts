@@ -60,9 +60,9 @@ export class CancelContractDialogComponent implements OnInit {
           this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
             this.router.navigate(['/main/contract/create/cancel']);
           });
-          this.toastService.showSuccessHTMLWithTimeout("Hủy hợp đồng thành công!", "", 3000);
+          this.toastService.showSuccessHTMLWithTimeout("Hủy tài liệu thành công!", "", 3000);
         } else {
-            this.toastService.showErrorHTMLWithTimeout("Huỷ nhiều hợp đồng không thành công","",3000);
+            this.toastService.showErrorHTMLWithTimeout("Huỷ nhiều tài liệu không thành công","",3000);
             return false;
         }
 
@@ -85,10 +85,10 @@ export class CancelContractDialogComponent implements OnInit {
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
           this.router.navigate(['/main/contract/create/cancel']);
         });
-        this.toastService.showSuccessHTMLWithTimeout("Hủy hợp đồng thành công!", "", 3000);
+        this.toastService.showSuccessHTMLWithTimeout("Hủy tài liệu thành công!", "", 3000);
         },
         error => {
-          this.toastService.showErrorHTMLWithTimeout("Hủy hợp đồng thất bại!", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("Hủy tài liệu thất bại!", "", 3000);
           return false;
         }
       );

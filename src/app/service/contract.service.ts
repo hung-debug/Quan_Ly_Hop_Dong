@@ -1157,7 +1157,7 @@ export class ContractService {
     const body = {
       mobile: phone,
       network_code: networkCode,
-      prompt: `Bạn có yêu cầu ký số hợp đồng ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
+      prompt: `Bạn có yêu cầu ký số tài liệu ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
       reason: 'reason',
       image_base64: image_base64,
       isTimestamp: isTimestamp,

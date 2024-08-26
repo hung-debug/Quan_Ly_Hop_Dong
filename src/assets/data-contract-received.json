@@ -1,7 +1,7 @@
 {
   "items": [{
     "id": 1,
-    "contractName": "Hợp đồng của người xem xét",
+    "contractName": "Tài liệu của người xem xét",
     "userName": "Công ty A",
     "partnerName": "Nhà phân phối B, Nhà phân phối C",
     "status": "Đang thực hiện",
@@ -11,7 +11,7 @@
   },
     {
       "id": 2,
-      "contractName": "Hợp đồng của người ký",
+      "contractName": "Tài liệu của người ký",
       "userName": "Công ty B",
       "partnerName": "Nhà phân phối AB, Nhà phân phối C",
       "status": "Đang thực hiện B",
@@ -21,7 +21,7 @@
     },
     {
       "id": 2,
-      "contractName": "Hợp đồng của người điều phối",
+      "contractName": "Tài liệu của người điều phối",
       "userName": "Công ty B",
       "partnerName": "Nhà phân phối AB, Nhà phân phối C",
       "status": "Đang thực hiện B",
@@ -31,7 +31,7 @@
     },
     {
       "id": 2,
-      "contractName": "Hợp đồng của văn thư",
+      "contractName": "Tài liệu của văn thư",
       "userName": "Công ty B",
       "partnerName": "Nhà phân phối AB, Nhà phân phối C",
       "status": "Đang thực hiện B",

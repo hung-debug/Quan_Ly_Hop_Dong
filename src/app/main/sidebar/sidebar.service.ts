@@ -65,13 +65,13 @@ export class SidebarService {
   QLDSCTS_04: boolean = true; //tim kiem thong tin
 
 
-  isBaoCaoChiTiet: boolean = true; // báo cáo chi tiết hợp đồng
-  isBaoCaoSapHetHieuLuc: boolean = true; // báo cáo hợp đồng sắp hết hiệu lực
-  isBaoCaoTrangThaiXuLy: boolean = true; // báo cáo hợp đồng trạng thái xử lý
-  isBaoCaoSoLuongTrangThai: boolean = true; // báo cáo số lượng hợp đồng theo trạng thái
-  isBaoCaoSoLuongLoai: boolean = true; // báo cáo số lượng hợp đồng theo loại
-  isBaoCaoHopDongNhan: boolean = true; //báo cáo hợp đồng nhận
-  isBaoCaoHopDongEcontractMsale: boolean = true; // báo cáo hợp đồng số lượng hợp đồng eContract-mSale
+  isBaoCaoChiTiet: boolean = true; // báo cáo chi tiết tài liệu
+  isBaoCaoSapHetHieuLuc: boolean = true; // báo cáo tài liệu sắp hết hiệu lực
+  isBaoCaoTrangThaiXuLy: boolean = true; // báo cáo tài liệu trạng thái xử lý
+  isBaoCaoSoLuongTrangThai: boolean = true; // báo cáo số lượng tài liệu theo trạng thái
+  isBaoCaoSoLuongLoai: boolean = true; // báo cáo số lượng tài liệu theo loại
+  isBaoCaoHopDongNhan: boolean = true; //báo cáo tài liệu nhận
+  isBaoCaoHopDongEcontractMsale: boolean = true; // báo cáo tài liệu số lượng tài liệu eContract-mSale
   isBaoCaoTrangThaiGuiSms: boolean = true; //báo cáo trạng thái gửi Sms
   isBaoCaoTrangThaiGuiEmail: boolean = true; //báo cáo trạng thái gửi Email
   isBaoCaoEKYC: boolean = true; // báo cáo xác thực ekyc

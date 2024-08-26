@@ -179,7 +179,7 @@ export class AddContractTypeComponent implements OnInit {
 
           //neu ten loai hop dong da ton tai
           }else{
-            this.toastService.showErrorHTMLWithTimeout('Tên loại hợp đồng đã tồn tại', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Tên loại tài liệu đã tồn tại', "", 3000);
             this.spinner.hide();
           }
         }, error => {
@@ -249,7 +249,7 @@ export class AddContractTypeComponent implements OnInit {
 
             //neu ma loai hop dong da ton tai
             }else{
-              this.toastService.showErrorHTMLWithTimeout('Mã loại hợp đồng đã tồn tại', "", 3000);
+              this.toastService.showErrorHTMLWithTimeout('Mã loại tài liệu đã tồn tại', "", 3000);
               this.spinner.hide();
             }
           }, error => {
@@ -277,7 +277,7 @@ export class AddContractTypeComponent implements OnInit {
                 if(dataByName.success){
                   this.contractTypeService.addContractType(data).subscribe(
                     data => {
-                      this.toastService.showSuccessHTMLWithTimeout('Thêm mới loại hợp đồng thành công!', "", 3000);
+                      this.toastService.showSuccessHTMLWithTimeout('Thêm mới loại tài liệu thành công!', "", 3000);
                       this.dialogRef.close();
                       this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
                         this.router.navigate(['/main/contract-type']);
@@ -290,7 +290,7 @@ export class AddContractTypeComponent implements OnInit {
                   )
                 //neu ten loai hop dong da ton tai
                 }else{
-                  this.toastService.showErrorHTMLWithTimeout('Tên loại hợp đồng đã tồn tại', "", 3000);
+                  this.toastService.showErrorHTMLWithTimeout('Tên loại tài liệu đã tồn tại', "", 3000);
                   this.spinner.hide();
                 }
               }, error => {
@@ -300,7 +300,7 @@ export class AddContractTypeComponent implements OnInit {
             )
           //neu ma loai hop dong da ton tai
           }else{
-            this.toastService.showErrorHTMLWithTimeout('Mã loại hợp đồng đã tồn tại', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Mã loại tài liệu đã tồn tại', "", 3000);
             this.spinner.hide();
           }
         }, error => {

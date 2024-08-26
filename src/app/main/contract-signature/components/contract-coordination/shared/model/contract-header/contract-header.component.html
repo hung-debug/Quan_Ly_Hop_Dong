@@ -4,19 +4,19 @@
     <ul id="progressbar">
       <!-- <li [ngClass]="(step == 'infor-contract' || step == 'determine-contract' ||
                       step == 'sample-contract' || step == 'confirm-contract') ? 'active ' : 'inactive'">
-         <div [ngClass]="{'current_active' : step == 'infor-contract'}">Thông tin hợp đồng</div>
+         <div [ngClass]="{'current_active' : step == 'infor-contract'}">Thông tin tài liệu</div>
       </li> -->
       <li [ngClass]="(step == 'determine-contract' || step == 'sample-contract' ||
                      step == 'confirm-contract') ? 'active' : 'inactive'">
-         <div [ngClass]="{'current_active' : step == 'determine-contract'}">Xác định người xử lý hợp đồng</div>
+         <div [ngClass]="{'current_active' : step == 'determine-contract'}">Xác định người xử lý tài liệu</div>
       </li>
 
       <li [ngClass]="(step == 'sample-contract' || step == 'confirm-contract') ? 'active' : 'inactive'">
-         <div [ngClass]="{'current_active' : step == 'sample-contract'}">Thiết kế hợp đồng</div>
+         <div [ngClass]="{'current_active' : step == 'sample-contract'}">Thiết kế tài liệu</div>
       </li>
 
       <li [ngClass]="step == 'confirm-contract' ? 'active' : 'inactive'">
-         <div [ngClass]="{'current_active' : step == 'confirm-contract'}">Xác nhận thông tin hợp đồng</div>
+         <div [ngClass]="{'current_active' : step == 'confirm-contract'}">Xác nhận thông tin tài liệu</div>
       </li>
     </ul>
   </div>

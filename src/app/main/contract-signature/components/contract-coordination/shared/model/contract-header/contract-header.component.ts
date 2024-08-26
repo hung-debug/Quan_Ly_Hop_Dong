@@ -150,7 +150,7 @@ export class ContractHeaderComponent implements OnInit {
         // this.datas.inforDetails = dataInfo;
 
         if (!this.datas.file_content) {
-          alert('Vui lòng chọn file hợp đồng!');
+          alert('Vui lòng chọn file tài liệu!');
           return false;
         }
         break;
@@ -159,7 +159,7 @@ export class ContractHeaderComponent implements OnInit {
         break;
       // @ts-ignore
       case variable.stepSampleContract.step3:
-        // valid dữ liệu kéo thả đối tượng bước 3, cần kéo ít nhất 1 đối tượng vào hợp đồng
+        // valid dữ liệu kéo thả đối tượng bước 3, cần kéo ít nhất 1 đối tượng vào tài liệu
         let data_not_drag = this.datas.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
         if (!data_not_drag) {
           alert('Vui lòng chọn ít nhất 1 đối tượng kéo thả!')

@@ -247,7 +247,7 @@ export class ConfirmContractFormComponent implements OnInit {
     //         (error) => {
     //           this.spinner.hide();
     //           this.toastService.showErrorHTMLWithTimeout(
-    //             'Lỗi lưu thông tin xác nhận đẩy file hợp đồng lên Bộ Công Thương',
+    //             'Lỗi lưu thông tin xác nhận đẩy file tài liệu lên Bộ Công Thương',
     //             '',
     //             3000
     //           );

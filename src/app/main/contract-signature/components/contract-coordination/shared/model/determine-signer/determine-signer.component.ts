@@ -709,7 +709,7 @@ export class DetermineSignerComponent implements OnInit {
     this.data_organization.recipients = new_arr;
   }
 
-  // xóa đối tượng điều phối hợp đồng (done)
+  // xóa đối tượng điều phối tài liệu (done)
   deletePartnerCoordination(index_item: any, item: any, id: number) {
     let arr_clone = item.recipients.filter((p: any) => p.role == 1);
     let arr_clone_different = item.recipients.filter((p: any) => p.role != 1);

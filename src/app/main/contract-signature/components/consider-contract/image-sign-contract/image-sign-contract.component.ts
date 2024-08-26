@@ -265,7 +265,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
           return sign.valueSign;
 
         }
-        return 'Số hợp đồng';
+        return 'Số tài liệu';
       } else if (sign.sign_unit == 'chu_ky_anh') {
         if(this.otpValueSign) {
           sign.valueSign= this.otpValueSign

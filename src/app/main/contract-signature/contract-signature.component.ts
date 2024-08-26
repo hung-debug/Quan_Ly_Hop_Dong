@@ -817,7 +817,7 @@ export class ContractSignatureComponent implements OnInit {
           this.dataChecked[lengthItem - 2].sign_type
         ) {
           this.toastService.showErrorHTMLWithTimeout(
-            'Các hợp đồng đang chọn có loại ký khác nhau ',
+            'Các tài liệu đang chọn có loại ký khác nhau ',
             '',
             3000
           );
@@ -831,7 +831,7 @@ export class ContractSignatureComponent implements OnInit {
           this.dataChecked[lengthItem - 2].card_id
         ) {
           this.toastService.showErrorHTMLWithTimeout(
-            'Hợp đồng vừa chọn có mã số thuế khác hợp đồng đầu tiên ',
+            'Tài liệu vừa chọn có mã số thuế khác tài liệu đầu tiên ',
             '',
             3000
           );
@@ -1166,7 +1166,7 @@ export class ContractSignatureComponent implements OnInit {
               }
             );
         }
-        this.toastService.showSuccessHTMLWithTimeout('Xem xét hợp đồng thành công',
+        this.toastService.showSuccessHTMLWithTimeout('Xem xét tài liệu thành công',
           '',
           1000
         );
@@ -1175,13 +1175,13 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   signManyContract() {
-    //Nếu chọn hợp đồng khác loại ký thì ko cho ký
+    //Nếu chọn tài liệu khác loại ký thì ko cho ký
     let contractsSignManyChecked = this.contractsSignMany.filter(
       (opt) => opt.checked
     );
     if(contractsSignManyChecked.length == 0) {
       this.toastService.showErrorHTMLWithTimeout(
-        'Vui lòng chọn hợp đồng',
+        'Vui lòng chọn tài liệu',
         '',
         3000
       );
@@ -1194,7 +1194,7 @@ export class ContractSignatureComponent implements OnInit {
           contractsSignManyChecked[i].sign_type[0].id != contractsSignManyChecked[j].sign_type[0].id
         ) {
           this.toastService.showErrorHTMLWithTimeout(
-            'Vui lòng chọn những hợp đồng cùng loại ký',
+            'Vui lòng chọn những tài liệu cùng loại ký',
             '',
             3000
           );
@@ -1302,11 +1302,11 @@ export class ContractSignatureComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async (result: any) => {
       //result = 1 tương ứng với nhấn nút đồng ý và ký
       if (result?.agree == 1) {
-        //Mã số thuế tại các hợp đồng cần giống nhau
+        //Mã số thuế tại các tài liệu cần giống nhau
         for (let i = 0; i < taxCode.length; i++) {
           for (let j = i + 1; j < taxCode.length; j++) {
             if (taxCode[i] != taxCode[j]) {
-              this.toastService.showErrorHTMLWithTimeout('Mã số thuế tại các hợp đồng khác nhau', '', 3000);
+              this.toastService.showErrorHTMLWithTimeout('Mã số thuế tại các tài liệu khác nhau', '', 3000);
               return;
             }
           }
@@ -1314,7 +1314,7 @@ export class ContractSignatureComponent implements OnInit {
 
         if (result.mark) {
           const data = {
-            title: 'ĐÓNG DẤU HỢP ĐỒNG ',
+            title: 'ĐÓNG DẤU TÀI LIỆU ',
             is_content: 'forward_contract',
             markSignAcc: this.datas.markSignAcc,
             mark: true,
@@ -1364,7 +1364,7 @@ export class ContractSignatureComponent implements OnInit {
       //lấy recipientId
       recipientId = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.id);
 
-      //Lấy id hợp đồng được tích vào
+      //Lấy id tài liệu được tích vào
       idContract = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.participant.contract.id);
 
       //Lấy id file được tích vào
@@ -1381,7 +1381,7 @@ export class ContractSignatureComponent implements OnInit {
           });
         } catch (err) {
           this.spinner.hide()
-          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người tham gia hợp đồng', '', 3000);
+          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người tham gia tài liệu', '', 3000);
           return false;
         }
       }
@@ -1498,7 +1498,7 @@ export class ContractSignatureComponent implements OnInit {
               if (checkSign[i].result.success == false) {
                 this.spinner.hide();
 
-                if (checkSign[i].result.message == 'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng') {
+                if (checkSign[i].result.message == 'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu') {
                   this.toastService.showErrorHTMLWithTimeout(
                     'taxcode.not.match.hsm',
                     '',
@@ -1728,7 +1728,7 @@ export class ContractSignatureComponent implements OnInit {
           // check điều kiện mst không trùng với mst nhập
           if (taxCode[0] !== resultRS.ma_dvcs) {
             this.toastService.showErrorHTMLWithTimeout(
-              'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng',
+              'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu',
               '',
               3000
             );
@@ -1841,8 +1841,8 @@ export class ContractSignatureComponent implements OnInit {
   remoteDialogSuccessOpen(isVnptSmartCa = false) {
     return Swal.fire({
       title: "THÔNG BÁO",
-      text: isVnptSmartCa ? "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký hợp đồng!" :
-        "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký hợp đồng!",
+      text: isVnptSmartCa ? "Hệ thống đã thực hiện gửi tài liệu đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký tài liệu!" :
+        "Hệ thống đã thực hiện gửi tài liệu đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký tài liệu!",
       icon: 'info',
       showCancelButton: true,
       showConfirmButton: false,
@@ -1949,7 +1949,7 @@ export class ContractSignatureComponent implements OnInit {
                 //   return this.toastService.showErrorHTMLWithTimeout("sign.token.err","",3000)
                 // }
 
-                //Lấy chiều dài của các trang trong các hợp đồng ký
+                //Lấy chiều dài của các trang trong các tài liệu ký
                 //Gọi api ký usb token nhiều lần
                 let dataSignMobi: any = null;
                 let currentSigningStatus: any = null;
@@ -1967,7 +1967,7 @@ export class ContractSignatureComponent implements OnInit {
                         // y.push(dataObjectSignature[j].coordinate_y);
                         // h.push(dataObjectSignature[j].height);
                         // w.push(dataObjectSignature[j].width);
-                        //Lấy ra trang ký của từng file hợp đồng
+                        //Lấy ra trang ký của từng file tài liệu
                         page.push(dataObjectSignature[j].page);
                       }
                     }
@@ -2024,7 +2024,7 @@ export class ContractSignatureComponent implements OnInit {
                     try {
                       // w[j] = x[j] + w[j];
 
-                      // // //Tính lại h, y theo chiều dài của các trang trong hợp đồng ký
+                      // // //Tính lại h, y theo chiều dài của các trang trong tài liệu ký
                       // y[j] = heightPage[i] - (y[j] - dataObjectSignature[j].currentHeight) - h[j];
 
                       // h[j] = y[j] + h[j];
@@ -2041,7 +2041,7 @@ export class ContractSignatureComponent implements OnInit {
 
                       w[j] = x[j] + w[j];
 
-                      // //Tính lại h, y theo chiều dài của các trang trong hợp đồng ký
+                      // //Tính lại h, y theo chiều dài của các trang trong tài liệu ký
                       y[j] = dataObjectSignature[j].heightPage - (y[j] - dataObjectSignature[j].currentHeight) - h[j] + dataObjectSignature[j].page*5;
 
                       h[j] = y[j] + h[j];
@@ -2108,7 +2108,7 @@ export class ContractSignatureComponent implements OnInit {
                     } catch (err) {
                       this.spinner.hide()
                       this.toastService.showErrorHTMLWithTimeout(
-                        'Lỗi cập nhật trạng thái hợp đồng ',
+                        'Lỗi cập nhật trạng thái tài liệu ',
                         '',
                         3000
                       );
@@ -2118,7 +2118,7 @@ export class ContractSignatureComponent implements OnInit {
                     if (!updateInfo.id || !updateInfo) {
                       this.spinner.hide()
                       this.toastService.showErrorHTMLWithTimeout(
-                        'Lỗi cập nhật trạng thái hợp đồng ',
+                        'Lỗi cập nhật trạng thái tài liệu ',
                         '',
                         3000
                       );
@@ -2235,7 +2235,7 @@ export class ContractSignatureComponent implements OnInit {
 
         base64String.push(encode(base64StringPdf));
 
-        //Lấy toạ độ ô ký của từng hợp đồng
+        //Lấy toạ độ ô ký của từng tài liệu
         const dataObjectSignature = await this.contractServiceV1
           .getDataObjectSignatureLoadChange(idContract[i])
           .toPromise();
@@ -2247,14 +2247,14 @@ export class ContractSignatureComponent implements OnInit {
               h.push(dataObjectSignature[j].height);
               w.push(dataObjectSignature[j].width);
 
-              //Lấy ra trang ký của từng file hợp đồng
+              //Lấy ra trang ký của từng file tài liệu
               page.push(dataObjectSignature[j].page);
               boxTypes.push(dataObjectSignature[j].type)
             }
           }
         }
 
-        //Lấy thông tin page của hợp đồng
+        //Lấy thông tin page của tài liệu
         const infoPage = await this.contractServiceV1
           .getInfoPage(documentId[i])
           .toPromise();
@@ -2269,7 +2269,7 @@ export class ContractSignatureComponent implements OnInit {
           }
         }
 
-        //Lấy trạng thái ceca của từng hợp đồng
+        //Lấy trạng thái ceca của từng tài liệu
         const cecaContract = await this.contractServiceV1
           .getListDataCoordination(idContract[i])
           .toPromise();
@@ -2511,7 +2511,7 @@ export class ContractSignatureComponent implements OnInit {
 
             if (!updateInfo.id) {
               this.toastService.showErrorHTMLWithTimeout(
-                'Lỗi cập nhật trạng thái hợp đồng ',
+                'Lỗi cập nhật trạng thái tài liệu ',
                 '',
                 3000
               );
@@ -2607,7 +2607,7 @@ export class ContractSignatureComponent implements OnInit {
 
         //   if (!updateInfo.id) {
         //     this.toastService.showErrorHTMLWithTimeout(
-        //       'Lỗi cập nhật trạng thái hợp đồng ',
+        //       'Lỗi cập nhật trạng thái tài liệu ',
         //       '',
         //       3000
         //     );
@@ -2804,7 +2804,7 @@ export class ContractSignatureComponent implements OnInit {
     if (sessionStorage.getItem('lang') == 'en') {
       title = 'CONTRACT SEARCH';
     } else if (sessionStorage.getItem('lang') == 'vi') {
-      title = 'TÌM KIẾM HỢP ĐỒNG';
+      title = 'TÌM KIẾM TÀI LIỆU';
     }
 
     const data = {

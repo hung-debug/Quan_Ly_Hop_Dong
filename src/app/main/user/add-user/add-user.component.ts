@@ -280,12 +280,12 @@ export class AddUserComponent implements OnInit, OnDestroy {
           if(dataCheckContract.success){
             this.update(data);
           }else{
-            this.toastService.showErrorHTMLWithTimeout('Không thể chuyển đơn vị cho người dùng tồn tại hợp đồng chưa xử lý', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Không thể chuyển đơn vị cho người dùng tồn tại tài liệu chưa xử lý', "", 3000);
             this.spinner.hide();
           }
       
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Kiểm tra hợp đồng theo người dùng thất bại', "", 3000);
+          this.toastService.showErrorHTMLWithTimeout('Kiểm tra tài liệu theo người dùng thất bại', "", 3000);
           this.spinner.hide();
         }
       )
@@ -548,7 +548,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
             else if(code == 'mark')
               this.attachFileMark = file;
           }else{
-            this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng JPG, PNG, JPGE", "", 3000);
+            this.toastService.showErrorHTMLWithTimeout("File tài liệu yêu cầu định dạng JPG, PNG, JPGE", "", 3000);
           }
 
         } else {

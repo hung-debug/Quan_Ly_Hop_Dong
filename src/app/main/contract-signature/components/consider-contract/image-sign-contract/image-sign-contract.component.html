@@ -75,7 +75,7 @@
   </div>
 </div>
 
-<!--Số hợp đồng-->
+<!--Số tài liệu-->
 <div *ngIf="sign.sign_unit == 'so_tai_lieu'" [ngStyle]="getStyle(sign)">
   <div class="skeleton-sign" (click)="doEditContractNo()"
        *ngIf="!contractNoValue && count == 0 && (!sign.valueSign && !sign.value && !contractNoValueSign) && !view">

@@ -653,7 +653,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
           (error) => {
             coutError = true;
             this.toastService.showErrorHTMLWithTimeout(
-              'Lỗi kiểm tra số hợp đồng',
+              'Lỗi kiểm tra số tài liệu',
               '',
               3000
             );
@@ -849,7 +849,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       let is_create_error = false;
       let arrFile: any[] = [];
 
-      // api clone hợp đồng mẫu sang hợp đồng tạo mới => tạo hợp đồng
+      // api clone tài liệu mẫu sang tài liệu tạo mới => tạo tài liệu
       await this.contractTemplateService
         .getFileContractFormClone(
           this.datasForm.template_contract_id,
@@ -917,7 +917,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       if (!is_create_error) {
         if (action == 'next_step') {
           if (this.datasForm.isChangeForm) {
-            // api get dữ liệu các đối tượng trong hợp đồng mẫu bước 2.
+            // api get dữ liệu các đối tượng trong tài liệu mẫu bước 2.
             await this.contractTemplateService
               .addInforContractTemplate(
                 null,
