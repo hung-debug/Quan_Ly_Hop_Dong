@@ -61,8 +61,13 @@
                 <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{d.name}}</div>
               </div>
 
-              <div *ngIf = "d.type == 2 || d.type == 3" class="row mt-12px">
-                <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'doi_tac' | translate}}:</div>
+              <div *ngIf = "d.type == 2" class="row mt-12px">
+                <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'doi_tac_to_chuc' | translate}}:</div>
+                <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{d.name}}</div>
+              </div>
+
+              <div *ngIf = "d.type == 3" class="row mt-12px">
+                <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'doi_tac_ca_nhan' | translate}}:</div>
                 <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{d.recipients[0].name}}</div>
               </div>
             </div>  

@@ -373,6 +373,8 @@
   "to_chuc_cua_toi": "TỔ CHỨC CỦA TÔI",
   "note_chon_loai_ki_so": "Lưu ý: bạn chỉ được phép chọn 1 kiểu ký số!",
   "doi_tac": "Đối tác",
+  "doi_tac_ca_nhan": "Đối tác cá nhân",
+  "doi_tac_to_chuc": "Đối tác tổ chức",
   "xoa_doi_tac_to_chuc": "Xóa đối tác tổ chức",
   "xoa_doi_tac_ca_nhan": "Xóa đối tác cá nhân",
   "them_doi_tac": "Thêm đối tác",

@@ -361,6 +361,8 @@
   "to_chuc_cua_toi": "MY ORGANIZATION",
   "note_chon_loai_ki_so": "Warning: You only choose one type of digital sign!",
   "doi_tac": "Partner",
+  "doi_tac_ca_nhan": "Personal partner",
+  "doi_tac_to_chuc": "Organizational partner",
   "xoa_doi_tac_to_chuc": "Delete organization partner",
   "xoa_doi_tac_ca_nhan": "Delete personal partner",
   "them_doi_tac": "Add partner",
