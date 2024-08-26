@@ -1179,7 +1179,15 @@ export class ContractSignatureComponent implements OnInit {
     let contractsSignManyChecked = this.contractsSignMany.filter(
       (opt) => opt.checked
     );
-
+    if(contractsSignManyChecked.length == 0) {
+      this.toastService.showErrorHTMLWithTimeout(
+        'Vui lòng chọn hợp đồng',
+        '',
+        3000
+      );
+      return;
+    }
+    console.log(contractsSignManyChecked)
     for (let i = 0; i < contractsSignManyChecked.length; i++) {
       for (let j = i + 1; j < contractsSignManyChecked.length; j++) {
         if (

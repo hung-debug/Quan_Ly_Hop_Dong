@@ -13,6 +13,7 @@ import { UnitService } from 'src/app/service/unit.service';
 import {TranslateService} from '@ngx-translate/core';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { environment } from 'src/environments/environment';
+import { SysService } from 'src/app/service/sys.service';
 import * as moment from 'moment';
 @Component({
   selector: 'app-infor-contract-batch',
@@ -85,6 +86,7 @@ export class InforContractBatchComponent implements OnInit {
     private unitService: UnitService,
     public translate: TranslateService,
     private contractTypeService: ContractTypeService,
+    private sysService: SysService,
   ) {
     this.step = variable.stepSampleContractBatch.step1;
   }
@@ -232,7 +234,8 @@ export class InforContractBatchComponent implements OnInit {
     const file = e.target.files[0];
     if (file) {
       // giới hạn file upload lên là 5mb
-      if (e.target.files[0].size <= 10*(Math.pow(1024, 2))) {
+      let checkSizeFile = this.sysService.checkSizeFile(file)
+      if (checkSizeFile.result) {
         const file_name = file.name;
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
@@ -255,7 +258,7 @@ export class InforContractBatchComponent implements OnInit {
         }
       } else {
         this.toastService.showErrorHTMLWithTimeout(
-          'Yêu cầu file tối đa 10MB',
+          checkSizeFile.message,
           '',
           3000
         );
