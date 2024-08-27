@@ -318,7 +318,7 @@ export var paidStatusList = [
 ]
 
 export var fileCeCaOptions = [
-  {id: 'NONE', name:'Không đẩy HĐ nào'},
+  {id: 'NONE', name:'Không đẩy tài liệu nào'},
   {id: 'ALL', name: 'Đẩy toàn bộ tài liệu'},
   {id: 'SELECTION', name: 'Tuỳ biến'}
 ]

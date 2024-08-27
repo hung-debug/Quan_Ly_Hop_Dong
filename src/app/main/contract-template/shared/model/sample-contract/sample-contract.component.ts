@@ -179,7 +179,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
           if (fileContract_2) {
 
-            // fix lỗi set nhầm file tài liệu hiển thị preview - edit mẫu HĐ
+            // fix lỗi set nhầm file tài liệu hiển thị preview - edit mẫu Tài liệu
             this.pdfSrc = fileContract_1.path;
           } else {
             this.pdfSrc = fileContract_1.path;

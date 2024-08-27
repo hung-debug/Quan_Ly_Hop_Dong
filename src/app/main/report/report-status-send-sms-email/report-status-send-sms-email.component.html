@@ -77,9 +77,9 @@
       <ng-template pTemplate="body" let-list let-row="rowIndex">
         <tr>
           <ng-container *ngIf="row >= 0">
-            <td>{{list.contractUuid}}</td> <!--mã hđ-->
-            <td>{{list.contractNo}}</td> <!--số hđ-->
-            <td>{{list.contractName}}</td> <!--Tên HĐ-->
+            <td>{{list.contractUuid}}</td> <!--mã Tài liệu-->
+            <td>{{list.contractNo}}</td> <!--số Tài liệu-->
+            <td>{{list.contractName}}</td> <!--Tên Tài liệu-->
             <td style="text-align: center; ">{{list.emailOrPhone}}</td> <!--SĐT-->
             <td style="text-align: center; ">
               <img ngbTooltip="{{'content' | translate}}" src="../../../assets/img/icon_file_sms.svg" width="20px"

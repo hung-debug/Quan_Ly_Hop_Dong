@@ -148,7 +148,7 @@ export class DetailUnitComponent implements OnInit {
     } else if (ceca_push_mode == 'SELECTION') {
       return "Tuỳ biến";
     } else {
-      return "Không đẩy HĐ nào";
+      return "Không đẩy tài liệu nào";
     }
   }
 

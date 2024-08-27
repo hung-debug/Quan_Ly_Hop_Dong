@@ -394,7 +394,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         }
 
         if (this.action != 'edit') {
-          // tạo mới hđ từ mẫu gán id = null
+          // tạo mới tài liệu từ mẫu gán id = null
           if (!element.template_recipient_id) {
             if (!element.id) {
               element.id = null;
