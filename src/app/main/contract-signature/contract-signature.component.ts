@@ -2803,7 +2803,7 @@ export class ContractSignatureComponent implements OnInit {
 
     if (sessionStorage.getItem('lang') == 'en') {
       title = 'CONTRACT SEARCH';
-    } else if (sessionStorage.getItem('lang') == 'vi') {
+    } else {
       title = 'TÌM KIẾM TÀI LIỆU';
     }
 
