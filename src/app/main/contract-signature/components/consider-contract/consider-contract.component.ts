@@ -885,7 +885,7 @@ export class ConsiderContractComponent
       })
       .then(() => {
         setTimeout(() => {
-          //this.setPosition();
+          this.setPosition();
 
           for (let i = 0; i <= this.pageNumber; i++) {
             this.top[i] = 0;
