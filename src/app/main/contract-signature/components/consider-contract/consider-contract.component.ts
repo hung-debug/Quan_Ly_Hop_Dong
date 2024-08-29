@@ -902,7 +902,7 @@ export class ConsiderContractComponent
             this.top[i + 1] += this.top[i];
             this.sum[i] = this.top[i + 1];
           }
-          this.scrollToPage(this.pageNum);
+          this.scrollToPage(currentPageNum);
 
           //vuthanhtan
           let canvasWidth: any[] = [];
