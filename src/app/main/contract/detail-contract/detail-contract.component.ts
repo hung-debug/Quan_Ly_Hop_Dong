@@ -157,6 +157,12 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   defaultValueSelect: any = 1.0;
   liquidationContractData: any;
   remoteSinging: any;
+  pageNum: number = 1;
+  page1: boolean = false;
+  pageLast: boolean = true;
+
+  pageRendering: any;
+  pageNumPending: any = null;
   zoomOptions = [
     { percent: '25%', value: 0.25 },
     { percent: '50%', value: 0.5 },
@@ -669,8 +675,21 @@ export class DetailContractComponent implements OnInit, OnDestroy {
             this.top[i + 1] += this.top[i];
             this.sum[i] = this.top[i + 1];
           }
+          this.scrollToPage(this.pageNum);
         }, 100);
       });
+  }
+
+  scrollToPage(pageNum: number) {
+    let canvas = document.getElementById('canvas-step3-' + pageNum);
+    let canvas1: any = document.getElementById('pdf-viewer-step-3');
+    let pdffull: any = document.getElementById('pdf-full');
+    if (canvas && pdffull) {
+      pdffull.scrollTo(
+        0,
+        canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top
+      );
+    }
   }
 
   eventMouseover() {}
@@ -742,6 +761,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   changeScale(scale: number) {
+    this.removePage();
     this.scale = scale;
     this.defaultValueSelect = scale;
     // Add logic to apply zoom level, e.g., re-render pages
@@ -1517,7 +1537,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   showInformation() {
-    this.pageNum = 1;
     this.removePage();
     this.show_information = !this.show_information;
     this.getPage();
@@ -1653,12 +1672,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     return res;
   }
 
-  pageNum: number = 1;
-  page1: boolean = false;
-  pageLast: boolean = true;
-
-  pageRendering: any;
-  pageNumPending: any = null;
   firstPage() {
     let pdffull: any = document.getElementById('pdf-full');
 
@@ -1734,8 +1747,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   scroll(event: any) {
     //đổi màu cho nút back page
-    let canvas1: any = document.getElementById('canvas-step3-1');
-
+    let canvas1: any = document.getElementById('canvas-step3-' + this.pageNum);
     if (event.srcElement.scrollTop < canvas1.height / 2) {
       this.page1 = false;
     } else {

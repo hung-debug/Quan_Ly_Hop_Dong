@@ -212,6 +212,8 @@ export class ConsiderContractComponent
   isCheck: number = 3;
   show_information: boolean = true;
   defaultValueSelect: any = 1.0;
+  page1: boolean = false;
+  pageLast: boolean = true;
   zoomOptions = [
     { percent: '25%', value: 0.25 },
     { percent: '50%', value: 0.5 },
@@ -372,6 +374,7 @@ export class ConsiderContractComponent
   }
 
   changeScale(scale: number) {
+    this.removePage();
     this.scale = scale;
     this.defaultValueSelect = scale;
     // Add logic to apply zoom level, e.g., re-render pages
@@ -416,11 +419,9 @@ export class ConsiderContractComponent
 
   }
 
-  page1: boolean = false;
-  pageLast: boolean = true;
   scroll(event: any) {
     //đổi màu cho nút back page
-    let canvas1: any = document.getElementById('canvas-step3-1');
+    let canvas1: any = document.getElementById('canvas-step3-' + this.pageNum);
 
     if (event.srcElement.scrollTop < canvas1.height / 2) {
       this.page1 = false;
@@ -799,7 +800,9 @@ export class ConsiderContractComponent
           }
         }
         // render pdf to canvas
-        if (!this.mobile) this.getPage();
+        if (!this.mobile) {
+          this.getPage();
+        }
         this.loaded = true;
       },
       (res: any) => {
@@ -857,7 +860,7 @@ export class ConsiderContractComponent
     // @ts-ignore
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-
+    let currentPageNum  = this.pageNum;
     pdfjs
       .getDocument(this.pdfSrc)
       .promise.then((pdf: any) => {
@@ -882,9 +885,7 @@ export class ConsiderContractComponent
       })
       .then(() => {
         setTimeout(() => {
-          this.setPosition();
-          this.eventMouseover();
-          this.loadedPdfView = true;
+          //this.setPosition();
 
           for (let i = 0; i <= this.pageNumber; i++) {
             this.top[i] = 0;
@@ -901,6 +902,7 @@ export class ConsiderContractComponent
             this.top[i + 1] += this.top[i];
             this.sum[i] = this.top[i + 1];
           }
+          this.scrollToPage(this.pageNum);
 
           //vuthanhtan
           let canvasWidth: any[] = [];
@@ -923,6 +925,18 @@ export class ConsiderContractComponent
           }
         }, 100);
       });
+  }
+
+  scrollToPage(pageNum: number) {
+    let canvas = document.getElementById('canvas-step3-' + pageNum);
+    let canvas1: any = document.getElementById('pdf-viewer-step-3');
+    let pdffull: any = document.getElementById('pdf-full');
+    if (canvas && pdffull) {
+      pdffull.scrollTo(
+        0,
+        canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top
+      );
+    }
   }
 
   setX() {
@@ -1406,7 +1420,6 @@ export class ConsiderContractComponent
           //     window.location.reload()
           //   }
           // })
-          console.log("111111")
           this.toastService.showSuccessHTMLWithTimeout('success_sign','',3000)
           this.router.navigateByUrl('/', { skipLocationChange: true })
             .then(() => {
@@ -3449,7 +3462,7 @@ export class ConsiderContractComponent
 
       let isInRecipient = false;
       const participants = this.datas?.is_data_contract?.participants;
-      console.log("participants", participants)
+
       for (const participant of participants) {
         for (const card of participant.recipients) {
           for (const item of determineCoordination.recipients) {
@@ -3681,10 +3694,8 @@ export class ConsiderContractComponent
     try {
       const checkV2Infor = await this.contractService.checkTokenV2Infor().toPromise()
       if (checkV2Infor.status == false) {
-        console.log('bye bye');
         return
       } else {
-        console.log('processing');
         this.fixingRecipientIds = checkV2Infor.listRecipientId
 
         if (this.fixingRecipientIds.length > 0) {
@@ -5300,7 +5311,6 @@ export class ConsiderContractComponent
   }
 
   showInformation() {
-    this.pageNum = 1;
     this.removePage();
     this.show_information = !this.show_information;
     this.datas.hideInfo = !this.datas.hideInfo;
