@@ -116,7 +116,7 @@ export class CurrentFolderComponent implements OnInit {
     });
   }
 
-  //api danh sách hợp đồng trong thư mục
+  //api danh sách tài liệu trong thư mục
   getContractList() {
     this.contractFolderService.getContractInFolder(this.parentId,this.keyword, this.p - 1, this.page).subscribe((response: any) => {
       this.contracts = response.entities;
@@ -136,7 +136,7 @@ export class CurrentFolderComponent implements OnInit {
 
     if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       data = {
-        title: 'XÁC NHẬN XÓA HỢP ĐỒNG TRONG THƯ MỤC',
+        title: 'XÁC NHẬN XÓA TÀI LIỆU TRONG THƯ MỤC',
         contractId: contractId,
         folderId: this.parentId
       };
@@ -257,7 +257,7 @@ export class CurrentFolderComponent implements OnInit {
           )
       },
       err => {
-        this.toastService.showErrorHTMLWithTimeout("Lấy dữ liệu file hợp đồng lỗi","",3000)
+        this.toastService.showErrorHTMLWithTimeout("Lấy dữ liệu file tài liệu lỗi","",3000)
       }
     )
   }

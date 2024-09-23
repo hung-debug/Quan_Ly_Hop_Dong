@@ -180,7 +180,7 @@
   right: 15px;
   position: absolute;
 }
-.input-text {
+.input_text {
   border: 0.5px solid #F1F5FE;
   margin: 0px;
   width: 100%;
@@ -191,6 +191,26 @@
   opacity: 0px;
   border-radius: 8px;
   font-weight: 400;
+}
+
+.input_text::placeholder {
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
+  color: #AEC7E5 !important;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 21px !important;
+}
+
+.input-group {
+  color: #AEC7E5 !important;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 21px;
+
+}
+
+.input-group .input_text {
+  font-weight: 500;
 }
 
 :host ::ng-deep {

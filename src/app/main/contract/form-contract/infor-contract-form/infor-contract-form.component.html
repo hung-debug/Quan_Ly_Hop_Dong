@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <!--Tên hợp đồng-->
+    <!--Tên tài liệu-->
     <div class="col-md-6">
       <div class="form-group">
         <div class="label_item">{{'contract.name' | translate}} <span class="require_star">*</span></div>
@@ -57,7 +57,7 @@
     </div>
 
    <div class="col-md-6">
-      <!--Loại hợp đồng-->
+      <!--Loại tài liệu-->
       <div class="form-group">
         <div class="label_item">{{'contract.type' | translate}}
           <span *ngIf="this.environment.flag == 'NB'" class="require_star">*</span>
@@ -96,7 +96,7 @@
       <div class="label_item">{{'expire.date.contract' | translate}}</div>
       <div>
         <p-calendar [(ngModel)]="this.datasForm.contract_expire_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="false"
-          aria-placeholder="chọn ngày hết hạn hợp đồng" dateFormat="dd/mm/yy"></p-calendar>
+          aria-placeholder="chọn ngày hết hạn tài liệu" dateFormat="dd/mm/yy"></p-calendar>
       </div>
     </div>
    </div>

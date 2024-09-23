@@ -226,7 +226,7 @@ export class DetermineSignerComponent implements OnInit {
       if (items.type == 3) {
         this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
 
-        //Cá nhân không ký số không đẩy lên bộ công thương(thông báo với loại hợp đồng ceca_push = 1)
+        //Cá nhân không ký số không đẩy lên bộ công thương(thông báo với loại tài liệu ceca_push = 1)
         // items.recipients.forEach((ele: any) => {
         //   if(this.datas.ceca_push == 1 && ele.sign_type.length > 0) {
         //     if(this.datas.ceca_push == 1 && (ele.sign_type[0].id == 1 || ele.sign_type[0].id == 5)) {
@@ -299,7 +299,7 @@ export class DetermineSignerComponent implements OnInit {
           }
         })
 
-      //Bỏ ô text/số hợp đồng khi loại ký không phải usb token
+      //Bỏ ô text/số tài liệu khi loại ký không phải usb token
       for(let j = 0; j < this.datas.is_determine_clone[i].recipients.length; j++) {
           const recipient =  this.datas.is_determine_clone[i].recipients[j];
           const fields = recipient.fields;
@@ -441,7 +441,7 @@ export class DetermineSignerComponent implements OnInit {
       else if (data.role == 4) {
         if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0 && this.getDataSignCert(data).length == 0) {
           this.unitService.getTaxCodeOriganzation(this.userService.getInforUser().organization_id).subscribe((res: any) => {
-            data.card_id=res.tax_code;})
+            data.card_id=res.parent_tax_code;})
         }
       }
     }
@@ -1248,7 +1248,7 @@ export class DetermineSignerComponent implements OnInit {
     this.data_organization.recipients = new_arr;
   }
 
-  // xóa đối tượng điều phối hợp đồng (done)
+  // xóa đối tượng điều phối tài liệu (done)
   deletePartnerCoordination(index_item: any, item: any, id: number) {
     let arr_clone = item.recipients.filter((p: any) => p.role == 1);
     let arr_clone_different = item.recipients.filter((p: any) => p.role != 1);

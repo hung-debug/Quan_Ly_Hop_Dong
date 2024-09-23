@@ -1134,7 +1134,7 @@
                             (change)="changeIsSmsReviewer($event, item, index)">
                           <input type="checkbox" style="width: 17px; height: 17px; margin: auto 0;" *ngIf="d.is_otp == 1" checked
                             (change)="changeIsSmsReviewer($event, item, index)">
-                          <div class="label-text" style="padding: 0 20px 0 5px; margin: auto 0;">Nhận SMS thông báo khi xử lý hợp đồng</div>
+                          <div class="label-text" style="padding: 0 20px 0 5px; margin: auto 0;">Nhận SMS thông báo khi xử lý tài liệu</div>
 
                           <!-- <div *ngIf="d.is_otp == 1" style="margin: auto 0;">
                             <div ngbDropdown class="d-inline-block" style="margin-left: 6px;">
@@ -1402,7 +1402,7 @@
                             (change)="changeIsSmsSignature($event, item, index,d)">
                           <input *ngIf="d.is_otp == 1" type="checkbox" style="width: 17px; height: 17px;" checked
                             [disabled]="getDataSignCka(d).length > 0" (change)="changeIsSmsSignature($event, item, index,d)">
-                          <div class="label-text" style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
+                          <div class="label-text" style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý tài liệu</div>
 
                           <!--Lựa chọn tiếng anh tiếng việt cho người ký đối tác trường hợp đăng nhập bằng email nội bộ-->
                           <!-- <div class="input-data" style="width: 6%;" *ngIf="d.is_otp == 1">
@@ -1560,7 +1560,7 @@
                           <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" checked
                             [disabled]="getDataSignCka(d).length > 0" checked
                             (change)="changeIsSmsDocument($event, item, index)">
-                          <div class="label-text" style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
+                          <div class="label-text" style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý tài liệu</div>
 
                           <!-- <div class="input-data" style="width: 6%;" *ngIf="d.is_otp == 1">
                             <div ngbDropdown class="d-inline-block" style="margin-left: 6px;">
@@ -1800,7 +1800,7 @@
                           (change)="changeIsSmsSignature($event, item, index)">
                         <input type="checkbox" style="width: 17px; height: 17px; margin: auto 0;" *ngIf="d.is_otp == 1" checked
                           (change)="changeIsSmsSignature($event, item, index)">
-                        <div class="label-text" style="margin: auto 6px;">Nhận SMS thông báo khi xử lý hợp đồng</div>
+                        <div class="label-text" style="margin: auto 6px;">Nhận SMS thông báo khi xử lý tài liệu</div>
 
                         <!-- <div class="input-data" style="margin: auto 0;" *ngIf="d.is_otp == 1 && getDataSignCka(d).length === 0">
                           <div ngbDropdown class="d-inline-block" style="margin-left: 6px;" >

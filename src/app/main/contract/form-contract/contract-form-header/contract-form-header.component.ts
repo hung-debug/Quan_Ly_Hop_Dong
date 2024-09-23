@@ -56,20 +56,20 @@ export class ContractFormHeaderComponent implements OnInit {
     if (this.datasForm.id) {
       this.contractService.deleteContract(this.datasForm.id).subscribe((data) => {
         if (data.success) {
-          // this.toastService.showSuccessHTMLWithTimeout("Xóa hợp đồng thành công!", "", 3000);
+          // this.toastService.showSuccessHTMLWithTimeout("Xóa tài liệu thành công!", "", 3000);
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
             void this.router.navigate(['/main/dashboard']);
           });
         } else {
           if (data.message == 'E02') {
-            this.toastService.showErrorHTMLWithTimeout("Hợp đồng không phải bản nháp!", "", 3000);
+            this.toastService.showErrorHTMLWithTimeout("Tài liệu không phải bản nháp!", "", 3000);
           } else {
-            this.toastService.showErrorHTMLWithTimeout("Xóa hợp đồng thất bại!", "", 3000);
+            this.toastService.showErrorHTMLWithTimeout("Xóa tài liệu thất bại!", "", 3000);
           }
         }
       },
         error => {
-          this.toastService.showErrorHTMLWithTimeout("Xóa hợp đồng thất bại", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("Xóa tài liệu thất bại", "", 3000);
         }
       );
     } else {

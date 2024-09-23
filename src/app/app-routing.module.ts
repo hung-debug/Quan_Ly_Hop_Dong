@@ -182,42 +182,42 @@ const routes: Routes = [
       {
         path: 'report',
         children: [
-          //Báo cáo chi tiết hợp đồng
+          //Báo cáo chi tiết tài liệu
           {
             path:'detail',
             component: ReportDetailComponent
           },
-          //Báo cáo hợp đồng sắp hết hạn
+          //Báo cáo tài liệu sắp hết hạn
           {
             path:'soon-expire',
             component: ReportSoonExpireComponent
           },
-          //Báo cáo trạng thái xử lý hợp đồng
+          //Báo cáo trạng thái xử lý tài liệu
           {
             path: 'status-contract',
             component: ReportStatusContractComponent
           },
-          //Báo cáo số lượng hợp đồng theo trạng thái
+          //Báo cáo số lượng tài liệu theo trạng thái
           {
             path: 'contract-number-follow-status',
             component: ReportContractNumberFollowStatusComponent
           },
-          //Báo cáo số lượng hợp đồng theo loại hợp đồng
+          //Báo cáo số lượng tài liệu theo loại tài liệu
           {
             path: 'contract-number-follow-type',
             component: ContractNumberFollowTypeComponent
           },
-          //Báo cáo số lượng hợp đồng theo hình thức ký
+          //Báo cáo số lượng tài liệu theo hình thức ký
           {
             path: 'contract-number-follow-sign',
             component: ContractNumberFollowSignComponent
           },
-          //Báo cáo số lượng hợp đồng nhận
+          //Báo cáo số lượng tài liệu nhận
           {
             path: 'contract-receive',
             component: ReportContractReceiveComponent
           },
-          //Báo cáo sản lượng hợp đồng eContract mSale
+          //Báo cáo sản lượng tài liệu eContract mSale
           {
             path: 'contract-number-econtract-mSale',
             component: environment.flag == 'NB'? ReportContractNumberEcontractMsaleComponent: PageNotFoundComponent

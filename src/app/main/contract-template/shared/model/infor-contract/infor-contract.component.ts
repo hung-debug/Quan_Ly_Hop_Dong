@@ -22,6 +22,7 @@ import { ConfirmUploadNewFileDialogComponent } from './../../../../contract/shar
 import * as pdfjsLib from 'pdfjs-dist';
 import { MatDialog } from '@angular/material/dialog';
 import {ContractService} from 'src/app/service/contract.service';
+import { SysService } from 'src/app/service/sys.service';
 export class ContractConnectArr {
   ref_id: number;
   constructor(ref_id: number) {
@@ -120,6 +121,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     private activeRoute: ActivatedRoute,
     private dialog: MatDialog,
     private contractService: ContractService,
+    private sysService: SysService,
   ) {
     this.step = variable.stepSampleContract.step1;
   }
@@ -230,7 +232,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       }
       
       // giới hạn file upload lên là 5mb
-      if (e.target.files[0].size <= 10*(Math.pow(1024, 2))) {
+      let checkSizeFile = this.sysService.checkSizeFile(file)
+      if (checkSizeFile.result) {
         this.spinner.show();
         const file_name = file.name;
         const extension = file.name.split('.').pop();
@@ -253,7 +256,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               this.datas.flagDigitalSign = false;
             } else if(response.length > 0) {
               Swal.fire({
-                html: "File hợp đồng đã chứa chữ ký số; Vui lòng tải lên file hợp đồng chưa được ký số để thực hiện ký hợp đồng",
+                html: "File tài liệu đã chứa chữ ký số; Vui lòng tải lên file tài liệu chưa được ký số để thực hiện ký tài liệu",
                 icon: 'warning',
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#b0bec5',
@@ -278,11 +281,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           )
         } else {
           this.spinner.hide()
-          this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng PDF, DOCX", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("File tài liệu yêu cầu định dạng PDF, DOCX", "", 3000);
         }
       } else {
         this.spinner.hide()
-        this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu tối đa 10MB", "", 3000);
+        this.toastService.showErrorHTMLWithTimeout(checkSizeFile.message, "", 3000);
       }
     }
   }
@@ -480,7 +483,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         }, (error: HttpErrorResponse) => {
           countSuccess++
           this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout("Thay thế file hợp đồng thất bại", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("Thay thế file tài liệu thất bại", "", 3000);
           // return;
         })
       }
@@ -553,7 +556,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       }, (error: HttpErrorResponse) => {
         countSuccess++;
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Đẩy thông tin mẫu hợp đồng thất bại", "", 3000);
+        this.toastService.showErrorHTMLWithTimeout("Đẩy thông tin mẫu tài liệu thất bại", "", 3000);
       })
 
       if (countSuccess == 0) {
@@ -677,9 +680,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   convertUrltoBlob(){
     const fileReader = new FileReader();
     if (this.datas.is_action_contract_created) {
-      // file hợp đồng chính không thay đổi => convert url sang dạng blob
+      // file tài liệu chính không thay đổi => convert url sang dạng blob
       if (!this.uploadFileContractAgain && this.datas.contractFile && (typeof this.datas.contractFile == 'string')) {
-      } else if (this.uploadFileContractAgain && this.datas.contractFile) { // dữ liệu file hợp đồng chính bị thay đổi
+      } else if (this.uploadFileContractAgain && this.datas.contractFile) { // dữ liệu file tài liệu chính bị thay đổi
         fileReader.readAsDataURL(this.datas.contractFile);
         fileReader.onload = (e) => {
           if (fileReader.result)
@@ -708,17 +711,17 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             return true;
           } else {
             if(dataCode.message == this.userService.getAuthCurrentUser().email){
-              this.toastService.showErrorHTMLWithTimeout('Mã mẫu hợp đồng đã tồn tại với mẫu hợp đồng đã tạo trước đó', "", 3000);
+              this.toastService.showErrorHTMLWithTimeout('Mã mẫu tài liệu đã tồn tại với mẫu tài liệu đã tạo trước đó', "", 3000);
               this.spinner.hide();
               return false;
             }else{
-              this.toastService.showErrorHTMLWithTimeout('Mã mẫu hợp đồng đã tồn tại với người dùng ' + dataCode.message, "", 3000);
+              this.toastService.showErrorHTMLWithTimeout('Mã mẫu tài liệu đã tồn tại với người dùng ' + dataCode.message, "", 3000);
               this.spinner.hide();
               return false;
             }
           }
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra mã mẫu hợp đồng', "", 3000);
+          this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra mã mẫu tài liệu', "", 3000);
           this.spinner.hide();
           return false;
         }
@@ -881,7 +884,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   contractNameCounter(){
     if(this.characterCounter(this.name) > 200){
-      this.errorContractName = "Tên mẫu hợp đồng không được vượt quá 200 ký tự";
+      this.errorContractName = "Tên mẫu tài liệu không được vượt quá 200 ký tự";
       return false;
     }
     return true;
@@ -918,7 +921,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   contractNumberCounter(){
     if(this.characterCounter(this.contract_no) > 100){
-      this.errorContractNumber = "Mã mẫu hợp đồng không được vượt quá 100 ký tự";
+      this.errorContractNumber = "Mã mẫu tài liệu không được vượt quá 100 ký tự";
       return false;
     }
     return this.checkPatternContractNumber();
@@ -926,7 +929,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   checkPatternContractNumber(){
     if(!String(this.contract_no).match(parttern.name_and_number)){
-      this.errorContractNumber = "Mã mẫu hợp đồng không được chứa ký tự đặc biệt, ký tự có dấu";
+      this.errorContractNumber = "Mã mẫu tài liệu không được chứa ký tự đặc biệt, ký tự có dấu";
       return false;
     }
     return true;

@@ -105,7 +105,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   isEnableText: boolean = false;
   isChangeText: boolean = false;
   loaded: boolean = false;
-
+  show_information: boolean = true;
   isPartySignature: any = [
     { id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam' },
     { id: 2, name: 'Công ty newEZ Việt Nam' },
@@ -153,9 +153,24 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   signBefore: boolean = false;
   folderId: any;
   folderName: any;
-  defaultValue: number = 100;
+  defaultValue: any = 100;
+  defaultValueSelect: any = 1.0;
   liquidationContractData: any;
   remoteSinging: any;
+  pageNum: number = 1;
+  page1: boolean = false;
+  pageLast: boolean = true;
+
+  pageRendering: any;
+  pageNumPending: any = null;
+  zoomOptions = [
+    { percent: '25%', value: 0.25 },
+    { percent: '50%', value: 0.5 },
+    { percent: '100%', value: 1.0 },
+    { percent: '150%', value: 1.5 },
+    { percent: '200%', value: 2.0 },
+    { percent: '250%', value: 2.5 }
+  ];
   constructor(
     private contractService: ContractService,
     private checkViewContractService: CheckViewContractService,
@@ -260,7 +275,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
     this.appService.setTitle(this.translate.instant('contract.detail'));
 
-    //Lấy thông tin id hợp đồng
+    //Lấy thông tin id tài liệu
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
     if (await this.checkViewContractService.callAPIcheckViewContract(this.idContract,false)) {
@@ -332,7 +347,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
 
-         //Hợp đồng huỷ status = 32 => link 404 đối với những người xử lý trong hợp đồng đó trừ người tạo
+         //Tài liệu huỷ status = 32 => link 404 đối với những người xử lý trong tài liệu đó trừ người tạo
          if(this.isDataContract.status == 32) {
           const callApiBpmn = await this.contractService
           .viewFlowContract(this.idContract)
@@ -521,7 +536,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           }
           if (!fileC) {
             this.toastService.showErrorHTMLWithTimeout(
-              'Thiếu dữ liệu file hợp đồng!',
+              'Thiếu dữ liệu file tài liệu!',
               '',
               3000
             );
@@ -627,6 +642,11 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           // canvas.style.paddingLeft = '15px';
           // canvas.style.border = '9px solid transparent';
           // canvas.style.borderImage = 'url(assets/img/shadow.png) 9 9 repeat';
+          // if(this.defaultValueSelect < 1) {
+          //   canvas.style.width = '100%'
+          // } else {
+          //   canvas.style.width = this.defaultValueSelect * 100 + '%'
+          // }
           let idPdf = 'pdf-viewer-step-3';
           let viewer = document.getElementById(idPdf);
           if (viewer) {
@@ -655,8 +675,21 @@ export class DetailContractComponent implements OnInit, OnDestroy {
             this.top[i + 1] += this.top[i];
             this.sum[i] = this.top[i + 1];
           }
+          this.scrollToPage(this.pageNum);
         }, 100);
       });
+  }
+
+  scrollToPage(pageNum: number) {
+    let canvas = document.getElementById('canvas-step3-' + pageNum);
+    let canvas1: any = document.getElementById('pdf-viewer-step-3');
+    let pdffull: any = document.getElementById('pdf-full');
+    if (canvas && pdffull) {
+      pdffull.scrollTo(
+        0,
+        canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top
+      );
+    }
   }
 
   eventMouseover() {}
@@ -722,39 +755,53 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     });
   }
 
-  changeScale(values: any){
-    switch (values){
-      case "-":
-        if(this.scale > 0.25){
-          this.scale = this.scale - 0.25;
-          this.defaultValue = this.scale * 100
-          // for (let page = 1; page <= this.pageNumber; page++) {
-          //   let canvas = document.getElementById('canvas-step3-' + page);
-          //   this.renderPageZoomInOut(page, canvas);
-          // }
-          this.getPage();
-
-        }else{
-          break;
-        }
-        break;
-      case "+":
-        if(this.scale < 5){
-          this.scale = this.scale + 0.25;
-          this.defaultValue = this.scale * 100
-          // for (let page = 1; page <= this.pageNumber; page++) {
-          //   let canvas = document.getElementById('canvas-step3-' + page);
-          //   this.renderPageZoomInOut(page, canvas);
-          // }
-          this.getPage();
-        }else{
-          break;
-        }
-        break;
-      default:
-        break;
-    }
+  onZoomChange(event: any) {
+    const zoomLevel = event.value;
+    this.changeScale(zoomLevel);
   }
+
+  changeScale(scale: number) {
+    this.removePage();
+    this.scale = scale;
+    this.defaultValueSelect = scale;
+    // Add logic to apply zoom level, e.g., re-render pages
+    this.getPage();
+  }
+
+  // changeScale(values: any){
+  //   console.log("this.scale", this.scale)
+  //   switch (values){
+  //     case "-":
+  //       if(this.scale > 0.25){
+  //         this.scale = this.scale - 0.25;
+  //         this.defaultValue = this.scale * 100
+  //         // for (let page = 1; page <= this.pageNumber; page++) {
+  //         //   let canvas = document.getElementById('canvas-step3-' + page);
+  //         //   this.renderPageZoomInOut(page, canvas);
+  //         // }
+  //         this.getPage();
+
+  //       }else{
+  //         break;
+  //       }
+  //       break;
+  //     case "+":
+  //       if(this.scale < 5){
+  //         this.scale = this.scale + 0.25;
+  //         this.defaultValue = this.scale * 100
+  //         // for (let page = 1; page <= this.pageNumber; page++) {
+  //         //   let canvas = document.getElementById('canvas-step3-' + page);
+  //         //   this.renderPageZoomInOut(page, canvas);
+  //         // }
+  //         this.getPage();
+  //       }else{
+  //         break;
+  //       }
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
 
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
@@ -869,7 +916,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     }
   }
 
-  // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
+  // hàm set kích thước cho đối tượng khi được kéo thả vào trong tài liệu
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
     let style: any = {
       transform:
@@ -982,7 +1029,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   processHandleContract() {
-    // alert('Luồng xử lý hợp đồng!');
+    // alert('Luồng xử lý tài liệu!');
     const data = this.datas;
 
     // @ts-ignore
@@ -1266,7 +1313,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   imageDialogSignOpen() {
     const data = {
-      title: 'KÝ HỢP ĐỒNG ',
+      title: 'KÝ TÀI LIỆU ',
       is_content: 'forward_contract',
     };
 
@@ -1313,15 +1360,15 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   getTextAlertConfirm() {
     if (this.datas.roleContractReceived == 2) {
       if (this.confirmConsider == 1) {
-        return 'Bạn có chắc chắn xác nhận hợp đồng này?';
+        return 'Bạn có chắc chắn xác nhận tài liệu này?';
       } else if (this.confirmConsider == 2) {
-        return 'Bạn có chắc chắn từ chối hợp đồng này?';
+        return 'Bạn có chắc chắn từ chối tài liệu này?';
       }
     } else if (this.datas.roleContractReceived == 3) {
       if (this.confirmSignature == 1) {
-        return 'Bạn có đồng ý với nội dung của hợp đồng và xác nhận ký?';
+        return 'Bạn có đồng ý với nội dung của tài liệu và xác nhận ký?';
       } else if (this.confirmSignature == 2) {
-        return 'Bạn không đồng ý với nội dung của hợp đồng và không xác nhận ký?';
+        return 'Bạn không đồng ý với nội dung của tài liệu và không xác nhận ký?';
       }
     }
   }
@@ -1408,8 +1455,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         (result) => {
           this.toastService.showSuccessHTMLWithTimeout(
             this.datas?.roleContractReceived == 3
-              ? 'Bạn vừa thực hiện ký thành công. Hợp đồng đã được chuyển tới người tiếp theo!'
-              : 'Xem xét hợp đồng thành công',
+              ? 'Bạn vừa thực hiện ký thành công. Tài liệu đã được chuyển tới người tiếp theo!'
+              : 'Xem xét tài liệu thành công',
             [3,4].includes(this.datas.roleContractReceived) ? 'Thực hiện ký thành công!' : '',
             1000
           );
@@ -1429,7 +1476,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     let inputValue = '';
     const { value: textRefuse } = await Swal.fire({
       title:
-        'Bạn có chắc chắn hủy hợp đồng này không? Vui lòng nhập lý do hủy:',
+        'Bạn có chắc chắn hủy tài liệu này không? Vui lòng nhập lý do hủy:',
       input: 'text',
       inputValue: inputValue,
       showCancelButton: true,
@@ -1439,7 +1486,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Hủy',
       inputValidator: (value) => {
         if (!value) {
-          return 'Bạn cần nhập lý do hủy hợp đồng!';
+          return 'Bạn cần nhập lý do hủy tài liệu!';
         } else {
           return null;
         }
@@ -1452,7 +1499,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         .subscribe(
           (result) => {
             this.toastService.showSuccessHTMLWithTimeout(
-              'Hủy hợp đồng thành công',
+              'Hủy tài liệu thành công',
               '',
               3000
             );
@@ -1469,7 +1516,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           }
         );
     } else {
-      // this.toastService.showWarningHTMLWithTimeout('Bạn cần nhập lý do hủy hợp đồng', '', 3000)
+      // this.toastService.showWarningHTMLWithTimeout('Bạn cần nhập lý do hủy tài liệu', '', 3000)
     }
   }
 
@@ -1487,6 +1534,12 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   t() {
 
+  }
+
+  showInformation() {
+    this.removePage();
+    this.show_information = !this.show_information;
+    this.getPage();
   }
 
   downloadContract(id: any) {
@@ -1619,12 +1672,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     return res;
   }
 
-  pageNum: number = 1;
-  page1: boolean = false;
-  pageLast: boolean = true;
-
-  pageRendering: any;
-  pageNumPending: any = null;
   firstPage() {
     let pdffull: any = document.getElementById('pdf-full');
 
@@ -1700,8 +1747,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   scroll(event: any) {
     //đổi màu cho nút back page
-    let canvas1: any = document.getElementById('canvas-step3-1');
-
+    let canvas1: any = document.getElementById('canvas-step3-' + this.pageNum);
     if (event.srcElement.scrollTop < canvas1.height / 2) {
       this.page1 = false;
     } else {

@@ -64,9 +64,9 @@ export class UploadContractFileComponent implements OnInit {
   ngOnInit(): void {
     if (this.data.action == "create") {
       this.isCreate = true
-      this.setTitle = "Tải lên file hợp đồng lưu trữ"
+      this.setTitle = "Tải lên file tài liệu lưu trữ"
     } else {
-      this.setTitle = "Sửa file hợp đồng lưu trữ"
+      this.setTitle = "Sửa file tài liệu lưu trữ"
       this.contractName = this.data.dataShare.name
       this.contractFileName = this.data.dataShare.filename  
     }
@@ -206,7 +206,7 @@ export class UploadContractFileComponent implements OnInit {
   validContractName() {
     this.errContractNameMess = ""
     if (!this.contractName) {
-      this.errContractNameMess = "Tên hợp đồng không được để trống"
+      this.errContractNameMess = "Tên tài liệu không được để trống"
       return false
     }
   }
@@ -214,11 +214,11 @@ export class UploadContractFileComponent implements OnInit {
   validContractFile() {
     this.errContractFileMess = ""
     if (!this.contractFile && !this.contractFileName) {
-      this.errContractFileMess = "File hợp đồng không được để trống" 
+      this.errContractFileMess = "File tài liệu không được để trống" 
       return false
     } else if (this.contractFile && this.contractFile.size > 10*(Math.pow(1024, 2))) {
       this.errContractFileSize = true
-      this.toastService.showWarningHTMLWithTimeout("File hợp đồng yêu cầu tối đa 10MB", "", 3000);
+      this.toastService.showWarningHTMLWithTimeout("File tài liệu yêu cầu tối đa 10MB", "", 3000);
       return false
     } else {
       this.errContractFileSize = false

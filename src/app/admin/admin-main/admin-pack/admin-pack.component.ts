@@ -139,7 +139,7 @@ export class AdminPackComponent implements OnInit {
       { field: 'duration', header: 'Thời gian(tháng)', style: 'text-align: left;' },
       {
         field: 'numberOfContracts',
-        header: 'Số lượng hợp đồng',
+        header: 'Số lượng tài liệu',
         style: 'text-align: left;',
       },
       {

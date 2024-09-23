@@ -59,11 +59,11 @@ export class AddConnectDialogComponent implements OnInit {
   onSubmit() {
     
     if(this.idList.length == 0){
-      this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn hợp đồng liên quan', "", 3000);
+      this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn tài liệu liên quan', "", 3000);
     }else{
       this.dialogRef.close();
       this.router.navigate([this.router.url])
-      this.toastService.showSuccessHTMLWithTimeout('Thêm hợp đồng liên quan thành công', "", 3000);
+      this.toastService.showSuccessHTMLWithTimeout('Thêm tài liệu liên quan thành công', "", 3000);
     }
   }
 

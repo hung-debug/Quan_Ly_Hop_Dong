@@ -230,7 +230,7 @@ export class ContractTemplateComponent implements OnInit {
       this.spinner.show();
       this.contractTemplateService.cloneContractTemplate(id).subscribe((res: any) => {
         //
-        this.toastService.showSuccessHTMLWithTimeout(`Sao chép mẫu hợp đồng ${res.name} thành công!`, "", 3000)
+        this.toastService.showSuccessHTMLWithTimeout(`Sao chép mẫu tài liệu ${res.name} thành công!`, "", 3000)
         this.getContractTemplateList();
 
       }, (error: HttpErrorResponse) => {
@@ -265,7 +265,7 @@ export class ContractTemplateComponent implements OnInit {
 
   deleteContractTemplate(id:any){
     const data = {
-      title: 'XÁC NHẬN XÓA MẪU HỢP ĐỒNG',
+      title: 'XÁC NHẬN XÓA MẪU TÀI LIỆU',
       id: id
     };
     // @ts-ignore
@@ -284,7 +284,7 @@ export class ContractTemplateComponent implements OnInit {
 
   stopContractTemplate(id:any){
     const data = {
-      title: 'XÁC NHẬN DỪNG PHÁT HÀNH MẪU HỢP ĐỒNG',
+      title: 'XÁC NHẬN DỪNG PHÁT HÀNH MẪU TÀI LIỆU',
       id: id
     };
     // @ts-ignore
@@ -303,7 +303,7 @@ export class ContractTemplateComponent implements OnInit {
 
   releaseContractTemplate(id:any){
     const data = {
-      title: 'XÁC NHẬN PHÁT HÀNH MẪU HỢP ĐỒNG',
+      title: 'XÁC NHẬN PHÁT HÀNH MẪU TÀI LIỆU',
       id: id
     };
     // @ts-ignore

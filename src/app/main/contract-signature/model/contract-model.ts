@@ -18,13 +18,13 @@ export const data_signature_contract = {
   "type_id": [
     {
       item_id: 2,
-      item_text: "Loại hợp đồng B"
+      item_text: "Loại tài liệu B"
     }
     
     ],
   "contractConnect": [
-    {item_id: 1, item_text: 'Hợp đồng A'},
-    {item_id: 2, item_text: 'Hợp đồng B'}
+    {item_id: 1, item_text: 'Tài liệu A'},
+    {item_id: 2, item_text: 'Tài liệu B'}
   ],
   attachFile: {
     lastModified: 1634125013874,
@@ -33,7 +33,7 @@ export const data_signature_contract = {
   },
   sign_time: 'Wed Nov 17 2021 00:49:23 GMT+0700 (Indochina Time)',
   "dateDeadline": "2021-11-15T13:43:28.476Z",
-  notes: "hợp đồng lao động",
+  notes: "tài liệu lao động",
   // "file_content": environment.base64_file_content_demo,
   "userForm": {
     "order": 1,
@@ -251,9 +251,9 @@ export const data_signature_contract = {
 // // step buoc 1
 //   infor_contract: {
 //     "id": 1,
-//     "name": "Hợp đồng cho thuê thiết bị phần cứng",
+//     "name": "Tài liệu cho thuê thiết bị phần cứng",
 //     "code": "HD.2021.11.19.01",
-//     "notes": "Hợp đồng cho thuê thiết bị tháng 11/2021",
+//     "notes": "Tài liệu cho thuê thiết bị tháng 11/2021",
 //     "refs": null,
 //     "contract_no": "HD.2021.11.19.01",
 //     "sign_time": "2021-11-19T10:00:10Z",
@@ -436,7 +436,7 @@ export const data_signature_contract = {
 //   ],
 //   infor_confirm: {
 //     "id": 1,
-//     "name": "Hợp đồng cho thuê thiết bị",
+//     "name": "Tài liệu cho thuê thiết bị",
 //     "type": 1,
 //     "path": "/2021/20/11/hop_dong_thue_thiet_bi.pdf",
 //     "internal": 1,

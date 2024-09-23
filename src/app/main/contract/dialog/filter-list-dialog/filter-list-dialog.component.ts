@@ -28,6 +28,8 @@ export class FilterListDialogComponent implements OnInit {
   filter_contract_no:any;
   filter_from_date:any;
   filter_to_date:any;
+  handler_name: any;
+  name_or_email_customer: any;
   status:any;
   isOrg:any="";
   organization_id:any;
@@ -51,6 +53,7 @@ export class FilterListDialogComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    
     this.organization_id = Number(this.data.organization_id);
 
     let userId = this.userService.getAuthCurrentUser().id;
@@ -89,6 +92,9 @@ export class FilterListDialogComponent implements OnInit {
       this.filter_contract_no = this.data.filter_contract_no;
       this.filter_from_date = this.data.filter_from_date?new Date(this.data.filter_from_date):"";
       this.filter_to_date = this.data.filter_to_date?new Date(this.data.filter_to_date):"";
+      this.handler_name = this.data.handler_name;
+      this.name_or_email_customer = this.data.name_or_email_customer;
+      this.name_or_email_customer = this.data.name_or_email_customer;
       this.status = this.data.status;
       this.isOrg = this.data.isOrg;
       this.organization_id = this.data.organization_id?Number(this.data.organization_id):"";
@@ -119,6 +125,7 @@ export class FilterListDialogComponent implements OnInit {
       isOrg: this.isOrg,
       organization_id: this.organization_id
     }
+    
     this.dialogRef.close();
     
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {

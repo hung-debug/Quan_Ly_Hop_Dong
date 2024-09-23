@@ -24,14 +24,14 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   }
 
   getText(sign: any) {
-    // ? 'Text' : 'Số hợp đồng'
+    // ? 'Text' : 'Số tài liệu'
     if (sign.sign_unit == 'text') {
       if(sign.text_type == "currency")
         return 'Số tiền';
       // 
       return 'Text';
     } else {
-      return 'Số hợp đồng';
+      return 'Số tài liệu';
     }
   }
 

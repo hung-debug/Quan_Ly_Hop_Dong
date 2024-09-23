@@ -433,7 +433,7 @@ export class InforUserComponent implements OnInit {
               this.attachFileMark = file;
             }
           }else{
-            this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng JPG, PNG, JPGE", "", 3000);
+            this.toastService.showErrorHTMLWithTimeout("File tài liệu yêu cầu định dạng JPG, PNG, JPGE", "", 3000);
           }
 
         } else {

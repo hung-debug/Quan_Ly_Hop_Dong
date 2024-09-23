@@ -1,112 +1,119 @@
-
-<ng-template [ngIf]="!roleMess">
+<div class="container-fluid" *ngIf="!roleMess">
   <div class="sample-contract row">
   <!--  information contract-->
-    <div class="col-md-3 sample-contract__information" style="background-color: white;">
-      <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
-        <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">THÔNG TIN MẪU HỢP ĐỒNG</div>
-        <div style="line-height: 25px">
-          <div>
-            <span class="title-contract">Tên mẫu hợp đồng:</span>
-            <span>{{datas?.is_data_contract?.name}}</span>
+    <div [ngClass] = "{'col-md-3': this.show_information}" class="sample-contract__information" style="background-color: white; padding-right: 0px;">
+      <div *ngIf="this.show_information == true">
+        <div id="width-element-info">
+          <div class="label">
+            {{'contract.detail' | translate}}
           </div>
           <div>
-            <span class="title-contract">Mã mẫu hợp đồng:</span>
-            <span>{{datas?.is_data_contract?.code}}</span>
-          </div>
-          <div>
-            <span class="title-contract">Loại hợp đồng:</span>
-            <span>{{datas?.is_data_contract?.type_name}}</span>
-          </div>
-          <div>
-            <span class="title-contract">File đính kèm:</span>
-            <span *ngFor="let d of allFileAttachment;let i = index">
-              <span *ngIf="i != 0">, </span>
-              <a style="color: #106DB6" rel="stylesheet" [href]="d.path" target="_blank">{{d.filename}}</a>
-            </span>
-          </div>
-          <div>
-            <span class="title-contract">Thời gian tạo:</span>
-            <span>{{datas?.is_data_contract?.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
-          </div>
-          <div>
-            <span class="title-contract">Thời gian hiệu lực:</span>
-            <span>{{datas?.is_data_contract?.start_time | date: 'dd/MM/yyyy'}} - {{datas?.is_data_contract?.end_time | date: 'dd/MM/yyyy'}}</span>
+            <div class="row mt-12px">
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'Tên tài liệu' | translate}}:</div>
+              <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract contract-name mt-lg-5px">{{datas?.is_data_contract?.name}}</div>
+            </div>
+            <div class="row mt-12px">
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'contract.uid' | translate}}:</div>
+              <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.contract_uid}}</div>
+            </div>
+            <div class="row mt-12px">
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'menu.contract.type.list' | translate}}:</div>
+              <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.type_name}}</div>
+            </div>
+            <div class="row mt-12px" *ngIf = "allFileAttachment.length > 0">
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'file.attach' | translate}}:</div>
+                <div class="custom-xl-width-col-xl-9 col-lg-12 mt-lg-5px">
+                  <div *ngFor="let d of allFileAttachment; let i = index" style="margin-right: 5px;" class="content-info-contract">
+                    <a class="info-contract" rel="stylesheet" [href]="d.path" target="_blank">{{d.filename}}</a>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-12px">
+              <span class="custom-xl-width-col-xl-3 col-lg-12 title-contract">Thời gian tạo:</span>
+              <span class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
+            </div>
+            <div class="row mt-12px">
+              <span class="custom-xl-width-col-xl-3 col-lg-12 title-contract">Thời gian hiệu lực:</span>
+              <span class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.start_time | date: 'dd/MM/yyyy'}} - {{datas?.is_data_contract?.end_time | date: 'dd/MM/yyyy'}}</span>
+            </div>
           </div>
         </div>
-      </div>
-     <hr>
 
-      <div class="location-change" [ngStyle]="changeDisplay()">
-        <div class="sample-contract__information&#45;&#45;user-sign" style="line-height: 25px">
-        </div>
-        <div>
-          <u style="color: #106DB6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">Thông tin ký</u>
+        <div class="mt-28px process-handle-contract" (click)="processHandleContract()">
+          <div>
+            {{'Thông tin ký' | translate}}
+          </div>
+          <img src="/assets/img/arrow-right.svg"/>
         </div>
       </div>
     </div>
 
-    <!--  file content-->
-    <!--  width: 74.7%-->
-    <div (scroll)="scroll($event)" id="pdf-full" class="col-md-9 sample-contract__file viewer-pdf isDrag"
-         style="background-color: #F2F2F2; position: relative;">
-         <!-- <div style="width: 100%; position: fixed; z-index: 1000; left: 870px;">
-          <img src="../../assets/img/plus.png" style="margin-bottom:3px;height: 30px; width: 30px;" (click)="changeScale('+')" />&nbsp;
-          <input class="input-web" type="text" style="width: 50px;height: 30px" [value]="defaultValue + '%'" disabled>&nbsp;
-          <img src="../../assets/img/minus.png" style="margin-bottom:3px; height: 30px; width: 30px;" (click)="changeScale('-')" />
-        </div> -->
-      <div id="pdf-viewer-step-3">
-        <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-          <div class="resize-drag not-out-drop ck-da-keo"
-               [id]="d.id"
-               style="z-index: -1;"
-               #itemElement
+    <div *ngIf="this.show_information" style="width: 24px; padding: 0px;">
+      <img style="width: 24px; height: 24px;" src="../../assets/img/dong_lai.png" (click)="showInformation()" />
+    </div>
 
-               [ngStyle]="(d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so_con_dau_va_thong_tin') ? changePosition(d) : changePositionSignature(d)">
-            <div class="name-sig-img-daky long-text-ellipsis">{{d.name}}</div>
-            <app-image-sign-contract-template-detail [style]="d.type==2 || d.type==3 ? 'display: flex; width: 100%; height: 100%; padding: 4px;' : ''"  [datas]="datas" [sign]="d"></app-image-sign-contract-template-detail>
+    <div *ngIf="!this.show_information" style="width: 24px; padding: 0px;">
+      <img style="width: 24px; height: 24px;" src="../../assets/img/mo_ra.png" (click)="showInformation()" />
+    </div>
+
+    <div [ngClass] = "{'col-md-9-tru': this.show_information, 'col-md-12-tru': !this.show_information}">
+      <div style="height: 48px; background-color: #EBF2FB; display: flex; justify-content: center">
+          <div style="margin: auto 0px auto 34px">
+              <button class="call-page input1" (click)="firstPage()">
+                  <img  width="16px" height="16px" *ngIf="!this.page1" src="assets/img/First.png">
+                  <img  width="16px" height="16px" *ngIf="this.page1" src="assets/img/First.png">
+              </button>
+              <button style="margin: 0px 8px;" class="call-page input1" (click)="previousPage()">
+                  <img width="16px" height="16px" *ngIf="this.page1" src="assets/img/Prev.png">
+                  <img width="16px" height="16px" *ngIf="!this.page1" src="assets/img/Prev.png">
+              </button>
+          
+              <input class="input1 no-focus" [(ngModel)]="pageNum" type="text" (keyup.enter)="onEnter($event)" />
+              &nbsp;/&nbsp;
+              <span class="page-number">{{ this.pageNumber }}</span>
+  
+              <button style="margin: 0px 8px;" class="call-page input1" (click)="onNextPage()" id="prev">
+                  <img width="6px" height="9px" *ngIf="this.pageLast" src="assets/img/Vector1.png">
+                  <img width="6px" height="9px" *ngIf="!this.pageLast" src="assets/img/Vector1.png">
+              </button>
+          
+              <button class="call-page input1" (click)="lastPage()" id="prev">
+                  <img width="16px" height="16px" *ngIf="this.pageLast" src="assets/img/Last.png">
+                  <img width="16px" height="16px" *ngIf="!this.pageLast" src="assets/img/Last.png">
+              </button>  
+          </div>
+      </div>
+  
+      <div (scroll)="scroll($event)" id="pdf-full" class="sample-contract__file viewer-pdf isDrag"
+        style="background-color: #F2F2F2; position: relative;">
+        <div id="pdf-viewer-step-3">
+          <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+            <div class="resize-drag not-out-drop ck-da-keo"
+                [id]="d.id"
+                style="z-index: -1;"
+                #itemElement
+
+                [ngStyle]="(d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so_con_dau_va_thong_tin') ? changePosition(d) : changePositionSignature(d)">
+              <div class="name-sig-img-daky long-text-ellipsis">{{d.name}}</div>
+              <app-image-sign-contract-template-detail [style]="d.type==2 || d.type==3 ? 'display: flex; width: 100%; height: 100%; padding: 4px;' : ''"  [datas]="datas" [sign]="d"></app-image-sign-contract-template-detail>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="footer-sample-contract">
-    <div class="col-md-3">
-    </div>
-    <div class="col-md-9">
+  <div class="footer-sample-contract row">
+    <div class="col-md-12" style="display: flex; justify-content: flex-end;">
         <div class="center" style="margin-top: 5px;">
-          <a style="text-align: center">
-            <button class="call-page" (click)="firstPage()">
-              <!-- <img width="16px" height="20px" *ngIf="this.page1" src="assets/img/previousbold.svg"> -->
-              <img  width="16px" height="20px" *ngIf="!this.page1" src="assets/img/firstpage.svg">
-              <img  width="16px" height="20px" *ngIf="this.page1" src="assets/img/previousbold.svg">
-            </button>
-            <button style="margin-right: 5px;" class="call-page1" (click)="previousPage()">
-              <img width="12px" height="16px" *ngIf="this.page1" src="assets/img/firstpagebold.svg">
-              <img width="12px" height="16px" *ngIf="!this.page1" src="assets/img/previous.svg">
-            </button>
-
-            <input class="input1" [(ngModel)]="pageNum" type="text" (keyup.enter)="onEnter($event)" />&nbsp;/ &nbsp;{{this.pageNumber}}
-            <button class="call-page1" (click)="onNextPage()" id="prev">
-              <img width="12px" height="16px" *ngIf="this.pageLast" src="assets/img/next.svg">
-              <img width="12px" height="16px" *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
-            </button>
-
-            <button class="call-page1" (click)="lastPage()" id="prev">
-              <img width="16px" height="20px" *ngIf="this.pageLast" src="assets/img/lastpage.svg">
-              <img width="16px" height="20px" *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
-            </button>
-          </a>
-
-          <a style="position: absolute; right: 5px;">
+          <a>
             <button  type="button" name="next" class="next action-button" (click)="endContract()">{{'end' | translate}}</button>
           </a>
         </div>
     </div>
   </div>
-</ng-template>
+</div>
 
 
-  <div>{{roleMess | translate}}</div>
+<div>{{roleMess | translate}}</div>
 

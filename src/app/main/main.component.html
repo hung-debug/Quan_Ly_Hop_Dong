@@ -87,7 +87,7 @@
               <!-- <a href="{{item.notice_url}}" style="text-decoration: none"> -->
               <div class="row">
                   <div *ngIf="this.lang == 'vi'" class="col-md-12 item_contract_name">{{item.notice_name}}</div>
-                  <div *ngIf="this.lang == 'en'" class="col-md-12 item_contract_name">{{item.notice_name.replace("Ký HĐ","Sign contract").replace("Quá hạn","Overdue").replace("Hoàn thành","Completed")}}</div>
+                  <div *ngIf="this.lang == 'en'" class="col-md-12 item_contract_name">{{item.notice_name.replace("Ký tài liệu","Sign contract").replace("Quá hạn","Overdue").replace("Hoàn thành","Completed")}}</div>
               </div>
               <div class="row" *ngFor="let s of item.notice_content.split('<br/>')">
                 <div *ngIf="!s.includes('\nBên B: #PARTICIPANT_2#')" class="col-md-12 item_contract_infor">

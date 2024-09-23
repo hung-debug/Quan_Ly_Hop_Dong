@@ -350,7 +350,7 @@ export class ContractFolderComponent implements OnInit {
           )
       },
       err => {
-        this.toastService.showErrorHTMLWithTimeout("Lấy dữ liệu file hợp đồng lỗi","",3000)
+        this.toastService.showErrorHTMLWithTimeout("Lấy dữ liệu file tài liệu lỗi","",3000)
       }
     )
   }
@@ -467,7 +467,7 @@ export class ContractFolderComponent implements OnInit {
       if (this.currentParentId == 0) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng chọn thư mục cần xóa','',3000)
       } else {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng chọn thư mục/hợp đồng cần xóa','',3000)
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng chọn thư mục/tài liệu cần xóa','',3000)
       }
     }
   }

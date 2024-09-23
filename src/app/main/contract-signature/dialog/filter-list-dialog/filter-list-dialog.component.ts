@@ -73,7 +73,7 @@ export class FilterListDialogComponent implements OnInit {
       organization_id: this.fbd.control(this.data.organization_id),
       status:this.data.status,
       contractStatus: this.fbd.control(this.data.contractStatus),
-    });
+    });   
   }
 
   onSubmit() {
@@ -93,7 +93,6 @@ export class FilterListDialogComponent implements OnInit {
       contractStatus: this.addForm.value.contractStatus
     }
     this.dialogRef.close();
-    
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['main/c/receive/' + data.status],
       {

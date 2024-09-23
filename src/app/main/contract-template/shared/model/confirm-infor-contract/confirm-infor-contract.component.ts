@@ -103,11 +103,11 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         this.router.navigate(['/main/contract-template']);
       });
       this.spinner.hide();
-      this.toastService.showSuccessHTMLWithTimeout("Tạo mẫu hợp đồng thành công!", "", 3000);
+      this.toastService.showSuccessHTMLWithTimeout("Tạo mẫu tài liệu thành công!", "", 3000);
     },
     error => {
       this.spinner.hide();
-      this.toastService.showErrorHTMLWithTimeout("Tạo mẫu hợp đồng thất bại", "", 3000);
+      this.toastService.showErrorHTMLWithTimeout("Tạo mẫu tài liệu thất bại", "", 3000);
       return false;
     }
     );
@@ -373,7 +373,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
           this.router.navigate(['/main/contract-template']);
         });
-        this.toastService.showSuccessHTMLWithTimeout("Sửa mẫu hợp đồng thành công!", "", 3000);
+        this.toastService.showSuccessHTMLWithTimeout("Sửa mẫu tài liệu thành công!", "", 3000);
 
       } else {
         if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {

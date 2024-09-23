@@ -9,7 +9,7 @@
 
 <div class="text-sign" *ngIf="sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu'">
   <div class="skeleton-sign">
-    <span *ngIf="this.lang == 'vi'" id="input-text" [ngbTooltip]="sign.value ? sign.value : ''">{{sign.value ? sign.value : ((sign.sign_unit == 'text') ? 'Text' : 'Số hợp đồng')}}</span>
-    <span *ngIf="this.lang == 'en'" id="input-text" [ngbTooltip]="sign.value ? sign.value : ''">{{sign.value ? sign.value : ((sign.sign_unit == 'text') ? 'Text' : 'Contract code')}}</span>
+    <span *ngIf="this.lang == 'vi'" id="input-text" [ngbTooltip]="sign.value ? sign.value : ''">{{sign.value ? sign.value : ((sign.sign_unit == 'text') ? 'Text' : 'Số tài liệu')}}</span>
+    <span *ngIf="this.lang == 'en'" id="input-text" [ngbTooltip]="sign.value ? sign.value : ''">{{sign.value ? sign.value : ((sign.sign_unit == 'text') ? 'Text' : 'Document code')}}</span>
   </div>
 </div>

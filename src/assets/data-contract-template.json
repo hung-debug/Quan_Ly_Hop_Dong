@@ -1,7 +1,7 @@
 {
     "items": [{
             "id": 1,
-            "contractName": "Hợp đồng thuê khoán chuyên môn",
+            "contractName": "Tài liệu thuê khoán chuyên môn",
             "userName": "Người ký (1)",
             "partnerName": "Người ký (1)",
             "status": "Đang phát hành",
@@ -10,7 +10,7 @@
         },
         {
           "id": 1,
-          "contractName": "Hợp đồng thanh lý",
+          "contractName": "Tài liệu thanh lý",
           "userName": "Người ký (1)",
           "partnerName": "Người ký (2), Văn thư (1)",
           "status": "Đang phát hành",
@@ -19,7 +19,7 @@
       },
       {
         "id": 1,
-        "contractName": "Hợp đồng bảo dưỡng thiết bị",
+        "contractName": "Tài liệu bảo dưỡng thiết bị",
         "userName": "Người ký (1)",
         "partnerName": "Người ký (2)",
         "status": "Đang phát hành",
@@ -28,7 +28,7 @@
     },
     {
       "id": 1,
-      "contractName": "Hợp đồng thay thế thiết bị",
+      "contractName": "Tài liệu thay thế thiết bị",
       "userName": "Người ký (1)",
       "partnerName": "Người ký (1)",
       "status": "Đang phát hành",
@@ -37,7 +37,7 @@
   },
   {
     "id": 1,
-    "contractName": "Hợp đồng phát triển dịch vụ",
+    "contractName": "Tài liệu phát triển dịch vụ",
     "userName": "Người ký (1)",
     "partnerName": "Người xem xét (1), Người ký (1)",
     "status": "Đang phát hành",

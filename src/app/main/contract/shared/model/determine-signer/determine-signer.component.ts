@@ -320,14 +320,14 @@ export class DetermineSignerComponent implements OnInit {
     try {
       numberContractUseOrg = await this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise();
     } catch (err) {
-      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng đã dùng ' + err, '', 3000);
+      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng tài liệu đã dùng ' + err, '', 3000);
     }
 
     //So luong hop dong da mua
     try {
       numberContractBuyOrg = await this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise();
     } catch (err) {
-      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng đã mua ' + err, '', 3000);
+      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng tài liệu đã mua ' + err, '', 3000);
     }
 
 
@@ -519,7 +519,7 @@ export class DetermineSignerComponent implements OnInit {
         // } else
         if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0 && this.getDataSignCert(data).length == 0 && this.getDataSignRemote(data).length == 0) {
           this.unitService.getTaxCodeOriganzation(this.userService.getInforUser().organization_id).subscribe((res: any) => {
-            data.card_id = res.tax_code;
+            data.card_id = res.parent_tax_code;
           })
         }
       }
@@ -1756,7 +1756,7 @@ export class DetermineSignerComponent implements OnInit {
     this.data_organization.recipients = new_arr;
   }
 
-  // xóa đối tượng điều phối hợp đồng (done)
+  // xóa đối tượng điều phối tài liệu (done)
   deletePartnerCoordination(index_item: any, item: any, id: number) {
     let arr_clone = item.recipients.filter((p: any) => p.role == 1);
     let arr_clone_different = item.recipients.filter((p: any) => p.role != 1);

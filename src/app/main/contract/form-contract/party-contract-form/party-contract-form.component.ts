@@ -269,7 +269,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       if (items.type == 3) {
         this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
 
-        //Cá nhân không ký số không đẩy lên bộ công thương(thông báo với loại hợp đồng ceca_push = 1)
+        //Cá nhân không ký số không đẩy lên bộ công thương(thông báo với loại tài liệu ceca_push = 1)
         // items.recipients.forEach((ele: any) => {
         //   if(this.datasForm.ceca_push == 1 && ele.sign_type.length > 0) {
         //     if(this.datasForm.ceca_push == 1 && ele.sign_type[0].id == 1 || ele.sign_type[0].id == 5) {
@@ -353,14 +353,14 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     try {
       numberContractUseOrg = await this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise();
     } catch(err) {
-      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng đã dùng '+err,'',3000);
+      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng tài liệu đã dùng '+err,'',3000);
     }
 
     //So luong hop dong da mua
     try {
       numberContractBuyOrg = await this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise();
     } catch(err) {
-      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng đã mua '+err,'',3000);
+      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng tài liệu đã mua '+err,'',3000);
     }
 
 
@@ -394,7 +394,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         }
 
         if (this.action != 'edit') {
-          // tạo mới hđ từ mẫu gán id = null
+          // tạo mới tài liệu từ mẫu gán id = null
           if (!element.template_recipient_id) {
             if (!element.id) {
               element.id = null;
@@ -527,7 +527,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         // else
          if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0 && this.getDataSignCert(data).length == 0) {
           this.unitService.getTaxCodeOriganzation(this.userService.getInforUser().organization_id).subscribe((res: any) => {
-            data.card_id=res.tax_code;})
+            data.card_id=res.parent_tax_code;})
         }
       }
     }
@@ -1602,7 +1602,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     this.data_organization.recipients = new_arr;
   }
 
-  // xóa đối tượng điều phối hợp đồng (done)
+  // xóa đối tượng điều phối tài liệu (done)
   deletePartnerCoordination(index_item: any, item: any, id: number) {
     let arr_clone = item.recipients.filter((p: any) => p.role == 1);
     let arr_clone_different = item.recipients.filter((p: any) => p.role != 1);

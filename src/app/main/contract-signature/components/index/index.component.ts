@@ -83,7 +83,7 @@ export class IndexComponent implements OnInit {
     if (e == 1) {
       let inputValue = '';
       const { value: textRefuse } = await Swal.fire({
-        title: 'Bạn có chắc chắn hủy hợp đồng này không? Vui lòng nhập lý do hủy:',
+        title: 'Bạn có chắc chắn hủy tài liệu này không? Vui lòng nhập lý do hủy:',
         input: 'text',
         inputValue: inputValue,
         showCancelButton: true,
@@ -93,7 +93,7 @@ export class IndexComponent implements OnInit {
         cancelButtonText: 'Hủy',
         inputValidator: (value) => {
           if (!value) {
-            return 'Bạn cần nhập lý do hủy hợp đồng!'
+            return 'Bạn cần nhập lý do hủy tài liệu!'
           } else {
             return null;
           }
@@ -120,7 +120,7 @@ export class IndexComponent implements OnInit {
           this.contractService.considerRejectContract(id_recipient_signature, textRefuse).subscribe(
             (result) => {
               this.spinner.hide();
-              this.toastService.showSuccessHTMLWithTimeout('Hủy hợp đồng thành công!', '', 3000);
+              this.toastService.showSuccessHTMLWithTimeout('Hủy tài liệu thành công!', '', 3000);
               this.router.navigate(['/main/contract-signature/receive/wait-processing']);
             }, error => {
               this.spinner.hide();
