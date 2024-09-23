@@ -77,6 +77,7 @@ export class ContractSignatureComponent implements OnInit {
   filter_to_date: any = '';
   filter_status: any = 1;
   contractStatus: any = '';
+  name_or_email_customer: any;
 
   typeDisplay: string = 'signOne';
   // typeDisplay: string = 'downloadOne';
@@ -173,6 +174,13 @@ export class ContractSignatureComponent implements OnInit {
       } else {
         this.filter_from_date = '';
       }
+      
+      if (typeof params.name_or_email_customer != 'undefined' && params.name_or_email_customer) {
+        this.name_or_email_customer = params.name_or_email_customer;
+      } else {
+        this.name_or_email_customer = '';
+      }
+      
       if (
         typeof params.filter_to_date != 'undefined' &&
         params.filter_to_date
@@ -203,7 +211,9 @@ export class ContractSignatureComponent implements OnInit {
         this.organization_id = '';
       }
     });
-
+    
+    this.organization_id = this.currentUser.organizationId;
+    
     if (sessionStorage.getItem('receivePageNum')) {
       this.page = Number(sessionStorage.getItem('receivePageNum'));
     }
@@ -349,7 +359,7 @@ export class ContractSignatureComponent implements OnInit {
     this.typeDisplay = 'downloadMany';
     this.enterPage = this.p;
     this.contractService.getContractMyProcessList(this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status,
-      this.p, this.page, 30).subscribe((data) => {
+      this.p, this.page, 30, this.name_or_email_customer,this.organization_id).subscribe((data) => {
         this.checkedAll = false;
         this.dataChecked = [];
 
@@ -440,7 +450,9 @@ export class ContractSignatureComponent implements OnInit {
         this.filter_status,
         this.p,
         this.page,
-        this.contractStatus
+        this.contractStatus,
+        this.name_or_email_customer,
+        this.organization_id
       )
       .subscribe((data) => {
         this.contracts = data.entities;
@@ -537,7 +549,9 @@ export class ContractSignatureComponent implements OnInit {
           this.filter_status,
           this.p,
           this.page,
-          this.contractStatus
+          this.contractStatus,
+          this.name_or_email_customer,
+          this.organization_id
         )
         .subscribe(
           (data) => {
@@ -579,7 +593,9 @@ export class ContractSignatureComponent implements OnInit {
             this.filter_status,
             this.p,
             this.page,
-            this.contractStatus
+            this.contractStatus,
+            this.name_or_email_customer,
+            this.organization_id
           )
           .subscribe(
             (data) => {
@@ -729,7 +745,7 @@ export class ContractSignatureComponent implements OnInit {
     return list;
   }
 
-  getNameOrganization(item: any, index: any, item1?: any) {
+  getNameOrganization(item: any, index: any) {
     return sideList[index].name + ' : ' + item.name;
   }
 
@@ -2752,8 +2768,11 @@ export class ContractSignatureComponent implements OnInit {
       filter_contract_no: this.filter_contract_no,
       filter_from_date: this.filter_from_date,
       filter_to_date: this.filter_to_date,
+      name_or_email_customer:this.name_or_email_customer,
+      organization_id: this.organization_id,
       status: this.status,
-      type_display: this.typeDisplay
+      type_display: this.typeDisplay,
+      refreshContractList: this.getContractList.bind(this) 
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(FilterListDialogComponent, {

@@ -196,7 +196,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.typeList = data
     });
 
-    this.contractService.getContractList('off', '', '', '', '', '', '', 30, "", 10000).subscribe(data => {
+    this.contractService.getContractList('off', '', '', '', '', '', '', 30, "", 10000,'','').subscribe(data => {
       this.contractConnectList = data.entities;
     });
 

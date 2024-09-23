@@ -719,8 +719,8 @@ export class DashboardComponent implements OnInit {
   }
 
   getNameOrganization(item: any, index: any) {
-    if(item.type == 3 && item.recipients.length > 0)
-      return sideList[index].name + " : " + item.recipients[0].name;
+    // if(item.type == 3 && item.recipients.length > 0)
+    //   return sideList[index].name + " : " + item.recipients[0].name;
     return sideList[index].name + " : " + item.name;
   }
 
@@ -743,10 +743,10 @@ export class DashboardComponent implements OnInit {
 
 
     });
-    this.contractService.getContractList('off','','','','','','',0,'',1,'').subscribe(data => {
+    this.contractService.getContractList('off','','','','','','',0,'',1,'','','').subscribe(data => {
       this.contractConnectList = data.entities;
     })
-    this.contractSignature.getContractMyProcessList('','','','','',1,'',4,'').subscribe(data => {
+    this.contractSignature.getContractMyProcessList('','','','','',1,'',4,'','','').subscribe(data => {
       this.contractRequestList = data.entities;  
       this.contractRecipienteList.forEach((item: any) => {
 
