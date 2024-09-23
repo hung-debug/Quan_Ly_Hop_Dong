@@ -35,8 +35,6 @@ export class FilterListDialogComponent implements OnInit {
   organization_id:any;
   selectedNodeOrganization:any;
   isQLHD_03: boolean | undefined;
-  handler_name: any;
-  name_or_email_customer: any;
 
   get f() { return this.addForm.controls; }
 
