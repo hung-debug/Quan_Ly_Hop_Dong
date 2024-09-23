@@ -255,7 +255,9 @@ export class ContractService {
   public getContractList(isOrg: any, organization_id: any, filter_name: any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status: any,
     page: any,
     size: any,
-    issue?: any
+    handlerName: any,
+    nameOrEmailCustomer: any,
+    issue?: any,
   ): Observable<any> {
     this.getCurrentUser();
 
@@ -298,7 +300,10 @@ export class ContractService {
           '&page=' +
           page +
           '&size=' +
-          size;
+          size + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
+          if(handlerName != ""){
+            listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
+          }
       } else {
         listContractUrl =
           this.listContractUrl +
@@ -319,7 +324,10 @@ export class ContractService {
           '&page=' +
           page +
           '&size=' +
-          size;
+          size + '&name_or_email_customer=' + nameOrEmailCustomer.trim() ;
+          if(handlerName != ""){
+            listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
+          }
       }
     } else {
       if (organization_id == '') {
@@ -344,11 +352,17 @@ export class ContractService {
           '&page=' +
           page +
           '&size=' +
-          size;
+          size + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
+          if(handlerName != ""){
+            listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
+          }
       } else {
         listContractUrl = this.listContractOrgUrl + '?organization_id=' + organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' +
           filter_contract_no.trim() + '&from_date=' + filter_from_date + '&to_date=' + filter_to_date + '&status=' + filter_status + '&remain_day=' + remain_day +
-          '&page=' + page + '&size=' + size;
+          '&page=' + page + '&size=' + size + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
+          if(handlerName != ""){
+            listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
+          }
       }
     }
 
@@ -1143,7 +1157,7 @@ export class ContractService {
     const body = {
       mobile: phone,
       network_code: networkCode,
-      prompt: `Bạn có yêu cầu ký số hợp đồng ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
+      prompt: `Bạn có yêu cầu ký số tài liệu ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
       reason: 'reason',
       image_base64: image_base64,
       isTimestamp: isTimestamp,

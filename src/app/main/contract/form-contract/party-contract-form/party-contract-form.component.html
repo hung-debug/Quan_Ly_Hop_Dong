@@ -1010,7 +1010,7 @@
       <div>
         <!--Đối tác là tổ chức-->
         <div *ngIf="item.type == 2">
-          <!-- điều phối hđ -->
+          <!-- điều phối tài liệu -->
           <div>
             <div class="label">{{ "user.lead" | translate }}
               <span *ngIf="getPartnerCoordination(item).length > 0">
@@ -1077,7 +1077,7 @@
                   <div class="mt-7px" *ngIf="this.site == 'NB'">
                     <div class="col-md-6" style="padding-right: 7px">
                       <div class="label-text flex">{{'user.phone' | translate}}&nbsp;&nbsp;<div
-                        style="color: #ffc107;">({{'Nhận thông báo khi xử lý hợp đồng' | translate}})</div>
+                        style="color: #ffc107;">({{'Nhận thông báo khi xử lý tài liệu' | translate}})</div>
                       </div>
                       <div class="input-data">
                         <input class="content-input flex hover-item" type="text" placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone"

@@ -72,7 +72,7 @@ export class PkiDialogSignComponent implements OnInit {
       if (!ArrRecipientsNew) {
 
         this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
+          'Bạn không có quyền xử lý tài liệu này!',
           '',
           3000
         );

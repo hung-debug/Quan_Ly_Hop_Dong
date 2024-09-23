@@ -18,9 +18,9 @@
     <ng-template [ngIf]="!roleMess">
       <div class="row cancel-padding" style="margin: 16px auto;">
         <div [ngClass]="{'col-lg-8-7': this.isOrg == 'off' && this.idCheckBox.length > 0, 'col-lg-10-9': !(this.isOrg == 'off' && this.idCheckBox.length > 0)}" class="col-lg-8-7 btn-padding-right">
-            <div class="input-line search">
+            <div class="input-group search">
                 <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
-                <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                <input type="text" id="filter_name" [value]="filter_name" class="input_text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                 <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
             </div>
 
@@ -120,7 +120,7 @@
                   </div>
               </div>
 
-              <!--Cột 3: Trạng thái HĐ-->
+              <!--Cột 3: Trạng thái Tài liệu-->
               <div class="col-sm-2 calendar_create">
                 <div class="item_contract_status">
                   <!-- <span class="status_blue">{{this.filter_status | pipe | translate}}
@@ -130,7 +130,7 @@
                 </div>
               </div>
 
-              <!--Cột 4: Ngày tạo HĐ-->
+              <!--Cột 4: Ngày tạo Tài liệu-->
               <!-- <div class="col-md-2 calendar_deadline">
                   <div style="display: flex; justify-content: center;">
                       <div class="div_icon"><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date:
@@ -146,7 +146,7 @@
 
               <!--Cột 5: Ngày cập nhật-->
               <div class="col-sm-2 calendar_create">
-                <!-- để tạm ngày tạo HĐ -->
+                <!-- để tạm ngày tạo Tài liệu -->
                 <div><i class="fa fa_icon"></i><span class="item_date">{{item.sign_time | date:
                   'dd/MM/yyyy'}}</span>
                 </div>
@@ -297,9 +297,9 @@
     <ng-template [ngIf]="!roleMess">
       <div class="row cancel-padding" style="margin: 16px auto;">
         <div [ngClass]="{'col-lg-9-8': (this.filter_status == 34 && this.isOrg == 'off' && this.idCheckBox.length > 0), 'col-lg-10-9': !(status === 'draft' && isOrg === 'off'), 'col-lg-8-7': status === 'draft' && isOrg === 'off', 'btn-padding-right': true}">
-            <div class="input-line search">
+            <div class="input-group search">
                 <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
-                <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                <input type="text" id="filter_name" [value]="filter_name" class="input_text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                 <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
             </div>
         </div>
@@ -423,7 +423,7 @@
                     </div>
                 </div>
 
-                <!--Cột 3: Trạng thái HĐ-->
+                <!--Cột 3: Trạng thái Tài liệu-->
                 <div class="col-sm-2 calendar_create">
                   <div class="item_contract_status">
                     <span class="status_blue" [ngStyle]="{'color': this.color, 'background-color': this.backgroundColor}">{{this.filter_status | pipe | translate}}</span>
@@ -438,7 +438,7 @@
 
                 <!--Cột 5: Ngày cập nhật-->
                 <div class="col-sm-2 calendar_create">
-                  <!-- để tạm ngày tạo HĐ -->
+                  <!-- để tạm ngày tạo Tài liệu -->
                   <div><i class="fa fa_icon"></i>
                     <span *ngIf = "this.filter_status == 20 || this.filter_status == 33" class="item_date">
                       {{item.sign_time | date:'dd/MM/yyyy HH:mm:ss'}}
@@ -606,7 +606,7 @@
     <div>{{roleMess | translate}}</div>
 </div>
 
-<!-- Màn HĐ hoàn thành HĐ tổ chức-->
+<!-- Màn Tài liệu hoàn thành Tài liệu tổ chức-->
 <div *ngIf="!((this.filter_status == 20 ||
               this.filter_status == 33 ||
               this.filter_status == 30 ||
@@ -623,9 +623,9 @@
     <ng-template [ngIf]="!roleMess">
       <div class="row cancel-padding" style="margin: 16px auto;">
         <div class="col-lg-9-8 btn-padding-right">
-            <div class="input-line search">
+            <div class="input-group search">
                 <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
-                <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                <input type="text" id="filter_name" [value]="filter_name" class="input_text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                 <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
             </div>
         </div>
@@ -713,7 +713,7 @@
                     </div>
                 </div>
 
-                <!--Cột 3: Trạng thái HĐ-->
+                <!--Cột 3: Trạng thái Tài liệu-->
                 <div class="col-sm-2 calendar_create">
                   <div class="item_contract_status">
                     <span class="status_blue" [ngStyle]="{'color': this.color, 'background-color': this.backgroundColor}">{{this.filter_status | pipe | translate}}
@@ -738,7 +738,7 @@
 
                 <!--Cột 5: Ngày cập nhật-->
                 <div class="col-sm-2 calendar_create">
-                  <!-- để tạm ngày tạo HĐ -->
+                  <!-- để tạm ngày tạo Tài liệu -->
                   <div><i class="fa fa_icon"></i><span class="item_date">{{item.success_time | date:
                     'dd/MM/yyyy HH:mm:ss'}}</span>
                   </div>
@@ -817,9 +817,9 @@
     <ng-template [ngIf]="!roleMess">
       <div class="row cancel-padding" style="margin: 16px auto;">
         <div class="col-lg-9-8 btn-padding-right">
-            <div class="input-line search">
+            <div class="input-group search">
                 <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
-                <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                <input type="text" id="filter_name" [value]="filter_name" class="input_text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                 <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
             </div>
         </div>
@@ -906,7 +906,7 @@
                     </div>
                 </div>
 
-                <!--Cột 3: Trạng thái HĐ-->
+                <!--Cột 3: Trạng thái Tài liệu-->
                 <div class="col-sm-2 calendar_create">
                   <div class="item_contract_status">
                     <!-- <span class="status_blue">{{this.filter_status | pipe | translate}}
@@ -1069,7 +1069,7 @@
     <div>{{roleMess | translate}}</div>
 </div>
 
-<!-- Hợp đồng hoàn thành -->
+<!-- Tài liệu hoàn thành -->
 <div *ngIf="(this.typeDisplay == 'downloadMany' && this.filter_status == 30)">
     <div class="row container-fluid-bg">
       <div class="margin-top-16">
@@ -1082,9 +1082,9 @@
         <ng-template [ngIf]="!roleMess">
           <div class="row cancel-padding" style="margin: 16px auto;">
             <div class="col-lg-8-7 btn-padding-right">
-                <div class="input-line search">
+                <div class="input-group search">
                     <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
-                    <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                    <input type="text" id="filter_name" [value]="filter_name" class="input_text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                     <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
                 </div>
             </div>
@@ -1203,7 +1203,7 @@
                         </div>
                     </div>
 
-                    <!--Cột 3: Trạng thái HĐ-->
+                    <!--Cột 3: Trạng thái Tài liệu-->
                     <div class="col-sm-2 calendar_create">
                       <div class="item_contract_status">
                         <span class="status_blue" [ngStyle]="{'color': this.color, 'background-color': this.backgroundColor}">{{this.filter_status | pipe | translate}}</span>
@@ -1314,7 +1314,7 @@
     </div>
 </div>
 
-<!--Phát hành hợp đồng-->
+<!--Phát hành tài liệu-->
 <div *ngIf="(this.typeDisplay == 'release' && this.filter_status == 0)">
     <div class="row container-fluid-bg">
       <div class="margin-top-16">
@@ -1327,9 +1327,9 @@
         <ng-template [ngIf]="!roleMess">
           <div class="row cancel-padding" style="margin: 16px auto;">
             <div class="col-lg-8-7 btn-padding-right">
-                <div class="input-line search">
+                <div class="input-group search">
                     <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
-                    <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                    <input type="text" id="filter_name" [value]="filter_name" class="input_text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                     <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
                 </div>
             </div>
@@ -1441,7 +1441,7 @@
                         </div>
                     </div>
 
-                    <!--Cột 3: Trạng thái HĐ-->
+                    <!--Cột 3: Trạng thái Tài liệu-->
                     <div class="col-sm-2 calendar_create">
                       <div class="item_contract_status">
                         <span class="status_blue" [ngStyle]="{'color': this.color, 'background-color': this.backgroundColor}">{{this.filter_status | pipe | translate}}</span>
@@ -1523,9 +1523,9 @@
       <ng-template [ngIf]="!roleMess">
         <div class="row cancel-padding" style="margin: 16px auto;">
           <div class="col-lg-8-7 btn-padding-right">
-              <div class="input-line search">
+              <div class="input-group search">
                   <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
-                  <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                  <input type="text" id="filter_name" [value]="filter_name" class="input_text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                   <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
               </div>
           </div>
@@ -1626,7 +1626,7 @@
                       </div>
                   </div>
 
-                  <!--Cột 3: Trạng thái HĐ-->
+                  <!--Cột 3: Trạng thái Tài liệu-->
                   <div class="col-sm-2 calendar_create">
                     <div class="item_contract_status">
                       <span class="status_blue" [ngStyle]="{'color': this.color, 'background-color': this.backgroundColor}">{{this.filter_status | pipe | translate}}</span>

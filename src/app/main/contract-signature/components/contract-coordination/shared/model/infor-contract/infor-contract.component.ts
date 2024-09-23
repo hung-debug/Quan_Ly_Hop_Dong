@@ -96,22 +96,22 @@ export class InforContractComponent implements OnInit {
     this.contractTypeList = [
       {
         item_id: 1,
-        item_text: "Loại hợp đồng A",
+        item_text: "Loại tài liệu A",
       },
       {
         item_id: 2,
-        item_text: "Loại hợp đồng B",
+        item_text: "Loại tài liệu B",
       }
     ];
 
     this.contractConnectList = [
       {
         item_id: 1,
-        item_text: "Hợp đồng A",
+        item_text: "Tài liệu A",
       },
       {
         item_id: 2,
-        item_text: "Hợp đồng B",
+        item_text: "Tài liệu B",
       }
     ];
 
@@ -213,11 +213,11 @@ export class InforContractComponent implements OnInit {
   validData() {
     this.clearError();
     if (!this.name) {
-      this.errorContractName = 'Tên hợp đồng không được để trống!';
+      this.errorContractName = 'Tên tài liệu không được để trống!';
       return false;
     }
     if (!this.datas.contractFile) {
-      this.errorContractFile = 'File hợp đồng không được để trống!';
+      this.errorContractFile = 'File tài liệu không được để trống!';
       return false;
     }
 

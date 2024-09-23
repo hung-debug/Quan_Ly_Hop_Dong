@@ -146,7 +146,7 @@ export class ConfirmContractBatchComponent
       (error: any) => {
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout(
-          'Lấy thông tin hợp đồng thất bại',
+          'Lấy thông tin tài liệu thất bại',
           '',
           3000
         );
@@ -305,7 +305,7 @@ export class ConfirmContractBatchComponent
           }
           if (!fileC) {
             this.toastService.showErrorHTMLWithTimeout(
-              'Thiếu dữ liệu file hợp đồng!',
+              'Thiếu dữ liệu file tài liệu!',
               '',
               3000
             );
@@ -595,7 +595,7 @@ export class ConfirmContractBatchComponent
     }
   }
 
-  // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
+  // hàm set kích thước cho đối tượng khi được kéo thả vào trong tài liệu
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
     let style: any =
     (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so' && d.sign_unit != 'chu_ky_so_con_dau_va_thong_tin' && d.sign_unit != 'chu_ky_so_con_dau' && d.sign_unit != 'chu_ky_so_thong_tin') ?
@@ -848,13 +848,13 @@ export class ConfirmContractBatchComponent
     let value = event.target.value;
     if (!value) {
       this.pageNumberCurrent = this.pageNumberOld;
-      //this.toastService.showErrorHTMLWithTimeout("Số hợp đồng không được để trống", "", 3000);
+      //this.toastService.showErrorHTMLWithTimeout("Số tài liệu không được để trống", "", 3000);
     } else if (value > this.pageNumberTotal) {
       this.pageNumberCurrent = this.pageNumberOld;
-      //this.toastService.showErrorHTMLWithTimeout("Không nhập số hợp đồng vượt quá " + this.pageNumberTotal, "", 3000);
+      //this.toastService.showErrorHTMLWithTimeout("Không nhập số tài liệu vượt quá " + this.pageNumberTotal, "", 3000);
     } else if (value < 1) {
       this.pageNumberCurrent = this.pageNumberOld;
-      //this.toastService.showErrorHTMLWithTimeout("Không nhập số hợp đồng nhỏ hơn 1", "", 3000);
+      //this.toastService.showErrorHTMLWithTimeout("Không nhập số tài liệu nhỏ hơn 1", "", 3000);
     } else {
       this.pageNumberCurrent = value;
       this.pageNumberOld = this.pageNumberCurrent;
@@ -962,11 +962,11 @@ export class ConfirmContractBatchComponent
 
         if(response.errors?.length > 0) {
           if(response.errors[0].code == 1015) {
-            this.toastService.showErrorHTMLWithTimeout('Số lượng hợp đồng đã mua không còn đủ để tạo hợp đồng','',3000);
+            this.toastService.showErrorHTMLWithTimeout('Số lượng tài liệu đã mua không còn đủ để tạo tài liệu','',3000);
             this.spinner.hide();
             return;
           } else {
-            this.toastService.showErrorHTMLWithTimeout('Tạo hợp đồng theo lô thất bại','',3000);
+            this.toastService.showErrorHTMLWithTimeout('Tạo tài liệu theo lô thất bại','',3000);
             this.spinner.hide();
             return;
           }
@@ -978,7 +978,7 @@ export class ConfirmContractBatchComponent
           });
           this.spinner.hide();
           this.toastService.showSuccessHTMLWithTimeout(
-            'Tạo hợp đồng theo lô thành công',
+            'Tạo tài liệu theo lô thành công',
             '',
             3000
           );
@@ -997,7 +997,7 @@ export class ConfirmContractBatchComponent
     // try {
     //   getNumberContractCreateOrg = await this.contractService.getDataNotifyOriganzation().toPromise();
     // } catch (err) {
-    //   this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng' + err, '', 3000);
+    //   this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng tài liệu' + err, '', 3000);
     // }
 
     // if ((countCeCa > 0 && (Number(getNumberContractCreateOrg.numberOfCeca) - this.datasBatch.ceca_push) < 0) &&

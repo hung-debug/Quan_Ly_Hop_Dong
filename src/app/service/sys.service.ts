@@ -24,7 +24,7 @@ export class SysService {
     } else {
       return {
         result: false,
-        message: 'File hợp đồng yêu cầu tối đa 25MB'
+        message: 'File tài liệu yêu cầu tối đa 25MB'
       }
     }
   }

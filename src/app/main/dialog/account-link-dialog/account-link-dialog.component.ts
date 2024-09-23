@@ -87,16 +87,16 @@ export class AccountLinkDialogComponent implements OnInit {
   }
 
   async checkSMS(contractId: any, recipientId: any, phone: any) {
-    //Lấy số lượng hợp đồng đã sử dụng
+    //Lấy số lượng tài liệu đã sử dụng
     const numberContractUseOriganzation = await this.unitService.getNumberContractUseOriganzation(this.data.orgId).toPromise();
     this.smsContractUse = numberContractUseOriganzation.sms;
 
-    //Lấy số lượng hợp đồng đã mua
+    //Lấy số lượng tài liệu đã mua
     const getNumberContractBuyOriganzation = await this.unitService.getNumberContractBuyOriganzation(this.data.orgId).toPromise();
     this.smsContractBuy = getNumberContractBuyOriganzation.sms;
 
     if(Number(this.smsContractUse) + Number(1) > Number(this.smsContractBuy)) {
-      this.toastService.showErrorHTMLWithTimeout('Số lượng SMS của tổ chức không đủ để nhận thông tin ký hợp đồng. Liên hệ với Admin để tiếp tục sử dụng dịch vụ','',3000);
+      this.toastService.showErrorHTMLWithTimeout('Số lượng SMS của tổ chức không đủ để nhận thông tin ký tài liệu. Liên hệ với Admin để tiếp tục sử dụng dịch vụ','',3000);
       return;
     } else {
         this.sendOtp(contractId, recipientId, phone);
@@ -493,7 +493,7 @@ export class AccountLinkDialogComponent implements OnInit {
 
               this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
               this.toastService.showSuccessHTMLWithTimeout(
-                [3, 4].includes(this.datas.roleContractReceived) ? 'Bạn vừa thực hiện ký thành công. Hợp đồng đã được chuyển tới người tiếp theo!' : 'Xem xét hợp đồng thành công'
+                [3, 4].includes(this.datas.roleContractReceived) ? 'Bạn vừa thực hiện ký thành công. Tài liệu đã được chuyển tới người tiếp theo!' : 'Xem xét tài liệu thành công'
                 , [3,4].includes(this.datas.roleContractReceived) ? 'Thực hiện ký thành công!' : '', 3000);
                 this.dialog.closeAll();
                 this.spinner.hide();

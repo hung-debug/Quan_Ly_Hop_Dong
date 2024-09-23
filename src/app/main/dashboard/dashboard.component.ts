@@ -238,7 +238,7 @@ export class DashboardComponent implements OnInit {
           this.numContractUse = data.contract;
           this.loadData1 = true;
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
+          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng tài liệu đã dùng', "", 3000);
         }
       )
 
@@ -249,7 +249,7 @@ export class DashboardComponent implements OnInit {
           this.loadData2 = true;
           this.search()
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng tài liệu đã mua', "", 3000);
         }
       )
 
@@ -277,7 +277,7 @@ export class DashboardComponent implements OnInit {
       Quý khách vui lòng đóng phí duy trì dịch vụ hàng năm để tiếp tục sử dụng sau ngày ${moment(this.endLicense).format("DD/MM/YYYY")}. Trân trọng cảm ơn!`
     }
     if (isContractExp){
-      messageContractExp = "Hợp đồng"
+      messageContractExp = "Tài liệu"
       numberExpArr.push(messageContractExp)
     }
     if (isEkycExp){
@@ -743,10 +743,10 @@ export class DashboardComponent implements OnInit {
 
 
     });
-    this.contractService.getContractList('off','','','','','','',0,'',1,'').subscribe(data => {
+    this.contractService.getContractList('off','','','','','','',0,'',1,'','','').subscribe(data => {
       this.contractConnectList = data.entities;
     })
-    this.contractSignature.getContractMyProcessList('','','','','',1,'',4,'').subscribe(data => {
+    this.contractSignature.getContractMyProcessList('','','','','',1,'',4,'','','').subscribe(data => {
       this.contractRequestList = data.entities;  
       this.contractRecipienteList.forEach((item: any) => {
 
@@ -788,7 +788,7 @@ export class DashboardComponent implements OnInit {
 
     if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       data = {
-        title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
+        title: 'XÁC NHẬN XÓA TÀI LIỆU',
         id: id
       };
     } else if (sessionStorage.getItem('lang') == 'en') {

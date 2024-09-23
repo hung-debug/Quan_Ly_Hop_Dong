@@ -137,7 +137,7 @@ export class ConfirmInfoContractComponent implements OnInit {
       if (!ArrRecipientsNew) {
 
         this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
+          'Bạn không có quyền xử lý tài liệu này!',
           '',
           3000
         );
@@ -323,8 +323,8 @@ export class ConfirmInfoContractComponent implements OnInit {
       if (!isCheckFail) {
         // arrCoordination (data old, request) thay bằng response_determine_contract.recipients (response)
         await this.contractService.coordinationContract(participantId, response_determine_contract.recipients, this.datas.recipient_id_coordition).toPromise().then((data) => {
-          this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 3000);
-          // save local check khi user f5 reload lại trang sẽ ko còn action điều phối hđ
+          this.toastService.showSuccessHTMLWithTimeout("Điều phối tài liệu thành công!", "", 3000);
+          // save local check khi user f5 reload lại trang sẽ ko còn action điều phối tài liệu
           // localStorage.setItem('coordination_complete', JSON.stringify(true));
           // this.spinner.hide();
         },

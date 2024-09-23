@@ -198,7 +198,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.typeList = data
     });
 
-    this.contractService.getContractList('off', '', '', '', '', '', '', 30, "", 10000).subscribe(data => {
+    this.contractService.getContractList('off', '', '', '', '', '', '', 30, "", 10000,'','').subscribe(data => {
       this.contractConnectList = data.entities;
     });
 
@@ -299,7 +299,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           this.datas.pagePdfFileNew = await this.getInforFile(file);
           this.datas.isUploadNewFile = true;
           try {
-            //Check file hợp đồng đã có chữ ký số hay chưa
+            //Check file tài liệu đã có chữ ký số hay chưa
             this.checkSignDigitalService.getList(file).subscribe((response) => {            
               this.spinner.hide();
               if(response.length == 0) {
@@ -315,7 +315,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                 this.datas.flagDigitalSign = false;
               } else if(response.length > 0) {
                 Swal.fire({
-                  html: "File hợp đồng đã chứa chữ ký số; Vui lòng tải lên file hợp đồng chưa được ký số để thực hiện ký hợp đồng",
+                  html: "File tài liệu đã chứa chữ ký số; Vui lòng tải lên file tài liệu chưa được ký số để thực hiện ký tài liệu",
                   icon: 'warning',
                   confirmButtonColor: '#3085d6',
                   cancelButtonColor: '#b0bec5',
@@ -343,7 +343,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           }
         } else {
           this.spinner.hide()
-          this.toastService.showWarningHTMLWithTimeout("File hợp đồng yêu cầu định dạng PDF, docx", "", 3000);
+          this.toastService.showWarningHTMLWithTimeout("File tài liệu yêu cầu định dạng PDF, docx", "", 3000);
         }
       } else {
         this.spinner.hide()
@@ -907,9 +907,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   convertUrltoBlob(){
     const fileReader = new FileReader();
     if (this.datas.is_action_contract_created) {
-      // file hợp đồng chính không thay đổi => convert url sang dạng blob
+      // file tài liệu chính không thay đổi => convert url sang dạng blob
       if (!this.uploadFileContractAgain && this.datas.contractFile && (typeof this.datas.contractFile == 'string')) {
-      } else if (this.uploadFileContractAgain && this.datas.contractFile) { // dữ liệu file hợp đồng chính bị thay đổi
+      } else if (this.uploadFileContractAgain && this.datas.contractFile) { // dữ liệu file tài liệu chính bị thay đổi
         fileReader.readAsDataURL(this.datas.contractFile);
         fileReader.onload = (e) => {
           if (fileReader.result)
@@ -937,12 +937,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           this.spinner.hide();
           return true;
         } else {
-          this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
+          this.toastService.showErrorHTMLWithTimeout('Số tài liệu đã tồn tại', "", 3000);
           this.spinner.hide();
           return false;
         }
       } catch (error) {
-        this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số hợp đồng', "", 3000);
+        this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số tài liệu', "", 3000);
         this.spinner.hide();
         return false;
       }
@@ -1054,13 +1054,13 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.defineData(this.datas);
     const fileReader = new FileReader();
     if (this.datas.is_action_contract_created) {
-      // file hợp đồng chính không thay đổi => convert url sang dạng blob
+      // file tài liệu chính không thay đổi => convert url sang dạng blob
       if (!this.uploadFileContractAgain && this.datas.contractFile && (typeof this.datas.contractFile == 'string')) {
         await this.contractService.getDataBinaryFileUrlConvert(this.datas.contractFile).toPromise().then((res: any) => {
           if (res)
             this.datas.contractFile = res;
         })
-      } else if (this.uploadFileContractAgain && this.datas.contractFile) { // dữ liệu file hợp đồng chính bị thay đổi
+      } else if (this.uploadFileContractAgain && this.datas.contractFile) { // dữ liệu file tài liệu chính bị thay đổi
         fileReader.readAsDataURL(this.datas.contractFile);
         fileReader.onload = (e) => {
           if (fileReader.result)
@@ -1089,11 +1089,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             else
               this.callAPI_Draft();
           } else {
-            this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Số tài liệu đã tồn tại', "", 3000);
             this.spinner.hide();
           }
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số hợp đồng', "", 3000);
+          this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số tài liệu', "", 3000);
           this.spinner.hide();
         }
       )
@@ -1255,7 +1255,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     if (this.name) {
       this.errorContractName = "";
       if (this.characterCounter(this.name) > 200) {
-        this.errorContractName = "Tên hợp đồng không được vượt quá 200 ký tự";
+        this.errorContractName = "Tên tài liệu không được vượt quá 200 ký tự";
         return false;
       }
       return true;
@@ -1264,7 +1264,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   contractNumberCounter() {
     if (this.contract_no && this.characterCounter(this.contract_no) > 100) {
-      this.errorContractNumber = "Số hợp đồng không được vượt quá 100 ký tự";
+      this.errorContractNumber = "Số tài liệu không được vượt quá 100 ký tự";
       return false;
     }
     return true;

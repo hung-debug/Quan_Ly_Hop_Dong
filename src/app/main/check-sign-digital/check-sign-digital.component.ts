@@ -83,7 +83,7 @@ export class CheckSignDigitalComponent implements OnInit {
         }
       } else {
         this.totalRecord = -1;
-        this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu nhỏ hơn 50MB", "", 3000);
+        this.toastService.showErrorHTMLWithTimeout("File tài liệu yêu cầu nhỏ hơn 50MB", "", 3000);
       }
     }
   }

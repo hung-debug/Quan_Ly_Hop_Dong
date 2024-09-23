@@ -125,7 +125,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   async ngOnInit() {
-    this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
+    this.appService.setTitle('THÔNG TIN TÀI LIỆU');
     // 
 
     this.idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
@@ -515,7 +515,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   }
 
 
-  // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
+  // hàm set kích thước cho đối tượng khi được kéo thả vào trong tài liệu
   changePosition(d?: any, e?: any, sizeChange?: any) {
     let style: any = 
     (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
@@ -688,7 +688,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     if (e == 1) {
       let inputValue = '';
       const { value: textRefuse } = await Swal.fire({
-        title: 'Bạn có chắc chắn hủy hợp đồng này không? Vui lòng nhập lý do hủy:',
+        title: 'Bạn có chắc chắn hủy tài liệu này không? Vui lòng nhập lý do hủy:',
         input: 'text',
         inputValue: inputValue,
         showCancelButton: true,
@@ -698,7 +698,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
         cancelButtonText: 'Hủy',
         inputValidator: (value) => {
           if (!value) {
-            return 'Bạn cần nhập lý do hủy hợp đồng!'
+            return 'Bạn cần nhập lý do hủy tài liệu!'
           } else {
             return null;
           }
@@ -725,7 +725,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
           this.contractService.considerRejectContract(id_recipient_signature, textRefuse).subscribe(
             (result) => {
               this.spinner.hide();
-              this.toastService.showSuccessHTMLWithTimeout('Hủy hợp đồng thành công!', '', 3000);
+              this.toastService.showSuccessHTMLWithTimeout('Hủy tài liệu thành công!', '', 3000);
               this.router.navigate(['/main/contract-signature/receive/wait-processing']);
             }, error => {
               this.spinner.hide();

@@ -281,7 +281,7 @@ export class ForwardContractComponent implements OnInit {
     if (!isInRecipient) {
       
       this.toastService.showErrorHTMLWithTimeout(
-        'Bạn không có quyền xử lý hợp đồng này do tên không trùng khớp!',
+        'Bạn không có quyền xử lý tài liệu này do tên không trùng khớp!',
         '',
         3000
       );
@@ -314,7 +314,7 @@ export class ForwardContractComponent implements OnInit {
       if (!ArrRecipientsNew) {
 
         this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
+          'Bạn không có quyền xử lý tài liệu này!',
           '',
           3000
         );
@@ -396,11 +396,11 @@ export class ForwardContractComponent implements OnInit {
       }
 
       if (!this.checkCanSwitchContract()) {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email ngoài luồng hợp đồng', '', 3000);
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email ngoài luồng tài liệu', '', 3000);
         return;
       }
       if (this.myForm.value.phone && !this.checkCanSwitchContractPhone()) {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập số điện thoại ngoài luồng hợp đồng', '', 3000);
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập số điện thoại ngoài luồng tài liệu', '', 3000);
         return;
       }
 

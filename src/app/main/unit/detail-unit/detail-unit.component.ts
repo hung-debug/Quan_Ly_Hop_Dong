@@ -102,7 +102,7 @@ export class DetailUnitComponent implements OnInit {
             this.eKYCContractUse = data.ekyc;
             this.smsContractUse = data.sms;
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng tài liệu đã dùng', "", 3000);
           }
         )
 
@@ -113,7 +113,7 @@ export class DetailUnitComponent implements OnInit {
             this.eKYCContractBuy = data.ekyc;
             this.smsContractBuy = data.sms;
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng tài liệu đã mua', "", 3000);
           }
         )
         
@@ -126,7 +126,7 @@ export class DetailUnitComponent implements OnInit {
             this.numCecaBuy = data.totalCecaPurchased;
             this.numCecaUse = (this.numCecaBuy) - (data.numberOfCeca)
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng tài liệu đã mua', "", 3000);
           }
         )
       }, error => {
@@ -137,18 +137,18 @@ export class DetailUnitComponent implements OnInit {
     //   data => {
     //     this.numContractCreate = data.total;
     //   }, error => {
-    //     this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã tạo', "", 3000);
+    //     this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng tài liệu đã tạo', "", 3000);
     //   }
     // )
 
   }
   convert(ceca_push_mode: any): any {
     if (ceca_push_mode == 'ALL') {
-      return "Đẩy toàn bộ hợp đồng"
+      return "Đẩy toàn bộ tài liệu"
     } else if (ceca_push_mode == 'SELECTION') {
       return "Tuỳ biến";
     } else {
-      return "Không đẩy HĐ nào";
+      return "Không đẩy tài liệu nào";
     }
   }
 

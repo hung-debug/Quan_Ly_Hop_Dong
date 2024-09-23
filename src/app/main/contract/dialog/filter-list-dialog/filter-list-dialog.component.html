@@ -55,6 +55,31 @@
                 </div>
             </div>
         </div>
+        
+        <div class="row" style="padding-top: 10px;" *ngIf="isOrg == 'off' && (this.data.status == 'processing' || this.data.status == 'expire' || this.data.status == 'overdue')">
+          <div class="col-md-6">
+            <div class="label text-color">{{'person.processing.contract' | translate}}</div>
+            <div class="input-data">
+                <input type="text" [(ngModel)]="handler_name">
+            </div>
+          </div>
+        </div>
+        
+        <div class="row" style="padding-top: 10px;"  *ngIf="isOrg=='on'">
+          <div class="col-md-6" *ngIf="isOrg=='on' && (this.data.status == 'processing' || this.data.status == 'expire' || this.data.status == 'overdue')">
+            <div class="label text-color">{{'person.processing.contract' | translate}}</div>
+            <div class="input-data">
+                <input type="text" [(ngModel)]="handler_name">
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="label text-color">{{'name.email.create.contract' | translate}}</div>
+            <div class="input-data">
+                <input type="text" [(ngModel)]="name_or_email_customer">
+            </div>
+          </div>
+        </div>
     
         <div class="row" style="justify-content: center;padding-top: 10px;">
             <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'cancel' | translate}}</button>

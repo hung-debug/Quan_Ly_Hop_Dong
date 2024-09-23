@@ -56,6 +56,6 @@
     [(ngModel)]="sign.value" type="text" (click)="reverseInput($event, sign)" (blur)="changeInput($event, sign)" (ngxInputSearch)="doTheSearch($event,'text')" style="white-space: nowrap;">
 
   <input *ngIf="getNotSpecifiedYetHandle() && sign.sign_unit == 'so_tai_lieu'" id="input-number-value"
-    (focusout)="focusOutFunction()" [(ngModel)]="this.contractNo" placeholder="Nhập số hợp đồng.." type="text"
+    (focusout)="focusOutFunction()" [(ngModel)]="this.contractNo" placeholder="Nhập số tài liệu.." type="text"
     (ngxInputSearch)="doTheSearch($event,'contractNo')" style="white-space: nowrap;">
 </div>

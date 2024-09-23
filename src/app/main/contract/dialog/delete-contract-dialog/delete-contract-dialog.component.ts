@@ -28,23 +28,23 @@ export class DeleteContractDialogComponent implements OnInit {
     this.contractService.deleteContract(this.data.id).subscribe((data) => {
 
       if(data.success){
-        this.toastService.showSuccessHTMLWithTimeout("Xóa hợp đồng thành công!", "", 3000);
+        this.toastService.showSuccessHTMLWithTimeout("Xóa tài liệu thành công!", "", 3000);
         this.dialogRef.close();
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
           this.router.navigate(['/main/contract/create/draft']);
         });  
       }else{
         if(data.message == 'E02'){
-          this.toastService.showErrorHTMLWithTimeout("Hợp đồng không phải bản nháp!", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("Tài liệu không phải bản nháp!", "", 3000);
         }else{
-          this.toastService.showErrorHTMLWithTimeout("Xóa hợp đồng thất bại!", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("Xóa tài liệu thất bại!", "", 3000);
         }
         
         this.dialogRef.close();
       }
     },
     error => {
-      this.toastService.showErrorHTMLWithTimeout("Xóa hợp đồng thất bại", "", 3000);
+      this.toastService.showErrorHTMLWithTimeout("Xóa tài liệu thất bại", "", 3000);
       this.dialogRef.close();
     }
     );

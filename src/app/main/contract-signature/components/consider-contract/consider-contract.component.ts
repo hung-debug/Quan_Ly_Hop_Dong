@@ -177,7 +177,7 @@ export class ConsiderContractComponent
 
   sessionIdUsbToken: any;
   emailRecipients: any;
-  //id tổ chức của người tạo hợp đồng
+  //id tổ chức của người tạo tài liệu
   orgId: any;
 
   phonePKI: any;
@@ -264,7 +264,7 @@ export class ConsiderContractComponent
     }
     this.getDeviceApp();
 
-    this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
+    this.appService.setTitle('THÔNG TIN TÀI LIỆU');
 
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
@@ -509,7 +509,7 @@ export class ConsiderContractComponent
           )
         }
         // this.contractService.getDetailContract()
-        //Hợp đồng huỷ status = 32 => link 404 đối với những người xử lý trong hợp đồng đó trừ người tạo
+        //Tài liệu huỷ status = 32 => link 404 đối với những người xử lý trong tài liệu đó trừ người tạo
         if (this.isDataContract.status == 32) {
           //lấy người tạo
           const callApiBpmn = await this.contractService
@@ -531,7 +531,7 @@ export class ConsiderContractComponent
           }
         }
 
-        //Show thông báo khi hợp đồng hết hiệu lực
+        //Show thông báo khi tài liệu hết hiệu lực
         if(this.isDataContract.release_state != 'CON_HIEU_LUC') {
           if(!this.mobile) {
             this.toastService.showErrorHTMLWithTimeout('expire.time.contract.notif','',3000);
@@ -781,7 +781,7 @@ export class ConsiderContractComponent
                 this.pdfSrcMobile = pdfMobile.filePath;
               } else if (fieldRecipientId.length >= 1) {
                 this.multiSignInPdf = true;
-                alert('Hợp đồng có chứa ô text/ ô số hợp đồng. Vui lòng thực hiện xử lý trên web hoặc ứng dụng di động!');
+                alert('Tài liệu có chứa ô text/ ô số tài liệu. Vui lòng thực hiện xử lý trên web hoặc ứng dụng di động!');
               } else if (this.recipient.sign_type[0].id == 7) {
                 alert('Loại ký này không hỗ trợ trên web mobile. Vui lòng thực hiện ký trên web!');
               } else {
@@ -1099,7 +1099,7 @@ export class ConsiderContractComponent
       });
   }
 
-  // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
+  // hàm set kích thước cho đối tượng khi được kéo thả vào trong tài liệu
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
     let style: any =
     (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
@@ -1234,7 +1234,7 @@ export class ConsiderContractComponent
   }
 
   processHandleContract() {
-    // alert('Luồng xử lý hợp đồng!');
+    // alert('Luồng xử lý tài liệu!');
     const data = this.datas;
     // @ts-ignore
     const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
@@ -1376,7 +1376,7 @@ export class ConsiderContractComponent
     const isDifferentName = await this.checkDifferentName();
     if (isDifferentName) {
       this.toastService.showErrorHTMLWithTimeout(
-        'Bạn không có quyền xử lý hợp đồng này!',
+        'Bạn không có quyền xử lý tài liệu này!',
         '',
         3000
       );
@@ -1410,10 +1410,10 @@ export class ConsiderContractComponent
     this.contractService.getRemoteSigningCurrentStatus(this.recipientId).subscribe(
       (res) => {
         if (res.isPresent && res.status == "DANG_XU_LY") {
-          // this.toastService.showWarningHTMLWithTimeout("Hợp đồng đang được xử lý, vui lòng ký hợp đồng trên app CA2 RS và reload lại trang!","",3000)
+          // this.toastService.showWarningHTMLWithTimeout("Tài liệu đang được xử lý, vui lòng ký tài liệu trên app CA2 RS và reload lại trang!","",3000)
           this.remoteSigningProcessingStatusSwalfire(res.status, res?.supplier)
           return
-          // this.toastService.showWarningHTMLWithTimeout("Vui lòng ký hợp đồng trên app CA2 RS và reload lại trang!","",3000)
+          // this.toastService.showWarningHTMLWithTimeout("Vui lòng ký tài liệu trên app CA2 RS và reload lại trang!","",3000)
         } else if (res.status == "HOAN_THANH") {
           // this.remoteSigningProcessingStatusSwalfire(res.status).then(res => {
           //   if (res.isConfirmed) {
@@ -1448,7 +1448,7 @@ export class ConsiderContractComponent
 
               if (this.ArrRecipientsNew.length === 0) {
                 this.toastService.showErrorHTMLWithTimeout(
-                  'Bạn không có quyền xử lý hợp đồng này!',
+                  'Bạn không có quyền xử lý tài liệu này!',
                   '',
                   3000
                 );
@@ -1490,7 +1490,7 @@ export class ConsiderContractComponent
 
               if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
                 this.toastService.showErrorHTMLWithTimeout(
-                  'Vui lòng chọn đồng ý hoặc từ chối hợp đồng',
+                  'Vui lòng chọn đồng ý hoặc từ chối tài liệu',
                   '',
                   3000
                 );
@@ -1525,7 +1525,7 @@ export class ConsiderContractComponent
                       return;
                     } else if (item.type == 4) {
                         this.toastService.showErrorHTMLWithTimeout(
-                          `Vui lòng nhập nội dung ô: Số hợp đồng (trang ${item.page})`,
+                          `Vui lòng nhập nội dung ô: Số tài liệu (trang ${item.page})`,
                           '',
                           3000
                         );
@@ -1712,7 +1712,7 @@ export class ConsiderContractComponent
                     if (!isInRecipient) {
 
                       this.toastService.showErrorHTMLWithTimeout(
-                        'Bạn không có quyền xử lý hợp đồng này!',
+                        'Bạn không có quyền xử lý tài liệu này!',
                         '',
                         3000
                       );
@@ -1740,7 +1740,7 @@ export class ConsiderContractComponent
 
                       if (this.ArrRecipientsNew.length === 0) {
                         this.toastService.showErrorHTMLWithTimeout(
-                          'Bạn không có quyền xử lý hợp đồng này!',
+                          'Bạn không có quyền xử lý tài liệu này!',
                           '',
                           3000
                         );
@@ -1899,7 +1899,7 @@ export class ConsiderContractComponent
 
   imageDialogSignOpen(e: any, haveSignImage: boolean) {
     const data = {
-      title: 'KÝ HỢP ĐỒNG ',
+      title: 'KÝ TÀI LIỆU',
       is_content: 'forward_contract',
       orgId: this.orgId,
       imgSignAcc: this.datas.imgSignAcc
@@ -2095,20 +2095,20 @@ export class ConsiderContractComponent
   getTextAlertConfirm() {
     if (this.datas.roleContractReceived == 2) {
       if (this.confirmConsider == 1) {
-        return 'Bạn có chắc chắn xác nhận hợp đồng này?';
+        return 'Bạn có chắc chắn xác nhận tài liệu này?';
       } else if (this.confirmConsider == 2) {
-        return 'Bạn có chắc chắn từ chối hợp đồng này?';
+        return 'Bạn có chắc chắn từ chối tài liệu này?';
       }
     } else if ([3, 4].includes(this.datas.roleContractReceived)) {
       if (this.confirmSignature == 1 && (this.datas.roleContractReceived == 3 || (!this.isContainSignField && this.datas.roleContractReceived == 4))) {
-        return 'Bạn có đồng ý với nội dung của hợp đồng và xác nhận ký?';
+        return 'Bạn có đồng ý với nội dung của tài liệu và xác nhận ký?';
       } else if (
         this.confirmSignature == 1 &&
         this.datas.roleContractReceived == 4 && this.isContainSignField
       ) {
-        return 'Bạn có đồng ý với nội dung của hợp đồng và xác nhận đóng dấu?';
+        return 'Bạn có đồng ý với nội dung của tài liệu và xác nhận đóng dấu?';
       } else if (this.confirmSignature == 2) {
-        return 'Bạn không đồng ý với nội dung của hợp đồng và không xác nhận ký?';
+        return 'Bạn không đồng ý với nội dung của tài liệu và không xác nhận ký?';
       }
     }
   }
@@ -3475,7 +3475,7 @@ export class ConsiderContractComponent
       if (!isInRecipient) {
 
         this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!', '', 3000
+          'Bạn không có quyền xử lý tài liệu này!', '', 3000
         );
         timer(3000).subscribe(() => {
           // Reload trang sau khi hiển thị thông báo
@@ -3497,7 +3497,7 @@ export class ConsiderContractComponent
 
           if (this.ArrRecipientsNew.length === 0) {
             this.toastService.showErrorHTMLWithTimeout(
-              'Bạn không có quyền xử lý hợp đồng này!',
+              'Bạn không có quyền xử lý tài liệu này!',
               '',
               3000
             );
@@ -3968,16 +3968,16 @@ export class ConsiderContractComponent
                   if (!this.mobile) {
                     this.toastService.showSuccessHTMLWithTimeout(
                       [3, 4].includes(this.datas.roleContractReceived)
-                        ? 'Ký hợp đồng thành công'
-                        : 'Xem xét hợp đồng thành công',
+                        ? 'Ký tài liệu thành công'
+                        : 'Xem xét tài liệu thành công',
                       '',
                       3000
                     );
                   } else {
                     if ([3, 4].includes(this.datas.roleContractReceived)) {
-                      alert('Ký hợp đồng thành công');
+                      alert('Ký tài liệu thành công');
                     } else {
-                      alert('Xem xét hợp đồng thành công');
+                      alert('Xem xét tài liệu thành công');
                     }
                   }
 
@@ -4053,9 +4053,9 @@ export class ConsiderContractComponent
               );
             } else {
               if ([3, 4].includes(this.datas.roleContractReceived)) {
-                alert('Ký hợp đồng thành công');
+                alert('Ký tài liệu thành công');
               } else {
-                alert('Xem xét hợp đồng thành công');
+                alert('Xem xét tài liệu thành công');
               }
             }
 
@@ -4088,12 +4088,12 @@ export class ConsiderContractComponent
               } else {
                 if (!this.mobile) {
                   this.toastService.showErrorHTMLWithTimeout(
-                    'Ký hợp đồng không thành công',
+                    'Ký tài liệu không thành công',
                     '',
                     3000
                   );
                 } else {
-                  alert('Ký hợp đồng không thành công');
+                  alert('Ký tài liệu không thành công');
                 }
                 this.spinner.hide();
               }
@@ -4142,9 +4142,9 @@ export class ConsiderContractComponent
                   );
                 } else {
                   if ([3, 4].includes(this.datas.roleContractReceived)) {
-                    alert('Ký hợp đồng thành công');
+                    alert('Ký tài liệu thành công');
                   } else {
-                    alert('Xem xét hợp đồng thành công');
+                    alert('Xem xét tài liệu thành công');
                   }
                 }
 
@@ -4248,7 +4248,7 @@ export class ConsiderContractComponent
     let fieldId: number = 0;
     let fieldName: string = '';
 
-    //this.idContract: id hợp đồng
+    //this.idContract: id tài liệu
     this.contractService
       .getDetailContract(this.idContract)
       .subscribe(async (response) => {
@@ -4323,12 +4323,12 @@ export class ConsiderContractComponent
 
     if (localStorage.getItem('lang') == 'vi') {
       rejectQuestion =
-        'Bạn có chắc chắn muốn từ chối hợp đồng này không? Vui lòng nhập lý do từ chối';
+        'Bạn có chắc chắn muốn từ chối tài liệu này không? Vui lòng nhập lý do từ chối';
       confirm = 'Xác nhận';
       cancel = 'Huỷ';
-      cancelSuccess = 'Từ chối hợp đồng thành công';
+      cancelSuccess = 'Từ chối tài liệu thành công';
       error = 'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý';
-      rejectReason = 'Bạn cần nhập lý do từ chối hợp đồng';
+      rejectReason = 'Bạn cần nhập lý do từ chối tài liệu';
     } else if (localStorage.getItem('lang') == 'en') {
       rejectQuestion =
         'Are you sure want to decline this contract? Please enter the reason';
@@ -4388,7 +4388,7 @@ export class ConsiderContractComponent
 
           if (this.ArrRecipientsNew.length === 0) {
             this.toastService.showErrorHTMLWithTimeout(
-              'Bạn không có quyền xử lý hợp đồng này!',
+              'Bạn không có quyền xử lý tài liệu này!',
               '',
               3000
             );
@@ -4569,7 +4569,7 @@ export class ConsiderContractComponent
               },
               (error) => {
                 this.toastService.showErrorHTMLWithTimeout(
-                  'Lỗi lấy số lượng hợp đồng đã mua',
+                  'Lỗi lấy số lượng tài liệu đã mua',
                   '',
                   3000
                 );
@@ -4578,7 +4578,7 @@ export class ConsiderContractComponent
         },
         (error) => {
           this.toastService.showErrorHTMLWithTimeout(
-            'Lỗi lấy số lượng hợp đồng đã dùng',
+            'Lỗi lấy số lượng tài liệu đã dùng',
             '',
             3000
           );
@@ -4731,7 +4731,7 @@ export class ConsiderContractComponent
     if (!isInRecipient) {
 
       this.toastService.showErrorHTMLWithTimeout(
-        'Bạn không có quyền xử lý hợp đồng này!',
+        'Bạn không có quyền xử lý tài liệu này!',
         '',
         3000
       );
@@ -4764,7 +4764,7 @@ export class ConsiderContractComponent
       if (!ArrRecipientsNew) {
 
         this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
+          'Bạn không có quyền xử lý tài liệu này!',
           '',
           3000
         );
@@ -4836,7 +4836,7 @@ export class ConsiderContractComponent
     if (!isInRecipient) {
 
       this.toastService.showErrorHTMLWithTimeout(
-        'Bạn không có quyền xử lý hợp đồng này!',
+        'Bạn không có quyền xử lý tài liệu này!',
         '',
         3000
       );
@@ -4869,7 +4869,7 @@ export class ConsiderContractComponent
       if (!ArrRecipientsNew) {
 
         this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
+          'Bạn không có quyền xử lý tài liệu này!',
           '',
           3000
         );
@@ -5166,16 +5166,16 @@ export class ConsiderContractComponent
                 if (!this.mobile) {
                   this.toastService.showSuccessHTMLWithTimeout(
                     [3, 4].includes(this.datas.roleContractReceived)
-                      ? 'Ký hợp đồng thành công'
-                      : 'Xem xét hợp đồng thành công',
+                      ? 'Ký tài liệu thành công'
+                      : 'Xem xét tài liệu thành công',
                     '',
                     3000
                   );
                 } else {
                   if ([3, 4].includes(this.datas.roleContractReceived)) {
-                    alert('Ký hợp đồng thành công');
+                    alert('Ký tài liệu thành công');
                   } else {
-                    alert('Xem xét hợp đồng thành công');
+                    alert('Xem xét tài liệu thành công');
                   }
                 }
 
@@ -5193,8 +5193,8 @@ export class ConsiderContractComponent
   remoteDialogSuccessOpen(isVnptSmartCa = false) {
     return Swal.fire({
       title: "THÔNG BÁO",
-      text: isVnptSmartCa ?  "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký hợp đồng!" :
-        "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký hợp đồng!",
+      text: isVnptSmartCa ?  "Hệ thống đã thực hiện gửi tài liệu đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký tài liệu!" :
+        "Hệ thống đã thực hiện gửi tài liệu đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký tài liệu!",
       icon: 'info',
       showCancelButton: true,
       showConfirmButton: false,
@@ -5239,22 +5239,22 @@ export class ConsiderContractComponent
   getTextAlertRemoteSigningProcess(code: any, supplier?: any) {
     switch (code) {
       case "QUA_THOI_GIAN_KY":
-        return supplier == 'vnpt' ? "Hợp đồng đã quá thời gian ký trên app VNPT SmartCA, vui lòng thực hiện ký lại trên web!"
-          :  "Hợp đồng đã quá thời gian ký trên app CA2 RS, vui lòng thực hiện ký lại trên web!"
+        return supplier == 'vnpt' ? "Tài liệu đã quá thời gian ký trên app VNPT SmartCA, vui lòng thực hiện ký lại trên web!"
+          :  "Tài liệu đã quá thời gian ký trên app CA2 RS, vui lòng thực hiện ký lại trên web!"
       case "DANG_XU_LY":
-        return supplier == 'vnpt' ?  "Hợp đồng đang được xử lý, vui lòng thực hiện ký trên app VNPT SmartCA và reload lại trang!" :
-          "Hợp đồng đang được xử lý, vui lòng thực hiện ký trên app CA2 RS và reload lại trang!"
+        return supplier == 'vnpt' ?  "Tài liệu đang được xử lý, vui lòng thực hiện ký trên app VNPT SmartCA và reload lại trang!" :
+          "Tài liệu đang được xử lý, vui lòng thực hiện ký trên app CA2 RS và reload lại trang!"
       case "HOAN_THANH":
-        return "Hợp đồng đã ký thành công!"
+        return "Tài liệu đã ký thành công!"
       case "TU_CHOI":
-        return supplier == 'vnpt' ? "Đã từ chối ký hợp đồng trên app VNPT SmartCA, vui lòng thực hiện ký lại trên web!" :
-          "Đã từ chối ký hợp đồng trên app CA2 RS, vui lòng thực hiện ký lại trên web!"
+        return supplier == 'vnpt' ? "Đã từ chối ký tài liệu trên app VNPT SmartCA, vui lòng thực hiện ký lại trên web!" :
+          "Đã từ chối ký tài liệu trên app CA2 RS, vui lòng thực hiện ký lại trên web!"
     }
   }
 
   containNotSupportTextSwalfire() {
     return Swal.fire({
-      title: "Hệ thống <b>không hỗ trợ</b> loại ký của bạn <b>nhập ô text/số hợp đồng</b>. Nếu đồng ý với điều khoản hợp đồng, bấm <b>Đồng ý</b>, <b>bỏ qua ô text/số hợp đồng</b> và bấm <b>Xác nhận</b> với điều khoản.",
+      title: "Hệ thống <b>không hỗ trợ</b> loại ký của bạn <b>nhập ô text/số tài liệu</b>. Nếu đồng ý với điều khoản tài liệu, bấm <b>Đồng ý</b>, <b>bỏ qua ô text/số tài liệu</b> và bấm <b>Xác nhận</b> với điều khoản.",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#0041C4',

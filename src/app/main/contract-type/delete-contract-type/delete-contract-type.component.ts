@@ -26,13 +26,13 @@ export class DeleteContractTypeComponent implements OnInit {
     this.contractTypeService.deleteContractType(this.data.id).subscribe(
       data => {
         if(data.success){
-          this.toastService.showSuccessHTMLWithTimeout("Xóa loại hợp đồng thành công!", "", 3000);
+          this.toastService.showSuccessHTMLWithTimeout("Xóa loại tài liệu thành công!", "", 3000);
           this.dialogRef.close();
           this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
           this.router.navigate(['/main/contract-type']);
         });  
         }else{
-          this.toastService.showErrorHTMLWithTimeout("Loại hợp đồng đã được gán!", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("Loại tài liệu đã được gán!", "", 3000);
           this.dialogRef.close();
         }
           

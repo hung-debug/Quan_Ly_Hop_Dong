@@ -151,7 +151,7 @@ export class CertDialogSignComponent implements OnInit {
         else {
           if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
             this.toastService.showErrorHTMLWithTimeout(
-              'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng',
+              'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu',
               '',
               3000
             );
@@ -170,7 +170,7 @@ export class CertDialogSignComponent implements OnInit {
         else {
           if (signUpdate == this.data.isDataObjectSignature[this.data.isDataObjectSignature.length - 1]) {
             this.toastService.showErrorHTMLWithTimeout(
-              'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng',
+              'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu',
               '',
               3000
             );

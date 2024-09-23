@@ -4,7 +4,7 @@
     </div>
     <div>
       <div class="label_item">
-        Tên hợp đồng <span class="require_star">*</span>
+        Tên tài liệu <span class="require_star">*</span>
       </div>
       <input [(ngModel)]="contractName" class="input_text" (keyup)="this.validContractName()" maxlength="100">
       <div class="invalid" *ngIf="errContractNameMess">

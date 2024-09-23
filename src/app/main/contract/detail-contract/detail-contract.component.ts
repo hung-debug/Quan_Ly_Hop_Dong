@@ -275,7 +275,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
     this.appService.setTitle(this.translate.instant('contract.detail'));
 
-    //Lấy thông tin id hợp đồng
+    //Lấy thông tin id tài liệu
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
     if (await this.checkViewContractService.callAPIcheckViewContract(this.idContract,false)) {
@@ -347,7 +347,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
 
-         //Hợp đồng huỷ status = 32 => link 404 đối với những người xử lý trong hợp đồng đó trừ người tạo
+         //Tài liệu huỷ status = 32 => link 404 đối với những người xử lý trong tài liệu đó trừ người tạo
          if(this.isDataContract.status == 32) {
           const callApiBpmn = await this.contractService
           .viewFlowContract(this.idContract)
@@ -536,7 +536,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           }
           if (!fileC) {
             this.toastService.showErrorHTMLWithTimeout(
-              'Thiếu dữ liệu file hợp đồng!',
+              'Thiếu dữ liệu file tài liệu!',
               '',
               3000
             );
@@ -916,7 +916,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     }
   }
 
-  // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
+  // hàm set kích thước cho đối tượng khi được kéo thả vào trong tài liệu
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
     let style: any = {
       transform:
@@ -1029,7 +1029,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   processHandleContract() {
-    // alert('Luồng xử lý hợp đồng!');
+    // alert('Luồng xử lý tài liệu!');
     const data = this.datas;
 
     // @ts-ignore
@@ -1313,7 +1313,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   imageDialogSignOpen() {
     const data = {
-      title: 'KÝ HỢP ĐỒNG ',
+      title: 'KÝ TÀI LIỆU ',
       is_content: 'forward_contract',
     };
 
@@ -1360,15 +1360,15 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   getTextAlertConfirm() {
     if (this.datas.roleContractReceived == 2) {
       if (this.confirmConsider == 1) {
-        return 'Bạn có chắc chắn xác nhận hợp đồng này?';
+        return 'Bạn có chắc chắn xác nhận tài liệu này?';
       } else if (this.confirmConsider == 2) {
-        return 'Bạn có chắc chắn từ chối hợp đồng này?';
+        return 'Bạn có chắc chắn từ chối tài liệu này?';
       }
     } else if (this.datas.roleContractReceived == 3) {
       if (this.confirmSignature == 1) {
-        return 'Bạn có đồng ý với nội dung của hợp đồng và xác nhận ký?';
+        return 'Bạn có đồng ý với nội dung của tài liệu và xác nhận ký?';
       } else if (this.confirmSignature == 2) {
-        return 'Bạn không đồng ý với nội dung của hợp đồng và không xác nhận ký?';
+        return 'Bạn không đồng ý với nội dung của tài liệu và không xác nhận ký?';
       }
     }
   }
@@ -1455,8 +1455,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         (result) => {
           this.toastService.showSuccessHTMLWithTimeout(
             this.datas?.roleContractReceived == 3
-              ? 'Bạn vừa thực hiện ký thành công. Hợp đồng đã được chuyển tới người tiếp theo!'
-              : 'Xem xét hợp đồng thành công',
+              ? 'Bạn vừa thực hiện ký thành công. Tài liệu đã được chuyển tới người tiếp theo!'
+              : 'Xem xét tài liệu thành công',
             [3,4].includes(this.datas.roleContractReceived) ? 'Thực hiện ký thành công!' : '',
             1000
           );
@@ -1476,7 +1476,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     let inputValue = '';
     const { value: textRefuse } = await Swal.fire({
       title:
-        'Bạn có chắc chắn hủy hợp đồng này không? Vui lòng nhập lý do hủy:',
+        'Bạn có chắc chắn hủy tài liệu này không? Vui lòng nhập lý do hủy:',
       input: 'text',
       inputValue: inputValue,
       showCancelButton: true,
@@ -1486,7 +1486,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Hủy',
       inputValidator: (value) => {
         if (!value) {
-          return 'Bạn cần nhập lý do hủy hợp đồng!';
+          return 'Bạn cần nhập lý do hủy tài liệu!';
         } else {
           return null;
         }
@@ -1499,7 +1499,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         .subscribe(
           (result) => {
             this.toastService.showSuccessHTMLWithTimeout(
-              'Hủy hợp đồng thành công',
+              'Hủy tài liệu thành công',
               '',
               3000
             );
@@ -1516,7 +1516,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           }
         );
     } else {
-      // this.toastService.showWarningHTMLWithTimeout('Bạn cần nhập lý do hủy hợp đồng', '', 3000)
+      // this.toastService.showWarningHTMLWithTimeout('Bạn cần nhập lý do hủy tài liệu', '', 3000)
     }
   }
 
