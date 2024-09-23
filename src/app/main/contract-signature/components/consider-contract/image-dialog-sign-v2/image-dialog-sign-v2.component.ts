@@ -17,7 +17,7 @@ import {INgxSelectOption} from "ngx-select-ex/ngx-select/ngx-select.interfaces";
 export class ImageDialogSignV2Component implements OnInit, AfterViewInit {
   myForm: FormGroup;
   datas: any;
-  typeImageSignatureRadio: any = 2;
+  typeImageSignatureRadio: any = 3;
   @ViewChild('signature')
   public signaturePad: SignaturePadComponent;
   imgSignAccountSelect: any;
@@ -31,8 +31,8 @@ export class ImageDialogSignV2Component implements OnInit, AfterViewInit {
   public signaturePadOptions: NgSignaturePadOptions = { // passed through to szimek/signature_pad constructor
     minWidth: 1.5,
     maxWidth: 1.5,
-    canvasWidth: 500,
-    canvasHeight: 300
+    canvasWidth: 950,
+    canvasHeight: 500
   };
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -51,7 +51,7 @@ export class ImageDialogSignV2Component implements OnInit, AfterViewInit {
 
     this.getDeviceApp();
 
-    this.typeImageSignatureRadio = 2;
+    this.typeImageSignatureRadio = 3;
     this.datas = this.data;
 
     this.initListSignatureAccountUser();

@@ -110,7 +110,11 @@
                 <div class="col-md-12 item_contract_name1">{{item.participant.contract.name}}</div>
               </div>
               <div class="row">
-                <div class="item_contract_infor">{{'created.user' | translate}}: {{item.participant.contract.nameUserCreate}} ({{item.participant.contract.organization_create_contract}})</div>
+                <!-- <div class="item_contract_infor">{{'created.user' | translate}}: {{item.participant.contract.nameUserCreate}} ({{item.participant.contract.organization_create_contract}})</div> -->
+                <div class="item_contract_infor" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
+                  <div>{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                  </div>
+                </div>
                 <div style="display: flex; justify-content: space-between;">
                   
                   <div>

@@ -167,8 +167,12 @@
                                 <div matTooltip="{{item.contractName}}" matTooltipPosition="above" matTooltipClass="custom-tooltip" class="item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
 
                                 <div class="row" (click)="openDetail(item.contractId)">
-                                  <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}} ({{item.participant.contract.organization_create_contract}})</div>
+                                  <!-- <div class="item_contract_infor" *ngIf="filter_status == 4">{{'created.user' | translate}}: {{item.participant.contract.nameUserCreate}} ({{item.participant.contract.organization_create_contract}})</div> -->
                                   <div>
+                                    <div class="row item_contract_infor" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
+                                      <div>{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                                      </div>
+                                    </div>
                                     <img src="../../../assets/img/path.svg"/>
                                     <span *ngIf="item.sign_type && item.sign_type.length > 0 && (item.status == 0 || item.status == 1 || item.status == 3)" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
                                     <span *ngIf="item.role == 1 && (item.status == 0 || item.status == 1)" style="color: #EE7200; padding: 5px;">{{'Đang điều phối' | translate}}</span>
@@ -181,6 +185,7 @@
                                     <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 6" style="color: #EE7200; padding: 5px;">{{'signed.cert.server' | translate}}</span>
                                     <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 7" style="color: #EE7200; padding: 5px;">{{'signed.usb.bcy' | translate}}</span>
                                     <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 8" style="color: #EE7200; padding: 5px;">{{'signed.romote.signing' | translate}}</span>
+                                    <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 1" style="color: #EE7200; padding: 5px;">{{'sign.image.otp' | translate}}</span>
                                   </div>
                                   <!-- <div *ngIf="item.ceca_push == 1">
                                     <div class="item_contract_infor">{{'contract.status.ceca' | translate}}:
@@ -525,6 +530,11 @@
                               <img src="../../assets/img/frame_contract.svg" style="width: 72px;" (click)="openDetail(item.contractId)">
                               <div style="margin-left: 12px;" matTooltip="{{item.participant.contract.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                                 <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
+                                <div class="row item_contract_infor" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
+                                  <div>{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                                  </div>
+                                </div>
+
                                 <div class="row">
                                   <div class="item_contract_infor">
                                     <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.contractId)">{{'contract_processing_flow' | translate}}</u>
@@ -655,8 +665,12 @@
                               <div style="margin-left: 12px;">
                                 <div matTooltip="{{item.participant.contract.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip" class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
                                 <div class="row" (click)="openDetail(item.contractId)">
-                                  <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}}</div>
+                                  <!-- <div class="item_contract_infor">{{'created.user' | translate}}: {{item.participant.contract.nameUserCreate}}</div> -->
                                   <div>
+                                    <div class="row item_contract_infor" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
+                                      <div *ngIf="filter_status == 1">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                                      </div>
+                                    </div>
                                     <img src="../../../assets/img/path.svg"/>
                                     <span *ngIf="item.sign_type && item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
                                     <span *ngIf="item.role == 1" style="color: #EE7200; padding: 5px;">{{'Đang điều phối' | translate}}</span>
@@ -920,9 +934,10 @@
                                 </div>
 
                                 <!--Cac ben ky-->
-                                <!-- <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
-                                    <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
-                                </div> -->
+                                <div class="row item_contract_infor" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
+                                  <div *ngIf="filter_status == 1">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                                  </div>
+                                </div>
 
                                 <!--Trang thai hop dong-->
                                 <!-- <div class="row">

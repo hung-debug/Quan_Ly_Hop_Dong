@@ -905,5 +905,7 @@
   "hsm.title" : "Select a signature or seal image",
   "drag.contract.theo_lo": "Hỗ trợ file XLS, XLSX",
   "many.extensions": "Many extensions",
-  "error.notTime": "Please select a signature expiration date"
+  "error.notTime": "Please select a signature expiration date",
+  "person.processing.contract": "Name of the person handling the contract",
+  "name.email.create.contract": "Name/Email person create contract"
 }

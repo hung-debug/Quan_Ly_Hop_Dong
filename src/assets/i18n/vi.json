@@ -929,5 +929,7 @@
   "errorSignTime": "Ngày hết hạn ký",
   "not.draw.sign": "Hiển thị chữ ký OTP sau khi thao tác vẽ tay/ upload ảnh",
   "many.extensions": "Gia hạn nhiều",
-  "error.notTime": "Vui lòng chọn ngày hết hạn ký"
+  "error.notTime": "Vui lòng chọn ngày hết hạn ký",
+  "person.processing.contract": "Tên người đang xử lý hợp đồng",
+  "name.email.create.contract": "Tên/email người tạo hợp đồng"
 }
