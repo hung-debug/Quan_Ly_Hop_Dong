@@ -761,7 +761,7 @@
                   <!--Văn thư tổ chức của tôi chọn loại ký-->
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{ 'choose' | translate }}"
                     [settings]="dropdownSignTypeSettings" [data]="signType_doc"
-                    (ngModelChange)="selectWithOtp($event, d,'1')">
+                    (ngModelChange)="selectWithOtp($event, d,'organization')">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="
                           padding: 1px 10px;

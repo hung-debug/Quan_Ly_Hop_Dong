@@ -441,7 +441,7 @@ export class DetermineSignerComponent implements OnInit {
       else if (data.role == 4) {
         if (this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0 && this.getDataSignCert(data).length == 0) {
           this.unitService.getTaxCodeOriganzation(this.userService.getInforUser().organization_id).subscribe((res: any) => {
-            data.card_id=res.tax_code;})
+            data.card_id=res.parent_tax_code;})
         }
       }
     }
