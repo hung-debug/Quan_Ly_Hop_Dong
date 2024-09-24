@@ -215,6 +215,7 @@
   "role.contract-template.list": "Document template management",
   "role.contract-template.add": "Add document template",
   "role.contract-template.edit": "Edit document template",
+  "contract-template.edit": "Edit document template",
   "role.contract-template.copy": "Copy document template",
   "role.contract-template.create-contract": "Create document by template",
   "role.contract-template.create-batch": "Create batch contracts",

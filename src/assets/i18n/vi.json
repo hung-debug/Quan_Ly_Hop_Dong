@@ -217,6 +217,7 @@
   "role.contract-template.list": "Nhóm chức năng quản lý mẫu tài liệu",
   "role.contract-template.add": "Thêm mới mẫu tài liệu",
   "role.contract-template.edit": "Sửa mẫu tài liệu",
+  "contract-template.edit": "Sửa mẫu tài liệu",
   "role.contract-template.copy": "Sao chép mẫu tài liệu",
   "role.contract-template.create-contract": "Tạo tài liệu đơn lẻ theo mẫu",
   "role.contract-template.create-batch": "Tạo tài liệu theo lô",
