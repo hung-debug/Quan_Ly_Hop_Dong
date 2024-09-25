@@ -279,6 +279,9 @@
   border-radius: 6px;
   cursor: pointer;
   margin: 5px 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis
 }
 
 .action-button1 {
@@ -291,6 +294,9 @@
   border-radius: 6px;
   cursor: pointer;
   margin: 5px 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis
 }
 
 .footer-contract {
