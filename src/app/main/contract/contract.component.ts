@@ -889,7 +889,10 @@ export class ContractComponent implements OnInit, AfterViewInit {
   autoSearch(event: any) {
     this.p = 1;
     this.filter_name = event.target.value;
-    this.getContractList();
+    clearTimeout(this.inputTimeout);
+    this.inputTimeout = setTimeout(() => {
+      this.getContractList();
+    }, 1000);
   }
 
   onInput(event: any) {

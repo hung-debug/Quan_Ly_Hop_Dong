@@ -94,6 +94,7 @@ export class RemoteDialogSignComponent implements OnInit {
             let taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
 
             this.myForm = this.fbd.group({
+              supplier: this.fbd.control('1', [Validators.required]),
               taxCode: this.fbd.control(taxCodePartnerStep2,
                 [Validators.required,
                   Validators.pattern(parttern.cardid)
