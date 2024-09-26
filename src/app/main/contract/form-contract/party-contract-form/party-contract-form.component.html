@@ -1766,7 +1766,7 @@
                   <u class="text-color" (click)="addPartnerSignature(item, id)">{{"btn.add.user.sign" | translate}}</u>
                 </div>
 
-                <div *ngIf="getPartnerSignature(item).length > 1"
+                <div *ngIf="getPartnerSignature(item).length > 1 || this.getPartnerCoordination(item).length > 0"
                   class="delete-element" (click)="deletePartnerSignature(index, item)">
                   {{ "btn.add.user.delete" | translate }}
                 </div>
