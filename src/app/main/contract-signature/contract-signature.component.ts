@@ -843,6 +843,42 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
+  checkSignType() {
+    let contractsSignManyChecked = this.contractsSignMany.filter(
+      (opt) => opt.checked
+    );
+    let totalBoxSignPki = 0;
+    for (let i = 0; i < contractsSignManyChecked.length; i++) {
+      for (let j = i + 1; j < contractsSignManyChecked.length; j++) {
+        if (
+          contractsSignManyChecked[i].sign_type[0].id != contractsSignManyChecked[j].sign_type[0].id
+        ) {
+          this.toastService.showErrorHTMLWithTimeout(
+            'Vui lòng chọn những tài liệu cùng loại ký',
+            '',
+            3000
+          );
+          return;
+        }
+      }
+
+      if(contractsSignManyChecked[i].sign_type[0].id == 3) {
+        totalBoxSignPki += contractsSignManyChecked[i].fields.length;
+      }
+    }
+
+    if(totalBoxSignPki > 15) {
+      this.toastService.showErrorHTMLWithTimeout(
+        'Vui lòng chọn những tài liệu có tổng số ô ký PKI không quá 15 ô',
+        '',
+        3000
+      );
+      return;
+    }
+  }
+
+
+
   toggle() {
     const checkBox = document.getElementById('all') as HTMLInputElement | null;
 
@@ -1175,6 +1211,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   signManyContract() {
+    let totalBoxSignPki = 0;
     //Nếu chọn tài liệu khác loại ký thì ko cho ký
     let contractsSignManyChecked = this.contractsSignMany.filter(
       (opt) => opt.checked
@@ -1201,8 +1238,20 @@ export class ContractSignatureComponent implements OnInit {
           return;
         }
       }
+
+      if(contractsSignManyChecked[i].sign_type[0].id == 3) {
+        totalBoxSignPki += contractsSignManyChecked[i].fields.length;
+      }
     }
 
+    if(totalBoxSignPki > 15) {
+      this.toastService.showErrorHTMLWithTimeout(
+        'Vui lòng chọn những tài liệu có tổng số ô ký PKI không quá 15 ô',
+        '',
+        3000
+      );
+      return;
+    }
     //Lay hop dong ky nhieu bang hsm hay usb token
     let signId = contractsSignManyChecked[0]?.sign_type[0]?.id;
 

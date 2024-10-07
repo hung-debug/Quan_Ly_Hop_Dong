@@ -490,14 +490,14 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     dataDetermine.forEach((data: any) => {
       dataContractUserSign.forEach((element: any) => {
         if (element.recipient_id == data.id ) {
-          if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id && item.sign_unit.includes('chu_ky_so') &&  ![2,4,6].includes(data?.sign_type[0]?.id))?.length > 1) {
+          if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id && item.sign_unit.includes('chu_ky_so') &&  ![2,3,4,6].includes(data?.sign_type[0]?.id))?.length > 1) {
             element.isSupportMultiSignatureBox = false;
           } else {
             element.isSupportMultiSignatureBox = true;
           }
-          if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id &&  [3,7,8].includes(data?.sign_type[0]?.id))?.length > 1) {
+          if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id &&  [7,8].includes(data?.sign_type[0]?.id))?.length > 1) {
             element.isNotSupportTextField = true
-          } else if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id &&  [2,4,6].includes(data?.sign_type[0]?.id))?.length > 0) {
+          } else if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id &&  [2,3,4,6].includes(data?.sign_type[0]?.id))?.length > 0) {
             element.isNotSupportTextField = false
           }
         }
@@ -786,7 +786,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             item['type_unit'] = 'organization';
             item['selected'] = false;
             //item['is_disable'] = false;
-            item['is_disable'] = !element?.sign_type?.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6));
+            item['is_disable'] = !element?.sign_type?.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6));
             // item['id'] = item.id;
             this.list_sign_name.push(item);
           }
@@ -1238,6 +1238,21 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     if(isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
       isSignType = 'chu_ky_so'
     }
+    let count = 0;
+    let test = this.convertToSignConfig();
+    console.log("test", test)
+    console.log("this.list_sign_name.", this.list_sign_name)
+    test.forEach((isObj: any) => {
+      this.list_sign_name.forEach((listItem: any) => {
+        if (isObj.recipient_id && isObj.recipient_id == listItem.id) {
+            const hasSignType3 = listItem.sign_type.some((signType: any) => signType.id == 3);
+            if (hasSignType3) {
+                count += 1;
+            }
+        }
+      });
+    });
+    console.log("Số lượng sign_type có id = 3: ", count);
     // p.recipient_id == element.id && p.sign_unit == isSignType)
     this.list_sign_name.forEach((element: any) => {
       if (isSignType == 'text' && value) {
@@ -1255,7 +1270,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                   element.is_disable = !element.sign_type.some(((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role != 4)
                 }
               } else if (isSignType.includes('chu_ky_so')) {
-                element.is_disable = !element.sign_type.some(((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role != 4) || 
+                element.is_disable = !element.sign_type.some(((p: any) => p.id == 2 || p.id == 3 && count < 15 || p.id == 4 || p.id == 6) || element.role != 4) || 
                 element.sign_type.some((p:any) => element.role == 4 && ![2,4,6].includes(p.id))
                 // element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
                 // element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6) || element.role != 4)
@@ -1273,7 +1288,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             if (isSignType == 'chu_ky_anh') {
               element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
             }else if (isSignType.includes('chu_ky_so')) {
-              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && element.role != 2);
+              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 && count < 15 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && element.role != 2);
             } else if (isSignType == 'text') {
               element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || (element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3 && p.id != 7)));
               // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4)); //disable van thu select text

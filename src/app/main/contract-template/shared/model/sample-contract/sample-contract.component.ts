@@ -554,14 +554,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     dataDetermine.forEach((data: any) => {
       dataContractUserSign.forEach((element: any) => {
         if (element.recipient_id == data.id ) {
-          if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id && item.sign_unit.includes('chu_ky_so') &&  ![2,4,6].includes(data?.sign_type[0]?.id))?.length > 1) {
+          if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id && item.sign_unit.includes('chu_ky_so') &&  ![2,3,4,6].includes(data?.sign_type[0]?.id))?.length > 1) {
             element.isSupportMultiSignatureBox = false;
           } else {
             element.isSupportMultiSignatureBox = true;
           }
-          if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id &&  [3,7,8].includes(data?.sign_type[0]?.id))?.length > 1) {
+          if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id &&  [7,8].includes(data?.sign_type[0]?.id))?.length > 1) {
             element.isNotSupportTextField = true
-          } else if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id &&  [2,4,6].includes(data?.sign_type[0]?.id))?.length > 0) {
+          } else if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id &&  [2,3,4,6].includes(data?.sign_type[0]?.id))?.length > 0) {
             element.isNotSupportTextField = false
           }
         }
@@ -783,7 +783,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             item['type_unit'] = 'organization';
             item['selected'] = false;
             //item['is_disable'] = false;
-            item['is_disable'] = !element?.sign_type?.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6));
+            item['is_disable'] = !element?.sign_type?.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6));
             item['org_name'] = element.name;
             this.list_sign_name.push(item);
           }
@@ -1279,6 +1279,21 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if(isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
       isSignType = 'chu_ky_so'
     }
+    let count = 0;
+    let test = this.convertToSignConfig();
+    console.log("test", test)
+    console.log("this.list_sign_name.", this.list_sign_name)
+    test.forEach((isObj: any) => {
+      this.list_sign_name.forEach((listItem: any) => {
+        if (isObj.recipient_id && isObj.recipient_id == listItem.id) {
+            const hasSignType3 = listItem.sign_type.some((signType: any) => signType.id == 3);
+            if (hasSignType3) {
+                count += 1;
+            }
+        }
+      });
+    });
+    console.log("Số lượng sign_type có id = 3: ", count);
     this.list_sign_name.forEach((element: any) => {
       if (isSignType != 'text' && (element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
         let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
@@ -1294,7 +1309,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             // element.is_disable = false;
             element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
           } else if (isSignType.includes('chu_ky_so')) {
-            element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
+            element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 3 && count < 15 || p.id == 4 || p.id == 6)
             // if(element.sign_type.some((p:any) => [2,4,6].includes(p.id))){
             //   element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6))
             // }
@@ -1307,7 +1322,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           if (isSignType == 'chu_ky_anh') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
           }else if (isSignType.includes('chu_ky_so')) {
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && element.role != 2);
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 && count < 15 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && element.role != 2);
           } else if (isSignType == 'text') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || (element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3 && p.id != 7))); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
             // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4)); //disable van thu select text
