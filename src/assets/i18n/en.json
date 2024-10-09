@@ -911,5 +911,6 @@
   "many.extensions": "Many extensions",
   "error.notTime": "Please select a signature expiration date",
   "person.processing.contract": "Name of the person handling the document",
-  "name.email.create.contract": "Name/Email person create document"
+  "name.email.create.contract": "Name/Email person create document",
+  "no.update.assign": "PKI only allows assignment of less than 15 signature cells"
 }

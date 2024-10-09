@@ -1238,21 +1238,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     if(isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
       isSignType = 'chu_ky_so'
     }
-    let count = 0;
-    let test = this.convertToSignConfig();
-    console.log("test", test)
-    console.log("this.list_sign_name.", this.list_sign_name)
-    test.forEach((isObj: any) => {
-      this.list_sign_name.forEach((listItem: any) => {
-        if (isObj.recipient_id && isObj.recipient_id == listItem.id) {
-            const hasSignType3 = listItem.sign_type.some((signType: any) => signType.id == 3);
-            if (hasSignType3) {
-                count += 1;
-            }
-        }
-      });
-    });
-    console.log("Số lượng sign_type có id = 3: ", count);
+    let assignSign = this.convertToSignConfig();
     // p.recipient_id == element.id && p.sign_unit == isSignType)
     this.list_sign_name.forEach((element: any) => {
       if (isSignType == 'text' && value) {
@@ -1270,8 +1256,17 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                   element.is_disable = !element.sign_type.some(((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role != 4)
                 }
               } else if (isSignType.includes('chu_ky_so')) {
-                element.is_disable = !element.sign_type.some(((p: any) => p.id == 2 || p.id == 3 && count < 15 || p.id == 4 || p.id == 6) || element.role != 4) || 
-                element.sign_type.some((p:any) => element.role == 4 && ![2,4,6].includes(p.id))
+                if(element.sign_type[0].id == 3) {
+                  let count = assignSign.filter((sign: any) => sign.recipient_id === element.id).length;
+                  if(count >= 15) {
+                    element.is_disable = true;
+                  } else {
+                    element.is_disable = false;
+                  }
+                } else {
+                  element.is_disable = !element.sign_type.some(((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role != 4) || 
+                  element.sign_type.some((p:any) => element.role == 4 && ![2,4,6].includes(p.id))
+                }
                 // element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
                 // element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6) || element.role != 4)
                 // element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
@@ -1287,8 +1282,17 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           } else {
             if (isSignType == 'chu_ky_anh') {
               element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
-            }else if (isSignType.includes('chu_ky_so')) {
-              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 && count < 15 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && element.role != 2);
+            } else if (isSignType.includes('chu_ky_so')) {
+              if (element.sign_type[0].id == 3) {
+                let count = assignSign.filter((sign: any) => sign.recipient_id === element.id).length;
+                if(count >= 15) {
+                  element.is_disable = true;
+                } else {
+                  element.is_disable = false;
+                }
+              } else {
+                element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && element.role != 2);
+              }
             } else if (isSignType == 'text') {
               element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || (element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3 && p.id != 7)));
               // element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4)); //disable van thu select text

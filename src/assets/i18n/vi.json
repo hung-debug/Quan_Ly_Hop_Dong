@@ -935,5 +935,6 @@
   "many.extensions": "Gia hạn nhiều",
   "error.notTime": "Vui lòng chọn ngày hết hạn ký",
   "person.processing.contract": "Tên người đang xử lý tài liệu",
-  "name.email.create.contract": "Tên/email người tạo tài liệu"
+  "name.email.create.contract": "Tên/email người tạo tài liệu",
+  "no.update.assign": "PKI chỉ cho phép gán dưới 15 ô ký"
 }

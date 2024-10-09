@@ -33,6 +33,7 @@ import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
 import { ImageSignContractComponent } from './components/consider-contract/image-sign-contract/image-sign-contract.component';
 import { ConfirmSignOtpComponent } from './components/consider-contract/confirm-sign-otp/confirm-sign-otp.component';
 import { PkiDialogSignComponent } from './components/consider-contract/pki-dialog-sign/pki-dialog-sign.component';
+import { PkiDialogSignMultiComponent } from './components/consider-contract/pki-dialog-sign-multi/pki-dialog-sign-multi.component';
 import { ImageDialogSignComponent } from './components/consider-contract/image-dialog-sign/image-dialog-sign.component';
 import {NgxSelectModule} from "ngx-select-ex";
 import { HsmDialogSignComponent } from './components/consider-contract/hsm-dialog-sign/hsm-dialog-sign.component';
@@ -126,7 +127,8 @@ export const contractSignatureRoutes1: Routes = [
     EditHandlerComponent,
     MultiSignListComponent,
     RemoteDialogSignComponent,
-    ImageDialogSignV2Component
+    ImageDialogSignV2Component,
+    PkiDialogSignMultiComponent
     // AddContractComponent
   ],
   imports: [

@@ -1250,19 +1250,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
   countDuplicate: any = 0;
   getCheckSignature(isSignType: any, listSelect?: string) {
-    let count = 0;
-    let test = this.convertToSignConfig();
-    test.forEach((isObj: any) => {
-      this.list_sign_name.forEach((listItem: any) => {
-        if (isObj.recipient_id && isObj.recipient_id == listItem.id) {
-            const hasSignType3 = listItem.sign_type.some((signType: any) => signType.id == 3);
-            if (hasSignType3) {
-                count += 1;
-            }
-        }
-      });
-    });
-    console.log("Số lượng sign_type có id = 3: ", count);
+    let assignSign = this.convertToSignConfig();
     if(isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
       isSignType = 'chu_ky_so'
     }
@@ -1282,7 +1270,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               element.is_disable = !element.sign_type.some(((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role == 4)
             }
           }else if (isSignType.includes('chu_ky_so')) {
-            element.is_disable = !element.sign_type.some(((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 3 && count < 15) || element.role != 4) || element.sign_type.some((p:any) => element.role == 4 && ![2,4,6,3].includes(p.id) && (p.id == 3 && count < 15))
+            if(element.sign_type[0].id == 3) {
+              let count = assignSign.filter((sign: any) => sign.recipient_id === element.id).length;
+              if(count >= 15) {
+                element.is_disable = true;
+              } else {
+                element.is_disable = false;
+              }
+            } else {
+              element.is_disable = !element.sign_type.some(((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role != 4) || element.sign_type.some((p:any) => element.role == 4 && ![2,4,6].includes(p.id))
+            }
             //element.is_disable = !element.sign_type.some(p: any) => (p.id == 2 || p.id == 4 || p.id == 6)
             // if(element.sign_type.some((p:any) => [2,4,6].includes(p.id))){
             //   element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6))
@@ -1300,7 +1297,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (isSignType == 'chu_ky_anh') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
         } else if (isSignType.includes('chu_ky_so')) {
-          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 && count <15 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && element.role != 2);
+          if(element.sign_type[0].id == 3) {
+            let count = assignSign.filter((sign: any) => sign.recipient_id === element.id).length;
+            if(count >= 15) {
+              element.is_disable = true;
+            } else {
+              element.is_disable = false;
+            }
+          } else {
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && element.role != 2);
+          }
         } else if (isSignType == 'text') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 ) || (element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3 && p.id != 7))); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
 
