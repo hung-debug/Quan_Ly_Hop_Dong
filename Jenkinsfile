@@ -1,6 +1,6 @@
 def pathInServer = "/u01/app"
-def patheContractStaging = "/u01/app/eContract-web-staging"
-def message = "*Start build Front-end eContract-demo*"
+def patheContractStaging = "/u01/app/eContract-web"
+def message = "*Start build Front-end eContract Dev*"
 def groupEChatWorkId = "65f95fbcd49bf204c8d6eb9b"
 pipeline {
     agent any
