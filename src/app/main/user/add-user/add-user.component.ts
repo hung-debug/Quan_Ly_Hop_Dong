@@ -46,7 +46,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   maxDate: Date = moment().toDate();
 
   orgIdOld:any;
-
+  is_show_phone_pki: boolean = true;
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
   isQLND_02:boolean=true;  //sua nguoi dung
@@ -70,7 +70,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       organizationId: this.fbd.control("", [Validators.required]),
       role: this.fbd.control("", [Validators.required]),
       status: 1,
-
+      is_show_phone_pki: true,
       phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
       networkKpi: null,
 
@@ -121,7 +121,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
             organizationId: this.fbd.control(orgId, [Validators.required]),
             role: this.fbd.control("", [Validators.required]),
             status: 1,
-
+            is_show_phone_pki: true,
             phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
             networkKpi: null,
 
@@ -157,7 +157,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
                     organizationId: this.fbd.control(data.organization_id, [Validators.required]),
                     role: this.fbd.control(Number(data.role_id), [Validators.required]),
                     status: data.status,
-
+                    is_show_phone_pki: data.is_show_phone_pki,
                     phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
                     networkKpi: data.phone_tel,
 
@@ -384,6 +384,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       organizationId: this.addForm.value.organizationId,
       role: this.addForm.value.role,
       status: this.addForm.value.status,
+      is_show_phone_pki: this.addForm.value.is_show_phone_pki,
       phoneKpi: this.addForm.value.phoneKpi,
       networkKpi: this.addForm.value.networkKpi,
       nameHsm: this.addForm.value.nameHsm,
