@@ -2425,7 +2425,7 @@ export class ConsiderContractComponent
             this.datas.is_data_contract.name,
             image_base64,
             this.isTimestamp,
-            this.dataNetworkPKI.hidden_phone ? false : true,
+            this.dataNetworkPKI.is_show_phone_pki ? false : true,
           );
           // await this.signContractSimKPI();
           if (!checkSign || (checkSign && !checkSign.success)) {
@@ -2446,7 +2446,7 @@ export class ConsiderContractComponent
             this.datas.is_data_contract.name,
             "",
             this.isTimestamp,
-            this.dataNetworkPKI.hidden_phone ? false : true,
+            this.dataNetworkPKI.is_show_phone_pki ? false : true,
           );
           // await this.signContractSimKPI();
           if (!checkSign || (checkSign && !checkSign.success)) {
@@ -4931,19 +4931,19 @@ export class ConsiderContractComponent
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(async (result: any) => {
+    dialogRef.afterClosed().subscribe(async (result: any) => {      
       if (result && result.phone && result.networkCode) {
         this.loadingText =
           'Yêu cầu ký đã được gửi tới số điện thoại của bạn.\n Vui lòng Xác nhận để thực hiện dịch vụ';
         this.signInfoPKIU.phone = result.phone;
         this.signInfoPKIU.phone_tel = result.phone_tel;
         this.signInfoPKIU.networkCode = result.networkCode;
-        this.signInfoPKIU.hidden_phone = result.hidden_phone;
+        this.signInfoPKIU.is_show_phone_pki = result.is_show_phone_pki;
         if (result.phone && result.phone_tel && result.networkCode) {
           this.dataNetworkPKI = {
             networkCode: this.signInfoPKIU.networkCode,
             phone: this.signInfoPKIU.phone,
-            hidden_phone: this.signInfoPKIU.hidden_phone,
+            is_show_phone_pki: this.signInfoPKIU.is_show_phone_pki,
           };
 
           await this.signContractSubmit();

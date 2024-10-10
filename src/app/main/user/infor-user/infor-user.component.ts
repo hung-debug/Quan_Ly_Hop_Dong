@@ -81,7 +81,8 @@ export class InforUserComponent implements OnInit {
      
       this.addKpiForm = this.fbd.group({
       phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
-      networkKpi: null
+      networkKpi: null,
+      is_show_phone_pki: true,
       });
    
       this.addHsmForm = this.fbd.group({
@@ -145,7 +146,8 @@ export class InforUserComponent implements OnInit {
 
         this.addKpiForm = this.fbd.group({
           phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
-          networkKpi: data.phone_tel == 3 ? 'bcy': data.phone_tel 
+          networkKpi: data.phone_tel == 3 ? 'bcy': data.phone_tel,
+          is_show_phone_pki: data.is_show_phone_pki, 
         });
 
         this.addHsmForm = this.fbd.group({
@@ -176,7 +178,8 @@ export class InforUserComponent implements OnInit {
         });
         this.addKpiFormOld = this.fbd.group({
           phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
-          networkKpi: data.phone_tel
+          networkKpi: data.phone_tel,
+          is_show_phone_pki: data.is_show_phone_pki,
         });
         this.addHsmFormOld = this.fbd.group({
           nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.new_input_form)),
@@ -315,7 +318,7 @@ export class InforUserComponent implements OnInit {
 
       phoneKpi: this.addKpiFormOld.value.phoneKpi,
       networkKpi: this.addKpiFormOld.value.networkKpi,
-
+      is_show_phone_pki: this.addKpiFormOld.value.is_show_phone_pki,
       nameHsm: this.addHsmFormOld.value.nameHsm,
 
       organization_change: this.addInforForm.value.organization_change
@@ -403,7 +406,7 @@ export class InforUserComponent implements OnInit {
 
       phoneKpi: this.addKpiForm.value.phoneKpi,
       networkKpi: this.addKpiForm.value.networkKpi == 'bcy' ? 3: this.addKpiForm.value.networkKpi,
-
+      is_show_phone_pki: this.addKpiForm.value.is_show_phone_pki,
       nameHsm: this.addHsmForm.value.nameHsm,
       taxCodeHsm: this.addHsmForm.value.taxCodeHsm,
       password1Hsm: this.addHsmForm.value.password1Hsm
