@@ -65,7 +65,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     const detailContract = await this.contractService.getDetailContract(this.data.is_data_contract.id).toPromise();
     this.endDate = moment(detailContract[0].sign_time, "YYYY/MM/DD").format("YYYY/MM/DD")
     let timeNow = moment(new Date(), "YYYY/MM/DD").format("YYYY/MM/DD")
-    this.isEndDate = this.endDate >= timeNow ? true : false;
+    // this.isEndDate = this.endDate >= timeNow ? true : false;
     let participants = detailContract[0].participants;
 
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
