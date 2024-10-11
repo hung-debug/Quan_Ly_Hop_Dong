@@ -49,10 +49,9 @@ export class PkiDialogSignMultiComponent implements OnInit {
     this.networkCode = this.datas?.sign?.phone_tel;
     if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
       this.type = 1;
-    } else
+    } else {
       this.type = 0;
-
-      console.log("type", this.type)
+    }
   }
 
   async onSubmit() {
@@ -94,23 +93,20 @@ export class PkiDialogSignMultiComponent implements OnInit {
       this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   
       for (const recipientId of this.datas.recipientId) {
-        // Await the getDetermineCoordination API call for each recipient
-        const response = await this.contractService.getDetermineCoordination(recipientId).toPromise();
-        console.log("response", response);
-  
-        const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-        console.log("ArrRecipients", ArrRecipients);
-  
+        const contract = this.data.chooseContract.find((contract: any) => contract.id === recipientId);
+
+        let response = await this.contractService.getDetermineCoordination(recipientId).toPromise();
+        let ArrRecipients = response.recipients.filter((ele: any) => ele.email == this.currentUser.email);
         let ArrRecipientsNew = false;
         ArrRecipients.forEach((item: any) => {
-          if (item.email === this.currentUser.email) {
+          if (item.sign_type[0].id == 3) {
             ArrRecipientsNew = true;
           }
         });
   
-        if (!ArrRecipientsNew) {
+        if (ArrRecipients.length == 0 || !ArrRecipientsNew) {
           this.toastService.showErrorHTMLWithTimeout(
-            'Bạn không có quyền xử lý tài liệu này!',
+            `Bạn không có quyền xử lý tài liệu ${contract.contractName}!`,
             '',
             3000
           );
@@ -125,31 +121,21 @@ export class PkiDialogSignMultiComponent implements OnInit {
           this.spinner.hide();
           return;
         }
-      }
-  
-      // Now iterate over the recipientId array in this.data
-      for (const recipientId of this.data.recipientId) {
-        try {
-          const res = await this.contractService.getCheckSignatured(recipientId).toPromise();
-          console.log("res", res);
-  
-          if (res && res.status === 2) {
-            this.toastService.showErrorHTMLWithTimeout('contract_signature_success', '', 3000);
-            return;
-          }
-        } catch (error) {
-          this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout('error_check_signature', '', 3000);
+
+        const res = await this.contractService.getCheckSignatured(recipientId).toPromise();
+        if (res && res.status === 2) {
+          this.toastService.showErrorHTMLWithTimeout(`Tài liệu ${contract.contractName} đã được xử lý!`, '', 3000);
+          return;
         }
       }
-  
+    
     } catch (error: any) {
       if (error instanceof HttpErrorResponse) {
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout('error_check_signature', '', 3000);
       }
     }
-
+    
     const resDialog = {
       phone: resPhone,
       networkCode: this.networkCompany,

@@ -657,7 +657,7 @@
                     <div class="col-sm-5">
                         <div class="flex-container">
                             <div>
-                              <input style="width: 16px; height: 16px;" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" (change)="checkSignType()"/>
+                              <input style="width: 16px; height: 16px;" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" (change)="checkSignType()" [disabled]="item.isDisable"/>
                             </div>
 
                             <div class="col-md-11" style="display: flex;margin-left: 12px; cursor: pointer;">

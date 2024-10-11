@@ -489,20 +489,19 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     // xoa fields khi chuyen sang loai ky ko support gan nhieu o ky
     dataDetermine.forEach((data: any) => {
       dataContractUserSign.forEach((element: any) => {
-        if (element.recipient_id == data.id ) {
-          if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id && item.sign_unit.includes('chu_ky_so') &&  ![2,3,4,6].includes(data?.sign_type[0]?.id))?.length > 1) {
-            element.isSupportMultiSignatureBox = false;
-          } else {
-            element.isSupportMultiSignatureBox = true;
-          }
-          if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id &&  [7,8].includes(data?.sign_type[0]?.id))?.length > 1) {
-            element.isNotSupportTextField = true
-          } else if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id &&  [2,3,4,6].includes(data?.sign_type[0]?.id))?.length > 0) {
-            element.isNotSupportTextField = false
-          }
+        if (element.recipient_id == data.id) {
+          const signTypeId = data?.sign_type[0]?.id;
+    
+          const filteredItems = dataContractUserSign.filter((item: any) => 
+            item.recipient_id == data.id && 
+            item.sign_unit.includes('chu_ky_so')
+          );
+          const condition1 = filteredItems.filter(item => ![2, 3, 4, 6].includes(signTypeId)).length > 1;
+          const condition2 = filteredItems.filter(item => signTypeId == 3).length > 15;
+          element.isSupportMultiSignatureBox = !(condition1 || condition2);
         }
-      })
-    })
+      });
+    });
     // xoa fields khi chuyen sang loai ky ko support gan nhieu o ky
 
     // Get data have change 1 in 3 value name, email, type sign
@@ -512,7 +511,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký"))) ||
           (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 3 || p.id == 7 || p.id == 8)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id) && !val.isNotSupportTextField) ||
           (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6 || p.id == 3 || p.id == 7 || p.id == 8)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id && !val.isNotSupportTextField)) ||
-          (val.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký"))))
+          (val.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && (val.recipient_id == data.id || val.name.includes("Người ký"))))
         )
         || dataDetermine.some((data: any) => val.sign_unit.includes('chu_ky_so') && val.isSupportMultiSignatureBox == false && val.recipient_id == data.id)
       );
@@ -562,9 +561,12 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                   ((val.recipient ? val.recipient.phone as any : val.phone as any) === (data.recipient ? data.recipient.phone as any : data.phone as any))
                 ) &&
                 val.sign_unit == data.sign_unit &&
-                val.name == data.name &&
-                val.type == data.type
-              ));
+                val.recipient_id == data.recipient_id
+                ));
+                // res.sign_config = isContractSign;
+                resItem.sign_config.forEach((items: any) => {
+                  items.id = items.id + '1';
+                })
             }
 
           })

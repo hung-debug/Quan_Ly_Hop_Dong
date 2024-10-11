@@ -565,15 +565,19 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // xoa fields khi chuyen sang loai ky ko support gan nhieu o ky
     dataDetermine.forEach((data: any) => {
       dataContractUserSign.forEach((element: any) => {
-        if (element.recipient_id == data.id ) {
-          if (dataContractUserSign.filter((item: any) => item.recipient_id == data.id && item.sign_unit.includes('chu_ky_so') &&  ![2,3,4,6].includes(data?.sign_type[0]?.id))?.length > 1) {
-            element.isSupportMultiSignatureBox = false;
-          } else {
-            element.isSupportMultiSignatureBox = true;
-          }
+        if (element.recipient_id == data.id) {
+          const signTypeId = data?.sign_type[0]?.id;
+    
+          const filteredItems = dataContractUserSign.filter((item: any) => 
+            item.recipient_id == data.id && 
+            item.sign_unit.includes('chu_ky_so')
+          );
+          const condition1 = filteredItems.filter(item => ![2, 3, 4, 6].includes(signTypeId)).length > 1;
+          const condition2 = filteredItems.filter(item => signTypeId == 3).length > 15;
+          element.isSupportMultiSignatureBox = !(condition1 || condition2);
         }
-      })
-    })
+      });
+    });
     // xoa fields khi chuyen sang loai ky ko support gan nhieu o ky
     let isContractSign: any[] = [];
     if(!this.datas.isDeleteField){

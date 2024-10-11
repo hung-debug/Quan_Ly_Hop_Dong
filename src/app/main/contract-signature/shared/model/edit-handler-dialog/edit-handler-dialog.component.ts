@@ -173,7 +173,7 @@ export class EditHandlerComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    if(this.data.sign_type[0].id != 3 && this.dataSign[0]?.id == 3 && this.fieldsUpdate.length >= 15) {
+    if(this.data.sign_type[0].id != 3 && this.dataSign[0]?.id == 3 && this.fieldsUpdate.length > 15) {
       this.toastService.showErrorHTMLWithTimeout(this.translate.instant('no.update.assign'), "", 3000);
       return; 
     }

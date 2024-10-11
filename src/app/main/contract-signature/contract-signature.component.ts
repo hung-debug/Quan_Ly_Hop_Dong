@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from 'src/app/service/app.service';
 import * as contractModel from './model/contract-model';
-import { variable } from '../../config/variable';
+import { networkList, variable } from '../../config/variable';
 
 import { ContractSignatureService } from '../../service/contract-signature.service';
 import { ContractService } from '../../service/contract.service';
@@ -30,6 +30,7 @@ import { CertDialogSignComponent } from './components/consider-contract/cert-dia
 import { TimeService } from 'src/app/service/time.service';
 import { ProcessingHandleEcontractComponent } from '../contract-signature/shared/model/processing-handle-econtract/processing-handle-econtract.component';
 import { RemoteDialogSignComponent } from './components/consider-contract/remote-dialog-sign/remote-dialog-sign.component';
+import { PkiDialogSignMultiComponent } from './components/consider-contract/pki-dialog-sign-multi/pki-dialog-sign-multi.component';
 // import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
@@ -117,6 +118,8 @@ export class ContractSignatureComponent implements OnInit {
   inputTimeout: any
   numberPage: number;
   enterPage: number = 1;
+  signInfoPKIU: any = {};
+  chooseContract: any = [];
   constructor(
     private appService: AppService,
     private contractServiceV1: ContractService,
@@ -661,6 +664,7 @@ export class ContractSignatureComponent implements OnInit {
                 this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
                 this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
                 this.contractsSignMany[v].checked = false;
+                this.contractsSignMany[v].isDisable = false;
               });
 
               this.spinner.hide();
@@ -693,6 +697,7 @@ export class ContractSignatureComponent implements OnInit {
                 this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
                 this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
                 this.contractsSignMany[v].checked = false;
+                this.contractsSignMany[v].isDisable = false;
               });
 
               this.spinner.hide();
@@ -824,8 +829,6 @@ export class ContractSignatureComponent implements OnInit {
           return;
         }
 
-
-
         if (
           this.dataChecked[lengthItem - 1].card_id !=
           this.dataChecked[lengthItem - 2].card_id
@@ -847,55 +850,92 @@ export class ContractSignatureComponent implements OnInit {
     let contractsSignManyChecked = this.contractsSignMany.filter(
       (opt) => opt.checked
     );
-    let totalBoxSignPki = 0;
-    for (let i = 0; i < contractsSignManyChecked.length; i++) {
-      for (let j = i + 1; j < contractsSignManyChecked.length; j++) {
-        if (
-          contractsSignManyChecked[i].sign_type[0].id != contractsSignManyChecked[j].sign_type[0].id
-        ) {
-          this.toastService.showErrorHTMLWithTimeout(
-            'Vui lòng chọn những tài liệu cùng loại ký',
-            '',
-            3000
-          );
-          return;
-        }
-      }
 
-      if(contractsSignManyChecked[i].sign_type[0].id == 3) {
-        totalBoxSignPki += contractsSignManyChecked[i].fields.length;
-      }
+    const selectAllCheckbox = document.getElementById('all') as HTMLInputElement;
+    if (contractsSignManyChecked.length === 0 && selectAllCheckbox) {
+      selectAllCheckbox.checked = false;
+    } else if (contractsSignManyChecked.length == this.contractsSignMany.length) {
+      selectAllCheckbox.checked = true;
     }
 
-    if(totalBoxSignPki > 15) {
-      this.toastService.showErrorHTMLWithTimeout(
-        'Vui lòng chọn những tài liệu có tổng số ô ký PKI không quá 15 ô',
+    if(contractsSignManyChecked.length == 0) {
+      for (let i = 0; i < this.contractsSignMany.length; i++) {
+        this.contractsSignMany[i].isDisable = false;
+      }
+    } else {
+      for (let i = 0; i < this.contractsSignMany.length; i++) {
+        if(this.contractsSignMany[i].sign_type[0].id == contractsSignManyChecked[0].sign_type[0].id) {
+          this.contractsSignMany[i].isDisable = false;
+        } else {
+          this.contractsSignMany[i].isDisable = true;
+        }
+      }
+    }
+    let totalBoxSignPki = 0;
+    contractsSignManyChecked.forEach(contract => {
+      if (contract.sign_type[0].id === 3) {
+        totalBoxSignPki += contract.fields.length;
+      }
+    });
+  
+    if (totalBoxSignPki > 0) {
+      this.contractsSignMany.forEach(contract => {
+        if (!contract.checked && contract.fields.length + totalBoxSignPki > 15) {
+          contract.isDisable = true;
+        }
+      });
+    }
+
+    if(totalBoxSignPki > 0 && totalBoxSignPki <= 15) {
+      this.toastService.showSuccessHTMLWithTimeout(
+        `Tài liệu bạn chọn có ${totalBoxSignPki}/15 ô ký PKI`,
         '',
         3000
       );
-      return;
     }
   }
-
-
 
   toggle() {
     const checkBox = document.getElementById('all') as HTMLInputElement | null;
 
     if (checkBox != null) {
       let checkBoxList = document.getElementsByName('item');
-
-      if (checkBox.checked === true) {
-        for (let i = 0; i < checkBoxList.length; i++) {
-          var checkBoxGet: any = checkBoxList[i];
-          checkBoxGet.checked = true;
-          this.contractsSignMany[i].checked = true;
-        }
-      } else {
+      for (let i = 0; i < checkBoxList.length; i++) {
+        var checkBoxGet: any = checkBoxList[i];
+        checkBoxGet.checked = false;
+        this.contractsSignMany[i].checked = false;
+      }
+      if (checkBox.checked) {
         for (let i = 0; i < checkBoxList.length; i++) {
           var checkBoxGet: any = checkBoxList[i];
           checkBoxGet.checked = false;
           this.contractsSignMany[i].checked = false;
+        }
+        let totalBoxSignPki = 0;
+
+        this.contractsSignMany.forEach(contract => {
+          if (contract.checked && contract.sign_type[0].id === 3) {
+            totalBoxSignPki += contract.fields.length;
+          }
+        });
+
+        for (let i = 0; i < checkBoxList.length; i++) {
+          if(this.contractsSignMany.length > 0 && this.contractsSignMany[0].sign_type[0].id == this.contractsSignMany[i].sign_type[0].id) {
+            if (this.contractsSignMany[0].sign_type[0].id === 3) {
+              if (totalBoxSignPki + this.contractsSignMany[i].fields.length <= 15) {
+                var checkBoxGet: any = checkBoxList[i];
+                checkBoxGet.checked = true;
+                this.contractsSignMany[i].checked = true;
+                totalBoxSignPki += this.contractsSignMany[i].fields.length;
+              } else {
+                this.contractsSignMany[i].isDisable = true;
+              }
+            } else {
+              var checkBoxGet: any = checkBoxList[i];
+              checkBoxGet.checked = true;
+              this.contractsSignMany[i].checked = true;
+            }
+          }
         }
       }
     }
@@ -1224,7 +1264,6 @@ export class ContractSignatureComponent implements OnInit {
       );
       return;
     }
-    console.log(contractsSignManyChecked)
     for (let i = 0; i < contractsSignManyChecked.length; i++) {
       for (let j = i + 1; j < contractsSignManyChecked.length; j++) {
         if (
@@ -1338,6 +1377,18 @@ export class ContractSignatureComponent implements OnInit {
             });
           });
       }
+    } else if (signId == 3) {
+      recipientId = contractsSignManyChecked
+      .filter((opt) => opt.checked)
+      .map((opt) => opt.id);
+
+      contractsSignManyChecked.map((item) => {
+        let itemChoose = {
+          id: item.id,
+          contractName: item.contractName
+        }
+        this.chooseContract.push(itemChoose);
+      })
     }
 
     this.openDialogSignManyComponent(recipientId, taxCode, idSignMany, signId);
@@ -1394,8 +1445,116 @@ export class ContractSignatureComponent implements OnInit {
     });
   }
 
+  getNameSign(results: any) {
+    const contractNames = results.map((item: any) => {
+      const contract = this.chooseContract.find((contract: any) => contract.id === item.recipientId);
+      return contract ? contract.contractName : '';
+    }).join(", ");
+
+    return contractNames;
+  }
+
   async actionSignMulti(signId: any, recipientId: any, taxCode: any, result: any, idSignMany: any) {
-    if (signId == 2) {
+    if(signId == 3) {
+      let signI = '';
+      if (this.srcMark) {
+        signI = this.srcMark.split(',')[1];
+      }
+      let name = this.chooseContract.map((contract: any) => contract.contractName).join(", ");
+      const nl = networkList;
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;  
+      try {
+        const userData: any = await this.userService.getUserById(this.currentUser.id).toPromise();
+        
+
+        const itemNameNetwork = nl.find((nc: any) => nc.id == userData.phone_tel);
+        this.signInfoPKIU.phone = userData.phone_sign;
+        this.signInfoPKIU.phone_tel = userData.phone_tel;
+        this.signInfoPKIU.networkCode = itemNameNetwork && itemNameNetwork.name
+          ? itemNameNetwork.name.toLowerCase()
+          : null;
+      
+        const data = {
+          title: 'CHỮ KÝ PKI',
+          type: 3,
+          sign: this.signInfoPKIU,
+          recipientId: recipientId,
+          chooseContract: this.chooseContract
+        };
+        
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.panelClass = 'custom-dialog-container';
+        dialogConfig.width = '497px';
+        dialogConfig.height = '330px';
+        dialogConfig.hasBackdrop = true;
+        dialogConfig.data = data;
+    
+        const dialogRef = this.dialog.open(PkiDialogSignMultiComponent, dialogConfig);
+        
+        // Await the dialog close event
+        const result: any = await dialogRef.afterClosed().toPromise();
+        if(result) {
+          this.spinner.show();
+          const checkSign = await this.contractServiceV1.signPkiDigitalMulti(
+            result.phone,
+            result.networkCode.toLowerCase(),
+            recipientId,
+            signI,
+            this.isTimestamp,
+            result.hidden_phone ? false : true,
+            name
+          ).toPromise();
+          this.spinner.hide();
+          let resultsFalse = checkSign.filter((item: any) => item.result.success === false);
+          let resultsTrue = checkSign.filter((item: any) => item.result.success === true);
+          //let resultsProcessing = checkSign.filter((item: any) => item.result.success === true && item.result.status === "PROCESSING");
+          //let resultsSigned = checkSign.filter((item: any) => item.result.success === true && item.result.status === "SIGNED");
+
+          if(resultsFalse.length > 0) {
+            let contractNames = this.getNameSign(resultsFalse);
+            this.toastService.showErrorHTMLWithTimeout(
+              `Tài liệu ${contractNames} ký không thành công!`,
+              '',
+              10000
+            );
+          }
+
+          if(resultsTrue.length > 0) {
+            let contractNames = this.getNameSign(resultsTrue);
+            this.toastService.showSuccessHTMLWithTimeout(
+              `Bạn vừa thực hiện ký thành công tài liệu ${contractNames}.`,
+              '',
+              10000
+            );
+          }
+
+          if(resultsFalse.length == 0) {
+            this.toastService.showSuccessHTMLWithTimeout(
+              'Ký số thành công',
+              '',
+              10000
+            );
+          }
+
+          if(resultsTrue.length == 0) {
+            this.toastService.showSuccessHTMLWithTimeout(
+              'Ký số thất bại',
+              '',
+              10000
+            );
+          }
+
+          this.router
+          .navigateByUrl('/', { skipLocationChange: true })
+          .then(() => {
+            this.router.navigate(['main/c/receive/processed']);
+          });
+        }
+      } catch (error) {
+        console.error("An error occurred:", error);
+      }
+           
+    } else if (signId == 2) {
       this.spinner.show();
 
       let contractsSignManyChecked = this.contractsSignMany.filter(

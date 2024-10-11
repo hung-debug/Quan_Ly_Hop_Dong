@@ -1169,7 +1169,7 @@ export class ContractService {
       .toPromise();
   }
 
-  signPkiDigitalMulti(phone: any, networkCode: any, recipientId: any, image_base64: any, isTimestamp: any, hidden_phone: boolean) {
+  signPkiDigitalMulti(phone: any, networkCode: any, recipientId: any, image_base64: any, isTimestamp: any, hidden_phone: boolean, nameContract: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -1183,12 +1183,12 @@ export class ContractService {
           isTimestamp: isTimestamp,
           mobile: phone,
           network_code: networkCode,
-          prompt: "Bạn có yêu cầu ký số tài liệu sim PKI. Vui lòng nhập mã pin để thực hiện ký.",
+          prompt: `Bạn có yêu cầu ký số tài liệu ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
           reason: "reason"
       }
     };
     return this.http
-      .post<any>(this.signMultiPKI, body, { headers: headers }).toPromise();
+      .post<any>(this.signMultiPKI, body, { headers: headers });
   }
 
   signHsm(datas: any, recipientId: number, isTimestamp: any, boxType: any) {
