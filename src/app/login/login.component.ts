@@ -13,6 +13,7 @@ import * as moment from 'moment';
 import { KeycloakService } from 'keycloak-angular';
 import { AccountLinkDialogComponent } from '../main/dialog/account-link-dialog/account-link-dialog.component';
 import { environment } from 'src/environments/environment';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-login',
@@ -48,6 +49,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private changeDetector : ChangeDetectorRef,
     private toastService: ToastService,
     private keycloakService: KeycloakService,
+    private spinner: NgxSpinnerService
 
   ) {
     translate.addLangs(['en', 'vi']);
@@ -568,7 +570,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
   }
   async loginSSO() {
-    await this.keycloakService.login()
+    await this.keycloakService.login();
   }
 
   openAccountLinkDialog(userData: any) {
