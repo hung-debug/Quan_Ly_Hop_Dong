@@ -1274,7 +1274,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               element.is_disable = !element.sign_type.some(((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role == 4)
             }
           }else if (isSignType.includes('chu_ky_so')) {
-            if(element.sign_type[0].id == 3) {
+            if(element.sign_type[0]?.id == 3) {
               let count = assignSign.filter((sign: any) => sign.recipient_id === element.id).length;
               if(count >= 15) {
                 element.is_disable = true;
@@ -1301,7 +1301,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (isSignType == 'chu_ky_anh') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
         } else if (isSignType.includes('chu_ky_so')) {
-          if(element.sign_type[0].id == 3) {
+          if(element.sign_type[0]?.id == 3) {
             let count = assignSign.filter((sign: any) => sign.recipient_id === element.id).length;
             if(count >= 15) {
               element.is_disable = true;
