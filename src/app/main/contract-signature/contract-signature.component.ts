@@ -529,7 +529,12 @@ export class ContractSignatureComponent implements OnInit {
 
   getContractList() {
     this.spinner.show();
+    const checkBox = document.getElementById('all') as HTMLInputElement | null;
+    if (checkBox != null) {
+      checkBox.checked = false;
+    }
     this.contracts = [];
+    this.contractsSignMany = [];
     if (this.filter_status % 10 == 1) {
       this.filter_status = 1;
     }
@@ -754,7 +759,8 @@ export class ContractSignatureComponent implements OnInit {
 
   //auto search
   autoSearch(event: any) {
-    setTimeout(() => {
+    clearTimeout(this.inputTimeout);
+    this.inputTimeout = setTimeout(() => {
       if (this.typeDisplay == 'signOne') {
         this.filter_name = event.target.value;
       } else if (this.typeDisplay == 'signMany' || this.typeDisplay == 'downloadMany') {
@@ -897,45 +903,55 @@ export class ContractSignatureComponent implements OnInit {
 
   toggle() {
     const checkBox = document.getElementById('all') as HTMLInputElement | null;
-
     if (checkBox != null) {
       let checkBoxList = document.getElementsByName('item');
+      if(this.contractsSignMany.length > 0) {
+        for (let i = 0; i < this.contractsSignMany.length; i++) {
+          if(this.contractsSignMany[0].sign_type[0].id != this.contractsSignMany[i].sign_type[0].id) {
+            checkBox.checked = false;
+            return this.toastService.showErrorHTMLWithTimeout(
+              `Vui lòng chọn những tài liệu cùng loại ký`,
+              '',
+              3000
+            );
+          }
+        }
+      }
+
       for (let i = 0; i < checkBoxList.length; i++) {
         var checkBoxGet: any = checkBoxList[i];
         checkBoxGet.checked = false;
         this.contractsSignMany[i].checked = false;
+        this.contractsSignMany[i].isDisable = false;
       }
+
       if (checkBox.checked) {
-        for (let i = 0; i < checkBoxList.length; i++) {
-          var checkBoxGet: any = checkBoxList[i];
-          checkBoxGet.checked = false;
-          this.contractsSignMany[i].checked = false;
-        }
         let totalBoxSignPki = 0;
-
-        this.contractsSignMany.forEach(contract => {
-          if (contract.checked && contract.sign_type[0].id === 3) {
-            totalBoxSignPki += contract.fields.length;
-          }
-        });
-
-        for (let i = 0; i < checkBoxList.length; i++) {
-          if(this.contractsSignMany.length > 0 && this.contractsSignMany[0].sign_type[0].id == this.contractsSignMany[i].sign_type[0].id) {
-            if (this.contractsSignMany[0].sign_type[0].id === 3) {
-              if (totalBoxSignPki + this.contractsSignMany[i].fields.length <= 15) {
-                var checkBoxGet: any = checkBoxList[i];
-                checkBoxGet.checked = true;
-                this.contractsSignMany[i].checked = true;
-                totalBoxSignPki += this.contractsSignMany[i].fields.length;
-              } else {
-                this.contractsSignMany[i].isDisable = true;
-              }
-            } else {
+        let totalAllBoxSignPki = 0;
+        for (let i = 0; i < checkBoxList.length; i++) {  
+          if (this.contractsSignMany[0].sign_type[0].id === 3) {
+            totalAllBoxSignPki += this.contractsSignMany[i].fields.length;
+            if (totalBoxSignPki + this.contractsSignMany[i].fields.length <= 15) {
               var checkBoxGet: any = checkBoxList[i];
               checkBoxGet.checked = true;
               this.contractsSignMany[i].checked = true;
+              totalBoxSignPki += this.contractsSignMany[i].fields.length;
+            } else {
+              this.contractsSignMany[i].isDisable = true;
             }
-          }
+          } else {
+            var checkBoxGet: any = checkBoxList[i];
+            checkBoxGet.checked = true;
+            this.contractsSignMany[i].checked = true;
+          }  
+        }
+
+        if(totalAllBoxSignPki > 15) {
+          this.toastService.showErrorHTMLWithTimeout(
+            `Vui lòng chọn những tài liệu có tổng số ô ký PKI không quá 15 ô`,
+            '',
+            3000
+          );
         }
       }
     }
