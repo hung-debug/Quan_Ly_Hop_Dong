@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   usedSSO: true,
-  // apiUrl: 'https://econtract-demo.mobifone.ai/service',
+  //apiUrl: 'https://econtract-demo.mobifone.ai/service',
   apiUrl: 'https://econtractdev.mobifone.ai/service',
   flag: 'KD',
   // flag: 'NB',

@@ -41,8 +41,6 @@ export class DialogSignManyComponentComponent implements OnInit {
       mark: this.id,
       agree: 1,
     }
-    console.log("data",data);
-
     this.dialogRef.close(data);
   }
 
