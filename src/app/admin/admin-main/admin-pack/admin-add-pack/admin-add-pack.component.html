@@ -167,7 +167,7 @@
 
       <div class="col-md-6">
         <div class="label text-color">
-          {{ "Số lượng hợp đồng" | translate }}
+          {{ "Số lượng tài liệu" | translate }}
           <span class="required-title">*</span>
         </div>
         <div
@@ -187,12 +187,12 @@
         </div>
         <div *ngIf="submitted && f.number_contract.errors" class="invalid">
           <div *ngIf="f.number_contract.errors.required">
-            {{ "Số lượng hợp đồng không được để trống" | translate }}
+            {{ "Số lượng tài liệu không được để trống" | translate }}
           </div>
           <!-- dungpt -->
           <!-- input cua so luong hop dong phai la so moi hop le -->
           <div *ngIf="f.number_contract.errors.pattern">
-            {{ "Số lượng hợp đồng phải là số" | translate }}
+            {{ "Số lượng tài liệu phải là số" | translate }}
           </div>
         </div>
       </div>

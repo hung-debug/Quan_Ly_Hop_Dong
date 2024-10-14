@@ -38,9 +38,9 @@ export class UnitComponent implements OnInit {
   isAdmin:boolean=false;
 
   //phan quyen
-  isQLTC_01:boolean=true;  //them moi to chuc
+  isQLTC_01:boolean=false;  //them moi to chuc
   isQLTC_02:boolean=true;  //sua to chuc
-  isQLTC_03:boolean=true;  //tim kiem to chuc
+  isQLTC_03:boolean=false;  //tim kiem to chuc
   isQLTC_04:boolean=true;  //xem thong tin chi tiet to chuc
 
   ngOnInit(): void {

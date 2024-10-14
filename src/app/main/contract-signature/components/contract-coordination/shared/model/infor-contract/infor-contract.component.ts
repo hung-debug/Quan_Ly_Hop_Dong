@@ -10,6 +10,7 @@ import { DatepickerOptions } from 'ng2-datepicker';
 import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 import { ContractService } from 'src/app/service/contract.service';
+import { SysService } from 'src/app/service/sys.service';
 import { DatePipe } from '@angular/common';
 import {Router} from "@angular/router";
 
@@ -63,6 +64,7 @@ export class InforContractComponent implements OnInit {
     private contractService: ContractService,
     public datepipe: DatePipe,
     private router: Router,
+    private sysService: SysService,
   ) {
     this.step = variable.stepSampleContract.step1;
   }
@@ -94,22 +96,22 @@ export class InforContractComponent implements OnInit {
     this.contractTypeList = [
       {
         item_id: 1,
-        item_text: "Loại hợp đồng A",
+        item_text: "Loại tài liệu A",
       },
       {
         item_id: 2,
-        item_text: "Loại hợp đồng B",
+        item_text: "Loại tài liệu B",
       }
     ];
 
     this.contractConnectList = [
       {
         item_id: 1,
-        item_text: "Hợp đồng A",
+        item_text: "Tài liệu A",
       },
       {
         item_id: 2,
-        item_text: "Hợp đồng B",
+        item_text: "Tài liệu B",
       }
     ];
 
@@ -136,7 +138,8 @@ export class InforContractComponent implements OnInit {
     const file = e.target.files[0];
     if (file) {
       // giới hạn file upload lên là 5mb
-      if (e.target.files[0].size <= 10*(Math.pow(1024, 2))) {
+      let checkSizeFile = this.sysService.checkSizeFile(file)
+      if (checkSizeFile.result) {
         const file_name = file.name;
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
@@ -149,7 +152,7 @@ export class InforContractComponent implements OnInit {
           alert('Chỉ hỗ trợ file có định dạng PDF')
         }
       } else {
-        alert('Yêu cầu file tối đa 10MB');
+        alert(checkSizeFile.message);
       }
     }
   }
@@ -167,7 +170,8 @@ export class InforContractComponent implements OnInit {
       const file = e.target.files[i];
       if (file) {
         // giới hạn file upload lên là 5mb
-        if (e.target.files[0].size <= 10*(Math.pow(1024, 2))) {
+        let checkSizeFile = this.sysService.checkSizeFile(file)
+        if (checkSizeFile.result) {
           const file_name = file.name;
           const extension = file.name.split('.').pop();
           this.datas.file_name_attach = file_name;
@@ -177,7 +181,7 @@ export class InforContractComponent implements OnInit {
         } else {
           this.datas.file_name_attach = '';
           this.datas.attachFile = '';
-          alert('Yêu cầu file tối đa 10MB');
+          alert(checkSizeFile.message);
           break;
         }
       }
@@ -209,11 +213,11 @@ export class InforContractComponent implements OnInit {
   validData() {
     this.clearError();
     if (!this.name) {
-      this.errorContractName = 'Tên hợp đồng không được để trống!';
+      this.errorContractName = 'Tên tài liệu không được để trống!';
       return false;
     }
     if (!this.datas.contractFile) {
-      this.errorContractFile = 'File hợp đồng không được để trống!';
+      this.errorContractFile = 'File tài liệu không được để trống!';
       return false;
     }
 

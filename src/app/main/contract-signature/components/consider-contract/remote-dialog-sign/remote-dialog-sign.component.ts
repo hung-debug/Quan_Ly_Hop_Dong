@@ -40,6 +40,7 @@ export class RemoteDialogSignComponent implements OnInit {
 
   ) {
     this.myForm = this.fbd.group({
+      supplier: this.fbd.control('1', [Validators.required]),
       taxCode: this.fbd.control("", [Validators.required,
       Validators.pattern(parttern.cardid)
         // Validators.pattern(parttern_input.taxCode_form) ||
@@ -53,7 +54,7 @@ export class RemoteDialogSignComponent implements OnInit {
 
   ngOnInit(): void {
     this.datas = this.data;
-    
+
 
 
     this.user = this.userService.getInforUser();
@@ -66,6 +67,7 @@ export class RemoteDialogSignComponent implements OnInit {
 
 
     this.myForm = this.fbd.group({
+      supplier: this.fbd.control('1', [Validators.required]),
       taxCode: this.fbd.control(this.datas?.dataContract?.card_id ? this.datas?.dataContract?.card_id : this.data.userCode, [
         Validators.required,
         Validators.pattern(parttern.cardid)
@@ -92,8 +94,9 @@ export class RemoteDialogSignComponent implements OnInit {
             let taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
 
             this.myForm = this.fbd.group({
-              taxCode: this.fbd.control(taxCodePartnerStep2, 
-                [Validators.required, 
+              supplier: this.fbd.control('1', [Validators.required]),
+              taxCode: this.fbd.control(taxCodePartnerStep2,
+                [Validators.required,
                   Validators.pattern(parttern.cardid)
               ]),
             })
@@ -119,7 +122,7 @@ export class RemoteDialogSignComponent implements OnInit {
           }
         }
       })
-  
+
     this.getDeviceApp()
   }
 
@@ -164,7 +167,7 @@ export class RemoteDialogSignComponent implements OnInit {
       }
       if (!isInRecipient) {
         this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
+          'Bạn không có quyền xử lý tài liệu này!',
           '',
           3000
         );
@@ -180,15 +183,15 @@ export class RemoteDialogSignComponent implements OnInit {
           return
         }
       }
-  
+
       this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-      
-  
+
+
       this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
-        
+
         const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-        
-  
+
+
         let ArrRecipientsNew = false
         ArrRecipients.map((item: any) => {
           if (item.email === this.currentUser.email) {
@@ -196,12 +199,12 @@ export class RemoteDialogSignComponent implements OnInit {
             return
           }
         });
-        
-  
+
+
         if (!ArrRecipientsNew) {
-          
+
           this.toastService.showErrorHTMLWithTimeout(
-            'Bạn không có quyền xử lý hợp đồng này!',
+            'Bạn không có quyền xử lý tài liệu này!',
             '',
             3000
           );
@@ -217,7 +220,7 @@ export class RemoteDialogSignComponent implements OnInit {
             return
           }
         };
-        
+
         //Check voi nguoi dung trong he thong
         if (!this.data.id)
           this.contractService.getCheckSignatured(this.data.recipientId).subscribe((res: any) => {
@@ -228,31 +231,33 @@ export class RemoteDialogSignComponent implements OnInit {
           }, (error: HttpErrorResponse) => {
             this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
           })
-  
+
         const data = {
           ma_dvcs: this.myForm.value.taxCode,
+          type: this.myForm.value.supplier
         };
-  
-        
-  
+
+
+
         if (!this.data.id) {
           //Trường hợp không phải ký nhiều
           if (data.ma_dvcs === this.taxCode) {
             this.dialogRef.close(data);
           } else {
-            this.toastService.showErrorHTMLWithTimeout('Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng', '', 3000);
+            this.toastService.showErrorHTMLWithTimeout('Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu', '', 3000);
           }
         }
-  
+
         else if (this.data.id == 1) {
           //Trường hợp ký nhiều
-          
+
           this.dialogRef.close(data);
         }
       })
     } else {
       const data = {
         ma_dvcs: this.myForm.value.taxCode,
+        type: this.myForm.value.supplier
       };
 
       this.dialogRef.close(data);

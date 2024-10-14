@@ -1,14 +1,39 @@
-  <div *ngIf="sign.sign_unit == 'chu_ky_so' || sign.sign_unit == 'chu_ky_anh'" class="content">
-    <div class="stamp-content">
-      <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/new-icon-chu-ky-so.svg' : 'assets/img/new-icon-chu-ky-so.svg'"
-        alt="mobifone.contract">
-    </div>
-    <div class="sign-info-content">
-      <span style="color: #106DB6;" *ngIf="sign.sign_unit == 'chu_ky_anh'; then content else other_content"></span>
-      <ng-template #content>Thông tin chữ ký ảnh</ng-template>
-      <ng-template #other_content>Thông tin chữ ký số</ng-template>
-    </div>
+
+<div *ngIf="sign.sign_unit == 'chu_ky_anh'" class="content">
+  <div class="stamp-content item-left">
+    <img src='assets/img/stamp.svg' alt="mobifone.contract">
+    <div class="font-sign">Chữ ký ảnh</div>
   </div>
+  <div class="sign-info-content item-right" style="margin-left: 5px;">
+    <img src='assets/img/only_info.svg' alt="mobifone.contract">
+    <div class="font-sign">Thông tin chữ ký ảnh</div>
+  </div>
+</div>
+
+<div *ngIf="sign.sign_unit == 'chu_ky_so_con_dau_va_thong_tin'" class="content">
+  <div class="stamp-content item-left">
+    <img src='assets/img/stamp.svg' alt="mobifone.contract">
+    <div class="font-sign">Con dấu/ Chữ ký</div>
+  </div>
+  <div class="sign-info-content item-right" style="margin-left: 5px;">
+    <img src='assets/img/only_info.svg' alt="mobifone.contract">
+    <div class="font-sign">Thông tin chữ ký số</div>
+  </div>
+</div>
+
+<div *ngIf="sign.sign_unit == 'chu_ky_so_con_dau'" class="content">
+  <div class="stamp-content item-left" style="flex-basis: 100% !important; margin-right: 0px !important">
+    <img src='assets/img/stamp.svg' alt="mobifone.contract">
+    <div class="font-sign">Con dấu/ Chữ ký</div>
+  </div>
+</div>
+
+<div *ngIf="sign.sign_unit == 'chu_ky_so_thong_tin'" class="content">
+  <div class="sign-info-content item-right" style="flex-basis: 100% !important;">
+    <img src='assets/img/only_info.svg' alt="mobifone.contract">
+    <div class="font-sign">Thông tin chữ ký số</div>
+  </div>
+</div>
 
 <div class="text-sign-not-template-text" *ngIf="(sign.sign_unit == 'text') && !signTemplate">
   <span [ngStyle]="getStyleText(sign)" class="font-style" id="input-text">{{getText(sign)}}</span>
@@ -31,6 +56,6 @@
     [(ngModel)]="sign.value" type="text" (click)="reverseInput($event, sign)" (blur)="changeInput($event, sign)" (ngxInputSearch)="doTheSearch($event,'text')" style="white-space: nowrap;">
 
   <input *ngIf="getNotSpecifiedYetHandle() && sign.sign_unit == 'so_tai_lieu'" id="input-number-value"
-    (focusout)="focusOutFunction()" [(ngModel)]="this.contractNo" placeholder="Nhập số hợp đồng.." type="text"
+    (focusout)="focusOutFunction()" [(ngModel)]="this.contractNo" placeholder="Nhập số tài liệu.." type="text"
     (ngxInputSearch)="doTheSearch($event,'contractNo')" style="white-space: nowrap;">
 </div>

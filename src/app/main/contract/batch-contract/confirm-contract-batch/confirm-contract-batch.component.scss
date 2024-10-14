@@ -4,301 +4,302 @@
 //}
 
 .sample-contract {
-    //height: calc(100vh - 104px);
-    height: calc(100vh - 287px);
-  
-    &__file {
-      //position: relative;
-      .sig-img-daky{
-        position: absolute;
-        top: -20px;
-        right: -3px;
-        //cursor: pointer;
-      }
-  
-    }
-  
-    .viewer-pdf {
-        height: calc(100vh - 287px);
-      overflow-x: auto;
-      text-align: center;
-      background-color: rgba(239, 239, 239, 1);
-      padding-top: 10px;
-    }
-  
-    #pdf-viewer-step-3.view{
-      padding-top: 15px;
-      overflow-y: auto;
-      height: calc(100vh - 122px);
-      overflow-x: hidden;
-    }
-  
-    .viewer-pdf.isDrag{
-      //height: calc(100vh - 104px);
-      height: calc(100vh - 287px);
-      overflow-x: auto;
-      text-align: center;
-      background-color: rgba(239, 239, 239, 1);
-      //margin-left: 26%;
-      padding-top: 10px;
-      &.view{
-        height: calc(100vh - 122px) !important;
-        margin-left: 33%;
-        padding-top: 10px;
-        .show-list-name{
-          pointer-events: none;
-        }
-      }
-    }
-  
-    &__information {
-      &--drag {
-        .content-drag {
-          //cursor: pointer;
-          width: 100%;
-          height: 30px;
-          background-color: #EBF8FF;
-          border-radius: 5px;
-          border: 1px solid #106DB6;
-          color: #106DB6;
-          text-align: center;
-          display: flex;
-          justify-content: center;
-          align-items: center
-        }
-  
-        .title-contract {
-          padding-right: 5px;
-        }
-  
-        .show-list-name-class:nth-last-child(4) {
-          //float: left;
-          margin-right: 11px;
-        }
-  
-        .show-list-name-class:nth-last-child(2) {
-          margin-right: 11px;
-        }
-  
-        .infor-contract {
-          color: black !important;
-          font-size: 13px !important;
-          .text-decoration-style {
-            color: #106DB6;
-            cursor: pointer
-          }
-          .text-decoration-style:hover {
-            text-decoration: underline;
-          }
-        }
-      }
-  
-      &--user-sign {
-        display: flex;
-        flex-direction: column;
-        label {
-          padding-bottom: 13px;
-        }
-  
-        .name-text {
-          display: flex;
-          flex-direction: column;
-          margin-bottom: 5px;
-          label {
-            padding-bottom: 5px;
-          }
-          input {
-            border-radius: 5px;
-            border: 1px solid #87CAFF;
-            height: 40px;
-            outline: none;
-          }
-        }
-  
-        .sign-unit-select {
-          label {
-            padding-bottom: 5px;
-          }
-          select {
-            color: #333333;
-            border: 1px solid #87CAFF;
-            outline: none;
-            &.form-select:disabled {
-              opacity: 0.7;
-            }
-          }
-  
-          select:invalid { color: gray; }
-  
-        }
-      }
-  
-      .flex-column {
-        .location {
-          display: flex;
-          justify-content: space-around
-        }
-        .location-drag {
-          //display: flex;
-          float: left;
-          align-items: center;
-          div {
-            //padding-right: 20px;
-            width: 88px;
-            //font-size: 13px;
-            color: #666666;
-  
-            text-align: center;
-            float: left;
-            padding-right: 15px;
-            padding-top: 10px;
-          }
-          input {
-            outline: none;
-            width: 88px;
-            height: 40px;
-            border-radius: 5px;
-            border: 1px solid #87CAFF;
-          }
-        }
-      }
-  
-      //.location-change {
-      //  overflow: auto;
-      //  height: calc(50vh - 100px);
-      //}
-    }
-  
-    .label {
-      font-size: 15px;
-      color: #106DB6;
-      font-style: normal;
-      font-weight: normal;
-    }
-  
-    .label-require {
-      font-size: 13px;
-      font-style: normal;
-      font-weight: normal;
-      color: #F48465;
-    }
-  }
-  
-  // test
-  
-  .ck-da-keo{
-    border: 1px solid #106DB6;
-    border-radius: 5px;
-  }
-  
-  .staff-ck-da-keo {
-    border: 1px solid #92bff5;
-    color: #2680eb;
-    border-radius: 2px;
-  }
-  
-  .employer-ck .signature-sample, .employer-ck .signature-sample-drag{
-    border: 1px solid #92bff5;
-    background-color: rgba(255, 233, 178, 1);
-    color: #fe7744;
-    border-radius: 2px;
-  }
-  .employer-ck-da-keo{
-    border: 1px solid #92bff5;
-    color: #fe7744;
-    border-radius: 2px;
-  }
-  
-  .staff-ck .signature-sample, .staff-ck .signature-sample-drag{
-    border: 1px solid #92bff5;
-    background-color: rgba(189, 217, 249, 1);
-    color: #2680eb;
-    border-radius: 2px;
-  }
-  .staff-ck-da-keo {
-    border: 1px solid #92bff5;
-    color: #2680eb;
-    border-radius: 2px;
-  }
-  
-  .resize-drag {
-    //position: absolute; // thuoc tinh absolute de giu nguyen vi tri khi keo sang pdf
-    z-index: 9;
-    //width: 250px;
-    //height: 32px;
-    font-size: 12px;
-    border-radius: 3px;
-    font-family: sans-serif;
-    outline: none;
-    touch-action: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(27, 51, 91, 1);
-  
-    /* This makes things *much* easier */
-    box-sizing: border-box;
-    //padding: 10px;
-  
-    .name-sig-img-daky {
-      position: absolute;
-      background-color: white;
-      top: -15px;
-      left: 6px;
-      padding: 0 4px;
-    }
-  
+  //height: calc(100vh - 104px);
+  height: calc(100vh - 239px);
+
+  &__file {
+    //position: relative;
     .sig-img-daky {
-      cursor: pointer;
-      > img {
-        width: 16px;
-      }
-      img:nth-last-child(2) {
-        width: 8px;
-        top: 6px;
-        position: absolute;
-        right: 3px;
-      }
+      position: absolute;
+      top: -20px;
+      right: -3px;
+      //cursor: pointer;
     }
-  }
-  
-  .drag-image{
-    //position: absolute;
-    //right: -22px;
-    //top: 5px;
-    padding-left: 7px;
-  }
-  
-  
-  
-  .action-button-previous {
-    width: 100px;
-    background: #C5C5F1;
-    font-weight: bold;
-    color: white;
-    border: 0 none;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 10px 5px;
-    margin: 5px 5px;
-  }
-  
-  
-  .input_text{
-    background: #EFF2F5;
-    padding: 10px;
-    border-radius: 5px;
-    min-height: 40px;
-  }
-  .label_item {
-    padding: 8px 0px 2px;
-    color: #5e5e5e;
   }
 
-  //style button
+  .viewer-pdf {
+    height: calc(100vh - 287px);
+    overflow-x: auto;
+    text-align: center;
+    background-color: rgba(239, 239, 239, 1);
+    padding-top: 10px;
+  }
+
+  #pdf-viewer-step-3.view {
+    padding-top: 15px;
+    overflow-y: auto;
+    height: calc(100vh - 122px);
+    overflow-x: hidden;
+  }
+
+  .viewer-pdf.isDrag {
+    //height: calc(100vh - 104px);
+    height: calc(100vh - 287px);
+    overflow-x: auto;
+    text-align: center;
+    background-color: rgba(239, 239, 239, 1);
+    //margin-left: 26%;
+    padding-top: 10px;
+    &.view {
+      height: calc(100vh - 122px) !important;
+      margin-left: 33%;
+      padding-top: 10px;
+      .show-list-name {
+        pointer-events: none;
+      }
+    }
+  }
+
+  &__information {
+    &--drag {
+      .content-drag {
+        //cursor: pointer;
+        width: 100%;
+        height: 30px;
+        background-color: #ebf8ff;
+        border-radius: 5px;
+        border: 1px solid #106db6;
+        color: #106db6;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .title-contract {
+        padding-right: 5px;
+      }
+
+      .show-list-name-class:nth-last-child(4) {
+        //float: left;
+        margin-right: 11px;
+      }
+
+      .show-list-name-class:nth-last-child(2) {
+        margin-right: 11px;
+      }
+
+      .infor-contract {
+        color: black !important;
+        font-size: 13px !important;
+        .text-decoration-style {
+          color: #106db6;
+          cursor: pointer;
+        }
+        .text-decoration-style:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    &--user-sign {
+      display: flex;
+      flex-direction: column;
+      label {
+        padding-bottom: 13px;
+      }
+
+      .name-text {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 5px;
+        label {
+          padding-bottom: 5px;
+        }
+        input {
+          border-radius: 5px;
+          border: 1px solid #87caff;
+          height: 40px;
+          outline: none;
+        }
+      }
+
+      .sign-unit-select {
+        label {
+          padding-bottom: 5px;
+        }
+        select {
+          color: #333333;
+          border: 1px solid #87caff;
+          outline: none;
+          &.form-select:disabled {
+            opacity: 0.7;
+          }
+        }
+
+        select:invalid {
+          color: gray;
+        }
+      }
+    }
+
+    .flex-column {
+      .location {
+        display: flex;
+        justify-content: space-around;
+      }
+      .location-drag {
+        //display: flex;
+        float: left;
+        align-items: center;
+        div {
+          //padding-right: 20px;
+          width: 88px;
+          //font-size: 13px;
+          color: #666666;
+
+          text-align: center;
+          float: left;
+          padding-right: 15px;
+          padding-top: 10px;
+        }
+        input {
+          outline: none;
+          width: 88px;
+          height: 40px;
+          border-radius: 5px;
+          border: 1px solid #87caff;
+        }
+      }
+    }
+
+    //.location-change {
+    //  overflow: auto;
+    //  height: calc(50vh - 100px);
+    //}
+  }
+
+  .label {
+    font-size: 15px;
+    color: #106db6;
+    font-style: normal;
+    font-weight: normal;
+  }
+
+  .label-require {
+    font-size: 13px;
+    font-style: normal;
+    font-weight: normal;
+    color: #f48465;
+  }
+}
+
+// test
+
+.ck-da-keo {
+  border: 1px solid #106db6;
+  border-radius: 5px;
+}
+
+.staff-ck-da-keo {
+  border: 1px solid #92bff5;
+  color: #2680eb;
+  border-radius: 2px;
+}
+
+.employer-ck .signature-sample,
+.employer-ck .signature-sample-drag {
+  border: 1px solid #92bff5;
+  background-color: rgba(255, 233, 178, 1);
+  color: #fe7744;
+  border-radius: 2px;
+}
+.employer-ck-da-keo {
+  border: 1px solid #92bff5;
+  color: #fe7744;
+  border-radius: 2px;
+}
+
+.staff-ck .signature-sample,
+.staff-ck .signature-sample-drag {
+  border: 1px solid #92bff5;
+  background-color: rgba(189, 217, 249, 1);
+  color: #2680eb;
+  border-radius: 2px;
+}
+.staff-ck-da-keo {
+  border: 1px solid #92bff5;
+  color: #2680eb;
+  border-radius: 2px;
+}
+
+.resize-drag {
+  //position: absolute; // thuoc tinh absolute de giu nguyen vi tri khi keo sang pdf
+  z-index: 9;
+  //width: 250px;
+  //height: 32px;
+  font-size: 12px;
+  border-radius: 3px;
+  font-family: sans-serif;
+  outline: none;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(27, 51, 91, 1);
+
+  /* This makes things *much* easier */
+  box-sizing: border-box;
+  //padding: 10px;
+
+  .name-sig-img-daky {
+    position: absolute;
+    background-color: white;
+    top: -15px;
+    left: 6px;
+    padding: 0 4px;
+  }
+
+  .sig-img-daky {
+    cursor: pointer;
+    > img {
+      width: 16px;
+    }
+    img:nth-last-child(2) {
+      width: 8px;
+      top: 6px;
+      position: absolute;
+      right: 3px;
+    }
+  }
+}
+
+.drag-image {
+  //position: absolute;
+  //right: -22px;
+  //top: 5px;
+  padding-left: 7px;
+}
+
+.action-button-previous {
+  width: 100px;
+  background: #c5c5f1;
+  font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 5px 5px;
+}
+
+.input_text {
+  background: #eff2f5;
+  padding: 10px;
+  border-radius: 5px;
+  min-height: 40px;
+}
+.label_item {
+  color: #8e9ab0;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 15px;
+}
+
+//style button
 .action-button {
   width: 100px;
-  background: #0041C4;
+  background: #0041c4;
   //font-weight: bold;
   color: white;
   border: 0 none;
@@ -310,7 +311,7 @@
 
 .draft-button {
   width: 100px;
-  background: #F8AD41;
+  background: #f8ad41;
   //font-weight: bold;
   color: white;
   border: 0 none;
@@ -322,25 +323,26 @@
 
 .action-button-previous {
   width: 100px;
-  background: #FFFFFF;
+  background: #ffffff;
   font-weight: bold;
-  color: #0041C4;
-  border: 1px solid var(--Primary, #0041C4);
+  color: #0041c4;
+  border: 1px solid var(--Primary, #0041c4);
   border-radius: 6px;
   cursor: pointer;
   padding: 9px 12px;
   margin: 10px 5px;
 }
 .footer-sample-contract {
-    border-top: 1px solid #ddd;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    .content_footer {
-        color: #0160AE;
-        font-size: 13px;
-        font-weight: 500;
-    }
+  // border-top: 1px solid #ddd;
+  // display: flex;
+  // justify-content: space-between;
+  // align-items: center;
+
+  .content_footer {
+    color: #0160AE;
+    font-size: 13px;
+    font-weight: 500;
+  }
 }
 
 .resize-drag {
@@ -361,43 +363,43 @@
   box-sizing: border-box;
   //padding: 10px;
   .name-sig-img-daky {
-      position: absolute;
-      background-color: yellow;
-      border-radius: 5px;
-      top: -15px;
-      left: 6px;
-      padding: 0 4px;
-      border: 1px solid #ddd;
-      // width: 100px;
+    position: absolute;
+    background-color: yellow;
+    border-radius: 5px;
+    top: -15px;
+    left: 6px;
+    padding: 0 4px;
+    border: 1px solid #ddd;
+    // width: 100px;
   }
   .sig-img-daky {
-      cursor: pointer;
-      >img {
-          width: 16px;
-      }
-      img:nth-last-child(2) {
-          width: 8px;
-          top: 6px;
-          position: absolute;
-          right: 3px;
-      }
+    cursor: pointer;
+    > img {
+      width: 16px;
+    }
+    img:nth-last-child(2) {
+      width: 8px;
+      top: 6px;
+      position: absolute;
+      right: 3px;
+    }
   }
 }
 .employer-ck .signature-sample,
 .employer-ck .signature-sample-drag {
-    border: 1px solid #92bff5;
-    background-color: rgba(255, 233, 178, 1);
-    color: #fe7744;
-    border-radius: 2px;
+  border: 1px solid #92bff5;
+  background-color: rgba(255, 233, 178, 1);
+  color: #fe7744;
+  border-radius: 2px;
 }
 
 .employer-ck-da-keo {
-    border: 1px solid #92bff5;
-    color: #fe7744;
-    border-radius: 2px;
+  border: 1px solid #92bff5;
+  color: #fe7744;
+  border-radius: 2px;
 }
 .ck-da-keo {
-  border: 1px solid #106DB6;
+  border: 1px solid #106db6;
   border-radius: 5px;
 }
 
@@ -408,24 +410,25 @@
 .call-page {
   padding: 0;
   border: none;
-  background: none;
 }
 
 .call-page1 {
   padding: 0;
   border: none;
-  background: none; 
-  margin-left: 5px
 }
 
 .input1 {
+  color: #00186D;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 19px;
   box-sizing: border-box; 
   text-align: center; 
-  width: 40px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   background: #FFFFFF;
-  border: 1px solid #87CAFF;
-  border-radius: 5px; 
+  border: none;
+  border-radius: 3px; 
 }
 
 .text-ellipsis {
@@ -434,4 +437,51 @@
   overflow: hidden;
   width: inherit;
   max-width: 106px;
+}
+
+.label-text {
+  color: #2b3d60;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 21px;
+}
+
+.to_chuc {
+  height: 30px;
+  padding: 6px 8px 6px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+  background-color: #ebf2fb;
+  color: #0041c4;
+}
+
+.background-item {
+  background-color: #f7fafd;
+  padding: 0px 0px 12px 0px;
+}
+
+.item-name {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 18px;
+  color: #00186d;
+}
+
+.item-email {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+  color: #00186d;
+}
+
+.padding-item {
+  padding: 12px 12px 0px 12px;
+}
+
+.page-number {
+  color: #00186D;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 19px;
 }

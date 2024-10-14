@@ -20,14 +20,21 @@
               <!-- <ng-container > -->
               <ng-container [formGroupName]="i">
                 <tr>
-                  <td class="col-md-3" style="font-weight: 700;color: #001A4D;">{{rowData.value.nameConfig}}</td>
+                  <td class="col-md-3" style="font-weight: 700;color: #001A4D;">{{rowData.value.nameConfig | translate}}</td>
                   <td class="col-md-3"><input name="item" type="checkbox" formControlName="smsConfig" /></td>
                   <td class="col-md-3"><input name="item" type="checkbox" formControlName="emailConfig" /></td>
                   <td class="col-md-2">
                     <p-dropdown panelStyleClass="font" appendTo="body" optionLabel="name" optionValue="id"
                       [options]="[6,2,5].includes(rowData.value.smsTypeId) ? listStatus : rowData.value.smsTypeId == 1 ? listStatus2 : listStatus1"
                       (onChange)="selectConfigDropDown($event,listConfig)" formControlName="userSendNotification"
-                      [autoDisplayFirst]="false"></p-dropdown>
+                      [autoDisplayFirst]="false">
+                      <ng-template pTemplate="item" let-item>
+                        {{item.name | translate}}
+                      </ng-template>
+                      <ng-template let-selectedItem pTemplate="selectedItem">
+                        {{selectedItem.name | translate}}
+                      </ng-template>
+                    </p-dropdown>
                   </td>
                 </tr>
               </ng-container>
@@ -56,7 +63,7 @@
         <!-- Cấu hình ngày sắp hết hạn -->
         <div class="border-table-email" style="text-align: center;">
           <div style="justify-content: center; padding-top: 20px; ">
-            <input [(ngModel)]="this.soonExpireDay" type="number" class="input-expiration-date" min="0" 
+            <input [(ngModel)]="this.soonExpireDay" type="number" class="input-expiration-date" min="0"
             oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null"
             (ngModelChange)="onSoonExpireDayChange($event)" />
           </div>
@@ -66,7 +73,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Cấu hình brandname -->
     <div *ngIf="isRoleConfigBrandname" class="col-md-9" style="border: 1px solid #e6e7ec; border-radius: 8px; margin-left: 6%;">
       <div style="margin-top: 20px;">
@@ -80,7 +87,7 @@
                 <span class="required-title">*</span>
               </div>
               <div class="input-data">
-                <input style="width: 100%;" type="text" formControlName="brandName" placeholder="Nhập Brandname" (keyup)="onChangeBrandname()">
+                <input style="width: 100%;" type="text" formControlName="brandName" placeholder="{{'enter.brandname' | translate}}" (keyup)="onChangeBrandname()">
               </div>
               <div *ngIf="f.brandName.errors" class="invalid">
                 <div *ngIf="f.brandName?.errors?.required">{{'error.unit.brandname.required' | translate}}</div>
@@ -140,7 +147,7 @@
       </div>
     </div>
   </div>
-  
+
   <!-- Cấu hình email server 3 2 3 2 2-->
   <div class="row email-config" *ngIf="isRoleConfigEmailServer">
     <div style="margin-top: 20px;">
@@ -158,26 +165,26 @@
               <span class="required-title">*</span>
             </div>
             <div class="input-data">
-              <input style="width: 100%;" maxlength = '100' type="text" formControlName="userNameMailServer" placeholder="Nhập Email" (keyup)="onChangeEmailServer()">
+              <input style="width: 100%;" maxlength = '100' type="text" formControlName="userNameMailServer" placeholder="{{'nhap_email'|translate}}" (keyup)="onChangeEmailServer()">
             </div>
             <div *ngIf="e.userNameMailServer.errors" class="invalid">
               <div *ngIf="e.userNameMailServer?.errors?.required">{{'error.user.email.required' | translate}}</div>
               <div *ngIf="e.userNameMailServer?.errors?.pattern">{{'error.user.email.format' | translate}}</div>
             </div>
           </div>
-          
+
           <div >
             <div class="label text-color">{{'aliases' | translate}}
               <span class="required-title">*</span>
             </div>
             <div class="input-data">
-              <input style="width: 100%;" type="text" maxlength = '100' formControlName="aliasMailServer" placeholder="Nhập bí danh">
+              <input style="width: 100%;" type="text" maxlength = '100' formControlName="aliasMailServer" placeholder="{{'enter.alias' |translate}}">
             </div>
             <div *ngIf="e.aliasMailServer.errors" class="invalid">
               <div *ngIf="e.aliasMailServer?.errors?.required">{{'error.aliases.required' | translate}}</div>
             </div>
           </div>
-          
+
           <div >
             <div class="label text-color">{{'login.password' | translate}}
               <span class="required-title">*</span>
@@ -196,33 +203,33 @@
               <div *ngIf="e.passwordMailServer?.errors?.required">{{'error.unit.password.required' | translate}}</div>
             </div>
           </div>
-          
+
           <div >
             <div class="label text-color">SMTP Server
               <span class="required-title">*</span>
             </div>
             <div class="input-data">
-              <input style="width: 100%;" type="text" maxlength = '20' formControlName="hostMailServer" placeholder="Nhập SMTP Server">
+              <input style="width: 100%;" type="text" formControlName="hostMailServer" placeholder="{{'enter.smtp' | translate}}">
             </div>
             <div *ngIf="e.hostMailServer.errors" class="invalid">
               <div *ngIf="e.hostMailServer?.errors?.required">{{'error.smtpServer.required' | translate}}</div>
-              <div *ngIf="e.hostMailServer?.errors?.pattern">{{'error.smtpServer.format' | translate}}</div>
+              <!-- <div *ngIf="e.hostMailServer?.errors?.pattern">{{'error.smtpServer.format' | translate}}</div> -->
             </div>
           </div>
-          
+
           <div >
             <div class="label text-color">SMTP Port
               <span class="required-title">*</span>
             </div>
             <div class="input-data">
-              <input style="width: 100%;" type="text" maxlength = '5' formControlName="portMailServer" placeholder="Nhập SMTP Server">
+              <input style="width: 100%;" type="text" maxlength = '5' formControlName="portMailServer" placeholder="{{'enter.smtp' | translate}}">
             </div>
             <div *ngIf="e.portMailServer.errors" class="invalid">
               <div *ngIf="e.portMailServer?.errors?.required">{{'error.smtpPort.required' | translate}}</div>
               <div *ngIf="e.portMailServer?.errors?.pattern">{{'error.smtpPort.format' | translate}}</div>
             </div>
           </div>
-          
+
         </div>
       </form>
       <div class="save-btn" style="padding-bottom: 10px;">
@@ -230,7 +237,7 @@
       </div>
     </div>
   </div>
-  
+
   <div>
     <!-- <div style="justify-content: center;padding-top: 20px;">
       <button class="save-button" (click)="onSubmit()">{{'btn.save' | translate}}</button>

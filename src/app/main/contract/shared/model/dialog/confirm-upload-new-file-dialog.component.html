@@ -3,16 +3,16 @@
     <h3 style="color: #106DB6; font-family: inherit;text-transform: uppercase;">{{this.data.title | translate}}</h3>
   </div>
   <div style="font-weight: bold; font-family: inherit;">
-    <h4>File hợp đồng cũ có  <span style="font-weight: bold;">{{this.data.isPagePdfOld}} trang </span>và 
+    <h4>File tài liệu cũ có  <span style="font-weight: bold;">{{this.data.isPagePdfOld}} trang </span>và 
       <span style="font-weight: bold;">{{this.data.countTextSign}} ô text, ô ký </span>cần xử lý </h4>
       
-    <h4>File hợp đồng mới có <span style="font-weight: bold;">{{this.data.isPagePdfNew}} trang</span></h4>
+    <h4>File tài liệu mới có <span style="font-weight: bold;">{{this.data.isPagePdfNew}} trang</span></h4>
       
     <h4 style="color: crimson;">{{'confirm.clear.text.sign' | translate}}</h4>
     
-    <h4>- Nếu <b>Đồng ý</b>, hệ thống sẽ xóa toàn bộ các ô text, ô ký đã gán cho file hợp đồng cũ.</h4>
+    <h4>- Nếu <b>Đồng ý</b>, hệ thống sẽ xóa toàn bộ các ô text, ô ký đã gán cho file tài liệu cũ.</h4>
     
-    <h4>- Nếu <b>Từ chối</b>, hệ thống sẽ xóa các ô text, ô ký nằm ngoài hợp đồng.</h4>
+    <h4>- Nếu <b>Từ chối</b>, hệ thống sẽ xóa các ô text, ô ký nằm ngoài tài liệu.</h4>
   </div>
   <div class="row" style="justify-content: center;padding-top: 10px;">
       <button class="cancel-button" (click)="onClose()"  type="button">{{'contract.status.fail' | translate}}</button>

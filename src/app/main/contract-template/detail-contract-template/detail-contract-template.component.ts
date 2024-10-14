@@ -85,7 +85,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   isEnableText: boolean = false;
   isChangeText: boolean = false;
   loaded: boolean = false;
-
+  show_information: boolean = true;
   isPartySignature: any = [
     {id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam'},
     {id: 2, name: 'Công ty newEZ Việt Nam'},
@@ -122,7 +122,12 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
 
   pageBefore: number;
   defaultValue: number = 100;
+  pageNum: number = 1;
+  page1: boolean = false;
+  pageLast: boolean = true;
 
+  pageRendering:any;
+  pageNumPending: any = null;
   constructor(
     private contractTemplateService: ContractTemplateService,
     private contractService: ContractService,
@@ -137,26 +142,46 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.appService.setTitle('Thông tin chi tiết mẫu hợp đồng');
+    this.appService.setTitle('Thông tin chi tiết mẫu tài liệu');
     this.getDataContractSignature();
   }
 
   setX(){
+    this.datas.isFirstLoadDrag = true;
     let i = 0;
     this.datas.contract_user_sign.forEach((element: any) => {
-      element.sign_config.forEach((item: any) => {
-        const htmlElement: HTMLElement | null = document.getElementById(item.id);
-        if(htmlElement) {
-          var oldX = Number(htmlElement.getAttribute('data-x'));
-          if(oldX) {
-            var newX = oldX + this.difX;
-            htmlElement.setAttribute('data-x', newX.toString());
+      if(element.sign_unit == "chu_ky_so") {
+        let type = element.type;
+        for (let i = 0; i < type.length; i++) {
+          type[i].sign_config.forEach((item: any) => {
+            const htmlElement: HTMLElement | null = document.getElementById(item.id);
+            if(htmlElement) {
+              var oldX = Number(htmlElement.getAttribute('data-x'));
+              if(oldX) {
+                var newX = oldX + this.difX;
+                htmlElement.setAttribute('data-x', newX.toString());
+              }
+            }
+            if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+              item.coordinate_x += this.difX;
+            }
+          }) 
+        }
+      } else {
+        element.sign_config.forEach((item: any) => {
+          const htmlElement: HTMLElement | null = document.getElementById(item.id);
+          if(htmlElement) {
+            var oldX = Number(htmlElement.getAttribute('data-x'));
+            if(oldX) {
+              var newX = oldX + this.difX;
+              htmlElement.setAttribute('data-x', newX.toString());
+            }
           }
-        }
-        if(this.arrDifPage[Number(item.page)-1] == 'max' ){
-          item.coordinate_x += this.difX;
-        }
-      })
+          if(this.arrDifPage[Number(item.page)-1] == 'max' ){
+            item.coordinate_x += this.difX;
+          }
+        })
+      }
     })
   }
 
@@ -221,18 +246,18 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
           this.roleAccess = true;
         }else{
           if(!this.roleAccess){
-            this.roleMess = "Mẫu hợp đồng không còn được chia sẻ đến bạn";
+            this.roleMess = "Mẫu tài liệu không còn được chia sẻ đến bạn";
           }else if(this.datas?.is_data_contract?.status==32){
-            this.roleMess = "Mẫu hợp đồng đã ngừng phát hành";
+            this.roleMess = "Mẫu tài liệu đã ngừng phát hành";
           }else if(this.datas?.is_data_contract?.releaseState=='CHUA_CO_HIEU_LUC'){
-            this.roleMess = "Mẫu hợp đồng chưa có hiệu lực";
+            this.roleMess = "Mẫu tài liệu chưa có hiệu lực";
           }else if(this.datas?.is_data_contract?.releaseState=='HET_HIEU_LUC'){
-            this.roleMess = "Mẫu hợp đồng hết hiệu lực";
+            this.roleMess = "Mẫu tài liệu hết hiệu lực";
           }
         }
 
         if(!this.datas?.is_data_contract){
-          this.roleMess = "Mẫu hợp đồng không còn tồn tại trên hệ thống";
+          this.roleMess = "Mẫu tài liệu không còn tồn tại trên hệ thống";
         }
 
         this.datas.is_data_object_signature.forEach((element: any) => {
@@ -261,14 +286,34 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
 
         this.datas.contract_user_sign.forEach((element: any) => {
           //
-          if (element.sign_unit == 'chu_ky_so') {
-            Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
-          } else if (element.sign_unit == 'chu_ky_anh') {
+          if (element.sign_unit == 'chu_ky_anh') {
             Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
           } else if (element.sign_unit == 'text') {
             Array.prototype.push.apply(element.sign_config, data_sign_config_text);
           } else if (element.sign_unit == 'so_tai_lieu') {
             Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
+          } else if (element.sign_unit == 'chu_ky_so') {
+            let targetObject1 = element.type.find((item: any) => item.sign_unit === "chu_ky_so_con_dau_va_thong_tin");
+            let targetObject2 = element.type.find((item: any) => item.sign_unit === "chu_ky_so_con_dau");
+            let targetObject3 = element.type.find((item: any) => item.sign_unit === "chu_ky_so_thong_tin");
+            data_sign_config_cks.forEach((data: any) => {
+              if (data.type_image_signature === 3) {
+                  data.sign_unit = 'chu_ky_so_con_dau_va_thong_tin';
+                  targetObject1.sign_config.push(data);
+              }
+    
+              if (data.type_image_signature === 2) {
+                data.height = data.height + 10;
+                data.width = data.width + 10;
+                data.sign_unit = 'chu_ky_so_con_dau'
+                targetObject2.sign_config.push(data);
+              }
+    
+              if (data.type_image_signature === 1) {
+                data.sign_unit = 'chu_ky_so_thong_tin'
+                targetObject3.sign_config.push(data);
+              }
+            });
           }
         })
         if(this.datas?.is_data_contract?.type_id){
@@ -409,8 +454,21 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
         }
 
         this.setX();
+        this.scrollToPage(this.pageNum);
       }, 100)
     })
+  }
+
+  scrollToPage(pageNum: number) {
+    let canvas = document.getElementById('canvas-step3-' + pageNum);
+    let canvas1: any = document.getElementById('pdf-viewer-step-3');
+    let pdffull: any = document.getElementById('pdf-full');
+    if (canvas && pdffull) {
+      pdffull.scrollTo(
+        0,
+        canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top
+      );
+    }
   }
 
   eventMouseover() {
@@ -567,10 +625,10 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   }
 
 
-  // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
+  // hàm set kích thước cho đối tượng khi được kéo thả vào trong tài liệu
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
     let style: any =
-    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
+    (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so' && d.sign_unit != 'chu_ky_so_con_dau_va_thong_tin' && d.sign_unit != 'chu_ky_so_con_dau' && d.sign_unit != 'chu_ky_so_thong_tin') ?
     {
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
@@ -581,17 +639,43 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
       "position": "absolute",
       "backgroundColor": '#FFFFFF',
       "border": "1px dashed #6B6B6B",
-      "border-radius": "6px"
+      "border-radius": "6px",
+      "min-width": "66px",
+      "min-height": "66px"
     }
-    // style.backgroundColor = '#EBF8FF';
     if (d['width']) {
       style.width = parseInt(d['width']) + "px";
     }
     if (d['height']) {
       style.height = parseInt(d['height']) + "px";
     }
+    if (this.datas.contract_no && d.sign_unit == 'so_tai_lieu') {
+      style.padding = '6px';
+    }
+    return style
+  }
 
-    return style;
+  changePositionSignature(d?: any, e?: any, sizeChange?: any) {
+      // new-signature-box-style-v2
+      let style: any = {
+        "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+        "position": "absolute",
+        "backgroundColor": '#FFFFFF',
+        "border": "1px dashed #6B6B6B",
+        "border-radius": "6px",
+        "min-width": "180px",
+        "min-height": "66px"
+      }
+      if (d['width']) {
+        style.width = parseInt(d['width']) + "px";
+      }
+      if (d['height']) {
+        style.height = parseInt(d['height']) + "px";
+      }
+      if (this.datas.contract_no && d.sign_unit == 'so_tai_lieu') {
+        style.padding = '6px';
+      }
+      return style
   }
 
   // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính
@@ -688,7 +772,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   }
 
   processHandleContract() {
-    // alert('Luồng xử lý hợp đồng!');
+    // alert('Luồng xử lý tài liệu!');
     const data = this.datas;
     // @ts-ignore
     const dialogRef = this.dialog.open(ProcessingHandleComponent, {
@@ -809,12 +893,6 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
     }
   }
 
-  pageNum: number = 1;
-  page1: boolean = false;
-  pageLast: boolean = true;
-
-  pageRendering:any;
-  pageNumPending: any = null;
   firstPage() {
     let pdffull: any = document.getElementById('pdf-full');
 
@@ -877,7 +955,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
 
   scroll(event: any) {
     //đổi màu cho nút back page
-    let canvas1: any = document.getElementById('canvas-step3-1');
+    let canvas1: any = document.getElementById('canvas-step3-' + + this.pageNum);
 
     if(event.srcElement.scrollTop < canvas1.height/2) {
       this.page1 = false;
@@ -903,5 +981,11 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
         this.pageNum = Number(i+2);
       }
     }
+  }
+
+  showInformation() {
+    this.removePage();
+    this.show_information = !this.show_information;
+    this.getPage();
   }
 }

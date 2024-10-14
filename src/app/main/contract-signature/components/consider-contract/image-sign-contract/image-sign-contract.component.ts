@@ -8,6 +8,7 @@ import {PkiDialogSignComponent} from "../pki-dialog-sign/pki-dialog-sign.compone
 import {HsmDialogSignComponent} from "../hsm-dialog-sign/hsm-dialog-sign.component";
 import { ToastService } from 'src/app/service/toast.service';
 import { Output, EventEmitter } from '@angular/core';
+import {ImageDialogSignV2Component} from "../image-dialog-sign-v2/image-dialog-sign-v2.component";
 
 
 @Component({
@@ -58,7 +59,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     };
   }
 
-  
+
   ngAfterViewInit() {
     if (this.sign.sign_unit == 'so_tai_lieu' || this.sign.sign_unit == 'text') {
       setTimeout(() => {
@@ -76,13 +77,13 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       }else{
         this.toastService.showWarningHTMLWithTimeout("Vui lòng thực hiện ký eKYC trên ứng dụng điện thoại!", "", 3000);
       }
-      
+
     } else if (this.sign.sign_unit == 'chu_ky_so'
       && this.sign?.recipient?.email == this.currentUser.email && !this.view
       && this.typeSignDigital && this.typeSignDigital == 3
     ) {
       // this.openPopupSignContract(3);
-    } 
+    }
   }
 
   confirmOtpSignContract() {
@@ -113,7 +114,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   imageDialogSignOpen() {
     const data = {
-      title: 'KÝ HỢP ĐỒNG ',
+      title: 'KÝ ẢNH VÀ OTP',
       is_content: 'forward_contract',
       imgSignAcc: this.datas.imgSignAcc
     };
@@ -122,7 +123,8 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     dialogConfig.width = '1024px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
-    const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
+    // const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
+    const dialogRef = this.dialog.open(ImageDialogSignV2Component, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
         this.countOtpBox++
@@ -167,15 +169,15 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+
       let is_data = result
     })
   }
 
   doneEditTextSign(e?: any) {
     this.checkShowEdit = false;
-    
-    
+
+
     if(this.sign.text_type == 'currency'){
         e.target.value = this.contractService.convertCurrency(e.target.value);
       this.sign.valueSign = e.target.value;}
@@ -203,7 +205,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ConfirmSignOtpComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
-      
+
       let is_data = result
     })
   }
@@ -213,7 +215,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     if(this.sign.valueSign != undefined)
     this.sign.valueSign = this.contractService.removePeriodsFromCurrencyValue(this.sign.valueSign);
 
-    
+
     if ([2,3,4].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
       this.checkShowEdit = !this.checkShowEdit;
 
@@ -231,7 +233,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     setTimeout(()=>{
       this.inputEditContractNo.nativeElement.focus();
     },100);
-   
+
   }
 
   count: number = 0;
@@ -250,20 +252,20 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       if (sign.sign_unit == 'so_tai_lieu') {
         if (sign.value) {
           // sign.value= this.convertCurrency(sign.value);
-          
+
           return sign.value;
         } else if(sign.valueSign) {
           // sign.valueSign= this.convertCurrency(sign.valueSign);
-          
+
           return sign.valueSign;
         } else if(this.contractNoValueSign) {
-          
+
           this.count++;
           sign.valueSign= this.contractNoValueSign
           return sign.valueSign;
 
         }
-        return 'Số hợp đồng';
+        return 'Số tài liệu';
       } else if (sign.sign_unit == 'chu_ky_anh') {
         if(this.otpValueSign) {
           sign.valueSign= this.otpValueSign

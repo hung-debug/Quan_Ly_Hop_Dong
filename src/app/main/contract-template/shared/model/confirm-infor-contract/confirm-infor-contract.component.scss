@@ -1,36 +1,33 @@
-.infor_contact {
-  border: 1px solid #0160AE;
-  padding: 10px;
-  border-radius: 10px;
-}
-
 .determine_contact {
-  border: 1px solid #0160AE;
-  padding: 10px;
-  border-radius: 10px;
+  border: 1px solid #E6EDFA;
+  border-radius: 6px;
 }
 
 .user_contact {
   border-radius: 10px;
-  border: 1px solid #0160AE;
+  // border: 1px solid #0160AE;
   margin-bottom: 10px;
 }
 
 .partner_contact {
   border-radius: 10px;
-  border: 1px solid #0160AE;
+  // border: 1px solid #0160AE;
   margin-bottom: 10px;
   margin-top: 10px;
 }
 
 .label_item {
-  padding: 10px 0px 5px;
-  color: #5e5e5e;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+  color: #2B3D60;
 }
 
 .labelOrg {
-  padding: 10px 0px 5px;
-  font-weight: 500;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 18px;
+  color: #00186D;
 }
 
 .content_footer {
@@ -63,7 +60,7 @@
   border-radius: 6px;
   cursor: pointer;
   padding: 10px 12px;
-  margin: 10px 0px;
+  margin: 10px 5px;
 }
 
 .draft-button {
@@ -78,18 +75,6 @@
   margin: 10px 5px;
 }
 
-.action-button-preview{
-  width: 100px;
-  background: #0041C4;
-  //font-weight: bold;
-  color: white;
-  border: 0 none;
-  border-radius: 6px;
-  cursor: pointer;
-  padding: 10px 12px;
-  margin: 10px 5px;
-}
-
 .action-button-previous {
   width: 100px;
   background: #FFFFFF;
@@ -99,7 +84,7 @@
   border-radius: 6px;
   cursor: pointer;
   padding: 9px 12px;
-  margin: 10px 0px;
+  margin: 10px 5px;
 }
 
 .input_text{
@@ -111,9 +96,9 @@
 
 .label{
   font-weight: 500;
-  color: #0160AE;
-  background-color: #C7D0E9;
-  height: 40px;
+  color: #0041C4;
+  background-color: #EBF2FB;
+  height: 48px;
   border-radius: 10px 10px 0 0;
   display: flex;
   align-items: center;
@@ -121,4 +106,62 @@
 }
 .content_determine{
   padding: 10px;
+}
+
+.boder-info {
+  border: 1px solid #C7D0E9;
+  border-radius: 12px;
+  width: 100%;
+}
+
+.content-input {
+  height: 48px;
+  border-radius: 6px;
+  border: 1px solid #E6EDFA;
+  background-color: #F7FAFD;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #00186D;
+}
+
+.ordering {
+  margin: auto 0px;
+  padding: 0px 16px;
+}
+
+.content-index {
+  border: 1px solid #0041C4;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.name-info {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  color: #00186D;
+}
+
+.item-name {
+  color: #00186D;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  margin: auto 0px auto 16px;
+}
+
+.hover-item:hover {
+  border: 1px solid #286CF5 !important; /* Thay đổi màu viền khi hover */
+}
+
+.color-email-or-phone {
+  color: #A8B5CE !important;
 }

@@ -7,6 +7,7 @@ import { ContractService } from 'src/app/service/contract.service';
 import {ToastService} from "../../../../../service/toast.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { environment } from 'src/environments/environment';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-pki-dialog-sign',
@@ -26,8 +27,12 @@ export class PkiDialogSignComponent implements OnInit {
   phoneNum: any;
   type: any = 0;
   hidden_phone: boolean = true;
+  is_show_phone_pki: boolean;
   environment: any = '';
-  
+  isError = false;
+  isErrorInvalid = false;
+  isErrorNetwork = false;
+  patternPhone = /^[0-9]*$/;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -35,13 +40,17 @@ export class PkiDialogSignComponent implements OnInit {
     private toastService : ToastService,
     private contractService: ContractService,
     private spinner: NgxSpinnerService,
+    private userService: UserService,
   ) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.environment = environment
     this.nl = networkList;
     this.datas = this.data;
+    let userId = this.userService.getAuthCurrentUser().id;
+    const infoUser = await this.userService.getUserById(userId).toPromise();
+    this.is_show_phone_pki = infoUser.is_show_phone_pki
     this.phoneNum = this.datas?.sign?.phone;
     this.networkCode = this.datas?.sign?.phone_tel;
     if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
@@ -51,12 +60,11 @@ export class PkiDialogSignComponent implements OnInit {
   }
 
   onSubmit() {
-    
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
     this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
-      
+
       const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
-      
+
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
@@ -65,12 +73,12 @@ export class PkiDialogSignComponent implements OnInit {
           return
         }
       });
-      
+
 
       if (!ArrRecipientsNew) {
-        
+
         this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
+          'Bạn không có quyền xử lý tài liệu này!',
           '',
           3000
         );
@@ -86,35 +94,41 @@ export class PkiDialogSignComponent implements OnInit {
           return
         }
       };
-      
+
 
     this.contractService.getCheckSignatured(this.data.recipientId).subscribe((res: any) => {
       if (res && res.status == 2) {
         this.toastService.showErrorHTMLWithTimeout('contract_signature_success', "", 3000);
         return;
-      } 
+      }
     }, (error: HttpErrorResponse) => {
       this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
     })
 
-    
-    const pattern = /^[0-9]*$/;
 
-    if (!this.phoneNum || (this.phoneNum && this.phoneNum.length < 9 || this.phoneNum.length > 11) || (this.phoneNum && !pattern.test(this.phoneNum))) {
+
+
+    if (!this.phoneNum || (this.phoneNum && this.phoneNum.length < 9 || this.phoneNum.length > 11) || (this.phoneNum && !this.patternPhone.test(this.phoneNum))) {
       if(!this.phoneNum) {
-        this.toastService.showErrorHTMLWithTimeout('Vui lòng nhập số điện thoại', '', 3000);
+        this.isError = true;
+        this.isErrorInvalid = false
+        // this.toastService.showErrorHTMLWithTimeout('Vui lòng nhập số điện thoại', '', 3000);
         return;
       } else {
-        this.toastService.showErrorHTMLWithTimeout('Vui lòng nhập đúng định dạng số điện thoại', '', 3000);
+        this.isErrorInvalid = true;
+        this.isError = false
+        // this.toastService.showErrorHTMLWithTimeout('Vui lòng nhập đúng định dạng số điện thoại', '', 3000);
         return;
       }
     }
+        this.isError = false
+        this.isErrorInvalid = false
 
     if(!this.networkCode) {
-      
-      this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn nhà mạng', '', 3000);
+      this.isErrorNetwork = true;
       return;
     }
+        this.isErrorNetwork = false;
 
     const firstChar = this.phoneNum.charAt(0);
     let resPhone = this.phoneNum;
@@ -123,7 +137,7 @@ export class PkiDialogSignComponent implements OnInit {
     }
     const itemNameNetwork = this.nl.find((nc: any) => nc.id == this.networkCode);
     if (itemNameNetwork) {
-      
+
 
 
       this.networkCompany = itemNameNetwork.id == 'bcy' ? 'bcy' : itemNameNetwork.name;
@@ -133,13 +147,18 @@ export class PkiDialogSignComponent implements OnInit {
       phone: resPhone,
       networkCode: this.networkCompany,
       phone_tel: this.networkCode,
-      hidden_phone: this.hidden_phone,
+      is_show_phone_pki: this.is_show_phone_pki
     };
 
-    
+
 
     this.dialogRef.close(resDialog);
   }
   )
 }
+  onChangeSelect(event?: any): void {
+    if (event.value) {
+      this.isErrorNetwork = false;
+    }
+  }
 }

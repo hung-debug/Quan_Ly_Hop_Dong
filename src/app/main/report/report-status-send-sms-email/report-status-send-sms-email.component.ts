@@ -203,7 +203,7 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
         rowspan: 1,
       },
       {
-        header: 'Trạng thái gửi',
+        header: 'status.sms.email',
         style: 'text-align: center',
         colspan: 1,
         rowspan: 1,

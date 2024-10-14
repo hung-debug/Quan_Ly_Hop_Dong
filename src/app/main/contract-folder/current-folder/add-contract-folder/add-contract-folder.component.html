@@ -7,14 +7,14 @@
             <div class="contract-type">
               <div class="label-input">{{'folder.type.contract' | translate}}&nbsp;<span style="color: red">*</span></div>
               <p-treeSelect class="md:w-20rem w-full" containerStyleClass="w-full" style="width: 100%!important" 
-              [(ngModel)]="selectedContractType" [options]="contractTypes" placeholder="Chọn hợp đồng" scrollHeight="200px" [showClear]="showClearValue" (ngModelChange)="chooseContractType()" selectionMode="single"
+              [(ngModel)]="selectedContractType" [options]="contractTypes" placeholder="Chọn tài liệu" scrollHeight="200px" [showClear]="showClearValue" (ngModelChange)="chooseContractType()" selectionMode="single"
               >
               </p-treeSelect>
             </div>
         
             <div class="contract-name">
                 <div class="label-input">Từ khóa tìm kiếm&nbsp;</div>
-                <div class="input-data-name"><input type="text border" [readonly]="this.action == 'openDetail'" [(ngModel)]="filter_name" placeholder="Tìm kiếm theo tên hợp đồng"></div>
+                <div class="input-data-name"><input type="text border" [readonly]="this.action == 'openDetail'" [(ngModel)]="filter_name" placeholder="Tìm kiếm theo tên tài liệu"></div>
               </div>
             <div class="contract-button">
                 <div class="label-input">&nbsp;</div>
@@ -100,7 +100,7 @@
   
           <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;padding-top: 50px;">
               <div style="display: table-cell;vertical-align: middle;">
-                  <img src="../../../assets/img/empty_data.svg" />
+                  <img src="../../../assets/img/no_data.svg" />
                   <div style="color: #94A7C6">{{'no.data' | translate}}</div>
               </div>
           </div>

@@ -77,6 +77,7 @@ export class ContractSignatureComponent implements OnInit {
   filter_to_date: any = '';
   filter_status: any = 1;
   contractStatus: any = '';
+  name_or_email_customer: any;
 
   typeDisplay: string = 'signOne';
   // typeDisplay: string = 'downloadOne';
@@ -136,7 +137,7 @@ export class ContractSignatureComponent implements OnInit {
 
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
-    ).customer.info;
+    ).customer.info; 
   }
 
   ngOnInit(): void {
@@ -173,6 +174,11 @@ export class ContractSignatureComponent implements OnInit {
       } else {
         this.filter_from_date = '';
       }
+      if (typeof params.name_or_email_customer != 'undefined' && params.name_or_email_customer) {
+        this.name_or_email_customer = params.name_or_email_customer;
+      } else {
+        this.name_or_email_customer = '';
+      }
       if (
         typeof params.filter_to_date != 'undefined' &&
         params.filter_to_date
@@ -203,6 +209,8 @@ export class ContractSignatureComponent implements OnInit {
         this.organization_id = '';
       }
     });
+    
+    this.organization_id = this.currentUser.organizationId
 
     if (sessionStorage.getItem('receivePageNum')) {
       this.page = Number(sessionStorage.getItem('receivePageNum'));
@@ -347,9 +355,9 @@ export class ContractSignatureComponent implements OnInit {
   downloadMany() {
     this.spinner.show();
     this.typeDisplay = 'downloadMany';
-
+    this.enterPage = this.p;
     this.contractService.getContractMyProcessList(this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status,
-      this.p, this.page, 30).subscribe((data) => {
+      this.p, this.page, 30, this.name_or_email_customer,this.organization_id).subscribe((data) => {
         this.checkedAll = false;
         this.dataChecked = [];
 
@@ -440,7 +448,9 @@ export class ContractSignatureComponent implements OnInit {
         this.filter_status,
         this.p,
         this.page,
-        this.contractStatus
+        this.contractStatus,
+        this.name_or_email_customer,
+        this.organization_id
       )
       .subscribe((data) => {
         this.contracts = data.entities;
@@ -515,6 +525,8 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   getContractList() {
+    this.spinner.show();
+    this.contracts = [];
     if (this.filter_status % 10 == 1) {
       this.filter_status = 1;
     }
@@ -535,7 +547,9 @@ export class ContractSignatureComponent implements OnInit {
           this.filter_status,
           this.p,
           this.page,
-          this.contractStatus
+          this.contractStatus,
+          this.name_or_email_customer,
+          this.organization_id
         )
         .subscribe(
           (data) => {
@@ -577,7 +591,9 @@ export class ContractSignatureComponent implements OnInit {
             this.filter_status,
             this.p,
             this.page,
-            this.contractStatus
+            this.contractStatus,
+            this.name_or_email_customer,
+            this.organization_id
           )
           .subscribe(
             (data) => {
@@ -727,7 +743,7 @@ export class ContractSignatureComponent implements OnInit {
     return list;
   }
 
-  getNameOrganization(item: any, index: any, item1?: any) {
+  getNameOrganization(item: any, index: any) {
     return sideList[index].name + ' : ' + item.name;
   }
 
@@ -757,14 +773,19 @@ export class ContractSignatureComponent implements OnInit {
       event.preventDefault();
     }
   }
-  
+
   autoSearchEnterPage(event: any) {
     if(event.target.value && event.target.value != 0 && event.target.value <= this.numberPage) {
       this.p = this.enterPage;
     } else {
       this.enterPage = this.p;
     }
-    this.getContractList();
+    if (this.typeDisplay == 'signOne') {
+      this.getContractList();
+    }
+    else if (this.typeDisplay == 'downloadMany') {
+      this.downloadMany();
+    }
   }
 
   countPage() {
@@ -796,7 +817,7 @@ export class ContractSignatureComponent implements OnInit {
           this.dataChecked[lengthItem - 2].sign_type
         ) {
           this.toastService.showErrorHTMLWithTimeout(
-            'Các hợp đồng đang chọn có loại ký khác nhau ',
+            'Các tài liệu đang chọn có loại ký khác nhau ',
             '',
             3000
           );
@@ -810,7 +831,7 @@ export class ContractSignatureComponent implements OnInit {
           this.dataChecked[lengthItem - 2].card_id
         ) {
           this.toastService.showErrorHTMLWithTimeout(
-            'Hợp đồng vừa chọn có mã số thuế khác hợp đồng đầu tiên ',
+            'Tài liệu vừa chọn có mã số thuế khác tài liệu đầu tiên ',
             '',
             3000
           );
@@ -1026,6 +1047,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   changePageNumber(e: any) {
+    this.enterPage = 1;
     this.spinner.show();
     this.p = 1;
     this.page = e.target.value;
@@ -1144,7 +1166,7 @@ export class ContractSignatureComponent implements OnInit {
               }
             );
         }
-        this.toastService.showSuccessHTMLWithTimeout('Xem xét hợp đồng thành công',
+        this.toastService.showSuccessHTMLWithTimeout('Xem xét tài liệu thành công',
           '',
           1000
         );
@@ -1153,18 +1175,26 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   signManyContract() {
-    //Nếu chọn hợp đồng khác loại ký thì ko cho ký
+    //Nếu chọn tài liệu khác loại ký thì ko cho ký
     let contractsSignManyChecked = this.contractsSignMany.filter(
       (opt) => opt.checked
     );
-
+    if(contractsSignManyChecked.length == 0) {
+      this.toastService.showErrorHTMLWithTimeout(
+        'Vui lòng chọn tài liệu',
+        '',
+        3000
+      );
+      return;
+    }
+    console.log(contractsSignManyChecked)
     for (let i = 0; i < contractsSignManyChecked.length; i++) {
       for (let j = i + 1; j < contractsSignManyChecked.length; j++) {
         if (
           contractsSignManyChecked[i].sign_type[0].id != contractsSignManyChecked[j].sign_type[0].id
         ) {
           this.toastService.showErrorHTMLWithTimeout(
-            'Vui lòng chọn những hợp đồng cùng loại ký',
+            'Vui lòng chọn những tài liệu cùng loại ký',
             '',
             3000
           );
@@ -1272,11 +1302,11 @@ export class ContractSignatureComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async (result: any) => {
       //result = 1 tương ứng với nhấn nút đồng ý và ký
       if (result?.agree == 1) {
-        //Mã số thuế tại các hợp đồng cần giống nhau
+        //Mã số thuế tại các tài liệu cần giống nhau
         for (let i = 0; i < taxCode.length; i++) {
           for (let j = i + 1; j < taxCode.length; j++) {
             if (taxCode[i] != taxCode[j]) {
-              this.toastService.showErrorHTMLWithTimeout('Mã số thuế tại các hợp đồng khác nhau', '', 3000);
+              this.toastService.showErrorHTMLWithTimeout('Mã số thuế tại các tài liệu khác nhau', '', 3000);
               return;
             }
           }
@@ -1284,7 +1314,7 @@ export class ContractSignatureComponent implements OnInit {
 
         if (result.mark) {
           const data = {
-            title: 'ĐÓNG DẤU HỢP ĐỒNG ',
+            title: 'ĐÓNG DẤU TÀI LIỆU ',
             is_content: 'forward_contract',
             markSignAcc: this.datas.markSignAcc,
             mark: true,
@@ -1334,7 +1364,7 @@ export class ContractSignatureComponent implements OnInit {
       //lấy recipientId
       recipientId = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.id);
 
-      //Lấy id hợp đồng được tích vào
+      //Lấy id tài liệu được tích vào
       idContract = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.participant.contract.id);
 
       //Lấy id file được tích vào
@@ -1351,12 +1381,12 @@ export class ContractSignatureComponent implements OnInit {
           });
         } catch (err) {
           this.spinner.hide()
-          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người tham gia hợp đồng', '', 3000);
+          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người tham gia tài liệu', '', 3000);
           return false;
         }
       }
 
-      for (let i = 0; i < idContract.length; i++) {   
+      for (let i = 0; i < idContract.length; i++) {
         // check case ky song song
         let dataObjectSignature: any = null;
         dataObjectSignature = await this.contractServiceV1
@@ -1368,7 +1398,7 @@ export class ContractSignatureComponent implements OnInit {
           this.spinner.hide()
           return
         }
-        // check case ky song song  
+        // check case ky song song
         try {
           let fileContract = await this.contractServiceV1.getFileContract(idContract[i]).toPromise();
 
@@ -1421,7 +1451,7 @@ export class ContractSignatureComponent implements OnInit {
           let imageRender = null;
 
           try {
-            this.isDateTime = await this.timeService.getRealTime().toPromise();
+            this.isDateTime = new Date();
           } catch(err) {
             this.isDateTime = new Date();
           }
@@ -1461,14 +1491,14 @@ export class ContractSignatureComponent implements OnInit {
               this.dataHsm,
               idSignMany
             );
-  
+
             let countSuccess = 0;
-  
+
             for (let i = 0; i < checkSign.length; i++) {
               if (checkSign[i].result.success == false) {
                 this.spinner.hide();
-  
-                if (checkSign[i].result.message == 'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng') {
+
+                if (checkSign[i].result.message == 'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu') {
                   this.toastService.showErrorHTMLWithTimeout(
                     'taxcode.not.match.hsm',
                     '',
@@ -1496,7 +1526,7 @@ export class ContractSignatureComponent implements OnInit {
                     '',
                     3000
                   );
-                } 
+                }
                 else if (checkSign[i].result.message == "false") {
                   this.toastService.showErrorHTMLWithTimeout(
                     "Lấy thông tin chứng thư số thất bại",
@@ -1515,7 +1545,7 @@ export class ContractSignatureComponent implements OnInit {
                 countSuccess++;
               }
             }
-  
+
             if (countSuccess == checkSign.length) {
               this.spinner.hide();
               this.toastService.showSuccessHTMLWithTimeout(
@@ -1523,14 +1553,14 @@ export class ContractSignatureComponent implements OnInit {
                 '',
                 3000
               );
-  
+
               this.router
                 .navigateByUrl('/', { skipLocationChange: true })
                 .then(() => {
                   this.router.navigate(['main/c/receive/processed']);
                 });
             }
-            
+
           } catch (error) {
             this.spinner.hide()
             return this.toastService.showErrorHTMLWithTimeout("Lấy thông tin chứng thư số thất bại","",3000)
@@ -1695,10 +1725,23 @@ export class ContractSignatureComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(async (resultRS: any) => {
         if (resultRS) {
+          // check điều kiện mst không trùng với mst nhập
+          if (taxCode[0] !== resultRS.ma_dvcs) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu',
+              '',
+              3000
+            );
+            return;
+          }
+          let isVnptSmartCa = false;
+          if (resultRS?.type == '1') {
+            isVnptSmartCa = true
+          }
           this.nameCompany = resultRS.ma_dvcs;
 
           try {
-            this.isDateTime = await this.timeService.getRealTime().toPromise();
+            this.isDateTime = new Date();
           } catch(err) {
             this.isDateTime = new Date();
           }
@@ -1725,7 +1768,8 @@ export class ContractSignatureComponent implements OnInit {
             manyRemoteSignData,
             recipientIds,
             null,
-            3
+            3,
+            isVnptSmartCa
           ).then(
             (res: any) => {
               this.spinner.hide();
@@ -1773,7 +1817,7 @@ export class ContractSignatureComponent implements OnInit {
 
               if (countSuccess == checkSign.length) {
                 this.spinner.hide();
-                this.remoteDialogSuccessOpen().then((res) => {
+                this.remoteDialogSuccessOpen(isVnptSmartCa).then((res) => {
                   if (res.isDismissed) {
                     this.router
                       .navigateByUrl('/', { skipLocationChange: true })
@@ -1794,10 +1838,11 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
-  remoteDialogSuccessOpen() {
+  remoteDialogSuccessOpen(isVnptSmartCa = false) {
     return Swal.fire({
       title: "THÔNG BÁO",
-      text: "Hệ thống đã thực hiện gửi hợp đồng đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký hợp đồng!",
+      text: isVnptSmartCa ? "Hệ thống đã thực hiện gửi tài liệu đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký tài liệu!" :
+        "Hệ thống đã thực hiện gửi tài liệu đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký tài liệu!",
       icon: 'info',
       showCancelButton: true,
       showConfirmButton: false,
@@ -1868,43 +1913,43 @@ export class ContractSignatureComponent implements OnInit {
                 this.signCertDigital = data.data;
                 this.nameCompany = data.data.CN;
 
-                let signI: any = '';
-                let imageRender = null;
+                // let signI: any = '';
+                // let imageRender = null;
 
-                try {
-                  this.isDateTime = await this.timeService.getRealTime().toPromise();
-                } catch(err) {
-                  this.isDateTime = new Date();
-                }
+                // try {
+                //   this.isDateTime = new Date();
+                // } catch(err) {
+                //   this.isDateTime = new Date();
+                // }
 
-                if(!this.isDateTime) this.isDateTime = new Date();
-                await of(null).pipe(delay(100)).toPromise();
+                // if(!this.isDateTime) this.isDateTime = new Date();
+                // await of(null).pipe(delay(100)).toPromise();
 
-                if (isMark) {
-                  imageRender = <HTMLElement>(document.getElementById('export-html-image'));
-                } else {
-                  // imageRender = <HTMLElement>(document.getElementById('export-html'));
-                  imageRender = null
-                  signI = null
-                }
+                // if (isMark) {
+                //   imageRender = <HTMLElement>(document.getElementById('export-html-image'));
+                // } else {
+                //   // imageRender = <HTMLElement>(document.getElementById('export-html'));
+                //   imageRender = null
+                //   signI = null
+                // }
 
-                if (imageRender) {
-                  // const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
-                  // signI = textSignB.split(',')[1];
-                  signI = this.srcMark.split(',')[1]
-                }
-                try {
-                  const getSignatureInfoTokenV1Data: any = await this.contractServiceV1.getSignatureInfoTokenV1(
-                    this.signCertDigital.Base64, signI
-                  ).toPromise()
-                  signI = getSignatureInfoTokenV1Data.data
-                } catch (error) {
-                  this.spinner.hide()
-                  console.log(error);
-                  return this.toastService.showErrorHTMLWithTimeout("sign.token.err","",3000)
-                }
+                // if (imageRender) {
+                //   // const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
+                //   // signI = textSignB.split(',')[1];
+                //   signI = this.srcMark.split(',')[1]
+                // }
+                // try {
+                //   const getSignatureInfoTokenV1Data: any = await this.contractServiceV1.getSignatureInfoTokenV1(
+                //     this.signCertDigital.Base64, signI
+                //   ).toPromise()
+                //   signI = getSignatureInfoTokenV1Data.data
+                // } catch (error) {
+                //   this.spinner.hide()
+                //   console.log(error);
+                //   return this.toastService.showErrorHTMLWithTimeout("sign.token.err","",3000)
+                // }
 
-                //Lấy chiều dài của các trang trong các hợp đồng ký
+                //Lấy chiều dài của các trang trong các tài liệu ký
                 //Gọi api ký usb token nhiều lần
                 let dataSignMobi: any = null;
                 let currentSigningStatus: any = null;
@@ -1913,8 +1958,8 @@ export class ContractSignatureComponent implements OnInit {
                     .getDataObjectSignatureLoadChange(idContract[i])
                     .toPromise();
                   dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i])
-                  currentSigningStatus = await this.checkCurrentSigningCall(dataObjectSignature[0].recipient.id)
-                  if (!currentSigningStatus) return
+                  // currentSigningStatus = await this.checkCurrentSigningCall(dataObjectSignature[0].recipient.id)
+                  // if (!currentSigningStatus) return
                   for (let j = 0; j < dataObjectSignature.length; j++) {
                     if (dataObjectSignature[j].recipient) {
                       if (recipientId[i] == dataObjectSignature[j].recipient.id) {
@@ -1922,7 +1967,7 @@ export class ContractSignatureComponent implements OnInit {
                         // y.push(dataObjectSignature[j].coordinate_y);
                         // h.push(dataObjectSignature[j].height);
                         // w.push(dataObjectSignature[j].width);
-                        //Lấy ra trang ký của từng file hợp đồng
+                        //Lấy ra trang ký của từng file tài liệu
                         page.push(dataObjectSignature[j].page);
                       }
                     }
@@ -1936,12 +1981,52 @@ export class ContractSignatureComponent implements OnInit {
                   })
                   this.getNewCoordinateTokenV1(infoPage, dataObjectSignature)
                   for (let j = 0; j < dataObjectSignature.length; j++) {
+
+                    let signI: any = '';
+                    let imageRender = null;
+    
+                    try {
+                      this.isDateTime = new Date();
+                    } catch(err) {
+                      this.isDateTime = new Date();
+                    }
+    
+                    if(!this.isDateTime) this.isDateTime = new Date();
+                    await of(null).pipe(delay(100)).toPromise();
+    
+                    if (isMark) {
+                      imageRender = <HTMLElement>(document.getElementById('export-html-image'));
+                    } else {
+                      // imageRender = <HTMLElement>(document.getElementById('export-html'));
+                      imageRender = null
+                      signI = null
+                    }
+    
+                    if (imageRender) {
+                      // const textSignB = await domtoimage.toPng(imageRender, this.getOptions(imageRender));
+                      // signI = textSignB.split(',')[1];
+                      //signI = this.srcMark.split(',')[1]
+                      signI = this.srcMark.split(',')[1]
+                    }
+                    
+                    let type = dataObjectSignature[j].type_image_signature
+                    try {
+                      const getSignatureInfoTokenV1Data: any = await this.contractServiceV1.getSignatureInfoTokenV1(
+                        this.signCertDigital.Base64, signI, type
+                      ).toPromise()
+                      signI = getSignatureInfoTokenV1Data.data
+                    } catch (error) {
+                      this.spinner.hide()
+                      console.log(error);
+                      return this.toastService.showErrorHTMLWithTimeout("sign.token.err","",3000)
+                    }
+                    
                     try {
                       // w[j] = x[j] + w[j];
-  
-                      // // //Tính lại h, y theo chiều dài của các trang trong hợp đồng ký
+
+                      // // //Tính lại h, y theo chiều dài của các trang trong tài liệu ký
                       // y[j] = heightPage[i] - (y[j] - dataObjectSignature[j].currentHeight) - h[j];
-    
+
                       // h[j] = y[j] + h[j];
                       w[j] = 0
                       x[j] = 0
@@ -1955,10 +2040,10 @@ export class ContractSignatureComponent implements OnInit {
                       h[j] = dataObjectSignature[j].height
 
                       w[j] = x[j] + w[j];
-  
-                      // //Tính lại h, y theo chiều dài của các trang trong hợp đồng ký
+
+                      // //Tính lại h, y theo chiều dài của các trang trong tài liệu ký
                       y[j] = dataObjectSignature[j].heightPage - (y[j] - dataObjectSignature[j].currentHeight) - h[j] + dataObjectSignature[j].page*5;
-    
+
                       h[j] = y[j] + h[j];
                       // calculate new coordinates
                       dataSignMobi =
@@ -1986,6 +2071,10 @@ export class ContractSignatureComponent implements OnInit {
 
                     let sign: any = null;
                     try {
+                      // sign = await this.contractServiceV1.updateDigitalSignatured(
+                      //   dataObjectSignature[j].id,
+                      //   dataSignMobi.data.FileDataSigned
+                      // );
                       sign = await this.contractServiceV1.updateDigitalSignatured(
                         dataObjectSignature[j].id,
                         dataSignMobi.data.FileDataSigned
@@ -2000,7 +2089,7 @@ export class ContractSignatureComponent implements OnInit {
                       );
                       return false;
                     }
-                    
+
                     if (!sign.recipient_id || !sign) {
                       this.spinner.hide()
                       this.toastService.showErrorHTMLWithTimeout(
@@ -2019,7 +2108,7 @@ export class ContractSignatureComponent implements OnInit {
                     } catch (err) {
                       this.spinner.hide()
                       this.toastService.showErrorHTMLWithTimeout(
-                        'Lỗi cập nhật trạng thái hợp đồng ',
+                        'Lỗi cập nhật trạng thái tài liệu ',
                         '',
                         3000
                       );
@@ -2029,7 +2118,7 @@ export class ContractSignatureComponent implements OnInit {
                     if (!updateInfo.id || !updateInfo) {
                       this.spinner.hide()
                       this.toastService.showErrorHTMLWithTimeout(
-                        'Lỗi cập nhật trạng thái hợp đồng ',
+                        'Lỗi cập nhật trạng thái tài liệu ',
                         '',
                         3000
                       );
@@ -2104,7 +2193,7 @@ export class ContractSignatureComponent implements OnInit {
     return options;
   }
 
-  async signTokenVersion2(fileC: any, idContract: any, recipientId: any, documentId: any, taxCode: any, idSignMany: any, isMark: boolean) { 
+  async signTokenVersion2(fileC: any, idContract: any, recipientId: any, documentId: any, taxCode: any, idSignMany: any, isMark: boolean) {
     //ky bang usb token
     let base64String: any = [];
 
@@ -2140,20 +2229,16 @@ export class ContractSignatureComponent implements OnInit {
     }
 
     // token v2 - prepare info - optimizing
-    let dataObjectSignature: any;
     try {
       let preparePromises = fileC.map( async (_: any, i: any) => {
         const base64StringPdf = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
 
         base64String.push(encode(base64StringPdf));
 
-        //Lấy toạ độ ô ký của từng hợp đồng
-        dataObjectSignature = await this.contractServiceV1
+        //Lấy toạ độ ô ký của từng tài liệu
+        const dataObjectSignature = await this.contractServiceV1
           .getDataObjectSignatureLoadChange(idContract[i])
           .toPromise();
-        dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i])
-        let currentSigningStatus: any = await this.checkCurrentSigningCall(dataObjectSignature[0].recipient.id)
-        if (!currentSigningStatus) return
         for (let j = 0; j < dataObjectSignature.length; j++) {
           if (dataObjectSignature[j].recipient) {
             if (recipientId[i] == dataObjectSignature[j].recipient.id) {
@@ -2162,18 +2247,18 @@ export class ContractSignatureComponent implements OnInit {
               h.push(dataObjectSignature[j].height);
               w.push(dataObjectSignature[j].width);
 
-              //Lấy ra trang ký của từng file hợp đồng
+              //Lấy ra trang ký của từng file tài liệu
               page.push(dataObjectSignature[j].page);
               boxTypes.push(dataObjectSignature[j].type)
             }
           }
         }
 
-        //Lấy thông tin page của hợp đồng
+        //Lấy thông tin page của tài liệu
         const infoPage = await this.contractServiceV1
           .getInfoPage(documentId[i])
           .toPromise();
-  
+
         for (let j = 0; j < infoPage.length; j++) {
           if (infoPage[j].page < page[i]) {
             currentHeight[i] += infoPage[j].height;
@@ -2183,12 +2268,12 @@ export class ContractSignatureComponent implements OnInit {
             break;
           }
         }
-  
-        //Lấy trạng thái ceca của từng hợp đồng
+
+        //Lấy trạng thái ceca của từng tài liệu
         const cecaContract = await this.contractServiceV1
           .getListDataCoordination(idContract[i])
           .toPromise();
-  
+
         if (cecaContract.ceca_push == 1) {
           ceca_push.push(true);
         } else {
@@ -2308,7 +2393,7 @@ export class ContractSignatureComponent implements OnInit {
         let signI: any = '';
 
         try {
-          this.isDateTime = await this.timeService.getRealTime().toPromise();
+          this.isDateTime = new Date();
         } catch(err) {
           this.isDateTime = new Date();
         }
@@ -2337,6 +2422,13 @@ export class ContractSignatureComponent implements OnInit {
       let promises = fileC.map(async (_: any, i: any) => {
         signDigital.page = page[i];
         let emptySignature: any;
+
+        let dataObjectSignature = await this.contractServiceV1
+        .getDataObjectSignatureLoadChange(idContract[i])
+        .toPromise();
+        dataObjectSignature = dataObjectSignature.filter(
+          (item: any) => item.type == 3 && item.recipient.id == recipientId[i]
+        );
 
         for (let j = 0; j< dataObjectSignature.length; j++) {
           signUpdate.id = dataObjectSignature[j].id;
@@ -2419,13 +2511,26 @@ export class ContractSignatureComponent implements OnInit {
 
             if (!updateInfo.id) {
               this.toastService.showErrorHTMLWithTimeout(
-                'Lỗi cập nhật trạng thái hợp đồng ',
+                'Lỗi cập nhật trạng thái tài liệu ',
                 '',
                 3000
               );
             }
 
+            if (i == fileC.length - 1) {
+              //this.spinner.hide();
+              // this.toastService.showSuccessHTMLWithTimeout(
+              //   'sign.success',
+              //   '',
+              //   3000
+              // );
 
+              // this.router
+              //   .navigateByUrl('/', { skipLocationChange: true })
+              //   .then(() => {
+              //     this.router.navigate(['main/c/receive/processed']);
+              //   });
+            }
           } catch (err) {
             this.spinner.hide()
             this.toastService.showErrorHTMLWithTimeout(
@@ -2502,7 +2607,7 @@ export class ContractSignatureComponent implements OnInit {
 
         //   if (!updateInfo.id) {
         //     this.toastService.showErrorHTMLWithTimeout(
-        //       'Lỗi cập nhật trạng thái hợp đồng ',
+        //       'Lỗi cập nhật trạng thái tài liệu ',
         //       '',
         //       3000
         //     );
@@ -2535,21 +2640,32 @@ export class ContractSignatureComponent implements OnInit {
 
       })
       await Promise.all(promises).then((results: any) => {
-        this.spinner.hide();
-        this.toastService.showSuccessHTMLWithTimeout(
-          'sign.success',
-          '',
-          3000
-        );
+        // this.toastService.showSuccessHTMLWithTimeout(
+        //   'sign.success',
+        //   '',
+        //   3000
+        // );
 
-        this.router
-          .navigateByUrl('/', { skipLocationChange: true })
-          .then(() => {
-            this.router.navigate(['main/c/receive/processed']);
-          });
+        // this.router
+        //   .navigateByUrl('/', { skipLocationChange: true })
+        //   .then(() => {
+        //     this.router.navigate(['main/c/receive/processed']);
+        //   });
       })
+      await Promise.all(promises)
       // token v2 - optimizing
       await this.signV2FixingProcess()
+      this.toastService.showSuccessHTMLWithTimeout(
+        'sign.success',
+        '',
+        3000
+      );
+      this.spinner.hide();
+      this.router
+      .navigateByUrl('/', { skipLocationChange: true })
+      .then(() => {
+        this.router.navigate(['main/c/receive/processed']);
+      });
       } else {
         this.spinner.hide();
         Swal.fire({
@@ -2577,9 +2693,9 @@ export class ContractSignatureComponent implements OnInit {
     try {
       const checkV2Infor = await this.contractServiceV1.checkTokenV2Infor().toPromise()
       if (checkV2Infor.status == false) {
-        console.log('bye bye');
+        //console.log('bye bye');
       } else {
-        console.log('multi processing');
+        //console.log('multi processing');
         this.fixingRecipientIds = checkV2Infor.listRecipientId
         if (this.fixingRecipientIds.length > 0) {
           for (const recipId of this.fixingRecipientIds) {
@@ -2687,8 +2803,8 @@ export class ContractSignatureComponent implements OnInit {
 
     if (sessionStorage.getItem('lang') == 'en') {
       title = 'CONTRACT SEARCH';
-    } else if (sessionStorage.getItem('lang') == 'vi') {
-      title = 'TÌM KIẾM HỢP ĐỒNG';
+    } else {
+      title = 'TÌM KIẾM TÀI LIỆU';
     }
 
     const data = {
@@ -2698,8 +2814,11 @@ export class ContractSignatureComponent implements OnInit {
       filter_contract_no: this.filter_contract_no,
       filter_from_date: this.filter_from_date,
       filter_to_date: this.filter_to_date,
+      name_or_email_customer:this.name_or_email_customer,
+      organization_id: this.organization_id,
       status: this.status,
-      type_display: this.typeDisplay
+      type_display: this.typeDisplay,
+      refreshContractList: this.getContractList.bind(this) 
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(FilterListDialogComponent, {
@@ -2902,20 +3021,20 @@ export class ContractSignatureComponent implements OnInit {
         return '';
       } else if (ceca_push == 1) {
         if (ceca_status == -1) {
-          return '[Gửi lên CeCA thất bại]';
+          return 'Gửi lên CeCA thất bại';
         } else if (ceca_status == 1) {
-          return '[Chờ BCT xác thực]';
+          return 'Chờ BCT xác thực';
         } else if (ceca_status == -2) {
-          return '[Xác thực thất bại]';
+          return 'Xác thực thất bại';
         } else if (ceca_status == 0) {
-          return '[BCT xác thực thành công]';
+          return 'BCT xác thực thành công';
         } else {
-          return '[Chưa gửi lên CeCA]';
+          return 'Chưa gửi lên CeCA';
         }
       }
-      return '[Không xác định]';
+      return 'Không xác định';
     }
-    return '';
+    return 'Không xác định';
   }
 
   getNewCoordinateTokenV1(heightPages: any, fields: any[]) {
@@ -2926,7 +3045,7 @@ export class ContractSignatureComponent implements OnInit {
       }
     })
   }
-  
+
   async checkCurrentSigningCall(recipientId: any) {
     let currentSigningStatus: any = null;
     try {

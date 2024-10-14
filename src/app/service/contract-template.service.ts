@@ -640,8 +640,25 @@ export class ContractTemplateService {
       {
         id: Helper._ranDomNumberText(10),
         sign_unit: 'chu_ky_so',
-        sign_config: []
-      },
+        sign_config: [],
+        type: [
+          {
+            id: Helper._ranDomNumberText(10),
+            sign_unit: 'chu_ky_so_con_dau_va_thong_tin',
+            sign_config: [],
+          },
+          {
+            id: Helper._ranDomNumberText(10),
+            sign_unit: 'chu_ky_so_con_dau',
+            sign_config: [],
+          },
+          {
+            id: Helper._ranDomNumberText(10),
+            sign_unit: 'chu_ky_so_thong_tin',
+            sign_config: [],
+          },
+        ],
+      }
     ]
   }
 

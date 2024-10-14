@@ -10,11 +10,11 @@
       </div>
     </div>
 
-    <!-- Thông tin hợp đồng -->
+    <!-- Thông tin tài liệu -->
     <div class="col-xxl-3-5 col-lg-6 col-md-6">
       <div>{{'contract.information' | translate}}</div>
       <div class="input-line">
-        <input type="text" [(ngModel)]="contractInfo" class="input_text" placeholder="Tìm kiếm theo Mã HĐ, Số HĐ, Tên HĐ" />
+        <input type="text" [(ngModel)]="contractInfo" class="input_text" placeholder="{{'search.code.number.name' | translate}}" />
       </div>
     </div>
 
@@ -59,9 +59,9 @@
       <ng-template pTemplate="body" let-list let-row="rowIndex">
         <tr>
           <ng-container *ngIf="row >= 0">
-            <td>{{list.contractUId}}</td> <!--mã hđ-->
-            <td>{{list.contractNum}}</td> <!--số hđ-->
-            <td>{{list.contractName}}</td> <!--Tên HĐ-->
+            <td>{{list.contractUId}}</td> <!--mã Tài liệu-->
+            <td>{{list.contractNum}}</td> <!--số Tài liệu-->
+            <td>{{list.contractName}}</td> <!--Tên Tài liệu-->
             <td>{{list.email}}</td> <!--Email-->
             <td style="text-align: center; ">
               <img ngbTooltip="{{'content' | translate}}" src="../../../assets/img/icon_file_sms.svg" width="20px"
@@ -93,7 +93,7 @@
 
 <div class="footer_pagination">
   <div class="footer_contract_per_page">
-    <div>Hiển thị&nbsp;</div>
+    <div>{{'display' | translate}}&nbsp;</div>
     <select [(ngModel)]="this.row" (change)="changePageNumber($event)">
         <option value="" hidden>10</option>
         <option *ngFor="let d of this.pageOptions">{{d}}</option>
@@ -104,7 +104,7 @@
       <p-paginator class="footer_pagination_between_p_paginator" [first]="page * row"  (onPageChange)="onPageChange($event)" [rows]="row" [totalRecords]="totalRecords"></p-paginator>
       <div *ngIf = "totalRecords" class="enterPage footer_pagination_between_input">
           <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-          <p>của {{numberPage}} trang</p>
+          <p>{{'of' | translate}} {{numberPage}} {{'page' | translate}}</p>
       </div>
   </div>
   <div class="footer_pagination_quantity">{{'chart.number' | translate}}: {{totalRecords === 0 ? 0 : page * row + 1}} - {{totalRecords > 0 ? toRecord() : 0}} / {{totalRecords > 0 ? totalRecords : 0}}</div>

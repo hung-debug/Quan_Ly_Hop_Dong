@@ -84,8 +84,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
   checkedAll: boolean = false;
   typeDisplay: string = 'view';
   dataDeleteDraftChecked: any[] = [];
+  idCheckBox: any[] = [];
   color: any;
   backgroundColor: any;
+  handler_name: any;
+  name_or_email_customer: any;
 
   //phan quyen
   isQLHD_01: boolean = true;  //them moi hop dong
@@ -101,7 +104,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   isQLHD_11: boolean = true;  //tao hop dong lien quan
   isQLHD_12: boolean = true;  //xem hop dong lien quan
   isQLHD_13: boolean = true;  //chia se hop dong
-  isQLHD_16: boolean = true;  //thanh lý hợp đồng
+  isQLHD_16: boolean = true;  //thanh lý tài liệu
 
 
   constructor(private appService: AppService,
@@ -153,6 +156,18 @@ export class ContractComponent implements OnInit, AfterViewInit {
       } else {
         this.filter_to_date = "";
       }
+      
+      if (typeof params.handler_name != 'undefined' && params.handler_name) {
+        this.handler_name = params.handler_name;
+      } else {
+        this.handler_name = "";
+      }
+      
+      if (typeof params.name_or_email_customer != 'undefined' && params.name_or_email_customer) {
+        this.name_or_email_customer = params.name_or_email_customer;
+      } else {
+        this.name_or_email_customer = "";
+      }
 
       if (typeof params.isOrg != 'undefined' && params.isOrg) {
         this.isOrg = params.isOrg;
@@ -175,6 +190,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       }
 
       this.sub = this.route.params.subscribe(params => {
+        this.spinner.show();
         this.contracts = [];
         this.pageTotal = 0;
         this.action = params['action'];
@@ -288,6 +304,18 @@ export class ContractComponent implements OnInit, AfterViewInit {
     }
   }
 
+  onCheckboxChange(item: any) {
+    if (item.checked) {
+      this.idCheckBox.push(item.id);  
+    } else {
+      const index = this.idCheckBox.indexOf(item.id);
+      if (index > -1) {
+        this.idCheckBox.splice(index, 1);
+      }
+    }
+    console.log('this.idCheckBox', this.idCheckBox)
+  }
+
   selectContract(item: any){
     if(!item.checked) this.checkedAll = false;
     else {
@@ -335,10 +363,12 @@ export class ContractComponent implements OnInit, AfterViewInit {
     } else {
       for (let i = 0; i < this.contracts.length; i++){
         this.contracts[i].checked = true;
-        this.dataChecked.push({
-          id: this.contracts[i].participants[0]?.contract_id,
-          selectedId : this.contracts[i].id
-        })
+        if(this.contracts[i].participants && this.contracts[i].participants.length) {
+          this.dataChecked.push({
+            id: this.contracts[i].participants[0]?.contract_id,
+            selectedId : this.contracts[i].id
+          })
+        }
       }
     }
   }
@@ -363,7 +393,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     )
   }
 
-  downloadManyContract() {
+  async downloadManyContract() {
     if (this.dataChecked.length === 0) {
       this.toastService.showErrorHTMLWithTimeout('not.select.contract','',3000);
       return
@@ -372,7 +402,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
     const myDate = new Date();
     // Replace 'yyyy-MM-dd' with your desired date format
     const formattedDate = this.datePipe.transform(myDate, 'ddMMyyyy');
-    const ids = this.dataChecked.map(el => el.id).toString();
+    const ids = await this.dataChecked.map(el => el.id).toString();
+    
     this.ContractSignatureService.getContractMyProcessListDownloadMany(ids).subscribe(
       (data) => {
         const file = new Blob([data], {type: 'application/zip'});
@@ -399,7 +430,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.typeDisplay = 'downloadMany';
     this.roleMess = "";
     if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
-      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền";
+      this.roleMess = "Danh sách tài liệu tổ chức chưa được phân quyền";
     }
 
     if (!this.roleMess) {
@@ -409,7 +440,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         isOrg ='off';
       }
 
-    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
+    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, this.handler_name, this.name_or_email_customer).subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = data.total_elements;
       this.totalPage = data.total_pages;
@@ -453,7 +484,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.roleMess = "";
 
     if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
-      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền";
+      this.roleMess = "Danh sách tài liệu tổ chức chưa được phân quyền";
     }
 
     if (!this.roleMess) {
@@ -464,7 +495,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         isOrg ='off';
       }
 
-    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, true).subscribe(data => {
+    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, this.handler_name, this.name_or_email_customer, true).subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = data.total_elements;
       this.checkedAll = false;
@@ -506,10 +537,10 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.typeDisplay = 'multiDeleteDraft';
     this.roleMess = "";
     if (this.isOrg == 'off' && !this.isQLHD_05) {
-      this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
+      this.roleMess = "Danh sách tài liệu của tôi chưa được phân quyền";
 
     } else if (this.isOrg == 'on' && !this.isQLHD_04) {
-      this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
+      this.roleMess = "Danh sách tài liệu tổ chức của tôi chưa được phân quyền";
     }
     if (!this.roleMess) {
 
@@ -522,7 +553,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       this.p = 0
     }
 
-    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
+    this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, this.handler_name, this.name_or_email_customer).subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = data.total_elements;
       this.checkedAll = false;
@@ -569,7 +600,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     let selectedContracts = this.dataDeleteDraftChecked.map((item: any) => item.selectedId)
     if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       data = {
-        title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
+        title: 'XÁC NHẬN XÓA TÀI LIỆU',
         contractIds: selectedContracts
       };
     } else if (sessionStorage.getItem('lang') == 'en') {
@@ -596,6 +627,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   toggleDeleteDraftAll(checkedAll: boolean){
     this.dataDeleteDraftChecked = [];
+    this.idCheckBox = [];
 
     if(checkedAll){
       for(let i = 0; i < this.contracts.length; i++){
@@ -604,6 +636,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     } else {
       for (let i = 0; i < this.contracts.length; i++){
         this.contracts[i].checked = true;
+        this.idCheckBox.push(this.contracts[i].id);
         this.dataDeleteDraftChecked.push({
           id: this.contracts[i].participants[0]?.contract_id,
           selectedId : this.contracts[i].id
@@ -683,18 +716,20 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   getContractList() {
+    this.spinner.show();
     this.pageTotal = 0;
     this.scrollY = 0;
     this.roleMess = "";
     this.typeDisplay="view";
-    this.contracts = []
+    this.contracts = [];
+    this.idCheckBox = [];
     this.contractService.sidebarContractEvent.subscribe((event: any) => {
       if(event='contract-signature')
       this.p = 1;
     })
 
     if (this.isOrg == 'on' && !this.isQLHD_04 && !this.isQLHD_03) {
-      this.roleMess = "Danh sách hợp đồng tổ chức chưa được phân quyền";
+      this.roleMess = "Danh sách tài liệu tổ chức chưa được phân quyền";
     }
 
     if (!this.roleMess) {
@@ -705,7 +740,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       }
 
       //get list contract
-      this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
+      this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page, this.handler_name, this.name_or_email_customer).subscribe(data => {
         this.contracts = data.entities;
         this.pageTotal = data.total_elements;
         this.checkedAll = false;
@@ -796,6 +831,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   changePageNumber(e: any){
+    this.enterPage = 1;
     this.spinner.show();
     this.p = 1;
     this.page = e.target.value;
@@ -812,7 +848,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
   setPageDownload() {
     this.pageStart = (this.p - 1) * this.page + 1;
     this.pageEnd = (this.p) * this.page;
-
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
     }
@@ -854,7 +889,10 @@ export class ContractComponent implements OnInit, AfterViewInit {
   autoSearch(event: any) {
     this.p = 1;
     this.filter_name = event.target.value;
-    this.getContractList();
+    clearTimeout(this.inputTimeout);
+    this.inputTimeout = setTimeout(() => {
+      this.getContractList();
+    }, 1000);
   }
 
   onInput(event: any) {
@@ -877,7 +915,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
     } else {
       this.enterPage = this.p;
     }
-    this.getContractList();
+    if(this.typeDisplay == 'downloadMany'){
+      this.downloadMany();
+    } else {
+      this.getContractList();
+    }
   }
   
   countPage() {
@@ -909,14 +951,13 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     this.contractService.getContractCopy(id).subscribe((res: any) => {
       //
-      this.toastService.showSuccessHTMLWithTimeout(`Sao chép hợp đồng ${res.name} thành công!`, "", 3000)
-      this.getContractList();
+      this.toastService.showSuccessHTMLWithTimeout(`Sao chép tài liệu ${res.name} thành công!`, "", 3000)
 
     }, (error: HttpErrorResponse) => {
       this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000)
       this.spinner.hide();
     }, () => {
-      this.spinner.hide();
+      this.getContractList();
     })
   }
 
@@ -928,11 +969,26 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   openEditExpiration(item: any) {
     let title = this.translate.instant('edit.exp.sign.time')
-    const data = {
-      title: title,
-      expirationSign: item.sign_time,
-      contractId: item.id,
-      scrollY: this.scrollY
+    let data;
+    if (item && item !== '') {
+      data = {
+        title: title,
+        expirationSign: item.sign_time,
+        contractId: item.id,
+        scrollY: this.scrollY,
+        status: 'one',
+        refreshContractList: this.getContractList.bind(this) 
+      }
+    } else {
+      const currentTime = new Date().toISOString();
+      data = {
+        title: title,
+        expirationSign: currentTime,
+        contractId: this.idCheckBox,
+        scrollY: this.scrollY,
+        status: 'multi',
+        refreshContractList: this.getContractList.bind(this) 
+      }
     }
 
      // @ts-ignore
@@ -943,7 +999,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      let is_data = result
+      let is_data = result;
+      //this.getContractList();
     })
   }
 
@@ -957,7 +1014,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   deleteItem(id: number) {
     this.statusPopup = 1;
-    this.notificationPopup = "Xóa hợp đồng thành công";
+    this.notificationPopup = "Xóa tài liệu thành công";
   }
 
   searchContract() {
@@ -966,7 +1023,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     if (sessionStorage.getItem('lang') == 'en') {
       title = "CONTRACT SEARCH"
     } else if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
-      title = "TÌM KIẾM HỢP ĐỒNG";
+      title = "TÌM KIẾM TÀI LIỆU";
     }
 
     const data = {
@@ -975,6 +1032,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
       filter_contract_no: this.filter_contract_no,
       filter_from_date: this.filter_from_date,
       filter_to_date: this.filter_to_date,
+      handler_name: this.handler_name,
+      name_or_email_customer: this.name_or_email_customer,
       status: this.status,
       isOrg: this.isOrg,
       organization_id: this.organization_id,
@@ -997,7 +1056,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
     if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       data = {
-        title: 'XÁC NHẬN HỦY HỢP ĐỒNG',
+        title: 'XÁC NHẬN HỦY TÀI LIỆU',
         id: id
       };
     } else {
@@ -1021,7 +1080,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   contractConnect(id: any) {
     const data = {
-      title: 'XEM HỢP ĐỒNG LIÊN QUAN',
+      title: 'XEM TÀI LIỆU LIÊN QUAN',
       id: id
     };
     // @ts-ignore
@@ -1040,7 +1099,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   addContractConnect(id: any) {
     const data = {
-      title: 'THÊM HỢP ĐỒNG LIÊN QUAN',
+      title: 'THÊM TÀI LIỆU LIÊN QUAN',
       id: id
     };
     // @ts-ignore
@@ -1059,7 +1118,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   shareContract(id: any) {
     const data = {
-      title: 'CHIA SẺ HỢP ĐỒNG',
+      title: 'CHIA SẺ TÀI LIỆU',
       id: id
     };
     // @ts-ignore
@@ -1080,7 +1139,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
     if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       data = {
-        title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
+        title: 'XÁC NHẬN XÓA TÀI LIỆU',
         id: id
       };
     } else if (sessionStorage.getItem('lang') == 'en') {
@@ -1131,18 +1190,18 @@ export class ContractComponent implements OnInit, AfterViewInit {
         return "";
       } else if (ceca_push == 1) {
         if (ceca_status == -1) {
-          return "[Gửi lên CeCA thất bại]";
+          return "Gửi lên CECA thất bại";
         } else if (ceca_status == 1) {
-          return "[Chờ BCT xác thực]";
+          return "Chờ BCT xác thực";
         } else if (ceca_status == -2) {
-          return "[Xác thực thất bại]";
+          return "Xác thực thất bại";
         } else if (ceca_status == 0) {
-          return "[BCT xác thực thành công]";
+          return "BCT xác thực thành công";
         } else {
-          return "[Chưa gửi lên CeCA]";
+          return "Chưa gửi lên CECA";
         }
       }
-      return "[Không xác định]";
+      return "Không xác định";
     }
     return "";
   }

@@ -38,9 +38,9 @@ export class DeleteFolderComponent implements OnInit {
         if (this.countFolders > 0 && this.countContracts == 0) {
           this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục thành công','',3000);
         } else if (this.countFolders == 0 && this.countContracts > 0) {
-          this.toastService.showSuccessHTMLWithTimeout('Xóa hợp đồng thành công','',3000);
+          this.toastService.showSuccessHTMLWithTimeout('Xóa tài liệu thành công','',3000);
         } else {
-          this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục/hợp đồng thành công','',3000);
+          this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục/tài liệu thành công','',3000);
         }
         this.dialogRef.close('deleted');
 
@@ -53,9 +53,9 @@ export class DeleteFolderComponent implements OnInit {
         if (this.countFolders > 0 && this.countContracts == 0) {
           this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục thất bại','',3000);
         } else if (this.countFolders == 0 && this.countContracts > 0) {
-          this.toastService.showSuccessHTMLWithTimeout('Xóa hợp đồng thất bại','',3000);
+          this.toastService.showSuccessHTMLWithTimeout('Xóa tài liệu thất bại','',3000);
         } else {
-          this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục/hợp đồng thất bại','',3000);
+          this.toastService.showSuccessHTMLWithTimeout('Xóa thư mục/tài liệu thất bại','',3000);
         }
       }
     )

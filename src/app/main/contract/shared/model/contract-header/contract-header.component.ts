@@ -87,20 +87,20 @@ export class ContractHeaderComponent implements OnInit {
       if (this.datas.id) {
         this.contractService.deleteContract(this.datas.id).subscribe((data) => {
           if (data.success) {
-            // this.toastService.showSuccessHTMLWithTimeout("Xóa hợp đồng thành công!", "", 3000);
+            // this.toastService.showSuccessHTMLWithTimeout("Xóa tài liệu thành công!", "", 3000);
             this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
               void this.router.navigate(['/main/dashboard']);
             });
           } else {
             if (data.message == 'E02') {
-              this.toastService.showErrorHTMLWithTimeout("Hợp đồng không phải bản nháp!", "", 3000);
+              this.toastService.showErrorHTMLWithTimeout("Tài liệu không phải bản nháp!", "", 3000);
             } else {
-              this.toastService.showErrorHTMLWithTimeout("Xóa hợp đồng thất bại!", "", 3000);
+              this.toastService.showErrorHTMLWithTimeout("Xóa tài liệu thất bại!", "", 3000);
             }
           }
         },
           error => {
-            this.toastService.showErrorHTMLWithTimeout("Xóa hợp đồng thất bại", "", 3000);
+            this.toastService.showErrorHTMLWithTimeout("Xóa tài liệu thất bại", "", 3000);
           }
         );
       } else {
@@ -202,7 +202,7 @@ export class ContractHeaderComponent implements OnInit {
     switch (step) {
       case variable.stepSampleContract.step1:
         if (!this.datas.file_content) {
-          alert('Vui lòng chọn file hợp đồng!');
+          alert('Vui lòng chọn file tài liệu!');
           return false;
         }
         break;
@@ -211,7 +211,7 @@ export class ContractHeaderComponent implements OnInit {
         break;
       // @ts-ignore
       case variable.stepSampleContract.step3:
-        // valid dữ liệu kéo thả đối tượng bước 3, cần kéo ít nhất 1 đối tượng vào hợp đồng
+        // valid dữ liệu kéo thả đối tượng bước 3, cần kéo ít nhất 1 đối tượng vào tài liệu
         let data_not_drag = this.datas.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
         if (!data_not_drag) {
           alert('Vui lòng chọn ít nhất 1 đối tượng kéo thả!')

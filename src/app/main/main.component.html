@@ -2,8 +2,8 @@
 
   <main class="page-content" [ngStyle]="getStyleWithSideBar()" style="padding-bottom: 25px;">
     <div class="sidebar-header sidebar-header-custom">
-      <a>
-        <img src="assets/img/logoEcontract2.svg" alt="Logo" class="img-responsive" width="150px" height="45px" style="position: absolute; top: 6px; left: 27px;" />
+      <a style="cursor: pointer;">
+        <img src="assets/img/logoEcontract2.svg" (click)="backToDashboard()" alt="Logo" class="img-responsive" width="150px" height="45px" style="position: absolute; top: 6px; left: 27px;" />
       </a>
     </div>
     <app-sidebar *ngIf="getShowHideSideBar() && this.mobile === false" (evenSelectSidebar)="getName($event)"></app-sidebar>
@@ -27,7 +27,36 @@
           </div>
         </div>
       </div>
-      <div *ngIf="getShowHideSideBar()"  style="display: flex;align-items: center;">
+      <div *ngIf="getShowHideSideBar()" style="display: flex;align-items: center;">
+        <div ngbDropdown class="d-inline-block header_language">
+          <div class="social-language" ngbDropdownToggle>
+            <!-- <span class="{{ 'language_icon' | translate }}"></span> -->
+            <div class="label-language">{{ "language" | translate }}</div>
+            <div style="margin-left: 8px;">
+              <img style="width: 20px; height: 20px;" src="../../assets/img/arrow-down.svg"/>
+            </div>
+          </div>
+
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu_language">
+            <button ngbDropdownItem class="drop_language" (click)="switchLang('vi')">
+              <div style="display: block">
+                <!-- <div class="db_user">
+                  <div class="db_icon_vietnam"></div>
+                </div> -->
+                VI
+              </div>
+            </button>
+            <button ngbDropdownItem class="drop_language" (click)="switchLang('en')">
+              <div style="display: block">
+                <!-- <div class="db_user">
+                  <div class="db_icon_english"></div>
+                </div> -->
+                EN
+              </div>
+            </button>
+          </div>
+        </div>
+
         <div *ngIf="!this.mobile" ngbDropdown class="d-inline-block" (click)="viewLink()">
           <div class="social-icons" ngbDropdownToggle>
             <div><img src="../../assets/img/document_bashboard.svg" style="width: 20px;"></div>
@@ -38,7 +67,7 @@
 
           </div> -->
         </div>
-        
+
         <div *ngIf="!this.mobile" ngbDropdown class="d-inline-block">
           <div class="social-icons" ngbDropdownToggle (click)="loadDataNotification()">
             <i *ngIf="numberNotification == 0" class="icon-pi p-mr-4 p-text-secondary"><img src="../../assets/img/bell-filled.svg"></i>
@@ -58,7 +87,7 @@
               <!-- <a href="{{item.notice_url}}" style="text-decoration: none"> -->
               <div class="row">
                   <div *ngIf="this.lang == 'vi'" class="col-md-12 item_contract_name">{{item.notice_name}}</div>
-                  <div *ngIf="this.lang == 'en'" class="col-md-12 item_contract_name">{{item.notice_name.replace("Ký HĐ","Sign contract").replace("Quá hạn","Overdue").replace("Hoàn thành","Completed")}}</div>
+                  <div *ngIf="this.lang == 'en'" class="col-md-12 item_contract_name">{{item.notice_name.replace("Ký tài liệu","Sign contract").replace("Quá hạn","Overdue").replace("Hoàn thành","Completed")}}</div>
               </div>
               <div class="row" *ngFor="let s of item.notice_content.split('<br/>')">
                 <div *ngIf="!s.includes('\nBên B: #PARTICIPANT_2#')" class="col-md-12 item_contract_infor">
@@ -74,18 +103,22 @@
                 </div>
 
                 <div class="col-md-6 item_contract_infor">{{'contract.status' | translate}}:
-                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_coordinator'">{{'contract.lead' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_reject'">{{'contract.status.fail' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_review'">{{'contract.view' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_sign'">{{'contract.sign' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_publish'">{{'contract.document' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_finish'">{{'contract.status.complete' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_cancel'">{{'contract.status.cancel' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='contract_exprire'">{{'contract.status.overdue' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire'">{{'contract.status.expire' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire_createdby'">{{'contract.status.expire' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='contract_exprire_createdby'">{{'contract.status.overdue' | translate}}</span>
-                    <span class="status_blue" *ngIf="item.message_code=='contract_exprire_time'">{{'expire.status' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_coordinator' || item.message_code=='sign_flow_coordinator_config'">{{'contract.lead' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_reject' || item.message_code=='sign_flow_reject_config'">{{'contract.status.fail' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_review' || item.message_code=='sign_flow_review_config'">{{'contract.view' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_sign' || item.message_code=='sign_flow_sign_config'">{{'contract.sign' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_publish' || item.message_code=='sign_flow_publish_config'">{{'contract.document' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_finish' || item.message_code=='sign_flow_finish_config'">{{'contract.status.complete' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_cancel' || item.message_code=='sign_flow_cancel_config'">{{'contract.status.cancel' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='contract_exprire' || item.message_code=='contract_exprire_config'">{{'contract.status.overdue' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire' || item.message_code=='contract_about_exprire_config'">{{'contract.status.expire' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire_createdby' || item.message_code=='contract_about_exprire_createdby_config'">{{'contract.status.expire' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='contract_exprire_createdby' || item.message_code=='contract_exprire_createdby_config'">{{'contract.status.overdue' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='contract_exprire_time' || item.message_code=='contract_exprire_time_config'">{{'expire.status' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='contract_share_notice' || item.message_code=='contract_share_notice_config'">{{'contract.share.notice' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='contract_transfer' || item.message_code=='contract_transfer_config'">{{'contract.transfer.config' | translate}}</span>
+                  <span class="status_blue" *ngIf="item.message_code=='contract_share_template' || item.message_code=='contract_share_template_config'">{{'contract.share.template.config' | translate}}</span>
+
                 </div>
               </div>
               <!-- </a> -->
@@ -99,7 +132,7 @@
           <div class="social-icons" ngbDropdownToggle>
             <span class="user_login"></span>
             <div style="display: flex; flex-direction: column;">
-              <div class="label" style="color: #001A4D;">Ông/ Bà {{nameCurrentUser}}</div>
+              <div class="label" style="color: #001A4D;">{{nameCurrentUser}}</div>
               <div class="label" style="color: #A8B5CE;">{{phoneCurrentUser}}</div>
             </div>
             <div style="margin-left: 16px;">
@@ -135,12 +168,12 @@
                   <div class="db_password"></div>
                 </div>
                 <div>
-                  <a href="https://auth-sso.mobifone.vn/vn/profile-information" 
+                  <a href="https://auth-sso.mobifone.vn/vn/profile-information"
                   >{{'login.reset_password_new' | translate }}</a>
                 </div>
               </div>
             </button> -->
-            
+
             <!-- <button ngbDropdownItem class="drop" (click)="viewLink()">
               <a style="color: inherit; text-decoration: none;" href="https://drive.google.com/drive/folders/1NHaCYOMCMsLvrw1uPbX2ezsC-Uo9huW3">
               <div style="display: flex; align-items: center;">
@@ -160,7 +193,7 @@
                 <div>{{'document.plugin.pki' | translate }}</div></div>
               </a>
             </button>
-            
+
             <button ngbDropdownItem class="drop_red" routerLink="/login" (click)="logout()">
               <div style="display: flex; align-items: center;">
                 <div class="db_user">
@@ -171,7 +204,7 @@
             </button>
           </div>
         </div>
-        
+
 
       </div>
     </header>

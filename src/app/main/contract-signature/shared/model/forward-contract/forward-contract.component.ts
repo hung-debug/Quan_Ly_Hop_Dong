@@ -281,7 +281,7 @@ export class ForwardContractComponent implements OnInit {
     if (!isInRecipient) {
       
       this.toastService.showErrorHTMLWithTimeout(
-        'Bạn không có quyền xử lý hợp đồng này do tên không trùng khớp!',
+        'Bạn không có quyền xử lý tài liệu này do tên không trùng khớp!',
         '',
         3000
       );
@@ -314,7 +314,7 @@ export class ForwardContractComponent implements OnInit {
       if (!ArrRecipientsNew) {
 
         this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
+          'Bạn không có quyền xử lý tài liệu này!',
           '',
           3000
         );
@@ -333,11 +333,11 @@ export class ForwardContractComponent implements OnInit {
       
       if (!String(this.myForm.value.name)) {
         // this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền'
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập tên người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập tên người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp/ủy quyền' : 'ủy quyền/chuyển tiếp'), '', 3000);
         return;
       }
       if (this.login == 'email' && !String(this.myForm.value.email)) {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp/ủy quyền' : 'ủy quyền/chuyển tiếp'), '', 3000);
         return;
       } else if (this.login == 'email' && !String(this.myForm.value.email).toLowerCase().match(
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -347,19 +347,19 @@ export class ForwardContractComponent implements OnInit {
       }
 
       if(this.login == 'phone' && !String(this.myForm.value.phone)) {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập SĐT người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập SĐT người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp/ủy quyền' : 'ủy quyền/chuyển tiếp'), '', 3000);
         return;
       }
 
       if (this.isReqPhone && !String(this.myForm.value.phone)) {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập số điện thoại người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập số điện thoại người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp/ủy quyền' : 'ủy quyền/chuyển tiếp'), '', 3000);
         return;
       } else if (this.myForm.value.phone && !String(this.myForm.value.phone).toLowerCase().match(parttern.phone)) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng số điện thoại', '', 3000);
         return;
       }
       if (this.isReqCardId && !String(this.myForm.value.card_id)) {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập CMT/CCCD người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập CMT/CCCD người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp/ủy quyền' : 'ủy quyền/chuyển tiếp'), '', 3000);
         return;
       } else if (this.isReqCardId && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id9) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id12)) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng CMT/CCCD', '', 3000);
@@ -367,7 +367,7 @@ export class ForwardContractComponent implements OnInit {
       }
       //Mã số thuế hsm
       else if (this.isReqCardIdHsm && !String(this.myForm.value.card_id)) {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập mã số thuế người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập mã số thuế người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp/ủy quyền' : 'ủy quyền/chuyển tiếp'), '', 3000);
         return;
       } else if (this.isReqCardIdHsm && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.cardid)) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng mã số thuế', '', 3000);
@@ -375,14 +375,14 @@ export class ForwardContractComponent implements OnInit {
       }
       //Thông tin trong usb token
       else if (this.isReqCardIdToken && !String(this.myForm.value.card_id)) {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập thông tin trong usb token của người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập thông tin trong usb token của người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp/ủy quyền' : 'ủy quyền/chuyển tiếp'), '', 3000);
         return;
       } else if (this.isReqCardIdToken && this.myForm.value.card_id && (!String(this.myForm.value.card_id).toLowerCase().match(parttern_input.taxCode_form) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id9)) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id12)) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng MST/CMT/CCCD', '', 3000);
         return;
       }
       else if (this.isReqCardIdCts && !String(this.myForm.value.card_id)) {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập MST/CMT/CCCD người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập MST/CMT/CCCD người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp/ủy quyền' : 'ủy quyền/chuyển tiếp'), '', 3000);
         return;
       } else if (this.isReqCardIdCts && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.cardid)) {
         this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng MST/CMT/CCCD', '', 3000);
@@ -396,11 +396,11 @@ export class ForwardContractComponent implements OnInit {
       }
 
       if (!this.checkCanSwitchContract()) {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email ngoài luồng hợp đồng', '', 3000);
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email ngoài luồng tài liệu', '', 3000);
         return;
       }
       if (this.myForm.value.phone && !this.checkCanSwitchContractPhone()) {
-        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập số điện thoại ngoài luồng hợp đồng', '', 3000);
+        this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập số điện thoại ngoài luồng tài liệu', '', 3000);
         return;
       }
 
@@ -461,7 +461,7 @@ export class ForwardContractComponent implements OnInit {
                   this.toastService.showWarningHTMLWithTimeout('taxcode.out', '', 3000);
                 }
               } else {
-                this.toastService.showSuccessHTMLWithTimeout((this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền') + ' thành công!'
+                this.toastService.showSuccessHTMLWithTimeout((this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp/Ủy quyền' : 'Ủy quyền/Chuyển tiếp') + ' thành công!'
                   , "", 3000);
                 this.dialogRef.close();
                 this.spinner.hide();

@@ -37,10 +37,10 @@ export class ContractTypeComponent implements OnInit {
   idOrg: any;
 
   //phan quyen
-  isQLLHD_01:boolean=true;  //them moi loai hop dong
+  isQLLHD_01:boolean=false;  //them moi loai hop dong
   isQLLHD_02:boolean=true;  //sua loai hop dong
   isQLLHD_03:boolean=true;  //xoa loai hop dong
-  isQLLHD_04:boolean=true;  //tim kiem loai hop dong
+  isQLLHD_04:boolean=false;  //tim kiem loai hop dong
   isQLLHD_05:boolean=true;  //xem thong tin chi tiet loai hop dong
   
   ceca: boolean = false;

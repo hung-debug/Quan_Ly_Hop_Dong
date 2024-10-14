@@ -46,7 +46,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   maxDate: Date = moment().toDate();
 
   orgIdOld:any;
-
+  is_show_phone_pki: boolean = true;
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
   isQLND_02:boolean=true;  //sua nguoi dung
@@ -66,12 +66,12 @@ export class AddUserComponent implements OnInit, OnDestroy {
       name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
       email: this.fbd.control("", [Validators.required, Validators.email]),
       birthday: null,
-      phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+      phone: this.fbd.control("", [Validators.required, Validators.pattern("^[+]*[0-9]{10,11}$")]),
       organizationId: this.fbd.control("", [Validators.required]),
       role: this.fbd.control("", [Validators.required]),
       status: 1,
-
-      phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
+      is_show_phone_pki: true,
+      phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
       networkKpi: null,
 
       nameHsm: this.fbd.control("", Validators.pattern(parttern_input.new_input_form)),
@@ -117,12 +117,12 @@ export class AddUserComponent implements OnInit, OnDestroy {
             name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
             email: this.fbd.control("", [Validators.required, Validators.email]),
             birthday: null,
-            phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+            phone: this.fbd.control("", [Validators.required, Validators.pattern("^[+]*[0-9]{10,11}$")]),
             organizationId: this.fbd.control(orgId, [Validators.required]),
             role: this.fbd.control("", [Validators.required]),
             status: 1,
-
-            phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
+            is_show_phone_pki: true,
+            phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
             networkKpi: null,
 
             nameHsm: this.fbd.control("", Validators.pattern(parttern_input.new_input_form)),
@@ -157,7 +157,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
                     organizationId: this.fbd.control(data.organization_id, [Validators.required]),
                     role: this.fbd.control(Number(data.role_id), [Validators.required]),
                     status: data.status,
-
+                    is_show_phone_pki: data.is_show_phone_pki,
                     phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
                     networkKpi: data.phone_tel,
 
@@ -280,12 +280,12 @@ export class AddUserComponent implements OnInit, OnDestroy {
           if(dataCheckContract.success){
             this.update(data);
           }else{
-            this.toastService.showErrorHTMLWithTimeout('Không thể chuyển đơn vị cho người dùng tồn tại hợp đồng chưa xử lý', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Không thể chuyển đơn vị cho người dùng tồn tại tài liệu chưa xử lý', "", 3000);
             this.spinner.hide();
           }
       
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Kiểm tra hợp đồng theo người dùng thất bại', "", 3000);
+          this.toastService.showErrorHTMLWithTimeout('Kiểm tra tài liệu theo người dùng thất bại', "", 3000);
           this.spinner.hide();
         }
       )
@@ -378,12 +378,13 @@ export class AddUserComponent implements OnInit, OnDestroy {
     const data = {
       id: "",
       name: this.addForm.value.name,
-      email: this.addForm.value.email.toLowerCase(),
+      email: this.addForm.value.email.trim().toLowerCase(),
       birthday: this.addForm.value.birthday,
-      phone: this.addForm.value.phone,
+      phone: this.addForm.value.phone.trim(),
       organizationId: this.addForm.value.organizationId,
       role: this.addForm.value.role,
       status: this.addForm.value.status,
+      is_show_phone_pki: this.addForm.value.is_show_phone_pki,
       phoneKpi: this.addForm.value.phoneKpi,
       networkKpi: this.addForm.value.networkKpi,
       nameHsm: this.addForm.value.nameHsm,
@@ -548,7 +549,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
             else if(code == 'mark')
               this.attachFileMark = file;
           }else{
-            this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng JPG, PNG, JPGE", "", 3000);
+            this.toastService.showErrorHTMLWithTimeout("File tài liệu yêu cầu định dạng JPG, PNG, JPGE", "", 3000);
           }
 
         } else {

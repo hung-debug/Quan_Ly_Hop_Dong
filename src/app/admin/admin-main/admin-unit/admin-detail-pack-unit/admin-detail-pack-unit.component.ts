@@ -37,7 +37,7 @@ export class AdminDetailPackUnitComponent implements OnInit {
           if(this.datas.calculatorMethod == 'BY_TIME') {
             this.datas.calculatorMethod = 'Theo thời gian';
           } else if(this.datas.calcaulatorMethod == 'BY_CONTRACT_NUMBER') {
-            this.datas.calculatorMethod = 'Theo số lượng hợp đồng';
+            this.datas.calculatorMethod = 'Theo số lượng tài liệu';
           }
 
           if(this.datas.paymentType == 'PRE') {
@@ -76,7 +76,7 @@ export class AdminDetailPackUnitComponent implements OnInit {
 
   getCalculatorMethod() {
     if(this.datas?.calculatorMethod == 'BY_CONTRACT_NUMBERS') {
-      this.datas.calculatorMethod = 'Theo số lượng hợp đồng';
+      this.datas.calculatorMethod = 'Theo số lượng tài liệu';
     } else if(this.datas?.calculatorMethod == 'BY_TIME') {
       this.datas.calculatorMethod = 'Theo thời gian';
     }

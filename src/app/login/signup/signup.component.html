@@ -23,7 +23,7 @@
                                         <span class="required-title">*</span>
                                     </div>
                                     <div class="input-line">
-                                        <input type="text" placeholder="{{ 'Nhập tên tổ chức' | translate }}" formControlName="name" class="input-text" />
+                                        <input type="text" placeholder="{{ 'enter.name.org' | translate }}" formControlName="name" class="input-text" />
                                     </div>
                                     <div *ngIf="submitted && f.name.errors" class="invalid">
                                         <div *ngIf="f.name.errors.required">
@@ -60,7 +60,7 @@
                                         <span class="required-title">*</span>
                                     </div>
                                     <div class="input-line">
-                                        <input type="text" placeholder="{{ 'Nhập mã tổ chức' | translate }}" formControlName="code" class="input-text" />
+                                        <input type="text" placeholder="{{ 'enter.code.org' | translate }}" formControlName="code" class="input-text" />
                                     </div>
                                     <div *ngIf="submitted && f.code.errors" class="invalid">
                                         <div *ngIf="f.code.errors.pattern">
@@ -180,10 +180,10 @@
                                     </div>
                                 </div>
 
-                                <!--Đẩy file hợp đồng lên Bộ công thương-->
+                                <!--Đẩy file tài liệu lên Bộ công thương-->
                                 <!-- <div class="col-md-6">
                   <div class="label text-color">
-                    {{ "Đẩy file hợp đồng lên Bộ công thương" | translate }}
+                    {{ "Đẩy file tài liệu lên Bộ công thương" | translate }}
                     <span class="required-title">*</span>
                   </div>
                   <div class="label text-color">

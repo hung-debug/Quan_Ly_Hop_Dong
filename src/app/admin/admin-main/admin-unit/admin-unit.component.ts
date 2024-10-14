@@ -147,7 +147,7 @@ export class AdminUnitComponent implements OnInit {
       { field: 'phone', header: 'Số điện thoại', style: 'text-align: left;' },
       { field: 'active', header: 'Kích hoạt', style: 'text-align: left;' },
       { field: 'email', header: 'Email đăng ký', style: 'text-align: left;' },
-      // {field: 'ceCAPushMode', header: 'Đẩy file hợp đồng lên Bộ công thương', style: 'text-align: left;' }
+      // {field: 'ceCAPushMode', header: 'Đẩy file tài liệu lên Bộ công thương', style: 'text-align: left;' }
     ];
 
     if (!(this.editUnitRole === false && this.deleteUnitRole === false)) {

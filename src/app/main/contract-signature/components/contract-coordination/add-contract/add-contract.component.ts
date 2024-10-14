@@ -49,13 +49,13 @@ export class AddContractComponent implements OnInit {
 
       //set title
       if(this.action == 'add'){
-        this.appService.setTitle('THÊM MỚI HỢP ĐỒNG');
+        this.appService.setTitle('THÊM MỚI TÀI LIỆU');
       }else if(this.action == 'edit'){
         this.id = params['id'];
-        this.appService.setTitle('SỬA HỢP ĐỒNG');
+        this.appService.setTitle('SỬA TÀI LIỆU');
       }else if(this.action == 'copy'){
         this.id = params['id'];
-        this.appService.setTitle('SAO CHÉP HỢP ĐỒNG');
+        this.appService.setTitle('SAO CHÉP TÀI LIỆU');
       }
     });
   }

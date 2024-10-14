@@ -23,7 +23,8 @@ export class DetailUnitComponent implements OnInit {
   status: any = "";
   parent_id: any = "";
   id: any = "";
-
+  datas: any;
+  endLicense: any;
   numContractUse: number = 0;
   numContractCreate: number = 0;
   numContractBuy: number = 0;
@@ -67,19 +68,20 @@ export class DetailUnitComponent implements OnInit {
 
   async getData() {
     await this.unitService.getUnitById(this.data.id).toPromise().then(
-      data => {
+      data => {      
         
         this.name = data.name,
-          this.short_name = data.short_name,
-          this.code = data.code,
-          this.email = data.email,
-          this.phone = data.phone,
-          this.fax = data.fax,
-          this.status = data.status,
-          this.parent_id = data.parent_id,
-          this.taxCode = data.tax_code,
-          this.cEcAPushMode = this.convert(data.ceca_push_mode),
-          this.id = data.id
+        this.short_name = data.short_name,
+        this.code = data.code,
+        this.email = data.email,
+        this.phone = data.phone,
+        this.fax = data.fax,
+        this.status = data.status,
+        this.parent_id = data.parent_id,
+        this.taxCode = data.tax_code,
+        this.cEcAPushMode = this.convert(data.ceca_push_mode),
+        this.id = data.id
+        this.endLicense = data.endLicense
 
         if (data.parent_id != null) {
           this.unitService.getUnitById(data.parent_id).subscribe(
@@ -100,7 +102,7 @@ export class DetailUnitComponent implements OnInit {
             this.eKYCContractUse = data.ekyc;
             this.smsContractUse = data.sms;
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng tài liệu đã dùng', "", 3000);
           }
         )
 
@@ -111,7 +113,7 @@ export class DetailUnitComponent implements OnInit {
             this.eKYCContractBuy = data.ekyc;
             this.smsContractBuy = data.sms;
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng tài liệu đã mua', "", 3000);
           }
         )
         
@@ -124,7 +126,7 @@ export class DetailUnitComponent implements OnInit {
             this.numCecaBuy = data.totalCecaPurchased;
             this.numCecaUse = (this.numCecaBuy) - (data.numberOfCeca)
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng tài liệu đã mua', "", 3000);
           }
         )
       }, error => {
@@ -135,18 +137,18 @@ export class DetailUnitComponent implements OnInit {
     //   data => {
     //     this.numContractCreate = data.total;
     //   }, error => {
-    //     this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã tạo', "", 3000);
+    //     this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng tài liệu đã tạo', "", 3000);
     //   }
     // )
 
   }
   convert(ceca_push_mode: any): any {
     if (ceca_push_mode == 'ALL') {
-      return "Đẩy toàn bộ hợp đồng"
+      return "Đẩy toàn bộ tài liệu"
     } else if (ceca_push_mode == 'SELECTION') {
       return "Tuỳ biến";
     } else {
-      return "Không đẩy HĐ nào";
+      return "Không đẩy tài liệu nào";
     }
   }
 

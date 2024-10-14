@@ -1,14 +1,15 @@
 <!-- <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row" style="padding: 10px; ">
     <ng-template #options let-item>
-        <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
+        <span class="button-classify">{{item.label | translate}}</span>
     </ng-template>
 </p-selectButton> -->
 
 <!--Truong hop dang xu ly va sap het han-->
+<!-- <div #mydiv *ngIf="(this.filter_status == 20 || this.filter_status == 33) && this.isOrg == 'off'" class="col-md-4" class="container-fluid"> -->
 <div #mydiv *ngIf="(this.filter_status == 20 || this.filter_status == 33) && this.isOrg == 'off'" class="col-md-4" class="container-fluid">
   <div class="row container-fluid-bg">
     <div class="margin-top-16">
-      <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row">
+      <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (ngModelChange)="changeTab()" class="row">
         <ng-template #options let-item>
             <span class="button-classify">{{ item.label | translate}}</span>
         </ng-template>
@@ -16,22 +17,26 @@
     </div>
     <ng-template [ngIf]="!roleMess">
       <div class="row cancel-padding" style="margin: 16px auto;">
-        <div class="col-lg-9-8 btn-padding-right">
-            <div class="input-line search">
+        <div [ngClass]="{'col-lg-8-7': this.isOrg == 'off' && this.idCheckBox.length > 0, 'col-lg-10-9': !(this.isOrg == 'off' && this.idCheckBox.length > 0)}" class="col-lg-8-7 btn-padding-right">
+            <div class="input-group search">
                 <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
-                <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                <input type="text" id="filter_name" [value]="filter_name" class="input_text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                 <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
             </div>
 
         </div>
-        <div class="col-lg-1-1 col-md-6 btn_search btn-padding-right btn-padding-left" >
+        <div [ngClass]="{'btn-padding-right': this.isOrg == 'off' && this.idCheckBox.length > 0, 'col-md-4': this.isOrg == 'off' && this.idCheckBox.length > 0}" class="col-lg-1-1 btn_search btn-padding-left">
           <button class="btn-block btn_advanced" (click)="searchContract()" >
             {{'btn.advance' | translate}}
             <img src="../../assets/img/vector_advance.svg" class="input-img" />
           </button>
         </div>
-        <div class="col-lg-1-1 col-md-6 btn_search btn-padding-left">
-          <button (click)="cancelMany()" class="btn-block btn_cancel">{{'cancel.multi'| translate}}</button>
+        <div class="col-lg-1-1 col-md-4 btn_search btn-padding-right btn-padding-left" *ngIf="this.isOrg == 'off' && this.idCheckBox.length > 0">
+          <button (click)="cancelMany()" class="btn-block btn_consider">{{"cancel.multi"| translate}}</button>
+        </div>
+
+        <div class="col-lg-1-1 col-md-4 btn_search btn-padding-left" *ngIf="this.isOrg == 'off' && this.idCheckBox.length > 0">
+          <button (click)="openEditExpiration('')" class="btn-block btn_cancel">{{"many.extensions"| translate}}</button>
         </div>
       </div>
 
@@ -40,7 +45,13 @@
           <!-- <div class="col-sm-0-5 bg-header" style="text-align: left;"> -->
             <!-- <input type="checkbox" style="width: 20px; height: 20px;"> -->
           <!-- </div> -->
-          <div class="col-sm-5 bg-header">{{'contract.process' | translate}}
+          <div class="col-sm-5 bg-header">
+            <div class="col-sm-1" style="text-align: justify;">
+              <input type="checkbox" style="width: 16px; height: 16px;" id="allDeleteDraft" name="allDeleteDraft" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDeleteDraftAll(checkedAll)">
+            </div>
+            <div class="col-sm-11">
+              {{'contract.process' | translate}}
+            </div>
           </div>
           <div class="col-sm-2 bg-header">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
@@ -73,12 +84,12 @@
               <div class="col-sm-5">
                   <div class="flex-container">
                       <div>
-                        <input class="input-checkbox col-md-1" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked"/>
+                        <input class="input-checkbox col-md-1" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" (change)="onCheckboxChange(item)"/>
                       </div>
 
                       <div class="col-md-11" style="display: flex;margin-left: 12px;cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                         <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
-                        <div style="margin-left: 12px;">
+                        <div style="margin-left: 12px;" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                           <div class="item_contract_name">
                               <a class="item_contract_name" style="text-decoration: none;" (click)="isQLHD_07?openDetail(item.id):null" [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                           'page': this.p,
@@ -97,9 +108,9 @@
                               </div>
                           </div>
                         </div>
-                          <!-- <div class="row">
-                              <div class="item_contract_infor">{{'contract.status' | translate}}:
-                                  <span class="status_blue">{{this.filter_status | pipe | translate}}
+                          <!-- <div class="row" *ngIf="item.ceca_push == 1">
+                              <div class="item_contract_infor">{{'contract.status.ceca' | translate}}:
+                                  <span class="status_blue_ceca">{{this.filter_status | pipe | translate}}
                                       {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
                                       translate}}</span>
                               </div>
@@ -109,7 +120,7 @@
                   </div>
               </div>
 
-              <!--Cột 3: Trạng thái HĐ-->
+              <!--Cột 3: Trạng thái Tài liệu-->
               <div class="col-sm-2 calendar_create">
                 <div class="item_contract_status">
                   <!-- <span class="status_blue">{{this.filter_status | pipe | translate}}
@@ -119,7 +130,7 @@
                 </div>
               </div>
 
-              <!--Cột 4: Ngày tạo HĐ-->
+              <!--Cột 4: Ngày tạo Tài liệu-->
               <!-- <div class="col-md-2 calendar_deadline">
                   <div style="display: flex; justify-content: center;">
                       <div class="div_icon"><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date:
@@ -135,7 +146,7 @@
 
               <!--Cột 5: Ngày cập nhật-->
               <div class="col-sm-2 calendar_create">
-                <!-- để tạm ngày tạo HĐ -->
+                <!-- để tạm ngày tạo Tài liệu -->
                 <div><i class="fa fa_icon"></i><span class="item_date">{{item.sign_time | date:
                   'dd/MM/yyyy'}}</span>
                 </div>
@@ -161,7 +172,7 @@
                       <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon"/></mat-icon>
                       <span class="three_dot_text">{{'view.processing.flow' | translate}}</span>
                     </button>
-                    <button mat-menu-item class="div_icon" (click)="openEditExpiration(item)" *ngIf="this.isOrg == 'off' && (status == 'processing' || status == 'expire' || status == 'overdue')">
+                    <button mat-menu-item class="div_icon" (click)="openEditExpiration(item)" *ngIf="(status == 'processing' || status == 'expire' || status == 'overdue')">
                       <mat-icon><img src="../../assets/img/timer-start.svg" class="img_icon"/></mat-icon>
                       <span class="three_dot_text">{{'edit.sign.time' | translate}}</span>
                     </button>
@@ -212,7 +223,7 @@
       </div>
       <div *ngIf="pageTotal == 0" style="min-height: 65vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
           <div style="display: table-cell;vertical-align: middle;">
-              <img src="../../../assets/img/empty_data.svg" />
+              <img src="../../../assets/img/no_data.svg" />
               <div style="color: #94A7C6">{{'no.data' | translate}}</div>
           </div>
       </div>
@@ -220,7 +231,7 @@
   </div>
     <div class="contract_footer">
       <div class="footer_contract_per_page">
-          <div>Số lượng hiển thị&nbsp;</div>
+          <div>{{'num.display' | translate}}&nbsp;</div>
           <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
               <option value="" hidden>{{this.page}}</option>
               <option *ngFor="let d of this.pageOptions">{{d}}</option>
@@ -233,16 +244,16 @@
         <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
         <div class="enterPage" *ngIf="pageTotal > 0">
             <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-            <p>của {{countPage()}} trang</p>
+            <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
         </div>
     </div>
       <!-- <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}} -->
-      <div class="footer_page_number">Hiển thị <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> kết quả
+      <div class="footer_page_number">{{'display' | translate}} <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> {{'results' | translate}}
       </div>
     </div>
     <div class="contract_footer_responsive">
       <div class="contract_footer_per_page_responsive">
-          <div>Số lượng hiển thị&nbsp;</div>
+          <div>{{'num.display' | translate}}&nbsp;</div>
           <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
             <option value="" hidden>10</option>
             <option *ngFor="let d of this.pageOptions">{{d}}</option>
@@ -253,17 +264,17 @@
       <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
       <div class="enterPage" *ngIf="pageTotal > 0">
           <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-          <p>của {{countPage()}} trang</p>
+          <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
       </div>
     </div>
-      <div class="footer_page_number">Hiển thị <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> kết quả
+      <div class="footer_page_number">{{'display' | translate}} <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> {{'results' | translate}}
     </div>
   </div>
   <div class="contract_footer_pagination_responsive">
     <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
     <div class="enterPage" *ngIf="pageTotal > 0">
         <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-        <p>của {{countPage()}} trang</p>
+        <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
     </div>
   </div>
     <div>{{roleMess | translate}}</div>
@@ -277,7 +288,7 @@
                this.typeDisplay =='release') && this.isOrg == 'off') && status != 'complete'" class="container-fluid">
   <div class="row container-fluid-bg">
     <div class="margin-top-16">
-      <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row">
+      <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (ngModelChange)="changeTab()" class="row">
         <ng-template #options let-item>
             <span class="button-classify">{{item.label | translate}}</span>
         </ng-template>
@@ -285,15 +296,15 @@
     </div>
     <ng-template [ngIf]="!roleMess">
       <div class="row cancel-padding" style="margin: 16px auto;">
-        <div [ngClass]="{'col-lg-10-9': !(status === 'draft' && isOrg === 'off'), 'col-lg-8-7': status === 'draft' && isOrg === 'off', 'btn-padding-right': true}">
-            <div class="input-line search">
+        <div [ngClass]="{'col-lg-9-8': (this.filter_status == 34 && this.isOrg == 'off' && this.idCheckBox.length > 0), 'col-lg-10-9': !(status === 'draft' && isOrg === 'off'), 'col-lg-8-7': status === 'draft' && isOrg === 'off', 'btn-padding-right': true}">
+            <div class="input-group search">
                 <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
-                <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                <input type="text" id="filter_name" [value]="filter_name" class="input_text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                 <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
             </div>
         </div>
 
-        <div [ngClass]="{'btn-padding-right': status === 'draft' && isOrg === 'off', 'col-lg-1-1': true, 'col-md-4': status === 'draft' && isOrg === 'off', 'btn_search': true, 'btn-padding-left': true}">
+        <div [ngClass]="{'btn-padding-right': ((status === 'draft' && isOrg === 'off') || (this.filter_status == 34 && this.isOrg == 'off' && this.idCheckBox.length > 0)), 'col-lg-1-1': true, 'col-md-4': status === 'draft' && isOrg === 'off', 'btn_search': true, 'btn-padding-left': true}">
           <button class="btn-block btn_advanced" (click)="searchContract()" >
             {{'btn.advance' | translate}}
             <img src="../../assets/img/vector_advance.svg" class="input-img" />
@@ -311,13 +322,24 @@
             {{'btn.multi.delete'|translate}}
           </button>
         </div>
+
+        <div class="col-lg-1-1 btn_search btn-padding-left" *ngIf="this.filter_status == 34 && this.isOrg == 'off' && this.idCheckBox.length > 0">
+          <button (click)="openEditExpiration('')" class="btn-block btn_consider">{{"many.extensions"| translate}}</button>
+        </div>
       </div>
 
         <div class="row list_header" *ngIf="pageTotal > 0;">
             <!-- <div class="col-xxl-1 col-md-1" style="text-align: left;"> -->
               <!-- <input type="checkbox" style="width: 20px; height: 20px;"> -->
             <!-- </div> -->
-            <div class="col-sm-5 bg-header">{{'contract.process' | translate}}</div>
+            <div class="col-sm-5 bg-header">
+              <div *ngIf = "this.filter_status == 34 &&  this.isOrg == 'off'" class="col-sm-1" style="text-align: justify;">
+                <input type="checkbox" style="width: 16px; height: 16px;" id="allDeleteDraft" name="allDeleteDraft" type="checkbox" [(ngModel)]="checkedAll" (click)="toggleDeleteDraftAll(checkedAll)">
+              </div>
+              <div class="col-sm-11">
+                {{'contract.process' | translate}}
+              </div>
+            </div>
             <!-- <div class="col-md-1" *ngIf="this.filter_status == 30 || this.filter_status == 40">{{'status.ceca' | translate}}
               <img src="../../assets/img/sort.svg"/>
             </div> -->
@@ -358,10 +380,14 @@
                 </div> -->
                 <!--Cột 2-->
                 <div class="col-sm-5">
-                    <div class="row">
+                    <div class="flex-container">
+                      <div *ngIf = "this.filter_status == 34 &&  this.isOrg == 'off'">
+                        <input class="input-checkbox col-md-1" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" (change)="onCheckboxChange(item)"/>
+                      </div>
+
                       <div class="col-md-11" style="display: flex;margin-left: 6px; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
-                          <div style="margin-left: 12px;">
+                          <div style="margin-left: 12px;" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                             <div class="item_contract_name">
                                 <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                         'page': this.p,
@@ -397,7 +423,7 @@
                     </div>
                 </div>
 
-                <!--Cột 3: Trạng thái HĐ-->
+                <!--Cột 3: Trạng thái Tài liệu-->
                 <div class="col-sm-2 calendar_create">
                   <div class="item_contract_status">
                     <span class="status_blue" [ngStyle]="{'color': this.color, 'background-color': this.backgroundColor}">{{this.filter_status | pipe | translate}}</span>
@@ -412,7 +438,7 @@
 
                 <!--Cột 5: Ngày cập nhật-->
                 <div class="col-sm-2 calendar_create">
-                  <!-- để tạm ngày tạo HĐ -->
+                  <!-- để tạm ngày tạo Tài liệu -->
                   <div><i class="fa fa_icon"></i>
                     <span *ngIf = "this.filter_status == 20 || this.filter_status == 33" class="item_date">
                       {{item.sign_time | date:'dd/MM/yyyy HH:mm:ss'}}
@@ -427,7 +453,7 @@
                       {{item.cancelDate | date:'dd/MM/yyyy HH:mm:ss'}}
                     </span>
                     <span *ngIf = "this.filter_status == 40" class="item_date">
-                      {{item.sign_time | date:'dd/MM/yyyy'}}
+                      {{item.success_time | date:'dd/MM/yyyy HH:mm:ss'}}
                     </span>
                     <span *ngIf = "this.filter_status != 20 && this.filter_status != 33 && this.filter_status != 34 && this.filter_status != 31 && this.filter_status != 32 && this.filter_status != 40" class="item_date">
                       {{item.updated_at | date:'dd/MM/yyyy HH:mm:ss'}}
@@ -451,6 +477,14 @@
                       <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
+                      <button mat-menu-item class="div_icon" *ngIf="status == 'draft' && isQLHD_02 && this.isOrg == 'off'" (click)="openEdit(item.id)">
+                        <mat-icon><img src="../../assets/img/edit.svg" class="img_icon"/></mat-icon>
+                        <span class="three_dot_text">{{'contract.edit' | translate}}</span>
+                      </button>
+                      <button mat-menu-item class="div_icon" (click)="processHandleContract(item.id)">
+                        <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon"/></mat-icon>
+                        <span class="three_dot_text">{{'view.processing.flow' | translate}}</span>
+                      </button>
                       <button mat-menu-item  class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue' || status == 'complete') && isQLHD_08 && this.isOrg == 'off'" (click)="openCopy(item.id)">
                         <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.copy' | translate}}</span>
@@ -459,11 +493,7 @@
                         <mat-icon><img src="../../assets/img/document-text.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.connect.view' | translate}}</span>
                       </button>
-                      <button mat-menu-item class="div_icon" (click)="processHandleContract(item.id)">
-                        <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon"/></mat-icon>
-                        <span class="three_dot_text">{{'view.processing.flow' | translate}}</span>
-                      </button>
-                      <button mat-menu-item class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'overdue') && this.isOrg == 'off'" (click)="openEditExpiration(item)">
+                      <button mat-menu-item class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'overdue')" (click)="openEditExpiration(item)">
                         <mat-icon><img src="../../assets/img/timer-start.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'edit.sign.time' | translate}}</span>
                       </button>
@@ -474,10 +504,6 @@
                       <button mat-menu-item class="div_icon" *ngIf="status == 'cancel' && this.isOrg == 'off'" (click)="ViewReasonCancel(item.id)">
                         <mat-icon><img src="../../assets/img/cancel_notes.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'reasson.cancel.contract' | translate}}</span>
-                      </button>
-                      <button mat-menu-item class="div_icon" *ngIf="status == 'draft' && isQLHD_02 && this.isOrg == 'off'" (click)="openEdit(item.id)">
-                        <mat-icon><img src="../../assets/img/edit.svg" class="img_icon"/></mat-icon>
-                        <span class="three_dot_text">{{'contract.edit' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" *ngIf="status == 'draft' && this.isOrg == 'off'" (click)="deleteContract(item.id)">
                         <mat-icon><img src="../../assets/img/trash_contract.svg" class="img_icon"/></mat-icon>
@@ -523,7 +549,7 @@
 
         <div *ngIf="pageTotal == 0" style="min-height: 65vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
             <div style="display: table-cell;vertical-align: middle;">
-                <img src="../../../assets/img/empty_data.svg" />
+                <img src="../../../assets/img/no_data.svg" />
                 <div style="color: #94A7C6">{{'no.data' | translate}}</div>
             </div>
         </div>
@@ -532,7 +558,7 @@
     </div>
     <div class="contract_footer">
       <div class="footer_contract_per_page">
-          <div>Số lượng hiển thị&nbsp;</div>
+          <div>{{'num.display' | translate}}&nbsp;</div>
           <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
               <option value="" hidden>10</option>
               <option *ngFor="let d of this.pageOptions">{{d}}</option>
@@ -544,16 +570,16 @@
         <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
         <div class="enterPage" *ngIf="pageTotal > 0">
             <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-            <p>của {{countPage()}} trang</p>
+            <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
         </div>
       </div>
       <!-- <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}} -->
-        <div class="footer_page_number">Hiển thị <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> kết quả
+        <div class="footer_page_number">{{'display' | translate}} <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> {{'results' | translate}}
       </div>
     </div>
     <div class="contract_footer_responsive">
         <div class="contract_footer_per_page_responsive">
-            <div>Số lượng hiển thị&nbsp;</div>
+            <div>{{'num.display' | translate}}&nbsp;</div>
             <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
               <option value="" hidden>10</option>
               <option *ngFor="let d of this.pageOptions">{{d}}</option>
@@ -564,23 +590,23 @@
         <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
         <div class="enterPage" *ngIf="pageTotal > 0">
             <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-            <p>của {{countPage()}} trang</p>
+            <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
         </div>
       </div>
-        <div class="footer_page_number">Hiển thị <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> kết quả
+        <div class="footer_page_number">{{'display' | translate}} <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> {{'results' | translate}}
       </div>
     </div>
     <div class="contract_footer_pagination_responsive">
       <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
       <div class="enterPage" *ngIf="pageTotal > 0">
           <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-          <p>của {{countPage()}} trang</p>
+          <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
       </div>
     </div>
     <div>{{roleMess | translate}}</div>
 </div>
 
-<!-- Màn HĐ hoàn thành HĐ của tổ chức-->
+<!-- Màn Tài liệu hoàn thành Tài liệu tổ chức-->
 <div *ngIf="!((this.filter_status == 20 ||
               this.filter_status == 33 ||
               this.filter_status == 30 ||
@@ -588,7 +614,7 @@
               && this.typeDisplay !== 'downloadMany' && status == 'complete'" class="container-fluid">
   <div class="row container-fluid-bg">
     <div class="margin-top-16">
-      <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row">
+      <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (ngModelChange)="changeTab()" class="row">
         <ng-template #options let-item>
             <span class="button-classify">{{item.label | translate}}</span>
         </ng-template>
@@ -597,9 +623,9 @@
     <ng-template [ngIf]="!roleMess">
       <div class="row cancel-padding" style="margin: 16px auto;">
         <div class="col-lg-9-8 btn-padding-right">
-            <div class="input-line search">
+            <div class="input-group search">
                 <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
-                <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                <input type="text" id="filter_name" [value]="filter_name" class="input_text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                 <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
             </div>
         </div>
@@ -651,7 +677,7 @@
                     <div class="row">
                         <div class="col-md-11" style="display: flex; margin-left: 12px; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
-                          <div style="margin-left: 12px;">
+                          <div style="margin-left: 12px;" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                             <div class="item_contract_name">
                                 <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                         'page': this.p,
@@ -687,7 +713,7 @@
                     </div>
                 </div>
 
-                <!--Cột 3: Trạng thái HĐ-->
+                <!--Cột 3: Trạng thái Tài liệu-->
                 <div class="col-sm-2 calendar_create">
                   <div class="item_contract_status">
                     <span class="status_blue" [ngStyle]="{'color': this.color, 'background-color': this.backgroundColor}">{{this.filter_status | pipe | translate}}
@@ -712,7 +738,7 @@
 
                 <!--Cột 5: Ngày cập nhật-->
                 <div class="col-sm-2 calendar_create">
-                  <!-- để tạm ngày tạo HĐ -->
+                  <!-- để tạm ngày tạo Tài liệu -->
                   <div><i class="fa fa_icon"></i><span class="item_date">{{item.success_time | date:
                     'dd/MM/yyyy HH:mm:ss'}}</span>
                   </div>
@@ -748,7 +774,7 @@
       </div>
       <div *ngIf="pageTotal == 0" style="min-height: 65vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
           <div style="display: table-cell;vertical-align: middle;">
-              <img src="../../../assets/img/empty_data.svg" />
+              <img src="../../../assets/img/no_data.svg" />
               <div style="color: #94A7C6">{{'no.data' | translate}}</div>
           </div>
       </div>
@@ -756,7 +782,7 @@
     </div>
     <div class="contract_footer">
       <div class="footer_contract_per_page">
-          <div>Số lượng hiển thị&nbsp;</div>
+          <div>{{'num.display' | translate}}&nbsp;</div>
           <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
               <option value="" hidden>10</option>
               <option *ngFor="let d of this.pageOptions">{{d}}</option>
@@ -768,11 +794,11 @@
         <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
         <div class="enterPage" *ngIf="pageTotal > 0">
             <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-            <p>của {{countPage()}} trang</p>
+            <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
         </div>
     </div>
       <!-- <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}} -->
-      <div class="footer_page_number">Hiển thị <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> kết quả
+      <div class="footer_page_number">{{'display' | translate}} <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> {{'results' | translate}}
       </div>
     </div>
     <div>{{roleMess | translate}}</div>
@@ -782,7 +808,7 @@
 <div *ngIf="(this.filter_status == 30 && this.isOrg == 'off' && this.typeDisplay === 'view')" class="container-fluid">
   <div class="row container-fluid-bg">
     <div class="margin-top-16">
-      <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row">
+      <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (ngModelChange)="changeTab()" class="row">
         <ng-template #options let-item>
             <span class="button-classify">{{item.label | translate}}</span>
         </ng-template>
@@ -791,9 +817,9 @@
     <ng-template [ngIf]="!roleMess">
       <div class="row cancel-padding" style="margin: 16px auto;">
         <div class="col-lg-9-8 btn-padding-right">
-            <div class="input-line search">
+            <div class="input-group search">
                 <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
-                <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                <input type="text" id="filter_name" [value]="filter_name" class="input_text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                 <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
             </div>
         </div>
@@ -844,7 +870,7 @@
                     <div class="row">
                         <div class="col-md-11" style="display: flex; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                           <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
-                          <div style="margin-left: 12px;">
+                          <div style="margin-left: 12px;" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                             <div class="item_contract_name">
                                 <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                         'page': this.p,
@@ -863,14 +889,14 @@
                                 </div>
                             </div>
 
-                            <!-- <div class="row">
-                                <div class="item_contract_infor">{{'contract.status' | translate}}:
-                                    <span class="status_blue">{{this.filter_status | pipe | translate}}
-                                        {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
-                                        translate}}</span>
-                                </div>
+                            <div class="row" *ngIf="item.ceca_push == 1">
+                              <div class="item_contract_infor">{{'contract.status.ceca' | translate}}:
+                                <span class="status_blue_ceca">
+                                    {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) | translate}}
+                                </span>
+                              </div>
                             </div>
-                            <div class="row">
+                            <!-- <div class="row">
                               <div class="item_contract_infor">
                                 <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
                               </div>
@@ -880,7 +906,7 @@
                     </div>
                 </div>
 
-                <!--Cột 3: Trạng thái HĐ-->
+                <!--Cột 3: Trạng thái Tài liệu-->
                 <div class="col-sm-2 calendar_create">
                   <div class="item_contract_status">
                     <!-- <span class="status_blue">{{this.filter_status | pipe | translate}}
@@ -908,17 +934,21 @@
                       <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
-                      <button mat-menu-item  class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue' || status == 'complete') && isQLHD_08 && this.isOrg == 'off'" (click)="openCopy(item.id)">
-                        <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
-                        <span class="three_dot_text">{{'contract.copy' | translate}}</span>
+                      <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off' && item.liquidationContractId == null && item.originalContractId == null && this.isQLHD_16" (click)="addContractLiquidationNew(item.id);">
+                        <mat-icon><img src="../../assets/img/clipboard-tick.svg" class="img_icon"/></mat-icon>
+                        <span class="three_dot_text">{{'contract.liquidation' | translate}}</span>
                       </button>
-                      <button mat-menu-item class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12 && this.isOrg == 'off'" (click)="contractConnect(item.id)">
-                        <mat-icon><img src="../../assets/img/document-text.svg" class="img_icon"/></mat-icon>
-                        <span class="three_dot_text">{{'contract.connect.view' | translate}}</span>
+                      <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="uploadAttachFiles(item);">
+                        <mat-icon><img src="../../assets/img/attach-square.svg" class="img_icon"/></mat-icon>
+                        <span class="three_dot_text">{{'upload_attach_files' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && isQLHD_11 && this.isOrg == 'off'" (click)="addContractConnectNew(item.id)">
                         <mat-icon><img src="../../assets/img/add_contract_dup.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.connect.add' | translate}}</span>
+                      </button>
+                      <button mat-menu-item class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12 && this.isOrg == 'off'" (click)="contractConnect(item.id)">
+                        <mat-icon><img src="../../assets/img/document-text.svg" class="img_icon"/></mat-icon>
+                        <span class="three_dot_text">{{'contract.connect.view' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="downloadContract(item.id);">
                         <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
@@ -928,13 +958,9 @@
                         <mat-icon><img src="../../assets/img/share_contract.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.share' | translate}}</span>
                       </button>
-                      <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="uploadAttachFiles(item);">
-                        <mat-icon><img src="../../assets/img/attach-square.svg" class="img_icon"/></mat-icon>
-                        <span class="three_dot_text">{{'upload_attach_files' | translate}}</span>
-                      </button>
-                      <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off' && item.liquidationContractId == null && item.originalContractId == null && this.isQLHD_16" (click)="addContractLiquidationNew(item.id);">
-                        <mat-icon><img src="../../assets/img/clipboard-tick.svg" class="img_icon"/></mat-icon>
-                        <span class="three_dot_text">{{'contract.liquidation' | translate}}</span>
+                      <button mat-menu-item  class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue' || status == 'complete') && isQLHD_08 && this.isOrg == 'off'" (click)="openCopy(item.id)">
+                        <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
+                        <span class="three_dot_text">{{'contract.copy' | translate}}</span>
                       </button>
                       <button mat-menu-item class="div_icon" (click)="processHandleContract(item.id)">
                         <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon"/></mat-icon>
@@ -987,7 +1013,7 @@
         </div>
         <div *ngIf="pageTotal == 0" style="min-height: 65vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
             <div style="display: table-cell;vertical-align: middle;">
-                <img src="../../../assets/img/empty_data.svg" />
+                <img src="../../../assets/img/no_data.svg" />
                 <div style="color: #94A7C6">{{'no.data' | translate}}</div>
             </div>
         </div>
@@ -996,7 +1022,7 @@
     </div>
     <div class="contract_footer">
       <div class="footer_contract_per_page">
-        <div>Số lượng hiển thị&nbsp;</div>
+        <div>{{'num.display' | translate}}&nbsp;</div>
           <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
               <option value="" hidden>10</option>
               <option *ngFor="let d of this.pageOptions">{{d}}</option>
@@ -1008,21 +1034,46 @@
         <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
         <div class="enterPage" *ngIf="pageTotal > 0">
             <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-            <p>của {{countPage()}} trang</p>
+            <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
         </div>
     </div>
-      <!-- <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}} -->
-      <div class="footer_page_number">Hiển thị <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> kết quả
+      <div class="footer_page_number">{{'display' | translate}} <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> {{'results' | translate}}
+      </div>
+    </div>
+    <div class="contract_footer_responsive">
+      <div class="contract_footer_per_page_responsive">
+          <div>{{'num.display' | translate}}&nbsp;</div>
+          <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
+            <option value="" hidden>10</option>
+            <option *ngFor="let d of this.pageOptions">{{d}}</option>
+          </select>
+        <div>&nbsp;{{'contracts.per.page' | translate}}</div>
+      </div>
+    <div class="footer_pagination">
+      <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
+      <div class="enterPage" *ngIf="pageTotal > 0">
+          <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
+          <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
+      </div>
+      </div>
+        <div class="footer_page_number">{{'display' | translate}} <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> {{'results' | translate}}
+      </div>
+    </div>
+    <div class="contract_footer_pagination_responsive">
+      <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
+      <div class="enterPage" *ngIf="pageTotal > 0">
+          <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
+          <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
       </div>
     </div>
     <div>{{roleMess | translate}}</div>
 </div>
 
-<!-- Hợp đồng hoàn thành -->
+<!-- Tài liệu hoàn thành -->
 <div *ngIf="(this.typeDisplay == 'downloadMany' && this.filter_status == 30)">
     <div class="row container-fluid-bg">
       <div class="margin-top-16">
-        <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row">
+        <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (ngModelChange)="changeTab()" class="row">
           <ng-template #options let-item>
               <span class="button-classify">{{item.label | translate}}</span>
           </ng-template>
@@ -1031,9 +1082,9 @@
         <ng-template [ngIf]="!roleMess">
           <div class="row cancel-padding" style="margin: 16px auto;">
             <div class="col-lg-8-7 btn-padding-right">
-                <div class="input-line search">
+                <div class="input-group search">
                     <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
-                    <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                    <input type="text" id="filter_name" [value]="filter_name" class="input_text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                     <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
                 </div>
             </div>
@@ -1089,7 +1140,7 @@
               <div class="col-sm-1 bg-header"></div>
           </div>
           <div *ngIf="pageTotal > 0" class="table-contract">
-            <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}">
+            <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
                 <div class="row">
                   <!--Cột 1-->
                   <!-- <div class="col-xxl-1 col-md-1 item_icon">
@@ -1116,7 +1167,7 @@
 
                             <div class="col-md-11" style="display: flex;margin-left: 12px; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                               <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
-                              <div style="margin-left: 12px;">
+                              <div style="margin-left: 12px;" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                                 <div class="item_contract_name">
                                     <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                             'page': this.p,
@@ -1152,7 +1203,7 @@
                         </div>
                     </div>
 
-                    <!--Cột 3: Trạng thái HĐ-->
+                    <!--Cột 3: Trạng thái Tài liệu-->
                     <div class="col-sm-2 calendar_create">
                       <div class="item_contract_status">
                         <span class="status_blue" [ngStyle]="{'color': this.color, 'background-color': this.backgroundColor}">{{this.filter_status | pipe | translate}}</span>
@@ -1206,7 +1257,7 @@
           </div>
           <div *ngIf="pageTotal == 0" style="min-height: 65vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
               <div style="display: table-cell;vertical-align: middle;">
-                  <img src="../../../assets/img/empty_data.svg" />
+                  <img src="../../../assets/img/no_data.svg" />
                   <div style="color: #94A7C6">{{'no.data' | translate}}</div>
               </div>
           </div>
@@ -1216,7 +1267,7 @@
       </div>
       <div class="contract_footer">
         <div class="footer_contract_per_page">
-          <div>Hiển thị&nbsp;</div>
+          <div>{{'display' | translate}}&nbsp;</div>
           <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
               <option value="" hidden>10</option>
               <option *ngFor="let d of this.pageOptions">{{d}}</option>
@@ -1225,18 +1276,49 @@
         </div>
         <div class="footer_title"></div>
         <div class="footer_pagination">
-            <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getPageData()" previousLabel="" nextLabel=""></pagination-controls>
+            <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; downloadMany()" previousLabel="" nextLabel=""></pagination-controls>
+            <div class="enterPage" *ngIf="pageTotal > 0">
+              <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
+              <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
+          </div>
         </div>
-        <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}}
+        <div class="footer_page_number">{{'display' | translate}} <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> {{'results' | translate}}
         </div>
+    </div>
+
+    <div class="contract_footer_responsive">
+      <div class="contract_footer_per_page_responsive">
+          <div>{{'num.display' | translate}}&nbsp;</div>
+          <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
+            <option value="" hidden>10</option>
+            <option *ngFor="let d of this.pageOptions">{{d}}</option>
+          </select>
+        <div>&nbsp;{{'contracts.per.page' | translate}}</div>
+      </div>
+    <div class="footer_pagination">
+      <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
+      <div class="enterPage" *ngIf="pageTotal > 0">
+          <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
+          <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
+      </div>
+      </div>
+        <div class="footer_page_number">{{'display' | translate}} <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> {{'results' | translate}}
+      </div>
+    </div>
+    <div class="contract_footer_pagination_responsive">
+      <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
+      <div class="enterPage" *ngIf="pageTotal > 0">
+          <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
+          <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
+      </div>
     </div>
 </div>
 
-<!--Phát hành hợp đồng-->
+<!--Phát hành tài liệu-->
 <div *ngIf="(this.typeDisplay == 'release' && this.filter_status == 0)">
     <div class="row container-fluid-bg">
       <div class="margin-top-16">
-        <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row">
+        <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (ngModelChange)="changeTab()" class="row">
           <ng-template #options let-item>
               <span class="button-classify">{{item.label | translate}}</span>
           </ng-template>
@@ -1245,9 +1327,9 @@
         <ng-template [ngIf]="!roleMess">
           <div class="row cancel-padding" style="margin: 16px auto;">
             <div class="col-lg-8-7 btn-padding-right">
-                <div class="input-line search">
+                <div class="input-group search">
                     <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
-                    <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                    <input type="text" id="filter_name" [value]="filter_name" class="input_text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                     <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
                 </div>
             </div>
@@ -1301,7 +1383,7 @@
               <div class="col-sm-1 bg-header"></div>
           </div>
           <div *ngIf="pageTotal > 0" class="table-contract">
-            <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}">
+            <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
                 <div class="row">
 
                     <!--Cột 1-->
@@ -1323,7 +1405,7 @@
 
                             <div class="col-md-11" style="display: flex;margin-left: 12px; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                               <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
-                              <div style="margin-left: 12px;">
+                              <div style="margin-left: 12px;" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                                 <div class="item_contract_name">
                                     <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                             'page': this.p,
@@ -1359,7 +1441,7 @@
                         </div>
                     </div>
 
-                    <!--Cột 3: Trạng thái HĐ-->
+                    <!--Cột 3: Trạng thái Tài liệu-->
                     <div class="col-sm-2 calendar_create">
                       <div class="item_contract_status">
                         <span class="status_blue" [ngStyle]="{'color': this.color, 'background-color': this.backgroundColor}">{{this.filter_status | pipe | translate}}</span>
@@ -1409,7 +1491,7 @@
             </div>
             <div *ngIf="pageTotal == 0" style="min-height: 65vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
                 <div style="display: table-cell;vertical-align: middle;">
-                    <img src="../../../assets/img/empty_data.svg" />
+                    <img src="../../../assets/img/no_data.svg" />
                     <div style="color: #94A7C6">{{'no.data' | translate}}</div>
                 </div>
             </div>
@@ -1423,7 +1505,7 @@
           <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; release()" previousLabel="" nextLabel=""></pagination-controls>
       </div>
       <!-- <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}} -->
-      <div class="footer_page_number">Hiển thị <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> kết quả
+      <div class="footer_page_number">{{'display' | translate}} <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> {{'results' | translate}}
       </div>
     </div>
 </div>
@@ -1432,7 +1514,7 @@
 <div *ngIf="(this.typeDisplay == 'multiDeleteDraft' && this.filter_status == 0)">
   <div class="row container-fluid-bg">
       <div class="margin-top-16">
-        <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()" class="row">
+        <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (ngModelChange)="changeTab()" class="row">
           <ng-template #options let-item>
               <span class="button-classify">{{item.label | translate}}</span>
           </ng-template>
@@ -1441,9 +1523,9 @@
       <ng-template [ngIf]="!roleMess">
         <div class="row cancel-padding" style="margin: 16px auto;">
           <div class="col-lg-8-7 btn-padding-right">
-              <div class="input-line search">
+              <div class="input-group search">
                   <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
-                  <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                  <input type="text" id="filter_name" [value]="filter_name" class="input_text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
                   <!-- <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" /> -->
               </div>
           </div>
@@ -1488,7 +1570,7 @@
             <div class="col-sm-1 bg-header"></div>
         </div>
         <div *ngIf="pageTotal > 0" class="table-contract">
-          <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: pageDownload, currentPage:p, totalItems: pageTotal}">
+          <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
               <div class="row">
                   <!--Cột 1-->
                   <!-- <div class="col-xxl-1 col-md-1 item_icon" *ngIf="this.filter_status == 0">
@@ -1508,7 +1590,7 @@
                           </div>
                           <div class="col-md-11" style="display: flex;margin-left: 12px; cursor: pointer;" (click)="isQLHD_07?openDetail(item.id):null">
                             <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
-                            <div style="margin-left: 12px;">
+                            <div style="margin-left: 12px;" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                               <div class="item_contract_name">
                                   <a class="item_contract_name" style="text-decoration: none;"  [routerLink]="['/main/form-contract/detail', item.id]" [queryParams]="{
                                           'page': this.p,
@@ -1544,7 +1626,7 @@
                       </div>
                   </div>
 
-                  <!--Cột 3: Trạng thái HĐ-->
+                  <!--Cột 3: Trạng thái Tài liệu-->
                   <div class="col-sm-2 calendar_create">
                     <div class="item_contract_status">
                       <span class="status_blue" [ngStyle]="{'color': this.color, 'background-color': this.backgroundColor}">{{this.filter_status | pipe | translate}}</span>
@@ -1598,7 +1680,7 @@
           </div>
           <div *ngIf="pageTotal == 0" style="min-height: 65vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
               <div style="display: table-cell;vertical-align: middle;">
-                  <img src="../../../assets/img/empty_data.svg" />
+                  <img src="../../../assets/img/no_data.svg" />
                   <div style="color: #94A7C6">{{'no.data' | translate}}</div>
               </div>
           </div>
@@ -1612,7 +1694,7 @@
         <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; multiDeleteDraft('changePages')" previousLabel="" nextLabel=""></pagination-controls>
     </div>
     <!-- <div class="footer_page_number">{{'chart.number' | translate}}: {{this.getPageStartEnd()}} / {{pageTotal}} -->
-    <div class="footer_page_number">Hiển thị <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> kết quả
+    <div class="footer_page_number">{{'display' | translate}} <span style="color:#001A4D ;">{{this.getPageStartEnd()}} / {{pageTotal}}</span> {{'results' | translate}}
     </div>
   </div>
 </div>

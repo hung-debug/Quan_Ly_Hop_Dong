@@ -60,6 +60,12 @@ export class DashboardComponent implements OnInit {
   orgList: any[] = [];
   orgListTmp: any[] = [];
   organization_id: any = "";
+  contract_signatures: any = 'c';
+  signatures: any = 's9';
+
+  consider: any = 'c9';
+  secretary: any = 's8';
+  coordinates: any = 'c8';
 
   selectedNodeOrganization: any;
   isQLHD_03: boolean | undefined;
@@ -85,6 +91,7 @@ export class DashboardComponent implements OnInit {
   loadData1: boolean = false;
   loadData2: boolean = false;
   step: any;
+  endDateService: any;
   //type = 1 => Hop dong don le khong theo mau
   //type = 2 => Hop dong don le theo mau
   //type = 3 => Hop dong theo lo
@@ -135,6 +142,8 @@ export class DashboardComponent implements OnInit {
     private dialog: MatDialog,
     private contractService : ContractService,
     private contractSignature: ContractSignatureService,
+    private contractServiceV1: ContractService,
+    public isContractService: ContractService,
   ) {
     this.stateOptions = [
       {label: "my.contract", value: 'off'},
@@ -167,7 +176,7 @@ export class DashboardComponent implements OnInit {
     let userId = this.userService.getAuthCurrentUser().id;
     this.userService.getUserById(userId).subscribe(
       data => {
-        this.currentName = data.name
+        this.currentName = data.name       
         //lay id role
         if (environment.flag == 'KD' && !data.is_required_sso && environment.usedSSO) {
           this.openAccountLinkDialog(data)
@@ -182,6 +191,8 @@ export class DashboardComponent implements OnInit {
         });
         this.OrgId = data.organization.id;
         this.userService.getOrgIdChildren(this.OrgId).subscribe(dataOrg => {
+                   
+          this.endDateService = dataOrg.endLicense
           let countNotiWarning: number = localStorage.getItem('countNoti') as any
           countNotiWarning++;
           localStorage.setItem("countNoti",countNotiWarning.toString())
@@ -199,7 +210,8 @@ export class DashboardComponent implements OnInit {
 
     }, error => {}
     )
-
+    console.log("this.endDateService",this.endDateService);
+    
     this.user = this.userService.getInforUser();
 
     if(localStorage.getItem('lang') == 'vi') {
@@ -222,24 +234,22 @@ export class DashboardComponent implements OnInit {
 
       this.unitService.getNumberContractUseOriganzation(this.userService.getInforUser().organization_id).toPromise().then(
         data => {
-          console.log("dataaaaaanumContractUse",data);
           this.search()
           this.numContractUse = data.contract;
           this.loadData1 = true;
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
+          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng tài liệu đã dùng', "", 3000);
         }
       )
 
       //lay so luong hop dong da mua
       this.unitService.getNumberContractBuyOriganzation(this.userService.getInforUser().organization_id).toPromise().then(
         data => {
-          console.log("dataaaaaanumContractBuy",data);
           this.numContractBuy = data.contract;
           this.loadData2 = true;
           this.search()
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng tài liệu đã mua', "", 3000);
         }
       )
 
@@ -267,7 +277,7 @@ export class DashboardComponent implements OnInit {
       Quý khách vui lòng đóng phí duy trì dịch vụ hàng năm để tiếp tục sử dụng sau ngày ${moment(this.endLicense).format("DD/MM/YYYY")}. Trân trọng cảm ơn!`
     }
     if (isContractExp){
-      messageContractExp = "Hợp đồng"
+      messageContractExp = "Tài liệu"
       numberExpArr.push(messageContractExp)
     }
     if (isEkycExp){
@@ -373,6 +383,77 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(['/main/form-contract/detail/' + id]);
     });
   }
+  
+  processContract(item: any){
+    if(item.participant.contract.status == 20 && item.role == 3 && item.status == 1){
+      this.contractServiceV1.getStatusSignImageOtp(item.id).subscribe(
+        (data) => {       
+          if (!data.locked) {
+            this.router.navigate(
+              [
+                'main/' +
+                this.contract_signatures +
+                '/' +
+                this.signatures +
+                '/' +
+                item.participant.contract.id,
+              ],
+              {
+                queryParams: {
+                  recipientId: item.id,
+                },
+              }
+            );
+          } else {
+            this.toastService.showErrorHTMLWithTimeout(
+              'Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' +
+              this.datepipe.transform(data.nextAttempt, 'dd/MM/yyyy HH:mm'),
+              '',
+              3000
+            );
+          }
+        },
+        (error) => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi', '', 3000);
+        }
+      );
+    } else if(item.participant.contract.status == 20 && item.role == 4 && item.status == 1){
+      this.router.navigate(['main/c/s8/' + item.participant.contract.id], {
+        queryParams: {
+          recipientId: item.id,
+        },
+      });
+    } else if(item.participant.contract.status == 20 && item.role == 1 && item.status == 1){
+      this.isContractService.getListDataCoordination(item.participant.contract.id).subscribe(
+        (res: any) => {
+          if (res) {
+            if (localStorage.getItem('data_coordinates_contract_id')) {
+              localStorage.removeItem('data_coordinates_contract_id');
+            }
+            localStorage.setItem(
+              'data_coordinates_contract_id',
+              JSON.stringify({ data_coordinates_id: res.id })
+            );
+  
+            this.router.navigate(
+              ['main/c/' + this.coordinates + '/' + item.participant.contract.id],
+              {
+              }
+            );
+          }
+        },
+        (res: any) => {
+          alert('Vui lòng liên hệ đội hỗ trợ để được xử lý!');
+        }
+      );
+    } else if(item.participant.contract.status == 20 && item.role == 2 && item.status == 1) {
+      this.router.navigate(['main/c/c9/' + item.participant.contract.id], {
+        queryParams: { 
+          recipientId: item.id 
+        },
+      });
+    }
+  }
 
   openLinkNotification(link: any, id: any) {
     window.location.href = link.replace('&type=1', '').replace('&type=', '').replace('?id','?recipientId').replace('contract-signature','c').replace('signatures','s9').replace('consider','c9').replace('secretary','s8').replace('coordinates','c8');
@@ -394,7 +475,6 @@ export class DashboardComponent implements OnInit {
     this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
     this.dashboardService.countContractCreate(this.isOrg, this.organization_id, this.filter_from_date, this.filter_to_date).subscribe(data => {
       let newData = Object.assign( {}, data)
-      // console.log("newData",newData);
 
       newData.isOrg = this.isOrg;
       newData.organization_id = this.organization_id;
@@ -639,8 +719,8 @@ export class DashboardComponent implements OnInit {
   }
 
   getNameOrganization(item: any, index: any) {
-    if(item.type == 3 && item.recipients.length > 0)
-      return sideList[index].name + " : " + item.recipients[0].name;
+    // if(item.type == 3 && item.recipients.length > 0)
+    //   return sideList[index].name + " : " + item.recipients[0].name;
     return sideList[index].name + " : " + item.name;
   }
 
@@ -657,28 +737,20 @@ export class DashboardComponent implements OnInit {
 
     this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
       this.listNotification = data.entities;
-      // console.log("this.listNotification",data);
     });
 
     this.dashboardService.getNotification(0, '', '', 1, '').subscribe(data => {
-      // this.contractConnectList = data.entities;
 
 
     });
-    this.contractService.getContractList('off','','','','','','',0,'',1,'').subscribe(data => {
-      console.log("this.contractConnectListlllllll",data);
+    this.contractService.getContractList('off','','','','','','',0,'',1,'','','').subscribe(data => {
       this.contractConnectList = data.entities;
     })
-    this.contractSignature.getContractMyProcessList('','','','','',1,'',4,'').subscribe(data => {
-      console.log("this.contractRequestList",data);
-      this.contractRequestList = data.entities;
-      // console.log("this.contractRequestList",this.contractRequestList);
-      // this.contractRecipienteList = data.entities.participant;
+    this.contractSignature.getContractMyProcessList('','','','','',1,'',4,'','','').subscribe(data => {
+      this.contractRequestList = data.entities;  
       this.contractRecipienteList.forEach((item: any) => {
-        // console.log("item",item);
 
       })
-      // console.log("this.contractRecipienteList",this.contractRecipienteList);
 
     })
   }
@@ -716,7 +788,7 @@ export class DashboardComponent implements OnInit {
 
     if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       data = {
-        title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
+        title: 'XÁC NHẬN XÓA TÀI LIỆU',
         id: id
       };
     } else if (sessionStorage.getItem('lang') == 'en') {

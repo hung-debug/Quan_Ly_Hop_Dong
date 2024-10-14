@@ -16,35 +16,36 @@ export class TimeService {
     private http: HttpClient,
   ) { }
 
-  getRealTime(): Observable<any> {
-    if (window.location.protocol === 'https:') {
-      return this.http.get<any>(this.apiUrlHTTPS)
-      .pipe(
-        map((data) => {
-          if (JSON.parse(JSON.stringify(data)) != null) {
-           return data.datetime;
-          }else{
-            return new Date();
-          }
-        }),
-        catchError(this.error)
-      );
-    } else {
-      return this.http.get<any>(this.apiUrlHTTP)
-      .pipe(
-        map((data) => {
-          if (JSON.parse(JSON.stringify(data)) != null) {
-           return data.datetime;
-          }else{
-            return new Date();
-          }
-        }),
-        catchError(this.error)
-      );
-    }
+  getRealTime() {
+    return new Date();
+    // if (window.location.protocol === 'https:') {
+    //   return this.http.get<any>(this.apiUrlHTTPS)
+    //   .pipe(
+    //     map((data) => {
+    //       if (JSON.parse(JSON.stringify(data)) != null) {
+    //        return data.datetime;
+    //       }else{
+    //         return new Date();
+    //       }
+    //     }),
+    //     catchError(this.error)
+    //   );
+    // } else {
+    //   return this.http.get<any>(this.apiUrlHTTP)
+    //   .pipe(
+    //     map((data) => {
+    //       if (JSON.parse(JSON.stringify(data)) != null) {
+    //        return data.datetime;
+    //       }else{
+    //         return new Date();
+    //       }
+    //     }),
+    //     catchError(this.error)
+    //   );
+    // }
   }
 
-  private error(error: HttpErrorResponse) {
-    return of(new Date());
-  }
+  // private error(error: HttpErrorResponse) {
+  //   return of(new Date());
+  // }
 }

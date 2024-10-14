@@ -10,6 +10,18 @@
   margin: 5px 5px;
 }
 
+.action-button-both{
+  width: 155px;
+  background: #0041C4;
+  //font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 5px 5px;
+}
+
 .action-button-previous {
   width: 100px;
   background: #FFFFFF;
@@ -45,13 +57,13 @@
 }
 
 .footer-contract {
-  border-top: 1px solid #ddd;
+  //border-top: 1px solid #ddd;
   display: flex;
   align-items: center;
   height: 37px;
   //add css 16022022
   float: right;
-  width: 75%;
+  // width: 75%;
   padding-top: 2vh;
   .content_footer {
     color:#0160AE;
@@ -114,8 +126,8 @@ input {
   background: white;
   border: 1px solid #106DB6;
   color: #106DB6;
-  width: 114px;
-  height: 30px;
+  width: 156px;
+  height: 40px;
   border-radius: 7px;
   cursor: pointer;
   margin: 5px 5px;

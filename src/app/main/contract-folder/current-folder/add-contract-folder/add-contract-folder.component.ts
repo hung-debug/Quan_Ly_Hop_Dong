@@ -108,7 +108,7 @@ export class AddContractFolderComponent implements OnInit {
       for (let i = 0; i < this.contracts.length; i++){
         this.contracts[i].checked = true;
 
-        //Chia 2 TH: Hợp đồng tạo - nhận
+        //Chia 2 TH: Tài liệu tạo - nhận
         this.dataChecked.push({
           id: this.contracts[i].contract_id,
           selectedId : this.contracts[i].id
@@ -125,7 +125,7 @@ export class AddContractFolderComponent implements OnInit {
     }
 
     if(this.parentId == 1)
-        //Danh sách hợp đồng tạo
+        //Danh sách tài liệu tạo
         this.contractFolderService.getContractCreatedList(this.filter_name, this.status.toString(), this.p1, this.defaultSize).subscribe(data => {
           this.contracts = data.entities;
           this.pageTotal = data.total_elements;
@@ -160,7 +160,7 @@ export class AddContractFolderComponent implements OnInit {
             this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
           })
         } else {
-          //Danh sách hợp đồng chờ xử lý
+          //Danh sách tài liệu chờ xử lý
           this.contractFolderService.getContractMyProcessList(this.filter_name, this.status, this.p1, this.defaultSize).subscribe(data => {
             this.contracts = data.entities;
             this.pageTotal = data.total_elements;
@@ -234,7 +234,7 @@ export class AddContractFolderComponent implements OnInit {
           // window.location.reload();
         }
       }, (err: any) => {
-        this.toastService.showErrorHTMLWithTimeout("Thêm hợp đồng thất bại","",3000)
+        this.toastService.showErrorHTMLWithTimeout("Thêm tài liệu thất bại","",3000)
       })
     }
 
@@ -330,7 +330,7 @@ getCreatedDate(item: any){
     this.status = this.selectedContractType.status;
     this.parentId = this.selectedContractType.parent.id;
     if(this.status == 999){
-      this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn loại hợp đồng để tìm kiếm", "", 3000);
+      this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn loại tài liệu để tìm kiếm", "", 3000);
       return
     }
     

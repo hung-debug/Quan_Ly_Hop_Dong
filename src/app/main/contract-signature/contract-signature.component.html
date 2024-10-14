@@ -93,10 +93,10 @@
         <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1"></div>
     </div> -->
 
-    <!--Danh sách tất cả hợp đồng cần ký trường hợp ký một-->
+    <!--Danh sách tất cả tài liệu cần ký trường hợp ký một-->
 
     <div *ngIf="this.typeDisplay === 'signOne'">
-      <div class="row container-fluid-bg">     
+      <div class="row container-fluid-bg">
         <div class="row cancel-padding" style="margin: 16px auto;">
           <div [ngClass]="{'col-lg-10-9': this.typeDisplay === 'signOne' && (filter_status != 4 && filter_status != 1), 'col-lg-9-8': this.typeDisplay === 'signOne' && filter_status == 4, 'col-lg-8-7': this.typeDisplay === 'signOne' && filter_status == 1, 'btn-padding-right': true}" class="col-lg-8-7" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
             <div class="input-line search">
@@ -161,14 +161,18 @@
                     </div> -->
                     <div class="col-sm-5">
                         <div class="row">
-                            <div class="col-md-11" style="display: flex; cursor: pointer;" (click)="openDetail(item.contractId)">
-                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                            <div class="col-md-11" style="display: flex; cursor: pointer;">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;" (click)="openDetail(item.contractId)">
                               <div style="margin-left: 12px;">
-                                <div class="item_contract_name">{{item.contractName}}</div>
+                                <div matTooltip="{{item.contractName}}" matTooltipPosition="above" matTooltipClass="custom-tooltip" class="item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
 
-                                <div class="row">
-                                  <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}} ({{item.participant.contract.organization_create_contract}})</div>
+                                <div class="row" (click)="openDetail(item.contractId)">
+                                  <!-- <div class="item_contract_infor" *ngIf="filter_status == 4">{{'created.user' | translate}}: {{item.participant.contract.nameUserCreate}} ({{item.participant.contract.organization_create_contract}})</div> -->
                                   <div>
+                                    <div class="row item_contract_infor" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
+                                      <div>{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                                      </div>
+                                    </div>
                                     <img src="../../../assets/img/path.svg"/>
                                     <span *ngIf="item.sign_type && item.sign_type.length > 0 && (item.status == 0 || item.status == 1 || item.status == 3)" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
                                     <span *ngIf="item.role == 1 && (item.status == 0 || item.status == 1)" style="color: #EE7200; padding: 5px;">{{'Đang điều phối' | translate}}</span>
@@ -181,7 +185,13 @@
                                     <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 6" style="color: #EE7200; padding: 5px;">{{'signed.cert.server' | translate}}</span>
                                     <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 7" style="color: #EE7200; padding: 5px;">{{'signed.usb.bcy' | translate}}</span>
                                     <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 8" style="color: #EE7200; padding: 5px;">{{'signed.romote.signing' | translate}}</span>
+                                    <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 1" style="color: #EE7200; padding: 5px;">{{'sign.image.otp' | translate}}</span>
                                   </div>
+                                  <!-- <div *ngIf="item.ceca_push == 1">
+                                    <div class="item_contract_infor">{{'contract.status.ceca' | translate}}:
+                                      <span class="status_blue_ceca">{{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
+                                    </div>
+                                  </div> -->
                                 </div>
 
                                 <!--Cac ben ky-->
@@ -190,11 +200,11 @@
                                 </div> -->
 
                                 <!--Trang thai hop dong-->
-                                <!-- <div class="row">
-                                    <div class="item_contract_infor">{{'contract.status.v2' | translate}}:
-                                        <span class="status_blue">{{item.contractStatus | pipe | translate}} {{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
+                                <div class="row" *ngIf="item.participant.contract.ceca_push == 1 && filter_status == 4 && item.participant.contract.status == 30">
+                                    <div class="item_contract_infor">{{'contract.status.ceca' | translate}}:
+                                        <span class="status_blue_ceca">{{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
                                     </div>
-                                </div> -->
+                                </div>
 
                                 <!--Trạng thái-->
                                 <!-- <div class="row">
@@ -245,7 +255,11 @@
                         <!-- <span class="status_blue">{{this.filter_status | pipe | translate}}
                           {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
                           translate}}</span> -->
-                        <span class="status_blue">{{item.contractStatus | pipe | translate}}</span>
+                        <!-- <span class="status_blue">{{item.contractStatus | pipe | translate}}</span> -->
+                        <span class="status_blue"
+                              [ngClass]="{'draft-status' : item?.contractStatus == 0, 'processing-status' : item?.contractStatus == 20,'expire-status' : item?.contractStatus == 33,
+                              'overdue-status' : item?.contractStatus == 2,'fail-status' : item?.contractStatus == 31,'cancel-status' : item?.contractStatus == 32,
+                              'complete-status' : item?.contractStatus == 30,'liquidated-status' : item?.contractStatus == 40}">{{item.contractStatus | pipe | translate}}</span>
                       </div>
                     </div>
 
@@ -256,7 +270,7 @@
 
                     <div class="col-sm-2 calendar_deadline">
                         <div><i class="fa fa_icon"></i>
-                          <span *ngIf = "item.participant && filter_status == 1" class="item_date">{{ item.participant.contract.sign_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
+                          <span *ngIf = "item.participant && filter_status == 1" class="item_date">{{ item.participant.contract.sign_time | date: 'dd/MM/yyyy'}}</span>
                           <span *ngIf = "item.participant && filter_status == 4" class="item_date">{{ signTime(item) | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
                           <!-- <span class="item_date">{{item.participant.contract.updated_at | date: 'dd/MM/yyyy HH:mm:ss'}}</span> -->
                         </div>
@@ -314,7 +328,7 @@
             <div *ngIf="filter_status == 11 || filter_status == 12 || filter_status == 13 || filter_status == 14">
                 <div class="row">
                     <div class="col-sm-5" (click)="openDetail(item.id)">
-                        <div class="row">
+                        <div class="row" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                             <div class="col-md-12 item_contract_name">{{item.name}}</div>
                         </div>
                         <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
@@ -360,13 +374,13 @@
                         </div>
                     </div>
                   </div> -->
-                  <div class="col-sm-5" (click)="openDetail(item.id)">
+                  <div class="col-sm-5">
                     <div  style="display: flex;">
-                    <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                    <img src="../../assets/img/frame_contract.svg" style="width: 72px;" (click)="openDetail(item.id)">
                       <div class="row">
                         <div style="margin-left: 12px;">
-                          <div class="col-md-12 item_contract_name">{{item.name}}</div>
-                          <div class="item_contract_infor">{{'created.user' | translate}}: {{item.nameUserCreate}} ({{item.organization_create_contract}})</div>
+                          <div matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip" class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
+                          <div class="item_contract_infor" (click)="openDetail(item.id)">{{'created.user' | translate}}: {{item.nameUserCreate}} ({{item.organization_create_contract}})</div>
                           <div class="item_contract_infor">
                             <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.id)">{{'contract_processing_flow' | translate}}</u>
                           </div>
@@ -378,7 +392,11 @@
                   <!--Trang thai hop dong-->
                   <div class="col-sm-2 calendar_create">
                     <div class="item_contract_status">
-                      <span class="status_blue">{{item.status | pipe | translate}}</span>
+                      <!-- <span class="status_blue">{{item.status | pipe | translate}}</span> -->
+                      <span class="status_blue"
+                            [ngClass]="{'draft-status' : item?.status == 0, 'processing-status' : item?.status == 20,'expire-status' : item?.status == 33,
+                              'overdue-status' : item?.status == 2,'fail-status' : item?.status == 31,'cancel-status' : item?.status == 32,
+                              'complete-status' : item?.status == 30,'liquidated-status' : item?.status == 40}">{{item.status | pipe | translate}}</span>
                     </div>
                   </div>
                   <div class="col-sm-2 calendar_create">
@@ -411,7 +429,7 @@
           <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
             <div class="row">
               <div class="col-sm-5" (click)="openDetail(item.id)">
-                <div class="row">
+                <div matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip" class="row">
                   <div class="col-md-12 item_contract_name">{{item.name}}</div>
                 </div>
                 <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
@@ -439,7 +457,7 @@
         </div>
       </div>
     </div>
-     <!--Danh sách tất cả hợp đồng có thể download.multi -->
+     <!--Danh sách tất cả tài liệu có thể download.multi -->
      <div *ngIf="this.typeDisplay === 'downloadMany'">
       <div class="row container-fluid-bg">
         <div class="row cancel-padding" style="margin: 16px auto;">
@@ -477,7 +495,7 @@
             <!-- <div class="col-sm-6">
             </div> -->
           </div>
-          
+
           <div class="col-md-2 bg-header">{{'report.status.contract' | translate}}
             <!-- <img src="../../assets/img/sort.svg"/> -->
           </div>
@@ -508,10 +526,15 @@
                               <input style="width: 16px; height: 16px;" id="all" name="all" type="checkbox" (click)="toggleOneDownload(item, index1)" [(ngModel)]="item.checked" (change)="selectContract(item)"/>
                             </div>
 
-                            <div class="col-md-11" style="display: flex; margin-left: 12px;cursor: pointer" (click)="openDetail(item.contractId)">
-                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
-                              <div style="margin-left: 12px;">
-                                <div class="item_contract_name">{{item.participant.contract.name}}</div>
+                            <div class="col-md-11" style="display: flex; margin-left: 12px;cursor: pointer">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;" (click)="openDetail(item.contractId)">
+                              <div style="margin-left: 12px;" matTooltip="{{item.participant.contract.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
+                                <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
+                                <div class="row item_contract_infor" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
+                                  <div>{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                                  </div>
+                                </div>
+
                                 <div class="row">
                                   <div class="item_contract_infor">
                                     <u style="color: #106DB6; cursor: pointer" (click)="processHandleContract(item.contractId)">{{'contract_processing_flow' | translate}}</u>
@@ -528,7 +551,7 @@
                         <!-- <span class="status_blue">{{this.filter_status | pipe | translate}}
                           {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) |
                           translate}}</span> -->
-                        <span class="status_blue">{{item.participant.contract.status| pipe | translate}}</span>
+                        <span class="status_blue" [ngClass]="{'complete-status' : item?.contractStatus == 30}">{{item.participant.contract.status| pipe | translate}}</span>
                       </div>
                     </div>
 
@@ -568,7 +591,7 @@
       </div>
      </div>
 
-    <!--Danh sách tất cả hợp đồng có thể sign.multi -->
+    <!--Danh sách tất cả tài liệu có thể sign.multi -->
     <div *ngIf="this.typeDisplay === 'signMany'">
       <div class="row container-fluid-bg">
         <div class="row cancel-padding" style="margin: 16px auto;">
@@ -585,12 +608,12 @@
             </button>
           </div>
 
-          <div class="col-lg-1-1 col-md-4 btn_search btn-padding-left btn-padding-right" *ngIf="this.typeDisplay === 'signMany' && filter_status == 1">
-            <button class="btn-block btn_cancel" (click)="signManyContract()">{{'contract.sign'| translate}}</button>
+          <div class="col-lg-1-1 col-md-4 btn-padding-left" *ngIf="this.typeDisplay === 'signMany' && filter_status == 1">
+            <button class="btn-block btn_cancel_sign_many" (click)="cancelSignMany()">{{'cancel'| translate}}</button>
           </div>
 
-          <div class="col-lg-1-1 col-md-4 btn-padding-left" *ngIf="this.typeDisplay === 'signMany' && filter_status == 1">
-            <button class="btn-block btn_cancel" (click)="cancelSignMany()">{{'cancel'| translate}}</button>
+          <div class="col-lg-1-1 col-md-4 btn_search btn-padding-left btn-padding-right" *ngIf="this.typeDisplay === 'signMany' && filter_status == 1">
+            <button class="btn-block btn_cancel" (click)="signManyContract()">{{'contract.sign'| translate}}</button>
           </div>
 
         </div>
@@ -601,7 +624,7 @@
         </div>
 
         <div class="row list_header" *ngIf="pageTotal > 0">
-          <div class="col-sm-5 bg-header">      
+          <div class="col-sm-5 bg-header">
             <div *ngIf="this.typeDisplay === 'signMany'" class="col-sm-1" style="text-align: left;">
               <input id="all" name="all" type="checkbox" (click)="toggle()" style="width: 16px; height: 16px; margin: -2px;"/>
             </div>
@@ -637,18 +660,30 @@
                               <input style="width: 16px; height: 16px;" name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked" />
                             </div>
 
-                            <div class="col-md-11" style="display: flex;margin-left: 12px; cursor: pointer;" (click)="openDetail(item.contractId)">
-                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                            <div class="col-md-11" style="display: flex;margin-left: 12px; cursor: pointer;">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;" (click)="openDetail(item.contractId)">
                               <div style="margin-left: 12px;">
-                                <div class="item_contract_name">{{item.participant.contract.name}}</div>
-                                <div class="row">
-                                  <div class="item_contract_infor">{{'created.user' | translate}}: {{item.name}}</div>
+                                <div matTooltip="{{item.participant.contract.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip" class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
+                                <div class="row" (click)="openDetail(item.contractId)">
+                                  <!-- <div class="item_contract_infor">{{'created.user' | translate}}: {{item.participant.contract.nameUserCreate}}</div> -->
                                   <div>
+                                    <div class="row item_contract_infor" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
+                                      <div *ngIf="filter_status == 1">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                                      </div>
+                                    </div>
                                     <img src="../../../assets/img/path.svg"/>
                                     <span *ngIf="item.sign_type && item.sign_type.length > 0" style="color: #EE7200; padding: 5px;">{{item.sign_type[0]?.name}}</span>
                                     <span *ngIf="item.role == 1" style="color: #EE7200; padding: 5px;">{{'Đang điều phối' | translate}}</span>
                                     <span *ngIf="item.role == 2" style="color: #EE7200; padding: 5px;">{{'Đang xem xét' | translate}}</span>
                                   </div>
+
+                                  <!-- <div *ngIf="item.ceca_push == 1">
+                                    <div class="item_contract_infor">{{'contract.status.ceca' | translate}}:
+                                      <span class="status_blue_ceca">{{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
+                                    </div>
+                                  </div> -->
+
+
                                 </div>
                                 <!--Cac ben ky-->
                                 <!-- <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
@@ -656,11 +691,11 @@
                                 </div> -->
 
                                 <!--Trang thai hop dong-->
-                                <!-- <div class="row">
-                                    <div class="item_contract_infor">{{'contract.status.v2' | translate}}:
-                                        <span class="status_blue">{{item.contractStatus | pipe | translate}} {{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
-                                    </div>
-                                </div> -->
+                                <div class="row" *ngIf="item.participant.contract.ceca_push == 1 && filter_status == 4 && item.participant.contract.status == 30">
+                                  <div class="item_contract_infor">{{'contract.status.ceca' | translate}}:
+                                      <span class="status_blue_ceca"> {{getNameStatusCeca(item.contractStatus, item.contractCecaPush, item.contractCecaStatus) | translate}}</span>
+                                  </div>
+                              </div>
 
                                 <!--Trạng thái-->
                                 <!-- <div class="row">
@@ -712,7 +747,7 @@
                     </div>
 
                     <div class="col-sm-2 calendar_deadline">
-                        <div><i class="fa fa-calendar fa_icon"></i><span *ngIf = "item.participant" class="item_date">{{item.participant.contract.sign_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
+                        <div><i class="fa fa-calendar fa_icon"></i><span *ngIf = "item.participant" class="item_date">{{item.participant.contract.sign_time | date: 'dd/MM/yyyy'}}</span></div>
                     </div>
 
                     <div style="cursor: pointer;" class="col-sm-1 item_icon" (click)="toggleOne(item, index1)">
@@ -741,14 +776,14 @@
 
             <div *ngIf="filter_status == -1">
                 <div class="row">
-                    <div class="col-sm-6" (click)="openDetail(item.id)">
-                        <div class="row">
-                            <div class="col-md-12 item_contract_name" >{{item.name}}</div>
+                    <div class="col-sm-6">
+                        <div matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip" class="row">
+                            <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
                         </div>
-                        <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
+                        <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index" (click)="openDetail(item.id)">
                             <div class="col-md-12 item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
                         </div>
-                        <div class="row">
+                        <div class="row" (click)="openDetail(item.id)">
                             <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
                                 <span class="status_blue">{{'contract.status.complete' | translate}} {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) | translate}}</span>
                             </div>
@@ -780,7 +815,7 @@
             <div *ngIf="filter_status == 11 || filter_status == 12 || filter_status == 13 || filter_status == 14">
                 <div class="row">
                     <div class="col-sm-6" (click)="openDetail(item.id)">
-                        <div class="row">
+                        <div class="row" matTooltip="{{item.name}}" matTooltipPosition="above" matTooltipClass="custom-tooltip">
                             <div class="col-md-12 item_contract_name">{{item.name}}</div>
                         </div>
                         <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
@@ -825,12 +860,12 @@
             </button>
           </div>
 
-          <div class="col-lg-1-1 col-md-4 btn_search btn-padding-left btn-padding-right" *ngIf="this.typeDisplay === 'viewMany' && filter_status == 1">
-            <button class="btn-block btn_consider" (click)="viewManyContract()">{{'contract.view'| translate}}</button>
+          <div class="col-lg-1-1 col-md-4 btn-padding-left" *ngIf="this.typeDisplay === 'viewMany' && filter_status == 1">
+            <button class="btn-block btn_cancel_sign_many" (click)="cancelViewMany()">{{'cancel'| translate}}</button>
           </div>
 
-          <div class="col-lg-1-1 col-md-4 btn-padding-left" *ngIf="this.typeDisplay === 'viewMany' && filter_status == 1">
-            <button class="btn-block btn_consider" (click)="cancelViewMany()">{{'cancel'| translate}}</button>
+          <div class="col-lg-1-1 col-md-4 btn_search btn-padding-left btn-padding-right" *ngIf="this.typeDisplay === 'viewMany' && filter_status == 1">
+            <button class="btn-block btn_cancel" (click)="viewManyContract()">{{'contract.view'| translate}}</button>
           </div>
 
         </div>
@@ -879,10 +914,10 @@
                             <div>
                               <input style="width: 16px; height: 16px;" id="allView" name="item" type="checkbox" [(ngModel)]="item.checked" (click)="toggleOneView(item, index1)" />
                             </div>
-                            <div class="col-md-11" style="display: flex; cursor: pointer;" (click)="openDetail(item.contractId)">
-                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;">
+                            <div class="col-md-11" style="display: flex; cursor: pointer;">
+                              <img src="../../assets/img/frame_contract.svg" style="width: 72px;" (click)="openDetail(item.contractId)">
                               <div style="margin-left: 12px;">
-                                <div class="item_contract_name">
+                                <div class="item_contract_name" (click)="openDetail(item.contractId)">
                                     <a  class="item_contract_name" style="text-decoration: none;"
                                         [routerLink]="['/main/form-contract/detail', item.contractId]"
                                         [queryParams]="{
@@ -899,9 +934,10 @@
                                 </div>
 
                                 <!--Cac ben ky-->
-                                <!-- <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
-                                    <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
-                                </div> -->
+                                <div class="row item_contract_infor" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
+                                  <div *ngIf="filter_status == 1">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}
+                                  </div>
+                                </div>
 
                                 <!--Trang thai hop dong-->
                                 <!-- <div class="row">
@@ -927,7 +963,7 @@
                                         <span class="status_blue" *ngIf="item.status == 3 && item.role == 4">{{'contract.document-refused' | translate}}</span>
                                     </div>
                                 </div> -->
-                                <div class="row">
+                                <div class="row" (click)="openDetail(item.contractId)">
                                   <div>
                                     <img src="../../../assets/img/path.svg"/>
                                     <span *ngIf="item.role == 2" style="color: #EE7200; padding: 5px;">{{'Đang xem xét' | translate}}</span>
@@ -958,7 +994,7 @@
                     </div>
 
                     <div class="col-sm-2 calendar_deadline">
-                        <div><i class="fa fa-calendar fa_icon"></i><span *ngIf = "item.participant" class="item_date">{{item.participant.contract.sign_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
+                        <div><i class="fa fa-calendar fa_icon"></i><span *ngIf = "item.participant" class="item_date">{{item.participant.contract.sign_time | date: 'dd/MM/yyyy'}}</span></div>
                     </div>
 
                     <div class="col-sm-1 item_icon">
@@ -992,14 +1028,14 @@
     <div *ngIf="pageTotal == 0 && !(this.typeDisplay == 'signMany' || this.typeDisplay == 'viewMany')"
       [ngStyle]="{'min-height': filter_status != -1 ? '66vh' : '71vh', 'display': 'table', 'top': '0', 'left': '0', 'width': '100%', 'text-align': 'center'}">
       <div style="display: table-cell; vertical-align: middle;">
-          <img src="../../../assets/img/empty_data.svg" />
+          <img src="../../../assets/img/no_data.svg" />
           <div style="color: #94A7C6">{{'no.data' | translate}}</div>
       </div>
     </div>
 
     <div *ngIf="this.typeDisplay === 'signOne'|| this.typeDisplay === 'downloadMany'" class="contract_footer">
         <div class="footer_contract_per_page">
-            <div>Hiển thị&nbsp;</div>
+            <div>{{'num.display' | translate}}&nbsp;</div>
             <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
                 <option value="" hidden>10</option>
                 <option *ngFor="let d of this.pageOptions">{{d}}</option>
@@ -1011,10 +1047,49 @@
             <pagination-controls *ngIf="pageTotal > 0" (pageChange)="p=$event; getPageData()" previousLabel="" nextLabel=""></pagination-controls>
             <div class="enterPage" *ngIf="pageTotal > 0">
                 <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-                <p>của {{countPage()}} trang</p>
+                <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
             </div>
         </div>
-        <div class="footer_page_number">{{'chart.number' | translate}}: {{getPageStartEnd()}} / {{pageTotal}}</div>
+        <div class="footer_page_number">
+          <span class="footer_page_number_chart_number">
+            {{'chart.number' | translate}}:
+          </span>
+          <span>
+            {{getPageStartEnd()}} / {{pageTotal}}
+          </span>
+        </div>
+    </div>
+    <div *ngIf="this.typeDisplay === 'signOne'|| this.typeDisplay === 'downloadMany'" class="contract_footer_responsive">
+        <div class="contract_footer_per_page_responsive">
+            <div>{{'num.display' | translate}}&nbsp;</div>
+            <select [(ngModel)]="this.page" (change)="changePageNumber($event)">
+                <option value="" hidden>10</option>
+                <option *ngFor="let d of this.pageOptions">{{d}}</option>
+            </select>
+            <div>&nbsp;{{'contracts.per.page' | translate}}</div>
+        </div>
+        <div class="footer_pagination">
+            <pagination-controls *ngIf="pageTotal > 0" (pageChange)="p=$event; getPageData()" previousLabel="" nextLabel=""></pagination-controls>
+            <div class="enterPage" *ngIf="pageTotal > 0">
+                <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
+                <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
+            </div>
+        </div>
+        <div class="footer_page_number">
+          <span class="footer_page_number_chart_number">
+            {{'chart.number' | translate}}:
+          </span>
+          <span>
+            {{getPageStartEnd()}} / {{pageTotal}}
+          </span>
+        </div>
+    </div>
+    <div class="contract_footer_pagination_responsive">
+      <pagination-controls *ngIf="pageTotal > 0" (pageChange)="p=$event; getPageData()" previousLabel="" nextLabel=""></pagination-controls>
+      <div class="enterPage" *ngIf="pageTotal > 0">
+          <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
+          <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
+      </div>
     </div>
 
 <!-- </div> -->
@@ -1025,7 +1100,7 @@
 </ngx-spinner>
 
 
-<!-- <div class="skeleton-sign position-absolute opacity-0">
+<div class="skeleton-sign position-absolute opacity-0" style="display: none;">
     <div class="signature-container" id="export-html" style="width: 155px;min-height: 80px; display: flex; font-size: 9px">
     </div>
 
@@ -1061,4 +1136,4 @@
           <img [src]='this.srcMark' style="width: 70%; height: 100%;z-index: 1; object-fit: contain">
       </div>
     </div>
-</div> -->
+</div>

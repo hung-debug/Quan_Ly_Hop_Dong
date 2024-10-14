@@ -93,7 +93,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   dataSignPosition: any;
   emailUser_sample: string;
-  
+
   list_font: any;
   textSign: boolean = false;
   selectedTextType = 1;
@@ -101,7 +101,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     { id: 1, name: 'default' },
     { id: 2, name: 'currency' },
   ];
-  
+
   sum: number[] = [];
   top: any[]= [];
 
@@ -116,7 +116,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.step = variable.stepSampleContract.step3
   }
 
-  ngOnInit() {  
+  ngOnInit() {
     this.emailUser_sample = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email;
     if (!this.datas['arrDelete']) {
       this.datas.arrDelete = []; // biến arrDelete lưu id các đối tượng bị thay đổi dữ liệu => xoá
@@ -338,7 +338,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
 
   getActionNextMore(res: any, isArrCoordination: any, exist: boolean) {
-    if (exist) {   
+    if (exist) {
       let data_have_position = res.sign_config.filter((p: any) => isArrCoordination.some((q: any) => q.sign_type && (
         (((p.sign_unit == 'chu_ky_anh' && q.sign_type.some(({id}: any) => id == 1 || id == 5) && p.recipient_id == q.id) ||
           ((p.sign_unit == 'chu_ky_so' && q.sign_type.some(({id}: any) => id == 2 || id == 3 || id == 4 || id == 6 || id == 7 || id == 8) && p.recipient_id == q.id) ||
@@ -418,7 +418,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let id = event.target.id;
       let signElement = <HTMLElement>document.getElementById(id);
       let rect_location = signElement.getBoundingClientRect();
-      if (id.includes('chua-keo')) {  //Khi kéo vào trong hợp đồng thì sẽ thêm 1 object vào trong mảng sign_config
+      if (id.includes('chua-keo')) {  //Khi kéo vào trong tài liệu thì sẽ thêm 1 object vào trong mảng sign_config
         event.target.style.webkitTransform = event.target.style.transform = 'none';// Đẩy chữ ký về vị trí cũ
         event.target.setAttribute('data-x', 0);
         event.target.setAttribute('data-y', 0);
@@ -435,7 +435,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               font_size: element.font_size
             }
             if (element.sign_config.length == 0) {
-              _obj['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
+              _obj['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong tài liệu
             } else {
               _obj['id'] = 'signer-' + index + '-index-' + (element.sign_config.length) + '_' + element.id;
             }
@@ -520,7 +520,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     element.phone = this.soHopDong.phone;
                   } else if(res.sign_config.length > 0) {
                     this.soHopDong = {
-                      
+
                     };
 
                     for(let i = 0; i < res.sign_config.length; i++) {
@@ -548,7 +548,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                       element.email = this.soHopDong.email;
                       element.phone = this.soHopDong.phone;
                     }
-                   
+
                   }
 
                   this.isChangeText = true;
@@ -658,11 +658,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.datas.determine_contract.forEach((element: any) => {
       if (element.recipients.some((q: any) => q.status == 1 && q.email == this.emailUser_sample)) {
         element.recipients.forEach((item: any) => {
-          let dataChange = [];          
+          let dataChange = [];
 
             dataChange = this.datas.is_data_object_signature.filter((p: any) => p.recipient &&
                 p.recipient.id == item.id &&
-              ((p.recipient.email != item.email || 
+              ((p.recipient.email != item.email ||
                 (p.type == 2 && !item.sign_type.some((q: any) => q.id == 1 || q.id == 5) ||
                 (p.type == 3 && !item.sign_type.some((q: any) => q.id == 2 || q.id == 3 || q.id == 4 || q.id == 6 || q.id == 7 || q.id == 8)) ||
                 ((p.type == 1 || p.type == 5) &&  item.role != 4 && !item.sign_type.some((q: any) => q.id == 2 || q.id == 4 || q.id == 6) ||
@@ -670,7 +670,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 )))));
 
           if (dataChange.length == 0) {
-            if (item.fields && item.fields.length && item.fields.length > 0) {            
+            if (item.fields && item.fields.length && item.fields.length > 0) {
               item.fields.forEach((res: any) => {
                 res['id_have_data'] = res.id;
                 res['is_type_party'] = element.type;
@@ -697,7 +697,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               item['role'] = item.role;
               dataNotPosition.push(item)
             }
-          } else {        
+          } else {
             let isValueDelete = dataChange.map(({id}: any) => {return id})
             Array.prototype.push.apply(this.datas.arrDelete, isValueDelete);
           }
@@ -832,7 +832,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           let canvas: any = document.getElementById('canvas-step3-'+i);
           this.top[i] = canvas.height;
         }
-        
+
         for(let i = 0; i < this.pageNumber; i++) {
           this.top[i+1] += this.top[i];
           this.sum[i] = this.top[i+1];
@@ -850,7 +850,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         for(let i = 0; i < this.pageNumber; i++) {
           if(canvasWidth[i] == Math.min(...canvasWidth))
           this.arrDifPage.push('min');
-          else  
+          else
           this.arrDifPage.push('max');
         }
         if(this.datas.isFirstLoadDrag != true)
@@ -935,7 +935,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           }
           a.setAttribute("data-x", element['coordinate_x']);
           a.setAttribute("data-y", element['coordinate_y']);
-        }       
+        }
       });
     }
 
@@ -1029,9 +1029,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
 
-  // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
+  // hàm set kích thước cho đối tượng khi được kéo thả vào trong tài liệu
   changePosition(d?: any, e?: any, sizeChange?: any) {
-    let style: any = 
+    let style: any =
     (d.sign_unit != 'chu_ky_anh' && d.sign_unit != 'chu_ky_so') ?
     {
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
@@ -1069,7 +1069,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // get select người ký
   getSignSelect(d: any) {
-    
+
     if (d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
       this.textSign = true;
       this.list_font = ["Arial", "Calibri", "Times New Roman"];
@@ -1085,19 +1085,19 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
-    
+
     let signElement;
     if (set_id) {
       // set lại id cho đối tượng ký đã click
       this.objSignInfo.id = set_id.id;
-      
-      
+
+
       signElement = document.getElementById(this.objSignInfo.id);
     } else
       signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-      if (isObjSign) {        
+      if (isObjSign) {
         this.isEnableSelect = false;
         this.objSignInfo.traf_x = d.coordinate_x;
         this.objSignInfo.traf_y = d.coordinate_y;
@@ -1116,7 +1116,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-  // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
+  // Hàm remove đối tượng đã được kéo thả vào trong file tài liệu canvas
   async onCancel(e: any, data: any) {
     let dataHaveId = true;
 
@@ -1127,7 +1127,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (data.id_have_data) {
       this.spinner.show();
       await this.contractService.deleteInfoContractSignature(data.id_have_data).toPromise().then((res: any) => {
-        this.toastService.showSuccessHTMLWithTimeout(`Xóa đối tượng ký trong hợp đồng!`, "", "3000");
+        this.toastService.showSuccessHTMLWithTimeout(`Xóa đối tượng ký trong tài liệu!`, "", "3000");
         this.list_sign_name.forEach((p: any) => {
           if (p.fields && p.fields.length && p.fields.length > 0) {
             for (let i = 0; i < p.fields.length; i++) {
@@ -1180,7 +1180,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   // Hàm tạo các đối tượng kéo thả
-  convertToSignConfig() { 
+  convertToSignConfig() {
     let arrSignConfig: any = [];
     let cloneUserSign = [...this.datas.contract_user_sign];
     cloneUserSign.forEach(element => {
@@ -1191,7 +1191,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       element.email = this.datas.is_data_object_signature.filter((item: any) => item.id == element.recipient_id)[0]?.email
       if(element.recipient)
       element.recipient.email = this.datas.is_data_object_signature.filter((item: any) => item.id == element.recipient_id)[0]?.email
-    }); 
+    });
     return arrSignConfig;
   }
 
@@ -1201,8 +1201,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     cloneUserSign.forEach(element => {
       arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
-    
-    let partnerRecipients: any[] = [] 
+
+    let partnerRecipients: any[] = []
     this.datas.is_data_object_signature.forEach((ele: any) => {
       partnerRecipients.push(ele.id)
     })
@@ -1236,7 +1236,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // })
 
     this.list_sign_name.forEach((element: any) => {
-      
+
       if (this.convertToSignConfig().some((p: any) => ((p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && (p.recipient ? p.recipient.email : p.email) && p.sign_unit == 'so_tai_lieu'))) {
         if (isSignType != 'text') {
           if(isSignType == 'so_tai_lieu') {
@@ -1250,7 +1250,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           }  else {
             element.is_disable = true
           }
-        } 
+        }
       } else {
         if (isSignType == 'chu_ky_anh') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
@@ -1262,7 +1262,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           if (this.datas.contract_no) {
             element.is_disable = true;
           } else {
-          // element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4)); 
+          // element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4));
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3 && p.id != 7))
           }
         }
@@ -1301,7 +1301,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // edit location doi tuong ky
   changePositionSign(e: any, locationChange: any, property: any) {
-    // 
+    //
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
@@ -1379,7 +1379,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 })
               }
             }
-          });  
+          });
         } else {
           // let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
           let data_name = this.list_sign_name.filter((p: any) => p.email == e.target.value)[0];
@@ -1401,9 +1401,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             isObjSign.email = data_name.email;
             signElement.setAttribute("email", isObjSign.email);
-            
+
             isObjSign.phone = data_name.phone;
             signElement.setAttribute("phone", isObjSign.phone);
+
+            if(isObjSign.recipient) {
+              isObjSign.recipient.id = data_name.id;
+              isObjSign.recipient.name = data_name.name;
+              isObjSign.recipient.email = data_name.email;
+            }
           }
 
           let idTypeSign = data_name.sign_type[0].id;
@@ -1411,7 +1417,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           if((data_name.role == 4 || ((idTypeSign == 2 || idTypeSign == 4))) && this.isChangeText) {
             this.soHopDong = data_name;
 
-            //Gán lại tất cả số hợp đồng cho một người ký
+            //Gán lại tất cả số tài liệu cho một người ký
             this.datas.contract_user_sign.forEach((res: any) => {
               if (res.sign_config.length > 0) {
                 let arrSignConfigItem: any = "";
@@ -1429,12 +1435,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     element.phone = data_name.phone;
                   })
                 }
-          
+
               }
             });
-          } 
+          }
         }
-        
+
       }
     }
   }
@@ -1589,25 +1595,25 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   }
                 }
                 if (boxElements[i].sign_unit == boxElements[j].sign_unit && boxElements[i].sign_unit == "so_tai_lieu") {
-                  this.toastService.showErrorHTMLWithTimeout("Vị trí các ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
+                  this.toastService.showErrorHTMLWithTimeout("Vị trí các ô số tài liệu không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
-  
+
                 if ((boxElements[i].sign_unit.includes('chu_ky') && ((boxElements[j].sign_unit == "text" && !boxElements[j].text_type))) ||
                     (boxElements[j].sign_unit.includes('chu_ky') && ((boxElements[i].sign_unit == "text" && !boxElements[i].text_type) ))) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô text hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
                 }
                 if ((boxElements[i].sign_unit.includes('chu_ky') && boxElements[j].sign_unit == "so_tai_lieu") ||
                     (boxElements[j].sign_unit.includes('chu_ky') && boxElements[i].sign_unit == "so_tai_lieu"))  {
-                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số hợp đồng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
+                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số tài liệu hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
                 }
                 if ((boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky')) ||
                     (boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky'))) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
-  
+
                 if ((((!boxElements[i].text_type && boxElements[i].sign_unit == "text"))  && boxElements[j].sign_unit == "so_tai_lieu") ||
                     (((!boxElements[j].text_type && boxElements[j].sign_unit == "text")) && boxElements[i].sign_unit == "so_tai_lieu")) {
-                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô text và ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
+                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô text và ô số tài liệu không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
                 if ((((!boxElements[i].text_type && boxElements[i].sign_unit == "text")) && boxElements[j].text_type == "currency") ||
                 (((!boxElements[j].text_type && boxElements[j].sign_unit == "text")) && boxElements[i].text_type == "currency")) {
@@ -1615,14 +1621,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 }
                 if ((boxElements[i].sign_unit == "so_tai_lieu" && boxElements[j].text_type == "currency") ||
                     (boxElements[j].sign_unit == "so_tai_lieu" && boxElements[i].text_type == "currency")) {
-                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô số và ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
+                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô số và ô số tài liệu không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
               }
               return false;
             }
           }
         }
-  
+
         //Trường hợp 2: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc phải trên
         for (let i = 0; i < coordinate_x.length; i++) {
           for (let j = i + 1; j < coordinate_x.length; j++) {
@@ -1647,25 +1653,25 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   }
                 }
                 if (boxElements[i].sign_unit == boxElements[j].sign_unit && boxElements[i].sign_unit == "so_tai_lieu") {
-                  this.toastService.showErrorHTMLWithTimeout("Vị trí các ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
+                  this.toastService.showErrorHTMLWithTimeout("Vị trí các ô số tài liệu không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
-  
+
                 if ((boxElements[i].sign_unit.includes('chu_ky') && ((boxElements[j].sign_unit == "text" && !boxElements[j].text_type))) ||
                     (boxElements[j].sign_unit.includes('chu_ky') && ((boxElements[i].sign_unit == "text" && !boxElements[i].text_type) ))) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô text hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
                 }
                 if ((boxElements[i].sign_unit.includes('chu_ky') && boxElements[j].sign_unit == "so_tai_lieu") ||
                     (boxElements[j].sign_unit.includes('chu_ky') && boxElements[i].sign_unit == "so_tai_lieu"))  {
-                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số hợp đồng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
+                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số tài liệu hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
                 }
                 if ((boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky')) ||
                     (boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky'))) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
-  
+
                 if ((((!boxElements[i].text_type && boxElements[i].sign_unit == "text"))  && boxElements[j].sign_unit == "so_tai_lieu") ||
                     (((!boxElements[j].text_type && boxElements[j].sign_unit == "text")) && boxElements[i].sign_unit == "so_tai_lieu")) {
-                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô text và ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
+                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô text và ô số tài liệu không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
                 if ((((!boxElements[i].text_type && boxElements[i].sign_unit == "text")) && boxElements[j].text_type == "currency") ||
                 (((!boxElements[j].text_type && boxElements[j].sign_unit == "text")) && boxElements[i].text_type == "currency")) {
@@ -1673,14 +1679,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 }
                 if ((boxElements[i].sign_unit == "so_tai_lieu" && boxElements[j].text_type == "currency") ||
                     (boxElements[j].sign_unit == "so_tai_lieu" && boxElements[i].text_type == "currency")) {
-                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô số và ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
+                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô số và ô số tài liệu không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
               }
               return false;
             }
           }
         }
-  
+
         //Trường hợp 3: ô 1 giao ô 2 trong vùng x2+w thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc trái trên
         for (let i = 0; i < coordinate_x.length; i++) {
           for (let j = i + 1; j < coordinate_x.length; j++) {
@@ -1704,25 +1710,25 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   }
                 }
                 if (boxElements[i].sign_unit == boxElements[j].sign_unit && boxElements[i].sign_unit == "so_tai_lieu") {
-                  this.toastService.showErrorHTMLWithTimeout("Vị trí các ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
+                  this.toastService.showErrorHTMLWithTimeout("Vị trí các ô số tài liệu không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
-  
+
                 if ((boxElements[i].sign_unit.includes('chu_ky') && ((boxElements[j].sign_unit == "text" && !boxElements[j].text_type))) ||
                     (boxElements[j].sign_unit.includes('chu_ky') && ((boxElements[i].sign_unit == "text" && !boxElements[i].text_type) ))) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô text hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
                 }
                 if ((boxElements[i].sign_unit.includes('chu_ky') && boxElements[j].sign_unit == "so_tai_lieu") ||
                     (boxElements[j].sign_unit.includes('chu_ky') && boxElements[i].sign_unit == "so_tai_lieu"))  {
-                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số hợp đồng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
+                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số tài liệu hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
                 }
                 if ((boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky')) ||
                     (boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky'))) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
-  
+
                 if ((((!boxElements[i].text_type && boxElements[i].sign_unit == "text"))  && boxElements[j].sign_unit == "so_tai_lieu") ||
                     (((!boxElements[j].text_type && boxElements[j].sign_unit == "text")) && boxElements[i].sign_unit == "so_tai_lieu")) {
-                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô text và ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
+                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô text và ô số tài liệu không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
                 if ((((!boxElements[i].text_type && boxElements[i].sign_unit == "text")) && boxElements[j].text_type == "currency") ||
                 (((!boxElements[j].text_type && boxElements[j].sign_unit == "text")) && boxElements[i].text_type == "currency")) {
@@ -1730,14 +1736,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 }
                 if ((boxElements[i].sign_unit == "so_tai_lieu" && boxElements[j].text_type == "currency") ||
                     (boxElements[j].sign_unit == "so_tai_lieu" && boxElements[i].text_type == "currency")) {
-                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô số và ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
+                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô số và ô số tài liệu không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
               }
               return false;
             }
           }
         }
-  
+
         //Trường hợp 4: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc phải trên
         for (let i = 0; i < coordinate_x.length; i++) {
           for (let j = i + 1; j < coordinate_x.length; j++) {
@@ -1762,25 +1768,25 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   }
                 }
                 if (boxElements[i].sign_unit == boxElements[j].sign_unit && boxElements[i].sign_unit == "so_tai_lieu") {
-                  this.toastService.showErrorHTMLWithTimeout("Vị trí các ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
+                  this.toastService.showErrorHTMLWithTimeout("Vị trí các ô số tài liệu không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
-  
+
                 if ((boxElements[i].sign_unit.includes('chu_ky') && ((boxElements[j].sign_unit == "text" && !boxElements[j].text_type))) ||
                     (boxElements[j].sign_unit.includes('chu_ky') && ((boxElements[i].sign_unit == "text" && !boxElements[i].text_type) ))) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô text hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
                 }
                 if ((boxElements[i].sign_unit.includes('chu_ky') && boxElements[j].sign_unit == "so_tai_lieu") ||
                     (boxElements[j].sign_unit.includes('chu_ky') && boxElements[i].sign_unit == "so_tai_lieu"))  {
-                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số hợp đồng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
+                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số tài liệu hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000)
                 }
                 if ((boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky')) ||
                     (boxElements[i].text_type == 'currency' && boxElements[j].sign_unit.includes('chu_ky'))) {
                   this.toastService.showErrorHTMLWithTimeout("Vị trí ô ký không được để trùng ô số hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
-  
+
                 if ((((!boxElements[i].text_type && boxElements[i].sign_unit == "text"))  && boxElements[j].sign_unit == "so_tai_lieu") ||
                     (((!boxElements[j].text_type && boxElements[j].sign_unit == "text")) && boxElements[i].sign_unit == "so_tai_lieu")) {
-                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô text và ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
+                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô text và ô số tài liệu không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
                 if ((((!boxElements[i].text_type && boxElements[i].sign_unit == "text")) && boxElements[j].text_type == "currency") ||
                 (((!boxElements[j].text_type && boxElements[j].sign_unit == "text")) && boxElements[i].text_type == "currency")) {
@@ -1788,7 +1794,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 }
                 if ((boxElements[i].sign_unit == "so_tai_lieu" && boxElements[j].text_type == "currency") ||
                     (boxElements[j].sign_unit == "so_tai_lieu" && boxElements[i].text_type == "currency")) {
-                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô số và ô số hợp đồng không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
+                  this.toastService.showErrorHTMLWithTimeout("Vị trí ô số và ô số tài liệu không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
                 }
               }
               return false;
@@ -1802,7 +1808,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         return false;
       } else if (count_number > 1) {
         if(!isSaveDraft)
-        this.toastService.showErrorHTMLWithTimeout("Hợp đồng chỉ được phép có 1 số hợp đồng!", "", 3000);
+        this.toastService.showErrorHTMLWithTimeout("Tài liệu chỉ được phép có 1 số tài liệu!", "", 3000);
         return false;
       } else if (count_text > 0) {
         if(!isSaveDraft)
@@ -1816,7 +1822,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           name: '',
           sign_type: ''
         };
-        
+
         if (environment.flag == "KD") {
           for (const element of data_partner) {
             if (element.sign_type.length > 0) {
@@ -1840,23 +1846,23 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             this.toastService.showWarningHTMLWithTimeout(`Thiếu đối tượng2 ${nameSign_partner.sign_type == 'chu_ky_so' ? 'ký số' : 'ký ảnh hoặc eKYC'} của đối tác ${nameSign_partner.name}, vui lòng chọn đủ người ký!`, "", 3000);
             return false;
           }
-  
+
           // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
           if (arrSign_partner.length < data_partner.length) {
             // alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!');
             this.spinner.hide();
-  
+
             if(!isSaveDraft)
             this.toastService.showWarningHTMLWithTimeout("Thiếu đối tượng ký của đối tác3, vui lòng chọn đủ người ký!", "", 3000);
             return false;
           }
         } else {
-        // valid ký kéo thiếu ô ký cho từng loại ký  
+        // valid ký kéo thiếu ô ký cho từng loại ký
           for (const element of data_partner) {
             if (element.sign_type.length > 0) {
               if (element.sign_type.some((p: any) => [3,7,8].includes(p.id) || ([2,4,6].includes(p.id) && element.role !==4)) && arrSign_partner.filter((item: any) => ((element.email && item.email == element.email) || (element.phone && item.phone == element.phone)) && item.sign_unit == 'chu_ky_so').length == 0) {
                 countError_partner++;
-                nameSign_partner.name = element.name;  
+                nameSign_partner.name = element.name;
                 nameSign_partner.sign_type = 'chu_ky_so';
                 break
               }
@@ -1877,10 +1883,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
 
           // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
-          if (arrSign_partner.length < data_partner.length || !this.validateVanThuData(arrSign_partner, data_partner)) {  
+          if (arrSign_partner.length < data_partner.length || !this.validateVanThuData(arrSign_partner, data_partner)) {
             // alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!');
             this.spinner.hide();
-            // if(!isSaveDraft)        
+            // if(!isSaveDraft)
             this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!", "", 3000);
             return false;
           }
@@ -1889,7 +1895,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
     return true;
   }
-  
+
   validateVanThuData(arrOrg: any[], dataOrg: any[]) {
     let count: number = 0
     dataOrg.forEach(element => {

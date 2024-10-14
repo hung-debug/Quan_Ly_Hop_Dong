@@ -5,7 +5,7 @@
         [style.background-color]="item.status==0 ? '#eaf4ff' : ''" class="item_contract">
           <div class="row">
             <div class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name}}</div>
-            <!-- <div *ngIf="this.lang == 'en'" class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name.replace("Ký HĐ","Sign contract").replace("Quá hạn","Overdue").replace("Hoàn thành","Completed")}}</div> -->
+            <!-- <div *ngIf="this.lang == 'en'" class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name.replace("Ký Tài liệu","Sign contract").replace("Quá hạn","Overdue").replace("Hoàn thành","Completed")}}</div> -->
           </div>
           <div class="row" *ngFor="let s of item.notice_content.split('<br/>')">
             <div *ngIf="!s.includes('\nBên B: #PARTICIPANT_2#')" class="col-md-12 item_contract_infor">
@@ -21,18 +21,21 @@
             </div>
 
             <div class="col-md-6 item_contract_infor">{{'contract.status' | translate}}:
-              <span class="status_blue" *ngIf="item.message_code=='sign_flow_coordinator'">{{'contract.lead' | translate}}</span>
-              <span class="status_blue" *ngIf="item.message_code=='sign_flow_reject'">{{'contract.status.fail' | translate}}</span>
-              <span class="status_blue" *ngIf="item.message_code=='sign_flow_review'">{{'contract.view' | translate}}</span>
-              <span class="status_blue" *ngIf="item.message_code=='sign_flow_sign'">{{'contract.sign' | translate}}</span>
-              <span class="status_blue" *ngIf="item.message_code=='sign_flow_publish'">{{'contract.document' | translate}}</span>
-              <span class="status_blue" *ngIf="item.message_code=='sign_flow_finish'">{{'contract.status.complete' | translate}}</span>
-              <span class="status_blue" *ngIf="item.message_code=='sign_flow_cancel'">{{'contract.status.cancel' | translate}}</span>
-              <span class="status_blue" *ngIf="item.message_code=='contract_exprire'">{{'contract.status.overdue' | translate}}</span>
-              <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire'">{{'contract.status.expire' | translate}}</span>
-              <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire_createdby'">{{'contract.status.expire' | translate}}</span>
-              <span class="status_blue" *ngIf="item.message_code=='contract_exprire_createdby'">{{'contract.status.overdue' | translate}}</span>
-              <span class="status_blue" *ngIf="item.message_code=='contract_exprire_time'">{{'expire.status' | translate}}</span>
+              <span class="status_blue" *ngIf="item.message_code=='sign_flow_coordinator' || item.message_code=='sign_flow_coordinator_config'">{{'contract.lead' | translate}}</span>
+              <span class="status_blue" *ngIf="item.message_code=='sign_flow_reject' || item.message_code=='sign_flow_reject_config'">{{'contract.status.fail' | translate}}</span>
+              <span class="status_blue" *ngIf="item.message_code=='sign_flow_review' || item.message_code=='sign_flow_review_config'">{{'contract.view' | translate}}</span>
+              <span class="status_blue" *ngIf="item.message_code=='sign_flow_sign' || item.message_code=='sign_flow_sign_config'">{{'contract.sign' | translate}}</span>
+              <span class="status_blue" *ngIf="item.message_code=='sign_flow_publish' || item.message_code=='sign_flow_publish_config'">{{'contract.document' | translate}}</span>
+              <span class="status_blue" *ngIf="item.message_code=='sign_flow_finish' || item.message_code=='sign_flow_finish_config'">{{'contract.status.complete' | translate}}</span>
+              <span class="status_blue" *ngIf="item.message_code=='sign_flow_cancel' || item.message_code=='sign_flow_cancel_config'">{{'contract.status.cancel' | translate}}</span>
+              <span class="status_blue" *ngIf="item.message_code=='contract_exprire' || item.message_code=='contract_exprire_config'">{{'contract.status.overdue' | translate}}</span>
+              <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire' || item.message_code=='contract_about_exprire_config'">{{'contract.status.expire' | translate}}</span>
+              <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire_createdby' || item.message_code=='contract_about_exprire_createdby_config'">{{'contract.status.expire' | translate}}</span>
+              <span class="status_blue" *ngIf="item.message_code=='contract_exprire_createdby' || item.message_code=='contract_exprire_createdby_config'">{{'contract.status.overdue' | translate}}</span>
+              <span class="status_blue" *ngIf="item.message_code=='contract_exprire_time' || item.message_code=='contract_exprire_time_config'">{{'expire.status' | translate}}</span>
+              <span class="status_blue" *ngIf="item.message_code=='contract_share_notice' || item.message_code=='contract_share_notice_config'">{{'contract.share.notice' | translate}}</span>
+                    <span class="status_blue" *ngIf="item.message_code=='contract_transfer' || item.message_code=='contract_transfer_config'">{{'contract.transfer.config' | translate}}</span>
+                    <span class="status_blue" *ngIf="item.message_code=='contract_share_template' || item.message_code=='contract_share_template_config'">{{'contract.share.template.config' | translate}}</span>
             </div>
 
           </div>
@@ -42,7 +45,7 @@
     <div *ngIf="listNotification.length == 0"
     style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
       <div style="display: table-cell;vertical-align: middle;">
-        <img src="../../../assets/img/empty_data.svg"/>
+        <img src="../../../assets/img/no_data.svg"/>
         <div style="color: #94A7C6">{{'no.data' | translate}}</div>
       </div>
     </div>
@@ -53,7 +56,7 @@
         <pagination-controls *ngIf="listNotification.length > 0;" (pageChange)="p=$event; getNotification()" previousLabel="" nextLabel=""></pagination-controls>
         <div class="enterPage" *ngIf="pageTotal > 0">
             <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-            <p>của {{countPage()}} trang</p>
+            <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
         </div>
       </div>
       <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>

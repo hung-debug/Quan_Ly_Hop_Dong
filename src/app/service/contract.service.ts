@@ -55,6 +55,7 @@ export class ContractService {
   processAuthorizeContractUrl: any = `${environment.apiUrl}/api/v1/processes/authorize`;
 
   addGetDataContract: any = `${environment.apiUrl}/api/v1/contracts/`;
+  editSignTimeMuti: any = `${environment.apiUrl}/api/v1/contracts/update-sign-time`;
 
   addGetFileContract: any = `${environment.apiUrl}/api/v1/documents/by-contract/`;
   addGetObjectSignature: any = `${environment.apiUrl}/api/v1/fields/by-contract/`;
@@ -254,9 +255,10 @@ export class ContractService {
   public getContractList(isOrg: any, organization_id: any, filter_name: any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status: any,
     page: any,
     size: any,
-    issue?: any
+    handlerName: any,
+    nameOrEmailCustomer: any,
+    issue?: any,
   ): Observable<any> {
-    console.log("iss ", isOrg);
     this.getCurrentUser();
 
     if (filter_from_date != '') {
@@ -298,7 +300,10 @@ export class ContractService {
           '&page=' +
           page +
           '&size=' +
-          size;
+          size + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
+          if(handlerName != ""){
+            listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
+          }
       } else {
         listContractUrl =
           this.listContractUrl +
@@ -319,7 +324,10 @@ export class ContractService {
           '&page=' +
           page +
           '&size=' +
-          size;
+          size + '&name_or_email_customer=' + nameOrEmailCustomer.trim() ;
+          if(handlerName != ""){
+            listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
+          }
       }
     } else {
       if (organization_id == '') {
@@ -344,11 +352,17 @@ export class ContractService {
           '&page=' +
           page +
           '&size=' +
-          size;
+          size + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
+          if(handlerName != ""){
+            listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
+          }
       } else {
         listContractUrl = this.listContractOrgUrl + '?organization_id=' + organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' +
           filter_contract_no.trim() + '&from_date=' + filter_from_date + '&to_date=' + filter_to_date + '&status=' + filter_status + '&remain_day=' + remain_day +
-          '&page=' + page + '&size=' + size;
+          '&page=' + page + '&size=' + size + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
+          if(handlerName != ""){
+            listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
+          }
       }
     }
 
@@ -461,6 +475,16 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
 
     return this.http.put<Contract>(this.addGetDataContract + contractId, body, { headers: headers })
+  }
+
+  editSignTimeMutiContract(body: any) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.put<Contract>(this.editSignTimeMuti, body, { headers: headers })
   }
 
   getSignPositionCoordinatesForm(id_contract_form: number) {
@@ -1045,7 +1069,7 @@ export class ContractService {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);    
+      .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       name: datas.name,
       type: is_type ? is_type : 1,
@@ -1056,7 +1080,7 @@ export class ContractService {
       ordering: 1,
       status: is_status ? is_status : 1,
       contract_id: datas.id,
-    });  
+    });
     return this.http.post<Contract>(this.documentUrl, body, {
       headers: headers,
     });
@@ -1133,7 +1157,7 @@ export class ContractService {
     const body = {
       mobile: phone,
       network_code: networkCode,
-      prompt: `Bạn có yêu cầu ký số hợp đồng ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
+      prompt: `Bạn có yêu cầu ký số tài liệu ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
       reason: 'reason',
       image_base64: image_base64,
       isTimestamp: isTimestamp,
@@ -1278,7 +1302,7 @@ export class ContractService {
       .toPromise();
   }
 
-  signRemote(datas: any, recipientId: number, isTimestamp: any, boxType: any) {
+  signRemote(datas: any, recipientId: number, isTimestamp: any, boxType: any, isVnptSmartCa= false) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -1291,6 +1315,7 @@ export class ContractService {
       isTimestamp: isTimestamp,
       type: boxType,
       field: datas.field,
+      supplier: isVnptSmartCa ? 'vnpt' : 'nacencomm',
     });
 
     return this.http
@@ -1298,7 +1323,7 @@ export class ContractService {
       .toPromise();
   }
 
-  signRemoteMulti(datas: any, recipientIds: [], isTimestamp: any, boxType: any) {
+  signRemoteMulti(datas: any, recipientIds: [], isTimestamp: any, boxType: any, isVnptSmartCa?: any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -1311,6 +1336,7 @@ export class ContractService {
       isTimestamp: false,
       type: boxType,
       field: datas.field,
+      supplier: isVnptSmartCa ? 'vnpt' : 'nacencomm',
     });
 
     return this.http
@@ -1959,7 +1985,7 @@ export class ContractService {
       .pipe();
   }
 
-  getSignatureInfoTokenV1(base64Cert: any, base64Img: any) {
+  getSignatureInfoTokenV1(base64Cert: any, base64Img: any, type: number) {
       this.getCurrentUser();
       const headers = new HttpHeaders()
         .append('Content-Type', 'application/json')
@@ -1967,6 +1993,7 @@ export class ContractService {
       const body = JSON.stringify({
         base64_cert: base64Cert,
         base64_image: base64Img,
+        type_image_signature: type
       });
       return this.http.post<any>(
         this.getSignatureInfoTokenV1Url,
@@ -2129,11 +2156,33 @@ export class ContractService {
         sign_unit: 'chu_ky_anh',
         sign_config: [],
       },
+      // {
+      //   id: Helper._ranDomNumberText(10),
+      //   sign_unit: 'chu_ky_so',
+      //   sign_config: [],
+      // },
       {
         id: Helper._ranDomNumberText(10),
         sign_unit: 'chu_ky_so',
         sign_config: [],
-      },
+        type: [
+          {
+            id: Helper._ranDomNumberText(10),
+            sign_unit: 'chu_ky_so_con_dau_va_thong_tin',
+            sign_config: [],
+          },
+          {
+            id: Helper._ranDomNumberText(10),
+            sign_unit: 'chu_ky_so_con_dau',
+            sign_config: [],
+          },
+          {
+            id: Helper._ranDomNumberText(10),
+            sign_unit: 'chu_ky_so_thong_tin',
+            sign_config: [],
+          },
+        ],
+      }
     ];
   }
 

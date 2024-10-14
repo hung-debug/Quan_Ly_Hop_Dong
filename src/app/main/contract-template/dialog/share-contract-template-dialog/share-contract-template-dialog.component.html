@@ -4,24 +4,28 @@
     </div>
 
     <div>
-    <p-selectButton [options]="stateOptions" [(ngModel)]="isList" optionLabel="label" optionValue="value" (click)="ngOnInit()"></p-selectButton>
+    <p-selectButton [options]="stateOptions" [(ngModel)]="isList" optionLabel="label" optionValue="value" (click)="ngOnInit()">
+      <ng-template #options let-item>
+        <span style="margin: 0 auto">{{ item.label | translate}}</span>
+      </ng-template>
+    </p-selectButton>
 </div>
     <form *ngIf="isList=='off'" [formGroup]="addFormUser" class="content" >
         <div class="row">
             <div class="col-md-12">
-                <div class="label text-color">Tổ chức</div>
+                <div class="label text-color">{{'menu.organization.list'|translate}}</div>
                 <div>
-                    <p-dropdown 
+                    <p-dropdown
                         panelStyleClass="font"
                         appendTo="body"
-                        [options]="orgList" 
-                        formControlName="orgId" 
-                        optionLabel="name" 
-                        optionValue="id" 
-                        placeholder="Chọn tổ chức" 
-                        [filter]="true" 
-                        filterBy="name" 
-                        [showClear]="true"  
+                        [options]="orgList"
+                        formControlName="orgId"
+                        optionLabel="name"
+                        optionValue="id"
+                        placeholder="Chọn tổ chức"
+                        [filter]="true"
+                        filterBy="name"
+                        [showClear]="true"
                         (onChange)="getUserByOrg(orgId.value)"
                         #orgId
                         ></p-dropdown>
@@ -32,25 +36,25 @@
             <div class="col-md-12">
                 <div class="label text-color">Email <span class="required-title">*</span></div>
                 <div>
-                    <p-multiSelect 
+                    <p-multiSelect
                         panelStyleClass="font"
                         appendTo="body"
-                        [options]="userList" 
-                        formControlName="email" 
-                        optionLabel="email" 
-                        optionValue="email" 
-                        placeholder="Chọn email" 
-                        [filter]="true" 
-                        filterBy="email" 
-                        [showClear]="true"  
+                        [options]="userList"
+                        formControlName="email"
+                        optionLabel="email"
+                        optionValue="email"
+                        placeholder="{{'select.email' | translate}}"
+                        [filter]="true"
+                        filterBy="email"
+                        [showClear]="true"
                         ></p-multiSelect>
                 </div>
                 <div *ngIf="submittedUser && fUser.email.errors" class="invalid">
-                    <div *ngIf="fUser.email.errors.required">Email không được để trống</div>
+                    <div *ngIf="fUser.email.errors.required">{{'error.email.required' |translate}}</div>
                 </div>
             </div>
         </div>
-    
+
         <div class="row" style="justify-content: center;padding-top: 10px;">
             <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.cancel' | translate}}</button>
             <button class="save-button" (click)="onSubmit()">{{'btn.share' | translate}}</button>
@@ -61,16 +65,16 @@
         <div class="col-md-12">
             <div class="label text-color">Tổ chức</div>
             <div>
-                <p-dropdown 
+                <p-dropdown
                     [(ngModel)]="orgId"
                     panelStyleClass="font"
                     appendTo="body"
-                    [options]="orgList" 
-                    optionLabel="name" 
-                    optionValue="id"    
-                    placeholder="Chọn tổ chức" 
-                    [filter]="true"   
-                    filterBy="name" 
+                    [options]="orgList"
+                    optionLabel="name"
+                    optionValue="id"
+                    placeholder="Chọn tổ chức"
+                    [filter]="true"
+                    filterBy="name"
                     (onChange)="getDataShareByOrgId()"
                     ></p-dropdown>
             </div>
@@ -102,11 +106,11 @@
               </ng-template>  -->
             </p-table>
           </div>
-        
-        <div *ngIf="list.length == 0" 
+
+        <div *ngIf="list.length == 0"
           style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
             <div style="display: table-cell;vertical-align: middle;">
-              <img src="../../../assets/img/empty_data.svg"/>
+              <img src="../../../assets/img/no_data.svg"/>
               <div style="color: #94A7C6">{{'no.data' | translate}}</div>
             </div>
         </div>
@@ -116,4 +120,3 @@
         </div>
     </div>
   </div>
-  

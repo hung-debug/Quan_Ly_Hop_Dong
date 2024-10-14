@@ -35,7 +35,7 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
    orgList: any[] = [];
    organization_id_user_login: any;
  
-   //Biến lấy số lượng tổ chức lớn nhất trong các hợp đồng
+   //Biến lấy số lượng tổ chức lớn nhất trong các tài liệu
    maxOrg: number;
  
    //Biến để gộp các cột

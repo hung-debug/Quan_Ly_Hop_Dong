@@ -61,6 +61,7 @@ import { DialogReasonCancelComponent } from './shared/model/dialog-reason-cancel
 import { EditHandlerComponent } from './shared/model/edit-handler-dialog/edit-handler-dialog.component';
 import { MultiSignListComponent } from './components/multi-sign-list/multi-sign-list.component';
 import { RemoteDialogSignComponent } from './components/consider-contract/remote-dialog-sign/remote-dialog-sign.component';
+import { ImageDialogSignV2Component } from './components/consider-contract/image-dialog-sign-v2/image-dialog-sign-v2.component';
 
 const signatures = "s9";
 const consider = "c9";
@@ -124,7 +125,8 @@ export const contractSignatureRoutes1: Routes = [
     DialogReasonCancelComponent,
     EditHandlerComponent,
     MultiSignListComponent,
-    RemoteDialogSignComponent
+    RemoteDialogSignComponent,
+    ImageDialogSignV2Component
     // AddContractComponent
   ],
   imports: [

@@ -49,7 +49,7 @@ export class AdminDetailPackComponent implements OnInit {
     if(this.datas?.calculatorMethod == 'BY_TIME') {
       return "Theo thời gian";
     } else if(this.datas?.calculatorMethod == 'BY_CONTRACT_NUMBERS') {
-      return "Theo số lượng hợp đồng";
+      return "Theo số lượng tài liệu";
     }
 
     return "";

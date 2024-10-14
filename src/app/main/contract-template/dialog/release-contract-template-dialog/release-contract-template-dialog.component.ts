@@ -28,10 +28,10 @@ export class ReleaseContractTemplateDialogComponent implements OnInit {
         this.router.navigate(['/main/contract-template']);
       });
       this.dialogRef.close();
-      this.toastService.showSuccessHTMLWithTimeout("Phát hành mẫu hợp đồng thành công!", "", 3000);
+      this.toastService.showSuccessHTMLWithTimeout("Phát hành mẫu tài liệu thành công!", "", 3000);
     },
     error => {
-      this.toastService.showErrorHTMLWithTimeout("Phát hành mẫu hợp đồng thất bại", "", 3000);
+      this.toastService.showErrorHTMLWithTimeout("Phát hành mẫu tài liệu thất bại", "", 3000);
       return false;
     }
     );

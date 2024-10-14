@@ -328,7 +328,7 @@ export class FooterSignatureComponent implements OnInit {
         if (!ArrRecipientsNew) {
 
           this.toastService.showErrorHTMLWithTimeout(
-            'Bạn không có quyền xử lý hợp đồng này!',
+            'Bạn không có quyền xử lý tài liệu này!',
             '',
             3000
           );
@@ -354,7 +354,7 @@ export class FooterSignatureComponent implements OnInit {
           if (dataCoordination) {
             this.datas.recipient_id_coordition = dataCoordination.id;
             if (dataCoordination.status == 5) {
-              this.toastService.showWarningHTMLWithTimeout("Hợp đồng đang trong quá trình xử lý!", "", 3000);
+              this.toastService.showWarningHTMLWithTimeout("Tài liệu đang trong quá trình xử lý!", "", 3000);
               return;
             }
           }
@@ -398,11 +398,11 @@ export class FooterSignatureComponent implements OnInit {
                           this.submitChanges.emit(1);
                         }
                       }, error => {
-                        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+                        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng tài liệu đã mua', "", 3000);
                       }
                     )
                   }, error => {
-                    this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
+                    this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng tài liệu đã dùng', "", 3000);
                   }
                 )
               }, error => {
@@ -469,7 +469,7 @@ export class FooterSignatureComponent implements OnInit {
         if (!ArrRecipientsNew) {
 
           this.toastService.showErrorHTMLWithTimeout(
-            'Bạn không có quyền xử lý hợp đồng này!',
+            'Bạn không có quyền xử lý tài liệu này!',
             '',
             3000
           );
@@ -549,7 +549,7 @@ export class FooterSignatureComponent implements OnInit {
     }
     if(!isInRecipient){
       this.toastService.showErrorHTMLWithTimeout(
-        'Bạn không có quyền xử lý hợp đồng này!',
+        'Bạn không có quyền xử lý tài liệu này!',
         '',
         3000
       );
@@ -589,7 +589,7 @@ export class FooterSignatureComponent implements OnInit {
       if (!ArrRecipientsNew) {
 
         this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
+          'Bạn không có quyền xử lý tài liệu này!',
           '',
           3000
         );
@@ -650,7 +650,7 @@ export class FooterSignatureComponent implements OnInit {
     }
     if(!isInRecipient){
       this.toastService.showErrorHTMLWithTimeout(
-        'Bạn không có quyền xử lý hợp đồng này!',
+        'Bạn không có quyền xử lý tài liệu này!',
         '',
         3000
       );
@@ -690,7 +690,7 @@ export class FooterSignatureComponent implements OnInit {
       if (!ArrRecipientsNew) {
 
         this.toastService.showErrorHTMLWithTimeout(
-          'Bạn không có quyền xử lý hợp đồng này!',
+          'Bạn không có quyền xử lý tài liệu này!',
           '',
           3000
         );

@@ -1,167 +1,212 @@
 <div class="container-fluid">
-<div class="sample-contract row" *ngIf="loaded">
-  <!--  information contract-->
-  <div *ngIf="!this.mobile" class="col-md-3 sample-contract__information" style="background-color: white;">
-    <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
-      <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">{{'contract.detail' | translate}}</div>
-      <div style="line-height: 25px">
-        <div>
-          <span class="title-contract">{{'contract.uid' | translate}}:</span>
-          <span>{{datas?.is_data_contract?.contract_uid}}</span>
+  <div class="sample-contract row" *ngIf="loaded">
+    <!--  information contract-->
+    <div [ngClass] = "{'col-md-3': this.show_information}" *ngIf="!this.mobile" class="sample-contract__information" style="background-color: white; padding-right: 0px;">
+      <div *ngIf="this.show_information == true">
+        <div id="width-element-info">
+          <div class="label">
+            {{'contract.detail' | translate}}
+          </div>                       
+          <div>
+            <div class="row mt-12px">
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'Tên tài liệu' | translate}}:</div>
+              <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract contract-name mt-lg-5px">{{datas?.is_data_contract?.name}}</div>
+            </div>
+            <div class="row mt-12px">
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'contract.uid' | translate}}:</div>
+              <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.contract_uid}}</div>
+            </div>
+            <div class="row mt-12px">
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'menu.contract.type.list' | translate}}:</div>
+              <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas?.is_data_contract?.type_name}}</div>
+            </div>
+            <div class="row mt-12px">
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'contract.number' | translate}}:</div>
+              <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{datas.is_data_contract.contract_no}}</div>
+            </div>
+            <div class="row mt-12px" *ngIf = "allFileAttachment.length > 0">
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'file.attach' | translate}}:</div>
+                <div class="custom-xl-width-col-xl-9 col-lg-12 mt-lg-5px">
+                  <div *ngFor="let d of allFileAttachment; let i = index" style="margin-right: 5px;" class="content-info-contract">
+                    <a class="info-contract" rel="stylesheet" [href]="d.path" target="_blank">{{d.filename}}</a>
+                </div>
+              </div>
+            </div>    
+            <div class="row mt-12px" *ngIf="datas.is_data_contract.originalContractId">
+              <span class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'contract.original' | translate}}:</span>
+              <span class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px" (click)="openDetailOriginalContract(this.datas.is_data_contract)">
+                {{datas.is_data_contract.original_contract_name}}
+              </span>
+            </div>
+            <div class="row mt-12px" *ngIf="(datas.is_data_contract.status == 40 || datas.is_data_contract.status == 30) && ([20,30].includes(this.liquidationContractData?.status)) && ((datas.is_data_contract.liquidationContractId && datas.is_data_contract.liquidation_contract_name) || datas.is_data_contract.originalContractId)">
+              <span class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'contract.liquidated' | translate}}:</span>
+              <span class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px" (click)="openDetailLiquidatedContract(this.datas.is_data_contract)">
+                {{datas.is_data_contract.liquidation_contract_name}}
+              </span>
+            </div>
+            <div class="row mt-12px" *ngIf = "datas?.is_data_contract?.refs.length > 0">
+              <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'contract.connect.detail' | translate}}:</div>
+                <div class="custom-xl-width-col-xl-9 col-lg-12 mt-lg-5px">
+                  <div *ngFor="let d of datas?.is_data_contract?.refs;let i = index" style="margin-right: 5px;" class="content-info-contract">
+                    <a class="info-contract" rel="stylesheet" [href]="d.path" target="_blank" (click)="openPdf(d.path, $event)">{{d.ref_name}}</a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div>
-          <span class="title-contract">{{'menu.contract.type.list' | translate}}:</span>
-          <span>{{datas?.is_data_contract?.type_name}}</span>
+    
+        <div class="location-change mt-28px" [ngStyle]="changeDisplay()">
+          <div class="sample-contract__information&#45;&#45;user-sign">
+            <div class="label">{{'relate.party' | translate}}</div>
+            <div *ngFor="let d of this.datas?.is_data_contract?.participants">
+              <div *ngIf = "d.type != 3 && d.type != 2" class="row mt-12px">
+                <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'organization.me' | translate}}:</div>
+                <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{d.name}}</div>
+              </div>
+
+              <div *ngIf = "d.type == 2" class="row mt-12px">
+                <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'doi_tac_to_chuc' | translate}}:</div>
+                <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{d.name}}</div>
+              </div>
+
+              <div *ngIf = "d.type == 3" class="row mt-12px">
+                <div class="custom-xl-width-col-xl-3 col-lg-12 title-contract">{{'doi_tac_ca_nhan' | translate}}:</div>
+                <div class="custom-xl-width-col-xl-9 col-lg-12 info-contract mt-lg-5px">{{d.recipients[0].name}}</div>
+              </div>
+            </div>
+    
+          </div>
         </div>
-        <div>
-          <span class="title-contract">{{'contract.name' | translate}}:</span>
-          <span>{{datas.is_data_contract.name}}</span>
-        </div>
-        <div>
-          <span class="title-contract">{{'contract.number' | translate}}:</span>
-          <span>{{datas.is_data_contract.contract_no}}</span>
-        </div>
-        <div style="overflow: auto; max-height: 150px;">
-          <span class="title-contract">{{'file.attach' | translate}}:</span>
-          <span *ngFor="let d of allFileAttachment;let i = index">
-            <span *ngIf="i != 0">, </span>
-            <a style="color: #106DB6" rel="stylesheet" [href]="d.path" target="_blank">{{d.filename}}</a>
-          </span>
-        </div>
-        <div *ngIf="datas.is_data_contract.originalContractId">
-          <span class="title-contract">{{'contract.original' | translate}}:</span>
-          <span style="cursor: pointer; color:#106DB6" (click)="openDetailOriginalContract(this.datas.is_data_contract)">
-            {{datas.is_data_contract.original_contract_name}}
-          </span>
-        </div>
-        <div *ngIf="(datas.is_data_contract.status == 40 || datas.is_data_contract.status == 30) && ([20,30].includes(this.liquidationContractData?.status)) && ((datas.is_data_contract.liquidationContractId && datas.is_data_contract.liquidation_contract_name) || datas.is_data_contract.originalContractId)">
-          <span class="title-contract">{{'contract.liquidated' | translate}}:</span>
-          <span style="cursor: pointer; color:#106DB6" (click)="openDetailLiquidatedContract(this.datas.is_data_contract)">
-            {{datas.is_data_contract.liquidation_contract_name}}
-          </span>
-        </div>
-        <div>
-          <span class="title-contract">{{'contract.connect' | translate}}:
-          </span>
-          <span *ngFor="let d of datas?.is_data_contract?.refs;let i = index">
-            <span *ngIf="i != 0">, </span>
-            <a style="color: #106DB6;"  [href]="d.path" target="_blank" (click)="openPdf(d.path, $event)">{{d.ref_name}}</a>
-          </span>
+
+        <div class="mt-28px process-handle-contract" (click)="processHandleContract()">
+          <div>
+            {{'contract_processing_flow' | translate}}
+          </div>
+          <img src="/assets/img/arrow-right.svg"/>
         </div>
       </div>
     </div>
-   <hr>
+   
+    <div *ngIf="!this.mobile && this.show_information" style="width: 24px; padding: 0px;">
+      <img style="width: 24px; height: 24px;" src="../../assets/img/dong_lai.png" (click)="showInformation()" />
+    </div>
 
-    <div class="location-change" [ngStyle]="changeDisplay()">
-      <div class="sample-contract__information&#45;&#45;user-sign" style="line-height: 25px">
-        <div style="text-align: center; font-weight: bold" class="label">{{'relate.party' | translate}}</div>
-        <div *ngFor="let d of this.datas?.is_data_contract?.participants">
-          <p>{{d.type != 3 ? d.name : d.recipients[0].name}}</p>
-        </div>
+    <div *ngIf="!this.mobile && !this.show_information" style="width: 24px; padding: 0px;">
+      <img style="width: 24px; height: 24px;" src="../../assets/img/mo_ra.png" (click)="showInformation()" />
+    </div>
 
+    <div [ngClass] = "{'col-md-9-tru': this.show_information, 'col-md-12-tru': !this.show_information}" *ngIf="!this.mobile">
+      <div style="height: 48px; background-color: #EBF2FB; display: flex; justify-content: space-between;">
+          <div style="margin: auto 0px auto 34px">
+              <button class="call-page input1" (click)="firstPage()">
+                  <img  width="16px" height="16px" *ngIf="!this.page1" src="assets/img/First.png">
+                  <img  width="16px" height="16px" *ngIf="this.page1" src="assets/img/First.png">
+              </button>
+              <button style="margin: 0px 8px;" class="call-page input1" (click)="previousPage()">
+                  <img width="16px" height="16px" *ngIf="this.page1" src="assets/img/Prev.png">
+                  <img width="16px" height="16px" *ngIf="!this.page1" src="assets/img/Prev.png">
+              </button>
+          
+              <input class="input1 no-focus" [(ngModel)]="pageNum" type="text" (keyup.enter)="onEnter($event)" />
+              &nbsp;/&nbsp;
+              <span class="page-number">{{ this.pageNumber }}</span>
+  
+              <button style="margin: 0px 8px;" class="call-page input1" (click)="onNextPage()" id="prev">
+                  <img width="6px" height="9px" *ngIf="this.pageLast" src="assets/img/Vector1.png">
+                  <img width="6px" height="9px" *ngIf="!this.pageLast" src="assets/img/Vector1.png">
+              </button>
+          
+              <button class="call-page input1" (click)="lastPage()" id="prev">
+                  <img width="16px" height="16px" *ngIf="this.pageLast" src="assets/img/Last.png">
+                  <img width="16px" height="16px" *ngIf="!this.pageLast" src="assets/img/Last.png">
+              </button>  
+          </div>
+
+          <div style="margin: auto 34px auto 0px;">
+            <div style="width: 80px;">
+              <p-dropdown
+                class="no-focus"
+                (onChange)="onZoomChange($event)"
+                panelStyleClass="font"
+                [options]="zoomOptions"
+                [(ngModel)]="defaultValueSelect"
+                optionLabel="percent"
+                optionValue="value"
+                filterBy="percent">
+              </p-dropdown>
+            </div>
+          </div>
+                 
+          <!-- <div style="margin: auto 34px auto 0px">
+              <img src="../../assets/img/minus.png" style="margin-bottom:3px;height: 30px; width: 30px;" (click)="changeScale('-')" />&nbsp;
+              <input class="input-web" type="text" style="width: 50px;height: 30px" [value]="defaultValue + '%'" disabled>&nbsp;
+              <img src="../../assets/img/plus.png" style="margin-bottom:3px; height: 30px; width: 30px;" (click)="changeScale('+')" />
+          </div> -->
       </div>
-      <div>
-        <u style="color: #106DB6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">{{'contract_processing_flow' | translate}}</u>
+  
+      <div (scroll)="scroll($event)" class="sample-contract__file viewer-pdf isDrag" id="pdf-full" style="background-color: #f3f7f9; position: relative">
+        <div id="pdf-viewer-step-3">
+        </div>
       </div>
     </div>
+   
+    <div *ngIf="this.mobile">
+      <pdf-viewer [src]="pdfSrc"
+      [render-text]="true"
+      style="width: 95%; height: calc(70vh); border: 1px;"
+      [fit-to-page]="true"
+      [show-borders]="true"
+      [show-all]="true"
+      [(page)]="pageMobile"
+      [stick-to-page]="true"
+      (after-load-complete)="afterLoadComplete($event)"
+      (pagechanging)="pagechanging($event)"
+      ></pdf-viewer>
+  
+      <div class="flex-column" style="text-align: center;margin-top: 2px;">
+        <button class="call-page" (click)="firstPageMobile()">
+          <img width="14px" height="18px" *ngIf="this.page1" src="assets/img/previousbold.svg">
+          <img width="14px" height="18px" *ngIf="!this.page1" src="assets/img/firstpage.svg">
+        </button>
+        <button class="call-page1" (click)="previousPageMobile()">
+          <img width="10px" height="14px" *ngIf="this.page1" src="assets/img/firstpagebold.svg">
+          <img width="10px" height="14px" *ngIf="!this.page1" src="assets/img/previous.svg">
+        </button>
+  
+        <input class="input-mobile" [(ngModel)]="pageMobile" type="text"/>&nbsp;/ &nbsp;{{this.pageNumber}}
+  
+        <button class="call-page1" id="prev" (click)="onNextPageMobile()">
+          <img width="10px" height="14px" *ngIf="this.pageLast" src="assets/img/next.svg">
+          <img width="10px" height="14px" *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
+        </button>
+  
+        <button class="call-page1" id="prev" (click)="lastPageMobile()">
+          <img width="14px" height="18px" *ngIf="this.pageLast" src="assets/img/lastpage.svg">
+          <img width="14px" height="18px" *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
+        </button>
+      </div>
+  
+      <a *ngIf="role || this.status == 30" style="position: absolute; right: 5px;">
+        <button  type="button" name="next" class="next action-button" *ngIf="view && loaded && status != 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>
+        <button  type="button" name="next" class="next action-button1" *ngIf="view && loaded && status == 4">{{checkStatusUser(status, role) | translate}}</button>
+      </a>
+    </div>  
   </div>
 
-  <!--  file content-->
-  <!--  width: 74.7%-->
-  <div (scroll)="scroll($event)" id="pdf-full" *ngIf="!this.mobile" class="col-md-9 sample-contract__file viewer-pdf isDrag"
-       style="background-color: #F2F2F2; position: relative;">
-       <div class="zoom-in-out">
-        <img src="../../assets/img/minus.png" style="margin-bottom:3px;height: 30px; width: 30px;" (click)="changeScale('-')" />&nbsp;
-        <input class="input-web" type="text" style="width: 50px;height: 30px" [value]="defaultValue + '%'" disabled>&nbsp;
-        <img src="../../assets/img/plus.png" style="margin-bottom:3px; height: 30px; width: 30px;" (click)="changeScale('+')" />
-      </div>
-    <div id="pdf-viewer-step-3">
+  <div class="footer-sample-contract row" *ngIf="loaded">
+    <div class="col-md-12" style="display: flex; justify-content: flex-end;">
+        <div *ngIf="!this.mobile" class="center" style="margin-top: 5px;">  
+            <a *ngIf="role || this.status == 30">
+              <button  type="button" name="next" class="next action-button" *ngIf="view && loaded && status != 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>
+              <button  type="button" name="next" class="next" [ngClass]="status == '4' ? 'action-button' : 'action-button1'" *ngIf="view && loaded && status == 4 " (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>
+              <button style="margin-left: 16px;" type="button" name="next" class="next action-button" (click)="endContract()">{{'end' | translate}}</button>
+            </a>
+  
+            <a *ngIf="!role && this.status != 30">
+              <button type="button" name="next" class="next action-button" (click)="endContract()">{{'end' | translate}}</button>
+            </a>
+        </div>
     </div>
   </div>
-
-  <div *ngIf="this.mobile">
-    <pdf-viewer [src]="pdfSrc"
-    [render-text]="true"
-    style="width: 95%; height: calc(70vh); border: 1px;"
-    [fit-to-page]="true"
-    [show-borders]="true"
-    [show-all]="true"
-    [(page)]="pageMobile"
-    [stick-to-page]="true"
-    (after-load-complete)="afterLoadComplete($event)"
-    (pagechanging)="pagechanging($event)"
-    ></pdf-viewer>
-
-    <div class="flex-column" style="text-align: center;margin-top: 2px;">
-      <button class="call-page" (click)="firstPageMobile()">
-        <img width="14px" height="18px" *ngIf="this.page1" src="assets/img/previousbold.svg">
-        <img width="14px" height="18px" *ngIf="!this.page1" src="assets/img/firstpage.svg">
-      </button>
-      <button class="call-page1" (click)="previousPageMobile()">
-        <img width="10px" height="14px" *ngIf="this.page1" src="assets/img/firstpagebold.svg">
-        <img width="10px" height="14px" *ngIf="!this.page1" src="assets/img/previous.svg">
-      </button>
-
-      <input class="input-mobile" [(ngModel)]="pageMobile" type="text"/>&nbsp;/ &nbsp;{{this.pageNumber}}
-
-      <button class="call-page1" id="prev" (click)="onNextPageMobile()">
-        <img width="10px" height="14px" *ngIf="this.pageLast" src="assets/img/next.svg">
-        <img width="10px" height="14px" *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
-      </button>
-
-      <button class="call-page1" id="prev" (click)="lastPageMobile()">
-        <img width="14px" height="18px" *ngIf="this.pageLast" src="assets/img/lastpage.svg">
-        <img width="14px" height="18px" *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
-      </button>
-    </div>
-
-    <a *ngIf="role || this.status == 30" style="position: absolute; right: 5px;">
-      <button  type="button" name="next" class="next action-button" *ngIf="view && loaded && status != 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>
-      <button  type="button" name="next" class="next action-button1" *ngIf="view && loaded && status == 4">{{checkStatusUser(status, role) | translate}}</button>
-    </a>
-  </div>
-
-
 </div>
 
-<div class="footer-sample-contract">
-  <div class="col-md-3">
-  </div>
-  <div class="col-md-9">
-      <div *ngIf="!this.mobile" class="center" style="margin-top: 5px;">
-
-        <a style="text-align: center">
-          <button class="call-page" (click)="firstPage()">
-            <img  width="16px" height="20px" *ngIf="!this.page1" src="assets/img/firstpage.svg">
-            <img  width="16px" height="20px" *ngIf="this.page1" src="assets/img/previousbold.svg">
-          </button>
-          <button style="margin-right: 5px;" class="call-page1" (click)="previousPage()">
-            <img width="12px" height="16px" *ngIf="this.page1" src="assets/img/firstpagebold.svg">
-            <img width="12px" height="16px" *ngIf="!this.page1" src="assets/img/previous.svg">
-          </button>
-
-          <input class="input-web" [(ngModel)]="pageNum" type="text" (keyup.enter)="onEnter($event)" />&nbsp;/ &nbsp;{{this.pageNumber}}
-          <button class="call-page1" (click)="onNextPage()" id="prev">
-            <img width="12px" height="16px" *ngIf="this.pageLast" src="assets/img/next.svg">
-            <img width="12px" height="16px" *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
-          </button>
-
-          <button class="call-page1" (click)="lastPage()" id="prev">
-            <img width="16px" height="20px" *ngIf="this.pageLast" src="assets/img/lastpage.svg">
-            <img width="16px" height="20px" *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
-          </button>
-        </a>
-
-          <a *ngIf="role || this.status == 30" style="position: absolute; right: 5px;">
-            <button  type="button" name="next" class="next action-button" *ngIf="view && loaded && status != 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>
-            <button  type="button" name="next" class="next action-button1" *ngIf="view && loaded && status == 4 " (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>
-            <button  type="button" name="next" class="next action-button" (click)="endContract()">{{'end' | translate}}</button>
-          </a>
-
-          <a *ngIf="!role && this.status != 30" style="position: absolute; right: 5px;">
-            <button  type="button" name="next" class="next action-button" (click)="endContract()">{{'end' | translate}}</button>
-          </a>
-      </div>
-  </div>
-</div>
-</div>

@@ -11,11 +11,11 @@
   margin-top: 12px;
 }
 
-// .item_contract:hover{
-  // background-color: rgb(255, 254, 254);
-  // box-shadow: 0px 3px 12px 0px rgba(16, 85, 225, 0.10);
-  // border: 1px solid #C3D7FF;
-// }
+.item_contract:hover{
+  background-color: rgb(255, 254, 254);
+  box-shadow: 0px 3px 12px 0px rgba(16, 85, 225, 0.10);
+  border: 1px solid #C3D7FF;
+}
 
 .item_contract_name {
   font-weight: 700;
@@ -31,6 +31,13 @@
   -webkit-box-orient: vertical;
 }
 
+.status_blue_ceca{
+  color: #2D6BE7;
+  height: 32px;
+  display: inline-block;
+  border-radius: 4px;
+  font-weight: 700;
+}
 
 .item_contract_infor{
   color: #8E9AB0;
@@ -60,6 +67,14 @@
   background-color: #EEF5FF;
   padding: 5px 16px 0px 16px;
   width: 110px;
+  height: 32px;
+  display: inline-block;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.status_blue_ceca{
+  color: #2D6BE7;
   height: 32px;
   display: inline-block;
   border-radius: 4px;
@@ -165,7 +180,7 @@
   right: 15px;
   position: absolute;
 }
-.input-text {
+.input_text {
   border: 0.5px solid #F1F5FE;
   margin: 0px;
   width: 100%;
@@ -176,6 +191,26 @@
   opacity: 0px;
   border-radius: 8px;
   font-weight: 400;
+}
+
+.input_text::placeholder {
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
+  color: #AEC7E5 !important;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 21px !important;
+}
+
+.input-group {
+  color: #AEC7E5 !important;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 21px;
+
+}
+
+.input-group .input_text {
+  font-weight: 500;
 }
 
 :host ::ng-deep {
@@ -260,6 +295,7 @@
     border-color: #FFFFFF;
     color: #00186D;
     font-weight: 600;
+    border-radius: 12px;
   }
 }
 
@@ -556,4 +592,42 @@ input::placeholder{
 .table-contract {
   min-height: 60vh;
   margin-bottom: 16px;
+}
+
+.col-lg-8-7 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: calc(100% - var(--width-button) * 3) !important;
+  }
+}
+
+.col-lg-10-9 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: calc(100% - var(--width-button)) !important;
+  }
+}
+
+.col-lg-9-8 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: calc(100% - var(--width-button) * 2) !important;
+  }
+}
+
+.col-lg-1-1 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: var(--width-button) !important;
+  }
+
+  @media (max-width: 991px) {
+    margin-top: 16px !important;
+  }
+}
+
+::ng-deep .custom-tooltip.mat-tooltip {
+  margin-bottom: 10px !important;
+  white-space: normal !important;
+  max-width: 400px;
 }

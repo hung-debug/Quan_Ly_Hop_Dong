@@ -1,7 +1,7 @@
 <meta name="viewport" content="width=device-width" />
 <div class="container-fluid">
 <div class="sample-contract row">
-  <!--Form thông tin chi tiết hợp đồng-->
+  <!--Form thông tin chi tiết tài liệu-->
   <div class="col-md-3 sample-contract__information" style="background-color: white">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
       <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label">{{ "contract.detail" | translate }}</div>
@@ -21,25 +21,25 @@
 
         </div>
 
-        <!--Mã hợp đồng-->
+        <!--Mã tài liệu-->
         <div>
           <span class="title-contract">{{ "contract.uid" | translate }}:</span>
           <span>{{ datas?.is_data_contract?.contract_uid }}</span>
         </div>
 
-        <!--Loại hợp đồng-->
+        <!--Loại tài liệu-->
         <div>
           <span class="title-contract">{{ "menu.contract.type.list" | translate }}:</span>
           <span>{{ datas?.is_data_contract?.type_name }}</span>
         </div>
 
-        <!--Tên hợp đồng-->
+        <!--Tên tài liệu-->
         <div>
           <span class="title-contract">{{ "contract.name" | translate }}:</span>
           <span>{{ datas?.is_data_contract.name }}</span>
         </div>
 
-        <!-- Số hợp đồng -->
+        <!-- Số tài liệu -->
         <div>
           <span class="title-contract">{{ "contract.number" | translate }}:</span>
           <span>{{ datas?.is_data_contract.contract_no }}</span>
@@ -91,7 +91,7 @@
     </div>
   </div>
 
-  <!--Form view hợp đồng-->
+  <!--Form view tài liệu-->
   <div (scroll)="scroll($event)" id="pdf-full" class="col-md-9 sample-contract__file viewer-pdf isDrag" style="background-color: #f2f2f2; position: relative">
     <div id="pdf-viewer-step-3">
       <div class="show-list-name-drag" [style.width]="this.canvasWidth">

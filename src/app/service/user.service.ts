@@ -14,6 +14,7 @@ export interface User {
   phone: any;
   birthday: any;
   status: any;
+  is_show_phone_pki: boolean,
   phone_sign: any;
   phone_tel: any;
   sign_image: any;
@@ -228,7 +229,7 @@ export class UserService {
       birthday: datas.birthday,
       status: datas.status,
       role_id: datas.role,
-
+      is_show_phone_pki: datas.is_show_phone_pki,
       sign_image: datas.sign_image,
 
       phone_sign: datas.phoneKpi,
@@ -260,7 +261,7 @@ export class UserService {
       birthday: datas.birthday,
       status: datas.status,
       role_id: datas.role,
-
+      is_show_phone_pki: datas.is_show_phone_pki,
       sign_image: datas.sign_image,
       stampImage: datas.stampImage,
 
@@ -340,6 +341,17 @@ export class UserService {
     this.getCurrentUser();
 
     let listUserUrl = this.listUserUrl + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email.trim() + '&size=' + row  +'&page=' + page;
+    const headers = { Authorization: 'Bearer ' + this.token };
+    return this.http.get<User[]>(listUserUrl, { headers }).pipe();
+  }
+  public getUserListShare(
+    filter_organization_id: any,
+    filter_nameOrEmail: any,
+    filter_email: any,
+  ): Observable<any> {
+    this.getCurrentUser();
+
+    let listUserUrl = this.listUserUrl + '?nameOrEmail=' + filter_nameOrEmail.trim() + '&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email.trim();
     const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<User[]>(listUserUrl, { headers }).pipe();
   }
@@ -468,8 +480,8 @@ export class UserService {
       headers: headers,
     });
   }
-  
-  
+
+
   updateConfigBrandname(data: any, orgId: any) {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -485,13 +497,13 @@ export class UserService {
       headers: headers,
     });
   }
-  
+
   updateConfigEmailServer(data: any, orgId: any) {
     const headers = new HttpHeaders()
     .append('Content-Type', 'application/json')
     .append('Authorization', 'Bearer ' + this.token);
     console.log("data",data);
-    
+
   const body = JSON.stringify({
     userNameMailServer: data.userNameMailServer,
     aliasMailServer: data.aliasMailServer,

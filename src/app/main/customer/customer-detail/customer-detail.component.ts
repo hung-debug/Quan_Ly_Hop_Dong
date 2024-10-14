@@ -66,7 +66,7 @@ export class CustomerDetailComponent implements OnInit {
         }
       this.id = params['id'];
       this.customerService.getCustomerList().subscribe((res: any) => {
-       this.orgCustomer = res.filter((item: any) => {
+       this.orgCustomer = res.content.filter((item: any) => {
             return item.id.toString() === this.id;
         });
         this.name = this.orgCustomer[0].name;

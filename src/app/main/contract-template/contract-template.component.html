@@ -80,16 +80,19 @@
                     <img src="../../assets/img/Frame 46282.svg" style="width: 72px;">
                   </div>
                   <div class="item_contract_name col-cell-ellipsis">
-                    <a  class="item_contract_name" style="text-decoration: none;" 
+                    <div style="margin: 12px;">
+                    <a  class="item_contract_name" style="text-decoration: none;margin-left: -4px;" 
                     [routerLink]="['/main/contract-template/form/detail/', item.id]"
                     [queryParams]="{'page': this.p}"
                     ngbTooltip="{{item.name}}">
                     {{item.name}}
                     </a>
+                    
 
                     <div *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
                       <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
                     </div>
+                  </div>
                   </div>
                 </div>
               </div>
@@ -99,47 +102,47 @@
               </div>
               
               <div class="col-md-2 calendar_create">
-                <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.end_time | date: 'dd/MM/yyyy HH:mm:ss'}}</span></div>
+                <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.end_time | date: 'dd/MM/yyyy'}}</span></div>
               </div>
         
         
               <div class="col-md-1 item_icon">
                 
-                <div class="three_dot" style="display: flex; justify-content: flex-end;" *ngIf="item.releaseState=='CON_HIEU_LUC'">
+                <div class="three_dot" style="display: flex; justify-content: flex-end;" *ngIf="(isShare=='off') || (isShare=='on' && item.releaseState=='CON_HIEU_LUC')">
                   <button mat-icon-button [matMenuTriggerFor]="menu" style="border: none; background-color: white;">
                     <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                   </button>
                   <mat-menu #menu="matMenu">
-                    <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && isQLMHD_09" (click)="cloneContractTemplateCall(item.id)">
-                      <mat-icon><img src="../../assets/img/icon_copy.svg" class="img_icon"/></mat-icon>
-                      <span class="three_dot_text">{{'role.contract-template.copy' | translate}}</span>
-                    </button>
                     <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && isQLMHD_02" (click)="openEdit(item.id)">
-                      <mat-icon><img src="../../assets/img/icon_edit.svg" class="img_icon"/></mat-icon>
+                      <mat-icon><img src="../../assets/img/edit.svg" class="img_icon"/></mat-icon>
                       <span class="three_dot_text">{{'role.contract-template.edit' | translate}}</span>
                     </button>
-                    <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && item.releaseState=='CON_HIEU_LUC' && isQLMHD_03 && item.status == 10" (click)="stopContractTemplate(item.id)">
-                      <mat-icon><img src="../../assets/img/icon_stop_release.svg" class="img_icon"/></mat-icon>
-                      <span class="three_dot_text">{{'stop.releasing' | translate}}</span>
-                    </button>
-                    <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && item.releaseState=='CON_HIEU_LUC' && item.status == 32 && isQLMHD_04" (click)="releaseContractTemplate(item.id)">
-                      <mat-icon><img src="../../assets/img/icon_open_release.svg" class="img_icon"/></mat-icon>
-                      <span class="three_dot_text">{{'Mở phát hành' | translate}}</span>
+                    <button mat-menu-item class="div_icon" *ngIf="item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLHD_15" (click)="addContractBatch(item.id)">
+                      <mat-icon><img src="../../assets/img/contract-batch.svg" class="img_icon"/></mat-icon>
+                      <span class="three_dot_text">{{'role.contract-template.create-batch' | translate}}</span>
                     </button>
                     <button mat-menu-item class="div_icon" *ngIf="item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLHD_14" (click)="addContractForm(item.id)">
-                      <mat-icon><img src="../../assets/img/icon_file.svg" class="img_icon"/></mat-icon>
+                      <mat-icon><img src="../../assets/img/contract_temp.svg" class="img_icon"/></mat-icon>
                       <span class="three_dot_text">{{'role.contract-template.create-contract' | translate}}</span>
                     </button>
-                    <button mat-menu-item class="div_icon" *ngIf="item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLHD_15" (click)="addContractBatch(item.id)">
-                      <mat-icon><img src="../../assets/img/icon_add_connect.svg" class="img_icon"/></mat-icon>
-                      <span class="three_dot_text">{{'role.contract-template.create-batch' | translate}}</span>
+                    <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && item.releaseState=='CON_HIEU_LUC' && item.status == 32 && isQLMHD_04" (click)="releaseContractTemplate(item.id)">
+                      <mat-icon><img src="../../assets/img/document-forward.svg" class="img_icon"/></mat-icon>
+                      <span class="three_dot_text">{{'release' | translate}}</span>
+                    </button>
+                    <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && item.releaseState=='CON_HIEU_LUC' && isQLMHD_03 && item.status == 10" (click)="stopContractTemplate(item.id)">
+                      <mat-icon><img src="../../assets/img/pause-circle.svg" class="img_icon"/></mat-icon>
+                      <span class="three_dot_text">{{'stop.releasing' | translate}}</span>
                     </button>
                     <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLMHD_05" (click)="shareContractTemplate(item.id)">
                       <mat-icon><img src="../../assets/img/share_contract.svg" class="img_icon"/></mat-icon>
                       <span class="three_dot_text">{{'btn.share' | translate}}</span>
                     </button>
+                    <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && isQLMHD_09" (click)="cloneContractTemplateCall(item.id)">
+                      <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
+                      <span class="three_dot_text">{{'role.contract-template.copy' | translate}}</span>
+                    </button>
                     <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && isQLMHD_07" (click)="deleteContractTemplate(item.id)">
-                      <mat-icon><img src="../../assets/img/icon_delete.svg" class="img_icon"/></mat-icon>
+                      <mat-icon><img src="../../assets/img/trash_contract.svg" class="img_icon"/></mat-icon>
                       <span class="three_dot_text">{{'role.contract-template.delete' | translate}}</span>
                     </button>
                   </mat-menu>
@@ -178,22 +181,65 @@
           <div *ngIf="pageTotal == 0" 
           style="min-height: 67vh;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
             <div style="display: table-cell;vertical-align: middle;"> 
-              <img src="../../../assets/img/empty_data.svg"/>
+              <img src="../../../assets/img/no_data.svg"/>
               <div style="color: #94A7C6">{{'no.data' | translate}}</div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="contract_footer">
+    <!-- <div class="contract_footer">
       <div class="footer_title"></div>
       <div class="footer_pagination">
         <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractTemplateList()" previousLabel="" nextLabel=""></pagination-controls>
         <div class="enterPage" *ngIf="pageTotal > 0">
           <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
-          <p>của {{countPage()}} trang</p>
+          <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
       </div>
       </div>
       <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
-    </div>
-    </div>
+    </div> -->
+  </div>
+
+<!-- </div> -->
+<div class="contract_footer">
+  <div class="footer_title"></div>
+  <div class="footer_pagination">
+    <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractTemplateList()" previousLabel="" nextLabel=""></pagination-controls>
+    <div class="enterPage" *ngIf="pageTotal > 0">
+      <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
+      <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
+  </div>
+  </div>
+  <div class="footer_page_number">
+    <span class="footer_page_number_chart_number">
+      {{'chart.number' | translate}}:
+    </span>
+    <span>
+      {{pageStart}} - {{pageEnd}} / {{pageTotal}}
+    </span>
+  </div>
+</div>
+<div class="contract_footer_responsive">
+  <div class="footer_title"></div>
+  <div class="footer_pagination">
+    <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractTemplateList()" previousLabel="" nextLabel=""></pagination-controls>
+    
+    <div class="enterPage" *ngIf="pageTotal > 0">
+      <div class="enter_page_responsive">
+        <input class="text-enterPage" placeholder="{{'contract.enterPage' | translate}}" (keypress)="validateInput($event)" [(ngModel)]="enterPage" (input)="onInput($event)"/>
+        <p>{{'of' | translate}} {{countPage()}} {{'page' | translate}}</p>
+      </div>
+      <div class="footer_page_number">
+        <span class="footer_page_number_chart_number">
+          {{'chart.number' | translate}}:
+        </span>
+        <span>
+          {{pageStart}} - {{pageEnd}} / {{pageTotal}}
+        </span>
+      </div>
+  </div>
+  
+  </div>
+</div>
+<!-- </div> -->

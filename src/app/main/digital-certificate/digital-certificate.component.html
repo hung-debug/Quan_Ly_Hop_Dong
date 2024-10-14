@@ -1,65 +1,67 @@
 <div *ngIf="isQLDSCTS_01 || isQLDSCTS_02 || isQLDSCTS_03 || isQLDSCTS_04" class="container-fluid">
   <div class="row">
-    <div class="col-xxl-4 col-md-3" *ngIf="isQLDSCTS_04">
-      <div>{{'notation' | translate}}</div>
-      <div class="input-line">
-        <input type="text" [(ngModel)]="serial_number" class="input_text"/>
-      </div>
-    </div>
-    <div class="col-xxl-4 col-md-3" *ngIf="isQLDSCTS_04">
-      <div>{{'subject' | translate}}</div>
-      <div class="input-line">
-        <input type="text" [(ngModel)]="subject" class="input_text"/>
-      </div>
-    </div>
-    <div class="col-xxl-4 col-md-3" *ngIf="isQLDSCTS_04">
-      <div>{{'contract.status' | translate}}</div>
-      <div>
-          <p-treeSelect placeholder="{{'all' | translate}}"
-          [options]="listStatus"
-          [(ngModel)]="status">
-          </p-treeSelect>
-      </div>
-    </div>
+    <div *ngIf="isQLDSCTS_01 || isQLDSCTS_04"  class="cancel-padding">
+      <div class="row mg-button-tools">
+        <div [ngClass] = "{'col-lg-3-6': !isQLDSCTS_01, 'col-lg-3-3': isQLDSCTS_01}" class="btn-padding-right" *ngIf="isQLDSCTS_04">
+          <input placeholder="{{'notation' | translate}}" type="text" [(ngModel)]="serial_number" class="input_text"/>
+        </div>
 
-    <div class="col-xxl-2 btn_search">
-      <button *ngIf="isQLDSCTS_04" class="btn btn-lg btn-block btn_search1" (click)="getFirstPageSearchData()">{{'btn.search' | translate }}</button>
-        <button *ngIf="isQLDSCTS_01" class="btn btn-lg btn-block btn_submit" (click)="addUnit()">{{'btn.add' | translate }}</button>
+        <div [ngClass] = "{'col-lg-3-6': !isQLDSCTS_01, 'col-lg-3-3': isQLDSCTS_01}" class="btn-padding-right btn-padding-left" *ngIf="isQLDSCTS_04">
+          <input placeholder="{{'subject' | translate}}" type="text" [(ngModel)]="subject" class="input_text"/>
+        </div>
+
+        <div [ngClass] = "{'col-lg-3-6': !isQLDSCTS_01, 'col-lg-3-3': isQLDSCTS_01}" class="btn-padding-right btn-padding-left" *ngIf="isQLDSCTS_04">
+          <div>
+              <p-treeSelect placeholder="{{'all' | translate}}"
+              [options]="listStatus"
+              [(ngModel)]="status">
+              </p-treeSelect>
+          </div>
+        </div>
+        
+        <div [ngClass] = "{'col-md-6': isQLDSCTS_01}" *ngIf="isQLDSCTS_04" class="col-lg-1-1 col-md-6 btn-padding-right btn-padding-left">
+          <button class="btn-block btn_advanced" (click)="getFirstPageSearchData()">{{'btn.search' | translate }}</button>
+        </div>
+
+        <div [ngClass] = "{'col-md-6': isQLDSCTS_04, 'btn-padding-left': isQLDSCTS_04}" *ngIf="isQLDSCTS_01" class="col-lg-1-1">
+          <button class="btn-block btn_cancel" (click)="addUnit()">{{'btn.add' | translate }}</button>
+        </div>
+      </div>
     </div>
   </div>
-  <div style="min-height: 74vh;">
-  <div class="row" style="padding-top: 20px;">
-    <p-table [value]="list" [paginator]="false" [lazy]="true" (onLazyLoad)="getPageableCert($event)" [totalRecords]="totalRecords" [rows]="size" id="table" [autoLayout]="true" [(first)]="first">
-      <ng-template pTemplate="header" let-columns>
-        <tr>
-            <th *ngFor="let col of cols" [style]='col.style'>
-              {{col.header | translate}}
-            </th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-list>
+  <div style="min-height: 74vh;" class="margin-top-16">
+    <div class="row" >
+      <p-table class="pd-0" [value]="list" [paginator]="false" [lazy]="true" (onLazyLoad)="getPageableCert($event)" [totalRecords]="totalRecords" [rows]="size" id="table" [autoLayout]="true" [(first)]="first">
+        <ng-template pTemplate="header" let-columns>
           <tr>
-              <td><span (click)="isQLDSCTS_03?detailUser(list.id):null" style="cursor: pointer; font-weight: 700;color: #001A4D;">{{list.keystoreSerialNumber}}</span></td>
-              <td>{{getValueByKey(list.certInformation, "CN")}}</td>
-              <td>{{getValue(list.certInformation, "UID")}}</td>
-              <td>{{list.keystoreDateStart | date:'dd/MM/yyyy HH:mm'}}</td>
-              <td>{{list.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}</td>
-
-              <td *ngIf="list.status == 1">{{'unit.active' | translate}}</td>
-              <td *ngIf="list.status != 1">{{'unit.inactive' | translate}}</td>
-              <td style="text-align: center; ">
-                <img *ngIf="isQLDSCTS_02" ngbTooltip="{{'contract.edit' | translate}}" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
-              </td>
+              <th *ngFor="let col of cols" [style]='col.style' class="border-header-table">
+                {{col.header | translate}}
+              </th>
           </tr>
-      </ng-template>
-      <!-- <ng-template pTemplate="paginatorleft" let-state>
-        <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-      </ng-template> -->
-      <ng-template pTemplate="paginatorright" let-state>
-        <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-      </ng-template>
-    </p-table>
-  </div>
+        </ng-template>
+        <ng-template pTemplate="body" let-list>
+            <tr>
+                <td><span (click)="isQLDSCTS_03?detailUser(list.id):null" style="cursor: pointer; font-weight: 700;color: #001A4D;">{{list.keystoreSerialNumber}}</span></td>
+                <td>{{getValueByKey(list.certInformation, "CN")}}</td>
+                <td>{{getValue(list.certInformation, "UID")}}</td>
+                <td>{{list.keystoreDateStart | date:'dd/MM/yyyy HH:mm'}}</td>
+                <td>{{list.keystoreDateEnd | date:'dd/MM/yyyy HH:mm'}}</td>
+
+                <td *ngIf="list.status == 1">{{'unit.active' | translate}}</td>
+                <td *ngIf="list.status != 1">{{'unit.inactive' | translate}}</td>
+                <td style="text-align: center; ">
+                  <img *ngIf="isQLDSCTS_02" ngbTooltip="{{'contract.edit' | translate}}" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
+                </td>
+            </tr>
+        </ng-template>
+        <!-- <ng-template pTemplate="paginatorleft" let-state>
+          <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        </ng-template> -->
+        <ng-template pTemplate="paginatorright" let-state>
+          <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        </ng-template>
+      </p-table>
+    </div>
   </div>
 </div>
 <div *ngIf="!isQLDSCTS_01 && !isQLDSCTS_02 && !isQLDSCTS_03 && !isQLDSCTS_04">

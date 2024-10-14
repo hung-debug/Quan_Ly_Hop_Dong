@@ -10,7 +10,7 @@
                 <span style="color: '#106DB6'">{{'orginator' | translate}}</span>
                 <span style="color: #8B8B8B">({{this.timeCreate}})</span>
             </div>
-            <div  *ngIf ="!this.reasonCancel && listCheckSmsEmail && isEndDate && isHiddenButton" class="col-md-2" style="display: flex; flex-direction: column;text-align: center">
+            <div  *ngIf ="!this.reasonCancel && listCheckSmsEmail  && isHiddenButton" class="col-md-2" style="display: flex; flex-direction: column;text-align: center">
                 <span style="color: '#106DB6'">{{'action' | translate}}</span>
             </div>
         </div>
@@ -19,15 +19,22 @@
 
                 <div class="col-md-6" style="display: flex; flex-direction: column;text-align: left;">
                     <div *ngIf="d.name" style="display: flex;">
-                    <!--Tên người trong luồng hợp đồng-->
+                    <!--Tên người trong luồng tài liệu-->
                         <span>{{d.name}}</span>&nbsp;
                         <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span>
                     </div>
                     <!-- <span style="color: #8B8B8B" *ngIf="d.type != 3 && d.name_company">{{d.name_company}}</span> -->
                     <span style="color: #8B8B8B" *ngIf="d.type == 1 && d.user_in_organization">{{d.user_in_organization}}</span>
-                    <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'vi' || !this.lang">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name : ''}}</span>
-
-                    <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'en'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name.replace("Ký ảnh và OTP"," Sign by OTP").replace("Ký eKYC","Sign eKYC").replace("Ký số bằng","Sign by").replace("và","and"): ''}}</span>
+                  <ng-template [ngIf]="d.role !== 1 && d.role !== 2">
+                    <span style="color: dimgray"
+                          *ngIf="d.typeOfSign && this.lang == 'vi' || !this.lang">{{'user.sign-type' | translate}}
+                      : {{d.typeOfSign.name ? d.typeOfSign.name : ''}}</span>
+                  </ng-template>
+                  <ng-template [ngIf]="d.role !== 1 && d.role !== 2">
+                    <span style="color: dimgray"
+                          *ngIf="d.typeOfSign && this.lang == 'en'">{{'user.sign-type' | translate}}
+                      : {{d.typeOfSign.name ? d.typeOfSign.name.replace("Ký ảnh và OTP", " Sign by OTP").replace("Ký eKYC", "Sign eKYC").replace("Ký số bằng", "Sign by").replace("và", "and") : ''}}</span>
+                  </ng-template>
                     <span style="color: dimgray" *ngIf="d.card_id && !(d.typeOfSign.id == 1 || d.typeOfSign.id == 3 || d.typeOfSign.id == 7) ">MST/CCCD: {{d.card_id}}</span>
                 </div>
 
@@ -44,7 +51,7 @@
                 </div>
 
 
-                <div class="col-md-2" style="text-align: center;display: flex;justify-content: center" *ngIf = "isHiddenButton && listCheckSmsEmail && isEndDate ">
+                <div class="col-md-2" style="text-align: center;display: flex;justify-content: center" *ngIf = "isHiddenButton && listCheckSmsEmail ">
                         <div *ngIf = "d.statusNumber != 0 && d.statusNumber !== 4">
                             <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d.id)"/>
                         </div>
@@ -61,15 +68,18 @@
                 <div class="col-md-6" style="display: flex; flex-direction: column;text-align: left;">
                     <div style="display: flex;">
 
-                    <!--Tên người trong luồng hợp đồng-->
+                    <!--Tên người trong luồng tài liệu-->
                     <span>{{d.name}}</span>&nbsp;
                     <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span>
                     </div>
                     <span style="color: #8B8B8B" *ngIf="d.type != 3 && d.name_company">{{d.name_company}}</span>
 
+                  <ng-template [ngIf]="d.role !== 1 && d.role !== 2">
                     <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'vi'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name}}</span>
-
+                  </ng-template>
+                  <ng-template [ngIf]="d.role !== 1 && d.role !== 2">
                     <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'en'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name.replace("Ký số bằng","Sign by").replace("và","and").replace("ảnh","OTP")}}</span>
+                  </ng-template>
                 </div>
 
                 <div class="col-md-4" style="display: flex; flex-direction: column;text-align: center">
@@ -84,7 +94,7 @@
                 </div>
 
                 <div class="col-md-2" style="text-align: center; display: flex;justify-content: center"
-                *ngIf = " isHiddenButton && listCheckSmsEmail && isEndDate ">
+                *ngIf = " isHiddenButton && listCheckSmsEmail">
                     <div *ngIf = "d.statusNumber !== 0 && d.statusNumber !== 4">
                         <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d.id)"/>
                     </div>

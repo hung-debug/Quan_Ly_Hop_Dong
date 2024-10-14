@@ -24,6 +24,7 @@ export interface Unit {
   brandName: any,
   smsUser: any,
   smsPass: any,
+  endLicense: any,
 }
 @Injectable({
   providedIn: 'root'

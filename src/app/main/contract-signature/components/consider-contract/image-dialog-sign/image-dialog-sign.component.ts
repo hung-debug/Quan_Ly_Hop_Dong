@@ -8,6 +8,7 @@ import {INgxSelectOption} from "ngx-select-ex/ngx-select/ngx-select.interfaces";
 import Swal from 'sweetalert2'
 import { ToastService } from 'src/app/service/toast.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { ContractService } from './../../../../../service/contract.service';
 @Component({
   selector: 'app-image-dialog-sign',
   templateUrl: './image-dialog-sign.component.html',
@@ -31,7 +32,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     minWidth: 1.5,
     maxWidth: 1.5,
     canvasWidth: 500,
-    canvasHeight: 300
+    canvasHeight: 380
   };
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -40,6 +41,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     public dialog: MatDialog,
     private contractSignatureService: ContractSignatureService,
     private toastService : ToastService,
+    public ContractService : ContractService,
     public dialogRef: MatDialogRef<ImageDialogSignComponent>
   ) { }
 
@@ -50,7 +52,13 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     
     this.getDeviceApp();
 
+    this.ContractService.getInforPersonProcess(this.data.recipientId).subscribe((data: any) =>{
+      if(data.sign_type[0].id == 1){
+        this.typeImageSignatureRadio = 3;
+      }
+    });
     this.typeImageSignatureRadio = 2;
+
     this.datas = this.data;
 
     this.initListSignatureAccountUser();

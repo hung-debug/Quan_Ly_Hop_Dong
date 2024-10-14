@@ -1,69 +1,74 @@
 
 
 <div class="container-fluid">
-  <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (onChange)="onSelect($event)">
-    <ng-template #options let-item>
-      <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
-    </ng-template>
-  </p-selectButton>
-<div class="col-md-12" style="padding-top: 20px;">
-  <div class="input-line search" style="justify-content:left; border: none; background-color: #F1F5FE;">
-      <!-- <img src="../../assets/img/icon_search.svg" class="input-img" /> -->
-      <input type="text" id="filter_name" [value]="filter_name" class="input-text" style=" width: 90%!important"
-      placeholder="{{getPlaceholderFind() | translate}}" (keyup)="autoSearch($event)" />
-  </div>
-</div>
-<div *ngIf="this.isOrgCustomer" class="row" style="justify-content: flex-end;">
-  <div class="col-xxl-1 btn_search" style="padding-top: 10px; ">
-      <button (click)="organizationAdd()" class="btn btn-lg btn-block btn_submit">{{'organization.customer.add'| translate}}</button>
-  </div>
-</div>
-<div *ngIf="!this.isOrgCustomer" class="row" style="justify-content: flex-end">
-  <div class="col-xxl-1 btn_search" style="padding-top: 10px;">
-      <button (click)="personalAdd()" class="btn btn-lg btn-block btn_submit">{{'personal.customer.add'| translate}}</button>
-  </div>
-</div>
-<div class="row" style="padding-top: 20px;">
-  <p-table [value]="list" [paginator]="false" [rows]="15" id="table" [autoLayout]="true">
-    <ng-template pTemplate="header" let-columns>
-      <tr>
-          <th *ngFor="let col of cols" [style]='col.style' [ngClass]="col.class">
-            {{col.header | translate}}
-          </th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-list>
-        <tr>
-            <td><a (click)="openDetail(list.id,list.type)" [routerLink]="['/main/form-customer/customer-detail/organization', list.id]"  
-              style="color: #001A4D; cursor: pointer; text-decoration: none; font-weight: 700;">{{list.name}}</a></td>
-            <td *ngIf="isOrgCustomer">{{list.taxCode}}</td>
-            <td *ngIf="!isOrgCustomer">{{list.phone}}</td>
-            <td *ngIf="!isOrgCustomer">{{list.email}}</td>
-            <td *ngIf="!isOrgCustomer">{{list.card_id}}</td>
-            <td style="text-align: center">
-              <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editCustomer(list.id, this.isOrgCustomer)"  style="cursor: pointer;"/>&nbsp;&nbsp;
-              <img src="../../../assets/img/icon_delete.svg" width="16px" (click)="deleteCustomer(list.id)" style="cursor: pointer;"/>
-            </td>
-        </tr>
-    </ng-template>
+  <div class="row">
+    <div class="cancel-padding">
+      <div class="row margin-top-16">
+        <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (onChange)="onSelect($event)">
+          <ng-template #options let-item>
+            <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
+          </ng-template>
+        </p-selectButton>
+      </div>
 
-    <!-- <div *ngIf="state.totalRecords>0"> -->
-    <!-- <ng-template pTemplate="paginatorleft" let-state>
-      <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-    </ng-template> -->
-    <ng-template pTemplate="paginatorright" let-state>
-      <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-    </ng-template> 
-  <!-- </div> -->
-  </p-table>
-</div>
-<div *ngIf="list.length == 0" 
-style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
-  <div style="display: table-cell;vertical-align: middle;">
-    <img src="../../../assets/img/empty_data.svg"/>
-    <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+      <div class="row margin-top-16">
+        <div class="col-lg-10-9 btn-padding-right">
+          <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{getPlaceholderFind() | translate}}" (keyup)="autoSearch($event)" />
+        </div>
+  
+        <div *ngIf="this.isOrgCustomer" class="col-lg-1-1 btn-padding-left">
+          <button (click)="organizationAdd()" class="btn-block btn_cancel">{{'organization.customer.add'| translate}}</button>
+        </div>
+      
+        <div *ngIf="!this.isOrgCustomer" class="col-lg-1-1 btn-padding-left">
+          <button (click)="personalAdd()" class="btn-block btn_cancel">{{'personal.customer.add'| translate}}</button>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+
+  <div class="row margin-top-16">
+    <p-table [value]="list" [paginator]="false" [rows]="15" id="table" [autoLayout]="true" class="pd-0">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of cols" [style]='col.style' [ngClass]="col.class" class="border-header-table">
+              {{col.header | translate}}
+            </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-list>
+          <tr>
+              <td><a (click)="openDetail(list.id,list.type)" [routerLink]="['/main/form-customer/customer-detail/organization', list.id]"  
+                style="color: #001A4D; cursor: pointer; text-decoration: none; font-weight: 700;">{{list.name}}</a></td>
+              <td *ngIf="isOrgCustomer">{{list.taxCode}}</td>
+              <td *ngIf="!isOrgCustomer">{{list.phone}}</td>
+              <td *ngIf="!isOrgCustomer">{{list.email}}</td>
+              <td *ngIf="!isOrgCustomer">{{list.card_id}}</td>
+              <td style="text-align: center">
+                <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editCustomer(list.id, this.isOrgCustomer)"  style="cursor: pointer;"/>&nbsp;&nbsp;
+                <img src="../../../assets/img/icon_delete.svg" width="16px" (click)="deleteCustomer(list.id)" style="cursor: pointer;"/>
+              </td>
+          </tr>
+      </ng-template>
+
+      <!-- <div *ngIf="state.totalRecords>0"> -->
+      <!-- <ng-template pTemplate="paginatorleft" let-state>
+        <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+      </ng-template> -->
+      <ng-template pTemplate="paginatorright" let-state>
+        <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+      </ng-template> 
+    <!-- </div> -->
+    </p-table>
+  </div>
+
+  <div *ngIf="list.length == 0" 
+  style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+    <div style="display: table-cell;vertical-align: middle;">
+      <img src="../../../assets/img/no_data.svg"/>
+      <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+    </div>
+  </div>
 </div>
 
 <div style="display: grid;margin-top: 10px;grid-template-columns: repeat(3, 1fr)">

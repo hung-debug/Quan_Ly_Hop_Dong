@@ -68,15 +68,15 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   getTextAlertConfirm() {
     /*if (this.datas.roleContractReceived == 2) {
       if (this.confirmConsider == 1) {
-        return 'Bạn có chắc chắn xác nhận hợp đồng này?';
+        return 'Bạn có chắc chắn xác nhận tài liệu này?';
       } else if (this.confirmConsider == 2) {
-        return 'Bạn có chắc chắn từ chối hợp đồng này?';
+        return 'Bạn có chắc chắn từ chối tài liệu này?';
       }
     } else if (this.datas.roleContractReceived == 3) {
       if (this.confirmSignature == 1) {
-        return 'Bạn có đồng ý với nội dung của hợp đồng và xác nhận ký?';
+        return 'Bạn có đồng ý với nội dung của tài liệu và xác nhận ký?';
       } else if (this.confirmSignature == 2) {
-        return 'Bạn không đồng ý với nội dung của hợp đồng và không xác nhận ký?';
+        return 'Bạn không đồng ý với nội dung của tài liệu và không xác nhận ký?';
       }
     }*/
     return ""
