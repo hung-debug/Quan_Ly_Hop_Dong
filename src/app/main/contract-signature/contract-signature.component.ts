@@ -1571,7 +1571,7 @@ export class ContractSignatureComponent implements OnInit {
           }
 
           if(resultsTrue.length == 0) {
-            this.toastService.showSuccessHTMLWithTimeout(
+            this.toastService.showErrorHTMLWithTimeout(
               'Ký số thất bại',
               '',
               10000
