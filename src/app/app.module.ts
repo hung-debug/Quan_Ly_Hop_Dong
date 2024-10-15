@@ -140,7 +140,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { PaginatorModule } from 'primeng/paginator';
 import { environment } from 'src/environments/environment';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouteInterceptorService } from './service/route-interceptor.service';
+//import { RouteInterceptorService } from './service/route-interceptor.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -344,7 +344,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     NgOtpInputModule,
     HighchartsChartModule
   ],
-  providers: [ AppService, DatePipe,CurrencyPipe,KeycloakAngularModule, KeycloakService, RouteInterceptorService,
+  providers: [ AppService, DatePipe,CurrencyPipe,KeycloakAngularModule, KeycloakService,
     {
     provide: PERFECT_SCROLLBAR_CONFIG,
     useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
