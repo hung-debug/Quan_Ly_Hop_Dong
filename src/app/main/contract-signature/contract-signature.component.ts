@@ -947,10 +947,10 @@ export class ContractSignatureComponent implements OnInit {
       }
 
       if (checkBox.checked) {
-        //let totalAllBoxSignPki = 0;
+        let totalAllBoxSignPki = 0;
         for (let i = 0; i < checkBoxList.length; i++) {  
           if (this.contractsSignMany[0].sign_type[0].id === 3) {
-            //totalAllBoxSignPki += this.contractsSignMany[i].fields.length;
+            totalAllBoxSignPki += this.contractsSignMany[i].fields.length;
             if (this.totalBoxSignPki + this.contractsSignMany[i].fields.length <= 15) {
               var checkBoxGet: any = checkBoxList[i];
               checkBoxGet.checked = true;
@@ -964,13 +964,13 @@ export class ContractSignatureComponent implements OnInit {
           }  
         }
 
-        // if(totalAllBoxSignPki > 15) {
-        //   this.toastService.showErrorHTMLWithTimeout(
-        //     `Vui lòng chọn những tài liệu có tổng số ô ký PKI không quá 15 ô`,
-        //     '',
-        //     3000
-        //   );
-        // }
+        if(totalAllBoxSignPki > 15) {
+          this.toastService.showErrorHTMLWithTimeout(
+            `Vui lòng chọn những tài liệu có tổng số ô ký PKI không quá 15 ô`,
+            '',
+            3000
+          );
+        }
       }
     }
   }
@@ -1544,7 +1544,7 @@ export class ContractSignatureComponent implements OnInit {
           //let resultsProcessing = checkSign.filter((item: any) => item.result.success === true && item.result.status === "PROCESSING");
           //let resultsSigned = checkSign.filter((item: any) => item.result.success === true && item.result.status === "SIGNED");
 
-          if(resultsFalse.length > 0) {
+          if(resultsFalse.length != checkSign.length) {
             let contractNames = this.getNameSign(resultsFalse);
             this.toastService.showErrorHTMLWithTimeout(
               `Tài liệu ${contractNames} ký không thành công!`,
@@ -1553,7 +1553,7 @@ export class ContractSignatureComponent implements OnInit {
             );
           }
 
-          if(resultsTrue.length > 0) {
+          if(resultsTrue.length != checkSign.length) {
             let contractNames = this.getNameSign(resultsTrue);
             this.toastService.showSuccessHTMLWithTimeout(
               `Bạn vừa thực hiện ký thành công tài liệu ${contractNames}.`,
@@ -1562,17 +1562,17 @@ export class ContractSignatureComponent implements OnInit {
             );
           }
 
-          if(resultsFalse.length == 0) {
-            this.toastService.showSuccessHTMLWithTimeout(
-              'Ký số thành công',
+          if(resultsFalse.length == checkSign.length) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'Ký số thất bại',
               '',
               10000
             );
           }
 
-          if(resultsTrue.length == 0) {
-            this.toastService.showErrorHTMLWithTimeout(
-              'Ký số thất bại',
+          if(resultsTrue.length == checkSign.length) {
+            this.toastService.showSuccessHTMLWithTimeout(
+              'Ký số thành công',
               '',
               10000
             );
