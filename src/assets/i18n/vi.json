@@ -92,6 +92,7 @@
   "contract.connect.add": "Thêm tài liệu liên quan",
   "contract.cancel": "Hủy tài liệu",
   "contract.download": "Tải tài liệu",
+  "contract.group.download": "Tải bộ tài liệu",
   "contract.share": "Chia sẻ tài liệu",
   "contract.lead": "Điều phối",
   "contract.view": "Xem xét",

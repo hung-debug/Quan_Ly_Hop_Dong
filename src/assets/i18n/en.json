@@ -93,6 +93,7 @@
   "contract.connect.add": "Add related contracts",
   "contract.cancel": "Cancel document",
   "contract.download": "Download document",
+  "contract.group.download": "Download document set",
   "contract.share": "Share document",
   "contract.lead": "Coordinator",
   "contract.view": "Consider",

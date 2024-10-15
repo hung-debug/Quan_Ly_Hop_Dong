@@ -954,6 +954,10 @@
                         <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.download' | translate}}</span>
                       </button>
+                      <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off' && item.is_attached_files == true" (click)="downloadFileContract(item.id);">
+                        <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
+                        <span class="three_dot_text">{{'contract.group.download' | translate}}</span>
+                      </button>
                       <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && isQLHD_13 && this.isOrg == 'off'" (click)="shareContract(item.id);">
                         <mat-icon><img src="../../assets/img/share_contract.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.share' | translate}}</span>
@@ -1240,6 +1244,10 @@
                           <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="downloadContract(item.id);">
                             <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                             <span class="three_dot_text">{{'contract.download' | translate}}</span>
+                          </button>
+                          <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off' && item.is_attached_files == true" (click)="downloadFileContract(item.id);">
+                            <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
+                            <span class="three_dot_text">{{'contract.group.download' | translate}}</span>
                           </button>
                           <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && isQLHD_13 && this.isOrg == 'off'" (click)="shareContract(item.id);">
                             <mat-icon><img src="../../assets/img/share_contract.svg" class="img_icon"/></mat-icon>
