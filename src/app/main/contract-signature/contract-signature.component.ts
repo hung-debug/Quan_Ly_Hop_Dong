@@ -65,6 +65,7 @@ export class ContractSignatureComponent implements OnInit {
   pageEnd: number = 0;
   pageTotal: number = 0;
   totalPage: number = 0;
+  totalBoxSignPki: number = 0;
   statusPopup: number = 1;
   notificationPopup: string = '';
 
@@ -535,6 +536,7 @@ export class ContractSignatureComponent implements OnInit {
     }
     this.contracts = [];
     this.contractsSignMany = [];
+    this.totalBoxSignPki = 0;
     if (this.filter_status % 10 == 1) {
       this.filter_status = 1;
     }
@@ -669,7 +671,7 @@ export class ContractSignatureComponent implements OnInit {
                 this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
                 this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
                 this.contractsSignMany[v].checked = false;
-                this.contractsSignMany[v].isDisable = false;
+                //this.contractsSignMany[v].isDisable = false;
               });
 
               this.spinner.hide();
@@ -702,7 +704,7 @@ export class ContractSignatureComponent implements OnInit {
                 this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
                 this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
                 this.contractsSignMany[v].checked = false;
-                this.contractsSignMany[v].isDisable = false;
+                //this.contractsSignMany[v].isDisable = false;
               });
 
               this.spinner.hide();
@@ -852,52 +854,70 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
-  checkSignType() {
-    let contractsSignManyChecked = this.contractsSignMany.filter(
-      (opt) => opt.checked
-    );
+  toggleOne1(item: any, index1: any) {
+    let data = {
+      id: index1,
+      sign_type: item.sign_type[0].id,
+      card_id: item.cardId,
+      checked: true,
+    };
 
-    const selectAllCheckbox = document.getElementById('all') as HTMLInputElement;
-    if (contractsSignManyChecked.length === 0 && selectAllCheckbox) {
-      selectAllCheckbox.checked = false;
-    } else if (contractsSignManyChecked.length == this.contractsSignMany.length) {
-      selectAllCheckbox.checked = true;
-    }
+    if (item.checked === false) {
+      let tempDataChecked = [...this.dataChecked, data];
+      let lengthItem = tempDataChecked.length;
+      let firstCheckedItem = tempDataChecked[0];
+      if (lengthItem >= 2) {
+        let lastCheckedItem = tempDataChecked[lengthItem - 1];
 
-    if(contractsSignManyChecked.length == 0) {
-      for (let i = 0; i < this.contractsSignMany.length; i++) {
-        this.contractsSignMany[i].isDisable = false;
-      }
-    } else {
-      for (let i = 0; i < this.contractsSignMany.length; i++) {
-        if(this.contractsSignMany[i].sign_type[0].id == contractsSignManyChecked[0].sign_type[0].id) {
-          this.contractsSignMany[i].isDisable = false;
-        } else {
-          this.contractsSignMany[i].isDisable = true;
+        if (firstCheckedItem.sign_type !== lastCheckedItem.sign_type) {;
+          this.toastService.showErrorHTMLWithTimeout(
+              'Các tài liệu đang chọn có loại ký khác nhau',
+              '',
+              3000
+          );
+          return false;
+        }
+
+        if (firstCheckedItem.card_id !== lastCheckedItem.card_id) {
+          this.toastService.showErrorHTMLWithTimeout(
+              'Tài liệu vừa chọn có mã số thuế khác tài liệu đầu tiên',
+              '',
+              3000
+          );
+          return false;
         }
       }
-    }
-    let totalBoxSignPki = 0;
-    contractsSignManyChecked.forEach(contract => {
-      if (contract.sign_type[0].id === 3) {
-        totalBoxSignPki += contract.fields.length;
+
+      if (firstCheckedItem.sign_type == 3) {;
+        this.totalBoxSignPki += item.fields.length
       }
-    });
+
+      if (this.totalBoxSignPki > 15) {
+        this.totalBoxSignPki -= item.fields.length
+        this.toastService.showErrorHTMLWithTimeout(
+          `Vui lòng chọn những tài liệu có tổng số ô ký PKI không quá 15 ô`,
+          '',
+          3000
+        );
+        return false;
+      }
   
-    if (totalBoxSignPki > 0) {
-      this.contractsSignMany.forEach(contract => {
-        if (!contract.checked && contract.fields.length + totalBoxSignPki > 15) {
-          contract.isDisable = true;
-        }
-      });
-    }
+      if(this.totalBoxSignPki > 0 && this.totalBoxSignPki <= 15) {
+        this.toastService.showSuccessHTMLWithTimeout(
+          `Hình thức ký số bằng SIM PKI: Đã chọn ${this.totalBoxSignPki}/15 ô ký`,
+          '',
+          3000
+        );
+      }
 
-    if(totalBoxSignPki > 0 && totalBoxSignPki <= 15) {
-      this.toastService.showSuccessHTMLWithTimeout(
-        `Tài liệu bạn chọn có ${totalBoxSignPki}/15 ô ký PKI`,
-        '',
-        3000
-      );
+      item.checked = true;
+      this.dataChecked.push(data);
+    } else {
+      if (item.sign_type[0].id == 3) {;
+        this.totalBoxSignPki -= item.fields.length
+      }
+      item.checked = false;
+      this.dataChecked = this.dataChecked.filter((checkedItem) => checkedItem.id !== index1);
     }
   }
 
@@ -920,24 +940,22 @@ export class ContractSignatureComponent implements OnInit {
 
       for (let i = 0; i < checkBoxList.length; i++) {
         var checkBoxGet: any = checkBoxList[i];
+        this.totalBoxSignPki = 0;
         checkBoxGet.checked = false;
         this.contractsSignMany[i].checked = false;
-        this.contractsSignMany[i].isDisable = false;
+        //this.contractsSignMany[i].isDisable = false;
       }
 
       if (checkBox.checked) {
-        let totalBoxSignPki = 0;
-        let totalAllBoxSignPki = 0;
+        //let totalAllBoxSignPki = 0;
         for (let i = 0; i < checkBoxList.length; i++) {  
           if (this.contractsSignMany[0].sign_type[0].id === 3) {
-            totalAllBoxSignPki += this.contractsSignMany[i].fields.length;
-            if (totalBoxSignPki + this.contractsSignMany[i].fields.length <= 15) {
+            //totalAllBoxSignPki += this.contractsSignMany[i].fields.length;
+            if (this.totalBoxSignPki + this.contractsSignMany[i].fields.length <= 15) {
               var checkBoxGet: any = checkBoxList[i];
               checkBoxGet.checked = true;
               this.contractsSignMany[i].checked = true;
-              totalBoxSignPki += this.contractsSignMany[i].fields.length;
-            } else {
-              this.contractsSignMany[i].isDisable = true;
+              this.totalBoxSignPki += this.contractsSignMany[i].fields.length;
             }
           } else {
             var checkBoxGet: any = checkBoxList[i];
@@ -946,13 +964,13 @@ export class ContractSignatureComponent implements OnInit {
           }  
         }
 
-        if(totalAllBoxSignPki > 15) {
-          this.toastService.showErrorHTMLWithTimeout(
-            `Vui lòng chọn những tài liệu có tổng số ô ký PKI không quá 15 ô`,
-            '',
-            3000
-          );
-        }
+        // if(totalAllBoxSignPki > 15) {
+        //   this.toastService.showErrorHTMLWithTimeout(
+        //     `Vui lòng chọn những tài liệu có tổng số ô ký PKI không quá 15 ô`,
+        //     '',
+        //     3000
+        //   );
+        // }
       }
     }
   }
