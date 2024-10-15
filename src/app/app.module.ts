@@ -140,6 +140,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { PaginatorModule } from 'primeng/paginator';
 import { environment } from 'src/environments/environment';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouteInterceptorService } from './service/route-interceptor.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -171,7 +172,12 @@ function initializeKeycloak(keycloak: KeycloakService) {
           localStorage.setItem('sso_token',ssoToken ?? '')
           if (!authenticated) {
             const fullUrl = window.location.href
-            if (fullUrl.includes('/login?type=mobifone-sso')) {
+            // if (fullUrl.includes('/login?type=mobifone-sso')) {
+            //   keycloak.login()
+            // }
+            if(fullUrl.includes('/login?loginType=1')){     
+              return;
+            }else{
               keycloak.login()
             }
           } 
@@ -338,7 +344,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     NgOtpInputModule,
     HighchartsChartModule
   ],
-  providers: [ AppService, DatePipe,CurrencyPipe,KeycloakAngularModule, KeycloakService,
+  providers: [ AppService, DatePipe,CurrencyPipe,KeycloakAngularModule, KeycloakService, RouteInterceptorService,
     {
     provide: PERFECT_SCROLLBAR_CONFIG,
     useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
