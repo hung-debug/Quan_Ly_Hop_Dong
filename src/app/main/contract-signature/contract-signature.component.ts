@@ -1539,12 +1539,28 @@ export class ContractSignatureComponent implements OnInit {
             name
           ).toPromise();
           this.spinner.hide();
+          recipientId.forEach((id: any) => {
+            let existingRecipient = checkSign.find((item: any) => item.recipientId === id);
+            
+            if (!existingRecipient) {
+              checkSign.push({
+                "recipientId": id,
+                "result": {
+                  "success": false,
+                  "message": "",
+                  "status": null,
+                  "details": null
+                }
+              });
+            }
+          });
+
           let resultsFalse = checkSign.filter((item: any) => item.result.success === false);
           let resultsTrue = checkSign.filter((item: any) => item.result.success === true);
           //let resultsProcessing = checkSign.filter((item: any) => item.result.success === true && item.result.status === "PROCESSING");
           //let resultsSigned = checkSign.filter((item: any) => item.result.success === true && item.result.status === "SIGNED");
 
-          if(resultsFalse.length != checkSign.length) {
+          if(resultsFalse.length > 0 && resultsFalse.length != checkSign.length) {
             let contractNames = this.getNameSign(resultsFalse);
             this.toastService.showErrorHTMLWithTimeout(
               `Tài liệu ${contractNames} ký không thành công!`,
@@ -1553,7 +1569,7 @@ export class ContractSignatureComponent implements OnInit {
             );
           }
 
-          if(resultsTrue.length != checkSign.length) {
+          if(resultsTrue.length > 0 && resultsTrue.length != checkSign.length) {
             let contractNames = this.getNameSign(resultsTrue);
             this.toastService.showSuccessHTMLWithTimeout(
               `Bạn vừa thực hiện ký thành công tài liệu ${contractNames}.`,
@@ -1562,7 +1578,7 @@ export class ContractSignatureComponent implements OnInit {
             );
           }
 
-          if(resultsFalse.length == checkSign.length) {
+          if(resultsTrue.length == 0 && resultsFalse.length == checkSign.length) {
             this.toastService.showErrorHTMLWithTimeout(
               'Ký số thất bại',
               '',
@@ -1570,7 +1586,7 @@ export class ContractSignatureComponent implements OnInit {
             );
           }
 
-          if(resultsTrue.length == checkSign.length) {
+          if(resultsFalse.length == 0 && resultsTrue.length == checkSign.length) {
             this.toastService.showSuccessHTMLWithTimeout(
               'Ký số thành công',
               '',
