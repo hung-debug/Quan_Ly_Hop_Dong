@@ -911,5 +911,9 @@
   "many.extensions": "Many extensions",
   "error.notTime": "Please select a signature expiration date",
   "person.processing.contract": "Name of the person handling the document",
-  "name.email.create.contract": "Name/Email person create document"
+  "name.email.create.contract": "Name/Email person create document",
+  "username.wrong.format": "Username is not correct format",
+  "choose.type.sign": "Select login method",
+  "status.account": "Account status",
+  "type.sign.email.phone": "Login by Email and Phone"
 }

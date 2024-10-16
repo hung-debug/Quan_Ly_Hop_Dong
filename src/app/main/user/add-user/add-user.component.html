@@ -79,7 +79,7 @@
                 </div>
 
             </div>
-            <div class="row" style="justify-content: center;padding-top: 10px;">
+            <!-- <div class="row" style="justify-content: center;padding-top: 10px;">
                 <div class="col-md-2" style="text-align: center;">
                     <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="status" name="status">
                     <span> {{'unit.active' | translate}}</span>
@@ -88,6 +88,40 @@
                     <input type="radio" name='confirm-radio-consider' [value]="0" formControlName="status" name="status">
                     <span> {{'unit.inactive' | translate}}</span>
                 </div>
+            </div> -->
+            <div class="row" style="justify-content: flex-start;padding-top: 10px;display: flex;">
+              <div style="display: flex;">
+                <div style="display: flex;">
+                  <span>{{'choose.type.sign' | translate}}:</span>
+                  <div style="margin-left: 10px;">
+                    <!-- <input name="item" type="checkbox" formControlName="loginType" (change)="onCheckboxChange($event, 'EMAIL')" value="EMAIL" [checked]="selectedTypes.includes('EMAIL')"/> -->
+                    <input type="radio" name="confirm-radio-consider" value="EMAIL" formControlName="loginType" name="loginType">
+                    <span> {{'typeOfSignEmail' | translate}}</span>
+                  </div>
+                  <div style="margin-left: 10px;">
+                    <!-- <input name="item" type="checkbox" formControlName="loginType" (change)="onCheckboxChange($event, 'SDT')" value="SDT" [checked]="selectedTypes.includes('SDT')"/> -->
+                    <input type="radio" name="confirm-radio-consider" value="SDT" formControlName="loginType" name="loginType">
+                    <span> {{'typeOfSignPhone' | translate}}</span>
+                  </div>
+                  <div style="margin-left: 10px;">
+                    <!-- <input name="item" type="checkbox" formControlName="loginType" (change)="onCheckboxChange($event, 'SDT')" value="SDT" [checked]="selectedTypes.includes('SDT')"/> -->
+                    <input type="radio" name="confirm-radio-consider" value="EMAIL_AND_SDT" formControlName="loginType" name="loginType">
+                    <span> {{'type.sign.email.phone' | translate}}</span>
+                  </div>
+                </div>
+
+                <div style="display: flex; margin-left: 35px;">
+                  <span>{{'status.account' | translate}}:</span>
+                  <div style="margin-left: 20px;">
+                    <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="status" name="status">
+                    <span> {{'unit.active' | translate}}</span>
+                  </div>
+                  <div style="margin-left: 20px;">
+                    <input type="radio" name='confirm-radio-consider' [value]="0" formControlName="status" name="status">
+                    <span> {{'unit.inactive' | translate}}</span>
+                  </div>
+                </div>
+              </div>
             </div>
         </div>
 

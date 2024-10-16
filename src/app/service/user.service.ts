@@ -228,7 +228,7 @@ export class UserService {
       birthday: datas.birthday,
       status: datas.status,
       role_id: datas.role,
-
+      loginType: datas.loginType,
       sign_image: datas.sign_image,
 
       phone_sign: datas.phoneKpi,
@@ -263,7 +263,7 @@ export class UserService {
 
       sign_image: datas.sign_image,
       stampImage: datas.stampImage,
-
+      loginType: datas.loginType,
       phone_sign: datas.phoneKpi,
       phone_tel: datas.networkKpi ==='bcy' ? 3 : datas.networkKpi,
 

@@ -70,7 +70,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       organizationId: this.fbd.control("", [Validators.required]),
       role: this.fbd.control("", [Validators.required]),
       status: 1,
-
+      loginType: 'SDT',
       phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
       networkKpi: null,
 
@@ -121,7 +121,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
             organizationId: this.fbd.control(orgId, [Validators.required]),
             role: this.fbd.control("", [Validators.required]),
             status: 1,
-
+            loginType: 'SDT',
             phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
             networkKpi: null,
 
@@ -157,7 +157,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
                     organizationId: this.fbd.control(data.organization_id, [Validators.required]),
                     role: this.fbd.control(Number(data.role_id), [Validators.required]),
                     status: data.status,
-
+                    loginType: data.loginType,
                     phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
                     networkKpi: data.phone_tel,
 
@@ -233,7 +233,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
     this.spinner.show();
     let userId = this.userService.getAuthCurrentUser().id;
     this.isMailSame = sessionStorage.getItem('isMailSame') == "true" ? true : false;  
-
+    this.addForm.get('loginType')?.setValue('SDT');
     
     this.userService.getUserById(userId).subscribe(
       data => {
@@ -384,6 +384,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       organizationId: this.addForm.value.organizationId,
       role: this.addForm.value.role,
       status: this.addForm.value.status,
+      loginType: this.addForm.value.loginType,
       phoneKpi: this.addForm.value.phoneKpi,
       networkKpi: this.addForm.value.networkKpi,
       nameHsm: this.addForm.value.nameHsm,
