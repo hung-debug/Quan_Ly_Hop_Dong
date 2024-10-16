@@ -1183,6 +1183,42 @@ export class ContractComponent implements OnInit, AfterViewInit {
       }
     );
   }
+  
+  downloadFileContract(id: any){
+    this.contractService.getFileContract(id).subscribe((data) => {
+      // const pathFileContract = data.filter(p: => p.type == 2);
+      const filteredData = data.filter((item:any) => item.type === 2);
+
+      const paths = filteredData.map((item:any) => item.path);
+      const myDate = new Date();
+      // Replace 'yyyy-MM-dd' with your desired date format
+      const formattedDate = this.datePipe.transform(myDate, 'ddMMyyyy');
+
+      if(paths.length > 0){
+        this.uploadService.downloadFile(paths[0]).subscribe((response: any) => {
+          const file = new Blob([response], {type: 'application/pdf'});
+          let url = window.URL.createObjectURL(file);
+          let a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          // a.download = 'Contracts'+ '_' + formattedDate;
+          a.download = filteredData[0].filename;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+        }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
+      } else {
+        this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);
+      }
+
+    },
+      error => {
+        this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);
+      }
+    );
+  }
 
   getNameStatusCeca(status: any, ceca_push: any, ceca_status: any) {
     if (status == 30) {
