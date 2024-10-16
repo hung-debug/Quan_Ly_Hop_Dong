@@ -915,5 +915,9 @@
   "error.notTime": "Please select a signature expiration date",
   "person.processing.contract": "Name of the person handling the document",
   "name.email.create.contract": "Name/Email person create document",
-  "no.update.assign": "PKI only allows assignment of less than 15 signature cells"
+  "no.update.assign": "PKI only allows assignment of less than 15 signature cells",
+  "username.wrong.format": "Username is not correct format",
+  "choose.type.sign": "Select login method",
+  "status.account": "Account status",
+  "type.sign.email.phone": "Login by Email and Phone"
 }
