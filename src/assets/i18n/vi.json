@@ -531,6 +531,7 @@
   "sign.by.pki":"Ký số bằng Sim PKI",
   "sign.image.otp":"Ký ảnh và OTP",
   "sign.image.ekyc":"Chữ ký ảnh hoặc eKYC",
+  "signed.ekyc":"Đã ký eKYC",
   "sign.digital":"Chữ ký số",
   "auto.scroll":"Tìm ô thông tin",
   "preview":"Xem trước",

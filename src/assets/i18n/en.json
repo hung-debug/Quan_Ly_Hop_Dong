@@ -516,6 +516,7 @@
   "sign.by.pki": "Sign by Sim PKI",
   "sign.image.otp": "Sign image and OTP",
   "sign.image.ekyc": "Sign image or eKYC",
+  "signed.ekyc":"Signed eKYC",
   "sign.digital": "Sign digital",
   "auto.scroll": "Auto scroll",
   "preview": "Preview",
