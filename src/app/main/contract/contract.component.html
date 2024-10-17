@@ -758,12 +758,12 @@
                     </button>
                     <mat-menu #menu="matMenu">
                       <!-- <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'on'" (click)="downloadContract(item.id);"> -->
-                      <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'on'" (click)="downloadFileContract(item.id);">
+                      <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'on'" (click)="downloadFileContract(item.id, item.name);">
                         <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.download' | translate}}</span>
                       </button>
                       <!-- <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'on' && item.is_attached_files == true" (click)="downloadFileContract(item.id);"> -->
-                      <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'on' && item.is_attached_files == true" (click)="downloadContract(item.id);">
+                      <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'on' && item.is_attached_files == true" (click)="downloadContract(item.id, item.name);">
                         <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.group.download' | translate}}</span>
                       </button>
@@ -957,12 +957,12 @@
                         <span class="three_dot_text">{{'contract.connect.view' | translate}}</span>
                       </button>
                       <!-- <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="downloadContract(item.id);"> -->
-                      <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="downloadFileContract(item.id);">
+                      <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="downloadFileContract(item.id, item.name);">
                         <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.download' | translate}}</span>
                       </button>
                       <!-- <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off' && item.is_attached_files == true" (click)="downloadFileContract(item.id);"> -->
-                      <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off' && item.is_attached_files == true" (click)="downloadContract(item.id);">
+                      <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off' && item.is_attached_files == true" (click)="downloadContract(item.id, item.name);">
                         <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.group.download' | translate}}</span>
                       </button>
@@ -1250,12 +1250,12 @@
                             <span class="three_dot_text">{{'contract.connect.add' | translate}}</span>
                           </button>
                           <!-- <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="downloadContract(item.id);"> -->
-                          <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="downloadFileContract(item.id);">
+                          <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="downloadFileContract(item.id,item.name);">
                             <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                             <span class="three_dot_text">{{'contract.download' | translate}}</span>
                           </button>
                           <!-- <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off' && item.is_attached_files == true" (click)="downloadFileContract(item.id);"> -->
-                          <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off' && item.is_attached_files == true" (click)="downloadContract(item.id);">
+                          <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off' && item.is_attached_files == true" (click)="downloadContract(item.id, item.name);">
                             <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                             <span class="three_dot_text">{{'contract.group.download' | translate}}</span>
                           </button>
@@ -1678,7 +1678,7 @@
                           <mat-icon><img src="../../assets/img/add_contract_dup.svg" class="img_icon"/></mat-icon>
                           <span class="three_dot_text">{{'contract.connect.add' | translate}}</span>
                         </button>
-                        <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="downloadContract(item.id);">
+                        <button mat-menu-item class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'" (click)="downloadContract(item.id, item.name);">
                           <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                           <span class="three_dot_text">{{'contract.download' | translate}}</span>
                         </button>
