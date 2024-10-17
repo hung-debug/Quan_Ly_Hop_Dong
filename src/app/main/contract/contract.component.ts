@@ -1162,7 +1162,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     })
   }
 
-  downloadContract(id: any) {
+  downloadContract(id: any, name: any) {
     this.contractService.getFileZipContract(id).subscribe((data) => {
       this.uploadService.downloadFile(data.path).subscribe((response: any) => {
         let url = window.URL.createObjectURL(response);
@@ -1170,7 +1170,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
         document.body.appendChild(a);
         a.setAttribute('style', 'display: none');
         a.href = url;
-        a.download = data.filename;
+        // a.download = data.filename;
+        a.download = name;
         a.click();
         window.URL.revokeObjectURL(url);
         a.remove();
@@ -1184,7 +1185,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     );
   }
   
-  downloadFileContract(id: any){
+  downloadFileContract(id: any, name: any){
     this.contractService.getFileContract(id).subscribe((data) => {
       // const pathFileContract = data.filter(p: => p.type == 2);
       const filteredData = data.filter((item:any) => item.type === 2);
@@ -1203,7 +1204,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
           a.setAttribute('style', 'display: none');
           a.href = url;
           // a.download = 'Contracts'+ '_' + formattedDate;
-          a.download = filteredData[0].filename;
+          // a.download = filteredData[0].filename;
+          a.download = name;
           a.click();
           window.URL.revokeObjectURL(url);
           a.remove();
