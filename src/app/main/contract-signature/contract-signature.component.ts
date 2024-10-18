@@ -1535,7 +1535,7 @@ export class ContractSignatureComponent implements OnInit {
             recipientId,
             signI,
             this.isTimestamp,
-            result.hidden_phone ? false : true,
+            result.is_show_phone_pki ? false : true,
             name
           ).toPromise();
           this.spinner.hide();

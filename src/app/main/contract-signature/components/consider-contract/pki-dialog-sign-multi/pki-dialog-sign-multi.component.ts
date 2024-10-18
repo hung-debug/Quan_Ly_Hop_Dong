@@ -7,6 +7,7 @@ import { ContractService } from 'src/app/service/contract.service';
 import {ToastService} from "../../../../../service/toast.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { environment } from 'src/environments/environment';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-pki-dialog-sign-multi',
@@ -25,7 +26,8 @@ export class PkiDialogSignMultiComponent implements OnInit {
   networkCompany: any = 0;
   phoneNum: any;
   type: any = 0;
-  hidden_phone: boolean = true;
+  // hidden_phone: boolean = true;
+  is_show_phone_pki: boolean;
   environment: any = '';
   isError = false;
   isErrorInvalid = false;
@@ -38,15 +40,19 @@ export class PkiDialogSignMultiComponent implements OnInit {
     private toastService : ToastService,
     private contractService: ContractService,
     private spinner: NgxSpinnerService,
+    private userService: UserService,
   ) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.environment = environment
     this.nl = networkList;
     this.datas = this.data;
     this.phoneNum = this.datas?.sign?.phone;
     this.networkCode = this.datas?.sign?.phone_tel;
+    let userId = this.userService.getAuthCurrentUser().id;
+    const infoUser = await this.userService.getUserById(userId).toPromise();
+    this.is_show_phone_pki = infoUser.is_show_phone_pki
     if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
       this.type = 1;
     } else {
@@ -140,7 +146,7 @@ export class PkiDialogSignMultiComponent implements OnInit {
       phone: resPhone,
       networkCode: this.networkCompany,
       phone_tel: this.networkCode,
-      hidden_phone: this.hidden_phone,
+      is_show_phone_pki: this.is_show_phone_pki
     };
     this.spinner.hide();
     this.dialogRef.close(resDialog);
