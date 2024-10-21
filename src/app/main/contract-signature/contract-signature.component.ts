@@ -423,7 +423,7 @@ export class ContractSignatureComponent implements OnInit {
 
   cancelSignMany() {
     this.typeDisplay = 'signOne';
-
+    this.totalBoxSignPki = 0;
     this.setNullFilter();
 
     if (this.myInput) {
