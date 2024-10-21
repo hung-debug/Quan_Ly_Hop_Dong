@@ -230,7 +230,7 @@ export class UserService {
       status: datas.status,
       role_id: datas.role,
       is_show_phone_pki: datas.is_show_phone_pki,
-      loginType: datas.loginType,
+      login_type: datas.login_type,
       sign_image: datas.sign_image,
 
       phone_sign: datas.phoneKpi,
@@ -265,7 +265,7 @@ export class UserService {
       is_show_phone_pki: datas.is_show_phone_pki,
       sign_image: datas.sign_image,
       stampImage: datas.stampImage,
-      loginType: datas.loginType,
+      login_type: datas.login_type,
       phone_sign: datas.phoneKpi,
       phone_tel: datas.networkKpi ==='bcy' ? 3 : datas.networkKpi,
 

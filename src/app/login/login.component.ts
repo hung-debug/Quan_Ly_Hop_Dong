@@ -342,9 +342,16 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
 
   async ngOnInit() {
-    if (!this.keycloakService.getKeycloakInstance().authenticated && this.type == 0) {
-      this.loginSSO();
-    }
+    // const fullUrl = window.location.href;
+    
+    // if (!this.keycloakService.getKeycloakInstance().authenticated && (fullUrl.includes('&type=') || fullUrl.includes('/login?loginType=0'))) {
+    //   console.log("Url",fullUrl);
+    //   this.loginSSO()
+    // }
+    // else{
+    //   console.log("3");
+    //   this.router.navigate(['/login'])
+    // }
     if (environment.flag == "NB") {
       this.isNB = true
     } else if(environment.flag != "NB" && environment.usedSSO) {
