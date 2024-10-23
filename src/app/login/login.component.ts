@@ -14,6 +14,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { AccountLinkDialogComponent } from '../main/dialog/account-link-dialog/account-link-dialog.component';
 import { environment } from 'src/environments/environment';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ContractService } from '../service/contract.service';
 
 @Component({
   selector: 'app-login',
@@ -37,6 +38,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   coordinates: any = "c8";
   isSSOlogin: boolean = false;
   isNB: boolean = false;
+  enviroment: any = "";
   @ViewChild('previewCaptcha') previewCaptcha: ElementRef;
 
   constructor(
@@ -49,7 +51,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private changeDetector : ChangeDetectorRef,
     private toastService: ToastService,
     private keycloakService: KeycloakService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private contractService: ContractService,
 
   ) {
     translate.addLangs(['en', 'vi']);
@@ -342,16 +345,20 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
 
   async ngOnInit() {
-    // const fullUrl = window.location.href;
-    
-    // if (!this.keycloakService.getKeycloakInstance().authenticated && (fullUrl.includes('&type=') || fullUrl.includes('/login?loginType=0'))) {
-    //   console.log("Url",fullUrl);
-    //   this.loginSSO()
-    // }
-    // else{
-    //   console.log("3");
-    //   this.router.navigate(['/login'])
-    // }
+    this.enviroment = environment
+    const fullUrl = window.location.href;
+    const urlOrigin: any = window.location.hostname;
+
+    const parsedApiUrl = new URL(environment.apiUrl);
+    debugger
+    if(fullUrl.includes('&type=1') || fullUrl.includes('/login?loginType=1') ){
+      console.log("noSSO");
+      this.router.navigate(['/login'])
+      
+    } else if(environment.flag == 'KD' && !this.keycloakService.getKeycloakInstance().authenticated && (urlOrigin === parsedApiUrl.hostname || urlOrigin === "localhost" || fullUrl.includes('&type=0') || fullUrl.includes('/login?loginType=0') || !fullUrl.includes('/login'))){
+      console.log("sso");
+      this.loginSSO()
+    }
     if (environment.flag == "NB") {
       this.isNB = true
     } else if(environment.flag != "NB" && environment.usedSSO) {
@@ -459,7 +466,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
         } catch (error) {
           this.isSSOlogin = false
           this.toastService.showErrorHTMLWithTimeout("Đăng nhập SSO thất bại","",3000)
-          this.router.navigate(['/login'])
+          // this.router.navigate(['/login'])
+          if(environment.flag == 'KD' && !this.keycloakService.getKeycloakInstance().authenticated){
+            this.loginSSO()
+          }
         }
       } else {
         let storedUsername = sessionStorage.getItem("mail");

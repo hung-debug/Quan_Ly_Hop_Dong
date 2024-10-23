@@ -22,7 +22,8 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   @Input() view: any;
   @Input() contractNoValue: boolean;
   @Input() contractNoValueSign: string;
-  @Input() isNotTextSupport: boolean
+  @Input() isNotTextSupport: boolean;
+  @Input() firstHandler: boolean
   @Input() otpValueSign: any;
   @ViewChild('inputEditText') inputEditText: ElementRef;
   @ViewChild('inputEditContractNo') inputEditContractNo: ElementRef;
@@ -53,10 +54,13 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   getStyle(sign: any) {
-    return {
+    let style;
+    style = {
       'font': sign.font,
       'font-size':sign.font_size+'px',
-    };
+      'background-color': '#ebf8ff',
+    };   
+    return style;
   }
 
 
@@ -216,7 +220,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     this.sign.valueSign = this.contractService.removePeriodsFromCurrencyValue(this.sign.valueSign);
 
 
-    if ([2,3,4].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
+    if ([2,3,4].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view || this.firstHandler) {
       this.checkShowEdit = !this.checkShowEdit;
 
       setTimeout(()=>{
@@ -252,7 +256,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       if (sign.sign_unit == 'so_tai_lieu') {
         if (sign.value) {
           // sign.value= this.convertCurrency(sign.value);
-
+          this.count++;
           return sign.value;
         } else if(sign.valueSign) {
           // sign.valueSign= this.convertCurrency(sign.valueSign);
