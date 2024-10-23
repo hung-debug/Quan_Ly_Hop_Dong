@@ -6,13 +6,13 @@ export const environment = {
   flag: 'KD',
   // flag: 'NB',
 
-  SSO_URL: 'https://auth-sso.mobifone.vn:8080/oauth',
+  // SSO_URL: 'https://auth-sso.mobifone.vn:8080/oauth',
   // SSO_REALM: 'sso-mobifone',
   // SSO_CLIENTID: 'TTCNTT-ECONTRACT-STAGING',
 
-  // SSO_URL: 'http://10.3.14.69:8080/oauth',
+  SSO_URL: 'http://10.3.14.69:8080/oauth',
   SSO_REALM: 'sso-mobifone',
-  SSO_CLIENTID: 'TTCNTT-ECONTRACT-STAGING',
+  SSO_CLIENTID: 'TTCNTT-ECONTRACT',
 
   // SSO_URL: 'https://auth-sso.mobifone.vn:8080/oauth',
   // SSO_REALM: 'sso-mobifone',

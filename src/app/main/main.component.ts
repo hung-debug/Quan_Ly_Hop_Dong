@@ -192,8 +192,7 @@ export class MainComponent implements OnInit {
      localStorage.removeItem('myTaxCode');
      localStorage.removeItem('url');
  
-    //  this.router.navigate(['/login']);
-    await this.keycloakService.login();
+     this.router.navigate(['/login']);
     } else {
      let ssoIdToken: any = localStorage.getItem('sso_id_token') || ''
      if (localStorage.getItem('sso_token')) {
@@ -202,8 +201,7 @@ export class MainComponent implements OnInit {
        localStorage.clear()
        sessionStorage.clear();
        this.authenticationService.deleteAllCookies()
-      //  this.router.navigate(['/login']);
-      await this.keycloakService.login();
+       this.router.navigate(['/login']);
      } else {
        localStorage.removeItem('sso_token');
        localStorage.clear()
