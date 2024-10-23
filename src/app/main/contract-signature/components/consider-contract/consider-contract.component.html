@@ -192,8 +192,8 @@
                 [firstHandler] = "firstHandler"
               >
               </app-image-sign-contract>
-              <div *ngIf="this.flagFocus && d.sign_unit == 'text'" class="name-sig-img-daky long-text-ellipsis">{{(d.recipient && !d.valueSign) ? d.recipient?.name : ''}}</div>
-              <div *ngIf="d.sign_unit != 'text' && !this.flagFocus && !this.otpValueSign" class="name-sig-img-daky long-text-ellipsis">{{(d.recipient && !d.valueSign) ? d.recipient?.name : ''}}</div>
+              <div *ngIf="!this.flagFocus && d.sign_unit == 'text'" class="name-sig-img-daky long-text-ellipsis">{{(d.recipient && !d.valueSign || d.valueSign && d.value) ? d.name : ''}}</div>
+              <div *ngIf="d.sign_unit != 'text' && !this.flagFocus && !this.otpValueSign" class="name-sig-img-daky long-text-ellipsis">{{(d.recipient && !d.valueSign || d.type == 4 && d.valueSign && d.value) ? d.recipient?.name : ''}}</div>
             </div>
           </div>
           <div class="skeleton-sign position-absolute opacity-0">

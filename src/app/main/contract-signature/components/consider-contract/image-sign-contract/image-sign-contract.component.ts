@@ -55,11 +55,18 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   getStyle(sign: any) {
     let style;
-    style = {
-      'font': sign.font,
-      'font-size':sign.font_size+'px',
-      'background-color': '#ebf8ff',
-    };   
+    if(sign.type == 4 && sign.valueSign && sign.value) {
+      style = {
+        'font': sign.font,
+        'font-size':sign.font_size+'px',
+        'background-color': '#ebf8ff',
+      };  
+    } else {
+      style = {
+        'font': sign.font,
+        'font-size':sign.font_size+'px'
+      };    
+    }
     return style;
   }
 
@@ -194,6 +201,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     this.contractNoValue = false;
     this.count++;
     sign.valueSign = this.contractNoValueSign;
+    sign.value = ''
     this.contractNoValueEvent.emit(this.contractNoValueSign);
   }
 
@@ -222,7 +230,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
     if ([2,3,4].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view || this.firstHandler) {
       this.checkShowEdit = !this.checkShowEdit;
-
+      this.sign.value = '';
       setTimeout(()=>{
         this.inputEditText.nativeElement.focus();
         this.newItemEvent.emit("text");
@@ -233,7 +241,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   doEditContractNo() {
     if (this.isNotTextSupport) return
     this.contractNoValue = !this.contractNoValue;
-
+    this.sign.value = '';
     setTimeout(()=>{
       this.inputEditContractNo.nativeElement.focus();
     },100);
