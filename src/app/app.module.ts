@@ -172,14 +172,18 @@ function initializeKeycloak(keycloak: KeycloakService) {
           localStorage.setItem('sso_token',ssoToken ?? '')
           if (!authenticated) {
             const fullUrl = window.location.href
-            // if (fullUrl.includes('/login?type=mobifone-sso')) {
-            //   keycloak.login()
-            // }
-            if(fullUrl.includes('/login?loginType=1')){     
-              return;
-            }else{
+            if (fullUrl.includes('/login?type=mobifone-sso')) {
               keycloak.login()
             }
+            // if(fullUrl.includes('/type=1')){     
+            //   console.log("1");
+              
+            //   return false;
+            // }else{
+            //   console.log("2");
+              
+            //   keycloak.login()
+            // }
           } 
         }, (err: any) => {
         }

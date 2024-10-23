@@ -186,6 +186,7 @@
                                     <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 7" style="color: #EE7200; padding: 5px;">{{'signed.usb.bcy' | translate}}</span>
                                     <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 8" style="color: #EE7200; padding: 5px;">{{'signed.romote.signing' | translate}}</span>
                                     <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 1" style="color: #EE7200; padding: 5px;">{{'sign.image.otp' | translate}}</span>
+                                    <span *ngIf="item.status == 2 && item.sign_type[0]?.id == 5" style="color: #EE7200; padding: 5px;">{{'signed.ekyc' | translate}}</span>
                                   </div>
                                   <!-- <div *ngIf="item.ceca_push == 1">
                                     <div class="item_contract_infor">{{'contract.status.ceca' | translate}}:
@@ -282,9 +283,13 @@
                           <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                         </button>
                         <mat-menu #menu="matMenu">
-                          <button mat-menu-item class="div_icon" *ngIf="item.contractStatus == 30" (click)="downloadContract(item.contractId);">
+                          <button mat-menu-item class="div_icon" *ngIf="item.contractStatus == 30" (click)="downloadContract(item.contractId, item.participant.contract.name);">
                             <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                             <span class="three_dot_text">{{'contract.download' | translate}}</span>
+                          </button>
+                          <button mat-menu-item class="div_icon" *ngIf="item.participant.contract.status == 30 && item.is_attached_files == true" (click)="downloadFileContract(item.participant.contract.id);">
+                            <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
+                            <span class="three_dot_text">{{'contract.group.download' | translate}}</span>
                           </button>
                           <button mat-menu-item class="div_icon" *ngIf="item.contractStatus == 32" (click)="ViewReasonCancel(item.contractId);">
                             <mat-icon><img src="../../assets/img/cancel_notes.svg" class="img_icon"/></mat-icon>
@@ -413,9 +418,13 @@
                         <mat-icon><img src="../../assets/img/lets-icons_meatballs-menu.svg"/></mat-icon>
                       </button>
                       <mat-menu #menu="matMenu">
-                        <button mat-menu-item class="div_icon" (click)="downloadContract(item.id);">
+                        <button mat-menu-item class="div_icon" (click)="downloadContract(item.id, item.name);">
                           <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
                           <span class="three_dot_text">{{'contract.download' | translate}}</span>
+                        </button>
+                        <button mat-menu-item class="div_icon" *ngIf="item.status == 30 && item.is_attached_files == true" (click)="downloadFileContract(item.id);">
+                          <mat-icon><img src="../../assets/img/download_contract.svg" class="img_icon"/></mat-icon>
+                          <span class="three_dot_text">{{'contract.group.download' | translate}}</span>
                         </button>
                       </mat-menu>
                     </div>
@@ -767,7 +776,7 @@
                             </div> -->
 
                             <div class="div_icon" *ngIf="item.contractStatus == 30">
-                                <img src="../../assets/img/download_contract.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.contractId);" />
+                                <img src="../../assets/img/download_contract.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.contractId, item.participant.contract.name);" />
                             </div>
                         </div>
                     </div>
@@ -805,7 +814,7 @@
                     <div class="col-sm-2 item_icon">
                         <div style="display: flex; justify-content: center;">
                             <div class="div_icon">
-                                <img src="../../assets/img/download_contract.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
+                                <img src="../../assets/img/download_contract.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id, item.participant.contract.name);" />
                             </div>
                         </div>
                     </div>

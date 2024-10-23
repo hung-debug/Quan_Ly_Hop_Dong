@@ -71,6 +71,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       role: this.fbd.control("", [Validators.required]),
       status: 1,
       is_show_phone_pki: true,
+      login_type: 'SDT',
       phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
       networkKpi: null,
 
@@ -122,6 +123,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
             role: this.fbd.control("", [Validators.required]),
             status: 1,
             is_show_phone_pki: true,
+            login_type: 'SDT',
             phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
             networkKpi: null,
 
@@ -136,7 +138,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       } else if (this.action == 'edit') {
         this.id = params['id'];
         this.appService.setTitle('user.update');
-
+        this.addForm.get('login_type')?.disable();
         this.roleService.getRoleList('', '').subscribe(data => {
           this.roleList = data.entities;
         });
@@ -144,6 +146,19 @@ export class AddUserComponent implements OnInit, OnDestroy {
         if(this.isQLND_02){
           this.userService.getUserById(this.id).subscribe(
             data => {
+              if (data.login_type == null) {
+                data.login_type = 'EMAIL';
+              }
+              console.log("data",data);
+              if(data.login_type == 'EMAIL'){
+                console.log("1");
+                
+                this.addForm.get('email')?.disable();
+              }else if(data.login_type == 'SDT'){
+                console.log("2");
+                this.addForm.get('phone')?.disable();
+              }
+              
               if(data.role_id != null){
                 //lay vai tro cua user
                 this.roleService.getRoleById(data?.role_id).subscribe(dataRoleUser => {
@@ -158,6 +173,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
                     role: this.fbd.control(Number(data.role_id), [Validators.required]),
                     status: data.status,
                     is_show_phone_pki: data.is_show_phone_pki,
+                    login_type: data.login_type ? data.login_type : 'EMAIL',
                     phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
                     networkKpi: data.phone_tel,
 
@@ -233,7 +249,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
     this.spinner.show();
     let userId = this.userService.getAuthCurrentUser().id;
     this.isMailSame = sessionStorage.getItem('isMailSame') == "true" ? true : false;  
-
+    this.addForm.get('login_type')?.setValue('SDT');
     
     this.userService.getUserById(userId).subscribe(
       data => {
@@ -385,6 +401,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       role: this.addForm.value.role,
       status: this.addForm.value.status,
       is_show_phone_pki: this.addForm.value.is_show_phone_pki,
+      login_type: this.addForm.value.login_type,
       phoneKpi: this.addForm.value.phoneKpi,
       networkKpi: this.addForm.value.networkKpi,
       nameHsm: this.addForm.value.nameHsm,

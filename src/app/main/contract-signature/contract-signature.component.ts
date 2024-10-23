@@ -423,7 +423,7 @@ export class ContractSignatureComponent implements OnInit {
 
   cancelSignMany() {
     this.typeDisplay = 'signOne';
-
+    this.totalBoxSignPki = 0;
     this.setNullFilter();
 
     if (this.myInput) {
@@ -1535,7 +1535,7 @@ export class ContractSignatureComponent implements OnInit {
             recipientId,
             signI,
             this.isTimestamp,
-            result.hidden_phone ? false : true,
+            result.is_show_phone_pki ? false : true,
             name
           ).toPromise();
           this.spinner.hide();
@@ -3090,43 +3090,60 @@ export class ContractSignatureComponent implements OnInit {
     });
   }
 
-  downloadContract(id: any) {
-    this.isContractService.getFileZipContract(id).subscribe(
-      (data) => {
-        //
-        this.uploadService
-          .downloadFile(data.path)
-          .subscribe((response: any) => {
-            let url = window.URL.createObjectURL(response);
-            let a = document.createElement('a');
-            document.body.appendChild(a);
-            a.setAttribute('style', 'display: none');
-            a.href = url;
-            a.download = data.filename;
+  downloadContract(id: any, name: any) {
+    this.isContractService.getFileContract(id).subscribe((data) => {
+      const filteredData = data.filter((item:any) => item.type === 2);
+      const paths = filteredData.map((item:any) => item.path);
 
-            a.click();
-            window.URL.revokeObjectURL(url);
-            a.remove();
+      if(paths.length > 0){
+        this.uploadService.downloadFile(paths[0]).subscribe((response: any) => {
+          const file = new Blob([response], {type: 'application/pdf'});
+          let url = window.URL.createObjectURL(file);
+          let a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          // a.download = 'Contracts'+ '_' + formattedDate;
+          a.download = name;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+        }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
+      } else {
+        this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);
+      }
+        (error: any) =>
+          this.toastService.showErrorHTMLWithTimeout('no.contract.download.file.error','',3000);
+    },
+    (error) => {
+      this.toastService.showErrorHTMLWithTimeout(
+        'no.contract.get.file.error',
+        '',
+        3000
+      );
+    }
+  );
+  }
+  
+  downloadFileContract(id: any){
+    this.isContractService.getFileZipContract(id).subscribe((data) => {
+        this.uploadService.downloadFile(data.path).subscribe((response: any) => {
+          let url = window.URL.createObjectURL(response);
+          let a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          a.download = data.filename;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+        }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
 
-            this.toastService.showSuccessHTMLWithTimeout(
-              'no.contract.download.file.success',
-              '',
-              3000
-            );
-          }),
-          (error: any) =>
-            this.toastService.showErrorHTMLWithTimeout(
-              'no.contract.download.file.error',
-              '',
-              3000
-            );
-      },
-      (error) => {
-        this.toastService.showErrorHTMLWithTimeout(
-          'no.contract.get.file.error',
-          '',
-          3000
-        );
+    },
+      error => {
+        this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);
       }
     );
   }
