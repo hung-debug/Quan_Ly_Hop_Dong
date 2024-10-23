@@ -71,7 +71,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       role: this.fbd.control("", [Validators.required]),
       status: 1,
       is_show_phone_pki: true,
-      login_type: 'EMAIL',
+      login_type: 'SDT',
       phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
       networkKpi: null,
 
@@ -123,7 +123,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
             role: this.fbd.control("", [Validators.required]),
             status: 1,
             is_show_phone_pki: true,
-            login_type: 'EMAIL',
+            login_type: 'SDT',
             phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
             networkKpi: null,
 
@@ -156,9 +156,6 @@ export class AddUserComponent implements OnInit, OnDestroy {
                 this.addForm.get('email')?.disable();
               }else if(data.login_type == 'SDT'){
                 console.log("2");
-                this.addForm.get('phone')?.disable();
-              }else if(data.login_type == 'EMAIL_AND_SDT'){
-                this.addForm.get('email')?.disable();
                 this.addForm.get('phone')?.disable();
               }
               
@@ -252,7 +249,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
     this.spinner.show();
     let userId = this.userService.getAuthCurrentUser().id;
     this.isMailSame = sessionStorage.getItem('isMailSame') == "true" ? true : false;  
-    this.addForm.get('login_type')?.setValue('EMAIL');
+    this.addForm.get('login_type')?.setValue('SDT');
     
     this.userService.getUserById(userId).subscribe(
       data => {

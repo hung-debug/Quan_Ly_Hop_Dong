@@ -45,7 +45,7 @@ export class ContractService {
   addDetermineCoorditionUrl: any = `${environment.apiUrl}/api/v1/participants/`;
   addSampleCntractUrl: any = `${environment.apiUrl}/api/v1/fields`;
   documentUrl: any = `${environment.apiUrl}/api/v1/documents`;
-  savefirstHandlerUrl: any = `${environment.apiUrl}/api/v1/fields/recipient/assign`;
+
   addConfirmContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
 
   changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
@@ -1439,20 +1439,6 @@ export class ContractService {
       .toPromise();
   }
 
-  savefirstHandler(fields: any) {
-    this.getCurrentUser();
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);
-    const body = JSON.stringify({
-      fields: fields,
-    });
-
-    return this.http.post<Contract>(this.savefirstHandlerUrl, body, {
-      headers: headers,
-    });
-  }
-
   getDetermineCoordination(idCoordination: number) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -1682,7 +1668,6 @@ export class ContractService {
   }
 
   getDetailContract(idContract: any) {
-    console.log("bbbbbbbbbb")
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -1697,7 +1682,6 @@ export class ContractService {
   }
 
   getDataObjectSignatureLoadChange(contract_id: number) {
-    console.log("ccccccccccc")
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')

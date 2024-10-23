@@ -36,8 +36,8 @@
         </div>
         
         <div *ngIf="isQLND_01" class="col-lg-1-1 col-md-4 btn-padding-left">
-          <button class="btn-block btn_cancel" (click)="addUser()">
-            <a class="btn-add" *ngIf="isQLND_01" [routerLink]="['/main/form-user/add']">
+          <button class="btn-block btn_cancel">
+            <a class="btn-add" *ngIf="isQLND_01" [routerLink]="['/main/form-user/add']" (click)="addUser()">
               {{'btn.add' | translate }}
             </a>
           </button>
