@@ -79,16 +79,16 @@
 <div *ngIf="sign.sign_unit == 'so_tai_lieu'" [ngStyle]="getStyle(sign)">
   <div class="skeleton-sign" (click)="doEditContractNo()"
        *ngIf="!contractNoValue && count == 0 && (!sign.valueSign && !sign.value && !contractNoValueSign) && !view">
-    <span style="text-align: left;" id="input-text" *ngIf="!sign.valueSign">{{getText(sign)}} 2</span>
+    <span style="text-align: left;" id="input-text" *ngIf="!sign.valueSign">{{getText(sign)}}</span>
   </div>
 
   <div class="skeleton-sign" *ngIf="view">
-    <span style="text-align: left;" id="input-text" *ngIf="!sign.valueSign">{{getText(sign)}} 3</span>
+    <span style="text-align: left;" id="input-text" *ngIf="!sign.valueSign">{{getText(sign)}}</span>
   </div>
 
   <div class="skeleton-sign-value" (click)="doEditContractNo()"
        *ngIf="!contractNoValue && count == 0 && (this.contractNoValueSign || sign.value || sign.valueSign) && !view">
-  <span style="text-align: left;" class="input-text">{{getText(sign)}} 4</span>
+  <span style="text-align: left;" class="input-text">{{getText(sign)}}</span>
   </div>
 
   <div class="skeleton-sign" *ngIf="contractNoValue || count > 0 && !view">

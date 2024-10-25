@@ -342,9 +342,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
 
   async ngOnInit() {
-    if (!this.keycloakService.getKeycloakInstance().authenticated && this.type == 0) {
-      this.loginSSO();
-    }
+    // if (!this.keycloakService.getKeycloakInstance().authenticated && this.type == 0) {
+    //   this.loginSSO();
+    // }
     if (environment.flag == "NB") {
       this.isNB = true
     } else if(environment.flag != "NB" && environment.usedSSO) {

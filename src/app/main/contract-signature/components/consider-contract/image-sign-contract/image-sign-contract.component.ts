@@ -23,7 +23,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   @Input() contractNoValue: boolean;
   @Input() contractNoValueSign: string;
   @Input() isNotTextSupport: boolean;
-  @Input() firstHandler: boolean
+  @Input() firstHandler: boolean;
   @Input() otpValueSign: any;
   @ViewChild('inputEditText') inputEditText: ElementRef;
   @ViewChild('inputEditContractNo') inputEditContractNo: ElementRef;
@@ -54,7 +54,6 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   getStyle(sign: any) {
-    let style;
     // if(sign.type == 4 && sign.valueSign && sign.value) {
     //   style = {
     //     'font': sign.font,
@@ -67,10 +66,10 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     //     'font-size':sign.font_size+'px'
     //   };    
     // }
-    style = {
+    let style = {
       'font': sign.font,
       'font-size':sign.font_size+'px',
-      'background-color': '#ebf8ff',
+      'background-color': 'transparent',
     }; 
     return style;
   }

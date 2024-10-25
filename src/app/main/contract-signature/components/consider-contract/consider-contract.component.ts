@@ -1225,10 +1225,8 @@ export class ConsiderContractComponent
       return 'ck-da-keo';
     } else if (!valueSign.valueSign) {
       return 'employer-ck';
-    } else if (valueSign.valueSign && valueSign.value) {
-      return 'ck-da-keo-first-handler';
     } else {
-      return '';
+      return 'ck-da-keo-first-handler';
     }
   }
 
@@ -1296,7 +1294,7 @@ export class ConsiderContractComponent
       );
       if(this.firstHandler) {
         this.datas.is_data_object_signature.map((item: any) => {
-          if(item.type != 2 && item.type != 3) {
+          if(item.type != 2 && item.type != 3 && item.type != 4 || (item.type == 4 && item.recipient_id)) {
             dataSignature.push(item);
           }
         })
@@ -1736,7 +1734,6 @@ export class ConsiderContractComponent
                     }
 
                     let isConnect = false
-                    console.log('111111111')
                     if (this.recipient.sign_type.some((item: any) => item.id == 7 )) {
                       try {
                         isConnect = await this.websocketService.connect()
@@ -1829,7 +1826,6 @@ export class ConsiderContractComponent
                         }
                       }
 
-                      console.log('2222222222')
                       // Kiểm tra ô ký đã ký chưa (status = 2)
                       this.spinner.show();
                       let id_recipient_signature: any = null;
@@ -1865,7 +1861,6 @@ export class ConsiderContractComponent
                                   [2, 3, 4].includes(this.datas.roleContractReceived) &&
                                   haveSignImage
                                 ) {
-                                  console.log('3333333333')
                                   this.confirmOtpSignContract(
                                     id_recipient_signature,
                                     phone_recipient_signature
@@ -1875,7 +1870,6 @@ export class ConsiderContractComponent
                                   [2, 3, 4].includes(this.datas.roleContractReceived) &&
                                   haveSignPKI
                                 ) {
-                                  console.log('444444444444')
                                   if(this.markImage){
                                     this.openMarkSign('pki');
                                   }else{
@@ -1886,7 +1880,6 @@ export class ConsiderContractComponent
                                   [2, 3, 4].includes(this.datas.roleContractReceived) &&
                                   haveSignHsm
                                 ) {
-                                  console.log('5555555555')
                                   if (this.markImage) {
                                     this.openMarkSign('hsm');
 
@@ -1899,12 +1892,9 @@ export class ConsiderContractComponent
                                   [2, 3, 4].includes(this.datas.roleContractReceived) &&
                                   haveSignCert
                                 ) {
-                                  console.log('666666666')
                                   if (this.markImage) {
-                                    console.log('777777777777')
                                     this.openMarkSign('cert');
                                   } else {
-                                    console.log('88888888888')
                                     this.certDialogSignOpen(this.recipientId);
                                     this.spinner.hide();
                                   }
@@ -1913,13 +1903,10 @@ export class ConsiderContractComponent
                                   [2, 3, 4].includes(this.datas.roleContractReceived) &&
                                   haveSignRemote
                                 ) {
-                                  console.log('99999999999')
                                   if (this.markImage) {
-                                    console.log('1000000000')
                                     this.openMarkSign('remote');
 
                                   } else {
-                                    console.log('aaaaaaaa1111111')
                                     this.remoteDialogSignOpen(this.recipientId);
                                     this.spinner.hide();
                                   }
@@ -1929,7 +1916,6 @@ export class ConsiderContractComponent
                                 else if (
                                   [2, 3, 4].includes(this.datas.roleContractReceived)
                                 ) {
-                                  console.log('aaaaaaaaa22222222')
                                   this.signContractSubmit();
                                 }
                               }
@@ -1948,13 +1934,11 @@ export class ConsiderContractComponent
                           [2, 3, 4].includes(this.datas.roleContractReceived) &&
                           haveSignPKI
                         ) {
-                          console.log('test11111111')
                           this.pkiDialogSignOpen();
                           this.spinner.hide();
                         } else if (
                           [2, 3, 4].includes(this.datas.roleContractReceived)
                         ) {
-                          console.log('test222222222')
                           this.signContractSubmit();
                         }
                       }
@@ -1995,7 +1979,7 @@ export class ConsiderContractComponent
   }
 
   async savefirstHandler() {
-    let textAndNumberContract = this.datas.is_data_object_signature.filter((item: any) => item.type !== 2 && item.type !== 3);
+    let textAndNumberContract = this.datas.is_data_object_signature.filter((item: any) => item.type !== 2 && item.type !== 3 && item.type !== 4 && item.valueSign || item.type == 4 && this.contractNoValueSign);
     if(textAndNumberContract.length > 0) {
       textAndNumberContract.forEach((item: any) => {
         if(item.type != 2 && item.type != 3 && item.type != 4) {
@@ -2007,11 +1991,15 @@ export class ConsiderContractComponent
         }
       });
       try {
-        // let findRecipientByEmail = this.findRecipientByEmail(this.datas.is_data_contract, this.currentUser.email);
-        // console.log("findRecipientByEmail", findRecipientByEmail.id)
-        let saveData = await this.contractService.savefirstHandler(textAndNumberContract).toPromise();
+        let saveData = null;
+        saveData = await this.contractService.savefirstHandler(textAndNumberContract).toPromise();
+        if(saveData && saveData.success === true) {
+          return true;
+        } else {
+          return false;
+        }
       } catch (error) {
-        return this.toastService.showErrorHTMLWithTimeout("Lỗi lấy thông tin người ký","",3000)
+        return false;
       }
     } else {
       return true;
@@ -3994,7 +3982,12 @@ export class ConsiderContractComponent
     let signDigitalStatus = null;
     let signUpdateTempN: any[] = [];
     if(this.firstHandler) {
-      this.savefirstHandler();
+      let savefirstHandler = await this.savefirstHandler();
+      if(!savefirstHandler) {
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout("Lỗi lưu ô Số tài liệu hoặc ô Text","",3000)
+        return false;
+      }
     }
     if (signUpdatePayload) {
       signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
@@ -4560,13 +4553,13 @@ export class ConsiderContractComponent
         (!item.valueSign && !this.otpValueSign) &&
         item.type != 3
     );
-    if(this.firstHandler) {
-      this.isDataObjectSignature.map((item: any) => {
-        if(item.type != 2 && item.type != 3 && !item.valueSign) {
-          validSign.push(item);
-        }
-      })
-    }
+    // if(this.firstHandler) {
+    //   this.isDataObjectSignature.map((item: any) => {
+    //     if(item.type != 2 && item.type != 3 && !item.valueSign) {
+    //       validSign.push(item);
+    //     }
+    //   })
+    // }
     this.currentNullValuePages = validSign.map((item: any) => item.page.toString())
     this.currentNullValuePages = [...new Set(this.currentNullValuePages)]
     this.currentNullElement = validSign
@@ -5105,7 +5098,9 @@ export class ConsiderContractComponent
       datas: this.datas,
       currentUser: this.currentUser,
       orgId: this.orgId,
-      otpValueSign: this.otpValueSign
+      otpValueSign: this.otpValueSign,
+      contractNoValueSign: this.contractNoValueSign,
+      firstHandler: this.firstHandler
     };
 
     const dialogConfig = new MatDialogConfig();

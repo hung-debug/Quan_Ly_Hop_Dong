@@ -92,6 +92,34 @@ export class ConfirmSignOtpComponent implements OnInit {
     }
   }
 
+  async savefirstHandler() {
+    let textAndNumberContract = this.data.datas.is_data_object_signature.filter((item: any) => item.type !== 2 && item.type !== 3 && item.type !== 4 && item.valueSign || item.type == 4 && this.data.contractNoValueSign);
+    if(textAndNumberContract.length > 0) {
+      textAndNumberContract.forEach((item: any) => {
+        if(item.type != 2 && item.type != 3 && item.type != 4) {
+          item.value = item.valueSign;
+        }
+
+        if(item.type == 4) {
+          item.value = this.data.contractNoValueSign;
+        }
+      });
+      try {
+        let saveData = null;
+        saveData = await this.contractService.savefirstHandler(textAndNumberContract).toPromise();
+        if(saveData && saveData.success === true) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (error) {
+        return false;
+      }
+    } else {
+      return true;
+    }
+  }
+
   async onSubmit() {
     // @ts-ignore
     document.getElementById("otp").focus();
@@ -401,6 +429,12 @@ export class ConfirmSignOtpComponent implements OnInit {
               this.spinner.hide();
             }
           }else{
+            if(this.data.firstHandler) {
+              let savefirstHandler = await this.savefirstHandler();
+              if(!savefirstHandler) {
+                this.toastService.showErrorHTMLWithTimeout("Lỗi lưu ô Số tài liệu hoặc ô Text","",3000)
+              }
+            }
             if (!notContainSignImage) {
             }
             setTimeout(() => {

@@ -11,6 +11,7 @@ import { User } from './user.service';
 import { encode } from 'base64-arraybuffer';
 
 export interface Contract {
+  success: boolean;
   id: number;
   name: string;
   code: string;
@@ -1682,7 +1683,6 @@ export class ContractService {
   }
 
   getDetailContract(idContract: any) {
-    console.log("bbbbbbbbbb")
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
