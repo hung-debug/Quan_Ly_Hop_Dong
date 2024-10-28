@@ -71,7 +71,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
       role: this.fbd.control("", [Validators.required]),
       status: 1,
       is_show_phone_pki: true,
-      login_type: 'SDT',
+      // login_type: 'SDT',
+      login_type: null,
       phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
       networkKpi: null,
 
@@ -123,7 +124,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
             role: this.fbd.control("", [Validators.required]),
             status: 1,
             is_show_phone_pki: true,
-            login_type: 'SDT',
+            // login_type: 'SDT',
+            login_type: null,
             phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
             networkKpi: null,
 
@@ -138,7 +140,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       } else if (this.action == 'edit') {
         this.id = params['id'];
         this.appService.setTitle('user.update');
-        this.addForm.get('login_type')?.disable();
+        // this.addForm.get('login_type')?.disable();
         this.roleService.getRoleList('', '').subscribe(data => {
           this.roleList = data.entities;
         });
@@ -173,7 +175,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
                     role: this.fbd.control(Number(data.role_id), [Validators.required]),
                     status: data.status,
                     is_show_phone_pki: data.is_show_phone_pki,
-                    login_type: data.login_type ? data.login_type : 'EMAIL',
+                    // login_type: data.login_type ? data.login_type : 'EMAIL',
+                    login_type: null,
                     phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
                     networkKpi: data.phone_tel,
 
@@ -249,7 +252,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
     this.spinner.show();
     let userId = this.userService.getAuthCurrentUser().id;
     this.isMailSame = sessionStorage.getItem('isMailSame') == "true" ? true : false;  
-    this.addForm.get('login_type')?.setValue('SDT');
+    // this.addForm.get('login_type')?.setValue('SDT');
     
     this.userService.getUserById(userId).subscribe(
       data => {
