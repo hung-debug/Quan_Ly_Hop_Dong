@@ -834,13 +834,28 @@ export class ConsiderContractComponent
 
   checkFirstHandler(data: any, email: any) {
     let participants = data.participants;
-    // Bước 1: Tìm participants có ordering nhỏ nhất
-    let minParticipantOrdering = Math.min(...participants.map((p: any) => p.ordering));
-    let minParticipantCount = participants.filter((p: any) => p.ordering === minParticipantOrdering).length;
+    let authorisedIds = new Set(
+      participants.flatMap((item: any) => 
+        item.recipients
+          .map((recipient: any) => recipient.authorisedBy)
+          .filter((authorisedBy: any) => authorisedBy !== null)
+      )
+    );
+    
+    // Bước 2: Lọc mảng `a`, loại bỏ các recipients có id trùng với bất kỳ authorisedBy nào
+    const result = participants.map((item: any) => ({
+        ...item,
+        recipients: item.recipients.filter((recipient: any) => !authorisedIds.has(recipient.id))
+    }));
+
+    // Bước 1: Tìm result có ordering nhỏ nhất
+    let minParticipantOrdering = Math.min(...result.map((p: any) => p.ordering));
+    let minParticipantCount = result.filter((p: any) => p.ordering === minParticipantOrdering).length;
     if (minParticipantCount > 1) {
       return false;
     }
-    let minParticipant = participants.find((p: any) => p.ordering === minParticipantOrdering);
+    let minParticipant = result.find((p: any) => p.ordering === minParticipantOrdering);
+
 
     // Bước 2: Lọc recipients theo role 2, 3, 4
     let recipientWithRole2 = minParticipant.recipients.filter((r: any) => r.role === 2);    
@@ -1294,7 +1309,7 @@ export class ConsiderContractComponent
       );
       if(this.firstHandler) {
         this.datas.is_data_object_signature.map((item: any) => {
-          if(item.type != 2 && item.type != 3 && item.type != 4 || (item.type == 4 && item.recipient_id)) {
+          if(item.type != 2 && item.type != 3 && item.type != 4 && item.recipient_id || (item.type == 4 && item.recipient_id)) {
             dataSignature.push(item);
           }
         })
@@ -1588,20 +1603,13 @@ export class ConsiderContractComponent
               ) {
                 if (!this.mobile) {
                   for (let item of this.currentNullElement) {
-                    if (!item.value && item.type !== 4 && item.type !== 2) {
+                    if (item.type == 4 || item.type == 1 || item.type == 5) {
                       this.toastService.showErrorHTMLWithTimeout(
-                        `Vui lòng nhập nội dung ô: ${item.name} (trang ${item.page})`,
+                        `Vui lòng nhập nội dung ô: ${item?.recipient?.name} (trang ${item.page})`,
                         '',
                         3000
                       );
                       return;
-                    } else if (item.type == 4) {
-                        this.toastService.showErrorHTMLWithTimeout(
-                          `Vui lòng nhập nội dung ô: Số tài liệu (trang ${item.page})`,
-                          '',
-                          3000
-                        );
-                        return;
                     } else {
                       this.toastService.showErrorHTMLWithTimeout(`Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc (trang ${item.page})`, '', 3000);
                       return;
@@ -2150,13 +2158,13 @@ export class ConsiderContractComponent
 
   getSwalFire(code: string) {
     if ((code == 'digital' && !this.mobile && this.recipient.sign_type.some((item: any) => item.id !== 7) && this.isContainSignField)) {
-      const allType3 = this.recipient.fields.every((itemCheck: any) => itemCheck.type === 3);
-      const allTypeImageSignature1 = this.recipient.fields.every((itemCheck: any) => itemCheck.type_image_signature === 1);
-      const allTypeImageSignature2 = this.recipient.fields.every((itemCheck: any) => itemCheck.type_image_signature === 2);
-  
-      if (allType3 && allTypeImageSignature1) {
+      const allType3 = this.recipient.fields.filter((itemCheck: any) => itemCheck.type === 3);
+      const allTypeImageSignature1 = allType3.every((itemCheck: any) => itemCheck.type_image_signature === 1);
+      const allTypeImageSignature2 = allType3.every((itemCheck: any) => itemCheck.type_image_signature === 2);
+      const allTypeImageSignature3 = allType3.every((itemCheck: any) => itemCheck.type_image_signature === 3);
+      if (allTypeImageSignature1 && !allTypeImageSignature2 && !allTypeImageSignature3) {
         this.isCheck = 1;
-      } else if (allType3 && allTypeImageSignature2) {
+      } else if (!allTypeImageSignature1 && allTypeImageSignature2 && !allTypeImageSignature3) {
         this.isCheck = 2;
       } else {
         this.isCheck = 3;

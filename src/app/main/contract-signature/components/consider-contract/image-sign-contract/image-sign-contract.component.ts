@@ -204,8 +204,16 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     // e.target.value = this.convertCurrency(e.target.value);
     this.contractNoValue = false;
     this.count++;
-    sign.valueSign = this.contractNoValueSign;
-    sign.value = ''
+    //let dataSignature = this.datas.is_data_object_signature;
+    for (let i = 0; i < this.datas.is_data_object_signature.length; i++) {
+      if(this.datas.is_data_object_signature[i].type == 4) {
+        this.datas.is_data_object_signature[i].valueSign = this.contractNoValueSign;
+        this.datas.is_data_object_signature[i].value = ''
+      }
+      
+    }
+    // sign.valueSign = this.contractNoValueSign;
+    // sign.value = ''
     this.contractNoValueEvent.emit(this.contractNoValueSign);
   }
 
