@@ -424,6 +424,7 @@ export class ContractSignatureComponent implements OnInit {
   cancelSignMany() {
     this.typeDisplay = 'signOne';
     this.totalBoxSignPki = 0;
+    this.dataChecked = [];
     this.setNullFilter();
 
     if (this.myInput) {
@@ -895,7 +896,7 @@ export class ContractSignatureComponent implements OnInit {
       if (this.totalBoxSignPki > 15) {
         this.totalBoxSignPki -= item.fields.length
         this.toastService.showErrorHTMLWithTimeout(
-          `Vui lòng chọn những tài liệu có tổng số ô ký PKI không quá 15 ô`,
+          `Hình thức ký số bằng SIM PKI: Đã chọn vượt quá 15 ô ký`,
           '',
           3000
         );
@@ -966,7 +967,7 @@ export class ContractSignatureComponent implements OnInit {
 
         if(totalAllBoxSignPki > 15) {
           this.toastService.showErrorHTMLWithTimeout(
-            `Vui lòng chọn những tài liệu có tổng số ô ký PKI không quá 15 ô`,
+            `Hình thức ký số bằng SIM PKI: Đã chọn vượt quá 15 ô ký`,
             '',
             3000
           );

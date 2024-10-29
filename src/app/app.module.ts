@@ -176,16 +176,16 @@ function initializeKeycloak(keycloak: KeycloakService) {
             if (fullUrl.includes('/login?type=mobifone-sso')) {
               keycloak.login()
             }
-            // if(fullUrl.includes('/type=1')){     
+            // if(fullUrl.includes('/type=1')){
             //   console.log("1");
-              
+
             //   return false;
             // }else{
             //   console.log("2");
-              
+
             //   keycloak.login()
             // }
-          } 
+          }
         }, (err: any) => {
         }
       );
@@ -349,7 +349,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     NgOtpInputModule,
     HighchartsChartModule
   ],
-  providers: [ AppService, DatePipe,CurrencyPipe,KeycloakAngularModule, KeycloakService,AuthGuard,
+  providers: [ AppService, DatePipe,CurrencyPipe,KeycloakAngularModule, KeycloakService, AuthGuard,
     {
     provide: PERFECT_SCROLLBAR_CONFIG,
     useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
