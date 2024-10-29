@@ -535,6 +535,7 @@ export class ContractSignatureComponent implements OnInit {
     if (checkBox != null) {
       checkBox.checked = false;
     }
+    this.dataChecked = [];
     this.contracts = [];
     this.contractsSignMany = [];
     this.totalBoxSignPki = 0;
@@ -762,6 +763,7 @@ export class ContractSignatureComponent implements OnInit {
 
   //auto search
   autoSearch(event: any) {
+
     clearTimeout(this.inputTimeout);
     this.inputTimeout = setTimeout(() => {
       if (this.typeDisplay == 'signOne') {
