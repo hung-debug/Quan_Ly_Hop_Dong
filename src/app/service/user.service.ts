@@ -23,6 +23,8 @@ export interface User {
   organization_id: any;
   organization: any;
   type: any;
+  success: any;
+  data:any;
 }
 
 @Injectable({

@@ -71,8 +71,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
       role: this.fbd.control("", [Validators.required]),
       status: 1,
       is_show_phone_pki: true,
-      // login_type: 'SDT',
-      login_type: null,
+      login_type: 'EMAIL',
+      // login_type: null,
       phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
       networkKpi: null,
 
@@ -124,8 +124,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
             role: this.fbd.control("", [Validators.required]),
             status: 1,
             is_show_phone_pki: true,
-            // login_type: 'SDT',
-            login_type: null,
+            login_type: 'EMAIL',
+            // login_type: null,
             phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
             networkKpi: null,
 
@@ -140,7 +140,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       } else if (this.action == 'edit') {
         this.id = params['id'];
         this.appService.setTitle('user.update');
-        // this.addForm.get('login_type')?.disable();
+        this.addForm.get('login_type')?.disable();
         this.roleService.getRoleList('', '').subscribe(data => {
           this.roleList = data.entities;
         });
@@ -175,8 +175,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
                     role: this.fbd.control(Number(data.role_id), [Validators.required]),
                     status: data.status,
                     is_show_phone_pki: data.is_show_phone_pki,
-                    // login_type: data.login_type ? data.login_type : 'EMAIL',
-                    login_type: null,
+                    login_type: data.login_type ? data.login_type : 'EMAIL',
+                    // login_type: null,
                     phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
                     networkKpi: data.phone_tel,
 
@@ -252,7 +252,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
     this.spinner.show();
     let userId = this.userService.getAuthCurrentUser().id;
     this.isMailSame = sessionStorage.getItem('isMailSame') == "true" ? true : false;  
-    // this.addForm.get('login_type')?.setValue('SDT');
+    this.addForm.get('login_type')?.setValue('EMAIL');
     
     this.userService.getUserById(userId).subscribe(
       data => {
@@ -354,6 +354,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       
       this.userService.updateUser(data).subscribe(
         dataOut => {
+          console.log("dataOut",dataOut);
           
           let emailCurrent = this.userService.getAuthCurrentUser().email;
           //neu nguoi thao tac chuyen to chuc cho chinh minh thi can logout de lay lai thong tin to chuc moi
@@ -497,11 +498,16 @@ export class AddUserComponent implements OnInit, OnDestroy {
                       //call api them moi
                       this.userService.addUser(data).subscribe(
                         data => {
-                          this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
-                          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                            this.router.navigate(['/main/user']);
-                          });
-                          this.spinner.hide();
+                          if(data.success == true){
+                            this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
+                            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                              this.router.navigate(['/main/user']);
+                            });
+                            this.spinner.hide();
+                          }else{
+                            this.toastService.showErrorHTMLWithTimeout(data.data, "", 3000);
+                          }
+
                         }, error => {
                           this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
                           this.spinner.hide();
@@ -518,11 +524,17 @@ export class AddUserComponent implements OnInit, OnDestroy {
                     //call api them moi
                     this.userService.addUser(data).subscribe(
                       data => {
-                        this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
-                        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                          this.router.navigate(['/main/user']);
-                        });
-                        this.spinner.hide();
+                        if(data.success == true){
+                          this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
+                          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                            this.router.navigate(['/main/user']);
+                          });
+                          this.spinner.hide();
+                        } else {
+                          this.toastService.showErrorHTMLWithTimeout(data.data, "", 3000);
+                          this.spinner.hide();
+                        }
+
                       }, error => {
                         this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
                         this.spinner.hide();
