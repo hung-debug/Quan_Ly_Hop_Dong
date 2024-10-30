@@ -173,7 +173,7 @@ export class EditHandlerComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    if(this.data.sign_type[0].id != 3 && this.dataSign[0]?.id == 3 && this.fieldsUpdate.length > 15) {
+    if(this.data.sign_type[0]?.id != 3 && this.dataSign[0]?.id == 3 && this.fieldsUpdate.length > 15) {
       this.toastService.showErrorHTMLWithTimeout(this.translate.instant('no.update.assign'), "", 3000);
       return; 
     }
@@ -468,9 +468,9 @@ export class EditHandlerComponent implements OnInit {
     })
     this.dataSign = this.data.sign_type
     let currentSignType = this.data.sign_type[0]
-    if(currentSignType.id == 2 || currentSignType.id == 3 || currentSignType.id == 4 || currentSignType.id == 6 || currentSignType.id == 7 || currentSignType.id == 8) {
+    if(currentSignType?.id == 2 || currentSignType?.id == 3 || currentSignType?.id == 4 || currentSignType?.id == 6 || currentSignType?.id == 7 || currentSignType?.id == 8) {
       this.signTypeList = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8);
-    } else if(currentSignType.id == 1 ||  currentSignType.id == 5) {
+    } else if(currentSignType?.id == 1 ||  currentSignType?.id == 5) {
       this.signTypeList = this.signTypeList.filter((p: any) => p.id == 1 || p.id == 5);
     }
  

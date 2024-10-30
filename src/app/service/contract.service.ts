@@ -11,6 +11,7 @@ import { User } from './user.service';
 import { encode } from 'base64-arraybuffer';
 
 export interface Contract {
+  success: boolean;
   id: number;
   name: string;
   code: string;
@@ -45,7 +46,7 @@ export class ContractService {
   addDetermineCoorditionUrl: any = `${environment.apiUrl}/api/v1/participants/`;
   addSampleCntractUrl: any = `${environment.apiUrl}/api/v1/fields`;
   documentUrl: any = `${environment.apiUrl}/api/v1/documents`;
-
+  savefirstHandlerUrl: any = `${environment.apiUrl}/api/v1/fields/recipient/assign`;
   addConfirmContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
 
   changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
@@ -1437,6 +1438,20 @@ export class ContractService {
     return this.http
       .get<File>(this.addGetFileContract + idContract, { headers })
       .toPromise();
+  }
+
+  savefirstHandler(fields: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      fields: fields,
+    });
+
+    return this.http.post<Contract>(this.savefirstHandlerUrl, body, {
+      headers: headers,
+    });
   }
 
   getDetermineCoordination(idCoordination: number) {

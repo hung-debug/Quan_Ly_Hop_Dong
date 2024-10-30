@@ -9,6 +9,7 @@
 
 
 .skeleton-sign-value {
+  width: 100%;
   position: absolute;
   left: 0px;
   bottom: 5px;
@@ -20,12 +21,18 @@
 
 .input-edit-text {
   width: 101%;
-  // border: 1px solid #106DB6;
-  padding: 4px;
+  border: 1px solid #106DB6;
+  // padding: 4px;
   margin-left: -1px;
   border-radius: 3px;
   border: none;
   color: black;
+  text-align: left;
+}
+
+.input-edit-text:focus {
+  outline: none;
+  border: none;
 }
 
 .stamp-content {

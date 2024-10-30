@@ -28,7 +28,8 @@ export class FooterSignatureComponent implements OnInit {
   @Input() pageNumber: number;
   @Input() page1: boolean;
   @Input() pageLast: boolean;
-
+  @Input() firstHandler: boolean;
+  @Input() confirmConsider: any;
   @Input() pageNum: number;
 
   @Input() pageBefore: number;
@@ -168,17 +169,13 @@ export class FooterSignatureComponent implements OnInit {
     this.coordinateY = this.coordinateY.sort(function (a: number, b: number) {
       return a - b;
     });
-
     this.idElement = this.idElement.sort(function (a: number, b: number) {
       return a - b;
     });
     let pdffull: any = document.getElementById('pdf-full');
-
-    if (this.confirmSignature == 1 || this.confirmSignature == 3) {
+    if (this.confirmSignature == 1 || this.confirmSignature == 3 || (!this.mobile && this.firstHandler && this.confirmConsider == 1)) {
       pdffull.scrollTo(0, this.coordinateY[this.indexY]);
-
       let id: any = document.getElementById(this.idElement[this.indexY]);
-
       if (id) {
         id.style.backgroundColor = 'yellow';
       }

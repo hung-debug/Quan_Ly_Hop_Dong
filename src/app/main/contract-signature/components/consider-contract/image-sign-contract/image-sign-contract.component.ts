@@ -22,7 +22,8 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   @Input() view: any;
   @Input() contractNoValue: boolean;
   @Input() contractNoValueSign: string;
-  @Input() isNotTextSupport: boolean
+  @Input() isNotTextSupport: boolean;
+  @Input() firstHandler: boolean;
   @Input() otpValueSign: any;
   @ViewChild('inputEditText') inputEditText: ElementRef;
   @ViewChild('inputEditContractNo') inputEditContractNo: ElementRef;
@@ -53,10 +54,24 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   getStyle(sign: any) {
-    return {
+    // if(sign.type == 4 && sign.valueSign && sign.value) {
+    //   style = {
+    //     'font': sign.font,
+    //     'font-size':sign.font_size+'px',
+    //     'background-color': '#ebf8ff',
+    //   };  
+    // } else {
+    //   style = {
+    //     'font': sign.font,
+    //     'font-size':sign.font_size+'px'
+    //   };    
+    // }
+    let style = {
       'font': sign.font,
       'font-size':sign.font_size+'px',
-    };
+      'background-color': 'transparent',
+    }; 
+    return style;
   }
 
 
@@ -189,7 +204,16 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     // e.target.value = this.convertCurrency(e.target.value);
     this.contractNoValue = false;
     this.count++;
-    sign.valueSign = this.contractNoValueSign;
+    //let dataSignature = this.datas.is_data_object_signature;
+    for (let i = 0; i < this.datas.is_data_object_signature.length; i++) {
+      if(this.datas.is_data_object_signature[i].type == 4) {
+        this.datas.is_data_object_signature[i].valueSign = this.contractNoValueSign;
+        this.datas.is_data_object_signature[i].value = ''
+      }
+      
+    }
+    // sign.valueSign = this.contractNoValueSign;
+    // sign.value = ''
     this.contractNoValueEvent.emit(this.contractNoValueSign);
   }
 
@@ -216,9 +240,9 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     this.sign.valueSign = this.contractService.removePeriodsFromCurrencyValue(this.sign.valueSign);
 
 
-    if ([2,3,4].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
+    if ([2,3,4].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view || this.firstHandler) {
       this.checkShowEdit = !this.checkShowEdit;
-
+      //this.sign.value = '';
       setTimeout(()=>{
         this.inputEditText.nativeElement.focus();
         this.newItemEvent.emit("text");
@@ -229,7 +253,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   doEditContractNo() {
     if (this.isNotTextSupport) return
     this.contractNoValue = !this.contractNoValue;
-
+    //this.sign.value = '';
     setTimeout(()=>{
       this.inputEditContractNo.nativeElement.focus();
     },100);
@@ -252,7 +276,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       if (sign.sign_unit == 'so_tai_lieu') {
         if (sign.value) {
           // sign.value= this.convertCurrency(sign.value);
-
+          this.count++;
           return sign.value;
         } else if(sign.valueSign) {
           // sign.valueSign= this.convertCurrency(sign.valueSign);
