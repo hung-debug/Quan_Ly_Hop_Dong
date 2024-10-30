@@ -21,9 +21,13 @@
                     <div *ngIf="id == null" class="input-data">
                         <input type="text" formControlName="email">
                     </div>
-                    <div *ngIf="id != null" class="input-data">
-                        <input type="text" formControlName="email">
+                    <!-- <div *ngIf="id != null" class="input-data hidden-color">
+                        <input type="text" formControlName="email" readonly class="hidden-color">
+                    </div> -->
+                    <div *ngIf="id != null" class="input-data hidden-color">
+                      <input type="text" formControlName="email" readonly class="hidden-color">
                     </div>
+
                     <div *ngIf="submitted && f.email.errors" class="invalid">
                         <div *ngIf="f.email.errors.required">{{'error.user.email.required' | translate}}</div>
                         <div *ngIf="f.email.errors.email">{{'error.user.email.format' | translate}}</div>
@@ -111,6 +115,7 @@
                 </div>
 
                 <div style="display: flex; margin-left: 35px;">
+                <!-- <div style="display: flex;"> -->
                   <span>{{'status.account' | translate}}:</span>
                   <div style="margin-left: 20px;">
                     <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="status" name="status">
