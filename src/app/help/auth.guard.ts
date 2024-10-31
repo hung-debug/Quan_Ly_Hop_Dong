@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {DeviceDetectorService} from "ngx-device-detector";
 import { ContractService } from '../service/contract.service';
 import { isPdfFile } from 'pdfjs-dist';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class AuthGuard implements CanActivate {
 
   contract_signatures: any = "c";
   kyTuCach: any = "&";
-
+  enviroment: any = "";
   constructor(
     private router: Router,
     private deviceService: DeviceDetectorService,
@@ -28,7 +29,7 @@ export class AuthGuard implements CanActivate {
     // @ts-ignore
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     let role;
-
+    this.enviroment = environment
     //@ts-ignore
      if(state.url.includes("handle/")) {
       
@@ -118,14 +119,15 @@ export class AuthGuard implements CanActivate {
           }
           return false;
       } else return true;
-    } else if(!state.url.includes("handle/")){
+    } else if (!state.url.includes("handle/") && environment.flag == 'KD') {
+      console.log("localStorage.getItem('currentUser')",localStorage.getItem('currentUser'));
       if (localStorage.getItem('currentUser') != null) {
         //
         return true;
       } else {
-        
-        // this.router.navigate(['/login']);
-        // return true;
+        console.log("tttttttttt")
+        this.router.navigate(['/login']);
+        return false;
       }
     }
   }

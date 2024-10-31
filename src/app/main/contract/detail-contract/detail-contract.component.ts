@@ -32,6 +32,7 @@ import { concatMap, map, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Helper } from 'src/app/core/Helper';
 import { encode } from 'base64-arraybuffer';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-detail-contract',
@@ -160,6 +161,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   pageNum: number = 1;
   page1: boolean = false;
   pageLast: boolean = true;
+  enviroment: any = "";
 
   pageRendering: any;
   pageNumPending: any = null;
@@ -198,10 +200,14 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
+    this.enviroment = environment
     this.getDeviceApp();
-    sessionStorage.removeItem('mail')
-    sessionStorage.removeItem('type')
-    sessionStorage.removeItem('url')
+    if(environment.flag == 'KD'){
+      sessionStorage.removeItem('mail')
+      sessionStorage.removeItem('type')
+      sessionStorage.removeItem('url')
+    }
+
     this.route.queryParams.subscribe((params) => {
       this.pageBefore = params.page;
       this.remoteSinging = params?.remoteSinging;
