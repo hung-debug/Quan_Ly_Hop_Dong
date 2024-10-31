@@ -587,8 +587,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (dataContractUserSign.length > 0 && dataDetermine.length > 0) {
       dataDiffirent = dataContractUserSign.filter(val => !dataDetermine.some((data: any) =>
         (val.sign_unit == "chu_ky_anh" && data.sign_type.some((p: any) => p.id == 1 || p.id == 5) && val.recipient_id == data.id) ||
-        (val.sign_unit == 'text' && !val.isNotSupportTextField) ||
-        (val.sign_unit == 'so_tai_lieu' && !val.isNotSupportTextField) ||
+        (val.sign_unit == 'text' && ((data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) || !val.recipient_id)) ||
+        (val.sign_unit == 'so_tai_lieu' && ((data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) || !val.recipient_id)) ||
         (val.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8)) && val.recipient_id == data.id)
         // || ((val.recipient ? val.recipient_id as any : val.email as any) == (val.recipient ? data.id as any : data.email as any))
       )
