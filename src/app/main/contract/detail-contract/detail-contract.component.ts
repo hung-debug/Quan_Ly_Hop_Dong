@@ -199,7 +199,9 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.getDeviceApp();
-
+    sessionStorage.removeItem('mail')
+    sessionStorage.removeItem('type')
+    sessionStorage.removeItem('url')
     this.route.queryParams.subscribe((params) => {
       this.pageBefore = params.page;
       this.remoteSinging = params?.remoteSinging;

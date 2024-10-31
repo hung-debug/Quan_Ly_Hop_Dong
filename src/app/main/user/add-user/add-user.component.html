@@ -98,17 +98,14 @@
                 <div style="display: flex;">
                   <span>{{'choose.type.sign' | translate}}:</span>
                   <div style="margin-left: 10px;">
-                    <!-- <input name="item" type="checkbox" formControlName="loginType" (change)="onCheckboxChange($event, 'EMAIL')" value="EMAIL" [checked]="selectedTypes.includes('EMAIL')"/> -->
                     <input type="radio" name="confirm-radio-consider" value="EMAIL" formControlName="login_type" name="login_type">
                     <span> {{'typeOfSignEmail' | translate}}</span>
                   </div>
                   <div style="margin-left: 10px;">
-                    <!-- <input name="item" type="checkbox" formControlName="loginType" (change)="onCheckboxChange($event, 'SDT')" value="SDT" [checked]="selectedTypes.includes('SDT')"/> -->
                     <input type="radio" name="confirm-radio-consider" value="SDT" formControlName="login_type" name="login_type">
                     <span> {{'typeOfSignPhone' | translate}}</span>
                   </div>
                   <div style="margin-left: 10px;">
-                    <!-- <input name="item" type="checkbox" formControlName="loginType" (change)="onCheckboxChange($event, 'SDT')" value="SDT" [checked]="selectedTypes.includes('SDT')"/> -->
                     <input type="radio" name="confirm-radio-consider" value="EMAIL_AND_SDT" formControlName="login_type" name="login_type">
                     <span> {{'type.sign.email.phone' | translate}}</span>
                   </div>

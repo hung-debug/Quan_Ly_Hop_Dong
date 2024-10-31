@@ -37,6 +37,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   coordinates: any = "c8";
   isSSOlogin: boolean = false;
   isNB: boolean = false;
+  enviroment: any = "";
   @ViewChild('previewCaptcha') previewCaptcha: ElementRef;
 
   constructor(
@@ -342,16 +343,34 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
 
   async ngOnInit() {
-    // const fullUrl = window.location.href;
+    if ((this.deviceService.isMobile() || this.deviceService.isTablet())) {
+      
+      if(localStorage.getItem('sign_type') == '5') {
+        this.checkBrowser();
+      }
+      this.getDeviceApp();
+
+      this.mobile = true;
+    } else {
+      this.mobile = false;
+    }
     
-    // if (!this.keycloakService.getKeycloakInstance().authenticated && (fullUrl.includes('&type=') || fullUrl.includes('/login?loginType=0'))) {
-    //   console.log("Url",fullUrl);
-    //   this.loginSSO()
-    // }
-    // else{
-    //   console.log("3");
-    //   this.router.navigate(['/login'])
-    // }
+    this.enviroment = environment
+    const fullUrl = window.location.href;
+    const urlOrigin: any = window.location.hostname;
+    
+    const parsedApiUrl = new URL(environment.apiUrl);
+    
+    // debugger
+    if(fullUrl.includes('&type=1') || fullUrl.includes('/login?loginType=1')){
+      console.log("noSSO");
+      this.router.navigate(['/login'])
+      
+    } else if(environment.flag == 'KD' && !this.keycloakService.getKeycloakInstance().authenticated && (urlOrigin === parsedApiUrl.hostname || fullUrl.includes('&type=0') || fullUrl.includes('/login?loginType=0') || (!fullUrl.includes('/login') && this.mobile == false))){
+      console.log("sso");
+      this.loginSSO()
+    }
+
     if (environment.flag == "NB") {
       this.isNB = true
     } else if(environment.flag != "NB" && environment.usedSSO) {
@@ -368,17 +387,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       this.type = 1;
     } else this.type = 0;
 
-    if ((this.deviceService.isMobile() || this.deviceService.isTablet())) {
 
-      if(localStorage.getItem('sign_type') == '5') {
-        this.checkBrowser();
-      }
-      this.getDeviceApp();
-
-      this.mobile = true;
-    } else {
-      this.mobile = false;
-    }
     if (environment.flag == 'KD' && environment.usedSSO) {
       const ssoToken: any = JSON.parse(JSON.stringify(localStorage.getItem('sso_token')) || '') ?? ''
       if ((this.keycloakService.getKeycloakInstance().authenticated || ssoToken) && (window.location.href.includes('realms/sso-mobifone') || window.localStorage.href.includes('/login?type=mobifone-sso')) ) {
@@ -459,7 +468,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
         } catch (error) {
           this.isSSOlogin = false
           this.toastService.showErrorHTMLWithTimeout("Đăng nhập SSO thất bại","",3000)
-          this.router.navigate(['/login'])
+          // this.router.navigate(['/login'])
+          if(environment.flag == 'KD' && !this.keycloakService.getKeycloakInstance().authenticated){
+            localStorage.clear()
+            sessionStorage.clear()
+            this.loginSSO()
+          }
         }
       } else {
         let storedUsername = sessionStorage.getItem("mail");

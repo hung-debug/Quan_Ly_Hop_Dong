@@ -30,14 +30,15 @@ export class AuthGuard implements CanActivate {
     let role;
 
     //@ts-ignore
-     if(state.url.includes("handle")) {
+     if(state.url.includes("handle/")) {
+      
       sessionStorage.clear();
 
       let code = state.url.substring(8);
 
       this.contractService.changeLink(code).subscribe((response) => {
         let url = response.original_link;
-
+        
         // window.location.href = url;
         let urlChange = "";
         let count = 0;
@@ -69,6 +70,7 @@ export class AuthGuard implements CanActivate {
     
     //@ts-ignore
     if (state.url.search('type') > 0 && (next._urlSegment.segments.some((p: any) => p.path == this.contract_signatures) || next._urlSegment.segments.some((p: any) => p.path == 'contract-template') || next._urlSegment.segments.some((p: any) => p.path == 'form-contract'))) {
+      
       if (!sessionStorage.getItem('url') && state.url.includes(this.kyTuCach+"mail")) {
         let isCheckUrl = state.url.split(this.kyTuCach+"mail=");
     
@@ -79,6 +81,7 @@ export class AuthGuard implements CanActivate {
         let is_local = sessionStorage.getItem('url');
         if (is_local?.includes('type')) {
           let dataLoginType = is_local.split("type")[is_local.split("type").length - 1];
+          
           if (sessionStorage.getItem('type')) {
             sessionStorage.removeItem('type')
           }
@@ -107,6 +110,7 @@ export class AuthGuard implements CanActivate {
               queryParams: {'loginType': 1}
             }).then(() => window.location.reload())
           } else {
+            
             this.router.navigate(['/login'],
               {
                 queryParams: {'loginType': 0}
@@ -114,14 +118,14 @@ export class AuthGuard implements CanActivate {
           }
           return false;
       } else return true;
-    } else {
+    } else if(!state.url.includes("handle/")){
       if (localStorage.getItem('currentUser') != null) {
         //
         return true;
       } else {
         
-        this.router.navigate(['/login']);
-        return false;
+        // this.router.navigate(['/login']);
+        // return true;
       }
     }
   }
