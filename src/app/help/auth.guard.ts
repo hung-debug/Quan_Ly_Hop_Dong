@@ -31,7 +31,6 @@ export class AuthGuard implements CanActivate {
 
     //@ts-ignore
      if(state.url.includes("handle/")) {
-      console.log("state.url.includes",state.url.includes("handle/"));
       
       sessionStorage.clear();
 
@@ -39,7 +38,6 @@ export class AuthGuard implements CanActivate {
 
       this.contractService.changeLink(code).subscribe((response) => {
         let url = response.original_link;
-        console.log("res",response);
         
         // window.location.href = url;
         let urlChange = "";
@@ -68,8 +66,6 @@ export class AuthGuard implements CanActivate {
     
 
     //console
-    console.log("state",state);
-    console.log("next",next);
     //@ts-ignore
     
     //@ts-ignore
@@ -86,13 +82,11 @@ export class AuthGuard implements CanActivate {
         let is_local = sessionStorage.getItem('url');
         if (is_local?.includes('type')) {
           let dataLoginType = is_local.split("type")[is_local.split("type").length - 1];
-          console.log("dataLoginType1",dataLoginType);
           
           if (sessionStorage.getItem('type')) {
             sessionStorage.removeItem('type')
           }
           if (dataLoginType == "=1") {
-            console.log("dataLoginType2",dataLoginType);
             sessionStorage.setItem('type', JSON.stringify({loginType: true}));
           }
         }
@@ -116,9 +110,8 @@ export class AuthGuard implements CanActivate {
             this.router.navigate(['/login'],
             {
               queryParams: {'loginType': 1}
-            }).then(() =>" window.location.reload()")
+            }).then(() => window.location.reload())
           } else {
-            console.log("2");
             
             this.router.navigate(['/login'],
               {
@@ -127,16 +120,14 @@ export class AuthGuard implements CanActivate {
           }
           return false;
       } else return true;
-    } else {
-      console.log("localStorage.getItem('currentUser')",localStorage.getItem('currentUser'));
-      
+    } else if(!state.url.includes("handle/")){
       if (localStorage.getItem('currentUser') != null) {
         //
         return true;
       } else {
         
-        this.router.navigate(['/login']);
-        return false;
+        // this.router.navigate(['/login']);
+        // return true;
       }
     }
   }

@@ -344,14 +344,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     if ((this.deviceService.isMobile() || this.deviceService.isTablet())) {
-      console.log("1");
       
       if(localStorage.getItem('sign_type') == '5') {
-        console.log("2");
         this.checkBrowser();
       }
       this.getDeviceApp();
-      console.log("3");
 
       this.mobile = true;
     } else {
@@ -361,14 +358,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.enviroment = environment
     const fullUrl = window.location.href;
     const urlOrigin: any = window.location.hostname;
-    console.log("urlOrigin",urlOrigin);
     
-
     const parsedApiUrl = new URL(environment.apiUrl);
-    console.log("parsedApiUrl",parsedApiUrl);
     
     // debugger
-    if(fullUrl.includes('&type=1') || fullUrl.includes('/login?loginType=1') ){
+    if(fullUrl.includes('&type=1') || fullUrl.includes('/login?loginType=1') || fullUrl.includes('handle')){
       console.log("noSSO");
       this.router.navigate(['/login'])
       
