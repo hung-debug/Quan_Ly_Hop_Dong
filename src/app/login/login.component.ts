@@ -366,7 +366,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       console.log("noSSO");
       this.router.navigate(['/login'])
       
-    } else if(environment.flag == 'KD' && !this.keycloakService.getKeycloakInstance().authenticated && (urlOrigin === parsedApiUrl.hostname || fullUrl.includes('&type=0') || fullUrl.includes('/login?loginType=0') || (!fullUrl.includes('/login') && this.mobile == false))){
+    } else if(environment.flag == 'KD' && !this.keycloakService.getKeycloakInstance()?.authenticated && (urlOrigin === parsedApiUrl.hostname || fullUrl.includes('&type=0') || fullUrl.includes('/login?loginType=0') || (!fullUrl.includes('/login') && this.mobile == false))){
       console.log("sso");
       this.loginSSO()
     }
@@ -469,7 +469,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
           this.isSSOlogin = false
           this.toastService.showErrorHTMLWithTimeout("Đăng nhập SSO thất bại","",3000)
           // this.router.navigate(['/login'])
-          if(environment.flag == 'KD' && !this.keycloakService.getKeycloakInstance().authenticated){
+          if(environment.flag == 'KD' && !this.keycloakService.getKeycloakInstance()?.authenticated){
             localStorage.clear()
             sessionStorage.clear()
             this.loginSSO()

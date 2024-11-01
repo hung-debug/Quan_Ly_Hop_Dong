@@ -1597,11 +1597,13 @@ export class ContractSignatureComponent implements OnInit {
             );
           }
 
-          this.router
-          .navigateByUrl('/', { skipLocationChange: true })
-          .then(() => {
-            this.router.navigate(['main/c/receive/processed']);
-          });
+          if(!(resultsTrue.length == 0 && resultsFalse.length == checkSign.length)) {
+            this.router
+            .navigateByUrl('/', { skipLocationChange: true })
+            .then(() => {
+              this.router.navigate(['main/c/receive/processed']);
+            });
+          }
         }
       } catch (error) {
         console.error("An error occurred:", error);

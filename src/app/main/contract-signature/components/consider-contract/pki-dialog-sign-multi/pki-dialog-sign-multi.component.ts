@@ -130,6 +130,7 @@ export class PkiDialogSignMultiComponent implements OnInit {
 
         const res = await this.contractService.getCheckSignatured(recipientId).toPromise();
         if (res && res.status === 2) {
+          this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout(`Tài liệu ${contract.contractName} đã được xử lý!`, '', 3000);
           return;
         }
