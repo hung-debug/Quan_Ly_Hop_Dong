@@ -7,6 +7,7 @@ import { ContractService } from 'src/app/service/contract.service';
 import {ToastService} from "../../../../../service/toast.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { environment } from 'src/environments/environment';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-pki-dialog-sign',
@@ -26,6 +27,7 @@ export class PkiDialogSignComponent implements OnInit {
   phoneNum: any;
   type: any = 0;
   hidden_phone: boolean = true;
+  is_show_phone_pki: boolean;
   environment: any = '';
   isError = false;
   isErrorInvalid = false;
@@ -38,13 +40,17 @@ export class PkiDialogSignComponent implements OnInit {
     private toastService : ToastService,
     private contractService: ContractService,
     private spinner: NgxSpinnerService,
+    private userService: UserService,
   ) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.environment = environment
     this.nl = networkList;
     this.datas = this.data;
+    let userId = this.userService.getAuthCurrentUser().id;
+    const infoUser = await this.userService.getUserById(userId).toPromise();
+    this.is_show_phone_pki = infoUser.is_show_phone_pki
     this.phoneNum = this.datas?.sign?.phone;
     this.networkCode = this.datas?.sign?.phone_tel;
     if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
@@ -57,12 +63,12 @@ export class PkiDialogSignComponent implements OnInit {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
     this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe(async (response) => {
 
-      const ArrRecipients = response.recipients.filter((ele: any) => ele.id);
+      let ArrRecipients = response.recipients.filter((ele: any) => ele.email == this.currentUser.email);
 
 
       let ArrRecipientsNew = false
       ArrRecipients.map((item: any) => {
-        if (item.email === this.currentUser.email) {
+        if (item.sign_type[0].id == 3) {
           ArrRecipientsNew = true
           return
         }
@@ -141,7 +147,7 @@ export class PkiDialogSignComponent implements OnInit {
       phone: resPhone,
       networkCode: this.networkCompany,
       phone_tel: this.networkCode,
-      hidden_phone: this.hidden_phone,
+      is_show_phone_pki: this.is_show_phone_pki
     };
 
 

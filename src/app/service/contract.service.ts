@@ -11,6 +11,7 @@ import { User } from './user.service';
 import { encode } from 'base64-arraybuffer';
 
 export interface Contract {
+  success: boolean;
   id: number;
   name: string;
   code: string;
@@ -45,7 +46,7 @@ export class ContractService {
   addDetermineCoorditionUrl: any = `${environment.apiUrl}/api/v1/participants/`;
   addSampleCntractUrl: any = `${environment.apiUrl}/api/v1/fields`;
   documentUrl: any = `${environment.apiUrl}/api/v1/documents`;
-
+  savefirstHandlerUrl: any = `${environment.apiUrl}/api/v1/fields/recipient/assign`;
   addConfirmContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
 
   changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
@@ -79,6 +80,7 @@ export class ContractService {
   postSignDigitalSimPKI: any = `https://econtract.mobifone.vn/SignService/v2/sign-document`;
   getFileSignSimPKI: any = `https://econtract.mobifone.vn/SignService/download-signed-document?signed_doc_id=`;
   signFilePKI: any = `${environment.apiUrl}/api/v1/sign/sim-pki-v3/`;
+  signMultiPKI: any = `${environment.apiUrl}/api/v1/sign/multi/sim-pki-v3`;
   getAllContractTypesUrl: any = `${environment.apiUrl}/api/v1/contract-types/`;
   imageMobiBase64: any;
   getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
@@ -1168,6 +1170,28 @@ export class ContractService {
       .toPromise();
   }
 
+  signPkiDigitalMulti(phone: any, networkCode: any, recipientId: any, image_base64: any, isTimestamp: any, hidden_phone: boolean, nameContract: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token)
+      .append('Connection', 'Keep-Alive');
+    const body = {
+      recipients: recipientId,
+      sim_pki_request: {
+          hidden_phone: hidden_phone,
+          image_base64: image_base64,
+          isTimestamp: isTimestamp,
+          mobile: phone,
+          network_code: networkCode,
+          prompt: `Bạn có yêu cầu ký số tài liệu ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
+          reason: "reason"
+      }
+    };
+    return this.http
+      .post<any>(this.signMultiPKI, body, { headers: headers });
+  }
+
   signHsm(datas: any, recipientId: number, isTimestamp: any, boxType: any) {
     this.getCurrentUser();
 
@@ -1414,6 +1438,20 @@ export class ContractService {
     return this.http
       .get<File>(this.addGetFileContract + idContract, { headers })
       .toPromise();
+  }
+
+  savefirstHandler(fields: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      fields: fields,
+    });
+
+    return this.http.post<Contract>(this.savefirstHandlerUrl, body, {
+      headers: headers,
+    });
   }
 
   getDetermineCoordination(idCoordination: number) {

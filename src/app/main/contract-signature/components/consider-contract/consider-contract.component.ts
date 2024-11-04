@@ -141,7 +141,8 @@ export class ConsiderContractComponent
   loadedPdfView: boolean = false;
   allFileAttachment: any[];
   allRelateToContract: any[];
-
+  firstHandler: boolean = false;
+  peopleFirstHandler: any;
   optionsSign: any = [
     { item_id: 1, item_text: 'Ký ảnh' },
     { item_id: 2, item_text: 'Ký số bằng USB token' },
@@ -220,7 +221,12 @@ export class ConsiderContractComponent
     { percent: '100%', value: 1.0 },
     { percent: '150%', value: 1.5 },
     { percent: '200%', value: 2.0 },
-    { percent: '250%', value: 2.5 }
+    { percent: '250%', value: 2.5 },
+    { percent: '300%', value: 3.0 },
+    { percent: '350%', value: 3.5 },
+    { percent: '400%', value: 4.0 },
+    { percent: '450%', value: 4.5 },
+    { percent: '500%', value: 5.0 },
   ];
   constructor(
     private contractService: ContractService,
@@ -497,8 +503,22 @@ export class ConsiderContractComponent
     this.contractService.getDetailContract(this.idContract).subscribe(
       async (rs) => {
         this.isDataContract = rs[0];
+        this.firstHandler = this.checkFirstHandler(rs[0], this.currentUser.email);
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
+        if(this.isDataObjectSignature.length) {
+          this.isDataObjectSignature.map((item: any) => {
+            if(item.type != 2 && item.type != 3 && item.type != 4 && item.value) {
+              item.valueSign = item.value;
+            }
+
+            if(item.type == 4 && item.value) {
+              this.contractNoValueSign = item.value;
+              item.valueSign = item.value;
+              // item.value = "";
+            }
+          })
+        }
         this.checkNotSupportText(rs[2])
         if (this.isDataContract?.originalContractId) {
           this.contractService.getDetailInforContract(this.isDataContract?.originalContractId).subscribe(
@@ -812,6 +832,65 @@ export class ConsiderContractComponent
     );
   }
 
+  checkFirstHandler(data: any, email: any) {
+    let participants = data.participants;
+    let authorisedIds = new Set(
+      participants.flatMap((item: any) => 
+        item.recipients
+          .map((recipient: any) => recipient.authorisedBy)
+          .filter((authorisedBy: any) => authorisedBy !== null)
+      )
+    );
+    
+    // Bước 2: Lọc mảng `a`, loại bỏ các recipients có id trùng với bất kỳ authorisedBy nào
+    const result = participants.map((item: any) => ({
+        ...item,
+        recipients: item.recipients.filter((recipient: any) => !authorisedIds.has(recipient.id))
+    }));
+
+    // Bước 1: Tìm result có ordering nhỏ nhất
+    let minParticipantOrdering = Math.min(...result.map((p: any) => p.ordering));
+    let minParticipantCount = result.filter((p: any) => p.ordering === minParticipantOrdering).length;
+    if (minParticipantCount > 1) {
+      return false;
+    }
+    let minParticipant = result.find((p: any) => p.ordering === minParticipantOrdering);
+
+
+    // Bước 2: Lọc recipients theo role 2, 3, 4
+    let recipientWithRole2 = minParticipant.recipients.filter((r: any) => r.role === 2);    
+    let recipientWithRole3 = minParticipant.recipients.filter((r: any) => r.role === 3);    
+    let recipientWithRole4 = minParticipant.recipients.filter((r: any) => r.role === 4);
+
+    let selectedRecipient = []
+
+    if(recipientWithRole2.length > 0) {
+      selectedRecipient = recipientWithRole2
+    } else if (recipientWithRole2.length === 0 && recipientWithRole3.length > 0) {
+      selectedRecipient = recipientWithRole3
+    } else {
+      selectedRecipient = recipientWithRole4
+    }
+
+    if (selectedRecipient.length == 0) {
+      return false;
+    }
+
+    // Bước 3: Kiểm tra nếu email của recipient được chọn có ordering nhỏ nhất và duy nhất
+    let minRecipientOrdering = Math.min(...selectedRecipient.map((r: any) => r.ordering));
+    let minRecipientCount = selectedRecipient.filter((r: any) => r.ordering === minRecipientOrdering).length;
+    if (minRecipientCount > 1) {
+      return false;
+    }
+
+    let minRecipient = selectedRecipient.find((r: any) => r.ordering === minRecipientOrdering);
+    if (minRecipient.email === email && minRecipient.ordering === minRecipientOrdering) {
+      this.peopleFirstHandler = minRecipient;
+      return true;
+    }
+    return false;
+  }
+  
   checkNotSupportText(signData: any) {
     signData = signData.filter((item: any) => item.recipient_id == this.recipientId)
     signData.forEach((element: any) => {
@@ -1162,7 +1241,7 @@ export class ConsiderContractComponent
     } else if (!valueSign.valueSign) {
       return 'employer-ck';
     } else {
-      return '';
+      return 'ck-da-keo-first-handler';
     }
   }
 
@@ -1223,11 +1302,19 @@ export class ConsiderContractComponent
       this.isDataObjectSignature &&
       this.isDataObjectSignature.length
     ) {
-      return this.datas.is_data_object_signature.filter(
+      let dataSignature = this.datas.is_data_object_signature.filter(
         (item: any) =>
           item?.recipient?.email === this.currentUser.email &&
           item?.recipient?.role === this.datas?.roleContractReceived
       );
+      if(this.firstHandler) {
+        this.datas.is_data_object_signature.map((item: any) => {
+          if(item.type != 2 && item.type != 3 && item.type != 4 && item.recipient_id || (item.type == 4 && item.recipient_id)) {
+            dataSignature.push(item);
+          }
+        })
+      }
+      return dataSignature;
     } else {
       return [];
     }
@@ -1516,20 +1603,13 @@ export class ConsiderContractComponent
               ) {
                 if (!this.mobile) {
                   for (let item of this.currentNullElement) {
-                    if (!item.value && item.type !== 4 && item.type !== 2) {
+                    if (item.type == 4 || item.type == 1 || item.type == 5) {
                       this.toastService.showErrorHTMLWithTimeout(
-                        `Vui lòng nhập nội dung ô: ${item.name} (trang ${item.page})`,
+                        `Vui lòng nhập nội dung ô: ${item?.recipient?.name} (trang ${item.page})`,
                         '',
                         3000
                       );
                       return;
-                    } else if (item.type == 4) {
-                        this.toastService.showErrorHTMLWithTimeout(
-                          `Vui lòng nhập nội dung ô: Số tài liệu (trang ${item.page})`,
-                          '',
-                          3000
-                        );
-                        return;
                     } else {
                       this.toastService.showErrorHTMLWithTimeout(`Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc (trang ${item.page})`, '', 3000);
                       return;
@@ -1662,7 +1742,6 @@ export class ConsiderContractComponent
                     }
 
                     let isConnect = false
-
                     if (this.recipient.sign_type.some((item: any) => item.id == 7 )) {
                       try {
                         isConnect = await this.websocketService.connect()
@@ -1754,7 +1833,6 @@ export class ConsiderContractComponent
                           return;
                         }
                       }
-
 
                       // Kiểm tra ô ký đã ký chưa (status = 2)
                       this.spinner.show();
@@ -1895,6 +1973,45 @@ export class ConsiderContractComponent
         }
     })
 
+  }
+
+  findRecipientByEmail(data: any, email: string) {
+    for (let participant of data.participants) {
+      for (let recipient of participant.recipients) {
+        if (recipient.email === email) {
+          return recipient;
+        }
+      }
+    }
+    return null;
+  }
+
+  async savefirstHandler() {
+    let textAndNumberContract = this.datas.is_data_object_signature.filter((item: any) => item.type !== 2 && item.type !== 3 && item.type !== 4 && item.valueSign || item.type == 4 && this.contractNoValueSign);
+    if(textAndNumberContract.length > 0) {
+      textAndNumberContract.forEach((item: any) => {
+        if(item.type != 2 && item.type != 3 && item.type != 4) {
+          item.value = item.valueSign;
+        }
+
+        if(item.type == 4) {
+          item.value = this.contractNoValueSign;
+        }
+      });
+      try {
+        let saveData = null;
+        saveData = await this.contractService.savefirstHandler(textAndNumberContract).toPromise();
+        if(saveData && saveData.success === true) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (error) {
+        return false;
+      }
+    } else {
+      return true;
+    }
   }
 
   imageDialogSignOpen(e: any, haveSignImage: boolean) {
@@ -2041,18 +2158,17 @@ export class ConsiderContractComponent
 
   getSwalFire(code: string) {
     if ((code == 'digital' && !this.mobile && this.recipient.sign_type.some((item: any) => item.id !== 7) && this.isContainSignField)) {
-      const allType3 = this.recipient.fields.every((itemCheck: any) => itemCheck.type === 3);
-      const allTypeImageSignature1 = this.recipient.fields.every((itemCheck: any) => itemCheck.type_image_signature === 1);
-      const allTypeImageSignature2 = this.recipient.fields.every((itemCheck: any) => itemCheck.type_image_signature === 2);
-  
-      if (allType3 && allTypeImageSignature1) {
+      const allType3 = this.recipient.fields.filter((itemCheck: any) => itemCheck.type === 3);
+      const allTypeImageSignature1 = allType3.every((itemCheck: any) => itemCheck.type_image_signature === 1);
+      const allTypeImageSignature2 = allType3.every((itemCheck: any) => itemCheck.type_image_signature === 2);
+      const allTypeImageSignature3 = allType3.every((itemCheck: any) => itemCheck.type_image_signature === 3);
+      if (allTypeImageSignature1 && !allTypeImageSignature2 && !allTypeImageSignature3) {
         this.isCheck = 1;
-      } else if (allType3 && allTypeImageSignature2) {
+      } else if (!allTypeImageSignature1 && allTypeImageSignature2 && !allTypeImageSignature3) {
         this.isCheck = 2;
       } else {
         this.isCheck = 3;
       }
-  
       let swalOptions: any = {
         title: this.getTextAlertConfirm(),
         icon: 'warning',
@@ -2425,7 +2541,7 @@ export class ConsiderContractComponent
             this.datas.is_data_contract.name,
             image_base64,
             this.isTimestamp,
-            this.dataNetworkPKI.hidden_phone ? false : true,
+            this.dataNetworkPKI.is_show_phone_pki ? false : true,
           );
           // await this.signContractSimKPI();
           if (!checkSign || (checkSign && !checkSign.success)) {
@@ -2446,7 +2562,7 @@ export class ConsiderContractComponent
             this.datas.is_data_contract.name,
             "",
             this.isTimestamp,
-            this.dataNetworkPKI.hidden_phone ? false : true,
+            this.dataNetworkPKI.is_show_phone_pki ? false : true,
           );
           // await this.signContractSimKPI();
           if (!checkSign || (checkSign && !checkSign.success)) {
@@ -3873,6 +3989,14 @@ export class ConsiderContractComponent
   async signImageC(signUpdatePayload: any, notContainSignImage: any, isVnptSmartCa = false) {
     let signDigitalStatus = null;
     let signUpdateTempN: any[] = [];
+    if(this.firstHandler) {
+      let savefirstHandler = await this.savefirstHandler();
+      if(!savefirstHandler) {
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout("Lỗi lưu ô Số tài liệu hoặc ô Text","",3000)
+        return false;
+      }
+    }
     if (signUpdatePayload) {
       signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
       if (notContainSignImage) {
@@ -4437,6 +4561,13 @@ export class ConsiderContractComponent
         (!item.valueSign && !this.otpValueSign) &&
         item.type != 3
     );
+    // if(this.firstHandler) {
+    //   this.isDataObjectSignature.map((item: any) => {
+    //     if(item.type != 2 && item.type != 3 && !item.valueSign) {
+    //       validSign.push(item);
+    //     }
+    //   })
+    // }
     this.currentNullValuePages = validSign.map((item: any) => item.page.toString())
     this.currentNullValuePages = [...new Set(this.currentNullValuePages)]
     this.currentNullElement = validSign
@@ -4931,19 +5062,19 @@ export class ConsiderContractComponent
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(async (result: any) => {
+    dialogRef.afterClosed().subscribe(async (result: any) => {      
       if (result && result.phone && result.networkCode) {
         this.loadingText =
           'Yêu cầu ký đã được gửi tới số điện thoại của bạn.\n Vui lòng Xác nhận để thực hiện dịch vụ';
         this.signInfoPKIU.phone = result.phone;
         this.signInfoPKIU.phone_tel = result.phone_tel;
         this.signInfoPKIU.networkCode = result.networkCode;
-        this.signInfoPKIU.hidden_phone = result.hidden_phone;
+        this.signInfoPKIU.is_show_phone_pki = result.is_show_phone_pki;
         if (result.phone && result.phone_tel && result.networkCode) {
           this.dataNetworkPKI = {
             networkCode: this.signInfoPKIU.networkCode,
             phone: this.signInfoPKIU.phone,
-            hidden_phone: this.signInfoPKIU.hidden_phone,
+            is_show_phone_pki: this.signInfoPKIU.is_show_phone_pki,
           };
 
           await this.signContractSubmit();
@@ -4975,7 +5106,9 @@ export class ConsiderContractComponent
       datas: this.datas,
       currentUser: this.currentUser,
       orgId: this.orgId,
-      otpValueSign: this.otpValueSign
+      otpValueSign: this.otpValueSign,
+      contractNoValueSign: this.contractNoValueSign,
+      firstHandler: this.firstHandler
     };
 
     const dialogConfig = new MatDialogConfig();

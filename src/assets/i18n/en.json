@@ -93,6 +93,7 @@
   "contract.connect.add": "Add related contracts",
   "contract.cancel": "Cancel document",
   "contract.download": "Download document",
+  "contract.group.download": "Download document set",
   "contract.share": "Share document",
   "contract.lead": "Coordinator",
   "contract.view": "Consider",
@@ -453,7 +454,8 @@
   "relate.party": "Related parties",
   "authorization": "Authorization",
   "forward": "Forward",
-  "processing.auth":"Processing authorization",
+  "authori_forward":"Authorization/Forward",
+  "processing.auth":"Processing authorization/forward",
   "confirm": "Confirm",
   "contract.sign.confirm": "CONFIRM SIGN DOCUMENT",
   "content.confirm": "Do you agree to the content, terms of the document and the use of electronic methods to make transactions?",
@@ -515,6 +517,7 @@
   "sign.by.pki": "Sign by Sim PKI",
   "sign.image.otp": "Sign image and OTP",
   "sign.image.ekyc": "Sign image or eKYC",
+  "signed.ekyc":"Signed eKYC",
   "sign.digital": "Sign digital",
   "auto.scroll": "Auto scroll",
   "preview": "Preview",
@@ -911,5 +914,10 @@
   "many.extensions": "Many extensions",
   "error.notTime": "Please select a signature expiration date",
   "person.processing.contract": "Name of the person handling the document",
-  "name.email.create.contract": "Name/Email person create document"
+  "name.email.create.contract": "Name/Email person create document",
+  "no.update.assign": "PKI only allows assignment of less than 15 signature cells",
+  "username.wrong.format": "Username is not correct format",
+  "choose.type.sign": "Select login method",
+  "status.account": "Account status",
+  "type.sign.email.phone": "Login by Email and Phone"
 }

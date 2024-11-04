@@ -17,7 +17,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./add-user.component.scss']
 })
 export class AddUserComponent implements OnInit, OnDestroy {
-  
+
   submitted = false;
   get f() { return this.addForm.controls; }
 
@@ -46,7 +46,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   maxDate: Date = moment().toDate();
 
   orgIdOld:any;
-
+  is_show_phone_pki: boolean = true;
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
   isQLND_02:boolean=true;  //sua nguoi dung
@@ -70,7 +70,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
       organizationId: this.fbd.control("", [Validators.required]),
       role: this.fbd.control("", [Validators.required]),
       status: 1,
-
+      is_show_phone_pki: true,
+      // login_type: 'EMAIL',
       phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
       networkKpi: null,
 
@@ -83,13 +84,13 @@ export class AddUserComponent implements OnInit, OnDestroy {
       organization_change:null
     });
   }
-  
+
   getDataOnInit(){
     let orgId = this.userService.getAuthCurrentUser().organizationId;
-    
+
     if(this.isQLND_01 || this.isQLND_02){
       //lay danh sach to chuc
-      this.unitService.getUnitList('', '').subscribe(data => {  
+      this.unitService.getUnitList('', '').subscribe(data => {
         this.orgList = data.entities;
       });
       this.networkList = networkList;
@@ -121,7 +122,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
             organizationId: this.fbd.control(orgId, [Validators.required]),
             role: this.fbd.control("", [Validators.required]),
             status: 1,
-
+            is_show_phone_pki: true,
+            // login_type: 'EMAIL',
             phoneKpi: this.fbd.control(null, [Validators.pattern("^[+]*[0-9]{10,11}$")]),
             networkKpi: null,
 
@@ -136,7 +138,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       } else if (this.action == 'edit') {
         this.id = params['id'];
         this.appService.setTitle('user.update');
-
+        // this.addForm.get('login_type')?.disable();
         this.roleService.getRoleList('', '').subscribe(data => {
           this.roleList = data.entities;
         });
@@ -144,6 +146,18 @@ export class AddUserComponent implements OnInit, OnDestroy {
         if(this.isQLND_02){
           this.userService.getUserById(this.id).subscribe(
             data => {
+              // if (data.login_type == null) {
+              //   data.login_type = 'EMAIL';
+              // }
+              // if(data.login_type == 'EMAIL'){
+              //   this.addForm.get('email')?.disable();
+              // }else if(data.login_type == 'SDT'){
+              //   this.addForm.get('phone')?.disable();
+              // }else if(data.login_type == 'EMAIL_AND_SDT'){
+              //   this.addForm.get('email')?.disable();
+              //   this.addForm.get('phone')?.disable();
+              // }
+
               if(data.role_id != null){
                 //lay vai tro cua user
                 this.roleService.getRoleById(data?.role_id).subscribe(dataRoleUser => {
@@ -157,7 +171,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
                     organizationId: this.fbd.control(data.organization_id, [Validators.required]),
                     role: this.fbd.control(Number(data.role_id), [Validators.required]),
                     status: data.status,
-
+                    is_show_phone_pki: data.is_show_phone_pki,
+                    // login_type: data.login_type ? data.login_type : 'EMAIL',
                     phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
                     networkKpi: data.phone_tel,
 
@@ -168,7 +183,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
                     fileImage:null,
 
                     organization_change: data.organization_change
-                  }); 
+                  });
                   this.phoneOld = data.phone;
 
                   this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
@@ -189,11 +204,11 @@ export class AddUserComponent implements OnInit, OnDestroy {
                       }
                     )
                   }
-                
+
                   //neu nguoi truy cap co ma vai tro la ADMIN thi duoc quyen sua
                   if(this.userRoleCode.toUpperCase() == 'ADMIN'){
                     this.isEditRole = true;
-    
+
                     //lay danh sach vai tro
                      this.roleService.getRoleByOrgId(orgId).subscribe(dataRole => {
                       //this.roleList = data.entities;
@@ -212,7 +227,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
                       });
                     });
                   }
-        
+
                   this.spinner.hide();
                 });
               }
@@ -220,7 +235,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
               this.spinner.hide();
               setTimeout(() => this.router.navigate(['/login']));
               this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-              
+
             }
           )
         }
@@ -232,16 +247,16 @@ export class AddUserComponent implements OnInit, OnDestroy {
     //lay id user
     this.spinner.show();
     let userId = this.userService.getAuthCurrentUser().id;
-    this.isMailSame = sessionStorage.getItem('isMailSame') == "true" ? true : false;  
+    this.isMailSame = sessionStorage.getItem('isMailSame') == "true" ? true : false;
+    // this.addForm.get('login_type')?.setValue('EMAIL');
 
-    
     this.userService.getUserById(userId).subscribe(
       data => {
 
         //lay id role
         this.roleService.getRoleById(data?.role_id).subscribe(
           data => {
-            
+
             let listRole: any[];
             this.userRoleCode = data.code;
             listRole = data.permissions;
@@ -256,7 +271,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
             this.router.navigate(['/login'])
           }
         );
-      
+
       }, error => {
         this.spinner.hide();
         // this.toastService.showErrorHTMLWithTimeout('Hết phiên đăng nhập, Vui lòng đăng nhập lại', "", 3000);
@@ -283,7 +298,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
             this.toastService.showErrorHTMLWithTimeout('Không thể chuyển đơn vị cho người dùng tồn tại tài liệu chưa xử lý', "", 3000);
             this.spinner.hide();
           }
-      
+
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Kiểm tra tài liệu theo người dùng thất bại', "", 3000);
           this.spinner.hide();
@@ -311,7 +326,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
           (sign_image as string[]).push(sign_image_content);
           data.sign_image = sign_image;
         } catch(err) {
-          
+
         }
       }
 
@@ -328,14 +343,14 @@ export class AddUserComponent implements OnInit, OnDestroy {
           (sign_image as string[]).push(sign_image_content);
           data.stampImage = sign_image;
         } catch(err) {
-          
-        }  
+
+        }
       }
 
-      
+
       this.userService.updateUser(data).subscribe(
         dataOut => {
-          
+
           let emailCurrent = this.userService.getAuthCurrentUser().email;
           //neu nguoi thao tac chuyen to chuc cho chinh minh thi can logout de lay lai thong tin to chuc moi
           if(data.organizationId != this.orgIdOld && emailCurrent == data.email){
@@ -350,7 +365,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
               this.router.navigate(['/main/user']);
             });
           }
-          
+
           this.spinner.hide();
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại', "", 3000);
@@ -361,7 +376,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
   getRoleByOrg(orgId:any){
     this.addForm.patchValue({
-      role: null, 
+      role: null,
     });
     this.roleService.getRoleByOrgId(orgId).subscribe(data => {
       this.roleList = data.entities;
@@ -384,6 +399,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
       organizationId: this.addForm.value.organizationId,
       role: this.addForm.value.role,
       status: this.addForm.value.status,
+      is_show_phone_pki: this.addForm.value.is_show_phone_pki,
+      // login_type: this.addForm.value.login_type,
       phoneKpi: this.addForm.value.phoneKpi,
       networkKpi: this.addForm.value.networkKpi,
       nameHsm: this.addForm.value.nameHsm,
@@ -395,7 +412,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       stampImage: [],
       organization_change: this.addForm.value.organizationId!= this.orgIdOld?1:this.addForm.value.organization_change
     }
-    
+
     if(this.id !=null){
       //neu thay doi so dien thoai thi can check lai
       if(data.phone != this.phoneOld){
@@ -423,14 +440,14 @@ export class AddUserComponent implements OnInit, OnDestroy {
                     this.unitService.updateUnit(dataUpdateUnit).subscribe(
                       data => {
                         //this.toastService.showSuccessHTMLWithTimeout('Cập nhật số điện thoại tổ chức thành công!', "", 3000);
-                        
+
                       }, error => {
                         this.toastService.showErrorHTMLWithTimeout('Lỗi cập nhật số điện thoại tổ chức', "", 3000);
                         this.spinner.hide();
                       }
                     )
                   }
-                  
+
                 }, error => {
                   this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
                   this.spinner.hide();
@@ -453,7 +470,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
         //ham update
         this.checkChangeUnit(data);
       }
-      
+
     }else{
       this.userService.checkPhoneUser(data.phone).subscribe(
         dataByPhone => {
@@ -463,24 +480,29 @@ export class AddUserComponent implements OnInit, OnDestroy {
             this.userService.getUserByEmail(data.email).subscribe(
               dataByEmail => {
                 if(dataByEmail.id == 0){
-      
+
                   if(data.fileImage != null){
                     this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
-                      
+
                       const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
                       const sign_image:never[]=[];
                       (sign_image as string[]).push(sign_image_content);
                       data.sign_image = sign_image;
-                      
-            
+
+
                       //call api them moi
                       this.userService.addUser(data).subscribe(
                         data => {
-                          this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
-                          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                            this.router.navigate(['/main/user']);
-                          });
-                          this.spinner.hide();
+                          // if(data.success == true){
+                            this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
+                            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                              this.router.navigate(['/main/user']);
+                            });
+                            this.spinner.hide();
+                          // }else{
+                          //   this.toastService.showErrorHTMLWithTimeout(data.data, "", 3000);
+                          // }
+
                         }, error => {
                           this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
                           this.spinner.hide();
@@ -493,15 +515,21 @@ export class AddUserComponent implements OnInit, OnDestroy {
                       return false;
                     });
                   }else{
-      
+
                     //call api them moi
                     this.userService.addUser(data).subscribe(
                       data => {
-                        this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
-                        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                          this.router.navigate(['/main/user']);
-                        });
-                        this.spinner.hide();
+                        // if(data.success == true){
+                          this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
+                          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                            this.router.navigate(['/main/user']);
+                          });
+                          this.spinner.hide();
+                        // } else {
+                        //   this.toastService.showErrorHTMLWithTimeout(data.data, "", 3000);
+                        //   this.spinner.hide();
+                        // }
+
                       }, error => {
                         this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
                         this.spinner.hide();

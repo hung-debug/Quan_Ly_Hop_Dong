@@ -88,7 +88,7 @@
 
   <div class="skeleton-sign-value" (click)="doEditContractNo()"
        *ngIf="!contractNoValue && count == 0 && (this.contractNoValueSign || sign.value || sign.valueSign) && !view">
-    <span style="text-align: left;" class="input-text">{{getText(sign)}}</span>
+  <span style="text-align: left;" class="input-text">{{getText(sign)}}</span>
   </div>
 
   <div class="skeleton-sign" *ngIf="contractNoValue || count > 0 && !view">

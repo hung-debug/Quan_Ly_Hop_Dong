@@ -92,6 +92,7 @@
   "contract.connect.add": "Thêm tài liệu liên quan",
   "contract.cancel": "Hủy tài liệu",
   "contract.download": "Tải tài liệu",
+  "contract.group.download": "Tải bộ tài liệu",
   "contract.share": "Chia sẻ tài liệu",
   "contract.lead": "Điều phối",
   "contract.view": "Xem xét",
@@ -478,7 +479,8 @@
   "sign.ekyc.app":"Vui lòng ký eKYC trên ứng dụng điện thoại",
   "authorization":"Uỷ quyền",
   "forward":"Chuyển tiếp",
-  "processing.auth":"Ủy quyền xử lý",
+  "authori_forward":"Ủy quyền/Chuyển tiếp",
+  "processing.auth":"Ủy quyền/Chuyển tiếp xử lý",
   "choose.network":"Chọn nhà mạng",
   "network.operator":"Nhà mạng",
   "confirm":"Xác nhận",
@@ -530,6 +532,7 @@
   "sign.by.pki":"Ký số bằng Sim PKI",
   "sign.image.otp":"Ký ảnh và OTP",
   "sign.image.ekyc":"Chữ ký ảnh hoặc eKYC",
+  "signed.ekyc":"Đã ký eKYC",
   "sign.digital":"Chữ ký số",
   "auto.scroll":"Tìm ô thông tin",
   "preview":"Xem trước",
@@ -935,5 +938,10 @@
   "many.extensions": "Gia hạn nhiều",
   "error.notTime": "Vui lòng chọn ngày hết hạn ký",
   "person.processing.contract": "Tên người đang xử lý tài liệu",
-  "name.email.create.contract": "Tên/email người tạo tài liệu"
+  "name.email.create.contract": "Tên/email người tạo tài liệu",
+  "no.update.assign": "PKI chỉ cho phép gán dưới 15 ô ký",
+  "username.wrong.format": "Tên người dùng không đúng định dạng",
+  "choose.type.sign": "Chọn hình thức đăng nhập",
+  "status.account": "Trạng thái tài khoản",
+  "type.sign.email.phone": "Đăng nhập bằng Email và SĐT"
 }

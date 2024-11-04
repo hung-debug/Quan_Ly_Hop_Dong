@@ -57,7 +57,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
         this.typeImageSignatureRadio = 3;
       }
     });
-    this.typeImageSignatureRadio = 2;
+    this.typeImageSignatureRadio = 1;
 
     this.datas = this.data;
 

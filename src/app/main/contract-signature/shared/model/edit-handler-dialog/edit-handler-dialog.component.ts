@@ -34,6 +34,7 @@ export class EditHandlerComponent implements OnInit {
   arrSearchNameDoc: any = [];
   is_origanzation_reviewer: any = [];
   is_origanzation_signature: any = [];
+  fieldsUpdate : any = [];
   is_origanzation_document: any = {};
   site: string;
   email: string;
@@ -171,6 +172,10 @@ export class EditHandlerComponent implements OnInit {
     if (!this.validData()) {
       this.spinner.hide();
       return;
+    }
+    if(this.data.sign_type[0]?.id != 3 && this.dataSign[0]?.id == 3 && this.fieldsUpdate.length > 15) {
+      this.toastService.showErrorHTMLWithTimeout(this.translate.instant('no.update.assign'), "", 3000);
+      return; 
     }
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
 
@@ -451,19 +456,21 @@ export class EditHandlerComponent implements OnInit {
   }
 
   async actionWithSignTypeForm() {
+    this.fieldsUpdate = [];
     const contractFieldsDetail = await this.contractService.getDetailInforContract(this.data.contract_id).toPromise();
     contractFieldsDetail.participants.forEach((element: any) => {
       element.recipients.forEach((recip: any) => {
         if (recip.id == this.recipientId) {
+          this.fieldsUpdate = recip.fields;
           this.hasText = recip.fields.some((data: any) => data.type !== 2 && data.type !== 3)
         }
       }) 
     })
     this.dataSign = this.data.sign_type
     let currentSignType = this.data.sign_type[0]
-    if(currentSignType.id == 2 || currentSignType.id == 3 || currentSignType.id == 4 || currentSignType.id == 6 || currentSignType.id == 7 || currentSignType.id == 8) {
+    if(currentSignType?.id == 2 || currentSignType?.id == 3 || currentSignType?.id == 4 || currentSignType?.id == 6 || currentSignType?.id == 7 || currentSignType?.id == 8) {
       this.signTypeList = this.signTypeList.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8);
-    } else if(currentSignType.id == 1 ||  currentSignType.id == 5) {
+    } else if(currentSignType?.id == 1 ||  currentSignType?.id == 5) {
       this.signTypeList = this.signTypeList.filter((p: any) => p.id == 1 || p.id == 5);
     }
  

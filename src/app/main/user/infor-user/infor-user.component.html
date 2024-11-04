@@ -36,6 +36,9 @@
                 <div class="label text-color">{{'user.phone' | translate}} <span class="required-title">*</span></div>
                 <div class="input-data">
                     <input type="text" formControlName="phone">
+                    <!-- <input type="text" formControlName="phone" *ngIf="this.disablePhone != 'EMAIL_AND_SDT'">
+                    <input type="text" formControlName="phone" [readonly]="true" class="hidden-color" *ngIf="this.disablePhone == 'EMAIL_AND_SDT'" style="min-height: 31px"> -->
+
                 </div>
                 <div *ngIf="submitted && f.phone.errors" class="invalid">
                     <div *ngIf="f.phone.errors.required">{{'error.user.phone.required' | translate}}</div>
@@ -61,6 +64,27 @@
                 </div>
             </div>
         </div>
+        
+        <!-- <div class="row" style="justify-content: flex-start;padding-top: 10px;display: flex;">
+          <div style="display: flex;">
+            <div style="display: flex;">
+              <span>{{'choose.type.sign' | translate}}:</span>
+              <div style="margin-left: 10px;">
+                <input type="radio" name="confirm-radio-consider" value="EMAIL" formControlName="login_type" name="login_type">
+                <span> {{'typeOfSignEmail' | translate}}</span>
+              </div>
+              <div style="margin-left: 10px;">
+                <input type="radio" name="confirm-radio-consider" value="SDT" formControlName="login_type" name="login_type">
+                <span> {{'typeOfSignPhone' | translate}}</span>
+              </div>
+              <div style="margin-left: 10px;">
+                <input type="radio" name="confirm-radio-consider" value="EMAIL_AND_SDT" formControlName="login_type" name="login_type">
+                <span> {{'type.sign.email.phone' | translate}}</span>
+              </div>
+            </div>
+          </div>
+        </div> -->
+
         <div class="row" style="justify-content: center;padding-top: 0px;">
             <button class="save-button" (click)="updateUser()">{{'btn.update' | translate}}</button>
         </div>
@@ -144,6 +168,14 @@
                                 <p-dropdown panelStyleClass="font" [options]="networkList" formControlName="networkKpi" optionLabel="name" optionValue="id" placeholder="{{'choose.network' | translate}}" [filter]="true" filterBy="name" [showClear]="true"></p-dropdown>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div style="padding-top: 10px;">
+                          <input type="checkbox" value="is_show_phone_pki" formControlName="is_show_phone_pki"/>
+                          <span style="margin-left: 2%; font-size: 15px; color:#00186D; font-weight: 500">{{'confirm.public.phone.pki' | translate}}</span>
+                        </div>
+                      </div>
                     </div>
                 </div>
             </form>

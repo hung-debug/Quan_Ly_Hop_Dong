@@ -1162,7 +1162,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     })
   }
 
-  downloadContract(id: any) {
+  downloadContract(id: any, name: any) {
     this.contractService.getFileZipContract(id).subscribe((data) => {
       this.uploadService.downloadFile(data.path).subscribe((response: any) => {
         let url = window.URL.createObjectURL(response);
@@ -1170,13 +1170,51 @@ export class ContractComponent implements OnInit, AfterViewInit {
         document.body.appendChild(a);
         a.setAttribute('style', 'display: none');
         a.href = url;
-        a.download = data.filename;
+        // a.download = data.filename;
+        a.download = name;
         a.click();
         window.URL.revokeObjectURL(url);
         a.remove();
 
         this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
       }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
+    },
+      error => {
+        this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);
+      }
+    );
+  }
+  
+  downloadFileContract(id: any, name: any){
+    this.contractService.getFileContract(id).subscribe((data) => {
+      // const pathFileContract = data.filter(p: => p.type == 2);
+      const filteredData = data.filter((item:any) => item.type === 2);
+
+      const paths = filteredData.map((item:any) => item.path);
+      const myDate = new Date();
+      // Replace 'yyyy-MM-dd' with your desired date format
+      const formattedDate = this.datePipe.transform(myDate, 'ddMMyyyy');
+
+      if(paths.length > 0){
+        this.uploadService.downloadFile(paths[0]).subscribe((response: any) => {
+          const file = new Blob([response], {type: 'application/pdf'});
+          let url = window.URL.createObjectURL(file);
+          let a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          // a.download = 'Contracts'+ '_' + formattedDate;
+          // a.download = filteredData[0].filename;
+          a.download = name;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+        }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
+      } else {
+        this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);
+      }
+
     },
       error => {
         this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);

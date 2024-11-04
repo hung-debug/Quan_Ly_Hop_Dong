@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from 'src/app/service/app.service';
 import * as contractModel from './model/contract-model';
-import { variable } from '../../config/variable';
+import { networkList, variable } from '../../config/variable';
 
 import { ContractSignatureService } from '../../service/contract-signature.service';
 import { ContractService } from '../../service/contract.service';
@@ -30,6 +30,7 @@ import { CertDialogSignComponent } from './components/consider-contract/cert-dia
 import { TimeService } from 'src/app/service/time.service';
 import { ProcessingHandleEcontractComponent } from '../contract-signature/shared/model/processing-handle-econtract/processing-handle-econtract.component';
 import { RemoteDialogSignComponent } from './components/consider-contract/remote-dialog-sign/remote-dialog-sign.component';
+import { PkiDialogSignMultiComponent } from './components/consider-contract/pki-dialog-sign-multi/pki-dialog-sign-multi.component';
 // import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
@@ -64,6 +65,7 @@ export class ContractSignatureComponent implements OnInit {
   pageEnd: number = 0;
   pageTotal: number = 0;
   totalPage: number = 0;
+  totalBoxSignPki: number = 0;
   statusPopup: number = 1;
   notificationPopup: string = '';
 
@@ -117,6 +119,8 @@ export class ContractSignatureComponent implements OnInit {
   inputTimeout: any
   numberPage: number;
   enterPage: number = 1;
+  signInfoPKIU: any = {};
+  chooseContract: any = [];
   constructor(
     private appService: AppService,
     private contractServiceV1: ContractService,
@@ -419,7 +423,8 @@ export class ContractSignatureComponent implements OnInit {
 
   cancelSignMany() {
     this.typeDisplay = 'signOne';
-
+    this.totalBoxSignPki = 0;
+    this.dataChecked = [];
     this.setNullFilter();
 
     if (this.myInput) {
@@ -526,7 +531,14 @@ export class ContractSignatureComponent implements OnInit {
 
   getContractList() {
     this.spinner.show();
+    const checkBox = document.getElementById('all') as HTMLInputElement | null;
+    if (checkBox != null) {
+      checkBox.checked = false;
+    }
+    this.dataChecked = [];
     this.contracts = [];
+    this.contractsSignMany = [];
+    this.totalBoxSignPki = 0;
     if (this.filter_status % 10 == 1) {
       this.filter_status = 1;
     }
@@ -661,6 +673,7 @@ export class ContractSignatureComponent implements OnInit {
                 this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
                 this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
                 this.contractsSignMany[v].checked = false;
+                //this.contractsSignMany[v].isDisable = false;
               });
 
               this.spinner.hide();
@@ -693,6 +706,7 @@ export class ContractSignatureComponent implements OnInit {
                 this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
                 this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
                 this.contractsSignMany[v].checked = false;
+                //this.contractsSignMany[v].isDisable = false;
               });
 
               this.spinner.hide();
@@ -749,7 +763,9 @@ export class ContractSignatureComponent implements OnInit {
 
   //auto search
   autoSearch(event: any) {
-    setTimeout(() => {
+
+    clearTimeout(this.inputTimeout);
+    this.inputTimeout = setTimeout(() => {
       if (this.typeDisplay == 'signOne') {
         this.filter_name = event.target.value;
       } else if (this.typeDisplay == 'signMany' || this.typeDisplay == 'downloadMany') {
@@ -824,8 +840,6 @@ export class ContractSignatureComponent implements OnInit {
           return;
         }
 
-
-
         if (
           this.dataChecked[lengthItem - 1].card_id !=
           this.dataChecked[lengthItem - 2].card_id
@@ -843,23 +857,122 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
+  toggleOne1(item: any, index1: any) {
+    let data = {
+      id: index1,
+      sign_type: item.sign_type[0].id,
+      card_id: item.cardId,
+      checked: true,
+    };
+
+    if (item.checked === false) {
+      let tempDataChecked = [...this.dataChecked, data];
+      let lengthItem = tempDataChecked.length;
+      let firstCheckedItem = tempDataChecked[0];
+      if (lengthItem >= 2) {
+        let lastCheckedItem = tempDataChecked[lengthItem - 1];
+
+        if (firstCheckedItem.sign_type !== lastCheckedItem.sign_type) {;
+          this.toastService.showErrorHTMLWithTimeout(
+              'Các tài liệu đang chọn có loại ký khác nhau',
+              '',
+              3000
+          );
+          return false;
+        }
+
+        if (firstCheckedItem.card_id !== lastCheckedItem.card_id) {
+          this.toastService.showErrorHTMLWithTimeout(
+              'Tài liệu vừa chọn có mã số thuế khác tài liệu đầu tiên',
+              '',
+              3000
+          );
+          return false;
+        }
+      }
+
+      if (firstCheckedItem.sign_type == 3) {;
+        this.totalBoxSignPki += item.fields.length
+      }
+
+      if (this.totalBoxSignPki > 15) {
+        this.totalBoxSignPki -= item.fields.length
+        this.toastService.showErrorHTMLWithTimeout(
+          `Hình thức ký số bằng SIM PKI: Đã chọn vượt quá 15 ô ký`,
+          '',
+          3000
+        );
+        return false;
+      }
+  
+      if(this.totalBoxSignPki > 0 && this.totalBoxSignPki <= 15) {
+        this.toastService.showSuccessHTMLWithTimeout(
+          `Hình thức ký số bằng SIM PKI: Đã chọn ${this.totalBoxSignPki}/15 ô ký`,
+          '',
+          3000
+        );
+      }
+
+      item.checked = true;
+      this.dataChecked.push(data);
+    } else {
+      if (item.sign_type[0].id == 3) {;
+        this.totalBoxSignPki -= item.fields.length
+      }
+      item.checked = false;
+      this.dataChecked = this.dataChecked.filter((checkedItem) => checkedItem.id !== index1);
+    }
+  }
+
   toggle() {
     const checkBox = document.getElementById('all') as HTMLInputElement | null;
-
     if (checkBox != null) {
       let checkBoxList = document.getElementsByName('item');
-
-      if (checkBox.checked === true) {
-        for (let i = 0; i < checkBoxList.length; i++) {
-          var checkBoxGet: any = checkBoxList[i];
-          checkBoxGet.checked = true;
-          this.contractsSignMany[i].checked = true;
+      if(this.contractsSignMany.length > 0) {
+        for (let i = 0; i < this.contractsSignMany.length; i++) {
+          if(this.contractsSignMany[0].sign_type[0].id != this.contractsSignMany[i].sign_type[0].id) {
+            checkBox.checked = false;
+            return this.toastService.showErrorHTMLWithTimeout(
+              `Vui lòng chọn những tài liệu cùng loại ký`,
+              '',
+              3000
+            );
+          }
         }
-      } else {
-        for (let i = 0; i < checkBoxList.length; i++) {
-          var checkBoxGet: any = checkBoxList[i];
-          checkBoxGet.checked = false;
-          this.contractsSignMany[i].checked = false;
+      }
+
+      for (let i = 0; i < checkBoxList.length; i++) {
+        var checkBoxGet: any = checkBoxList[i];
+        this.totalBoxSignPki = 0;
+        checkBoxGet.checked = false;
+        this.contractsSignMany[i].checked = false;
+        //this.contractsSignMany[i].isDisable = false;
+      }
+
+      if (checkBox.checked) {
+        let totalAllBoxSignPki = 0;
+        for (let i = 0; i < checkBoxList.length; i++) {  
+          if (this.contractsSignMany[0].sign_type[0].id === 3) {
+            totalAllBoxSignPki += this.contractsSignMany[i].fields.length;
+            if (this.totalBoxSignPki + this.contractsSignMany[i].fields.length <= 15) {
+              var checkBoxGet: any = checkBoxList[i];
+              checkBoxGet.checked = true;
+              this.contractsSignMany[i].checked = true;
+              this.totalBoxSignPki += this.contractsSignMany[i].fields.length;
+            }
+          } else {
+            var checkBoxGet: any = checkBoxList[i];
+            checkBoxGet.checked = true;
+            this.contractsSignMany[i].checked = true;
+          }  
+        }
+
+        if(totalAllBoxSignPki > 15) {
+          this.toastService.showErrorHTMLWithTimeout(
+            `Hình thức ký số bằng SIM PKI: Đã chọn vượt quá 15 ô ký`,
+            '',
+            3000
+          );
         }
       }
     }
@@ -1175,6 +1288,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   signManyContract() {
+    let totalBoxSignPki = 0;
     //Nếu chọn tài liệu khác loại ký thì ko cho ký
     let contractsSignManyChecked = this.contractsSignMany.filter(
       (opt) => opt.checked
@@ -1187,7 +1301,6 @@ export class ContractSignatureComponent implements OnInit {
       );
       return;
     }
-    console.log(contractsSignManyChecked)
     for (let i = 0; i < contractsSignManyChecked.length; i++) {
       for (let j = i + 1; j < contractsSignManyChecked.length; j++) {
         if (
@@ -1201,8 +1314,20 @@ export class ContractSignatureComponent implements OnInit {
           return;
         }
       }
+
+      if(contractsSignManyChecked[i].sign_type[0].id == 3) {
+        totalBoxSignPki += contractsSignManyChecked[i].fields.length;
+      }
     }
 
+    if(totalBoxSignPki > 15) {
+      this.toastService.showErrorHTMLWithTimeout(
+        'Vui lòng chọn những tài liệu có tổng số ô ký PKI không quá 15 ô',
+        '',
+        3000
+      );
+      return;
+    }
     //Lay hop dong ky nhieu bang hsm hay usb token
     let signId = contractsSignManyChecked[0]?.sign_type[0]?.id;
 
@@ -1289,6 +1414,18 @@ export class ContractSignatureComponent implements OnInit {
             });
           });
       }
+    } else if (signId == 3) {
+      recipientId = contractsSignManyChecked
+      .filter((opt) => opt.checked)
+      .map((opt) => opt.id);
+
+      contractsSignManyChecked.map((item) => {
+        let itemChoose = {
+          id: item.id,
+          contractName: item.contractName
+        }
+        this.chooseContract.push(itemChoose);
+      })
     }
 
     this.openDialogSignManyComponent(recipientId, taxCode, idSignMany, signId);
@@ -1345,8 +1482,134 @@ export class ContractSignatureComponent implements OnInit {
     });
   }
 
+  getNameSign(results: any) {
+    const contractNames = results.map((item: any) => {
+      const contract = this.chooseContract.find((contract: any) => contract.id === item.recipientId);
+      return contract ? contract.contractName : '';
+    }).join(", ");
+
+    return contractNames;
+  }
+
   async actionSignMulti(signId: any, recipientId: any, taxCode: any, result: any, idSignMany: any) {
-    if (signId == 2) {
+    if(signId == 3) {
+      let signI = '';
+      if (this.srcMark) {
+        signI = this.srcMark.split(',')[1];
+      }
+      let name = this.chooseContract.map((contract: any) => contract.contractName).join(", ");
+      const nl = networkList;
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;  
+      try {
+        const userData: any = await this.userService.getUserById(this.currentUser.id).toPromise();
+        
+
+        const itemNameNetwork = nl.find((nc: any) => nc.id == userData.phone_tel);
+        this.signInfoPKIU.phone = userData.phone_sign;
+        this.signInfoPKIU.phone_tel = userData.phone_tel;
+        this.signInfoPKIU.networkCode = itemNameNetwork && itemNameNetwork.name
+          ? itemNameNetwork.name.toLowerCase()
+          : null;
+      
+        const data = {
+          title: 'CHỮ KÝ PKI',
+          type: 3,
+          sign: this.signInfoPKIU,
+          recipientId: recipientId,
+          chooseContract: this.chooseContract
+        };
+        
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.panelClass = 'custom-dialog-container';
+        dialogConfig.width = '497px';
+        dialogConfig.height = '330px';
+        dialogConfig.hasBackdrop = true;
+        dialogConfig.data = data;
+    
+        const dialogRef = this.dialog.open(PkiDialogSignMultiComponent, dialogConfig);
+        
+        // Await the dialog close event
+        const result: any = await dialogRef.afterClosed().toPromise();
+        if(result) {
+          this.spinner.show();
+          const checkSign = await this.contractServiceV1.signPkiDigitalMulti(
+            result.phone,
+            result.networkCode.toLowerCase(),
+            recipientId,
+            signI,
+            this.isTimestamp,
+            result.is_show_phone_pki ? false : true,
+            name
+          ).toPromise();
+          this.spinner.hide();
+          recipientId.forEach((id: any) => {
+            let existingRecipient = checkSign.find((item: any) => item.recipientId === id);
+            
+            if (!existingRecipient) {
+              checkSign.push({
+                "recipientId": id,
+                "result": {
+                  "success": false,
+                  "message": "",
+                  "status": null,
+                  "details": null
+                }
+              });
+            }
+          });
+
+          let resultsFalse = checkSign.filter((item: any) => item.result.success === false);
+          let resultsTrue = checkSign.filter((item: any) => item.result.success === true);
+          //let resultsProcessing = checkSign.filter((item: any) => item.result.success === true && item.result.status === "PROCESSING");
+          //let resultsSigned = checkSign.filter((item: any) => item.result.success === true && item.result.status === "SIGNED");
+
+          if(resultsFalse.length > 0 && resultsFalse.length != checkSign.length) {
+            let contractNames = this.getNameSign(resultsFalse);
+            this.toastService.showErrorHTMLWithTimeout(
+              `Tài liệu ${contractNames} ký không thành công!`,
+              '',
+              10000
+            );
+          }
+
+          if(resultsTrue.length > 0 && resultsTrue.length != checkSign.length) {
+            let contractNames = this.getNameSign(resultsTrue);
+            this.toastService.showSuccessHTMLWithTimeout(
+              `Bạn vừa thực hiện ký thành công tài liệu ${contractNames}.`,
+              '',
+              10000
+            );
+          }
+
+          if(resultsTrue.length == 0 && resultsFalse.length == checkSign.length) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'Ký số thất bại',
+              '',
+              10000
+            );
+          }
+
+          if(resultsFalse.length == 0 && resultsTrue.length == checkSign.length) {
+            this.toastService.showSuccessHTMLWithTimeout(
+              'Ký số thành công',
+              '',
+              10000
+            );
+          }
+
+          if(!(resultsTrue.length == 0 && resultsFalse.length == checkSign.length)) {
+            this.router
+            .navigateByUrl('/', { skipLocationChange: true })
+            .then(() => {
+              this.router.navigate(['main/c/receive/processed']);
+            });
+          }
+        }
+      } catch (error) {
+        console.error("An error occurred:", error);
+      }
+           
+    } else if (signId == 2) {
       this.spinner.show();
 
       let contractsSignManyChecked = this.contractsSignMany.filter(
@@ -2832,43 +3095,60 @@ export class ContractSignatureComponent implements OnInit {
     });
   }
 
-  downloadContract(id: any) {
-    this.isContractService.getFileZipContract(id).subscribe(
-      (data) => {
-        //
-        this.uploadService
-          .downloadFile(data.path)
-          .subscribe((response: any) => {
-            let url = window.URL.createObjectURL(response);
-            let a = document.createElement('a');
-            document.body.appendChild(a);
-            a.setAttribute('style', 'display: none');
-            a.href = url;
-            a.download = data.filename;
+  downloadContract(id: any, name: any) {
+    this.isContractService.getFileContract(id).subscribe((data) => {
+      const filteredData = data.filter((item:any) => item.type === 2);
+      const paths = filteredData.map((item:any) => item.path);
 
-            a.click();
-            window.URL.revokeObjectURL(url);
-            a.remove();
+      if(paths.length > 0){
+        this.uploadService.downloadFile(paths[0]).subscribe((response: any) => {
+          const file = new Blob([response], {type: 'application/pdf'});
+          let url = window.URL.createObjectURL(file);
+          let a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          // a.download = 'Contracts'+ '_' + formattedDate;
+          a.download = name;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+        }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
+      } else {
+        this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);
+      }
+        (error: any) =>
+          this.toastService.showErrorHTMLWithTimeout('no.contract.download.file.error','',3000);
+    },
+    (error) => {
+      this.toastService.showErrorHTMLWithTimeout(
+        'no.contract.get.file.error',
+        '',
+        3000
+      );
+    }
+  );
+  }
+  
+  downloadFileContract(id: any){
+    this.isContractService.getFileZipContract(id).subscribe((data) => {
+        this.uploadService.downloadFile(data.path).subscribe((response: any) => {
+          let url = window.URL.createObjectURL(response);
+          let a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          a.download = data.filename;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+        }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
 
-            this.toastService.showSuccessHTMLWithTimeout(
-              'no.contract.download.file.success',
-              '',
-              3000
-            );
-          }),
-          (error: any) =>
-            this.toastService.showErrorHTMLWithTimeout(
-              'no.contract.download.file.error',
-              '',
-              3000
-            );
-      },
-      (error) => {
-        this.toastService.showErrorHTMLWithTimeout(
-          'no.contract.get.file.error',
-          '',
-          3000
-        );
+    },
+      error => {
+        this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);
       }
     );
   }

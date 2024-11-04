@@ -32,6 +32,7 @@ import { concatMap, map, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Helper } from 'src/app/core/Helper';
 import { encode } from 'base64-arraybuffer';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-detail-contract',
@@ -160,6 +161,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   pageNum: number = 1;
   page1: boolean = false;
   pageLast: boolean = true;
+  enviroment: any = "";
 
   pageRendering: any;
   pageNumPending: any = null;
@@ -169,7 +171,12 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     { percent: '100%', value: 1.0 },
     { percent: '150%', value: 1.5 },
     { percent: '200%', value: 2.0 },
-    { percent: '250%', value: 2.5 }
+    { percent: '250%', value: 2.5 },
+    { percent: '300%', value: 3.0 },
+    { percent: '350%', value: 3.5 },
+    { percent: '400%', value: 4.0 },
+    { percent: '450%', value: 4.5 },
+    { percent: '500%', value: 5.0 },
   ];
   constructor(
     private contractService: ContractService,
@@ -193,7 +200,13 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
+    this.enviroment = environment
     this.getDeviceApp();
+    if(environment.flag == 'KD'){
+      sessionStorage.removeItem('mail')
+      sessionStorage.removeItem('type')
+      sessionStorage.removeItem('url')
+    }
 
     this.route.queryParams.subscribe((params) => {
       this.pageBefore = params.page;

@@ -2,20 +2,24 @@ import { truncate } from "lodash";
 
 export const environment = {
   production: true,
-  usedSSO: true,
-  // apiUrl: 'https://econtract-demo.mobifone.ai/service',
+  // usedSSO: true,
+  //apiUrl: 'https://econtract-demo.mobifone.ai/service',
   // apiUrl: 'https://econtractdev.mobifone.ai/service',
   // flag: 'KD',
   // flag: 'NB',
 
+  // SSO_URL: 'https://auth-sso.mobifone.vn:8080/oauth',
+  // SSO_REALM: 'sso-mobifone',
+  // SSO_CLIENTID: 'TTCNTT-ECONTRACT-STAGING',
+
+  // SSO_URL: 'http://10.3.14.69:8080/oauth',
+  // SSO_REALM: 'sso-mobifone',
+  // SSO_CLIENTID: 'TTCNTT-ECONTRACT',
+
   SSO_URL: 'https://auth-sso.mobifone.vn:8080/oauth',
   SSO_REALM: 'sso-mobifone',
   SSO_CLIENTID: 'TTCNTT-ECONTRACT',
-
-  // SSO_URL: 'https://auth-sso.mobifone.vn:8080/oauth',
-  // SSO_REALM: 'sso-mobifone',
-  // SSO_CLIENTID: 'TTCNTT-ECONTRACT',
-  // usedSSO: false,
+  usedSSO: true,
 
   //NB
   // apiUrl: 'https://econtract.mobifone.vn/service',

@@ -1,6 +1,6 @@
 def pathInServer = "/u01/app"
-def patheContractStaging = "/u01/app/eContract-web-staging"
-def message = "*Start build Front-end eContract-demo*"
+def patheContractStaging = "/u01/app/eContract-web"
+def message = "*Start build Front-end eContract Dev*"
 def groupEChatWorkId = "65f95fbcd49bf204c8d6eb9b"
 pipeline {
     agent any
@@ -77,11 +77,11 @@ pipeline {
                     echo "-------------------Run backup.sh done-------------------"
 
                     echo "-------------------Start push file to server-------------------"
-                    sshPut remote: remote, from: 'builds/eContract-web/.', into: "${patheContractStaging}/"
+                    sshPut remote: remote, from: 'builds/eContract-web/.', into: "${pathInServer}/"
                     echo "-------------------Push file to server done-------------------"
 
                     sh """
-                      curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["${groupEChatWorkId}"],"announcement": "Hoàn thành deploy Front-end eContract-demo. Truy cập link https://econtract-demo.mobifone.ai để test"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement/group
+                      curl -X POST -H "Content-Type: application/json"  -H "x-api-key: AoOK0GLBh+sKwwH1jPAqTV+4ktUbMdxmJ/ly/lNZ168=" -d '{"listGroup": ["${groupEChatWorkId}"],"announcement": "Hoàn thành deploy Front-end eContract Dev. Truy cập link https://econtractdev.mobifone.ai để test"}' https://ottchat.mobifone.vn/chat_engine/general/push_announcement/group
 
                     """
                     echo "-------------------Deploy done-------------------"
