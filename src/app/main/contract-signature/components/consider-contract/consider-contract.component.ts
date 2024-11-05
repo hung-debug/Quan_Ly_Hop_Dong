@@ -1307,7 +1307,7 @@ export class ConsiderContractComponent
           item?.recipient?.email === this.currentUser.email &&
           item?.recipient?.role === this.datas?.roleContractReceived
       );
-      if(this.firstHandler) {
+      if(this.firstHandler && !this.mobile) {
         this.datas.is_data_object_signature.map((item: any) => {
           if(item.type != 2 && item.type != 3 && item.type != 4 && item.recipient_id || (item.type == 4 && item.recipient_id)) {
             dataSignature.push(item);
