@@ -69,6 +69,7 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
     // Gán giá trị mặc định cho biến date
 
     this.date = [startDate, endDate];
+    
   }
 
 

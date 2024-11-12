@@ -21,6 +21,7 @@ import { Table } from 'primeng/table';
   styleUrls: ['./report-detail.component.scss'],
 })
 export class ReportDetailComponent implements OnInit {
+
   @ViewChild('dt') table: Table;
 
   //Biến lưu dữ liệu trong bảng
@@ -47,8 +48,8 @@ export class ReportDetailComponent implements OnInit {
 
   params: any;
   date: any;
+  completionDate: Date;
   optionsStatus: any;
-
   formGroup: any;
   contractStatus: number = -1;
 
@@ -64,7 +65,10 @@ export class ReportDetailComponent implements OnInit {
   enterPage: number = 1;
   inputTimeout: any;
   numberPage: number;
+  selectedOption: string; // Biến để lưu trữ tùy chọn được chọn từ dropdown
+  dateOptions: any[]; // Mảng các tùy chọn cho dropdown
   constructor(
+    
     private appService: AppService,
     private userService: UserService,
     private translate: TranslateService,
@@ -75,12 +79,21 @@ export class ReportDetailComponent implements OnInit {
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
     private convertStatusService: ConvertStatusService,
-  ) {
+ 
+  ){
     this.formGroup = this.fbd.group({
       name: this.fbd.control(''),
       date: this.fbd.control(''),
+      completionDate: this.fbd.control(''),
       contractStatus: this.fbd.control(''),
     });
+    // Khởi tạo ngày mặc định là khoảng 1 tháng tính từ ngày hiện tại
+    const currentDate = new Date();
+    const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    this.date = [startDate, currentDate];
+    // Khởi tạo các tùy chọn cho dropdown
+    //  this.dateOptions = ['1 tuần', '1 tháng', '1 năm'];
+    //  this.selectedOption = this.dateOptions[1]; // Lựa chọn mặc định là '1 tháng'
   }
 
   ngOnInit(): void {
@@ -147,6 +160,24 @@ export class ReportDetailComponent implements OnInit {
       );
     });
   }
+
+  // changeDateRange(option: string) {
+  //   // Xử lý thay đổi phạm vi ngày tháng dựa trên lựa chọn
+  //   switch (option) {
+  //     case '1 tuần':
+  //       // Xử lý để hiển thị phạm vi 1 tuần
+  //       break;
+  //     case '1 tháng':
+  //       // Xử lý để hiển thị phạm vi 1 tháng
+  //       break;
+  //     case '1 năm':
+  //       // Xử lý để hiển thị phạm vi 1 năm
+  //       break;
+  //     default:
+  //       // Xử lý mặc định
+  //       break;
+  //   }
+  // }
 
   convertTime(time: any,code?: any) {
     return moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") != 'Invalid date' ? moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") : "" ;
@@ -220,9 +251,16 @@ export class ReportDetailComponent implements OnInit {
         colspan: 1,
         rowspan: 2,
       },
+  
       {
-        id: 8,
+        id: 9,
         header: 'contract.status.v2',
+        style: 'text-align: left; width: 250px',
+        colspan: 1,
+        rowspan: 2,
+      },    {
+        id: 8,
+        header: 'completed-date',
         style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,

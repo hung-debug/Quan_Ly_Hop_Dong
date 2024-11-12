@@ -895,7 +895,7 @@
   "of":"của",
   "page": "trang",
   "hello":"Xin chào",
-  "search.code.number.name": "Tìm kiếm theo Mã tài liệu, Số tài liệu, Tên tài liệu",
+  "search.code.number.name": "Mã TL, Số TL, Tên TL, Email/SĐT người ký",
   "view_all": "Xem tất cả",
   "find.sign": "Tìm ô ký",
   "note.usb.token.bcy": "- Ký USB Token Ban cơ yếu, Sim PKI và Remote Signing không hỗ trợ nhập ô text/số tài liệu/ký nhiều ô ký cùng lúc",

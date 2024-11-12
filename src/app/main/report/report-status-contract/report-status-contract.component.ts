@@ -89,7 +89,10 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
     private convertStatusService: ConvertStatusService,
     private contractTypeService: ContractTypeService
   ) {
- 
+    // Khởi tạo ngày mặc định là 1 tháng tính từ ngày hiện tại
+    const currentDate = new Date();
+    const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    this.date = [startDate, currentDate];
   }
 
 
