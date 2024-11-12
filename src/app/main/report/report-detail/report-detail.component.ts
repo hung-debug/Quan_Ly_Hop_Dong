@@ -258,7 +258,8 @@ export class ReportDetailComponent implements OnInit {
         style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
-      },    {
+      },  
+        {
         id: 8,
         header: 'completed-date',
         style: 'text-align: left; width: 250px',

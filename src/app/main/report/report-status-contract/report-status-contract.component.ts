@@ -21,6 +21,7 @@ import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
 import { Table } from 'primeng/table';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-report-status-contract',
@@ -77,6 +78,7 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
   inputTimeout: any;
   numberPage: number;
   @ViewChild('typeContract') typeContract: any;
+completionDate: any;
   constructor(
     private appService: AppService,
     private userService: UserService,
@@ -198,7 +200,9 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
       },
     ];
   }
-
+  convertTime(time: any,code?: any) {
+    return moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") != 'Invalid date' ? moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") : "" ;
+  }
   validData() {
     if (!this.date || (this.date && this.date.length < 2)) {
       this.toastService.showErrorHTMLWithTimeout('date.full.valid', '', 3000);
@@ -212,7 +216,7 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
       .fill(0)
       .map((x, i) => i + 1);
   }
-
+  
   //Export ra file excel
   maxParticipants: number = 0;
   export(flag: boolean) {
@@ -314,7 +318,12 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
             colspan: 1,
             rowspan: 1,
           });
-
+          this.cols.push({
+            header: 'completed-date',
+            style: 'text-align:left',
+            colspan: 1,
+            rowspan: 1,
+          });
           this.cols.push({
             header: 'user.ed',
             style: 'text-align: left',
