@@ -67,13 +67,13 @@
                   <div class="text-choose-file">Chọn file ảnh chữ ký từ máy tính của bạn.</div>
                   <div class="text-support-extension">Hỗ trợ định dạng PNG, JPG, JPGE</div>
                 </div>
-              </div>
+             </div>
             </div>
           </div>
         </div>
-        <div class="image-sign-acc-2 mt-4" style="max-height: 600px;">
+        <div class="image-sign-acc-2 mt-4" style="max-height: 300px;">
           <img *ngIf="imgSignPCSelect && !this.mobile" (click)="addFileAttach()" [src]="imgSignPCSelect" alt=""
-            style="display: block;margin: 0 auto;max-height: 600px;">
+            style="display: block;margin: 0 auto;max-height: 300px;">
 
           <img *ngIf="imgSignPCSelect && this.mobile" (click)="addFileAttach()" [src]="imgSignPCSelect" alt=""
             style="display: block;margin: 0 auto;max-height: 600px; max-width: 210px">
@@ -84,19 +84,26 @@
         <signature-pad *ngIf="typeImageSignatureRadio == 3" #signature [options]="signaturePadOptions"
           (drawStart)="drawStart($event)" (drawEnd)="drawComplete($event)"></signature-pad>
       </div>
+      <div *ngIf="typeImageSignatureRadio == 4 "style="display: block;margin: 0 auto;max-height: 500px; max-width: 210px">
+        <div class="upload-image-region d-flex flex-column container-img-file-1">
+        <img src="assets/img/no-img-icon.svg" alt="#" width="400px">
+        
+        <div class="text-support-extension">Không chọn ảnh nào</div></div>
+      </div>
    
     <div class="image-result">
 
     </div>
     <div class="checkbox-confirm">
-      <input id="checkbox-confirm-consider" type="checkbox" [(ngModel)]="confirmConsider">
-      <label for="checkbox-confirm-consider" class="ms-2">{{ 'content.confirm' | translate }}</label>
+      <input class="checkbox-hide-processing-thread hover-item" type="checkbox" [(ngModel)]="confirmConsider" (change)="updateButtonState()" />
+      <div class="text" >{{ 'multi.sign.confirm' | translate }}</div>
     </div>
+    
     <div class="select-option">
       <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
       <button style="margin-left:50px" *ngIf="(typeImageSignatureRadio != 1 && typeImageSignatureRadio != 4)" class="dx-button-form dx-button-close dx-button-90 mb-4" type="button" (click)="clearImage()">Clear
       </button>
-      <button style="margin-left:50px" *ngIf="(typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc))|| (typeImageSignatureRadio != 1)" class="dx-button-form dx-button-close dx-button-90 mb-4" type="button" (click)="uploadImage()">OK
+      <button style="margin-left:50px" *ngIf="(typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc))|| (typeImageSignatureRadio != 1)" [class.disabled]="!confirmConsider" class="button dx-button-form dx-button-close dx-button-90 mb-4" type="button" (click)="uploadImage()">OK
       </button>
      
     </div>

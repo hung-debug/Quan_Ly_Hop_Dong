@@ -40,6 +40,47 @@
     }
   }
 }
+.checkbox-confirm {
+  display: inline-flex;
+  align-items: center; /* Canh giữa các phần tử theo chiều dọc */
+}
+.checkbox-confirm .text {
+  margin-left: 8px; /* Để khoảng cách giữa checkbox và text */
+  color: #0041c4; /* Màu văn bản */
+  font-size: 14px; /* Kích cỡ font */
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif; /* Font family */
+}
+
+.checkbox-hide-processing-thread {
+  -webkit-appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  -moz-appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  width: 24px;
+  height: 24px;
+  margin: auto 8px auto 0;
+  border-radius: 6px;
+  display: block;
+  border: 1px solid #A8B5CE; /* Thêm border */
+  position: relative;
+  cursor: pointer;
+  background-color: #fff; /* Màu nền mặc định */
+}
+.checkbox-hide-processing-thread:checked {
+  // background-color: #fff;
+  background-color: #0041C4;
+}
+
+.checkbox-hide-processing-thread:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 13px; /* Kích thước ảnh */
+  height: 10px; /* Kích thước ảnh */
+  background-image: url('../../../../../../assets/img/Vector.png'); /* Replace with your image URL */
+  background-size: cover; /* Đảm bảo ảnh bao phủ toàn bộ vùng */
+  transform: translate(-50%, -50%);
+}    
 .cancel-button{
   border: 0px;
   border-radius: 5px;
@@ -51,6 +92,7 @@
   font-size: 13px;
   margin: 0 10px;
 }
+
 .image-sign-acc {
   width: 100%;
   display: flex;
@@ -158,4 +200,8 @@ input[type="file"] {
   margin-top: 8px;
   color: #ED1C24;
   font-weight: 500;
+}
+.disabled {
+  background-color: #ccc !important;
+  cursor: not-allowed !important;
 }

@@ -68,6 +68,10 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     this.initListSignatureAccountUser();
     this.imgSignAccountSelect = 'data:image/png;base64,' + this.datas.imgSignAcc;
     this.markSignAccountSelect = 'data:image/png;base64,' + this.datas.markSignAcc;
+    if (!this.datas.imgSignAcc && !this.datas.markSignAcc) {
+      console.log("noImg");
+      this.typeImageSignatureRadio = 4; // Nếu cả hai biến đều trống, set typeImageSignatureRadio = 4
+    }
   }
 
   getDeviceApp() {
@@ -116,7 +120,12 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
       }
     }
   }
-
+  updateButtonState() {
+    // Cập nhật trạng thái của checkbox và ảnh hưởng đến trạng thái của nút OK
+    if (!this.confirmConsider) {
+      // Nếu checkbox không được chọn, bạn có thể thực hiện hành động nào đó ở đây nếu cần thiết
+    }
+  }
   handleUpload(event: any) {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -198,12 +207,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     this.imgSignAccountSelect = e[0].data.data;
     
   }
-  NoImage(){
-    if (!this.datas.imgSignAcc && !this.datas.markSignAcc) {
-      console.log("noImg");
-      this.typeImageSignatureRadio = 4; // Nếu cả hai biến đều trống, set typeImageSignatureRadio = 4
-    }
-  }
+
   uploadImage() {
     if (this.typeImageSignatureRadio == 1) {
       if(!this.imgSignAccountSelect) {
