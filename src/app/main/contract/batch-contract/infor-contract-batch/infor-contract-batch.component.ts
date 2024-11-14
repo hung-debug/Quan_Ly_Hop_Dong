@@ -353,7 +353,7 @@ export class InforContractBatchComponent implements OnInit {
           }
 
           this.orgId = this.userService.getInforUser().organization_id;
-
+          let checkSmsMethod: any = null;
           this.unitService
             .getUnitById(this.orgId)
             .toPromise()
@@ -369,7 +369,7 @@ export class InforContractBatchComponent implements OnInit {
                         this.numContractUse = data.contract;
                         this.eKYCContractUse = data.ekyc;
                         this.smsContractUse = data.sms;
-
+                        checkSmsMethod = data.sms_send_method;
                         //lay so luong hop dong da mua
                         this.unitService
                           .getNumberContractBuyOriganzation(this.orgId)
@@ -391,9 +391,9 @@ export class InforContractBatchComponent implements OnInit {
                                   3000
                                 );
                               } else if (
-                                Number(this.smsContractUse) +
+                                (Number(this.smsContractUse) +
                                   Number(countSMS) >
-                                Number(this.smsContractBuy)
+                                Number(this.smsContractBuy)) && checkSmsMethod == 'API'
                               ) {
                                 this.toastService.showErrorHTMLWithTimeout(
                                   'Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000
