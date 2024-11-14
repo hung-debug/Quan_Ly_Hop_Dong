@@ -22,11 +22,14 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   public signaturePad: SignaturePadComponent;
   imgSignAccountSelect: any;
   markSignAccountSelect: any;
+  
 
   imgSignPCSelect: any;
   imgSignDrawing: any;
   optionsFileSignAccount: any;
   mobile: boolean = false;
+  confirmConsider: boolean = true;
+  hasImage = false;
 
   public signaturePadOptions: NgSignaturePadOptions = { // passed through to szimek/signature_pad constructor
     minWidth: 1.5,
@@ -54,6 +57,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
 
     this.ContractService.getInforPersonProcess(this.data.recipientId).subscribe((data: any) =>{
       if(data.sign_type[0].id == 1){
+        console.log("=3")
         this.typeImageSignatureRadio = 3;
       }
     });
@@ -131,7 +135,9 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
 
   t(ev: number) {
     this.checkIOSAndroid();
-
+    if (ev==4){console.log("no pic")
+      
+    }
     if (ev == 3) {
       setTimeout(() => {
         this.signaturePad.set('border', 'none');
@@ -190,8 +196,14 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
 
   chooseImageSignAcc(e: INgxSelectOption[]) {
     this.imgSignAccountSelect = e[0].data.data;
+    
   }
-
+  NoImage(){
+    if (!this.datas.imgSignAcc && !this.datas.markSignAcc) {
+      console.log("noImg");
+      this.typeImageSignatureRadio = 4; // Nếu cả hai biến đều trống, set typeImageSignatureRadio = 4
+    }
+  }
   uploadImage() {
     if (this.typeImageSignatureRadio == 1) {
       if(!this.imgSignAccountSelect) {
@@ -217,6 +229,14 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
         this.dialogRef.close(this.imgSignDrawing);
       }
     }
+    else if (this.typeImageSignatureRadio == 4) {
+     
+        if(this.data.mark) {
+          this.dialogRef.close(this.markSignAccountSelect);
+        } else {
+          this.dialogRef.close(this.imgSignAccountSelect);
+        }
+      }   
   }
 
   clearImage() {

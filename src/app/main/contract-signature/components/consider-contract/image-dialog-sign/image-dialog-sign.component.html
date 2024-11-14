@@ -11,6 +11,11 @@
           <label for="radio-img-draw" class="ms-2">Vẽ tay chữ ký</label>
         </div>
         <div class="radio-confirm">
+          <input id="radio-file-account" type="radio" name="choose-radio-signature" [value]="4"
+            [(ngModel)]='typeImageSignatureRadio' (change)="t(4)">
+          <label for="radio-file-account" class="ms-2">Không chọn ảnh</label>
+        </div>
+        <div class="radio-confirm">
           <input id="radio-file-com" type="radio" name='choose-radio-signature' [value]="2"
             [(ngModel)]='typeImageSignatureRadio' (change)="t(2)">
           <label for="radio-file-com" class="ms-2">Tải ảnh lên</label>
@@ -20,11 +25,13 @@
             [(ngModel)]='typeImageSignatureRadio' (change)="t(1)">
           <label for="radio-file-account" class="ms-2">Ảnh từ tài khoản</label>
         </div>
+      
       </div>
     </div>
 
-    <div class="image-sign" style="min-height: 50vh">
-
+    <div class="image-sign" style="min-height: 20vh">
+      
+      
       <!--TH dialog chữ ký ảnh-->
       <div *ngIf="typeImageSignatureRadio == 1 && !this.data.mark">
 <!--        <label class="align-select">Chữ ký đã tạo trên hệ thống:</label>-->
@@ -46,7 +53,7 @@
           </div>
         </div>
       </div>
-
+      
       <div *ngIf="typeImageSignatureRadio == 2">
         <div class="form-group">
           <div class="select-file-contract" [hidden]="imgSignPCSelect">
@@ -77,16 +84,21 @@
         <signature-pad *ngIf="typeImageSignatureRadio == 3" #signature [options]="signaturePadOptions"
           (drawStart)="drawStart($event)" (drawEnd)="drawComplete($event)"></signature-pad>
       </div>
-    </div>
+   
     <div class="image-result">
 
     </div>
-
+    <div class="checkbox-confirm">
+      <input id="checkbox-confirm-consider" type="checkbox" [(ngModel)]="confirmConsider">
+      <label for="checkbox-confirm-consider" class="ms-2">{{ 'content.confirm' | translate }}</label>
+    </div>
     <div class="select-option">
-      <button *ngIf="typeImageSignatureRadio != 1" class="dx-button-form dx-button-close dx-button-90 mb-4" type="button" (click)="clearImage()">Clear
+      <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
+      <button style="margin-left:50px" *ngIf="(typeImageSignatureRadio != 1 && typeImageSignatureRadio != 4)" class="dx-button-form dx-button-close dx-button-90 mb-4" type="button" (click)="clearImage()">Clear
       </button>
       <button style="margin-left:50px" *ngIf="(typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc))|| (typeImageSignatureRadio != 1)" class="dx-button-form dx-button-close dx-button-90 mb-4" type="button" (click)="uploadImage()">OK
       </button>
+     
     </div>
   </div>
 

@@ -2164,12 +2164,18 @@ export class ConsiderContractComponent
       const allTypeImageSignature3 = allType3.every((itemCheck: any) => itemCheck.type_image_signature === 3);
       if (allTypeImageSignature1 && !allTypeImageSignature2 && !allTypeImageSignature3) {
         this.isCheck = 1;
+       
       } else if (!allTypeImageSignature1 && allTypeImageSignature2 && !allTypeImageSignature3) {
         this.isCheck = 2;
+       
       } else {
         this.isCheck = 3;
+       
       }
-      let swalOptions: any = {
+      return Promise.resolve({ value: 'yes', isConfirmed: true });
+      console.log("minh 1")
+       let swalOptions: any
+       = {
         title: this.getTextAlertConfirm(),
         icon: 'warning',
         showCancelButton: true,
@@ -2179,8 +2185,8 @@ export class ConsiderContractComponent
         cancelButtonText: this.translate.instant('contract.status.canceled'),
         inputLabel: this.translate.instant('stamp.contract.questions'),
       };
-  
-      if (this.isCheck === 3) {
+     
+      if (this.isCheck === 3) { console.log("check3")
         swalOptions.input = 'select';
         swalOptions.inputOptions = {
           no: this.translate.instant('no'),
@@ -2190,7 +2196,9 @@ export class ConsiderContractComponent
       
       return Swal.fire(swalOptions);;
     } else {
+      
       return Swal.fire({
+        
         title: this.getTextAlertConfirm(),
         icon: 'warning',
         showCancelButton: true,
@@ -2198,6 +2206,7 @@ export class ConsiderContractComponent
         cancelButtonColor: '#b0bec5',
         confirmButtonText: this.translate.instant('confirm'),
         cancelButtonText: this.translate.instant('contract.status.canceled'),
+        
       });
     }
   }
