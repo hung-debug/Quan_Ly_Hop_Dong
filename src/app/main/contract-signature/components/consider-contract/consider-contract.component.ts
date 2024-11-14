@@ -5114,7 +5114,9 @@ export class ConsiderContractComponent
       orgId: this.orgId,
       otpValueSign: this.otpValueSign,
       contractNoValueSign: this.contractNoValueSign,
-      firstHandler: this.firstHandler
+      firstHandler: this.firstHandler,
+      arrDifPage: this.arrDifPage,
+      difX: this.difX
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -5278,9 +5280,17 @@ export class ConsiderContractComponent
     }
 
     return new Promise((resolve: any, reject: any) => {
-      vgca_sign_issued(JSON.stringify(params), (res: any) => {
+      vgca_sign_issued(JSON.stringify(params), async (res: any) => {
         let response = JSON.parse(res)
         if (response.Status == 0 && response.FileServer) {
+          if(this.firstHandler) {
+            let savefirstHandler = await this.savefirstHandler();
+            if(!savefirstHandler) {
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout("Lỗi lưu ô Số tài liệu hoặc ô Text","",3000)
+              return false;
+            }
+          }
           let data: any = []
           data[0] = {
             "processAt": new Date()

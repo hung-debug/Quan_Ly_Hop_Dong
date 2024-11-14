@@ -93,9 +93,14 @@ export class ConfirmSignOtpComponent implements OnInit {
   }
 
   async savefirstHandler() {
-    let textAndNumberContract = this.data.datas.is_data_object_signature.filter((item: any) => item.type !== 2 && item.type !== 3 && item.type !== 4 && item.valueSign || item.type == 4 && this.data.contractNoValueSign);
+    let textAndNumberContract = this.data.datas.is_data_object_signature.filter((item: any) => item.type !== 2 && item.type !== 3 && item.type !== 4 && item.valueSign && item.action_in_contract == false || item.type == 4 && item.recipient_id && this.data.contractNoValueSign && item.action_in_contract == false)
+    .map((item: any) => ({ ...item })); // Sao chép mỗi phần tử trong mảng
     if(textAndNumberContract.length > 0) {
       textAndNumberContract.forEach((item: any) => {
+        if (this.data.arrDifPage[Number(item.page) - 1] == 'max') {
+          item.coordinate_x -= this.data.difX;
+        }
+
         if(item.type != 2 && item.type != 3 && item.type != 4) {
           item.value = item.valueSign;
         }
