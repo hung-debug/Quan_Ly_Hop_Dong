@@ -1309,7 +1309,7 @@ export class ConsiderContractComponent
       );
       if(this.firstHandler && !this.mobile) {
         this.datas.is_data_object_signature.map((item: any) => {
-          if(item.type != 2 && item.type != 3 && item.type != 4 && item.recipient_id || (item.type == 4 && item.recipient_id)) {
+          if(item.type != 2 && item.type != 3 && item.type != 4 || (item.type == 4 && item.recipient_id)) {
             dataSignature.push(item);
           }
         })
@@ -1987,9 +1987,15 @@ export class ConsiderContractComponent
   }
 
   async savefirstHandler() {
-    let textAndNumberContract = this.datas.is_data_object_signature.filter((item: any) => item.type !== 2 && item.type !== 3 && item.type !== 4 && item.valueSign || item.type == 4 && this.contractNoValueSign);
+    let textAndNumberContract = this.datas.is_data_object_signature
+    .filter((item: any) => item.type !== 2 && item.type !== 3 && item.type !== 4 && item.valueSign && item.action_in_contract == false || item.type == 4 && item.recipient_id && this.contractNoValueSign && item.action_in_contract == false)
+    .map((item: any) => ({ ...item })); // Sao chép mỗi phần tử trong mảng
     if(textAndNumberContract.length > 0) {
       textAndNumberContract.forEach((item: any) => {
+        if (this.arrDifPage[Number(item.page) - 1] == 'max') {
+          item.coordinate_x -= this.difX;
+        }
+
         if(item.type != 2 && item.type != 3 && item.type != 4) {
           item.value = item.valueSign;
         }

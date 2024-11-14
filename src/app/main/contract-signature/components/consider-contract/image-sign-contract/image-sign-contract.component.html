@@ -44,12 +44,15 @@
 
 <!-- ô text -->
 <div *ngIf="sign.sign_unit == 'text' && sign.text_type != 'currency'" [ngStyle]="getStyle(sign)">
+  <div class="skeleton-sign" *ngIf="this.firstHandler && sign.action_in_contract">
+    <span style="text-align: left;">{{sign.valueSign ? sign.valueSign : getText(sign)}}</span>
+  </div>
 
-  <div class="skeleton-sign" (click)="doEditText()" *ngIf="!checkShowEdit && !sign.valueSign">
+  <div class="skeleton-sign" (click)="doEditText()" *ngIf="!checkShowEdit && !sign.valueSign && !(this.firstHandler && sign.action_in_contract)">
     <span style="text-align: left;" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
   </div>
 
-  <div class="skeleton-sign-value" (click)="doEditText()" *ngIf="!checkShowEdit && sign.valueSign">
+  <div class="skeleton-sign-value" (click)="doEditText()" *ngIf="!checkShowEdit && sign.valueSign && !(this.firstHandler && sign.action_in_contract)">
     <span id="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
   </div>
 
@@ -61,12 +64,15 @@
 
 <!-- Ô tiền -->
 <div class="text-sign" *ngIf="sign.sign_unit == 'text' && sign.text_type == 'currency'">
+  <div class="skeleton-sign" *ngIf="this.firstHandler && sign.action_in_contract">
+    <span style="text-align: left;">{{sign.valueSign ? sign.valueSign : getText(sign)}}</span>
+  </div>
 
-  <div class="skeleton-sign" (click)="doEditText()" *ngIf="!checkShowEdit && !sign.valueSign">
+  <div class="skeleton-sign" (click)="doEditText()" *ngIf="!checkShowEdit && !sign.valueSign && !(this.firstHandler && sign.action_in_contract)">
     <span [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
   </div>
 
-  <div class="skeleton-sign-value" (click)="doEditText()" *ngIf="!checkShowEdit && sign.valueSign">
+  <div class="skeleton-sign-value" (click)="doEditText()" *ngIf="!checkShowEdit && sign.valueSign && !(this.firstHandler && sign.action_in_contract)">
     <span id="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
   </div>
   <div *ngIf="checkShowEdit">
@@ -78,20 +84,20 @@
 <!--Số tài liệu-->
 <div *ngIf="sign.sign_unit == 'so_tai_lieu'" [ngStyle]="getStyle(sign)">
   <div class="skeleton-sign" (click)="doEditContractNo()"
-       *ngIf="!contractNoValue && count == 0 && (!sign.valueSign && !sign.value && !contractNoValueSign) && !view">
+       *ngIf="!contractNoValue && count == 0 && (!sign.valueSign && !sign.value && !contractNoValueSign) && !view && !(this.firstHandler && sign.action_in_contract)">
     <span style="text-align: left;" id="input-text" *ngIf="!sign.valueSign">{{getText(sign)}}</span>
   </div>
 
-  <div class="skeleton-sign" *ngIf="view">
+  <div class="skeleton-sign" *ngIf="view || (this.firstHandler && sign.action_in_contract)">
     <span style="text-align: left;" id="input-text" *ngIf="!sign.valueSign">{{getText(sign)}}</span>
   </div>
 
   <div class="skeleton-sign-value" (click)="doEditContractNo()"
-       *ngIf="!contractNoValue && count == 0 && (this.contractNoValueSign || sign.value || sign.valueSign) && !view">
+       *ngIf="!contractNoValue && count == 0 && (this.contractNoValueSign || sign.value || sign.valueSign) && !view && !(this.firstHandler && sign.action_in_contract)">
   <span style="text-align: left;" class="input-text">{{getText(sign)}}</span>
   </div>
 
-  <div class="skeleton-sign" *ngIf="contractNoValue || count > 0 && !view">
+  <div class="skeleton-sign" *ngIf="contractNoValue || count > 0 && !view && !(this.firstHandler && sign.action_in_contract)">
     <input [ngStyle]="getStyle(sign)" type="text" class="input-edit-text" [(ngModel)]="contractNoValueSign"
            (blur)="doneEditContractNoSign(sign, $event)" #inputEditContractNo>
   </div>
