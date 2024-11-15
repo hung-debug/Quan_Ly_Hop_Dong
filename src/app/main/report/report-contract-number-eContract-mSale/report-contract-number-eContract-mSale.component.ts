@@ -65,6 +65,10 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       { label: 'overview.report', value: 'off' },
       { label: 'detail.report', value: 'on' },
     ];
+     // Khởi tạo ngày mặc định là khoảng 1 tháng tính từ ngày hiện tại
+    const currentDate = new Date();
+    const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    this.date = [startDate, currentDate];
   }
   async ngOnInit(): Promise<void> {
     // Tính toán ngày kết thúc (hiện tại)
