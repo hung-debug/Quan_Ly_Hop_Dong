@@ -2120,17 +2120,21 @@ export class ConsiderContractComponent
     };
 
     // @ts-ignore
-    const dialogRef = this.dialog.open(ImageDialogSignComponent, {
-      width: '1024px',
+    let dialogRef = this.dialog.open(ImageDialogSignComponent, {
+      width: '800px',
       backdrop: 'static',
       data: data,
       code: code
-    });
-
-
+    }); 
+  
     dialogRef.afterClosed().subscribe((res: any) => {
+      console.log("res", res)
       if (res) {
-        this.srcMark = res;
+        if(res == 'khongcoanh') {
+          this.srcMark = null;
+        } else {
+          this.srcMark = res;
+        }
 
         this.spinner.show();
 

@@ -210,6 +210,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
 
   uploadImage() {
     if (this.typeImageSignatureRadio == 1) {
+    
       if(!this.imgSignAccountSelect) {
         this.toastService.showErrorHTMLWithTimeout('Bạn chưa chọn ảnh','',3000)
       } else {
@@ -233,13 +234,8 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
         this.dialogRef.close(this.imgSignDrawing);
       }
     }
-    else if (this.typeImageSignatureRadio == 4) {
-     
-        if(this.data.mark) {
-          this.dialogRef.close(this.markSignAccountSelect);
-        } else {
-          this.dialogRef.close(this.imgSignAccountSelect);
-        }
+    else if (this.typeImageSignatureRadio == 4) {        
+          this.dialogRef.close('khongcoanh');    
       }   
   }
 

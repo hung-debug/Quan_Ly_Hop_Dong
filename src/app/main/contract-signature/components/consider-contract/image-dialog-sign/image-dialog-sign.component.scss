@@ -41,6 +41,7 @@
   }
 }
 .checkbox-confirm {
+  margin-top: 40px;
   display: inline-flex;
   align-items: center; /* Canh giữa các phần tử theo chiều dọc */
 }
@@ -195,13 +196,38 @@ input[type="file"] {
   font-size: 18px;
   color: #106DB6;
 }
-
+.text-blank {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #106DB6;
+}
+.noImg{
+  background-color: #fff;
+  min-width: 300px;
+  min-height: 100px;
+}
+.blankImg{
+  background-color: #F3F6FA; 
+  border-radius: 2%;
+  text-align: center;
+  padding: 20px;  
+  min-width: 700px;
+  min-height: 400px;
+  margin: 0 auto;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
 .text-support-extension {
   margin-top: 8px;
   color: #ED1C24;
   font-weight: 500;
 }
 .disabled {
+  background-color: #ccc !important;
+  cursor: not-allowed !important;
+}
+.disable {
   background-color: #ccc !important;
   cursor: not-allowed !important;
 }

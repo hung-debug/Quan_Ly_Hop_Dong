@@ -1,4 +1,6 @@
-<div class="container-fluid" style="min-height: 60vh;max-height: 80vh;">
+<div class="container-fluid"[ngStyle]="{
+  'min-height': this.typeImageSignatureRadio == 4 ? '300px' : '60vh',
+  'max-height': this.typeImageSignatureRadio == 4 ? '300px' : '80vh'}" >
   <div style="text-align: center; font-weight: bold">
     <h3 style="color: #106DB6; font-weight: bold">{{this.datas.title}}</h3>
   </div>
@@ -38,18 +40,18 @@
         <div class="image-sign-acc-2 mt-4 d-flex justify-content-center align-items-center" style="max-height: 600px;">
           <img *ngIf="imgSignAccountSelect" [src]="imgSignAccountSelect" alt="" style="max-height: 600px;">
           <div *ngIf="!datas.imgSignAcc" style="margin-top: 12rem;">
-            Dữ liệu trống!
+          <div class="blankImg">{{'notify_have_not_sign_acc' | translate}}</div>
           </div>
         </div>
       </div>
 
       <!--TH dialog chữ ký có con dấu-->
       <div *ngIf="typeImageSignatureRadio == 1 && this.data.mark">
-        <label class="align-select">Con dấu đã tạo trên hệ thống:</label>
+        <label *ngIf="datas.markSignAcc" class="align-select">Con dấu đã tạo trên hệ thống:</label>
         <div class="image-sign-acc-2 mt-4 d-flex justify-content-center align-items-center" style="max-height: 600px;">
           <img *ngIf="markSignAccountSelect" [src]="markSignAccountSelect" alt="" style="max-height: 600px;">
-          <div *ngIf="!datas.markSignAcc" style="margin-top: 12rem;">
-            Dữ liệu trống!
+          <div *ngIf="!datas.markSignAcc">
+            <div class="blankImg">{{'notify_have_not_sign_acc' | translate}}</div>
           </div>
         </div>
       </div>
@@ -84,18 +86,15 @@
         <signature-pad *ngIf="typeImageSignatureRadio == 3" #signature [options]="signaturePadOptions"
           (drawStart)="drawStart($event)" (drawEnd)="drawComplete($event)"></signature-pad>
       </div>
-      <div *ngIf="typeImageSignatureRadio == 4 "style="display: block;margin: 0 auto;max-height: 500px; max-width: 210px">
-        <div class="upload-image-region d-flex flex-column container-img-file-1">
-        <img src="assets/img/no-img-icon.svg" alt="#" width="400px">
-        
-        <div class="text-support-extension">Không chọn ảnh nào</div></div>
+      <div *ngIf="typeImageSignatureRadio == 4"style="display: block;margin: 0 auto;max-height: 500px; max-width: 210px">
+        <div class="noImg"></div>
       </div>
    
     <div class="image-result">
 
     </div>
     <div class="checkbox-confirm">
-      <input class="checkbox-hide-processing-thread hover-item" type="checkbox" [(ngModel)]="confirmConsider" (change)="updateButtonState()" />
+      <input class="checkbox-hide-processing-thread hover-item" style="min-height: 25px; min-width: 25px;" type="checkbox" [(ngModel)]="confirmConsider" (change)="updateButtonState()" />
       <div class="text" >{{ 'multi.sign.confirm' | translate }}</div>
     </div>
     
@@ -103,7 +102,7 @@
       <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
       <button style="margin-left:50px" *ngIf="(typeImageSignatureRadio != 1 && typeImageSignatureRadio != 4)" class="dx-button-form dx-button-close dx-button-90 mb-4" type="button" (click)="clearImage()">Clear
       </button>
-      <button style="margin-left:50px" *ngIf="(typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc))|| (typeImageSignatureRadio != 1)" [class.disabled]="!confirmConsider" class="button dx-button-form dx-button-close dx-button-90 mb-4" type="button" (click)="uploadImage()">OK
+         <button style="margin-left:50px" *ngIf="(typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc))|| (typeImageSignatureRadio != 1)" [class.disable]="!confirmConsider"  [disabled]="!confirmConsider" class="button dx-button-form dx-button-close dx-button-90 mb-4" type="button" (click)="uploadImage()">OK
       </button>
      
     </div>
