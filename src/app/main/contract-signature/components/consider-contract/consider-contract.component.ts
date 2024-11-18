@@ -796,6 +796,14 @@ export class ConsiderContractComponent
                   })
                 }
               });
+              if(this.firstHandler) {
+                this.isDataObjectSignature.map((item: any) => {
+                  if(item.type != 2 && item.type != 3 && !item.recipient_id) {
+                    fieldRecipientId.push(item);
+                    countNotBoxSign++
+                  }
+                })
+              }
               if ((fieldRecipientId?.length == 0 || countNotBoxSign == 0) && this.recipient.sign_type[0].id !== 7) {
                 const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, image_base64).toPromise();
                 this.pdfSrcMobile = pdfMobile.filePath;
@@ -4567,13 +4575,14 @@ export class ConsiderContractComponent
         (!item.valueSign && !this.otpValueSign) &&
         item.type != 3
     );
-    // if(this.firstHandler) {
-    //   this.isDataObjectSignature.map((item: any) => {
-    //     if(item.type != 2 && item.type != 3 && !item.valueSign) {
-    //       validSign.push(item);
-    //     }
-    //   })
-    // }
+
+    if(this.firstHandler) {
+      this.isDataObjectSignature.map((item: any) => {
+        if(item.type != 2 && item.type != 3 && !item.valueSign && !item.recipient_id) {
+          validSign.push(item);
+        }
+      })
+    }
     this.currentNullValuePages = validSign.map((item: any) => item.page.toString())
     this.currentNullValuePages = [...new Set(this.currentNullValuePages)]
     this.currentNullElement = validSign
