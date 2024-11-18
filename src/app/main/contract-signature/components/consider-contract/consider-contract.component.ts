@@ -1612,12 +1612,21 @@ export class ConsiderContractComponent
                 if (!this.mobile) {
                   for (let item of this.currentNullElement) {
                     if (item.type == 4 || item.type == 1 || item.type == 5) {
-                      this.toastService.showErrorHTMLWithTimeout(
-                        `Vui lòng nhập nội dung ô: ${item?.recipient?.name} (trang ${item.page})`,
-                        '',
-                        3000
-                      );
-                      return;
+                      if(!item.recipient_id) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          `Vui lòng nhập nội dung ô: ${item.name} (trang ${item.page})`,
+                          '',
+                          3000
+                        );
+                        return;
+                      } else {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          `Vui lòng nhập nội dung ô: ${item?.recipient?.name} (trang ${item.page})`,
+                          '',
+                          3000
+                        );
+                        return;
+                      }
                     } else {
                       this.toastService.showErrorHTMLWithTimeout(`Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc (trang ${item.page})`, '', 3000);
                       return;
