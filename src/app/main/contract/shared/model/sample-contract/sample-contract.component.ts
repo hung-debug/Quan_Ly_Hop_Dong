@@ -787,7 +787,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             item['type_unit'] = 'partner'
             item['selected'] = false;
             item['is_disable'] = false;
-            item['type'] = element.type;
+            // item['type'] = element.type;
             item['text_type']='default'
             this.list_sign_name.push(item);
           }
@@ -2012,8 +2012,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             isObjSign.status = data_name.status;
             signElement.setAttribute("status", isObjSign.status);
 
-            isObjSign.type = data_name.type ? data_name.type : (data_name.fields ? data_name?.fields[0]?.type : '');
-            signElement.setAttribute("type", isObjSign.type);
+            // isObjSign.type = data_name.type ? data_name.type : (data_name.fields ? data_name?.fields[0]?.type : '');
+            // signElement.setAttribute("type", isObjSign.type);
 
             isObjSign.email = data_name.email;
             signElement.setAttribute("email", isObjSign.email);

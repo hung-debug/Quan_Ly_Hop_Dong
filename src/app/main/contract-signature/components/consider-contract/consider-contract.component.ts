@@ -796,6 +796,14 @@ export class ConsiderContractComponent
                   })
                 }
               });
+              if(this.firstHandler) {
+                this.isDataObjectSignature.map((item: any) => {
+                  if(item.type != 2 && item.type != 3 && !item.recipient_id) {
+                    fieldRecipientId.push(item);
+                    countNotBoxSign++
+                  }
+                })
+              }
               if ((fieldRecipientId?.length == 0 || countNotBoxSign == 0) && this.recipient.sign_type[0].id !== 7) {
                 const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, image_base64).toPromise();
                 this.pdfSrcMobile = pdfMobile.filePath;
@@ -1307,9 +1315,9 @@ export class ConsiderContractComponent
           item?.recipient?.email === this.currentUser.email &&
           item?.recipient?.role === this.datas?.roleContractReceived
       );
-      if(this.firstHandler) {
+      if(this.firstHandler && !this.mobile) {
         this.datas.is_data_object_signature.map((item: any) => {
-          if(item.type != 2 && item.type != 3 && item.type != 4 && item.recipient_id || (item.type == 4 && item.recipient_id)) {
+          if(item.type != 2 && item.type != 3 && item.type != 4 || (item.type == 4 && item.recipient_id)) {
             dataSignature.push(item);
           }
         })
@@ -1604,12 +1612,21 @@ export class ConsiderContractComponent
                 if (!this.mobile) {
                   for (let item of this.currentNullElement) {
                     if (item.type == 4 || item.type == 1 || item.type == 5) {
-                      this.toastService.showErrorHTMLWithTimeout(
-                        `Vui lòng nhập nội dung ô: ${item?.recipient?.name} (trang ${item.page})`,
-                        '',
-                        3000
-                      );
-                      return;
+                      if(!item.recipient_id) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          `Vui lòng nhập nội dung ô: ${item.name} (trang ${item.page})`,
+                          '',
+                          3000
+                        );
+                        return;
+                      } else {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          `Vui lòng nhập nội dung ô: ${item?.recipient?.name} (trang ${item.page})`,
+                          '',
+                          3000
+                        );
+                        return;
+                      }
                     } else {
                       this.toastService.showErrorHTMLWithTimeout(`Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc (trang ${item.page})`, '', 3000);
                       return;
@@ -1987,9 +2004,15 @@ export class ConsiderContractComponent
   }
 
   async savefirstHandler() {
-    let textAndNumberContract = this.datas.is_data_object_signature.filter((item: any) => item.type !== 2 && item.type !== 3 && item.type !== 4 && item.valueSign || item.type == 4 && this.contractNoValueSign);
+    let textAndNumberContract = this.datas.is_data_object_signature
+    .filter((item: any) => item.type !== 2 && item.type !== 3 && item.type !== 4 && item.valueSign && item.action_in_contract == false || item.type == 4 && item.recipient_id && this.contractNoValueSign && item.action_in_contract == false)
+    .map((item: any) => ({ ...item })); // Sao chép mỗi phần tử trong mảng
     if(textAndNumberContract.length > 0) {
       textAndNumberContract.forEach((item: any) => {
+        if (this.arrDifPage[Number(item.page) - 1] == 'max') {
+          item.coordinate_x -= this.difX;
+        }
+
         if(item.type != 2 && item.type != 3 && item.type != 4) {
           item.value = item.valueSign;
         }
@@ -4561,13 +4584,14 @@ export class ConsiderContractComponent
         (!item.valueSign && !this.otpValueSign) &&
         item.type != 3
     );
-    // if(this.firstHandler) {
-    //   this.isDataObjectSignature.map((item: any) => {
-    //     if(item.type != 2 && item.type != 3 && !item.valueSign) {
-    //       validSign.push(item);
-    //     }
-    //   })
-    // }
+
+    if(this.firstHandler) {
+      this.isDataObjectSignature.map((item: any) => {
+        if(item.type != 2 && item.type != 3 && !item.valueSign && !item.recipient_id) {
+          validSign.push(item);
+        }
+      })
+    }
     this.currentNullValuePages = validSign.map((item: any) => item.page.toString())
     this.currentNullValuePages = [...new Set(this.currentNullValuePages)]
     this.currentNullElement = validSign
@@ -5108,7 +5132,9 @@ export class ConsiderContractComponent
       orgId: this.orgId,
       otpValueSign: this.otpValueSign,
       contractNoValueSign: this.contractNoValueSign,
-      firstHandler: this.firstHandler
+      firstHandler: this.firstHandler,
+      arrDifPage: this.arrDifPage,
+      difX: this.difX
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -5272,9 +5298,17 @@ export class ConsiderContractComponent
     }
 
     return new Promise((resolve: any, reject: any) => {
-      vgca_sign_issued(JSON.stringify(params), (res: any) => {
+      vgca_sign_issued(JSON.stringify(params), async (res: any) => {
         let response = JSON.parse(res)
         if (response.Status == 0 && response.FileServer) {
+          if(this.firstHandler) {
+            let savefirstHandler = await this.savefirstHandler();
+            if(!savefirstHandler) {
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout("Lỗi lưu ô Số tài liệu hoặc ô Text","",3000)
+              return false;
+            }
+          }
           let data: any = []
           data[0] = {
             "processAt": new Date()
