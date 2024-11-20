@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
@@ -105,9 +105,10 @@ export class ReportDetailComponent implements OnInit {
     this.formGroup = this.fbd.group({
       name: this.fbd.control(''),
       date: this.fbd.control(''),
+      completionDate:this.fbd.control(''),
       contractStatus: this.fbd.control(''),
     });
-
+  
     this.optionsStatus = [
       { id: 20, name: 'Đang thực hiện' },
       { id: 33, name: 'Sắp hết hạn' },
@@ -143,7 +144,7 @@ export class ReportDetailComponent implements OnInit {
         { id: 30, name: 'Complete' },
       ];
     }
-
+ 
     //lay id user
     this.organization_id_user_login = this.userService.getAuthCurrentUser().organizationId;
     //mac dinh se search theo ma to chuc minh
@@ -159,6 +160,10 @@ export class ReportDetailComponent implements OnInit {
         (p: any) => p.data == this.organization_id
       );
     });
+    // this.formGroup.get(this.contractStatus)?.valueChanges.subscribe((optionsStatus: any) => {
+    //   if (optionsStatus !== 30) {
+    //       this.formGroup.get(this.completionDate)?.setValue(null); // Reset completionDate if status is not 'Hoàn thành'
+    //   }});
   }
 
   // changeDateRange(option: string) {
@@ -197,9 +202,27 @@ export class ReportDetailComponent implements OnInit {
       this.toastService.showErrorHTMLWithTimeout('date.full.valid','',3000);
       return false;
     }
+    // if(!this.completionDate || (this.completionDate && this.completionDate.length < 2)) {
+    //   this.toastService.showErrorHTMLWithTimeout('date.full.valid','',3000);
+    //   return false;
+    // }
     return true;
+   
+  
   }
-
+  onStatusChange() {
+    if (this.contractStatus !== 30) { // Nếu trạng thái khác "Hoàn thành"
+      this.completionDate = null;
+    }
+    if (this.completionDate !==null) { 
+      this.contractStatus  == 30;
+    }
+  }
+  onDateChange() {
+    if (this.completionDate !==null) { 
+      this.contractStatus  == 30;
+    }
+  }
   setColForTable() {
     this.cols = [
       {
@@ -311,7 +334,12 @@ export class ReportDetailComponent implements OnInit {
       from_date = this.datepipe.transform(this.date[0],'yyyy-MM-dd');
       to_date = this.datepipe.transform(this.date[1],'yyyy-MM-dd');
     }
-
+    let completedFromDate :any='';
+    let completedToDate :any ='';
+    if(this.completionDate && this.completionDate.length > 0) {
+      completedFromDate  = this.datepipe.transform(this.completionDate[0],'yyyy-MM-dd');
+      completedToDate  = this.datepipe.transform(this.completionDate[1],'yyyy-MM-dd');
+    }
     let contractStatus = this.contractStatus;
 
     if(!contractStatus) 
@@ -321,12 +349,13 @@ export class ReportDetailComponent implements OnInit {
 
     if(!to_date)
       to_date = from_date
-    
+    if(!completedToDate)
+      completedToDate=completedFromDate
     let payload = ""
     if(this.contractInfo){
        payload ='&textSearch=' + this.contractInfo.trim()
     }
-    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData + payload + `&pageNumber=`+this.page+`&pageSize=`+this.row;
+    let params = '?from_date='+from_date+'&to_date='+to_date+'&completedFromDate='+completedFromDate+'&completedToDate='+completedToDate+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData + payload + `&pageNumber=`+this.page+`&pageSize=`+this.row;
     this.reportService.export('rp-detail',idOrg,params, flag).subscribe((response: any) => {
         this.spinner.hide();
         if(flag) {
