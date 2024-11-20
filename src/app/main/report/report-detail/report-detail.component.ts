@@ -48,7 +48,7 @@ export class ReportDetailComponent implements OnInit {
 
   params: any;
   date: any;
-  completionDate: Date;
+  completionDate: any;
   optionsStatus: any;
   formGroup: any;
   contractStatus: number = -1;
