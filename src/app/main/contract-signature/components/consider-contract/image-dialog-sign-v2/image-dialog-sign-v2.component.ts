@@ -27,12 +27,13 @@ export class ImageDialogSignV2Component implements OnInit, AfterViewInit {
   imgSignDrawing: any;
   optionsFileSignAccount: any;
   mobile: boolean = false;
-
+  confirmConsider: boolean = true;
   public signaturePadOptions: NgSignaturePadOptions = { // passed through to szimek/signature_pad constructor
     minWidth: 1.5,
     maxWidth: 1.5,
     canvasWidth: 950,
-    canvasHeight: 500
+    canvasHeight: 500,
+    penColor: '#0041C4'
   };
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,

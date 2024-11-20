@@ -35,7 +35,8 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     minWidth: 1.5,
     maxWidth: 1.5,
     canvasWidth: 500,
-    canvasHeight: 380
+    canvasHeight: 380,
+    penColor: '#0041C4'
   };
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -64,8 +65,8 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     this.typeImageSignatureRadio = 1;
 
     this.datas = this.data;
-
     this.initListSignatureAccountUser();
+    console.log("this.datas.imgSignAcc", this.datas.imgSignAcc)
     this.imgSignAccountSelect = 'data:image/png;base64,' + this.datas.imgSignAcc;
     this.markSignAccountSelect = 'data:image/png;base64,' + this.datas.markSignAcc;
     if (!this.datas.imgSignAcc && !this.datas.markSignAcc) {
@@ -120,12 +121,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
       }
     }
   }
-  updateButtonState() {
-    // Cập nhật trạng thái của checkbox và ảnh hưởng đến trạng thái của nút OK
-    if (!this.confirmConsider) {
-      // Nếu checkbox không được chọn, bạn có thể thực hiện hành động nào đó ở đây nếu cần thiết
-    }
-  }
+
   handleUpload(event: any) {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -215,9 +211,9 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
         this.toastService.showErrorHTMLWithTimeout('Bạn chưa chọn ảnh','',3000)
       } else {
         if(this.data.mark) {
-          this.dialogRef.close(this.markSignAccountSelect);
+          this.dialogRef.close({value: this.markSignAccountSelect, type: 1});
         } else {
-          this.dialogRef.close(this.imgSignAccountSelect);
+          this.dialogRef.close({value: this.imgSignAccountSelect, type: 1});
         }
       }
 
@@ -225,18 +221,17 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
       if(!this.imgSignPCSelect) {
         this.toastService.showErrorHTMLWithTimeout('not.photo','',3000)
       } else {
-        this.dialogRef.close(this.imgSignPCSelect);
+        this.dialogRef.close({value: this.imgSignPCSelect, type: 2});
       }
     } else if (this.typeImageSignatureRadio == 3) {
       if(!this.imgSignDrawing) {
         this.toastService.showErrorHTMLWithTimeout('not.draw.sign','',3000)
       } else {
-        this.dialogRef.close(this.imgSignDrawing);
+        this.dialogRef.close({value: this.imgSignDrawing, type: 3});
       }
-    }
-    else if (this.typeImageSignatureRadio == 4) {        
-          this.dialogRef.close('khongcoanh');    
-      }   
+    } else if (this.typeImageSignatureRadio == 4) {        
+      this.dialogRef.close({value: this.markSignAccountSelect, type: 4});
+    }   
   }
 
   clearImage() {

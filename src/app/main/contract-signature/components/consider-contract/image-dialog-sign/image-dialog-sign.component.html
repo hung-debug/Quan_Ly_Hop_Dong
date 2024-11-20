@@ -1,55 +1,53 @@
-<div class="container-fluid"[ngStyle]="{
-  'min-height': this.typeImageSignatureRadio == 4 ? '300px' : '60vh',
-  'max-height': this.typeImageSignatureRadio == 4 ? '300px' : '80vh'}" >
-  <div style="text-align: center; font-weight: bold">
-    <h3 style="color: #106DB6; font-weight: bold">{{this.datas.title}}</h3>
+<div class="container-fluid color-dialog-sign"[ngClass]="{
+  'type-image-4': typeImageSignatureRadio == 4,
+  'default-image': typeImageSignatureRadio != 4 }">
+  <div class="content-title-dialog-sign">
+    <div class="title-dialog-sign">{{this.datas.title}}</div>
   </div>
+  <div class="text-select margin-top-20px">{{'text.select' | translate}}</div>
+
   <div class="content">
-    <div class="name-item">
-      <div class="confirm-radio d-flex justify-content-between mx-4">
-        <div *ngIf="!this.data.mark" class="radio-confirm">
-          <input id="radio-img-draw" type="radio" name='choose-radio-signature' [value]="3"
-            [(ngModel)]='typeImageSignatureRadio' (change)="t(3)">
-          <label for="radio-img-draw" class="ms-2">Vẽ tay chữ ký</label>
-        </div>
-        <div class="radio-confirm">
-          <input id="radio-file-account" type="radio" name="choose-radio-signature" [value]="4"
-            [(ngModel)]='typeImageSignatureRadio' (change)="t(4)">
-          <label for="radio-file-account" class="ms-2">Không chọn ảnh</label>
-        </div>
-        <div class="radio-confirm">
-          <input id="radio-file-com" type="radio" name='choose-radio-signature' [value]="2"
-            [(ngModel)]='typeImageSignatureRadio' (change)="t(2)">
-          <label for="radio-file-com" class="ms-2">Tải ảnh lên</label>
-        </div>
-        <div class="radio-confirm">
-          <input id="radio-file-account" type="radio" name="choose-radio-signature" [value]="1"
-            [(ngModel)]='typeImageSignatureRadio' (change)="t(1)">
-          <label for="radio-file-account" class="ms-2">Ảnh từ tài khoản</label>
-        </div>
-      
+    <div class="margin-top-20px d-flex justify-content-between">
+      <div *ngIf="!this.data.mark" class="radio-confirm d-flex">
+        <input id="radio-img-draw" type="radio" name='choose-radio-signature' [value]="3"
+          [(ngModel)]='typeImageSignatureRadio' (change)="t(3)">
+        <label class="lable-radio" for="radio-img-draw">Vẽ tay chữ ký</label>
+      </div>
+
+      <div class="radio-confirm d-flex">
+        <input id="radio-file-account" type="radio" name="choose-radio-signature" [value]="4"
+          [(ngModel)]='typeImageSignatureRadio' (change)="t(4)">
+        <label class="lable-radio" for="radio-file-account">Không chọn ảnh</label>
+      </div>
+
+      <div class="radio-confirm d-flex">
+        <input id="radio-file-com" type="radio" name='choose-radio-signature' [value]="2"
+          [(ngModel)]='typeImageSignatureRadio' (change)="t(2)">
+        <label class="lable-radio" for="radio-file-com">Tải ảnh lên</label>
+      </div>
+
+      <div class="radio-confirm d-flex">
+        <input id="radio-file-account" type="radio" name="choose-radio-signature" [value]="1"
+          [(ngModel)]='typeImageSignatureRadio' (change)="t(1)">
+        <label class="lable-radio" for="radio-file-account">Ảnh từ tài khoản</label>
       </div>
     </div>
 
-    <div class="image-sign" style="min-height: 20vh">
-      
-      
+    <div class="image-sign margin-top-20px">
       <!--TH dialog chữ ký ảnh-->
       <div *ngIf="typeImageSignatureRadio == 1 && !this.data.mark">
-<!--        <label class="align-select">Chữ ký đã tạo trên hệ thống:</label>-->
-        <div class="image-sign-acc-2 mt-4 d-flex justify-content-center align-items-center" style="max-height: 600px;">
-          <img *ngIf="imgSignAccountSelect" [src]="imgSignAccountSelect" alt="" style="max-height: 600px;">
-          <div *ngIf="!datas.imgSignAcc" style="margin-top: 12rem;">
-          <div class="blankImg">{{'notify_have_not_sign_acc' | translate}}</div>
+        <div class="dialog-signature">
+          <img *ngIf="imgSignAccountSelect" [src]="imgSignAccountSelect" alt="" style="height: 100%;">
+          <div *ngIf="!datas.imgSignAcc">
+            <div class="blankImg">{{'notify_have_not_sign_acc' | translate}}</div>
           </div>
         </div>
       </div>
 
       <!--TH dialog chữ ký có con dấu-->
       <div *ngIf="typeImageSignatureRadio == 1 && this.data.mark">
-        <label *ngIf="datas.markSignAcc" class="align-select">Con dấu đã tạo trên hệ thống:</label>
-        <div class="image-sign-acc-2 mt-4 d-flex justify-content-center align-items-center" style="max-height: 600px;">
-          <img *ngIf="markSignAccountSelect" [src]="markSignAccountSelect" alt="" style="max-height: 600px;">
+        <div class="dialog-signature">
+          <img *ngIf="markSignAccountSelect" [src]="markSignAccountSelect" alt="" style="height: 100%;">
           <div *ngIf="!datas.markSignAcc">
             <div class="blankImg">{{'notify_have_not_sign_acc' | translate}}</div>
           </div>
@@ -57,54 +55,43 @@
       </div>
       
       <div *ngIf="typeImageSignatureRadio == 2">
-        <div class="form-group">
-          <div class="select-file-contract" [hidden]="imgSignPCSelect">
-            <div class="file-approve">
-              <div class="label_item">File đính kèm:</div>
-              <input id="attachFileSignature" type="file" accept="image/*"
-                (change)="fileChangedAttach($event)" style="display: none;">
-              <div class="select-contract container-img-file" (click)="addFileAttach()">
-                <div class="upload-image-region d-flex flex-column container-img-file-1">
-                  <img src="assets/img/img-icon.svg" alt="#" width="50px">
-                  <div class="text-choose-file">Chọn file ảnh chữ ký từ máy tính của bạn.</div>
-                  <div class="text-support-extension">Hỗ trợ định dạng PNG, JPG, JPGE</div>
-                </div>
-             </div>
+        <div class="dialog-signature" [hidden]="imgSignPCSelect" (click)="addFileAttach()">
+          <input id="attachFileSignature" type="file" accept="image/*"
+            (change)="fileChangedAttach($event)" style="display: none;">
+          <div class="select-contract container-img-file">
+            <div class="upload-image-region d-flex flex-column container-img-file-1">
+              <div class="upload-photo" type="button">Tải ảnh lên</div>
+              <div class="text-support-extension">Hỗ trợ file PNG, JPG, JPGE</div>
             </div>
           </div>
         </div>
-        <div class="image-sign-acc-2 mt-4" style="max-height: 300px;">
-          <img *ngIf="imgSignPCSelect && !this.mobile" (click)="addFileAttach()" [src]="imgSignPCSelect" alt=""
+
+        <div class="dialog-signature" *ngIf="imgSignPCSelect" (click)="addFileAttach()">
+          <img *ngIf="!this.mobile" [src]="imgSignPCSelect" alt=""
             style="display: block;margin: 0 auto;max-height: 300px;">
 
-          <img *ngIf="imgSignPCSelect && this.mobile" (click)="addFileAttach()" [src]="imgSignPCSelect" alt=""
-            style="display: block;margin: 0 auto;max-height: 600px; max-width: 210px">
+          <img *ngIf="this.mobile" [src]="imgSignPCSelect" alt=""
+            style="display: block;margin: 0 auto;max-height: 600px; max-width: 210px;">
         </div>
       </div>
 
-      <div *ngIf="typeImageSignatureRadio == 3">
-        <signature-pad *ngIf="typeImageSignatureRadio == 3" #signature [options]="signaturePadOptions"
-          (drawStart)="drawStart($event)" (drawEnd)="drawComplete($event)"></signature-pad>
-      </div>
-      <div *ngIf="typeImageSignatureRadio == 4"style="display: block;margin: 0 auto;max-height: 500px; max-width: 210px">
-        <div class="noImg"></div>
-      </div>
-   
-    <div class="image-result">
-
+      <div class="signature-container" *ngIf="typeImageSignatureRadio == 3">
+        <signature-pad class="signature-pad" *ngIf="typeImageSignatureRadio == 3" #signature [options]="signaturePadOptions"
+        (drawStart)="drawStart($event)" (drawEnd)="drawComplete($event)"></signature-pad>
+      </div>   
     </div>
+
     <div class="checkbox-confirm">
-      <input class="checkbox-hide-processing-thread hover-item" style="min-height: 25px; min-width: 25px;" type="checkbox" [(ngModel)]="confirmConsider" (change)="updateButtonState()" />
-      <div class="text" >{{ 'multi.sign.confirm' | translate }}</div>
+      <input class="checkbox-hide-processing-thread hover-item" type="checkbox" [(ngModel)]="confirmConsider"/>
+      <div class="text" style="text-align: justify;">{{ 'multi.sign.confirm' | translate }}</div>
     </div>
     
-    <div class="select-option">
-      <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
-      <button style="margin-left:50px" *ngIf="(typeImageSignatureRadio != 1 && typeImageSignatureRadio != 4)" class="dx-button-form dx-button-close dx-button-90 mb-4" type="button" (click)="clearImage()">Clear
-      </button>
-         <button style="margin-left:50px" *ngIf="(typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc))|| (typeImageSignatureRadio != 1)" [class.disable]="!confirmConsider"  [disabled]="!confirmConsider" class="button dx-button-form dx-button-close dx-button-90 mb-4" type="button" (click)="uploadImage()">OK
-      </button>
-     
+    <div class="select-option margin-top-20px">
+      <button class="button-cancel" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
+      <button class="button-clear" style="margin-left:20px" *ngIf="(typeImageSignatureRadio != 1 && typeImageSignatureRadio != 4)" type="button" (click)="clearImage()">Clear</button>     
+      <button class="button-confirm-active" style="margin-left:20px" *ngIf="confirmConsider && ((typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc)) || (typeImageSignatureRadio != 1))" type="button" (click)="uploadImage()">{{ 'confirm' | translate }}</button>
+
+      <button class="button-confirm-disable" style="margin-left:20px" *ngIf="!confirmConsider && ((typeImageSignatureRadio == 1 && (datas.imgSignAcc || datas.markSignAcc))|| (typeImageSignatureRadio != 1))" type="button">{{ 'confirm' | translate }}</button>
     </div>
   </div>
 

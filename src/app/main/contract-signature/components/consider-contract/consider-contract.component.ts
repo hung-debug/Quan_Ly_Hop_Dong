@@ -1307,7 +1307,7 @@ export class ConsiderContractComponent
           item?.recipient?.email === this.currentUser.email &&
           item?.recipient?.role === this.datas?.roleContractReceived
       );
-      if(this.firstHandler) {
+      if(this.firstHandler && !this.mobile) {
         this.datas.is_data_object_signature.map((item: any) => {
           if(item.type != 2 && item.type != 3 && item.type != 4 && item.recipient_id || (item.type == 4 && item.recipient_id)) {
             dataSignature.push(item);
@@ -1620,6 +1620,7 @@ export class ConsiderContractComponent
                     this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 3000);
                     return;
                   } else {
+                    //ttttt
                     this.imageDialogSignOpen(e, haveSignImage);
                     return;
                   }
@@ -2015,6 +2016,7 @@ export class ConsiderContractComponent
   }
 
   imageDialogSignOpen(e: any, haveSignImage: boolean) {
+    ///
     const data = {
       title: 'KÝ TÀI LIỆU',
       is_content: 'forward_contract',
@@ -2029,11 +2031,16 @@ export class ConsiderContractComponent
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(async (result: any) => {
-
-      let is_data = result;
-      this.otpValueSign = result
-      this.datas.is_data_object_signature.valueSign = result;
-      if (result) {
+      let is_data;
+      if(result.type != 4) {
+        is_data = result.value;
+        this.otpValueSign = result.value
+        this.datas.is_data_object_signature.valueSign = result.value;  
+      }
+      // let is_data = result;
+      // this.otpValueSign = result
+      // this.datas.is_data_object_signature.valueSign = result;
+      if (result.value) {
         if (
           e &&
           e == 1 &&
@@ -2121,7 +2128,7 @@ export class ConsiderContractComponent
 
     // @ts-ignore
     let dialogRef = this.dialog.open(ImageDialogSignComponent, {
-      width: '800px',
+      width: '580px',
       backdrop: 'static',
       data: data,
       code: code
@@ -2130,10 +2137,10 @@ export class ConsiderContractComponent
     dialogRef.afterClosed().subscribe((res: any) => {
       console.log("res", res)
       if (res) {
-        if(res == 'khongcoanh') {
-          this.srcMark = null;
+        if(res.type != 4) {
+          this.srcMark = res.value;
         } else {
-          this.srcMark = res;
+          this.markImage = false;
         }
 
         this.spinner.show();
@@ -2177,9 +2184,7 @@ export class ConsiderContractComponent
        
       }
       return Promise.resolve({ value: 'yes', isConfirmed: true });
-      console.log("minh 1")
-       let swalOptions: any
-       = {
+      let swalOptions: any = {
         title: this.getTextAlertConfirm(),
         icon: 'warning',
         showCancelButton: true,
@@ -2189,8 +2194,8 @@ export class ConsiderContractComponent
         cancelButtonText: this.translate.instant('contract.status.canceled'),
         inputLabel: this.translate.instant('stamp.contract.questions'),
       };
-     
-      if (this.isCheck === 3) { console.log("check3")
+  
+      if (this.isCheck === 3) {
         swalOptions.input = 'select';
         swalOptions.inputOptions = {
           no: this.translate.instant('no'),

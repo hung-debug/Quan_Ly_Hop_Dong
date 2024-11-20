@@ -1437,6 +1437,7 @@ export class ContractSignatureComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(async (result: any) => {
+      console.log("result", result)
       //result = 1 tương ứng với nhấn nút đồng ý và ký
       if (result?.agree == 1) {
         //Mã số thuế tại các tài liệu cần giống nhau
@@ -1461,22 +1462,25 @@ export class ContractSignatureComponent implements OnInit {
           dialogConfig.width = '1024px';
           dialogConfig.hasBackdrop = true;
           dialogConfig.data = data;
-
+          console.log("dialogConfig", dialogConfig)
           const dialogRef = this.dialog.open(
             ImageDialogSignComponent,
             dialogConfig
           );
-
+          //console.log("dialogRef", dialogRef)
           dialogRef.afterClosed().subscribe((res: any) => {
             if (res) {
-              this.srcMark = res;
-              this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
-              // this.spinner.hide();
+              if(res.type != 4) {
+                this.srcMark = res.value;
+                this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
+                // this.spinner.hide();
+              } else {
+                console.log("dddddđ")
+                this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
+              }
             }
 
           });
-        } else {
-          this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
         }
       }
     });

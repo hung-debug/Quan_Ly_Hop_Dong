@@ -135,7 +135,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     };
 
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '1024px';
+    dialogConfig.width = '580px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
     // const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
