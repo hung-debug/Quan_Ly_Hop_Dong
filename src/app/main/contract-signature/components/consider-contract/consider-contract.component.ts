@@ -2135,7 +2135,6 @@ export class ConsiderContractComponent
     }); 
   
     dialogRef.afterClosed().subscribe((res: any) => {
-      console.log("res", res)
       if (res) {
         if(res.type != 4) {
           this.srcMark = res.value;
@@ -2204,8 +2203,9 @@ export class ConsiderContractComponent
       }
       
       return Swal.fire(swalOptions);;
+    } else if ((code == 'digital' && this.mobile && this.recipient.sign_type.some((item: any) => item.id !== 7) && this.isContainSignField)) {
+      return Promise.resolve({isConfirmed: true, isDenied: false, isDismissed: false, value: true});
     } else {
-      
       return Swal.fire({
         
         title: this.getTextAlertConfirm(),
@@ -2229,6 +2229,7 @@ export class ConsiderContractComponent
   }
 
   getTextAlertConfirm() {
+    console.log("zzzzzzzzzzzzzzzzzzz")
     if (this.datas.roleContractReceived == 2) {
       if (this.confirmConsider == 1) {
         return 'Bạn có chắc chắn xác nhận tài liệu này?';

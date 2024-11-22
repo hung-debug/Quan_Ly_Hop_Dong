@@ -3,7 +3,6 @@ import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@a
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {ConfirmSignOtpComponent} from "../confirm-sign-otp/confirm-sign-otp.component";
 
-import {ImageDialogSignComponent} from "../image-dialog-sign/image-dialog-sign.component";
 import {PkiDialogSignComponent} from "../pki-dialog-sign/pki-dialog-sign.component";
 import {HsmDialogSignComponent} from "../hsm-dialog-sign/hsm-dialog-sign.component";
 import { ToastService } from 'src/app/service/toast.service';
@@ -138,7 +137,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     dialogConfig.width = '580px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
-    // const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
+
     const dialogRef = this.dialog.open(ImageDialogSignV2Component, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {

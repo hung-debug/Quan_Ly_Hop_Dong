@@ -1459,7 +1459,7 @@ export class ContractSignatureComponent implements OnInit {
           };
 
           const dialogConfig = new MatDialogConfig();
-          dialogConfig.width = '1024px';
+          dialogConfig.width = '580px';
           dialogConfig.hasBackdrop = true;
           dialogConfig.data = data;
           console.log("dialogConfig", dialogConfig)
