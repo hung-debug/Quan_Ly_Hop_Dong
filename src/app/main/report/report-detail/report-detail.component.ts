@@ -343,10 +343,6 @@ export class ReportDetailComponent implements OnInit {
       completed_to_date  = this.datepipe.transform(this.completionDate[1],'yyyy-MM-dd');
     }
     let contractStatus = this.contractStatus;
-    if(from_date<completed_from_date&&to_date<completed_to_date)
-      this.completionDate=null;
-    if(!contractStatus) 
-      contractStatus = -1;
 
     this.clickTable = true;
 

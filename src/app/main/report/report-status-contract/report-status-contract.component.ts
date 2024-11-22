@@ -216,7 +216,17 @@ completionDate: any;
       .fill(0)
       .map((x, i) => i + 1);
   }
-  
+  onStatusChange() {
+    if (this.contractStatus !== 30) { // Nếu trạng thái khác "Hoàn thành"
+      this.completionDate = null;
+    }
+  }
+  onDateChange() {
+    if (this.completionDate && this.completionDate.length > 0) {
+      this.contractStatus = 30;
+    } else
+    this.contractStatus =-1
+  }
   //Export ra file excel
   maxParticipants: number = 0;
   export(flag: boolean) {
@@ -239,7 +249,12 @@ completionDate: any;
       from_date = this.datepipe.transform(this.date[0], 'yyyy-MM-dd');
       to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
     }
-
+    let completed_from_date :any='';
+    let completed_to_date :any ='';
+    if(this.completionDate && this.completionDate.length > 0) {
+      completed_from_date  = this.datepipe.transform(this.completionDate[0],'yyyy-MM-dd');
+      completed_to_date  = this.datepipe.transform(this.completionDate[1],'yyyy-MM-dd');
+    }
     let contractStatus = this.contractStatus;
 
     if (!contractStatus) contractStatus = -1;
@@ -247,7 +262,8 @@ completionDate: any;
     this.type_id = this.type_id ? this.type_id : '';
 
     if (!to_date) to_date = from_date;
-    
+    if(!completed_to_date)
+      completed_to_date=completed_from_date
     let payload = ""
     if(this.contractInfo){
        payload ='&textSearch=' + this.contractInfo.trim()
@@ -257,7 +273,7 @@ completionDate: any;
       '?from_date=' +
       from_date +
       '&to_date=' +
-      to_date +
+      to_date +'&completed_from_date='+completed_from_date+'&completed_to_date='+completed_to_date+
       '&status=' +
       contractStatus +
       '&fetchChildData=' +
