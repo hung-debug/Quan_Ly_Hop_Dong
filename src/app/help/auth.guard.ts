@@ -119,13 +119,11 @@ export class AuthGuard implements CanActivate {
           }
           return false;
       } else return true;
-    } else if (!state.url.includes("handle/") && environment.flag == 'KD') {
-      console.log("localStorage.getItem('currentUser')",localStorage.getItem('currentUser'));
+    } else if ((!state.url.includes("handle/") && environment.flag == 'KD') || environment.flag == 'NB') {
       if (localStorage.getItem('currentUser') != null) {
         //
         return true;
       } else {
-        console.log("tttttttttt")
         this.router.navigate(['/login']);
         return false;
       }
