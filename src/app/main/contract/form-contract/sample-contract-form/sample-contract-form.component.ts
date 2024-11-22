@@ -800,7 +800,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             item['type_unit'] = 'partner'
             item['selected'] = false;
             item['is_disable'] = false;
-            item['type'] = element.type;
+            //item['type'] = element.type;
             // item['id'] = item.id;
             this.list_sign_name.push(item);
           }
@@ -1987,8 +1987,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             isObjSign.status = data_name.status;
             signElement.setAttribute("status", isObjSign.status);
 
-            isObjSign.type = data_name.type;
-            signElement.setAttribute("type", isObjSign.type);
+            // isObjSign.type = data_name.type;
+            // signElement.setAttribute("type", isObjSign.type);
 
             isObjSign.email = data_name.email;
             signElement.setAttribute("email", isObjSign.email);
