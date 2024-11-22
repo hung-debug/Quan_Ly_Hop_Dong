@@ -20,6 +20,7 @@ import { InputTreeService } from 'src/app/service/input-tree.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Table } from 'primeng/table';
 import * as moment from 'moment';
 
@@ -83,7 +84,7 @@ completionDate: any;
     private appService: AppService,
     private userService: UserService,
     private inputTreeService: InputTreeService,
-
+    private fbd: FormBuilder,
     private datepipe: DatePipe,
     private reportService: ReportService,
     private toastService: ToastService,
@@ -105,7 +106,12 @@ completionDate: any;
     this.appService.setSubTitle('report.processing.status.contract.full');
 
     this.getTypeListContract();
-
+    this.formGroup = this.fbd.group({
+      name: this.fbd.control(''),
+      date: this.fbd.control(''),
+      completionDate:this.fbd.control(''),
+      contractStatus: this.fbd.control(''),
+    });
     this.optionsStatus = [
       { id: 20, name: 'Đang thực hiện' },
       { id: 33, name: 'Sắp hết hạn' },
@@ -286,7 +292,7 @@ completionDate: any;
         '?from_date=' +
         from_date +
         '&to_date=' +
-        to_date +
+        to_date +'&completed_from_date='+completed_from_date+'&completed_to_date='+completed_to_date+
         '&status=' +
         contractStatus + payload +`&pageNumber=`+this.page+`&pageSize=`+this.row;
     }
@@ -389,6 +395,7 @@ completionDate: any;
           });
 
           this.list = listFirst.concat(listSecond);
+          console.log("list", this.list)
           this.totalRecords = response.TotalElements;
           this.numberPage = response.TotalPages;
         }
