@@ -1467,7 +1467,6 @@ export class ContractSignatureComponent implements OnInit {
             ImageDialogSignComponent,
             dialogConfig
           );
-          //console.log("dialogRef", dialogRef)
           dialogRef.afterClosed().subscribe((res: any) => {
             if (res) {
               if(res.type != 4) {
@@ -1475,7 +1474,7 @@ export class ContractSignatureComponent implements OnInit {
                 this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
                 // this.spinner.hide();
               } else {
-                console.log("dddddđ")
+                this.srcMark=''
                 this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
               }
             }
