@@ -110,6 +110,7 @@ export class ReportDetailComponent implements OnInit {
     });
   
     this.optionsStatus = [
+      { id: -1, name: 'Tất cả' },
       { id: 20, name: 'Đang thực hiện' },
       { id: 33, name: 'Sắp hết hạn' },
       { id: 2, name:'Quá hạn' },
@@ -136,6 +137,7 @@ export class ReportDetailComponent implements OnInit {
       this.lang = 'en';
 
       this.optionsStatus = [
+        { id: -1, name: 'All' },
         { id: 20, name: 'Processing' },
         { id: 33, name: 'Expiration soon' },
         { id: 2, name:'Overdue' },
@@ -218,8 +220,10 @@ export class ReportDetailComponent implements OnInit {
   onDateChange() {
     if (this.completionDate && this.completionDate.length > 0) {
       this.contractStatus = 30;
-    }
+    } else
+    this.contractStatus =-1
   }
+  
   setColForTable() {
     this.cols = [
       {
@@ -331,6 +335,7 @@ export class ReportDetailComponent implements OnInit {
       from_date = this.datepipe.transform(this.date[0],'yyyy-MM-dd');
       to_date = this.datepipe.transform(this.date[1],'yyyy-MM-dd');
     }
+    
     let completed_from_date :any='';
     let completed_to_date :any ='';
     if(this.completionDate && this.completionDate.length > 0) {
@@ -338,7 +343,8 @@ export class ReportDetailComponent implements OnInit {
       completed_to_date  = this.datepipe.transform(this.completionDate[1],'yyyy-MM-dd');
     }
     let contractStatus = this.contractStatus;
-
+    if(from_date<completed_from_date&&to_date<completed_to_date)
+      this.completionDate=null;
     if(!contractStatus) 
       contractStatus = -1;
 
