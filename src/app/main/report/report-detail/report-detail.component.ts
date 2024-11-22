@@ -214,13 +214,10 @@ export class ReportDetailComponent implements OnInit {
     if (this.contractStatus !== 30) { // Nếu trạng thái khác "Hoàn thành"
       this.completionDate = null;
     }
-    if (this.completionDate !==null) { 
-      this.contractStatus  == 30;
-    }
   }
   onDateChange() {
-    if (this.completionDate !==null) { 
-      this.contractStatus  == 30;
+    if (this.completionDate && this.completionDate.length > 0) {
+      this.contractStatus = 30;
     }
   }
   setColForTable() {
@@ -334,11 +331,11 @@ export class ReportDetailComponent implements OnInit {
       from_date = this.datepipe.transform(this.date[0],'yyyy-MM-dd');
       to_date = this.datepipe.transform(this.date[1],'yyyy-MM-dd');
     }
-    let completedFromDate :any='';
-    let completedToDate :any ='';
+    let completed_from_date :any='';
+    let completed_to_date :any ='';
     if(this.completionDate && this.completionDate.length > 0) {
-      completedFromDate  = this.datepipe.transform(this.completionDate[0],'yyyy-MM-dd');
-      completedToDate  = this.datepipe.transform(this.completionDate[1],'yyyy-MM-dd');
+      completed_from_date  = this.datepipe.transform(this.completionDate[0],'yyyy-MM-dd');
+      completed_to_date  = this.datepipe.transform(this.completionDate[1],'yyyy-MM-dd');
     }
     let contractStatus = this.contractStatus;
 
@@ -349,13 +346,13 @@ export class ReportDetailComponent implements OnInit {
 
     if(!to_date)
       to_date = from_date
-    if(!completedToDate)
-      completedToDate=completedFromDate
+    if(!completed_to_date)
+      completed_to_date=completed_from_date
     let payload = ""
     if(this.contractInfo){
        payload ='&textSearch=' + this.contractInfo.trim()
     }
-    let params = '?from_date='+from_date+'&to_date='+to_date+'&completedFromDate='+completedFromDate+'&completedToDate='+completedToDate+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData + payload + `&pageNumber=`+this.page+`&pageSize=`+this.row;
+    let params = '?from_date='+from_date+'&to_date='+to_date+'&completed_from_date='+completed_from_date+'&completed_to_date='+completed_to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData + payload + `&pageNumber=`+this.page+`&pageSize=`+this.row;
     this.reportService.export('rp-detail',idOrg,params, flag).subscribe((response: any) => {
         this.spinner.hide();
         if(flag) {
