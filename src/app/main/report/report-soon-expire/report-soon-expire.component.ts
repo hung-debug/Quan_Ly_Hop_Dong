@@ -66,11 +66,6 @@ export class ReportSoonExpireComponent implements OnInit {
     private contractService: ContractService,
     private contractTypeService: ContractTypeService
   ) {
-      // Khởi tạo ngày mặc định là khoảng 1 tháng tính từ ngày hiện tại
-    const currentDate = new Date();
-    const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    this.date = [startDate, currentDate];
-    
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.info;
