@@ -2157,12 +2157,12 @@ export class ContractSignatureComponent implements OnInit {
     // for (let i = 0; i < fileC.length; i++) {
     //   currentHeight[i] = 0;
     // }
-    for (let i = 0; i < fileC.length; i++) {
-      const base64StringPdf = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
+    // for (let i = 0; i < fileC.length; i++) {
+    //   const base64StringPdf = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
 
-      base64String.push(encode(base64StringPdf));
+    //   base64String.push(encode(base64StringPdf));
 
-    }
+    // }
 
     //Lay thong tin cua usb token
     this.contractServiceV1.getAllAccountsDigital().then(
@@ -2175,7 +2175,7 @@ export class ContractSignatureComponent implements OnInit {
               if (response.success == true) {
                 this.signCertDigital = data.data;
                 this.nameCompany = data.data.CN;
-
+                let dataBase64StringPdf;
                 // let signI: any = '';
                 // let imageRender = null;
 
@@ -2220,7 +2220,45 @@ export class ContractSignatureComponent implements OnInit {
                   dataObjectSignature = await this.contractServiceV1
                     .getDataObjectSignatureLoadChange(idContract[i])
                     .toPromise();
+                  let fieldsSignature = dataObjectSignature;
                   dataObjectSignature = dataObjectSignature.filter((item: any) => item.type == 3 && item.recipient.id == recipientId[i])
+
+                  try {
+                    let saveFieldsData = await this.contractServiceV1.savefirstHandler(fieldsSignature).toPromise();
+                    if(!saveFieldsData || saveFieldsData && saveFieldsData.success === false) {
+                      this.spinner.hide()
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Lỗi lưu ô Số tài liệu hoặc ô Text ',
+                        '',
+                        3000
+                      );
+                      return false;
+                    }
+
+                    let fileContract = await this.contractServiceV1.getFileContract(idContract[i]).toPromise();
+
+                    const pdfC2 = fileContract.find((p: any) => p.type == 2);
+                    const pdfC1 = fileContract.find((p: any) => p.type == 1);
+          
+                    if (pdfC2) {
+                      fileContract = pdfC2.path;
+                    } else if (pdfC1) {
+                      fileContract = pdfC1.path;
+                    } else {
+                      return;
+                    }
+                    const base64StringPdf = await this.contractServiceV1.getDataFileUrlPromise(fileContract);
+                    dataBase64StringPdf = encode(base64StringPdf);
+                  } catch (err) {
+                    this.spinner.hide()
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Lỗi lưu ô Số tài liệu hoặc ô Text ',
+                      '',
+                      3000
+                    );
+                    return false;
+                  }
+
                   // currentSigningStatus = await this.checkCurrentSigningCall(dataObjectSignature[0].recipient.id)
                   // if (!currentSigningStatus) return
                   for (let j = 0; j < dataObjectSignature.length; j++) {
@@ -2310,8 +2348,8 @@ export class ContractSignatureComponent implements OnInit {
                       h[j] = y[j] + h[j];
                       // calculate new coordinates
                       dataSignMobi =
-                        await this.contractServiceV1.postSignDigitalMobiMulti(this.signCertDigital.Serial, base64String[i], signI, dataObjectSignature[j].page, h[j], w[j], x[j], y[j]);
-                      base64String[i] = dataSignMobi.data.FileDataSigned
+                        await this.contractServiceV1.postSignDigitalMobiMulti(this.signCertDigital.Serial, dataBase64StringPdf, signI, dataObjectSignature[j].page, h[j], w[j], x[j], y[j]);
+                        dataBase64StringPdf = dataSignMobi.data.FileDataSigned
                     } catch (err) {
                       this.spinner.hide()
                       this.toastService.showErrorHTMLWithTimeout(

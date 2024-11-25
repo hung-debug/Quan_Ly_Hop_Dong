@@ -793,7 +793,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             item['type_unit'] = 'partner'
             item['selected'] = false;
             item['is_disable'] = false;
-            item['type'] = element.type;
+            //item['type'] = element.type;
             item['org_name'] = element.name;
             this.list_sign_name.push(item);
           }
