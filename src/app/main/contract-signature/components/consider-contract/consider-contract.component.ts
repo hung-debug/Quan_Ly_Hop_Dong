@@ -798,7 +798,7 @@ export class ConsiderContractComponent
               });
               if(this.firstHandler) {
                 this.isDataObjectSignature.map((item: any) => {
-                  if(item.type != 2 && item.type != 3 && !item.recipient_id) {
+                  if(item.type != 2 && item.type != 3 && item.type != 4 && !item.recipient_id) {
                     fieldRecipientId.push(item);
                     countNotBoxSign++
                   }
@@ -4587,7 +4587,7 @@ export class ConsiderContractComponent
 
     if(this.firstHandler) {
       this.isDataObjectSignature.map((item: any) => {
-        if(item.type != 2 && item.type != 3 && !item.valueSign && !item.recipient_id) {
+        if(item.type != 2 && item.type != 3 && item.type != 4 && !item.valueSign && !item.recipient_id) {
           validSign.push(item);
         }
       })
