@@ -2,8 +2,8 @@
   color: var(--text-primary);
 }
 
-.height-dialog {
-  min-height: 58vh;
+.gap {
+  gap: 12px !important;
 }
 
 .type-image-4 {
@@ -11,7 +11,7 @@
 }
 
 .default-image {
-  min-height: 58vh;
+  // min-height: 58vh;
 }
 
 .content-title-dialog-sign {
@@ -113,6 +113,9 @@
     font-size: 14px;
     font-weight: 700;
     line-height: 21px;
+    white-space: nowrap;    /* Không cho phép xuống dòng */
+    overflow: hidden;       /* Ẩn nội dung tràn */
+    text-overflow: ellipsis;/* Hiển thị dấu "..." nếu bị tràn */
   }
 
   .button-cancel {
@@ -179,9 +182,9 @@
 }
 
 @media (max-width: 576px) {
-  .height-dialog {
-    min-height: 54vh;
-  }
+  // .default-image {
+  //   min-height: 46vh;
+  // }
 
   .title-dialog-sign {
     font-size: 13px;
@@ -227,6 +230,10 @@
 
   .checkbox-confirm .text {
     font-size: 12px;
+  }
+
+  .signature-pad {
+    height: 210px;
   }
 
   .select-option {

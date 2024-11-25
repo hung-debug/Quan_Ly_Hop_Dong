@@ -2,12 +2,16 @@
   color: var(--text-primary);
 }
 
+.gap {
+  gap: 12px !important;
+}
+
 .type-image-4 {
   min-height: 240px;
 }
 
 .default-image {
-  min-height: 58vh;
+  // min-height: 58vh;
 }
 
 .content-title-dialog-sign {
@@ -109,6 +113,9 @@
     font-size: 14px;
     font-weight: 700;
     line-height: 21px;
+    white-space: nowrap;    /* Không cho phép xuống dòng */
+    overflow: hidden;       /* Ẩn nội dung tràn */
+    text-overflow: ellipsis;/* Hiển thị dấu "..." nếu bị tràn */
   }
 
   .button-cancel {
@@ -179,9 +186,9 @@
     min-height: 210px;
   }
   
-  .default-image {
-    min-height: 54vh;
-  }
+  // .default-image {
+  //   min-height: 46vh;
+  // }
 
   .title-dialog-sign {
     font-size: 13px;
@@ -237,6 +244,10 @@
       padding: 0px 12px;
       font-size: 13px;
     }
+  }
+
+  .signature-pad {
+    height: 210px;
   }
 
   .upload-photo {

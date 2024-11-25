@@ -1437,7 +1437,6 @@ export class ContractSignatureComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(async (result: any) => {
-      console.log("result", result)
       //result = 1 tương ứng với nhấn nút đồng ý và ký
       if (result?.agree == 1) {
         //Mã số thuế tại các tài liệu cần giống nhau
@@ -1456,13 +1455,13 @@ export class ContractSignatureComponent implements OnInit {
             is_content: 'forward_contract',
             markSignAcc: this.datas.markSignAcc,
             mark: true,
+            optionNoSelectPhoto: true
           };
 
           const dialogConfig = new MatDialogConfig();
           dialogConfig.width = '580px';
           dialogConfig.hasBackdrop = true;
           dialogConfig.data = data;
-          console.log("dialogConfig", dialogConfig)
           const dialogRef = this.dialog.open(
             ImageDialogSignComponent,
             dialogConfig

@@ -2016,13 +2016,13 @@ export class ConsiderContractComponent
   }
 
   imageDialogSignOpen(e: any, haveSignImage: boolean) {
-    ///
     const data = {
       title: 'KÝ TÀI LIỆU',
       is_content: 'forward_contract',
       orgId: this.orgId,
       imgSignAcc: this.datas.imgSignAcc,
-      recipientId: this.recipientId
+      recipientId: this.recipientId,
+      optionNoSelectPhoto: false
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -2032,14 +2032,9 @@ export class ConsiderContractComponent
     const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(async (result: any) => {
       let is_data;
-      if(result.type != 4) {
-        is_data = result.value;
-        this.otpValueSign = result.value
-        this.datas.is_data_object_signature.valueSign = result.value;  
-      }
-      // let is_data = result;
-      // this.otpValueSign = result
-      // this.datas.is_data_object_signature.valueSign = result;
+      is_data = result.value;
+      this.otpValueSign = result.value
+      this.datas.is_data_object_signature.valueSign = result.value;  
       if (result.value) {
         if (
           e &&
@@ -2123,7 +2118,8 @@ export class ConsiderContractComponent
       is_content: 'forward_contract',
       markSignAcc: this.datas.markSignAcc,
       mark: true,
-      recipientId: this.recipientId
+      recipientId: this.recipientId,
+      optionNoSelectPhoto: true
     };
 
     // @ts-ignore
@@ -2229,7 +2225,6 @@ export class ConsiderContractComponent
   }
 
   getTextAlertConfirm() {
-    console.log("zzzzzzzzzzzzzzzzzzz")
     if (this.datas.roleContractReceived == 2) {
       if (this.confirmConsider == 1) {
         return 'Bạn có chắc chắn xác nhận tài liệu này?';

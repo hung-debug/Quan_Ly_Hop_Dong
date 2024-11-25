@@ -58,7 +58,6 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
 
     this.ContractService.getInforPersonProcess(this.data.recipientId).subscribe((data: any) =>{
       if(data.sign_type[0].id == 1){
-        console.log("=3")
         this.typeImageSignatureRadio = 3;
       }
     });
@@ -66,11 +65,9 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
 
     this.datas = this.data;
     this.initListSignatureAccountUser();
-    console.log("this.datas.imgSignAcc", this.datas.imgSignAcc)
     this.imgSignAccountSelect = 'data:image/png;base64,' + this.datas.imgSignAcc;
     this.markSignAccountSelect = 'data:image/png;base64,' + this.datas.markSignAcc;
     if (!this.datas.imgSignAcc && !this.datas.markSignAcc) {
-      console.log("noImg");
       this.typeImageSignatureRadio = 4; // Nếu cả hai biến đều trống, set typeImageSignatureRadio = 4
     }
   }
@@ -140,8 +137,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
 
   t(ev: number) {
     this.checkIOSAndroid();
-    if (ev==4){console.log("no pic")
-      
+    if (ev==4){  
     }
     if (ev == 3) {
       setTimeout(() => {

@@ -7,29 +7,29 @@
   <div class="text-select margin-top-20px">{{'text.select' | translate}}</div>
 
   <div class="content">
-    <div class="margin-top-20px d-flex justify-content-between">
-      <div *ngIf="!this.data.mark" class="radio-confirm d-flex">
+    <div class="margin-top-20px d-flex justify-content-between gap">
+      <div *ngIf="!this.data.mark" class="radio-confirm flex">
         <input id="radio-img-draw" type="radio" name='choose-radio-signature' [value]="3"
           [(ngModel)]='typeImageSignatureRadio' (change)="t(3)">
-        <label class="lable-radio" for="radio-img-draw">Vẽ tay chữ ký</label>
+        <div class="lable-radio" for="radio-img-draw">Vẽ tay chữ ký</div>
       </div>
 
-      <div class="radio-confirm d-flex">
+      <div class="radio-confirm flex" *ngIf = "this.data.optionNoSelectPhoto">
         <input id="radio-file-account" type="radio" name="choose-radio-signature" [value]="4"
           [(ngModel)]='typeImageSignatureRadio' (change)="t(4)">
-        <label class="lable-radio" for="radio-file-account">Không chọn ảnh</label>
+        <div class="lable-radio" for="radio-file-account">Không chọn ảnh</div>
       </div>
 
-      <div class="radio-confirm d-flex">
+      <div class="radio-confirm flex">
         <input id="radio-file-com" type="radio" name='choose-radio-signature' [value]="2"
           [(ngModel)]='typeImageSignatureRadio' (change)="t(2)">
-        <label class="lable-radio" for="radio-file-com">Tải ảnh lên</label>
+        <div class="lable-radio" for="radio-file-com">Tải ảnh lên</div>
       </div>
 
-      <div class="radio-confirm d-flex">
+      <div class="radio-confirm flex">
         <input id="radio-file-account" type="radio" name="choose-radio-signature" [value]="1"
           [(ngModel)]='typeImageSignatureRadio' (change)="t(1)">
-        <label class="lable-radio" for="radio-file-account">Ảnh từ tài khoản</label>
+        <div class="lable-radio" for="radio-file-account">Ảnh từ tài khoản</div>
       </div>
     </div>
 
