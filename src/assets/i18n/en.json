@@ -920,6 +920,6 @@
   "choose.type.sign": "Select login method",
   "status.account": "Account status",
   "type.sign.email.phone": "Login by Email and Phone",
-  "multi.sign.confirm":"By Confirming, you agree to the contents and terms of the contract and use electronic methods to perform transactions.",
+  "multi.sign.confirm":"By Confirming, you agree to the contents and terms of the document and use electronic methods to perform transactions.",
   "text.select": "Select a signature or seal image"
 }
