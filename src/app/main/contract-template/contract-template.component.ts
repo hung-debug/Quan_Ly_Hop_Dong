@@ -349,13 +349,13 @@ export class ContractTemplateComponent implements OnInit {
 
   cloneFullStream(id: number) {
     setTimeout(() => {
-      void this.router.navigate(['main/form-contract/add/' + id + '/KEEP_ALL']);
+      void this.router.navigate(['main/form-contract/add/' + id + '/template/KEEP_ALL']);
     }, 100)
   }
 
   cloneStreamOrganizational(id: number) {
     setTimeout(() => {
-      void this.router.navigate(['main/form-contract/add/' + id + '/KEEP_MY_ORG']);
+      void this.router.navigate(['main/form-contract/add/' + id + '/template/KEEP_MY_ORG']);
     }, 100)
   }
 }

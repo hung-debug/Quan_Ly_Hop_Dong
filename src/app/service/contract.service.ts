@@ -56,7 +56,8 @@ export class ContractService {
   processAuthorizeContractUrl: any = `${environment.apiUrl}/api/v1/processes/authorize`;
 
   addGetDataContract: any = `${environment.apiUrl}/api/v1/contracts/`;
-  urlGetDataCloneParticipants: any = `${environment.apiUrl}/api/v1/contracts/clone-participants/`;
+  urlCloneParticipants: any = `${environment.apiUrl}/api/v1/contracts/clone-participants/`;
+  urlCloneParticipantsTemplate: any = `${environment.apiUrl}/api/v1/contracts/template/clone-participants/`;
   editSignTimeMuti: any = `${environment.apiUrl}/api/v1/contracts/update-sign-time`;
 
   addGetFileContract: any = `${environment.apiUrl}/api/v1/documents/by-contract/`;
@@ -1718,12 +1719,22 @@ export class ContractService {
     // addGetDataContract:any = `${environment.apiUrl}/api/v1/contracts/`;
   }
 
-  getDataCloneParticipants(idContract: any, option: any) {
+  cloneParticipants(idContract: any, option: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<any>(this.urlGetDataCloneParticipants + idContract + '?option=' + option, {
+    return this.http.get<any>(this.urlCloneParticipants + idContract + '?option=' + option, {
+      headers,
+    });
+  }
+
+  cloneParticipantsTemplate(idContract: any, option: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.urlCloneParticipantsTemplate + idContract + '?option=' + option, {
       headers,
     });
   }

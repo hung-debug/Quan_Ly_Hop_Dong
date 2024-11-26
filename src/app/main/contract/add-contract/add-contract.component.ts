@@ -83,6 +83,7 @@ export class AddContractComponent implements OnInit {
   type: number = 1;
   action: string;
   typeClone: string;
+  status: string;
   id: string;
   private sub: any;
 
@@ -161,6 +162,8 @@ export class AddContractComponent implements OnInit {
         this.sub = this.route.params.subscribe(async (params) => {
           this.action = params['action'];
           this.typeClone = params['type'];
+          this.status = params['status'];
+          console.log("this.status", this.status)
           //lay id user
           let userId = this.userService.getAuthCurrentUser().id;
           this.userService.getUserById(userId).subscribe(
@@ -282,21 +285,40 @@ export class AddContractComponent implements OnInit {
           } else if (this.action == 'add' && (this.typeClone == 'KEEP_MY_ORG' || this.typeClone == 'KEEP_ALL')) {
             this.spinner.show();
             let dataClone;
-            if (this.typeClone == 'KEEP_MY_ORG') {
-              try {
-                dataClone = await this.contractService.getDataCloneParticipants(this.id, 'KEEP_MY_ORG').toPromise();
-              } catch (error) {
-                this.spinner.hide();
-                this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin luồng tổ chức của tôi','',3000);
+            if (this.status == 'single') {
+              if (this.typeClone == 'KEEP_MY_ORG') {
+                try {
+                  dataClone = await this.contractService.cloneParticipants(this.id, 'KEEP_MY_ORG').toPromise();
+                } catch (error) {
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin luồng tổ chức của tôi','',3000);
+                }
+              } else {
+                try {
+                  dataClone = await this.contractService.cloneParticipants(this.id, 'KEEP_ALL').toPromise();
+                } catch (error) {
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin toàn bộ luồng ký','',3000);
+                }
               }
             } else {
-              try {
-                dataClone = await this.contractService.getDataCloneParticipants(this.id, 'KEEP_ALL').toPromise();
-              } catch (error) {
-                this.spinner.hide();
-                this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin toàn bộ luồng ký','',3000);
+              if (this.typeClone == 'KEEP_MY_ORG') {
+                try {
+                  dataClone = await this.contractService.cloneParticipantsTemplate(this.id, 'KEEP_MY_ORG').toPromise();
+                } catch (error) {
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin luồng tổ chức của tôi','',3000);
+                }
+              } else {
+                try {
+                  dataClone = await this.contractService.cloneParticipantsTemplate(this.id, 'KEEP_ALL').toPromise();
+                } catch (error) {
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin toàn bộ luồng ký','',3000);
+                }
               }
             }
+
 
             for (let i = 0; i < dataClone?.participants.length; i++) {
               for (let j = 0; j < dataClone?.participants[i].recipients.length; j++) {
