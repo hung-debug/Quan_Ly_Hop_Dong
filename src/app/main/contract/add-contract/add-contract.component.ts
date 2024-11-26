@@ -323,6 +323,7 @@ export class AddContractComponent implements OnInit {
             for (let i = 0; i < dataClone?.participants.length; i++) {
               for (let j = 0; j < dataClone?.participants[i].recipients.length; j++) {
                 dataClone.participants[i].recipients[j].id = null; 
+                dataClone.participants[i].recipients[j].status = 0;
                 dataClone.participants[i].recipients[j].fields = null;           
               }              
             }
