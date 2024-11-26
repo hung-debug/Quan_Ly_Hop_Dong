@@ -504,7 +504,7 @@
                         <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{'contract.copy' | translate}}</span>
                       </button>
-                      <button mat-menu-item [matMenuTriggerFor]="subMenu">
+                      <button *ngIf="(status != 'draft')" mat-menu-item [matMenuTriggerFor]="subMenu">
                         <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
                         <span class="three_dot_text">{{ 'create.document.holds.signing.stream' | translate }}</span>
                       </button>
