@@ -2119,7 +2119,7 @@ export class ConsiderContractComponent
       markSignAcc: this.datas.markSignAcc,
       mark: true,
       recipientId: this.recipientId,
-      optionNoSelectPhoto: true
+      optionNoSelectPhoto:  this.isCheck == 2 ? false : true
     };
 
     // @ts-ignore
