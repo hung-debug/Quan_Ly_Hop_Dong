@@ -943,5 +943,8 @@
   "username.wrong.format": "Tên người dùng không đúng định dạng",
   "choose.type.sign": "Chọn hình thức đăng nhập",
   "status.account": "Trạng thái tài khoản",
-  "type.sign.email.phone": "Đăng nhập bằng Email và SĐT"
+  "type.sign.email.phone": "Đăng nhập bằng Email và SĐT",
+  "create.document.holds.signing.stream": "Tạo tài liệu giữ luồng ký",
+  "keep.signature.stream.all": "Giữ toàn bộ luồng ký",
+  "keep.signature.stream.organizational": "Chỉ giữ luồng tổ chức của tôi"
 }

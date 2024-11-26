@@ -919,5 +919,8 @@
   "username.wrong.format": "Username is not correct format",
   "choose.type.sign": "Select login method",
   "status.account": "Account status",
-  "type.sign.email.phone": "Login by Email and Phone"
+  "type.sign.email.phone": "Login by Email and Phone",
+  "create.document.holds.signing.stream": "Creates a document that holds the signing stream",
+  "keep.signature.stream.all": "Keep the entire signature stream",
+  "keep.signature.stream.organizational": "Just keep my organizational flow"
 }
