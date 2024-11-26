@@ -67,8 +67,10 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     this.initListSignatureAccountUser();
     this.imgSignAccountSelect = 'data:image/png;base64,' + this.datas.imgSignAcc;
     this.markSignAccountSelect = 'data:image/png;base64,' + this.datas.markSignAcc;
-    if (!this.datas.imgSignAcc && !this.datas.markSignAcc) {
+    if (!this.datas.imgSignAcc && !this.datas.markSignAcc && this.data.optionNoSelectPhoto) {
       this.typeImageSignatureRadio = 4; // Nếu cả hai biến đều trống, set typeImageSignatureRadio = 4
+    } else if (!this.datas.imgSignAcc && !this.datas.markSignAcc && !this.data.optionNoSelectPhoto) {
+      this.typeImageSignatureRadio = 2; 
     }
   }
 
