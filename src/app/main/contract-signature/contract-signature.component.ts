@@ -1474,6 +1474,7 @@ export class ContractSignatureComponent implements OnInit {
                 // this.spinner.hide();
               } else {
                 this.srcMark=''
+                result.mark = 0;
                 this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
               }
             }

@@ -215,6 +215,7 @@ export class ConsiderContractComponent
   defaultValueSelect: any = 1.0;
   page1: boolean = false;
   pageLast: boolean = true;
+  isXemXet: boolean = false;
   zoomOptions = [
     { percent: '25%', value: 0.25 },
     { percent: '50%', value: 0.5 },
@@ -1638,7 +1639,7 @@ export class ConsiderContractComponent
               ) {
                 // let typeSignDigital = null;
                 // let typeSignImage = null;
-                if (this.recipient?.sign_type) {
+                if (this.recipient?.sign_type.length) {
                   const typeSD = this.recipient?.sign_type.find(
                     (t: any) => t.id != 1
                   );
@@ -1652,6 +1653,8 @@ export class ConsiderContractComponent
                   if (typeSImage) {
                     typeSignImage = typeSImage.id;
                   }
+                } else {
+                  this.isXemXet = true;
                 }
 
                 if (typeSignDigital && typeSignDigital == 3) {
@@ -2199,11 +2202,8 @@ export class ConsiderContractComponent
       }
       
       return Swal.fire(swalOptions);;
-    } else if ((code == 'digital' && this.mobile && this.recipient.sign_type.some((item: any) => item.id !== 7) && this.isContainSignField)) {
-      return Promise.resolve({isConfirmed: true, isDenied: false, isDismissed: false, value: true});
-    } else {
+    } else if (this.isXemXet) {
       return Swal.fire({
-        
         title: this.getTextAlertConfirm(),
         icon: 'warning',
         showCancelButton: true,
@@ -2213,6 +2213,8 @@ export class ConsiderContractComponent
         cancelButtonText: this.translate.instant('contract.status.canceled'),
         
       });
+    } else {
+      return Promise.resolve({isConfirmed: true, isDenied: false, isDismissed: false, value: true});
     }
   }
 
