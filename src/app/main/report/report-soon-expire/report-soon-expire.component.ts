@@ -330,7 +330,13 @@ export class ReportSoonExpireComponent implements OnInit {
     this.enterPage = this.page + 1;
     this.export(false);
   }
-
+  onReportClick(flag: boolean){
+    if (flag) {
+      this.page = 0;
+      this.enterPage = this.page + 1;
+    }
+    this.export(false);
+  }
   validateInput(event: KeyboardEvent) {
     const input = event.key;
     if (input === ' ' || (isNaN(Number(input)) && input !== 'Backspace')) {

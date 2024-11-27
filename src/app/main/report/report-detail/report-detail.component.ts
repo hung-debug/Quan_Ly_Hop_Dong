@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder} from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
@@ -84,21 +84,13 @@ export class ReportDetailComponent implements OnInit {
     this.formGroup = this.fbd.group({
       name: this.fbd.control(''),
       date: this.fbd.control(''),
-      completionDate: this.fbd.control(''),
       contractStatus: this.fbd.control(''),
+      completionDate: this.fbd.control(''),
     });
-    // Khởi tạo ngày mặc định là khoảng 1 tháng tính từ ngày hiện tại
-    const currentDate = new Date();
-    const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    this.date = [startDate, currentDate];
-    // Khởi tạo các tùy chọn cho dropdown
-    //  this.dateOptions = ['1 tuần', '1 tháng', '1 năm'];
-    //  this.selectedOption = this.dateOptions[1]; // Lựa chọn mặc định là '1 tháng'
   }
 
   ngOnInit(): void {
     this.spinner.hide();
-
     this.appService.setTitle('report');
     this.appService.setSubTitle('report.detail.contract.full');
 
@@ -108,9 +100,12 @@ export class ReportDetailComponent implements OnInit {
       completionDate:this.fbd.control(''),
       contractStatus: this.fbd.control(''),
     });
-  
-    this.optionsStatus = [
-      { id: -1, name: 'Tất cả' },
+    // Khởi tạo ngày mặc định là khoảng 1 tháng tính từ ngày hiện tại
+    const currentDate = new Date();
+    const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    this.date = [startDate, currentDate];
+
+    this.optionsStatus = [   
       { id: 20, name: 'Đang thực hiện' },
       { id: 33, name: 'Sắp hết hạn' },
       { id: 2, name:'Quá hạn' },
@@ -137,7 +132,6 @@ export class ReportDetailComponent implements OnInit {
       this.lang = 'en';
 
       this.optionsStatus = [
-        { id: -1, name: 'All' },
         { id: 20, name: 'Processing' },
         { id: 33, name: 'Expiration soon' },
         { id: 2, name:'Overdue' },
@@ -168,24 +162,6 @@ export class ReportDetailComponent implements OnInit {
     //   }});
   }
 
-  // changeDateRange(option: string) {
-  //   // Xử lý thay đổi phạm vi ngày tháng dựa trên lựa chọn
-  //   switch (option) {
-  //     case '1 tuần':
-  //       // Xử lý để hiển thị phạm vi 1 tuần
-  //       break;
-  //     case '1 tháng':
-  //       // Xử lý để hiển thị phạm vi 1 tháng
-  //       break;
-  //     case '1 năm':
-  //       // Xử lý để hiển thị phạm vi 1 năm
-  //       break;
-  //     default:
-  //       // Xử lý mặc định
-  //       break;
-  //   }
-  // }
-
   convertTime(time: any,code?: any) {
     return moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") != 'Invalid date' ? moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") : "" ;
   }
@@ -204,10 +180,6 @@ export class ReportDetailComponent implements OnInit {
       this.toastService.showErrorHTMLWithTimeout('date.full.valid','',3000);
       return false;
     }
-    // if(!this.completionDate || (this.completionDate && this.completionDate.length < 2)) {
-    //   this.toastService.showErrorHTMLWithTimeout('date.full.valid','',3000);
-    //   return false;
-    // }
     return true;
    
   
@@ -343,7 +315,7 @@ export class ReportDetailComponent implements OnInit {
       completed_to_date  = this.datepipe.transform(this.completionDate[1],'yyyy-MM-dd');
     }
     let contractStatus = this.contractStatus;
-
+    if (!contractStatus) contractStatus = -1;
     this.clickTable = true;
 
     if(!to_date)
@@ -413,7 +385,6 @@ export class ReportDetailComponent implements OnInit {
         }
       
     })
- 
   }
   
   toRecord() {
@@ -431,6 +402,14 @@ export class ReportDetailComponent implements OnInit {
     if (input === ' ' || (isNaN(Number(input)) && input !== 'Backspace')) {
       event.preventDefault();
     }
+  }
+
+  onReportClick(flag: boolean){
+    if (flag) {
+      this.page = 0;
+      this.enterPage = this.page + 1;
+    }
+    this.export(false);
   }
 
   onInput(event: any) {
