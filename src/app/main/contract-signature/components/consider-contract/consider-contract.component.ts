@@ -796,14 +796,14 @@ export class ConsiderContractComponent
                   })
                 }
               });
-              if(this.firstHandler) {
-                this.isDataObjectSignature.map((item: any) => {
-                  if(item.type != 2 && item.type != 3 && item.type != 4 && !item.recipient_id) {
-                    fieldRecipientId.push(item);
-                    countNotBoxSign++
-                  }
-                })
-              }
+              // if(this.firstHandler) {
+              //   this.isDataObjectSignature.map((item: any) => {
+              //     if(item.type != 2 && item.type != 3 && item.type != 4 && !item.recipient_id) {
+              //       fieldRecipientId.push(item);
+              //       countNotBoxSign++
+              //     }
+              //   })
+              // }
               if ((fieldRecipientId?.length == 0 || countNotBoxSign == 0) && this.recipient.sign_type[0].id !== 7) {
                 const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, image_base64).toPromise();
                 this.pdfSrcMobile = pdfMobile.filePath;
