@@ -302,7 +302,13 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
     this.enterPage = this.page + 1;
     this.exportSmsReportCall(false);
   }
-
+  onReportClick(flag: boolean){
+    if (flag) {
+      this.page = 0;
+      this.enterPage = this.page + 1;
+    }
+    this.exportSmsReportCall(false);
+}
   validateInput(event: KeyboardEvent) {
     const input = event.key;
     if (input === ' ' || (isNaN(Number(input)) && input !== 'Backspace')) {
