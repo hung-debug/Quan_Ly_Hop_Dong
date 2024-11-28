@@ -805,7 +805,7 @@ export class ConsiderContractComponent
               //   })
               // }
               if ((fieldRecipientId?.length == 0 || countNotBoxSign == 0) && this.recipient.sign_type[0].id !== 7) {
-                const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, image_base64).toPromise();
+                const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, image_base64, this.idContract).toPromise();
                 this.pdfSrcMobile = pdfMobile.filePath;
               } else if (fieldRecipientId.length >= 1) {
                 this.multiSignInPdf = true;
@@ -817,7 +817,7 @@ export class ConsiderContractComponent
             } else {
               try {
                 console.log("recipientId", this.recipientId)
-                const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, chu_ky_anh).toPromise();
+                const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, chu_ky_anh, this.idContract).toPromise();
                 if(pdfMobile.success) {
                   this.pdfSrcMobile = pdfMobile.filePath;
                 } else {

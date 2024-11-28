@@ -699,7 +699,7 @@ export class ContractService {
       .toPromise();
   }
 
-  getFilePdfForMobile(recipientId: any, image_base64: any) {
+  getFilePdfForMobile(recipientId: any, image_base64: any, contractId: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -707,6 +707,7 @@ export class ContractService {
 
     const body = {
       image_base64: image_base64,
+      contractId: contractId
     };
 
     return this.http.post<any>(this.getFilePdfForMobileUrl + recipientId, body,
