@@ -1283,8 +1283,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
                     }
                   })
             } else {
-              this.router.navigate(['/login']);
-              this.contractService.deleteToken().subscribe();
+              this.router.navigate(['/main/c/receive/wait-processing']);
+              //this.contractService.deleteToken().subscribe();
             }
           }
 

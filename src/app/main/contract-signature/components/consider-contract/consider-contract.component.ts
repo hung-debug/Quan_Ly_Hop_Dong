@@ -815,7 +815,25 @@ export class ConsiderContractComponent
               } else {
               }
             } else {
-              this.pdfSrcMobile = this.pdfSrc;
+              try {
+                console.log("recipientId", this.recipientId)
+                const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, chu_ky_anh).toPromise();
+                if(pdfMobile.success) {
+                  this.pdfSrcMobile = pdfMobile.filePath;
+                } else {
+                  return this.toastService.showErrorHTMLWithTimeout(
+                    pdfMobile.message,
+                    '',
+                    3000
+                  );
+                }
+              } catch (error) {
+                return this.toastService.showErrorHTMLWithTimeout(
+                  'Có lỗi xảy ra',
+                  '',
+                  3000
+                );
+              }
             }
           } else {
             if (this.recipient.status >= 2) {
