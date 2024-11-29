@@ -707,7 +707,7 @@ export class ContractService {
 
     const body = {
       image_base64: image_base64,
-      contractId: contractId
+      contract_id: contractId
     };
 
     return this.http.post<any>(this.getFilePdfForMobileUrl + recipientId, body,

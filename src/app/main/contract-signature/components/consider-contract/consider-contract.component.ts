@@ -815,8 +815,7 @@ export class ConsiderContractComponent
               } else {
               }
             } else {
-              try {
-                console.log("recipientId", this.recipientId)
+              try {  
                 const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, chu_ky_anh, this.idContract).toPromise();
                 if(pdfMobile.success) {
                   this.pdfSrcMobile = pdfMobile.filePath;
