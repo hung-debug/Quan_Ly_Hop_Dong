@@ -796,16 +796,16 @@ export class ConsiderContractComponent
                   })
                 }
               });
-              if(this.firstHandler) {
-                this.isDataObjectSignature.map((item: any) => {
-                  if(item.type != 2 && item.type != 3 && item.type != 4 && !item.recipient_id) {
-                    fieldRecipientId.push(item);
-                    countNotBoxSign++
-                  }
-                })
-              }
+              // if(this.firstHandler) {
+              //   this.isDataObjectSignature.map((item: any) => {
+              //     if(item.type != 2 && item.type != 3 && item.type != 4 && !item.recipient_id) {
+              //       fieldRecipientId.push(item);
+              //       countNotBoxSign++
+              //     }
+              //   })
+              // }
               if ((fieldRecipientId?.length == 0 || countNotBoxSign == 0) && this.recipient.sign_type[0].id !== 7) {
-                const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, image_base64).toPromise();
+                const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, image_base64, this.idContract).toPromise();
                 this.pdfSrcMobile = pdfMobile.filePath;
               } else if (fieldRecipientId.length >= 1) {
                 this.multiSignInPdf = true;
@@ -815,7 +815,25 @@ export class ConsiderContractComponent
               } else {
               }
             } else {
-              this.pdfSrcMobile = this.pdfSrc;
+              try {
+                console.log("recipientId", this.recipientId)
+                const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipientId, chu_ky_anh, this.idContract).toPromise();
+                if(pdfMobile.success) {
+                  this.pdfSrcMobile = pdfMobile.filePath;
+                } else {
+                  return this.toastService.showErrorHTMLWithTimeout(
+                    pdfMobile.message,
+                    '',
+                    3000
+                  );
+                }
+              } catch (error) {
+                return this.toastService.showErrorHTMLWithTimeout(
+                  'Có lỗi xảy ra',
+                  '',
+                  3000
+                );
+              }
             }
           } else {
             if (this.recipient.status >= 2) {
