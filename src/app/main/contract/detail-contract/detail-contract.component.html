@@ -146,6 +146,18 @@
   
       <div (scroll)="scroll($event)" class="sample-contract__file viewer-pdf isDrag" id="pdf-full" style="background-color: #f3f7f9; position: relative">
         <div id="pdf-viewer-step-3">
+          <div *ngFor="let d of this.convertToSignConfig1()" class="show-list-name-drag"
+            [style.width]="this.canvasWidth">
+            <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement
+              [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
+              <app-sign-contract 
+                style="display: flex; width: 100%; padding: 4px;" 
+                [datas]="datas" 
+                [signTemplate]="true" 
+                [sign]="d"
+              ></app-sign-contract>
+            </div>
+          </div>
         </div>
       </div>
     </div>

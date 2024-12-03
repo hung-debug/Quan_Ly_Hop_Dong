@@ -33,7 +33,9 @@ import { HttpClient } from '@angular/common/http';
 import { Helper } from 'src/app/core/Helper';
 import { encode } from 'base64-arraybuffer';
 import { environment } from 'src/environments/environment';
-
+import {
+  chu_ky_anh,
+} from '../../../config/variable';
 @Component({
   selector: 'app-detail-contract',
   templateUrl: './detail-contract.component.html',
@@ -554,7 +556,20 @@ export class DetailContractComponent implements OnInit, OnDestroy {
               3000
             );
           } else {
-            this.pdfSrc = fileC;
+            if (this.mobile) {
+              const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipient.id, chu_ky_anh, this.idContract).toPromise();
+              if(pdfMobile.success) {
+                this.pdfSrc = pdfMobile.filePath;
+              } else {
+                return this.toastService.showErrorHTMLWithTimeout(
+                  pdfMobile.message,
+                  '',
+                  3000
+                );
+              }
+            } else {
+              this.pdfSrc = fileC;           
+            }
             this.pdfSrcMobile =
               'https://docs.google.com/viewerng/viewer?url=' +
               this.pdfSrc +
@@ -1834,4 +1849,16 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       });
     });
   }
+
+  convertToSignConfig1() {
+    let arrSignConfig: any = [];   
+    this.isDataObjectSignature.map((item: any) => {
+      if(item.type != 2 && item.type != 3 && item.type != 4 && !item.recipient_id && item.action_in_contract == false && item.value) {
+        item.isView = true;
+        arrSignConfig.push(item);
+      }
+    })
+    return arrSignConfig;
+  }
+
 }

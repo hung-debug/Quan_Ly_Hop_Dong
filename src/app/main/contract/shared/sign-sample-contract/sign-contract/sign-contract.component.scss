@@ -47,6 +47,14 @@
   color: #106DB6;
 }
 
+.text-sign1 span {
+  width: 125px;
+  border: 0px;
+  height: 25px;
+  outline: none;
+  color: black !important;
+}
+
 // .font-style {
 //   font-size: 11px !important;
 // }
@@ -88,6 +96,15 @@ textarea::after {
   left: 0px;
   outline: none;
   color: #106DB6;
+  text-align: left;
+}
+
+.text-sign-not-template-text1 {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  outline: none;
+  color: black;
   text-align: left;
 }
 
