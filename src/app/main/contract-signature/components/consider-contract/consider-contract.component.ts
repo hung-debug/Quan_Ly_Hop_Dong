@@ -1334,7 +1334,7 @@ export class ConsiderContractComponent
       );
       if(this.firstHandler && !this.mobile) {
         this.datas.is_data_object_signature.map((item: any) => {
-          if(item.type != 2 && item.type != 3 && item.type != 4 && item.value || (item.type == 4 && item.recipient_id)) {
+          if(item.type != 2 && item.type != 3 && item.type != 4 && (item.value && !item.recipient_id || item.recipient_id) || (item.type == 4 && item.recipient_id)) {
             dataSignature.push(item);
           }
         })
