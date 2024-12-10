@@ -922,5 +922,8 @@
   "type.sign.email.phone": "Login by Email and Phone",
   "file.connect": "Related documents",
   "multi.sign.confirm":"By Confirming, you agree to the contents and terms of the document and use electronic methods to perform transactions.",
-  "text.select": "Select a signature or seal image"
+  "text.select": "Select a signature or seal image",
+  "create.document.holds.signing.stream": "Creates a document that holds the signing stream",
+  "keep.signature.stream.all": "Keep the entire signature stream",
+  "keep.signature.stream.organizational": "Just keep my organizational flow"
 }

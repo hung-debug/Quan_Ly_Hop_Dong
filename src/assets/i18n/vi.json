@@ -946,5 +946,8 @@
   "status.account": "Trạng thái tài khoản",
   "type.sign.email.phone": "Đăng nhập bằng Email và SĐT",
   "file.connect": "Tài liệu liên quan",
-  "text.select": "Chọn hình ảnh chữ ký hoặc con dấu"
+  "text.select": "Chọn hình ảnh chữ ký hoặc con dấu",
+  "create.document.holds.signing.stream": "Tạo tài liệu giữ luồng ký",
+  "keep.signature.stream.all": "Giữ toàn bộ luồng ký",
+  "keep.signature.stream.organizational": "Chỉ giữ luồng tổ chức của tôi"
 }
