@@ -277,7 +277,13 @@ export class ReportEKYCComponent implements OnInit {
     // sessionStorage.setItem('createdPageNum', this.page.toString());
     this.exportEKYCReportCall(false);
   }
-  
+  onReportClick(flag: boolean){
+    if (flag) {
+      this.page = 0;
+      this.enterPage = this.page + 1;
+    }
+    this.exportEKYCReportCall(false);
+  }
   downloadFile(data: any) {
     let currentDate = moment().format('HH:mm:ss')
     let selectedStartDate = moment(this.date[0]).format('DD-MM-YYYY')

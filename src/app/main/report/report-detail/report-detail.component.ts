@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder} from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
@@ -21,6 +21,7 @@ import { Table } from 'primeng/table';
   styleUrls: ['./report-detail.component.scss'],
 })
 export class ReportDetailComponent implements OnInit {
+
   @ViewChild('dt') table: Table;
 
   //Biến lưu dữ liệu trong bảng
@@ -47,8 +48,8 @@ export class ReportDetailComponent implements OnInit {
 
   params: any;
   date: any;
+  completionDate: any;
   optionsStatus: any;
-
   formGroup: any;
   contractStatus: number = -1;
 
@@ -64,7 +65,10 @@ export class ReportDetailComponent implements OnInit {
   enterPage: number = 1;
   inputTimeout: any;
   numberPage: number;
+  selectedOption: string; // Biến để lưu trữ tùy chọn được chọn từ dropdown
+  dateOptions: any[]; // Mảng các tùy chọn cho dropdown
   constructor(
+    
     private appService: AppService,
     private userService: UserService,
     private translate: TranslateService,
@@ -75,27 +79,33 @@ export class ReportDetailComponent implements OnInit {
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
     private convertStatusService: ConvertStatusService,
-  ) {
+ 
+  ){
     this.formGroup = this.fbd.group({
       name: this.fbd.control(''),
       date: this.fbd.control(''),
       contractStatus: this.fbd.control(''),
+      completionDate: this.fbd.control(''),
     });
   }
 
   ngOnInit(): void {
     this.spinner.hide();
-
     this.appService.setTitle('report');
     this.appService.setSubTitle('report.detail.contract.full');
 
     this.formGroup = this.fbd.group({
       name: this.fbd.control(''),
       date: this.fbd.control(''),
+      completionDate:this.fbd.control(''),
       contractStatus: this.fbd.control(''),
     });
+    // Khởi tạo ngày mặc định là khoảng 1 tháng tính từ ngày hiện tại
+    const currentDate = new Date();
+    const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    this.date = [startDate, currentDate];
 
-    this.optionsStatus = [
+    this.optionsStatus = [   
       { id: 20, name: 'Đang thực hiện' },
       { id: 33, name: 'Sắp hết hạn' },
       { id: 2, name:'Quá hạn' },
@@ -130,7 +140,7 @@ export class ReportDetailComponent implements OnInit {
         { id: 30, name: 'Complete' },
       ];
     }
-
+ 
     //lay id user
     this.organization_id_user_login = this.userService.getAuthCurrentUser().organizationId;
     //mac dinh se search theo ma to chuc minh
@@ -146,6 +156,10 @@ export class ReportDetailComponent implements OnInit {
         (p: any) => p.data == this.organization_id
       );
     });
+    // this.formGroup.get(this.contractStatus)?.valueChanges.subscribe((optionsStatus: any) => {
+    //   if (optionsStatus !== 30) {
+    //       this.formGroup.get(this.completionDate)?.setValue(null); // Reset completionDate if status is not 'Hoàn thành'
+    //   }});
   }
 
   convertTime(time: any,code?: any) {
@@ -167,8 +181,21 @@ export class ReportDetailComponent implements OnInit {
       return false;
     }
     return true;
+   
+  
   }
-
+  onStatusChange() {
+    if (this.contractStatus !== 30) { // Nếu trạng thái khác "Hoàn thành"
+      this.completionDate = null;
+    }
+  }
+  onDateChange() {
+    if (this.completionDate && this.completionDate.length > 0) {
+      this.contractStatus = 30;
+    } else
+    this.contractStatus =-1
+  }
+  
   setColForTable() {
     this.cols = [
       {
@@ -220,9 +247,17 @@ export class ReportDetailComponent implements OnInit {
         colspan: 1,
         rowspan: 2,
       },
+  
       {
-        id: 8,
+        id: 9,
         header: 'contract.status.v2',
+        style: 'text-align: left; width: 250px',
+        colspan: 1,
+        rowspan: 2,
+      },  
+        {
+        id: 8,
+        header: 'completed-date',
         style: 'text-align: left; width: 250px',
         colspan: 1,
         rowspan: 2,
@@ -272,22 +307,26 @@ export class ReportDetailComponent implements OnInit {
       from_date = this.datepipe.transform(this.date[0],'yyyy-MM-dd');
       to_date = this.datepipe.transform(this.date[1],'yyyy-MM-dd');
     }
-
+    
+    let completed_from_date :any='';
+    let completed_to_date :any ='';
+    if(this.completionDate && this.completionDate.length > 0) {
+      completed_from_date  = this.datepipe.transform(this.completionDate[0],'yyyy-MM-dd');
+      completed_to_date  = this.datepipe.transform(this.completionDate[1],'yyyy-MM-dd');
+    }
     let contractStatus = this.contractStatus;
-
-    if(!contractStatus) 
-      contractStatus = -1;
-
+    if (!contractStatus) contractStatus = -1;
     this.clickTable = true;
 
     if(!to_date)
       to_date = from_date
-    
+    if(!completed_to_date)
+      completed_to_date=completed_from_date
     let payload = ""
     if(this.contractInfo){
        payload ='&textSearch=' + this.contractInfo.trim()
     }
-    let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData + payload + `&pageNumber=`+this.page+`&pageSize=`+this.row;
+    let params = '?from_date='+from_date+'&to_date='+to_date+'&completed_from_date='+completed_from_date+'&completed_to_date='+completed_to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData + payload + `&pageNumber=`+this.page+`&pageSize=`+this.row;
     this.reportService.export('rp-detail',idOrg,params, flag).subscribe((response: any) => {
         this.spinner.hide();
         if(flag) {
@@ -346,7 +385,6 @@ export class ReportDetailComponent implements OnInit {
         }
       
     })
- 
   }
   
   toRecord() {
@@ -364,6 +402,14 @@ export class ReportDetailComponent implements OnInit {
     if (input === ' ' || (isNaN(Number(input)) && input !== 'Backspace')) {
       event.preventDefault();
     }
+  }
+
+  onReportClick(flag: boolean){
+    if (flag) {
+      this.page = 0;
+      this.enterPage = this.page + 1;
+    }
+    this.export(false);
   }
 
   onInput(event: any) {

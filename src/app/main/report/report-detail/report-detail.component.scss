@@ -202,7 +202,8 @@ input[type="checkbox"]:checked + label:before {
     height: 33px;
     width: 50%;
   }
-
+ 
+  
   .pi-fw {
     color: #106db6;
     margin-right: 5px;
@@ -296,7 +297,9 @@ input[type="checkbox"]:checked + label:before {
   display: block;
   margin: auto 0;
 }
-
+.date_dropdown{
+  width: 30px;
+}
 .footer_contract_per_page {
   display: flex;
   margin: auto 0 auto 5px;
@@ -326,7 +329,7 @@ input[type="checkbox"]:checked + label:before {
 
 @media (min-width: 1580px) {
   .col-xxl-2-5 {
-    flex: 0 0 20.833333%;
-    max-width: 20.833333%;
+    flex: 0 0 16.6666%;
+    max-width: 16.6666%;
   }
 }

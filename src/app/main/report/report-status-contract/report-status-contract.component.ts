@@ -20,7 +20,9 @@ import { InputTreeService } from 'src/app/service/input-tree.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Table } from 'primeng/table';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-report-status-contract',
@@ -77,11 +79,12 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
   inputTimeout: any;
   numberPage: number;
   @ViewChild('typeContract') typeContract: any;
+completionDate: any;
   constructor(
     private appService: AppService,
     private userService: UserService,
     private inputTreeService: InputTreeService,
-
+    private fbd: FormBuilder,
     private datepipe: DatePipe,
     private reportService: ReportService,
     private toastService: ToastService,
@@ -89,7 +92,10 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
     private convertStatusService: ConvertStatusService,
     private contractTypeService: ContractTypeService
   ) {
- 
+    // Khởi tạo ngày mặc định là 1 tháng tính từ ngày hiện tại
+    const currentDate = new Date();
+    const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    this.date = [startDate, currentDate];
   }
 
 
@@ -100,7 +106,12 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
     this.appService.setSubTitle('report.processing.status.contract.full');
 
     this.getTypeListContract();
-
+    this.formGroup = this.fbd.group({
+      name: this.fbd.control(''),
+      date: this.fbd.control(''),
+      completionDate:this.fbd.control(''),
+      contractStatus: this.fbd.control(''),
+    });
     this.optionsStatus = [
       { id: 20, name: 'Đang thực hiện' },
       { id: 33, name: 'Sắp hết hạn' },
@@ -195,7 +206,9 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
       },
     ];
   }
-
+  convertTime(time: any,code?: any) {
+    return moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") != 'Invalid date' ? moment(time, "YYYY/MM/DD").format("DD/MM/YYYY") : "" ;
+  }
   validData() {
     if (!this.date || (this.date && this.date.length < 2)) {
       this.toastService.showErrorHTMLWithTimeout('date.full.valid', '', 3000);
@@ -209,7 +222,17 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
       .fill(0)
       .map((x, i) => i + 1);
   }
-
+  onStatusChange() {
+    if (this.contractStatus !== 30) { // Nếu trạng thái khác "Hoàn thành"
+      this.completionDate = null;
+    }
+  }
+  onDateChange() {
+    if (this.completionDate && this.completionDate.length > 0) {
+      this.contractStatus = 30;
+    } else
+    this.contractStatus =-1
+  }
   //Export ra file excel
   maxParticipants: number = 0;
   export(flag: boolean) {
@@ -232,7 +255,12 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
       from_date = this.datepipe.transform(this.date[0], 'yyyy-MM-dd');
       to_date = this.datepipe.transform(this.date[1], 'yyyy-MM-dd');
     }
-
+    let completed_from_date :any='';
+    let completed_to_date :any ='';
+    if(this.completionDate && this.completionDate.length > 0) {
+      completed_from_date  = this.datepipe.transform(this.completionDate[0],'yyyy-MM-dd');
+      completed_to_date  = this.datepipe.transform(this.completionDate[1],'yyyy-MM-dd');
+    }
     let contractStatus = this.contractStatus;
 
     if (!contractStatus) contractStatus = -1;
@@ -240,7 +268,8 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
     this.type_id = this.type_id ? this.type_id : '';
 
     if (!to_date) to_date = from_date;
-    
+    if(!completed_to_date)
+      completed_to_date=completed_from_date
     let payload = ""
     if(this.contractInfo){
        payload ='&textSearch=' + this.contractInfo.trim()
@@ -250,7 +279,7 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
       '?from_date=' +
       from_date +
       '&to_date=' +
-      to_date +
+      to_date +'&completed_from_date='+completed_from_date+'&completed_to_date='+completed_to_date+
       '&status=' +
       contractStatus +
       '&fetchChildData=' +
@@ -263,7 +292,7 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
         '?from_date=' +
         from_date +
         '&to_date=' +
-        to_date +
+        to_date +'&completed_from_date='+completed_from_date+'&completed_to_date='+completed_to_date+
         '&status=' +
         contractStatus + payload +`&pageNumber=`+this.page+`&pageSize=`+this.row;
     }
@@ -311,7 +340,12 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
             colspan: 1,
             rowspan: 1,
           });
-
+          this.cols.push({
+            header: 'completed-date',
+            style: 'text-align:left',
+            colspan: 1,
+            rowspan: 1,
+          });
           this.cols.push({
             header: 'user.ed',
             style: 'text-align: left',
@@ -361,6 +395,7 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
           });
 
           this.list = listFirst.concat(listSecond);
+          console.log("list", this.list)
           this.totalRecords = response.TotalElements;
           this.numberPage = response.TotalPages;
         }
@@ -376,7 +411,13 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
     this.enterPage = this.page + 1;
     this.export(false);
   }
-
+  onReportClick(flag: boolean){
+    if (flag) {
+      this.page = 0;
+      this.enterPage = this.page + 1;
+    }
+    this.export(false);
+  }
   validateInput(event: KeyboardEvent) {
     const input = event.key;
     if (input === ' ' || (isNaN(Number(input)) && input !== 'Backspace')) {
