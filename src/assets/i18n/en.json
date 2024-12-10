@@ -867,7 +867,7 @@
   "package.unused":"Un used",
   "hello":"Hello",
   "menu.customer.list":"Customer directory",
-  "search.code.number.name": "Document code, Document number, Document name",
+  "search.code.number.name": "Doc code/number/name, Email, Phone number",
   "view_all": "View all",
   "edit.sign.time":"Edit sign time",
   "view.processing.flow":"View processing flow",
@@ -920,5 +920,7 @@
   "choose.type.sign": "Select login method",
   "status.account": "Account status",
   "type.sign.email.phone": "Login by Email and Phone",
-  "file.connect": "Related documents"
+  "file.connect": "Related documents",
+  "multi.sign.confirm":"By Confirming, you agree to the contents and terms of the document and use electronic methods to perform transactions.",
+  "text.select": "Select a signature or seal image"
 }

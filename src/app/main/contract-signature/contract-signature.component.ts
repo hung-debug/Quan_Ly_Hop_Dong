@@ -1455,28 +1455,31 @@ export class ContractSignatureComponent implements OnInit {
             is_content: 'forward_contract',
             markSignAcc: this.datas.markSignAcc,
             mark: true,
+            optionNoSelectPhoto: true
           };
 
           const dialogConfig = new MatDialogConfig();
-          dialogConfig.width = '1024px';
+          dialogConfig.width = '580px';
           dialogConfig.hasBackdrop = true;
           dialogConfig.data = data;
-
           const dialogRef = this.dialog.open(
             ImageDialogSignComponent,
             dialogConfig
           );
-
           dialogRef.afterClosed().subscribe((res: any) => {
             if (res) {
-              this.srcMark = res;
-              this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
-              // this.spinner.hide();
+              if(res.type != 4) {
+                this.srcMark = res.value;
+                this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
+                // this.spinner.hide();
+              } else {
+                this.srcMark=''
+                result.mark = 0;
+                this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
+              }
             }
 
           });
-        } else {
-          this.actionSignMulti(signId, recipientId, taxCode, result, idSignMany);
         }
       }
     });

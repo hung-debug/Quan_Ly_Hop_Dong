@@ -30,6 +30,11 @@ export class DialogSignManyComponentComponent implements OnInit {
 
   ngOnInit(): void {
     this.options = optionsCeCa;
+    const data = {
+      mark: 1,
+      agree: 1,
+    }
+    this.dialogRef.close(data);
   }
 
   onChangeForm(event: any) {
