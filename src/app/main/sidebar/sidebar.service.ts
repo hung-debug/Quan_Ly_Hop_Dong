@@ -142,201 +142,203 @@ export class SidebarService {
 
     this.userService.getUserById(currentUserC.customer.info.id).subscribe(
       (data) => {
-        this.roleService.getRoleById(data?.role_id).subscribe(
-          (data) => {
-            let listRole: any[];
-            listRole = data.permissions;
-
-            this.isQLHD_01 = listRole.some(
-              (element) => element.code == 'QLHD_01'
-            );
-            this.isQLHD_02 = listRole.some(
-              (element) => element.code == 'QLHD_02'
-            );
-            this.isQLHD_03 = listRole.some(
-              (element) => element.code == 'QLHD_03'
-            );
-            this.isQLHD_04 = listRole.some(
-              (element) => element.code == 'QLHD_04'
-            );
-            this.isQLHD_05 = true;
-            this.isQLHD_06 = listRole.some(
-              (element) => element.code == 'QLHD_06'
-            );
-            this.isQLHD_07 = listRole.some(
-              (element) => element.code == 'QLHD_07'
-            );
-            this.isQLHD_08 = listRole.some(
-              (element) => element.code == 'QLHD_08'
-            );
-            this.isQLHD_09 = listRole.some(
-              (element) => element.code == 'QLHD_09'
-            );
-            this.isQLHD_10 = listRole.some(
-              (element) => element.code == 'QLHD_10'
-            );
-            this.isQLHD_11 = listRole.some(
-              (element) => element.code == 'QLHD_11'
-            );
-            this.isQLHD_12 = listRole.some(
-              (element) => element.code == 'QLHD_12'
-            );
-            this.isQLHD_13 = listRole.some(
-              (element) => element.code == 'QLHD_13'
-            );
-            this.isQLHD_14 = listRole.some(
-              (element) => element.code == 'QLHD_14'
-            );
-            this.isQLHD_15 = listRole.some(
-              (element) => element.code == 'QLHD_15'
-            );
-
-            this.isQLMHD_01 = listRole.some(
-              (element) => element.code == 'QLMHD_01'
-            );
-            this.isQLMHD_02 = listRole.some(
-              (element) => element.code == 'QLMHD_02'
-            );
-            this.isQLMHD_03 = listRole.some(
-              (element) => element.code == 'QLMHD_03'
-            );
-            this.isQLMHD_04 = listRole.some(
-              (element) => element.code == 'QLMHD_04'
-            );
-            this.isQLMHD_05 = listRole.some(
-              (element) => element.code == 'QLMHD_05'
-            );
-            this.isQLMHD_06 = listRole.some(
-              (element) => element.code == 'QLMHD_06'
-            );
-            this.isQLMHD_07 = listRole.some(
-              (element) => element.code == 'QLMHD_07'
-            );
-            this.isQLMHD_08 = listRole.some(
-              (element) => element.code == 'QLMHD_08'
-            );
-
-            this.isQLTC_01 = listRole.some(
-              (element) => element.code == 'QLTC_01'
-            );
-            this.isQLTC_02 = listRole.some(
-              (element) => element.code == 'QLTC_02'
-            );
-            this.isQLTC_03 = listRole.some(
-              (element) => element.code == 'QLTC_03'
-            );
-            this.isQLTC_04 = listRole.some(
-              (element) => element.code == 'QLTC_04'
-            );
-
-            this.isQLND_01 = listRole.some(
-              (element) => element.code == 'QLND_01'
-            );
-            this.isQLND_02 = listRole.some(
-              (element) => element.code == 'QLND_02'
-            );
-            this.isQLND_03 = listRole.some(
-              (element) => element.code == 'QLND_03'
-            );
-            this.isQLND_04 = listRole.some(
-              (element) => element.code == 'QLND_04'
-            );
-
-            this.isQLVT_01 = listRole.some(
-              (element) => element.code == 'QLVT_01'
-            );
-            this.isQLVT_02 = listRole.some(
-              (element) => element.code == 'QLVT_02'
-            );
-            this.isQLVT_03 = listRole.some(
-              (element) => element.code == 'QLVT_03'
-            );
-            this.isQLVT_04 = listRole.some(
-              (element) => element.code == 'QLVT_04'
-            );
-            this.isQLVT_05 = listRole.some(
-              (element) => element.code == 'QLVT_05'
-            );
-
-            this.isQLLHD_01 = listRole.some(
-              (element) => element.code == 'QLLHD_01'
-            );
-            this.isQLLHD_02 = listRole.some(
-              (element) => element.code == 'QLLHD_02'
-            );
-            this.isQLLHD_03 = listRole.some(
-              (element) => element.code == 'QLLHD_03'
-            );
-            this.isQLLHD_04 = listRole.some(
-              (element) => element.code == 'QLLHD_04'
-            );
-            this.isQLLHD_05 = listRole.some(
-              (element) => element.code == 'QLLHD_05'
-            );
-            this.QLDSCTS_01 = listRole.some(
-              (element) => element.code == 'QLDSCTS_01'
-            );
-            this.QLDSCTS_02 = listRole.some(
-              (element) => element.code == 'QLDSCTS_02'
-            );
-            this.QLDSCTS_03 = listRole.some(
-              (element) => element.code == 'QLDSCTS_03'
-            );
-            this.QLDSCTS_04 = listRole.some(
-              (element) => element.code == 'QLDSCTS_04'
-            );
-
-            this.isBaoCaoChiTiet = listRole.some(
-              (element) => element.code == 'BAOCAO_CHITIET'
-            )
-
-            this.isBaoCaoSapHetHieuLuc = listRole.some(
-              (element) => element.code == 'BAOCAO_SAPHETHIEULUC'
-            )
-
-            this.isBaoCaoTrangThaiXuLy = listRole.some(
-              (element) => element.code == 'BAOCAO_TRANGTHAIXULY'
-            )
-
-            this.isBaoCaoSoLuongTrangThai = listRole.some(
-              (element) => element.code == 'BAOCAO_SOLUONG_TRANGTHAI'
-            )
-
-            this.isBaoCaoHopDongEcontractMsale = listRole.some(
-              (element) => element.code == 'BAOCAO_SOLUONG_HOPDONG_ECONTRACT_MSALE'
-            )
-
-            this.isBaoCaoTrangThaiGuiSms = listRole.some(
-              (element) => element.code == 'BAOCAO_TRANGTHAIGUI_SMS'
-            )
-
-            this.isBaoCaoTrangThaiGuiEmail = listRole.some(
-              (element) => element.code == 'BAOCAO_TRANGTHAIGUI_EMAIL'
-            )
-
-            this.isBaoCaoEKYC = listRole.some(
-              (element) => element.code == 'BAOCAO_EKYC'
-            )
-
-            this.isBaoCaoSoLuongLoai = listRole.some((element) => element.code == 'BAOCAO_SOLUONG_LOAIHOPDONG');
-
-            this.isBaoCaoHopDongNhan = listRole.some((element) => element.code == 'BAOCAO_HOPDONG_NHAN');
-
-            this.isConfigSms = listRole.some((element) => element.code == 'CAUHINH_SMS');
-
-            this.isConfigSoonExpireDay = listRole.some((element) => element.code == 'CAUHINH_NGAYSAPHETHAN');
-
-            this.isConfigBrandname = listRole.some((element) => element.code == 'CAUHINH_BRANDNAME');
-
-            this.isConfigMailServer = listRole.some((element) => element.code == 'CAUHINH_MAILSERVER');
-
-            this.buildMenu(currentUserC);
-          },
-          (error) => {
-            this.toastService.showErrorHTMLWithTimeout('Lấy thông tin phân quyền','',3000);
-            this.router.navigate(['/login'])
-          }
-        );
+        if(data) {
+          this.roleService.getRoleById(data?.role_id).subscribe(
+            (data) => {
+              let listRole: any[];
+              listRole = data.permissions;
+  
+              this.isQLHD_01 = listRole.some(
+                (element) => element.code == 'QLHD_01'
+              );
+              this.isQLHD_02 = listRole.some(
+                (element) => element.code == 'QLHD_02'
+              );
+              this.isQLHD_03 = listRole.some(
+                (element) => element.code == 'QLHD_03'
+              );
+              this.isQLHD_04 = listRole.some(
+                (element) => element.code == 'QLHD_04'
+              );
+              this.isQLHD_05 = true;
+              this.isQLHD_06 = listRole.some(
+                (element) => element.code == 'QLHD_06'
+              );
+              this.isQLHD_07 = listRole.some(
+                (element) => element.code == 'QLHD_07'
+              );
+              this.isQLHD_08 = listRole.some(
+                (element) => element.code == 'QLHD_08'
+              );
+              this.isQLHD_09 = listRole.some(
+                (element) => element.code == 'QLHD_09'
+              );
+              this.isQLHD_10 = listRole.some(
+                (element) => element.code == 'QLHD_10'
+              );
+              this.isQLHD_11 = listRole.some(
+                (element) => element.code == 'QLHD_11'
+              );
+              this.isQLHD_12 = listRole.some(
+                (element) => element.code == 'QLHD_12'
+              );
+              this.isQLHD_13 = listRole.some(
+                (element) => element.code == 'QLHD_13'
+              );
+              this.isQLHD_14 = listRole.some(
+                (element) => element.code == 'QLHD_14'
+              );
+              this.isQLHD_15 = listRole.some(
+                (element) => element.code == 'QLHD_15'
+              );
+  
+              this.isQLMHD_01 = listRole.some(
+                (element) => element.code == 'QLMHD_01'
+              );
+              this.isQLMHD_02 = listRole.some(
+                (element) => element.code == 'QLMHD_02'
+              );
+              this.isQLMHD_03 = listRole.some(
+                (element) => element.code == 'QLMHD_03'
+              );
+              this.isQLMHD_04 = listRole.some(
+                (element) => element.code == 'QLMHD_04'
+              );
+              this.isQLMHD_05 = listRole.some(
+                (element) => element.code == 'QLMHD_05'
+              );
+              this.isQLMHD_06 = listRole.some(
+                (element) => element.code == 'QLMHD_06'
+              );
+              this.isQLMHD_07 = listRole.some(
+                (element) => element.code == 'QLMHD_07'
+              );
+              this.isQLMHD_08 = listRole.some(
+                (element) => element.code == 'QLMHD_08'
+              );
+  
+              this.isQLTC_01 = listRole.some(
+                (element) => element.code == 'QLTC_01'
+              );
+              this.isQLTC_02 = listRole.some(
+                (element) => element.code == 'QLTC_02'
+              );
+              this.isQLTC_03 = listRole.some(
+                (element) => element.code == 'QLTC_03'
+              );
+              this.isQLTC_04 = listRole.some(
+                (element) => element.code == 'QLTC_04'
+              );
+  
+              this.isQLND_01 = listRole.some(
+                (element) => element.code == 'QLND_01'
+              );
+              this.isQLND_02 = listRole.some(
+                (element) => element.code == 'QLND_02'
+              );
+              this.isQLND_03 = listRole.some(
+                (element) => element.code == 'QLND_03'
+              );
+              this.isQLND_04 = listRole.some(
+                (element) => element.code == 'QLND_04'
+              );
+  
+              this.isQLVT_01 = listRole.some(
+                (element) => element.code == 'QLVT_01'
+              );
+              this.isQLVT_02 = listRole.some(
+                (element) => element.code == 'QLVT_02'
+              );
+              this.isQLVT_03 = listRole.some(
+                (element) => element.code == 'QLVT_03'
+              );
+              this.isQLVT_04 = listRole.some(
+                (element) => element.code == 'QLVT_04'
+              );
+              this.isQLVT_05 = listRole.some(
+                (element) => element.code == 'QLVT_05'
+              );
+  
+              this.isQLLHD_01 = listRole.some(
+                (element) => element.code == 'QLLHD_01'
+              );
+              this.isQLLHD_02 = listRole.some(
+                (element) => element.code == 'QLLHD_02'
+              );
+              this.isQLLHD_03 = listRole.some(
+                (element) => element.code == 'QLLHD_03'
+              );
+              this.isQLLHD_04 = listRole.some(
+                (element) => element.code == 'QLLHD_04'
+              );
+              this.isQLLHD_05 = listRole.some(
+                (element) => element.code == 'QLLHD_05'
+              );
+              this.QLDSCTS_01 = listRole.some(
+                (element) => element.code == 'QLDSCTS_01'
+              );
+              this.QLDSCTS_02 = listRole.some(
+                (element) => element.code == 'QLDSCTS_02'
+              );
+              this.QLDSCTS_03 = listRole.some(
+                (element) => element.code == 'QLDSCTS_03'
+              );
+              this.QLDSCTS_04 = listRole.some(
+                (element) => element.code == 'QLDSCTS_04'
+              );
+  
+              this.isBaoCaoChiTiet = listRole.some(
+                (element) => element.code == 'BAOCAO_CHITIET'
+              )
+  
+              this.isBaoCaoSapHetHieuLuc = listRole.some(
+                (element) => element.code == 'BAOCAO_SAPHETHIEULUC'
+              )
+  
+              this.isBaoCaoTrangThaiXuLy = listRole.some(
+                (element) => element.code == 'BAOCAO_TRANGTHAIXULY'
+              )
+  
+              this.isBaoCaoSoLuongTrangThai = listRole.some(
+                (element) => element.code == 'BAOCAO_SOLUONG_TRANGTHAI'
+              )
+  
+              this.isBaoCaoHopDongEcontractMsale = listRole.some(
+                (element) => element.code == 'BAOCAO_SOLUONG_HOPDONG_ECONTRACT_MSALE'
+              )
+  
+              this.isBaoCaoTrangThaiGuiSms = listRole.some(
+                (element) => element.code == 'BAOCAO_TRANGTHAIGUI_SMS'
+              )
+  
+              this.isBaoCaoTrangThaiGuiEmail = listRole.some(
+                (element) => element.code == 'BAOCAO_TRANGTHAIGUI_EMAIL'
+              )
+  
+              this.isBaoCaoEKYC = listRole.some(
+                (element) => element.code == 'BAOCAO_EKYC'
+              )
+  
+              this.isBaoCaoSoLuongLoai = listRole.some((element) => element.code == 'BAOCAO_SOLUONG_LOAIHOPDONG');
+  
+              this.isBaoCaoHopDongNhan = listRole.some((element) => element.code == 'BAOCAO_HOPDONG_NHAN');
+  
+              this.isConfigSms = listRole.some((element) => element.code == 'CAUHINH_SMS');
+  
+              this.isConfigSoonExpireDay = listRole.some((element) => element.code == 'CAUHINH_NGAYSAPHETHAN');
+  
+              this.isConfigBrandname = listRole.some((element) => element.code == 'CAUHINH_BRANDNAME');
+  
+              this.isConfigMailServer = listRole.some((element) => element.code == 'CAUHINH_MAILSERVER');
+  
+              this.buildMenu(currentUserC);
+            },
+            (error) => {
+              this.toastService.showErrorHTMLWithTimeout('Lấy thông tin phân quyền','',3000);
+              this.router.navigate(['/login'])
+            }
+          );
+        }
       },
       (error) => {
         setTimeout(() => this.router.navigate(['/login']));
