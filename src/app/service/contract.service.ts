@@ -181,6 +181,7 @@ export class ContractService {
   token: any;
   customer_id: any;
   organization_id: any;
+  phone: any;
   errorData: any = {};
   redirectUrl: string = '';
 
@@ -225,6 +226,9 @@ export class ContractService {
     this.organization_id = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.info.organizationId;
+    this.phone = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.info.phone;
   }
 
   getAuthCurrentUser() {
@@ -619,7 +623,8 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
 
     const body = JSON.stringify({
-      email: email
+      email: email,
+      phone: this.phone
     });
 
     return this.http.post<any>(this.checkViewContractUrl + id, body, {
