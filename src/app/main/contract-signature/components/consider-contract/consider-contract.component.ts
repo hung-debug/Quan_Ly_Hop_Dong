@@ -268,6 +268,9 @@ export class ConsiderContractComponent
       this.isNB = true
     } else {
       this.isNB = false
+      sessionStorage.removeItem('mail')
+      sessionStorage.removeItem('type')
+      sessionStorage.removeItem('url')
     }
     this.getDeviceApp();
 
