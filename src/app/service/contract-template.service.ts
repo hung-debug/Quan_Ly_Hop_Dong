@@ -11,6 +11,7 @@ export class ContractTemplateService {
 
   token: any;
   organization_id: any;
+  phone: any;
 
   shareContractTemplateUrl: any = `${environment.apiUrl}/api/v1/shares/template`;
   listContractTemplateUrl: any = `${environment.apiUrl}/api/v1/contracts/template/my-contract/list`;
@@ -47,6 +48,7 @@ export class ContractTemplateService {
   getCurrentUser() {
     this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
     this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId;
+    this.phone = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.phone;
   }
 
   // public getContractTemplateList(isShare:any, filter_name:any, filter_type: any, page:any, size:any): Observable<any> {
@@ -80,7 +82,8 @@ export class ContractTemplateService {
       .append('Authorization', 'Bearer ' + this.token);
 
     const body = JSON.stringify({
-      email: email
+      email: email,
+      phone: this.phone
     });
 
     return this.http.post<any>(this.checkViewTemplateContractUrl + id, body, {
