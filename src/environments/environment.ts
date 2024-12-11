@@ -8,6 +8,7 @@ export const environment = {
   usedSSO: true,
 
   apiUrl: 'https://econtractdev.mobifone.ai/service',
+  // apiUrl: 'http://10.4.201.53',
   // apiUrl: 'https://econtract-demo.mobifone.ai/service',
 
   //flag: 'NB',

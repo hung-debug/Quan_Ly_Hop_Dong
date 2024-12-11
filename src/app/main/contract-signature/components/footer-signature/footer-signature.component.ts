@@ -290,7 +290,7 @@ export class FooterSignatureComponent implements OnInit {
   }
   ArrRecipientsNew: boolean;
   action() {
-    
+    console.log ("act btn cf");
     if (this.datas.action_title == 'dieu_phoi') {
       this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
       let id_recipient_signature = null;

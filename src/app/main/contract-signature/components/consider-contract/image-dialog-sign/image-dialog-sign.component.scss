@@ -1,146 +1,273 @@
-//@font-face {
-//  font-family:font_lexend_deca;
-//  src:url('assets/scss/font/LexendDeca-VariableFont_wght.ttf') format('ttf');
-//  font-weight:normal;
-//  font-style:normal;
-//}
-
-.content {
-  .name-item {
-    .require_star {
-      color: red;
-    }
-    .form-control > input {
-      border: none;
-      outline: none;
-      margin-left: 20px;
-    }
-  }
-
-  .name-item:not(:last-child) {
-    margin-bottom: 10px;
-  }
-
-  .select-option {
-    display: flex;
-    justify-content: center;
-    margin-top: 29px;
-    button {
-      width: 91px;
-      height: 31px;
-      border-radius: 5px;
-      border: none;
-      color: white;
-      // background-color: #8B8B8B;
-      background-color: #106DB6;
-      cursor: pointer;
-    }
-    button:nth-last-child(1) {
-      background-color: #106DB6;
-    }
-  }
+.color-dialog-sign {
+  color: var(--text-primary);
 }
 
-.image-sign-acc {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #E9F4FD;
-  height: 42vh;
+.gap {
+  gap: 12px !important;
 }
 
-.image-sign-acc {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 42vh;
+.type-image-4 {
+  min-height: 240px;
 }
 
-.select-signature-acc {
-  width: 30%;
+.default-image {
+  // min-height: 58vh;
 }
 
-.align-select {
-  margin-left: 2%;
-}
-::ng-deep .multiselect-dropdown {
-  .dropdown-btn {
-    border: 1px solid #87CAFF !important;
-    min-height: 38px;
-    height: auto;
-  }
-}
-
-//upload file
-input[type="file"] {
-  display: none;
-}
-.custom-file-upload {
-  border: 1px solid #ccc;
-  display: inline-block;
-  padding: 6px 12px;
-  cursor: pointer;
-  color: #106DB6;
-  width: 100%;
-  border-radius: 20px;
-}
-
-//label type contract
-.label_type{
+.content-title-dialog-sign {
   text-align: center;
-  font-weight: 500;
-  padding: 10px;
 }
 
-//label item form
-.label_item{
-  padding: 12px 0px 3px;
+.title-dialog-sign {
+  font-size: var(--fs14);
+  font-weight: 700;
+  line-height: 21px;
 }
 
-.require_star{
-  color: red;
+.text-select {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
 }
 
+.radio-confirm input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  margin: auto 8px auto 0px;
+  cursor: pointer;
+}
 
-.input-line {
+.dialog-signature {
+  height: 300px;
+  background-color: #F3F6FA;
+  border-radius: 12px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog-signature img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.blankImg {
+  text-align: center;
+}
+
+.checkbox-confirm {
+  margin-top: 20px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.checkbox-confirm .text {
+  margin-left: 8px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+.checkbox-hide-processing-thread {
+  -webkit-appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  -moz-appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+  min-width: 24px;
+  min-height: 24px;
+  margin: auto 8px auto 0;
+  border-radius: 6px;
+  display: block;
+  border: 1px solid #A8B5CE; /* Thêm border */
   position: relative;
+  cursor: pointer;
+  background-color: #fff; /* Màu nền mặc định */
 }
-.input-img {
-  top: 10px;
-  right: 25px;
+.checkbox-hide-processing-thread:checked {
+  // background-color: #fff;
+  background-color: #0041C4;
+}
+
+.checkbox-hide-processing-thread:checked::after {
+  content: '';
   position: absolute;
-}
-.input-text {
-  border: 0;
-  width: 100%;
-  outline:0px;
+  top: 50%;
+  left: 50%;
+  width: 13px; /* Kích thước ảnh */
+  height: 10px; /* Kích thước ảnh */
+  background-image: url('../../../../../../assets/img/Vector.png'); /* Replace with your image URL */
+  background-size: cover; /* Đảm bảo ảnh bao phủ toàn bộ vùng */
+  transform: translate(-50%, -50%);
 }
 
-.container-img-file {
-  height: 47vh;
+.select-option {
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: #E9F4FD;
+  button {
+    width: 120px;
+    height: 38px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 21px;
+    white-space: nowrap;    /* Không cho phép xuống dòng */
+    overflow: hidden;       /* Ẩn nội dung tràn */
+    text-overflow: ellipsis;/* Hiển thị dấu "..." nếu bị tràn */
+  }
+
+  .button-cancel {
+    border: 1px solid #C6D2EA;
+    background-color: #FFFFFF;
+    color: #677694;
+  }
+
+  .button-clear, .button-confirm-active {
+    background-color: #0041C4;
+    color: #FFFFFF;
+  }
+
+  .button-confirm-disable {
+    background-color: #8E9AB0;
+    color: #FFFFFF;
+  }
 }
 
-.container-img-file-1 {
-  justify-content: center;
-  align-items: center;
+.signature-container {
+  position: relative;
+  width: 100%;
+  border-radius: 1.2vh;
+  overflow: hidden;
 }
 
-.text-choose-file {
-  margin-top: 32px;
-  font-size: 18px;
-  color: #106DB6;
+.signature-pad {
+  height: 300px;
+  border-radius: 1.2vh;
+  background-color: #F3F6FA;
+  display: block;
+}
+
+:host ::ng-deep .signature-pad canvas {
+  border: none !important;
+}
+
+.upload-photo {
+  width: 120px;
+  height: 44px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  text-align: center; /* Canh giữa theo chiều ngang */
+  line-height: 44px; /* Đặt bằng chiều cao của ô */
+  font-size: 14px;
+  font-weight: 700;
+  border: 1px solid #0041C4;
+  background-color: #FFFFFF;
+  color: #0041C4;
+  margin: auto;
 }
 
 .text-support-extension {
-  margin-top: 8px;
-  color: #ED1C24;
-  font-weight: 500;
+  color: #A8B5CE;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  margin-top: 10px;
+}
+
+.margin-top-20px {
+  margin-top: 20px !important;
+}
+
+@media (max-width: 576px) {
+  .type-image-4 {
+    min-height: 210px;
+  }
+  
+  // .default-image {
+  //   min-height: 46vh;
+  // }
+
+  .title-dialog-sign {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 21px;
+  }
+
+  .text-select {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+  }
+
+  .margin-top-20px {
+    margin-top: 10px !important;
+  }
+
+  .radio-confirm input[type="radio"] {
+    width: 15px;
+    height: 15px;
+    margin: auto 4px auto 0px;
+  }
+  
+  .dialog-signature {
+    height: 210px;
+  }
+
+  .lable-radio {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+  }
+
+  .checkbox-hide-processing-thread {
+    min-width: 20px;
+    min-height: 20px;
+    margin: auto 4px auto 0;
+  }
+
+  .checkbox-confirm {
+    margin-top: 10px;
+  }
+
+  .checkbox-confirm .text {
+    font-size: 12px;
+  }
+
+  .select-option {
+    button {
+      width: 100px;
+      height: 30px;
+      border-radius: 5px;
+      padding: 0px 12px;
+      font-size: 13px;
+    }
+  }
+
+  .signature-pad {
+    height: 210px;
+  }
+
+  .upload-photo {
+    width: 100px;
+    height: 36px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    text-align: center; /* Canh giữa theo chiều ngang */
+    line-height: 36px; /* Đặt bằng chiều cao của ô */
+    font-size: 14px;
+    font-weight: 700;
+    border: 1px solid #0041C4;
+    background-color: #FFFFFF;
+    color: #0041C4;
+    margin: auto;
+  }
+  
+  .text-support-extension {
+    font-size: 11px;
+    margin-top: 5px;
+  }
 }

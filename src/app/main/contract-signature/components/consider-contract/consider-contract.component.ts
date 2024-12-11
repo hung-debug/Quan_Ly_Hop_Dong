@@ -215,6 +215,7 @@ export class ConsiderContractComponent
   defaultValueSelect: any = 1.0;
   page1: boolean = false;
   pageLast: boolean = true;
+  isXemXet: boolean = false;
   zoomOptions = [
     { percent: '25%', value: 0.25 },
     { percent: '50%', value: 0.5 },
@@ -267,6 +268,9 @@ export class ConsiderContractComponent
       this.isNB = true
     } else {
       this.isNB = false
+      sessionStorage.removeItem('mail')
+      sessionStorage.removeItem('type')
+      sessionStorage.removeItem('url')
     }
     this.getDeviceApp();
 
@@ -1654,6 +1658,7 @@ export class ConsiderContractComponent
                     this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 3000);
                     return;
                   } else {
+                    //ttttt
                     this.imageDialogSignOpen(e, haveSignImage);
                     return;
                   }
@@ -1671,7 +1676,7 @@ export class ConsiderContractComponent
               ) {
                 // let typeSignDigital = null;
                 // let typeSignImage = null;
-                if (this.recipient?.sign_type) {
+                if (this.recipient?.sign_type.length) {
                   const typeSD = this.recipient?.sign_type.find(
                     (t: any) => t.id != 1
                   );
@@ -1685,6 +1690,8 @@ export class ConsiderContractComponent
                   if (typeSImage) {
                     typeSignImage = typeSImage.id;
                   }
+                } else {
+                  this.isXemXet = true;
                 }
 
                 if (typeSignDigital && typeSignDigital == 3) {
@@ -2060,7 +2067,8 @@ export class ConsiderContractComponent
       is_content: 'forward_contract',
       orgId: this.orgId,
       imgSignAcc: this.datas.imgSignAcc,
-      recipientId: this.recipientId
+      recipientId: this.recipientId,
+      optionNoSelectPhoto: false
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -2069,11 +2077,11 @@ export class ConsiderContractComponent
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(async (result: any) => {
-
-      let is_data = result;
-      this.otpValueSign = result
-      this.datas.is_data_object_signature.valueSign = result;
-      if (result) {
+      let is_data;
+      is_data = result.value;
+      this.otpValueSign = result.value
+      this.datas.is_data_object_signature.valueSign = result.value;  
+      if (result.value) {
         if (
           e &&
           e == 1 &&
@@ -2156,21 +2164,25 @@ export class ConsiderContractComponent
       is_content: 'forward_contract',
       markSignAcc: this.datas.markSignAcc,
       mark: true,
-      recipientId: this.recipientId
+      recipientId: this.recipientId,
+      optionNoSelectPhoto:  this.isCheck == 2 ? false : true
     };
 
     // @ts-ignore
-    const dialogRef = this.dialog.open(ImageDialogSignComponent, {
-      width: '1024px',
+    let dialogRef = this.dialog.open(ImageDialogSignComponent, {
+      width: '580px',
       backdrop: 'static',
       data: data,
       code: code
-    });
-
-
+    }); 
+  
     dialogRef.afterClosed().subscribe((res: any) => {
       if (res) {
-        this.srcMark = res;
+        if(res.type != 4) {
+          this.srcMark = res.value;
+        } else {
+          this.markImage = false;
+        }
 
         this.spinner.show();
 
@@ -2204,11 +2216,15 @@ export class ConsiderContractComponent
       const allTypeImageSignature3 = allType3.every((itemCheck: any) => itemCheck.type_image_signature === 3);
       if (allTypeImageSignature1 && !allTypeImageSignature2 && !allTypeImageSignature3) {
         this.isCheck = 1;
+       
       } else if (!allTypeImageSignature1 && allTypeImageSignature2 && !allTypeImageSignature3) {
         this.isCheck = 2;
+       
       } else {
         this.isCheck = 3;
+       
       }
+      return Promise.resolve({ value: 'yes', isConfirmed: true });
       let swalOptions: any = {
         title: this.getTextAlertConfirm(),
         icon: 'warning',
@@ -2229,7 +2245,7 @@ export class ConsiderContractComponent
       }
       
       return Swal.fire(swalOptions);;
-    } else {
+    } else if (this.isXemXet) {
       return Swal.fire({
         title: this.getTextAlertConfirm(),
         icon: 'warning',
@@ -2238,7 +2254,10 @@ export class ConsiderContractComponent
         cancelButtonColor: '#b0bec5',
         confirmButtonText: this.translate.instant('confirm'),
         cancelButtonText: this.translate.instant('contract.status.canceled'),
+        
       });
+    } else {
+      return Promise.resolve({isConfirmed: true, isDenied: false, isDismissed: false, value: true});
     }
   }
 

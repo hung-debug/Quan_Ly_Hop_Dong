@@ -417,7 +417,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   onResize(e?: any) {
     this.checkZoomService.onResize();
   }
-
+//1
   getDataSignUpdateAction() {
     let dataPosition: any[] = [];
     let dataNotPosition: any[] = [];
@@ -482,7 +482,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     })
   }
-
+//2
   setDataSignContract() {
     let data_sign_config_cks = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_so');
     let data_sign_config_cka = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_anh');
@@ -523,7 +523,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     })
   }
-
+//3*
   defindDataContract() {
     let dataDetermine: {
       role: Boolean | number;
@@ -2415,7 +2415,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
     return false;
   }
-
+//** */
   validData(isSaveDraft?: any) {
     let data_not_drag = this.datas.contract_user_sign.find((item: any) => {
       if (item.sign_unit === 'chu_ky_so') {
@@ -2455,7 +2455,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               // }
               currentElement = element
               count++;
-              break
+              break;
             } else if (element.sign_unit == 'so_tai_lieu' && element.length > 1) {
               count_number++;
               currentElement = element

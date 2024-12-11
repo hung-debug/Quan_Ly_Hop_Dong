@@ -256,3 +256,9 @@
 .custom-table-td {
   word-break: break-word;width: 10%;
 }
+@media (min-width: 1580px) {
+  .col-xxl-2 {
+    flex: 0 0 13.8%;
+    max-width: 13.8%;
+  }
+}

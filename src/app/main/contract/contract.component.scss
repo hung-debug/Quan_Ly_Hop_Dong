@@ -631,3 +631,15 @@ input::placeholder{
   white-space: normal !important;
   max-width: 400px;
 }
+
+::ng-deep .custom-sub-menu {
+  margin-right: 5px;
+}
+
+::ng-deep .mat-menu-item-submenu-trigger {
+  padding: 0px 8px !important;
+}
+
+::ng-deep .mat-menu-submenu-icon {
+  display: none !important; /* Ẩn icon mũi tên */
+}

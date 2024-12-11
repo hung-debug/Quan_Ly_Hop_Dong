@@ -119,6 +119,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   attachFilesList: any[] = [];
   isDocx: boolean = false;
   contractId: any;
+  private sub: any;
+  typeClone: string;
+  status: string;
   constructor(
     private uploadService: UploadService,
     private contractService: ContractService,
@@ -132,6 +135,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     private activeRoute: ActivatedRoute,
     private dialog: MatDialog,
     private sysService: SysService,
+    private route: ActivatedRoute,
   ) {
     this.step = variable.stepSampleContract.step1;
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
@@ -141,10 +145,18 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.environment = environment
     this.spinner.hide();
 
+    this.sub = this.route.params.subscribe(params => {
+      this.typeClone = params['type'];
+      this.status = params['status'];
+    });
+
     let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
     this.contractId = idContract
     this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract, false);
 
+    if(this.status == 'template' && (this.typeClone == 'KEEP_MY_ORG' || this.typeClone == 'KEEP_ALL')) {
+      this.checkView = true;
+    }
     if(!idContract || this.checkView) {
       this.actionSuccess();
     } else {

@@ -82,6 +82,8 @@ export class AddContractComponent implements OnInit {
   //type = 3 => Hop dong theo lo
   type: number = 1;
   action: string;
+  typeClone: string;
+  status: string;
   id: string;
   private sub: any;
 
@@ -157,9 +159,11 @@ export class AddContractComponent implements OnInit {
 
       if (response.status == 'Using' || environment.flag == 'NB') {
         //title
-        this.sub = this.route.params.subscribe((params) => {
+        this.sub = this.route.params.subscribe(async (params) => {
           this.action = params['action'];
-
+          this.typeClone = params['type'];
+          this.status = params['status'];
+          console.log("this.status", this.status)
           //lay id user
           let userId = this.userService.getAuthCurrentUser().id;
           this.userService.getUserById(userId).subscribe(
@@ -220,7 +224,7 @@ export class AddContractComponent implements OnInit {
 
           //set title
           this.type = 1;
-          if (this.action == 'add') {
+          if (this.action == 'add' && this.typeClone != 'KEEP_MY_ORG' && this.typeClone != 'KEEP_ALL') {
             this.appService.setTitle('contract.add');
           } else if (this.action == 'add-form') {
             this.type = 2;
@@ -244,6 +248,13 @@ export class AddContractComponent implements OnInit {
           } else if (this.action == 'copy') {
             this.id = params['id'];
             this.appService.setTitle('contract.copy');
+          } else if (this.action == 'add' && (this.typeClone == 'KEEP_MY_ORG' || this.typeClone == 'KEEP_ALL')) {
+            this.id = params['id'];
+            if (this.typeClone == 'KEEP_MY_ORG') {
+              this.appService.setTitle('keep.signature.stream.organizational');
+            } else {
+              this.appService.setTitle('keep.signature.stream.all');
+            }
           }
 
           if (this.action == 'edit') {
@@ -271,6 +282,58 @@ export class AddContractComponent implements OnInit {
                 this.spinner.hide();
               }
             );
+          } else if (this.action == 'add' && (this.typeClone == 'KEEP_MY_ORG' || this.typeClone == 'KEEP_ALL')) {
+            this.spinner.show();
+            let dataClone;
+            if (this.status == 'single') {
+              if (this.typeClone == 'KEEP_MY_ORG') {
+                try {
+                  dataClone = await this.contractService.cloneParticipants(this.id, 'KEEP_MY_ORG').toPromise();
+                } catch (error) {
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin luồng tổ chức của tôi','',3000);
+                }
+              } else {
+                try {
+                  dataClone = await this.contractService.cloneParticipants(this.id, 'KEEP_ALL').toPromise();
+                } catch (error) {
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin toàn bộ luồng ký','',3000);
+                }
+              }
+            } else {
+              if (this.typeClone == 'KEEP_MY_ORG') {
+                try {
+                  dataClone = await this.contractService.cloneParticipantsTemplate(this.id, 'KEEP_MY_ORG').toPromise();
+                } catch (error) {
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin luồng tổ chức của tôi','',3000);
+                }
+              } else {
+                try {
+                  dataClone = await this.contractService.cloneParticipantsTemplate(this.id, 'KEEP_ALL').toPromise();
+                } catch (error) {
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin toàn bộ luồng ký','',3000);
+                }
+              }
+            }
+
+
+            for (let i = 0; i < dataClone?.participants.length; i++) {
+              for (let j = 0; j < dataClone?.participants[i].recipients.length; j++) {
+                dataClone.participants[i].recipients[j].id = null; 
+                dataClone.participants[i].recipients[j].status = 0;
+                dataClone.participants[i].recipients[j].fields = null;           
+              }              
+            }
+            let data_api = {
+              is_data_contract: dataClone,
+              i_data_file_contract: [],
+              is_data_object_signature: [],
+            };
+
+            this.getDataContractCreated(data_api);
           } else {
             if (this.type == 1) {
               this.step = variable.stepSampleContract.step1;
@@ -295,6 +358,7 @@ export class AddContractComponent implements OnInit {
   }
 
   getDataContractCreated(data: any) {
+    console.log("data", data)
     let fileNameAttach = data.i_data_file_contract.filter(
       (p: any) => p.type == 3
     );

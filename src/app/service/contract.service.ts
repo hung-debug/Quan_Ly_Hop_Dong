@@ -56,6 +56,8 @@ export class ContractService {
   processAuthorizeContractUrl: any = `${environment.apiUrl}/api/v1/processes/authorize`;
 
   addGetDataContract: any = `${environment.apiUrl}/api/v1/contracts/`;
+  urlCloneParticipants: any = `${environment.apiUrl}/api/v1/contracts/clone-participants/`;
+  urlCloneParticipantsTemplate: any = `${environment.apiUrl}/api/v1/contracts/template/clone-participants/`;
   editSignTimeMuti: any = `${environment.apiUrl}/api/v1/contracts/update-sign-time`;
 
   addGetFileContract: any = `${environment.apiUrl}/api/v1/documents/by-contract/`;
@@ -181,6 +183,7 @@ export class ContractService {
   token: any;
   customer_id: any;
   organization_id: any;
+  phone: any;
   errorData: any = {};
   redirectUrl: string = '';
 
@@ -225,6 +228,9 @@ export class ContractService {
     this.organization_id = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.info.organizationId;
+    this.phone = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.info.phone;
   }
 
   getAuthCurrentUser() {
@@ -620,7 +626,8 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
 
     const body = JSON.stringify({
-      email: email
+      email: email,
+      phone: this.phone
     });
 
     return this.http.post<any>(this.checkViewContractUrl + id, body, {
@@ -1717,6 +1724,26 @@ export class ContractService {
       headers,
     });
     // addGetDataContract:any = `${environment.apiUrl}/api/v1/contracts/`;
+  }
+
+  cloneParticipants(idContract: any, option: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.urlCloneParticipants + idContract + '?option=' + option, {
+      headers,
+    });
+  }
+
+  cloneParticipantsTemplate(idContract: any, option: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.urlCloneParticipantsTemplate + idContract + '?option=' + option, {
+      headers,
+    });
   }
 
   getDataPreRelease(idContract: any) {

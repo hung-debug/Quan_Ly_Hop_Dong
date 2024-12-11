@@ -22,17 +22,21 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   public signaturePad: SignaturePadComponent;
   imgSignAccountSelect: any;
   markSignAccountSelect: any;
+  
 
   imgSignPCSelect: any;
   imgSignDrawing: any;
   optionsFileSignAccount: any;
   mobile: boolean = false;
+  confirmConsider: boolean = true;
+  hasImage = false;
 
   public signaturePadOptions: NgSignaturePadOptions = { // passed through to szimek/signature_pad constructor
     minWidth: 1.5,
     maxWidth: 1.5,
     canvasWidth: 500,
-    canvasHeight: 380
+    canvasHeight: 380,
+    penColor: '#0041C4'
   };
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -60,10 +64,14 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     this.typeImageSignatureRadio = 1;
 
     this.datas = this.data;
-
     this.initListSignatureAccountUser();
     this.imgSignAccountSelect = 'data:image/png;base64,' + this.datas.imgSignAcc;
     this.markSignAccountSelect = 'data:image/png;base64,' + this.datas.markSignAcc;
+    if (!this.datas.imgSignAcc && !this.datas.markSignAcc && this.data.optionNoSelectPhoto) {
+      this.typeImageSignatureRadio = 4; // Nếu cả hai biến đều trống, set typeImageSignatureRadio = 4
+    } else if (!this.datas.imgSignAcc && !this.datas.markSignAcc && !this.data.optionNoSelectPhoto) {
+      this.typeImageSignatureRadio = 2; 
+    }
   }
 
   getDeviceApp() {
@@ -131,7 +139,8 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
 
   t(ev: number) {
     this.checkIOSAndroid();
-
+    if (ev==4){  
+    }
     if (ev == 3) {
       setTimeout(() => {
         this.signaturePad.set('border', 'none');
@@ -190,17 +199,19 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
 
   chooseImageSignAcc(e: INgxSelectOption[]) {
     this.imgSignAccountSelect = e[0].data.data;
+    
   }
 
   uploadImage() {
     if (this.typeImageSignatureRadio == 1) {
+    
       if(!this.imgSignAccountSelect) {
         this.toastService.showErrorHTMLWithTimeout('Bạn chưa chọn ảnh','',3000)
       } else {
         if(this.data.mark) {
-          this.dialogRef.close(this.markSignAccountSelect);
+          this.dialogRef.close({value: this.markSignAccountSelect, type: 1});
         } else {
-          this.dialogRef.close(this.imgSignAccountSelect);
+          this.dialogRef.close({value: this.imgSignAccountSelect, type: 1});
         }
       }
 
@@ -208,15 +219,17 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
       if(!this.imgSignPCSelect) {
         this.toastService.showErrorHTMLWithTimeout('not.photo','',3000)
       } else {
-        this.dialogRef.close(this.imgSignPCSelect);
+        this.dialogRef.close({value: this.imgSignPCSelect, type: 2});
       }
     } else if (this.typeImageSignatureRadio == 3) {
       if(!this.imgSignDrawing) {
         this.toastService.showErrorHTMLWithTimeout('not.draw.sign','',3000)
       } else {
-        this.dialogRef.close(this.imgSignDrawing);
+        this.dialogRef.close({value: this.imgSignDrawing, type: 3});
       }
-    }
+    } else if (this.typeImageSignatureRadio == 4) {        
+      this.dialogRef.close({value: this.markSignAccountSelect, type: 4});
+    }   
   }
 
   clearImage() {
