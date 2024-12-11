@@ -5,7 +5,7 @@
       <div class="contract__content--title-doi-tac">
         <input id="order-organization" class="contract-total index-input" type="number"
         [(ngModel)]="data_organization.ordering" (focusout)="onChangeValue($event,'order-organization')"
-        oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1').slice(0, 5);">
+        oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
 
         <div class="organization-me">{{ "organization.me" | translate }}&nbsp;<span style="color: red">*</span>
         </div>
@@ -37,7 +37,7 @@
                   <input [id]="'ordering-organzation-view-' + index" class="contract-total index-input"
                   (focusout)="onChangeValue($event,'ordering-organzation-view-' + index)"
                   type="number" [(ngModel)]="d.ordering"
-                  oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1').slice(0, 5);"
+                  oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
                   [disabled]="getOriganzationReviewer().length == 1 && !isEditOrdering">
 
                   <div class="text-header-user-view">
@@ -296,7 +296,7 @@
                   <input [id]="'ordering-sign-' + index" class="contract-total"
                   (focusout)="onChangeValue($event,'ordering-sign-' + index)" style="width: 32px; height: 32px"
                   type="number" [(ngModel)]="d.ordering"
-                  oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1').slice(0, 5);"
+                  oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
                   [disabled]="getOriganzationSignature().length == 1 && !isEditOrdering">
 
                   <div class="text-header-user-view">
@@ -682,7 +682,7 @@
                   <input [id]="'ordering-doc-' + index" class="col-md-1 contract-total"
                   (focusout)="onChangeValue($event, 'ordering-doc-' + index)" style="width: 32px; height: 32px"
                   type="number" [(ngModel)]="d.ordering" [disabled]="getOriganzationDocument().length == 1 && !isEditOrdering"
-                  oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1').slice(0, 5);">
+                  oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
 
                   <div class="text-header-user-view">
                     {{ "user.doc" | translate }}<span>&nbsp;{{ index + 1 }}</span>
@@ -1067,8 +1067,8 @@
                     <div class="col-md-6 flex">
                       <input [id]="'ordering-view-' + index" class="col-md-1 contract-total"
                       (focusout)="onChangeValue($event,'ordering-view-' + index)" style="width: 32px; height: 32px"
-                      type="number" [(ngModel)]="d.ordering" [disabled]="!isEditOrderingPartner"
-                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1').slice(0, 5);">
+                      type="number" [(ngModel)]="d.ordering" [disabled]="!isEditOrdering"
+                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
 
                       <div class="text-header-user-view">
                         {{ "user.view" | translate }}<span>&nbsp;{{ index + 1 }}</span>
@@ -1282,8 +1282,8 @@
                       <input [id]="'ordering-sign-partner-' + index"
                       (focusout)="onChangeValue($event,'ordering-sign-partner-' + index)" class="contract-total"
                       style="width: 32px; height: 32px" type="number" [(ngModel)]="d.ordering"
-                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1').slice(0, 5);"
-                      [disabled]="getPartnerSignature(item).length == 1 && !isEditOrderingPartner">
+                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
+                      [disabled]="getPartnerSignature(item).length == 1 && !isEditOrdering">
 
                       <div class="text-header-user-view">
                         {{ "user.sign" | translate }}<span>&nbsp;{{ index + 1 }}</span>
@@ -1494,8 +1494,8 @@
                       <input [id]="'ordering-partner-doc-' + index"
                       (focusout)="onChangeValue($event, 'ordering-partner-doc-' + index)" class="contract-total"
                       style="width: 32px; height: 32px" type="number" [(ngModel)]="d.ordering"
-                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1').slice(0, 5);"
-                      [disabled]="getPartnerDocument(item).length == 1 && !isEditOrderingPartner">
+                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
+                      [disabled]="getPartnerDocument(item).length == 1 && !isEditOrdering">
 
                       <div class="text-header-user-view">
                         {{ "user.doc" | translate }}<span>&nbsp;{{ index + 1 }}</span>
@@ -1652,8 +1652,8 @@
                       <input [id]="'ordering-sign-partner-' + index"
                       (focusout)="onChangeValue($event, 'ordering-sign-partner-' + index)" class="col-md-1 contract-total"
                       style="width: 32px; height: 32px" type="number"
-                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1').slice(0, 5);"
-                      [(ngModel)]="d.ordering" [disabled]="getPartnerSignature(item).length == 1 && !isEditOrderingPersonalPartner">
+                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
+                      [(ngModel)]="d.ordering" [disabled]="getPartnerSignature(item).length == 1">
 
                       <div class="text-header-user-view">
                         {{ "user.sign" | translate }}<span>&nbsp;{{ index + 1 }}</span>

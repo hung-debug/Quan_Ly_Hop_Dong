@@ -4,7 +4,7 @@
       <div class="contract__content--title-doi-tac">
         <input id="order-organization" class="contract-total index-input" type="number"
           [(ngModel)]="data_organization.ordering" (focusout)="onChangeValue($event, 'order-organization')"
-          oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1').slice(0, 5);" />
+          oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
 
         <div class="organization-me">{{ "organization.me" | translate }}&nbsp;<span style="color: red">*</span>
         </div>
@@ -38,7 +38,7 @@
                         'ordering-organzation-view-' + index
                       )
                     " type="number" [(ngModel)]="d.ordering"
-                    oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1').slice(0, 5);"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
                     [disabled]="
                       getOriganzationReviewer().length == 1 && !isEditOrdering
                     " />
@@ -222,7 +222,7 @@
                   <input [id]="'ordering-sign-' + index" class="col-md-1 contract-total"
                     (focusout)="onChangeValue($event, 'ordering-sign-' + index)" style="width: 32px; height: 32px"
                     type="number" [(ngModel)]="d.ordering"
-                    oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1').slice(0, 5);"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
                     [disabled]="
                       getOriganzationSignature().length == 1 && !isEditOrdering
                     " />
@@ -648,7 +648,7 @@
                     (focusout)="onChangeValue($event, 'ordering-doc-' + index)" style="width: 32px; height: 32px"
                     type="number" [(ngModel)]="d.ordering" [disabled]="
                     getOriganzationDocument().length == 1 && !isEditOrdering"
-                    oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1').slice(0, 5);" />
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
 
                   <div class="text-header-user-view">
                     {{ "user.doc" | translate }}<span>&nbsp;{{ index + 1 }}</span>
@@ -972,7 +972,7 @@
         <input [id]="'ordering-partner-' + id" class="contract-total index-input"
           (focusout)="onChangeValue($event, 'ordering-partner-' + id)" style="width: 32px; height: 32px" type="number"
           [(ngModel)]="item.ordering"
-          oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1').slice(0, 5);" />
+          oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
 
         <div class="organization-me">{{ "doi_tac" | translate }}&nbsp;<span style="color: red">*</span>
         </div>
@@ -1173,9 +1173,9 @@
                       <input [id]="'ordering-view-' + index" class="contract-total"
                         (focusout)="onChangeValue($event, 'ordering-view-' + index)" style="width: 32px; height: 32px"
                         type="number" [(ngModel)]="d.ordering" [disabled]="
-                          getPartnerReviewer(item).length == 1 && !isEditOrderingPartner
+                          getPartnerReviewer(item).length == 1 && !isEditOrdering
                         "
-                        oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1').slice(0, 5);" />
+                        oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
 
                       <div class="text-header-user-view">
                         {{ "user.view" | translate }}<span>&nbsp;{{ index + 1 }}</span>
@@ -1471,9 +1471,9 @@
                           onChangeValue($event, 'ordering-sign-partner-' + index)
                         " class="col-md-1 contract-total" style="width: 32px; height: 32px" type="number"
                         [(ngModel)]="d.ordering"
-                        oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1').slice(0, 5);"
+                        oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
                         [disabled]="
-                          getPartnerSignature(item).length == 1 && !isEditOrderingPartner
+                          getPartnerSignature(item).length == 1 && !isEditOrdering
                         " />
 
                       <div class="text-header-user-view">
@@ -1902,9 +1902,9 @@
                           onChangeValue($event, 'ordering-partner-doc-' + index)
                         " class="col-md-1 contract-total" style="width: 32px; height: 32px" type="number"
                       [(ngModel)]="d.ordering"
-                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1').slice(0, 5);"
+                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
                       [disabled]="
-                          getPartnerDocument(item).length == 1 && !isEditOrderingPartner
+                          getPartnerDocument(item).length == 1 && !isEditOrdering
                         " />
 
                       <div class="text-header-user-view">
@@ -2174,8 +2174,8 @@
                       <input [id]="'ordering-sign-partner-' + index" (focusout)="
                           onChangeValue($event, 'ordering-sign-partner-' + index)
                         " class="col-md-1 contract-total" style="width: 32px; height: 32px" type="number"
-                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1').slice(0, 5);"
-                      [(ngModel)]="d.ordering" [disabled]="getPartnerSignature(item).length == 1 && !isEditOrderingPersonalPartner" />
+                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
+                      [(ngModel)]="d.ordering" [disabled]="getPartnerSignature(item).length == 1" />
                
                       <div class="text-header-user-view">
                         {{ "user.sign" | translate }}<span>&nbsp;{{ index + 1 }}</span>
@@ -2474,23 +2474,7 @@
                         </div>
                       </div>
                     </div>
-
-                    <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là hsm chứng thư số 1 lần-->
-                    <div class="col-md-6" *ngIf="getDataSignCertOneTime(d).length > 0">
-                      <div class="participants__name">
-                        <div class="label-text flex">
-                          {{ "tax_code.cardId" | translate }}&nbsp;<span class="required-title">*</span>
-                          <div style="color: #ffc107">
-                            ({{ "info.hsm" | translate }})
-                          </div>
-                        </div>
-                        <div class="input-data">
-                          <input class="content-input hover-item" type="text" placeholder="{{ 'enter.tax_code.cardId' | translate }}" [(ngModel)]="d.card_id"
-                            oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
-                        </div>
-                      </div>
-                    </div>
-
+    
                     <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là chứng thư số-->
                     <div class="participants--input" class="col-md-6" *ngIf="
                           getDataSignCert(d).length > 0 ||

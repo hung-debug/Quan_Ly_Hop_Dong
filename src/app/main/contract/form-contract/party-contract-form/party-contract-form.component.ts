@@ -1077,82 +1077,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       //valid ordering cac ben doi tac - to chuc
       let isOrderingPerson_exception = this.datasForm.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some((p: any) => p.id == 1 || p.id == 5));
       let isOrdering_not_exception = this.datasForm.is_determine_clone.filter((val: any) => val.recipients.filter((item: any) => item.role == 3 && item.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8))?.length > 0);
-            
-      let arrOrg = this.datasForm.is_determine_clone.filter((val: any) => val.type == 1) // lấy ra mảng tổ chức của tôi
-      let orgViewer = arrOrg[0]?.recipients.filter((item: any) => item.role == 2) // lấy ra người xem xét tổ chức của tôi
-      
-      let arrPartnerOrg = this.datasForm.is_determine_clone.filter((val: any) => val.type == 2) // lấy ra mảng tổ chức đối tác
-      let arrOrgPartnerViewer = arrPartnerOrg[0]?.recipients.filter((item: any) => item.role == 2) // lấy ra người xem xét tổ chức của đối tác
-      
-      let orderingPersonPartner = isOrderingPerson_exception[0]?.recipients[0]?.ordering; //lấy ra ordering của người ký đối tác cá nhân
-      let arrPartner = this.datasForm.is_determine_clone.filter((val: any) => val.type == 3); // lấy ra mảng chứa đối tác cá nhân
-
-      const orderingCounts: { [key: number]: number } = {};
-      this.datasForm.is_determine_clone.forEach((item: any) => {
-        orderingCounts[item.ordering] = (orderingCounts[item.ordering] || 0) + 1;
-      });
-      // Lấy các phần tử có `ordering` trùng nhau
-      const duplicateOrderingItems = this.datasForm.is_determine_clone.filter((item: any) => orderingCounts[item.ordering] > 1);
-      
-      let orderingPerson_exception = isOrderingPerson_exception[0].ordering;// lấy ra ordering của tổ chức đối tác cá nhân
-
-      let arrNoPartner = this.datasForm.is_determine_clone.filter((item: any) => item.type != 3) // lấy ra mảng ko chứa đối tác cá nhân
-
-      let arrCompareOrderingPartner = arrNoPartner.filter((item: any) => item.ordering == orderingPerson_exception) // so sánh ordering của đối tác cá nhân với các ordering tổ chức
-      
-      if (isOrderingPerson_exception.length > 0 && arrCompareOrderingPartner.length > 0) {
-        let dataPartner_ordering = isOrderingPerson_exception.some((val: any) => val.recipients[0]?.ordering == 1);
-
-        // let dataError_ordering = isOrderingPerson_exception.some((val: any) => val.type == 3 && val.recipients[0]?.ordering < 2); // ordering đối tác cá nhân phải = 1 nhỏ nhất
-        let data_orderingSmall = isOrderingPerson_exception[0]?.recipients.filter((val: any) => val.ordering);
-        //lấy ra ordering đối tác cá nhân
-        let orderingPartner = data_orderingSmall[0]?.ordering;
-        
-        let dataOrderingOrg = arrOrg[0]?.recipients.filter((item:any) => item.ordering > 1 && (item.role !=2 && item.role != 4)); // so sánh giá trị các ordering trong tổ chức của tôi phải lớn hơn 1
-        // dataOrderingOrg.length > 0 tức là ordering đối tác cá nhân = 1 là nhỏ nhất
-
-        let dataOrg_ordering = arrOrg[0]?.recipients.filter((item:any) => item.ordering && (item.role !=2 && item.role != 4)); // lấy mảng chứa các tổ chức của tôi không có người xem xét và văn thư
-
-        //so sánh giá trị ordering đối tác các nhân và ordering người xem xét tổ chức của tôi
-        let sortOrderViewerPartner = orgViewer?.filter((item:any) => orderingPartner > item.ordering) // so sánh ordering đối tác cá nhân phải lớn hơn ordering người xem xét
-        //nếu sortOrderViewerPartner.length == orgViewer.length (nếu 2 giá trị bằng nhau thì đúng còn ko thì false)
-
-        let sortOrdering = dataOrg_ordering?.filter((item: any)=> orderingPartner < item.ordering) // so sánh giá trị ordering của đối tác cá nhân với các ordering trong tổ chức của tôi
-        // nếu sortOrdering.length == dataOrg_ordering.length ( nếu 2 giá trị bằng nhau thì true còn ko thì sẽ là false )
-        
-        let dataOrderingOrgPartner = arrPartnerOrg[0]?.recipients?.filter((item:any) => item.ordering > 1 && (item.role !=2 && item.role !=1 && item.role != 4)); // so sánh giá trị các ordering trong tổ chức của đối tác phải lớn hơn 1
-        // dataOrderingOrgPartner.length > 0 tức là ordering đối tác cá nhân = 1 là nhỏ nhất
-        
-        // let dataOrgPart_ordering = arrPartnerOrg[0]?.recipients.filter((item:any) => item.ordering && item.role !=2);
-        let dataOrgPart_ordering = arrPartnerOrg[0]?.recipients?.filter((item:any) => item.ordering && (item.role !=2 && item.role !=1 && item.role != 4)); // lấy mảng chứa các tổ chức của đối tác không có người xem xét, điều phối, văn thư
-        
-        //so sánh giá trị ordering đối tác các nhân và ordering người xem xét tổ chức của tôi
-        let sortOrderViewerOrgPartner = arrOrgPartnerViewer?.filter((item:any) => orderingPartner > item.ordering) // so sánh ordering đối tác cá nhân phải lớn hơn ordering người xem xét đối tác tổ chức
-        //nếu sortOrderViewerOrgPartner.length == arrOrgPartnerViewer.length (nếu 2 giá trị bằng nhau thì đúng còn ko thì false)
-        
-        let sortOrderingOrgPartner = dataOrderingOrgPartner?.filter((item: any)=> orderingPartner < item.ordering) // so sánh giá trị ordering của đối tác cá nhân với các ordering trong tổ chức đối tác
-        // nếu sortOrderingOrgPartner.length == dataOrg_ordering.length ( nếu 2 giá trị bằng nhau thì true còn ko thì sẽ là false )
-        
-        // lấy ra mảng chứa đối tác cá nhân không phải loại ký otp và ekyc
-        let isOrderingPerson_NoException = this.datasForm.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6));
-
-        //so sánh odering của đối tác cá nhân ký số với ordering của đối tác cá nhân ký ảnh hoặc ekyc
-        let sortOrderingPersonPartner = isOrderingPerson_NoException[0]?.recipients?.filter((item: any) => item.ordering == orderingPersonPartner);
-
-        // valid ordering doi tac ca nhan selected option eKYC/OTP/Image
-        if(sortOrdering?.length != dataOrg_ordering?.length || dataOrderingOrg?.length == 0 ||
-          sortOrderingOrgPartner?.length != dataOrgPart_ordering?.length || dataOrderingOrgPartner?.length == 0 || sortOrderingPersonPartner.length > 0) {
-           this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
-           return false;
-         }
-        
-        // let dataError_ordering = isOrderingPerson_exception.some((val: any) => val.ordering > isOrderingPerson_exception.length);
-        // if (dataError_ordering) {
-        // if (!dataError_ordering && dataOrg_ordering.length > 0 && dataPartner_ordering) {
-        //   this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
-        //   return false;
-        // }
-      }else if(isOrderingPerson_exception.length > 0){
+      // valid ordering doi tac ca nhan selected option eKYC/OTP/Image
+      if (isOrderingPerson_exception.length > 0) {
         let dataError_ordering = isOrderingPerson_exception.some((val: any) => val.ordering > isOrderingPerson_exception.length);
         if (dataError_ordering) {
           this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
@@ -1160,21 +1086,21 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         }
       }
 
-      // let isCheckOrdering = [];
-      // for (const d of isOrderingPerson_exception) {
-      //   isCheckOrdering.push(d.ordering);
-      // }
-      // let maxOrderingException = Math.max.apply(Math, isCheckOrdering);
-      // if (!maxOrderingException) {maxOrderingException = 0;}
-      // if (isOrdering_not_exception.length > 0) {
-      //   // let dataError_ordering = isOrdering_not_exception.some((val: any) => val.ordering <= isOrderingPerson_exception.length);
+      let isCheckOrdering = [];
+      for (const d of isOrderingPerson_exception) {
+        isCheckOrdering.push(d.ordering);
+      }
+      let maxOrderingException = Math.max.apply(Math, isCheckOrdering);
+      if (!maxOrderingException) {maxOrderingException = 0;}
+      if (isOrdering_not_exception.length > 0) {
+        // let dataError_ordering = isOrdering_not_exception.some((val: any) => val.ordering <= isOrderingPerson_exception.length);
 
-      //   let dataError_ordering = isOrdering_not_exception.some((val: any) => val.ordering <= maxOrderingException);
-      //   if (dataError_ordering) {
-      //     this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
-      //     return false;
-      //   }
-      // }
+        let dataError_ordering = isOrdering_not_exception.some((val: any) => val.ordering <= maxOrderingException);
+        if (dataError_ordering) {
+          this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
+          return false;
+        }
+      }
     }
 
     if (count > 0) {
@@ -1766,9 +1692,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     item.recipients = new_arr;
   }
 
-  isEditOrdering: boolean = false; // check disable ordering tổ chức của tôi
-  isEditOrderingPartner: boolean = false; // check disable ordering tổ chức của đối tác
-  isEditOrderingPersonalPartner: boolean = false; // check disable ordering đối tác cá nhân
+  isEditOrdering: boolean = false;
   dataParnterOrganization() {
     let ordersArr: any = [];
     this.datasForm.is_determine_clone.forEach((item: any) => {
@@ -1776,74 +1700,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         ordersArr.push(item.ordering)
       }
     })
-    // if (this.checkOrgsHaveSameOrder(ordersArr)) {
-    //   this.isEditOrdering = true
-    // } else this.isEditOrdering = false
-    
-    const orderingCounts: { [key: number]: number } = {};
-    this.datasForm.is_determine_clone.forEach((item: any) => {
-      orderingCounts[item.ordering] = (orderingCounts[item.ordering] || 0) + 1;
-    });
-    // Lấy các phần tử có `ordering` trùng nhau tổ chức của tôi và tổ chức đối tác trừ đối tác cá nhân
-    const duplicateOrderingItemsOrg = this.datasForm.is_determine_clone.filter((item: any) => item.type !== 3 && orderingCounts[item.ordering] > 1);
-
-    // Lấy các phần tử có `ordering` trùng nhau tổ chức của tôi và tổ chức đối tác cá nhân
-    const duplicateOrderingOrg_PersonPartner = this.datasForm.is_determine_clone.filter((item: any) => item.type !== 2 && orderingCounts[item.ordering] > 1);
-
-    // Lấy các phần tử có `ordering` trùng nhau tổ chức của đối tác và tổ chức đối tác cá nhân
-    const duplicateOrderingOrgPartner_PersonPartner = this.datasForm.is_determine_clone.filter((item: any) => item.type !== 1 && orderingCounts[item.ordering] > 1);
-
-    // Lấy các phần tử có `ordering` trùng nhau đối tác cá nhân
-    const duplicateOrdering_PersonPartner = this.datasForm.is_determine_clone.filter((item: any) => item.type == 3 && orderingCounts[item.ordering] > 1);
-
-    // Lấy các phần tử có `ordering` trùng nhau tất cả tổ chức
-    const duplicateOrderingAllItems = this.datasForm.is_determine_clone.filter((item: any) => orderingCounts[item.ordering] > 1); 
-    
-    // let isOrderingPerson_exception = this.datasForm.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some((p: any) => p.id == 1 || p.id == 5));
-    let isOrderingPerson_exception = this.datasForm.is_determine_clone.filter((val: any) => val.type == 3);
-    let isOrderingOrg = this.datasForm.is_determine_clone.filter((val: any) => val.type == 1);
-    let isOrderingOrgPartner = this.datasForm.is_determine_clone.filter((val: any) => val.type == 2); // lấy mảng đối tác tổ chức
-    let orderingPerson_exception = isOrderingPerson_exception[0]?.ordering; // lấy ra ordering của đối tác cá nhân
-
-    let arrNoPartner = this.datasForm.is_determine_clone.filter((item: any) => item.type != 3) // lọc ra mảng chưa các phần tử không có đối tác cá nhân
-
-    let arrCompareOrderingPartner = arrNoPartner.filter((item: any) => item.ordering == orderingPerson_exception) // so sánh ordering đối tác cá nhân với các tổ chức còn lại
-    
-    if(duplicateOrderingAllItems.length >= 3 && isOrderingPerson_exception.length > 0 && isOrderingOrg.length > 0 && isOrderingOrgPartner.length > 0){
-      this.isEditOrdering = true;
-      this.isEditOrderingPartner = true;
-      this.isEditOrderingPersonalPartner = true;
-    }  
-    else if(arrCompareOrderingPartner.length > 0 && duplicateOrderingOrgPartner_PersonPartner.length >= 2){
-      this.isEditOrderingPersonalPartner = true;
-      this.isEditOrdering = false;
-      this.isEditOrderingPartner = true;
-    } 
-    else if(arrCompareOrderingPartner.length > 0 && duplicateOrderingOrg_PersonPartner.length >= 2){
-      this.isEditOrderingPersonalPartner = true;
-      this.isEditOrdering = true;
-      this.isEditOrderingPartner = false;
-    }
-    else if(duplicateOrderingItemsOrg.length >= 2 && isOrderingPerson_exception.length > 0 && isOrderingOrg.length > 0){
-      this.isEditOrdering = true;
-      this.isEditOrderingPartner = true;
-      this.isEditOrderingPersonalPartner = false;
-    } 
-    else if(duplicateOrdering_PersonPartner.length >= 2 && isOrderingPerson_exception.length > 0){
-      this.isEditOrdering = false;
-      this.isEditOrderingPartner = true;
-      this.isEditOrderingPersonalPartner = true;
-    } 
-    else if (this.checkOrgsHaveSameOrder(ordersArr)) {
-      this.isEditOrdering = true;
-      this.isEditOrderingPartner = true;
-    }  
-    else{
-      this.isEditOrdering = false;
-      this.isEditOrderingPartner = false;
-      this.isEditOrderingPersonalPartner = false;
-    }
-    
+    if (this.checkOrgsHaveSameOrder(ordersArr)) {
+      this.isEditOrdering = true
+    } else this.isEditOrdering = false
     return this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
