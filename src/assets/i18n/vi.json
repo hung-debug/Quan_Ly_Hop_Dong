@@ -944,5 +944,7 @@
   "choose.type.sign": "Chọn hình thức đăng nhập",
   "status.account": "Trạng thái tài khoản",
   "type.sign.email.phone": "Đăng nhập bằng Email và SĐT",
-  "file.connect": "Tài liệu liên quan"
+  "file.connect": "Tài liệu liên quan",
+  "configuration": "Cấu hình",
+  "text.allow.first.handler": "Cho phép người xử lý đầu tiên được chỉnh sửa tất cả ô text/ ô tiền"
 }

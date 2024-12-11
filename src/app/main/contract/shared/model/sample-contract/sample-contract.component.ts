@@ -130,7 +130,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   isDropdownVisibleChuKySo: boolean = false;
   selectedOption: DropdownOption | undefined;
   showDropdown: boolean = false;
-
+  hideConfigFirstHandler: boolean = false;
+  allowFirstHandler: boolean = false;
+  satisfiedFirstHandler: boolean = false;
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
@@ -152,6 +154,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.spinner.hide();
 
     this.list_font = ["Arial", "Calibri", "Times New Roman"];
+    this.satisfiedFirstHandler = this.checkFirstHandler(this.datas.is_determine_clone)
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
       // ham chuyen doi hinh thuc ky type => sign_unit
@@ -1877,7 +1880,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         });
       }
     })
-    //
+
+    if(this.satisfiedFirstHandler) {
+      this.hideConfigFirstHandler = arrSignConfig.some(
+        (config: any) => config.sign_unit === "text" || config.sign_unit === "so_tai_lieu"
+      );
+
+      if(!this.hideConfigFirstHandler) {
+        this.allowFirstHandler = false
+      }
+    }
+
     return arrSignConfig;
   }
 
@@ -3103,4 +3116,45 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   swapStampPosition() {
     this.isOnTheLeft = !this.isOnTheLeft
   }
+
+  checkFirstHandler(data: any) {
+    const participants = data;
+  
+    // Bước 1: Tìm `ordering` nhỏ nhất trong tổ chức
+    const minParticipantOrdering = Math.min(...participants.map((p: any) => p.ordering));
+    const minParticipants = participants.filter((p: any) => p.ordering === minParticipantOrdering);
+  
+    if (minParticipants.length !== 1) {
+      return false;
+    }
+  
+    const minParticipant = minParticipants[0];
+  
+    // Bước 2: Tìm recipients theo vai trò ưu tiên
+    const recipients = minParticipant.recipients;
+    let selectedRecipients = recipients.filter((r: any) => r.role === 2);
+  
+    if (selectedRecipients.length === 0) {
+      selectedRecipients = recipients.filter((r: any) => r.role === 3);
+    }
+    if (selectedRecipients.length === 0) {
+      selectedRecipients = recipients.filter((r: any) => r.role === 4);
+    }
+  
+    // Nếu không có recipient nào, trả về false
+    if (selectedRecipients.length === 0) {
+      return false;
+    }
+  
+    // Bước 3: Kiểm tra `ordering` nhỏ nhất và duy nhất trong recipients
+    const minRecipientOrdering = Math.min(...selectedRecipients.map((r: any) => r.ordering));
+    const minRecipients = selectedRecipients.filter((r: any) => r.ordering === minRecipientOrdering);
+  
+    // Nếu không duy nhất, trả về false
+    if (minRecipients.length !== 1) {
+      return false;
+    }
+    return true;
+  }
+
 }

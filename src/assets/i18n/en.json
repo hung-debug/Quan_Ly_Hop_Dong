@@ -920,5 +920,7 @@
   "choose.type.sign": "Select login method",
   "status.account": "Account status",
   "type.sign.email.phone": "Login by Email and Phone",
-  "file.connect": "Related documents"
+  "file.connect": "Related documents",
+  "configuration": "Configuration",
+  "text.allow.first.handler": "Allows the first handler to edit all text/money boxes"
 }

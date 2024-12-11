@@ -1,7 +1,7 @@
 .sample-contract {
   // height: calc(100vh - 246px);
-  height: calc(100vh - 239px);
-
+  // height: calc(100vh - 239px);
+  height : 100%;
   &__file {
     //position: relative;
     .sig-img-daky {
@@ -14,7 +14,8 @@
 
   .viewer-pdf {
     // height: calc(100vh - 246px);
-    height: calc(100vh - 287px);
+    //height: calc(100vh - 287px);
+    height: 80vh;
     overflow-x: auto;
     text-align: center;
     background-color: rgba(239, 239, 239, 1);
@@ -30,7 +31,8 @@
 
   .viewer-pdf.isDrag {
     // height: calc(100vh - 246px);
-    height: calc(100vh - 287px);
+    //height: calc(100vh - 287px);
+    height: 80vh;
     overflow-x: auto;
     text-align: center;
     background-color: rgba(239, 239, 239, 1);
@@ -423,7 +425,8 @@
 
 @media screen and (min-width:1224px) and (max-width:1280px){
     .sample-contract{
-        height: calc(100vh - 260px);
+        //height: calc(100vh - 260px);
+        height: 100%;
         .label{
           font-size: 14px;
         }
@@ -498,7 +501,8 @@
 
 @media screen and (min-width:1280px) and (max-width:1440px){
   .sample-contract{
-      height: calc(100vh - 260px);
+      //height: calc(100vh - 260px);
+      height: 100%;
       .label{
         font-size: 14px;
       }
@@ -573,7 +577,8 @@
 
 @media screen and (min-width:1440px) and (max-width:1600px) {
   .sample-contract{
-    height: calc(100vh - 260px);
+    //height: calc(100vh - 260px);
+    height: 100%;
     &__information{
       &--drag{
         .content-drag {
@@ -641,7 +646,8 @@
 
 @media screen and (min-width:1600px) and (max-width:1824px) {
   .sample-contract{
-    height: calc(100vh - 260px);
+    //height: calc(100vh - 260px);
+    height: 100%;
     &__information{
       &--drag{
         .content-drag {
@@ -710,7 +716,8 @@
 
 @media screen and (min-height:630px) and (max-height:780px) {
   .sample-contract{
-    height: calc(100vh - 260px);
+    //height: calc(100vh - 260px);
+    height: 100%;
     &__information{
       &--drag{
         #element-drag{
@@ -984,4 +991,46 @@
   font-size: 14px;
   font-weight: 700;
   line-height: 19px;
+}
+
+.checkbox-hide-processing-thread {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid #A8B5CE;
+  background-color: #fff;
+
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkbox-hide-processing-thread:checked {
+  background-color: #0041C4;
+}
+
+.checkbox-hide-processing-thread:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 13px;
+  height: 10px;
+  background-image: url('../../../../../../assets/img/Vector.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  transform: translate(-50%, -50%);
+}
+
+.text-allow-first-handler {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: var(--text-primary) !important;
 }

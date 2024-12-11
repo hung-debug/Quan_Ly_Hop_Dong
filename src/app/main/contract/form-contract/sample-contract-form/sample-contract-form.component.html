@@ -1,5 +1,5 @@
-<div>
-    <div (window:resize)="onResize($event)" class="sample-contract row" style="margin: 32px 0px 0px 0px !important;">
+<div class="sample-contract">
+    <div (window:resize)="onResize($event)" class="row" style="margin: 32px 0px 0px 0px !important;">
         <!--  information contract-->
         <div class="col-lg-2-5 sample-contract__information cancel-padding" style="background-color: white; z-index: 10">
             <div class="sample-contract__information--drag" id="width-element-info" style="position: relative; padding: 16px">
@@ -227,20 +227,28 @@
                         </div>
                     </div>
                 </div>
+
+                <div *ngIf="this.satisfiedFirstHandler && this.hideConfigFirstHandler" class="flex-column" style="margin: 32px 16px 0 16px;">
+                    <label class="label-require">{{'configuration' | translate}}</label>
+                    <div class="mt-8px flex" style="align-items: center; gap: 8px;">
+                        <input  class="checkbox-hide-processing-thread hover-item" type ="checkbox" [(ngModel)]="this.allowFirstHandler">
+                        <div class="text-allow-first-handler">{{'text.allow.first.handler' | translate}}</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="row footer-sample-contract" style="margin: 0px 16px;">
-    <div class="col-md-9 cancel-padding" style="padding: 10px 5px;">
-        <button (click)="back($event, 'party-contract-form')" type="button" name="next" class="next action-button-previous">{{'btn.previous' | translate}}</button>
-    </div>
-    <div class="col-md-3 cancel-padding" style="display: flex; justify-content: flex-end;">
-        <div class="center">
-            <div>
-                <button (click)="next('save_draft')" type="button" name="saveDocument" class="next draft-button">{{'btn.save-draft' | translate}}</button>
-                <button (click)="next('next_step')" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button>
+    <div class="row footer-sample-contract" style="margin: 0px 16px;">
+        <div class="col-md-9 cancel-padding" style="padding: 10px 5px;">
+            <button (click)="back($event, 'party-contract-form')" type="button" name="next" class="next action-button-previous">{{'btn.previous' | translate}}</button>
+        </div>
+        <div class="col-md-3 cancel-padding" style="display: flex; justify-content: flex-end;">
+            <div class="center">
+                <div>
+                    <button (click)="next('save_draft')" type="button" name="saveDocument" class="next draft-button">{{'btn.save-draft' | translate}}</button>
+                    <button (click)="next('next_step')" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button>
+                </div>
             </div>
         </div>
     </div>
