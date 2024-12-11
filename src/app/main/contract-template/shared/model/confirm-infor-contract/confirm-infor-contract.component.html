@@ -131,6 +131,41 @@
             </div>
         </div>
     </div>
+    
+    <div class="labelOrg" style="margin-top: 20px;">{{'cc.user' | translate}}</div>
+    <div>
+      <!-- <div class="row mt-8px">
+        <div class="col-md-12">
+          <input placeholder="{{'Nhập email hoặc SĐT' | translate}}" type="text" [(ngModel)]="address_cc" class="cc-input mt-6px hover-item"/>
+        </div>
+      </div> -->
+      <div class="row mt-8px">
+        <div class="col-md-12">
+          <div class="cc-input-wrapper hover-item">
+            <!-- Hiển thị danh sách email đã nhập -->
+            <div class="email-tags">
+              <span *ngFor="let input of emailPhoneList" class="email-tag">
+                {{ input }}
+                <button type="button" class="remove-btn" (click)="removeEmail(input)">×</button>
+              </span>
+            </div>
+            <!-- Ô input -->
+            <input 
+                [placeholder]="emailPhoneList.length === 0 ? ('hind_text_cc' | translate) : ''" 
+                type="text" 
+                [(ngModel)]="currentInput" 
+                (keydown)="handleKeydown($event)"  
+                class="cc-input input_text"   
+            />
+          </div>
+        </div>
+
+        <!-- Hiển thị thông báo lỗi -->
+        <div *ngIf="errorMessage" class="error-message">
+            {{ errorMessage }}
+        </div>
+      </div>
+    </div>
 
     <!-- <div class="determine_contact">
         <div class="user_contact">

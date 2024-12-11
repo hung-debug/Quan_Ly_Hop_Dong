@@ -165,3 +165,154 @@
 .color-email-or-phone {
   color: #A8B5CE !important;
 }
+
+.cc-input{
+  width: 100%;
+  height: 48px;
+  border-radius: 6px;
+  border: 1px solid #E6EDFA;
+  background-color: #F7FAFD;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #00186D;
+}
+
+
+:host ::ng-deep {
+  .p-dropdown, .p-multiselect {
+      border: 1px solid #106DB6;
+      border-radius: 5px;
+      // height: 33px;
+      width: 100%;
+      outline: 0;
+      color: black !important;
+  }
+  // .p-dropdown-label, .p-multiselect-label {
+  //     padding: 5px 5px 5px 15px;
+  // }
+  .p-chips{
+    width: 100%;
+  }
+  .p-chips .p-chips-multiple-container{
+    width: 100%;
+    border: 1px solid #106DB6;
+    outline: none !important;
+    outline-offset: 0;
+    box-shadow: none !important;
+    padding: 2px 0.25rem;
+  }
+  .p-chips-token{
+    margin: 2px 0;
+  }
+
+  .p-selectbutton .p-button {
+    outline: 0 !important;
+    box-shadow: none !important;
+    height: 33px;
+    width: 50%;
+  }
+  .p-selectbutton .p-button.p-highlight {
+    background: #c5ebff;
+    border-color: #c5ebff;
+    color: #106DB6;
+  }
+  .p-paginator .p-paginator-pages .p-paginator-page{
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+    margin: 4px;
+    height: 26px !important;
+    width: 50px;
+    border-radius: 5px;
+    background-color: #e6e6e6;
+  }
+
+  .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    background-color: #2199e8;
+    color: white;
+    border: 1px solid #2199e8;
+  }
+
+  .p-paginator-bottom .p-ripple{
+    padding: 10px;
+    border-width: 0 !important;
+    height: 26px !important;
+    width: 50px !important;
+  }
+  .p-datatable-table, .p-datatable-table .ng-star-inserted, .p-paginator-pages .ng-star-inserted{
+    font-size: 13px;
+    font-family: font_lexend_deca;
+  }
+  .p-datatable .p-paginator-bottom {
+    border-width: 0;
+  }
+}
+
+.cc-input-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  border: 1px solid var(--Neutral-06, #E6EDFA);
+  // padding: 5px;
+  border-radius: 8px;
+  background-color: #F7FAFD;
+}
+
+.email-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.email-tag {
+  margin-left: 5px;
+  background-color: #337ab7;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  color: #FFFFFF;
+}
+
+.email-tag .remove-btn {
+  margin-left: 5px;
+  background: none;
+  border: none;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.cc-input {
+  border: none;
+  flex: 1;
+  padding: 5px;
+}
+
+.cc-input:focus {
+  outline: none;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.input_text::placeholder {
+  color: #AEC7E5;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+}

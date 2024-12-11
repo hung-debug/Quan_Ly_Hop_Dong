@@ -417,6 +417,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
+      address_cc: datas.address_cc,
       name: datas.name,
       code: datas.contract_no,
       contract_no: datas.contract_no,
@@ -1734,6 +1735,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     let contractDetail = {
+      address_cc: contract.address_cc,
       name: contract.name,
       notes: contract.notes,
       refs: contract.refs,

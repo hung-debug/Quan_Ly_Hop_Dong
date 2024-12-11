@@ -920,5 +920,7 @@
   "choose.type.sign": "Select login method",
   "status.account": "Account status",
   "type.sign.email.phone": "Login by Email and Phone",
-  "file.connect": "Related documents"
+  "file.connect": "Related documents",
+  "cc.user": "CC Document to",
+  "hind_text_cc": "Enter email, separated by ','"
 }
