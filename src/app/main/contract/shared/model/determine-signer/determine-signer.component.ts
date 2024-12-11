@@ -1163,7 +1163,7 @@ export class DetermineSignerComponent implements OnInit {
       // Lấy các phần tử có `ordering` trùng nhau
       const duplicateOrderingItems = this.datas.is_determine_clone.filter((item: any) => orderingCounts[item.ordering] > 1);
 
-      let orderingPerson_exception = isOrderingPerson_exception[0].ordering;// lấy ra ordering của tổ chức đối tác cá nhân
+      let orderingPerson_exception = isOrderingPerson_exception[0]?.ordering;// lấy ra ordering của tổ chức đối tác cá nhân
 
       let arrNoPartner = this.datas.is_determine_clone.filter((item: any) => item.type != 3) // lấy ra mảng ko chứa đối tác cá nhân
 
@@ -1211,7 +1211,7 @@ export class DetermineSignerComponent implements OnInit {
         
         // valid ordering doi tac ca nhan selected option eKYC/OTP/Image
         if(sortOrdering?.length != dataOrg_ordering?.length || dataOrderingOrg?.length == 0 ||
-          sortOrderingOrgPartner?.length != dataOrgPart_ordering?.length || dataOrderingOrgPartner?.length == 0 || sortOrderingPersonPartner.length > 0) {
+          sortOrderingOrgPartner?.length != dataOrgPart_ordering?.length || dataOrderingOrgPartner?.length == 0 || sortOrderingPersonPartner?.length > 0) {
            this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
            return false;
          }
