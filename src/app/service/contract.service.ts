@@ -441,6 +441,7 @@ export class ContractService {
       )?.slice(0, 11).concat("00:00:00Z"),
       ceca_push: datas.ceca_push,
       originalContractId: datas.original_contract_id ? datas.original_contract_id : null,
+      isAllowFirstHandleEdit: datas.isAllowFirstHandleEdit
     });
 
     if (id) {
@@ -1747,7 +1748,8 @@ export class ContractService {
       type_id: contract.type_id,
       ceca_push: contract.ceca_push,
       contract_expire_time: contract.contract_expire_time,
-      readyIssue: true
+      readyIssue: true,
+      isAllowFirstHandleEdit: contract.isAllowFirstHandleEdit
     }
     const body = JSON.stringify(contractDetail);
     return this.http.put<any>(this.addGetDataContract + contract.id, body, { headers });

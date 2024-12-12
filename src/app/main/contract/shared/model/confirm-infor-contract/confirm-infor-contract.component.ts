@@ -329,6 +329,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
                 this.save_draft_infor.close_modal.close();
               }
               this.contractService.getDataPreRelease(this.datas.contract_id).subscribe((contract: any) => {
+                contract.isAllowFirstHandleEdit = this.datas.isAllowFirstHandleEdit;
                 this.contractService.addContractRelease(contract).subscribe((res: any) => {
                 });
               });
@@ -407,6 +408,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
             (data: any) => {
               dataSample_contract.push(data);
               this.contractService.getDataPreRelease(this.datas.contract_id).subscribe((contract: any) => {
+                contract.isAllowFirstHandleEdit = this.datas.isAllowFirstHandleEdit;
                 this.contractService.addContractRelease(contract).subscribe((res: any) => {
                 });
               });

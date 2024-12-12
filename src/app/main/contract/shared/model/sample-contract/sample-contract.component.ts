@@ -131,7 +131,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   selectedOption: DropdownOption | undefined;
   showDropdown: boolean = false;
   hideConfigFirstHandler: boolean = false;
-  allowFirstHandler: boolean = false;
   satisfiedFirstHandler: boolean = false;
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -154,6 +153,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.spinner.hide();
 
     this.list_font = ["Arial", "Calibri", "Times New Roman"];
+    if(!this.datas.isAllowFirstHandleEdit) {
+      this.datas.isAllowFirstHandleEdit = false;
+    }
     this.satisfiedFirstHandler = this.checkFirstHandler(this.datas.is_determine_clone)
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
@@ -1887,7 +1889,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       );
 
       if(!this.hideConfigFirstHandler) {
-        this.allowFirstHandler = false
+        this.datas.isAllowFirstHandleEdit = false
       }
     }
 
@@ -2222,6 +2224,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
             if(this.validData('release-check') == true){
               this.contractService.getDataPreRelease(this.datas.contract_id).subscribe((contract: any) => {
+                contract.isAllowFirstHandleEdit = this.datas.isAllowFirstHandleEdit;
                 this.contractService.addContractRelease(contract).subscribe((res: any) => {
                 });
               });
@@ -2275,6 +2278,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           dataSample_contract.push(data);
           if(this.validData('release-check') == true){
             this.contractService.getDataPreRelease(this.datas.contract_id).subscribe((contract: any) => {
+              contract.isAllowFirstHandleEdit = this.datas.isAllowFirstHandleEdit;
               this.contractService.addContractRelease(contract).subscribe((res: any) => {
               });
             });
