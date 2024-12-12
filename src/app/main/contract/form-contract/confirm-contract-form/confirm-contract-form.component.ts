@@ -207,7 +207,6 @@ export class ConfirmContractFormComponent implements OnInit {
         if (!this.emailPhoneList.includes(input)) {
           this.emailPhoneList.push(input);
         }
-        console.log("emailPhoneList",this.emailPhoneList);
         
       }
       this.currentInput = ''; // Xóa nội dung input sau khi thêm

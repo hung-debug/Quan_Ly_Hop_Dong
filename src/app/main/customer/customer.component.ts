@@ -88,7 +88,6 @@ export class CustomerComponent implements OnInit {
   getCustomerList(){
     if(this.isOrgCustomer){
       this.customerService.getCustomerList(this.row, this.page).subscribe((res: any) => {
-        console.log("res",res);
         let filterList: any[] = [];
         res.content.forEach((item: any) => {
           if(item.type === "ORGANIZATION" && item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(this.filter_name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))){

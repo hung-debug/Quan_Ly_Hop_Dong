@@ -48,7 +48,6 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
   isCalendarClick: number = 0;
   top: number[] = [];
   onContainerClick(event: MouseEvent) {
-    console.log("y ", this.data.scrollY);
     if (this.calendarContainer.nativeElement.contains(event.target)) {
       this.inputElement.showOnFocus = true;
 
@@ -71,7 +70,6 @@ export class EditExpirationSigningTimeComponent implements OnInit, AfterViewInit
         inputElement.click();
         this.isCalendarClick = 0;
 
-        console.log("el ", element);
       }
     } else {
       this.inputElement.showOnFocus = false;

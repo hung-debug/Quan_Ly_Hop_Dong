@@ -505,7 +505,6 @@ export class UserService {
     const headers = new HttpHeaders()
     .append('Content-Type', 'application/json')
     .append('Authorization', 'Bearer ' + this.token);
-    console.log("data",data);
 
   const body = JSON.stringify({
     userNameMailServer: data.userNameMailServer,
