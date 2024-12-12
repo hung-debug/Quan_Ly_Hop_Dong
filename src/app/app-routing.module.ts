@@ -266,6 +266,10 @@ const routes: Routes = [
         component: AddContractComponent,
       },
       {
+        path: 'form-contract/:action/:id/:status/:type',
+        component: AddContractComponent,
+      },
+      {
         path: 'contract-template',
         component: ContractTemplateComponent,
       },

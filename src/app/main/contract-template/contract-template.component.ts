@@ -346,4 +346,16 @@ export class ContractTemplateComponent implements OnInit {
   addContractBatch(id: number) {
     this.router.navigate(['main/form-contract/add-batch/' + id]);
   }
+
+  cloneFullStream(id: number) {
+    setTimeout(() => {
+      void this.router.navigate(['main/form-contract/add/' + id + '/template/KEEP_ALL']);
+    }, 100)
+  }
+
+  cloneStreamOrganizational(id: number) {
+    setTimeout(() => {
+      void this.router.navigate(['main/form-contract/add/' + id + '/template/KEEP_MY_ORG']);
+    }, 100)
+  }
 }

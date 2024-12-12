@@ -9,7 +9,6 @@ import {forkJoin, Observable, timer} from "rxjs";
 import {take} from "rxjs/operators";
 import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
-import {ImageDialogSignComponent} from "../image-dialog-sign/image-dialog-sign.component";
 import {PkiDialogSignComponent} from "../pki-dialog-sign/pki-dialog-sign.component";
 // @ts-ignore
 import domtoimage from 'dom-to-image';

@@ -141,9 +141,24 @@
                       <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
                       <span class="three_dot_text">{{'role.contract-template.copy' | translate}}</span>
                     </button>
+                    <button mat-menu-item [matMenuTriggerFor]="subMenu">
+                      <mat-icon><img src="../../assets/img/copy.svg" class="img_icon"/></mat-icon>
+                      <span class="three_dot_text">{{ 'create.document.holds.signing.stream' | translate }}</span>
+                    </button>
                     <button mat-menu-item class="div_icon" *ngIf="isShare=='off' && isQLMHD_07" (click)="deleteContractTemplate(item.id)">
                       <mat-icon><img src="../../assets/img/trash_contract.svg" class="img_icon"/></mat-icon>
                       <span class="three_dot_text">{{'role.contract-template.delete' | translate}}</span>
+                    </button>
+                  </mat-menu>
+
+                  <mat-menu #subMenu="matMenu" [overlapTrigger]="false" class="custom-sub-menu">
+                    <button mat-menu-item (click)="cloneFullStream(item.id)">
+                      <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon" /></mat-icon>
+                      <span class="three_dot_text">{{ 'keep.signature.stream.all' | translate }}</span>
+                    </button>
+                    <button mat-menu-item (click)="cloneStreamOrganizational(item.id)">
+                      <mat-icon><img src="../../assets/img/programming-arrow.svg" class="img_icon" /></mat-icon>
+                      <span class="three_dot_text">{{ 'keep.signature.stream.organizational' | translate }}</span>
                     </button>
                   </mat-menu>
                 </div>

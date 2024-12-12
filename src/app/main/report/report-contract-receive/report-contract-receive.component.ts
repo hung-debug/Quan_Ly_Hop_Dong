@@ -79,6 +79,10 @@ export class ReportContractReceiveComponent implements OnInit {
       date: this.fbd.control(''),
       contractStatus: this.fbd.control(''),
     });
+     // Khởi tạo ngày mặc định là khoảng 1 tháng tính từ ngày hiện tại
+  const currentDate = new Date();
+  const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+  this.date = [startDate, currentDate];
   }
 
   ngOnInit(): void {
@@ -357,7 +361,13 @@ export class ReportContractReceiveComponent implements OnInit {
     this.enterPage = this.page + 1;
     this.export(false);
   }
-
+  onReportClick(flag: boolean){
+    if (flag) {
+      this.page = 0;
+      this.enterPage = this.page + 1;
+    }
+    this.export(false);
+  }
   validateInput(event: KeyboardEvent) {
     const input = event.key;
     if (input === ' ' || (isNaN(Number(input)) && input !== 'Backspace')) {

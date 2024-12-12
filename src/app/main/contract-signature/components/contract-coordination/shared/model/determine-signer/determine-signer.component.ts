@@ -74,6 +74,8 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("this.data",this.datas);
+    
     if (this.datas.determine_contract)
       this.is_determine_clone = [...this.datas.determine_contract];
     else
@@ -332,6 +334,22 @@ export class DetermineSignerComponent implements OnInit {
       if (this.getCheckDuplicateCardId(allCheckEmail, this.is_determine_clone)) {
         this.getNotificationValid("Mã số thuế/CMT/CCCD đã tồn tại trong luồng xử lý, vui lòng nhập lại thông tin");
         return false
+      }
+    }
+    
+    if (count == 0) {
+      let isOrderingPerson_exception = this.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some((p: any) => p.id == 1 || p.id == 5));
+      let orderingPartner = isOrderingPerson_exception[0]?.recipients[0]?.ordering; // lấy ordering của người ký đối tác cá nhân
+      
+      let arrOrgPartner = this.is_determine_clone.filter((val: any) => val.type == 2); // lấy ra mảng tổ chức của đối tác
+
+      let arrOrgPartnerSigner = arrOrgPartner[0]?.recipients.filter((item: any) => item.role == 3); // lấy ra người ký tổ chức của đối tác
+
+      let arrOrderingPartner = arrOrgPartnerSigner.every((item: any) => item.ordering > orderingPartner); // so sánh ordering của người ký đối tác tổ chức với ordering ng ký đối tác cá nhân
+      
+      if(!arrOrderingPartner && isOrderingPerson_exception.length > 0){
+        this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC (STT:"+ orderingPartner +") cần thực hiện ký trước hình thức ký số!");
+        return false;
       }
     }
 

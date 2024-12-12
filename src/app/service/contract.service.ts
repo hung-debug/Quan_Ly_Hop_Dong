@@ -56,6 +56,8 @@ export class ContractService {
   processAuthorizeContractUrl: any = `${environment.apiUrl}/api/v1/processes/authorize`;
 
   addGetDataContract: any = `${environment.apiUrl}/api/v1/contracts/`;
+  urlCloneParticipants: any = `${environment.apiUrl}/api/v1/contracts/clone-participants/`;
+  urlCloneParticipantsTemplate: any = `${environment.apiUrl}/api/v1/contracts/template/clone-participants/`;
   editSignTimeMuti: any = `${environment.apiUrl}/api/v1/contracts/update-sign-time`;
 
   addGetFileContract: any = `${environment.apiUrl}/api/v1/documents/by-contract/`;
@@ -421,6 +423,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
+      address_cc: datas.address_cc,
       name: datas.name,
       code: datas.contract_no,
       contract_no: datas.contract_no,
@@ -1724,6 +1727,26 @@ export class ContractService {
     // addGetDataContract:any = `${environment.apiUrl}/api/v1/contracts/`;
   }
 
+  cloneParticipants(idContract: any, option: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.urlCloneParticipants + idContract + '?option=' + option, {
+      headers,
+    });
+  }
+
+  cloneParticipantsTemplate(idContract: any, option: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.urlCloneParticipantsTemplate + idContract + '?option=' + option, {
+      headers,
+    });
+  }
+
   getDataPreRelease(idContract: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -1740,6 +1763,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     let contractDetail = {
+      address_cc: contract.address_cc,
       name: contract.name,
       notes: contract.notes,
       refs: contract.refs,

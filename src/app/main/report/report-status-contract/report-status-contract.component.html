@@ -28,11 +28,17 @@
           <div>{{ 'create-date' | translate}} <span style="color: red"> *</span></div>
           <div class="input-line">
               <p-calendar selectionMode="range" [readonlyInput]="false" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"
-
               ></p-calendar>
           </div>
       </div>
 
+       <!-- Ngày hoàn thành tài liệu -->
+       <div class="col-xxl-2 col-lg-4 col-md-6">
+        <div>{{ 'completed-date' | translate}} </div>
+        <div class="input-line">
+            <p-calendar selectionMode="range" [readonlyInput]="false" [(ngModel)]="completionDate" (ngModelChange)="onDateChange()"[showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
+        </div>
+      </div>
       <!--Trạng thái-->
       <div class="col-xxl-2 col-lg-4 col-md-6">
           <div>{{'contract.status' | translate}}</div>
@@ -47,6 +53,7 @@
                   [showClear]="true"
                   [options]="optionsStatus"
                   [autoDisplayFirst]="false"
+                  (onChange)="onStatusChange()"
               ></p-dropdown>
           </div>
       </div>
@@ -63,7 +70,7 @@
       <!--Button-->
 
       <div class="col-xxl-1 col-lg-2 col-md-3 btn_search">
-        <button class="btn btn-lg btn-block btn_submit" (click)="export(false)">{{'btn.report' | translate }}</button>
+        <button class="btn btn-lg btn-block btn_submit" (click)="export(false)" (click)="onReportClick(true)">{{'btn.report' | translate }}</button>
       </div>
 
       <div class="col-xxl-1 col-lg-2 col-md-3 btn_search">
@@ -104,6 +111,7 @@
                             </span>
                         </td>
                         <td>{{this.convert(list.status)}}</td>
+                        <td class="row-word">{{this.convertTime(list.completeDate)}}</td>
                         <td>{{list.processedUser}}</td>
                         <td>{{list.processingUser}}</td>
                         <td>{{list.notProcessedYet}}</td>

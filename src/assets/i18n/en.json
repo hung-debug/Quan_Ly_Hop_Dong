@@ -867,7 +867,7 @@
   "package.unused":"Un used",
   "hello":"Hello",
   "menu.customer.list":"Customer directory",
-  "search.code.number.name": "Document code, Document number, Document name",
+  "search.code.number.name": "Doc code/number/name, Email, Phone number",
   "view_all": "View all",
   "edit.sign.time":"Edit sign time",
   "view.processing.flow":"View processing flow",
@@ -921,6 +921,13 @@
   "status.account": "Account status",
   "type.sign.email.phone": "Login by Email and Phone",
   "file.connect": "Related documents",
+  "cc.user": "CC Document to",
+  "hind_text_cc": "Enter email, separated by ','",
+  "multi.sign.confirm":"By Confirming, you agree to the contents and terms of the document and use electronic methods to perform transactions.",
+  "text.select": "Select a signature or seal image",
+  "create.document.holds.signing.stream": "Creates a document that holds the signing stream",
+  "keep.signature.stream.all": "Keep the entire signature stream",
+  "keep.signature.stream.organizational": "Just keep my organizational flow",
   "configuration": "Configuration",
   "text.allow.first.handler": "Allows the first handler to edit all text/money boxes"
 }

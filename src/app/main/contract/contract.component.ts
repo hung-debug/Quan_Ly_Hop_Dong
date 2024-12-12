@@ -1263,4 +1263,16 @@ export class ContractComponent implements OnInit, AfterViewInit {
       let is_data = result
     })
   }
+
+  cloneFullStream(id: number) {
+    setTimeout(() => {
+      void this.router.navigate(['main/form-contract/add/' + id + '/single/KEEP_ALL']);
+    }, 100)
+  }
+
+  cloneStreamOrganizational(id: number) {
+    setTimeout(() => {
+      void this.router.navigate(['main/form-contract/add/' + id + '/single/KEEP_MY_ORG']);
+    }, 100)
+  }
 }

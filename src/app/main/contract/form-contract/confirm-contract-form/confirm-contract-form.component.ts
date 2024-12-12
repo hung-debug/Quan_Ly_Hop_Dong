@@ -19,6 +19,7 @@ import { ConfirmCecaFormComponent } from '../confirm-ceca-form/confirm-ceca-form
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
+import { ContractTemplateService } from 'src/app/service/contract-template.service';
 
 @Component({
   selector: 'app-confirm-contract-form',
@@ -37,7 +38,8 @@ export class ConfirmContractFormComponent implements OnInit {
     private router: Router,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ContractTemplateService: ContractTemplateService
   ) {
     this.stepForm = variable.stepSampleContractForm.step4;
   }
@@ -91,9 +93,24 @@ export class ConfirmContractFormComponent implements OnInit {
 
   conn: string;
   userSignType: any;
-  ngOnInit(): void {
-
+    
+  address_cc: any = [];
+  emailPhoneList: string[] = []; // Danh sách email
+  currentInput: string = ''; // Giá trị hiện tại trong ô input
+  errorMessage: string | null = null;
+  
+  ngOnInit(): void {    
     this.spinner.hide();
+    this.ContractTemplateService.addInforContractTemplate(null,this.datasForm.template_contract_id,'get-form-data').subscribe((contract:any)=>{
+      if(this.datasForm.address_cc && this.datasForm.address_cc.length) {
+        this.emailPhoneList = this.datasForm.address_cc;
+      } else {
+        if(contract.address_cc && contract.address_cc.length) {
+          this.emailPhoneList = contract.address_cc;  
+        }
+      }
+    });
+    
     this.data_organization = this.datasForm.is_determine_clone.filter(
       (p: any) => p.type == 1
     )[0];
@@ -177,45 +194,94 @@ export class ConfirmContractFormComponent implements OnInit {
     );
     void this.router.navigate(['/main/contract/create/draft']);
   }
-
-  callAPIFinish() {
-    //call API step confirm
-    //this.contractService.addConfirmContract(this.datasForm).subscribe((data) => {
-    this.spinner.show();
-    this.contractService.changeStatusContract(this.datasForm.id, 10, '').subscribe(
-        (data: any) => {
-          if(data.errors?.length > 0) {
-            if(data.errors[0].code == 1017) {
-              this.spinner.hide();
-              this.toastService.showErrorHTMLWithTimeout('contract.no.existed','',3000);
-            }
-          } else {
-            this.router.navigate(['/main/contract/create/processing']);
-            this.router
-              .navigateByUrl('/', { skipLocationChange: true })
-              .then(() => {
-                this.router.navigate(['/main/contract/create/processing']);
-              });
-            this.spinner.show();
-            this.toastService.showSuccessHTMLWithTimeout(
-              'create.contract.success',
-              '',
-              3000
-            );
   
-            this.spinner.hide();  
-          }
-        },
-        (error) => {
-          this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout(
-            'no.push.information.contract.error',
-            '',
-            3000
-          );
-          return false;
+  addEmail(): void {
+    if (this.currentInput.trim()) {
+      const inputs  = this.currentInput.split(','); // Hỗ trợ nhập nhiều email 1 lần, ngăn cách bằng dấu phẩy
+      for (let input of inputs) {
+        input = input.trim();
+        if (!this.isValidInput(input)) {
+          this.errorMessage = `"${input}" không đúng định dạng email`;
+          return; // Ngừng lại nếu có lỗi
         }
-      );
+        if (!this.emailPhoneList.includes(input)) {
+          this.emailPhoneList.push(input);
+        }
+        console.log("emailPhoneList",this.emailPhoneList);
+        
+      }
+      this.currentInput = ''; // Xóa nội dung input sau khi thêm
+      this.errorMessage = null; // Xóa thông báo lỗi nếu không có lỗi
+    }
+  }
+  
+  handleKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.key === ',') {
+      // Ngăn hành vi mặc định nếu cần (như xuống dòng với Enter)
+      event.preventDefault();
+      this.addEmail(); // Gọi hàm thêm email/phone
+    }
+  }
+  
+  // Hàm kiểm tra định dạng email
+  isValidInput(input: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // const phoneRegex = /^(?:\+[0-9]{11}|[0-9]{10,11})$/;
+    // return emailRegex.test(input) || phoneRegex.test(input);
+    return emailRegex.test(input.trim());
+  }
+  
+  removeEmail(input: string): void {
+    this.emailPhoneList = this.emailPhoneList.filter(e => e !== input);
+  }
+  
+  async callAPIFinish() {
+    try{
+      this.spinner.show();
+      // Gọi API addContractStep1 lần đầu    
+      const contract: any = await this.contractService.addContractStep1(
+        this.datasForm,
+        this.datasForm.contract_id ? this.datasForm.contract_id : null,
+        'template_form'
+      ).toPromise();
+      
+      contract.address_cc = this.emailPhoneList;
+      
+      const result: any = await this.contractService.addContractStep1(
+        contract,
+        this.datasForm.contract_id ? this.datasForm.contract_id : null,
+        'template_form'
+      ).toPromise();
+      
+      // Sau khi addContractRelease thành công, gọi API changeStatusContract
+      const statusResponse: any = await this.contractService
+        .changeStatusContract(this.datasForm.id, 10, '')
+        .toPromise(); // Đợi kết quả từ API
+        
+      // Kiểm tra kết quả trả về từ changeStatusContract
+      if (statusResponse.errors?.length > 0) {
+        if (statusResponse.errors[0].code === 1017) {
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout('contract.no.existed', '', 3000);
+          return;
+        }
+      } else {
+        // Điều hướng nếu thành công
+        this.router.navigate(['/main/contract/create/processing']);
+        await this.router.navigateByUrl('/', { skipLocationChange: true });
+        this.router.navigate(['/main/contract/create/processing']);
+  
+        // Hiển thị thông báo thành công
+        this.toastService.showSuccessHTMLWithTimeout('create.contract.success', '', 3000);
+      }
+    } catch (error) {
+      // Xử lý lỗi nếu có
+      console.error(error);
+      this.toastService.showErrorHTMLWithTimeout('no.push.information.contract.error', '', 3000);
+    } finally {
+      this.spinner.hide(); // Đảm bảo spinner được ẩn dù có lỗi hay không
+    } 
+      
   }
 
   user: any;
@@ -485,6 +551,15 @@ export class ConfirmContractFormComponent implements OnInit {
               countIsSignId++;
             }
           );
+          
+        const contract: any = await this.contractService.addContractStep1(
+          this.datasForm,
+          this.datasForm.contract_id ? this.datasForm.contract_id : null,
+          'template_form'
+        ).toPromise();
+        contract.address_cc = this.emailPhoneList;
+        const result: any = await this.contractService.addContractStep1(contract,this.datasForm.contract_id ? this.datasForm.contract_id : null,'template_form').toPromise();
+        
         if (countIsSignId > 0) {
           break;
         }

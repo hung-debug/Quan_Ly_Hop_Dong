@@ -112,6 +112,7 @@ export class ContractTemplateService {
 
     if (!actionGet) {
       body = JSON.stringify({
+        address_cc: datas.address_cc,
         name: datas.name,
         code: datas.contract_no,
         start_time: start_time,

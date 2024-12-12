@@ -41,6 +41,11 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   is_origanzation_signature: any = [];
   is_origanzation_document: any = [];
   data_parnter_organization: any = [];
+  
+  address_cc: any = [];
+  emailPhoneList: string[] = []; // Danh sách email
+  currentInput: string = ''; // Giá trị hiện tại trong ô input
+  errorMessage: string | null = null;
 
   getPartnerCoordinationer(item: any) {
     return item.recipients.filter((p: any) => p.role == 1)
@@ -57,6 +62,11 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    this.contractTemplateService.addInforContractTemplate(this.datas,this.datas.contract_id,'get-form-data').subscribe((contract:any)=>{
+      if(contract.address_cc && contract.address_cc.length) {
+        this.emailPhoneList = contract.address_cc;
+      }
+    });
 
     if(this.datas.type_id){
       this.contractTypeService.getContractTypeById(this.datas.type_id).subscribe(data => {
@@ -94,23 +104,87 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 3000);
     void this.router.navigate(['/main/contract/create/draft']);
   }
-
-  callAPIFinish() {
-    this.spinner.show();
-
-    this.contractTemplateService.changeStatusContract(this.datas.id, 10).subscribe((data) => {
-      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate(['/main/contract-template']);
-      });
+  
+  async callAPIFinish() {
+    try {
+      this.spinner.show();
+  
+      // Gán danh sách email/SDT vào `datas`
+      this.datas.address_cc = this.emailPhoneList;
+  
+      // Gọi API addInforContractTemplate và đợi hoàn thành
+      await this.contractTemplateService
+        .addInforContractTemplate(this.datas, this.datas.contract_id)
+        .toPromise(); // Chuyển Observable thành Promise
+  
+      // Sau khi API trên hoàn thành, gọi API changeStatusContract
+      await this.contractTemplateService
+        .changeStatusContract(this.datas.id, 10)
+        .toPromise(); // Đợi API này hoàn thành
+  
+      // Xử lý khi cả hai API thành công
+      await this.router.navigateByUrl('/', { skipLocationChange: true });
+      this.router.navigate(['/main/contract-template']);
+  
+      this.toastService.showSuccessHTMLWithTimeout(
+        'Tạo mẫu tài liệu thành công!',
+        '',
+        3000
+      );
+    } catch (error) {
+      // Xử lý lỗi nếu xảy ra ở bất kỳ API nào
+      console.error('Error:', error);
+      this.toastService.showErrorHTMLWithTimeout(
+        'Tạo mẫu tài liệu thất bại',
+        '',
+        3000
+      );
+    } finally {
+      // Ẩn spinner dù thành công hay thất bại
       this.spinner.hide();
-      this.toastService.showSuccessHTMLWithTimeout("Tạo mẫu tài liệu thành công!", "", 3000);
-    },
-    error => {
-      this.spinner.hide();
-      this.toastService.showErrorHTMLWithTimeout("Tạo mẫu tài liệu thất bại", "", 3000);
-      return false;
     }
-    );
+  }
+  
+  addEmail(): void {
+    if (this.currentInput.trim()) {
+      const inputs  = this.currentInput.split(','); // Hỗ trợ nhập nhiều email 1 lần, ngăn cách bằng dấu phẩy
+      for (let input of inputs) {
+        input = input.trim();
+        if (!this.isValidInput(input)) {
+          this.errorMessage = `"${input}" không đúng định dạng email`;
+          return; // Ngừng lại nếu có lỗi
+        }
+        console.log("input", input)
+        console.log("this.emailPhoneList", this.emailPhoneList)
+        if (!this.emailPhoneList.includes(input)) {
+          this.emailPhoneList.push(input);
+        }
+        console.log("emailPhoneList",this.emailPhoneList);
+        
+      }
+      this.currentInput = ''; // Xóa nội dung input sau khi thêm
+      this.errorMessage = null; // Xóa thông báo lỗi nếu không có lỗi
+    }
+  }
+  
+  handleKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.key === ',') {
+      // Ngăn hành vi mặc định nếu cần (như xuống dòng với Enter)
+      event.preventDefault();
+      this.addEmail(); // Gọi hàm thêm email/phone
+    }
+  }
+  
+  // Hàm kiểm tra định dạng email
+  isValidInput(input: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // const phoneRegex = /^(?:\+[0-9]{11}|[0-9]{10,11})$/;
+    // return emailRegex.test(input) || phoneRegex.test(input);
+    return emailRegex.test(input.trim());
+  }
+  
+  removeEmail(input: string): void {
+    this.emailPhoneList = this.emailPhoneList.filter(e => e !== input);
   }
 
   async SaveContract(action: string) {
@@ -296,6 +370,10 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
         await this.contractTemplateService.editContractSample(dataSignId[i], id).toPromise().then((data: any) => {
           dataSample_contract.push(data);
+          this.datas.address_cc = this.emailPhoneList;
+          this.contractTemplateService.addInforContractTemplate(this.datas, this.datas.contract_id).subscribe((contract: any) => {
+
+          });
         }, (error) => {
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout("Vui lòng liên hệ đội hỗ trợ để được xử lý", "", 3000);

@@ -497,3 +497,15 @@
     flex-direction: column;
   }
 }
+
+::ng-deep .custom-sub-menu {
+  margin-right: 5px;
+}
+
+::ng-deep .mat-menu-item-submenu-trigger {
+  padding: 0px 8px !important;
+}
+
+::ng-deep .mat-menu-submenu-icon {
+  display: none !important; /* Ẩn icon mũi tên */
+}

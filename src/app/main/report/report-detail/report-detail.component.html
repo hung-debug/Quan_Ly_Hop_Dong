@@ -16,22 +16,37 @@
             </div>
         </div>
     
-        <!-- Tài liệu -->
+        <!-- Tìm kiếm Tài liệu -->
         <div class="col-xxl-2-5 col-lg-4 col-md-6">
             <div>{{'contract.information' | translate}}</div>
             <div class="input-line">
                 <input type="text" [(ngModel)]="contractInfo" class="input_text" placeholder="{{'search.code.number.name' | translate}}" />
             </div>
         </div>
-    
+      
         <!-- Ngày tạo tài liệu -->
         <div class="col-xxl-2-5 col-lg-4 col-md-6">
-            <div>{{ 'create-date' | translate}} <span style="color: red"> *</span></div>
+            <div>{{ 'create-date' | translate }} <span style="color: red"> *</span></div>
             <div class="input-line">
-                <p-calendar selectionMode="range" [readonlyInput]="false" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
+              <p-calendar #calendar selectionMode="range" [readonlyInput]="false" [(ngModel)]="date" [showIcon]="true"
+                dateFormat="dd/mm/yy">
+              </p-calendar>
             </div>
         </div>
-    
+        <!-- <div class="date_dropdown">
+            <p-dropdown [options]="dateOptions" [autoDisplayFirst]="false" [(ngModel)]="selectedOption"
+              (onChange)="changeDateRange(selectedOption)"style="width: 15px;">
+            </p-dropdown>
+        </div> -->
+          
+        <!-- Ngày hoàn thành tài liệu -->
+        <div class="col-xxl-2-5 col-lg-4 col-md-6">
+            <div>{{ 'completed-date' | translate}} </div>
+            <div class="input-line">
+                <p-calendar selectionMode="range" [readonlyInput]="false" [(ngModel)]="completionDate" (ngModelChange)="onDateChange()"[showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
+            </div>
+        </div>
+
         <!-- Trạng thái -->
         <div class="col-xxl-2-5 col-lg-4 col-md-6">
             <div>{{'contract.status' | translate}}</div>
@@ -46,17 +61,18 @@
                     [options]="optionsStatus"
                     [(ngModel)]="contractStatus"
                     [autoDisplayFirst]="false"
+                    (onChange)="onStatusChange()"
                 ></p-dropdown>
             </div>
         </div>
     
         <!-- Button -->
         <div class="col-xxl-1 col-lg-2 col-md-3 btn_search">
-            <button class="btn btn-lg btn-block btn_submit" (click)="export(false)">{{'btn.report' | translate }}</button>
+            <button class="btn btn-lg btn-block btn_submit" (click)="onReportClick(true)" (click)="export(false)">{{'btn.report' | translate }}</button>
         </div>
     
         <div class="col-xxl-1 col-lg-2 col-md-3 btn_search">
-            <button (click)="export(true)" class="btn btn-lg btn-block btn_submit">Export</button>
+            <button (click)="export(true)"  class="btn btn-lg btn-block btn_submit">Export</button>
         </div>
     </div>
     
@@ -105,7 +121,7 @@
                       <td class="row-word">{{this.convertTime(list.createdAt)}}</td>
                       <td class="row-word">{{this.convertTime(list.signTime)}}</td>
                       <td class="row-word">{{this.convertStatus(list.status.toLowerCase())}}</td>
-
+                      <td class="row-word">{{this.convertTime(list.completeDate)}}</td>
                       <!-- <td *ngIf="list.status == 'CANCEL'" class="row-word">{{this.convertTime(list.cancelDate)}}</td>
                       <td *ngIf="list.status != 'CANCEL'" class="row-word">{{this.convertTime(list.updatedAt)}}</td> -->
 
