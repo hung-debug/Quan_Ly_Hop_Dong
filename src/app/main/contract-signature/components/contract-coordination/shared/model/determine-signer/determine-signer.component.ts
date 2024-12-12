@@ -74,7 +74,6 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("this.data",this.datas);
     
     if (this.datas.determine_contract)
       this.is_determine_clone = [...this.datas.determine_contract];

@@ -117,7 +117,8 @@ export class ContractTemplateService {
         code: datas.contract_no,
         start_time: start_time,
         end_time: end_time,
-        type_id: datas.type_id
+        type_id: datas.type_id,
+        isAllowFirstHandleEdit: datas.isAllowFirstHandleEdit
       });
     }
     if (id && body && !actionGet) {

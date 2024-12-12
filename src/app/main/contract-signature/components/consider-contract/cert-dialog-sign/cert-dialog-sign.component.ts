@@ -135,7 +135,6 @@ export class CertDialogSignComponent implements OnInit {
         3000
       )
     }
-    console.log("selectedCert", this.selectedCert);
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
     const uidCert = this.getValueByKey(this.selectedCert.certInformation, "UID")
     this.dataCardId = uidCert?.split(":")[1];

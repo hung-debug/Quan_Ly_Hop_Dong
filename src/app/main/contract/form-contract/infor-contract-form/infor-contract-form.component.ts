@@ -681,6 +681,22 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         }
       }
       if (!coutError) {
+        if (this.action != 'edit') {
+          await this.contractTemplateService.addInforContractTemplate(
+            null,
+            this.datasForm.template_contract_id,
+            'get-form-data'
+          )
+          .toPromise()
+          .then(
+            (res: any) => {
+              this.datasForm.isAllowFirstHandleEdit = res.isAllowFirstHandleEdit
+            },
+            (error) => {
+              this.errorData();
+            }
+          );
+        }
         // push du lieu cac thong tin tao buoc 1
         await this.contractService
           .addContractStep1(

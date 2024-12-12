@@ -210,7 +210,6 @@ export class DashboardComponent implements OnInit {
 
     }, error => {}
     )
-    console.log("this.endDateService",this.endDateService);
     
     this.user = this.userService.getInforUser();
 

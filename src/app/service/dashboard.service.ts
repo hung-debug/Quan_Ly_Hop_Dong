@@ -44,8 +44,6 @@ export class DashboardService {
 
     let countContractCreateUrl = '';
 
-    console.log("iss org ", isOrg);
-
     if(isOrg != 'off'){
       if(organization_id == ""){
         countContractCreateUrl = this.countContractOrgAllCreateUrl + '?organizationId=' + this.organization_id + '&from_date=' + from_date + '&to_date=' + to_date;
@@ -101,7 +99,6 @@ export class DashboardService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    console.log("tken",this.token);
     const body ="";
     return this.http.put<any>(this.readAllViewNotificationUrl,"" , {headers});
 

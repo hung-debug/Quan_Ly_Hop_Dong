@@ -139,8 +139,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       
       // Gán thêm `address_cc` từ emailPhoneList
       contract.address_cc = this.emailPhoneList;
-      console.log("this.emailPhoneList",this.emailPhoneList);
-      
+      contract.isAllowFirstHandleEdit = this.datas.isAllowFirstHandleEdit;
   
       // Gọi API addContractRelease
       await this.contractService
@@ -195,7 +194,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         if (!this.emailPhoneList.includes(input)) {
           this.emailPhoneList.push(input);
         }
-        console.log("emailPhoneList",this.emailPhoneList);
         
       }
       this.currentInput = ''; // Xóa nội dung input sau khi thêm
@@ -389,6 +387,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
                 this.save_draft_infor.close_modal.close();
               }
               this.contractService.getDataPreRelease(this.datas.contract_id).subscribe((contract: any) => {
+                contract.isAllowFirstHandleEdit = this.datas.isAllowFirstHandleEdit;
                 contract.address_cc = this.emailPhoneList;
                 this.contractService.addContractRelease(contract).subscribe((res: any) => {
                 });
@@ -468,6 +467,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           async (data: any) => {
               dataSample_contract.push(data);
               this.contractService.getDataPreRelease(this.datas.contract_id).subscribe((contract: any) => {
+                contract.isAllowFirstHandleEdit = this.datas.isAllowFirstHandleEdit;
                 contract.address_cc = this.emailPhoneList;
                 this.contractService.addContractRelease(contract).subscribe((res: any) => {
                 });

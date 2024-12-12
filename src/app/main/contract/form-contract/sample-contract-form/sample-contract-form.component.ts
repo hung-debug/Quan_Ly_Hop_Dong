@@ -124,6 +124,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   digitalSign: number = 3;
   textUnit: number = 1;
   isDropdownVisibleChuKySo: boolean = false;
+  hideConfigFirstHandler: boolean = false;
+  satisfiedFirstHandler: boolean = false;
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
@@ -152,7 +154,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     }
 
     this.list_font = ["Arial","Calibri","Times New Roman"];
-
+    this.satisfiedFirstHandler = this.checkFirstHandler(this.datasForm.is_determine_clone)
     this.isChangeNumberContract = this.datasForm.contract_no; // save contract number check with input contract number object signature when change
 
     if (!this.datasForm.contract_user_sign) {
@@ -166,11 +168,11 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           }
           if (res.type == 2) {
             res['sign_unit'] = 'chu_ky_anh';
-            res.name = res.recipient.name;
+            res.name = res?.recipient?.name;
           }
           if (res.type == 3) {
             res['sign_unit'] = 'chu_ky_so'
-            res.name = res.recipient.name;
+            res.name = res?.recipient?.name;
           }
           if (res.type == 4) {
             res['sign_unit'] = 'so_tai_lieu'
@@ -511,7 +513,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký"))) ||
           (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id) && !val.isNotSupportTextField) ||
           (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id && !val.isNotSupportTextField)) ||
-          (val.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && (val.recipient_id == data.id || val.name.includes("Người ký"))))
+          (val.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && (val.recipient_id == data.id || val?.name?.includes("Người ký"))))
         )
         || dataDetermine.some((data: any) => val.sign_unit.includes('chu_ky_so') && val.isSupportMultiSignatureBox == false && val.recipient_id == data.id)
       );
@@ -522,7 +524,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký"))) ||
           (val.sign_unit == 'text' && ((data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || !val.recipient_id)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id)) ||
           (val.sign_unit == 'so_tai_lieu' && ((data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || !val.recipient_id)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id)) ||
-          (val.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký"))))
+          (val.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val?.name?.includes("Người ký"))))
         ));
 
 
@@ -1846,7 +1848,17 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         });
       }
     })
-    //
+
+    if(this.satisfiedFirstHandler) {
+      this.hideConfigFirstHandler = arrSignConfig.some(
+        (config: any) => config.sign_unit === "text" || config.sign_unit === "so_tai_lieu"
+      );
+
+      if(!this.hideConfigFirstHandler) {
+        this.datasForm.isAllowFirstHandleEdit = false
+      }
+    }
+
     return arrSignConfig;
   }
 
@@ -2257,6 +2269,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
             if(this.validData() == true){
               this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
+                contract.isAllowFirstHandleEdit = this.datasForm.isAllowFirstHandleEdit;
                 this.contractService.addContractRelease(contract).subscribe((res: any) => {
                 });
               });
@@ -2347,12 +2360,19 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         delete dataSignId[i].id_have_data;
         await this.contractService.getContractSampleEdit(dataSignId[i], id).toPromise().then((data: any) => {
           dataSample_contract.push(data);
-          if(this.validData('release-check') == true){
-            this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
-              this.contractService.addContractRelease(contract).subscribe((res: any) => {
-              });
+          // if(this.validData('release-check') == true){
+          //   this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
+          //     console.log("1", this.datasForm.isAllowFirstHandleEdit)
+          //     contract.isAllowFirstHandleEdit = this.datasForm.isAllowFirstHandleEdit;
+          //     this.contractService.addContractRelease(contract).subscribe((res: any) => {
+          //     });
+          //   });
+          // }
+          this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
+            contract.isAllowFirstHandleEdit = this.datasForm.isAllowFirstHandleEdit;
+            this.contractService.addContractRelease(contract).subscribe((res: any) => {
             });
-          }
+          });
         }, (error: HttpErrorResponse) => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! vui lòng thao tác lại hoặc liên hệ với nhà phát triển để xử lý!', "", 3000);
           countIsSignId++;
@@ -3265,4 +3285,45 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       }
     }
   }
+
+  checkFirstHandler(data: any) {
+    const participants = data;
+  
+    // Bước 1: Tìm `ordering` nhỏ nhất trong tổ chức
+    const minParticipantOrdering = Math.min(...participants.map((p: any) => p.ordering));
+    const minParticipants = participants.filter((p: any) => p.ordering === minParticipantOrdering);
+  
+    if (minParticipants.length !== 1) {
+      return false;
+    }
+  
+    const minParticipant = minParticipants[0];
+  
+    // Bước 2: Tìm recipients theo vai trò ưu tiên
+    const recipients = minParticipant.recipients;
+    let selectedRecipients = recipients.filter((r: any) => r.role === 2);
+  
+    if (selectedRecipients.length === 0) {
+      selectedRecipients = recipients.filter((r: any) => r.role === 3);
+    }
+    if (selectedRecipients.length === 0) {
+      selectedRecipients = recipients.filter((r: any) => r.role === 4);
+    }
+  
+    // Nếu không có recipient nào, trả về false
+    if (selectedRecipients.length === 0) {
+      return false;
+    }
+  
+    // Bước 3: Kiểm tra `ordering` nhỏ nhất và duy nhất trong recipients
+    const minRecipientOrdering = Math.min(...selectedRecipients.map((r: any) => r.ordering));
+    const minRecipients = selectedRecipients.filter((r: any) => r.ordering === minRecipientOrdering);
+  
+    // Nếu không duy nhất, trả về false
+    if (minRecipients.length !== 1) {
+      return false;
+    }
+    return true;
+  }
+
 }

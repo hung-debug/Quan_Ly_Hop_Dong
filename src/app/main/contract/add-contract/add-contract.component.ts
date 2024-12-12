@@ -163,7 +163,7 @@ export class AddContractComponent implements OnInit {
           this.action = params['action'];
           this.typeClone = params['type'];
           this.status = params['status'];
-          console.log("this.status", this.status)
+
           //lay id user
           let userId = this.userService.getAuthCurrentUser().id;
           this.userService.getUserById(userId).subscribe(
@@ -358,7 +358,6 @@ export class AddContractComponent implements OnInit {
   }
 
   getDataContractCreated(data: any) {
-    console.log("data", data)
     let fileNameAttach = data.i_data_file_contract.filter(
       (p: any) => p.type == 3
     );
@@ -383,6 +382,7 @@ export class AddContractComponent implements OnInit {
         this.datasForm.contract_id = data.is_data_contract.id;
         this.datasForm.pdfUrl = fileName.path;
         this.datasForm.document_id = fileName.id;
+        this.datasForm.isAllowFirstHandleEdit = data.is_data_contract.isAllowFirstHandleEdit;
         this.datasForm.template_contract_id =
           data.is_data_contract.template_contract_id;
         if (fileNameAttach) {

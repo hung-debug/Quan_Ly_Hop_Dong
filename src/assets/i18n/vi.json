@@ -951,5 +951,7 @@
   "text.select": "Chọn hình ảnh chữ ký hoặc con dấu",
   "create.document.holds.signing.stream": "Tạo tài liệu giữ luồng ký",
   "keep.signature.stream.all": "Giữ toàn bộ luồng ký",
-  "keep.signature.stream.organizational": "Chỉ giữ luồng tổ chức của tôi"
+  "keep.signature.stream.organizational": "Chỉ giữ luồng tổ chức của tôi",
+  "configuration": "Cấu hình",
+  "text.allow.first.handler": "Cho phép người xử lý đầu tiên được chỉnh sửa tất cả ô text/ ô tiền"
 }

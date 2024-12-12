@@ -167,6 +167,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   pageRendering: any;
   pageNumPending: any = null;
+  isAllowFirstHandleEdit: boolean = false;
   zoomOptions = [
     { percent: '25%', value: 0.25 },
     { percent: '50%', value: 0.5 },
@@ -361,7 +362,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         this.isDataContract = rs[0];
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
-
+        this.isAllowFirstHandleEdit = this.isDataContract.isAllowFirstHandleEdit;
          //Tài liệu huỷ status = 32 => link 404 đối với những người xử lý trong tài liệu đó trừ người tạo
          if(this.isDataContract.status == 32) {
           const callApiBpmn = await this.contractService
@@ -557,15 +558,19 @@ export class DetailContractComponent implements OnInit, OnDestroy {
             );
           } else {
             if (this.mobile) {
-              const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipient.id, chu_ky_anh, this.idContract).toPromise();
-              if(pdfMobile.success) {
-                this.pdfSrc = pdfMobile.filePath;
+              if(this.isAllowFirstHandleEdit) {
+                const pdfMobile = await this.contractService.getFilePdfForMobile(this.recipient.id, chu_ky_anh, this.idContract).toPromise();
+                if(pdfMobile.success) {
+                  this.pdfSrc = pdfMobile.filePath;
+                } else {
+                  return this.toastService.showErrorHTMLWithTimeout(
+                    pdfMobile.message,
+                    '',
+                    3000
+                  );
+                }
               } else {
-                return this.toastService.showErrorHTMLWithTimeout(
-                  pdfMobile.message,
-                  '',
-                  3000
-                );
+                this.pdfSrc = fileC;  
               }
             } else {
               this.pdfSrc = fileC;           
@@ -1851,13 +1856,15 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   convertToSignConfig1() {
-    let arrSignConfig: any = [];   
-    this.isDataObjectSignature.map((item: any) => {
-      if(item.type != 2 && item.type != 3 && item.type != 4 && !item.recipient_id && item.action_in_contract == false && item.value) {
-        item.isView = true;
-        arrSignConfig.push(item);
-      }
-    })
+    let arrSignConfig: any = []; 
+    if(this.isAllowFirstHandleEdit) {
+      this.isDataObjectSignature.map((item: any) => {
+        if(item.type != 2 && item.type != 3 && item.type != 4 && !item.recipient_id && item.action_in_contract == false && item.value) {
+          item.isView = true;
+          arrSignConfig.push(item);
+        }
+      })
+    }
     return arrSignConfig;
   }
 

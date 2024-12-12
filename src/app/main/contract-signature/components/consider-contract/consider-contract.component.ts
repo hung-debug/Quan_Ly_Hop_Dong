@@ -142,7 +142,7 @@ export class ConsiderContractComponent
   allFileAttachment: any[];
   allRelateToContract: any[];
   firstHandler: boolean = false;
-  peopleFirstHandler: any;
+
   optionsSign: any = [
     { item_id: 1, item_text: 'Ký ảnh' },
     { item_id: 2, item_text: 'Ký số bằng USB token' },
@@ -507,7 +507,9 @@ export class ConsiderContractComponent
     this.contractService.getDetailContract(this.idContract).subscribe(
       async (rs) => {
         this.isDataContract = rs[0];
-        this.firstHandler = this.checkFirstHandler(rs[0], this.currentUser.email);
+        if(this.isDataContract.isAllowFirstHandleEdit) {
+          this.firstHandler = this.checkFirstHandler(rs[0], this.currentUser.email);
+        }
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
         if(this.isDataObjectSignature.length) {
@@ -914,7 +916,6 @@ export class ConsiderContractComponent
 
     let minRecipient = selectedRecipient.find((r: any) => r.ordering === minRecipientOrdering);
     if (minRecipient.email === email && minRecipient.ordering === minRecipientOrdering) {
-      this.peopleFirstHandler = minRecipient;
       return true;
     }
     return false;

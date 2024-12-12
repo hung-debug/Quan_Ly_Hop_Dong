@@ -154,12 +154,9 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           this.errorMessage = `"${input}" không đúng định dạng email`;
           return; // Ngừng lại nếu có lỗi
         }
-        console.log("input", input)
-        console.log("this.emailPhoneList", this.emailPhoneList)
         if (!this.emailPhoneList.includes(input)) {
           this.emailPhoneList.push(input);
         }
-        console.log("emailPhoneList",this.emailPhoneList);
         
       }
       this.currentInput = ''; // Xóa nội dung input sau khi thêm

@@ -59,7 +59,6 @@ export class ContractTypeComponent implements OnInit {
     //lay id user
     let userId = this.userService.getAuthCurrentUser().id;
     this.idOrg = this.userService.getAuthCurrentUser().organization_id;
-    console.log("log",this.idOrg);
     
     this.userService.getUserById(userId).subscribe(
       data => {
@@ -92,9 +91,7 @@ export class ContractTypeComponent implements OnInit {
 
   searchContractType(){
     this.contractTypeService.getContractTypeList(this.code, this.name, this.idOrg, this.row, this.page).subscribe(response => {
-      console.log("row",this.row);
       this.list = response.content;
-      console.log("res",response);
       this.totalRecords = response.totalElements;
     });
   }

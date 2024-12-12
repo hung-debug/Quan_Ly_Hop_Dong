@@ -202,7 +202,6 @@ export class UserComponent implements OnInit {
     this.userService.getUserList(this.organization_id? this.organization_id : '', this.nameOrEmail, this.name, this.row, this.page).subscribe(response => {
       this.spinner.hide();
       this.list = response.entities;
-      console.log("ressponse",response);
       this.totalRecords = response.total_elements;
       // log
     });

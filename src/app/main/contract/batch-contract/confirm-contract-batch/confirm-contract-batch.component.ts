@@ -283,7 +283,6 @@ export class ConfirmContractBatchComponent
       (p: any) => p.type == 2 || p.type == 3
     );
 
-    console.log("pp ",this.data_parnter_organization);
     this.contractTemplateService
       .getDetailContractV2(this.datasBatch.idContractTemplate)
       .subscribe((rs) => {

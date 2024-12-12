@@ -395,7 +395,6 @@ completionDate: any;
           });
 
           this.list = listFirst.concat(listSecond);
-          console.log("list", this.list)
           this.totalRecords = response.TotalElements;
           this.numberPage = response.TotalPages;
         }
