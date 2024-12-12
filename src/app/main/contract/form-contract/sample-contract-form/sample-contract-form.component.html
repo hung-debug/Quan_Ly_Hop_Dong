@@ -43,36 +43,37 @@
                                     </div>
                                 </div>
 
-                                <div *ngIf="d.sign_unit == 'chu_ky_so'" class="flex mt-12px" (click)="toggleDropdownChuKySo()" id="element-drag">
+                                <div *ngIf="d.sign_unit == 'chu_ky_so'" class="flex mt-12px chu_ky_so_new" id="element-drag">
                                     <div  class="content-drag1 content-chu_ky_so_new hover-item-o-ky">
                                         <div class="flex">
                                             <div class="content-item-ky">
                                                 <img style="width: 24px; height: 24px;" src="assets/img/designtools.png">
                                                 <span class="text-so-hop-dong mt-8px">{{'sign.digital' | translate}}</span>
                                             </div>
-                                            <div *ngIf="this.isDropdownVisibleChuKySo" class="horizontal-dropdown horizontal-dropdown-right">
-                                                <ng-container *ngFor="let t of d.type">
-                                                    <div class="item-ky" *ngIf="t.sign_unit == 'chu_ky_so_con_dau_va_thong_tin'">
-                                                        <img loading="lazy" class="resize-drag" [id]="getIdSignChuaKeo(t.id)" style="object-fit: cover; width: 201px; height: 100%;" src="assets/img/con-dau-va-thong-tin.png">
-                                                        <div class="text-ky">Chữ ký có con dấu và thông tin</div>
-                                                    </div>
-                                            
-                                                    <div class="item-ky" *ngIf="t.sign_unit == 'chu_ky_so_con_dau'">
-                                                        <img loading="lazy" class="resize-drag" [id]="getIdSignChuaKeo(t.id)" style="object-fit: cover; width: 201px; height: 100%;" src="assets/img/con-dau.png">
-                                                        <div class="text-ky">Chỉ có con dấu/ chữ ký</div>
-                                                    </div>
-                                            
-                                                    <div class="item-ky" *ngIf="t.sign_unit == 'chu_ky_so_thong_tin'">
-                                                        <img loading="lazy" class="resize-drag" [id]="getIdSignChuaKeo(t.id)" style="object-fit: cover; width: 201px; height: 100%;" src="assets/img/thong-tin.png">
-                                                        <div class="text-ky">Chỉ có thông tin</div>
-                                                    </div>
-                                                </ng-container>
-                                            </div>                                            
                                         </div>
                                     </div>
-
+                                  
                                     <div class="imgage-ky">
-                                        <img  style="width: 24px; height: 24px;" src="assets/img/mui-ten-dropdown.png">
+                                      <img style="width: 24px; height: 24px;" src="assets/img/mui-ten-dropdown.png" />
+                                    </div>
+
+                                    <div class="horizontal-dropdown horizontal-dropdown-right">
+                                        <ng-container *ngFor="let t of d.type">
+                                            <div class="item-ky" *ngIf="t.sign_unit == 'chu_ky_so_con_dau_va_thong_tin'">
+                                                <img loading="lazy" class="resize-drag" [id]="getIdSignChuaKeo(t.id)" style="object-fit: cover; width: 201px; height: 100%;" src="assets/img/con-dau-va-thong-tin.png">
+                                                <div class="text-ky">Chữ ký có con dấu và thông tin</div>
+                                            </div>
+                                    
+                                            <div class="item-ky" *ngIf="t.sign_unit == 'chu_ky_so_con_dau'">
+                                                <img loading="lazy" class="resize-drag" [id]="getIdSignChuaKeo(t.id)" style="object-fit: cover; width: 201px; height: 100%;" src="assets/img/con-dau.png">
+                                                <div class="text-ky">Chỉ có con dấu/ chữ ký</div>
+                                            </div>
+
+                                            <div class="item-ky" *ngIf="t.sign_unit == 'chu_ky_so_thong_tin'">
+                                                <img loading="lazy" class="resize-drag" [id]="getIdSignChuaKeo(t.id)" style="object-fit: cover; width: 201px; height: 100%;" src="assets/img/thong-tin.png">
+                                                <div class="text-ky">Chỉ có thông tin</div>
+                                            </div>
+                                        </ng-container>
                                     </div>
                                 </div>
 
@@ -231,7 +232,7 @@
                 <div *ngIf="this.satisfiedFirstHandler && this.hideConfigFirstHandler" class="flex-column" style="margin: 32px 16px 0 16px;">
                     <label class="label-require">{{'configuration' | translate}}</label>
                     <div class="mt-8px flex" style="align-items: center; gap: 8px;">
-                        <input  class="checkbox-hide-processing-thread hover-item" type ="checkbox" [(ngModel)]="this.allowFirstHandler">
+                        <input  class="checkbox-hide-processing-thread hover-item" type ="checkbox" [(ngModel)]="this.datasForm.isAllowFirstHandleEdit">
                         <div class="text-allow-first-handler">{{'text.allow.first.handler' | translate}}</div>
                     </div>
                 </div>

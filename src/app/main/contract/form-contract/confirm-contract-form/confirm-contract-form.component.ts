@@ -245,7 +245,7 @@ export class ConfirmContractFormComponent implements OnInit {
       ).toPromise();
       
       contract.address_cc = this.emailPhoneList;
-      
+      contract.isAllowFirstHandleEdit = this.datasForm.isAllowFirstHandleEdit;
       const result: any = await this.contractService.addContractStep1(
         contract,
         this.datasForm.contract_id ? this.datasForm.contract_id : null,
@@ -557,6 +557,7 @@ export class ConfirmContractFormComponent implements OnInit {
           'template_form'
         ).toPromise();
         contract.address_cc = this.emailPhoneList;
+        contract.isAllowFirstHandleEdit = this.datasForm.isAllowFirstHandleEdit;
         const result: any = await this.contractService.addContractStep1(contract,this.datasForm.contract_id ? this.datasForm.contract_id : null,'template_form').toPromise();
         
         if (countIsSignId > 0) {

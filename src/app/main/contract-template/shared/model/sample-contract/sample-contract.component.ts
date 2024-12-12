@@ -117,7 +117,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   digitalSign: number = 3;
   textUnit: number = 1;
   hideConfigFirstHandler: boolean = false;
-  allowFirstHandler: boolean = false;
   satisfiedFirstHandler: boolean = false;
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -145,6 +144,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     this.list_font = ["Arial", "Calibri", "Times New Roman"];
+    if(!this.datas.isAllowFirstHandleEdit) {
+      this.datas.isAllowFirstHandleEdit = false;
+    }
     this.satisfiedFirstHandler = this.checkFirstHandler(this.datas.is_determine_clone)
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
@@ -1910,7 +1912,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       );
 
       if(!this.hideConfigFirstHandler) {
-        this.allowFirstHandler = false
+        this.datas.isAllowFirstHandleEdit = false
       }
     }
 

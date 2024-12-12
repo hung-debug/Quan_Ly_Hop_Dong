@@ -125,7 +125,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   textUnit: number = 1;
   isDropdownVisibleChuKySo: boolean = false;
   hideConfigFirstHandler: boolean = false;
-  allowFirstHandler: boolean = false;
   satisfiedFirstHandler: boolean = false;
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -169,11 +168,11 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           }
           if (res.type == 2) {
             res['sign_unit'] = 'chu_ky_anh';
-            res.name = res.recipient.name;
+            res.name = res?.recipient?.name;
           }
           if (res.type == 3) {
             res['sign_unit'] = 'chu_ky_so'
-            res.name = res.recipient.name;
+            res.name = res?.recipient?.name;
           }
           if (res.type == 4) {
             res['sign_unit'] = 'so_tai_lieu'
@@ -514,7 +513,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký"))) ||
           (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id) && !val.isNotSupportTextField) ||
           (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id && !val.isNotSupportTextField)) ||
-          (val.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && (val.recipient_id == data.id || val.name.includes("Người ký"))))
+          (val.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && (val.recipient_id == data.id || val?.name?.includes("Người ký"))))
         )
         || dataDetermine.some((data: any) => val.sign_unit.includes('chu_ky_so') && val.isSupportMultiSignatureBox == false && val.recipient_id == data.id)
       );
@@ -525,7 +524,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký"))) ||
           (val.sign_unit == 'text' && ((data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || !val.recipient_id)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id)) ||
           (val.sign_unit == 'so_tai_lieu' && ((data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || !val.recipient_id)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id)) ||
-          (val.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký"))))
+          (val.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val?.name?.includes("Người ký"))))
         ));
 
 
@@ -1856,7 +1855,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       );
 
       if(!this.hideConfigFirstHandler) {
-        this.allowFirstHandler = false
+        this.datasForm.isAllowFirstHandleEdit = false
       }
     }
 
@@ -2270,6 +2269,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
             if(this.validData() == true){
               this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
+                contract.isAllowFirstHandleEdit = this.datasForm.isAllowFirstHandleEdit;
                 this.contractService.addContractRelease(contract).subscribe((res: any) => {
                 });
               });
@@ -2360,12 +2360,19 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         delete dataSignId[i].id_have_data;
         await this.contractService.getContractSampleEdit(dataSignId[i], id).toPromise().then((data: any) => {
           dataSample_contract.push(data);
-          if(this.validData('release-check') == true){
-            this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
-              this.contractService.addContractRelease(contract).subscribe((res: any) => {
-              });
+          // if(this.validData('release-check') == true){
+          //   this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
+          //     console.log("1", this.datasForm.isAllowFirstHandleEdit)
+          //     contract.isAllowFirstHandleEdit = this.datasForm.isAllowFirstHandleEdit;
+          //     this.contractService.addContractRelease(contract).subscribe((res: any) => {
+          //     });
+          //   });
+          // }
+          this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
+            contract.isAllowFirstHandleEdit = this.datasForm.isAllowFirstHandleEdit;
+            this.contractService.addContractRelease(contract).subscribe((res: any) => {
             });
-          }
+          });
         }, (error: HttpErrorResponse) => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! vui lòng thao tác lại hoặc liên hệ với nhà phát triển để xử lý!', "", 3000);
           countIsSignId++;
