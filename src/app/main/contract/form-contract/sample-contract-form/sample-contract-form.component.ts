@@ -3289,6 +3289,30 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   checkFirstHandler(data: any) {
     const participants = data;
   
+    const allRole2 = participants.flatMap((item: any) => 
+      item.recipients.filter((r: any) => r.role === 2)
+    );
+
+    if (allRole2.length > 0) {
+      // Nếu chỉ có một recipient, kiểm tra email có trùng không
+      if (allRole2.length === 1) {
+        return true;
+      }
+  
+      // Tìm giá trị ordering nhỏ nhất trong tất cả các recipient
+      const minOrdering = Math.min(...allRole2.map((r: any) => r.ordering));
+    
+      // Kiểm tra xem có nhiều recipient có cùng ordering nhỏ nhất không
+      const minOrderingCount = allRole2.filter((r: any) => r.ordering === minOrdering).length;
+  
+      // Nếu ordering là duy nhất và email trùng
+      if (minOrderingCount === 1) {
+        return true;
+      }
+  
+      return false;
+    }
+
     // Bước 1: Tìm `ordering` nhỏ nhất trong tổ chức
     const minParticipantOrdering = Math.min(...participants.map((p: any) => p.ordering));
     const minParticipants = participants.filter((p: any) => p.ordering === minParticipantOrdering);
@@ -3301,11 +3325,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   
     // Bước 2: Tìm recipients theo vai trò ưu tiên
     const recipients = minParticipant.recipients;
-    let selectedRecipients = recipients.filter((r: any) => r.role === 2);
-  
-    if (selectedRecipients.length === 0) {
-      selectedRecipients = recipients.filter((r: any) => r.role === 3);
-    }
+    let selectedRecipients = recipients.filter((r: any) => r.role === 3);
     if (selectedRecipients.length === 0) {
       selectedRecipients = recipients.filter((r: any) => r.role === 4);
     }
