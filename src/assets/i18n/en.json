@@ -929,5 +929,9 @@
   "keep.signature.stream.all": "Keep the entire signature stream",
   "keep.signature.stream.organizational": "Just keep my organizational flow",
   "configuration": "Configuration",
-  "text.allow.first.handler": "Allows the first handler to edit all text/money boxes"
+  "text.allow.first.handler": "Allows the first handler to edit all text/money boxes",
+  "system.config": "System configuration",
+  "choose.api": "Choose API",
+  "api.is.required": "Api is required",
+  "config.system": "Config system"
 }

@@ -1,0 +1,277 @@
+.horizontal-container {
+  // display: flex;
+  // flex-direction: row;
+  background-color: #FFFFFF;
+  min-height: 88vh;
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.system-config{
+  border: 1px solid #8E9AB0;
+  border-radius: 8px;
+  margin-top: 20px;
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.system-config1{
+  border-radius: 8px;
+  margin-top: 20px;
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.input-url{
+  width: 85%;
+  height: 40px;
+  border-radius: 8px;
+  border: solid 2px #8E9AB0;
+}
+
+.method{
+  height: 40px;
+  width: 5%;
+  border-radius: 8px;
+  border: solid 2px #8E9AB0;
+}
+
+u{
+  margin: 10px;
+  color: #106DB6;
+}
+
+.invalid{
+  color: red;
+}
+
+.check{
+  height: 43px;
+  font-size: 14px !important;
+  width: 8%;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  background-color: #29a55d;
+  border: solid 1px #FFFFFF;
+  font-weight: 700;
+  margin-left: 2%;
+}
+
+input, textarea, select {
+  width: 97%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+#apiKey{
+  margin-left: 2%;
+  margin-top: 10px;
+}
+
+span{
+  margin-left: 5px;
+}
+
+#body{
+  margin-left: 2%;
+  margin-top: 10px;
+}
+
+.group_button{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;  
+}
+
+.deleteConfig{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;  
+}
+
+.button-add-save{
+  display: flex;
+  gap: 10px;
+}
+
+.disable-add-save{
+  height: 40px;
+  font-size: 14px !important;
+  width: 115px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  background-color: #8E9AB0;
+  border: solid 1px #FFFFFF;
+  font-weight: 700;
+  margin: 5px;
+}
+
+.add-save{
+  height: 40px;
+  font-size: 14px !important;
+  width: 115px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  background-color: #29a55d;
+  border: solid 1px #FFFFFF;
+  font-weight: 700;
+  margin: 5px;
+}
+
+.delete-config{
+  height: 40px;
+  font-size: 14px !important;
+  width: 115px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  background-color: #29a55d;
+  border: solid 1px #FFFFFF;
+  font-weight: 700;
+  margin: 10px;
+}
+
+.checkstatus {
+  display: flex;
+  align-items: center; 
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+@media (min-width: 1400px) {
+  .col-xxl-6 {
+      flex: 0 0 auto;
+      width: 50%;
+  }
+
+  .col-xxl-8 {
+    flex: 0 0 auto;
+    width: 70%;
+}
+
+  .col-xxl-2 {
+    flex: 0 0 auto;
+    width: 10%;
+  }
+}
+
+.col-lg-4-9 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    // width: calc((100% - var(--width-button))) !important
+    width: 100%;
+  }
+
+  @media (max-width: 991px) {
+    margin-top: 16px !important;
+  }
+}
+
+.col-lg-5-45 {
+  @media (min-width: 992px) {
+    flex: 0 0 auto !important;
+    width: calc((100% - var(--width-button)) / 2) !important
+  }
+
+  @media (max-width: 991px) {
+    margin-top: 16px !important;
+  }
+}
+
+:host ::ng-deep {
+  .ngx-pagination {
+    padding: 0;
+    font-family: 'Roboto';
+  }
+  .ngx-pagination .current {
+    background: #0041C4;
+  }
+  .ngx-pagination a, .ngx-pagination button {
+    text-decoration: none;
+    background: #F3F6FA;
+    color: #A8B5CE;
+  }
+  .ngx-pagination a:hover, .ngx-pagination button:hover {
+    background-color: #F3F6FA;
+  }
+  .ngx-pagination ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .ngx-pagination li {
+    border-radius: 5.8px;
+    margin: 0 4px;
+    // width: 50px;
+    // border-radius: 5px;
+  }
+  .ngx-pagination li span {
+    display: block;
+  }
+  .ngx-pagination button {
+    background-color: #0041C4;
+  }
+  .ngx-pagination .pagination-previous a::before,
+  .ngx-pagination .pagination-previous.disabled::before {
+    font-family: 'Material Icons';
+    content: url('../../../assets/img/Vector_left.svg');
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    margin: 0;
+  }
+  .ngx-pagination .pagination-next a::after,
+  .ngx-pagination .pagination-next.disabled::after {
+    font-family: 'Material Icons';
+    content: url('../../../assets/img/Vector_right.svg');
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    margin: 0;
+  }
+
+  .p-selectbutton .p-button {
+    outline: 0 !important;
+    box-shadow: none !important;
+    height: 42px;
+    width: 50%;
+    font-weight: 500;
+    background-color: #F6F6F6;
+    color: var(--Text-Secondary, #8E9AB0);
+    border: 0px;
+  }
+  .p-selectbutton .p-button.p-highlight {
+    background: #FFFFFF;
+    border-color: #FFFFFF;
+    color: #001A4D;
+    font-weight: 600;
+  }
+
+  .p-dropdown {
+    border: 1px solid #106DB6;
+    border-radius: 5px;
+    height: 35px;
+    width: 100%;
+    outline: 0;
+    color: black !important;
+    margin-top: 20px;
+  }
+  .p-dropdown-label {
+      padding: 5px 5px 5px 15px;
+  }
+}
+
+.text-success {
+  color: green;
+  font-weight: bold;
+}
+
+.text-danger {
+  color: red;
+  font-weight: bold;
+}

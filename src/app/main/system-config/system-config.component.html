@@ -1,0 +1,104 @@
+<div class="horizontal-container" *ngIf="isRoleWebHook">
+  <form [formGroup]="addForm">
+    <!-- <div formArrayName="apiListFormArray"> -->
+      <!-- <div *ngFor="let form of apiListFormArray.controls; let i = index" [formGroupName]="i"> -->
+        <div class="row system-config">
+          <div class="col-lg-4-9 btn-padding-right btn-padding-left">
+            <div class="dropdown-container">
+              <p-dropdown 
+                panelStyleClass="font"
+                [options]="apiList" 
+                formControlName="api" 
+                optionLabel="type" 
+                (onChange)="onApiChange($event)"
+                placeholder="{{'choose.api' | translate}}"
+                ></p-dropdown>
+            </div>
+            <!-- <div *ngIf="submitted && f.api.errors" class="invalid">
+              <div *ngIf="f.api.errors.required">{{'api.is.required' | translate}}</div>
+            </div> -->
+            <div *ngIf="submitted && f.api.errors">
+              <small class="text-danger" *ngIf="f.api.errors['required']">{{'api.is.required' | translate}}</small>
+            </div>
+            <!-- <div *ngIf="addForm.get('type')?.invalid && addForm.get('type')?.touched && submitted && f.type.errors" class="invalid">
+              Loại API không được phép bỏ trống
+            </div> -->
+          </div>
+          
+          <div class="row">
+            <div class="system-config1">
+              <div class="">
+                <select id="method" class="method">
+                  <option value="POST">POST</option>
+                </select>
+                <input class="input-url btn-padding-right btn-padding-left" type="text" placeholder="Nhập URL" formControlName="url"/>
+                <button class="check" (click)="checkStatusApiWebHook()">Kiểm tra</button>
+              </div>
+              <div *ngIf="submitted && f.url.errors">
+                <small class="text-danger" *ngIf="f.url.errors['required']">Url không được phép bỏ trống.</small>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-xxl-6">
+              <div class="row">
+                <span>API Key</span>
+                <textarea rows="7" placeholder="Nhập API Key, ví dụ: 56494c92-f18f-4f3e-ac79-49544661e63b" (input)="validateApiKey($event)"  maxlength="32" formControlName="apikey"></textarea>
+                <div *ngIf="submitted && f.apikey.errors">
+                  <small class="text-danger" *ngIf="f.apikey.errors['required']">API Key không được phép bỏ trống.</small>
+                  <small class="text-danger" *ngIf="f.apikey.errors['pattern']">API Key chỉ được phép chứa ký tự không dấu và không có khoảng trắng.</small>
+                  <small class="text-danger" *ngIf="f.apikey.errors['maxlength']">API Key tối đa 32 ký tự.</small>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-xxl-6">
+              <div class="row">
+                <span>Body</span>
+                <textarea id="body" rows="7" formControlName="body"></textarea>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="checkstatus">
+              <span>Trạng thái kiểm tra:</span>
+              <!-- <span style="color: #29a55d;">{{checkStatus}}</span> -->
+              <span [ngClass]="{'text-success': checkStatus === 'Thành công', 'text-danger': checkStatus === 'Thất bại'}">
+                {{ checkStatus }}
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- <div class="row" style="display: flex; justify-content: flex-end; align-items: center;">
+          <div class="deleteConfig">
+            <span><u>Xóa cấu hình</u></span>
+          </div>
+        </div> -->
+      <!-- </div> -->
+    <!-- </div> -->
+
+
+  </form>
+
+  
+  <!-- <div>
+    <form *ngFor="let form of formsArray">
+      <system-config-add></system-config-add>
+    </form>
+  </div> -->
+
+  
+  <div class="row" style="display: flex; justify-content: space-between; align-items: center;">
+    <div class="group_button">
+      <div class="button-add-save">
+        <button class="add-save" type="submit" (click)="onSubmit()">Lưu lại</button>
+        <!-- <button *ngIf="this.formsArray.length < this.apiList.length" class="add-save" type="button" (click)="addNewForm()">Thêm mới</button> -->
+        <!-- <button *ngIf="this.formsArray.length >= this.apiList.length" class="disable-add-save" type="button" (click)="addNewForm()" disabled>Thêm mới</button> -->
+      </div>
+    </div>
+  </div>
+ 
+</div>
