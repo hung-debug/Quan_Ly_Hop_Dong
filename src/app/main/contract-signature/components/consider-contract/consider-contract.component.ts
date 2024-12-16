@@ -867,7 +867,7 @@ export class ConsiderContractComponent
     let participants = data.participants;
   
     const allRole2 = participants.flatMap((item: any) => 
-      item.recipients.filter((r: any) => r.role === 2 && r.status === 1)
+      item.recipients.filter((r: any) => r.role === 2)
     );
   
     if (allRole2.length > 0) {
@@ -886,7 +886,7 @@ export class ConsiderContractComponent
       const minOrderingCount = allRole2.filter((r: any) => r.ordering === minOrdering).length;
   
       // Nếu ordering là duy nhất và email trùng
-      if (minOrderingCount === 1 && minOrderingRecipient.email === email) {
+      if (minOrderingCount === 1 && minOrderingRecipient.email === email && minOrderingRecipient.status == 1) {
         return true;
       }
   
