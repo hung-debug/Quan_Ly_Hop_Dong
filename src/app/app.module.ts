@@ -142,6 +142,7 @@ import { environment } from 'src/environments/environment';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthGuard } from './help/auth.guard';
 //import { RouteInterceptorService } from './service/route-interceptor.service';
+import { SystemConfigComponent } from './main/system-config/system-config.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -286,7 +287,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     UploadAttachFilesComponent,
     DeleteContractFolderComponent,
     UploadContractFileComponent,
-    AccountLinkDialogComponent
+    AccountLinkDialogComponent,
+    SystemConfigComponent
   ],
   imports: [
     PaginatorModule,

@@ -80,6 +80,7 @@ export class SidebarService {
   isConfigSoonExpireDay: boolean = true; // cấu hình ngày sắp hết hạn
   isConfigBrandname: boolean = true; // cấu hình brandname
   isConfigMailServer: boolean = true; //cấu hình mail server
+  isConfigWebHook : boolean = true; // cầu hình hệ thống
 
   toggled = false;
   _hasBackgroundImage = true;
@@ -330,6 +331,8 @@ export class SidebarService {
               this.isConfigBrandname = listRole.some((element) => element.code == 'CAUHINH_BRANDNAME');
   
               this.isConfigMailServer = listRole.some((element) => element.code == 'CAUHINH_MAILSERVER');
+              
+              this.isConfigWebHook = listRole.some((element) => element.code == 'CAUHINH_HETHONG');
   
               this.buildMenu(currentUserC);
             },
@@ -576,7 +579,7 @@ export class SidebarService {
 
     if(this.isQLLHD_01 || this.isQLLHD_02 || this.isQLLHD_03 || this.isQLLHD_04 || this.isQLLHD_05 ||
       this.isConfigSms || this.isConfigSoonExpireDay || this.isConfigBrandname || this.isConfigMailServer ||
-      this.QLDSCTS_01 || this.QLDSCTS_02 || this.QLDSCTS_03 || this.QLDSCTS_04)
+      this.QLDSCTS_01 || this.QLDSCTS_02 || this.QLDSCTS_03 || this.QLDSCTS_04 || this.isConfigWebHook)
       {
         let submenusConfig: any[] = [];
         submenusConfig.push(
@@ -594,6 +597,11 @@ export class SidebarService {
             title: 'certificate.list',
             active: false,
             href: '/main/digital-certificate',
+          },
+          {
+            title: 'system.config',
+            active: false,
+            href: '/main/system-config',
           }
         )
         this.menus.push({

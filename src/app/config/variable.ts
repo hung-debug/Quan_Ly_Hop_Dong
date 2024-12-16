@@ -741,6 +741,213 @@ export var roleListNB =
   }
 ]
 
+export var roleListParent =
+[
+  {
+    //Nhóm chức năng quản lý tài liệu
+    label: 'role.contract.list',
+    value: 'QLHD',
+    items: [
+      //Thêm mới tài liệu đơn lẻ không theo mẫu
+      { label: 'add.contract.one.not.template', value: 'QLHD_01' },
+      //Thêm mới tài liệu đơn lẻ theo mẫu
+      { label: 'add.contract.one.template', value: 'QLHD_14' },
+      //Thêm mới tài liệu theo lô
+      { label: 'add.contract.batch', value: 'QLHD_15' },
+      //Sửa tài liệu
+      { label: 'fix.contract', value: 'QLHD_02' },
+      //Xem danh sách tài liệu của tổ chức của tôi và tổ chức con
+      {
+        label: 'view.list.contracts.me.and.child',
+        value: 'QLHD_03',
+      },
+      //Xem danh sách tài liệu của tổ chức của tôi
+      { label: 'view.list.contracts.me', value: 'QLHD_04' },
+      //Xem danh sách tài liệu của tôi
+      //Tìm kiếm tài liệu
+      { label: 'search.contract', value: 'QLHD_06' },
+      //Xem thông tin chi tiết tài liệu
+      { label: 'role.contract.view.detail', value: 'QLHD_07' },
+      //Sao chép tài liệu
+      { label: 'contract.copy', value: 'QLHD_08' },
+      //Hủy tài liệu
+      { label: 'contract.cancel', value: 'QLHD_09' },
+      //Xem lịch sử tài liệu
+      { label: 'role.contract.view.history', value: 'QLHD_10' },
+      //Tạo tài liệu liên quan
+      { label: 'role.contract.create.connect', value: 'QLHD_11' },
+      //Xem tài liệu liên quan
+      { label: 'contract.connect.view', value: 'QLHD_12' },
+      //Chia sẻ tài liệu
+      { label: 'contract.share', value: 'QLHD_13' },
+      //Thanh lý tài liệu,
+      { label: 'contract.liquidation', value: 'QLHD_16'}
+    ],
+  },
+  {
+    //Nhóm chức năng quản lý mẫu tài liệu
+    label: 'role.contract-template.list', value: "QLMHD",
+    items: [
+      //Thêm mới mẫu tài liệu
+      { label: 'contract-template.add', value: "QLMHD_01"},
+      //Sửa mẫu tài liệu
+      { label: 'role.contract-template.edit', value: "QLMHD_02"},
+      //Ngừng phát hành mẫu tài liệu
+      { label: 'role.contract-template.stop', value: "QLMHD_03"},
+      //Phát hành mẫu tài liệu
+      { label: 'role.contract-template.start', value: "QLMHD_04"},
+      //Chia sẻ mẫu tài liệu
+      { label: 'role.contract-template.share', value: "QLMHD_05"},
+      //Tìm kiếm mẫu tài liệu
+      { label: 'role.contract-template.filter', value: "QLMHD_06"},
+      //Xóa mẫu tài liệu
+      { label: 'role.contract-template.delete', value: "QLMHD_07"},
+      //Xem thông tin chi tiết mẫu tài liệu
+      { label: 'role.contract-template.view.detail', value: "QLMHD_08"},
+      { label: 'role.contract-template.copy', value: 'QLMHD_09' },
+    ]
+  },
+  {
+    //Nhóm chức năng quản lý tổ chức
+    label: 'role.unit.list',
+    value: 'QLTC',
+    items: [
+      //Thêm mới tổ chức
+      { label: 'unit.add', value: 'QLTC_01' },
+      //Sửa tổ chức
+      { label: 'role.unit.edit', value: 'QLTC_02' },
+      //Tìm kiếm tổ chức
+      { label: 'role.unit.filter', value: 'QLTC_03' },
+      //Xem thông tin chi tiết tổ chức
+      { label: 'role.unit.view.detail', value: 'QLTC_04' },
+    ],
+  },
+  {
+    //Nhóm chức năng quản lý người dùng
+    label: 'role.user.list',
+    value: 'QLND',
+    items: [
+      //Thêm mới người dùng
+      { label: 'user.add', value: 'QLND_01' },
+      //Sửa người dùng
+      { label: 'role.user.edit', value: 'QLND_02' },
+      //Tìm kiếm người dùng
+      { label: 'role.user.filter', value: 'QLND_03' },
+      //Xem thông tin chi tiết người dùng
+      { label: 'role.user.view.detail', value: 'QLND_04' },
+    ],
+  },
+  {
+    //Nhóm chức năng quản lý vai trò
+    label: 'role.list.v2',
+    value: 'QLVT',
+    items: [
+      //Thêm mới vai trò
+      { label: 'role.add', value: 'QLVT_01' },
+      //Sửa vai trò
+      { label: 'role.edit', value: 'QLVT_02' },
+      //Xóa vai trò
+      { label: 'role.delete', value: 'QLVT_03' },
+      //Tìm kiếm vai trò
+      { label: 'role.filter', value: 'QLVT_04' },
+      //Xem thông tin chi tiết vai trò
+      { label: 'role.view.detail', value: 'QLVT_05' },
+    ],
+  },
+  {
+    //Nhóm chức năng quản lý loại tài liệu
+    label: 'role.contract-type.list',
+    value: 'QLLHD',
+    items: [
+      //Thêm mới loại tài liệu
+      { label: 'role.contract-type.add', value: 'QLLHD_01' },
+      //Sửa loại tài liệu
+      { label: 'role.contract-type.edit', value: 'QLLHD_02' },
+      //Xóa loại tài liệu
+      { label: 'role.contract-type.delete', value: 'QLLHD_03' },
+      //Tìm kiếm loại tài liệu
+      { label: 'role.contract-type.filter', value: 'QLLHD_04' },
+      //Xem thông tin chi tiết loại tài liệu
+      { label: 'role.contract-type.view.detail', value: 'QLLHD_05' },
+    ],
+  },
+
+  //Nhóm chức năng báo cáo
+  {
+    label: 'role.group.report',
+    value: 'QLBC',
+    items: [
+      //Báo cáo chi tiết
+      {label: 'role.report.detail',value:'BAOCAO_CHITIET'},
+
+      //Báo cáo sắp hết hiệu lực
+      {label: 'role.soon.expire.time',value:'BAOCAO_SAPHETHIEULUC'},
+
+      //Báo cáo trạng thái xử lý
+      {label: 'role.processing.status.contract',value:'BAOCAO_TRANGTHAIXULY'},
+
+      //Báo cáo số lượng trạng thái
+      {label: 'role.number.status', value:'BAOCAO_SOLUONG_TRANGTHAI'},
+
+      //Báo cáo số lượng theo loại tài liệu
+      {label: 'role.contract.type.quantity',value:'BAOCAO_SOLUONG_LOAIHOPDONG'},
+
+      //Báo cáo tài liệu nhận
+      {label: 'role.contract.receive', value:'BAOCAO_HOPDONG_NHAN'},
+
+      //Báo cáo trạng thái gửi Sms
+      {label: 'role.report.history.send.sms', value:'BAOCAO_TRANGTHAIGUI_SMS'},
+
+      //Báo cáo trạng thái gửi Email
+      {label: 'role.report.history.send.email', value:'BAOCAO_TRANGTHAIGUI_EMAIL'},
+      
+      //Báo cáo xác thực eKYC
+      {label: 'report.ekyc', value:'BAOCAO_EKYC'}
+    ]
+
+  },
+
+  //Nhóm chức năng quản lý danh sách chứng thư số
+  {
+    label:'role.cerificate.list',
+    value:'QLDSCTS',
+    items: [
+      //Thêm mới chứng thư số
+      { label: 'role.cerificate.add', value: 'QLDSCTS_01' },
+      //Sửa chứng thư số
+      { label: 'role.cerificate.update', value: 'QLDSCTS_02' },
+      //Xem thông tin chi tiết chứng thư số
+      { label: 'role.cerificate.detail', value: 'QLDSCTS_03' },
+      //Tìm kiếm chứng thư số
+      { label: 'role.cerificate.filter', value: 'QLDSCTS_04' },
+    ]
+  },
+
+  //Nhóm chức năng cấu hình SMS/Email
+  {
+    label:'role.config.sms.email',
+    value:'QLCH',
+    items: [
+
+        //Cấu hình sms
+        {label:'config.sms',value:'CAUHINH_SMS'},
+
+        //Cấu hình ngày sắp hết hạn
+        {label:'config.day.expiration',value:'CAUHINH_NGAYSAPHETHAN'},
+        
+        //Cấu hình brandname
+        {label:'config.brandname.role',value:'CAUHINH_BRANDNAME'},
+        
+        // Cấu hình mail server
+        {label:'config.email.server.role', value: 'CAUHINH_MAILSERVER'},
+        
+        // Cấu hình hệ thống
+        {label:'config.system', value: 'CAUHINH_HETHONG'},
+
+    ]
+  }
+]
+
 export var adminRoleList = [
   {
     //Nhóm chức năng quản lý tổ chức

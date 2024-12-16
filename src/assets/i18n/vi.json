@@ -953,5 +953,9 @@
   "keep.signature.stream.all": "Giữ toàn bộ luồng ký",
   "keep.signature.stream.organizational": "Chỉ giữ luồng tổ chức của tôi",
   "configuration": "Cấu hình",
-  "text.allow.first.handler": "Cho phép người xử lý đầu tiên được chỉnh sửa tất cả ô text/ ô tiền"
+  "text.allow.first.handler": "Cho phép người xử lý đầu tiên được chỉnh sửa tất cả ô text/ ô tiền",
+  "system.config": "Cấu hình hệ thống",
+  "choose.api": "Chọn API",
+  "api.is.required": "Loại API không được phép bỏ trống",
+  "config.system": "Cấu hình hệ thống"
 }

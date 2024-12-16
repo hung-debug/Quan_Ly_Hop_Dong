@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { SelectItemGroup } from 'primeng/api';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
-import {roleList, roleListNB} from "../../../config/variable";
+import {roleList, roleListNB,roleListParent} from "../../../config/variable";
 import {parttern_input} from "../../../config/parttern"
 import { parttern } from '../../../config/parttern';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { environment } from 'src/environments/environment';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-add-role',
@@ -38,7 +39,8 @@ export class AddRoleComponent implements OnInit {
     public dialogRef: MatDialogRef<AddRoleComponent>,
     public router: Router,
     public dialog: MatDialog,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private userService: UserService,
     ) {
       this.addForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
@@ -48,7 +50,7 @@ export class AddRoleComponent implements OnInit {
       });
     }
 
-  ngOnInit(): void {
+    async ngOnInit(): Promise<void> {
     this.datas = this.data;
     if(this.data.id != null){
       this.roleService.getRoleById(this.data.id).subscribe(
@@ -74,11 +76,20 @@ export class AddRoleComponent implements OnInit {
 
     // if(sessionStorage.getItem('lang') == 'vi')
 
-      if(environment.flag == 'KD'){
-        this.groupedRole = roleList;
-      }else{
-        this.groupedRole = roleListNB;
-      }
+    let userId = this.userService.getAuthCurrentUser().id;
+    const infoUser = await this.userService.getUserById(userId).toPromise();
+    
+    // this.OrgId = data.organization.id;
+    let inforAccount = await this.userService.getOrgIdChildren(infoUser.organization.id).toPromise();
+    //parentid null là thằng cha còn có giá trị là thằng con
+
+    if(inforAccount.parent_id === null){
+      this.groupedRole = roleListParent
+    }else if(environment.flag == 'KD'){
+      this.groupedRole = roleList;
+    }else{
+      this.groupedRole = roleListNB;
+    }
     // else if(sessionStorage.getItem('lang') == 'en')
     // this.groupedRole = roleList_en;
   }

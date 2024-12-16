@@ -57,6 +57,7 @@ import {ContentSmsComponent} from './main/report/report-status-send-sms-email/co
 import {ContentEmailComponent} from './main/report/report-contract-send-email/content-email/content-email.component';
 import { ReportContractReceiveComponent } from './main/report/report-contract-receive/report-contract-receive.component';
 import { environment } from 'src/environments/environment';
+import { SystemConfigComponent } from './main/system-config/system-config.component';
 
 const contract_signatures = "c";
 const signatures = "s9";
@@ -170,6 +171,10 @@ const routes: Routes = [
       {
         path: 'digital-certificate',
         component: DigitalCertificateComponent,
+      },
+      {
+        path: 'system-config',
+        component: SystemConfigComponent,
       },
       {
         path: contract_signatures,
