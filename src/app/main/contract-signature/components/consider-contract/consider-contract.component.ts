@@ -865,6 +865,34 @@ export class ConsiderContractComponent
 
   checkFirstHandler(data: any, email: any) {
     let participants = data.participants;
+  
+    const allRole2 = participants.flatMap((item: any) => 
+      item.recipients.filter((r: any) => r.role === 2 && r.status === 1)
+    );
+  
+    if (allRole2.length > 0) {
+      // Nếu chỉ có một recipient, kiểm tra email có trùng không
+      if (allRole2.length === 1) {
+        return allRole2[0].email === email;
+      }
+  
+      // Tìm giá trị ordering nhỏ nhất trong tất cả các recipient
+      const minOrdering = Math.min(...allRole2.map((r: any) => r.ordering));
+  
+      // Lọc ra recipient có ordering nhỏ nhất
+      const minOrderingRecipient = allRole2.find((r: any) => r.ordering === minOrdering);
+  
+      // Kiểm tra xem có nhiều recipient có cùng ordering nhỏ nhất không
+      const minOrderingCount = allRole2.filter((r: any) => r.ordering === minOrdering).length;
+  
+      // Nếu ordering là duy nhất và email trùng
+      if (minOrderingCount === 1 && minOrderingRecipient.email === email) {
+        return true;
+      }
+  
+      return false;
+    }
+  
     let authorisedIds = new Set(
       participants.flatMap((item: any) => 
         item.recipients
@@ -888,16 +916,13 @@ export class ConsiderContractComponent
     let minParticipant = result.find((p: any) => p.ordering === minParticipantOrdering);
 
 
-    // Bước 2: Lọc recipients theo role 2, 3, 4
-    let recipientWithRole2 = minParticipant.recipients.filter((r: any) => r.role === 2);    
+    // Bước 2: Lọc recipients theo role 3, 4  
     let recipientWithRole3 = minParticipant.recipients.filter((r: any) => r.role === 3);    
     let recipientWithRole4 = minParticipant.recipients.filter((r: any) => r.role === 4);
 
     let selectedRecipient = []
 
-    if(recipientWithRole2.length > 0) {
-      selectedRecipient = recipientWithRole2
-    } else if (recipientWithRole2.length === 0 && recipientWithRole3.length > 0) {
+    if (recipientWithRole3.length > 0) {
       selectedRecipient = recipientWithRole3
     } else {
       selectedRecipient = recipientWithRole4
