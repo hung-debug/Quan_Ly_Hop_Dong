@@ -35,9 +35,9 @@
             <div class="col-md-4">
                 <div class="label text-color">{{'user.phone' | translate}} <span class="required-title">*</span></div>
                 <div class="input-data">
-                    <!-- <input type="text" formControlName="phone"> -->
-                    <input type="text" formControlName="phone" *ngIf="this.disablePhone != 'EMAIL_AND_SDT'">
-                    <input type="text" formControlName="phone" [readonly]="true" class="hidden-color" *ngIf="this.disablePhone == 'EMAIL_AND_SDT'" style="min-height: 31px">
+                    <input type="text" formControlName="phone">
+                    <!-- <input type="text" formControlName="phone" *ngIf="this.disablePhone != 'EMAIL_AND_SDT'">
+                    <input type="text" formControlName="phone" [readonly]="true" class="hidden-color" *ngIf="this.disablePhone == 'EMAIL_AND_SDT'" style="min-height: 31px"> -->
 
                 </div>
                 <div *ngIf="submitted && f.phone.errors" class="invalid">
@@ -65,7 +65,7 @@
             </div>
         </div>
         
-        <div class="row" style="justify-content: flex-start;padding-top: 10px;display: flex;">
+        <!-- <div class="row" style="justify-content: flex-start;padding-top: 10px;display: flex;">
           <div style="display: flex;">
             <div style="display: flex;">
               <span>{{'choose.type.sign' | translate}}:</span>
@@ -83,7 +83,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <div class="row" style="justify-content: center;padding-top: 0px;">
             <button class="save-button" (click)="updateUser()">{{'btn.update' | translate}}</button>
