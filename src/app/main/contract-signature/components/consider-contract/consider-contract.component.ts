@@ -866,7 +866,21 @@ export class ConsiderContractComponent
   checkFirstHandler(data: any, email: any) {
     let participants = data.participants;
   
-    const allRole2 = participants.flatMap((item: any) => 
+    let authorisedIds = new Set(
+      participants.flatMap((item: any) => 
+        item.recipients
+          .map((recipient: any) => recipient.authorisedBy)
+          .filter((authorisedBy: any) => authorisedBy !== null)
+      )
+    );
+    
+    // Bước 2: Lọc mảng `a`, loại bỏ các recipients có id trùng với bất kỳ authorisedBy nào
+    const result = participants.map((item: any) => ({
+        ...item,
+        recipients: item.recipients.filter((recipient: any) => !authorisedIds.has(recipient.id))
+    }));
+
+    const allRole2 = result.flatMap((item: any) => 
       item.recipients.filter((r: any) => r.role === 2)
     );
   
@@ -893,19 +907,6 @@ export class ConsiderContractComponent
       return false;
     }
   
-    let authorisedIds = new Set(
-      participants.flatMap((item: any) => 
-        item.recipients
-          .map((recipient: any) => recipient.authorisedBy)
-          .filter((authorisedBy: any) => authorisedBy !== null)
-      )
-    );
-    
-    // Bước 2: Lọc mảng `a`, loại bỏ các recipients có id trùng với bất kỳ authorisedBy nào
-    const result = participants.map((item: any) => ({
-        ...item,
-        recipients: item.recipients.filter((recipient: any) => !authorisedIds.has(recipient.id))
-    }));
 
     // Bước 1: Tìm result có ordering nhỏ nhất
     let minParticipantOrdering = Math.min(...result.map((p: any) => p.ordering));
