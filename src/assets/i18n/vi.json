@@ -957,5 +957,6 @@
   "system.config": "Cấu hình hệ thống",
   "choose.api": "Chọn API",
   "api.is.required": "Loại API không được phép bỏ trống",
-  "config.system": "Cấu hình hệ thống"
+  "config.system": "Cấu hình hệ thống",
+  "example.apikey": "Nhập API Key, ví dụ: 56494c92-f18f-4f3e-ac79-49544661e63b"
 }

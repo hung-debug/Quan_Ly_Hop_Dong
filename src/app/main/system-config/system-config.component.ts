@@ -37,7 +37,7 @@ export class SystemConfigComponent implements OnInit {
       api: this.fbd.control("", [Validators.required]),
       url: this.fbd.control("", [Validators.required]),
       apikey: this.fbd.control("", [
-        Validators.required,
+        // Validators.required,
         Validators.maxLength(32),
         Validators.pattern(/^[a-zA-Z0-9\S]+$/) // Chỉ chấp nhận ký tự không dấu và không khoảng trắng
       ]),
@@ -147,7 +147,7 @@ export class SystemConfigComponent implements OnInit {
         type: [item.type, Validators.required],
         body: [item.body],
         apikey: this.fbd.control("", [
-          Validators.required,
+          // Validators.required,
           Validators.maxLength(32),
           Validators.pattern(/^[a-zA-Z0-9\S]+$/) // Chỉ chấp nhận ký tự không dấu và không khoảng trắng
         ]),
@@ -295,6 +295,11 @@ export class SystemConfigComponent implements OnInit {
   
     // Cập nhật giá trị trong FormControl
     this.addForm.get("apikey")?.setValue(inputElement.value);
+    this.addForm.get("apikey")?.updateValueAndValidity();
+    // const apiKeyControl = this.addForm.get('apikey');
+    // if (apiKeyControl?.value === '') {
+    //   console.log('API Key đang trống!');
+    // }
   }
   
   // Hàm liệt kê lỗi của form
@@ -327,24 +332,9 @@ export class SystemConfigComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     // stop here if form is invalid
-    // if (this.addForm.invalid) {
-    //   console.log("this.addForm.invalid",this.addForm);
-    //   console.log('Các trường không hợp lệ:', this.getFormValidationErrors());
-    //   console.log('API Key Value:', this.addForm.get('apikey')?.value); // Giá trị hiện tại
-    //   console.log('API Key Errors:', this.addForm.get('apikey')?.errors); // Lỗi hiện tại
-    //   console.log('Form Status:', this.addForm.status); // VALID / INVALID
-            
-    //   const control = this.addForm.get('apikey');
-    //   console.log("control",control?.value);
-
-    //   console.log("API Key before submitting: ", this.addForm.value.apikey);
-    //   console.log(Validators.required(control?.value)); // null nếu hợp lệ
-
-    //   console.log(Validators.maxLength(32)(control?.value)); // null nếu hợp lệ
-    //   console.log(/^[a-zA-Z0-9\S]+$/.test(control?.value)); // true nếu hợp lệ
-
-    //   return;
-    // }
+    if (this.addForm.invalid) {
+      return;
+    }
     
     let cleanStringBody = this.addForm.value.body.replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
     // console.log("cleanStringBody",cleanStringBody);
