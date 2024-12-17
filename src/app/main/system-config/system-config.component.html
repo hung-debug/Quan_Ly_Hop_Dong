@@ -44,11 +44,14 @@
             <div class="col-xxl-6">
               <div class="row">
                 <span>API Key</span>
-                <textarea rows="7" placeholder="Nhập API Key, ví dụ: 56494c92-f18f-4f3e-ac79-49544661e63b" (input)="validateApiKey($event)"  maxlength="32" formControlName="apikey"></textarea>
+                <textarea id="apiKey" rows="7" placeholder="{{'example.apikey' | translate}}" (input)="validateApiKey($event)"  maxlength="32" formControlName="apikey"></textarea>
                 <div *ngIf="submitted && f.apikey.errors">
-                  <small class="text-danger" *ngIf="f.apikey.errors['required']">API Key không được phép bỏ trống.</small>
+                  <!-- <small class="text-danger" *ngIf="f.apikey.errors['required']">API Key không được phép bỏ trống.</small> -->
                   <small class="text-danger" *ngIf="f.apikey.errors['pattern']">API Key chỉ được phép chứa ký tự không dấu và không có khoảng trắng.</small>
                   <small class="text-danger" *ngIf="f.apikey.errors['maxlength']">API Key tối đa 32 ký tự.</small>
+                </div>
+                <div *ngIf="f.apikey.value === '' && (f.apikey.touched || f.apikey.dirty)">
+                  <small class="text-danger">API Key không được phép bỏ trống.</small>
                 </div>
               </div>
             </div>
@@ -56,7 +59,7 @@
             <div class="col-xxl-6">
               <div class="row">
                 <span>Body</span>
-                <textarea id="body" rows="7" formControlName="body"></textarea>
+                <textarea id="body" rows="7" formControlName="body" readonly></textarea>
               </div>
             </div>
           </div>
