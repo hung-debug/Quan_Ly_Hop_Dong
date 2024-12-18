@@ -805,28 +805,57 @@ export class DetermineSignerComponent implements OnInit {
         let sortOrderViewerOrgPartner = arrOrgPartnerViewer?.filter((item:any) => orderingPartner > item.ordering) // so sánh ordering đối tác cá nhân phải lớn hơn ordering người xem xét đối tác tổ chức
         //nếu sortOrderViewerOrgPartner.length == arrOrgPartnerViewer.length (nếu 2 giá trị bằng nhau thì đúng còn ko thì false)
         
-        let sortOrderingOrgPartner = dataOrderingOrgPartner?.filter((item: any)=> orderingPartner < item.ordering) // so sánh giá trị ordering của đối tác cá nhân với các ordering trong tổ chức đối tác
+        let sortOrderingOrgPartner = dataOrderingOrgPartner?.filter((item: any)=> orderingPartner < item.ordering) // so sánh giá trị ordering trong recipients của đối tác cá nhân với các ordering trong tổ chức đối tác
         // nếu sortOrderingOrgPartner.length == dataOrg_ordering.length ( nếu 2 giá trị bằng nhau thì true còn ko thì sẽ là false )
         
         // lấy ra mảng chứa đối tác cá nhân không phải loại ký otp và ekyc
         let isOrderingPerson_NoException = this.datas.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6));
 
         //so sánh odering của đối tác cá nhân ký số với ordering của đối tác cá nhân ký ảnh hoặc ekyc
-        let sortOrderingPersonPartner = isOrderingPerson_NoException[0]?.recipients?.filter((item: any) => item.ordering == orderingPersonPartner);        
-
-        // valid ordering doi tac ca nhan selected option eKYC/OTP/Image
-        if(sortOrdering?.length != dataOrg_ordering?.length || dataOrderingOrg?.length == 0 ||
-          sortOrderingOrgPartner?.length != dataOrgPart_ordering?.length || dataOrderingOrgPartner?.length == 0 || sortOrderingPersonPartner?.length > 0) {
-           this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
-           return false;
-         }
+        let sortOrderingPersonPartner = isOrderingPerson_NoException[0]?.recipients?.filter((item: any) => item.ordering == orderingPersonPartner);
         
-        // let dataError_ordering = isOrderingPerson_exception.some((val: any) => val.ordering > isOrderingPerson_exception.length);
-        // if (dataError_ordering) {
-        // if (!dataError_ordering && dataOrg_ordering.length > 0 && dataPartner_ordering) {
-        //   this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
-        //   return false;
-        // }
+        let arrOrg_PersonPartner = this.datas.is_determine_clone.filter((val: any) => val.type != 2) // lấy ra mảng tổ chức của tôi và đối tác cá nhân
+
+        let arrOrgPartner_PersonPartner = this.datas.is_determine_clone.filter((val: any) => val.type != 1) // lấy ra mảng tổ chức của đối tác và đối tác cá nhân
+    
+        let compareOrderingPersonPartner_Org = arrOrg_PersonPartner?.filter((item: any) => item.ordering > orderingPersonPartner); // so sánh ordering đối tác cá nhân với mảng tổ chức của tối 
+
+        let compareOrderingPersonPartner_OrgPartner = arrOrgPartner_PersonPartner?.filter((item: any) => item.ordering > orderingPersonPartner); // so sánh ordering đối tác cá nhân với mảng tổ chức của đối tác
+        
+        //dataOrderingOrgPartner?.length == 0: so sánh giá trị các ordering trong tổ chức của đối tác phải lớn hơn 1 
+        // dataOrderingOrgPartner.length > 0 tức là ordering đối tác cá nhân = 1 là nhỏ nhất
+        // dataOrgPart_ordering: // lấy mảng chứa tổ chức của đối tác không có người xem xét
+        // sortOrderingOrgPartner?.length : // so sánh giá trị ordering trong recipients của đối tác cá nhân với các ordering trong tổ chức đối tác
+        // dataOrgPart_ordering?.length : lấy mảng chứa tổ chức của đối tác không có người xem xét
+
+        // các tổ chức có ordering giống nhau
+        if(compareOrderingPersonPartner_Org?.length == 0 && compareOrderingPersonPartner_OrgPartner?.length == 0){
+          // valid ordering doi tac ca nhan selected option eKYC/OTP/Image
+          if(sortOrdering?.length != dataOrg_ordering?.length || dataOrderingOrg?.length == 0 ||
+            sortOrderingOrgPartner?.length != dataOrgPart_ordering?.length || dataOrderingOrgPartner?.length == 0 || sortOrderingPersonPartner?.length > 0) {
+             this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
+             return false;
+           }
+        }else if(compareOrderingPersonPartner_Org?.length == 0){//ordering đối tác cá nhân = ordering tổ chức của tôi và khác ordering tổ chức đối tác
+          // valid ordering doi tac ca nhan selected option eKYC/OTP/Image
+          if(sortOrdering?.length != dataOrg_ordering?.length || dataOrderingOrg?.length == 0 || sortOrderingPersonPartner?.length > 0) {
+             this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
+             return false;
+           }
+        }else if(compareOrderingPersonPartner_OrgPartner?.length == 0){ //ordering đối tác cá nhân = ordering tổ chức của đối tác và khác ordering tổ chức của tôi
+          // valid ordering doi tac ca nhan selected option eKYC/OTP/Image
+          if(sortOrderingOrgPartner?.length != dataOrgPart_ordering?.length || dataOrderingOrgPartner?.length == 0 || sortOrderingPersonPartner?.length > 0) {
+             this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
+             return false;
+           }
+        }else{
+          // valid ordering doi tac ca nhan selected option eKYC/OTP/Image
+          if(sortOrdering?.length != dataOrg_ordering?.length || dataOrderingOrg?.length == 0 ||
+            sortOrderingOrgPartner?.length != dataOrgPart_ordering?.length || dataOrderingOrgPartner?.length == 0 || sortOrderingPersonPartner?.length > 0) {
+             this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
+             return false;
+           }
+        }
       }else if(isOrderingPerson_exception.length > 0){
         let dataError_ordering = isOrderingPerson_exception.some((val: any) => val.ordering > isOrderingPerson_exception.length);
         if (dataError_ordering) {
