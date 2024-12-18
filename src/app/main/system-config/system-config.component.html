@@ -1,4 +1,4 @@
-<div class="horizontal-container" *ngIf="isRoleWebHook">
+<div class="horizontal-container" *ngIf="isRoleWebHook && this.checkRole === null">
   <form [formGroup]="addForm">
     <!-- <div formArrayName="apiListFormArray"> -->
       <!-- <div *ngFor="let form of apiListFormArray.controls; let i = index" [formGroupName]="i"> -->
@@ -35,7 +35,7 @@
                 <button class="check" (click)="checkStatusApiWebHook()">Kiểm tra</button>
               </div>
               <div *ngIf="submitted && f.url.errors">
-                <small class="text-danger" *ngIf="f.url.errors['required']">Url không được phép bỏ trống.</small>
+                <small class="text-danger" *ngIf="f.url.errors['required']">URL không được phép bỏ trống</small>
               </div>
             </div>
           </div>
@@ -47,11 +47,11 @@
                 <textarea id="apiKey" rows="7" placeholder="{{'example.apikey' | translate}}" (input)="validateApiKey($event)"  maxlength="32" formControlName="apikey"></textarea>
                 <div *ngIf="submitted && f.apikey.errors">
                   <!-- <small class="text-danger" *ngIf="f.apikey.errors['required']">API Key không được phép bỏ trống.</small> -->
-                  <small class="text-danger" *ngIf="f.apikey.errors['pattern']">API Key chỉ được phép chứa ký tự không dấu và không có khoảng trắng.</small>
-                  <small class="text-danger" *ngIf="f.apikey.errors['maxlength']">API Key tối đa 32 ký tự.</small>
+                  <small class="text-danger" *ngIf="f.apikey.errors['pattern']">API Key chỉ được phép chứa ký tự không dấu và không có khoảng trắng</small>
+                  <small class="text-danger" *ngIf="f.apikey.errors['maxlength']">API Key tối đa 32 ký tự</small>
                 </div>
                 <div *ngIf="f.apikey.value === '' && (f.apikey.touched || f.apikey.dirty)">
-                  <small class="text-danger">API Key không được phép bỏ trống.</small>
+                  <small class="text-danger">API Key không được phép bỏ trống</small>
                 </div>
               </div>
             </div>

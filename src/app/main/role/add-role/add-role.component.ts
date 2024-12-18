@@ -79,11 +79,9 @@ export class AddRoleComponent implements OnInit {
     let userId = this.userService.getAuthCurrentUser().id;
     const infoUser = await this.userService.getUserById(userId).toPromise();
     
-    // this.OrgId = data.organization.id;
-    let inforAccount = await this.userService.getOrgIdChildren(infoUser.organization.id).toPromise();
     //parentid null là thằng cha còn có giá trị là thằng con
 
-    if(inforAccount.parent_id === null){
+    if(infoUser.organization.parent_id === null){
       this.groupedRole = roleListParent
     }else if(environment.flag == 'KD'){
       this.groupedRole = roleList;

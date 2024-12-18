@@ -53,6 +53,7 @@ export class SystemConfigComponent implements OnInit {
   api: any = "";
   body: any;
   checkStatus: any;
+  checkRole: any;
   // formsArray: any[] = [{
   //   api: this.fbd.control("", [Validators.required]),
   //   url: this.fbd.control("", [Validators.required]),
@@ -81,13 +82,13 @@ export class SystemConfigComponent implements OnInit {
     
     let userId = this.userService.getAuthCurrentUser().id;
     const infoUser = await this.userService.getUserById(userId).toPromise();
-    
+    this.checkRole = infoUser.organization.parent_id;
     const inforRole = await this.roleService.getRoleById(infoUser.role_id).toPromise();
     const listRole = inforRole.permissions;
     
     this.isRoleWebHook = listRole.some((element: any) => element.code == 'CAUHINH_HETHONG');
     this.getListApiWebHook();
-
+    
     //parentid null là thằng cha còn có giá trị là thằng con
   }
 
@@ -183,11 +184,9 @@ export class SystemConfigComponent implements OnInit {
       async (data) => {
         if(data.success === true){
           this.checkStatus = "Thành công"
-        }else{
-          this.checkStatus = "Thất bại"
         }
       }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra kết nối cấu hình webhook tổ chức', "", 3000);
+        this.checkStatus = "Thất bại"
         this.spinner.hide();
       }
     )
@@ -295,7 +294,7 @@ export class SystemConfigComponent implements OnInit {
   
     // Cập nhật giá trị trong FormControl
     this.addForm.get("apikey")?.setValue(inputElement.value);
-    this.addForm.get("apikey")?.updateValueAndValidity();
+    // this.addForm.get("apikey")?.updateValueAndValidity();
     // const apiKeyControl = this.addForm.get('apikey');
     // if (apiKeyControl?.value === '') {
     //   console.log('API Key đang trống!');
@@ -329,16 +328,10 @@ export class SystemConfigComponent implements OnInit {
   }
   
   
-  onSubmit() {
+  async onSubmit() {
     this.submitted = true;
-    // stop here if form is invalid
-    if (this.addForm.invalid) {
-      return;
-    }
-    
     let cleanStringBody = this.addForm.value.body.replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
-    // console.log("cleanStringBody",cleanStringBody);
-
+    
     const dataApi = {
       id: this.addForm.value.api.id,
       type: this.addForm.value.api.type,
@@ -347,29 +340,38 @@ export class SystemConfigComponent implements OnInit {
       url: this.addForm.value.url,
       orgId: this.addForm.value.api.orgId
     }
-    // console.log("dataApi", dataApi);
+    // stop here if form is invalid
+    if (this.addForm.invalid) {
+      this.toastService.showErrorHTMLWithTimeout('Kết nối API thất bại ', "", 3000);
+      return;
+    }
 
-    // console.log("addForm", this.addForm);
-    // console.log("formarrray", this.formsArray);
-    
     if(dataApi.id){
-      this.systemConfigService.getUpdateApiWebHook(dataApi).subscribe(
+      this.systemConfigService.checkStatusWebHook(dataApi).subscribe(
         async (data) => {
-          // console.log("data",data);
-          this.toastService.showSuccessHTMLWithTimeout('Cập nhật cấu hình webhook tổ chức thành công!', "", 3000);
-          await this.getListApiWebHook();
-          
+          if(data.success === true){
+            this.checkStatus = "Thành công";
+            this.systemConfigService.getUpdateApiWebHook(dataApi).subscribe(
+              async (data) => {
+                this.toastService.showSuccessHTMLWithTimeout('Cập nhật cấu hình webhook tổ chức thành công!', "", 3000);
+              }, error => {
+                this.toastService.showErrorHTMLWithTimeout('Lỗi cập nhật cấu hình webhook tổ chức', "", 3000);
+                this.spinner.hide();
+              }
+            )
+          }
+
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Lỗi cập nhật cấu hình webhook tổ chức', "", 3000);
+          this.checkStatus = "Thất bại"
+          this.toastService.showErrorHTMLWithTimeout('Kết nối API thất bại', "", 3000);
           this.spinner.hide();
         }
       )
+
     }else{
       this.systemConfigService.getAddApIWebHook(dataApi).subscribe(
         async (data) => {
-          // console.log("data",data);
           this.toastService.showSuccessHTMLWithTimeout('Thêm mới cấu hình webhook tổ chức thành công!', "", 3000);
-          await this.getListApiWebHook();
           
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Lỗi thêm mới cấu hình webhook tổ chức', "", 3000);
