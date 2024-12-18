@@ -27,6 +27,7 @@ import { isPdfFile } from "pdfjs-dist";
 import { CheckZoomService } from "src/app/service/check-zoom.service";
 import { DetectCoordinateService } from "src/app/service/detect-coordinate.service";
 import { environment } from "src/environments/environment";
+import { SysService } from 'src/app/service/sys.service';
 
 @Component({
   selector: 'app-sample-contract-form',
@@ -136,7 +137,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     public translate: TranslateService,
     private userService: UserService,
     private checkZoomService: CheckZoomService,
-    private detectCoordinateService: DetectCoordinateService
+    private detectCoordinateService: DetectCoordinateService,
+    private sysService: SysService,
   ) {
     this.stepForm = variable.stepSampleContractForm.step3
   }
@@ -154,7 +156,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     }
 
     this.list_font = ["Arial","Calibri","Times New Roman"];
-    this.satisfiedFirstHandler = this.checkFirstHandler(this.datasForm.is_determine_clone)
+    this.satisfiedFirstHandler = this.sysService.checkFirstHandler(this.datasForm.is_determine_clone)
     this.isChangeNumberContract = this.datasForm.contract_no; // save contract number check with input contract number object signature when change
 
     if (!this.datasForm.contract_user_sign) {
@@ -3286,64 +3288,5 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     }
   }
 
-  checkFirstHandler(data: any) {
-    const participants = data;
-  
-    const allRole2 = participants.flatMap((item: any) => 
-      item.recipients.filter((r: any) => r.role === 2)
-    );
-
-    if (allRole2.length > 0) {
-      // Nếu chỉ có một recipient, kiểm tra email có trùng không
-      if (allRole2.length === 1) {
-        return true;
-      }
-  
-      // Tìm giá trị ordering nhỏ nhất trong tất cả các recipient
-      const minOrdering = Math.min(...allRole2.map((r: any) => r.ordering));
-    
-      // Kiểm tra xem có nhiều recipient có cùng ordering nhỏ nhất không
-      const minOrderingCount = allRole2.filter((r: any) => r.ordering === minOrdering).length;
-  
-      // Nếu ordering là duy nhất và email trùng
-      if (minOrderingCount === 1) {
-        return true;
-      }
-  
-      return false;
-    }
-
-    // Bước 1: Tìm `ordering` nhỏ nhất trong tổ chức
-    const minParticipantOrdering = Math.min(...participants.map((p: any) => p.ordering));
-    const minParticipants = participants.filter((p: any) => p.ordering === minParticipantOrdering);
-  
-    if (minParticipants.length !== 1) {
-      return false;
-    }
-  
-    const minParticipant = minParticipants[0];
-  
-    // Bước 2: Tìm recipients theo vai trò ưu tiên
-    const recipients = minParticipant.recipients;
-    let selectedRecipients = recipients.filter((r: any) => r.role === 3);
-    if (selectedRecipients.length === 0) {
-      selectedRecipients = recipients.filter((r: any) => r.role === 4);
-    }
-  
-    // Nếu không có recipient nào, trả về false
-    if (selectedRecipients.length === 0) {
-      return false;
-    }
-  
-    // Bước 3: Kiểm tra `ordering` nhỏ nhất và duy nhất trong recipients
-    const minRecipientOrdering = Math.min(...selectedRecipients.map((r: any) => r.ordering));
-    const minRecipients = selectedRecipients.filter((r: any) => r.ordering === minRecipientOrdering);
-  
-    // Nếu không duy nhất, trả về false
-    if (minRecipients.length !== 1) {
-      return false;
-    }
-    return true;
-  }
 
 }

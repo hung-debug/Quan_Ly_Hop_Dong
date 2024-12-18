@@ -879,74 +879,29 @@ export class ConsiderContractComponent
         ...item,
         recipients: item.recipients.filter((recipient: any) => !authorisedIds.has(recipient.id))
     }));
-
-    const allRole2 = result.flatMap((item: any) => 
-      item.recipients.filter((r: any) => r.role === 2)
-    );
   
-    if (allRole2.length > 0) {
-      // Nếu chỉ có một recipient, kiểm tra email có trùng không
-      if (allRole2.length === 1) {
-        return allRole2[0].email === email;
-      }
+    const checkRoleRecipients = (role: number) => {
+      let minParentOrdering = Math.min(...result.map((item: any) => item.ordering)); // Bước 1: Tìm ordering nhỏ nhất của cha
+
+      let roleRecipients = result.filter((item: any) => item.ordering === minParentOrdering) // Bước 2: Chỉ lấy participants có ordering nhỏ nhất
+      .flatMap((item: any) =>
+        item.recipients.filter((r: any) => r.role === role) // Lọc recipients có role phù hợp
+      );
   
-      // Tìm giá trị ordering nhỏ nhất trong tất cả các recipient
-      const minOrdering = Math.min(...allRole2.map((r: any) => r.ordering));
+      if (roleRecipients.length === 0) return false;
   
-      // Lọc ra recipient có ordering nhỏ nhất
-      const minOrderingRecipient = allRole2.find((r: any) => r.ordering === minOrdering);
+      if (roleRecipients.length === 1) return roleRecipients[0].email === email;
   
-      // Kiểm tra xem có nhiều recipient có cùng ordering nhỏ nhất không
-      const minOrderingCount = allRole2.filter((r: any) => r.ordering === minOrdering).length;
+      const minOrdering = Math.min(...roleRecipients.map((r: any) => r.ordering));
+      const minOrderingRecipient = roleRecipients.find((r: any) => r.ordering === minOrdering);
+      const minOrderingCount = roleRecipients.filter((r: any) => r.ordering === minOrdering).length;
   
-      // Nếu ordering là duy nhất và email trùng
-      if (minOrderingCount === 1 && minOrderingRecipient.email === email && minOrderingRecipient.status == 1) {
-        return true;
-      }
+      return minOrderingCount === 1 && minOrderingRecipient.email === email;
+    };
   
-      return false;
-    }
-  
-
-    // Bước 1: Tìm result có ordering nhỏ nhất
-    let minParticipantOrdering = Math.min(...result.map((p: any) => p.ordering));
-    let minParticipantCount = result.filter((p: any) => p.ordering === minParticipantOrdering).length;
-    if (minParticipantCount > 1) {
-      return false;
-    }
-    let minParticipant = result.find((p: any) => p.ordering === minParticipantOrdering);
-
-
-    // Bước 2: Lọc recipients theo role 3, 4  
-    let recipientWithRole3 = minParticipant.recipients.filter((r: any) => r.role === 3);    
-    let recipientWithRole4 = minParticipant.recipients.filter((r: any) => r.role === 4);
-
-    let selectedRecipient = []
-
-    if (recipientWithRole3.length > 0) {
-      selectedRecipient = recipientWithRole3
-    } else {
-      selectedRecipient = recipientWithRole4
-    }
-
-    if (selectedRecipient.length == 0) {
-      return false;
-    }
-
-    // Bước 3: Kiểm tra nếu email của recipient được chọn có ordering nhỏ nhất và duy nhất
-    let minRecipientOrdering = Math.min(...selectedRecipient.map((r: any) => r.ordering));
-    let minRecipientCount = selectedRecipient.filter((r: any) => r.ordering === minRecipientOrdering).length;
-    if (minRecipientCount > 1) {
-      return false;
-    }
-
-    let minRecipient = selectedRecipient.find((r: any) => r.ordering === minRecipientOrdering);
-    if (minRecipient.email === email && minRecipient.ordering === minRecipientOrdering) {
-      return true;
-    }
-    return false;
+    return checkRoleRecipients(2) || checkRoleRecipients(3) || checkRoleRecipients(4);
   }
-  
+   
   checkNotSupportText(signData: any) {
     signData = signData.filter((item: any) => item.recipient_id == this.recipientId)
     signData.forEach((element: any) => {
