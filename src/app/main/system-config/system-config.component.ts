@@ -331,6 +331,7 @@ export class SystemConfigComponent implements OnInit {
   async onSubmit() {
     this.submitted = true;
     let cleanStringBody = this.addForm.value.body.replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
+    let apiKey = this.addForm.get("apikey");
     
     const dataApi = {
       id: this.addForm.value.api.id,
@@ -341,7 +342,7 @@ export class SystemConfigComponent implements OnInit {
       orgId: this.addForm.value.api.orgId
     }
     // stop here if form is invalid
-    if (this.addForm.invalid) {
+    if (this.addForm.invalid || apiKey?.value === '') {
       this.toastService.showErrorHTMLWithTimeout('Kết nối API thất bại ', "", 3000);
       return;
     }
