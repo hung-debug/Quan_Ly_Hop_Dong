@@ -184,6 +184,10 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
       }
     })
   }
+  
+  get addressCC(): string {
+    return this.datas?.is_data_contract?.address_cc?.join(', ') || '';
+  }
 
   endContract() {
     this.actionBack();

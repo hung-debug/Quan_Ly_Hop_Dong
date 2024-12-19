@@ -593,6 +593,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       }
     );
   }
+  
+  get addressCC(): string {
+    return this.datas?.is_data_contract?.address_cc?.join(', ') || '';
+  }
 
   downloadPDF(url: string): Observable<Blob> {
     const options = { responseType: 'blob' as 'json' };
