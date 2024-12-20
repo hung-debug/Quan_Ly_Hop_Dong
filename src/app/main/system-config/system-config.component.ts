@@ -91,7 +91,7 @@ export class SystemConfigComponent implements OnInit {
   }
   
   apiKeyExactValidator(): ValidatorFn {
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+    const uuidRegex = /^[0-9a-zA-Z]{8}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{12}$/;
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value || '';
       const isValid = uuidRegex.test(value);
