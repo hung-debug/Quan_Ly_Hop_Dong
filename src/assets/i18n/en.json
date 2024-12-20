@@ -876,7 +876,7 @@
   "enter.code.org": "Enter organization code",
   "enter.name.org": "Enter organization name",
   "update.last": "Last updated",
-  "seach.report.ekyc": "Search Full name,CMT/CCCD,Name-Code-Number of Document",
+  "seach.report.ekyc": "Full name,CMT/CCCD,Name-Code-Number of Document",
   "code.contract": "Document code",
   "phone": "Phone number",
   "content":"Content",
@@ -936,5 +936,6 @@
   "config.system": "Config system",
   "example.apikey": "Enter Api Key, example: 56494c92-f18f-4f3e-ac79-49544661e63b",
   "person_cc": "PERSON CC",
-  "webhook.body.sample": "This is sample data. Please bypass this data in API"
+  "webhook.body.sample": "This is sample data. Please bypass this data in API",
+  "search.code.number.name.1": "Doc code/number/name"
 }
