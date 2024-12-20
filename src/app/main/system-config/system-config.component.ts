@@ -8,7 +8,7 @@ import { DigitalCertificateService } from 'src/app/service/digital-certificate.s
 import { TranslateService } from '@ngx-translate/core';
 import { LazyLoadEvent } from 'primeng/api';
 import { SystemConfigService } from 'src/app/service/system-config.service';
-import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, FormArray, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { UserService } from 'src/app/service/user.service';
 import { RoleService } from 'src/app/service/role.service';
 
@@ -37,9 +37,7 @@ export class SystemConfigComponent implements OnInit {
       api: this.fbd.control("", [Validators.required]),
       url: this.fbd.control("", [Validators.required]),
       apikey: this.fbd.control("", [
-        // Validators.required,
-        Validators.maxLength(32),
-        Validators.pattern(/^[a-zA-Z0-9\S]+$/) // Chỉ chấp nhận ký tự không dấu và không khoảng trắng
+        this.apiKeyExactValidator()
       ]),
       body: this.fbd.control(""),
       // method: 'POST',
@@ -90,6 +88,24 @@ export class SystemConfigComponent implements OnInit {
     this.getListApiWebHook();
     
     //parentid null là thằng cha còn có giá trị là thằng con
+  }
+  
+  apiKeyExactValidator(): ValidatorFn {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value || '';
+      const isValid = uuidRegex.test(value);
+      if (!isValid) {
+        return { pattern: true }; // Lỗi không đúng định dạng UUID
+      }
+      if (value.length !== 36) {
+        return { length: true }; // Lỗi không đủ 36 ký tự
+      }
+      if (/\s/.test(value)) {
+        return { whitespace: true }; // Lỗi có khoảng trắng
+      }
+      return null; // Hợp lệ
+    };
   }
 
   // addNewForm() {

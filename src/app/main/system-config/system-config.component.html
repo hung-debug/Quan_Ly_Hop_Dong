@@ -50,8 +50,12 @@
                 <textarea id="apiKey" rows="7" placeholder="{{'example.apikey' | translate}}" (input)="validateApiKey($event)"  maxlength="32" formControlName="apikey"></textarea>
                 <div *ngIf="submitted && f.apikey.errors">
                   <!-- <small class="text-danger" *ngIf="f.apikey.errors['required']">API Key không được phép bỏ trống.</small> -->
-                  <small class="text-danger" *ngIf="f.apikey.errors['pattern']">API Key chỉ được phép chứa ký tự không dấu và không có khoảng trắng</small>
-                  <small class="text-danger" *ngIf="f.apikey.errors['maxlength']">API Key tối đa 32 ký tự</small>
+                  <!-- <small class="text-danger" *ngIf="f.apikey.errors['pattern']">API Key chỉ được phép chứa ký tự không dấu và không có khoảng trắng</small>
+                  <small class="text-danger" *ngIf="f.apikey.errors['maxlength']">API Key tối đa 32 ký tự</small> -->
+                  <small class="text-danger" *ngIf="f.apikey.errors['required']">API Key không được phép bỏ trống.</small>
+                  <small class="text-danger" *ngIf="f.apikey.errors['pattern']">API Key phải theo định dạng: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.</small>
+                  <small class="text-danger" *ngIf="f.apikey.errors['length']">API Key phải đúng 36 ký tự.</small>
+                  <small class="text-danger" *ngIf="f.apikey.errors['whitespace']">API Key không được chứa khoảng trắng.</small>
                 </div>
                 <div *ngIf="f.apikey.value === '' && (f.apikey.touched || f.apikey.dirty)">
                   <small class="text-danger">API Key không được phép bỏ trống</small>
