@@ -66,6 +66,23 @@
             </div>
           </div>
         </div>
+        
+        <div class="mt-12px">
+          <div class="to_chuc">
+            {{'person_cc' | translate}}
+          </div>
+          <div class="background-item">
+            <div *ngIf="addressCC" class="padding-item">
+              <div class="mt-6px">
+                <div>
+                  <div class="flex">
+                    <div class="item-name">{{addressCC}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div class="mt-12px">
           <div *ngFor="let record of this.data_parnter_organization; let i=index">
