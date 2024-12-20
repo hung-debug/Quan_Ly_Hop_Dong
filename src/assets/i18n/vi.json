@@ -903,7 +903,7 @@
   "enter.code.org": "Nhập mã tổ chức",
   "enter.name.org": "Nhập tên tổ chức",
   "update.last": "Cập nhật lần cuối",
-  "seach.report.ekyc": "Tìm kiếm theo Họ tên, CMT/CCCD, Tên tài liệu, Mã tài liệu, Số tài liệu",
+  "seach.report.ekyc": "Họ tên, CMT/CCCD, Tên TL, Mã TL, Số TL",
   "contract.change.status": "Chuyển xử lý tài liệu",
   "contract.cancel.status": "Hủy tài liệu",
   "contract.deny.status": "Từ chối tài liệu",
@@ -951,5 +951,6 @@
   "text.select": "Chọn hình ảnh chữ ký hoặc con dấu",
   "create.document.holds.signing.stream": "Tạo tài liệu giữ luồng ký",
   "keep.signature.stream.all": "Giữ toàn bộ luồng ký",
-  "keep.signature.stream.organizational": "Chỉ giữ luồng tổ chức của tôi"
+  "keep.signature.stream.organizational": "Chỉ giữ luồng tổ chức của tôi",
+  "search.code.number.name.1": "Mã TL, Số TL, Tên TL"
 }
