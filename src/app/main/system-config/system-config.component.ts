@@ -139,27 +139,27 @@ export class SystemConfigComponent implements OnInit {
 
   populateFormArray() {
     // Lấy FormArray từ addForm
-    const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
+    // const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
 
-    // Duyệt qua apiList và thêm từng phần tử vào FormArray
-    this.apiList.forEach(item => {
-      const apiFormGroup = this.fbd.group({
-        id: [item.id],
-        type: [item.type, Validators.required],
-        body: [item.body],
-        apikey: this.fbd.control("", [
-          // Validators.required,
-          Validators.maxLength(32),
-          Validators.pattern(/^[a-zA-Z0-9\S]+$/) // Chỉ chấp nhận ký tự không dấu và không khoảng trắng
-        ]),
-        url: [item.url, Validators.required],
-        orgId: [item.orgId]
-      });
+    // // Duyệt qua apiList và thêm từng phần tử vào FormArray
+    // this.apiList.forEach(item => {
+    //   const apiFormGroup = this.fbd.group({
+    //     id: [item.id],
+    //     type: [item.type, Validators.required],
+    //     body: [item.body],
+    //     apikey: this.fbd.control("", [
+    //       // Validators.required,
+    //       Validators.maxLength(32),
+    //       Validators.pattern(/^[a-zA-Z0-9\S]+$/) // Chỉ chấp nhận ký tự không dấu và không khoảng trắng
+    //     ]),
+    //     url: [item.url, Validators.required],
+    //     orgId: [item.orgId]
+    //   });
 
-      // Thêm form group vào FormArray
-      apiListFormArray.push(apiFormGroup);
-      // console.log("apiFormGroup",apiFormGroup);
-    });
+    //   // Thêm form group vào FormArray
+    //   apiListFormArray.push(apiFormGroup);
+    //   // console.log("apiFormGroup",apiFormGroup);
+    // });
   }
   
   get apiListFormArray(): FormArray {
@@ -193,7 +193,7 @@ export class SystemConfigComponent implements OnInit {
   }
 
 
-  onApiChange(event: any): void {
+  async onApiChange(event: any): Promise<void> {
     console.log("event", event);
 
     // const selectedApiId = event.value; // Lấy ID của API được chọn từ sự kiện onChange
@@ -208,18 +208,29 @@ export class SystemConfigComponent implements OnInit {
     //     url: selectedApi.url
     //   });
     // }
+    
+    // Lấy dữ liệu body sample api
+    let sampleWebHook = await this.systemConfigService.getSampleApiWebHook().toPromise();
+    
     const selectedApiId = event.value.id; // Lấy ID của API được chọn từ sự kiện onChange
     // console.log("selectedApiType",selectedApiId);
     const selectedResponse = this.apiList.find(item => item.id === selectedApiId);
     // console.log("selectedResponse",selectedResponse);
     if (selectedResponse) {
-      // Cập nhật body với giá trị body của API được chọn
-      this.body = selectedResponse.body ? JSON.stringify(selectedResponse.body, null, 2) : '';
-      this.addForm.patchValue({
-        body: this.body,
-        apikey: selectedResponse.apikey,
-        url: selectedResponse.url
-      });
+      // Cập nhật body với giá trị body của API mẫu với id null
+      if(selectedApiId === null){
+        this.body = sampleWebHook[0]?.body ? JSON.stringify(sampleWebHook[0]?.body, null, 2) : '';
+        this.addForm.patchValue({
+          body: this.body,
+        });
+      }else{
+        this.body = selectedResponse.body ? JSON.stringify(selectedResponse.body, null, 2) : '';
+        this.addForm.patchValue({
+          body: this.body,
+          apikey: selectedResponse.apikey,
+          url: selectedResponse.url
+        });
+      }
     } else {
       // Trường hợp không tìm thấy API phù hợp, reset body về trống
       this.body = '';

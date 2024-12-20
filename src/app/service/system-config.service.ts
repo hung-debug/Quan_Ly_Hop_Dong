@@ -25,7 +25,7 @@ export class SystemConfigService {
   organization_id: any;
   constructor(private http: HttpClient,) { }
 
-
+  listSampleApiWebHook: any = `${environment.apiUrl}/api/v1/organizations/webhooktype`;
   listApiWebHook: any = `${environment.apiUrl}/api/v1/organizations/webhook`;
   addNewApiWebHook: any = `${environment.apiUrl}/api/v1/organizations/webhook`;
   apiTemplateWebHook: any = `${environment.apiUrl}/api/v1/organizations/webhooktype`;
@@ -54,6 +54,15 @@ export class SystemConfigService {
       url: data.url,
     });
     return this.http.post<SystemConfig>(this.addApiWebHook, body, { headers: headers });
+  }
+  
+  //API có chức năng lấy thông tin mẫu webhook của tổ chức
+  getSampleApiWebHook() {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any[]>(this.listSampleApiWebHook, { headers }).pipe();
   }
 
   //API có chức năng lấy thông tin chi tiết tất cả webhook của tổ chức

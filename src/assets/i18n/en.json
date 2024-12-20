@@ -934,5 +934,6 @@
   "choose.api": "Choose API",
   "api.is.required": "Api is required",
   "config.system": "Config system",
-  "example.apikey": "Enter Api Key, example: 56494c92-f18f-4f3e-ac79-49544661e63b"
+  "example.apikey": "Enter Api Key, example: 56494c92-f18f-4f3e-ac79-49544661e63b",
+  "webhook.body.sample": "This is sample data. Please bypass this data in API"
 }
