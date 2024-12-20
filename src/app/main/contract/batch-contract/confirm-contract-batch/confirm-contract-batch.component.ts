@@ -133,7 +133,6 @@ export class ConfirmContractBatchComponent
   }
 
   ngOnInit() {
-    // console.log(this.datasBatch);
     this.spinner.show();
     this.contractService.getContractBatchList(this.datasBatch.contractFile, this.datasBatch.idContractTemplate, this.datasBatch.ceca_push).subscribe((response: any) => {
       this.contractList = response;
@@ -317,6 +316,10 @@ export class ConfirmContractBatchComponent
         this.loaded = true;
         this.spinner.hide();
       });
+  }
+  
+  get addressCC(): string {
+    return this.data?.address_cc?.join(', ') || '';
   }
 
   getPartnerCoordinationer(item: any) {
