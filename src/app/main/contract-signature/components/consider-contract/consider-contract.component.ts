@@ -883,11 +883,12 @@ export class ConsiderContractComponent
     const checkRoleRecipients = (role: number) => {
       let minParentOrdering = Math.min(...result.map((item: any) => item.ordering)); // Bước 1: Tìm ordering nhỏ nhất của cha
 
-      let roleRecipients = result.filter((item: any) => item.ordering === minParentOrdering) // Bước 2: Chỉ lấy participants có ordering nhỏ nhất
+      return result.filter((item: any) => item.ordering === minParentOrdering)
       .flatMap((item: any) =>
         item.recipients.filter((r: any) => r.role === role) // Lọc recipients có role phù hợp
-      );
+      )};
   
+    const processRoleRecipients = (roleRecipients: any[]) => {
       if (roleRecipients.length === 0) return false;
   
       if (roleRecipients.length === 1) return roleRecipients[0].email === email;
@@ -899,7 +900,23 @@ export class ConsiderContractComponent
       return minOrderingCount === 1 && minOrderingRecipient.email === email;
     };
   
-    return checkRoleRecipients(2) || checkRoleRecipients(3) || checkRoleRecipients(4);
+    // Kiểm tra theo thứ tự ưu tiên: 2 -> 3 -> 4
+    const role2Recipients = checkRoleRecipients(2);
+    if (role2Recipients.length > 0) {
+      return processRoleRecipients(role2Recipients); // Chỉ lấy role 2 nếu có dữ liệu
+    }
+  
+    const role3Recipients = checkRoleRecipients(3);
+    if (role3Recipients.length > 0) {
+      return processRoleRecipients(role3Recipients); // Chỉ lấy role 3 nếu có dữ liệu
+    }
+  
+    const role4Recipients = checkRoleRecipients(4);
+    if (role4Recipients.length > 0) {
+      return processRoleRecipients(role4Recipients); // Chỉ lấy role 4 nếu có dữ liệu
+    }
+  
+    return false;
   }
    
   checkNotSupportText(signData: any) {
