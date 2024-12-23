@@ -47,7 +47,7 @@
                   <span>API Key</span>
                   <span class="require_star">*</span>
                 </div>
-                <textarea id="apiKey" rows="7" placeholder="{{'example.apikey' | translate}}" (input)="validateApiKey($event)"  maxlength="32" formControlName="apikey"></textarea>
+                <textarea id="apiKey" rows="7" placeholder="{{'example.apikey' | translate}}" (input)="validateApiKey($event)"  maxlength="36" formControlName="apikey"></textarea>
                 <div *ngIf="submitted && f.apikey.errors">
                   <!-- <small class="text-danger" *ngIf="f.apikey.errors['required']">API Key không được phép bỏ trống.</small> -->
                   <!-- <small class="text-danger" *ngIf="f.apikey.errors['pattern']">API Key chỉ được phép chứa ký tự không dấu và không có khoảng trắng</small>
