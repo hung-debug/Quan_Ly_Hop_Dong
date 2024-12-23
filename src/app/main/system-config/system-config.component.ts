@@ -134,12 +134,10 @@ export class SystemConfigComponent implements OnInit {
   // }
 
   async getListApiWebHook() {
-    await this.systemConfigService.getlistApiWebHook().toPromise().then(response => {
-      // console.log("res", response);
-      let arrApiList : any[] = response[0];
-      this.apiList.push(response[0]);
-      // console.log("this.apiList",this.apiList);
-      
+    try {
+      let getlistApiWebHook =  await this.systemConfigService.getlistApiWebHook().toPromise();
+      this.apiList.push(getlistApiWebHook[0]);
+
       this.apiList = this.apiList.map((item: any) => ({
         id: item.id,
         type: item.type,
@@ -148,9 +146,30 @@ export class SystemConfigComponent implements OnInit {
         url: item.url,
         orgId: item.orgId
       }));
+      
+      let sampleWebHook = await this.systemConfigService.getSampleApiWebHook().toPromise();
+      if(this.apiList.length && this.apiList[0]?.id) {
+        let valueBody = this.apiList[0]?.body
+        const formattedString = JSON.stringify(valueBody).replace(/(\w+):/g, '"$1":').replace(/'/g, '"'); // Đổi dấu nháy đơn thành nháy kép
+        
+        const jsonObject = JSON.parse(formattedString);
+        this.addForm.patchValue({
+          api: this.apiList[0],
+          apikey: this.apiList[0]?.apikey,
+          body: JSON.stringify(jsonObject, null, 2),
+          url: this.apiList[0]?.url,
+        });
+      } else if(this.apiList[0]?.id === null){
+        this.addForm.patchValue({
+          api: sampleWebHook[0]?.typeName,
+          body: sampleWebHook[0]?.body ? JSON.stringify(sampleWebHook[0]?.body, null, 2) : '',
+        });
+      }
 
       this.populateFormArray();
-    });
+    } catch (error) {
+      console.log("error", error)
+    }
   }
 
   populateFormArray() {
