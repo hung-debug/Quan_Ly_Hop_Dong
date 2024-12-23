@@ -806,7 +806,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   // changeScale(values: any){
-  //   console.log("this.scale", this.scale)
   //   switch (values){
   //     case "-":
   //       if(this.scale > 0.25){

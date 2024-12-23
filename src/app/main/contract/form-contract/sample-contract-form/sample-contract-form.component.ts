@@ -2364,7 +2364,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           dataSample_contract.push(data);
           // if(this.validData('release-check') == true){
           //   this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
-          //     console.log("1", this.datasForm.isAllowFirstHandleEdit)
           //     contract.isAllowFirstHandleEdit = this.datasForm.isAllowFirstHandleEdit;
           //     this.contractService.addContractRelease(contract).subscribe((res: any) => {
           //     });

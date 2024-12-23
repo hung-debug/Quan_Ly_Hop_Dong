@@ -615,7 +615,6 @@ export class SidebarService {
       
       let userId = this.userService.getAuthCurrentUser().id;
       const infoUser = await this.userService.getUserById(userId).toPromise();
-      console.log("infoUser",infoUser);
       this.checkRole = infoUser.organization.parent_id;
       if(this.isConfigWebHook && this.checkRole === null){
         this.menus.push({

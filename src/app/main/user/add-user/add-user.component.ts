@@ -146,7 +146,6 @@ export class AddUserComponent implements OnInit, OnDestroy {
         if(this.isQLND_02){
           this.userService.getUserById(this.id).subscribe(
             data => {
-              // console.log("data2",data);
               
               // if (data.login_type == null) {
               //   data.login_type = 'EMAIL';

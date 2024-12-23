@@ -530,9 +530,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   //   const canvasList = document.querySelectorAll('.dropzone');
   //   canvasList.forEach((canvas: any) => {
   //     canvas.style.width = this.canvasWidth * this.scale + 'px';
-  //     console.log("canvas.style.width",canvas.style.width);
   //     canvas.style.height = this.canvasHeight * this.scale + 'px';
-  //     console.log("anvas.style.height",canvas.style.height);
   //   });
   // }
 

@@ -123,7 +123,6 @@ export class InforUserComponent implements OnInit {
         // if (data.login_type == null) {
         //   data.login_type = 'EMAIL';
         // }
-        // // console.log("data1",data);
         // if(data.login_type == 'EMAIL'){
         //   this.addInforForm.get('email')?.disable();
         // }else if(data.login_type == 'SDT'){
