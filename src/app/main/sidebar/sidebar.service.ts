@@ -579,7 +579,7 @@ export class SidebarService {
 
     if(this.isQLLHD_01 || this.isQLLHD_02 || this.isQLLHD_03 || this.isQLLHD_04 || this.isQLLHD_05 ||
       this.isConfigSms || this.isConfigSoonExpireDay || this.isConfigBrandname || this.isConfigMailServer ||
-      this.QLDSCTS_01 || this.QLDSCTS_02 || this.QLDSCTS_03 || this.QLDSCTS_04)
+      this.QLDSCTS_01 || this.QLDSCTS_02 || this.QLDSCTS_03 || this.QLDSCTS_04 || this.isConfigWebHook)
       {
         let submenusConfig: any[] = [];
         submenusConfig.push(
@@ -598,6 +598,11 @@ export class SidebarService {
             active: false,
             href: '/main/digital-certificate',
           },
+          {
+            title: 'system.config',
+            active: false,
+            href: '/main/system-config',
+          },
         )
         this.menus.push({
           title: 'menu.config',
@@ -613,23 +618,23 @@ export class SidebarService {
         });
       }
       
-      let userId = this.userService.getAuthCurrentUser().id;
-      const infoUser = await this.userService.getUserById(userId).toPromise();
-      console.log("infoUser",infoUser);
-      this.checkRole = infoUser.organization.parent_id;
-      if(this.isConfigWebHook && this.checkRole === null){
-        this.menus.push({
-          title: 'system.config',
-          icon: '/assets/img/setting-3.svg',
-          iconFill: '/assets/img/setting-3_v2.svg',
-          iconDefault: '/assets/img/setting-3.svg',
-          active: false,
-          activeDrop: false,
-          type: 'simple',
-          href: '/main/system-config',
-          id: 7,
-        });
-      }
+      // let userId = this.userService.getAuthCurrentUser().id;
+      // const infoUser = await this.userService.getUserById(userId).toPromise();
+      // console.log("infoUser",infoUser);
+      // this.checkRole = infoUser.organization.parent_id;
+      // if(this.isConfigWebHook && this.checkRole === null){
+      //   this.menus.push({
+      //     title: 'system.config',
+      //     icon: '/assets/img/setting-3.svg',
+      //     iconFill: '/assets/img/setting-3_v2.svg',
+      //     iconDefault: '/assets/img/setting-3.svg',
+      //     active: false,
+      //     activeDrop: false,
+      //     type: 'simple',
+      //     href: '/main/system-config',
+      //     id: 7,
+      //   });
+      // }
 
       this.menus.push({
         title: 'contract.folder',

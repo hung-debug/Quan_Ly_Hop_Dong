@@ -930,10 +930,10 @@
   "keep.signature.stream.organizational": "Just keep my organizational flow",
   "configuration": "Configuration",
   "text.allow.first.handler": "Allows the first handler to edit all text/money boxes",
-  "system.config": "System configuration",
+  "system.config": "Webhook configuration",
   "choose.api": "Choose API",
   "api.is.required": "Api is required",
-  "config.system": "Config system",
+  "config.system": "Webhook configuration",
   "example.apikey": "Enter Api Key, example: 56494c92-f18f-4f3e-ac79-49544661e63b",
   "person_cc": "PERSON CC",
   "webhook.body.sample": "This is sample data. Please bypass this data in API"

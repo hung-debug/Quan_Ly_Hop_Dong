@@ -8,7 +8,7 @@ import { DigitalCertificateService } from 'src/app/service/digital-certificate.s
 import { TranslateService } from '@ngx-translate/core';
 import { LazyLoadEvent } from 'primeng/api';
 import { SystemConfigService } from 'src/app/service/system-config.service';
-import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, FormArray, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { UserService } from 'src/app/service/user.service';
 import { RoleService } from 'src/app/service/role.service';
 
@@ -37,9 +37,7 @@ export class SystemConfigComponent implements OnInit {
       api: this.fbd.control("", [Validators.required]),
       url: this.fbd.control("", [Validators.required]),
       apikey: this.fbd.control("", [
-        // Validators.required,
-        Validators.maxLength(32),
-        Validators.pattern(/^[a-zA-Z0-9\S]+$/) // Chỉ chấp nhận ký tự không dấu và không khoảng trắng
+        this.apiKeyExactValidator()
       ]),
       body: this.fbd.control(""),
       // method: 'POST',
@@ -91,6 +89,24 @@ export class SystemConfigComponent implements OnInit {
     
     //parentid null là thằng cha còn có giá trị là thằng con
   }
+  
+  apiKeyExactValidator(): ValidatorFn {
+    const uuidRegex = /^[0-9a-zA-Z]{8}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{12}$/;
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value || '';
+      const isValid = uuidRegex.test(value);
+      if (!isValid) {
+        return { pattern: true }; // Lỗi không đúng định dạng UUID
+      }
+      if (value.length !== 36) {
+        return { length: true }; // Lỗi không đủ 36 ký tự
+      }
+      if (/\s/.test(value)) {
+        return { whitespace: true }; // Lỗi có khoảng trắng
+      }
+      return null; // Hợp lệ
+    };
+  }
 
   // addNewForm() {
   //   // this.formsArray.push(this.formsArray); // Thêm một form mới vào mảng
@@ -118,12 +134,10 @@ export class SystemConfigComponent implements OnInit {
   // }
 
   async getListApiWebHook() {
-    await this.systemConfigService.getlistApiWebHook().toPromise().then(response => {
-      // console.log("res", response);
-      let arrApiList : any[] = response[0];
-      this.apiList.push(response[0]);
-      // console.log("this.apiList",this.apiList);
-      
+    try {
+      let getlistApiWebHook =  await this.systemConfigService.getlistApiWebHook().toPromise();
+      this.apiList.push(getlistApiWebHook[0]);
+
       this.apiList = this.apiList.map((item: any) => ({
         id: item.id,
         type: item.type,
@@ -132,9 +146,30 @@ export class SystemConfigComponent implements OnInit {
         url: item.url,
         orgId: item.orgId
       }));
+      
+      let sampleWebHook = await this.systemConfigService.getSampleApiWebHook().toPromise();
+      if(this.apiList.length && this.apiList[0]?.id) {
+        let valueBody = this.apiList[0]?.body
+        const formattedString = JSON.stringify(valueBody).replace(/(\w+):/g, '"$1":').replace(/'/g, '"'); // Đổi dấu nháy đơn thành nháy kép
+        
+        const jsonObject = JSON.parse(formattedString);
+        this.addForm.patchValue({
+          api: this.apiList[0],
+          apikey: this.apiList[0]?.apikey,
+          body: JSON.stringify(jsonObject, null, 2),
+          url: this.apiList[0]?.url,
+        });
+      } else if(this.apiList[0]?.id === null){
+        this.addForm.patchValue({
+          api: sampleWebHook[0]?.typeName,
+          body: sampleWebHook[0]?.body ? JSON.stringify(sampleWebHook[0]?.body, null, 2) : '',
+        });
+      }
 
       this.populateFormArray();
-    });
+    } catch (error) {
+      console.log("error", error)
+    }
   }
 
   populateFormArray() {
