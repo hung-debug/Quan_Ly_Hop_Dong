@@ -379,7 +379,7 @@ export class SystemConfigComponent implements OnInit {
     this.submitted = true;
     let cleanStringBody = this.addForm.value.body.replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
     let apiKey = this.addForm.get("apikey");
-    this.spinner.show();
+    
     const dataApi = {
       id: this.addForm.value.api.id,
       type: this.addForm.value.api.type,
@@ -393,15 +393,17 @@ export class SystemConfigComponent implements OnInit {
       this.toastService.showErrorHTMLWithTimeout('Kết nối API thất bại ', "", 3000);
       return;
     }
-
+    this.spinner.show();
     if(dataApi.id){
       this.systemConfigService.checkStatusWebHook(dataApi).subscribe(
         async (data) => {
           if(data.success === true){
             this.checkStatus = "Thành công";
+            this.spinner.hide();
             this.systemConfigService.getUpdateApiWebHook(dataApi).subscribe(
               async (data) => {
                 this.toastService.showSuccessHTMLWithTimeout('Cập nhật cấu hình webhook tổ chức thành công!', "", 3000);
+                this.spinner.hide();
               }, error => {
                 this.toastService.showErrorHTMLWithTimeout('Lỗi cập nhật cấu hình webhook tổ chức', "", 3000);
                 this.spinner.hide();
