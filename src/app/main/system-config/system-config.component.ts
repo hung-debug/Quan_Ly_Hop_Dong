@@ -204,7 +204,7 @@ export class SystemConfigComponent implements OnInit {
   checkStatusApiWebHook(){
     let cleanStringBody = this.addForm.value.body.replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
     console.log("cleanStringBody",cleanStringBody);
-
+    this.spinner.show();
     const dataApi = {
       id: this.addForm.value.api.id,
       type: this.addForm.value.api.type,
@@ -219,6 +219,7 @@ export class SystemConfigComponent implements OnInit {
       async (data) => {
         if(data.success === true){
           this.checkStatus = "Thành công"
+          this.spinner.hide();
         }
       }, error => {
         this.checkStatus = "Thất bại"
@@ -378,7 +379,7 @@ export class SystemConfigComponent implements OnInit {
     this.submitted = true;
     let cleanStringBody = this.addForm.value.body.replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
     let apiKey = this.addForm.get("apikey");
-    
+    this.spinner.show();
     const dataApi = {
       id: this.addForm.value.api.id,
       type: this.addForm.value.api.type,
