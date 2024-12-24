@@ -43,11 +43,10 @@
                   <button class="check" (click)="checkStatusApiWebHook()">Kiểm tra</button>
                 </div>
               </div>
-
               <!-- </div> -->
-              <div *ngIf="submitted && f.url.errors">
-                <small class="text-danger" *ngIf="f.url.errors['required']">URL không được phép bỏ trống</small>
-              </div>
+            </div>
+            <div *ngIf="submitted && f.url.errors">
+              <small class="text-danger" *ngIf="f.url.errors['required']">URL không được phép bỏ trống</small>
             </div>
           </div>
           
@@ -127,3 +126,6 @@
 
 </div>
 </div>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+  <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+</ngx-spinner>
