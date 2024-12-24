@@ -1262,7 +1262,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.list_sign_name.forEach((element: any) => {
       if (this.convertToSignConfig().some((p: any) => (
         (element.login_by == 'phone' ? (p.recipient ? p.recipient.phone : p.phone) == element.phone :
-        ((p.recipient ? p.recipient.email : p.email) == element.email)) && (p.sign_unit == isSignType || p.sign_unit.includes('chu_ky_so'))) ||
+        ((p.recipient ? p.recipient.email : p.email) == element.email)) && ((p.sign_unit == 'text' && p.id != this.objSignInfo.id)) && (p.sign_unit == isSignType || p.sign_unit.includes('chu_ky_so'))) ||
         (isSignType == 'so_tai_lieu' && (p.recipient ? p?.recipient?.email : p.email ? p?.recipient?.phone : p.phone) && p.sign_unit == 'so_tai_lieu'))) {
         if (isSignType != 'text') {
           if (isSignType == 'so_tai_lieu') {
@@ -1960,6 +1960,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             isObjSign.text_type = type_name;
             signElement.setAttribute("text_type", isObjSign.text_type);
+            if (type_name === 'currency') {
+              isObjSign.type = 5;
+            } else {
+              isObjSign.type = 1;
+            }
           }
 
         } else if (property == 'font') {
