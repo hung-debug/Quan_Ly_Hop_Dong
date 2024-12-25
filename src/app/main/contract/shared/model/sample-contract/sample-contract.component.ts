@@ -1260,7 +1260,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
   countDuplicate: any = 0;
-  getCheckSignature(isSignType: any, listSelect?: string) {
+  getCheckSignatureBk(isSignType: any, listSelect?: string) {
     let assignSign = this.convertToSignConfig();
     if(isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
       isSignType = 'chu_ky_so'
@@ -1334,6 +1334,43 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
       // }
 
+      if (listSelect) {
+        element.selected = listSelect && element.name == listSelect;
+      }
+    })
+  }
+
+  getCheckSignature(isSignType: any, listSelect?: string) {
+    console.log("đơn")
+    if(isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
+      isSignType = 'chu_ky_so'
+    }
+    let assignSign = this.convertToSignConfig();
+    // p.recipient_id == element.id && p.sign_unit == isSignType)
+    this.list_sign_name.forEach((element: any) => {
+      if (isSignType == 'text') {
+        element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6);
+      } else if (isSignType.includes('chu_ky_so')) {
+        if (element.sign_type[0]?.id == 3) {
+          let count = assignSign.filter((sign: any) => sign.recipient_id === element.id).length;
+          if(count >= 15) {
+            element.is_disable = true;
+          } else {
+            element.is_disable = false;
+          }
+        } else {
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8));
+        }
+      } else if (isSignType == 'chu_ky_anh') {
+        element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5));
+      } else if(isSignType == 'so_tai_lieu') {
+        if (this.datas.contract_no) {
+          element.is_disable = true;
+        } else {
+          element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6);
+        }
+      }
+    
       if (listSelect) {
         element.selected = listSelect && element.name == listSelect;
       }
@@ -1977,6 +2014,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             isObjSign.text_type = type_name;
             signElement.setAttribute("text_type", isObjSign.text_type);
+            if (type_name === 'currency') {
+              isObjSign.type = 5;
+            } else {
+              isObjSign.type = 1;
+            }
           }
 
         } else if (property == 'font') {

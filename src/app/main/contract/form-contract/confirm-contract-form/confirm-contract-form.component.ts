@@ -362,7 +362,11 @@ export class ConfirmContractFormComponent implements OnInit {
               } else if(element.sign_unit == 'so_tai_lieu') {
                 element.type = 4;
               } else {
-                element.type = 1;
+                if(element.text_type == 'currency') {
+                  element['type'] = 5;
+                } else {
+                  element['type'] = 1;        
+                }
               }
             }
   
@@ -442,7 +446,11 @@ export class ConfirmContractFormComponent implements OnInit {
                   if(item.contract_no) item.contract_no = item.contract_no.trim();
                 }
               } else {
-                item['type'] = 1;
+                if(item.text_type == 'currency') {
+                  item['type'] = 5;
+                } else {
+                  item['type'] = 1;        
+                }
               }
   
               this.arrVariableRemove.forEach((item_remove: any) => {
@@ -600,7 +608,11 @@ export class ConfirmContractFormComponent implements OnInit {
           item['type'] = 3;
           item['type_image_signature'] = 1;
         } else {
-          item['type'] = 1;
+          if(item.text_type == 'currency') {
+            item['type'] = 5;
+          } else {
+            item['type'] = 1;        
+          }
         }
 
         this.arrVariableRemove.forEach((item_remove: any) => {
