@@ -313,7 +313,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
         this.idCheckBox.splice(index, 1);
       }
     }
-    console.log('this.idCheckBox', this.idCheckBox)
   }
 
   selectContract(item: any){
@@ -952,7 +951,9 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.contractService.getContractCopy(id).subscribe((res: any) => {
       //
       this.toastService.showSuccessHTMLWithTimeout(`Sao chép tài liệu ${res.name} thành công!`, "", 3000)
-
+      setTimeout(() => {
+        void this.router.navigate(['main/form-contract/edit/' + res.id]);
+      }, 100)
     }, (error: HttpErrorResponse) => {
       this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000)
       this.spinner.hide();
