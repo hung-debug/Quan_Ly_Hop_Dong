@@ -532,43 +532,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         ));
     //
     // }
-      // Lọc lại contract_user_sign dựa trên is_determine_clone
-    this.datasForm.contract_user_sign.forEach((res: any) => {
-      if (res.sign_unit === 'chu_ky_so') {
-        res.type.forEach((resItem: any) => {
-          if (resItem.sign_config.length > 0) {
-            resItem.sign_config = resItem.sign_config.filter((item: any) => {
-            
-            // Giữ lại ô ký nếu recipient_id là template_recipient_id
-            if (this.datasForm.is_determine_clone.some((clone: any) =>
-              clone.recipients.some((recipient: any) => recipient.template_recipient_id === item.recipient_id)
-            )) {
-              return true;
-            }
-            // Chỉ loại bỏ ô ký nếu recipient_id không còn trong is_determine_clone
-            return this.datasForm.is_determine_clone.some((clone: any) =>
-              clone.recipients.some((recipient: any) => recipient.id === item.recipient_id)
-            );
-          });
-        }
-      });
-    } else {
-      if (res.sign_config.length > 0) {
-        res.sign_config = res.sign_config.filter((item: any) => {
-          // Giữ lại ô ký nếu recipient_id là template_recipient_id
-          if (this.datasForm.is_determine_clone.some((clone: any) =>
-            clone.recipients.some((recipient: any) => recipient.template_recipient_id === item.recipient_id)
-          )) {
-            return true;
-          }
-          // Chỉ loại bỏ ô ký nếu recipient_id không còn trong is_determine_clone
-          return this.datasForm.is_determine_clone.some((clone: any) =>
-            clone.recipients.some((recipient: any) => recipient.id === item.recipient_id)
-          );
-        });
-      }
-    }
-  });
 
     // xoa nhung du lieu doi tuong thay doi khi sua, remove element when change data step 2
 
@@ -961,7 +924,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                 name: element.name,
                 text_attribute_name: element.text_attribute_name,
                 required: 1,
-                text_type: element.text_type || 'default'
+                text_type: 'default'
               }
               if (element.sign_config.length == 0) {
                 _obj['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong tài liệu
