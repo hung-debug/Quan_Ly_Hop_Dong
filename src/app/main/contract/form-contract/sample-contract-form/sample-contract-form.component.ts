@@ -140,7 +140,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    console.log('SampleContractFromComponent')
 
     this.onResize();
 
@@ -1273,7 +1272,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   }
 
   getCheckSignature(isSignType: any, listSelect?: string, value?: any) {
-    console.log('getCheckSignature')
     if(isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
       isSignType = 'chu_ky_so'
     }
@@ -1316,9 +1314,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                 
                 element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
               } else {
-                console.log('chu_ky_anh')
                 element.is_disable = true
-                console.log(element.is_disable)
               }
             }
           } else {
