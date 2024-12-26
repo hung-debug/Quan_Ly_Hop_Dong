@@ -285,7 +285,7 @@ export class DetermineSignerComponent implements OnInit {
         this.datas.is_determine_clone.forEach((items: any, index: number) => {
           items.recipients.forEach((element: any) => {
             if (element.login_by == "email") {
-              if (element.sign_type.length > 0 && (element.sign_type[0].id == 5 || element.sign_type[0].id == 1)) {
+              if (element.sign_type.length > 0 && element.sign_type[0].id == 5) {
                 countEkyc++;
               } else if (element.sign_type.length > 0 && element.sign_type[0].id == 1) {
                 countSMS++;

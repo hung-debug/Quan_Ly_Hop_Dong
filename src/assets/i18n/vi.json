@@ -903,7 +903,7 @@
   "enter.code.org": "Nhập mã tổ chức",
   "enter.name.org": "Nhập tên tổ chức",
   "update.last": "Cập nhật lần cuối",
-  "seach.report.ekyc": "Tìm kiếm theo Họ tên, CMT/CCCD, Tên tài liệu, Mã tài liệu, Số tài liệu",
+  "seach.report.ekyc": "Họ tên, CMT/CCCD, Tên TL, Mã TL, Số TL",
   "contract.change.status": "Chuyển xử lý tài liệu",
   "contract.cancel.status": "Hủy tài liệu",
   "contract.deny.status": "Từ chối tài liệu",
@@ -960,5 +960,6 @@
   "config.system": "Cấu hình Webhook",
   "example.apikey": "Nhập API Key, ví dụ: 56494c92-f18f-4f3e-ac79-49544661e63b",
   "person_cc": "NGƯỜI ĐƯỢC CC",
-  "webhook.body.sample": "Đây là dữ liệu mẫu. Vui lòng bypass dữ liệu này trong API"
+  "webhook.body.sample": "Đây là dữ liệu mẫu. Vui lòng bypass dữ liệu này trong API",
+  "search.code.number.name.1": "Mã TL, Số TL, Tên TL"
 }

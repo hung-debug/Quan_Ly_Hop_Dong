@@ -598,12 +598,20 @@ export class SidebarService {
             active: false,
             href: '/main/digital-certificate',
           },
-          {
-            title: 'system.config',
-            active: false,
-            href: '/main/system-config',
-          },
         )
+        let userId = this.userService.getAuthCurrentUser().id;
+        const infoUser = await this.userService.getUserById(userId).toPromise();
+        console.log("infoUser",infoUser);
+        this.checkRole = infoUser.organization.parent_id;
+        if(this.isConfigWebHook && this.checkRole === null){
+          submenusConfig.push( 
+            {
+              title: 'system.config',
+              active: false,
+              href: '/main/system-config',
+            },
+          )
+        }
         this.menus.push({
           title: 'menu.config',
           icon: '/assets/img/setting-3.svg',
