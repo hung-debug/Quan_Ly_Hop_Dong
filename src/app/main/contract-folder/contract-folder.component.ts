@@ -3,7 +3,7 @@ import { DeleteFolderComponent } from './delete-folder/delete-folder.component';
 import { ContractFolderService } from '../../service/contract-folder.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { AppService } from 'src/app/service/app.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AddFolderComponent } from './add-folder/add-folder.component';
 import { event } from 'jquery';
@@ -48,6 +48,7 @@ export class ContractFolderComponent implements OnInit {
   isFolder: boolean = false;
   isContract: boolean = false;
   currentParentId: number = 0;
+  size: number = 0;
   checkedAll: boolean = false;
   searchName: string = "";
   pageDownload: number = 10;
@@ -63,10 +64,32 @@ export class ContractFolderComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private contractService: ContractService,
     private toastService : ToastService,
+    private route: ActivatedRoute,
 
   ) { }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      if (typeof params.size != 'undefined' && params.size
+      ) {
+        this.page = params.size;
+      }
+
+      if (typeof params.currentParentId != 'undefined' && params.currentParentId
+      ) {
+        this.currentParentId = params.currentParentId;
+      }
+
+      if (typeof params.page != 'undefined' && params.page
+      ) {
+        this.p = parseFloat(params.page) + 1;
+      }
+
+      if (typeof params.filter_name != 'undefined' && params.filter_name
+      ) {
+        this.searchName = params.filter_name;
+      }
+    });
     this.isViewFolder = true;
     this.appService.setTitle("contract.folder");
     this.appService.setSubTitle("");
@@ -92,14 +115,17 @@ export class ContractFolderComponent implements OnInit {
         this.router.navigate(['/main/form-contract/detail/' + item.id],
         {
           queryParams: {
-            'page': 1,
-            'filter_type': '',
+            'page': this.p - 1,
+            'filter_type': 'contract-folder',
             'filter_contract_no':'',
             'filter_from_date': '',
             'filter_to_date': '',
             'isOrg': 'off',
             'organization_id': '',
-            'status': ''
+            'status': '',
+            'size': this.page,
+            'filter_name': this.searchName?.trim(),
+            'currentParentId': this.currentParentId
           },
           skipLocationChange: false
         });

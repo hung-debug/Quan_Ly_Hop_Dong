@@ -514,11 +514,11 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     let dataDiffirent: any[] = [];
     if (dataDetermine.length > 0) {
       dataDiffirent = dataContractUserSign.filter((val: any) => !dataDetermine.some((data: any) =>
-        ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký"))) ||
-          (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id) && !val.isNotSupportTextField) ||
-          (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id && !val.isNotSupportTextField)) ||
-          (val.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && (val.recipient_id == data.id || val?.name?.includes("Người ký"))))
-        )
+        (((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name|| val.name.includes("Người ký"))) ||
+          ((val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id) && !val.isNotSupportTextField) ||
+          ((val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id && !val.isNotSupportTextField)) ||
+          (val.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && (val.recipient_id == data.id|| val.name.includes("Người ký"))))
+        ))
         || dataDetermine.some((data: any) => val.sign_unit.includes('chu_ky_so') && val.isSupportMultiSignatureBox == false && val.recipient_id == data.id)
       );
     }
