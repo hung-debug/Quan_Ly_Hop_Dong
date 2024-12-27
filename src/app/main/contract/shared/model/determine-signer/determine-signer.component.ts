@@ -1143,17 +1143,15 @@ export class DetermineSignerComponent implements OnInit {
       let isOrdering_not_exception = this.datas.is_determine_clone.filter((val: any) => val.recipients.filter((item: any) => item.role == 3 && item.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8))?.length > 0);
       
       let arrOrg = this.datas.is_determine_clone.filter((val: any) => val.type == 1) // lấy ra mảng tổ chức của tôi
-      // console.log("arrOrg",arrOrg);
       
       let orderingPersonPartner = isOrderingPerson_exception[0]?.recipients[0]?.ordering; //lấy ra ordering của người ký đối tác cá nhân
 
       let arrPartner = this.datas.is_determine_clone.filter((val: any) => val.type == 3); // lấy ra mảng chứa đối tác cá nhân
 
       let orgViewer = arrOrg[0]?.recipients.filter((item: any) => item.role == 2) // lấy ra người xem xét tổ chức của tôi
-      // console.log("orgViewer",orgViewer);
+
       let arrPartnerOrg = this.datas.is_determine_clone.filter((val: any) => val.type == 2) // lấy ra mảng tổ chức đối tác
-      // console.log("arrPartnerOrg",arrPartnerOrg);
-      // console.log("arrPartnerOrg",arrPartnerOrg[0]);
+
       let arrOrgPartnerViewer = arrPartnerOrg[0]?.recipients.filter((item: any) => item.role == 2) // lấy ra người xem xét tổ chức của đối tác
 
       const orderingCounts: { [key: number]: number } = {};
@@ -1981,23 +1979,18 @@ export class DetermineSignerComponent implements OnInit {
     });
     // Lấy các phần tử có `ordering` trùng nhau tổ chức của tôi và tổ chức đối tác trừ đối tác cá nhân
     const duplicateOrderingItemsOrg = this.datas.is_determine_clone.filter((item: any) => item.type !== 3 && orderingCounts[item.ordering] > 1);
-    // console.log("duplicateOrderingItemsOrg",duplicateOrderingItemsOrg);
     
     // Lấy các phần tử có `ordering` trùng nhau tổ chức của tôi và tổ chức đối tác cá nhân
     const duplicateOrderingOrg_PersonPartner = this.datas.is_determine_clone.filter((item: any) => item.type !== 2 && orderingCounts[item.ordering] > 1);
-    // console.log("duplicateOrderingOrg_PersonPartner",duplicateOrderingOrg_PersonPartner);
     
     // Lấy các phần tử có `ordering` trùng nhau tổ chức của đối tác và tổ chức đối tác cá nhân
     const duplicateOrderingOrgPartner_PersonPartner = this.datas.is_determine_clone.filter((item: any) => item.type !== 1 && orderingCounts[item.ordering] > 1);
-    // console.log("duplicateOrderingOrgPartner_PersonPartner",duplicateOrderingOrgPartner_PersonPartner);
     
     // Lấy các phần tử có `ordering` trùng nhau đối tác cá nhân
     const duplicateOrdering_PersonPartner = this.datas.is_determine_clone.filter((item: any) => item.type == 3 && orderingCounts[item.ordering] > 1);
-    // console.log("duplicateOrdering_PersonPartner",duplicateOrdering_PersonPartner);
         
     // Lấy các phần tử có `ordering` trùng nhau tất cả tổ chức
     const duplicateOrderingAllItems = this.datas.is_determine_clone.filter((item: any) => orderingCounts[item.ordering] > 1); 
-    // console.log("duplicateOrderingAllItems",duplicateOrderingAllItems);
     
     // let isOrderingPerson_exception = this.datas.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some((p: any) => p.id == 1 || p.id == 5 || p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8));
     let isOrderingPerson_exception = this.datas.is_determine_clone.filter((val: any) => val.type == 3);
@@ -2010,42 +2003,35 @@ export class DetermineSignerComponent implements OnInit {
     let arrCompareOrderingPartner = arrNoPartner.filter((item: any) => item.ordering == orderingPerson_exception) // so sánh ordering đối tác cá nhân với các tổ chức còn lại
 
     if(duplicateOrderingAllItems.length >= 3 && isOrderingPerson_exception.length > 0 && isOrderingOrg.length > 0 && isOrderingOrgPartner.length > 0){
-      // console.log("a");
       this.isEditOrdering = true;
       this.isEditOrderingPartner = true;
       this.isEditOrderingPersonalPartner = true;
     }  
     else if(arrCompareOrderingPartner.length > 0 && duplicateOrderingOrgPartner_PersonPartner.length >= 2){
-      // console.log("b");
       this.isEditOrderingPersonalPartner = true;
       this.isEditOrdering = false;
       this.isEditOrderingPartner = true;
     } 
-    else if(arrCompareOrderingPartner.length > 0 && duplicateOrderingOrg_PersonPartner.length >= 2){
-      // console.log("c");   
+    else if(arrCompareOrderingPartner.length > 0 && duplicateOrderingOrg_PersonPartner.length >= 2){ 
       this.isEditOrderingPersonalPartner = true;
       this.isEditOrdering = true;
       this.isEditOrderingPartner = false;
     }
     else if(duplicateOrderingItemsOrg.length >= 2 && isOrderingPerson_exception.length > 0 && isOrderingOrg.length > 0){
-      // console.log("d");
       this.isEditOrdering = true;
       this.isEditOrderingPartner = true;
       this.isEditOrderingPersonalPartner = false;
     } 
     else if(duplicateOrdering_PersonPartner.length >= 2 && isOrderingPerson_exception.length > 0){
-      // console.log("e");
       this.isEditOrdering = false;
       this.isEditOrderingPartner = true;
       this.isEditOrderingPersonalPartner = true;
     } 
     else if (this.checkOrgsHaveSameOrder(ordersArr)) {
-      // console.log("f");
       this.isEditOrdering = true;
       this.isEditOrderingPartner = true;
     }  
     else{
-      // console.log("g");
       this.isEditOrdering = false;
       this.isEditOrderingPartner = false;
       this.isEditOrderingPersonalPartner = false;

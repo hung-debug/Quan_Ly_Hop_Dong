@@ -880,6 +880,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
   showEventInfo = (event: any) => {
+    const target = event.target;
+    const contentDrag = target.parentElement?.querySelector('.text-shd'); // class ngang cấp
+
+    if (contentDrag) {
+      contentDrag.style.width = '100%';  // Set the width to 100% after dragging ends
+    }
     let canvasElement: HTMLElement | null;
     if (event.relatedTarget && event.relatedTarget.id) {
       canvasElement = document.getElementById(event.relatedTarget.id);
@@ -1260,7 +1266,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
   countDuplicate: any = 0;
-  getCheckSignature(isSignType: any, listSelect?: string) {
+  getCheckSignatureBk(isSignType: any, listSelect?: string) {
     let assignSign = this.convertToSignConfig();
     if(isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
       isSignType = 'chu_ky_so'
@@ -1340,6 +1346,42 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
   }
 
+  getCheckSignature(isSignType: any, listSelect?: string) {
+    if(isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
+      isSignType = 'chu_ky_so'
+    }
+    let assignSign = this.convertToSignConfig();
+    // p.recipient_id == element.id && p.sign_unit == isSignType)
+    this.list_sign_name.forEach((element: any) => {
+      if (isSignType == 'text') {
+        element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6);
+      } else if (isSignType.includes('chu_ky_so')) {
+        if (element.sign_type[0]?.id == 3) {
+          let count = assignSign.filter((sign: any) => sign.recipient_id === element.id).length;
+          if(count >= 15) {
+            element.is_disable = true;
+          } else {
+            element.is_disable = false;
+          }
+        } else {
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8));
+        }
+      } else if (isSignType == 'chu_ky_anh') {
+        element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5));
+      } else if(isSignType == 'so_tai_lieu') {
+        if (this.datas.contract_no) {
+          element.is_disable = true;
+        } else {
+          element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6);
+        }
+      }
+    
+      if (listSelect) {
+        element.selected = listSelect && element.name == listSelect;
+      }
+    })
+  }
+
   getConditionFiledSign(element: any, isSignType: string) {
     if ((element.fields && element.fields.length && element.fields.length > 0) &&
       (element.sign_type.some((id: number) => [1, 5].includes(id)) && isSignType == 'chu_ky_anh') || (element.sign_type.some((id: number) => [2, 3, 4].includes(id)) && isSignType == 'chu_ky_so') || (isSignType == 'text' && (element.sign_type.some((id: number) => id == 2) || element.role == 4) || (isSignType == 'so_tai_lieu' && (element.role != 4 || (this.datas.contract_no && element.role == 4))))) {
@@ -1400,6 +1442,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     target.setAttribute('data-x', x);
     target.setAttribute('data-y', y);
 
+    const sibling = target.parentElement?.querySelector('.text-shd'); // class ngang cấp
+    if (sibling) {
+      const parentWidth = sibling.parentElement?.offsetWidth || 0; // Lấy kích thước cha
+      sibling.style.width = `${parentWidth * 0.5}px`; // Đặt width = 50% của cha
+      console.log('Sibling width set to 50%:', sibling);
+    }
   }
 
   setWidth(d: any) {
@@ -1977,6 +2025,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             isObjSign.text_type = type_name;
             signElement.setAttribute("text_type", isObjSign.text_type);
+            if (type_name === 'currency') {
+              isObjSign.type = 5;
+            } else {
+              isObjSign.type = 1;
+            }
           }
 
         } else if (property == 'font') {

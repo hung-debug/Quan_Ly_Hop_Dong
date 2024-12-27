@@ -363,11 +363,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
     
     // debugger
     if(fullUrl.includes('&type=1') || fullUrl.includes('/login?loginType=1')){
-      console.log("noSSO");
       this.router.navigate(['/login'])
       
     } else if(environment.flag == 'KD' && !this.keycloakService.getKeycloakInstance()?.authenticated && (urlOrigin === parsedApiUrl.hostname || fullUrl.includes('localhost') || fullUrl.includes('&type=0') || fullUrl.includes('/login?loginType=0') || (!fullUrl.includes('/login') && this.mobile == false))){
-      console.log("sso");
       this.loginSSO()
     }
 
@@ -513,19 +511,14 @@ export class LoginComponent implements OnInit, AfterViewInit {
   checkBrowser() {
     if(this.deviceService.os == 'iOS') {
       if(this.deviceService.browser == 'Safari' && parseFloat(this.deviceService.browser_version) >= 11) {
-        console.log("có hỗ trợ")
       } else {
         alert("Trình duyệt này hiện không support tốt cho việc ký eKYC trên web. Vui lòng ký eKYC trên app để có trải nghiệm tốt nhất")
       }
     } else if(this.deviceService.os == 'Android') {
       if(this.deviceService.browser == 'Chrome' && parseFloat(this.deviceService.browser_version) >= 53) {
-        console.log("có hỗ trợ ");
       } else if(this.deviceService.browser == 'Firefox' && parseFloat(this.deviceService.browser_version) >= 36) {
-        console.log("có hỗ trợ");
       } else if(this.deviceService.browser == 'Opera' && parseFloat(this.deviceService.browser_version) >= 41) {
-        console.log("có hỗ trợ")
       } else if(this.deviceService.browser == 'Samsung' && parseFloat(this.deviceService.browser_version) >= 6) {
-        console.log("có hỗ trợ");
       } else {
         alert("Trình duyệt này hiện không support tốt cho việc ký eKYC trên web. Vui lòng ký eKYC trên app để có trải nghiệm tốt nhất")
       }

@@ -31,17 +31,11 @@ export class ActionDeviceComponent implements OnInit {
 
       domain = domain.replace('http://','').replace('https://','');
 
-      console.log("router ", window.location.origin);
-
-      console.log("doamin ", domain);
-
 
       if(urlQ != null)
         urlQ = urlQ.replace('c/','contract-signature/').replace('s9/','signatures/').replace('c9/','consider/').replace('s8/','secretary/').replace('c8','coordinates/')
         .replace('&type','&loginType').replace('&mail','&recipientEmail');
-
-      console.log("urlQ ",urlQ);
-
+        
       const urlEmail = sessionStorage.getItem('recipientEmail') || sessionStorage.getItem('mail');
 
 

@@ -625,25 +625,7 @@ export class SidebarService {
           id: 6,
         });
       }
-      
-      // let userId = this.userService.getAuthCurrentUser().id;
-      // const infoUser = await this.userService.getUserById(userId).toPromise();
-      // console.log("infoUser",infoUser);
-      // this.checkRole = infoUser.organization.parent_id;
-      // if(this.isConfigWebHook && this.checkRole === null){
-      //   this.menus.push({
-      //     title: 'system.config',
-      //     icon: '/assets/img/setting-3.svg',
-      //     iconFill: '/assets/img/setting-3_v2.svg',
-      //     iconDefault: '/assets/img/setting-3.svg',
-      //     active: false,
-      //     activeDrop: false,
-      //     type: 'simple',
-      //     href: '/main/system-config',
-      //     id: 7,
-      //   });
-      // }
-
+    
       this.menus.push({
         title: 'contract.folder',
         icon: '/assets/img/folder-2.svg',

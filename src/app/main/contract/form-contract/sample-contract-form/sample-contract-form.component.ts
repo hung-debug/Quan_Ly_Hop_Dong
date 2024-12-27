@@ -178,7 +178,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           }
           if (res.type == 4) {
             res['sign_unit'] = 'so_tai_lieu'
-
+            if(res.value) {
+              this.datasForm.contract_no = res.value;
+            }
             if(!res.name) {
               this.isContractNoNameNull = true;
             }
@@ -512,11 +514,11 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     let dataDiffirent: any[] = [];
     if (dataDetermine.length > 0) {
       dataDiffirent = dataContractUserSign.filter((val: any) => !dataDetermine.some((data: any) =>
-        ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.name.includes("Người ký"))) ||
-          (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id) && !val.isNotSupportTextField) ||
-          (val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id && !val.isNotSupportTextField)) ||
-          (val.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && (val.recipient_id == data.id || val?.name?.includes("Người ký"))))
-        )
+        (((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name|| val.name.includes("Người ký"))) ||
+          ((val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id) && !val.isNotSupportTextField) ||
+          ((val.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id && !val.isNotSupportTextField)) ||
+          (val.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && (val.recipient_id == data.id|| val.name.includes("Người ký"))))
+        ))
         || dataDetermine.some((data: any) => val.sign_unit.includes('chu_ky_so') && val.isSupportMultiSignatureBox == false && val.recipient_id == data.id)
       );
     }
@@ -528,8 +530,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           (val.sign_unit == 'so_tai_lieu' && ((data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || !val.recipient_id)) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val.id)) ||
           (val.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && ((val.recipient ? val.recipient.email : val.email) == data.email || val.name == data.name || val?.name?.includes("Người ký"))))
         ));
-
-
     //
     // }
 
@@ -559,22 +559,22 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               end
               */
               resItem.sign_config = resItem.sign_config.filter((val: any) =>
-              dataContractUserSign.some((data: any) =>
-                (
-                  ((val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email as any : data.email as any)) ||
-                  ((val.recipient ? val.recipient.phone as any : val.phone as any) === (data.recipient ? data.recipient.phone as any : data.phone as any))
-                ) &&
-                val.sign_unit == data.sign_unit &&
-                val.recipient_id == data.recipient_id
-                ));
-                // res.sign_config = isContractSign;
-                resItem.sign_config.forEach((items: any) => {
-                  items.id = items.id + '1';
-                })
-            }
-
-          })
-        } else {
+                dataContractUserSign.some((data: any) =>
+                  (
+                    ((val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email as any : data.email as any)) ||
+                    ((val.recipient ? val.recipient.phone as any : val.phone as any) === (data.recipient ? data.recipient.phone as any : data.phone as any))
+                  ) &&
+                  val.sign_unit == data.sign_unit &&
+                  val.recipient_id == data.recipient_id
+                  ));
+                  // res.sign_config = isContractSign;
+                  resItem.sign_config.forEach((items: any) => {
+                    items.id = items.id + '1';
+                  })
+              }
+    
+            })
+          } else {
           if (res.sign_config.length > 0) {
             /*
             * begin xóa đối tượng ký đã bị thay đổi dữ liệu
@@ -699,6 +699,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                     dataForm.sign_config[i].is_have_text = true;
                     dataForm.sign_config[i].text_attribute_name = dataForm.sign_config[i].name;
                   }
+                  if (dataForm.sign_unit == 'so_tai_lieu' && !dataForm.sign_config[i].recipient_id) {
+                    dataForm.sign_config[i].is_have_text = true;
+                  }
                   dataForm.sign_config[i].name = "";
                   if (dataForm.sign_unit == 'so_tai_lieu' && this.datasForm.contract_no) {
                     dataForm.sign_config[i].value = this.datasForm.contract_no;
@@ -745,6 +748,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                   dataForm.sign_config[i].text_attribute_name = dataForm.sign_config[i].name;
                 }
                 dataForm.sign_config[i].name = "";
+                if (dataForm.sign_unit == 'so_tai_lieu' && !dataForm.sign_config[i].recipient_id) {
+                  dataForm.sign_config[i].is_have_text = true;
+                }
                 if (dataForm.sign_unit == 'so_tai_lieu' && this.datasForm.contract_no) {
                   dataForm.sign_config[i].value = this.datasForm.contract_no;
                 }
@@ -1240,7 +1246,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getCheckSignature(isSignType: any, listSelect?: string, value?: any) {
+  getCheckSignatureBk(isSignType: any, listSelect?: string, value?: any) {
     if(isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
       isSignType = 'chu_ky_so'
     }
@@ -1280,6 +1286,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                 //   element.is_disable = !element.sign_type.some((p: any) => (p.id == 2 || p.id == 4 || p.id == 6))
                 // }
               } else if (isSignType == 'chu_ky_anh') {
+                
                 element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
               } else {
                 element.is_disable = true
@@ -1316,6 +1323,48 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           }
       }
 
+      if (listSelect) {
+        // element.is_disable = false;
+        element.selected = listSelect && element.name == listSelect;
+      }
+    })
+  }
+
+
+  getCheckSignature(isSignType: any, listSelect?: string, value?: any) {
+    if(isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
+      isSignType = 'chu_ky_so'
+    }
+    let assignSign = this.convertToSignConfig();
+    // p.recipient_id == element.id && p.sign_unit == isSignType)
+    this.list_sign_name.forEach((element: any) => {
+      if (isSignType == 'text' && value) {
+        element.is_disable = true;
+      } else {
+        if (isSignType == 'text') {
+          element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6);
+        } else if (isSignType.includes('chu_ky_so')) {
+          if (element.sign_type[0]?.id == 3) {
+            let count = assignSign.filter((sign: any) => sign.recipient_id === element.id).length;
+            if(count >= 15) {
+              element.is_disable = true;
+            } else {
+              element.is_disable = false;
+            }
+          } else {
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8));
+          }
+        } else if (isSignType == 'chu_ky_anh') {
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5));
+        } else if(isSignType == 'so_tai_lieu') {
+          console.log("this.datasForm.contract_no", this.datasForm.contract_no)
+          if (this.datasForm.contract_no) {
+            element.is_disable = true;
+          } else {
+            element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6);
+          }
+        }
+      }
       if (listSelect) {
         // element.is_disable = false;
         element.selected = listSelect && element.name == listSelect;
@@ -1836,14 +1885,14 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
   convertToSignConfig() {
     let arrSignConfig: any = [];
     let cloneUserSign = [...this.datasForm.contract_user_sign];
-
+  
     cloneUserSign.forEach(element => {
       if (this.datasForm.is_action_contract_created) {
         if ((element.recipient && ![2, 3].includes(element.recipient.status)) || (!element.recipient && ![2, 3].includes(element.status))) {
           arrSignConfig = arrSignConfig.concat(element.sign_config);
         }
       } else arrSignConfig = arrSignConfig.concat(element.sign_config);
-
+  
       if ((element.sign_unit === 'chu_ky_so') && element.type) {
         element.type.forEach((subConfig: { sign_config: any; }) => {
             arrSignConfig = arrSignConfig.concat(subConfig.sign_config);
@@ -1947,9 +1996,13 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
           } else if (locationChange == 'text_type') {
             let type_name = this.list_text_type.filter((p: any) => p.id == e.target.value)[0].name;
-
             isObjSign.text_type = type_name;
             signElement.setAttribute("text_type", isObjSign.text_type);
+            if (type_name === 'currency') {
+              isObjSign.type = 5;
+            } else {
+              isObjSign.type = 1;
+            }
           }
         } else if (property == 'font') {
           isObjSign.font = e.target.value;
@@ -2364,7 +2417,6 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           dataSample_contract.push(data);
           // if(this.validData('release-check') == true){
           //   this.contractService.getDataPreRelease(this.datasForm.contract_id).subscribe((contract: any) => {
-          //     console.log("1", this.datasForm.isAllowFirstHandleEdit)
           //     contract.isAllowFirstHandleEdit = this.datasForm.isAllowFirstHandleEdit;
           //     this.contractService.addContractRelease(contract).subscribe((res: any) => {
           //     });
