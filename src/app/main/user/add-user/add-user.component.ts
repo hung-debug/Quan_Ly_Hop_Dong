@@ -525,26 +525,30 @@ export class AddUserComponent implements OnInit, OnDestroy {
                       return false;
                     });
                   }else{
+                    if(dataByEmail.id == 0){
+                      //call api them moi
+                      this.userService.addUser(data).subscribe(
+                        data => {
+                          if(data.success == true){
+                            this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
+                            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                              this.router.navigate(['/main/user']);
+                            });
+                            this.spinner.hide();
+                          } else {
+                            this.toastService.showErrorHTMLWithTimeout(data.data, "", 3000);
+                            this.spinner.hide();
+                          }
 
-                    //call api them moi
-                    this.userService.addUser(data).subscribe(
-                      data => {
-                        if(data.success == true){
-                          this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
-                          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                            this.router.navigate(['/main/user']);
-                          });
-                          this.spinner.hide();
-                        } else {
-                          this.toastService.showErrorHTMLWithTimeout(data.data, "", 3000);
+                        }, error => {
+                          this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
                           this.spinner.hide();
                         }
-
-                      }, error => {
-                        this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
-                        this.spinner.hide();
-                      }
-                    )
+                      )
+                    }else{
+                      this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong hệ thống', "", 3000);
+                      this.spinner.hide();
+                    }
                   }
                 }else{
                   this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong hệ thống', "", 3000);
