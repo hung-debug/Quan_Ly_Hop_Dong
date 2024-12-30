@@ -252,9 +252,10 @@ export class AddUserComponent implements OnInit, OnDestroy {
     let userId = this.userService.getAuthCurrentUser().id;
     
     const idUser = this.route.snapshot.paramMap.get('id'); // ID sẽ ở url
-
-    let arrUser = await this.userService.getUserById(idUser).toPromise();
-    this.isDisable = arrUser.login_type;
+    if(idUser){
+      let arrUser = await this.userService.getUserById(idUser).toPromise();
+      this.isDisable = arrUser.login_type;
+    }
 
     this.isMailSame = sessionStorage.getItem('isMailSame') == "true" ? true : false;
     this.addForm.get('login_type')?.setValue('EMAIL');
