@@ -18,16 +18,12 @@
 
                 <div class="col-md-4">
                     <div class="label text-color">{{'user.email' | translate}} <span class="required-title">*</span></div>
-                    <div *ngIf="id == null" class="input-data">
+                    <div class="input-data" *ngIf="this.isDisable === 'SDT'">
                         <input type="text" formControlName="email">
                     </div>
-                    <!-- <div *ngIf="id != null" class="input-data hidden-color">
-                        <input type="text" formControlName="email" readonly class="hidden-color">
-                    </div> -->
-                    <div *ngIf="id != null" class="input-data hidden-color">
-                      <input type="text" formControlName="email" readonly class="hidden-color">
+                    <div *ngIf="this.isDisable === 'EMAIL' || this.isDisable === 'EMAIL_AND_SDT'" class="input-data hidden-color">
+                      <input type="text" formControlName="email" readonly>
                     </div>
-
                     <div *ngIf="submitted && f.email.errors" class="invalid">
                         <div *ngIf="f.email.errors.required">{{'error.user.email.required' | translate}}</div>
                         <div *ngIf="f.email.errors.email">{{'error.user.email.format' | translate}}</div>
@@ -45,9 +41,12 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="label text-color">{{'user.phone' | translate}} <span class="required-title">*</span></div>
-                    <div class="input-data">
-                        <input type="text" formControlName="phone">
-                    </div>
+                    <div class="input-data" *ngIf="this.isDisable === 'EMAIL'">
+                      <input type="text" formControlName="phone">
+                  </div>
+                  <div *ngIf="this.isDisable === 'SDT' || this.isDisable === 'EMAIL_AND_SDT'" class="input-data hidden-color">
+                    <input type="text" formControlName="phone" readonly>
+                  </div>
                     <div *ngIf="submitted && f.phone.errors" class="invalid">
                         <div *ngIf="f.phone.errors.required">{{'error.user.phone.required' | translate}}</div>
                         <div *ngIf="f.phone.errors.pattern">{{'error.user.phone.format' | translate}}</div>

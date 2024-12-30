@@ -47,6 +47,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
   orgIdOld:any;
   is_show_phone_pki: boolean = true;
+  isDisable: any;
+  user:any;
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
   isQLND_02:boolean=true;  //sua nguoi dung
@@ -244,10 +246,16 @@ export class AddUserComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     //lay id user
     this.spinner.show();
     let userId = this.userService.getAuthCurrentUser().id;
+    
+    const idUser = this.route.snapshot.paramMap.get('id'); // ID sẽ ở url
+
+    let arrUser = await this.userService.getUserById(idUser).toPromise();
+    this.isDisable = arrUser.login_type;
+
     this.isMailSame = sessionStorage.getItem('isMailSame') == "true" ? true : false;
     this.addForm.get('login_type')?.setValue('EMAIL');
 
