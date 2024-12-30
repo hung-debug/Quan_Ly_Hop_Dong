@@ -879,6 +879,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   soHopDong: any;
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
   showEventInfo = (event: any) => {
+    const target = event.target;
+    const contentDrag = target.parentElement?.querySelector('.text-shd'); // class ngang cấp
+
+    if (contentDrag) {
+      contentDrag.style.width = '100%';  // Set the width to 100% after dragging ends
+    }
+
     let canvasElement: HTMLElement | null;
     if (event.relatedTarget && event.relatedTarget.id) {
       canvasElement = document.getElementById(event.relatedTarget.id);
@@ -1443,6 +1450,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     target.setAttribute('data-x', x)
     target.setAttribute('data-y', y);
 
+    const sibling = target.parentElement?.querySelector('.text-shd'); // class ngang cấp
+    if (sibling) {
+      const parentWidth = sibling.parentElement?.offsetWidth || 0; // Lấy kích thước cha
+      sibling.style.width = `${parentWidth * 0.5}px`; // Đặt width = 50% của cha
+    }
   }
 
   setWidth(d: any) {
