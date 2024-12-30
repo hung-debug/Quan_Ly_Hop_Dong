@@ -1446,7 +1446,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (sibling) {
       const parentWidth = sibling.parentElement?.offsetWidth || 0; // Lấy kích thước cha
       sibling.style.width = `${parentWidth * 0.5}px`; // Đặt width = 50% của cha
-      console.log('Sibling width set to 50%:', sibling);
     }
   }
 

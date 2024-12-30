@@ -79,7 +79,6 @@ export class ConsiderContractComponent
   arrPage: any = [];
   objDrag: any = {};
   scale: any;
-  defaultScale: any = 1.0;
   objPdfProperties: any = {
     pages: [],
   };
@@ -1168,8 +1167,8 @@ export class ConsiderContractComponent
 
   resetToDefault(){
     if(this.scale != 1){
-      this.scale = this.defaultScale;
-      this.defaultValueSelect = this.scale * 100
+      this.scale = 1.0;
+      this.defaultValueSelect = this.scale;
       this.getPage();
     }
 

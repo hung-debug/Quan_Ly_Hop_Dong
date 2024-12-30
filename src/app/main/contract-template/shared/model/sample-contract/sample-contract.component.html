@@ -9,7 +9,7 @@
 
                 <div style="margin: 0px 16px;">
                     <div *ngFor="let d of this.datas.contract_user_sign" class="show-list-name-class">
-                        <div *ngIf="!d.sign_config.position" [ngClass]="{'resize-drag': d.sign_unit !== 'chu_ky_so'}" (click)="showThumbnail()" [id]=getIdSignChuaKeo(d.id)>
+                        <div *ngIf="!d.sign_config.position" [ngClass]="{'resize-drag': d.sign_unit !== 'chu_ky_so', 'text-shd': d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu'}" (click)="showThumbnail()" [id]=getIdSignChuaKeo(d.id)>
                             <div style="position: relative; display: contents;">
                                 <div *ngIf="d.sign_unit == 'so_tai_lieu'" class="content-drag mt-12px d-flex align-items-center justify-content-start hover-item-o-ky" id="element-drag-text">
                                     <div style="width: 24px; height: 24px;">
