@@ -8,7 +8,7 @@ import {
   ElementRef,
    Output, EventEmitter, SimpleChanges, AfterViewInit
 } from "@angular/core";
-import { variable } from "src/app/config/variable";
+import { variable, type_signature } from "src/app/config/variable";
 import { Helper } from "src/app/core/Helper";
 import * as $ from 'jquery';
 
@@ -2087,6 +2087,13 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
               isObjSign.recipient.id = data_name.id;
               isObjSign.recipient.name = data_name.name;
               isObjSign.recipient.email = data_name.email;
+              let assignSignatureType = type_signature.filter(item => item.id == data_name.sign_type[0].id);
+              const targetId = data_name.id;
+              const result = this.datasForm.is_determine_clone.find((item: any) =>
+                item.recipients.some((recipient: any) => recipient.id === targetId)
+              );
+              isObjSign.recipient.sign_type = assignSignatureType
+              isObjSign.is_type_party = result.type
             }
             let idTypeSign = data_name.sign_type[0].id;
 

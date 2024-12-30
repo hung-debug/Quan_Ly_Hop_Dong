@@ -9,7 +9,7 @@ import {
   OnDestroy,
   AfterViewInit, Output, EventEmitter, OnChanges, SimpleChanges
 } from '@angular/core';
-import { variable } from "../../../../../config/variable";
+import { variable, type_signature } from "../../../../../config/variable";
 import { Helper } from "../../../../../core/Helper";
 import * as $ from 'jquery';
 
@@ -2093,6 +2093,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               isObjSign.recipient.id = data_name.id;
               isObjSign.recipient.name = data_name.name;
               isObjSign.recipient.email = data_name.email;
+              let assignSignatureType = type_signature.filter(item => item.id == data_name.sign_type[0].id);
+              const targetId = data_name.id;
+              const result = this.datas.is_determine_clone.find((item: any) =>
+                item.recipients.some((recipient: any) => recipient.id === targetId)
+              );
+              isObjSign.recipient.sign_type = assignSignatureType
+              isObjSign.is_type_party = result.type
             }
           }
 
