@@ -1532,7 +1532,7 @@ export class DetermineSignerComponent implements OnInit {
     
     //bỏ check trùng mst/cccd khi 2 văn thư có loại ký pki
     for (let i = 0; i < dataValid.length; i++) {
-      if(dataValid[i].sign_type && dataValid[i].sign_type.length > 0 && dataValid[i].sign_type[0]?.id == 3 ){
+      if(dataValid[i].sign_type && dataValid[i].sign_type.length > 0 && (dataValid[i].sign_type[0]?.id == 3 || dataValid[i].sign_type[0]?.id == 7) ){
         dataValid[i].card_id = ''
       }   
     }
