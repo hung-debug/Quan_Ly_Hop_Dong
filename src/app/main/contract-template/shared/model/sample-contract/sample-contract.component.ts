@@ -1365,7 +1365,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.list_sign_name.forEach((element: any) => {
       if (isSignType != 'text' && (element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
         let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
-        console.log("data", data)
         if (data.length >= 0 && !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) && isSignType !== 'chu_ky_anh') {
           element.is_disable = true;
         } else {
@@ -1375,15 +1374,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (isSignType == 'text') {
           element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6);
         } else if (isSignType.includes('chu_ky_so')) {
+          let count = assignSign.filter((sign: any) => sign.recipient_id === element.id).length;
           if (element.sign_type[0]?.id == 3) {
-            let count = assignSign.filter((sign: any) => sign.recipient_id === element.id).length;
-            if(count >= 15) {
-              element.is_disable = true;
-            } else {
-              element.is_disable = false;
-            }
+            element.is_disable = count >= 15;
+          } else if (element.sign_type[0]?.id == 7 || element.sign_type[0]?.id == 8) {
+            element.is_disable = count >= 1;
           } else {
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8));
+            element.is_disable = !element.sign_type.some((p: any) => [2, 4, 6].includes(p.id));
           }
         } else if (isSignType == 'chu_ky_anh') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5));
