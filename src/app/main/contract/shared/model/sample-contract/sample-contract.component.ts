@@ -9,7 +9,7 @@ import {
   OnDestroy,
   AfterViewInit, Output, EventEmitter, OnChanges, SimpleChanges
 } from '@angular/core';
-import { variable } from "../../../../../config/variable";
+import { variable, type_signature } from "../../../../../config/variable";
 import { Helper } from "../../../../../core/Helper";
 import * as $ from 'jquery';
 
@@ -1079,8 +1079,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                       // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                       if (res.type[i].sign_unit == 'text' || res.type[i].sign_unit == 'so_tai_lieu') {
                         if (res.type[i].sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
-                          element['width'] = rect_location.width;
-                          element['height'] = rect_location.height;
+                          // element['width'] = rect_location.width;
+                          // element['height'] = rect_location.height;
                         } else {
                           if (event.target.className.includes('da-keo')){
                             element['width'] = event.target.offsetWidth;
@@ -1203,8 +1203,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                     if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
                       if (res.sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
-                        element['width'] = rect_location.width;
-                        element['height'] = rect_location.height;
+                        const span = document.createElement('span');
+                        span.textContent = this.datas.contract_no;
+                        document.body.appendChild(span);
+                        let textWidth = span.getBoundingClientRect().width;
+                        element['width'] = textWidth;
+                        element['height'] = '28';
+                        document.body.removeChild(span);
                       } else {
                         if (event.target.className.includes('da-keo')){
                           element['width'] = event.target.offsetWidth;
@@ -2093,6 +2098,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               isObjSign.recipient.id = data_name.id;
               isObjSign.recipient.name = data_name.name;
               isObjSign.recipient.email = data_name.email;
+              let assignSignatureType = type_signature.filter(item => item.id == data_name.sign_type[0].id);
+              const targetId = data_name.id;
+              const result = this.datas.is_determine_clone.find((item: any) =>
+                item.recipients.some((recipient: any) => recipient.id === targetId)
+              );
+              isObjSign.recipient.sign_type = assignSignatureType
+              isObjSign.is_type_party = result.type
             }
           }
 
