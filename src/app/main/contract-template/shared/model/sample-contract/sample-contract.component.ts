@@ -592,15 +592,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // Get những dữ liệu còn lại khi thay đổi
     let dataDiffirent: any[] = [];
     if (dataContractUserSign.length > 0 && dataDetermine.length > 0) {
-      dataDiffirent = dataContractUserSign.filter(val => !dataDetermine.some((data: any) =>
-        (val.sign_unit == "chu_ky_anh" && data.sign_type.some((p: any) => p.id == 1 || p.id == 5) && val.recipient_id == data.id) ||
-        (val.sign_unit == 'text' && ((data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) || !val.recipient_id)) ||
-        (val.sign_unit == 'so_tai_lieu' && ((data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)) || !val.recipient_id)) ||
-        (val.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8)) && val.recipient_id == data.id)
-        // || ((val.recipient ? val.recipient_id as any : val.email as any) == (val.recipient ? data.id as any : data.email as any))
+      dataDiffirent = dataContractUserSign.filter((d: any) => !dataDetermine.some((data: any) =>
+        (((d.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && d.recipient_id == data.id) ||
+        ((d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && d.recipient_id == data.id) ||
+        ((d.sign_unit == 'so_tai_lieu' && (data.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6))) && d.recipient_id == data.id) ||
+        (d.sign_unit.includes('chu_ky_so') && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4 || p.id == 6 || p.id == 7 || p.id == 8) && d.recipient_id == data.id))
+      ))
+      || dataDetermine.some((data: any) => d.sign_unit.includes('chu_ky_so') && d.isSupportMultiSignatureBox == false && d.recipient_id == data.id)
       )
-      || dataDetermine.some((data: any) => val.sign_unit.includes('chu_ky_so') && val.isSupportMultiSignatureBox == false && val.recipient_id == data.id)
-    );
     }
     // xoa nhung du lieu doi tuong bi thay doi
     if(!this.datas.isDeleteField){
@@ -664,7 +663,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               */
               //giu lai cac ban ghi chua gan nguoi xu ly + o so tai lieu chua gan nguoi xu ly + o text da co ten chua gan nguoi xu ly + da gan nguoi xu ly va nguoi xu ly con ton tai
               //!(val.recipient ? val.recipient : val.name) ||
-              res.sign_config = res.sign_config.filter((val: any) => !dataDiffirent.some((data: any) => !(val.recipient ? val.recipient : val.name) ||
+              let signConfig = res.sign_config.filter((item: any) => !item.recipient_id && (item.sign_unit == 'so_tai_lieu' || item.sign_unit == 'text'))
+              res.sign_config = res.sign_config.filter((val: any) => !dataDiffirent.some((data: any) => 
+                !(val.recipient ? val.recipient : val.name) ||
                 (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'so_tai_lieu')
                 || (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'text' && val.text_attribute_name)
                 || (
@@ -672,6 +673,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   && (val.type as any) == (data.type as any)
                   && (val.recipient_id ? val.recipient_id as any : val.email as any) === (data.recipient_id ? data.recipient_id as any : data.email as any)
                   && val.sign_unit == data.sign_unit)));
+                  if(signConfig.length) {
+                    signConfig.forEach((element: any) => {
+                      res.sign_config.push(element)
+                    });
+                  }
+
               res.sign_config.forEach((items: any) => {
                 items.id = items.id + '1';
               })

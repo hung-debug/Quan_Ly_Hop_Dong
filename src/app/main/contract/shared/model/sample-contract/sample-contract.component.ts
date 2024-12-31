@@ -1079,8 +1079,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                       // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                       if (res.type[i].sign_unit == 'text' || res.type[i].sign_unit == 'so_tai_lieu') {
                         if (res.type[i].sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
-                          element['width'] = rect_location.width;
-                          element['height'] = rect_location.height;
+                          // element['width'] = rect_location.width;
+                          // element['height'] = rect_location.height;
                         } else {
                           if (event.target.className.includes('da-keo')){
                             element['width'] = event.target.offsetWidth;
@@ -1203,8 +1203,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                     if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
                       if (res.sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
-                        element['width'] = rect_location.width;
-                        element['height'] = rect_location.height;
+                        const span = document.createElement('span');
+                        span.textContent = this.datas.contract_no;
+                        document.body.appendChild(span);
+                        let textWidth = span.getBoundingClientRect().width;
+                        element['width'] = textWidth;
+                        element['height'] = '28';
+                        document.body.removeChild(span);
                       } else {
                         if (event.target.className.includes('da-keo')){
                           element['width'] = event.target.offsetWidth;

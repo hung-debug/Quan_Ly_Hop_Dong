@@ -1269,7 +1269,9 @@ export class ContractSignatureComponent implements OnInit {
             3000
           );
         }
-        this.router.navigate(['/main/c/receive/processed']);
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigate(['main/c/receive/processed']);
+        });
         this.toastService.showSuccessHTMLWithTimeout('Xem xét tài liệu thành công',
           '',
           1000

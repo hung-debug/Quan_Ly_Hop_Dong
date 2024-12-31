@@ -702,7 +702,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                   if (dataForm.sign_unit == 'so_tai_lieu' && !dataForm.sign_config[i].recipient_id) {
                     dataForm.sign_config[i].is_have_text = true;
                   }
-                  dataForm.sign_config[i].name = "";
+                  if(dataForm.sign_config[i]) {
+                    dataForm.sign_config[i].name = "";
+                  }
                   if (dataForm.sign_unit == 'so_tai_lieu' && this.datasForm.contract_no) {
                     dataForm.sign_config[i].value = this.datasForm.contract_no;
                   }
@@ -747,7 +749,9 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                   dataForm.sign_config[i].is_have_text = true;
                   dataForm.sign_config[i].text_attribute_name = dataForm.sign_config[i].name;
                 }
-                dataForm.sign_config[i].name = "";
+                if(dataForm.sign_config[i]) {
+                  dataForm.sign_config[i].name = "";
+                }
                 if (dataForm.sign_unit == 'so_tai_lieu' && !dataForm.sign_config[i].recipient_id) {
                   dataForm.sign_config[i].is_have_text = true;
                 }
@@ -1198,8 +1202,13 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                     if (!element.width && !element.height) {
                       if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
                         if (res.sign_unit == 'so_tai_lieu' && this.datasForm.contract_no) {
-                          element['width'] = '';
-                          element['height'] = '';
+                          const span = document.createElement('span');
+                          span.textContent = this.datasForm.contract_no;
+                          document.body.appendChild(span);
+                          let textWidth = span.getBoundingClientRect().width;
+                          element['width'] = textWidth + 10;
+                          element['height'] = '28';
+                          document.body.removeChild(span);
                         } else {
                           element['width'] = '135';
                           element['height'] = '28';
