@@ -356,32 +356,38 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
         }
       }
+      
+      const checkEmail = await this.userService.getUserByEmail(data.email).toPromise();
 
-
-      this.userService.updateUser(data).subscribe(
-        dataOut => {
-
-          let emailCurrent = this.userService.getAuthCurrentUser().email;
-          //neu nguoi thao tac chuyen to chuc cho chinh minh thi can logout de lay lai thong tin to chuc moi
-          if(data.organizationId != this.orgIdOld && emailCurrent == data.email){
-            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công. Vui lòng đăng nhập lại!', "", 3000);
-            localStorage.clear();
-            sessionStorage.clear();
-            this.router.navigate(['/login']);
-
-          }else{
-            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công!', "", 3000);
-            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-              this.router.navigate(['/main/user']);
-            });
+      if(checkEmail?.id == 0){
+        this.userService.updateUser(data).subscribe(
+          dataOut => {
+  
+            let emailCurrent = this.userService.getAuthCurrentUser().email;
+            //neu nguoi thao tac chuyen to chuc cho chinh minh thi can logout de lay lai thong tin to chuc moi
+            if(data.organizationId != this.orgIdOld && emailCurrent == data.email){
+              this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công. Vui lòng đăng nhập lại!', "", 3000);
+              localStorage.clear();
+              sessionStorage.clear();
+              this.router.navigate(['/login']);
+  
+            }else{
+              this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công!', "", 3000);
+              this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                this.router.navigate(['/main/user']);
+              });
+            }
+  
+            this.spinner.hide();
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại1', "", 3000);
+            this.spinner.hide();
           }
-
-          this.spinner.hide();
-        }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại', "", 3000);
-          this.spinner.hide();
-        }
-      )
+        )
+      }else{
+        this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong hệ thống', "", 3000);
+        this.spinner.hide();
+      }
   }
 
   getRoleByOrg(orgId:any){
