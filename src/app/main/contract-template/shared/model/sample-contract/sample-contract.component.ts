@@ -601,6 +601,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       || dataDetermine.some((data: any) => d.sign_unit.includes('chu_ky_so') && d.isSupportMultiSignatureBox == false && d.recipient_id == data.id)
       )
     }
+    //dataDiffirent = dataDiffirent.filter((item: any) => item.recipient_id)
     // xoa nhung du lieu doi tuong bi thay doi
     if(!this.datas.isDeleteField){
       if (dataDiffirent.length > 0) {
@@ -648,7 +649,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               */
               res.sign_config.forEach((element: any, index: number) => {
                 //chi remove neu da duoc gan nguoi xu ly
-                if ((element.id_have_data && dataDiffirent.some((p: any) => p.id_have_data && p.id_have_data == element.id_have_data))) {
+                if ((element.id_have_data && dataDiffirent.some((p: any) => p.recipient_id && p.id_have_data && p.id_have_data == element.id_have_data))) {
                   this.removeDataSignChange(element.id_have_data);
                   delete res.sign_config[index]
                 } else if (dataDiffirent.some((p: any) => p.id == element.id && p.recipient_id == element.recipient_id)) {
