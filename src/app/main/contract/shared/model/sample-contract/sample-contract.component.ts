@@ -675,6 +675,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             /*
             end
             */
+            let signConfig = [];
+            if(this.datas.contract_no) {
+              signConfig = res.sign_config.filter((item: any) => !item.recipient_id && item.sign_unit == 'so_tai_lieu')
+            }
             res.sign_config = res.sign_config.filter((val: any) =>
               isContractSign.some((data: any) =>
                 ((val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email as any : data.email as any) ||
@@ -682,6 +686,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 val.sign_unit == data.sign_unit &&
                 val.recipient_id == data.recipient_id
               ));
+              if(signConfig.length) {
+                signConfig.forEach((element: any) => {
+                  res.sign_config.push(element)
+                });
+              }
             // res.sign_config = isContractSign;
             res.sign_config.forEach((items: any) => {
               items.id = items.id + '1';
