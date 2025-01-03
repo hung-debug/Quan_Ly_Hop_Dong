@@ -574,48 +574,48 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
                 })
               }
             })
-          } else {
-            if (res.sign_config.length > 0) {
-              /*
-              * begin xóa đối tượng ký đã bị thay đổi dữ liệu
-              */
-              res.sign_config.forEach((element: any, index: number) => {
-                //chi remove neu da duoc gan nguoi xu ly
-                if ((element.id_have_data && dataDiffirent.some((p: any) => p.recipient_id && p.id_have_data && p.id_have_data == element.id_have_data))) {
-                  this.removeDataSignChange(element.id_have_data);
+        } else {
+          if (res.sign_config.length > 0) {
+            /*
+            * begin xóa đối tượng ký đã bị thay đổi dữ liệu
+            */
+            res.sign_config.forEach((element: any, index: number) => {
+              //chi remove neu da duoc gan nguoi xu ly
+              if ((element.id_have_data && dataDiffirent.some((p: any) => p.recipient_id && p.id_have_data && p.id_have_data == element.id_have_data))) {
+                this.removeDataSignChange(element.id_have_data);
+                delete res.sign_config[index]
+              } else if (dataDiffirent.some((p: any) => p.recipient_id && p.id == element.id && p.recipient_id == element.recipient_id)) {
+                if (dataDetermine.some((p: any) => p.template_recipient_id == element.recipient_id)) {
                   delete res.sign_config[index]
-                } else if (dataDiffirent.some((p: any) => p.id == element.id && p.recipient_id == element.recipient_id)) {
-                  if (dataDetermine.some((p: any) => p.template_recipient_id == element.recipient_id)) {
-                    delete res.sign_config[index]
-                  }
                 }
-                
-              })
-              /*
-              end
-              */
-              //giu lai cac ban ghi chua gan nguoi xu ly + o so tai lieu chua gan nguoi xu ly + o text da co ten chua gan nguoi xu ly + da gan nguoi xu ly va nguoi xu ly con ton tai
-              //!(val.recipient ? val.recipient : val.name) ||
-              let signConfig = res.sign_config.filter((item: any) => !item.recipient_id && (item.sign_unit == 'so_tai_lieu' || item.sign_unit == 'text'))
-              res.sign_config = res.sign_config.filter((val: any) => !dataDiffirent.some((data: any) => 
-                !(val.recipient ? val.recipient : val.name) ||
-                (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'so_tai_lieu')
-                || (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'text' && val.text_attribute_name)
-                || (
-                  (val.name as any) == (data.name as any)
-                  && (val.type as any) == (data.type as any)
-                  && (val.recipient_id ? val.recipient_id as any : val.email as any) === (data.recipient_id ? data.recipient_id as any : data.email as any)
-                  && val.sign_unit == data.sign_unit)));
-                  if(signConfig.length) {
-                    signConfig.forEach((element: any) => {
-                      res.sign_config.push(element)
-                    });
-                  }
+              }
+              
+            })
+            /*
+            end
+            */
+            //giu lai cac ban ghi chua gan nguoi xu ly + o so tai lieu chua gan nguoi xu ly + o text da co ten chua gan nguoi xu ly + da gan nguoi xu ly va nguoi xu ly con ton tai
+            //!(val.recipient ? val.recipient : val.name) ||
+            let signConfig = res.sign_config.filter((item: any) => !item.recipient_id && (item.sign_unit == 'so_tai_lieu' || item.sign_unit == 'text'))
+            res.sign_config = res.sign_config.filter((val: any) => !dataDiffirent.some((data: any) => 
+              !(val.recipient ? val.recipient : val.name) ||
+              (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'so_tai_lieu')
+              || (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'text' && val.text_attribute_name)
+              || (
+                (val.name as any) == (data.name as any)
+                && (val.type as any) == (data.type as any)
+                && (val.recipient_id ? val.recipient_id as any : val.email as any) === (data.recipient_id ? data.recipient_id as any : data.email as any)
+                && val.sign_unit == data.sign_unit)));
+                if(signConfig.length) {
+                  signConfig.forEach((element: any) => {
+                    res.sign_config.push(element)
+                  });
+                }
 
-              res.sign_config.forEach((items: any) => {
-                items.id = items.id + '1';
-              })
-            }
+            res.sign_config.forEach((items: any) => {
+              items.id = items.id + '1';
+            })
+          }
         }
       })
     }
