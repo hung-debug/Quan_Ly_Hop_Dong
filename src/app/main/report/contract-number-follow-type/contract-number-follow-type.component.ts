@@ -15,6 +15,7 @@ import { Table } from 'primeng/table';
   styleUrls: ['./contract-number-follow-type.component.scss']
 })
 export class ContractNumberFollowTypeComponent implements OnInit {
+  
   @ViewChild('dt') table: Table;
 
    //Biến lưu dữ liệu trong bảng
@@ -62,6 +63,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
   Arr = Array;
 
   constructor(
+    
     private appService: AppService,
     private userService: UserService,
     private inputTreeService: InputTreeService,
@@ -76,7 +78,6 @@ export class ContractNumberFollowTypeComponent implements OnInit {
     this.date = [startDate, currentDate]; }
 
   ngOnInit(): void {
-
     this.spinner.hide();
     this.appService.setTitle('report');
     this.appService.setSubTitle('report.number.contracts.contract-type.full');
@@ -85,6 +86,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
       // { id: -1, name: 'Tất cả' },
       { id: 20, name: 'Đang thực hiện' },
       { id: 2, name:'Quá hạn' },
+      { id: 40, name:'Thanh lý' },
       { id: 31, name: 'Từ chối' },
       { id: 32, name: 'Huỷ bỏ' },
       { id: 30, name: 'Hoàn thành' },
@@ -99,6 +101,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
         { id: -1, name: 'All' },
         { id: 20, name: 'Processing' },
         { id: 2, name:'Overdue' },
+        { id: 40, name:'Liquidated'},
         { id: 31, name: 'Reject' },
         { id: 32, name: 'Cancel' },
         { id: 30, name: 'Complete' },
@@ -160,6 +163,11 @@ export class ContractNumberFollowTypeComponent implements OnInit {
       },
       {
         header: 'contract.status.overdue',
+        style: 'text-align: left;',
+        colspan: 1,
+      },
+      {
+        header: 'contract.status.liquidated',
         style: 'text-align: left;',
         colspan: 1,
       }
@@ -240,7 +248,8 @@ export class ContractNumberFollowTypeComponent implements OnInit {
             rejected: 0,
             canceled: 0,
             prepare_expires: 0,
-            expired: 0
+            expired: 0,
+            liquidated: 0
           };
 
           Object.keys(response).forEach((key, index) => {
@@ -285,6 +294,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
               this.total.canceled += item.value.canceled;
               this.total.prepare_expires += item.value.prepare_expires;
               this.total.expired += item.value.expired;
+              this.total.liquidated += item.value.liquidated;
           })
         }
        
