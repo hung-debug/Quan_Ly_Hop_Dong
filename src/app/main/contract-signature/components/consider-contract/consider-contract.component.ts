@@ -228,6 +228,7 @@ export class ConsiderContractComponent
     { percent: '450%', value: 4.5 },
     { percent: '500%', value: 5.0 },
   ];
+  contract_no: any;
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -1485,8 +1486,8 @@ export class ConsiderContractComponent
     const nameUpdate = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
     return nameUpdate.name != this.recipient.name;
   }
-
-  async submitEvents(e: any) {
+  
+  async submitEvents(e: any) { 
     const isDifferentName = await this.checkDifferentName();
     if (isDifferentName) {
       this.toastService.showErrorHTMLWithTimeout(
@@ -1504,6 +1505,8 @@ export class ConsiderContractComponent
         return
       }
     }
+  
+  
     let haveSignPKI = false;
     let haveSignImage = false;
     let haveSignCert = false;
@@ -1520,7 +1523,25 @@ export class ConsiderContractComponent
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.info;
-
+    this.contractNoValueSign=this.contractNoValueSign?.trim();
+    if (this.contractNoValueSign) {
+      //check so hop dong da ton tai hay chua
+      this.spinner.show();
+      try {
+        let res: any = await this.contractService.checkCodeUnique(this.contractNoValueSign?.trim()).toPromise()
+        if (res.success) {
+          this.spinner.hide();
+        } else {
+          this.toastService.showErrorHTMLWithTimeout('Số tài liệu đã tồn tại', "", 3000);
+          this.spinner.hide();
+          return false;
+        }
+      } catch (error) {
+        this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số tài liệu', "", 3000);
+        this.spinner.hide();
+        return false;
+      }  
+    } 
     this.contractService.getRemoteSigningCurrentStatus(this.recipientId).subscribe(
       (res) => {
         if (res.isPresent && res.status == "DANG_XU_LY") {
