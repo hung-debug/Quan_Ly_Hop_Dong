@@ -1530,7 +1530,7 @@ export class ConsiderContractComponent
       //check so hop dong da ton tai hay chua
       this.spinner.show();
       try {
-        let res: any = await this.contractService.checkCodeUnique(this.contractNoValueSign?.trim()).toPromise()
+        let res: any = await this.contractService.checkCodeUniqueSign(this.contractNoValueSign?.trim(),this.idContract).toPromise()
         if (res.success) {
           this.spinner.hide();
         } else {
