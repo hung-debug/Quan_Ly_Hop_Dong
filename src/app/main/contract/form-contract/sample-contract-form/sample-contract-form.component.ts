@@ -2208,7 +2208,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
       let contract_no = this.datasForm.contract_no?.trim();
       let code = this.datasForm.code?.trim();
       if (this.isChangeNumberContract != this.datasForm.contract_no) {
-        await this.contractService.checkCodeUnique(this.datasForm.contract_no).toPromise().then(
+        await this.contractService.checkCodeUniqueSign(this.datasForm.contract_no,this.datasForm.contract_id).toPromise().then(
           dataCode => {
             if (!dataCode.success) {
               this.toastService.showWarningHTMLWithTimeout('contract_number_already_exist', "", 3000);
@@ -2233,6 +2233,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
             })
           }
       }
+
 
       this.datasForm.contract_no = contract_no?.trim();
       this.datasForm.code = code?.trim();

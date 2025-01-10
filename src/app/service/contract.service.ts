@@ -88,6 +88,7 @@ export class ContractService {
   getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
   addGetFileZipContract: any = `${environment.apiUrl}/api/v1/documents/compress/`;
   checkCodeUniqueUrl: any = `${environment.apiUrl}/api/v1/contracts/check-code-unique`;
+  checkCodeUniqueSignUrl: any = `${environment.apiUrl}/api/v1/contracts/check-code-unique-sign`;
   getCopyContract: any = `${environment.apiUrl}/api/v1/contracts/clone/`;
   deleteContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
   deleteMultiContractUrl: any = `${environment.apiUrl}/api/v1/contracts/multi`;
@@ -1863,6 +1864,21 @@ export class ContractService {
     });
     return this.http
       .post<any>(this.checkCodeUniqueUrl, body, { headers })
+      .pipe();
+  }
+
+  checkCodeUniqueSign(code: string, contractId: any): Observable<any> {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      code: code,
+      organization_id: this.organization_id,
+      contract_id: contractId
+    });
+    return this.http
+      .post<any>(this.checkCodeUniqueSignUrl, body, { headers })
       .pipe();
   }
 

@@ -133,6 +133,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   showDropdown: boolean = false;
   hideConfigFirstHandler: boolean = false;
   satisfiedFirstHandler: boolean = false;
+  isChangeNumberContract: number;
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
@@ -155,6 +156,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.onResize();
     this.spinner.hide();
 
+    this.isChangeNumberContract = this.datas.contract_no; // check xem co thay doi so hop dong hay khong
     this.list_font = ["Arial", "Calibri", "Times New Roman"];
     if(!this.datas.isAllowFirstHandleEdit) {
       this.datas.isAllowFirstHandleEdit = false;
@@ -2183,6 +2185,37 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       return;
     } else {
+
+      let coutError = false;
+      let contract_no = this.datas.contract_no?.trim();
+      let code = this.datas.code?.trim();
+      if (this.isChangeNumberContract != this.datas.contract_no) {
+        await this.contractService.checkCodeUniqueSign(this.datas.contract_no,this.datas.contract_id).toPromise().then(
+          dataCode => {
+            if (!dataCode.success) {
+              this.toastService.showWarningHTMLWithTimeout('contract_number_already_exist', "", 3000);
+              this.spinner.hide();
+              coutError = true;
+            }
+          }, (error) => {
+            coutError = true;
+            this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số tài liệu', "", 3000);
+            this.spinner.hide();
+          });
+
+          if (!coutError) {
+            if(action == 'save_draft') {
+              this.datas.code = null;
+              this.datas.contract_no = null;
+            }
+            await this.contractService.addContractStep1(this.datas, this.datas.contract_id, 'template_form').toPromise().then((data) => {
+
+            }, (error) => {
+              coutError = true;
+            })
+          }
+      }
+      
       if (action == 'save_draft') {
         if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
           let isHaveFieldId: any[] = [];
