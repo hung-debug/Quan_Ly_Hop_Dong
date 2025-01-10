@@ -937,5 +937,6 @@
   "example.apikey": "Enter Api Key, example: 56494c92-f18f-4f3e-ac79-49544661e63b",
   "person_cc": "PERSON CC",
   "webhook.body.sample": "This is sample data. Please bypass this data in API",
-  "search.code.number.name.1": "Doc code/number/name"
+  "search.code.number.name.1": "Doc code/number/name",
+  "liquidated": "Liquidated"
 }
