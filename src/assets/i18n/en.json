@@ -927,5 +927,6 @@
   "text.select": "Select a signature or seal image",
   "create.document.holds.signing.stream": "Creates a document that holds the signing stream",
   "keep.signature.stream.all": "Keep the entire signature stream",
-  "keep.signature.stream.organizational": "Just keep my organizational flow"
+  "keep.signature.stream.organizational": "Just keep my organizational flow",
+  "liquidated": "Liquidated"
 }
