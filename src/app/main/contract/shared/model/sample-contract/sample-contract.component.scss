@@ -1048,3 +1048,8 @@
   line-height: 21px;
   color: var(--text-primary) !important;
 }
+
+.resize-drag {
+  cursor: grab;
+  user-select: none;
+}

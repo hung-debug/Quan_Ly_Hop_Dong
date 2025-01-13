@@ -94,7 +94,7 @@ export class PreviewContractTemplateComponent implements OnInit {
         });
       }
     })
-
+    arrSignConfig = arrSignConfig.sort((item1: any, item2: any) => item1.ordering - item2.ordering);
     return arrSignConfig;
   }
 

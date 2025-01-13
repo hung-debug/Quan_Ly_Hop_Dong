@@ -1342,6 +1342,7 @@ export class ConsiderContractComponent
           }
         })
       }
+      dataSignature = dataSignature.sort((item1: any, item2: any) => item1.ordering - item2.ordering);
       return dataSignature;
     } else {
       return [];
