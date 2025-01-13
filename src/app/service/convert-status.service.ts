@@ -30,6 +30,8 @@ export class ConvertStatusService {
       return this.translate.instant('contract.status.draft');
     } else if(code == 'created') {
       return this.translate.instant('dashboard.contract.created');
+    } else if(code == 'liquidated') {
+      return this.translate.instant('liquidated');
     }
     return code;
   }
