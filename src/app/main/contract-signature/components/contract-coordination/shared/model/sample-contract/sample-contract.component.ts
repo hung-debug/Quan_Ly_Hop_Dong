@@ -1345,6 +1345,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             isObjSign.text_type = type_name;
             signElement.setAttribute("text_type", isObjSign.text_type);
+            if (type_name === 'currency') {
+              isObjSign.type = 5;
+            } else {
+              isObjSign.type = 1;
+            }
           }
         } else if (property == 'font') {
           isObjSign.font = e.target.value;

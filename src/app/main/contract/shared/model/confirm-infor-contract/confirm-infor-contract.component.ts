@@ -253,7 +253,11 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
               } else if(element.sign_unit == 'so_tai_lieu') {
                 element.type = 4;
               } else {
-                element.type = 1;
+                if(element.text_type == 'currency') {
+                  element['type'] = 5;
+                } else {
+                  element['type'] = 1;        
+                }
               }
             }
             if (element.id_have_data) {

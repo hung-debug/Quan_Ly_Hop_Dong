@@ -179,11 +179,9 @@ function initializeKeycloak(keycloak: KeycloakService) {
               keycloak.login()
             }
             // if(fullUrl.includes('/type=1')){
-            //   console.log("1");
 
             //   return false;
             // }else{
-            //   console.log("2");
 
             //   keycloak.login()
             // }

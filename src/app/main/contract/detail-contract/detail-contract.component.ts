@@ -143,7 +143,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   top: any[] = [];
 
   pageBefore: number;
-
+  size: number;
+  currentParentId: number;
   filter_name: any;
   filter_type: any;
   filter_contract_no: any;
@@ -269,6 +270,16 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       if (typeof params.folderId != 'undefined' && params.folderId
       ) {
         this.folderId = params.folderId;
+      }
+
+      if (typeof params.size != 'undefined' && params.size
+      ) {
+        this.size = params.size;
+      }
+
+      if (typeof params.currentParentId != 'undefined' && params.currentParentId
+      ) {
+        this.currentParentId = params.currentParentId;
       }
 
       if(typeof params.folderName != 'undefined' && params.folderName) {
@@ -598,6 +609,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       }
     );
   }
+  
+  get addressCC(): string {
+    return this.datas?.is_data_contract?.address_cc?.join(', ') || '';
+  }
 
   downloadPDF(url: string): Observable<Blob> {
     const options = { responseType: 'blob' as 'json' };
@@ -802,7 +817,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   // changeScale(values: any){
-  //   console.log("this.scale", this.scale)
   //   switch (values){
   //     case "-":
   //       if(this.scale > 0.25){
@@ -1237,22 +1251,36 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   actionBack() {
     if (this.pageBefore && this.isOrg) {
-      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/main/contract/create/' + this.statusLink], {
-          queryParams: {
-            page: this.pageBefore,
-            filter_type: this.filter_type,
-            filter_contract_no: this.filter_contract_no,
-            filter_from_date: this.filter_from_date,
-            filter_to_date: this.filter_to_date,
-            isOrg: this.isOrg,
-            organization_id: this.organization_id,
-            status: this.statusLink,
-            filter_name:this.filter_name
-          },
-          skipLocationChange: true,
+      if(this.filter_type == 'contract-folder') {
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigate(['/main/contract-folder'], {
+            queryParams: {
+              page: this.pageBefore,
+              size: this.size,
+              filter_name:this.filter_name,
+              currentParentId: this.currentParentId
+            },
+            skipLocationChange: false,
+          });
         });
-      });
+      } else {
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigate(['/main/contract/create/' + this.statusLink], {
+            queryParams: {
+              page: this.pageBefore,
+              filter_type: this.filter_type,
+              filter_contract_no: this.filter_contract_no,
+              filter_from_date: this.filter_from_date,
+              filter_to_date: this.filter_to_date,
+              isOrg: this.isOrg,
+              organization_id: this.organization_id,
+              status: this.statusLink,
+              filter_name:this.filter_name
+            },
+            skipLocationChange: true,
+          });
+        });
+      }
     } else if(this.pageBefore) {
        //Ket thuc hop dong nhan
        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {

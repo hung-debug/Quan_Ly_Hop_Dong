@@ -9,7 +9,7 @@ import {
   OnDestroy,
   AfterViewInit, Output, EventEmitter, OnChanges, SimpleChanges
 } from '@angular/core';
-import { variable } from "../../../../../config/variable";
+import { variable, type_signature } from "../../../../../config/variable";
 import { Helper } from "../../../../../core/Helper";
 import * as $ from 'jquery';
 
@@ -26,6 +26,7 @@ import { UserService } from 'src/app/service/user.service';
 import { CheckZoomService } from 'src/app/service/check-zoom.service';
 import { DetectCoordinateService } from 'src/app/service/detect-coordinate.service';
 import { environment } from 'src/environments/environment';
+import { SysService } from 'src/app/service/sys.service';
 
 interface DropdownOption {
   value: number;
@@ -132,6 +133,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   showDropdown: boolean = false;
   hideConfigFirstHandler: boolean = false;
   satisfiedFirstHandler: boolean = false;
+  isChangeNumberContract: number;
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
@@ -141,7 +143,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     private router: Router,
     private checkZoomService: CheckZoomService,
     private userService: UserService,
-    private detectCoordinateService: DetectCoordinateService
+    private detectCoordinateService: DetectCoordinateService,
+    private sysService: SysService,
   ) {
     this.step = variable.stepSampleContract.step3
   }
@@ -149,14 +152,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   temp: any[];
 
   ngOnInit() {
+    console.log("đơn lẻ k theo mẫu")
     this.onResize();
     this.spinner.hide();
 
+    this.isChangeNumberContract = this.datas.contract_no; // check xem co thay doi so hop dong hay khong
     this.list_font = ["Arial", "Calibri", "Times New Roman"];
     if(!this.datas.isAllowFirstHandleEdit) {
       this.datas.isAllowFirstHandleEdit = false;
     }
-    this.satisfiedFirstHandler = this.checkFirstHandler(this.datas.is_determine_clone)
+    this.satisfiedFirstHandler = this.sysService.checkFirstHandler(this.datas.is_determine_clone)
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
       // ham chuyen doi hinh thuc ky type => sign_unit
@@ -672,6 +677,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             /*
             end
             */
+            let signConfig = [];
+            if(this.datas.contract_no) {
+              signConfig = res.sign_config.filter((item: any) => !item.recipient_id && item.sign_unit == 'so_tai_lieu')
+            }
             res.sign_config = res.sign_config.filter((val: any) =>
               isContractSign.some((data: any) =>
                 ((val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email as any : data.email as any) ||
@@ -679,6 +688,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 val.sign_unit == data.sign_unit &&
                 val.recipient_id == data.recipient_id
               ));
+              if(signConfig.length) {
+                signConfig.forEach((element: any) => {
+                  res.sign_config.push(element)
+                });
+              }
             // res.sign_config = isContractSign;
             res.sign_config.forEach((items: any) => {
               items.id = items.id + '1';
@@ -878,6 +892,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
   showEventInfo = (event: any) => {
+    const target = event.target;
+    const contentDrag = target.parentElement?.querySelector('.text-shd'); // class ngang cấp
+
+    if (contentDrag) {
+      contentDrag.style.width = '100%';  // Set the width to 100% after dragging ends
+    }
     let canvasElement: HTMLElement | null;
     if (event.relatedTarget && event.relatedTarget.id) {
       canvasElement = document.getElementById(event.relatedTarget.id);
@@ -1070,8 +1090,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                       // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                       if (res.type[i].sign_unit == 'text' || res.type[i].sign_unit == 'so_tai_lieu') {
                         if (res.type[i].sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
-                          element['width'] = rect_location.width;
-                          element['height'] = rect_location.height;
+                          // element['width'] = rect_location.width;
+                          // element['height'] = rect_location.height;
                         } else {
                           if (event.target.className.includes('da-keo')){
                             element['width'] = event.target.offsetWidth;
@@ -1194,8 +1214,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                     if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
                       if (res.sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
-                        element['width'] = rect_location.width;
-                        element['height'] = rect_location.height;
+                        const span = document.createElement('span');
+                        span.textContent = this.datas.contract_no;
+                        document.body.appendChild(span);
+                        let textWidth = span.getBoundingClientRect().width;
+                        element['width'] = textWidth;
+                        element['height'] = '28';
+                        document.body.removeChild(span);
                       } else {
                         if (event.target.className.includes('da-keo')){
                           element['width'] = event.target.offsetWidth;
@@ -1258,7 +1283,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
   countDuplicate: any = 0;
-  getCheckSignature(isSignType: any, listSelect?: string) {
+  getCheckSignatureBk(isSignType: any, listSelect?: string) {
     let assignSign = this.convertToSignConfig();
     if(isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
       isSignType = 'chu_ky_so'
@@ -1338,6 +1363,40 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
   }
 
+  getCheckSignature(isSignType: any, listSelect?: string) {
+    if(isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
+      isSignType = 'chu_ky_so'
+    }
+    let assignSign = this.convertToSignConfig();
+    // p.recipient_id == element.id && p.sign_unit == isSignType)
+    this.list_sign_name.forEach((element: any) => {
+      if (isSignType == 'text') {
+        element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6);
+      } else if (isSignType.includes('chu_ky_so')) {
+        let count = assignSign.filter((sign: any) => sign.recipient_id === element.id).length;
+        if (element.sign_type[0]?.id == 3) {
+          element.is_disable = count >= 15;
+        } else if (element.sign_type[0]?.id == 7 || element.sign_type[0]?.id == 8) {
+          element.is_disable = count >= 1;
+        } else {
+          element.is_disable = !element.sign_type.some((p: any) => [2, 4, 6].includes(p.id));
+        }
+      } else if (isSignType == 'chu_ky_anh') {
+        element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5));
+      } else if(isSignType == 'so_tai_lieu') {
+        if (this.datas.contract_no) {
+          element.is_disable = true;
+        } else {
+          element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6);
+        }
+      }
+    
+      if (listSelect) {
+        element.selected = listSelect && element.name == listSelect;
+      }
+    })
+  }
+
   getConditionFiledSign(element: any, isSignType: string) {
     if ((element.fields && element.fields.length && element.fields.length > 0) &&
       (element.sign_type.some((id: number) => [1, 5].includes(id)) && isSignType == 'chu_ky_anh') || (element.sign_type.some((id: number) => [2, 3, 4].includes(id)) && isSignType == 'chu_ky_so') || (isSignType == 'text' && (element.sign_type.some((id: number) => id == 2) || element.role == 4) || (isSignType == 'so_tai_lieu' && (element.role != 4 || (this.datas.contract_no && element.role == 4))))) {
@@ -1398,6 +1457,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     target.setAttribute('data-x', x);
     target.setAttribute('data-y', y);
 
+    const sibling = target.parentElement?.querySelector('.text-shd'); // class ngang cấp
+    if (sibling) {
+      const parentWidth = sibling.parentElement?.offsetWidth || 0; // Lấy kích thước cha
+      sibling.style.width = `${parentWidth * 0.5}px`; // Đặt width = 50% của cha
+    }
   }
 
   setWidth(d: any) {
@@ -1975,6 +2039,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             isObjSign.text_type = type_name;
             signElement.setAttribute("text_type", isObjSign.text_type);
+            if (type_name === 'currency') {
+              isObjSign.type = 5;
+            } else {
+              isObjSign.type = 1;
+            }
           }
 
         } else if (property == 'font') {
@@ -2040,6 +2109,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               isObjSign.recipient.id = data_name.id;
               isObjSign.recipient.name = data_name.name;
               isObjSign.recipient.email = data_name.email;
+              let assignSignatureType = type_signature.filter(item => item.id == data_name.sign_type[0].id);
+              const targetId = data_name.id;
+              const result = this.datas.is_determine_clone.find((item: any) =>
+                item.recipients.some((recipient: any) => recipient.id === targetId)
+              );
+              isObjSign.recipient.sign_type = assignSignatureType
+              isObjSign.is_type_party = result.type
             }
           }
 
@@ -2109,6 +2185,37 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       return;
     } else {
+
+      let coutError = false;
+      let contract_no = this.datas.contract_no?.trim();
+      let code = this.datas.code?.trim();
+      if (this.isChangeNumberContract != this.datas.contract_no) {
+        await this.contractService.checkCodeUniqueSign(this.datas.contract_no,this.datas.contract_id).toPromise().then(
+          dataCode => {
+            if (!dataCode.success) {
+              this.toastService.showWarningHTMLWithTimeout('contract_number_already_exist', "", 3000);
+              this.spinner.hide();
+              coutError = true;
+            }
+          }, (error) => {
+            coutError = true;
+            this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số tài liệu', "", 3000);
+            this.spinner.hide();
+          });
+
+          if (!coutError) {
+            if(action == 'save_draft') {
+              this.datas.code = null;
+              this.datas.contract_no = null;
+            }
+            await this.contractService.addContractStep1(this.datas, this.datas.contract_id, 'template_form').toPromise().then((data) => {
+
+            }, (error) => {
+              coutError = true;
+            })
+          }
+      }
+      
       if (action == 'save_draft') {
         if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
           let isHaveFieldId: any[] = [];
@@ -3119,46 +3226,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   swapStampPosition() {
     this.isOnTheLeft = !this.isOnTheLeft
-  }
-
-  checkFirstHandler(data: any) {
-    const participants = data;
-  
-    // Bước 1: Tìm `ordering` nhỏ nhất trong tổ chức
-    const minParticipantOrdering = Math.min(...participants.map((p: any) => p.ordering));
-    const minParticipants = participants.filter((p: any) => p.ordering === minParticipantOrdering);
-  
-    if (minParticipants.length !== 1) {
-      return false;
-    }
-  
-    const minParticipant = minParticipants[0];
-  
-    // Bước 2: Tìm recipients theo vai trò ưu tiên
-    const recipients = minParticipant.recipients;
-    let selectedRecipients = recipients.filter((r: any) => r.role === 2);
-  
-    if (selectedRecipients.length === 0) {
-      selectedRecipients = recipients.filter((r: any) => r.role === 3);
-    }
-    if (selectedRecipients.length === 0) {
-      selectedRecipients = recipients.filter((r: any) => r.role === 4);
-    }
-  
-    // Nếu không có recipient nào, trả về false
-    if (selectedRecipients.length === 0) {
-      return false;
-    }
-  
-    // Bước 3: Kiểm tra `ordering` nhỏ nhất và duy nhất trong recipients
-    const minRecipientOrdering = Math.min(...selectedRecipients.map((r: any) => r.ordering));
-    const minRecipients = selectedRecipients.filter((r: any) => r.ordering === minRecipientOrdering);
-  
-    // Nếu không duy nhất, trả về false
-    if (minRecipients.length !== 1) {
-      return false;
-    }
-    return true;
   }
 
 }

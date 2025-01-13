@@ -56,7 +56,7 @@ export class InforUserComponent implements OnInit {
   organizationName:any;
   roleName:any;
   maxDate: Date = moment().toDate();
-  disablePhone: any;
+  isDisable: any;
 
   constructor(private appService: AppService,
     private toastService : ToastService,
@@ -116,14 +116,13 @@ export class InforUserComponent implements OnInit {
 
     this.id = this.user.customer_id;
     let arrUser = await this.userService.getUserById(this.id).toPromise();
-    this.disablePhone = arrUser.login_type;
+    this.isDisable = arrUser.login_type;
 
     this.userService.getUserById(this.id).subscribe(
       data => {
         if (data.login_type == null) {
           data.login_type = 'EMAIL';
         }
-        // console.log("data1",data);
         if(data.login_type == 'EMAIL'){
           this.addInforForm.get('email')?.disable();
         }else if(data.login_type == 'SDT'){

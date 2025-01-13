@@ -1258,27 +1258,20 @@ export class ContractSignatureComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async (isSubmit: any) => {
 
       if (isSubmit) {
-        for (let index = 0; index < this.dataChecked.length; index++) {
-          this.contractServiceV1
-            .updateInfoContractConsider([], this.dataChecked[index].id)
-            .subscribe(
-              (result) => {
-
-                this.router
-                  .navigateByUrl('/', { skipLocationChange: true })
-                  .then(() => {
-                    this.router.navigate(['/main/c/receive/processed']);
-                  });
-              },
-              (error) => {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
-                  '',
-                  3000
-                );
-              }
-            );
+        try {
+          for (let index = 0; index < this.dataChecked.length; index++) {
+            await this.contractServiceV1.updateInfoContractConsider([], this.dataChecked[index].id).toPromise(); // Nếu phương thức trả về Observable, cần chuyển đổi sang Promise
+          }
+        } catch (error) {
+          this.toastService.showErrorHTMLWithTimeout(
+            'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
+            '',
+            3000
+          );
         }
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigate(['main/c/receive/processed']);
+        });
         this.toastService.showSuccessHTMLWithTimeout('Xem xét tài liệu thành công',
           '',
           1000

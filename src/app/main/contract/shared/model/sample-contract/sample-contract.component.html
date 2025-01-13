@@ -11,7 +11,7 @@
                 <div style="margin: 0px 16px;">
                     <div *ngFor="let d of this.datas.contract_user_sign" class="show-list-name-class">
                         <div *ngIf="!d.sign_config.position"
-                             [ngClass]="{'resize-drag': d.sign_unit !== 'chu_ky_so'}"
+                             [ngClass]="{'resize-drag': d.sign_unit !== 'chu_ky_so', 'text-shd': d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu'}"
                              [id]="getIdSignChuaKeo(d.id)"
                              (click)="showThumbnail()">
                             <div style="position: relative; display: contents;">

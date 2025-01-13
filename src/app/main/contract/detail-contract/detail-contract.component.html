@@ -77,6 +77,18 @@
     
           </div>
         </div>
+        
+        <div class="location-change mt-28px" [ngStyle]="changeDisplay()" *ngIf="addressCC">
+          <div class="sample-contract__information&#45;&#45;user-sign">
+            <div class="label">{{'person_cc' | translate}}</div>
+            <div>
+              <div class="row mt-12px">
+                <div class="custom-xl-width-col-xl-12 col-lg-12 info-contract mt-lg-5px">{{addressCC}}</div>
+              </div>
+            </div>
+    
+          </div>
+        </div>
 
         <div class="mt-28px process-handle-contract" (click)="processHandleContract()">
           <div>

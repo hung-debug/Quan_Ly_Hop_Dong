@@ -79,7 +79,6 @@ export class ConsiderContractComponent
   arrPage: any = [];
   objDrag: any = {};
   scale: any;
-  defaultScale: any = 1.0;
   objPdfProperties: any = {
     pages: [],
   };
@@ -229,6 +228,7 @@ export class ConsiderContractComponent
     { percent: '450%', value: 4.5 },
     { percent: '500%', value: 5.0 },
   ];
+  contract_no: any;
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -865,6 +865,7 @@ export class ConsiderContractComponent
 
   checkFirstHandler(data: any, email: any) {
     let participants = data.participants;
+  
     let authorisedIds = new Set(
       participants.flatMap((item: any) => 
         item.recipients
@@ -878,49 +879,46 @@ export class ConsiderContractComponent
         ...item,
         recipients: item.recipients.filter((recipient: any) => !authorisedIds.has(recipient.id))
     }));
+  
+    const checkRoleRecipients = (role: number) => {
+      let minParentOrdering = Math.min(...result.map((item: any) => item.ordering)); // Bước 1: Tìm ordering nhỏ nhất của cha
 
-    // Bước 1: Tìm result có ordering nhỏ nhất
-    let minParticipantOrdering = Math.min(...result.map((p: any) => p.ordering));
-    let minParticipantCount = result.filter((p: any) => p.ordering === minParticipantOrdering).length;
-    if (minParticipantCount > 1) {
-      return false;
+      return result.filter((item: any) => item.ordering === minParentOrdering)
+      .flatMap((item: any) =>
+        item.recipients.filter((r: any) => r.role === role) // Lọc recipients có role phù hợp
+      )};
+  
+    const processRoleRecipients = (roleRecipients: any[]) => {
+      if (roleRecipients.length === 0) return false;
+  
+      if (roleRecipients.length === 1) return roleRecipients[0].email === email;
+  
+      const minOrdering = Math.min(...roleRecipients.map((r: any) => r.ordering));
+      const minOrderingRecipient = roleRecipients.find((r: any) => r.ordering === minOrdering);
+      const minOrderingCount = roleRecipients.filter((r: any) => r.ordering === minOrdering).length;
+  
+      return minOrderingCount === 1 && minOrderingRecipient.email === email;
+    };
+  
+    // Kiểm tra theo thứ tự ưu tiên: 2 -> 3 -> 4
+    const role2Recipients = checkRoleRecipients(2);
+    if (role2Recipients.length > 0) {
+      return processRoleRecipients(role2Recipients); // Chỉ lấy role 2 nếu có dữ liệu
     }
-    let minParticipant = result.find((p: any) => p.ordering === minParticipantOrdering);
-
-
-    // Bước 2: Lọc recipients theo role 2, 3, 4
-    let recipientWithRole2 = minParticipant.recipients.filter((r: any) => r.role === 2);    
-    let recipientWithRole3 = minParticipant.recipients.filter((r: any) => r.role === 3);    
-    let recipientWithRole4 = minParticipant.recipients.filter((r: any) => r.role === 4);
-
-    let selectedRecipient = []
-
-    if(recipientWithRole2.length > 0) {
-      selectedRecipient = recipientWithRole2
-    } else if (recipientWithRole2.length === 0 && recipientWithRole3.length > 0) {
-      selectedRecipient = recipientWithRole3
-    } else {
-      selectedRecipient = recipientWithRole4
+  
+    const role3Recipients = checkRoleRecipients(3);
+    if (role3Recipients.length > 0) {
+      return processRoleRecipients(role3Recipients); // Chỉ lấy role 3 nếu có dữ liệu
     }
-
-    if (selectedRecipient.length == 0) {
-      return false;
+  
+    const role4Recipients = checkRoleRecipients(4);
+    if (role4Recipients.length > 0) {
+      return processRoleRecipients(role4Recipients); // Chỉ lấy role 4 nếu có dữ liệu
     }
-
-    // Bước 3: Kiểm tra nếu email của recipient được chọn có ordering nhỏ nhất và duy nhất
-    let minRecipientOrdering = Math.min(...selectedRecipient.map((r: any) => r.ordering));
-    let minRecipientCount = selectedRecipient.filter((r: any) => r.ordering === minRecipientOrdering).length;
-    if (minRecipientCount > 1) {
-      return false;
-    }
-
-    let minRecipient = selectedRecipient.find((r: any) => r.ordering === minRecipientOrdering);
-    if (minRecipient.email === email && minRecipient.ordering === minRecipientOrdering) {
-      return true;
-    }
+  
     return false;
   }
-  
+   
   checkNotSupportText(signData: any) {
     signData = signData.filter((item: any) => item.recipient_id == this.recipientId)
     signData.forEach((element: any) => {
@@ -1170,8 +1168,8 @@ export class ConsiderContractComponent
 
   resetToDefault(){
     if(this.scale != 1){
-      this.scale = this.defaultScale;
-      this.defaultValueSelect = this.scale * 100
+      this.scale = 1.0;
+      this.defaultValueSelect = this.scale;
       this.getPage();
     }
 
@@ -1488,8 +1486,8 @@ export class ConsiderContractComponent
     const nameUpdate = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
     return nameUpdate.name != this.recipient.name;
   }
-
-  async submitEvents(e: any) {
+  
+  async submitEvents(e: any) { 
     const isDifferentName = await this.checkDifferentName();
     if (isDifferentName) {
       this.toastService.showErrorHTMLWithTimeout(
@@ -1507,6 +1505,8 @@ export class ConsiderContractComponent
         return
       }
     }
+  
+  
     let haveSignPKI = false;
     let haveSignImage = false;
     let haveSignCert = false;
@@ -1523,7 +1523,25 @@ export class ConsiderContractComponent
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.info;
-
+    this.contractNoValueSign=this.contractNoValueSign?.trim();
+    if (this.contractNoValueSign) {
+      //check so hop dong da ton tai hay chua
+      this.spinner.show();
+      try {
+        let res: any = await this.contractService.checkCodeUniqueSign(this.contractNoValueSign?.trim(),this.idContract).toPromise()
+        if (res.success) {
+          this.spinner.hide();
+        } else {
+          this.toastService.showErrorHTMLWithTimeout('Số tài liệu đã tồn tại', "", 3000);
+          this.spinner.hide();
+          return false;
+        }
+      } catch (error) {
+        this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số tài liệu', "", 3000);
+        this.spinner.hide();
+        return false;
+      }  
+    } 
     this.contractService.getRemoteSigningCurrentStatus(this.recipientId).subscribe(
       (res) => {
         if (res.isPresent && res.status == "DANG_XU_LY") {

@@ -13,6 +13,9 @@
   position: absolute;
   left: 0px;
   bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
 }
 
 .skeleton-sign-value1 {
