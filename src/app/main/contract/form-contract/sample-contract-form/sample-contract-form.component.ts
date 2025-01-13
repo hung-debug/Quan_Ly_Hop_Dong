@@ -1868,7 +1868,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
         this.datasForm.isAllowFirstHandleEdit = false
       }
     }
-    console.log("arrSignConfig", arrSignConfig)
+    //console.log("arrSignConfig", arrSignConfig)
     arrSignConfig = arrSignConfig.sort((item1: any, item2: any) => item1.ordering - item2.ordering);
 
     // Tìm giá trị zIndex lớn nhất
