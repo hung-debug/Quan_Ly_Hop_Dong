@@ -520,7 +520,6 @@ export class ConsiderContractComponent
             if(item.type == 4 && item.value) {
               this.contractNoValueSign = item.value;
               item.valueSign = item.value;
-              this.isChangeNumberContract = this.contractNoValueSign;
               // item.value = "";
             }
           })
@@ -855,6 +854,7 @@ export class ConsiderContractComponent
           this.getPage();
         }
         this.loaded = true;
+        this.isChangeNumberContract = this.contractNoValueSign; 
       },
       (res: any) => {
         // @ts-ignore
