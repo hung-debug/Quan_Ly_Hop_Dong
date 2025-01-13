@@ -448,8 +448,11 @@ h3 {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 220px;
   height: 59px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media screen and (min-width:1224px) and (max-width:1280px){
@@ -510,4 +513,8 @@ h3 {
     transition: left 500ms;
     white-space: nowrap;
   }
+}
+
+.img-responsive {
+  height: 45px;
 }
