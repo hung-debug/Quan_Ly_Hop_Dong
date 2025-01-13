@@ -1,5 +1,5 @@
 import { ToastService } from './../../service/toast.service';
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit, Output, ElementRef, HostListener } from '@angular/core';
 import {AppService} from 'src/app/service/app.service';
 import {Chart} from 'angular-highcharts';
 import {TranslateService} from '@ngx-translate/core';
@@ -144,6 +144,7 @@ export class DashboardComponent implements OnInit {
     private contractSignature: ContractSignatureService,
     private contractServiceV1: ContractService,
     public isContractService: ContractService,
+    private el: ElementRef
   ) {
     this.stateOptions = [
       {label: "my.contract", value: 'off'},
@@ -160,8 +161,14 @@ export class DashboardComponent implements OnInit {
   }
 
   lang: any;
-  ngOnInit(): void {
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.updateBackground();
+  }
+
+  ngOnInit(): void {
+    this.updateBackground();
     this.enviroment = environment;
     if (environment.flag == 'NB') {
       this.site = 'NB';
@@ -256,6 +263,24 @@ export class DashboardComponent implements OnInit {
       this.convertData();
       this.getDataPieChart();
     });
+  }
+
+  private updateBackground(): void {
+    const element = this.el.nativeElement.querySelector('.add-contract-theme');
+    if (element) {
+      let url = environment.apiUrl.replace("/service", "");
+      let banner = url + environment.bannerWeb;
+      element.style.background = `url(${banner})`;
+      element.style.backgroundSize = 'cover';
+      element.style.backgroundRepeat = 'no-repeat';
+
+      // Kiểm tra kích thước màn hình
+      if (window.innerWidth < 960) {
+        element.style.backgroundPosition = 'center'; // Căn giữa khi màn hình nhỏ
+      } else {
+        element.style.backgroundPosition = 'right center'; // Căn phải khi màn hình lớn
+      }
+    }
   }
 
   getNotiMessage(isSoonExp: boolean, isExp: boolean, isEkycExp: boolean, isSmsExp: boolean, isCecaExp: boolean, isContractExp: boolean){

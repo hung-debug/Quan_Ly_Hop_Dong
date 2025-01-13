@@ -39,6 +39,7 @@ export class MainComponent implements OnInit {
   getAlllistNotification: any[] = [];
   messageNotification: string;
   isMessageNotificationSet = false;
+  logoWeb: string;
   @ViewChild('scrollingText', { static: false }) scrollingTextElement: ElementRef<any>;
   constructor(private router: Router,
               private appService: AppService,
@@ -101,6 +102,8 @@ export class MainComponent implements OnInit {
 
   lang: any;
   async ngOnInit() {
+    let url = environment.apiUrl.replace("/service", "");
+    this.logoWeb = url + environment.logoWeb;
     if(localStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     } else if(localStorage.getItem('lang') == 'en') {
