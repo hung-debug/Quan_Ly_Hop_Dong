@@ -1,29 +1,26 @@
 <div class="horizontal-container">
   <div *ngIf="isRoleWebHook && this.checkRole === null">
   <form [formGroup]="addForm">
-    <!-- <div formArrayName="apiListFormArray"> -->
-      <!-- <div *ngFor="let form of apiListFormArray.controls; let i = index" [formGroupName]="i"> -->
-        <div class="row system-config">
+    <div formArrayName="apiListFormArray">
+      <div *ngFor="let form of apiListFormArray.controls; let i = index" >
+        <div class="row system-config" [formGroupName]="i">
           <div class="col-lg-4-9 btn-padding-right btn-padding-left">
             <div class="dropdown-container">
               <p-dropdown 
                 panelStyleClass="font"
                 [options]="apiList" 
                 formControlName="api" 
-                optionLabel="type" 
-                (onChange)="onApiChange($event)"
-                placeholder="{{'choose.api' | translate}}"
+                optionLabel="label" 
+                (onChange)="onApiChange($event, i)"
+                placeholder="{{'choose.api' | translate}}" 
                 ></p-dropdown>
             </div>
-            <!-- <div *ngIf="submitted && f.api.errors" class="invalid">
-              <div *ngIf="f.api.errors.required">{{'api.is.required' | translate}}</div>
-            </div> -->
-            <div *ngIf="submitted && f.api.errors">
+            <!-- <div *ngIf="submitted && f.api.errors">
               <small class="text-danger" *ngIf="f.api.errors['required']">{{'api.is.required' | translate}}</small>
-            </div>
-            <!-- <div *ngIf="addForm.get('type')?.invalid && addForm.get('type')?.touched && submitted && f.type.errors" class="invalid">
-              Loại API không được phép bỏ trống
             </div> -->
+            <div *ngIf="isFieldInvalid(i, 'api')">
+              <small class="text-danger">{{'api.is.required' | translate}}</small>
+            </div>
           </div>
           
           <div class="row">
@@ -40,13 +37,16 @@
                 </div>
           
                 <div class="flex-item check-button-container">
-                  <button class="check" (click)="checkStatusApiWebHook()">Kiểm tra</button>
+                  <button class="check" (click)="checkStatusApiWebHook(i)">Kiểm tra</button>
                 </div>
               </div>
               <!-- </div> -->
             </div>
             <div *ngIf="submitted && f.url.errors">
-              <small class="text-danger" *ngIf="f.url.errors['required']">URL không được phép bỏ trống</small>
+              <!-- <small class="text-danger" *ngIf="f.url.errors['required']">URL không được phép bỏ trống</small> -->
+              <div *ngIf="isFieldInvalid(i, 'url')">
+                <small class="text-danger">URL không được bỏ trống.</small>
+              </div>
             </div>
           </div>
           
@@ -57,18 +57,17 @@
                   <span>API Key</span>
                   <span class="require_star">*</span>
                 </div>
-                <textarea id="apiKey" rows="4" placeholder="{{'example.apikey' | translate}}" (input)="validateApiKey($event)"  maxlength="36" formControlName="apikey"></textarea>
-                <div *ngIf="submitted && f.apikey.errors">
-                  <!-- <small class="text-danger" *ngIf="f.apikey.errors['required']">API Key không được phép bỏ trống.</small> -->
-                  <!-- <small class="text-danger" *ngIf="f.apikey.errors['pattern']">API Key chỉ được phép chứa ký tự không dấu và không có khoảng trắng</small>
-                  <small class="text-danger" *ngIf="f.apikey.errors['maxlength']">API Key tối đa 32 ký tự</small> -->
-                  <small class="text-danger" *ngIf="f.apikey.errors['required']">API Key không được phép bỏ trống.</small>
-                  <small class="text-danger" *ngIf="f.apikey.errors['pattern']">API Key phải theo định dạng: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.</small>
-                  <small class="text-danger" *ngIf="f.apikey.errors['length']">API Key phải đúng 36 ký tự.</small>
-                  <small class="text-danger" *ngIf="f.apikey.errors['whitespace']">API Key không được chứa khoảng trắng.</small>
-                </div>
-                <div *ngIf="f.apikey.value === '' && (f.apikey.touched || f.apikey.dirty)">
-                  <small class="text-danger">API Key không được phép bỏ trống</small>
+                <textarea id="apiKey" rows="6" placeholder="{{'example.apikey' | translate}}" (input)="validateApiKey($event)"  maxlength="36" formControlName="apikey"></textarea>
+                <div *ngIf="isFieldInvalid(i, 'apikey')">
+                  <div *ngIf="submitted && f.apikey.errors">
+                    <small class="text-danger" *ngIf="f.apikey.errors['required']">API Key không được phép bỏ trống.</small>
+                    <small class="text-danger" *ngIf="f.apikey.errors['pattern']">API Key phải theo định dạng: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.</small>
+                    <small class="text-danger" *ngIf="f.apikey.errors['length']">API Key phải đúng 36 ký tự.</small>
+                    <small class="text-danger" *ngIf="f.apikey.errors['whitespace']">API Key không được chứa khoảng trắng.</small>
+                  </div>
+                  <div *ngIf="f.apikey.value === '' && (f.apikey.touched || f.apikey.dirty)">
+                    <small class="text-danger">API Key không được phép bỏ trống</small>
+                  </div>
                 </div>
               </div>
             </div>
@@ -79,47 +78,44 @@
                   <span>Body</span>
                   <span style="font-style: italic; color: orange;">({{'webhook.body.sample' | translate}})</span>
                 </div>
-                <textarea id="body" rows="4" formControlName="body" readonly></textarea>
+                <textarea id="body" rows="6" formControlName="body" readonly></textarea>
               </div>
             </div>
           </div>
-          
+
           <div class="row">
             <div class="checkstatus">
               <span>Trạng thái kiểm tra:</span>
-              <!-- <span style="color: #29a55d;">{{checkStatus}}</span> -->
-              <span [ngClass]="{'text-success': checkStatus === 'Thành công', 'text-danger': checkStatus === 'Thất bại'}">
+              <!-- <span [ngClass]="{'text-success': checkStatus === 'Thành công', 'text-danger': checkStatus === 'Thất bại'}">
                 {{ checkStatus }}
-              </span>
+              </span> -->
+              <span [ngClass]="{
+                'text-success': form.get('checkStatus')?.value === 'Thành công',
+                'text-danger': form.get('checkStatus')?.value === 'Thất bại'
+              }">
+                {{form.value.checkStatus}}
+            </span>
             </div>
           </div>
         </div>
         
-        <!-- <div class="row" style="display: flex; justify-content: flex-end; align-items: center;">
+        <div class="row" style="display: flex; justify-content: flex-end; align-items: center;">
           <div class="deleteConfig">
-            <span><u>Xóa cấu hình</u></span>
+            <span (click)="deleteConfig(i)"><u>Xóa cấu hình</u></span>
           </div>
-        </div> -->
-      <!-- </div> -->
-    <!-- </div> -->
+        </div>
+      </div>
+    </div>
 
 
   </form>
 
-  
-  <!-- <div>
-    <form *ngFor="let form of formsArray">
-      <system-config-add></system-config-add>
-    </form>
-  </div> -->
-
-  
   <div class="row" style="display: flex; justify-content: space-between; align-items: center;">
     <div class="group_button">
       <div class="button-add-save">
         <button class="add-save" type="submit" (click)="onSubmit()">Lưu lại</button>
-        <!-- <button *ngIf="this.formsArray.length < this.apiList.length" class="add-save" type="button" (click)="addNewForm()">Thêm mới</button> -->
-        <!-- <button *ngIf="this.formsArray.length >= this.apiList.length" class="disable-add-save" type="button" (click)="addNewForm()" disabled>Thêm mới</button> -->
+        <button *ngIf="apiListFormArray.length < this.apiList.length" class="add-save" type="button" (click)="addNewForm()">Thêm mới</button>
+        <button *ngIf="apiListFormArray.length >= this.apiList.length" class="disable-add-save" type="button" (click)="addNewForm()" disabled>Thêm mới</button>
       </div>
     </div>
   </div>

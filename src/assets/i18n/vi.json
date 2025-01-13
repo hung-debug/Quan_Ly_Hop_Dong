@@ -959,5 +959,6 @@
   "api.is.required": "Loại API không được phép bỏ trống",
   "config.system": "Cấu hình Webhook",
   "example.apikey": "Nhập API Key, ví dụ: 56494c92-f18f-4f3e-ac79-49544661e63b",
-  "webhook.body.sample": "Đây là dữ liệu mẫu. Vui lòng bypass dữ liệu này trong API"
+  "webhook.body.sample": "Đây là dữ liệu mẫu. Vui lòng bypass dữ liệu này trong API",
+  "delete.config.question" : "Bạn có chắc chắn muốn xóa cấu hình không?"
 }

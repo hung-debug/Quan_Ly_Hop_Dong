@@ -58,6 +58,7 @@ import {ContentEmailComponent} from './main/report/report-contract-send-email/co
 import { ReportContractReceiveComponent } from './main/report/report-contract-receive/report-contract-receive.component';
 import { environment } from 'src/environments/environment';
 import { SystemConfigComponent } from './main/system-config/system-config.component';
+import { DeleteConfigDialogComponent } from './main/system-config/delete-config-dialog/delete-config-dialog.component';
 
 const contract_signatures = "c";
 const signatures = "s9";

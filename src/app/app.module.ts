@@ -143,6 +143,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthGuard } from './help/auth.guard';
 //import { RouteInterceptorService } from './service/route-interceptor.service';
 import { SystemConfigComponent } from './main/system-config/system-config.component';
+import { DeleteConfigDialogComponent } from './main/system-config/delete-config-dialog/delete-config-dialog.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -288,7 +289,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     DeleteContractFolderComponent,
     UploadContractFileComponent,
     AccountLinkDialogComponent,
-    SystemConfigComponent
+    SystemConfigComponent,
+    DeleteConfigDialogComponent
   ],
   imports: [
     PaginatorModule,

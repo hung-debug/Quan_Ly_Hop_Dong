@@ -33,7 +33,7 @@ export class SystemConfigService {
   editApiWebHook: any = `${environment.apiUrl}/api/v1/organizations/webhook`;
   updateApiWebHook: any = `${environment.apiUrl}/api/v1/organizations/update_webhook`;
   checkApiWebHook: any = `${environment.apiUrl}/api/v1/organizations/webhook/check`;
-
+  deleteApiWebHook: any = `${environment.apiUrl}/api/v1/organizations/delete_webhook/`;
 
 
   getCurrentUser() {
@@ -117,6 +117,15 @@ export class SystemConfigService {
     });
     
     return this.http.post<SystemConfig>(this.addNewApiWebHook, bodyAdd, { headers: headers });
+  }
+  
+  getDeleteApiWebHook(apiName: any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    
+    return this.http.delete<SystemConfig>(this.deleteApiWebHook + apiName, { 'headers': headers });
   }
   
   checkStatusWebHook(dataCheckWebHook: any){
