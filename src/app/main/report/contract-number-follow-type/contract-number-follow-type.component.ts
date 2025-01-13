@@ -167,7 +167,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
         colspan: 1,
       },
       {
-        header: 'contract.status.liquidated',
+        header: 'contract.status.liquidated.v2',
         style: 'text-align: left;',
         colspan: 1,
       }
