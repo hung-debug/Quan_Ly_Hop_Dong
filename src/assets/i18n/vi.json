@@ -952,9 +952,5 @@
   "create.document.holds.signing.stream": "Tạo tài liệu giữ luồng ký",
   "keep.signature.stream.all": "Giữ toàn bộ luồng ký",
   "keep.signature.stream.organizational": "Chỉ giữ luồng tổ chức của tôi",
-<<<<<<< HEAD
-  "contract.status.liquidated.v2": "Thanh lý"
-=======
   "liquidated": "Thanh lý"
->>>>>>> b051c44d902e16089e2f2eb5881de69bddd9d46f
 }
