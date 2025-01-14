@@ -133,6 +133,7 @@ export class ConsiderContractComponent
   countAttachFile = 0;
   widthDrag: any;
 
+  isChangeNumberContract: string;
   isEnableSelect: boolean = true;
   isEnableText: boolean = false;
   isChangeText: boolean = false;
@@ -279,7 +280,6 @@ export class ConsiderContractComponent
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
     const checkViewContract = await this.checkViewContractService.callAPIcheckViewContract(this.idContract, false);
-
 
     if (checkViewContract) {
       this.actionRoleContract();
@@ -855,6 +855,7 @@ export class ConsiderContractComponent
           this.getPage();
         }
         this.loaded = true;
+        this.isChangeNumberContract = this.contractNoValueSign; 
       },
       (res: any) => {
         // @ts-ignore
@@ -1516,7 +1517,7 @@ export class ConsiderContractComponent
 
     let typeSignDigital: any = null;
     let typeSignImage: any = null;
-    let isRemoteSigning: boolean = false
+    let isRemoteSigning: boolean = false;
     const counteKYC = this.recipient?.sign_type.filter(
       (p: any) => p.id == 5
     ).length;
@@ -1525,7 +1526,7 @@ export class ConsiderContractComponent
       localStorage.getItem('currentUser') || ''
     ).customer.info;
     this.contractNoValueSign=this.contractNoValueSign?.trim();
-    if (this.contractNoValueSign) {
+    if (this.isChangeNumberContract!=this.contractNoValueSign) {
       //check so hop dong da ton tai hay chua
       this.spinner.show();
       try {
