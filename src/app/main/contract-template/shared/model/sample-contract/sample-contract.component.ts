@@ -2720,7 +2720,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 return this.toastService.showErrorHTMLWithTimeout("Vị trí các ô ký ảnh và ô ký số không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
               }
               if (boxElements[i].sign_unit.includes('chu_ky_anh') && boxElements[j].sign_unit.includes('chu_ky_anh')) {
-                return this.toastService.showErrorHTMLWithTimeout("Vị trí các ô ký không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
+                return this.toastService.showErrorHTMLWithTimeout("Vị trí các ô ký ảnh không được để trùng hoặc giao nhau" + ` (trang ${boxElements[i].page})`,"",3000);
               }
               if (boxElements[i].sign_unit == boxElements[j].sign_unit && boxElements[i].sign_unit == "text" ) {
                 if ((boxElements[i].text_type == "default" && boxElements[i].text_type == boxElements[j].text_type) ||
