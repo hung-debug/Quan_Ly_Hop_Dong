@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  usedSSO: true,
+  usedSSO: false,
 
   apiUrl: 'https://econtractdev.mobifone.ai/service',
   // apiUrl: 'http://10.4.201.53',
