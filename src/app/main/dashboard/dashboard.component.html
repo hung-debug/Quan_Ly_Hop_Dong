@@ -3,14 +3,13 @@
     <div class="col-xxl-6 col-md-6" style="padding: 0 !important; display: flex; flex-direction: column;">
       <div class="add-contract-theme">
         <div style="max-width: 450px;">
-          <span style="font-size: 18px;">{{'hello' | translate}}, {{this.currentName}}</span>
-          <br><br>
-          <span>{{'text.dashboard.theme' | translate}}</span>
+          <div style="font-size: 18px; font-weight: 700; line-height: 24px;">{{'hello' | translate}}, {{this.currentName}}</div>
+          <div class="text-dashboard-theme">{{'text.dashboard.theme' | translate}}</div>
         </div>
         <!-- <br> -->
         <div class="ceate_contract" (click)="clickOpenDraft()">
           <button class="btn_add_contract" >{{'contract.status.draft' | translate}}
-            <img src="../../assets/img/document-draft.svg" style="margin-left: 8px;">
+            <img src="../../assets/img/document-draft.svg" style="margin-left: 4px;">
           </button>
           <!-- <mat-menu #menu="matMenu" style="margin-left: 50px;" class="popup_create_contract" xPosition = "after">
             <button mat-menu-item class="div_icon" (click)="clickAddContract(1);">

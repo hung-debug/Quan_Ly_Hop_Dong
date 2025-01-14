@@ -147,6 +147,17 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
   }
 
+  backgroundLoginWeb() {
+    let url = environment.apiUrl.replace("/service", "");
+    let loginApp = url + environment.loginWeb;
+    return {
+      'background': `url(${loginApp}) center center`,
+      '-webkit-background-size': 'cover',
+      '-moz-background-size': 'cover',
+      '-o-background-size': 'cover',
+    }
+  }
+
   weakPass: boolean = false;
   login(urlLink: any, isContractId: any, isRecipientId: any) {
     this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type, isContractId).subscribe((data) => {
