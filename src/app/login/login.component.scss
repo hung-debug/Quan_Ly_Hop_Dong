@@ -15,7 +15,7 @@
 .form-signin_mobile {
   max-width: 480px;
   margin: 0 auto;
-  padding-top: 10%;
+  // padding-top: 10%;
   padding-left: 5%;
   padding-right: 5%;
 }
@@ -31,7 +31,7 @@
 }
 
 .login-form-mobile{
-  padding-top: 60%;
+  padding-top: 20%;
   padding-left: 5%;
   padding-right: 5%;
 }
@@ -195,7 +195,7 @@ img {
   // background: #fff;
   // max-width: 1280px;
   position: relative;
-  background: url("../../assets/img/BG.svg") center center;
+  // background: url("../../assets/img/BG.svg") center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -220,7 +220,7 @@ img {
 
 .left-background-mobile {
   position: relative;
-  background: url("../../assets/img/login_webmobile.png") center center;
+  //background: url("../../assets/img/login_webmobile.png") center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -240,13 +240,13 @@ img {
   width: 100%;
   height: calc(100vh);
   position: relative;
-  background-size: cover;
-  background: url("../../assets/img/login_webmobile.png");
+  background-size: cover !important;
+  //background: url("../../assets/img/login_webmobile.png");
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
 }
-h
+
 .small-logo {
   height: calc(20vh);
   // text-align: center;
