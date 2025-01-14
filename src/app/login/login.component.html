@@ -179,7 +179,7 @@
 <div *ngIf="this.mobile == true && !isSSOlogin" class="all">
   <div>
     <!-- <div class="left-background-mobile"></div> -->
-    <div class="right-panel-mobile">
+    <div [ngStyle]="backgroundLoginMobile()" class="right-panel-mobile">
       <div ngbDropdown class="d-inline-block header_language">
         <div class="social-icons" ngbDropdownToggle>
           <span class="{{ 'language_icon' | translate }}"></span>
