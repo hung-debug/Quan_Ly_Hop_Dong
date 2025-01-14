@@ -2,34 +2,34 @@
 
 <div id="all" *ngIf="this.mobile == false && !isSSOlogin" class="all">
 
-  <div class="full-height d-flex flex-row">
-    <div class="left-background"></div>
-    <div class="right-panel">
-      <div ngbDropdown class="d-inline-block header_language">
-        <div class="social-icons" ngbDropdownToggle>
-          <span class="{{ 'language_icon' | translate }}"></span>
-          <div class="label">{{ "language" | translate }}</div>
-        </div>
-
-        <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
-          <button ngbDropdownItem class="drop" (click)="switchLang('en')">
-            <div style="display: flex; align-items: center">
-              <div class="db_user">
-                <div class="db_icon_english"></div>
-              </div>
-              <div>{{ "language_en" | translate }}</div>
-            </div>
-          </button>
-          <button ngbDropdownItem class="drop" (click)="switchLang('vi')">
-            <div style="display: flex; align-items: center">
-              <div class="db_user">
-                <div class="db_icon_vietnam"></div>
-              </div>
-              <div>{{ "language_vi" | translate }}</div>
-            </div>
-          </button>
-        </div>
+  <div [ngStyle]="backgroundLoginWeb()" class="full-height d-flex flex-row">
+    <div ngbDropdown class="d-inline-block header_language">
+      <div class="social-icons" ngbDropdownToggle>
+        <span class="{{ 'language_icon' | translate }}"></span>
+        <div class="label">{{ "language" | translate }}</div>
       </div>
+
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
+        <button ngbDropdownItem class="drop" (click)="switchLang('en')">
+          <div style="display: flex; align-items: center">
+            <div class="db_user">
+              <div class="db_icon_english"></div>
+            </div>
+            <div>{{ "language_en" | translate }}</div>
+          </div>
+        </button>
+        <button ngbDropdownItem class="drop" (click)="switchLang('vi')">
+          <div style="display: flex; align-items: center">
+            <div class="db_user">
+              <div class="db_icon_vietnam"></div>
+            </div>
+            <div>{{ "language_vi" | translate }}</div>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <div class="right-panel">
       <div class="login-form">
         <div id="login-form">
           <div class="small-logo d-flex flex-column justify-content-center">
@@ -43,13 +43,14 @@
           </div>
           <br>
           <div>
-            <h1 style="color: white;">{{ "login" | translate }}</h1>
+            <div class="login">{{ "login" | translate }}</div>
+          </div>
+       
+          <div style="margin-top: 5px;">
+            <div class="infor-login">{{ "infor.login" | translate }}</div>
           </div>
           
-          <div style="padding-bottom: 5px;">
-            <h3 style="color: white;">{{ "infor.login" | translate }}</h3>
-          </div>
-          
+          <br>
           <div class="input-form ng-touched ng-pristine ng-invalid">
             <form class="form-signin" [formGroup]="loginForm">
               <div *ngIf="type == 1" class="form-group note">
@@ -63,7 +64,7 @@
                     id="username"
                     placeholder="{{ 'login.username' | translate }}"
                     formControlName="username"
-                    class="input-text"
+                    class="input-text input-text-login"
                   />
                 </div>
               </div>
@@ -78,7 +79,7 @@
                     [type]="fieldTextType ? 'text' : 'password'"
                     placeholder="{{ 'login.password' | translate }}"
                     formControlName="password"
-                    class="input-text"
+                    class="input-text input-text-login"
                   />
                   <div class="icon-password">
                     <i
@@ -152,23 +153,22 @@
             <!-- SSO -->
           </div>
         </div>
-
-
       </div>
     </div>
-  </div>
-  <div class="slogan" [ngStyle]="getStyleFooter()">
-    <div class="bg-footer-login">
-      <div class="footer-text" style="padding-left: 1%;">
-        <span class="copyright">
-          <img src="../../assets/img/solar_copyright-line-duotone.svg">
-          {{'footer_text' | translate}}
-        </span>
-      </div>
-      <div class="footer-image" style="padding-right: 1%;">
-        <span class="">
-          <img src="../../assets/img/thumb-CeCA.png" style="width: 190px; height: 46px; top: 9px">
-        </span>
+
+    <div class="slogan" [ngStyle]="getStyleFooter()">
+      <div class="bg-footer-login">
+        <div class="footer-text" style="padding-left: 1%;">
+          <span class="copyright">
+            <img src="../../assets/img/solar_copyright-line-duotone.svg">
+            {{'footer_text' | translate}}
+          </span>
+        </div>
+        <div class="footer-image" style="padding-right: 1%;">
+          <span class="">
+            <img src="../../assets/img/thumb-CeCA.png" style="width: 190px; height: 46px; top: 9px">
+          </span>
+        </div>
       </div>
     </div>
   </div>
@@ -177,15 +177,14 @@
 
 
 <div *ngIf="this.mobile == true && !isSSOlogin" class="all">
-  <div>
+  <div [ngStyle]="backgroundLoginMobile()" class="full-height">
     <!-- <div class="left-background-mobile"></div> -->
-    <div [ngStyle]="backgroundLoginMobile()" class="right-panel-mobile">
+    <div class="right-panel-mobile">
       <div ngbDropdown class="d-inline-block header_language">
         <div class="social-icons" ngbDropdownToggle>
           <span class="{{ 'language_icon' | translate }}"></span>
           <div class="label">{{ "language" | translate }}</div>
         </div>
-
         <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
           <button ngbDropdownItem class="drop" (click)="switchLang('en')">
             <div style="display: flex; align-items: center">
@@ -210,27 +209,23 @@
           <div>
             <img
               src="../../assets/img/EClogo.png"
-              width="300px"
+              width="250px"
               style="max-width: 50%; margin-left: 5%;"
             />
           </div>
         </div>
-
-        
+        <br>
         <div class="input-form ng-touched ng-pristine ng-invalid">
           <form class="form-signin_mobile" [formGroup]="loginForm">
             <div>
               <div>
-                <h1 style="color: white;">{{ "login" | translate }}</h1>
-              </div>
-              
-              <div>
-                <h3 style="color: white;">{{ "infor.login" | translate }}</h3>
+                <div class="login">{{ "login" | translate }}</div>
               </div>
             </div>
             <div *ngIf="type == 1" class="form-group note">
               {{ "login.note.user" | translate }}
             </div>
+            <br>
             <div class="form-group" style="padding-bottom: 15px;">
               <div class="input-line">
                 <img src="../../assets/img/user_icon_login.svg" class="input-img" />
@@ -239,7 +234,7 @@
                   id="username"
                   placeholder="{{ 'login.username' | translate }}"
                   formControlName="username"
-                  class="input-text"
+                  class="input-text input-text-login"
                 />
               </div>
             </div>
@@ -251,7 +246,7 @@
                   [type]="fieldTextType ? 'text' : 'password'"
                   placeholder="{{ 'login.password' | translate }}"
                   formControlName="password"
-                  class="input-text"
+                  class="input-text input-text-login"
                 />
                 <div class="icon-password">
                   <i

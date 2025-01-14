@@ -43,6 +43,17 @@ export class ForgotPasswordComponent implements OnInit {
     this.initRegForm();
   }
 
+  backgroundLoginWeb() {
+    let url = environment.apiUrl.replace("/service", "");
+    let loginApp = url + environment.loginWeb;
+    return {
+      'background': `url(${loginApp}) center center`,
+      '-webkit-background-size': 'cover',
+      '-moz-background-size': 'cover',
+      '-o-background-size': 'cover',
+    }
+  }
+  
   sendForgetPassword() {
     let email = this.forgotPasswordForm.value.email;
 

@@ -143,7 +143,21 @@ export class LoginComponent implements OnInit, AfterViewInit {
     let url = environment.apiUrl.replace("/service", "");
     let loginApp = url + environment.loginApp;
     return {
-      'background': `url(${loginApp})`
+      'background': `url(${loginApp})`,
+      '-webkit-background-size': 'cover',
+      '-moz-background-size': 'cover',
+      '-o-background-size': 'cover',
+    }
+  }
+
+  backgroundLoginWeb() {
+    let url = environment.apiUrl.replace("/service", "");
+    let loginApp = url + environment.loginWeb;
+    return {
+      'background': `url(${loginApp}) center center`,
+      '-webkit-background-size': 'cover',
+      '-moz-background-size': 'cover',
+      '-o-background-size': 'cover',
     }
   }
 

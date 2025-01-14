@@ -295,10 +295,11 @@ h3{
   width: 130px;
   height: 38px;
   box-sizing: border-box;
-  color: #0041C4;
-  background: #FFFFFF;
+  color: #FFFFFF;
   font-size: 12px;
   font-weight: 700;
+  box-shadow: 0px 3px 12px 0px #0041C41A;
+  background: #FFFFFF3D;
 }
 
 
@@ -385,4 +386,12 @@ h3{
     height: auto;
     object-fit: contain;
   }
+}
+
+.text-dashboard-theme {
+  color: #E6EDFA;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  padding-top: 12px;
 }
