@@ -22,27 +22,16 @@ export class DeleteConfigDialogComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    console.log("data",this.data);
-    
+
   }
 
-  onSubmit(){
-    // this.systemConfigService.getDeleteApiWebHook(this.data.api_name).subscribe((data) => {
+  onCancel(): void {
+    this.dialogRef.close({ action: 'cancel' }); // Trả về action cancel
+  }
 
-    //   if(data.success === true){
-    //     this.toastService.showSuccessHTMLWithTimeout("Xóa cấu hình webhook thành công!", "", 3000);
-    //     this.dialogRef.close();
-    //   }else{
-    //     this.toastService.showErrorHTMLWithTimeout("Xóa cấu hình webhook không thành công!", "", 3000);
-    //     this.dialogRef.close();
-    //   }
-    // },
-    // error => {
-    //   this.toastService.showErrorHTMLWithTimeout("Lỗi xóa cấu hình webhook", "", 3000);
-    //   this.dialogRef.close();
-    // }
-    // );
-    this.dialogRef.close();
+  // Gửi dữ liệu khi người dùng xóa
+  onDelete(): void {
+    this.dialogRef.close({ action: 'delete' }); // Trả về action delete
   }
 
 }
