@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
@@ -43,14 +43,31 @@ export class ForgotPasswordComponent implements OnInit {
     this.initRegForm();
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.backgroundLoginWeb();
+  }
+
   backgroundLoginWeb() {
     let url = environment.apiUrl.replace("/service", "");
     let loginApp = url + environment.loginWeb;
-    return {
-      'background': `url(${loginApp}) center center`,
-      '-webkit-background-size': 'cover',
-      '-moz-background-size': 'cover',
-      '-o-background-size': 'cover',
+
+    if (window.innerWidth <= 500) {
+      loginApp = url + environment.loginApp;
+    }
+
+    if(window.innerWidth <= 500) {
+      return {
+      'background': `url(${loginApp})`,
+      'background-size': '100% 100%'
+      }
+    } else {
+      return {
+        'background': `url(${loginApp}) center center`,
+        '-webkit-background-size': 'cover',
+        '-moz-background-size': 'cover',
+        '-o-background-size': 'cover',
+      }
     }
   }
   
