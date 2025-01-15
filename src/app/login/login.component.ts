@@ -144,9 +144,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     let loginApp = url + environment.loginApp;
     return {
       'background': `url(${loginApp})`,
-      '-webkit-background-size': 'cover',
-      '-moz-background-size': 'cover',
-      '-o-background-size': 'cover',
+      'background-size': '100% 100%'
     }
   }
 
