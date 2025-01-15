@@ -315,7 +315,8 @@ export class SystemConfigComponent implements OnInit {
           url: selectedResponse.url || '',
           apikey: selectedResponse.apikey || '',
           body: selectedResponse.body ? JSON.stringify(jsonObject, null, 2) : '',
-          orgId: selectedResponse.orgId || ''
+          orgId: selectedResponse.orgId || '',
+          disabled: !!selectedResponse.id,
         });
         
 
