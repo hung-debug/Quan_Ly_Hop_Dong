@@ -42,10 +42,8 @@ export class SystemConfigComponent implements OnInit {
         this.apiKeyExactValidator()
       ]),
       body: this.fbd.control(""),
-      // method: 'POST',
       orgId: this.fbd.control(""),
       checkStatus: [''],
-      // apiListFormArray: this.fbd.array([])
       apiListFormArray: this.fbd.array([this.createFormGroup()])
     });
   }
@@ -66,15 +64,6 @@ export class SystemConfigComponent implements OnInit {
   checkStatus: any;
   checkRole: any;
   idApi: any;
-  // formsArray: any[] = [{
-  //   api: this.fbd.control("", [Validators.required]),
-  //   url: this.fbd.control("", [Validators.required]),
-  //   apikey: this.fbd.control("", [Validators.required]),
-  //   body: this.fbd.control(""),
-  //   // method: 'POST',
-  //   orgId: this.fbd.control("", [Validators.required]),
-  //   // apiListFormArray: this.fbd.array([])
-  // }];
   
   isRoleWebHook: boolean = false;
   addForm: FormGroup;
@@ -99,9 +88,12 @@ export class SystemConfigComponent implements OnInit {
     const listRole = inforRole.permissions;
     
     this.isRoleWebHook = listRole.some((element: any) => element.code == 'CAUHINH_HETHONG');
-    this.getListApiWebHook();
+    await this.getListApiWebHook();
+    if(this.addForm.value.apiListFormArray.length == 0){
+      const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
+      apiListFormArray.push(this.createFormGroup());
+    }
     
-    //parentid null là thằng cha còn có giá trị là thằng con
   }
   
   apiKeyExactValidator(): ValidatorFn {
@@ -128,20 +120,20 @@ export class SystemConfigComponent implements OnInit {
   addNewForm() {
     const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
     apiListFormArray.push(this.createFormGroup());
-    console.log("apiListFormArray111111111",apiListFormArray);
+    // console.log("apiListFormArray111111111",apiListFormArray);
     
-    console.log("apiListFormArraylength",apiListFormArray.length);
+    // console.log("apiListFormArraylength",apiListFormArray.length);
 
   }
 
   async getListApiWebHook() {
     try {
       let getlistApiWebHook =  await this.systemConfigService.getlistApiWebHook().toPromise();
-      console.log("getlistApiWebHook",getlistApiWebHook);
+      // console.log("getlistApiWebHook",getlistApiWebHook);
       
       // this.apiList.push(getlistApiWebHook[0]);
       this.apiList = getlistApiWebHook;
-      console.log("this.apiList",this.apiList);
+      // console.log("this.apiList",this.apiList);
       
       this.apiList = this.apiList.map((item: any) => ({
         id: item.id,
@@ -151,16 +143,17 @@ export class SystemConfigComponent implements OnInit {
         apikey: item.apikey,
         url: item.url,
         orgId: item.orgId,
+        checkStatus:"",
+        disabled: !!item.id,
         ...item,
-        checkStatus:""
       }));
       
       let sampleWebHook = await this.systemConfigService.getSampleApiWebHook().toPromise();
-      console.log("sampleWebHook",sampleWebHook);
+      // console.log("sampleWebHook",sampleWebHook);
       const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
       const formArray = this.addForm.get('apiListFormArray') as FormArray;
-      console.log("formArray",formArray);
-      console.log("22222222222222222",apiListFormArray);
+      // console.log("formArray",formArray);
+      // console.log("22222222222222222",apiListFormArray);
 
       apiListFormArray.clear();
       if(this.apiList.length && (this.apiList[0]?.id || this.apiList[1]?.id)) {
@@ -168,16 +161,16 @@ export class SystemConfigComponent implements OnInit {
         console.log("a",formArray);
       
         this.apiList.forEach(async (api) => {
-          console.log("api", api);
+          // console.log("api", api);
   
           const formGroup = this.fbd.group({
             api: [api ? api : '', Validators.required],
             apikey: [api ? api.apikey : '', [this.apiKeyExactValidator()]],
-            body: [api.body ? JSON.stringify(api.body, null, 2) : 'abc', Validators.required],
+            body: [api.body ? JSON.stringify(api.body, null, 2) : '', Validators.required],
             url: [api ? api.url : '', Validators.required],
             orgId: [api ? api.orgId : ''],
             checkStatus: '',
-            disable: ''
+            disabled: !!api.id,
           });
           if(api.id){
             apiListFormArray.push(formGroup);
@@ -186,18 +179,19 @@ export class SystemConfigComponent implements OnInit {
               apikey: api.apikey,
               body: JSON.stringify(api.body, null, 2),
               url: api.url,
-              orgId: api.orgId
+              orgId: api.orgId,
+              disabled: !!api.id,
             });
             let getlistApiWebHook = await this.systemConfigService.getlistApiWebHook().toPromise();
-            console.log("getlistApiWebHook", getlistApiWebHook);
+            // console.log("getlistApiWebHook", getlistApiWebHook);
           }
           
         });
 
-        console.log("apiListFormArray",apiListFormArray);
+        // console.log("apiListFormArray",apiListFormArray);
 
       } else if(this.apiList[0]?.id === null || this.apiList[1]?.id === null){
-        console.log("b");
+        // console.log("b");
         // this.addForm.patchValue({
         //   api: sampleWebHook[0]?.typeName,
         //   body: sampleWebHook[0]?.body ? JSON.stringify(sampleWebHook[0]?.body, null, 2) : '',
@@ -249,7 +243,7 @@ export class SystemConfigComponent implements OnInit {
     // console.log("sampleWebHook",sampleWebHook);
     // Lấy form group tại chỉ số i
     const formGroup = formArray.at(i) as FormGroup;
-    console.log("formGroup", formGroup);
+    // console.log("formGroup", formGroup);
     const listApi = formGroup.value;
     // this.addForm.value.apiListFormArray.forEach((listApi: any) =>{
     // console.log("listApi",listApi);
@@ -266,18 +260,14 @@ export class SystemConfigComponent implements OnInit {
       url: listApi.url,
       orgId: listApi.api.orgId
     }
-    console.log("dataApi",dataApi);
+    // console.log("dataApi",dataApi);
     if(dataApi.url){
       this.systemConfigService.checkStatusWebHook(dataApi).subscribe(
         async (data) => {
           if(data.success === true){
-            console.log("abc");
-            
             // this.checkStatus = "Thành công";
             formGroup.get('checkStatus')?.setValue('Thành công');
             // this.checkStatus = formGroup.value.checkStatus;
-            console.log("formGroup.get('checkStatus')",formGroup.get('checkStatus' + i));
-            
             // this.getListApiWebHook();
             this.spinner.hide();
           }
@@ -290,7 +280,7 @@ export class SystemConfigComponent implements OnInit {
         }
       )
     }else{
-      console.log("2222222222222')",formGroup.get('checkStatus' + i));
+      // console.log("2222222222222')",formGroup.get('checkStatus' + i));
       // this.checkStatus = "Thất bại";
       formGroup.get('checkStatus')?.setValue('Thất bại');
     }
@@ -300,18 +290,18 @@ export class SystemConfigComponent implements OnInit {
   async onApiChange(event: any, index: any): Promise<void> {
     try {
       let sampleWebHook = await this.systemConfigService.getSampleApiWebHook().toPromise(); // get giá trị mẫu của form
-      console.log("sampleWebHook",sampleWebHook);
+      // console.log("sampleWebHook",sampleWebHook);
       
-      console.log("this.addFor",this.addForm.value);
+      // console.log("this.addFor",this.addForm.value);
       // Kiểm tra giá trị được chọn
       const selectedApi = event.value;
-      console.log("Selected API:", selectedApi);
+      // console.log("Selected API:", selectedApi);
       this.selectedApiWebId = selectedApi.id;
       // Tìm đối tượng trong apiList
       const selectedResponse = this.apiList.find(item => item.id === selectedApi.id);
       this.idApi = selectedResponse.id;
       this.body = selectedResponse.body;
-      console.log("selectedResponse",selectedResponse);
+      // console.log("selectedResponse",selectedResponse);
       let selectedSample = sampleWebHook.find(item => item.typeName == selectedApi.label);
       const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
       
@@ -329,14 +319,12 @@ export class SystemConfigComponent implements OnInit {
         });
         
 
-        console.log("this.apiListthis.apiList",this.apiList);
+        // console.log("this.apiListthis.apiList",this.apiList);
         
-        console.log("Updated FormArray Values:", apiListFormArray.value);
-        console.log("this.addFormmmmm",this.addForm.value);
-        console.log("formGroup",formGroup);
+        // console.log("Updated FormArray Values:", apiListFormArray.value);
+        // console.log("this.addFormmmmm",this.addForm.value);
+        // console.log("formGroup",formGroup);
       } else if (selectedApi?.id === null) {
-        console.log("abc");
-        
         const formattedString = JSON.stringify(selectedSample?.body).replace(/(\w+):/g, '"$1":').replace(/'/g, '"');
         const jsonObject = JSON.parse(formattedString);
         const formGroup = apiListFormArray.at(index) as FormGroup;
@@ -504,9 +492,9 @@ export class SystemConfigComponent implements OnInit {
     const dataApiArray: any[] = [];
     // let cleanStringBody = this.addForm.value.body.replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
       // Kiểm tra toàn bộ danh sách trong apiListFormArray trước
-      console.log("this.addForm.value.apiListFormArray",this.addForm.value.apiListFormArray);
+      // console.log("this.addForm.value.apiListFormArray",this.addForm.value.apiListFormArray);
     const invalidApi = this.addForm.value.apiListFormArray.some((listApi: any) => {
-      console.log("listApi",listApi);
+      // console.log("listApi",listApi);
       
       return listApi.apikey === '';
     });
@@ -520,88 +508,44 @@ export class SystemConfigComponent implements OnInit {
     // }
     // console.log("listApi1", listApi);
     const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
+    // console.log("apiListFormArray", apiListFormArray)
     let successCount = 0; // Đếm số lượng API lưu thành công
     const totalCount = apiListFormArray.controls.length; // Tổng số API
-    console.log("apiListFormArray",apiListFormArray);
-    console.log("totalCount",totalCount);
-
+    // console.log("apiListFormArray11111",apiListFormArray);
+    // console.log("totalCount",totalCount);
+    
     // apiListFormArray.controls.forEach(async(formGroup: any) => {
-      for (const formGroup of apiListFormArray.controls){
+    for (const formGroup of apiListFormArray.controls){
+      // console.log("formGroup ttttt", formGroup)
       const listApi = formGroup.value;
-      console.log("listApi",listApi);
-      console.log("this.addForm.value.apiListFormArray",this.addForm.value.apiListFormArray);
+      //console.log("listApi",listApi);
+      //console.log("this.addForm.value.apiListFormArray",this.addForm.value.apiListFormArray);
       
       if (!listApi.apikey || !listApi.url || !listApi.body) {
+        // formGroup.markAsTouched();
         formGroup.get('checkStatus')?.setValue('Thất bại'); // Đánh dấu trạng thái thất bại
         continue;
       }
       
       let cleanStringBody = JSON.stringify(listApi.api.body).replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
-      console.log("cleanStringBody",cleanStringBody);
+      // console.log("cleanStringBody",cleanStringBody);
+      let body = listApi.api.id ? JSON.parse(cleanStringBody) : JSON.parse(listApi.body);
       const dataApi = {
-        id: listApi.api.id,
+        id: listApi.api?.id,
         type: listApi.api.label,
-        body: JSON.parse(cleanStringBody),
+        // body: JSON.parse(cleanStringBody),
+        body: body,
         apikey: listApi.apikey,
         url: listApi.url,
         orgId: listApi.api.orgId
       }
-      console.log("dataApi",dataApi);
+      //console.log("dataApi",dataApi);
       
-      dataApiArray.push(dataApi);
-      console.log("dataApiArray",dataApiArray);
-      // if (!listApi.apikey) {
-      //   formGroup.get('checkStatus')?.setValue('Thất bại');
-      //   // this.toastService.showErrorHTMLWithTimeout('Kết nối API thất bại vì thiếu API key!', "", 3000);
-      //   return;
-      // }
-    
-      // if (this.addForm.invalid || listApi.apikey === '') {
-      //   this.toastService.showErrorHTMLWithTimeout('Kết nối API thất bại 1', "", 3000);
-      //   return;
-      // }
+      // dataApiArray.push(dataApi);
+      // console.log("dataApiArray",dataApiArray);
+
       this.spinner.show();
-      // if(dataApi.id){
-      //   const data = await this.systemConfigService.checkStatusWebHook(dataApi).toPromise();
-        
-        
-      //   this.systemConfigService.checkStatusWebHook(dataApi).subscribe(
-      //     async (data) => {
-      //       console.log("dataApi1",dataApi);
-      //       if(data.success === true){
-      //         // this.checkStatus = "Thành công";
-      //         formGroup.get('checkStatus')?.setValue('Thành công');
-      //         this.spinner.hide();
-      //         this.systemConfigService.getUpdateApiWebHook(dataApi).subscribe(
-      //           async (data) => {
-      //             this.toastService.showSuccessHTMLWithTimeout('Cập nhật cấu hình webhook tổ chức thành công!1', "", 3000);
-      //             this.spinner.hide();
-      //           }, error => {
-      //             this.toastService.showErrorHTMLWithTimeout('Lỗi cập nhật cấu hình webhook tổ chức1', "", 3000);
-      //             this.spinner.hide();
-      //           }
-      //         )
-      //       }
-  
-      //     }, error => {
-      //       // this.checkStatus = "Thất bại"
-      //       formGroup.get('checkStatus')?.setValue('Thất bại');
-      //       this.toastService.showErrorHTMLWithTimeout('Kết nối API thất bại2', "", 3000);
-      //       this.spinner.hide();
-      //     }
-      //   )
-  
-      // }else{
-      //   this.systemConfigService.getAddApIWebHook(dataApi).subscribe(
-      //     async (data) => {
-      //       this.toastService.showSuccessHTMLWithTimeout('Thêm mới cấu hình webhook tổ chức thành công!3', "", 3000);
-            
-      //     }, error => {
-      //       this.toastService.showErrorHTMLWithTimeout('Lỗi thêm mới cấu hình webhook tổ chức4', "", 3000);
-      //       this.spinner.hide();
-      //     }
-      //   )
-      // }
+
       try {
         // Nếu có `id`, gọi API cập nhật
         if (dataApi.id) {
@@ -617,15 +561,58 @@ export class SystemConfigComponent implements OnInit {
           }
         } else {
           // Nếu không có `id`, gọi API thêm mới
-          await this.systemConfigService.getAddApIWebHook(dataApi).toPromise();
-          formGroup.get('checkStatus')?.setValue('Thành công');
-          successCount++;
+          let addedApi = await this.systemConfigService.getAddApIWebHook(dataApi).toPromise();
+          // formGroup.get('checkStatus')?.setValue('Thành công');
+          // successCount++;
+          // console.log("formGroup",formGroup);
+          // console.log("formGroup.get('api')",formGroup.get('api'));
+          // console.log("addedApi",addedApi);
+          let stringBody = JSON.stringify(addedApi.body).replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
+          // console.log("stringBody",stringBody);
+          const parsedBody = JSON.parse(stringBody);
+          const formattedBody = JSON.stringify(parsedBody, null, 2);
+          let bodyApi = JSON.parse(stringBody)
+          // console.log("bodyApi",bodyApi);
+          // if (addedApi && addedApi.id) {
+            // formGroup.value.patchValue({
+            //   // api: {
+            //     // ...listApi.api,
+            //     // id: addedApi.id,
+            //   // },
+            //   id: addedApi.id, // Cập nhật `id` mới từ server
+            //   url: addedApi.url,
+            //   apikey: addedApi.apikey,
+            //   // body: JSON.parse(addedApi.body),
+            //   body: formattedBody
+            // });
+            formGroup.value.api.id = addedApi.id;
+            formGroup.value.api.body = addedApi.body;
+            formGroup.value.api.url = addedApi.url;
+            formGroup.value.api.apikey = addedApi.apikey;
+            
+            // console.log("formGroup ttttt", formGroup)
+            // console.log("addedApi.id", addedApi.id)
+          //   //apiListFormArray.push(data)
+            
+          //   console.log("formGroup",formGroup);
+            
+          //   // let updateApi = await this.systemConfigService.getUpdateApiWebHook(addedApi).toPromise();
+          //   // console.log("updateApi",updateApi);
+          //   // dataApi.id = updateApi.id;
+          //   // console.log("dataApi456",dataApi);
+            formGroup.get('checkStatus')?.setValue('Thành công');
+            successCount++;
+          //   console.log("apiListFormArrayapiListFormArray",apiListFormArray)
+          // } else {
+          //   formGroup.get('checkStatus')?.setValue('Thất bại');
+          // }
         }
       } catch (error) {
+        console.log("error",error); 
         formGroup.get('checkStatus')?.setValue('Thất bại');
       }
-    // })
-  }
+      // })
+    }
     this.spinner.hide();
     if (successCount === totalCount) {
       this.toastService.showSuccessHTMLWithTimeout(
@@ -708,8 +695,8 @@ export class SystemConfigComponent implements OnInit {
     // Lấy form group tại chỉ số i
     const formGroup = formArray.at(i) as FormGroup;
     const listApi = formGroup.value;
-    console.log("listApi1", listApi);
-    console.log("listApi.api",listApi.api);
+    // console.log("listApi1", listApi);
+    // console.log("listApi.api",listApi.api);
     
     if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       data = {
@@ -733,64 +720,60 @@ export class SystemConfigComponent implements OnInit {
     })
     dialogRef.afterClosed().subscribe((result: any) => {
       const formArrayLength = formArray.length;
-      if (formArrayLength > 1) {
-        if(listApi.api.id){
-          // Trường hợp có nhiều form => Xóa cả dữ liệu và form
+      if(result?.action === 'delete'){
+        if (formArrayLength > 1) {
+          if(listApi.api.id){
+            // Trường hợp có nhiều form => Xóa cả dữ liệu và form
+            this.systemConfigService.getDeleteApiWebHook(listApi.api.type).subscribe(
+              (data) => {
+                if (data.success) {
+                  this.toastService.showSuccessHTMLWithTimeout("Xóa cấu hình webhook thành công!", "", 3000);
+                  formArray.removeAt(i); // Xóa form khỏi FormArray
+                  this.getListApiWebHook();
+                } else {
+                  this.toastService.showErrorHTMLWithTimeout("Xóa cấu hình webhook không thành công!", "", 3000);
+                }
+              },
+              (error) => {
+                this.toastService.showErrorHTMLWithTimeout("Lỗi xóa cấu hình webhook!", "", 3000);
+              }
+            );
+          }else{
+            formArray.removeAt(i);
+          }
+  
+        } else {
+          console.log("b");
+          // Trường hợp chỉ còn 1 form => Chỉ xóa dữ liệu
           this.systemConfigService.getDeleteApiWebHook(listApi.api.type).subscribe(
             (data) => {
               if (data.success) {
-                this.toastService.showSuccessHTMLWithTimeout("Xóa cấu hình webhook thành công!", "", 3000);
-                formArray.removeAt(i); // Xóa form khỏi FormArray
-                this.updateFormIndexes();
-                this.getListApiWebHook();
+                this.toastService.showSuccessHTMLWithTimeout("Xóa dữ liệu webhook thành công!", "", 3000);
+  
+                // Reset dữ liệu trong form thay vì xóa form
+                formGroup.reset({
+                  apikey: '',
+                  url: '',
+                  body: '',
+                });
+                // this.getListApiWebHook();
+                // this.ensureAtLeastOneEmptyForm();
               } else {
-                this.toastService.showErrorHTMLWithTimeout("Xóa cấu hình webhook không thành công!", "", 3000);
+                this.toastService.showErrorHTMLWithTimeout("Xóa dữ liệu webhook không thành công!", "", 3000);
               }
             },
             (error) => {
-              this.toastService.showErrorHTMLWithTimeout("Lỗi xóa cấu hình webhook!", "", 3000);
+              this.toastService.showErrorHTMLWithTimeout("Lỗi xóa dữ liệu webhook!", "", 3000);
             }
           );
-        }else{
-          formArray.removeAt(i);
-          this.updateFormIndexes();
         }
-
       } else {
-        // Trường hợp chỉ còn 1 form => Chỉ xóa dữ liệu
-        this.systemConfigService.getDeleteApiWebHook(listApi.api.type).subscribe(
-          (data) => {
-            if (data.success) {
-              this.toastService.showSuccessHTMLWithTimeout("Xóa dữ liệu webhook thành công!", "", 3000);
-
-              // Reset dữ liệu trong form thay vì xóa form
-              formGroup.reset({
-                apikey: '',
-                url: '',
-                body: '',
-              });
-              this.getListApiWebHook();
-            } else {
-              this.toastService.showErrorHTMLWithTimeout("Xóa dữ liệu webhook không thành công!", "", 3000);
-            }
-          },
-          (error) => {
-            this.toastService.showErrorHTMLWithTimeout("Lỗi xóa dữ liệu webhook!", "", 3000);
-          }
-        );
+        console.log("avbc");
+        
+        return
       }
+
     });
-  }
-  
-  updateFormIndexes(): void {
-    const formArray = this.addForm.get('apiListFormArray') as FormArray;
-  
-    formArray.controls.forEach((formGroup, index) => {
-      // Nếu có bất kỳ dữ liệu hoặc logic liên quan đến `index`, cập nhật tại đây
-      formGroup.patchValue({ index });
-    });
-  
-    this.cdr.detectChanges(); // Cập nhật giao diện
   }
   
 }

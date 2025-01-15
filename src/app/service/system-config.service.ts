@@ -110,6 +110,7 @@ export class SystemConfigService {
       .append('Authorization', 'Bearer ' + this.token);
       
     const bodyAdd = JSON.stringify({
+      id: dataWebHook.id,
       type: dataWebHook.type,
       url: dataWebHook.url,
       apikey: dataWebHook.apikey,
