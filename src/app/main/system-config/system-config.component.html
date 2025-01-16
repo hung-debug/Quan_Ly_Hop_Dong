@@ -8,7 +8,7 @@
             <div class="dropdown-container">
               <p-dropdown 
                 panelStyleClass="font"
-                [options]="apiList" 
+                [options]="getFilteredOptions(i)" 
                 formControlName="api" 
                 optionLabel="label" 
                 (onChange)="onApiChange($event, i)"

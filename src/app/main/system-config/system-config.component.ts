@@ -125,7 +125,7 @@ export class SystemConfigComponent implements OnInit {
     // console.log("apiListFormArraylength",apiListFormArray.length);
 
   }
-
+  selectedLabels: string[] = [];
   async getListApiWebHook() {
     try {
       let getlistApiWebHook =  await this.systemConfigService.getlistApiWebHook().toPromise();
@@ -144,7 +144,7 @@ export class SystemConfigComponent implements OnInit {
         url: item.url,
         orgId: item.orgId,
         checkStatus:"",
-        disabled: !!item.id,
+        // disabled: !!item.id,
         ...item,
       }));
       
@@ -170,7 +170,7 @@ export class SystemConfigComponent implements OnInit {
             url: [api ? api.url : '', Validators.required],
             orgId: [api ? api.orgId : ''],
             checkStatus: '',
-            disabled: !!api.id,
+            // disabled: !!api.id,
           });
           if(api.id){
             apiListFormArray.push(formGroup);
@@ -180,7 +180,7 @@ export class SystemConfigComponent implements OnInit {
               body: JSON.stringify(api.body, null, 2),
               url: api.url,
               orgId: api.orgId,
-              disabled: !!api.id,
+              // disabled: !!api.id,
             });
             let getlistApiWebHook = await this.systemConfigService.getlistApiWebHook().toPromise();
             // console.log("getlistApiWebHook", getlistApiWebHook);
@@ -219,6 +219,17 @@ export class SystemConfigComponent implements OnInit {
     } catch (error) {
       console.log("error", error)
     }
+  }
+  
+  getFilteredOptions(index: number): any[] {
+    const formArray = this.addForm.get('apiListFormArray') as FormArray;
+    const selectedValues = formArray.controls.map((control, i) => {
+      // Lấy giá trị đã chọn từ các form khác
+      return i !== index ? control.value.api?.label : null;
+    }).filter(label => label); // Lọc giá trị không hợp lệ
+  
+    // Lọc bỏ các giá trị đã chọn
+    return this.apiList.filter(option => !selectedValues.includes(option.label));
   }
 
   populateFormArray() {
@@ -305,6 +316,12 @@ export class SystemConfigComponent implements OnInit {
       let selectedSample = sampleWebHook.find(item => item.typeName == selectedApi.label);
       const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
       
+      const selectedLabel = event.value.label;
+      // Thêm giá trị vào danh sách đã chọn nếu không tồn tại
+      if (!this.selectedLabels.includes(selectedLabel)) {
+        this.selectedLabels.push(selectedLabel);
+      }
+      
       if (selectedResponse.id) {
         const formGroup = apiListFormArray.at(index) as FormGroup;
         
@@ -316,7 +333,7 @@ export class SystemConfigComponent implements OnInit {
           apikey: selectedResponse.apikey || '',
           body: selectedResponse.body ? JSON.stringify(jsonObject, null, 2) : '',
           orgId: selectedResponse.orgId || '',
-          disabled: !!selectedResponse.id,
+          // disabled: !!selectedResponse.id,
         });
         
 
@@ -517,7 +534,7 @@ export class SystemConfigComponent implements OnInit {
     
     // apiListFormArray.controls.forEach(async(formGroup: any) => {
     for (const formGroup of apiListFormArray.controls){
-      // console.log("formGroup ttttt", formGroup)
+      console.log("formGroup ttttt", formGroup)
       const listApi = formGroup.value;
       //console.log("listApi",listApi);
       //console.log("this.addForm.value.apiListFormArray",this.addForm.value.apiListFormArray);
@@ -590,8 +607,10 @@ export class SystemConfigComponent implements OnInit {
             formGroup.value.api.body = addedApi.body;
             formGroup.value.api.url = addedApi.url;
             formGroup.value.api.apikey = addedApi.apikey;
-            
-            // console.log("formGroup ttttt", formGroup)
+            // if(formGroup.value.api.id){
+            //   formGroup.value.api.disabled = true;
+            // }
+            console.log("formGroup 111111", formGroup)
             // console.log("addedApi.id", addedApi.id)
           //   //apiListFormArray.push(data)
             
@@ -730,6 +749,7 @@ export class SystemConfigComponent implements OnInit {
                 if (data.success) {
                   this.toastService.showSuccessHTMLWithTimeout("Xóa cấu hình webhook thành công!", "", 3000);
                   formArray.removeAt(i); // Xóa form khỏi FormArray
+                  console.log("formGroup12",formGroup);
                   this.getListApiWebHook();
                 } else {
                   this.toastService.showErrorHTMLWithTimeout("Xóa cấu hình webhook không thành công!", "", 3000);
@@ -752,7 +772,30 @@ export class SystemConfigComponent implements OnInit {
                 this.toastService.showSuccessHTMLWithTimeout("Xóa dữ liệu webhook thành công!", "", 3000);
   
                 // Reset dữ liệu trong form thay vì xóa form
+                // formGroup.reset({
+                //   id:'',
+                //   apikey: '',
+                //   url: '',
+                //   body: '',
+                //   disabled: false
+                // });
+                // formGroup.value.api.id = '';
+                // formGroup.value.api.body = '';
+                // formGroup.value.api.url = '';
+                // formGroup.value.api.apikey = '';
+
+                // formGroup.value.body = '';
+                // formGroup.value.url = '';
+                // formGroup.value.apikey = '';
+                // if(formGroup.value.id){
+                //   formGroup.value.api.disabled = true;
+                // }else{
+                //   formGroup.value.api.disabled = false;
+                // }
+                console.log("formGroup",formGroup);
+                // Reset dữ liệu trong form thay vì xóa form
                 formGroup.reset({
+                  id:'',
                   apikey: '',
                   url: '',
                   body: '',
