@@ -64,7 +64,7 @@ export class SystemConfigComponent implements OnInit {
   checkStatus: any;
   checkRole: any;
   idApi: any;
-  
+  selectedApiBeforeChange: any;
   isRoleWebHook: boolean = false;
   addForm: FormGroup;
   submitted = false;
@@ -158,7 +158,6 @@ export class SystemConfigComponent implements OnInit {
       apiListFormArray.clear();
       if(this.apiList.length && (this.apiList[0]?.id || this.apiList[1]?.id)) {
         const formArray = this.addForm.get('apiListFormArray') as FormArray;
-        console.log("a",formArray);
       
         this.apiList.forEach(async (api) => {
           // console.log("api", api);
@@ -298,22 +297,32 @@ export class SystemConfigComponent implements OnInit {
   }
   
   selectedApiWebId: number | null = null;
+
+  onDropdownShow(i: number): void {
+    // Ép kiểu AbstractControl thành FormArray
+    const formArray = this.addForm.get('apiListFormArray') as FormArray;
+  
+    // Lấy giá trị của dropdown tại vị trí index i
+    this.selectedApiBeforeChange = formArray?.at(i)?.get('api')?.value;
+  }
+  
   async onApiChange(event: any, index: any): Promise<void> {
     try {
+      console.log("this.selectedApiBeforeChange", this.selectedApiBeforeChange)
       let sampleWebHook = await this.systemConfigService.getSampleApiWebHook().toPromise(); // get giá trị mẫu của form
-      // console.log("sampleWebHook",sampleWebHook);
-      
-      // console.log("this.addFor",this.addForm.value);
-      // Kiểm tra giá trị được chọn
       const selectedApi = event.value;
+
+      // Debug hoặc thực hiện logic với allControls
+
       // console.log("Selected API:", selectedApi);
-      this.selectedApiWebId = selectedApi.id;
+      this.selectedApiWebId = selectedApi?.id;
       // Tìm đối tượng trong apiList
-      const selectedResponse = this.apiList.find(item => item.id === selectedApi.id);
+      const selectedResponse = this.apiList.find(item => item.id === selectedApi?.id);
+      console.log("selectedResponse", selectedResponse)
       this.idApi = selectedResponse.id;
       this.body = selectedResponse.body;
       // console.log("selectedResponse",selectedResponse);
-      let selectedSample = sampleWebHook.find(item => item.typeName == selectedApi.label);
+      let selectedSample = sampleWebHook.find(item => item.typeName == selectedApi?.label);
       const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
       
       const selectedLabel = event.value.label;
@@ -327,33 +336,80 @@ export class SystemConfigComponent implements OnInit {
         
         const formattedString = JSON.stringify(selectedResponse.body).replace(/(\w+):/g, '"$1":').replace(/'/g, '"');
         const jsonObject = JSON.parse(formattedString);
+        console.log("11111")
         formGroup.patchValue({
           label: selectedResponse.api || '',
           url: selectedResponse.url || '',
           apikey: selectedResponse.apikey || '',
           body: selectedResponse.body ? JSON.stringify(jsonObject, null, 2) : '',
           orgId: selectedResponse.orgId || '',
-          // disabled: !!selectedResponse.id,
         });
-        
-
-        // console.log("this.apiListthis.apiList",this.apiList);
-        
-        // console.log("Updated FormArray Values:", apiListFormArray.value);
-        // console.log("this.addFormmmmm",this.addForm.value);
-        // console.log("formGroup",formGroup);
       } else if (selectedApi?.id === null) {
-        const formattedString = JSON.stringify(selectedSample?.body).replace(/(\w+):/g, '"$1":').replace(/'/g, '"');
+        //replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
+        // const formattedString = JSON.stringify(selectedSample?.body).replace(/(\w+):/g, '"$1":').replace(/'/g, '"');
+        const formattedString = JSON.stringify(selectedSample?.body).replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
+        console.log("formattedString",formattedString);
+        console.log("selectedSample?.body",selectedSample?.body);
+        
         const jsonObject = JSON.parse(formattedString);
+        console.log("jsonObject",jsonObject);
+        
         const formGroup = apiListFormArray.at(index) as FormGroup;
         const sampleBody = selectedSample?.body 
           ? JSON.stringify(jsonObject, null, 2) 
           : '';
           
+          console.log("2222")
+          console.log("sampleBody", sampleBody)
         formGroup.patchValue({
           body: sampleBody,
         })
+        let FormBody = {
+          "contractId": 9637,
+          "recipient": [
+            {
+              "role": "Người điều phối",
+              "recipient": "recipient1@example.com",
+              "status": "Đang xử lý"
+            },
+            {
+              "role": "Người xem xét",
+              "recipient": "recipient2@example.com",
+              "status": "Đang xử lý"
+            },
+            {
+              "role": "Người ký",
+              "recipient": "recipient3@example.com",
+              "status": "Đang xử lý"
+            },
+            {
+              "role": "Văn thư",
+              "recipient": "recipient4@example.com",
+              "status": "Đang xử lý"
+            }
+          ]
+        }
+        if(this.selectedApiBeforeChange.id) {
+          console.log("this.selectedApiBeforeChange", this.selectedApiBeforeChange)
+          formGroup.controls.api.value.id = this.selectedApiBeforeChange.id;
+          formGroup.controls.api.value.body = sampleBody
+          formGroup.controls.api.value.type = selectedResponse.type;
+          formGroup.controls.api.value.apikey = selectedResponse.apikey;
+          formGroup.controls.api.value.url = selectedResponse.url;
+          formGroup.value.api.id = this.selectedApiBeforeChange.id;
+          formGroup.controls.api.value.label = selectedResponse.label;
+        }
+console.log("formGroup", formGroup)
+        // formGroup.controls.patchValue({
+        //   body: sampleBody,
+        // })
+        // formGroup.value.api.id = addedApi.id;
+        // formGroup.value.api.body = addedApi.body;
+        // formGroup.value.api.url = addedApi.url;
+        // formGroup.value.api.apikey = addedApi.apikey;
+        console.log("formGroup", formGroup)
       }else {
+        console.log("3333")
         this.addForm.patchValue({
           body: '',
           apikey: '',
@@ -475,7 +531,6 @@ export class SystemConfigComponent implements OnInit {
   validateApiKey(event: Event): void {
     const inputElement = event.target as HTMLTextAreaElement;
     const value = inputElement.value;
-    // Cập nhật giá trị trong FormControl
     this.addForm.get("apikey")?.setValue(inputElement.value);
   }
   
@@ -536,7 +591,7 @@ export class SystemConfigComponent implements OnInit {
     for (const formGroup of apiListFormArray.controls){
       console.log("formGroup ttttt", formGroup)
       const listApi = formGroup.value;
-      //console.log("listApi",listApi);
+      console.log("listApi",listApi);
       //console.log("this.addForm.value.apiListFormArray",this.addForm.value.apiListFormArray);
       
       if (!listApi.apikey || !listApi.url || !listApi.body) {
@@ -545,9 +600,14 @@ export class SystemConfigComponent implements OnInit {
         continue;
       }
       
-      let cleanStringBody = JSON.stringify(listApi.api.body).replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
-      // console.log("cleanStringBody",cleanStringBody);
-      let body = listApi.api.id ? JSON.parse(cleanStringBody) : JSON.parse(listApi.body);
+      let cleanStringBody = JSON.stringify(listApi.api.body).replace(/(\w+):/g, '"$1":').replace(/'/g, '"');
+      console.log("JSON.parse(cleanStringBody)",JSON.parse(listApi.api.body));
+      console.log("JSON.parse(listApi.body)",JSON.parse(listApi.body));
+      
+      console.log("cleanStringBody",cleanStringBody);
+      let body = listApi.api.id ? JSON.parse(listApi.api.body) : JSON.parse(listApi.body);
+      console.log("body",body);
+      
       const dataApi = {
         id: listApi.api?.id,
         type: listApi.api.label,
@@ -704,7 +764,7 @@ export class SystemConfigComponent implements OnInit {
     //     }
     //   )
     // }
-
+    await this.getListApiWebHook();
 
   }
   

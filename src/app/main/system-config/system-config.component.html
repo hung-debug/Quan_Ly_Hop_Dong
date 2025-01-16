@@ -14,6 +14,7 @@
                 (onChange)="onApiChange($event, i)"
                 optionDisabled="disabled"
                 placeholder="{{'choose.api' | translate}}" 
+                (onShow)="onDropdownShow(i)"
                 ></p-dropdown>
             </div>
             <!-- <div *ngIf="submitted && f.api.errors">
