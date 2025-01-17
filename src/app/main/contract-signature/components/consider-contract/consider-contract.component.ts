@@ -1530,7 +1530,7 @@ export class ConsiderContractComponent
       //check so hop dong da ton tai hay chua
       this.spinner.show();
       try {
-        let res: any = await this.contractService.checkCodeUniqueSign(this.contractNoValueSign?.trim(),this.idContract).toPromise()
+        let res: any = await this.contractService.checkCodeUniqueSign(this.contractNoValueSign?.trim(), this.idContract,this.orgId).toPromise()
         if (res.success) {
           this.spinner.hide();
         } else {
@@ -1542,7 +1542,7 @@ export class ConsiderContractComponent
         this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số tài liệu', "", 3000);
         this.spinner.hide();
         return false;
-      }  
+      } 
     } 
     this.contractService.getRemoteSigningCurrentStatus(this.recipientId).subscribe(
       (res) => {

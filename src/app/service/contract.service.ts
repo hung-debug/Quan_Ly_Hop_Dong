@@ -1867,14 +1867,15 @@ export class ContractService {
       .pipe();
   }
 
-  checkCodeUniqueSign(code: string, contractId: any): Observable<any> {
+  checkCodeUniqueSign(code: string, contractId: any, orgID?: any): Observable<any> {
+    let org_ID = orgID ? orgID : this.organization_id
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       code: code,
-      organization_id: this.organization_id,
+      organization_id: org_ID,
       contract_id: contractId
     });
     return this.http
