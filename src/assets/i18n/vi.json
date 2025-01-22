@@ -963,5 +963,6 @@
   "delete.config.question" : "Bạn có chắc chắn muốn xóa cấu hình không?",
   "person_cc": "NGƯỜI ĐƯỢC CC",
   "search.code.number.name.1": "Mã TL, Số TL, Tên TL",
-  "liquidated": "Thanh lý"
+  "liquidated": "Thanh lý",
+  "text.select.note": "(hình ảnh nền có định dạng PNG với nền trong suốt)" 
 }

@@ -939,5 +939,6 @@
   "delete.config.question" : "Are you sure you want to delete this config?",
   "person_cc": "PERSON CC",
   "search.code.number.name.1": "Doc code/number/name",
-  "liquidated": "Liquidated"
+  "liquidated": "Liquidated",
+  "text.select.note": "(the background image is in PNG format with a transparent background)" 
 }
