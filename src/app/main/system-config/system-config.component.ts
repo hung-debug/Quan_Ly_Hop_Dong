@@ -258,6 +258,32 @@ export class SystemConfigComponent implements OnInit {
     this.selectedApiBeforeChange = formArray?.at(i)?.get('api')?.value;
   }
   
+  formatBodyIfNeeded(input: any) {
+    // Kiểm tra nếu input là chuỗi thì chuyển thành object
+    if (typeof input === "string") {
+      try {
+        input = JSON.parse(input); // Parse chuỗi JSON
+      } catch (e) {
+        console.error("Input không phải JSON hợp lệ:", e);
+        return null; // Trả về null nếu không hợp lệ
+      }
+    }
+  
+    // Nếu input là object và có key 'recipient' là mảng
+    if (input && input.recipient && Array.isArray(input.recipient)) {
+      return {
+        contractId: input.contractId || null, // Giữ nguyên contractId nếu có
+        recipient: input.recipient.map((item: any) => {
+          // Giữ nguyên tất cả các trường của mỗi đối tượng trong recipient
+          return { ...item };
+        })
+      };
+    }
+  
+    // Nếu không cần format hoặc input không hợp lệ
+    return input;
+  }
+
   async onApiChange(event: any, index: any): Promise<void> {
     try {
       // console.log("this.selectedApiBeforeChange1111111", this.selectedApiBeforeChange);
@@ -290,7 +316,7 @@ export class SystemConfigComponent implements OnInit {
 
         let body = formGroup.controls.api.value.body || '';
         const currentLabel = formGroup.controls.api.value.label || '';
-
+        body = this.formatBodyIfNeeded(body);
           formGroup.patchValue({
             // label: selectedResponse.api || '',
             // url: selectedResponse.url || '',
