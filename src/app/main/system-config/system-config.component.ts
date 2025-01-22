@@ -312,11 +312,12 @@ export class SystemConfigComponent implements OnInit {
         
         const formattedString = JSON.stringify(selectedResponse.body).replace(/(\w+):/g, '"$1":').replace(/'/g, '"');
 
-        const jsonObject = JSON.parse(formattedString);
+        let jsonObject = JSON.parse(formattedString);
 
         let body = formGroup.controls.api.value.body || '';
         const currentLabel = formGroup.controls.api.value.label || '';
         body = this.formatBodyIfNeeded(body);
+        jsonObject = this.formatBodyIfNeeded(jsonObject);
           formGroup.patchValue({
             // label: selectedResponse.api || '',
             // url: selectedResponse.url || '',
