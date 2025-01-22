@@ -68,7 +68,9 @@ export class SystemConfigComponent implements OnInit {
   isRoleWebHook: boolean = false;
   addForm: FormGroup;
   submitted = false;
-  id: any
+  id: any;
+  submittedForms: boolean[] = [];
+  
   get f() { return this.addForm.controls; }
 
   async ngOnInit(): Promise<void> {
@@ -86,6 +88,8 @@ export class SystemConfigComponent implements OnInit {
     this.checkRole = infoUser.organization.parent_id;
     const inforRole = await this.roleService.getRoleById(infoUser.role_id).toPromise();
     const listRole = inforRole.permissions;
+    const formArray = this.addForm.get('apiListFormArray') as FormArray;
+    this.submittedForms = new Array(formArray.length).fill(false);
     
     this.isRoleWebHook = listRole.some((element: any) => element.code == 'CAUHINH_HETHONG');
     await this.getListApiWebHook();
@@ -125,7 +129,7 @@ export class SystemConfigComponent implements OnInit {
     const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
     apiListFormArray.push(this.createFormGroup());
     this.isAddForm = true;
-
+    this.submittedForms.push(false);
   }
   selectedLabels: string[] = [];
   async getListApiWebHook() {
@@ -208,9 +212,19 @@ export class SystemConfigComponent implements OnInit {
     return this.apiListFormArray.at(index) as FormGroup;
   }
   isFieldInvalid(index: number, field: string): any {
-    const formGroup = this.getFormGroup(index);
+    // const formGroup = this.getFormGroup(index);
+    // const control = formGroup.get(field);
+    // return control?.invalid && (control.dirty || control.touched || this.submitted);
+    const formArray = this.addForm.get('apiListFormArray') as FormArray;
+    const formGroup = formArray.at(index) as FormGroup;
     const control = formGroup.get(field);
-    return control?.invalid && (control.dirty || control.touched || this.submitted);
+// console.log("control",control);
+
+    // Kiểm tra trạng thái submitted hoặc touched/dirty cho form cụ thể
+    return (
+      control?.invalid && 
+      (control?.touched || control?.dirty || this.submittedForms[index])
+    );
   }
   
   async checkStatusApiWebHook(i: number){
@@ -220,7 +234,7 @@ export class SystemConfigComponent implements OnInit {
 
     const listApi = formGroup.value;
 
-    let cleanStringBody = JSON.stringify(listApi?.api?.body).replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
+    let cleanStringBody = JSON.stringify(listApi?.api?.body).replace(/(\w+):/g, '"$1":').replace(/'/g, '"');
 
     let body = listApi.api.id ? JSON.parse(cleanStringBody) : JSON.parse(listApi.body);
 
@@ -413,10 +427,35 @@ export class SystemConfigComponent implements OnInit {
         });
         // console.log("apiListFormArray.controls[1].value.api.id",apiListFormArray.controls[1].value.api.id);
       }
-      
-      
     }
+    this.submittedForms = this.addForm.value.apiListFormArray.map(() => true);
+    const formArray = this.addForm.get('apiListFormArray') as FormArray;
+    // console.log("form",formArray);
     
+      // Kiểm tra tính hợp lệ của từng form
+    let hasInvalidForm = false;
+    formArray.controls.forEach((control, index) => {
+      const formGroup = control as FormGroup;
+      if (formGroup.invalid) {
+        hasInvalidForm = true;
+    
+        // Kích hoạt trạng thái `touched` cho tất cả các control trong formGroup
+        Object.keys(formGroup.controls).forEach((key) => {
+          const control = formGroup.get(key);
+          control?.markAsTouched(); // Đánh dấu là "touched"
+          control?.updateValueAndValidity(); // Cập nhật trạng thái hợp lệ
+        });
+    
+        // console.log(`Form tại chỉ số ${index} không hợp lệ:`, formGroup.value);
+      }
+    });
+
+    if (hasInvalidForm) {
+      // Có ít nhất một form không hợp lệ
+      // console.log('Có lỗi trong các form, không thể lưu');
+      this.apiKeyExactValidator()
+      return;
+    }
     let successCount = 0; // Đếm số lượng API lưu thành công
     const totalCount = apiListFormArray.controls.length; // Tổng số API
 
@@ -431,11 +470,12 @@ export class SystemConfigComponent implements OnInit {
       }
       
       let body = listApi.api.id ? listApi.api.body : JSON.parse(listApi.body);
+      let bodyData = this.formatBodyIfNeeded(body);
       const dataApi = {
         id: listApi.api?.id,
         type: listApi.api.label,
         // body: JSON.parse(cleanStringBody),
-        body: listApi.api.label == 'GET_CONTRACT_STATUS' ? body : JSON.parse(listApi.body),
+        body: listApi.api.label == 'GET_CONTRACT_STATUS' ? bodyData : JSON.parse(listApi.body),
         apikey: listApi.apikey,
         url: listApi.url,
         orgId: listApi.api.orgId

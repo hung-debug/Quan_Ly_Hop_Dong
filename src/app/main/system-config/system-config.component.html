@@ -19,7 +19,10 @@
             </div>
             <div *ngIf="submitted && f.url.errors">
               <div *ngIf="isFieldInvalid(i, 'api')">
-                <small class="text-danger">{{'api.is.required' | translate}}</small>
+                <div *ngIf="form.get('api')?.errors?.['required']">
+                  <small class="text-danger">{{'api.is.required' | translate}}</small>
+                </div>
+                
               </div>
             </div>
 
@@ -67,7 +70,7 @@
                     <small class="text-danger" *ngIf="f.apikey.errors['length']">API Key phải đúng 36 ký tự.</small>
                     <small class="text-danger" *ngIf="f.apikey.errors['whitespace']">API Key không được chứa khoảng trắng.</small>
                   </div>
-                  <div *ngIf="f.apikey.value === '' && (f.apikey.touched || f.apikey.dirty)">
+                  <div *ngIf="(f.apikey.value === '' && (f.apikey.touched || f.apikey.dirty))">
                     <small class="text-danger">API Key không được phép bỏ trống</small>
                   </div>
                 </div>
