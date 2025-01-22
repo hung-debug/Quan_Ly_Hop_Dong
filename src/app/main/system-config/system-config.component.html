@@ -17,12 +17,12 @@
                 (onShow)="onDropdownShow(i)"
                 ></p-dropdown>
             </div>
-            <!-- <div *ngIf="submitted && f.api.errors">
-              <small class="text-danger" *ngIf="f.api.errors['required']">{{'api.is.required' | translate}}</small>
-            </div> -->
-            <div *ngIf="isFieldInvalid(i, 'api')">
-              <small class="text-danger">{{'api.is.required' | translate}}</small>
+            <div *ngIf="submitted && f.url.errors">
+              <div *ngIf="isFieldInvalid(i, 'api')">
+                <small class="text-danger">{{'api.is.required' | translate}}</small>
+              </div>
             </div>
+
           </div>
           
           <div class="row">

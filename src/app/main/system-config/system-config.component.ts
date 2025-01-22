@@ -63,7 +63,7 @@ export class SystemConfigComponent implements OnInit {
   body: any;
   checkStatus: any;
   checkRole: any;
-  idApi: any;
+  apiData: any;
   selectedApiBeforeChange: any;
   isRoleWebHook: boolean = false;
   addForm: FormGroup;
@@ -120,23 +120,18 @@ export class SystemConfigComponent implements OnInit {
     (this.addForm.get('apiListFormArray') as FormArray).removeAt(index);
   }
   
+  isAddForm : boolean = false
   addNewForm() {
     const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
     apiListFormArray.push(this.createFormGroup());
-    // console.log("apiListFormArray111111111",apiListFormArray);
-    
-    // console.log("apiListFormArraylength",apiListFormArray.length);
+    this.isAddForm = true;
 
   }
   selectedLabels: string[] = [];
   async getListApiWebHook() {
     try {
       let getlistApiWebHook =  await this.systemConfigService.getlistApiWebHook().toPromise();
-      // console.log("getlistApiWebHook",getlistApiWebHook);
-      
-      // this.apiList.push(getlistApiWebHook[0]);
       this.apiList = getlistApiWebHook;
-      // console.log("this.apiList",this.apiList);
       
       this.apiList = this.apiList.map((item: any) => ({
         id: item.id,
@@ -147,20 +142,14 @@ export class SystemConfigComponent implements OnInit {
         url: item.url,
         orgId: item.orgId,
         checkStatus:"",
-        // disabled: !!item.id,
         ...item,
       }));
       
       let sampleWebHook = await this.systemConfigService.getSampleApiWebHook().toPromise();
-      // console.log("sampleWebHook",sampleWebHook);
       const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
-      const formArray = this.addForm.get('apiListFormArray') as FormArray;
-      // console.log("formArray",formArray);
-      // console.log("22222222222222222",apiListFormArray);
 
       apiListFormArray.clear();
       if(this.apiList.length && (this.apiList[0]?.id || this.apiList[1]?.id)) {
-        const formArray = this.addForm.get('apiListFormArray') as FormArray;
       
         this.apiList.forEach(async (api) => {
   
@@ -171,7 +160,6 @@ export class SystemConfigComponent implements OnInit {
             url: [api ? api.url : '', Validators.required],
             orgId: [api ? api.orgId : ''],
             checkStatus: '',
-            // disabled: !!api.id,
           });
           if(api.id){
             apiListFormArray.push(formGroup);
@@ -182,38 +170,13 @@ export class SystemConfigComponent implements OnInit {
               url: api.url,
               orgId: api.orgId,
               checkStatus: api.checkStatus
-              // disabled: !!api.id,
             });
             let getlistApiWebHook = await this.systemConfigService.getlistApiWebHook().toPromise();
-            // console.log("getlistApiWebHook", getlistApiWebHook);
           }
           
         });
 
-        // console.log("apiListFormArray",apiListFormArray);
-
       } else if(this.apiList[0]?.id === null || this.apiList[1]?.id === null){
-        // console.log("b");
-        // this.addForm.patchValue({
-        //   api: sampleWebHook[0]?.typeName,
-        //   body: sampleWebHook[0]?.body ? JSON.stringify(sampleWebHook[0]?.body, null, 2) : '',
-        // });
-        
-        // sampleWebHook.forEach(sampleApi =>{
-        //   if(sampleApi?.typeName === 'GET_CONTRACT_STATUS'){
-        //     const formGroup = this.fbd.group({
-        //       api: [sampleApi?.typeName, Validators.required],
-        //       body: [sampleApi?.body ? JSON.stringify(sampleWebHook[0]?.body, null, 2) : ''],
-        //     });
-        //     apiListFormArray.push(formGroup); // Thêm form từ sample
-        //   } else if(sampleApi?.typeName === 'GET_RECIPIENT_STATUS'){
-        //     const formGroup = this.fbd.group({
-        //       api: [sampleApi?.typeName, Validators.required],
-        //       body: [sampleApi?.body ? JSON.stringify(sampleWebHook[1]?.body, null, 2) : ''],
-        //     });
-        //     apiListFormArray.push(formGroup); // Thêm form từ sample
-        //   }
-        // })
 
       }
 
@@ -252,49 +215,36 @@ export class SystemConfigComponent implements OnInit {
   
   async checkStatusApiWebHook(i: number){
     const formArray = this.addForm.get('apiListFormArray') as FormArray;
-    // let sampleWebHook = await this.systemConfigService.getSampleApiWebHook().toPromise(); // get giá trị mẫu của form
-    // console.log("sampleWebHook",sampleWebHook);
-    // Lấy form group tại chỉ số i
+
     const formGroup = formArray.at(i) as FormGroup;
-    // console.log("formGroup", formGroup);
+
     const listApi = formGroup.value;
-    // this.addForm.value.apiListFormArray.forEach((listApi: any) =>{
-    // console.log("listApi",listApi);
+
     let cleanStringBody = JSON.stringify(listApi?.api?.body).replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
 
     let body = listApi.api.id ? JSON.parse(cleanStringBody) : JSON.parse(listApi.body);
-    
+
     const dataApi = {
       id: listApi.api.id,
       type: listApi.api.label,
-      // body: JSON.parse(cleanStringBody),
-      body: body,
+      body: listApi.api.label == 'GET_CONTRACT_STATUS' ? body : JSON.parse(listApi.body),
       apikey: listApi.apikey,
       url: listApi.url,
       orgId: listApi.api.orgId
     }
-    // console.log("dataApi",dataApi);
     if(dataApi.url){
       this.systemConfigService.checkStatusWebHook(dataApi).subscribe(
         async (data) => {
           if(data.success === true){
-            // this.checkStatus = "Thành công";
             formGroup.get('checkStatus')?.setValue('Thành công');
-            // this.checkStatus = formGroup.value.checkStatus;
-            // this.getListApiWebHook();
             this.spinner.hide();
           }
         }, error => {
-          // this.checkStatus = "Thất bại";
-          // console.log("ttttt11111')",formGroup.get('checkStatus' + i));
-          // this.checkStatus = formGroup.value.checkStatus;
           formGroup.get('checkStatus')?.setValue('Thất bại');
           this.spinner.hide();
         }
       )
     }else{
-      // console.log("2222222222222')",formGroup.get('checkStatus' + i));
-      // this.checkStatus = "Thất bại";
       formGroup.get('checkStatus')?.setValue('Thất bại');
     }
   }
@@ -304,31 +254,28 @@ export class SystemConfigComponent implements OnInit {
   onDropdownShow(i: number): void {
     // Ép kiểu AbstractControl thành FormArray
     const formArray = this.addForm.get('apiListFormArray') as FormArray;
-  
     // Lấy giá trị của dropdown tại vị trí index i
     this.selectedApiBeforeChange = formArray?.at(i)?.get('api')?.value;
   }
   
   async onApiChange(event: any, index: any): Promise<void> {
     try {
-      // console.log("this.selectedApiBeforeChange", this.selectedApiBeforeChange)
+      // console.log("this.selectedApiBeforeChange1111111", this.selectedApiBeforeChange);
       let sampleWebHook = await this.systemConfigService.getSampleApiWebHook().toPromise(); // get giá trị mẫu của form
       const selectedApi = event.value;
 
       // Debug hoặc thực hiện logic với allControls
-
-      // console.log("Selected API:", selectedApi);
       this.selectedApiWebId = selectedApi?.id;
       // Tìm đối tượng trong apiList
       const selectedResponse = this.apiList.find(item => item.id === selectedApi?.id);
-      // console.log("selectedResponse", selectedResponse)
-      this.idApi = selectedResponse.id;
+      this.apiData = selectedResponse;
       this.body = selectedResponse.body;
       // console.log("selectedResponse",selectedResponse);
       let selectedSample = sampleWebHook.find(item => item.typeName == selectedApi?.label);
       const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
       
       const selectedLabel = event.value.label;
+
       // Thêm giá trị vào danh sách đã chọn nếu không tồn tại
       if (!this.selectedLabels.includes(selectedLabel)) {
         this.selectedLabels.push(selectedLabel);
@@ -338,48 +285,54 @@ export class SystemConfigComponent implements OnInit {
         const formGroup = apiListFormArray.at(index) as FormGroup;
         
         const formattedString = JSON.stringify(selectedResponse.body).replace(/(\w+):/g, '"$1":').replace(/'/g, '"');
+
         const jsonObject = JSON.parse(formattedString);
 
-        formGroup.patchValue({
-          label: selectedResponse.api || '',
-          url: selectedResponse.url || '',
-          apikey: selectedResponse.apikey || '',
-          body: selectedResponse.body ? JSON.stringify(jsonObject, null, 2) : '',
-          orgId: selectedResponse.orgId || '',
-        });
-      } else if (selectedApi?.id === null) {
-        // const formattedString = JSON.stringify(selectedSample?.body).replace(/(\w+):/g, '"$1":').replace(/'/g, '"');
+        let body = formGroup.controls.api.value.body || '';
+        const currentLabel = formGroup.controls.api.value.label || '';
+
+          formGroup.patchValue({
+            // label: selectedResponse.api || '',
+            // url: selectedResponse.url || '',
+            // apikey: selectedResponse.apikey || '',
+            // body: selectedResponse.body ? JSON.stringify(jsonObject, null, 2) : '',
+            // // body: selectedResponse.body ? JSON.parse(formattedString) : '',
+            // orgId: selectedResponse.orgId || '',
+            id: formGroup.controls.api.value.id || '',
+            label: formGroup.controls.api.value.label || '',
+            url: formGroup.controls.api.value.url || '',
+            apikey: formGroup.controls.api.value.apikey || '',
+            body: formGroup.controls.api.value.label == 'GET_CONTRACT_STATUS' ? JSON.stringify(jsonObject, null, 2) : JSON.stringify(body, null, 2),
+            // body: body,
+          });
+      } else 
+      if (selectedApi?.id === null) {
+        
         const formattedString = JSON.stringify(selectedSample?.body).replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
+
         const jsonObject = JSON.parse(formattedString);
+        console.log("jsonObject",jsonObject);
         const formGroup = apiListFormArray.at(index) as FormGroup;
-        const sampleBody = selectedSample?.body 
-          ? JSON.stringify(jsonObject, null, 2) 
-          : '';
-          
+        const sampleBody = selectedSample?.body ? JSON.stringify(jsonObject, null, 2) : '';
+        // const sampleBody = selectedSample?.body ? JSON.parse(formattedString) : '';
+        console.log("sampleBody",sampleBody);
+        
         formGroup.patchValue({
           body: sampleBody,
         })
-        if(this.selectedApiBeforeChange.id) {
+        // console.log("12345",this.addForm.value.apiListFormArray.length);
+        if(this.selectedApiBeforeChange.id && this.addForm.value.apiListFormArray.length == 1) {
           // console.log("this.selectedApiBeforeChange", this.selectedApiBeforeChange)
           formGroup.controls.api.value.id = this.selectedApiBeforeChange.id;
           formGroup.controls.api.value.body = sampleBody
           formGroup.controls.api.value.type = selectedResponse.type;
-          formGroup.controls.api.value.apikey = selectedResponse.apikey;
-          formGroup.controls.api.value.url = selectedResponse.url;
-          formGroup.value.api.id = this.selectedApiBeforeChange.id;
+          formGroup.controls.api.value.apikey = this.selectedApiBeforeChange.apikey;
+          formGroup.controls.api.value.url = this.selectedApiBeforeChange.url;
+          // formGroup.value.api.id = this.selectedApiBeforeChange.id;
           formGroup.controls.api.value.label = selectedResponse.label;
         }
-// console.log("formGroup", formGroup)
-        // formGroup.controls.patchValue({
-        //   body: sampleBody,
-        // })
-        // formGroup.value.api.id = addedApi.id;
-        // formGroup.value.api.body = addedApi.body;
-        // formGroup.value.api.url = addedApi.url;
-        // formGroup.value.api.apikey = addedApi.apikey;
-        // console.log("formGroup", formGroup)
+
       }else {
-        // console.log("3333")
         this.addForm.patchValue({
           body: '',
           apikey: '',
@@ -391,112 +344,6 @@ export class SystemConfigComponent implements OnInit {
       console.error("Error in onApiChange:", error);
     }
   }
-  // async onApiChange(event: any): Promise<void> {
-  //   console.log("event", event);
-
-  //   // const selectedApiId = event.value; // Lấy ID của API được chọn từ sự kiện onChange
-    
-  //   // const selectedApi = this.apiList.find(item => item.id === selectedApiId);
-  //   // if (selectedApi) {
-  //   //   // Cập nhật `FormGroup` cụ thể dựa trên chỉ số `index`
-  //   //   const formGroup = (this.addForm.get('apiListFormArray') as FormArray).at(index) as FormGroup;
-  //   //   formGroup.patchValue({
-  //   //     body: selectedApi.body ? JSON.stringify(selectedApi.body, null, 2) : '',
-  //   //     apikey: selectedApi.apikey,
-  //   //     url: selectedApi.url
-  //   //   });
-  //   // }
-    
-  //   // Lấy dữ liệu body sample api
-  //   let sampleWebHook = await this.systemConfigService.getSampleApiWebHook().toPromise();
-  //   console.log("apiListFormArray",this.apiListFormArray);
-    
-  //   const selectedApiId = event.value.id; // Lấy ID của API được chọn từ sự kiện onChange
-  //   console.log("selectedApiType",selectedApiId);
-  //   const selectedResponse = this.apiList.find(item => item.id === selectedApiId);
-  //   console.log("selectedResponse",selectedResponse);
-  //   if (selectedResponse) {
-  //     console.log("1");
-      
-  //     // Cập nhật body với giá trị body của API mẫu với id null
-  //     if(selectedApiId === null){
-  //       console.log("ab");
-  //       this.body = sampleWebHook[0]?.body ? JSON.stringify(sampleWebHook[0]?.body, null, 2) : '';
-  //       this.addForm.patchValue({
-  //         body: this.body,
-  //       });
-  //     }else{
-  //       console.log("bc");
-  //       console.log("selectedResponse",selectedResponse);
-  //       this.body = selectedResponse.body ? JSON.stringify(selectedResponse.body, null, 2) : '';
-  //       console.log("this.body",this.body);
-  //       console.log("this.addForm",this.addForm);
-        
-  //       this.addForm.patchValue({
-  //         body: this.body,
-  //         apikey: selectedResponse.apikey,
-  //         url: selectedResponse.url
-  //       });
-  //       console.log("this.addForm1",this.addForm);
-        
-  //     }
-  //   } else {
-  //     console.log("2");
-  //     // Trường hợp không tìm thấy API phù hợp, reset body về trống
-  //     this.body = '';
-  //     this.addForm.patchValue({
-  //       body: '',
-  //       apikey:'',
-  //       url:''
-  //     });
-  //   }
-
-
-  //   // this.id = selectedResponse.id
-  //   // let idApi = this.id
-  //   // console.log("selectedResponse", selectedResponse);
-  //   // console.log("selectedResponse 1", this.addForm);
-  //   // if (selectedResponse) {
-  //   //   // Cập nhật body với giá trị body của API được chọn
-  //   //   this.body = selectedResponse.body ? JSON.stringify(selectedResponse.body, null, 2) : '';
-  //   //   console.log("body",this.body);
-      
-  //   //   this.addForm.value.apiListFormArray.map((x: any) => {
-  //   //     console.log("x", x);
-  //   //   console.log("id",this.id);
-  //   //   console.log("selectedApiType", selectedApiId);
-  //   //   // console.log("selectedApiId == id",selectedApiId === idApi);
-  //   //     if (x.api.id === idApi) {
-  //   //       console.log("a");
-  //   //       this.addForm.patchValue({
-  //   //         body: this.body,
-  //   //         apikey: selectedResponse.apikey,
-  //   //         url: selectedResponse.url
-  //   //       });
-  //   //     }else{
-  //   //       console.log("a1");
-  //   //       this.addForm.patchValue({
-  //   //         body: '',
-  //   //         apikey:'',
-  //   //         url:''
-  //   //       });
-  //   //     }
-
-  //   //   })
-
-  //   //   // this.addForm.patchValue({
-  //   //   //   body: this.body,
-  //   //   //   apikey: selectedResponse.apikey,
-  //   //   //   url: selectedResponse.url
-  //   //   // });
-  //   // } else {
-  //   //   // Trường hợp không tìm thấy API phù hợp, reset body về trống
-  //   //   this.body = '1';
-  //   //   this.addForm.patchValue({
-  //   //     body: '2'
-  //   //   });
-  //   // }
-  // }
 
   validateApiKey(event: Event): void {
     const inputElement = event.target as HTMLTextAreaElement;
@@ -504,38 +351,12 @@ export class SystemConfigComponent implements OnInit {
     this.addForm.get("apikey")?.setValue(inputElement.value);
   }
   
-  // Hàm liệt kê lỗi của form
-  getFormValidationErrors(formGroup: FormGroup = this.addForm): any[] {
-    const errors: any[] = [];
-  
-    Object.keys(formGroup.controls).forEach(key => {
-      const control = formGroup.get(key);
-      if (control instanceof FormGroup) {
-        // Nếu control là FormGroup, đệ quy kiểm tra bên trong
-        errors.push(...this.getFormValidationErrors(control));
-      } else if (control instanceof FormArray) {
-        // Nếu control là FormArray, kiểm tra từng phần tử trong mảng
-        control.controls.forEach((arrayControl, index) => {
-          if (arrayControl instanceof FormGroup) {
-            errors.push(...this.getFormValidationErrors(arrayControl));
-          } else if (arrayControl.errors) {
-            errors.push({ field: `${key}[${index}]`, errors: arrayControl.errors });
-          }
-        });
-      } else if (control && control.errors) {
-        errors.push({ field: key, errors: control.errors });
-      }
-    });
-  
-    return errors;
-  }
   
   async onSubmit() {
+    // console.log("this",this.isAddForm);
+    
     this.submitted = true;
-    const dataApiArray: any[] = [];
-    // let cleanStringBody = this.addForm.value.body.replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
       // Kiểm tra toàn bộ danh sách trong apiListFormArray trước
-      // console.log("this.addForm.value.apiListFormArray",this.addForm.value.apiListFormArray);
     const invalidApi = this.addForm.value.apiListFormArray.some((listApi: any) => {
       // console.log("listApi",listApi);
       
@@ -551,34 +372,38 @@ export class SystemConfigComponent implements OnInit {
     // }
     // console.log("listApi1", listApi);
     const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
-    // console.log("apiListFormArray", apiListFormArray)
+    // console.log("apiListFormArray", apiListFormArray);
+    // console.log("this.add.",this.isAddForm);
+    // console.log("this.apiData",this.apiData);
+    
+    if(this.isAddForm == true){
+      if (apiListFormArray.length > 1) { // Kiểm tra xem có ít nhất 2 phần tử
+        apiListFormArray.controls[1].patchValue({
+          api: { // Gán giá trị id bên trong đối tượng api
+            id: null,
+            label: apiListFormArray?.value[0]?.api?.label == 'GET_CONTRACT_STATUS' ? 'GET_RECIPIENT_STATUS' : 'GET_CONTRACT_STATUS',
+          },
+        });
+        // console.log("apiListFormArray.controls[1].value.api.id",apiListFormArray.controls[1].value.api.id);
+      }
+      
+      
+    }
+    
     let successCount = 0; // Đếm số lượng API lưu thành công
     const totalCount = apiListFormArray.controls.length; // Tổng số API
-    // console.log("apiListFormArray11111",apiListFormArray);
-    // console.log("totalCount",totalCount);
-    
-    // apiListFormArray.controls.forEach(async(formGroup: any) => {
+
     for (const formGroup of apiListFormArray.controls){
       // console.log("formGroup ttttt", formGroup)
       const listApi = formGroup.value;
       // console.log("listApi",listApi);
-      //console.log("this.addForm.value.apiListFormArray",this.addForm.value.apiListFormArray);
-      
       if (!listApi.apikey || !listApi.url || !listApi.body) {
-        // formGroup.markAsTouched();
         formGroup.get('checkStatus')?.setValue('Thất bại'); // Đánh dấu trạng thái thất bại
+        this.spinner.hide();
         return;
       }
       
-      let cleanStringBody = JSON.stringify(listApi.api.body).replace(/(\w+):/g, '"$1":').replace(/'/g, '"');
-      // console.log("listApi.api.body",listApi.api.body);
-      // console.log("listApi.api.body",listApi.api.body);
-      // console.log("JSON.parse(listApi.body))",JSON.parse(listApi.body));
-      
-      // console.log("cleanStringBody",cleanStringBody);
       let body = listApi.api.id ? listApi.api.body : JSON.parse(listApi.body);
-      // console.log("body",body);
-      // console.log("JSON.parse(listApi.api.body)",JSON.parse(listApi.api.body));
       const dataApi = {
         id: listApi.api?.id,
         type: listApi.api.label,
@@ -588,11 +413,7 @@ export class SystemConfigComponent implements OnInit {
         url: listApi.url,
         orgId: listApi.api.orgId
       }
-      //console.log("dataApi",dataApi);
-      
-      // dataApiArray.push(dataApi);
-      // console.log("dataApiArray",dataApiArray);
-
+      // console.log("dataApi",dataApi);
       this.spinner.show();
 
       try {
@@ -626,56 +447,9 @@ export class SystemConfigComponent implements OnInit {
             successCount++;
           }else{
             formGroup.get('checkStatus')?.setValue('Thất bại');
+            this.spinner.hide();
             return;
           }
-          // Nếu không có `id`, gọi API thêm mới
-          // let addedApi = await this.systemConfigService.getAddApIWebHook(dataApi).toPromise();
-          // formGroup.get('checkStatus')?.setValue('Thành công');
-          // successCount++;
-          // console.log("formGroup",formGroup);
-          // console.log("formGroup.get('api')",formGroup.get('api'));
-          // console.log("addedApi",addedApi);
-          // let stringBody = JSON.stringify(addedApi.body).replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
-          // // console.log("stringBody",stringBody);
-          // const parsedBody = JSON.parse(stringBody);
-          // const formattedBody = JSON.stringify(parsedBody, null, 2);
-          // let bodyApi = JSON.parse(stringBody)
-          // console.log("bodyApi",bodyApi);
-          // if (addedApi && addedApi.id) {
-            // formGroup.value.patchValue({
-            //   // api: {
-            //     // ...listApi.api,
-            //     // id: addedApi.id,
-            //   // },
-            //   id: addedApi.id, // Cập nhật `id` mới từ server
-            //   url: addedApi.url,
-            //   apikey: addedApi.apikey,
-            //   // body: JSON.parse(addedApi.body),
-            //   body: formattedBody
-            // });
-            // formGroup.value.api.id = addedApi.id;
-            // formGroup.value.api.body = addedApi.body;
-            // formGroup.value.api.url = addedApi.url;
-            // formGroup.value.api.apikey = addedApi.apikey;
-            // if(formGroup.value.api.id){
-            //   formGroup.value.api.disabled = true;
-            // }
-            // console.log("formGroup 111111", formGroup)
-            // console.log("addedApi.id", addedApi.id)
-          //   //apiListFormArray.push(data)
-            
-          //   console.log("formGroup",formGroup);
-            
-          //   // let updateApi = await this.systemConfigService.getUpdateApiWebHook(addedApi).toPromise();
-          //   // console.log("updateApi",updateApi);
-          //   // dataApi.id = updateApi.id;
-          //   // console.log("dataApi456",dataApi);
-            // formGroup.get('checkStatus')?.setValue('Thành công');
-            // successCount++;
-          //   console.log("apiListFormArrayapiListFormArray",apiListFormArray)
-          // } else {
-          //   formGroup.get('checkStatus')?.setValue('Thất bại');
-          // }
         }
       } catch (error) {
         console.log("error",error); 
@@ -691,12 +465,15 @@ export class SystemConfigComponent implements OnInit {
         "",
         3000
       );
+      await this.getListApiWebHook();
+      window.location.reload();
     } else if (successCount > 0) {
       this.toastService.showSuccessHTMLWithTimeout(
         `Lưu thành công ${successCount}/${totalCount} API.`,
         "",
         3000
       );
+      window.location.reload();
     } else {
       this.toastService.showErrorHTMLWithTimeout(
         `Không có API nào được lưu thành công (${successCount}/${totalCount}).`,
@@ -708,6 +485,7 @@ export class SystemConfigComponent implements OnInit {
     // console.log("12345",this.addForm.value.apiListFormArray.length);
     if(this.addForm.value.apiListFormArray.length == 1){
       await this.getListApiWebHook();
+      window.location.reload();
     }
 
   }
@@ -719,8 +497,6 @@ export class SystemConfigComponent implements OnInit {
     // Lấy form group tại chỉ số i
     const formGroup = formArray.at(i) as FormGroup;
     const listApi = formGroup.value;
-    // console.log("listApi1", listApi);
-    // console.log("listApi.api",listApi.api);
     
     if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       data = {
@@ -742,19 +518,20 @@ export class SystemConfigComponent implements OnInit {
       data,
       autoFocus: false
     })
-    dialogRef.afterClosed().subscribe((result: any) => {
+    dialogRef.afterClosed().subscribe(async (result: any) => {
       const formArrayLength = formArray.length;
       if(result?.action === 'delete'){
-        if (formArrayLength > 1) {
+        if (formArrayLength >= 1) {
           if(listApi.api.id){
             // Trường hợp có nhiều form => Xóa cả dữ liệu và form
             this.systemConfigService.getDeleteApiWebHook(listApi.api.type).subscribe(
-              (data) => {
+              async (data) => {
                 if (data.success) {
                   this.toastService.showSuccessHTMLWithTimeout("Xóa cấu hình webhook thành công!", "", 3000);
                   formArray.removeAt(i); // Xóa form khỏi FormArray
                   // console.log("formGroup12",formGroup);
                   this.getListApiWebHook();
+                  await this.ngOnInit();
                 } else {
                   this.toastService.showErrorHTMLWithTimeout("Xóa cấu hình webhook không thành công!", "", 3000);
                 }
@@ -765,39 +542,15 @@ export class SystemConfigComponent implements OnInit {
             );
           }else{
             formArray.removeAt(i);
+            await this.ngOnInit();
           }
   
         } else {
-          // console.log("b");
           // Trường hợp chỉ còn 1 form => Chỉ xóa dữ liệu
           this.systemConfigService.getDeleteApiWebHook(listApi.api.type).subscribe(
             async (data) => {
               if (data.success) {
                 this.toastService.showSuccessHTMLWithTimeout("Xóa dữ liệu webhook thành công!", "", 3000);
-  
-                // Reset dữ liệu trong form thay vì xóa form
-                // formGroup.reset({
-                //   id:'',
-                //   apikey: '',
-                //   url: '',
-                //   body: '',
-                //   disabled: false
-                // });
-                // formGroup.value.api.id = '';
-                // formGroup.value.api.body = '';
-                // formGroup.value.api.url = '';
-                // formGroup.value.api.apikey = '';
-
-                // formGroup.value.body = '';
-                // formGroup.value.url = '';
-                // formGroup.value.apikey = '';
-                // if(formGroup.value.id){
-                //   formGroup.value.api.disabled = true;
-                // }else{
-                //   formGroup.value.api.disabled = false;
-                // }
-                // console.log("formGroup",formGroup);
-                // Reset dữ liệu trong form thay vì xóa form
                 formGroup.reset({
                   id:'',
                   apikey: '',
@@ -805,8 +558,6 @@ export class SystemConfigComponent implements OnInit {
                   body: '',
                 });
                 await this.ngOnInit();
-                // this.getListApiWebHook();
-                // this.ensureAtLeastOneEmptyForm();
               } else {
                 this.toastService.showErrorHTMLWithTimeout("Xóa dữ liệu webhook không thành công!", "", 3000);
               }
@@ -817,8 +568,6 @@ export class SystemConfigComponent implements OnInit {
           );
         }
       } else {
-        // console.log("avbc");
-        
         return
       }
 
