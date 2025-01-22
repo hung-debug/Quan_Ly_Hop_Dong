@@ -938,5 +938,5 @@
   "person_cc": "PERSON CC",
   "webhook.body.sample": "This is sample data. Please bypass this data in API",
   "search.code.number.name.1": "Doc code/number/name",
-  "text.select.note": "(the background image is in PNG format with a transparent background)" 
+  "text.support.extension": "Please upload a background-extracted image of your signature/seal (PNG) to ensure accurate and professional display on the document/contract!"
 }
