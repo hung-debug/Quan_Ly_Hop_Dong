@@ -963,5 +963,6 @@
   "delete.config.question" : "Bạn có chắc chắn muốn xóa cấu hình không?",
   "person_cc": "NGƯỜI ĐƯỢC CC",
   "search.code.number.name.1": "Mã TL, Số TL, Tên TL",
-  "liquidated": "Thanh lý"
+  "liquidated": "Thanh lý",
+  "text.support.extension": "Vui lòng tải lên ảnh chữ ký/ con dấu đã được tách nền (PNG) để đảm bảo hiển thị chính xác và chuyên nghiệp trên tài liệu/ hợp đồng!"
 }
