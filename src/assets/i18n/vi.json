@@ -961,5 +961,6 @@
   "example.apikey": "Nhập API Key, ví dụ: 56494c92-f18f-4f3e-ac79-49544661e63b",
   "person_cc": "NGƯỜI ĐƯỢC CC",
   "webhook.body.sample": "Đây là dữ liệu mẫu. Vui lòng bypass dữ liệu này trong API",
-  "search.code.number.name.1": "Mã TL, Số TL, Tên TL"
+  "search.code.number.name.1": "Mã TL, Số TL, Tên TL",
+  "text.select.note": "(hình ảnh nền có định dạng PNG với nền trong suốt)" 
 }
