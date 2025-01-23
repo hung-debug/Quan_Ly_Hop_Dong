@@ -54,7 +54,8 @@ export class SystemConfigComponent implements OnInit {
       apikey: this.fbd.control("", [this.apiKeyExactValidator()]),
       body: this.fbd.control(""),
       orgId: this.fbd.control(""),
-      checkStatus: ['']
+      checkStatus: [''],
+      isApiInteracted: this.fbd.control(false),
     });
   }
   lang: any;
@@ -183,8 +184,6 @@ export class SystemConfigComponent implements OnInit {
       } else if(this.apiList[0]?.id === null || this.apiList[1]?.id === null){
 
       }
-
-      this.populateFormArray();
     } catch (error) {
       console.log("error", error)
     }
@@ -197,12 +196,25 @@ export class SystemConfigComponent implements OnInit {
       return i !== index ? control.value.api?.label : null;
     }).filter(label => label); // Lọc giá trị không hợp lệ
   
-    // Lọc bỏ các giá trị đã chọn
-    return this.apiList.filter(option => !selectedValues.includes(option.label));
-  }
+    // Lọc bỏ các giá trị đã chọn từ danh sách options
+    let filteredOptions = this.apiList.filter(option => !selectedValues.includes(option.label));
+    // console.log("filteredOptionsssssssssssss",filteredOptions);
+    // Đảm bảo giá trị hiện tại (nếu có) nằm trong danh sách
+    const currentData = formArray.at(index).value;
+    const currentApi = formArray.at(index).value.api;
 
-  populateFormArray() {
+    // Đảm bảo giá trị hiện tại (nếu có) nằm trong danh sách
+    const containsCurrentApi = filteredOptions.some(option => option.label === currentApi?.label);
 
+    // Kiểm tra nếu currentApi không tồn tại trong filteredOptions hoặc có tương tác API
+    if (currentApi && currentApi.label && !containsCurrentApi || currentData?.isApiInteracted) {
+      filteredOptions.push(currentApi); // Thêm giá trị hiện tại vào danh sách nếu không trùng
+      // console.log("filteredOptions after adding currentApi", filteredOptions);
+    }
+      // Lọc bỏ giá trị rỗng (empty value)
+    filteredOptions = filteredOptions.filter(option => option && option !== "");
+
+    return filteredOptions;
   }
   
   get apiListFormArray(): FormArray {
@@ -223,6 +235,22 @@ export class SystemConfigComponent implements OnInit {
     // Kiểm tra trạng thái submitted hoặc touched/dirty cho form cụ thể
     return (
       control?.invalid && 
+      (control?.touched || control?.dirty || this.submittedForms[index])
+    );
+  }
+  
+  isApiFieldInvalid(index: number): any {
+    const formArray = this.addForm.get('apiListFormArray') as FormArray;
+    const formGroup = formArray.at(index) as FormGroup;
+    const control = formGroup.get('api');
+    const isApiInteracted = formGroup.get('isApiInteracted')?.value;
+    // Kiểm tra form mới: nếu API chưa được chọn và dropdown chưa được tương tác
+    if (formGroup.value.body) {
+      return; // Form mới và chưa chọn gì
+    }
+    // Nếu api chưa được chọn và dropdown chưa được tương tác, coi là invalid
+    return (
+      (!isApiInteracted || control?.invalid) &&
       (control?.touched || control?.dirty || this.submittedForms[index])
     );
   }
@@ -270,6 +298,10 @@ export class SystemConfigComponent implements OnInit {
     const formArray = this.addForm.get('apiListFormArray') as FormArray;
     // Lấy giá trị của dropdown tại vị trí index i
     this.selectedApiBeforeChange = formArray?.at(i)?.get('api')?.value;
+    const formGroup = formArray.at(i) as FormGroup;
+
+    // Khi người dùng mở dropdown, đánh dấu là đã tương tác
+    formGroup.patchValue({ isApiInteracted: true });
   }
   
   formatBodyIfNeeded(input: any) {
@@ -413,7 +445,7 @@ export class SystemConfigComponent implements OnInit {
     // }
     // console.log("listApi1", listApi);
     const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
-    // console.log("apiListFormArray", apiListFormArray);
+    console.log("apiListFormArray", apiListFormArray.controls[1]);
     // console.log("this.add.",this.isAddForm);
     // console.log("this.apiData",this.apiData);
     
@@ -428,6 +460,7 @@ export class SystemConfigComponent implements OnInit {
         // console.log("apiListFormArray.controls[1].value.api.id",apiListFormArray.controls[1].value.api.id);
       }
     }
+    // console.log("apiListFormArray", apiListFormArray.controls[1].touched);
     this.submittedForms = this.addForm.value.apiListFormArray.map(() => true);
     const formArray = this.addForm.get('apiListFormArray') as FormArray;
     // console.log("form",formArray);
@@ -445,15 +478,11 @@ export class SystemConfigComponent implements OnInit {
           control?.markAsTouched(); // Đánh dấu là "touched"
           control?.updateValueAndValidity(); // Cập nhật trạng thái hợp lệ
         });
-    
-        // console.log(`Form tại chỉ số ${index} không hợp lệ:`, formGroup.value);
       }
     });
 
     if (hasInvalidForm) {
       // Có ít nhất một form không hợp lệ
-      // console.log('Có lỗi trong các form, không thể lưu');
-      this.apiKeyExactValidator()
       return;
     }
     let successCount = 0; // Đếm số lượng API lưu thành công
