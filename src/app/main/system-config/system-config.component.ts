@@ -187,7 +187,7 @@ export class SystemConfigComponent implements OnInit {
 
       }
     } catch (error) {
-      console.log("error", error)
+      // console.log("error", error)
     }
   }
   
@@ -211,13 +211,9 @@ export class SystemConfigComponent implements OnInit {
     return this.apiListFormArray.at(index) as FormGroup;
   }
   isFieldInvalid(index: number, field: string): any {
-    // const formGroup = this.getFormGroup(index);
-    // const control = formGroup.get(field);
-    // return control?.invalid && (control.dirty || control.touched || this.submitted);
     const formArray = this.addForm.get('apiListFormArray') as FormArray;
     const formGroup = formArray.at(index) as FormGroup;
     const control = formGroup.get(field);
-// console.log("control",control);
 
     // Kiểm tra trạng thái submitted hoặc touched/dirty cho form cụ thể
     return (
@@ -277,7 +273,7 @@ export class SystemConfigComponent implements OnInit {
       try {
         input = JSON.parse(input); // Parse chuỗi JSON
       } catch (e) {
-        console.error("Input không phải JSON hợp lệ:", e);
+        // console.error("Input không phải JSON hợp lệ:", e);
         return null; // Trả về null nếu không hợp lệ
       }
     }
@@ -299,7 +295,6 @@ export class SystemConfigComponent implements OnInit {
 
   async onApiChange(event: any, index: any): Promise<void> {
     try {
-      // console.log("this.selectedApiBeforeChange1111111", this.selectedApiBeforeChange);
       let sampleWebHook = await this.systemConfigService.getSampleApiWebHook().toPromise(); // get giá trị mẫu của form
       const selectedApi = event.value;
 
@@ -322,7 +317,6 @@ export class SystemConfigComponent implements OnInit {
       }
       
       if (selectedResponse.id) {
-        console.log("tttttttttttttttt11111111111")
         const formGroup = apiListFormArray.at(index) as FormGroup;
         
         const formattedString = JSON.stringify(selectedResponse.body).replace(/(\w+):/g, '"$1":').replace(/'/g, '"');
@@ -334,18 +328,11 @@ export class SystemConfigComponent implements OnInit {
         body = this.formatBodyIfNeeded(body);
         jsonObject = this.formatBodyIfNeeded(jsonObject);
           formGroup.patchValue({
-            // label: selectedResponse.api || '',
-            // url: selectedResponse.url || '',
-            // apikey: selectedResponse.apikey || '',
-            // body: selectedResponse.body ? JSON.stringify(jsonObject, null, 2) : '',
-            // // body: selectedResponse.body ? JSON.parse(formattedString) : '',
-            // orgId: selectedResponse.orgId || '',
             id: formGroup.controls.api.value.id || '',
             label: formGroup.controls.api.value.label || '',
             url: formGroup.controls.api.value.url || '',
             apikey: formGroup.controls.api.value.apikey || '',
             body: formGroup.controls.api.value.label == 'GET_CONTRACT_STATUS' ? JSON.stringify(jsonObject, null, 2) : JSON.stringify(body, null, 2),
-            // body: body,
           });
       } else 
       if (!selectedApi?.id) {
@@ -353,12 +340,9 @@ export class SystemConfigComponent implements OnInit {
         const formattedString = JSON.stringify(selectedSample?.body).replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
 
         const jsonObject = JSON.parse(formattedString);
-        console.log("jsonObject",jsonObject);
         const formGroup = apiListFormArray.at(index) as FormGroup;
         const sampleBody = selectedSample?.body ? JSON.stringify(jsonObject, null, 2) : '';
-        // const sampleBody = selectedSample?.body ? JSON.parse(formattedString) : '';
-        console.log("sampleBody",sampleBody);
-        
+
         formGroup.patchValue({
           body: sampleBody,
         })
@@ -398,51 +382,28 @@ export class SystemConfigComponent implements OnInit {
     this.addForm.get("apikey")?.setValue(inputElement.value);
   }
   
+  processValidForm(index: number, formGroup: FormGroup): void {
+    // Xử lý form hợp lệ ở đây
+    // console.log(`Đang xử lý form hợp lệ tại chỉ số ${index}:`, formGroup.value);
+  
+  }
   
   async onSubmit() {
-    // console.log("this",this.isAddForm);
-    
     this.submitted = true;
-      // Kiểm tra toàn bộ danh sách trong apiListFormArray trước
+    // Kiểm tra toàn bộ danh sách trong apiListFormArray trước
     const invalidApi = this.addForm.value.apiListFormArray.some((listApi: any) => {
-      // console.log("listApi",listApi);
-      
       return listApi.apikey === '';
     });
-    // if (invalidApi) {
-    //   console.log("invalidApi",invalidApi);
-    //   console.log("this.addForm.invalid",this.addForm.invalid);
-    //   // console.log("listApi.apikey",listApi.apikey);
-      
-    //   this.toastService.showErrorHTMLWithTimeout('Kết nối API thất bại', "", 3000);
-    //   return;
-    // }
-    // console.log("listApi1", listApi);
-    const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
-    // console.log("apiListFormArray", apiListFormArray);
-    // console.log("this.add.",this.isAddForm);
-    // console.log("this.apiData",this.apiData);
-    
-    // if(this.isAddForm == true){
-    //   if (apiListFormArray.length > 1) { // Kiểm tra xem có ít nhất 2 phần tử
-    //     apiListFormArray.controls[1].patchValue({
-    //       api: { // Gán giá trị id bên trong đối tượng api
-    //         id: null,
-    //         label: apiListFormArray?.value[0]?.api?.label == 'GET_CONTRACT_STATUS' ? 'GET_RECIPIENT_STATUS' : 'GET_CONTRACT_STATUS',
-    //       },
-    //     });
-    //     // console.log("apiListFormArray.controls[1].value.api.id",apiListFormArray.controls[1].value.api.id);
-    //   }
-    // }
 
+    const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
 
     this.submittedForms = this.addForm.value.apiListFormArray.map(() => true);
     const formArray = this.addForm.get('apiListFormArray') as FormArray;
-    // console.log("form",formArray);
     
       // Kiểm tra tính hợp lệ của từng form
     let hasInvalidForm = false;
     formArray.controls.forEach((control, index) => {
+      this.submittedForms[index] = true;
       const formGroup = control as FormGroup;
       if (formGroup.invalid) {
         hasInvalidForm = true;
@@ -453,42 +414,37 @@ export class SystemConfigComponent implements OnInit {
           control?.markAsTouched(); // Đánh dấu là "touched"
           control?.updateValueAndValidity(); // Cập nhật trạng thái hợp lệ
         });
-    
-        // console.log(`Form tại chỉ số ${index} không hợp lệ:`, formGroup.value);
+      }else {
+        // Nếu form hợp lệ, xử lý logic của bạn ở đây
+        this.processValidForm(index, formGroup);
       }
     });
 
     if (hasInvalidForm) {
       // Có ít nhất một form không hợp lệ
-      // console.log('Có lỗi trong các form, không thể lưu');
       this.apiKeyExactValidator()
-      return;
+      // return;
     }
     let successCount = 0; // Đếm số lượng API lưu thành công
     const totalCount = apiListFormArray.controls.length; // Tổng số API
 
     for (const formGroup of apiListFormArray.controls){
-      // console.log("formGroup ttttt", formGroup)
       const listApi = formGroup.value;
-      // console.log("listApi",listApi);
       if (!listApi.apikey || !listApi.url || !listApi.body) {
         formGroup.get('checkStatus')?.setValue('Thất bại'); // Đánh dấu trạng thái thất bại
         this.spinner.hide();
         return;
       }
-      
       let body = listApi.api.id ? listApi.api.body : JSON.parse(listApi.body);
       let bodyData = this.formatBodyIfNeeded(body);
       const dataApi = {
         id: listApi.api?.id,
         type: listApi.api.label,
-        // body: JSON.parse(cleanStringBody),
         body: listApi.api.label == 'GET_CONTRACT_STATUS' ? bodyData : JSON.parse(listApi.body),
         apikey: listApi.apikey,
         url: listApi.url,
         orgId: listApi.api.orgId
       }
-      // console.log("dataApi",dataApi);
       this.spinner.show();
 
       try {
@@ -557,7 +513,6 @@ export class SystemConfigComponent implements OnInit {
       );
       return
     }
-    // console.log("12345",this.addForm.value.apiListFormArray.length);
     if(this.addForm.value.apiListFormArray.length == 1){
       await this.getListApiWebHook();
       window.location.reload();
@@ -604,7 +559,6 @@ export class SystemConfigComponent implements OnInit {
                 if (data.success) {
                   this.toastService.showSuccessHTMLWithTimeout("Xóa cấu hình webhook thành công!", "", 3000);
                   formArray.removeAt(i); // Xóa form khỏi FormArray
-                  // console.log("formGroup12",formGroup);
                   this.getListApiWebHook();
                   await this.ngOnInit();
                 } else {
