@@ -20,6 +20,7 @@ import { DeleteConfigDialogComponent } from './delete-config-dialog/delete-confi
 })
 
 export class SystemConfigComponent implements OnInit {
+  apiListFilter: any = [];
 // apiListFormArray: any;
   constructor(
     private router: Router,
@@ -54,8 +55,7 @@ export class SystemConfigComponent implements OnInit {
       apikey: this.fbd.control("", [this.apiKeyExactValidator()]),
       body: this.fbd.control(""),
       orgId: this.fbd.control(""),
-      checkStatus: [''],
-      isApiInteracted: this.fbd.control(false),
+      checkStatus: ['']
     });
   }
   lang: any;
@@ -67,6 +67,8 @@ export class SystemConfigComponent implements OnInit {
   apiData: any;
   selectedApiBeforeChange: any;
   isRoleWebHook: boolean = false;
+  selectedResponse: any;
+  noSelectedResponse: any;
   addForm: FormGroup;
   submitted = false;
   id: any;
@@ -190,32 +192,17 @@ export class SystemConfigComponent implements OnInit {
   }
   
   getFilteredOptions(index: number): any[] {
+    if(this.apiListFilter.length) {
+      this.apiList = this.apiListFilter;
+    }
     const formArray = this.addForm.get('apiListFormArray') as FormArray;
     const selectedValues = formArray.controls.map((control, i) => {
       // Lấy giá trị đã chọn từ các form khác
       return i !== index ? control.value.api?.label : null;
     }).filter(label => label); // Lọc giá trị không hợp lệ
-  
-    // Lọc bỏ các giá trị đã chọn từ danh sách options
-    let filteredOptions = this.apiList.filter(option => !selectedValues.includes(option.label));
-    // console.log("filteredOptionsssssssssssss",filteredOptions);
-    // Đảm bảo giá trị hiện tại (nếu có) nằm trong danh sách
-    const currentData = formArray.at(index).value;
-    const currentApi = formArray.at(index).value.api;
-
-    // Đảm bảo giá trị hiện tại (nếu có) nằm trong danh sách
-    const containsCurrentApi = filteredOptions.some(option => option.label === currentApi?.label);
-
-    // Kiểm tra nếu currentApi không tồn tại trong filteredOptions hoặc có tương tác API
-    if (currentApi && currentApi.label && !containsCurrentApi || currentData?.isApiInteracted) {
-      filteredOptions.push(currentApi); // Thêm giá trị hiện tại vào danh sách nếu không trùng
-      // console.log("filteredOptions after adding currentApi", filteredOptions);
-    }
-      // Lọc bỏ giá trị rỗng (empty value)
-    filteredOptions = filteredOptions.filter(option => option && option !== "");
-
-    return filteredOptions;
+    return this.apiList.filter(option => !selectedValues.includes(option.label));
   }
+
   
   get apiListFormArray(): FormArray {
     return this.addForm.get('apiListFormArray') as FormArray;
@@ -235,22 +222,6 @@ export class SystemConfigComponent implements OnInit {
     // Kiểm tra trạng thái submitted hoặc touched/dirty cho form cụ thể
     return (
       control?.invalid && 
-      (control?.touched || control?.dirty || this.submittedForms[index])
-    );
-  }
-  
-  isApiFieldInvalid(index: number): any {
-    const formArray = this.addForm.get('apiListFormArray') as FormArray;
-    const formGroup = formArray.at(index) as FormGroup;
-    const control = formGroup.get('api');
-    const isApiInteracted = formGroup.get('isApiInteracted')?.value;
-    // Kiểm tra form mới: nếu API chưa được chọn và dropdown chưa được tương tác
-    if (formGroup.value.body) {
-      return; // Form mới và chưa chọn gì
-    }
-    // Nếu api chưa được chọn và dropdown chưa được tương tác, coi là invalid
-    return (
-      (!isApiInteracted || control?.invalid) &&
       (control?.touched || control?.dirty || this.submittedForms[index])
     );
   }
@@ -298,10 +269,6 @@ export class SystemConfigComponent implements OnInit {
     const formArray = this.addForm.get('apiListFormArray') as FormArray;
     // Lấy giá trị của dropdown tại vị trí index i
     this.selectedApiBeforeChange = formArray?.at(i)?.get('api')?.value;
-    const formGroup = formArray.at(i) as FormGroup;
-
-    // Khi người dùng mở dropdown, đánh dấu là đã tương tác
-    formGroup.patchValue({ isApiInteracted: true });
   }
   
   formatBodyIfNeeded(input: any) {
@@ -340,12 +307,13 @@ export class SystemConfigComponent implements OnInit {
       this.selectedApiWebId = selectedApi?.id;
       // Tìm đối tượng trong apiList
       const selectedResponse = this.apiList.find(item => item.id === selectedApi?.id);
+      let noSelectedResponse = this.apiList.find(item => item.id != selectedApi?.id);
+
       this.apiData = selectedResponse;
       this.body = selectedResponse.body;
-      // console.log("selectedResponse",selectedResponse);
       let selectedSample = sampleWebHook.find(item => item.typeName == selectedApi?.label);
       const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
-      
+
       const selectedLabel = event.value.label;
 
       // Thêm giá trị vào danh sách đã chọn nếu không tồn tại
@@ -354,6 +322,7 @@ export class SystemConfigComponent implements OnInit {
       }
       
       if (selectedResponse.id) {
+        console.log("tttttttttttttttt11111111111")
         const formGroup = apiListFormArray.at(index) as FormGroup;
         
         const formattedString = JSON.stringify(selectedResponse.body).replace(/(\w+):/g, '"$1":').replace(/'/g, '"');
@@ -379,7 +348,7 @@ export class SystemConfigComponent implements OnInit {
             // body: body,
           });
       } else 
-      if (selectedApi?.id === null) {
+      if (!selectedApi?.id) {
         
         const formattedString = JSON.stringify(selectedSample?.body).replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
 
@@ -403,6 +372,11 @@ export class SystemConfigComponent implements OnInit {
           formGroup.controls.api.value.url = this.selectedApiBeforeChange.url;
           // formGroup.value.api.id = this.selectedApiBeforeChange.id;
           formGroup.controls.api.value.label = selectedResponse.label;
+          selectedResponse.id = this.selectedApiBeforeChange.id;
+          selectedResponse.value.id = this.selectedApiBeforeChange.id;
+          noSelectedResponse.id = "";
+          noSelectedResponse.value.id = "";
+          this.apiListFilter = [selectedResponse, noSelectedResponse];
         }
 
       }else {
@@ -445,22 +419,23 @@ export class SystemConfigComponent implements OnInit {
     // }
     // console.log("listApi1", listApi);
     const apiListFormArray = this.addForm.get('apiListFormArray') as FormArray;
-    console.log("apiListFormArray", apiListFormArray.controls[1]);
+    // console.log("apiListFormArray", apiListFormArray);
     // console.log("this.add.",this.isAddForm);
     // console.log("this.apiData",this.apiData);
     
-    if(this.isAddForm == true){
-      if (apiListFormArray.length > 1) { // Kiểm tra xem có ít nhất 2 phần tử
-        apiListFormArray.controls[1].patchValue({
-          api: { // Gán giá trị id bên trong đối tượng api
-            id: null,
-            label: apiListFormArray?.value[0]?.api?.label == 'GET_CONTRACT_STATUS' ? 'GET_RECIPIENT_STATUS' : 'GET_CONTRACT_STATUS',
-          },
-        });
-        // console.log("apiListFormArray.controls[1].value.api.id",apiListFormArray.controls[1].value.api.id);
-      }
-    }
-    // console.log("apiListFormArray", apiListFormArray.controls[1].touched);
+    // if(this.isAddForm == true){
+    //   if (apiListFormArray.length > 1) { // Kiểm tra xem có ít nhất 2 phần tử
+    //     apiListFormArray.controls[1].patchValue({
+    //       api: { // Gán giá trị id bên trong đối tượng api
+    //         id: null,
+    //         label: apiListFormArray?.value[0]?.api?.label == 'GET_CONTRACT_STATUS' ? 'GET_RECIPIENT_STATUS' : 'GET_CONTRACT_STATUS',
+    //       },
+    //     });
+    //     // console.log("apiListFormArray.controls[1].value.api.id",apiListFormArray.controls[1].value.api.id);
+    //   }
+    // }
+
+
     this.submittedForms = this.addForm.value.apiListFormArray.map(() => true);
     const formArray = this.addForm.get('apiListFormArray') as FormArray;
     // console.log("form",formArray);
@@ -478,11 +453,15 @@ export class SystemConfigComponent implements OnInit {
           control?.markAsTouched(); // Đánh dấu là "touched"
           control?.updateValueAndValidity(); // Cập nhật trạng thái hợp lệ
         });
+    
+        // console.log(`Form tại chỉ số ${index} không hợp lệ:`, formGroup.value);
       }
     });
 
     if (hasInvalidForm) {
       // Có ít nhất một form không hợp lệ
+      // console.log('Có lỗi trong các form, không thể lưu');
+      this.apiKeyExactValidator()
       return;
     }
     let successCount = 0; // Đếm số lượng API lưu thành công
