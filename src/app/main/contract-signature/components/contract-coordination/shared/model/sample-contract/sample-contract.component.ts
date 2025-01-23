@@ -101,7 +101,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     { id: 1, name: 'default' },
     { id: 2, name: 'currency' },
   ];
-
+  isContractNoNameNull: boolean = false;
   sum: number[] = [];
   top: any[]= [];
   ordering: number = 0;
@@ -1224,66 +1224,79 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     return arrSignConfig;
   }
 
-  getCheckSignature(isSignType: any, listSelect?: string) {
-    // this.list_sign_name.forEach((element: any) => {
-    //   if (this.convertToSignConfig().some((p: any) => (p.email == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && p.email && p.sign_unit == 'so_tai_lieu'))) {
-    //     if (isSignType != 'text') {
-    //       element.is_disable = true;
-    //     }
-    //   } else {
-    //     if (isSignType == 'chu_ky_anh') {
-    //       element.is_disable = !(element.sign_type.some((p: any) => p.id == 1) && element.role != 2);
-    //     } else if (isSignType == 'chu_ky_so') {
-    //       element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
-    //     } else if (isSignType == 'text') {
-    //       element.is_disable = !(element.sign_type.some((p: any) => p.id == 2)); // ô text chỉ có ký usb token mới được chỉ định (element.role == 4)
-    //     } else {
-    //       if (element.role != 4 || (this.datas.contract_no && element.role == 4)) {
-    //         element.is_disable = true;
-    //       } else element.is_disable = false;
-    //     }
-    //   }
+  // getCheckSignature(isSignType: any, listSelect?: string) {
+  //   this.list_sign_name.forEach((element: any) => {
 
-    //   if (listSelect) {
-    //     element.selected = listSelect && element.name == listSelect;
-    //   }
-    // })
+  //     if (this.convertToSignConfig().some((p: any) => ((p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && (p.recipient ? p.recipient.email : p.email) && p.sign_unit == 'so_tai_lieu'))) {
+  //       if (isSignType != 'text') {
+  //         if(isSignType == 'so_tai_lieu') {
+  //           // element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4));
 
+  //           element.is_disable = !(element.sign_type.some((p: any) => [2,4,6].includes(p.id)) || element.role == 4)
+  //         } else if (isSignType == 'chu_ky_so') {
+  //           element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
+  //         } else if (isSignType == 'chu_ky_anh') {
+  //           element.is_disable = false
+  //         }  else {
+  //           element.is_disable = true
+  //         }
+  //       }
+  //     } else {
+  //       if (isSignType == 'chu_ky_anh') {
+  //         element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
+  //       } else if (isSignType == 'chu_ky_so') {
+  //         element.is_disable = !(element.sign_type.some((p: any) => [2,4,6].includes(p.id)) && element.role != 2);
+  //       } else if (isSignType == 'text') {
+  //         element.is_disable = !(element.sign_type.some((p: any) => [2,4,6].includes(p.id)) || (element.role == 4 && !element.sign_type.some((p: any) => [3,7,8].includes(p.id)))); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
+  //       } else {
+  //         if (this.datas.contract_no) {
+  //           element.is_disable = true;
+  //         } else {
+  //         // element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4));
+  //         element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3 && p.id != 7))
+  //         }
+  //       }
+  //     }
+  //     // }
+
+  //     if (listSelect) {
+  //       element.selected = listSelect && element.name == listSelect;
+  //     }
+  //   })
+  // }
+
+  getCheckSignature(isSignType: any, listSelect?: string, value?: any) {
+    // if(isSignType == 'chu_ky_so_con_dau_va_thong_tin' || isSignType == 'chu_ky_so_con_dau' || isSignType == 'chu_ky_so_thong_tin') {
+    //   isSignType = 'chu_ky_so'
+    // }
+    let assignSign = this.convertToSignConfig();
+    // p.recipient_id == element.id && p.sign_unit == isSignType)
     this.list_sign_name.forEach((element: any) => {
-
-      if (this.convertToSignConfig().some((p: any) => ((p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && (p.recipient ? p.recipient.email : p.email) && p.sign_unit == 'so_tai_lieu'))) {
-        if (isSignType != 'text') {
-          if(isSignType == 'so_tai_lieu') {
-            // element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4));
-
-            element.is_disable = !(element.sign_type.some((p: any) => [2,4,6].includes(p.id)) || element.role == 4)
-          } else if (isSignType == 'chu_ky_so') {
-            element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6)
-          } else if (isSignType == 'chu_ky_anh') {
-            element.is_disable = false
-          }  else {
-            element.is_disable = true
-          }
-        }
+      if (isSignType == 'text' && value) {
+        element.is_disable = true;
       } else {
-        if (isSignType == 'chu_ky_anh') {
-          element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
-        } else if (isSignType == 'chu_ky_so') {
-          element.is_disable = !(element.sign_type.some((p: any) => [2,4,6].includes(p.id)) && element.role != 2);
-        } else if (isSignType == 'text') {
-          element.is_disable = !(element.sign_type.some((p: any) => [2,4,6].includes(p.id)) || (element.role == 4 && !element.sign_type.some((p: any) => [3,7,8].includes(p.id)))); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
-        } else {
+        if (isSignType == 'text') {
+          element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6);
+        } else if (isSignType.includes('chu_ky_so')) {
+          let count = assignSign.filter((sign: any) => sign.recipient_id === element.id).length;
+          if (element.sign_type[0]?.id == 3 || element.sign_type[0]?.id == 7 || element.sign_type[0]?.id == 8) {
+            element.is_disable = count >= 1;
+          } else {
+            element.is_disable = !element.sign_type.some((p: any) => [2, 4, 6].includes(p.id));
+          }
+        } else if (isSignType == 'chu_ky_anh') {
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5));
+        } else if(isSignType == 'so_tai_lieu') {
+          console.log("this.datasForm.contract_no", this.datas.contract_no)
           if (this.datas.contract_no) {
             element.is_disable = true;
           } else {
-          // element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4));
-          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6) || element.role == 4 && element.sign_type.some((p: any) => p.id != 8 && p.id != 3 && p.id != 7))
+            element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6);
           }
         }
       }
-      // }
-
       if (listSelect) {
+        // element.is_disable = false;
         element.selected = listSelect && element.name == listSelect;
       }
     })
