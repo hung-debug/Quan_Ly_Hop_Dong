@@ -31,11 +31,9 @@
   min-width: 370px;
 }
 
-// .login-form-mobile{
-//   padding-top: 20%;
-//   padding-left: 5%;
-//   padding-right: 5%;
-// }
+.login-form-mobile{
+  width: 100%;
+}
 
 .form-group{
   // margin: 20px;
@@ -247,7 +245,7 @@ img {
   height: 505px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  // justify-content: center;
   align-items: center;
 }
 
