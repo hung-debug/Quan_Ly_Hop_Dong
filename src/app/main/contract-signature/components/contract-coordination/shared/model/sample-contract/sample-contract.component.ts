@@ -117,6 +117,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
+    console.log("điều phối")
     this.emailUser_sample = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email;
     if (!this.datas['arrDelete']) {
       this.datas.arrDelete = []; // biến arrDelete lưu id các đối tượng bị thay đổi dữ liệu => xoá
@@ -1190,12 +1191,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     cloneUserSign.forEach(element => {
       arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
-    arrSignConfig.forEach((element: any) => {
-      element.name = this.datas.is_data_object_signature.filter((item: any) => item.id == element.recipient_id)[0]?.name
-      element.email = this.datas.is_data_object_signature.filter((item: any) => item.id == element.recipient_id)[0]?.email
-      if(element.recipient)
-      element.recipient.email = this.datas.is_data_object_signature.filter((item: any) => item.id == element.recipient_id)[0]?.email
-    });
+    // arrSignConfig.forEach((element: any) => {
+    //   element.name = this.datas.is_data_object_signature.filter((item: any) => item.id == element.recipient_id)[0]?.name
+    //   element.email = this.datas.is_data_object_signature.filter((item: any) => item.id == element.recipient_id)[0]?.email
+    //   if(element.recipient)
+    //   element.recipient.email = this.datas.is_data_object_signature.filter((item: any) => item.id == element.recipient_id)[0]?.email
+    // });
 
     arrSignConfig = arrSignConfig.sort((item1: any, item2: any) => item1.ordering - item2.ordering);
 
@@ -1278,7 +1279,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (isSignType == 'text') {
           element.is_disable = !element.sign_type.some((p: any) => p.id == 2 || p.id == 4 || p.id == 6);
         } else if (isSignType.includes('chu_ky_so')) {
-          let count = assignSign.filter((sign: any) => sign.recipient_id === element.id).length;
+          let count = assignSign.filter((sign: any) => sign?.email === element?.email).length;
           if (element.sign_type[0]?.id == 3 || element.sign_type[0]?.id == 7 || element.sign_type[0]?.id == 8) {
             element.is_disable = count >= 1;
           } else {

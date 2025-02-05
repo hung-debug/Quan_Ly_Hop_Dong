@@ -726,7 +726,8 @@ export class ConfirmContractBatchComponent
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
     if (this.datasBatch && this.datasBatch.is_data_object_signature && this.datasBatch.is_data_object_signature.length) {
-      return this.datasBatch.is_data_object_signature;
+      let arrSignConfig = this.datasBatch.is_data_object_signature.sort((item1: any, item2: any) => item1.ordering - item2.ordering);
+      return arrSignConfig;
     } else {
       return [];
     }
