@@ -93,8 +93,8 @@
     <!--  file content-->
     <div (scroll)="scroll($event)" id="pdf-full" class="col-md-9 sample-contract__file viewer-pdf isDrag" style="background-color: #f3f7f9; position: relative">
         <div id="pdf-viewer-step-3">
-            <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-                <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
+            <div *ngFor="let d of this.convertToSignConfig1()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+                <div *ngIf="!d.isCurrentSignConfigs" class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
                     <div *ngIf="d.name" class="name-sig-img-daky long-text-ellipsis">{{d.name ? d.name : ''}}</div>
                     <div class="sig-img-daky" (click)="onCancel($event, d)">
                         <!-- <img src="assets/img/clear.svg" alt=""> -->
@@ -102,15 +102,13 @@
                     </div>
                     <app-sign-contract class="main-sign-box" [datas]="datas" [sign]="d"></app-sign-contract>
                 </div>
-            </div>
 
-            <div *ngFor="let d2 of this.getCurrentSignConfigs()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-                <div class="resize-drag" [id]="d2.id" style="z-index: -1; pointer-events: none;" #itemElement [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d2)">
-                    <div *ngIf="d2.name" class="name-sig-img-daky long-text-ellipsis">{{d2.name ? d2.name : ''}}</div>
+                <div *ngIf="d.isCurrentSignConfigs" class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1; pointer-events: none;" #itemElement [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
+                    <div *ngIf="d.name" class="name-sig-img-daky long-text-ellipsis">{{d.name ? d.name : ''}}</div>
                     <div class="sig-img-daky">
                     </div>
-                    <app-sign-contract class="main-sign-box" [datas]="datas" [sign]="d2"></app-sign-contract>
-                </div>
+                    <app-sign-contract class="main-sign-box" [datas]="datas" [sign]="d"></app-sign-contract>
+                </div>  
             </div>
         </div>
     </div>
