@@ -1210,6 +1210,34 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     return arrSignConfig;
   }
 
+
+  convertToSignConfig1() {
+    let arrSignConfig: any = [];
+    let cloneUserSign = [...this.datas.contract_user_sign];
+    cloneUserSign.forEach(element => {
+      arrSignConfig = arrSignConfig.concat(element.sign_config);
+    })
+
+    let getCurrentSignConfigs = this.getCurrentSignConfigs();
+
+    for (let i = 0; i < getCurrentSignConfigs.length; i++) {
+      getCurrentSignConfigs[i].isCurrentSignConfigs = true; 
+    }
+    
+    let mergedArray = [...arrSignConfig, ...getCurrentSignConfigs];
+
+    mergedArray = mergedArray.sort((item1: any, item2: any) => item1.ordering - item2.ordering);
+
+    // Tìm giá trị zIndex lớn nhất
+    const maxZIndex = mergedArray.reduce((max: any, item: any) => {
+      return item.ordering ? Math.max(max, item.ordering) : max;
+    }, 0) || 1;
+
+    this.ordering = maxZIndex + 1;
+
+    return mergedArray;
+  }
+
   getCurrentSignConfigs() {
     let arrSignConfig: any = [];
     let cloneUserSign = [...this.datas.contract_user_sign_index];
