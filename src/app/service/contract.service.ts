@@ -1336,20 +1336,25 @@ export class ContractService {
       .toPromise();
   }
 
-  signRemote(datas: any, recipientId: number, isTimestamp: any, boxType: any, isVnptSmartCa= false) {
+  signRemote(datas: any, recipientId: number, isTimestamp: any, boxType: any, supplierID:any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-
+    const supplierMap: { [key: number]: string } = {
+        1: 'vnpt',
+        3: 'mobica',
+        2: 'nacencomm'
+      };
+    const supplier = supplierMap[supplierID] || 'vnpt';
     const body = JSON.stringify({
       userCode: datas.cert_id,
       image_base64: datas.imageBase64,
       isTimestamp: isTimestamp,
       type: boxType,
       field: datas.field,
-      supplier: isVnptSmartCa ? 'vnpt' : 'nacencomm',
+      supplier: supplier
     });
 
     return this.http
@@ -1357,12 +1362,18 @@ export class ContractService {
       .toPromise();
   }
 
-  signRemoteMulti(datas: any, recipientIds: [], isTimestamp: any, boxType: any, isVnptSmartCa?: any) {
+  signRemoteMulti(datas: any, recipientIds: [], isTimestamp: any, boxType: any, supplierID : any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+    const supplierMap: { [key: number]: string } = {
+        1: 'vnpt',
+        2: 'mobica',
+        3: 'nacencomm'
+      };
+    const supplier = supplierMap[supplierID] || 'vnpt';
 
     const body = JSON.stringify({
       userCode: datas.cert_id,
@@ -1370,7 +1381,7 @@ export class ContractService {
       isTimestamp: false,
       type: boxType,
       field: datas.field,
-      supplier: isVnptSmartCa ? 'vnpt' : 'nacencomm',
+      supplier: supplier
     });
 
     return this.http
