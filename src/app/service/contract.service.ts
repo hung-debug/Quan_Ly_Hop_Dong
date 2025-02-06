@@ -1344,8 +1344,8 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     const supplierMap: { [key: number]: string } = {
         1: 'vnpt',
-        3: 'mobica',
-        2: 'nacencomm'
+        2: 'mobica',
+        3: 'nacencomm'
       };
     const supplier = supplierMap[supplierID] || 'vnpt';
     const body = JSON.stringify({
