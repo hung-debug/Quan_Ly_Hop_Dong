@@ -144,7 +144,7 @@ export class SystemConfigComponent implements OnInit {
         id: item.id,
         label: item.type, // Hiển thị tên API trong dropdown
         value: { id: item.id, type: item.type }, // Dữ liệu được chọn khi chọn API
-        body: item.body,
+        body: this.formatBodyIfNeeded(item.body),
         apikey: item.apikey,
         url: item.url,
         orgId: item.orgId,
@@ -163,7 +163,8 @@ export class SystemConfigComponent implements OnInit {
           const formGroup = this.fbd.group({
             api: [api ? api : '', Validators.required],
             apikey: [api ? api.apikey : '', [this.apiKeyExactValidator()]],
-            body: [api.body ? JSON.stringify(api.body, null, 2) : '', Validators.required],
+            // body: [api.body ? JSON.stringify(api.body, null, 2) : '', Validators.required],
+            body: [api.body ? JSON.stringify(this.formatBodyIfNeeded(api.body), null, 2) : '', Validators.required],
             url: [api ? api.url : '', Validators.required],
             orgId: [api ? api.orgId : ''],
             checkStatus: '',
@@ -173,7 +174,8 @@ export class SystemConfigComponent implements OnInit {
             formGroup.patchValue({
               // Đảm bảo rằng giá trị được cập nhật đúng vào formGroup
               apikey: api.apikey,
-              body: JSON.stringify(api.body, null, 2),
+              // body: JSON.stringify(api.body, null, 2),
+              body: JSON.stringify(this.formatBodyIfNeeded(api.body), null, 2),
               url: api.url,
               orgId: api.orgId,
               checkStatus: api.checkStatus
@@ -317,14 +319,13 @@ export class SystemConfigComponent implements OnInit {
       }
       
       if (selectedResponse.id) {
-        const formGroup = apiListFormArray.at(index) as FormGroup;
+        const formGroup = apiListFormArray?.at(index) as FormGroup;
         
         const formattedString = JSON.stringify(selectedResponse.body).replace(/(\w+):/g, '"$1":').replace(/'/g, '"');
 
         let jsonObject = JSON.parse(formattedString);
 
         let body = formGroup.controls.api.value.body || '';
-        const currentLabel = formGroup.controls.api.value.label || '';
         body = this.formatBodyIfNeeded(body);
         jsonObject = this.formatBodyIfNeeded(jsonObject);
           formGroup.patchValue({
@@ -334,10 +335,11 @@ export class SystemConfigComponent implements OnInit {
             apikey: formGroup.controls.api.value.apikey || '',
             body: formGroup.controls.api.value.label == 'GET_CONTRACT_STATUS' ? JSON.stringify(jsonObject, null, 2) : JSON.stringify(body, null, 2),
           });
+          this.cdr.detectChanges();
       } else 
       if (!selectedApi?.id) {
         
-        const formattedString = JSON.stringify(selectedSample?.body).replace(/\\{2}/g, '\\').replace(/^"+|"+$/g, '');
+        const formattedString = JSON.stringify(selectedSample?.body)?.replace(/\\{2}/g, '\\')?.replace(/^"+|"+$/g, '');
 
         const jsonObject = JSON.parse(formattedString);
         const formGroup = apiListFormArray.at(index) as FormGroup;
@@ -433,14 +435,14 @@ export class SystemConfigComponent implements OnInit {
       if (!listApi.apikey || !listApi.url || !listApi.body) {
         formGroup.get('checkStatus')?.setValue('Thất bại'); // Đánh dấu trạng thái thất bại
         this.spinner.hide();
-        return;
+        // return;
       }
-      let body = listApi.api.id ? listApi.api.body : JSON.parse(listApi.body);
+      let body = listApi?.api?.id ? listApi?.api?.body : JSON.parse(listApi?.body);
       let bodyData = this.formatBodyIfNeeded(body);
       const dataApi = {
         id: listApi.api?.id,
         type: listApi.api.label,
-        body: listApi.api.label == 'GET_CONTRACT_STATUS' ? bodyData : JSON.parse(listApi.body),
+        body: listApi?.api?.label == 'GET_CONTRACT_STATUS' ? bodyData : JSON.parse(listApi?.body),
         apikey: listApi.apikey,
         url: listApi.url,
         orgId: listApi.api.orgId
@@ -456,7 +458,12 @@ export class SystemConfigComponent implements OnInit {
             formGroup.get('checkStatus')?.setValue('Thành công');
             successCount++;
             // Cập nhật cấu hình webhook nếu API thành công
-            await this.systemConfigService.getUpdateApiWebHook(dataApi).toPromise();
+            let updateWebhook = await this.systemConfigService.getUpdateApiWebHook(dataApi).toPromise();
+            formGroup.value.api.id = updateWebhook.id;
+            formGroup.value.api.body = updateWebhook.body;
+            formGroup.value.api.url = updateWebhook.url;
+            formGroup.value.api.apikey = updateWebhook.apikey;
+            formGroup.value.api.type = updateWebhook.type;
           } else {
             formGroup.get('checkStatus')?.setValue('Thất bại');
           }
@@ -497,14 +504,12 @@ export class SystemConfigComponent implements OnInit {
         3000
       );
       await this.getListApiWebHook();
-      window.location.reload();
     } else if (successCount > 0) {
       this.toastService.showSuccessHTMLWithTimeout(
         `Lưu thành công ${successCount}/${totalCount} API.`,
         "",
         3000
       );
-      window.location.reload();
     } else {
       this.toastService.showErrorHTMLWithTimeout(
         `Không có API nào được lưu thành công (${successCount}/${totalCount}).`,
@@ -515,7 +520,6 @@ export class SystemConfigComponent implements OnInit {
     }
     if(this.addForm.value.apiListFormArray.length == 1){
       await this.getListApiWebHook();
-      window.location.reload();
     }
 
   }
@@ -551,16 +555,33 @@ export class SystemConfigComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async (result: any) => {
       const formArrayLength = formArray.length;
       if(result?.action === 'delete'){
-        if (formArrayLength >= 1) {
+        if (formArrayLength > 1) {
           if(listApi.api.id){
             // Trường hợp có nhiều form => Xóa cả dữ liệu và form
-            this.systemConfigService.getDeleteApiWebHook(listApi.api.type).subscribe(
+            this.systemConfigService.getDeleteApiWebHook(listApi.api.label).subscribe(
               async (data) => {
                 if (data.success) {
                   this.toastService.showSuccessHTMLWithTimeout("Xóa cấu hình webhook thành công!", "", 3000);
+                  // await this.getListApiWebHook();
                   formArray.removeAt(i); // Xóa form khỏi FormArray
-                  this.getListApiWebHook();
-                  await this.ngOnInit();
+                  let getlistApiWebHook =  await this.systemConfigService.getlistApiWebHook().toPromise();
+                  this.apiList = getlistApiWebHook;
+                  
+                  this.apiList = this.apiList.map((item: any) => ({
+                    id: item.id,
+                    label: item.type, // Hiển thị tên API trong dropdown
+                    value: { id: item.id, type: item.type }, // Dữ liệu được chọn khi chọn API
+                    body: this.formatBodyIfNeeded(item.body),
+                    apikey: item.apikey,
+                    url: item.url,
+                    orgId: item.orgId,
+                    checkStatus:"",
+                    ...item,
+                  }));
+                  
+                  // 🛠 Ép UI cập nhật
+                  this.cdr.detectChanges();
+                  // await this.ngOnInit();
                 } else {
                   this.toastService.showErrorHTMLWithTimeout("Xóa cấu hình webhook không thành công!", "", 3000);
                 }
@@ -571,12 +592,13 @@ export class SystemConfigComponent implements OnInit {
             );
           }else{
             formArray.removeAt(i);
+            this.cdr.detectChanges();
             await this.ngOnInit();
           }
   
         } else {
           // Trường hợp chỉ còn 1 form => Chỉ xóa dữ liệu
-          this.systemConfigService.getDeleteApiWebHook(listApi.api.type).subscribe(
+          this.systemConfigService.getDeleteApiWebHook(listApi.api.label).subscribe(
             async (data) => {
               if (data.success) {
                 this.toastService.showSuccessHTMLWithTimeout("Xóa dữ liệu webhook thành công!", "", 3000);
@@ -599,6 +621,8 @@ export class SystemConfigComponent implements OnInit {
       } else {
         return
       }
+      // Reset trạng thái form
+      this.submittedForms = new Array(formArray.length).fill(false);
 
     });
   }
