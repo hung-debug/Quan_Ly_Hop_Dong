@@ -472,9 +472,9 @@
   "sign.day": "Sign day",
   "sign.by": "Sign by",
   "password.level1": "Password level 1",
-  "password.level2": "Password level 2",
+  "password.level2": "Password",
   "password.level1.blank": "Level 1 password cannot be blank",
-  "password.level2.blank": "Level 2 password cannot be blank",
+  "password.level2.blank": "Password cannot be blank",
   "user.blank": "User cannot be blank",
   "username": "Username",
   "taxcode.blank": "Tax code cannot be blank",
@@ -940,5 +940,8 @@
   "person_cc": "PERSON CC",
   "search.code.number.name.1": "Doc code/number/name",
   "liquidated": "Liquidated",
-  "text.support.extension": "Please upload a background-extracted image of your signature/seal (PNG) to ensure accurate and professional display on the document/contract!"
+  "text.support.extension": "Please upload a background-extracted image of your signature/seal (PNG) to ensure accurate and professional display on the document/contract!",
+  "uuid.blank":"UUID cannot be left blank",
+  "supplier": "Supplier",
+  "choose.supplier": "Choose a supplier"
 }

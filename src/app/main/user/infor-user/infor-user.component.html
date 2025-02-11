@@ -198,6 +198,17 @@
                     <!--Mã số thuế hsm-->
                     <div class="row">
                         <div class="col-md-12">
+                            <div>{{'supplier' | translate}}</div>
+                            <div>
+                                <p-dropdown panelStyleClass="font" [options]="supplierList" formControlName="supplier" optionLabel="name" optionValue="id" placeholder="{{'choose.supplier' | translate}}" [filter]="false" filterBy="name" [showClear]="false"
+                                (onChange)="onSupplierChange($event)">
+                                </p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="row">
+                        <div class="col-md-12">
                             <div>{{'tax_code.cardId' | translate}}</div>
                             <div class="input-data">
                                 <input type="text" formControlName="taxCodeHsm">
@@ -206,10 +217,10 @@
                                 <div *ngIf="fHsm.taxCodeHsm.errors.pattern">{{'Mã số thuế/CMT/CCCD không đúng định dạng' | translate}}</div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!--Tên người dùng hsm-->
-                    <div class="row">
+                    <div *ngIf="this.isHsmIcorp" class="row">
                         <div class="col-md-12">
                             <div>{{'user.name.v2' | translate}}</div>
                             <div class="input-data">
@@ -221,8 +232,18 @@
                         </div>
                     </div>
 
+                    <!--UUID hsm-->
+                    <div *ngIf="!this.isHsmIcorp" class="row">
+                        <div class="col-md-12">
+                            <div>UUID</div>
+                            <div class="input-data">
+                                <input type="text" formControlName="uuid" id="uuid">
+                            </div>
+                        </div>
+                    </div>
+
                     <!--Mật khẩu cấp 1 hsm-->
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-md-12">
                             <div>{{'password.level1' | translate}}</div>
                             <div class="input-line">
@@ -236,7 +257,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </form>
         </div>

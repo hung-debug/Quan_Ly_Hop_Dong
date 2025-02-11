@@ -16,6 +16,7 @@
               optionLabel="name"
               optionValue="id"
               [dropdownIcon]="'none'"
+              (onChange)="onSupplierChange($event)"
               placeholder="{{'choose.network' | translate}}">
               <ng-template let-selectedItem pTemplate="selectedItem">
                 <p class="option-custom">{{selectedItem.name}}</p>
@@ -26,7 +27,8 @@
         </div>
       </div>
     </div>
-    <div class="row" style="padding-top: 10px;">
+
+    <div *ngIf="isHsmIcorp" class="row" style="padding-top: 10px;">
       <div class="col-md-12">
         <div class="input-line" [ngClass]="{'invalid': submitted && f.username.errors}">
           <img src="../../assets/img/user_hsm.svg" class="input-img"/>
@@ -42,7 +44,7 @@
       </div>
     </div>
 
-    <div class="row" style="padding-top: 10px;">
+    <!-- <div *ngIf="isHsmIcorp" class="row" style="padding-top: 10px;">
       <div class="col-md-12">
         <div class="input-line" [ngClass]="{'invalid': submitted && f.taxCode.errors}">
           <img src="../../assets/img/bar_code.svg" class="input-img"/>
@@ -59,17 +61,17 @@
           <div *ngIf="f.taxCode.errors.pattern">{{'taxcode.format' | translate}}</div>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <div class="row" style="padding-top: 10px;">
+    <div *ngIf="isHsmIcorp" class="row" style="padding-top: 10px;">
       <div class="col-md-12">
         <div class="input-line" [ngClass]="{'invalid': submitted && f.pass1.errors}">
           <img src="../../assets/img/pass.svg" class="input-img"/>
           <input *ngIf="this.fieldTextType1 === false" type="text" formControlName="pass1" id="pass1"
-                 placeholder="{{(isHsmIcorp ? 'login.password' : 'password.level1') | translate}}"
+                 placeholder="{{(isHsmIcorp ? 'password.level2' : 'password.level1') | translate}}"
                  class="input-text pw"/>
           <input *ngIf="this.fieldTextType1 === true" type="text" formControlName="pass1" id="pass1"
-            placeholder="{{(isHsmIcorp ? 'login.password' : 'password.level1') | translate}}"
+            placeholder="{{(isHsmIcorp ? 'password.level2' : 'password.level1') | translate}}"
             class="input-text"/>
           <div class="icon-password">
             <img class="mt-1" (click)="toggleFieldTextType1()" [src]="!fieldTextType1 ? '../../assets/img/password_not_view.svg': '../../assets/img/password_view.svg'" />
@@ -81,6 +83,23 @@
         </div>
       </div>
     </div>
+
+    <div *ngIf="!isHsmIcorp" class="row" style="padding-top: 10px;">
+      <div class="col-md-12">
+        <div class="input-line" [ngClass]="{'invalid': submitted && f.uuid.errors}">
+          <img src="../../assets/img/user_hsm.svg" class="input-img"/>
+          <input
+            type="text" formControlName="uuid"
+            placeholder="UUID"
+            class="input-text"
+          />
+        </div>
+        <div *ngIf="submitted && f.uuid.errors" class="invalid-text">
+          <div *ngIf="f.uuid.errors.required">{{'uuid.blank' | translate}}</div>
+        </div>
+      </div>
+    </div>
+
     <div *ngIf="!isHsmIcorp" class="row" style="padding-top: 10px;">
       <div class="col-md-12">
         <div class="input-line" [ngClass]="{'invalid': submitted && f.pass2.errors}">

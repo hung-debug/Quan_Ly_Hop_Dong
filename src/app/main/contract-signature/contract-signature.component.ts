@@ -1733,13 +1733,14 @@ export class ContractSignatureComponent implements OnInit {
           }
 
           this.dataHsm = {
-            ma_dvcs: resultHsm.ma_dvcs,
+            // ma_dvcs: resultHsm.ma_dvcs,
             username: resultHsm.username,
             password: resultHsm.password,
             password2: resultHsm.password2,
             image_base64:  result.mark ? signI : null,
             processAt: this.isDateTime,
             supplier: resultHsm.supplier,
+            uuid: resultHsm.uuid,
             type: 3
           };
 

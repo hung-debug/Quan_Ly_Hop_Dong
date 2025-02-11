@@ -1726,10 +1726,11 @@ export class ConsiderContractComponent
 
                   this.dataHsm = {
                     supplier: '',
-                    ma_dvcs: '',
+                    //ma_dvcs: '',
                     username: '',
                     password: '',
                     password2: '',
+                    uuid: '',
                     imageBase64: '',
                   };
 
@@ -2770,20 +2771,22 @@ export class ConsiderContractComponent
             this.dataHsm = {
               field: fieldHsm,
               supplier: this.dataHsm.supplier,
-              ma_dvcs: this.dataHsm.ma_dvcs,
+              //ma_dvcs: this.dataHsm.ma_dvcs,
               username: this.dataHsm.username,
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
+              uuid: this.dataHsm.uuid,
               imageBase64: (!this.markImage && signUpdate.type==3) ? null : (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
           } else {
             this.dataHsm = {
               field: fieldHsm,
               supplier: this.dataHsm.supplier,
-              ma_dvcs: this.dataHsm.ma_dvcs,
+              //ma_dvcs: this.dataHsm.ma_dvcs,
               username: this.dataHsm.username,
               password: this.dataHsm.password,
               password2: this.dataHsm.password2,
+              uuid: this.dataHsm.uuid,
               imageBase64: (!this.markImage && signUpdate.type==3) ? null :
                             (this.markImage && signUpdate.type==3) ? this.srcMark.split(',')[1] : signI,
             };
@@ -5012,11 +5015,11 @@ export class ConsiderContractComponent
 
         if (result) {
           this.dataHsm.supplier = result.supplier
-          this.dataHsm.ma_dvcs = result.ma_dvcs;
+          //this.dataHsm.ma_dvcs = result.ma_dvcs;
           this.dataHsm.username = result.username;
           this.dataHsm.password = result.password;
           this.dataHsm.password2 = result.password2;
-
+          this.dataHsm.uuid = result.uuid;
           await this.signContractSubmit();
         }
       });

@@ -1219,7 +1219,8 @@ export class ContractService {
       // isTimestamp: isTimestamp
       field: datas.field,
       type: boxType,
-      supplier: datas.supplier
+      supplier: datas.supplier,
+      uuid: datas.uuid
     });
 
     return this.http
@@ -1262,6 +1263,7 @@ export class ContractService {
       password: datas.password,
       password2: datas.password2,
       image_base64: datas.imageBase64,
+      uuid: datas.uuid
     });
 
     return this.http
