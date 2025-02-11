@@ -23,7 +23,8 @@ export class FilterListDialogComponent implements OnInit {
     { "id": 2, "name": this.translate.instant('contract.status.overdue') },
     { "id": 31, "name": this.translate.instant('contract.status.fail') },
     { "id": 32, "name": this.translate.instant('contract.status.cancel') },
-    { "id": 30, "name": this.translate.instant('contract.status.complete') }
+    { "id": 30, "name": this.translate.instant('contract.status.complete') },
+    { "id": 40, "name": this.translate.instant('liquidated') }
   ];
   contractStatusProcessingList: { id: number, name: string }[] = [
     { "id": 20, "name": this.translate.instant('sys.processing') },
