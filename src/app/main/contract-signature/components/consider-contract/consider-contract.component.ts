@@ -2333,7 +2333,7 @@ export class ConsiderContractComponent
   font: any;
   font_size: any;
   currentBoxSignType: any
-  async signDigitalDocument(isVnptSmartCa = false) {
+  async signDigitalDocument(supplierID: any) {
     let typeSignDigital = this.typeSignDigital;
     let checkCurrentSigningStatus: any = false;
     checkCurrentSigningStatus = await this.checkCurrentSigningCall()
@@ -3272,7 +3272,7 @@ export class ConsiderContractComponent
                   this.recipientId,
                   this.isTimestamp,
                   signUpdate.type,
-                  isVnptSmartCa
+                  supplierID
                 );
                 if (!checkSign || (checkSign && !checkSign.success)) {
                   if (!checkSign.message) {
@@ -3321,7 +3321,7 @@ export class ConsiderContractComponent
                     this.recipientId,
                     this.isTimestamp,
                     signUpdate.type,
-                    isVnptSmartCa
+                    supplierID
                   );
                   if (!checkSign || (checkSign && !checkSign.success)) {
                     if (!checkSign.message) {
@@ -3411,7 +3411,7 @@ export class ConsiderContractComponent
   }
 
   otp: boolean = false;
-  async signContractSubmit(isVnptSmartCa = false) {
+  async signContractSubmit(supplierID:any=!1) {
     this.spinner.show();
     const signUploadObs$ = [];
     let indexSignUpload: any[] = [];
@@ -3491,11 +3491,11 @@ export class ConsiderContractComponent
     );
 
     if (signUploadObs$.length == 0 || eKYC == 1) {
-      await this.signContract(true, isVnptSmartCa);
+      await this.signContract(true, supplierID);
     }
   }
 
-  async signContract(notContainSignImage?: boolean, isVnptSmartCa = false) {
+  async signContract(notContainSignImage?: boolean, supplierID =! 1) {
     const signUpdateTemp = JSON.parse(
       JSON.stringify(this.isDataObjectSignature)
     );
@@ -3629,7 +3629,7 @@ export class ConsiderContractComponent
         }
       }
     } else {
-      await this.signImageC(signUpdatePayload, notContainSignImage, isVnptSmartCa);
+      await this.signImageC(signUpdatePayload, notContainSignImage, supplierID);
     }
   }
 
@@ -4069,7 +4069,7 @@ export class ConsiderContractComponent
   }
 
   filePath: any = '';
-  async signImageC(signUpdatePayload: any, notContainSignImage: any, isVnptSmartCa = false) {
+  async signImageC(signUpdatePayload: any, notContainSignImage: any, supplierID:any=!1) {
     let signDigitalStatus = null;
     let signUpdateTempN: any[] = [];
     if(this.firstHandler) {
@@ -4083,7 +4083,7 @@ export class ConsiderContractComponent
     if (signUpdatePayload) {
       signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
       if (notContainSignImage) {
-        signDigitalStatus = await this.signDigitalDocument(isVnptSmartCa);
+        signDigitalStatus = await this.signDigitalDocument(supplierID);
 
         if (this.eKYC == false) {
           signUpdateTempN = signUpdateTempN
@@ -4154,7 +4154,7 @@ export class ConsiderContractComponent
             this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
               async (result) => {
                 if (!notContainSignImage) {
-                  await this.signDigitalDocument(isVnptSmartCa);
+                  await this.signDigitalDocument(supplierID);
                 }
 
                 this.router
@@ -4221,7 +4221,7 @@ export class ConsiderContractComponent
       this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
         async (result) => {
           if (!notContainSignImage) {
-            await this.signDigitalDocument(isVnptSmartCa);
+            await this.signDigitalDocument(supplierID);
           }
 
           this.router.navigateByUrl('/', { skipLocationChange: true })
@@ -4309,7 +4309,7 @@ export class ConsiderContractComponent
             } else {
               if (!notContainSignImage) {
                 //Ký số
-                await this.signDigitalDocument(isVnptSmartCa);
+                await this.signDigitalDocument(supplierID);
               }
 
               this.router
@@ -4373,7 +4373,7 @@ export class ConsiderContractComponent
       }
       if (this.currentBoxSignType == 8) {
         this.spinner.hide()
-        this.remoteDialogSuccessOpen(isVnptSmartCa).then(result => {
+        this.remoteDialogSuccessOpen(supplierID).then(result => {
           if (result.isDismissed) {
             this.router.navigate([
               'main/form-contract/detail/' + this.idContract,
@@ -5116,15 +5116,14 @@ export class ConsiderContractComponent
         let imageRender = null;
 
         this.cardId = result?.ma_dvcs?.trim();
-        let isVnptSmartCA = false
-        if (result?.type == '1') {
-          isVnptSmartCA = true;
-        }
-
+        // let isVnptSmartCA = false
+        // if (result?.type == '1') {
+        //   isVnptSmartCA = true;
+        // }
         if (result) {
+          let supplierID = result.type;
           this.dataCert.cert_id = result.ma_dvcs;
-
-          await this.signContractSubmit(isVnptSmartCA);
+          await this.signContractSubmit(supplierID);
         }
       });
     })
@@ -5419,11 +5418,25 @@ export class ConsiderContractComponent
     })
   }
 
-  remoteDialogSuccessOpen(isVnptSmartCa = false) {
+  remoteDialogSuccessOpen(supplierID:any) {
+    let message = "";
+    switch (supplierID) {
+      case "1":
+        message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký tài liệu!";
+        break;
+      case "2":
+        message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống Mobica, vui lòng mở App Mobica để ký tài liệu!";
+        break;
+      case "3":
+        message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký tài liệu!";
+        break;
+      default:
+        message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký tài liệu!";
+        break;
+    }
     return Swal.fire({
       title: "THÔNG BÁO",
-      text: isVnptSmartCa ?  "Hệ thống đã thực hiện gửi tài liệu đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký tài liệu!" :
-        "Hệ thống đã thực hiện gửi tài liệu đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký tài liệu!",
+      text: message,
       icon: 'info',
       showCancelButton: true,
       showConfirmButton: false,
