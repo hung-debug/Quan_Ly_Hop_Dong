@@ -1758,48 +1758,53 @@ export class ContractSignatureComponent implements OnInit {
               if (checkSign[i].result.success == false) {
                 this.spinner.hide();
 
-                if (checkSign[i].result.message == 'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu') {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'taxcode.not.match.hsm',
-                    '',
-                    3000
-                  );
-                } else if (
-                  checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
-                ) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'Mật khẩu cấp 2 không đúng',
-                    '',
-                    3000
-                  );
-                } else if (
-                  checkSign[i].result.message == 'License ky so HSM het han!'
-                ) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'License ký số HSM hết hạn!',
-                    '',
-                    3000
-                  );
-                } else if (checkSign.message.includes('Cannot authenticate hsm')) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'Không thể xác thực hsm',
-                    '',
-                    3000
-                  );
-                }
-                else if (checkSign[i].result.message == "false") {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    "Lấy thông tin chứng thư số thất bại",
-                    '',
-                    3000
-                  );
-                } else {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    checkSign[i].result.message,
-                    '',
-                    3000
-                  );
-                }
+                this.toastService.showErrorHTMLWithTimeout(
+                  checkSign[i].result.message,
+                  '',
+                  3000
+                );
+                // if (checkSign[i].result.message == 'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu') {
+                //   this.toastService.showErrorHTMLWithTimeout(
+                //     'taxcode.not.match.hsm',
+                //     '',
+                //     3000
+                //   );
+                // } else if (
+                //   checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
+                // ) {
+                //   this.toastService.showErrorHTMLWithTimeout(
+                //     'Mật khẩu cấp 2 không đúng',
+                //     '',
+                //     3000
+                //   );
+                // } else if (
+                //   checkSign[i].result.message == 'License ky so HSM het han!'
+                // ) {
+                //   this.toastService.showErrorHTMLWithTimeout(
+                //     'License ký số HSM hết hạn!',
+                //     '',
+                //     3000
+                //   );
+                // } else if (checkSign.message.includes('Cannot authenticate hsm')) {
+                //   this.toastService.showErrorHTMLWithTimeout(
+                //     'Không thể xác thực hsm',
+                //     '',
+                //     3000
+                //   );
+                // }
+                // else if (checkSign[i].result.message == "false") {
+                //   this.toastService.showErrorHTMLWithTimeout(
+                //     "Lấy thông tin chứng thư số thất bại",
+                //     '',
+                //     3000
+                //   );
+                // } else {
+                //   this.toastService.showErrorHTMLWithTimeout(
+                //     checkSign[i].result.message,
+                //     '',
+                //     3000
+                //   );
+                // }
                 return;
               } else {
                 countSuccess++;

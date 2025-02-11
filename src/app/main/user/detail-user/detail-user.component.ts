@@ -13,6 +13,7 @@ import { networkList } from "../../../config/variable";
 })
 export class DetailUserComponent implements OnInit {
 
+  isHsmIcorp: boolean = false
   name:any="";
   email:any="";
   birthday:any="";
@@ -25,8 +26,9 @@ export class DetailUserComponent implements OnInit {
   networkKpi:any="";
 
   nameHsm:any="";
-  taxCodeHsm:any="";
-  password1Hsm:any="";
+  uuid:any="";
+  supplier:any="";
+  // password1Hsm:any="";
 
   imgSignPCSelect:any
   imgSignPCSelectMark: any
@@ -84,7 +86,7 @@ export class DetailUserComponent implements OnInit {
       this.id = params['id'];
       this.userService.getUserById(this.id).subscribe(
         data => {
-          
+          this.isHsmIcorp = data.hsm_supplier === "icorp";
           this.name = data.name;
           this.email = data.email;
           this.birthday = data.birthday;
@@ -97,8 +99,13 @@ export class DetailUserComponent implements OnInit {
           this.networkKpi = data.phone_tel;
 
           this.nameHsm = data.hsm_name;
-          this.taxCodeHsm = data.tax_code;
-          this.password1Hsm = data.hsm_pass;
+          this.uuid = data.uuid;
+          if(data.hsm_supplier == "icorp") {
+            this.supplier = "I-CA";
+          } else if (data.hsm_supplier == "mobifone") {
+            this.supplier = "MobiFone";
+          }
+          // this.password1Hsm = data.hsm_pass;
 
           this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
           

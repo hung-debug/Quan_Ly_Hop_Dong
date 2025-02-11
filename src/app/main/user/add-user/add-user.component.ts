@@ -433,7 +433,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       networkKpi: this.addForm.value.networkKpi,
       nameHsm: this.addForm.value.nameHsm,
       uuid: this.addForm.value.uuid,
-      supplier: this.addForm.value.supplier,
+      hsm_supplier: this.addForm.value.supplier,
       taxCodeHsm: this.addForm.value.taxCodeHsm,
       password1Hsm: this.addForm.value.password1Hsm,
       fileImage: this.attachFile,
