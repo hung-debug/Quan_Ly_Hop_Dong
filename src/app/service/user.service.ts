@@ -241,6 +241,8 @@ export class UserService {
       hsm_name: datas.nameHsm,
       tax_code: datas.taxCodeHsm,
       hsm_pass: datas.password1Hsm,
+      hsm_supplier: datas.hsm_supplier,
+      uuid: datas.uuid
     });
 
 
