@@ -6,7 +6,7 @@ import { UserService } from 'src/app/service/user.service';
 import { AppService } from 'src/app/service/app.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { RoleService } from 'src/app/service/role.service';
-import { networkList } from "../../../config/variable";
+import { networkList, supplier } from "../../../config/variable";
 import { UploadService } from 'src/app/service/upload.service';
 import {parttern_input, parttern} from "../../../config/parttern";
 import * as moment from "moment";
@@ -28,6 +28,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
   networkList: Array<any> = [];
+  supplierList: Array<any> = [];
   roleList: Array<any> = [];
   phoneOld:any;
 
@@ -52,6 +53,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
   isQLND_02:boolean=true;  //sua nguoi dung
+  isHsmIcorp: boolean = false
 
   constructor(private appService: AppService,
               private toastService : ToastService,
@@ -78,6 +80,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
       networkKpi: null,
 
       nameHsm: this.fbd.control("", Validators.pattern(parttern_input.new_input_form)),
+      uuid: this.fbd.control(""),
+      supplier: this.fbd.control(""),
       taxCodeHsm: this.fbd.control("",Validators.pattern(parttern_input.taxCode_form)),
       password1Hsm: this.fbd.control(""),
 
@@ -85,6 +89,10 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
       organization_change:null
     });
+  }
+
+  onSupplierChange(event: any) {
+    this.isHsmIcorp = event.value === "icorp";
   }
 
   getDataOnInit(){
@@ -96,6 +104,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
         this.orgList = data.entities;
       });
       this.networkList = networkList;
+      this.supplierList = supplier;
     }
 
     if(this.isQLND_02) {
@@ -130,6 +139,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
             networkKpi: null,
 
             nameHsm: this.fbd.control("", Validators.pattern(parttern_input.new_input_form)),
+            uuid:  this.fbd.control(""),
+            supplier: this.fbd.control(""),
             taxCodeHsm: this.fbd.control("",Validators.pattern(parttern.cardid)),
             password1Hsm: this.fbd.control(""),
 
@@ -148,7 +159,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
         if(this.isQLND_02){
           this.userService.getUserById(this.id).subscribe(
             data => {
-              
+              this.isHsmIcorp = data.hsm_supplier === "icorp";
               if (data.login_type == null) {
                 data.login_type = 'EMAIL';
               }
@@ -182,7 +193,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
                     nameHsm: this.fbd.control(data.hsm_name , Validators.pattern(parttern_input.new_input_form)),
                     taxCodeHsm: this.fbd.control(data.tax_code,Validators.pattern(parttern.cardid)),
                     password1Hsm: this.fbd.control(data.hsm_pass),
-
+                    uuid:  this.fbd.control(data.uuid),
+                    supplier: this.fbd.control(data.hsm_supplier),
                     fileImage:null,
 
                     organization_change: data.organization_change
@@ -420,6 +432,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
       phoneKpi: this.addForm.value.phoneKpi,
       networkKpi: this.addForm.value.networkKpi,
       nameHsm: this.addForm.value.nameHsm,
+      uuid: this.addForm.value.uuid,
+      supplier: this.addForm.value.supplier,
       taxCodeHsm: this.addForm.value.taxCodeHsm,
       password1Hsm: this.addForm.value.password1Hsm,
       fileImage: this.attachFile,

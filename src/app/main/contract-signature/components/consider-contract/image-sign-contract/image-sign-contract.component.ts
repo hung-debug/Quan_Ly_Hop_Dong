@@ -123,6 +123,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       this.pkiDialogSignOpen();
     } else if (typeSign == 4) {
       this.hsmDialogSignOpen();
+      ///
     }
   }
 

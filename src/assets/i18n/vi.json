@@ -487,10 +487,10 @@
   "sign.day":"Ngày ký",
   "sign.by":"Ký bởi",
   "password.level1":"Mật khẩu cấp 1",
-  "password.level2":"Mật khẩu cấp 2",
+  "password.level2":"Mã PIN/Mật khẩu",
   "password.level1.blank":"Mật khẩu cấp 1 không được để trống",
-  "password.level2.blank":"Mật khẩu cấp 2 không được để trống",
-  "user.blank":"Tên người dùng không dược để trống",
+  "password.level2.blank":"Mật khẩu không được để trống",
+  "user.blank":"Tên người dùng không được để trống",
   "username":"Tên đăng nhập",
   "taxcode.blank":"Mã số thuế/CMT/CCCD không được để trống",
   "taxcode.format":"Mã số thuế/CMT/CCCD không đúng định dạng",
@@ -964,5 +964,8 @@
   "person_cc": "NGƯỜI ĐƯỢC CC",
   "search.code.number.name.1": "Mã TL, Số TL, Tên TL",
   "liquidated": "Thanh lý",
-  "text.support.extension": "Vui lòng tải lên ảnh chữ ký/ con dấu đã được tách nền (PNG) để đảm bảo hiển thị chính xác và chuyên nghiệp trên tài liệu/ hợp đồng!"
+  "text.support.extension": "Vui lòng tải lên ảnh chữ ký/ con dấu đã được tách nền (PNG) để đảm bảo hiển thị chính xác và chuyên nghiệp trên tài liệu/ hợp đồng!",
+  "uuid.blank":"UUID không được để trống",
+  "supplier": "Nhà cung cấp",
+  "choose.supplier": "Chọn nhà cung cấp"
 }

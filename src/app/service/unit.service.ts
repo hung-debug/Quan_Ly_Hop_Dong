@@ -131,6 +131,8 @@ export class UnitService {
       parent_id: datas.parent_id,
       path: datas.path,
       tax_code: datas.tax_code,
+      uuid: datas.uuid,
+      hsm_supplier: datas.hsm_supplier,
       // brandName: datas.brandName,
       // smsUser: datas.smsUser,
       // smsPass: datas.smsPass,

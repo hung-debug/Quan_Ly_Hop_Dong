@@ -7,7 +7,7 @@ import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UploadService } from 'src/app/service/upload.service';
 import { UserService } from 'src/app/service/user.service';
-import { networkList } from "../../../config/variable";
+import { networkList, supplier } from "../../../config/variable";
 import {parttern_input, parttern} from "../../../config/parttern"
 import * as moment from "moment";
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -33,6 +33,7 @@ export class InforUserComponent implements OnInit {
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
   networkList: Array<any> = [];
+  supplierList: Array<any> = [];
   roleList: Array<any> = [];
 
   addInforForm: FormGroup;
@@ -57,7 +58,7 @@ export class InforUserComponent implements OnInit {
   roleName:any;
   maxDate: Date = moment().toDate();
   isDisable: any;
-
+  isHsmIcorp: boolean = false
   constructor(private appService: AppService,
     private toastService : ToastService,
     private userService : UserService,
@@ -88,6 +89,8 @@ export class InforUserComponent implements OnInit {
       });
    
       this.addHsmForm = this.fbd.group({
+        supplier: null,
+        uuid: null,
         nameHsm: this.fbd.control("", Validators.pattern(parttern_input.new_input_form)),
         taxCodeHsm: this.fbd.control("",[
             Validators.pattern(parttern.cardid),
@@ -110,6 +113,7 @@ export class InforUserComponent implements OnInit {
     });
 
     this.networkList = networkList;
+    this.supplierList = supplier;
     this.user = this.userService.getInforUser();
     this.appService.setTitle('user.information');
     this.appService.setSubTitle('');
@@ -167,13 +171,15 @@ export class InforUserComponent implements OnInit {
           networkKpi: data.phone_tel == 3 ? 'bcy': data.phone_tel,
           is_show_phone_pki: data.is_show_phone_pki, 
         });
-
+        this.isHsmIcorp = data.hsm_supplier === "icorp";
         this.addHsmForm = this.fbd.group({
           nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.new_input_form)),
           taxCodeHsm: this.fbd.control(data.tax_code, [
               Validators.pattern(parttern.cardid),
             ]
             ),
+          supplier: this.fbd.control(data.hsm_supplier),
+          uuid: this.fbd.control(data.uuid),
           password1Hsm: this.fbd.control(data.hsm_pass)
         });
 
@@ -200,6 +206,8 @@ export class InforUserComponent implements OnInit {
           is_show_phone_pki: data.is_show_phone_pki,
         });
         this.addHsmFormOld = this.fbd.group({
+          supplier: this.fbd.control(data.hsm_supplier),
+          uuid: this.fbd.control(data.uuid),
           nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.new_input_form)),
           taxCodeHsm: this.fbd.control(data.tax_code, [
             Validators.pattern(parttern.cardid),
@@ -211,7 +219,11 @@ export class InforUserComponent implements OnInit {
       }
     )
   }
-  
+
+  onSupplierChange(event: any) {
+    this.isHsmIcorp = event.value === "icorp";
+  }
+
   fieldTextType: boolean = false;
   toggleFieldTextType() {
     this.fieldTextType = !this.fieldTextType;
@@ -337,6 +349,8 @@ export class InforUserComponent implements OnInit {
       phoneKpi: this.addKpiFormOld.value.phoneKpi,
       networkKpi: this.addKpiFormOld.value.networkKpi,
       is_show_phone_pki: this.addKpiFormOld.value.is_show_phone_pki,
+      hsm_supplier: this.addHsmFormOld.value.supplier,
+      uuid: this.addHsmFormOld.value.uuid,
       nameHsm: this.addHsmFormOld.value.nameHsm,
 
       organization_change: this.addInforForm.value.organization_change
@@ -425,6 +439,8 @@ export class InforUserComponent implements OnInit {
       phoneKpi: this.addKpiForm.value.phoneKpi,
       networkKpi: this.addKpiForm.value.networkKpi == 'bcy' ? 3: this.addKpiForm.value.networkKpi,
       is_show_phone_pki: this.addKpiForm.value.is_show_phone_pki,
+      hsm_supplier: this.addHsmForm.value.supplier,
+      uuid: this.addHsmForm.value.uuid,
       nameHsm: this.addHsmForm.value.nameHsm,
       taxCodeHsm: this.addHsmForm.value.taxCodeHsm,
       password1Hsm: this.addHsmForm.value.password1Hsm
