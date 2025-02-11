@@ -78,7 +78,7 @@ export class InforUserComponent implements OnInit {
         role: this.fbd.control("", [Validators.required]),
         status: 1,
         organization_change:null,
-        login_type: 'EMAIL'
+        // login_type: 'EMAIL'
       });
      
       this.addKpiForm = this.fbd.group({
@@ -103,7 +103,7 @@ export class InforUserComponent implements OnInit {
     this.unitService.getUnitList('', '').subscribe(data => {
       this.orgList = data.entities;
     });
-    this.addInforForm.get('login_type')?.disable();
+    // this.addInforForm.get('login_type')?.disable();
     //lay danh sach vai tro
     this.roleService.getRoleList('', '').subscribe(data => {
       this.roleList = data.entities;
@@ -116,21 +116,21 @@ export class InforUserComponent implements OnInit {
 
     this.id = this.user.customer_id;
     let arrUser = await this.userService.getUserById(this.id).toPromise();
-    this.isDisable = arrUser.login_type;
+    // this.isDisable = arrUser.login_type;
 
     this.userService.getUserById(this.id).subscribe(
       data => {
-        if (data.login_type == null) {
-          data.login_type = 'EMAIL';
-        }
-        if(data.login_type == 'EMAIL'){
-          this.addInforForm.get('email')?.disable();
-        }else if(data.login_type == 'SDT'){
-          this.addInforForm.get('phone')?.disable();
-        }else if(data.login_type == 'EMAIL_AND_SDT'){
-          this.addInforForm.get('email')?.disable();
-          this.addInforForm.get('phone')?.disable();
-        }
+        // if (data.login_type == null) {
+        //   data.login_type = 'EMAIL';
+        // }
+        // if(data.login_type == 'EMAIL'){
+        //   this.addInforForm.get('email')?.disable();
+        // }else if(data.login_type == 'SDT'){
+        //   this.addInforForm.get('phone')?.disable();
+        // }else if(data.login_type == 'EMAIL_AND_SDT'){
+        //   this.addInforForm.get('email')?.disable();
+        //   this.addInforForm.get('phone')?.disable();
+        // }
 
         this.addInforForm = this.fbd.group({
           name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.new_input_form)]),
@@ -141,7 +141,7 @@ export class InforUserComponent implements OnInit {
           role: this.fbd.control(data.role_id, [Validators.required]),
           status: data.status,
           organization_change: data.organization_change,
-          login_type: data.login_type ? data.login_type : 'EMAIL',
+          // login_type: data.login_type ? data.login_type : 'EMAIL',
         });
         this.phoneOld = data.phone;
 
@@ -333,7 +333,7 @@ export class InforUserComponent implements OnInit {
       fileImage: this.attachFile,
       fileImageMark: this.attachFileMark,
       sign_image: [],
-      login_type: this.addInforForm.value.login_type,
+      // login_type: this.addInforForm.value.login_type,
       phoneKpi: this.addKpiFormOld.value.phoneKpi,
       networkKpi: this.addKpiFormOld.value.networkKpi,
       is_show_phone_pki: this.addKpiFormOld.value.is_show_phone_pki,
