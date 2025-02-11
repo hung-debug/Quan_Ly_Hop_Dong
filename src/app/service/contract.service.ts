@@ -35,6 +35,7 @@ export class ContractService {
   sidebarContractEvent: EventEmitter<any> = new EventEmitter();
 
   listContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract`;
+  listFileAttch: any = `${environment.apiUrl}/api/v1/contracts/contract-folder/all-refs`;
   listPastContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract/organization-old`;
   listContractOrgUrl: any = `${environment.apiUrl}/api/v1/contracts/my-organization-contract`;
   listContractOrgChildrenUrl: any = `${environment.apiUrl}/api/v1/contracts/my-org-and-descendant-contract`;
@@ -289,6 +290,8 @@ export class ContractService {
     let listContractUrl = '';
     if (isOrg == 'off') {
       if (filter_status == '50') {
+        console.log("1");
+        
         filter_status = '30';
         listContractUrl =
           this.listPastContractUrl +
@@ -314,6 +317,7 @@ export class ContractService {
             listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
           }
       } else {
+        console.log("2");
         listContractUrl =
           this.listContractUrl +
           '?keyword=' +
@@ -339,7 +343,9 @@ export class ContractService {
           }
       }
     } else {
+      console.log("3");
       if (organization_id == '') {
+        console.log("4");
         listContractUrl =
           this.listContractOrgChildrenUrl +
           '?organizationId=' +
@@ -366,6 +372,7 @@ export class ContractService {
             listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
           }
       } else {
+        console.log("5");
         listContractUrl = this.listContractOrgUrl + '?organization_id=' + organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' +
           filter_contract_no.trim() + '&from_date=' + filter_from_date + '&to_date=' + filter_to_date + '&status=' + filter_status + '&remain_day=' + remain_day +
           '&page=' + page + '&size=' + size + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
@@ -381,6 +388,14 @@ export class ContractService {
     //
     const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
+  }
+  
+  getFileAttach(){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<Contract[]>(this.listFileAttch, {headers: headers,});
   }
 
   public getContractMyProcessList(
