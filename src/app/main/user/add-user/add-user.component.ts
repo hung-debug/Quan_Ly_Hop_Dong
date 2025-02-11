@@ -370,7 +370,6 @@ export class AddUserComponent implements OnInit, OnDestroy {
       }
       
       const checkEmail = await this.userService.getUserByEmail(data.email).toPromise();
-
       if(checkEmail?.id){
         this.userService.updateUser(data).subscribe(
           dataOut => {
