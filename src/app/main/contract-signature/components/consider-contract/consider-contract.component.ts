@@ -5478,19 +5478,34 @@ export class ConsiderContractComponent
     });
   }
 
-  getTextAlertRemoteSigningProcess(code: any, supplier?: any) {
+  getTextAlertRemoteSigningProcess(code: any, supplierID?: any) {
+    let appName = "";
+    switch (supplierID) {
+      case "1":
+        appName = "VNPT SmartCA";
+        break;
+      case "2":
+        appName = "MobiCA"; // Hoặc tên app chính xác của Nacencomm
+        break;
+      case "3":
+        appName = "CA2 Remote Signing"; // Hoặc tên app chính xác của Nacencomm
+        break;
+      default:
+        appName = "CA2 Remote Signing";
+        break;
+    }
+  
     switch (code) {
       case "QUA_THOI_GIAN_KY":
-        return supplier == 'vnpt' ? "Tài liệu đã quá thời gian ký trên app VNPT SmartCA, vui lòng thực hiện ký lại trên web/app eContract!"
-          :  "Tài liệu đã quá thời gian ký trên app CA2 RS, vui lòng thực hiện ký lại trên web/app eContract!"
+        return `Tài liệu đã quá thời gian ký trên app ${appName}, vui lòng thực hiện ký lại trên web/app eContract!`;
       case "DANG_XU_LY":
-        return supplier == 'vnpt' ?  "Tài liệu đang được xử lý, vui lòng thực hiện ký trên app VNPT SmartCA và reload lại trang!" :
-          "Tài liệu đang được xử lý, vui lòng thực hiện ký trên app CA2 RS và reload lại trang!"
+        return `Tài liệu đang được xử lý, vui lòng thực hiện ký trên app ${appName} và reload lại trang!`;
       case "HOAN_THANH":
-        return "Tài liệu đã ký thành công!"
+        return "Tài liệu đã ký thành công!";
       case "TU_CHOI":
-        return supplier == 'vnpt' ? "Đã từ chối ký tài liệu trên app VNPT SmartCA, vui lòng thực hiện ký lại trên web/app eContract!" :
-          "Đã từ chối ký tài liệu trên app CA2 RS, vui lòng thực hiện ký lại trên web/app eContract!"
+        return `Đã từ chối ký tài liệu trên app ${appName}, vui lòng thực hiện ký lại trên web/app eContract!`;
+      default:
+        return "Có lỗi xảy ra trong quá trình lấy thông báo. Vui lòng thử lại!"; // Thêm default case để xử lý các trường hợp không xác định
     }
   }
 

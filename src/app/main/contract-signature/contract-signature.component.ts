@@ -1999,10 +1999,8 @@ export class ContractSignatureComponent implements OnInit {
             );
             return;
           }
-          let isVnptSmartCa = false;
-          if (resultRS?.type == '1') {
-            isVnptSmartCa = true
-          }
+          let supplierID = resultRS.type;
+        
           this.nameCompany = resultRS.ma_dvcs;
 
           try {
@@ -2034,7 +2032,7 @@ export class ContractSignatureComponent implements OnInit {
             recipientIds,
             null,
             3,
-            isVnptSmartCa
+            supplierID
           ).then(
             (res: any) => {
               this.spinner.hide();
@@ -2082,7 +2080,7 @@ export class ContractSignatureComponent implements OnInit {
 
               if (countSuccess == checkSign.length) {
                 this.spinner.hide();
-                this.remoteDialogSuccessOpen(isVnptSmartCa).then((res) => {
+                this.remoteDialogSuccessOpen(supplierID).then((res) => {
                   if (res.isDismissed) {
                     this.router
                       .navigateByUrl('/', { skipLocationChange: true })
@@ -2103,21 +2101,35 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
-  remoteDialogSuccessOpen(isVnptSmartCa = false) {
-    return Swal.fire({
-      title: "THÔNG BÁO",
-      text: isVnptSmartCa ? "Hệ thống đã thực hiện gửi tài liệu đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký tài liệu!" :
-        "Hệ thống đã thực hiện gửi tài liệu đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký tài liệu!",
-      icon: 'info',
-      showCancelButton: true,
-      showConfirmButton: false,
-      cancelButtonColor: '#b0bec5',
-      cancelButtonText: "Thoát",
-      customClass: {
-        title: 'my-custom-title-class',
-      },
-    });
-  }
+  remoteDialogSuccessOpen(supplierID:any) {
+      let message = "";
+      switch (supplierID) {
+        case "1":
+          message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký tài liệu!";
+          break;
+        case "2":
+          message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống Mobica, vui lòng mở App Mobica để ký tài liệu!";
+          break;
+        case "3":
+          message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký tài liệu!";
+          break;
+        default:
+          message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký tài liệu!";
+          break;
+      }
+      return Swal.fire({
+        title: "THÔNG BÁO",
+        text: message,
+        icon: 'info',
+        showCancelButton: true,
+        showConfirmButton: false,
+        cancelButtonColor: '#b0bec5',
+        cancelButtonText: "Thoát",
+        customClass: {
+          title: 'my-custom-title-class',
+        },
+      });
+    }
 
   getValueByKey(inputString: string, key: string) {
     const elements : any = inputString?.split(', ');
