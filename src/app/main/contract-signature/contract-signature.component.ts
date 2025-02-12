@@ -2105,16 +2105,16 @@ export class ContractSignatureComponent implements OnInit {
       let message = "";
       switch (supplierID) {
         case "1":
-          message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký tài liệu!";
+          message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
           break;
         case "2":
-          message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống Mobica, vui lòng mở App Mobica để ký tài liệu!";
+          message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
           break;
         case "3":
-          message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký tài liệu!";
+          message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
           break;
         default:
-          message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký tài liệu!";
+          message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
           break;
       }
       return Swal.fire({
