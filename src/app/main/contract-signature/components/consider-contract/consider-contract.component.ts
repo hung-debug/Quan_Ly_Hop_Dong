@@ -5397,16 +5397,16 @@ export class ConsiderContractComponent
     let message = "";
     switch (supplierID) {
       case "1":
-        message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký tài liệu!";
+        message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!!";
         break;
       case "2":
-        message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống Mobica, vui lòng mở App Mobica để ký tài liệu!";
+        message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
         break;
       case "3":
-        message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký tài liệu!";
+        message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
         break;
       default:
-        message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký tài liệu!";
+        message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
         break;
     }
     return Swal.fire({
@@ -5472,13 +5472,13 @@ export class ConsiderContractComponent
   
     switch (code) {
       case "QUA_THOI_GIAN_KY":
-        return `Tài liệu đã quá thời gian ký trên app ${appName}, vui lòng thực hiện ký lại trên web/app eContract!`;
+        return `Tài liệu đã quá thời gian ký số trên app Remote Signing, vui lòng thực hiện ký lại trên web/app eContract!`;
       case "DANG_XU_LY":
-        return `Tài liệu đang được xử lý, vui lòng thực hiện ký trên app ${appName} và reload lại trang!`;
+        return `Tài liệu đang được xử lý, vui lòng thực hiện ký trên app Remote Signing và reload lại trang!`;
       case "HOAN_THANH":
         return "Tài liệu đã ký thành công!";
       case "TU_CHOI":
-        return `Đã từ chối ký tài liệu trên app ${appName}, vui lòng thực hiện ký lại trên web/app eContract!`;
+        return `Đã từ chối ký số tài liệu trên app Remote Signing, vui lòng thực hiện ký lại trên web/app eContract!`;
       default:
         return "Có lỗi xảy ra trong quá trình lấy thông báo. Vui lòng thử lại!"; // Thêm default case để xử lý các trường hợp không xác định
     }
