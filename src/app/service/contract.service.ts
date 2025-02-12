@@ -1347,7 +1347,7 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     const supplierMap: { [key: number]: string } = {
         1: 'vnpt',
-        2: 'mobica',
+        2: 'mobiCA',
         3: 'nacencomm'
       };
     const supplier = supplierMap[supplierID] || 'vnpt';
@@ -1373,7 +1373,7 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     const supplierMap: { [key: number]: string } = {
         1: 'vnpt',
-        2: 'mobica',
+        2: 'mobiCA',
         3: 'nacencomm'
       };
     const supplier = supplierMap[supplierID] || 'vnpt';
