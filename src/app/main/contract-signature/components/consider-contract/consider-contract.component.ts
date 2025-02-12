@@ -5453,14 +5453,17 @@ export class ConsiderContractComponent
     });
   }
 
-  getTextAlertRemoteSigningProcess(code: any, supplier?: any) {
+  getTextAlertRemoteSigningProcess(code: any, supplierID?: any) {
     let appName = "";
-    switch (supplier) {
-      case "vnpt":
+    switch (supplierID) {
+      case "1":
         appName = "VNPT SmartCA";
         break;
-      case "nacencomm":
+      case "2":
         appName = "MobiCA"; // Hoặc tên app chính xác của Nacencomm
+        break;
+      case "3":
+        appName = "CA2 Remote Signing"; // Hoặc tên app chính xác của Nacencomm
         break;
       default:
         appName = "CA2 Remote Signing";
