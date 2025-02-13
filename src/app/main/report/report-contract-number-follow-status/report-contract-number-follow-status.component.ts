@@ -53,6 +53,8 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
 
    Arr = Array;
 
+   isExporting: boolean = false; // Thêm biến cờ
+
   constructor(
     private appService: AppService,
     private userService: UserService,
@@ -154,7 +156,14 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
       return;
     }
 
-    this.spinner.show();
+    // Vô hiệu hóa nút export
+    this.isExporting = true;
+
+    // Hiển thị thông báo "Báo cáo đang được xuất"
+    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+
+    // Ẩn spinner
+    this.spinner.hide();
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length ? this.selectedNodeOrganization : this.selectedNodeOrganization[0]
 
@@ -177,30 +186,31 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
 
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
 
-    const response = await this.reportService.export('rp-by-status',idOrg,params, flag).toPromise();
-
-    this.spinner.hide();
-    if(flag) {
-      let url = window.URL.createObjectURL(response);
-      let a = document.createElement('a');
-      document.body.appendChild(a);
-      a.setAttribute('style', 'display: none');
-      a.href = url;
-      a.download = `BaoCaoSLTheoTrangThai_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
-      a.click();
-      window.URL.revokeObjectURL(url);
-      a.remove();
-
-      this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
-    } else {
-
-      this.list = [];
-      this.table.first = 0
+      const response = await this.reportService.export('rp-by-status',idOrg,params, flag).toPromise();
 
       this.spinner.hide();
-      this.clickReport = true;
+      if(flag) {
+        let url = window.URL.createObjectURL(response);
+        let a = document.createElement('a');
+        document.body.appendChild(a);
+        a.setAttribute('style', 'display: none');
+        a.href = url;
+        a.download = `BaoCaoSLTheoTrangThai_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
 
-      this.list = response;
+        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+        this.isExporting = false;
+      } else {
+
+        this.list = [];
+        this.table.first = 0
+
+        this.spinner.hide();
+        this.clickReport = true;
+
+        this.list = response;
     }
   }
 

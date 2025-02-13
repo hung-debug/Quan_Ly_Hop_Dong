@@ -62,6 +62,9 @@ export class ReportContractReceiveComponent implements OnInit {
   enterPage: number = 1;
   inputTimeout: any;
   numberPage: number;
+
+  isExporting: boolean = false; // Thêm biến cờ
+
   constructor(
     private appService: AppService,
     private userService: UserService,
@@ -263,7 +266,14 @@ export class ReportContractReceiveComponent implements OnInit {
       return;
     }
 
-    this.spinner.show();
+    // Vô hiệu hóa nút export
+    this.isExporting = true;
+
+    // Hiển thị thông báo "Báo cáo đang được xuất"
+    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+
+    // Ẩn spinner
+    this.spinner.hide();
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length ? this.selectedNodeOrganization : this.selectedNodeOrganization[0]
 
@@ -308,6 +318,7 @@ export class ReportContractReceiveComponent implements OnInit {
           a.remove();
   
           this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+          this.isExporting = false;
         } else {
           this.table.first = 0
           this.list = [];

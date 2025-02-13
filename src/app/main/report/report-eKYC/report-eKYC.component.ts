@@ -43,6 +43,9 @@ export class ReportEKYCComponent implements OnInit {
   inputTimeout: any;
   numberPage: number;
   pageOptions: any[] = [10, 20, 50, 100];
+
+  isExporting: boolean = false; // Thêm biến cờ
+
   constructor(
     private appService: AppService,
     private inputTreeService: InputTreeService,
@@ -171,6 +174,15 @@ export class ReportEKYCComponent implements OnInit {
   }
   
   async exportEKYCReportCall(isExport: boolean){
+    // Vô hiệu hóa nút export
+    this.isExporting = true;
+
+    // Hiển thị thông báo "Báo cáo đang được xuất"
+    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+
+    // Ẩn spinner
+    this.spinner.hide();
+
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length
     ? this.selectedNodeOrganization
     : this.selectedNodeOrganization[0];
@@ -225,6 +237,7 @@ export class ReportEKYCComponent implements OnInit {
             this.spinner.hide()
             if (res) {
               this.toastService.showSuccessHTMLWithTimeout('Xuất file báo cáo thành công','',3000)
+              this.isExporting = false;
               this.downloadFile(res)
             }
             // this.list = res.content.filter((item: any) => !item.emailOrPhone.includes('@'))

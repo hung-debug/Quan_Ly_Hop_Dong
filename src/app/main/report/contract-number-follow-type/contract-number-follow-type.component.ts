@@ -62,6 +62,8 @@ export class ContractNumberFollowTypeComponent implements OnInit {
 
   Arr = Array;
 
+  isExporting: boolean = false; // Thêm biến cờ
+
   constructor(
     
     private appService: AppService,
@@ -191,7 +193,14 @@ export class ContractNumberFollowTypeComponent implements OnInit {
       return;
     }
 
-    this.spinner.show();
+    // Vô hiệu hóa nút export
+    this.isExporting = true;
+
+    // Hiển thị thông báo "Báo cáo đang được xuất"
+    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+
+    // Ẩn spinner
+    this.spinner.hide();
 
     let idOrg = this.organization_id;
     if(this.selectedNodeOrganization.data) {
@@ -232,6 +241,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
           a.remove();
   
           this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+          this.isExporting = false;
         } else {
 
           this.table.first = 0

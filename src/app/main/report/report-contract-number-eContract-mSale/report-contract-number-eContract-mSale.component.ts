@@ -45,6 +45,8 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
   contractsSum: number = 0
   isBaoCaoHopDongEcontractMsale: boolean = true;
 
+  isExporting: boolean = false; // Thêm biến cờ
+
   constructor(
     private appService: AppService,
     private inputTreeService: InputTreeService,
@@ -255,7 +257,15 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     if (!this.validData()) {
       return;
     }
-    this.spinner.show();
+
+    // Vô hiệu hóa nút export
+    this.isExporting = true;
+
+    // Hiển thị thông báo "Báo cáo đang được xuất"
+    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+
+    // Ẩn spinner
+    this.spinner.hide();
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length
       ? this.selectedNodeOrganization
@@ -286,7 +296,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       to_date;
 
     //chờ api, api mẫu báo cáo sắp hết hiệu lực
-    if (flag) {
+        if (flag) {
       this.reportService.exportMsale('rp-by-contract-type', idOrg, this.type_id.toString(), params, flag).subscribe(
         (response: any) => {
           this.spinner.hide();
@@ -310,7 +320,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
               )
           }}
       });
-    } else {
+        } else {
       this.reportService.exportMsale('rp-by-contract-type', idOrg, this.type_id.toString(), params, flag).subscribe(
         (response: any) => {
           this.spinner.hide();
@@ -324,22 +334,22 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
           this.list = newMsaleData
           this.table.first = 0
         }, (err: any) => {
-          this.spinner.hide()
-          if (!flag) {
+        this.spinner.hide()
+        if (!flag) {
+          this.toastService.showErrorHTMLWithTimeout(
+            'report.msale.search.failed',
+            '',
+            3000
+          )
+        } else {
+          if (flag) {
             this.toastService.showErrorHTMLWithTimeout(
-              'report.msale.search.failed',
+              'report.msale.download.failed',
               '',
               3000
             )
-          } else {
-            if (flag) {
-              this.toastService.showErrorHTMLWithTimeout(
-                'report.msale.download.failed',
-                '',
-                3000
-              )
-          }}
-      });
+        }}
+    });
     }
   }
 
@@ -372,34 +382,12 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       '&to_date=' +
       to_date;
 
-    if (flag) {
-      this.reportService.exportMsale('rp-by-contract-type-detail', idOrg, this.type_id_detail.toString(), params, flag).subscribe(
-        (response: any) => {
-          this.spinner.hide();
+    this.reportService.exportMsale('rp-by-contract-type-detail', idOrg, this.type_id_detail.toString(), params, flag).subscribe({
+      next: (response: any) => {
+        this.spinner.hide();
+        if (flag) {
           this.exportToExcelDetail(response)
-        },
-        (err: any) => {
-          this.spinner.hide()
-          if (!flag) {
-            this.toastService.showErrorHTMLWithTimeout(
-              'report.msale.search.failed',
-              '',
-              3000
-            )
-          } else {
-            if (flag) {
-              this.toastService.showErrorHTMLWithTimeout(
-                'report.msale.download.failed',
-                '',
-                3000
-              )
-          }}
-      });
-    } else {
-      this.reportService.exportDetail('rp-by-contract-type-detail', idOrg, this.type_id_detail.toString(), params, flag).subscribe(
-        (response: any) => {
-          this.spinner.hide();
-
+        } else {
           let msaleDataDetail: any[] = this.convertObjDataToArr(response)
           let newMsaleDataDetail: any = msaleDataDetail.map((item: any) => ({
             ...item, orgName: this.getOrgNameFromString(item.key), orgId: this.getOrgIdFromString(item.key)
@@ -412,24 +400,30 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
             this.contractsSum += element.data.length
           });
           this.table.first = 0
-        }, (err: any) => {
-          this.spinner.hide()
-          if (!flag) {
+        }
+      },
+      error: (err: any) => {
+        this.spinner.hide()
+        if (!flag) {
+          this.toastService.showErrorHTMLWithTimeout(
+            'report.msale.search.failed',
+            '',
+            3000
+          )
+        } else {
+          if (flag) {
             this.toastService.showErrorHTMLWithTimeout(
-              'report.msale.search.failed',
+              'report.msale.download.failed',
               '',
               3000
             )
-          } else {
-            if (flag) {
-              this.toastService.showErrorHTMLWithTimeout(
-                'report.msale.download.failed',
-                '',
-                3000
-              )
-          }}
-      });
-    }
+        }}
+      },
+      complete: () => {
+        // Hoàn thành
+        this.isExporting = false; // Kích hoạt lại nút export
+      }
+    });
   }
 
   convertObjDataToArr(obj: any) {
