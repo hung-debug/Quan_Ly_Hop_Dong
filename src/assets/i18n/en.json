@@ -415,6 +415,7 @@
   "org.contract": "Organization's document",
   "choose.contract": "Choose document",
   "choose.contract.type": "Choose type of document",
+  "choose.attach.file":"Completed Document or in the Folder Management menu",
   "side": "Side",
   "cancel": "Cancel",
   "type_of_sign": "Type of sign",

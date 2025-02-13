@@ -189,7 +189,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.name = this.datas.name ? this.datas.name : null;
     this.contract_no = this.datas.contract_no ? this.datas.contract_no.trim() : this.datas.contract_no;
     this.type_id = this.datas.type_id ? this.datas.type_id : null;
-
+    console.log("this.datas",this.datas);
+  
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
 
     this.sign_time = this.datas.sign_time ? moment(this.datas.sign_time).toDate() : moment(new Date()).add(30, 'day').toDate();
@@ -210,8 +211,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.typeList = data
     });
 
-    this.contractService.getContractList('off', '', '', '', '', '', '', 30, "", 10000,'','').subscribe(data => {
-      this.contractConnectList = data.entities;
+    // this.contractService.getContractList('off', '', '', '', '', '', '', 30, "", 1000,'','').subscribe(data => {
+    //   this.contractConnectList = data.entities;
+    // });
+    
+    this.contractService.getFileAttach().subscribe(data => {
+      this.contractConnectList = data;
     });
 
     this.contractService.getDataNotifyOriganzation().subscribe((response) => {
@@ -450,7 +455,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   //dropdown contract connect
   get getContractConnectItems() {
+    console.log("this.contractConnectList",this.contractConnectList);
+    
     return this.contractConnectList.reduce((acc, curr) => {
+      console.log("acc",acc);
+      console.log("curr",curr);
       acc[curr.item_id] = curr;
       return acc;
     }, {});
@@ -1013,8 +1022,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   convertData(datas: any) {
     //
     if (this.datas.contractConnect != null && this.datas.contractConnect != '') {
+      console.log("this.datas.contractConnect",this.datas.contractConnect);
+      
       const array_empty: any[] = [];
       this.datas.contractConnect.forEach((element: any, index: number) => {
+        console.log("element",element);
+        
         const data = element.ref_id;
         array_empty.push(data);
       })
@@ -1036,6 +1049,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.datas.type_id = this.type_id;
 
     if (this.contractConnect && this.contractConnect.length && this.contractConnect.length > 0) {
+      console.log("this.contractConnect",this.contractConnect);
+      
       const array_empty: ContractConnectArr[] = [];
       this.contractConnect.forEach((element: any, index: number) => {
         const data = new ContractConnectArr(element);
