@@ -166,7 +166,7 @@
                             (crop)="onCroppedSign($event)"></app-image-cropperv2>
 
                         <!-- Hiển thị ảnh cho Sign -->
-                        <img class="hidden_img" (click)="addFileAttach('sign')" src="assets/img/img-icon.svg" width="30"
+                        <img class="hidden_img" *ngIf="imgSignPCSelect" (click)="addFileAttach('sign')" src="assets/img/img-icon.svg" width="30"
                         height="30" />
                         <div class="image-div" *ngIf="imgSignPCSelect && !showCropperSign">
                             <img class="img" [src]="imgSignPCSelect" alt=""
@@ -197,7 +197,7 @@
                             (crop)="onCroppedMark($event)"></app-image-cropperv2>
 
                         <!-- Hiển thị ảnh cho Mark -->
-                        <img class="hidden_img" (click)="addFileAttach('mark')" src="assets/img/img-icon.svg" width="30"
+                        <img class="hidden_img"*ngIf="imgSignPCSelectMark" (click)="addFileAttach('mark')" src="assets/img/img-icon.svg" width="30"
                         height="30" />
                         <div class="image-div" *ngIf="imgSignPCSelectMark && !showCropperMark">
                             <img class="img" [src]="imgSignPCSelectMark" alt=""

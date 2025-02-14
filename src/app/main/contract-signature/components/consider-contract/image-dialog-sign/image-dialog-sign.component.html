@@ -62,7 +62,6 @@
             <div class="upload-image-region d-flex flex-column container-img-file-1">
               <div class="upload-photo" type="button">Tải ảnh lên</div>
               <div class="text-support-extension" style="text-align: center; margin-left: 5%; margin-right: 5%;">{{'text.support.extension' | translate}}</div>
-              <div class="text-support-extension" style="text-align: center;">{{'upload.guild' | translate}}</div>
             </div>
           </div>
         </div>
@@ -72,13 +71,6 @@
       <div class="image-cropper-container-wrapper">
           <app-image-cropper *ngIf="showCropper" [imageSrc]="imgSignPCSelect" (crop)="onCropped($event)" (clear)="onCancelCrop()"></app-image-cropper>
       </div>
-        <div class="dialog-signature" *ngIf="imgSignPCSelect" (click)="addFileAttach()">
-          <img *ngIf="!this.mobile" [src]="imgSignPCSelect" alt=""
-            style="display: block;margin: 0 auto;max-height: 300px;">
-
-          <img *ngIf="this.mobile" [src]="imgSignPCSelect" alt=""
-            style="display: block;margin: 0 auto;max-height: 600px; max-width: 210px;">
-        </div>
       </div>
 
       <div class="signature-container" *ngIf="typeImageSignatureRadio == 3">
