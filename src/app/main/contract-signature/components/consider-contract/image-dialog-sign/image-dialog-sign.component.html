@@ -71,7 +71,6 @@
       <div class="image-cropper-container-wrapper">
           <app-image-cropper *ngIf="showCropper" [imageSrc]="imgSignPCSelect" (crop)="onCropped($event)" (clear)="onCancelCrop()"></app-image-cropper>
       </div>
-        <div class="dialog-signature" *ngIf="imgSignPCSelect" (click)="addFileAttach()">
       </div>
 
       <div class="signature-container" *ngIf="typeImageSignatureRadio == 3">
