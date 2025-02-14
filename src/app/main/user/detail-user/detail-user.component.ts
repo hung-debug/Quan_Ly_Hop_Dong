@@ -130,11 +130,13 @@ export class DetailUserComponent implements OnInit {
             });
           }
           if(data.phone_tel != null){
-            networkList.filter((i: any) => {
-              if(i.id == data.phone_tel){
-                this.networkKpi = i.name;
-              }
-            });
+            if(data.phone_tel == 1) {
+              this.networkKpi = "MobiFone";
+            } else if (data.phone_tel == 2) {
+              this.networkKpi = "Viettel";
+            } else {
+              this.networkKpi = "Ban cơ yếu";
+            }
           }
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
