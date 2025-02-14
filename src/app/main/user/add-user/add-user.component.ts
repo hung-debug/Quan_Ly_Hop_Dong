@@ -159,6 +159,9 @@ export class AddUserComponent implements OnInit, OnDestroy {
         if(this.isQLND_02){
           this.userService.getUserById(this.id).subscribe(
             data => {
+              if(data.phone_tel == 3) {
+                data.phone_tel = "bcy"
+              }
               this.isHsmIcorp = data.hsm_supplier === "icorp";
               if (data.login_type == null) {
                 data.login_type = 'EMAIL';
