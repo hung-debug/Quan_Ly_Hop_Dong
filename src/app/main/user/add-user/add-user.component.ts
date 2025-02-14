@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy,ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from 'src/app/service/toast.service';
@@ -11,6 +11,7 @@ import { UploadService } from 'src/app/service/upload.service';
 import {parttern_input, parttern} from "../../../config/parttern";
 import * as moment from "moment";
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ImageCropperComponentv2 } from '../image-cropper/image-cropperv2.component'; // Import component cropper
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
@@ -35,8 +36,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
   datas: any;
   attachFile:any;
   sign_image:null;
-  imgSignBucket:null;
-  imgSignPath:null;
+  imgSignBucket: string | null = null;
+  imgSignPath: string | null = null;
   isEditRole:boolean=false;
   isMailSame: boolean = false;
 
@@ -52,6 +53,25 @@ export class AddUserComponent implements OnInit, OnDestroy {
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
   isQLND_02:boolean=true;  //sua nguoi dung
+
+  // Các biến liên quan đến ảnh Sign
+  @ViewChild('imageCropperSign') imageCropperSign: ImageCropperComponentv2; // Tham chiếu đến component cropper
+  selectedFileSign: File | null = null; // File ảnh Sign được chọn
+  croppedImageSign: string | null = null; // Dữ liệu base64 của ảnh Sign sau khi crop
+  showCropperSign: boolean = false; // Cờ để hiển thị/ẩn component cropper cho ảnh Sign
+
+  // Các biến liên quan đến ảnh Mark
+  @ViewChild('imageCropperMark') imageCropperMark: ImageCropperComponentv2; // Tham chiếu đến component cropper
+  selectedFileMark: File | null = null; // File ảnh Mark được chọn
+  croppedImageMark: string | null = null; // Dữ liệu base64 của ảnh Mark sau khi crop
+  showCropperMark: boolean = false; // Cờ để hiển thị/ẩn component cropper cho ảnh Mark
+
+  selectedCode: string | null = null; // Lưu mã ('sign' hoặc 'mark') để biết ảnh nào đang được xử lý
+
+  imgSignPCSelect: string;
+  imgSignPCSelectMark: string;
+  imgSignBucketMark: string | null = null;
+  imgSignPathMark: string | null = null;
 
   constructor(private appService: AppService,
               private toastService : ToastService,
@@ -82,6 +102,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       password1Hsm: this.fbd.control(""),
 
       fileImage:null,
+      fileImageMark:null,
 
       organization_change:null
     });
@@ -318,11 +339,21 @@ export class AddUserComponent implements OnInit, OnDestroy {
       this.update(data);
     }
   }
-
-  imgSignBucketMark: any;
-  imgSignPathMark: any
   async update(data:any){
     data.id = this.id;
+    // Upload ảnh Sign
+    if (this.selectedFileSign) {
+      const dataFile = await this.uploadService.uploadFile(this.selectedFileSign).toPromise();
+      this.imgSignPath = dataFile.file_object.file_path;
+      this.imgSignBucket = dataFile.file_object.bucket;
+    }
+
+    // Upload ảnh Mark
+    if (this.selectedFileMark) {
+      const dataFile = await this.uploadService.uploadFile(this.selectedFileMark).toPromise();
+      this.imgSignPathMark = dataFile.file_object.file_path;
+      this.imgSignBucketMark = dataFile.file_object.bucket;
+    }
       if(this.imgSignBucket != null && this.imgSignPath != null && !data.fileImage){
         const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
         const sign_image:never[]=[];
@@ -397,13 +428,33 @@ export class AddUserComponent implements OnInit, OnDestroy {
       this.roleList = data.entities;
     });
   }
-
   onSubmit() {
     this.submitted = true;
     // stop here if form is invalid
     if (this.addForm.invalid) {
       return;
     }
+    this.spinner.show();
+
+    // Kiểm tra và crop ảnh Sign (nếu có)
+    if (this.selectedFileSign && this.showCropperSign) {
+      this.selectedCode = 'sign';
+      this.imageCropperSign.cropImage(); // Gọi hàm cropImage() của component ImageCropper
+      return;
+    }
+
+    // Kiểm tra và crop ảnh Mark (nếu có)
+    if (this.selectedFileMark && this.showCropperMark) {
+      this.selectedCode = 'mark';
+      this.imageCropperMark.cropImage(); // Gọi hàm cropImage() của component ImageCropper
+      return;
+    }
+
+    // Nếu không có ảnh nào cần crop, tiếp tục quá trình
+    this.processSubmit();
+  }
+
+  processSubmit() {
     this.spinner.show();
     const data = {
       id: "",
@@ -590,10 +641,17 @@ export class AddUserComponent implements OnInit, OnDestroy {
           if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'jpge') {
             this.handleUpload(e, code);
 
-            if(code == 'sign')
-              this.attachFile = file;
-            else if(code == 'mark')
-              this.attachFileMark = file;
+            if (code === 'sign') {
+              this.selectedFileSign = file;
+              this.croppedImageSign = null;
+              this.imgSignPCSelect = '';
+              this.showCropperSign = false;
+            } else if (code === 'mark') {
+              this.selectedFileMark = file;
+              this.croppedImageMark = null;
+              this.imgSignPCSelectMark ='';
+              this.showCropperMark = false;
+            }
           }else{
             this.toastService.showErrorHTMLWithTimeout("File tài liệu yêu cầu định dạng JPG, PNG, JPGE", "", 3000);
           }
@@ -608,8 +666,6 @@ export class AddUserComponent implements OnInit, OnDestroy {
     }
   }
 
-  imgSignPCSelect: string;
-  imgSignPCSelectMark: string;
   handleUpload(event: any, code: string) {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -617,9 +673,13 @@ export class AddUserComponent implements OnInit, OnDestroy {
     reader.onload = () => {
       if(code == 'sign') {
         this.imgSignPCSelect = reader.result? reader.result.toString() : '';
+        this.showCropperSign = true; // Hiển thị component cropper cho ảnh Sign
+        this.selectedFileSign = file;
       }
       else if(code == 'mark') {
         this.imgSignPCSelectMark = reader.result? reader.result.toString() : '';
+        this.showCropperMark = true; // Hiển thị component cropper cho ảnh Mark
+        this.selectedFileMark = file;
       }
     };
   }
@@ -636,5 +696,39 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
       sessionStorage.removeItem('isMailSame');
+  }
+   // Hàm được gọi khi ảnh Sign đã được crop
+   onCroppedSign(croppedImage: string) {
+    this.croppedImageSign = croppedImage; // Lưu dữ liệu base64 của ảnh đã crop
+    this.imgSignPCSelect = croppedImage; // Cập nhật ảnh hiển thị
+    this.showCropperSign = false; // Ẩn component cropper
+    this.selectedFileSign = this.base64ToFile(croppedImage, 'cropped-sign.png'); // Tạo File từ base64
+    this.processSubmit();
+  }
+
+    // Hàm được gọi khi ảnh Mark đã được crop
+    onCroppedMark(croppedImage: string) {
+      this.croppedImageMark = croppedImage; // Lưu dữ liệu base64 của ảnh đã crop
+      this.imgSignPCSelectMark = croppedImage; // Cập nhật ảnh hiển thị
+      this.showCropperMark = false; // Ẩn component cropper
+      this.selectedFileMark = this.base64ToFile(croppedImage, 'cropped-mark.png'); // Tạo File từ base64
+      this.processSubmit();
+    }
+
+  // Hàm chuyển đổi base64 thành File
+  base64ToFile(base64String: string, filename: string): File {
+    const arr = base64String.split(',');
+    let mime = '';
+    const match = arr[0].match(/:(.*?);/);
+    if (match && match[1]) {
+      mime = match[1];
+    }
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
   }
 }

@@ -157,12 +157,21 @@
                                     <img src="assets/img/img-icon.svg" alt="#" width="20px">
                                     <div class="text-choose-file">{{'choose.sign.file.image' | translate}}</div>
                                     <div class="text-support-extension">{{'support.format.PNG.JPG.JPGE' | translate}}</div>
+                                    <div class="text-support-extension"style="text-align: center;">{{'upload.guild' | translate}}</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="image-div">
-                            <img *ngIf="imgSignPCSelect" [src]="imgSignPCSelect" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
-                            <img class="hidden_img" (click)="addFileAttach('sign')" src="assets/img/img-icon.svg" width="30" height="30" />
+                        <!-- Cropper cho Sign -->
+                        <app-image-cropperv2 #imageCropperSign *ngIf="showCropperSign" [imageSrc]="imgSignPCSelect"
+                            (crop)="onCroppedSign($event)"></app-image-cropperv2>
+
+                        <!-- Hiển thị ảnh cho Sign -->
+                        <img class="hidden_img" (click)="addFileAttach('sign')" src="assets/img/img-icon.svg" width="30"
+                        height="30" />
+                        <div class="image-div" *ngIf="imgSignPCSelect && !showCropperSign">
+                            <img class="img" [src]="imgSignPCSelect" alt=""
+                                style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%">
+                            
                         </div>
                     </div>
                 </div>
@@ -179,12 +188,21 @@
                                     <img src="assets/img/img-icon.svg" alt="#" width="20px">
                                     <div class="text-choose-file">{{'choose.sign.file.image' | translate}}</div>
                                     <div class="text-support-extension">{{'support.format.PNG.JPG.JPGE' | translate}}</div>
+                                    <div class="text-support-extension" style="text-align: center;">{{'upload.guild' | translate}}</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="image-div">
-                            <img *ngIf="imgSignPCSelectMark" [src]="imgSignPCSelectMark" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
-                            <img class="hidden_img" (click)="addFileAttach('mark')" src="assets/img/img-icon.svg" width="30" height="30" />
+                        <!-- Cropper cho Mark -->
+                        <app-image-cropperv2 #imageCropperMark *ngIf="showCropperMark" [imageSrc]="imgSignPCSelectMark"
+                            (crop)="onCroppedMark($event)"></app-image-cropperv2>
+
+                        <!-- Hiển thị ảnh cho Mark -->
+                        <img class="hidden_img" (click)="addFileAttach('mark')" src="assets/img/img-icon.svg" width="30"
+                        height="30" />
+                        <div class="image-div" *ngIf="imgSignPCSelectMark && !showCropperMark">
+                            <img class="img" [src]="imgSignPCSelectMark" alt=""
+                                style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
+                            
                         </div>
                     </div>
                 </div>

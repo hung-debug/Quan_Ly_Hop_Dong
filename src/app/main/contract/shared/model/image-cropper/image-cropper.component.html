@@ -1,0 +1,9 @@
+<div class="upload-image-region d-flex flex-column container-img-file-1">
+  <canvas #imageCanvas class="image-canvas"
+    (mousedown)="onMouseDown($event)"
+    (mousemove)="onMouseMove($event)"
+    (mouseup)="onMouseUp()"
+    (mouseleave)="onMouseLeave()"
+  ></canvas>
+  <canvas #cropCanvas style="display: none;"></canvas>
+</div>
