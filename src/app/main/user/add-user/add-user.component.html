@@ -18,7 +18,13 @@
 
                 <div class="col-md-4">
                     <div class="label text-color">{{'user.email' | translate}} <span class="required-title">*</span></div>
-                    <div class="input-data" *ngIf="!this.isDisable">
+                    <div *ngIf="id == null" class="input-data">
+                      <input type="text" formControlName="email">
+                    </div>
+                    <div *ngIf="id != null" class="input-data hidden-color">
+                      <input type="text" formControlName="email" readonly class="hidden-color">
+                    </div>
+                    <!-- <div class="input-data" *ngIf="!this.isDisable">
                       <input type="text" formControlName="email">
                     </div>
                     <div class="input-data" *ngIf="this.isDisable === 'SDT'">
@@ -26,7 +32,7 @@
                     </div>
                     <div *ngIf="this.isDisable === 'EMAIL' || this.isDisable === 'EMAIL_AND_SDT'" class="input-data hidden-color">
                       <input type="text" formControlName="email" readonly>
-                    </div>
+                    </div> -->
                     <div *ngIf="submitted && f.email.errors" class="invalid">
                         <div *ngIf="f.email.errors.required">{{'error.user.email.required' | translate}}</div>
                         <div *ngIf="f.email.errors.email">{{'error.user.email.format' | translate}}</div>
@@ -44,12 +50,15 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="label text-color">{{'user.phone' | translate}} <span class="required-title">*</span></div>
-                    <div class="input-data" *ngIf="!this.isDisable">
+                    <div class="input-data">
+                      <input type="text" formControlName="phone">
+                    </div>
+                    <!-- <div class="input-data" *ngIf="!this.isDisable">
                       <input type="text" formControlName="phone">
                     </div>
                     <div class="input-data" *ngIf="this.isDisable === 'EMAIL'">
                       <input type="text" formControlName="phone">
-                  </div>
+                  </div> -->
                   <div *ngIf="this.isDisable === 'SDT' || this.isDisable === 'EMAIL_AND_SDT'" class="input-data hidden-color">
                     <input type="text" formControlName="phone" readonly>
                   </div>
@@ -88,7 +97,7 @@
                 </div>
 
             </div>
-            <!-- <div class="row" style="justify-content: center;padding-top: 10px;">
+            <div class="row" style="justify-content: center;padding-top: 10px;">
                 <div class="col-md-2" style="text-align: center;">
                     <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="status" name="status">
                     <span> {{'unit.active' | translate}}</span>
@@ -97,8 +106,8 @@
                     <input type="radio" name='confirm-radio-consider' [value]="0" formControlName="status" name="status">
                     <span> {{'unit.inactive' | translate}}</span>
                 </div>
-            </div> -->
-            <div class="row" style="justify-content: flex-start;padding-top: 10px;display: flex;">
+            </div>
+            <!-- <div class="row" style="justify-content: flex-start;padding-top: 10px;display: flex;">
               <div style="display: flex;">
                 <div style="display: flex;">
                   <span>{{'choose.type.sign' | translate}}:</span>
@@ -114,11 +123,11 @@
                     <input type="radio" name="confirm-radio-consider" value="EMAIL_AND_SDT" formControlName="login_type" name="login_type">
                     <span> {{'type.sign.email.phone' | translate}}</span>
                   </div>
-                </div>
+                </div> -->
 
-                <div style="display: flex; margin-left: 35px;">
+                <!-- <div style="display: flex; margin-left: 35px;"> -->
                 <!-- <div style="display: flex;"> -->
-                  <span>{{'status.account' | translate}}:</span>
+                  <!-- <span>{{'status.account' | translate}}:</span>
                   <div style="margin-left: 20px;">
                     <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="status" name="status">
                     <span> {{'unit.active' | translate}}</span>
@@ -129,7 +138,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
         </div>
 
         <br>
@@ -148,12 +157,21 @@
                                     <img src="assets/img/img-icon.svg" alt="#" width="20px">
                                     <div class="text-choose-file">{{'choose.sign.file.image' | translate}}</div>
                                     <div class="text-support-extension">{{'support.format.PNG.JPG.JPGE' | translate}}</div>
+                                    <div class="text-support-extension"style="text-align: center;">{{'upload.guild' | translate}}</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="image-div">
-                            <img *ngIf="imgSignPCSelect" [src]="imgSignPCSelect" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
-                            <img class="hidden_img" (click)="addFileAttach('sign')" src="assets/img/img-icon.svg" width="30" height="30" />
+                        <!-- Cropper cho Sign -->
+                        <app-image-cropperv2 #imageCropperSign *ngIf="showCropperSign" [imageSrc]="imgSignPCSelect"
+                            (crop)="onCroppedSign($event)"></app-image-cropperv2>
+
+                        <!-- Hiển thị ảnh cho Sign -->
+                        <img class="hidden_img" (click)="addFileAttach('sign')" src="assets/img/img-icon.svg" width="30"
+                        height="30" />
+                        <div class="image-div" *ngIf="imgSignPCSelect && !showCropperSign">
+                            <img class="img" [src]="imgSignPCSelect" alt=""
+                                style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%">
+                            
                         </div>
                     </div>
                 </div>
@@ -170,12 +188,21 @@
                                     <img src="assets/img/img-icon.svg" alt="#" width="20px">
                                     <div class="text-choose-file">{{'choose.sign.file.image' | translate}}</div>
                                     <div class="text-support-extension">{{'support.format.PNG.JPG.JPGE' | translate}}</div>
+                                    <div class="text-support-extension" style="text-align: center;">{{'upload.guild' | translate}}</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="image-div">
-                            <img *ngIf="imgSignPCSelectMark" [src]="imgSignPCSelectMark" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
-                            <img class="hidden_img" (click)="addFileAttach('mark')" src="assets/img/img-icon.svg" width="30" height="30" />
+                        <!-- Cropper cho Mark -->
+                        <app-image-cropperv2 #imageCropperMark *ngIf="showCropperMark" [imageSrc]="imgSignPCSelectMark"
+                            (crop)="onCroppedMark($event)"></app-image-cropperv2>
+
+                        <!-- Hiển thị ảnh cho Mark -->
+                        <img class="hidden_img" (click)="addFileAttach('mark')" src="assets/img/img-icon.svg" width="30"
+                        height="30" />
+                        <div class="image-div" *ngIf="imgSignPCSelectMark && !showCropperMark">
+                            <img class="img" [src]="imgSignPCSelectMark" alt=""
+                                style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
+                            
                         </div>
                     </div>
                 </div>

@@ -63,6 +63,7 @@ import { EditHandlerComponent } from './shared/model/edit-handler-dialog/edit-ha
 import { MultiSignListComponent } from './components/multi-sign-list/multi-sign-list.component';
 import { RemoteDialogSignComponent } from './components/consider-contract/remote-dialog-sign/remote-dialog-sign.component';
 import { ImageDialogSignV2Component } from './components/consider-contract/image-dialog-sign-v2/image-dialog-sign-v2.component';
+import { ImageCropperComponent } from '../contract/shared/model/image-cropper/image-cropper.component';
 
 const signatures = "s9";
 const consider = "c9";
@@ -128,7 +129,8 @@ export const contractSignatureRoutes1: Routes = [
     MultiSignListComponent,
     RemoteDialogSignComponent,
     ImageDialogSignV2Component,
-    PkiDialogSignMultiComponent
+    PkiDialogSignMultiComponent,
+    ImageCropperComponent
     // AddContractComponent
   ],
   imports: [

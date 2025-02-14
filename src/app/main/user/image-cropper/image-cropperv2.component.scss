@@ -1,0 +1,72 @@
+
+// .image-canvas {
+//   justify-content: center;
+//   align-items: center;
+//   max-width: 100%;
+//   max-height: 100%;
+//   object-fit: contain; /* Thêm object-fit: contain */
+// }
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  width: 100%;
+  height: 20%;
+  gap: 10px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  width: 100%;
+  gap: 10px;
+}
+
+.button-control {
+  padding: 8px 12px;
+  border: 1px solid #C6D2EA;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  color: #677694;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 21px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.button-done {
+  padding: 8px 12px;
+  background-color: #0041C4;
+  border: 1px solid #C6D2EA;
+  border-radius: 6px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 21px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.button-cancel {
+  padding: 8px 12px;
+  border: 1px solid #C6D2EA;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  color: #aa2e2e;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 21px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
