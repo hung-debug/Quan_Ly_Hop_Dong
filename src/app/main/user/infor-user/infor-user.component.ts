@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from 'src/app/service/app.service';
@@ -12,6 +12,7 @@ import {parttern_input, parttern} from "../../../config/parttern"
 import * as moment from "moment";
 import { NgxSpinnerService } from 'ngx-spinner';
 import { error } from 'console';
+import { ImageCropperComponentv2 } from '../image-cropper/image-cropperv2.component';
 @Component({
   selector: 'app-infor-user',
   templateUrl: './infor-user.component.html',
@@ -57,6 +58,26 @@ export class InforUserComponent implements OnInit {
   roleName:any;
   maxDate: Date = moment().toDate();
   isDisable: any;
+
+  // Tham chiếu đến các component ImageCropper
+  @ViewChild('imageCropperSign') imageCropperSign: ImageCropperComponentv2;
+  @ViewChild('imageCropperMark') imageCropperMark: ImageCropperComponentv2;
+
+  // Các biến liên quan đến ảnh Sign
+  selectedFileSign: File | null = null; // File ảnh Sign được chọn
+  croppedImageSign: string | null = null; // Dữ liệu base64 của ảnh Sign sau khi crop
+  showCropperSign: boolean = false; // Cờ để hiển thị/ẩn component cropper cho ảnh Sign
+
+  // Các biến liên quan đến ảnh Mark
+  selectedFileMark: File | null = null; // File ảnh Mark được chọn
+  croppedImageMark: string | null = null; // Dữ liệu base64 của ảnh Mark sau khi crop
+  showCropperMark: boolean = false; // Cờ để hiển thị/ẩn component cropper cho ảnh Mark
+
+  selectedCode: string | null = null; // Lưu mã ('sign' hoặc 'mark') để biết ảnh nào đang được xử lý
+
+  // Biến cờ để kiểm tra xem cả hai ảnh đã được chọn hay chưa
+  isSignSelected: boolean = false;
+  isMarkSelected: boolean = false;
 
   constructor(private appService: AppService,
     private toastService : ToastService,
