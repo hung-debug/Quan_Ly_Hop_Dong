@@ -944,5 +944,6 @@
   "text.support.extension": "Please upload a background-extracted image of your signature/seal (PNG) to ensure accurate and professional display on the document/contract!",
   "uuid.blank":"UUID cannot be left blank",
   "supplier": "Supplier",
-  "choose.supplier": "Choose a supplier"
+  "choose.supplier": "Choose a supplier",
+  "upload.guild":"(Image needs to be in clear PNG format)"
 }
