@@ -288,14 +288,17 @@ export class ImageCropperComponent implements AfterViewInit {
   // Hàm di chuyển crop box
   private moveCropBox(mouseX: number, mouseY: number) {
     // Tính toán vị trí mới của crop box
-    this.cropX = mouseX - this.offsetX;
-    this.cropY = mouseY - this.offsetY;
+    let newCropX = mouseX - this.offsetX;
+    let newCropY = mouseY - this.offsetY;
 
     // Giới hạn vị trí của crop box
-    // this.cropX = Math.max(this.imageX, this.cropX);
-    // this.cropY = Math.max(this.imageY, this.cropY);
-    // this.cropX = Math.min(this.imageX + this.imageWidth - this.cropWidth, this.cropX);
-    // this.cropY = Math.min(this.imageY + this.imageHeight - this.cropHeight, this.cropY);
+    newCropX = Math.max(this.imageX, newCropX); // Không cho cropX nhỏ hơn vị trí X của ảnh
+    newCropY = Math.max(this.imageY, newCropY); // Không cho cropY nhỏ hơn vị trí Y của ảnh
+    newCropX = Math.min(this.imageX + this.imageWidth - this.cropWidth, newCropX); // Không cho cropX + cropWidth lớn hơn vị trí X của ảnh + chiều rộng ảnh
+    newCropY = Math.min(this.imageY + this.imageHeight - this.cropHeight, newCropY); // Không cho cropY + cropHeight lớn hơn vị trí Y của ảnh + chiều cao ảnh
+
+    this.cropX = newCropX;
+    this.cropY = newCropY;
 
     // Vẽ lại canvas
     this.drawCanvas();
