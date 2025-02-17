@@ -500,6 +500,9 @@ export class InforUserComponent implements OnInit {
 
   attachFileMark: any = null;
   fileChangedAttach(e: any, code: string) {
+    // Reset các biến liên quan đến ảnh trước khi xử lý file mới
+    this.resetImage(code);
+
     let files = e.target.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -589,4 +592,20 @@ export class InforUserComponent implements OnInit {
     this.selectedFileMark = this.base64ToFile(croppedImage, 'cropped-mark.png'); // Tạo File từ base64
     this.continueUpdateSignUser(); // Tiếp tục quá trình cập nhật
   }
+    // Hàm reset các biến liên quan đến ảnh
+    resetImage(code: string) {
+      if (code === 'sign') {
+        this.selectedFileSign = null;
+        this.croppedImageSign = null;
+        this.imgSignPCSelect ='';
+        this.showCropperSign = false;
+        this.isSignSelected = false;
+      } else if (code === 'mark') {
+        this.selectedFileMark = null;
+        this.croppedImageMark = null;
+        this.imgSignPCSelectMark = '';
+        this.showCropperMark = false;
+        this.isMarkSelected = false;
+      }
+    }
 }

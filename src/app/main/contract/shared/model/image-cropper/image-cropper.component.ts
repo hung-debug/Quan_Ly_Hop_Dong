@@ -117,9 +117,9 @@ export class ImageCropperComponent implements AfterViewInit {
   private drawCropBox() {
     if (!this.ctx) return; // Nếu không có context thì không vẽ
     // Thiết lập màu và độ dày của đường viền crop box
-    this.ctx.strokeStyle = 'white';
-    this.ctx.lineWidth = 2;
-    this.ctx.setLineDash([5, 5]);
+    this.ctx.strokeStyle = '#3884cc';
+    // this.ctx.lineWidth = 3;
+    // this.ctx.setLineDash([5, 5]);
     // Vẽ hình chữ nhật crop box
     this.ctx.strokeRect(this.cropX, this.cropY, this.cropWidth, this.cropHeight);
     this.ctx.setLineDash([]);
