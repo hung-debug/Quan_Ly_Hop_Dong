@@ -131,7 +131,7 @@
             ></app-image-cropperv2>
 
             <!-- Hiển thị ảnh cho Sign -->
-            <img class="hidden_img" *ngIf="imgSignPCSelect" (click)="addFileAttach('sign')" src="assets/img/img-icon.svg" width="15" height="15" />
+            <img class="hidden_img" *ngIf="imgSignPCSelect" (click)="addFileAttach('sign')" src="assets/img/img-icon.svg" width="20" height="20" style="margin-top: 10px; margin-left: 10px;" />
             <div class="image-div" *ngIf="imgSignPCSelect && !showCropperSign">
                 <img class="img" [src]="imgSignPCSelect" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%">
                 
@@ -164,7 +164,7 @@
             ></app-image-cropperv2>
 
             <!-- Hiển thị ảnh cho Mark -->
-            <img class="hidden_img" *ngIf="imgSignPCSelectMark"(click)="addFileAttach('mark')" src="assets/img/img-icon.svg" width="15" height="15" />
+            <img class="hidden_img" *ngIf="imgSignPCSelectMark"(click)="addFileAttach('mark')" src="assets/img/img-icon.svg" width="20" height="20" style="margin-top: 10px; margin-left: 10px;" />
             <div class="image-div" *ngIf="imgSignPCSelectMark && !showCropperMark">
                 <img class="img" [src]="imgSignPCSelectMark" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
                
