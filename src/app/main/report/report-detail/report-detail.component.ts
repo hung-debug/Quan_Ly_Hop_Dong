@@ -67,6 +67,8 @@ export class ReportDetailComponent implements OnInit {
   numberPage: number;
   selectedOption: string; // Biến để lưu trữ tùy chọn được chọn từ dropdown
   dateOptions: any[]; // Mảng các tùy chọn cho dropdown
+  isExporting: boolean = false; // Thêm biến cờ
+
   constructor(
     
     private appService: AppService,
@@ -296,7 +298,14 @@ export class ReportDetailComponent implements OnInit {
       return;
     }
 
-    this.spinner.show();
+    // Vô hiệu hóa nút export
+    this.isExporting = true;
+
+    // Hiển thị thông báo "Báo cáo đang được xuất"
+    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+
+    // Ẩn spinner
+    this.spinner.hide();
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length ? this.selectedNodeOrganization : this.selectedNodeOrganization[0]
 
@@ -330,9 +339,9 @@ export class ReportDetailComponent implements OnInit {
     }
     let params = '?from_date='+from_date+'&to_date='+to_date+'&completed_from_date='+completed_from_date+'&completed_to_date='+completed_to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData + payload + `&pageNumber=`+this.page+`&pageSize=`+this.row;
     this.reportService.export('rp-detail',idOrg,params, flag).subscribe((response: any) => {
-        this.spinner.hide();
+        //this.spinner.hide(); // Bỏ dòng này
         if(flag) {
-          this.spinner.hide();
+          //this.spinner.hide(); // Bỏ dòng này
           let url = window.URL.createObjectURL(response);
           let a = document.createElement('a');
           document.body.appendChild(a);
@@ -344,6 +353,7 @@ export class ReportDetailComponent implements OnInit {
           a.remove();
   
           this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+          this.isExporting = false;
         } else {
           this.table.first = 0
           this.list = [];

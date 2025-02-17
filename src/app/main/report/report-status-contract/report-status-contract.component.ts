@@ -80,6 +80,9 @@ export class ReportStatusContractComponent implements OnInit, AfterViewInit {
   numberPage: number;
   @ViewChild('typeContract') typeContract: any;
 completionDate: any;
+
+  isExporting: boolean = false; // Thêm biến cờ
+
   constructor(
     private appService: AppService,
     private userService: UserService,
@@ -242,7 +245,14 @@ completionDate: any;
       return;
     }
 
-    this.spinner.show();
+    // Vô hiệu hóa nút export
+    this.isExporting = true;
+
+    // Hiển thị thông báo "Báo cáo đang được xuất"
+    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+
+    // Ẩn spinner
+    this.spinner.hide();
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length
       ? this.selectedNodeOrganization
@@ -302,103 +312,104 @@ completionDate: any;
     this.reportService
       .export('rp-by-status-process', idOrg, params, flag)
       .subscribe((response: any) => {
-        this.spinner.hide();
+          this.spinner.hide();
 
-        if (flag) {
-          let url = window.URL.createObjectURL(response);
-          let a = document.createElement('a');
-          document.body.appendChild(a);
-          a.setAttribute('style', 'display: none');
-          a.href = url;
-          a.download = `BaoCaoTrangThaiXuLy_${new Date().getDate()}-${
-            new Date().getMonth() + 1
-          }-${new Date().getFullYear()}.xlsx`;
-          a.click();
-          window.URL.revokeObjectURL(url);
-          a.remove();
+          if (flag) {
+            let url = window.URL.createObjectURL(response);
+            let a = document.createElement('a');
+            document.body.appendChild(a);
+            a.setAttribute('style', 'display: none');
+            a.href = url;
+            a.download = `BaoCaoTrangThaiXuLy_${new Date().getDate()}-${
+              new Date().getMonth() + 1
+            }-${new Date().getFullYear()}.xlsx`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
 
-          this.toastService.showSuccessHTMLWithTimeout(
-            'no.contract.download.file.success',
-            '',
-            3000
-          );
-        } else {
-          this.list = [];
+            this.toastService.showSuccessHTMLWithTimeout(
+              'no.contract.download.file.success',
+              '',
+              3000
+            );
+            this.isExporting = false;
+          } else {
+            this.list = [];
 
-          this.table.first = 0;
-          this.setColForTable();
-          for (let i = 0; i < response.maxParticipant - 1; i++) {
+            this.table.first = 0;
+            this.setColForTable();
+            for (let i = 0; i < response.maxParticipant - 1; i++) {
+              this.cols.push({
+                header: 'Bên được yêu cầu ký ' + (i + 1),
+                style: 'text-align: left;',
+                colspan: 1,
+                rowspan: 1,
+              });
+            }
+
             this.cols.push({
-              header: 'Bên được yêu cầu ký ' + (i + 1),
-              style: 'text-align: left;',
+              header: 'contract.status.v2',
+              style: 'text-align:left',
               colspan: 1,
               rowspan: 1,
             });
-          }
-
-          this.cols.push({
-            header: 'contract.status.v2',
-            style: 'text-align:left',
-            colspan: 1,
-            rowspan: 1,
-          });
-          this.cols.push({
-            header: 'completed-date',
-            style: 'text-align:left',
-            colspan: 1,
-            rowspan: 1,
-          });
-          this.cols.push({
-            header: 'user.ed',
-            style: 'text-align: left',
-            colspan: 1,
-            rowspan: 1,
-          });
-
-          this.cols.push({
-            header: 'user.ing',
-            style: 'text-align: left',
-            colspan: 1,
-            rowspan: 1,
-          });
-
-          this.cols.push({
-            header: 'user.not.process',
-            style: 'text-align: left',
-            colspan: 1,
-            rowspan: 1,
-          });
-
-          this.maxParticipants = response.maxParticipant;
-          this.cols.sort((a, b) => a.id - b.id);
-
-          let listFirst = [this.orgName];
-          let listSecond = response.contracts;
-
-          listSecond.forEach((ele: any) => {
-            // Lọc lấy phần tử có thuộc tính type = 1
-            let type1 = ele.participants.filter(function (participant: any) {
-              return participant.type === 1;
+            this.cols.push({
+              header: 'completed-date',
+              style: 'text-align:left',
+              colspan: 1,
+              rowspan: 1,
+            });
+            this.cols.push({
+              header: 'user.ed',
+              style: 'text-align: left',
+              colspan: 1,
+              rowspan: 1,
             });
 
-            // Sắp xếp mảng các phần tử không phải type 1 theo thứ tự tăng dần của thuộc tính 'ordering'
-            let others = ele.participants
-              .filter(function (participant: any) {
-                return participant.type !== 1;
-              })
-              .sort(function (a: any, b: any) {
-                return a.ordering - b.ordering;
+            this.cols.push({
+              header: 'user.ing',
+              style: 'text-align: left',
+              colspan: 1,
+              rowspan: 1,
+            });
+
+            this.cols.push({
+              header: 'user.not.process',
+              style: 'text-align: left',
+              colspan: 1,
+              rowspan: 1,
+            });
+
+            this.maxParticipants = response.maxParticipant;
+            this.cols.sort((a, b) => a.id - b.id);
+
+            let listFirst = [this.orgName];
+            let listSecond = response.contracts;
+
+            listSecond.forEach((ele: any) => {
+              // Lọc lấy phần tử có thuộc tính type = 1
+              let type1 = ele.participants.filter(function (participant: any) {
+                return participant.type === 1;
               });
 
-            // Kết hợp mảng type1 và others thành một mảng mới
-            let sortedParticipants = type1.concat(others);
+              // Sắp xếp mảng các phần tử không phải type 1 theo thứ tự tăng dần của thuộc tính 'ordering'
+              let others = ele.participants
+                .filter(function (participant: any) {
+                  return participant.type !== 1;
+                })
+                .sort(function (a: any, b: any) {
+                  return a.ordering - b.ordering;
+                });
 
-            ele.participants = sortedParticipants;
-          });
+              // Kết hợp mảng type1 và others thành một mảng mới
+              let sortedParticipants = type1.concat(others);
 
-          this.list = listFirst.concat(listSecond);
-          this.totalRecords = response.TotalElements;
-          this.numberPage = response.TotalPages;
+              ele.participants = sortedParticipants;
+            });
+
+            this.list = listFirst.concat(listSecond);
+            this.totalRecords = response.TotalElements;
+            this.numberPage = response.TotalPages;
         }
       });
   }

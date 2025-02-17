@@ -945,5 +945,6 @@
   "uuid.blank":"UUID cannot be left blank",
   "supplier": "Supplier",
   "choose.supplier": "Choose a supplier",
-  "upload.guild":"(Image needs to be in clear PNG format)"
+  "upload.guild":"(Image needs to be in clear PNG format)",
+  "report.exporting": "Exporting report"
 }

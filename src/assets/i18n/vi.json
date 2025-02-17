@@ -969,5 +969,6 @@
   "uuid.blank":"UUID không được để trống",
   "supplier": "Nhà cung cấp",
   "choose.supplier": "Chọn nhà cung cấp",
-  "upload.guild":"(Hình ảnh nên có định dạng PNG với nền trong suốt)"
+  "upload.guild":"(Hình ảnh nên có định dạng PNG với nền trong suốt)",
+  "report.exporting": "Đang xuất báo cáo..."
 }
