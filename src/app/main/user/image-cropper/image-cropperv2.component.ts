@@ -117,9 +117,9 @@ export class ImageCropperComponentv2 implements AfterViewInit {
   private drawCropBox() {
     if (!this.ctx) return; // Nếu không có context thì không vẽ
     // Thiết lập màu và độ dày của đường viền crop box
-    this.ctx.strokeStyle = 'white';
-    this.ctx.lineWidth = 2;
-    this.ctx.setLineDash([5, 5]);
+    this.ctx.strokeStyle = '#3884cc';
+    // this.ctx.lineWidth = 3;
+    // this.ctx.setLineDash([5, 5]);
     // Vẽ hình chữ nhật crop box
     this.ctx.strokeRect(this.cropX, this.cropY, this.cropWidth, this.cropHeight);
     this.ctx.setLineDash([]);
@@ -238,64 +238,84 @@ export class ImageCropperComponentv2 implements AfterViewInit {
 
   // Hàm resize crop box
   private resizeCropBox(mouseX: number, mouseY: number) {
-    if (!this.resizeDirection) return; // Nếu không có hướng resize thì không xử lý
+    if (!this.resizeDirection) return;
 
-    const deltaX = mouseX - this.resizeStartX; // Khoảng cách di chuyển chuột theo chiều x
-    const deltaY = mouseY - this.resizeStartY; // Khoảng cách di chuyển chuột theo chiều y
+    let deltaX = mouseX - this.resizeStartX;
+    let deltaY = mouseY - this.resizeStartY;
 
-    // Thay đổi vị trí và kích thước của crop box dựa trên hướng resize
+    let newCropX = this.cropX;
+    let newCropY = this.cropY;
+    let newCropWidth = this.cropWidth;
+    let newCropHeight = this.cropHeight;
+
     switch (this.resizeDirection) {
       case 'nw':
-        this.cropX += deltaX;
-        this.cropY += deltaY;
-        this.cropWidth -= deltaX;
-        this.cropHeight -= deltaY;
+        newCropX += deltaX;
+        newCropY += deltaY;
+        newCropWidth -= deltaX;
+        newCropHeight -= deltaY;
         break;
       case 'ne':
-        this.cropY += deltaY;
-        this.cropWidth += deltaX;
-        this.cropHeight -= deltaY;
+        newCropY += deltaY;
+        newCropWidth += deltaX;
+        newCropHeight -= deltaY;
         break;
       case 'sw':
-        this.cropX += deltaX;
-        this.cropWidth -= deltaX;
-        this.cropHeight += deltaY;
+        newCropX += deltaX;
+        newCropWidth -= deltaX;
+        newCropHeight += deltaY;
         break;
       case 'se':
-        this.cropWidth += deltaX;
-        this.cropHeight += deltaY;
+        newCropWidth += deltaX;
+        newCropHeight += deltaY;
         break;
     }
 
-    // Lưu lại vị trí chuột khi resize
+    // Giới hạn kích thước tối thiểu
+    newCropWidth = Math.max(10, newCropWidth);
+    newCropHeight = Math.max(10, newCropHeight);
+
+    // Giới hạn crop box nằm trong ảnh
+    if (newCropX < this.imageX) {
+      newCropX = this.imageX;
+      newCropWidth = this.cropX + this.cropWidth - this.imageX;
+    }
+    if (newCropY < this.imageY) {
+      newCropY = this.imageY;
+      newCropHeight = this.cropY + this.cropHeight - this.imageY;
+    }
+    if (newCropX + newCropWidth > this.imageX + this.imageWidth) {
+      newCropWidth = this.imageX + this.imageWidth - newCropX;
+    }
+    if (newCropY + newCropHeight > this.imageY + this.imageHeight) {
+      newCropHeight = this.imageY + this.imageHeight - newCropY;
+    }
+
+    this.cropX = newCropX;
+    this.cropY = newCropY;
+    this.cropWidth = newCropWidth;
+    this.cropHeight = newCropHeight;
+
     this.resizeStartX = mouseX;
     this.resizeStartY = mouseY;
 
-    // Giới hạn kích thước và vị trí của crop box
-    this.cropWidth = Math.max(10, this.cropWidth);
-    this.cropHeight = Math.max(10, this.cropHeight);
-    // this.cropX = Math.max(this.imageX, this.cropX);
-    // this.cropY = Math.max(this.imageY, this.cropY);
-    // this.cropX = Math.min(this.imageX + this.imageWidth, this.cropX);
-    // this.cropY = Math.min(this.imageY + this.imageHeight, this.cropY);
-    this.cropWidth = Math.min(this.imageX + this.imageWidth - this.cropX, this.cropWidth);
-    this.cropHeight = Math.min(this.imageY + this.imageHeight - this.cropY, this.cropHeight);
-
-    // Vẽ lại canvas
     this.drawCanvas();
   }
 
   // Hàm di chuyển crop box
   private moveCropBox(mouseX: number, mouseY: number) {
     // Tính toán vị trí mới của crop box
-    this.cropX = mouseX - this.offsetX;
-    this.cropY = mouseY - this.offsetY;
+    let newCropX = mouseX - this.offsetX;
+    let newCropY = mouseY - this.offsetY;
 
     // Giới hạn vị trí của crop box
-    // this.cropX = Math.max(this.imageX, this.cropX);
-    // this.cropY = Math.max(this.imageY, this.cropY);
-    // this.cropX = Math.min(this.imageX + this.imageWidth - this.cropWidth, this.cropX);
-    // this.cropY = Math.min(this.imageY + this.imageHeight - this.cropHeight, this.cropY);
+    newCropX = Math.max(this.imageX, newCropX); // Không cho cropX nhỏ hơn vị trí X của ảnh
+    newCropY = Math.max(this.imageY, newCropY); // Không cho cropY nhỏ hơn vị trí Y của ảnh
+    newCropX = Math.min(this.imageX + this.imageWidth - this.cropWidth, newCropX); // Không cho cropX + cropWidth lớn hơn vị trí X của ảnh + chiều rộng ảnh
+    newCropY = Math.min(this.imageY + this.imageHeight - this.cropHeight, newCropY); // Không cho cropY + cropHeight lớn hơn vị trí Y của ảnh + chiều cao ảnh
+
+    this.cropX = newCropX;
+    this.cropY = newCropY;
 
     // Vẽ lại canvas
     this.drawCanvas();
