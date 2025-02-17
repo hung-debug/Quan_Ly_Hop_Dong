@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
 
 @Component({
-  selector: 'app-image-cropper', 
+  selector: 'app-image-cropper',
   templateUrl: './image-cropper.component.html',
   styleUrls: ['./image-cropper.component.scss']
 })
@@ -22,27 +22,27 @@ export class ImageCropperComponent implements AfterViewInit {
   private image: HTMLImageElement; // Đối tượng Image để tải ảnh
   private ctx: CanvasRenderingContext2D | null; // Context của canvas hiển thị ảnh
   private cropCtx: CanvasRenderingContext2D | null; // Context của canvas crop ảnh
-  private isDragging = false; // Trạng thái kéo chuột để vẽ crop box
+  // private isDragging = false; // Trạng thái kéo chuột để vẽ crop box
   // Vị trí khi bắt đầu kéo chuột
-  private startX = 0; 
-  private startY = 0; 
+  // private startX = 0;
+  // private startY = 0;
   // Vị trí x của crop box
-  private cropX = 10; 
+  private cropX = 10;
   private cropY = 10;
   // kích thước của crop box
-  private cropWidth = 600; 
+  private cropWidth = 600;
   private cropHeight = 600;
   // Khoảng cách từ vị trí chuột đến góc trên bên trái của crop box khi di chuyển
-  private offsetX = 0; 
-  private offsetY = 0; 
+  private offsetX = 0;
+  private offsetY = 0;
 
   private scale = 1; // Tỷ lệ scale của ảnh
   // kích thước của ảnh sau khi scale
-  private imageWidth = 0; 
-  private imageHeight = 0; 
+  private imageWidth = 0;
+  private imageHeight = 0;
   // kích thước ban đầu của ảnh
-  private initialImageWidth = 0; 
-  private initialImageHeight = 0; 
+  private initialImageWidth = 0;
+  private initialImageHeight = 0;
   private isResizing = false; // Trạng thái resize crop box
   private resizeDirection: 'nw' | 'ne' | 'sw' | 'se' | null = null; // Hướng resize crop box
   private resizeStartX = 0; // Vị trí x khi bắt đầu resize
@@ -84,9 +84,11 @@ export class ImageCropperComponent implements AfterViewInit {
       this.imageY = (this.maxCanvasHeight - this.imageHeight) / 2;
 
       // Điều chỉnh kích thước crop box ban đầu
-      const initialSize = Math.min(this.imageWidth * 1.3, this.imageHeight * 1.3, 300);
-      this.cropWidth = initialSize;
-      this.cropHeight = initialSize;
+      // const initialSize = Math.min(this.imageWidth * 1.3, this.imageHeight * 1.3, 300);
+      // this.cropWidth = initialSize;
+      // this.cropHeight = initialSize;
+      this.cropWidth = this.imageWidth;
+      this.cropHeight = this.imageHeight;
       this.cropX = (this.imageWidth - this.cropWidth) / 2 + this.imageX;
       this.cropY = (this.imageHeight - this.cropHeight) / 2 + this.imageY;
 
@@ -197,10 +199,10 @@ export class ImageCropperComponent implements AfterViewInit {
       return;
     }
 
-    // Nếu không nằm trên handle resize hoặc crop box thì bắt đầu kéo chuột để vẽ crop box
-    this.isDragging = true; // Bật trạng thái kéo chuột
-    this.startX = mouseX; // Lưu vị trí x khi bắt đầu kéo chuột
-    this.startY = mouseY; // Lưu vị trí y khi bắt đầu kéo chuột
+    // // Nếu không nằm trên handle resize hoặc crop box thì bắt đầu kéo chuột để vẽ crop box
+    // this.isDragging = true; // Bật trạng thái kéo chuột
+    // this.startX = mouseX; // Lưu vị trí x khi bắt đầu kéo chuột
+    // this.startY = mouseY; // Lưu vị trí y khi bắt đầu kéo chuột
   }
 
   // Hàm xử lý sự kiện mousemove
@@ -221,17 +223,17 @@ export class ImageCropperComponent implements AfterViewInit {
       return;
     }
 
-    // Nếu không đang kéo chuột thì không xử lý
-    if (!this.isDragging) return;
+    // // Nếu không đang kéo chuột thì không xử lý
+    // if (!this.isDragging) return;
 
-    // Tính toán vị trí và kích thước của crop box khi kéo chuột
-    this.cropX = Math.min(this.startX, mouseX);
-    this.cropY = Math.min(this.startY, mouseY);
-    this.cropWidth = Math.abs(mouseX - this.startX);
-    this.cropHeight = Math.abs(mouseY - this.startY);
+    // // Tính toán vị trí và kích thước của crop box khi kéo chuột
+    // this.cropX = Math.min(this.startX, mouseX);
+    // this.cropY = Math.min(this.startY, mouseY);
+    // this.cropWidth = Math.abs(mouseX - this.startX);
+    // this.cropHeight = Math.abs(mouseY - this.startY);
 
-    // Vẽ lại canvas
-    this.drawCanvas();
+    // // Vẽ lại canvas
+    // this.drawCanvas();
   }
 
   // Hàm resize crop box
@@ -302,7 +304,7 @@ export class ImageCropperComponent implements AfterViewInit {
   // Hàm xử lý sự kiện mouseup
   onMouseUp() {
     // Tắt các trạng thái kéo chuột, resize và di chuyển
-    this.isDragging = false;
+    // this.isDragging = false;
     this.isResizing = false;
     this.resizeDirection = null;
     this.isMoving = false;
@@ -311,7 +313,7 @@ export class ImageCropperComponent implements AfterViewInit {
   // Hàm xử lý sự kiện mouseleave
   onMouseLeave() {
     // Tắt các trạng thái kéo chuột, resize và di chuyển
-    this.isDragging = false;
+    // this.isDragging = false;
     this.isResizing = false;
     this.resizeDirection = null;
     this.isMoving = false;
