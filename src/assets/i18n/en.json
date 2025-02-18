@@ -946,5 +946,7 @@
   "supplier": "Supplier",
   "choose.supplier": "Choose a supplier",
   "upload.guild":"(Image needs to be in clear PNG format)",
-  "report.exporting": "Exporting report"
+  "report.exporting": "Exporting report",
+  "change.phone": "CHANGE PHONE NUMBER",
+  "hind.text.phone.otp": "Enter phone number to receive OTP code"
 }

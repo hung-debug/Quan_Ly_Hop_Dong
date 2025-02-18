@@ -65,6 +65,8 @@ import { RemoteDialogSignComponent } from './components/consider-contract/remote
 import { ImageDialogSignV2Component } from './components/consider-contract/image-dialog-sign-v2/image-dialog-sign-v2.component';
 import { ImageCropperComponent } from '../contract/shared/model/image-cropper/image-cropper.component';
 
+import { NgOtpInputModule } from  'ng-otp-input';
+import { DialogChangePhoneComponent } from './components/consider-contract/dialog-change-phone/dialog-change-phone.component';
 const signatures = "s9";
 const consider = "c9";
 const secretary = "s8";
@@ -130,7 +132,9 @@ export const contractSignatureRoutes1: Routes = [
     RemoteDialogSignComponent,
     ImageDialogSignV2Component,
     PkiDialogSignMultiComponent,
-    ImageCropperComponent
+    ImageCropperComponent,
+    PkiDialogSignMultiComponent,
+    DialogChangePhoneComponent
     // AddContractComponent
   ],
   imports: [
@@ -158,7 +162,7 @@ export const contractSignatureRoutes1: Routes = [
     TableModule,
     WebcamModule,
     PdfViewerModule,
-
+    NgOtpInputModule
   ],
   providers: [
     NoAuthGuard,
