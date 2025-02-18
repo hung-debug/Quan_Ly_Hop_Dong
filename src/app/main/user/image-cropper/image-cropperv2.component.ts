@@ -137,7 +137,7 @@ export class ImageCropperComponentv2 implements AfterViewInit {
   // Hàm vẽ các handle resize
   private drawResizeHandles() {
     if (!this.ctx) return; // Nếu không có context thì không vẽ
-    const handleSize = 8; // Kích thước của handle
+    const handleSize = 15; // Kích thước của handle
     this.ctx.fillStyle = 'white'; // Màu của handle
 
     // Vẽ handle ở góc trên bên trái
@@ -156,7 +156,7 @@ export class ImageCropperComponentv2 implements AfterViewInit {
     const mouseY = event.offsetY; // Vị trí y của chuột
 
     // Kiểm tra xem chuột có nằm trên các handle resize không
-    const handleSize = 8;
+    const handleSize = 15;
     if (mouseX >= (this.cropX - handleSize / 2) && mouseX <= (this.cropX + handleSize / 2) &&
       mouseY >= (this.cropY - handleSize / 2) && mouseY <= (this.cropY + handleSize / 2)) {
       this.isResizing = true; // Bật trạng thái resize
