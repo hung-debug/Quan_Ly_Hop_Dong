@@ -63,7 +63,8 @@ import { EditHandlerComponent } from './shared/model/edit-handler-dialog/edit-ha
 import { MultiSignListComponent } from './components/multi-sign-list/multi-sign-list.component';
 import { RemoteDialogSignComponent } from './components/consider-contract/remote-dialog-sign/remote-dialog-sign.component';
 import { ImageDialogSignV2Component } from './components/consider-contract/image-dialog-sign-v2/image-dialog-sign-v2.component';
-
+import { NgOtpInputModule } from  'ng-otp-input';
+import { DialogChangePhoneComponent } from './components/consider-contract/dialog-change-phone/dialog-change-phone.component';
 const signatures = "s9";
 const consider = "c9";
 const secretary = "s8";
@@ -128,7 +129,8 @@ export const contractSignatureRoutes1: Routes = [
     MultiSignListComponent,
     RemoteDialogSignComponent,
     ImageDialogSignV2Component,
-    PkiDialogSignMultiComponent
+    PkiDialogSignMultiComponent,
+    DialogChangePhoneComponent
     // AddContractComponent
   ],
   imports: [
@@ -156,7 +158,7 @@ export const contractSignatureRoutes1: Routes = [
     TableModule,
     WebcamModule,
     PdfViewerModule,
-
+    NgOtpInputModule
   ],
   providers: [
     NoAuthGuard,
