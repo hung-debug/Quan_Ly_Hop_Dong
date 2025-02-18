@@ -105,11 +105,14 @@ hr{
   margin-top: 32px;
   color: #106DB6;
 }
-
 .text-support-extension {
-  margin-top: 8px;
-  color: #ED1C24;
-  font-weight: 500;
+  width: 275px;
+  margin-bottom:9vh;
+  color: #A8B5CE;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  font-family: 'Roboto', sans-serif;
 }
 :host ::ng-deep {
   .p-calendar {
@@ -159,6 +162,31 @@ hr{
 input.pw {
   -webkit-text-security: disc;
 }
+.upload-photo {
+  width: 120px;
+  height: 38px; /* Đặt chiều cao bằng line-height */
+  border-radius: 8px;
+  border: 1.3px solid #0041C4;
+  background-color: #FFFFFF;
+  color: #0041C4;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin: auto;
+  margin-bottom: 8px;
+  margin-top: 10vh;
+
+  /* Căn giữa chữ hoàn hảo */
+  display: flex;
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  text-align: center; /* Đảm bảo căn giữa text */
+  line-height: normal; /* Reset line-height */
+}
+
+
+
+
 
 
   
