@@ -144,6 +144,7 @@ import { AuthGuard } from './help/auth.guard';
 //import { RouteInterceptorService } from './service/route-interceptor.service';
 import { SystemConfigComponent } from './main/system-config/system-config.component';
 import { DeleteConfigDialogComponent } from './main/system-config/delete-config-dialog/delete-config-dialog.component';
+import { ExportStatusComponent } from './main/report/export-status/export-status.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -288,7 +289,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     UploadContractFileComponent,
     AccountLinkDialogComponent,
     SystemConfigComponent,
-    DeleteConfigDialogComponent
+    DeleteConfigDialogComponent,
+    ExportStatusComponent
   ],
   imports: [
     PaginatorModule,

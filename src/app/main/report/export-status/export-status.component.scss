@@ -1,0 +1,100 @@
+.export-status-container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: auto; /* Adjust as needed */
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Ensure it's on top of other elements */
+  }
+  
+  .cancelled {
+    color: gray;
+    text-decoration: line-through;
+  }
+  .export-status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .export-status-list {
+    max-height: 200px; /* Adjust as needed */
+  }
+  
+  .export-status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+  
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  
+  .file-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .file-icon {
+    margin-right: 5px;
+    font-size: 1.2em;
+    color: #198754; /* Green color for Excel icon */
+  }
+  
+  .filename {
+    font-size: 0.9em;
+  }
+  
+  .status-icons {
+    display: flex;
+    align-items: center;
+  }
+  
+  .spinner {
+    margin-left: 5px;
+    color: blue;
+    animation: spin 1s linear infinite; /* Add spin animation */
+  }
+  
+  .success-icon {
+    color: green;
+  }
+  
+  .error-icon {
+    color: red;
+  }
+  
+  .cancel-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: red;
+    width: 30px;
+  }
+  
+  .download {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: red;
+    width: 34px;
+  }
+  
+  /* Keyframes for spin animation */
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
