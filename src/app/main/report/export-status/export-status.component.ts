@@ -5,7 +5,7 @@ export interface ExportStatus {
   filename: string;
   status: 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
   progress?: number;
-  url?: string;
+  url?: string|null;
   id: any
 }
 
@@ -16,6 +16,11 @@ export interface ExportStatus {
 })
 export class ExportStatusComponent {
   @Input() exportStatuses: ExportStatus[] = [];
+  isExpanded: boolean = true; // Khởi tạo trạng thái mở rộng
+
+  toggleExportStatusList() {
+    this.isExpanded = !this.isExpanded;
+  }
 
   cancelExport(id: string) {
     AppComponent.exportStatuses = AppComponent.exportStatuses.filter(item => item.id !== id);

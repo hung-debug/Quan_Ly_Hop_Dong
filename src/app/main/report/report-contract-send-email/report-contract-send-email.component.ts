@@ -13,6 +13,7 @@ import { ContractTypeService } from 'src/app/service/contract-type.service';
 import * as moment from 'moment-timezone';
 import { MatDialog } from '@angular/material/dialog';
 import { ContentEmailComponent } from '../report-contract-send-email/content-email/content-email.component';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-report-status-send-email',
@@ -228,9 +229,20 @@ export class ReportStatusSendEmailComponent implements OnInit {
     }
 
     let params = `?pageNumber=`+this.page+`&pageSize=`+this.row;
+    let id: string = '';
+    if (isExport) {
+      let now = new Date();
+      let randomFive = Math.floor(10000 + Math.random() * 90000);
+      id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
+      let selectedStartDate = moment(this.date[0]).format('DD-MM-YYYY')
+      let selectedEndDate = moment(this.date[1]).format('DD-MM-YYYY')
+      const filename = `Email_Report_${selectedStartDate + '_' + selectedEndDate}.xlsx`;
+      AppComponent.exportStatuses.push({ id: id, filename: filename, status: 'processing', url: "" });
+    } else {this.isExporting = false;}
     try {
       if (!isExport) {
-        this.spinner.show()
+        //this.spinner.show()
+        this.isExporting = false;
         await this.reportService.exportEmailReport(params, payloadData, false).toPromise().then(
           (res: any) => {
             this.table.first = 0
@@ -242,7 +254,7 @@ export class ReportStatusSendEmailComponent implements OnInit {
           }
         )
       } else {
-        this.spinner.show()
+        //this.spinner.show()
         await this.reportService.exportEmailReport(params, payloadData, true).toPromise().then(
           (res: any) => {
             // this.list = [];
@@ -250,7 +262,8 @@ export class ReportStatusSendEmailComponent implements OnInit {
             if (res) {
               this.toastService.showSuccessHTMLWithTimeout('Xuất file báo cáo thành công','',3000)
               this.isExporting = false;
-              this.downloadFile(res)
+              // this.downloadFile(res)
+              this.updateExportStatus(id, window.URL.createObjectURL(new Blob([res], { type: 'application/x-binary' })));
             }
           }
         )
@@ -258,6 +271,13 @@ export class ReportStatusSendEmailComponent implements OnInit {
     } catch (error) {
       this.spinner.hide()
       this.toastService.showErrorHTMLWithTimeout('error.get.contract.list.report','',3000)
+    }
+  }
+  updateExportStatus(id: string, url: string | null = null, status: 'completed' | 'failed' = 'completed') {
+    const statusItem = AppComponent.exportStatuses.find(item => item.id === id);
+    if (statusItem) {
+      statusItem.url = url ?? undefined;
+      statusItem.status = status;
     }
   }
 
@@ -308,23 +328,23 @@ export class ReportStatusSendEmailComponent implements OnInit {
     }
     this.exportEmailReportCall(false);
   }
-  downloadFile(data: any) {
-    let currentDate = moment().format('HH:mm:ss')
-    let selectedStartDate = moment(this.date[0]).format('DD-MM-YYYY')
-    let selectedEndDate = moment(this.date[1]).format('DD-MM-YYYY')
-    const blob = new Blob([data], { type: 'application/x-binary' });
-    const url = window.URL.createObjectURL(blob);
+  // downloadFile(data: any) {
+  //   let currentDate = moment().format('HH:mm:ss')
+  //   let selectedStartDate = moment(this.date[0]).format('DD-MM-YYYY')
+  //   let selectedEndDate = moment(this.date[1]).format('DD-MM-YYYY')
+  //   const blob = new Blob([data], { type: 'application/x-binary' });
+  //   const url = window.URL.createObjectURL(blob);
 
-    // Create an anchor element for downloading the file
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `Email_Report_${selectedStartDate + '_' + selectedEndDate}.xlsx`; // Specify the file name for the download
+  //   // Create an anchor element for downloading the file
+  //   const a = document.createElement('a');
+  //   a.href = url;
+  //   a.download = `Email_Report_${selectedStartDate + '_' + selectedEndDate}.xlsx`; // Specify the file name for the download
 
-    // Trigger a click event to initiate the download
-    a.click();
+  //   // Trigger a click event to initiate the download
+  //   a.click();
 
-    // Clean up by revoking the URL
-    window.URL.revokeObjectURL(url);
-  }
+  //   // Clean up by revoking the URL
+  //   window.URL.revokeObjectURL(url);
+  // }
 
 }

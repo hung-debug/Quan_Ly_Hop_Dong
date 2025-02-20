@@ -12,6 +12,7 @@ import { ContractTypeService } from 'src/app/service/contract-type.service';
 import * as moment from 'moment-timezone';
 import { MatDialog } from '@angular/material/dialog';
 import { ContentSmsComponent } from './content-sms/content-sms.component';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-report-status-send-sms-email',
@@ -267,8 +268,19 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
     }
 
     let params = `?pageNumber=`+this.page+`&pageSize=`+this.row;
+    let id: string = '';
+    if (isExport) {
+      let now = new Date();
+      let randomFive = Math.floor(10000 + Math.random() * 90000);
+      id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
+      let selectedStartDate = moment(this.date[0]).format('DD-MM-YYYY')
+      let selectedEndDate = moment(this.date[1]).format('DD-MM-YYYY')
+      const filename = `Sms_Report_${selectedStartDate + '_' + selectedEndDate}.xlsx`;
+      AppComponent.exportStatuses.push({ id: id, filename: filename, status: 'processing', url: "" });
+    } else {this.isExporting = false;}
     try {
       if (!isExport) {
+        this.isExporting = false;
         this.spinner.show()
         await this.reportService.exportSmsReport(params, payloadData, false).toPromise().then(
           (res: any) => {
@@ -294,7 +306,8 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
             if (res) {
               this.toastService.showSuccessHTMLWithTimeout('Xuất file báo cáo thành công','',3000)
               this.isExporting = false;
-              this.downloadFile(res)
+              // this.downloadFile(res)
+              this.updateExportStatus(id, window.URL.createObjectURL(new Blob([res], { type: 'application/x-binary' })));
             }
             // this.list = res.content.filter((item: any) => !item.emailOrPhone.includes('@'))
           }
@@ -303,6 +316,14 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
     } catch (error) {
       this.spinner.hide()
       this.toastService.showErrorHTMLWithTimeout('error.get.contract.list.report','',3000)
+      this.updateExportStatus(id, null, 'failed');
+    }
+  }
+  updateExportStatus(id: string, url: string | null = null, status: 'completed' | 'failed' = 'completed') {
+    const statusItem = AppComponent.exportStatuses.find(item => item.id === id);
+    if (statusItem) {
+      statusItem.url = url ?? undefined;
+      statusItem.status = status;
     }
   }
 

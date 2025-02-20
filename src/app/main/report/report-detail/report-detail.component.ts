@@ -339,9 +339,10 @@ export class ReportDetailComponent implements OnInit {
       let now = new Date();
       let randomFive = Math.floor(10000 + Math.random() * 90000); // 5 số ngẫu nhiên
       id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
-      const filename = `BaoCaoChiTiet_${id}.xlsx`;
+      const filename = `BaoCaoChiTiet_HĐ_eContract_${new Date().getDate()}-${new Date().getMonth() + 1
+      }-${new Date().getFullYear()}.xlsx`;
       AppComponent.exportStatuses.push({id: id, filename: filename, status: 'processing', url: ""}); // Thay đổi dòng này
-    }
+    } else {this.isExporting = false;}
 
     let payload = ""
     if(this.contractInfo){
@@ -365,6 +366,7 @@ export class ReportDetailComponent implements OnInit {
           this.isExporting = false;
           this.updateExportStatus(id, window.URL.createObjectURL(response)); // Lưu URL
         } else {
+          this.isExporting = false;
           this.table.first = 0
           this.list = [];
           this.colsSuggest = [
