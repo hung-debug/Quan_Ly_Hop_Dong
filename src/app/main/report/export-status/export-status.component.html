@@ -3,34 +3,44 @@
       <div>
         Trạng thái báo cáo
       </div>
-
+      <button class="toggle-button" (click)="toggleExportStatusList()">
+        <img src="../../assets/img/minus-svgrepo-com.svg" style="width: 100%;"/>
+      </button>
       <button class="cancel-button" (click)="cancelReport()">
         <img src="../../assets/img/icon_close.svg" style="width: 100%;"/>
       </button>
     </div>
   
-    <div class="export-status-list">
+    <div class="export-status-list" *ngIf="isExpanded">
       <div class="export-status-item" *ngFor="let status of exportStatuses"
            [ngClass]="{'cancelled': status.status === 'cancelled'}">
         <div class="file-info">
           <span class="file-icon">
-            <i class="fas fa-file-excel"></i>
+            <img src="../../assets/img/icon_file_excel.svg" style="width: 100%;"/>  
           </span>
           <span class="filename">{{ status.filename }}</span>
         </div>
   
         <div class="status-icons">
           <ng-container *ngIf="status.status === 'pending' || status.status === 'processing'">
-            <span class="spinner">
-              <i class="fas fa-spinner fa-spin"></i>
-            </span>
+            <button class="cancel-button">
+              <img src="../../assets/img/timer-start.svg" style="width: 120%;"/>
+            </button>
           </ng-container>
   
           <ng-container *ngIf="status.status === 'completed'">
-            <button class="download" (click)="downloadExport(status.id, status.filename)">
-              <img src="../../assets/img/download_contract.svg" style="width: 100%;"/>
-            </button>
-
+            <ng-container *ngIf="!status.downloaded">
+              <button class="download" (click)="downloadExport(status.id, status.filename)">
+                <img src="../../assets/img/icon_download.svg" style="width: 90%;"/>
+              </button>
+            </ng-container>
+  
+            <ng-container  *ngIf="status.downloaded">
+              <button class="cancel-button" >
+                <img src="../../assets/img/icon_valid.svg" style="width: 110%;"/>
+              </button>
+            </ng-container>
+  
             <button class="cancel-button" (click)="cancelExport(status?.id)">
               <img src="../../assets/img/icon_close.svg" style="width: 100%;"/>
             </button>

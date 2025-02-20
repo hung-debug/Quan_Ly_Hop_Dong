@@ -309,7 +309,6 @@ export class ReportContractReceiveComponent implements OnInit {
       id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
       const filename = `BaoCaoHopDongNhan_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
       AppComponent.exportStatuses.push({ id: id, filename: filename, status: 'processing', url: "" });
-      this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
     } else {this.isExporting = false;}
 
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status=' + contractStatus + '&fetchChildData='+ this.fetchChildData + payload + `&pageNumber=`+this.page+`&pageSize=`+this.row;

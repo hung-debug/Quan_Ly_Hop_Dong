@@ -52,6 +52,7 @@
     margin-right: 5px;
     font-size: 1.2em;
     color: #198754; /* Green color for Excel icon */
+    width: 20px;
   }
   
   .filename {
@@ -83,6 +84,21 @@
     cursor: pointer;
     color: red;
     width: 30px;
+  }
+  .toggle-button {
+    position: sticky;
+    margin-left: 15vh;
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 31px;
+  }
+  .check-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: red;
+    width: 50px;
   }
   
   

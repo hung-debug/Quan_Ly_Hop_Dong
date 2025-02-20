@@ -190,14 +190,14 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
 
     let id: string = '';
-    if(flag) {
-      this.isExporting = false;
+    if (flag) {
       let now = new Date();
-      let randomFive = Math.floor(10000 + Math.random() * 90000); // 5 số ngẫu nhiên
+      let randomFive = Math.floor(10000 + Math.random() * 90000);
       id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
       const filename = `BaoCaoSLTheoTrangThai_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
-      AppComponent.exportStatuses.push({id: id, filename: filename, status: 'processing', url: ""}); // Thêm vào exportStatuses
+      AppComponent.exportStatuses.push({ id: id, filename: filename, status: 'processing', url: "" });
     } else {this.isExporting = false;}
+
   
     try {
       const response = await this.reportService.export('rp-by-status',idOrg,params, flag).toPromise();
@@ -236,11 +236,11 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
     }
   }
   updateExportStatus(id: string, url: string | null = null, status: 'completed' | 'failed' = 'completed') {
-    const statusItem = this.exportStatuses.find(item => item.id === id);
-    if (statusItem) {
-      statusItem.url = url;
-      statusItem.status = status;
-    }
+      const statusItem = AppComponent.exportStatuses.find(item => item.id === id);
+      if (statusItem) {
+        statusItem.url = url ?? undefined;
+        statusItem.status = status;
+      }
   }
   cancelExport(id: string) {
     this.exportStatuses = this.exportStatuses.filter(item => item.id !== id);
