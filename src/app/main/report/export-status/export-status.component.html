@@ -3,12 +3,14 @@
       <div>
         Trạng thái báo cáo
       </div>
+      <div>
       <button class="toggle-button" (click)="toggleExportStatusList()">
-        <img src="../../assets/img/minus-svgrepo-com.svg" style="width: 100%;"/>
+        <img src="../../assets/img/download_contract.svg" style="width: 100%;"/>
       </button>
       <button class="cancel-button" (click)="cancelReport()">
         <img src="../../assets/img/icon_close.svg" style="width: 100%;"/>
       </button>
+    </div>
     </div>
   
     <div class="export-status-list" *ngIf="isExpanded">
@@ -36,7 +38,7 @@
             </ng-container>
   
             <ng-container  *ngIf="status.downloaded">
-              <button class="cancel-button" >
+              <button class="check-button" >
                 <img src="../../assets/img/icon_valid.svg" style="width: 110%;"/>
               </button>
             </ng-container>
