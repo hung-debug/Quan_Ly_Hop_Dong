@@ -9,7 +9,12 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit{
+  static exportStatuses: any[] = []; // Static variable
+  
   ngOnInit() {
     (window as any).environmentFlag = environment.flag;
+  }
+  getExportStatuses() {
+    return AppComponent.exportStatuses;
   }
 }
