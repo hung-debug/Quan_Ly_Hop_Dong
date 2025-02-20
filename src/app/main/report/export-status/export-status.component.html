@@ -5,7 +5,9 @@
       </div>
       <div>
       <button class="toggle-button" (click)="toggleExportStatusList()">
-        <img src="../../assets/img/download_contract.svg" style="width: 100%;"/>
+        <img src="../../assets/img/arrow-down.png" 
+       [class.rotated]="!isExpanded"
+       style="width: 100%;"/>
       </button>
       <button class="cancel-button" (click)="cancelReport()">
         <img src="../../assets/img/icon_close.svg" style="width: 100%;"/>
@@ -25,15 +27,15 @@
   
         <div class="status-icons">
           <ng-container *ngIf="status.status === 'pending' || status.status === 'processing'">
-            <button class="cancel-button">
-              <img src="../../assets/img/timer-start.svg" style="width: 120%;"/>
-            </button>
+            <span class="spinner">
+              <img src="../../assets/img/icons8-spinner-64.png" style="width: 100%;"/>
+            </span>
           </ng-container>
   
           <ng-container *ngIf="status.status === 'completed'">
             <ng-container *ngIf="!status.downloaded">
               <button class="download" (click)="downloadExport(status.id, status.filename)">
-                <img src="../../assets/img/document-download_v2.svg" style="width: 90%;"/>
+                <img src="../../assets/img/download_contract.svg" style="width: 100%;"/>
               </button>
             </ng-container>
   

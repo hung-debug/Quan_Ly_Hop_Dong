@@ -61,14 +61,26 @@
   
   .status-icons {
     display: flex;
-    align-items: center;
+    //align-items: center;
+    margin-left: 20px;
   }
   
   .spinner {
-    margin-left: 5px;
+    margin-right: 5.5px;
+    display: block;
+    width: 23px; /* Thay đổi kích thước theo nhu cầu */
+    height: 23px; /* Thay đổi kích thước theo nhu cầu */
     color: blue;
-    animation: spin 1s linear infinite; /* Add spin animation */
+    animation: spin 1s linear infinite; /* Thêm hoạt ảnh quay */
+    transform-origin: center; /* Đặt trung tâm quay ở giữa */
   }
+  
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  
   
   .success-icon {
     color: green;
@@ -109,6 +121,9 @@
     cursor: pointer;
     color: red;
     width: 34px;
+  }
+  .rotated {
+    transform: rotate(180deg);
   }
   
   /* Keyframes for spin animation */
