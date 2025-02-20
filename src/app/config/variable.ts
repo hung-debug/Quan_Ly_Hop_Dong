@@ -278,6 +278,17 @@ export var networkList = [
   {id: 'bcy', name:'Ban cơ yếu'}
 ];
 
+export var supplier = [
+  {
+    id: 'mobifone',
+    name: 'MobiFone'
+  },
+  {
+    id: 'icorp',
+    name: 'I-CA'
+  }
+];
+
 // export var networkList1 = [
 //   { id: 1, name: 'Mobifone' },
 //   { id: 2, name: 'Viettel' },

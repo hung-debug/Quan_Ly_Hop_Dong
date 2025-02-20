@@ -11,6 +11,7 @@ import { Table } from 'primeng/table';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import * as moment from 'moment-timezone';
 import { MatDialog } from '@angular/material/dialog';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-report-eKYC',
@@ -43,6 +44,9 @@ export class ReportEKYCComponent implements OnInit {
   inputTimeout: any;
   numberPage: number;
   pageOptions: any[] = [10, 20, 50, 100];
+
+  isExporting: boolean = false; // Thêm biến cờ
+
   constructor(
     private appService: AppService,
     private inputTreeService: InputTreeService,
@@ -171,6 +175,15 @@ export class ReportEKYCComponent implements OnInit {
   }
   
   async exportEKYCReportCall(isExport: boolean){
+    // Vô hiệu hóa nút export
+    this.isExporting = true;
+
+    // Hiển thị thông báo "Báo cáo đang được xuất"
+    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+
+    // Ẩn spinner
+    this.spinner.hide();
+
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length
     ? this.selectedNodeOrganization
     : this.selectedNodeOrganization[0];
@@ -198,10 +211,22 @@ export class ReportEKYCComponent implements OnInit {
     }
 
     let params = `?pageNumber=`+this.page+`&pageSize=`+this.row;
+    let id: string = '';
+  if (isExport) {
+    let now = new Date();
+    let randomFive = Math.floor(10000 + Math.random() * 90000);
+    id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
+    let selectedStartDate = moment(this.date[0]).format('DD-MM-YYYY')
+    let selectedEndDate = moment(this.date[1]).format('DD-MM-YYYY')
+    const filename = `eKYC_Report_${selectedStartDate + '_' + selectedEndDate}.xlsx`;
+    AppComponent.exportStatuses.push({ id: id, filename: filename, status: 'processing', url: "" });
+    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+  } else {this.isExporting = false;}
     
     try {
       if (!isExport) {
-        this.spinner.show()
+        //  this.spinner.show()
+        this.isExporting = false;
         await this.reportService.exportEkycReport(params, payloadData, false).toPromise().then(
           (res: any) => {
             this.table.first = 0
@@ -225,7 +250,9 @@ export class ReportEKYCComponent implements OnInit {
             this.spinner.hide()
             if (res) {
               this.toastService.showSuccessHTMLWithTimeout('Xuất file báo cáo thành công','',3000)
-              this.downloadFile(res)
+              this.isExporting = false;
+              // this.downloadFile(res)
+              this.updateExportStatus(id, window.URL.createObjectURL(new Blob([res], { type: 'application/x-binary' })));
             }
             // this.list = res.content.filter((item: any) => !item.emailOrPhone.includes('@'))
           }
@@ -234,6 +261,14 @@ export class ReportEKYCComponent implements OnInit {
     } catch (error) {
       this.spinner.hide()
       this.toastService.showErrorHTMLWithTimeout('error.get.contract.list.report','',3000)
+      this.updateExportStatus(id, null, 'failed');
+    }
+  }
+  updateExportStatus(id: string, url: string | null = null, status: 'completed' | 'failed' = 'completed') {
+    const statusItem = AppComponent.exportStatuses.find(item => item.id === id);
+    if (statusItem) {
+      statusItem.url = url ?? undefined;
+      statusItem.status = status;
     }
   }
   

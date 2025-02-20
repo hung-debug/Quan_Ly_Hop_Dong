@@ -10,6 +10,8 @@ import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
 import { Table } from 'primeng/table';
+import { ExportStatus } from '../export-status/export-status.component';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-report-contract-number-follow-status',
@@ -52,6 +54,9 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
    fetchChildData: boolean = true;
 
    Arr = Array;
+
+   isExporting: boolean = false; // Thêm biến cờ
+   exportStatuses: ExportStatus[] = []; // Thêm thuộc tính này
 
   constructor(
     private appService: AppService,
@@ -154,7 +159,14 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
       return;
     }
 
-    this.spinner.show();
+    // Vô hiệu hóa nút export
+    this.isExporting = true;
+
+    // Hiển thị thông báo "Báo cáo đang được xuất"
+    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+
+    // Ẩn spinner
+    this.spinner.hide();
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length ? this.selectedNodeOrganization : this.selectedNodeOrganization[0]
 
@@ -177,31 +189,65 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
 
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
 
-    const response = await this.reportService.export('rp-by-status',idOrg,params, flag).toPromise();
-
-    this.spinner.hide();
+    let id: string = '';
     if(flag) {
-      let url = window.URL.createObjectURL(response);
-      let a = document.createElement('a');
-      document.body.appendChild(a);
-      a.setAttribute('style', 'display: none');
-      a.href = url;
-      a.download = `BaoCaoSLTheoTrangThai_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
-      a.click();
-      window.URL.revokeObjectURL(url);
-      a.remove();
-
-      this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
-    } else {
-
-      this.list = [];
-      this.table.first = 0
+      this.isExporting = false;
+      let now = new Date();
+      let randomFive = Math.floor(10000 + Math.random() * 90000); // 5 số ngẫu nhiên
+      id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
+      const filename = `BaoCaoSLTheoTrangThai_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
+      AppComponent.exportStatuses.push({id: id, filename: filename, status: 'processing', url: ""}); // Thêm vào exportStatuses
+    } else {this.isExporting = false;}
+  
+    try {
+      const response = await this.reportService.export('rp-by-status',idOrg,params, flag).toPromise();
 
       this.spinner.hide();
-      this.clickReport = true;
+      if(flag) {
+        // let url = window.URL.createObjectURL(response);
+        // let a = document.createElement('a');
+        // document.body.appendChild(a);
+        // a.setAttribute('style', 'display: none');
+        // a.href = url;
+        // a.download = `BaoCaoSLTheoTrangThai_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
+        // a.click();
+        // window.URL.revokeObjectURL(url);
+        // a.remove();
 
-      this.list = response;
+        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+        this.isExporting = false;
+        this.updateExportStatus(id, window.URL.createObjectURL(response)); // Cập nhật trạng thái
+      } else {
+        this.isExporting = false;
+        this.list = [];
+        this.table.first = 0
+
+        this.spinner.hide();
+        this.clickReport = true;
+        this.isExporting = false;
+        this.list = response;
+    } } catch (error) {
+      console.error('Error exporting report:', error);
+      this.toastService.showErrorHTMLWithTimeout("report.export.failed", "", 3000);
+      this.isExporting = false;
+      if (flag) {
+        this.updateExportStatus(id, null, 'failed'); // Cập nhật trạng thái lỗi
+      }
     }
+  }
+  updateExportStatus(id: string, url: string | null = null, status: 'completed' | 'failed' = 'completed') {
+    const statusItem = this.exportStatuses.find(item => item.id === id);
+    if (statusItem) {
+      statusItem.url = url;
+      statusItem.status = status;
+    }
+  }
+  cancelExport(id: string) {
+    this.exportStatuses = this.exportStatuses.filter(item => item.id !== id);
+  }
+  
+  cancelReport() {
+    this.exportStatuses = [];
   }
 
   convert(code: string) {

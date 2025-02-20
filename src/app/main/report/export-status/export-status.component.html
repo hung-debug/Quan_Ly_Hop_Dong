@@ -1,0 +1,47 @@
+<div *ngIf="exportStatuses.length" class="export-status-container">
+    <div class="export-status-header">
+      <div>
+        Trạng thái báo cáo
+      </div>
+
+      <button class="cancel-button" (click)="cancelReport()">
+        <img src="../../assets/img/icon_close.svg" style="width: 100%;"/>
+      </button>
+    </div>
+  
+    <div class="export-status-list">
+      <div class="export-status-item" *ngFor="let status of exportStatuses"
+           [ngClass]="{'cancelled': status.status === 'cancelled'}">
+        <div class="file-info">
+          <span class="file-icon">
+            <i class="fas fa-file-excel"></i>
+          </span>
+          <span class="filename">{{ status.filename }}</span>
+        </div>
+  
+        <div class="status-icons">
+          <ng-container *ngIf="status.status === 'pending' || status.status === 'processing'">
+            <span class="spinner">
+              <i class="fas fa-spinner fa-spin"></i>
+            </span>
+          </ng-container>
+  
+          <ng-container *ngIf="status.status === 'completed'">
+            <button class="download" (click)="downloadExport(status.id, status.filename)">
+              <img src="../../assets/img/download_contract.svg" style="width: 100%;"/>
+            </button>
+
+            <button class="cancel-button" (click)="cancelExport(status?.id)">
+              <img src="../../assets/img/icon_close.svg" style="width: 100%;"/>
+            </button>
+          </ng-container>
+  
+          <ng-container *ngIf="status.status === 'failed'">
+            <span class="error-icon">
+              <i class="fas fa-times-circle"></i>
+            </span>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>

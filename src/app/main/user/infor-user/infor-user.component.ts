@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from 'src/app/service/app.service';
@@ -7,11 +7,12 @@ import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UploadService } from 'src/app/service/upload.service';
 import { UserService } from 'src/app/service/user.service';
-import { networkList } from "../../../config/variable";
+import { networkList, supplier } from "../../../config/variable";
 import {parttern_input, parttern} from "../../../config/parttern"
 import * as moment from "moment";
 import { NgxSpinnerService } from 'ngx-spinner';
 import { error } from 'console';
+import { ImageCropperComponentv2 } from '../image-cropper/image-cropperv2.component';
 @Component({
   selector: 'app-infor-user',
   templateUrl: './infor-user.component.html',
@@ -33,6 +34,7 @@ export class InforUserComponent implements OnInit {
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
   networkList: Array<any> = [];
+  supplierList: Array<any> = [];
   roleList: Array<any> = [];
 
   addInforForm: FormGroup;
@@ -57,7 +59,26 @@ export class InforUserComponent implements OnInit {
   roleName:any;
   maxDate: Date = moment().toDate();
   isDisable: any;
+  isHsmIcorp: boolean = false
+  // Tham chiếu đến các component ImageCropper
+  @ViewChild('imageCropperSign') imageCropperSign: ImageCropperComponentv2;
+  @ViewChild('imageCropperMark') imageCropperMark: ImageCropperComponentv2;
 
+  // Các biến liên quan đến ảnh Sign
+  selectedFileSign: File | null = null; // File ảnh Sign được chọn
+  croppedImageSign: string | null = null; // Dữ liệu base64 của ảnh Sign sau khi crop
+  showCropperSign: boolean = false; // Cờ để hiển thị/ẩn component cropper cho ảnh Sign
+
+  // Các biến liên quan đến ảnh Mark
+  selectedFileMark: File | null = null; // File ảnh Mark được chọn
+  croppedImageMark: string | null = null; // Dữ liệu base64 của ảnh Mark sau khi crop
+  showCropperMark: boolean = false; // Cờ để hiển thị/ẩn component cropper cho ảnh Mark
+
+  selectedCode: string | null = null; // Lưu mã ('sign' hoặc 'mark') để biết ảnh nào đang được xử lý
+
+  // Biến cờ để kiểm tra xem cả hai ảnh đã được chọn hay chưa
+  isSignSelected: boolean = false;
+  isMarkSelected: boolean = false;
   constructor(private appService: AppService,
     private toastService : ToastService,
     private userService : UserService,
@@ -88,6 +109,8 @@ export class InforUserComponent implements OnInit {
       });
    
       this.addHsmForm = this.fbd.group({
+        supplier: null,
+        uuid: null,
         nameHsm: this.fbd.control("", Validators.pattern(parttern_input.new_input_form)),
         taxCodeHsm: this.fbd.control("",[
             Validators.pattern(parttern.cardid),
@@ -110,6 +133,7 @@ export class InforUserComponent implements OnInit {
     });
 
     this.networkList = networkList;
+    this.supplierList = supplier;
     this.user = this.userService.getInforUser();
     this.appService.setTitle('user.information');
     this.appService.setSubTitle('');
@@ -167,13 +191,15 @@ export class InforUserComponent implements OnInit {
           networkKpi: data.phone_tel == 3 ? 'bcy': data.phone_tel,
           is_show_phone_pki: data.is_show_phone_pki, 
         });
-
+        this.isHsmIcorp = data.hsm_supplier === "icorp";
         this.addHsmForm = this.fbd.group({
           nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.new_input_form)),
           taxCodeHsm: this.fbd.control(data.tax_code, [
               Validators.pattern(parttern.cardid),
             ]
             ),
+          supplier: this.fbd.control(data.hsm_supplier),
+          uuid: this.fbd.control(data.uuid),
           password1Hsm: this.fbd.control(data.hsm_pass)
         });
 
@@ -200,6 +226,8 @@ export class InforUserComponent implements OnInit {
           is_show_phone_pki: data.is_show_phone_pki,
         });
         this.addHsmFormOld = this.fbd.group({
+          supplier: this.fbd.control(data.hsm_supplier),
+          uuid: this.fbd.control(data.uuid),
           nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.new_input_form)),
           taxCodeHsm: this.fbd.control(data.tax_code, [
             Validators.pattern(parttern.cardid),
@@ -211,7 +239,11 @@ export class InforUserComponent implements OnInit {
       }
     )
   }
-  
+
+  onSupplierChange(event: any) {
+    this.isHsmIcorp = event.value === "icorp";
+  }
+
   fieldTextType: boolean = false;
   toggleFieldTextType() {
     this.fieldTextType = !this.fieldTextType;
@@ -248,69 +280,93 @@ export class InforUserComponent implements OnInit {
     )
   }
 
-  async updateSign(data:any){
+  updateSign(data: any) {
+    // Upload ảnh Sign
+    if (this.selectedFileSign) {
+      this.uploadService.uploadFile(this.selectedFileSign).subscribe(
+        (dataFile: any) => {
+          this.imgSignPath = dataFile.file_object.file_path;
+          this.imgSignBucket = dataFile.file_object.bucket;
 
-    
+          if (this.imgSignBucket != null && this.imgSignPath != null) {
+            const sign_image_content: any = { bucket: this.imgSignBucket, path: this.imgSignPath };
+            const sign_image: never[] = [];
+            (sign_image as string[]).push(sign_image_content);
+            data.sign_image = sign_image;
+          }
 
-      //upload file
-      if(this.attachFile) {
-        const dataFile = await this.uploadService.uploadFile(this.attachFile).toPromise();
-        this.imgSignPath = dataFile.file_object.file_path;
-        this.imgSignBucket = dataFile.file_object.bucket;
-      }
-     
-      if(this.attachFileMark) {
-        const dataFile = await this.uploadService.uploadFile(this.attachFileMark).toPromise();
-        this.imgSignPathMark = dataFile.file_object.file_path;
-        this.imgSignBucketMark = dataFile.file_object.bucket;
-      }
-
-      if(this.imgSignBucket != null && this.imgSignPath != null){
-        const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
-        const sign_image:never[]=[];
+          // Sau khi upload ảnh Sign thành công, tiếp tục upload ảnh Mark (nếu có)
+          this.uploadMark(data);
+        },
+        error => {
+          console.error("Lỗi upload ảnh sign:", error);
+          this.toastService.showErrorHTMLWithTimeout('Lỗi upload ảnh sign', "", 3000);
+          this.spinner.hide();
+        }
+      );
+    } else {
+      // Nếu không có ảnh Sign mới, giữ lại thông tin ảnh cũ (nếu có)
+      if (this.imgSignBucket && this.imgSignPath) {
+        const sign_image_content: any = { bucket: this.imgSignBucket, path: this.imgSignPath };
+        const sign_image: never[] = [];
         (sign_image as string[]).push(sign_image_content);
         data.sign_image = sign_image;
-      } else if(data.fileImage) {
-        try {
-          const fileImage = await this.uploadService.uploadFile(data.fileImage).toPromise();
-          const sign_image_content:any = {bucket: fileImage.file_object.bucket, path: fileImage.file_object.file_path};
-          const sign_image:never[]=[];
-          (sign_image as string[]).push(sign_image_content);
-          data.sign_image = sign_image;
-        } catch(err) {
-          
-        }
       }
+      // Tiếp tục upload ảnh Mark (nếu có)
+      this.uploadMark(data);
+    }
+  }
+  uploadMark(data: any) {
+    // Upload ảnh Mark
+    if (this.selectedFileMark) {
+      this.uploadService.uploadFile(this.selectedFileMark).subscribe(
+        (dataFile: any) => {
+          this.imgSignPathMark = dataFile.file_object.file_path;
+          this.imgSignBucketMark = dataFile.file_object.bucket;
 
-      if(this.imgSignBucketMark != null && this.imgSignPathMark != null){
-        const sign_image_content:any = {bucket: this.imgSignBucketMark, path: this.imgSignPathMark};
-        const sign_image:never[]=[];
-        (sign_image as string[]).push(sign_image_content);
-        data.stampImage = sign_image;
-      } else if(data.fileImageMark) {
-        try {
-          const fileImageMark = await this.uploadService.uploadFile(data.fileImageMark).toPromise();
-          const sign_image_content:any = {bucket: fileImageMark.file_object.bucket, path: fileImageMark.file_object.file_path};
-          const sign_image:never[]=[];
-          (sign_image as string[]).push(sign_image_content);
-          data.stampImage = sign_image;
-        } catch(err) {
-          
-        }  
-      }
+          if (this.imgSignBucketMark != null && this.imgSignPathMark != null) {
+            const stamp_image_content: any = { bucket: this.imgSignBucketMark, path: this.imgSignPathMark };
+            const stampImage: never[] = [];
+            (stampImage as string[]).push(stamp_image_content);
+            data.stampImage = stampImage;
+          }
 
-      this.userService.updateUser(data).subscribe(
-        data => {
-          this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
-          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-            this.router.navigate(['/main/user-infor']);
-          });
-          this.spinner.hide();
-        }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
+          // Sau khi upload ảnh Mark thành công, gọi API updateUser
+          this.callUpdateUserAPI(data);
+        },
+        error => {
+          console.error("Lỗi upload ảnh mark:", error);
+          this.toastService.showErrorHTMLWithTimeout('Lỗi upload ảnh mark', "", 3000);
           this.spinner.hide();
         }
-      )
+      );
+    } else {
+      // Nếu không có ảnh Mark mới, giữ lại thông tin ảnh cũ (nếu có)
+      if (this.imgSignBucketMark && this.imgSignPathMark) {
+        const stamp_image_content: any = { bucket: this.imgSignBucketMark, path: this.imgSignPathMark };
+        const stampImage: never[] = [];
+        (stampImage as string[]).push(stamp_image_content);
+        data.stampImage = stampImage;
+      }
+      // Gọi API updateUser
+      this.callUpdateUserAPI(data);
+    }
+  }
+  callUpdateUserAPI(data: any) {
+    this.userService.updateUser(data).subscribe(
+      response => {
+        this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigate(['/main/user-infor']);
+        });
+        this.spinner.hide();
+      },
+      error => {
+        console.error("Lỗi cập nhật thông tin người dùng:", error);
+        this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
+        this.spinner.hide();
+      }
+    );
   }
 
   updateUser(){
@@ -337,6 +393,8 @@ export class InforUserComponent implements OnInit {
       phoneKpi: this.addKpiFormOld.value.phoneKpi,
       networkKpi: this.addKpiFormOld.value.networkKpi,
       is_show_phone_pki: this.addKpiFormOld.value.is_show_phone_pki,
+      hsm_supplier: this.addHsmFormOld.value.supplier,
+      uuid: this.addHsmFormOld.value.uuid,
       nameHsm: this.addHsmFormOld.value.nameHsm,
 
       organization_change: this.addInforForm.value.organization_change
@@ -399,13 +457,32 @@ export class InforUserComponent implements OnInit {
     }
   }
 
-  updateSignUser(){
+  async updateSignUser() {
     this.submittedSign = true;
-    // stop here if form is invalid
     if (this.addKpiForm.invalid || this.addHsmForm.invalid) {
       return;
     }
     this.spinner.show();
+
+    // Kiểm tra và crop ảnh Sign (nếu có)
+    if (this.selectedFileSign && this.showCropperSign) {
+      this.selectedCode = 'sign';
+      this.imageCropperSign.cropImage(); // Gọi hàm cropImage() của component ImageCropper
+      return;
+    }
+
+    // Kiểm tra và crop ảnh Mark (nếu có)
+    if (this.selectedFileMark && this.showCropperMark) {
+      this.selectedCode = 'mark';
+      this.imageCropperMark.cropImage(); // Gọi hàm cropImage() của component ImageCropper
+      return;
+    }
+
+    // Nếu không có ảnh nào cần crop, tiếp tục quá trình
+    this.continueUpdateSignUser();
+  }
+
+  continueUpdateSignUser() {
     const data = {
       id: this.id,
       name: this.addInforFormOld.value.name,
@@ -416,50 +493,54 @@ export class InforUserComponent implements OnInit {
       role: this.addInforFormOld.value.role,
       status: this.addInforFormOld.value.status,
 
-      fileImage: this.attachFile,
+      fileImage: this.selectedFileSign,
       sign_image: [],
 
-      fileImageMark: this.attachFileMark,
+      fileImageMark: this.selectedFileMark,
       stampImage: [],
 
       phoneKpi: this.addKpiForm.value.phoneKpi,
-      networkKpi: this.addKpiForm.value.networkKpi == 'bcy' ? 3: this.addKpiForm.value.networkKpi,
+      networkKpi: this.addKpiForm.value.networkKpi == 'bcy' ? 3 : this.addKpiForm.value.networkKpi,
       is_show_phone_pki: this.addKpiForm.value.is_show_phone_pki,
+      hsm_supplier: this.addHsmForm.value.supplier,
+      uuid: this.addHsmForm.value.uuid,
       nameHsm: this.addHsmForm.value.nameHsm,
       taxCodeHsm: this.addHsmForm.value.taxCodeHsm,
       password1Hsm: this.addHsmForm.value.password1Hsm
 
-    }
+    };
 
-    //ham update
     this.updateSign(data);
   }
 
   attachFileMark: any = null;
   fileChangedAttach(e: any, code: string) {
-    let files = e.target.files;
-    for(let i = 0; i < files.length; i++){
+    // Reset các biến liên quan đến ảnh trước khi xử lý file mới
+    this.resetImage(code);
 
-      const file = e.target.files[i];
+    let files = e.target.files;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
       if (file) {
-        // giới hạn file upload lên là 5mb
-        if (e.target.files[0].size <= 50000000) {
-          const file_name = file.name;
-          const extension = file.name.split('.').pop();
-          if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'jpge') {
-            this.handleUpload(e, code);
-            if(code == 'sign') {
-              this.attachFile = file;
-            } else if(code == 'mark') {
-              this.attachFileMark = file;
+        if (file.size <= 50000000) {
+          const extension = file.name.split('.').pop()?.toLowerCase();
+          if (extension === 'jpg' || extension === 'png' || extension === 'jpeg') {
+            if (code === 'sign') {
+              this.selectedFileSign = file;
+              this.isSignSelected = true;
+            } else if (code === 'mark') {
+              this.selectedFileMark = file;
+              this.isMarkSelected = true;
             }
-          }else{
+            this.handleUpload(e, code);
+          } else {
             this.toastService.showErrorHTMLWithTimeout("File tài liệu yêu cầu định dạng JPG, PNG, JPGE", "", 3000);
           }
-
         } else {
-          this.attachFile = null;
-          this.attachFileMark = null;
+          this.selectedFileSign = null;
+          this.selectedFileMark = null;
+          this.isSignSelected = false;
+          this.isMarkSelected = false;
           this.toastService.showErrorHTMLWithTimeout("Yêu cầu file nhỏ hơn 50MB", "", 3000);
           break;
         }
@@ -473,10 +554,14 @@ export class InforUserComponent implements OnInit {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      if(code == 'sign')
-      this.imgSignPCSelect = reader.result? reader.result.toString() : '';
-    else if(code == 'mark')
-      this.imgSignPCSelectMark = reader.result? reader.result.toString() : '';
+      this.selectedCode = code;
+      if (code === 'sign') {
+        this.imgSignPCSelect = reader.result?.toString() || '';
+        this.showCropperSign = true; // Hiển thị component cropper cho ảnh Sign
+      } else if (code === 'mark') {
+        this.imgSignPCSelectMark = reader.result?.toString() || '';
+        this.showCropperMark = true; // Hiển thị component cropper cho ảnh Mark
+      }
     };
   }
 
@@ -488,5 +573,54 @@ export class InforUserComponent implements OnInit {
       // @ts-ignore
       document.getElementById('attachFileMark').click();
   }
+  // Hàm chuyển đổi base64 thành File
+  base64ToFile(base64String: string, filename: string): File {
+    const arr = base64String.split(',');
+    let mime = '';
+    const match = arr[0].match(/:(.*?);/);
+    if (match && match[1]) {
+      mime = match[1];
+    }
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+  }
 
+  // Hàm được gọi khi ảnh Sign đã được crop
+  onCroppedSign(croppedImage: string) {
+    this.croppedImageSign = croppedImage; // Lưu dữ liệu base64 của ảnh đã crop
+    this.imgSignPCSelect = croppedImage; // Cập nhật ảnh hiển thị
+    this.showCropperSign = false; // Ẩn component cropper
+    this.selectedFileSign = this.base64ToFile(croppedImage, 'cropped-sign.png'); // Tạo File từ base64
+    this.continueUpdateSignUser(); // Tiếp tục quá trình cập nhật
+  }
+
+  // Hàm được gọi khi ảnh Mark đã được crop
+  onCroppedMark(croppedImage: string) {
+    this.croppedImageMark = croppedImage; // Lưu dữ liệu base64 của ảnh đã crop
+    this.imgSignPCSelectMark = croppedImage; // Cập nhật ảnh hiển thị
+    this.showCropperMark = false; // Ẩn component cropper
+    this.selectedFileMark = this.base64ToFile(croppedImage, 'cropped-mark.png'); // Tạo File từ base64
+    this.continueUpdateSignUser(); // Tiếp tục quá trình cập nhật
+  }
+    // Hàm reset các biến liên quan đến ảnh
+    resetImage(code: string) {
+      if (code === 'sign') {
+        this.selectedFileSign = null;
+        this.croppedImageSign = null;
+        this.imgSignPCSelect ='';
+        this.showCropperSign = false;
+        this.isSignSelected = false;
+      } else if (code === 'mark') {
+        this.selectedFileMark = null;
+        this.croppedImageMark = null;
+        this.imgSignPCSelectMark = '';
+        this.showCropperMark = false;
+        this.isMarkSelected = false;
+      }
+    }
 }

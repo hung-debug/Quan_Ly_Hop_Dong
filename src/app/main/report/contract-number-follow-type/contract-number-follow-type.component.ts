@@ -8,6 +8,7 @@ import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { ReportService } from '../report.service';
 import { Table } from 'primeng/table';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-contract-number-follow-type',
@@ -61,6 +62,8 @@ export class ContractNumberFollowTypeComponent implements OnInit {
   };
 
   Arr = Array;
+
+  isExporting: boolean = false; // Thêm biến cờ
 
   constructor(
     
@@ -191,7 +194,14 @@ export class ContractNumberFollowTypeComponent implements OnInit {
       return;
     }
 
-    this.spinner.show();
+    // Vô hiệu hóa nút export
+    this.isExporting = true;
+
+    // Hiển thị thông báo "Báo cáo đang được xuất"
+    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+
+    // Ẩn spinner
+    this.spinner.hide();
 
     let idOrg = this.organization_id;
     if(this.selectedNodeOrganization.data) {
@@ -213,6 +223,16 @@ export class ContractNumberFollowTypeComponent implements OnInit {
 
     if(!to_date)
       to_date = from_date;
+
+    let id: string = '';
+    if (flag) {
+    let now = new Date();
+    let randomFive = Math.floor(10000 + Math.random() * 90000);
+    id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
+    const filename = `BaoCaoSLTheoLoaiHopDong_${id}.xlsx`;
+    AppComponent.exportStatuses.push({ id: id, filename: filename, status: 'processing', url: "" });
+    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+    } else {this.isExporting = false;}
     
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData;
     this.reportService.export('rp-by-type',idOrg,params, flag).subscribe((response: any) => {
@@ -221,19 +241,21 @@ export class ContractNumberFollowTypeComponent implements OnInit {
         
         if(flag) {
           this.spinner.hide();
-          let url = window.URL.createObjectURL(response);
-          let a = document.createElement('a');
-          document.body.appendChild(a);
-          a.setAttribute('style', 'display: none');
-          a.href = url;
-          a.download = `BaoCaoSLTheoLoaiHopDong_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
-          a.click();
-          window.URL.revokeObjectURL(url);
-          a.remove();
+          // let url = window.URL.createObjectURL(response);
+          // let a = document.createElement('a');
+          // document.body.appendChild(a);
+          // a.setAttribute('style', 'display: none');
+          // a.href = url;
+          // a.download = `BaoCaoSLTheoLoaiHopDong_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
+          // a.click();
+          // window.URL.revokeObjectURL(url);
+          // a.remove();
   
           this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+          this.isExporting = false;
+          this.updateExportStatus(id, window.URL.createObjectURL(response));
         } else {
-
+          this.isExporting = false;
           this.table.first = 0
 
           this.clickReport = true;
@@ -300,6 +322,13 @@ export class ContractNumberFollowTypeComponent implements OnInit {
        
     })
 
+  }
+  updateExportStatus(id: string, url: string | null = null, status: 'completed' | 'failed' = 'completed') {
+    const statusItem = AppComponent.exportStatuses.find(item => item.id === id);
+    if (statusItem) {
+      statusItem.url = url ?? undefined;
+      statusItem.status = status;
+    }
   }
 
   changeCheckBox(event: any) {
