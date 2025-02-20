@@ -298,7 +298,7 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
         //   this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn thời gian gửi!','',3000)
         //   return
         // }
-        this.spinner.show()
+        //this.spinner.show()
         await this.reportService.exportSmsReport(params, payloadData, true).toPromise().then(
           (res: any) => {
             // this.list = [];
