@@ -10,6 +10,7 @@ import { Table } from 'primeng/table';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import * as moment from 'moment';
 import { environment } from "src/environments/environment";
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-report-contract-number-eContract-mSale',
@@ -294,6 +295,14 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       // this.size +
       '&to_date=' +
       to_date;
+    let id: string = '';
+      if (flag) {
+        let now = new Date();
+        let randomFive = Math.floor(10000 + Math.random() * 90000);
+        id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
+        const filename = `BaoCaoSLHĐ_eContract_mSale_${id}.xlsx`;
+        AppComponent.exportStatuses.push({ id: id, filename: filename, status: 'processing', url: "" });
+      } else {this.isExporting = false;}
 
     //chờ api, api mẫu báo cáo sắp hết hiệu lực
         if (flag) {
@@ -301,7 +310,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
         (response: any) => {
           this.spinner.hide();
           // this.toastService.showSuccessHTMLWithTimeout('Xuất file báo cáo thành công','',3000)
-          this.exportToExcel(response)
+          //this.exportToExcel(response)
         },
         (err: any) => {
           this.spinner.hide()
@@ -318,9 +327,11 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
                 '',
                 3000
               )
+              this.updateExportStatus(id, null, 'failed');
           }}
       });
         } else {
+          this.isExporting = false;
       this.reportService.exportMsale('rp-by-contract-type', idOrg, this.type_id.toString(), params, flag).subscribe(
         (response: any) => {
           this.spinner.hide();
@@ -381,12 +392,21 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       from_date +
       '&to_date=' +
       to_date;
+    let id: string = '';
+      if (flag) {
+        let now = new Date();
+        let randomFive = Math.floor(10000 + Math.random() * 90000);
+        id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
+        const filename = `BaoCaoChiTiet_HĐ_eContract_${id}.xlsx`;
+        AppComponent.exportStatuses.push({ id: id, filename: filename, status: 'processing', url: "" });
+      }
 
     this.reportService.exportMsale('rp-by-contract-type-detail', idOrg, this.type_id_detail.toString(), params, flag).subscribe({
       next: (response: any) => {
         this.spinner.hide();
         if (flag) {
-          this.exportToExcelDetail(response)
+          //this.exportToExcelDetail(response)
+          this.updateExportStatus(id, window.URL.createObjectURL(response));
         } else {
           let msaleDataDetail: any[] = this.convertObjDataToArr(response)
           let newMsaleDataDetail: any = msaleDataDetail.map((item: any) => ({
@@ -405,6 +425,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       error: (err: any) => {
         this.spinner.hide()
         if (!flag) {
+          this.isExporting = false;
           this.toastService.showErrorHTMLWithTimeout(
             'report.msale.search.failed',
             '',
@@ -424,6 +445,13 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
         this.isExporting = false; // Kích hoạt lại nút export
       }
     });
+  }
+  updateExportStatus(id: string, url: string | null = null, status: 'completed' | 'failed' = 'completed') {
+    const statusItem = AppComponent.exportStatuses.find(item => item.id === id);
+    if (statusItem) {
+      statusItem.url = url ?? undefined;
+      statusItem.status = status;
+    }
   }
 
   convertObjDataToArr(obj: any) {

@@ -26,9 +26,9 @@
     border-bottom: 1px solid #ccc;
   }
   
-  .export-status-list {
-    max-height: 200px; /* Adjust as needed */
-  }
+  // .export-status-list {
+  //  min-height: 200px; /* Adjust as needed */
+  // }
   
   .export-status-item {
     display: flex;
@@ -84,6 +84,7 @@
     color: red;
     width: 30px;
   }
+  
   
   .download {
     background: none;

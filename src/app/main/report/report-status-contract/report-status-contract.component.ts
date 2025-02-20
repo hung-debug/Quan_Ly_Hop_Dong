@@ -23,6 +23,7 @@ import { ReportService } from '../report.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Table } from 'primeng/table';
 import * as moment from 'moment';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-report-status-contract',
@@ -287,6 +288,18 @@ completionDate: any;
        payload ='&textSearch=' + this.contractInfo.trim()
     }
 
+    let id: string = '';
+    if (flag) {
+    let now = new Date();
+    let randomFive = Math.floor(10000 + Math.random() * 90000);
+    id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
+    const filename = `BaoCaoTrangThaiXuLy_${new Date().getDate()}-${
+               new Date().getMonth() + 1
+             }-${new Date().getFullYear()}.xlsx`;
+    AppComponent.exportStatuses.push({ id: id, filename: filename, status: 'processing', url: "" });
+    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+    } else {this.isExporting = false;}
+
     let params =
       '?from_date=' +
       from_date +
@@ -315,17 +328,17 @@ completionDate: any;
           this.spinner.hide();
 
           if (flag) {
-            let url = window.URL.createObjectURL(response);
-            let a = document.createElement('a');
-            document.body.appendChild(a);
-            a.setAttribute('style', 'display: none');
-            a.href = url;
-            a.download = `BaoCaoTrangThaiXuLy_${new Date().getDate()}-${
-              new Date().getMonth() + 1
-            }-${new Date().getFullYear()}.xlsx`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-            a.remove();
+            // let url = window.URL.createObjectURL(response);
+            // let a = document.createElement('a');
+            // document.body.appendChild(a);
+            // a.setAttribute('style', 'display: none');
+            // a.href = url;
+            // a.download = `BaoCaoTrangThaiXuLy_${new Date().getDate()}-${
+            //   new Date().getMonth() + 1
+            // }-${new Date().getFullYear()}.xlsx`;
+            // a.click();
+            // window.URL.revokeObjectURL(url);
+            // a.remove();
 
             this.toastService.showSuccessHTMLWithTimeout(
               'no.contract.download.file.success',
@@ -333,7 +346,9 @@ completionDate: any;
               3000
             );
             this.isExporting = false;
+            this.updateExportStatus(id, window.URL.createObjectURL(response));
           } else {
+            this.isExporting = false;
             this.list = [];
 
             this.table.first = 0;
@@ -413,7 +428,13 @@ completionDate: any;
         }
       });
   }
-
+  updateExportStatus(id: string, url: string | null = null, status: 'completed' | 'failed' = 'completed') {
+    const statusItem = AppComponent.exportStatuses.find(item => item.id === id);
+    if (statusItem) {
+      statusItem.url = url ?? undefined;
+      statusItem.status = status;
+    }
+  }
   toRecord() {
     return Math.min((this.page + 1) * this.row, this.totalRecords)
   }

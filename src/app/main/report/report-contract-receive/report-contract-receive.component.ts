@@ -12,6 +12,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractService } from 'src/app/service/contract.service';
 import { ConvertStatusService } from 'src/app/service/convert-status.service';
 import { Table } from 'primeng/table';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-report-contract-receive',
@@ -301,25 +302,37 @@ export class ReportContractReceiveComponent implements OnInit {
     if(this.contractInfo){
       payload ='&textSearch=' + this.contractInfo.trim()
     }
+    let id: string = '';
+    if (flag) {
+      let now = new Date();
+      let randomFive = Math.floor(10000 + Math.random() * 90000);
+      id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
+      const filename = `BaoCaoHopDongNhan_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
+      AppComponent.exportStatuses.push({ id: id, filename: filename, status: 'processing', url: "" });
+      this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+    } else {this.isExporting = false;}
 
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status=' + contractStatus + '&fetchChildData='+ this.fetchChildData + payload + `&pageNumber=`+this.page+`&pageSize=`+this.row;
     this.reportService.export('rp-my-process',idOrg,params, flag).subscribe((response: any) => {
         this.spinner.hide();
         if(flag) {
-          this.spinner.hide();
-          let url = window.URL.createObjectURL(response);
-          let a = document.createElement('a');
-          document.body.appendChild(a);
-          a.setAttribute('style', 'display: none');
-          a.href = url;
-          a.download = `BaoCaoHopDongNhan_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
-          a.click();
-          window.URL.revokeObjectURL(url);
-          a.remove();
+          // this.spinner.hide();
+          // let url = window.URL.createObjectURL(response);
+          // let a = document.createElement('a');
+          // document.body.appendChild(a);
+          // a.setAttribute('style', 'display: none');
+          // a.href = url;
+          // a.download = `BaoCaoHopDongNhan_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
+          // a.click();
+          // window.URL.revokeObjectURL(url);
+          // a.remove();
   
           this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
           this.isExporting = false;
+          this.updateExportStatus(id, window.URL.createObjectURL(response));
+
         } else {
+          this.isExporting = false;
           this.table.first = 0
           this.list = [];
           this.colsSuggest = [
@@ -363,6 +376,13 @@ export class ReportContractReceiveComponent implements OnInit {
       
     })
  
+  }
+  updateExportStatus(id: string, url: string | null = null, status: 'completed' | 'failed' = 'completed') {
+    const statusItem = AppComponent.exportStatuses.find(item => item.id === id);
+    if (statusItem) {
+      statusItem.url = url ?? undefined;
+      statusItem.status = status;
+    }
   }
 
   toRecord() {
