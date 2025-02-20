@@ -7,7 +7,7 @@
       <!-- <p>Chúng tôi đã gửi mã OTP về số điện thoại <b style="color: #106DB6;">{{this.datasOtp.phone}}</b>.<br>
         Vui lòng nhập mã và tiếp tục thực hiện.</p> -->
       <p class="text_validate">Vui lòng nhập mã xác thực đã được gửi về số điện thoại {{this.datasOtp.phone}}.</p>
-      <p *ngIf="this.datasOtp.firstHandler" class="change_phone" (click)="changePhone()">Thay đổi số điện thoại</p>
+      <p *ngIf="this.datasOtp.firstHandlerEdit" class="change_phone" (click)="changePhone()">Thay đổi số điện thoại</p>
     </div>
     
     <div style="display: flex;flex-direction: column;">

@@ -5191,7 +5191,8 @@ export class ConsiderContractComponent
       contractNoValueSign: this.contractNoValueSign,
       firstHandler: this.firstHandler,
       arrDifPage: this.arrDifPage,
-      difX: this.difX
+      difX: this.difX,
+      firstHandlerEdit: this.isDataContract.isAllowFirstHandleEdit
     };
 
     const dialogConfig = new MatDialogConfig();
