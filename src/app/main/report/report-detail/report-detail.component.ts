@@ -13,6 +13,7 @@ import * as moment from 'moment';
 import { ConvertStatusService } from 'src/app/service/convert-status.service';
 
 import { Table } from 'primeng/table';
+import { AppComponent } from 'src/app/app.component';
 
 
 @Component({
@@ -333,27 +334,36 @@ export class ReportDetailComponent implements OnInit {
       to_date = from_date
     if(!completed_to_date)
       completed_to_date=completed_from_date
+    let id: string;
+    if(flag) {
+      let now = new Date();
+      let randomFive = Math.floor(10000 + Math.random() * 90000); // 5 số ngẫu nhiên
+      id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
+      const filename = `BaoCaoChiTiet_${id}.xlsx`;
+      AppComponent.exportStatuses.push({id: id, filename: filename, status: 'processing', url: ""}); // Thay đổi dòng này
+    }
+
     let payload = ""
     if(this.contractInfo){
        payload ='&textSearch=' + this.contractInfo.trim()
     }
     let params = '?from_date='+from_date+'&to_date='+to_date+'&completed_from_date='+completed_from_date+'&completed_to_date='+completed_to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData + payload + `&pageNumber=`+this.page+`&pageSize=`+this.row;
     this.reportService.export('rp-detail',idOrg,params, flag).subscribe((response: any) => {
+      if (flag) {
         //this.spinner.hide(); // Bỏ dòng này
-        if(flag) {
-          //this.spinner.hide(); // Bỏ dòng này
-          let url = window.URL.createObjectURL(response);
-          let a = document.createElement('a');
-          document.body.appendChild(a);
-          a.setAttribute('style', 'display: none');
-          a.href = url;
-          a.download = `BaoCaoChiTiet_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
-          a.click();
-          window.URL.revokeObjectURL(url);
-          a.remove();
-  
-          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+        // let url = window.URL.createObjectURL(response);
+        // let a = document.createElement('a');
+        // document.body.appendChild(a);
+        // a.setAttribute('style', 'display: none');
+        // a.href = url;
+        // a.download = `BaoCaoChiTiet_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
+        // a.click();
+        // window.URL.revokeObjectURL(url);
+        // a.remove();
+
+        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
           this.isExporting = false;
+          this.updateExportStatus(id, window.URL.createObjectURL(response)); // Lưu URL
         } else {
           this.table.first = 0
           this.list = [];
@@ -396,9 +406,17 @@ export class ReportDetailComponent implements OnInit {
           this.numberPage = response.TotalPages;
         }
       
-    })
+    });
   }
-  
+
+  updateExportStatus(id: string, url: string) {
+    const statusItem = AppComponent.exportStatuses.find(item => item.id === id);
+    if (statusItem) {
+        statusItem.url = url;
+        statusItem.status = 'completed'; // Cập nhật thêm trạng thái nếu cần
+    }
+  }
+
   toRecord() {
     return Math.min((this.page + 1) * this.row, this.totalRecords)
   }
