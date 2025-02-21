@@ -1,4 +1,4 @@
-<div *ngIf="exportStatuses.length" class="export-status-container">
+<div *ngIf="exportStatuses.length && this.isExpanded" class="export-status-container">
     <div class="export-status-header">
       <div class="title-export">
         Trạng thái xuất báo cáo
@@ -8,11 +8,6 @@
         <div *ngIf = "this.isExpanded">
           <img src="../../assets/img/mynaui_minus-solid.svg" 
           [class.rotated]="!isExpanded"
-          style="width: 100%;"/>
-        </div>
-
-        <div *ngIf = "!this.isExpanded">
-          <img src="../../assets/img/icon-park-outline_up.svg" 
           style="width: 100%;"/>
         </div>
       </button>
@@ -65,4 +60,10 @@
         </div>
       </div>
     </div>
+</div>
+
+<div class="toggleExport" *ngIf="!this.isExpanded" (click)="toggleExportStatusList()">
+  <div>
+    <img src="../../assets/img/ci_download _icon.svg" style="width: 30px;"/>
   </div>
+</div>
