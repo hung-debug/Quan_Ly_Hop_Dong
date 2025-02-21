@@ -62,8 +62,15 @@
     </div>
 </div>
 
-<div class="toggleExport" *ngIf="!this.isExpanded" (click)="toggleExportStatusList()">
-  <div>
-    <img src="../../assets/img/ci_download _icon.svg" style="width: 30px;"/>
+<div class="toggleExport" *ngIf="!this.isExpanded">
+  <div *ngIf="hasPendingExports(); else downloadIcon">
+    <span class="spinner">
+      <img src="../../assets/img/icons8-spinner-64.png" style="width: 100%;"/>
+    </span>
   </div>
+
+  <ng-template #downloadIcon>
+    <img src="../../assets/img/ci_download _icon.svg" style="width: 30px; cursor: pointer;"
+         (click)="toggleExportStatusList()"/>
+  </ng-template>
 </div>
