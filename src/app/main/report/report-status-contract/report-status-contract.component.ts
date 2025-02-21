@@ -250,7 +250,7 @@ completionDate: any;
     this.isExporting = true;
 
     // Hiển thị thông báo "Báo cáo đang được xuất"
-    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+    //this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
 
     // Ẩn spinner
     this.spinner.hide();

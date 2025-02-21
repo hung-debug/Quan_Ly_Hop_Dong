@@ -303,7 +303,7 @@ export class ReportDetailComponent implements OnInit {
     this.isExporting = true;
 
     // Hiển thị thông báo "Báo cáo đang được xuất"
-    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+    //this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
 
     // Ẩn spinner
     this.spinner.hide();
@@ -336,6 +336,7 @@ export class ReportDetailComponent implements OnInit {
       completed_to_date=completed_from_date
     let id: string;
     if(flag) {
+      this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
       let now = new Date();
       let randomFive = Math.floor(10000 + Math.random() * 90000); // 5 số ngẫu nhiên
       id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
