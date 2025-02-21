@@ -1,133 +1,132 @@
+.title-export {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #2B3D60;
+}
+
 .export-status-container {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    width: auto; /* Adjust as needed */
-    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 5px;
-    margin: 10px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* Ensure it's on top of other elements */
-  }
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: auto; /* Adjust as needed */
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  margin: 10px;
+  box-shadow: 0px 3px 12px 0px #1055E11A;
+  z-index: 1000;
+}
   
-  .cancelled {
-    color: gray;
-    text-decoration: line-through;
-  }
-  .export-status-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px;
-    cursor: pointer;
-    background-color: #f0f0f0;
-    border-bottom: 1px solid #ccc;
-  }
+.cancelled {
+  color: gray;
+  text-decoration: line-through;
+}
+
+.export-status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  cursor: pointer;
+  background-color: #F3F6FA;
+}
   
-  // .export-status-list {
-  //  min-height: 200px; /* Adjust as needed */
-  // }
-  
-  .export-status-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 5px;
-    padding: 5px;
-    border-bottom: 1px solid #eee;
-  
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-  
-  .file-info {
-    display: flex;
-    align-items: center;
-  }
-  
-  .file-icon {
-    margin-right: 5px;
-    font-size: 1.2em;
-    color: #198754; /* Green color for Excel icon */
-    width: 20px;
-  }
-  
-  .filename {
-    font-size: 0.9em;
-  }
-  
-  .status-icons {
-    display: flex;
-    //align-items: center;
-    margin-left: 20px;
-  }
-  
-  .spinner {
-    margin-right: 5.5px;
-    display: block;
-    width: 23px; /* Thay đổi kích thước theo nhu cầu */
-    height: 23px; /* Thay đổi kích thước theo nhu cầu */
-    color: blue;
-    animation: spin 1s linear infinite; /* Thêm hoạt ảnh quay */
-    transform-origin: center; /* Đặt trung tâm quay ở giữa */
-  }
-  
-  @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-  
-  
-  
-  .success-icon {
-    color: green;
-  }
-  
-  .error-icon {
-    color: red;
-  }
-  
-  .cancel-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: red;
-    width: 30px;
-  }
-  .toggle-button {
-    position: sticky;
-    margin-left: 15vh;
-    background: none;
-    border: none;
-    cursor: pointer;
-    width: 35px;
-  }
-  .check-button {
-    margin-right: 3px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: red;
-    width: 30px;
-  }
-  
-  
-  .download {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: red;
-    width: 34px;
-  }
-  .rotated {
-    transform: rotate(180deg);
-  }
-  
-  /* Keyframes for spin animation */
-  @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
+.export-status-item {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #1D1D1D;
+  border-bottom: 2px solid #E6EDFA;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+}
+
+.file-icon {
+  margin-right: 5px;
+  font-size: 1.2em;
+}
+
+.filename {
+  font-size: 0.9em;
+}
+
+.status-icons {
+  display: flex;
+}
+
+.spinner {
+  margin-right: 5.5px;
+  display: block;
+  width: 23px; /* Thay đổi kích thước theo nhu cầu */
+  height: 23px; /* Thay đổi kích thước theo nhu cầu */
+  color: blue;
+  animation: spin 1s linear infinite; /* Thêm hoạt ảnh quay */
+  transform-origin: center; /* Đặt trung tâm quay ở giữa */
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.success-icon {
+  color: green;
+}
+
+.error-icon {
+  color: red;
+}
+
+.cancel-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red;
+}
+
+.toggle-button {
+  position: sticky;
+  margin-left: 15vh;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.check-button {
+  margin-right: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red;
+  width: 30px;
+}
+
+
+.download {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red;
+  width: 34px;
+}
+.rotated {
+  transform: rotate(180deg);
+}
+
+/* Keyframes for spin animation */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.size-35 {
+  width: 35px;
+}
