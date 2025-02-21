@@ -48,4 +48,9 @@ export class ExportStatusComponent {
       }
     }
   }
+
+  hasPendingExports(): boolean {
+    return this.exportStatuses.some(status => status.status !== 'completed');
+  }
+  
 }
