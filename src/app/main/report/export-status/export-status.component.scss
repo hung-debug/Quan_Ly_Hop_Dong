@@ -147,3 +147,31 @@
   align-items: center;
   justify-content: center;
 }
+
+.cancel-button, .zoom_out {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 2px solid transparent; /* Đường viền trong suốt mặc định */
+  background: none;
+  cursor: pointer;
+  transition: all 0.3s ease; /* Tạo hiệu ứng mượt mà */
+}
+
+.cancel-button:hover, .zoom_out:hover {
+  background-color: #FFFFFF;
+  border-radius: 50%; /* Làm tròn viền */
+  box-shadow: 0px 3px 12px 0px #1055E11A;
+}
+
+.cancel-button .icon-close-hover {
+  display: none; /* Ẩn icon hover mặc định */
+}
+
+.cancel-button:hover .icon-close-default {
+  display: none; /* Ẩn icon mặc định khi hover */
+}
+
+.cancel-button:hover .icon-close-hover {
+  display: inline-block; /* Hiện icon hover khi hover vào nút */
+}
