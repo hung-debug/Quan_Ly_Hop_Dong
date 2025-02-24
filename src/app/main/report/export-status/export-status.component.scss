@@ -187,3 +187,8 @@
 .download:hover .icon-dowload-hover {
   display: inline-block; /* Hiện icon hover khi hover vào nút */
 }
+
+.export-status-list {
+  max-height: 500px;
+  overflow-y: auto;
+}
