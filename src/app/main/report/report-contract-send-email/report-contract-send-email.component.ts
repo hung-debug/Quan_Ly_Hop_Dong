@@ -243,8 +243,8 @@ export class ReportStatusSendEmailComponent implements OnInit {
     } else {this.isExporting = false;}
     try {
       if (!isExport) {
-        //this.spinner.show()
-        this.spinner.hide();
+        this.spinner.show()
+        
         this.isExporting = false;
         await this.reportService.exportEmailReport(params, payloadData, false).toPromise().then(
           (res: any) => {
@@ -254,10 +254,11 @@ export class ReportStatusSendEmailComponent implements OnInit {
             this.list = res.content
             this.totalRecords = res.totalElements;
             this.numberPage = res.totalPages;
+            this.spinner.hide();
           }
         )
+      
       } else {
-        //this.spinner.show()
         await this.reportService.exportEmailReport(params, payloadData, true).toPromise().then(
           (res: any) => {
             // this.list = [];

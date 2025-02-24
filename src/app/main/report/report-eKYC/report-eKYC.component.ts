@@ -227,7 +227,7 @@ export class ReportEKYCComponent implements OnInit {
     
     try {
       if (!isExport) {
-        this.spinner.hide()
+         this.spinner.show()
         this.isExporting = false;
         await this.reportService.exportEkycReport(params, payloadData, false).toPromise().then(
           (res: any) => {
@@ -245,7 +245,6 @@ export class ReportEKYCComponent implements OnInit {
         //   this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn thời gian gửi!','',3000)
         //   return
         // }
-        this.spinner.show()
         await this.reportService.exportEkycReport(params, payloadData, true).toPromise().then(
           (res: any) => {
             // this.list = [];
