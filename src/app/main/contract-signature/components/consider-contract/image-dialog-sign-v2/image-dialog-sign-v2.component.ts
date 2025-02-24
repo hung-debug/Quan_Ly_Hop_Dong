@@ -212,6 +212,7 @@ fileChangedAttach(e: any) {
         this.toastService.showErrorHTMLWithTimeout('not.photo','',3000)
       } else {
         this.imageCropper.cropImage();
+        this.dialogRef.close(this.croppedImage);
       }
     } else if (this.typeImageSignatureRadio == 3) {
       if(!this.imgSignDrawing) {
