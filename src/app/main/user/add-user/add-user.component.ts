@@ -703,7 +703,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
     this.imgSignPCSelect = croppedImage; // Cập nhật ảnh hiển thị
     this.showCropperSign = false; // Ẩn component cropper
     this.selectedFileSign = this.base64ToFile(croppedImage, 'cropped-sign.png'); // Tạo File từ base64
-    this.processSubmit();
+    this.onSubmit();
   }
 
     // Hàm được gọi khi ảnh Mark đã được crop
@@ -712,7 +712,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
       this.imgSignPCSelectMark = croppedImage; // Cập nhật ảnh hiển thị
       this.showCropperMark = false; // Ẩn component cropper
       this.selectedFileMark = this.base64ToFile(croppedImage, 'cropped-mark.png'); // Tạo File từ base64
-      this.processSubmit();
+      this.onSubmit();
     }
 
   // Hàm chuyển đổi base64 thành File
