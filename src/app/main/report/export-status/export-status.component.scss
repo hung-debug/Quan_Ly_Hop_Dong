@@ -175,3 +175,15 @@
 .cancel-button:hover .icon-close-hover {
   display: inline-block; /* Hiện icon hover khi hover vào nút */
 }
+
+.download .icon-dowload-hover {
+  display: none; /* Ẩn icon hover mặc định */
+}
+
+.download:hover .icon-dowload-default {
+  display: none; /* Ẩn icon mặc định khi hover */
+}
+
+.download:hover .icon-dowload-hover {
+  display: inline-block; /* Hiện icon hover khi hover vào nút */
+}
