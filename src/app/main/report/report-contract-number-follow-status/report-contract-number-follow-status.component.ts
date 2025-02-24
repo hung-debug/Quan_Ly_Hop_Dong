@@ -158,16 +158,12 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
     if(!this.validData()) {
       return;
     }
-
+    this.spinner.show();
     // Vô hiệu hóa nút export
     this.isExporting = true;
 
     // Hiển thị thông báo "Báo cáo đang được xuất"
     //this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
-
-    // Ẩn spinner
-    this.spinner.hide();
-
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length ? this.selectedNodeOrganization : this.selectedNodeOrganization[0]
 
     let idOrg = this.selectedNodeOrganization.data;
@@ -191,6 +187,7 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
 
     let id: string = '';
     if (flag) {
+      this.spinner.hide();
       let now = new Date();
       let randomFive = Math.floor(10000 + Math.random() * 90000);
       id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
@@ -219,6 +216,7 @@ export class ReportContractNumberFollowStatusComponent implements OnInit {
         this.isExporting = false;
         this.updateExportStatus(id, window.URL.createObjectURL(response)); // Cập nhật trạng thái
       } else {
+        this.spinner.hide();
         this.isExporting = false;
         this.list = [];
         this.table.first = 0
