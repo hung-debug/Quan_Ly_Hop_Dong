@@ -215,7 +215,7 @@ export class ReportSoonExpireComponent implements OnInit {
     //this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
 
     // Ẩn spinner
-    this.spinner.hide();
+    this.spinner.show();
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length
       ? this.selectedNodeOrganization
@@ -245,6 +245,7 @@ export class ReportSoonExpireComponent implements OnInit {
     }
     let id: string = '';
   if (flag) {
+    this.spinner.hide();
     this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
     let now = new Date();
     let randomFive = Math.floor(10000 + Math.random() * 90000);
@@ -288,6 +289,7 @@ export class ReportSoonExpireComponent implements OnInit {
             this.isExporting = false;
             this.updateExportStatus(id, window.URL.createObjectURL(response));
           } else {
+            this.spinner.hide();
             this.isExporting = false;
             this.list = [];
 

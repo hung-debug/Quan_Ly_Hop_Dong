@@ -298,7 +298,7 @@ export class ReportDetailComponent implements OnInit {
     if(!this.validData()) {
       return;
     }
-
+    this.spinner.show();
     // Vô hiệu hóa nút export
     this.isExporting = true;
 
@@ -306,7 +306,7 @@ export class ReportDetailComponent implements OnInit {
     //this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
 
     // Ẩn spinner
-    this.spinner.hide();
+    
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length ? this.selectedNodeOrganization : this.selectedNodeOrganization[0]
 
@@ -336,6 +336,7 @@ export class ReportDetailComponent implements OnInit {
       completed_to_date=completed_from_date
     let id: string;
     if(flag) {
+      this.spinner.hide();
       this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
       let now = new Date();
       let randomFive = Math.floor(10000 + Math.random() * 90000); // 5 số ngẫu nhiên
@@ -352,7 +353,7 @@ export class ReportDetailComponent implements OnInit {
     let params = '?from_date='+from_date+'&to_date='+to_date+'&completed_from_date='+completed_from_date+'&completed_to_date='+completed_to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData + payload + `&pageNumber=`+this.page+`&pageSize=`+this.row;
     this.reportService.export('rp-detail',idOrg,params, flag).subscribe((response: any) => {
       if (flag) {
-        //this.spinner.hide(); // Bỏ dòng này
+          this.spinner.hide(); // Bỏ dòng này
         // let url = window.URL.createObjectURL(response);
         // let a = document.createElement('a');
         // document.body.appendChild(a);
@@ -367,6 +368,7 @@ export class ReportDetailComponent implements OnInit {
           this.isExporting = false;
           this.updateExportStatus(id, window.URL.createObjectURL(response)); // Lưu URL
         } else {
+          this.spinner.hide();
           this.isExporting = false;
           this.table.first = 0
           this.list = [];
