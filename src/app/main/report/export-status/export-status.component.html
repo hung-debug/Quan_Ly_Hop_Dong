@@ -34,8 +34,9 @@
   
           <ng-container *ngIf="status.status === 'completed'">
             <ng-container>
-              <button class="download size-35" (click)="downloadExport(status.id, status.filename)">
-                <img src="../../assets/img/ci_download.svg" style="width: 100%;"/>
+              <button class="download" (click)="downloadExport(status.id, status.filename)">
+                <img src="../../assets/img/Vector.svg" class="icon-dowload-default" style="width: 15px;"/>
+                <img src="../../assets/img/ci_download.svg" class="icon-dowload-hover" style="width: 24px;"/>
               </button>
             </ng-container>
   
