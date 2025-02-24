@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {FormGroup} from "@angular/forms";
 import {NgSignaturePadOptions, SignaturePadComponent} from "@almothafar/angular-signature-pad";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
@@ -8,6 +8,7 @@ import {ContractSignatureService} from "../../../../../service/contract-signatur
 import {ToastService} from "../../../../../service/toast.service";
 import Swal from "sweetalert2";
 import {INgxSelectOption} from "ngx-select-ex/ngx-select/ngx-select.interfaces";
+import { ImageCropperComponent } from 'src/app/main/contract/shared/model/image-cropper/image-cropper.component';
 
 @Component({
   selector: 'app-image-dialog-sign-v2',
@@ -35,6 +36,10 @@ export class ImageDialogSignV2Component implements OnInit, AfterViewInit {
     canvasHeight: 500,
     penColor: '#0041C4'
   };
+  @ViewChild('croppedCanvas') croppedCanvas: ElementRef;
+    croppedImage: string | null = null;
+    showCropper: boolean = false;
+  @ViewChild(ImageCropperComponent) imageCropper: ImageCropperComponent;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -73,7 +78,7 @@ export class ImageDialogSignV2Component implements OnInit, AfterViewInit {
     document.getElementById('attachFileSignature').click();
   }
 
-  fileChangedAttach(e: any) {
+fileChangedAttach(e: any) {
     let files = e.target.files;
     let valid = ["jpg", "jpeg", "png"];
     for(let i = 0; i < files.length; i++){
@@ -113,6 +118,8 @@ export class ImageDialogSignV2Component implements OnInit, AfterViewInit {
     reader.readAsDataURL(file);
     reader.onload = () => {
       this.imgSignPCSelect = reader.result? reader.result.toString() : '';
+      this.croppedImage = null;
+      this.showCropper = true; // Hiển thị cropper ngay khi có ảnh
     };
   }
 
@@ -189,13 +196,14 @@ export class ImageDialogSignV2Component implements OnInit, AfterViewInit {
 
   uploadImage() {
     if (this.typeImageSignatureRadio == 1) {
+    
       if(!this.imgSignAccountSelect) {
         this.toastService.showErrorHTMLWithTimeout('Bạn chưa chọn ảnh','',3000)
       } else {
         if(this.data.mark) {
-          this.dialogRef.close(this.markSignAccountSelect);
+          this.dialogRef.close({value: this.markSignAccountSelect, type: 1});
         } else {
-          this.dialogRef.close(this.imgSignAccountSelect);
+          this.dialogRef.close({value: this.imgSignAccountSelect, type: 1});
         }
       }
 
@@ -203,20 +211,33 @@ export class ImageDialogSignV2Component implements OnInit, AfterViewInit {
       if(!this.imgSignPCSelect) {
         this.toastService.showErrorHTMLWithTimeout('not.photo','',3000)
       } else {
-        this.dialogRef.close(this.imgSignPCSelect);
+        this.imageCropper.cropImage();
       }
     } else if (this.typeImageSignatureRadio == 3) {
       if(!this.imgSignDrawing) {
         this.toastService.showErrorHTMLWithTimeout('not.draw.sign','',3000)
       } else {
-        this.dialogRef.close(this.imgSignDrawing);
+        this.dialogRef.close({value: this.imgSignDrawing, type: 3});
       }
-    }
+    } else if (this.typeImageSignatureRadio == 4) {        
+      this.dialogRef.close({value: this.markSignAccountSelect, type: 4});
+    }   
   }
 
   clearImage() {
     this.signaturePad?.clear();
     this.imgSignDrawing = null;
+    this.imgSignPCSelect = null;
+    this.croppedImage = null;
+    this.onCancelCrop();
+  }
+  onCropped(croppedImage: string) {
+    this.croppedImage = croppedImage;
+    this.dialogRef.close({ value: this.croppedImage, type: 2 });
+  }
+
+  onCancelCrop() {
+    this.showCropper = false;
     this.imgSignPCSelect = null;
   }
 }
