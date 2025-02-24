@@ -225,6 +225,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
 
     let id: string = '';
     if (flag) {
+    this.spinner.hide();
     let now = new Date();
     let randomFive = Math.floor(10000 + Math.random() * 90000);
     id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
