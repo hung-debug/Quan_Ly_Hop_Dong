@@ -228,7 +228,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
       } else {
         if (!this.mobile) {
           this.imageCropper.cropImage();
-          this.dialogRef.close({value: this.croppedImage, type: 2});
+          this.dialogRef.close(this.croppedImage);
         }
         else {
           this.dialogRef.close({value: this.imgSignPCSelect, type: 2});

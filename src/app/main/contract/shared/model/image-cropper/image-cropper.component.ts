@@ -121,7 +121,7 @@ export class ImageCropperComponent implements AfterViewInit {
   // Hàm vẽ crop box
   private drawCropBox() {
     if (!this.ctx) return; // Nếu không có context thì không vẽ
-    //if (!this.isMobile) return;
+
     // Thiết lập màu và độ dày của đường viền crop box
     this.ctx.strokeStyle = '#3884cc';
     // this.ctx.lineWidth = 3;
@@ -136,6 +136,16 @@ export class ImageCropperComponent implements AfterViewInit {
     this.ctx.rect(this.cropX, this.cropY, this.cropWidth, this.cropHeight);
     this.ctx.closePath();
     this.ctx.fill('evenodd');
+    // Bỏ qua phần fill nếu là mobile
+    if (this.isMobile) {
+      this.ctx.fillStyle = 'rgb(255, 255, 255)';
+      this.ctx.beginPath();
+      this.ctx.rect(0, 0, this.maxCanvasWidth, this.maxCanvasHeight);
+      this.ctx.rect(this.cropX, this.cropY, this.cropWidth, this.cropHeight);
+      this.ctx.closePath();
+      this.ctx.fill('evenodd');
+      this.ctx.lineWidth = 0;
+  }
     // Vẽ các handle resize
     this.drawResizeHandles();
   }
@@ -143,8 +153,9 @@ export class ImageCropperComponent implements AfterViewInit {
   // Hàm vẽ các handle resize
   private drawResizeHandles() {
     if (!this.ctx) return; // Nếu không có context thì không vẽ
-    const handleSize = 15; // Kích thước của handle
+    var handleSize = 15; // Kích thước của handle
     this.ctx.fillStyle = 'white'; // Màu của handle
+    if (this.isMobile) {handleSize =0;this.ctx.fillStyle = '';};
 
     // Vẽ handle ở góc trên bên trái
     this.ctx.fillRect(this.cropX - handleSize / 2, this.cropY - handleSize / 2, handleSize, handleSize);
