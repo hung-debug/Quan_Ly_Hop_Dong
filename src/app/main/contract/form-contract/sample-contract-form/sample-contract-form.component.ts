@@ -143,7 +143,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     this.stepForm = variable.stepSampleContractForm.step3
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     console.log("đơn lẻ theo mẫu")
     this.onResize();
 
@@ -193,7 +193,7 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
           }
         })
       }
-      this.datasForm.contract_user_sign = this.contractTemplateService.getDataFormatContractUserSign();
+      this.datasForm.contract_user_sign = await this.contractTemplateService.getDataFormatContractUserSign();
       this.setDataSignContract();
     } else {
       this.isNoEmailObj = false;
@@ -284,6 +284,8 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     this.synchronized1(this.textUnit);
 
     this.checkDifferent();
+
+    this.datasForm.contract_user_sign = await this.filterUniqueSignConfig(this.datasForm.contract_user_sign);
   }
 
   toggleDropdownChuKySo() {
@@ -411,6 +413,34 @@ export class SampleContractFormComponent implements OnInit, AfterViewInit {
     this.datasForm.font = $event;
   }
 
+  filterUniqueSignConfig(data: any) {
+    return data.map((item: any) => {
+      // Lọc trùng trong sign_config
+      const uniqueConfigs = item.sign_config.reduce((acc: any, config: any) => {
+        if (!acc.some((c: any) => c.id === config.id)) {
+          acc.push(config);
+        }
+        return acc;
+      }, []);
+  
+      // Nếu sign_unit là 'chu_ky_so', lọc trùng trong type
+      if (item.sign_unit === 'chu_ky_so' && Array.isArray(item.type)) {
+        item.type = item.type.map((subItem: any) => {
+          const uniqueSubConfigs = subItem.sign_config.reduce((acc: any, config: any) => {
+            if (!acc.some((c: any) => c.id === config.id)) {
+              acc.push(config);
+            }
+            return acc;
+          }, []);
+  
+          return { ...subItem, sign_config: uniqueSubConfigs };
+        });
+      }
+  
+      return { ...item, sign_config: uniqueConfigs };
+    });
+  }
+  
   setDataSignContract() {
     if (!this.datasForm.is_data_object_signature) {
       this.datasForm.is_data_object_signature = [];
