@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
-
+import { DeviceDetectorService } from 'ngx-device-detector';
 @Component({
   selector: 'app-image-cropper',
   templateUrl: './image-cropper.component.html',
@@ -52,6 +52,11 @@ export class ImageCropperComponent implements AfterViewInit {
   private maxCanvasHeight = 100; // Chiều cao tối đa của canvas
   private imageX = 0; // Vị trí x của ảnh trên canvas
   private imageY = 0; // Vị trí y của ảnh trên canvas
+  isMobile: boolean;
+  constructor(private deviceDetectorService: DeviceDetectorService) {}
+  ngOnInit(): void {
+    this.isMobile = this.deviceDetectorService.isMobile();
+  }
 
   // Hàm lifecycle hook, được gọi sau khi view đã được khởi tạo
   ngAfterViewInit(): void {
@@ -116,6 +121,7 @@ export class ImageCropperComponent implements AfterViewInit {
   // Hàm vẽ crop box
   private drawCropBox() {
     if (!this.ctx) return; // Nếu không có context thì không vẽ
+    //if (!this.isMobile) return;
     // Thiết lập màu và độ dày của đường viền crop box
     this.ctx.strokeStyle = '#3884cc';
     // this.ctx.lineWidth = 3;
