@@ -42,8 +42,6 @@ export class ExportStatusComponent {
         a.href = status.url;
         a.download = filename;
         a.click();
-        window.URL.revokeObjectURL(status.url);
-        a.remove();
         status.downloaded = true;
       }
     }
