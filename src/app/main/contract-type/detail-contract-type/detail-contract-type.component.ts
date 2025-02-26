@@ -59,6 +59,15 @@ export class DetailContractTypeComponent implements OnInit {
       return this.translateService.instant('no');
     }
   }
+  
+  getGroupName(groupId: number): string {
+    const groupNames: { [key: number]: string } = {
+      1: 'Khác',
+      2: 'Công nghệ thông tin',
+      3: 'Đầu tư chi phí'
+    };
+    return groupNames[groupId] || 'Không xác định'; // Trả về giá trị mặc định nếu không tìm thấy
+  }
 }
 
 
