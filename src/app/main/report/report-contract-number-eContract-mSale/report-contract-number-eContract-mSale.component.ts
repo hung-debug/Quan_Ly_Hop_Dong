@@ -149,6 +149,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     this.typeListDetail = [
       { id: 1, name: 'Khác' },
       { id: 2, name: 'Công nghệ thông tin' },
+      { id: 3, name: 'Đầu tư chi phí'}
     ];
     for (let i = 0; i<this.typeListDetail?.length; i++){
       this.type_id_detail.push(this.typeListDetail[i].id)
