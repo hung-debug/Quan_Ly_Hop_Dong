@@ -226,7 +226,13 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
       if(!this.imgSignPCSelect) {
         this.toastService.showErrorHTMLWithTimeout('not.photo','',3000)
       } else {
-        this.imageCropper.cropImage();
+        if (!this.mobile) {
+          this.imageCropper.cropImage();
+          this.dialogRef.close({value: this.croppedImage, type: 2});
+        }
+        else {
+          this.dialogRef.close({value: this.imgSignPCSelect, type: 2});
+        }
       }
     } else if (this.typeImageSignatureRadio == 3) {
       if(!this.imgSignDrawing) {

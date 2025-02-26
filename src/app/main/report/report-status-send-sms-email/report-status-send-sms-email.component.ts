@@ -226,10 +226,10 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
     this.isExporting = true;
 
     // Hiển thị thông báo "Báo cáo đang được xuất"
-    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+    //this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
 
     // Ẩn spinner
-    this.spinner.hide();
+    this.spinner.show();
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length
     ? this.selectedNodeOrganization
@@ -270,6 +270,7 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
     let params = `?pageNumber=`+this.page+`&pageSize=`+this.row;
     let id: string = '';
     if (isExport) {
+      this.spinner.hide();
       let now = new Date();
       let randomFive = Math.floor(10000 + Math.random() * 90000);
       id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
@@ -298,7 +299,7 @@ export class ReportStatusSendSmsEmailComponent implements OnInit {
         //   this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn thời gian gửi!','',3000)
         //   return
         // }
-        this.spinner.show()
+        //this.spinner.show()
         await this.reportService.exportSmsReport(params, payloadData, true).toPromise().then(
           (res: any) => {
             // this.list = [];

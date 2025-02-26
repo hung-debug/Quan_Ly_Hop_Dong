@@ -1,101 +1,194 @@
+.title-export {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #2B3D60;
+}
+
 .export-status-container {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    width: auto; /* Adjust as needed */
-    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 5px;
-    margin: 10px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* Ensure it's on top of other elements */
-  }
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: auto; /* Adjust as needed */
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  margin: 10px;
+  box-shadow: 0px 3px 12px 0px #1055E11A;
+  z-index: 1000;
+}
   
-  .cancelled {
-    color: gray;
-    text-decoration: line-through;
-  }
-  .export-status-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px;
-    cursor: pointer;
-    background-color: #f0f0f0;
-    border-bottom: 1px solid #ccc;
-  }
+.cancelled {
+  color: gray;
+  text-decoration: line-through;
+}
+
+.export-status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  cursor: pointer;
+  background-color: #F3F6FA;
+}
   
-  // .export-status-list {
-  //  min-height: 200px; /* Adjust as needed */
-  // }
-  
-  .export-status-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 5px;
-    padding: 5px;
-    border-bottom: 1px solid #eee;
-  
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-  
-  .file-info {
-    display: flex;
-    align-items: center;
-  }
-  
-  .file-icon {
-    margin-right: 5px;
-    font-size: 1.2em;
-    color: #198754; /* Green color for Excel icon */
-  }
-  
-  .filename {
-    font-size: 0.9em;
-  }
-  
-  .status-icons {
-    display: flex;
-    align-items: center;
-  }
-  
-  .spinner {
-    margin-left: 5px;
-    color: blue;
-    animation: spin 1s linear infinite; /* Add spin animation */
-  }
-  
-  .success-icon {
-    color: green;
-  }
-  
-  .error-icon {
-    color: red;
-  }
-  
-  .cancel-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: red;
-    width: 30px;
-  }
-  
-  
-  .download {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: red;
-    width: 34px;
-  }
-  
-  /* Keyframes for spin animation */
-  @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
+.export-status-item {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #1D1D1D;
+  border-bottom: 2px solid #E6EDFA;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+}
+
+.file-icon {
+  margin-right: 5px;
+  font-size: 1.2em;
+}
+
+.filename {
+  font-size: 0.9em;
+}
+
+.status-icons {
+  display: flex;
+}
+
+.spinner {
+  margin-right: 5.5px;
+  display: block;
+  width: 23px; /* Thay đổi kích thước theo nhu cầu */
+  height: 23px; /* Thay đổi kích thước theo nhu cầu */
+  color: blue;
+  animation: spin 1s linear infinite; /* Thêm hoạt ảnh quay */
+  transform-origin: center; /* Đặt trung tâm quay ở giữa */
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.success-icon {
+  color: green;
+}
+
+.error-icon {
+  color: red;
+}
+
+.cancel-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red;
+}
+
+.toggle-button {
+  position: sticky;
+  margin-left: 15vh;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.check-button {
+  margin-right: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red;
+  width: 30px;
+}
+
+
+.download {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red;
+  width: 34px;
+}
+.rotated {
+  transform: rotate(180deg);
+}
+
+/* Keyframes for spin animation */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.size-35 {
+  width: 35px;
+}
+
+.toggleExport {
+  width: 44px;
+  height: 44px;
+  position: fixed;
+  bottom: 0;
+  margin-bottom: 180px;
+  right: 0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  box-shadow: 0px 3px 12px 0px #1055E11A;
+  z-index: 1000;
+  background-color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cancel-button, .zoom_out {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 2px solid transparent; /* Đường viền trong suốt mặc định */
+  background: none;
+  cursor: pointer;
+  transition: all 0.3s ease; /* Tạo hiệu ứng mượt mà */
+}
+
+.cancel-button:hover, .zoom_out:hover {
+  background-color: #FFFFFF;
+  border-radius: 50%; /* Làm tròn viền */
+  box-shadow: 0px 3px 12px 0px #1055E11A;
+}
+
+.cancel-button .icon-close-hover {
+  display: none; /* Ẩn icon hover mặc định */
+}
+
+.cancel-button:hover .icon-close-default {
+  display: none; /* Ẩn icon mặc định khi hover */
+}
+
+.cancel-button:hover .icon-close-hover {
+  display: inline-block; /* Hiện icon hover khi hover vào nút */
+}
+
+.download .icon-dowload-hover {
+  display: none; /* Ẩn icon hover mặc định */
+}
+
+.download:hover .icon-dowload-default {
+  display: none; /* Ẩn icon mặc định khi hover */
+}
+
+.download:hover .icon-dowload-hover {
+  display: inline-block; /* Hiện icon hover khi hover vào nút */
+}
+
+.export-status-list {
+  max-height: 500px;
+  overflow-y: auto;
+}

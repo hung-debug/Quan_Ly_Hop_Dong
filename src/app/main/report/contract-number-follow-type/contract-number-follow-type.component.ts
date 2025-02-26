@@ -193,15 +193,14 @@ export class ContractNumberFollowTypeComponent implements OnInit {
     if(!this.validData()) {
       return;
     }
-
+    this.spinner.show();
     // Vô hiệu hóa nút export
     this.isExporting = true;
 
     // Hiển thị thông báo "Báo cáo đang được xuất"
-    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+    //this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
 
-    // Ẩn spinner
-    this.spinner.hide();
+    
 
     let idOrg = this.organization_id;
     if(this.selectedNodeOrganization.data) {
@@ -226,6 +225,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
 
     let id: string = '';
     if (flag) {
+    this.spinner.hide();
     let now = new Date();
     let randomFive = Math.floor(10000 + Math.random() * 90000);
     id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
@@ -255,6 +255,7 @@ export class ContractNumberFollowTypeComponent implements OnInit {
           this.isExporting = false;
           this.updateExportStatus(id, window.URL.createObjectURL(response));
         } else {
+          this.spinner.hide();
           this.isExporting = false;
           this.table.first = 0
 

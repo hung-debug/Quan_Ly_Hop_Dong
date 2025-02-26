@@ -7,6 +7,7 @@ export interface ExportStatus {
   progress?: number;
   url?: string|null;
   id: any
+  downloaded?: boolean;
 }
 
 @Component({
@@ -43,7 +44,13 @@ export class ExportStatusComponent {
         a.click();
         window.URL.revokeObjectURL(status.url);
         a.remove();
+        status.downloaded = true;
       }
     }
   }
+
+  hasPendingExports(): boolean {
+    return this.exportStatuses.some(status => status.status !== 'completed');
+  }
+  
 }

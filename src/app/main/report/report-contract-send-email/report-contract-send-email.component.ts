@@ -197,10 +197,10 @@ export class ReportStatusSendEmailComponent implements OnInit {
     this.isExporting = true;
 
     // Hiển thị thông báo "Báo cáo đang được xuất"
-    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+    //this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
 
-    // Ẩn spinner
-    this.spinner.hide();
+
+    this.spinner.show();
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length
     ? this.selectedNodeOrganization
@@ -231,6 +231,8 @@ export class ReportStatusSendEmailComponent implements OnInit {
     let params = `?pageNumber=`+this.page+`&pageSize=`+this.row;
     let id: string = '';
     if (isExport) {
+      this.spinner.hide();
+      this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
       let now = new Date();
       let randomFive = Math.floor(10000 + Math.random() * 90000);
       id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
@@ -241,7 +243,8 @@ export class ReportStatusSendEmailComponent implements OnInit {
     } else {this.isExporting = false;}
     try {
       if (!isExport) {
-        //this.spinner.show()
+        this.spinner.show()
+        
         this.isExporting = false;
         await this.reportService.exportEmailReport(params, payloadData, false).toPromise().then(
           (res: any) => {
@@ -251,10 +254,11 @@ export class ReportStatusSendEmailComponent implements OnInit {
             this.list = res.content
             this.totalRecords = res.totalElements;
             this.numberPage = res.totalPages;
+            this.spinner.hide();
           }
         )
+      
       } else {
-        //this.spinner.show()
         await this.reportService.exportEmailReport(params, payloadData, true).toPromise().then(
           (res: any) => {
             // this.list = [];

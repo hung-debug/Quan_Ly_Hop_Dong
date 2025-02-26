@@ -596,7 +596,7 @@ export class InforUserComponent implements OnInit {
     this.imgSignPCSelect = croppedImage; // Cập nhật ảnh hiển thị
     this.showCropperSign = false; // Ẩn component cropper
     this.selectedFileSign = this.base64ToFile(croppedImage, 'cropped-sign.png'); // Tạo File từ base64
-    this.continueUpdateSignUser(); // Tiếp tục quá trình cập nhật
+    this.updateSignUser(); // Tiếp tục quá trình cập nhật
   }
 
   // Hàm được gọi khi ảnh Mark đã được crop
@@ -605,7 +605,7 @@ export class InforUserComponent implements OnInit {
     this.imgSignPCSelectMark = croppedImage; // Cập nhật ảnh hiển thị
     this.showCropperMark = false; // Ẩn component cropper
     this.selectedFileMark = this.base64ToFile(croppedImage, 'cropped-mark.png'); // Tạo File từ base64
-    this.continueUpdateSignUser(); // Tiếp tục quá trình cập nhật
+    this.updateSignUser(); // Tiếp tục quá trình cập nhật
   }
     // Hàm reset các biến liên quan đến ảnh
     resetImage(code: string) {

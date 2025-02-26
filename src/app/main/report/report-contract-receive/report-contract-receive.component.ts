@@ -266,15 +266,13 @@ export class ReportContractReceiveComponent implements OnInit {
     if(!this.validData()) {
       return;
     }
-
+    this.spinner.show();
     // Vô hiệu hóa nút export
     this.isExporting = true;
 
     // Hiển thị thông báo "Báo cáo đang được xuất"
-    this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+    //this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
 
-    // Ẩn spinner
-    this.spinner.hide();
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length ? this.selectedNodeOrganization : this.selectedNodeOrganization[0]
 
@@ -304,17 +302,17 @@ export class ReportContractReceiveComponent implements OnInit {
     }
     let id: string = '';
     if (flag) {
+      this.spinner.hide();
+      this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
       let now = new Date();
       let randomFive = Math.floor(10000 + Math.random() * 90000);
       id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
       const filename = `BaoCaoHopDongNhan_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
       AppComponent.exportStatuses.push({ id: id, filename: filename, status: 'processing', url: "" });
-      this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
     } else {this.isExporting = false;}
 
     let params = '?from_date='+from_date+'&to_date='+to_date+'&status=' + contractStatus + '&fetchChildData='+ this.fetchChildData + payload + `&pageNumber=`+this.page+`&pageSize=`+this.row;
     this.reportService.export('rp-my-process',idOrg,params, flag).subscribe((response: any) => {
-        this.spinner.hide();
         if(flag) {
           // this.spinner.hide();
           // let url = window.URL.createObjectURL(response);
@@ -332,6 +330,7 @@ export class ReportContractReceiveComponent implements OnInit {
           this.updateExportStatus(id, window.URL.createObjectURL(response));
 
         } else {
+          this.spinner.hide();
           this.isExporting = false;
           this.table.first = 0
           this.list = [];
