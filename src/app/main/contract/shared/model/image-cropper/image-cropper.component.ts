@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
-
+import { DeviceDetectorService } from 'ngx-device-detector';
 @Component({
   selector: 'app-image-cropper',
   templateUrl: './image-cropper.component.html',
@@ -52,6 +52,11 @@ export class ImageCropperComponent implements AfterViewInit {
   private maxCanvasHeight = 100; // Chiều cao tối đa của canvas
   private imageX = 0; // Vị trí x của ảnh trên canvas
   private imageY = 0; // Vị trí y của ảnh trên canvas
+  isMobile: boolean;
+  constructor(private deviceDetectorService: DeviceDetectorService) {}
+  ngOnInit(): void {
+    this.isMobile = this.deviceDetectorService.isMobile();
+  }
 
   // Hàm lifecycle hook, được gọi sau khi view đã được khởi tạo
   ngAfterViewInit(): void {
@@ -116,6 +121,7 @@ export class ImageCropperComponent implements AfterViewInit {
   // Hàm vẽ crop box
   private drawCropBox() {
     if (!this.ctx) return; // Nếu không có context thì không vẽ
+
     // Thiết lập màu và độ dày của đường viền crop box
     this.ctx.strokeStyle = '#3884cc';
     // this.ctx.lineWidth = 3;
@@ -130,6 +136,16 @@ export class ImageCropperComponent implements AfterViewInit {
     this.ctx.rect(this.cropX, this.cropY, this.cropWidth, this.cropHeight);
     this.ctx.closePath();
     this.ctx.fill('evenodd');
+    // Bỏ qua phần fill nếu là mobile
+    if (this.isMobile) {
+      this.ctx.fillStyle = 'rgb(255, 255, 255)';
+      this.ctx.beginPath();
+      this.ctx.rect(0, 0, this.maxCanvasWidth, this.maxCanvasHeight);
+      this.ctx.rect(this.cropX, this.cropY, this.cropWidth, this.cropHeight);
+      this.ctx.closePath();
+      this.ctx.fill('evenodd');
+      this.ctx.lineWidth = 0;
+  }
     // Vẽ các handle resize
     this.drawResizeHandles();
   }
@@ -137,8 +153,9 @@ export class ImageCropperComponent implements AfterViewInit {
   // Hàm vẽ các handle resize
   private drawResizeHandles() {
     if (!this.ctx) return; // Nếu không có context thì không vẽ
-    const handleSize = 15; // Kích thước của handle
+    var handleSize = 15; // Kích thước của handle
     this.ctx.fillStyle = 'white'; // Màu của handle
+    if (this.isMobile) {handleSize =0;this.ctx.fillStyle = '';};
 
     // Vẽ handle ở góc trên bên trái
     this.ctx.fillRect(this.cropX - handleSize / 2, this.cropY - handleSize / 2, handleSize, handleSize);

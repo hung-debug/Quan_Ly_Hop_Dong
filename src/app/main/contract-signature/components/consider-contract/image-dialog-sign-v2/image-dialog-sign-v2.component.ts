@@ -196,14 +196,13 @@ fileChangedAttach(e: any) {
 
   uploadImage() {
     if (this.typeImageSignatureRadio == 1) {
-    
       if(!this.imgSignAccountSelect) {
         this.toastService.showErrorHTMLWithTimeout('Bạn chưa chọn ảnh','',3000)
       } else {
         if(this.data.mark) {
-          this.dialogRef.close({value: this.markSignAccountSelect, type: 1});
+          this.dialogRef.close(this.markSignAccountSelect);
         } else {
-          this.dialogRef.close({value: this.imgSignAccountSelect, type: 1});
+          this.dialogRef.close(this.imgSignAccountSelect);
         }
       }
 
@@ -211,23 +210,16 @@ fileChangedAttach(e: any) {
       if(!this.imgSignPCSelect) {
         this.toastService.showErrorHTMLWithTimeout('not.photo','',3000)
       } else {
-        if (!this.mobile) {
-          this.imageCropper.cropImage();
-          this.dialogRef.close({value: this.croppedImage, type: 2});
-        }
-        else {
-          this.dialogRef.close({value: this.imgSignPCSelect, type: 2});
-        }
+        this.imageCropper.cropImage();
+        this.dialogRef.close(this.croppedImage);
       }
     } else if (this.typeImageSignatureRadio == 3) {
       if(!this.imgSignDrawing) {
         this.toastService.showErrorHTMLWithTimeout('not.draw.sign','',3000)
       } else {
-        this.dialogRef.close({value: this.imgSignDrawing, type: 3});
+        this.dialogRef.close(this.imgSignDrawing);
       }
-    } else if (this.typeImageSignatureRadio == 4) {        
-      this.dialogRef.close({value: this.markSignAccountSelect, type: 4});
-    }   
+    }
   }
 
   clearImage() {
@@ -239,7 +231,6 @@ fileChangedAttach(e: any) {
   }
   onCropped(croppedImage: string) {
     this.croppedImage = croppedImage;
-    this.dialogRef.close({ value: this.croppedImage, type: 2 });
   }
 
   onCancelCrop() {
