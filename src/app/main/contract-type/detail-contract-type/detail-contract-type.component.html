@@ -34,7 +34,8 @@
           <div class="col-md-12">
               <div class="label_item">{{'contract.group' | translate}}</div>
               <div>
-                  <div [innerText]="groupId == 1 ? 'Khác' : 'Công nghệ thông tin'" class="input_text"></div>
+                  <!-- <div [innerText]="groupId == 1 ? 'Khác' : 'Công nghệ thông tin'" class="input_text"></div> -->
+                  <div [innerText]="getGroupName(groupId)" class="input_text"></div>
               </div>
           </div>
       </div>
