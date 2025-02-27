@@ -5323,9 +5323,31 @@ export class ConsiderContractComponent
       this.mobile = false;
     }
   }
+  
+  openOrDownloadFile(item: any){
+    let currentUrl: string = ""
+    this.contractService.getFileContract(item.contract_id).subscribe(
+      res => {
+        let fileName = res.path
+        // const extension = fileName.split(".").pop()
+        const extension = fileName
+        currentUrl = res.path
+        if (extension?.toLowerCase() == "txt") {
+          window.open(currentUrl)
+        } else {
+          window.open(currentUrl.replace("/tmp/","/tmp/v2/"))
+        }
+      }
+    )
+  }
 
-  openPdf(path: any, event: any) {
-    this.contractService.openPdf(path, event);
+  openPdf(path: any, event: any, item: any) {
+    // this.contractService.openPdf(path, event);
+    if(path.endsWith('.pdf')){
+      this.contractService.openPdf(path, event);
+    } else{
+      this.openOrDownloadFile(item);
+    }
   }
 
   flagFocus: boolean = false;
