@@ -12,6 +12,7 @@ export interface ContractType {
   organization_id: string,
   ceca_push: any;
   groupId:any;
+  groupName: any
 }
 @Injectable({
   providedIn: 'root'
