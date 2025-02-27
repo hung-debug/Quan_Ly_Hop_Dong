@@ -313,6 +313,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
           this.spinner.hide();
           // this.toastService.showSuccessHTMLWithTimeout('Xuất file báo cáo thành công','',3000)
           //this.exportToExcel(response)
+          this.updateExportStatus(id, window.URL.createObjectURL(response)); // Cập nhật trạng thái
         },
         (err: any) => {
           this.spinner.hide()
