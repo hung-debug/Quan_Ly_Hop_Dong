@@ -259,7 +259,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     if (!this.validData()) {
       return;
     }
-
+    this.spinner.show();
     // Vô hiệu hóa nút export
     this.isExporting = true;
 
@@ -267,7 +267,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     //this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
 
     // Ẩn spinner
-    this.spinner.hide();
+    // this.spinner.hide();
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length
       ? this.selectedNodeOrganization
