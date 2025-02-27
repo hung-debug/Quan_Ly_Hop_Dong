@@ -298,6 +298,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
       to_date;
     let id: string = '';
       if (flag) {
+        this.spinner.hide();
         this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
         let now = new Date();
         let randomFive = Math.floor(10000 + Math.random() * 90000);
