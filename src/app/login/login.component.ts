@@ -431,6 +431,18 @@ export class LoginComponent implements OnInit, AfterViewInit {
           switch(res.code) {
             case '00':
               this.toastService.showSuccessHTMLWithTimeout('Đăng nhập thành công, mở sang trang chủ hệ thống eContract.','',3000)
+              try {
+                await this.customerAnalysis.getTokenAnalysis().toPromise();
+                let data = {
+                  eventName: "Login",
+                  params: {
+                    username: this.loginForm.value.username
+                  }
+                };
+                this.customerAnalysis.pushData(data);
+              } catch (error) {
+                console.error("Lấy token thất bại:", error);             
+              }            
               setTimeout(() => {
                 this.router.navigate(['/main/dashboard'])
                 this.isSSOlogin = false

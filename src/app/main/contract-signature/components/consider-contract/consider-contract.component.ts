@@ -2544,6 +2544,23 @@ export class ConsiderContractComponent
                 );
                 return false;
               }
+              try {
+                await this.customerAnalysis.getTokenAnalysis().toPromise();
+              
+                let data = {
+                  eventName: "kyUsbToken_V1", // Thay đổi eventName cho phù hợp
+                  params: {
+                    tenHĐ: this.datas.is_data_contract.name,
+                    maHĐ: this.datas.is_data_contract.id,
+                    nguoiXuLy: this.signCertDigital.Serial, // Sử dụng Serial của USB Token
+                    thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                  },
+                };
+                await this.customerAnalysis.pushData(data);
+                console.log('Gửi dữ liệu phân tích USB Token V1 thành công');
+              } catch (error) {
+                console.error('Lỗi khi gửi dữ liệu phân tích USB Token V1:', error);
+              }
               const sign = await this.contractService.updateDigitalSignatured(
                 signUpdate.id,
                 dataSignMobi.data.FileDataSigned
@@ -2562,6 +2579,23 @@ export class ConsiderContractComponent
         }
         if (this.usbTokenVersion == 2) {
           await this.signV2FixingProcess()
+        }
+        try {
+          await this.customerAnalysis.getTokenAnalysis().toPromise();
+        
+          let data = {
+            eventName: "kyUsbToken_V2", // Thay đổi eventName cho phù hợp
+            params: {
+              tenHĐ: this.datas.is_data_contract.name,
+              maHĐ: this.datas.is_data_contract.id,
+              nguoiXuLy: this.signCertDigital, // Sử dụng Serial của USB Token
+              thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+            },
+          };
+          await this.customerAnalysis.pushData(data);
+          console.log('Gửi dữ liệu phân tích USB Token V2 thành công');
+        } catch (error) {
+          console.error('Lỗi khi gửi dữ liệu phân tích USB Token V2:', error);
         }
         return true;
       } else {
@@ -3150,6 +3184,22 @@ export class ConsiderContractComponent
                     } else if (pdfC1) {
                       fileC = pdfC1.path;
                     }
+                    try {
+                      await this.customerAnalysis.getTokenAnalysis().toPromise();
+                    
+                      let data = {
+                        eventName: "kyCTS", // Thay đổi eventName cho phù hợp
+                        params: {
+                          tenHĐ: this.datas.is_data_contract.name,
+                          maHĐ: this.datas.is_data_contract.id,
+                          nguoiXuLy: this.cert_id, // Sử dụng cert_id
+                          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                        },
+                      };
+                      await this.customerAnalysis.pushData(data);
+                    } catch (error) {
+                      console.error('Lỗi khi gửi dữ liệu phân tích Chứng thư số:', error);
+                    }  
                   }
                 }
               } catch (error) {
@@ -3183,6 +3233,22 @@ export class ConsiderContractComponent
                       fileC = pdfC2.path;
                     } else if (pdfC1) {
                       fileC = pdfC1.path;
+                    }
+                    try {
+                      await this.customerAnalysis.getTokenAnalysis().toPromise();
+                    
+                      let data = {
+                        eventName: "kyCTS", // Thay đổi eventName cho phù hợp
+                        params: {
+                          tenHĐ: this.datas.is_data_contract.name,
+                          maHĐ: this.datas.is_data_contract.id,
+                          nguoiXuLy: this.cert_id, // Sử dụng cert_id
+                          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                        },
+                      };
+                      await this.customerAnalysis.pushData(data);
+                    } catch (error) {
+                      console.error('Lỗi khi gửi dữ liệu phân tích Chứng thư số:', error);
                     }
                   }
                 }
@@ -3417,24 +3483,6 @@ export class ConsiderContractComponent
                       } else if (pdfC1) {
                         fileC = pdfC1.path;
                       }
-                          // Thêm code pushData cho Remote Signing
-                  try {
-                    await this.customerAnalysis.getTokenAnalysis().toPromise();
-
-                    let data = {
-                      eventName: this.getRemoteSignEventName(supplierID), // Sử dụng hàm để lấy eventName
-                      params: {
-                        tenHĐ: this.datas.is_data_contract.name,
-                        maHĐ: this.datas.is_data_contract.id,
-                        nguoiXuLy: this.dataCert.cert_id || this.recipientId, // Sử dụng cert_id hoặc recipientId
-                        thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
-                      },
-                    };
-                    await this.customerAnalysis.pushData(data);
-                    console.log('Dữ liệu Remote Signing (' + supplierID + ') đã được gửi thành công!');
-                  } catch (error) {
-                    console.error('Lỗi khi gửi dữ liệu Remote Signing (' + supplierID + '):', error);
-                  }
                     }
                   }
                 } catch (error) {
@@ -4262,7 +4310,7 @@ export class ConsiderContractComponent
                     );
                   });
 
-                setTimeout(() => {
+                setTimeout(async () => {
                   if (!this.mobile) {
                     this.toastService.showSuccessHTMLWithTimeout(
                       [3, 4].includes(this.datas.roleContractReceived)
@@ -4271,6 +4319,22 @@ export class ConsiderContractComponent
                       '',
                       3000
                     );
+                  try {
+                      await this.customerAnalysis.getTokenAnalysis().toPromise();
+          
+                      let data = {
+                        eventName: "xemxetHĐ",
+                        params: {
+                          tenHĐ: this.datas.is_data_contract.name,
+                          maHĐ: this.datas.is_data_contract.id,
+                          nguoiXuLy: this.currentUser.email || this.currentUser.phone, // Sử dụng email hoặc số điện thoại
+                          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                        },
+                      };
+                      await this.customerAnalysis.pushData(data);
+                    } catch (error) {
+                      console.error('Lỗi khi gửi dữ liệu phân tích Xem xét HĐ (Đồng ý):', error);
+                    }
                   } else {
                     if ([3, 4].includes(this.datas.roleContractReceived)) {
                       alert('Ký tài liệu thành công');

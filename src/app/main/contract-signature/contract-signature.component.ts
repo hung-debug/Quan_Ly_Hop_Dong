@@ -31,6 +31,7 @@ import { TimeService } from 'src/app/service/time.service';
 import { ProcessingHandleEcontractComponent } from '../contract-signature/shared/model/processing-handle-econtract/processing-handle-econtract.component';
 import { RemoteDialogSignComponent } from './components/consider-contract/remote-dialog-sign/remote-dialog-sign.component';
 import { PkiDialogSignMultiComponent } from './components/consider-contract/pki-dialog-sign-multi/pki-dialog-sign-multi.component';
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
 // import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
@@ -135,7 +136,8 @@ export class ContractSignatureComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private userService: UserService,
     private downloadPluginService: DowloadPluginService,
-    private timeService: TimeService
+    private timeService: TimeService,
+    private customerAnalysis: CustomerAnalysis
   ) {
     this.constantModel = contractModel;
 
@@ -1272,6 +1274,22 @@ export class ContractSignatureComponent implements OnInit {
         this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
           this.router.navigate(['main/c/receive/processed']);
         });
+        try {
+          await this.customerAnalysis.getTokenAnalysis().toPromise();
+
+          let data = {
+            eventName: "xemxetLoHĐ",
+            params: {
+              tenHĐ: this.contractViewList.filter(item => this.dataChecked.some(checkedItem => checkedItem.id === item.id)).map(item => item.contractName), // Lấy danh sách tên HĐ
+              maHĐ: this.contractViewList.filter(item => this.dataChecked.some(checkedItem => checkedItem.id === item.id)).map(item => item.contractId), // Lấy danh sách mã HĐ
+              nguoiXuLy: this.currentUser.email || this.currentUser.phone, // Sử dụng email hoặc số điện thoại
+              thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+            },
+          };
+          await this.customerAnalysis.pushData(data);
+        } catch (error) {
+          console.error('Lỗi khi gửi dữ liệu phân tích Xem xét HĐ (Đồng ý):', error);
+        }
         this.toastService.showSuccessHTMLWithTimeout('Xem xét tài liệu thành công',
           '',
           1000
@@ -1486,7 +1504,40 @@ export class ContractSignatureComponent implements OnInit {
 
     return contractNames;
   }
-
+  getRemoteSignEventName(supplierID: any): string {
+    switch (supplierID) {
+      case "1":
+        return "kyLoRS_VNPTSmartCA";
+      case "3":
+        return "kyLoRS_Nacencomm";
+      case "2":
+        return "kyLoRS_MobiCA";
+      default:
+        return "kyLoRS_Default"; // Hoặc một giá trị mặc định khác
+    }
+  }
+  getSimPKIEventName(networkCode: string): string {
+    switch (networkCode) {
+      case "mobifone":
+        return "kyLoSimPKI_MobiFone";
+      case "viettel":
+        return "kyLoSimPKI_Viettel";
+      case "bcy":
+        return "kyLoSimPKI_BCY";
+      default:
+        return "kyLoSimPKI_Default"; // Hoặc một giá trị mặc định khác
+    }
+  }
+  getUsbEventName(usbTokenType: string): string {
+  switch (usbTokenType) {
+    case "bcy":
+      return "kyLoUSBtokenBCY";
+    case "standard":
+      return "kyLoUSBtoken";
+    default:
+      return "kyLoUSBtoken"; // Giá trị mặc định (có thể điều chỉnh)
+  }
+}
   async actionSignMulti(signId: any, recipientId: any, taxCode: any, result: any, idSignMany: any) {
     if(signId == 3) {
       let signI = '';
@@ -1592,7 +1643,22 @@ export class ContractSignatureComponent implements OnInit {
               10000
             );
           }
-
+          try {
+            await this.customerAnalysis.getTokenAnalysis().toPromise();
+        
+            let data = {
+              eventName: this.getSimPKIEventName(result.networkCode), // Sử dụng hàm để lấy eventName
+              params: {
+                tenHĐ: checkSign.map((item: any) => item.tenHĐ), // Lấy danh sách tên HĐ
+                maHĐ: checkSign.map((item: any) => item.maHĐ), // Lấy danh sách mã HĐ
+                nguoiXuLy: result.phone, // Sử dụng số điện thoại
+                thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+              },
+            };
+            await this.customerAnalysis.pushData(data);
+          } catch (error) {
+            console.error('Lỗi khi gửi dữ liệu phân tích Ký lô Sim PKI:', error);
+          }
           if(!(resultsTrue.length == 0 && resultsFalse.length == checkSign.length)) {
             this.router
             .navigateByUrl('/', { skipLocationChange: true })
@@ -1685,6 +1751,24 @@ export class ContractSignatureComponent implements OnInit {
       }
 
       this.signUsbTokenMany(fileC, idContract, recipientId, documentId, taxCode, idSignMany, result.mark);
+      // Thêm đoạn code phân tích khách hàng vào đây (sau khi gọi this.signUsbTokenMany())
+    try {
+      await this.customerAnalysis.getTokenAnalysis().toPromise();
+
+      let data = {
+        eventName: this.getUsbEventName(result.usbTokenType), // Sử dụng hàm getUsbEventName
+        params: {
+          tenHĐ: contractsSignManyChecked.map((item: any) => item.contractName), // Lấy danh sách tên HĐ
+          maHĐ: contractsSignManyChecked.map((item: any) => item.contractNumber), // Lấy danh sách mã HĐ
+          nguoiXuLy: taxCode[0], // Sử dụng mã số thuế
+          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+        },
+      };
+      await this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error('Lỗi khi gửi dữ liệu phân tích Ký lô USB Token:', error);
+    }
+      
     } else if (signId == 4) {
       //Ký nhiều hsm
       //Mở popup ký hsm
@@ -1818,7 +1902,37 @@ export class ContractSignatureComponent implements OnInit {
                 '',
                 3000
               );
+             // Xác định eventName dựa trên nhà cung cấp HSM
+            let eventName: string;
+            switch (this.dataHsm.supplier) {
+              case "mobifone":
+                eventName = "kyLoHsm_mbf";
+                break;
+              case "ica":
+                eventName = "kyLoHsm_ica";
+                break;
+              default:
+                eventName = "kyLoHsm_default"; // Hoặc một giá trị mặc định khác
+                break;
+            }
 
+            // Thêm đoạn code phân tích khách hàng vào đây
+            try {
+              await this.customerAnalysis.getTokenAnalysis().toPromise();
+
+              let data = {
+                eventName: eventName,
+                params: {
+                  tenHĐ: checkSign.map((item: any) => item.tenHĐ), // Lấy danh sách tên HĐ
+                  maHĐ: checkSign.map((item: any) => item.maHĐ), // Lấy danh sách mã HĐ
+                  nguoiXuLy: this.dataHsm.username || this.dataHsm.ma_dvcs, // Sử dụng username hoặc mã đơn vị từ dataHsm
+                  thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                },
+              };
+              await this.customerAnalysis.pushData(data);
+            } catch (error) {
+              console.error('Lỗi khi gửi dữ liệu phân tích Ký lô HSM:', error);
+            }
               this.router
                 .navigateByUrl('/', { skipLocationChange: true })
                 .then(() => {
@@ -1946,7 +2060,22 @@ export class ContractSignatureComponent implements OnInit {
                 '',
                 3000
               );
-
+            try {
+                await this.customerAnalysis.getTokenAnalysis().toPromise();
+            
+                let data = {
+                  eventName: "kyLoCTS", // Sử dụng eventName phù hợp
+                  params: {
+                    tenHĐ: contractsSignManyChecked.map((item: any) => item.contractName), // Lấy danh sách tên HĐ
+                    maHĐ: contractsSignManyChecked.map((item: any) => item.contractNumber), // Lấy danh sách mã HĐ
+                    nguoiXuLy: this.cardId, // Sử dụng thông tin người ký
+                    thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                  },
+                };
+                await this.customerAnalysis.pushData(data);
+              } catch (error) {
+                console.error('Lỗi khi gửi dữ liệu phân tích Ký lô Chứng thư số:', error);
+              }
               await this.router.navigateByUrl('/', { skipLocationChange: true });
               await this.router.navigate(['main/c/receive/processed']);
             } else {
@@ -2034,7 +2163,7 @@ export class ContractSignatureComponent implements OnInit {
             3,
             supplierID
           ).then(
-            (res: any) => {
+            async (res: any) => {
               this.spinner.hide();
 
               let countSuccess = 0;
@@ -2089,6 +2218,23 @@ export class ContractSignatureComponent implements OnInit {
                       });
                   }
                 })
+                  // Thêm đoạn code phân tích khách hàng vào đây
+                try {
+                  await this.customerAnalysis.getTokenAnalysis().toPromise();
+
+                  let data = {
+                    eventName: this.getRemoteSignEventName(supplierID), // Sử dụng hàm để lấy eventName
+                    params: {
+                      tenHĐ: checkSign.map((item: any) => item.tenHĐ), // Lấy danh sách tên HĐ
+                      maHĐ: checkSign.map((item: any) => item.maHĐ), // Lấy danh sách mã HĐ
+                      nguoiXuLy: manyRemoteSignData.cert_id, // Sử dụng cert_id
+                      thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                    },
+                  };
+                  await this.customerAnalysis.pushData(data);
+                } catch (error) {
+                  console.error('Lỗi khi gửi dữ liệu phân tích Ký lô Remote Signing:', error);
+                }
               }
             },
             (err: any) => {

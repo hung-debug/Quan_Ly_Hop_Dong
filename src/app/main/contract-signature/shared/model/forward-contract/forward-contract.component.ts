@@ -10,6 +10,7 @@ import { parttern, parttern_input } from 'src/app/config/parttern';
 import { environment } from 'src/environments/environment';
 import { type_signature } from 'src/app/config/variable';
 import { TranslateService } from '@ngx-translate/core';
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
 
 @Component({
   selector: 'app-forward-contract',
@@ -44,7 +45,8 @@ export class ForwardContractComponent implements OnInit {
     public dialogRef: MatDialogRef<ForwardContractComponent>,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private customerAnalysis: CustomerAnalysis
   ) {
    
   }
@@ -454,7 +456,7 @@ export class ForwardContractComponent implements OnInit {
           }
 
           await this.contractService.processAuthorizeContract(dataAuthorize).toPromise().then(
-            data => {
+            async data => {
               if (!data.success) {
                 if (data.message == 'Tax code has existed') {
                   this.spinner.hide();
@@ -463,6 +465,21 @@ export class ForwardContractComponent implements OnInit {
               } else {
                 this.toastService.showSuccessHTMLWithTimeout((this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp/Ủy quyền' : 'Ủy quyền/Chuyển tiếp') + ' thành công!'
                   , "", 3000);
+                  try {
+                    await this.customerAnalysis.getTokenAnalysis().toPromise();
+                    let data = {
+                      eventName: "uyQuyen/chuyenTiep",
+                      params: {
+                        tenHĐ: this.datas.dataContract.is_data_contract.name,
+                        maHĐ: this.datas.dataContract.is_data_contract.id,
+                        nguoiXuLy:this.currentUser.email || this.currentUser.phone, // Sử dụng email hoặc số điện thoại
+                        thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                      },
+                    };
+                    await this.customerAnalysis.pushData(data);
+                  } catch (error) {
+                    console.error('Lỗi khi gửi dữ liệu phân tích Ủy quyền/Chuyển tiếp:', error);
+                  }
                 this.dialogRef.close();
                 this.spinner.hide();
                 this.router.navigate(['/main/form-contract/detail/forward/' + this.datas?.dataContract?.is_data_contract?.id]);
