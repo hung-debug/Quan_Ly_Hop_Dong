@@ -24,6 +24,7 @@ import { ContractTemplateService } from 'src/app/service/contract-template.servi
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
 @Component({
   selector: 'app-confirm-contract-batch',
   templateUrl: './confirm-contract-batch.component.html',
@@ -128,6 +129,7 @@ export class ConfirmContractBatchComponent
     private contractTemplateService: ContractTemplateService,
     private router: Router,
     private userService: UserService,
+    private customerAnalysis: CustomerAnalysis,
   ) {
     this.step = variable.stepSampleContractBatch.step2;
   }
@@ -959,6 +961,21 @@ export class ConfirmContractBatchComponent
     const isAllow = await this.checkNumber(this.datasBatch.ceca_push, this.convertToSignConfig().length);
     if (isAllow) {
       try {
+        await this.customerAnalysis.getTokenAnalysis().toPromise();
+
+        // Tạo đối tượng data chứa thông tin sự kiện
+        let data = {
+          eventName: "taoHDTheoLo", // Thay đổi eventName cho phù hợp
+          params: {
+            tenHĐ: this.datasBatch.file_name, // Lấy tên từ datasBatch (nếu có)
+            //maHĐ: this.datasBatch.contract_id, // Lấy mã từ datasBatch (nếu có)
+            thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+          },
+          // Thêm các thông tin khác từ this.datasBatch nếu cần
+        };
+
+        // Gọi pushData để gửi dữ liệu lên Parse Server
+        await this.customerAnalysis.pushData(data); // Chỉ truyền data
         this.spinner.show();
         const confirmContractBatchCall = await this.contractService.confirmContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,isCeCA).toPromise()
         let response = confirmContractBatchCall

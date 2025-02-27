@@ -19,7 +19,7 @@ import { ConfirmCecaContractComponent } from '../confirm-ceca-contract/confirm-c
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
-
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
 @Component({
   selector: 'app-confirm-infor-contract',
   templateUrl: './confirm-infor-contract.component.html',
@@ -39,7 +39,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     private router: Router,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private customerAnalysis: CustomerAnalysis
   ) {
     this.step = variable.stepSampleContract.step4;
   }
@@ -57,7 +58,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   emailPhoneList: string[] = []; // Danh sách email
   currentInput: string = ''; // Giá trị hiện tại trong ô input
   errorMessage: string | null = null;
-
+  
   getPartnerCoordinationer(item: any) {
     return item.recipients.filter((p: any) => p.role == 1);
   }
@@ -108,6 +109,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     }
   }
 
+  
   back(e: any, step?: any) {
     this.nextOrPreviousStep(step);
   }
@@ -220,7 +222,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   removeEmail(input: string): void {
     this.emailPhoneList = this.emailPhoneList.filter(e => e !== input);
   }
-  
 
   async SaveContract(action: string) {
     if (this.datas.is_action_contract_created && this.router.url.includes('edit')) {
@@ -378,8 +379,30 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         }
       })
       this.contractService.getContractSample(this.data_sample_contract).subscribe(
-          (data) => {
+          async (data) => {
             if (action == 'finish_contract') {
+              try {
+                await this.customerAnalysis.getTokenAnalysis().toPromise();
+        
+                // Tạo đối tượng data chứa thông tin sự kiện và thông tin từ this.datas
+                let data = {
+                  eventName: "taoHDDonLe",
+                  params: {
+                    tenHD: this.datas.name,
+                    maHD: this.datas.contract_id,
+                    thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                  },
+                  // Thêm các thông tin khác từ this.datas nếu cần
+                };
+                console.log('Giá trị của this.datas.contract_no:', this.datas);
+                console.log('ngay tao', this.customerAnalysis.convertToVietnamTimeISOString(new Date()))
+                // Gọi pushData để gửi dữ liệu lên Parse Server
+                await this.customerAnalysis.pushData(data); // Chỉ truyền data
+                console.log('Dữ liệu đã được gửi thành công!');
+              } catch (error) {
+                console.error('Lỗi khi gửi dữ liệu:', error);
+              }
+        
               this.callAPIFinish();
             } else {
               if (
@@ -426,6 +449,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         );
     }
   }
+  
 
   async getDefindDataSignEdit(dataSignId: any,dataSignNotId: any,action: any) {
     let dataSample_contract: any[] = [];
@@ -610,4 +634,5 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       }
     }
   }
+  
 }

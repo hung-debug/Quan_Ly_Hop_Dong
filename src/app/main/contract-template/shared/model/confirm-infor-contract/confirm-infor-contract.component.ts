@@ -10,6 +10,7 @@ import { ContractTemplateService } from 'src/app/service/contract-template.servi
 import { MatDialog } from '@angular/material/dialog';
 import { PreviewContractTemplateComponent } from '../preview-contract-template/preview-contract-template.component';
 import { isTemplateExpression } from 'typescript';
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
 @Component({
   selector: 'app-confirm-infor-contract',
   templateUrl: './confirm-infor-contract.component.html',
@@ -29,6 +30,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     private toastService: ToastService,
     private contractTypeService: ContractTypeService,
     private dialog: MatDialog,
+    private customerAnalysis: CustomerAnalysis,
     ) {
     this.step = variable.stepSampleContract.step4
   }
@@ -107,6 +109,20 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   
   async callAPIFinish() {
     try {
+      await this.customerAnalysis.getTokenAnalysis().toPromise();
+
+      // Tạo đối tượng data chứa thông tin sự kiện
+      let data = {
+        eventName: "taoMauHĐ", // Thay đổi eventName cho phù hợp
+        params: {
+          tenMauHĐ: this.datas.name, // Lấy tên mẫu từ datas
+          maMauHĐ: this.datas.contract_no, // Lấy mã mẫu từ datas
+          thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+        },
+        // Thêm các thông tin khác từ this.datas nếu cần
+      };
+      // Gọi pushData để gửi dữ liệu lên Parse Server
+      await this.customerAnalysis.pushData(data); // Chỉ truyền data
       this.spinner.show();
   
       // Gán danh sách email/SDT vào `datas`
@@ -186,6 +202,24 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
   async SaveContract(action: string) {
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
+      try {
+        await this.customerAnalysis.getTokenAnalysis().toPromise();
+
+        // Tạo đối tượng data chứa thông tin sự kiện
+        let data = {
+          eventName: "capNhatMauHD", // Thay đổi eventName cho phù hợp
+          params: {
+            tenMauHĐ: this.datas.name,
+            maMauHĐ: this.datas.contract_no,
+            thoiGianCapNhat: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+          },
+        };
+        // Gọi pushData để gửi dữ liệu lên Parse Server
+        await this.customerAnalysis.pushData(data); // Chỉ truyền data
+        console.log('Dữ liệu đã được gửi thành công!');
+      } catch (error) {
+        console.error('Lỗi khi gửi dữ liệu:', error);
+      }
       let isHaveFieldId: any[] = [];
       let isNotFieldId: any[] = [];
       let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));

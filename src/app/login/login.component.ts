@@ -190,21 +190,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
             try {
               await this.customerAnalysis.getTokenAnalysis().toPromise();
               let data = {
-                userUuid: this.loginForm.value.username,
                 eventName: "Login",
                 params: {
                   username: this.loginForm.value.username
                 }
               };
-
-              let data1 = {
-                params: {
-                  tenHĐ: 'truong test 1'
-                }
-              };
-
               this.customerAnalysis.pushData(data);
-              this.customerAnalysis.pushEvent('taoHDDonLe',data1);
             } catch (error) {
               console.error("Lấy token thất bại:", error);             
             }            

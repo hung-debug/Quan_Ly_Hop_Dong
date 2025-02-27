@@ -19,6 +19,7 @@ import { TRISTATECHECKBOX_VALUE_ACCESSOR } from 'primeng/tristatecheckbox';
 import { UnitService } from 'src/app/service/unit.service';
 import { environment } from 'src/environments/environment';
 import { TimeService } from 'src/app/service/time.service';
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
 
 
 @Component({
@@ -58,7 +59,8 @@ export class ConfirmSignOtpComponent implements OnInit {
     public datepipe: DatePipe,
     private deviceService: DeviceDetectorService,
     private unitService: UnitService,
-    private timeService: TimeService
+    private timeService: TimeService,
+    private customerAnalysis: CustomerAnalysis
   ) { }
 
 
@@ -275,6 +277,26 @@ export class ConfirmSignOtpComponent implements OnInit {
           this.datas.is_data_object_signature[indexSignUpload[ir]].value = this.datas.filePath;
         }
         ir++;
+      }
+      try {
+        await this.customerAnalysis.getTokenAnalysis().toPromise();
+
+        // Tạo đối tượng data chứa thông tin sự kiện
+        let data = {
+          eventName: "kyOTP", // Thay đổi eventName cho phù hợp
+          params: {
+            tenHĐ: this.datas.is_data_contract.name,
+            maHĐ: this.datasOtp.contract_id,
+            nguoiXuLy: this.datasOtp.phone || this.datasOtp.email, // Hoặc this.datasOtp.email
+            thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date()) // Sử dụng TimeService
+          },
+          // Thêm các thông tin khác nếu cần
+        };
+        // Gọi pushData để gửi dữ liệu lên Parse Server
+        await this.customerAnalysis.pushData(data);
+        console.log('Dữ liệu đã được gửi thành công!');
+      } catch (error) {
+        console.error('Lỗi khi gửi dữ liệu:', error);
       }
       await this.signContract(false, bucket);
     }, error => {

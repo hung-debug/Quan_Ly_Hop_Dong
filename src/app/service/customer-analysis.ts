@@ -10,8 +10,23 @@ import { map } from 'rxjs/operators';
 export class CustomerAnalysis {
   urlGetTokenAnalysis: any = `${environment.urlgetTokenAnalysis}/v1/auth/authenticate_app`
   tokenAnalysis: any;
-  infoUser: any
+  infoUser: any;
+  datas: any;
   constructor(private http: HttpClient) {}
+    convertToVietnamTimeISOString(date: Date): string {
+    const vietnamTime = new Date(date.getTime());
+    
+    // Lấy các thành phần của thời gian
+    const year = vietnamTime.getFullYear();
+    const month = String(vietnamTime.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+    const day = String(vietnamTime.getDate()).padStart(2, '0');
+    const hours = String(vietnamTime.getHours()).padStart(2, '0');
+    const minutes = String(vietnamTime.getMinutes()).padStart(2, '0');
+    const seconds = String(vietnamTime.getSeconds()).padStart(2, '0');
+    const milliseconds = String(vietnamTime.getMilliseconds()).padStart(3, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}+07:00`;
+  }
 
   getTokenAnalysis() {
     const headers = new HttpHeaders()
@@ -50,6 +65,7 @@ export class CustomerAnalysis {
     data.appId = this.tokenAnalysis.tenantId;
     data.phone = this.infoUser.phone;
     data.mail = this.infoUser.email;
+    data.userUuid = this.infoUser.email;
     const EmailObject = Parse.Object.extend(this.tokenAnalysis.eventKey);
     const emailObject = new EmailObject();
   
