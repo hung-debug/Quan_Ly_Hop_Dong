@@ -20,7 +20,7 @@ import { UnitService } from 'src/app/service/unit.service';
 import { environment } from 'src/environments/environment';
 import { TimeService } from 'src/app/service/time.service';
 import { DialogChangePhoneComponent } from '../dialog-change-phone/dialog-change-phone.component';
-import { TranslateService } from '@ngx-translate/core';,
+import { TranslateService } from '@ngx-translate/core';
 import { CustomerAnalysis } from 'src/app/service/customer-analysis';
 
 @Component({

@@ -55,6 +55,7 @@ import { WebSocketSubject } from "rxjs/webSocket";
 import { WebsocketService } from 'src/app/service/websocket.service';
 import { environment } from 'src/environments/environment';
 import { RemoteDialogSignComponent } from './remote-dialog-sign/remote-dialog-sign.component';
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
 
 @Component({
   selector: 'app-consider-contract',
@@ -250,6 +251,7 @@ export class ConsiderContractComponent
     private detectCoordinateService: DetectCoordinateService,
     private timeService: TimeService,
     private websocketService: WebsocketService,
+    private customerAnalysis: CustomerAnalysis
 
   ) {
     this.currentUser = JSON.parse(
@@ -376,6 +378,18 @@ export class ConsiderContractComponent
         }
       );
     });
+  }
+  getRemoteSignEventName(supplierID: any): string {
+    switch (supplierID) {
+      case "1":
+        return "kyRS_VNPTSmartCA";
+      case "3":
+        return "kyRS_Nacencomm";
+      case "2":
+        return "kyRS_MobiCA";
+      default:
+        return "kyRS_Default"; // Hoặc một giá trị mặc định khác
+    }
   }
 
   onZoomChange(event: any) {
@@ -2836,6 +2850,45 @@ export class ConsiderContractComponent
                   } else if (pdfC1) {
                     fileC = pdfC1.path;
                   }
+                  if (this.dataHsm.supplier === 'mobifone') {
+                    try {
+                      await this.customerAnalysis.getTokenAnalysis().toPromise();
+      
+                      let data = {
+                        eventName: "kyHsm_mbf", // Event name cho MobiFone
+                        params: {
+                          tenHĐ: this.datas.is_data_contract.name,
+                          maHĐ: this.datas.is_data_contract.id,
+                          nguoiXuLy: this.dataHsm.username || this.dataHsm.ma_dvcs, // Sử dụng username hoặc mã đơn vị từ dataHsm
+                          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                        },
+                      };
+                      await this.customerAnalysis.pushData(data);
+                      console.log('Dữ liệu MobiFone đã được gửi thành công!');
+                    } catch (error) {
+                      console.error('Lỗi khi gửi dữ liệu MobiFone:', error);
+                    }
+                  }
+                  // Thêm code pushData cho I-CA
+                  else if (this.dataHsm.supplier === 'icorp') {
+                    try {
+                      await this.customerAnalysis.getTokenAnalysis().toPromise();
+      
+                      let data = {
+                        eventName: "kyHsm_ica", // Event name cho I-CA
+                        params: {
+                          tenHĐ: this.datas.is_data_contract.name,
+                          maHĐ: this.datas.is_data_contract.id,
+                          nguoiXuLy: this.dataHsm.username || this.dataHsm.ma_dvcs, // Sử dụng username hoặc mã đơn vị từ dataHsm
+                          thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                        },
+                      };
+                      await this.customerAnalysis.pushData(data);
+                      console.log('Dữ liệu I-CA đã được gửi thành công!');
+                    } catch (error) {
+                      console.error('Lỗi khi gửi dữ liệu I-CA:', error);
+                    }
+                  }
                 }
               }
             } else {
@@ -3297,6 +3350,24 @@ export class ConsiderContractComponent
                     } else if (pdfC1) {
                       fileC = pdfC1.path;
                     }
+                    // Thêm code pushData cho Remote Signing
+                  try {
+                    await this.customerAnalysis.getTokenAnalysis().toPromise();
+
+                    let data = {
+                      eventName: this.getRemoteSignEventName(supplierID), // Sử dụng hàm để lấy eventName
+                      params: {
+                        tenHĐ: this.datas.is_data_contract.name,
+                        maHĐ: this.datas.is_data_contract.id,
+                        nguoiXuLy: this.dataCert.cert_id || this.recipientId, // Sử dụng cert_id hoặc recipientId
+                        thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                      },
+                    };
+                    await this.customerAnalysis.pushData(data);
+                    console.log('Dữ liệu Remote Signing (' + supplierID + ') đã được gửi thành công!');
+                  } catch (error) {
+                    console.error('Lỗi khi gửi dữ liệu Remote Signing (' + supplierID + '):', error);
+                  }
                   }
                 }
               } catch (error) {
@@ -3346,6 +3417,24 @@ export class ConsiderContractComponent
                       } else if (pdfC1) {
                         fileC = pdfC1.path;
                       }
+                          // Thêm code pushData cho Remote Signing
+                  try {
+                    await this.customerAnalysis.getTokenAnalysis().toPromise();
+
+                    let data = {
+                      eventName: this.getRemoteSignEventName(supplierID), // Sử dụng hàm để lấy eventName
+                      params: {
+                        tenHĐ: this.datas.is_data_contract.name,
+                        maHĐ: this.datas.is_data_contract.id,
+                        nguoiXuLy: this.dataCert.cert_id || this.recipientId, // Sử dụng cert_id hoặc recipientId
+                        thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                      },
+                    };
+                    await this.customerAnalysis.pushData(data);
+                    console.log('Dữ liệu Remote Signing (' + supplierID + ') đã được gửi thành công!');
+                  } catch (error) {
+                    console.error('Lỗi khi gửi dữ liệu Remote Signing (' + supplierID + '):', error);
+                  }
                     }
                   }
                 } catch (error) {
@@ -5125,6 +5214,7 @@ export class ConsiderContractComponent
           this.dataCert.cert_id = result.ma_dvcs;
           await this.signContractSubmit(supplierID);
         }
+        console.log (result.type)
       });
     })
   }
