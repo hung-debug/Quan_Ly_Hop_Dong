@@ -19,6 +19,7 @@ export class DetailContractTypeComponent implements OnInit {
   code:any="";
   ceca_push: any = "";
   groupId: any = "";
+  groupName: any = "";
   site: string;
   environment: any;
 
@@ -40,7 +41,8 @@ export class DetailContractTypeComponent implements OnInit {
         this.name = data.name
         this.code = data.code,
         this.ceca_push = this.convertCeCa(data.ceca_push)
-        this.groupId = data.groupId
+        this.groupId = data.groupId,
+        this.groupName = data.groupName
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
       }
@@ -59,6 +61,7 @@ export class DetailContractTypeComponent implements OnInit {
       return this.translateService.instant('no');
     }
   }
+  
 }
 
 

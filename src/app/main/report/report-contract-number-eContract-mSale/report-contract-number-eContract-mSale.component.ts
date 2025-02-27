@@ -149,6 +149,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     this.typeListDetail = [
       { id: 1, name: 'Khác' },
       { id: 2, name: 'Công nghệ thông tin' },
+      { id: 3, name: 'Đầu tư chi phí'}
     ];
     for (let i = 0; i<this.typeListDetail?.length; i++){
       this.type_id_detail.push(this.typeListDetail[i].id)
@@ -258,7 +259,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     if (!this.validData()) {
       return;
     }
-
+    this.spinner.show();
     // Vô hiệu hóa nút export
     this.isExporting = true;
 
@@ -266,7 +267,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     //this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
 
     // Ẩn spinner
-    this.spinner.hide();
+    // this.spinner.hide();
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length
       ? this.selectedNodeOrganization
