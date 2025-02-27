@@ -146,11 +146,10 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
   async getContractGroupListDetail(typeIdDetail?: number) {
     this.typeListDetail = []
     this.type_id_detail = []
-    this.typeListDetail = [
-      { id: 1, name: 'Khác' },
-      { id: 2, name: 'Công nghệ thông tin' },
-      { id: 3, name: 'Đầu tư chi phí'}
-    ];
+    const inforType = await this.reportService
+    .getContractGroup()
+    .toPromise();
+    this.typeListDetail = inforType
     for (let i = 0; i<this.typeListDetail?.length; i++){
       this.type_id_detail.push(this.typeListDetail[i].id)
     }
@@ -416,6 +415,8 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
           let parentOrgIndex = newMsaleDataDetail.findIndex((item: any) => item.orgId == idOrg)
           newMsaleDataDetail = [newMsaleDataDetail[parentOrgIndex], ...newMsaleDataDetail.toSpliced(parentOrgIndex, 1)]
           this.listDetail = newMsaleDataDetail
+          console.log("this.listDetail",this.listDetail);
+          
           this.contractsSum = 0
           this.listDetail.forEach(element => {
             this.contractsSum += element.data.length

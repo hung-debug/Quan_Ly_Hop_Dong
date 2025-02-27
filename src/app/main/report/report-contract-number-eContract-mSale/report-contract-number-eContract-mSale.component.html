@@ -158,9 +158,11 @@
         <tr *ngFor="let data of listDetail.data">
           <td class="row-word">{{data.name}}</td>
           <td class="row-word">{{data.typeName}}</td>
-          <td class="row-word" *ngIf="data.groupId == 1 || data.groupId == null">Khác</td>
+          <!-- <td class="row-word" *ngIf="data.groupId == 1 || data.groupId == null">Khác</td>
           <td class="row-word" *ngIf="data.groupId == 2">Công nghệ thông tin</td>
-          <td class="row-word" *ngIf="data.groupId == 3">Đầu tư chi phí</td>
+          <td class="row-word" *ngIf="data.groupId == 3">Đầu tư chi phí</td> -->
+          <td class="row-word" *ngIf="!data.groupId || !data.groupId">Khác</td>
+          <td class="row-word" *ngIf="data.groupId && data.groupId">{{data.groupName}}</td>
           <td class="row-word">{{data.contractNo}}</td>
           <td class="row-word">{{data.code}}</td>
           <td class="row-word">{{this.convertTime(data.createdAt)}}</td>
