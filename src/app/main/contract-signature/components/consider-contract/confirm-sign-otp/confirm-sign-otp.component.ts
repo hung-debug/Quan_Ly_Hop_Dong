@@ -19,8 +19,9 @@ import { TRISTATECHECKBOX_VALUE_ACCESSOR } from 'primeng/tristatecheckbox';
 import { UnitService } from 'src/app/service/unit.service';
 import { environment } from 'src/environments/environment';
 import { TimeService } from 'src/app/service/time.service';
+import { DialogChangePhoneComponent } from '../dialog-change-phone/dialog-change-phone.component';
+import { TranslateService } from '@ngx-translate/core';,
 import { CustomerAnalysis } from 'src/app/service/customer-analysis';
-
 
 @Component({
   selector: 'app-confirm-sign-otp',
@@ -36,6 +37,7 @@ export class ConfirmSignOtpComponent implements OnInit {
   count = 120;
   isSentOpt = false;
   submitted = false;
+  ssoOTP: any = "";
 
   phoneOtp:any;
   isDateTime:any;
@@ -60,6 +62,7 @@ export class ConfirmSignOtpComponent implements OnInit {
     private deviceService: DeviceDetectorService,
     private unitService: UnitService,
     private timeService: TimeService,
+    public translate: TranslateService,
     private customerAnalysis: CustomerAnalysis
   ) { }
 
@@ -69,7 +72,7 @@ export class ConfirmSignOtpComponent implements OnInit {
     this.datasOtp = this.data;
     this.datas = this.datasOtp.datas;
     this.addForm = this.fbd.group({
-      otp: this.fbd.control("", [Validators.required]),
+      otp: this.fbd.control(this.ssoOTP, [Validators.required, Validators.pattern('^[0-9]{6}$')]),
     });
       this.checkSMS(this.datasOtp.contract_id, this.datasOtp.recipient_id, this.datasOtp.phone);
 
@@ -124,6 +127,11 @@ export class ConfirmSignOtpComponent implements OnInit {
     } else {
       return true;
     }
+  }
+  
+  onOtpChange(event: any) {
+    this.ssoOTP = event
+    this.addForm.get('otp')?.setValue(event);
   }
 
   async onSubmit() {
@@ -481,5 +489,27 @@ export class ConfirmSignOtpComponent implements OnInit {
       )
     }
 
+  }
+
+  changePhone(){
+    const data = {
+      title: this.translate.instant('change.phone'),
+    };
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = 'custom-dialog-container';
+    dialogConfig.maxWidth = '480px';
+    dialogConfig.width = '400px';
+    dialogConfig.height = '250px';
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.data = data;
+    const dialogRef = this.dialog.open(DialogChangePhoneComponent, dialogConfig);
+    
+    dialogRef.afterClosed().subscribe(async (result: any) => {
+      let phoneRevert = result.phoneChange.replace(/^\+/, "");
+      this.datasOtp.phone = phoneRevert;
+      
+      this.sendOtpAgain(this.datasOtp.contract_id, this.datasOtp.recipient_id,phoneRevert)
+    })
   }
 }

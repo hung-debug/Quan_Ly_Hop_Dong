@@ -39,7 +39,7 @@
     </div>
 
     <div class="col-xxl-1 col-lg-2 col-md-3 btn_search">
-      <button class="btn btn-lg btn-block btn_submit" (click)="exportEKYCReportCall(true)">Export</button>
+      <button class="btn btn-lg btn-block btn_submit" (click)="exportEKYCReportCall(true)" [disabled]="isExporting" >Export</button>
     </div>
 
     <!-- <div class="col-md-4 btn_search">

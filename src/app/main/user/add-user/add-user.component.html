@@ -154,15 +154,24 @@
                             <input id="attachFileSignature" type="file" accept=".jpg, .png, .jpeg" (change)="fileChangedAttach($event,'sign')" style="display: none;" />
                             <div class="select-contract container-img-file" (click)="addFileAttach('sign')">
                                 <div class="upload-image-region d-flex flex-column container-img-file">
-                                    <img src="assets/img/img-icon.svg" alt="#" width="20px">
-                                    <div class="text-choose-file">{{'choose.sign.file.image' | translate}}</div>
-                                    <div class="text-support-extension">{{'support.format.PNG.JPG.JPGE' | translate}}</div>
+                                    <div class="upload-photo" type="button">Tải ảnh lên</div>
+                                    <!-- <img src="assets/img/img-icon.svg" alt="#" width="20px">
+                                    <div class="text-choose-file">{{'choose.sign.file.image' | translate}}</div> -->
+                                    <!-- <div class="text-support-extension">{{'support.format.PNG.JPG.JPGE' | translate}}</div> -->
+                                    <div class="text-support-extension"style="text-align: center;">{{'text.support.extension' | translate}}</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="image-div">
-                            <img *ngIf="imgSignPCSelect" [src]="imgSignPCSelect" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
-                            <img class="hidden_img" (click)="addFileAttach('sign')" src="assets/img/img-icon.svg" width="30" height="30" />
+                        <!-- Cropper cho Sign -->
+                        <app-image-cropperv2 #imageCropperSign *ngIf="showCropperSign" [imageSrc]="imgSignPCSelect"
+                            (crop)="onCroppedSign($event)"></app-image-cropperv2>
+
+                        <!-- Hiển thị ảnh cho Sign -->
+                        <img class="hidden_img" *ngIf="imgSignPCSelect" (click)="addFileAttach('sign')" src="assets/img/img-icon.svg"width="20" height="20" style="margin-top: 10px; margin-left: 10px;"/>
+                        <div class="image-div" *ngIf="imgSignPCSelect && !showCropperSign">
+                            <img class="img" [src]="imgSignPCSelect" alt=""
+                                style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%">
+                            
                         </div>
                     </div>
                 </div>
@@ -176,15 +185,22 @@
                             <input id="attachFileMark" type="file" accept=".jpg, .png, .jpeg" (change)="fileChangedAttach($event,'mark')" style="display: none;" />
                             <div class="select-contract container-img-file" (click)="addFileAttach('mark')">
                                 <div class="upload-image-region d-flex flex-column container-img-file">
-                                    <img src="assets/img/img-icon.svg" alt="#" width="20px">
-                                    <div class="text-choose-file">{{'choose.sign.file.image' | translate}}</div>
-                                    <div class="text-support-extension">{{'support.format.PNG.JPG.JPGE' | translate}}</div>
+                                    <div class="upload-photo" type="button">Tải ảnh lên</div>
+                                    <!-- <div class="text-support-extension">{{'support.format.PNG.JPG.JPGE' | translate}}</div> -->
+                                    <div class="text-support-extension" style="text-align: center;">{{'text.support.extension' | translate}}</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="image-div">
-                            <img *ngIf="imgSignPCSelectMark" [src]="imgSignPCSelectMark" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
-                            <img class="hidden_img" (click)="addFileAttach('mark')" src="assets/img/img-icon.svg" width="30" height="30" />
+                        <!-- Cropper cho Mark -->
+                        <app-image-cropperv2 #imageCropperMark *ngIf="showCropperMark" [imageSrc]="imgSignPCSelectMark"
+                            (crop)="onCroppedMark($event)"></app-image-cropperv2>
+
+                        <!-- Hiển thị ảnh cho Mark -->
+                        <img class="hidden_img"*ngIf="imgSignPCSelectMark" (click)="addFileAttach('mark')" src="assets/img/img-icon.svg" width="20" height="20" style="margin-top: 10px; margin-left: 10px;" />
+                        <div class="image-div" *ngIf="imgSignPCSelectMark && !showCropperMark">
+                            <img class="img" [src]="imgSignPCSelectMark" alt=""
+                                style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
+                            
                         </div>
                     </div>
                 </div>
@@ -240,6 +256,17 @@
                         <!--Mã số thuế hsm-->
                         <div class="row">
                             <div class="col-md-12">
+                                <div>{{'supplier' | translate}}</div>
+                                <div>
+                                    <p-dropdown panelStyleClass="font" [options]="supplierList" formControlName="supplier" optionLabel="name" optionValue="id" placeholder="{{'choose.supplier' | translate}}" [filter]="false" filterBy="name" [showClear]="false"
+                                    (onChange)="onSupplierChange($event)">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="row">
+                            <div class="col-md-12">
                                 <div>{{'tax_code' | translate}}</div>
                                 <div class="input-data">
                                     <input type="text" formControlName="taxCodeHsm">
@@ -248,10 +275,20 @@
                                     <div *ngIf="f.taxCodeHsm.errors.pattern">{{'Mã số thuế/CMT/CCCD không đúng định dạng' | translate}}</div>
                                 </div>
                             </div>
+                        </div> -->
+
+                        <!--UUID hsm-->
+                        <div *ngIf="!this.isHsmIcorp" class="row">
+                            <div class="col-md-12">
+                                <div>UUID</div>
+                                <div class="input-data">
+                                    <input type="text" formControlName="uuid" id="uuid">
+                                </div>
+                            </div>
                         </div>
 
                         <!--Tên người dùng hsm-->
-                        <div class="row">
+                        <div *ngIf="this.isHsmIcorp" class="row">
                             <div class="col-md-12">
                                 <div>{{'user.name.v2' | translate}}</div>
                                 <div class="input-data">
@@ -264,14 +301,14 @@
                         </div>
 
                         <!--Mật khẩu cấp 1 hsm-->
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-md-12">
                                 <div>{{'password.level1' | translate}}</div>
                                 <div class="input-data">
                                     <input class="pw" type="text" formControlName="password1Hsm">
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

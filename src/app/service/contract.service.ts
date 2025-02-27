@@ -35,6 +35,7 @@ export class ContractService {
   sidebarContractEvent: EventEmitter<any> = new EventEmitter();
 
   listContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract`;
+  listFileAttch: any = `${environment.apiUrl}/api/v1/contracts/contract-folder/all-refs`;
   listPastContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract/organization-old`;
   listContractOrgUrl: any = `${environment.apiUrl}/api/v1/contracts/my-organization-contract`;
   listContractOrgChildrenUrl: any = `${environment.apiUrl}/api/v1/contracts/my-org-and-descendant-contract`;
@@ -289,6 +290,8 @@ export class ContractService {
     let listContractUrl = '';
     if (isOrg == 'off') {
       if (filter_status == '50') {
+        console.log("1");
+        
         filter_status = '30';
         listContractUrl =
           this.listPastContractUrl +
@@ -314,6 +317,7 @@ export class ContractService {
             listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
           }
       } else {
+        console.log("2");
         listContractUrl =
           this.listContractUrl +
           '?keyword=' +
@@ -339,7 +343,9 @@ export class ContractService {
           }
       }
     } else {
+      console.log("3");
       if (organization_id == '') {
+        console.log("4");
         listContractUrl =
           this.listContractOrgChildrenUrl +
           '?organizationId=' +
@@ -366,6 +372,7 @@ export class ContractService {
             listContractUrl = listContractUrl + '&handler_name=' + handlerName.trim();
           }
       } else {
+        console.log("5");
         listContractUrl = this.listContractOrgUrl + '?organization_id=' + organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' +
           filter_contract_no.trim() + '&from_date=' + filter_from_date + '&to_date=' + filter_to_date + '&status=' + filter_status + '&remain_day=' + remain_day +
           '&page=' + page + '&size=' + size + '&name_or_email_customer=' + nameOrEmailCustomer.trim();
@@ -381,6 +388,14 @@ export class ContractService {
     //
     const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
+  }
+  
+  getFileAttach(){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<Contract[]>(this.listFileAttch, {headers: headers,});
   }
 
   public getContractMyProcessList(
@@ -1219,7 +1234,8 @@ export class ContractService {
       // isTimestamp: isTimestamp
       field: datas.field,
       type: boxType,
-      supplier: datas.supplier
+      supplier: datas.supplier,
+      uuid: datas.uuid
     });
 
     return this.http
@@ -1262,6 +1278,7 @@ export class ContractService {
       password: datas.password,
       password2: datas.password2,
       image_base64: datas.imageBase64,
+      uuid: datas.uuid
     });
 
     return this.http
@@ -1337,20 +1354,25 @@ export class ContractService {
       .toPromise();
   }
 
-  signRemote(datas: any, recipientId: number, isTimestamp: any, boxType: any, isVnptSmartCa= false) {
+  signRemote(datas: any, recipientId: number, isTimestamp: any, boxType: any, supplierID:any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-
+    const supplierMap: { [key: number]: string } = {
+        1: 'vnpt',
+        2: 'mobiCA',
+        3: 'nacencomm'
+      };
+    const supplier = supplierMap[supplierID] || 'vnpt';
     const body = JSON.stringify({
       userCode: datas.cert_id,
       image_base64: datas.imageBase64,
       isTimestamp: isTimestamp,
       type: boxType,
       field: datas.field,
-      supplier: isVnptSmartCa ? 'vnpt' : 'nacencomm',
+      supplier: supplier
     });
 
     return this.http
@@ -1358,12 +1380,18 @@ export class ContractService {
       .toPromise();
   }
 
-  signRemoteMulti(datas: any, recipientIds: [], isTimestamp: any, boxType: any, isVnptSmartCa?: any) {
+  signRemoteMulti(datas: any, recipientIds: [], isTimestamp: any, boxType: any, supplierID : any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+    const supplierMap: { [key: number]: string } = {
+        1: 'vnpt',
+        2: 'mobiCA',
+        3: 'nacencomm'
+      };
+    const supplier = supplierMap[supplierID] || 'vnpt';
 
     const body = JSON.stringify({
       userCode: datas.cert_id,
@@ -1371,7 +1399,7 @@ export class ContractService {
       isTimestamp: false,
       type: boxType,
       field: datas.field,
-      supplier: isVnptSmartCa ? 'vnpt' : 'nacencomm',
+      supplier: supplier
     });
 
     return this.http

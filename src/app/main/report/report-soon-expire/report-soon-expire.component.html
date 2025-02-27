@@ -65,7 +65,7 @@
       </div>
 
       <div class="col-xxl-1 col-lg-2 col-md-3 btn_search">
-        <button class="btn btn-lg btn-block btn_submit" (click)="export(true)">Export</button>
+        <button class="btn btn-lg btn-block btn_submit" (click)="export(true)" [disabled]="isExporting">Export</button>
       </div>
   </div>
 

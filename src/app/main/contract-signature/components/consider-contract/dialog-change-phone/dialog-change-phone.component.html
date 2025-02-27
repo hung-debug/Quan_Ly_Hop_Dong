@@ -1,0 +1,43 @@
+<div class="container">
+  <div style="text-align: center; font-weight: bold">
+    <span class="title_otp">{{this.datas.title}}</span>
+  </div>
+  <div class="content">
+    <div style="text-align: center;">
+      <!-- <p>Chúng tôi đã gửi mã OTP về số điện thoại <b style="color: #106DB6;">{{this.datasOtp.phone}}</b>.<br>
+        Vui lòng nhập mã và tiếp tục thực hiện.</p> -->
+      <p class="text_validate">Vui Lòng nhập số điện thoại dùng để nhập mã OTP.</p>
+      
+    </div>
+  </div>
+  
+  <div style="display: flex;flex-direction: column;">
+    <div class="form-group">
+      <div class="label_item">{{'user.phone' | translate}} <span class="require_star">*</span></div>
+      <div class="input-group">
+        <input placeholder="{{'hind.text.phone.otp' | translate}}" type="text" [(ngModel)]="phoneChange" class="input_text"
+          (keyup)="phoneRequired()" />
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="invalid" *ngIf="errorPhone!=''">
+        {{errorPhone| translate}}
+      </div>
+    </div>
+  </div>
+  
+  <div class="select-option">
+    <button class="cancel-button" (click)="this.dialogRef.close()" type="button">
+      {{ "btn.cancel" | translate }}
+    </button>
+    <!-- <button class="dx-button-form dx-button-close dx-button-90" [ngStyle]="getStyleReset()" (click)="this.count == 0?sendOtpAgain(this.datasOtp.contract_id, this.datasOtp.recipient_id, this.datasOtp.phone):''" type="button">Gửi lại OTP</button> -->
+    <!-- <button *ngIf="errorPhone ==''" class="dx-button-form dx-button-close dx-button-90" (click)="onSubmit()" type="button" >{{'confirm' | translate}}</button> -->
+    <button 
+    (click)="onSubmit()" 
+    [disabled]="!phoneValid"
+    [ngClass]="{'disable-button': !phoneValid, 'submit-button': phoneValid}">
+    {{'confirm' | translate}}
+  </button>
+  </div>
+
+</div>

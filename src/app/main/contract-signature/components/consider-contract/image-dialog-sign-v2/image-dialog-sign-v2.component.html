@@ -60,14 +60,12 @@
             </div>
           </div>
         </div>
-
-        <div class="dialog-signature" *ngIf="imgSignPCSelect" (click)="addFileAttach()">
-          <img *ngIf="!this.mobile" [src]="imgSignPCSelect" alt=""
-            style="display: block;margin: 0 auto;max-height: 300px;">
-
-          <img *ngIf="this.mobile" [src]="imgSignPCSelect" alt=""
-            style="display: block;margin: 0 auto;max-height: 600px; max-width: 210px;">
-        </div>
+        <div class="dialog-signature" *ngIf="imgSignPCSelect && !showCropper">
+          <img [src]="croppedImage || imgSignPCSelect" alt="" style="max-width: 100%; max-height: 100%;">
+      </div>
+      <div class="image-cropper-container-wrapper">
+          <app-image-cropper *ngIf="showCropper" [imageSrc]="imgSignPCSelect" (crop)="onCropped($event)" (clear)="onCancelCrop()"></app-image-cropper>
+      </div>
       </div>
 
       <div class="signature-container" *ngIf="typeImageSignatureRadio == 3">

@@ -1733,13 +1733,14 @@ export class ContractSignatureComponent implements OnInit {
           }
 
           this.dataHsm = {
-            ma_dvcs: resultHsm.ma_dvcs,
+            // ma_dvcs: resultHsm.ma_dvcs,
             username: resultHsm.username,
             password: resultHsm.password,
             password2: resultHsm.password2,
             image_base64:  result.mark ? signI : null,
             processAt: this.isDateTime,
             supplier: resultHsm.supplier,
+            uuid: resultHsm.uuid,
             type: 3
           };
 
@@ -1757,48 +1758,53 @@ export class ContractSignatureComponent implements OnInit {
               if (checkSign[i].result.success == false) {
                 this.spinner.hide();
 
-                if (checkSign[i].result.message == 'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu') {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'taxcode.not.match.hsm',
-                    '',
-                    3000
-                  );
-                } else if (
-                  checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
-                ) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'Mật khẩu cấp 2 không đúng',
-                    '',
-                    3000
-                  );
-                } else if (
-                  checkSign[i].result.message == 'License ky so HSM het han!'
-                ) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'License ký số HSM hết hạn!',
-                    '',
-                    3000
-                  );
-                } else if (checkSign.message.includes('Cannot authenticate hsm')) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'Không thể xác thực hsm',
-                    '',
-                    3000
-                  );
-                }
-                else if (checkSign[i].result.message == "false") {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    "Lấy thông tin chứng thư số thất bại",
-                    '',
-                    3000
-                  );
-                } else {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    checkSign[i].result.message,
-                    '',
-                    3000
-                  );
-                }
+                this.toastService.showErrorHTMLWithTimeout(
+                  checkSign[i].result.message,
+                  '',
+                  3000
+                );
+                // if (checkSign[i].result.message == 'Mã số thuế/CMT/CCCD không trùng khớp thông tin ký tài liệu') {
+                //   this.toastService.showErrorHTMLWithTimeout(
+                //     'taxcode.not.match.hsm',
+                //     '',
+                //     3000
+                //   );
+                // } else if (
+                //   checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
+                // ) {
+                //   this.toastService.showErrorHTMLWithTimeout(
+                //     'Mật khẩu cấp 2 không đúng',
+                //     '',
+                //     3000
+                //   );
+                // } else if (
+                //   checkSign[i].result.message == 'License ky so HSM het han!'
+                // ) {
+                //   this.toastService.showErrorHTMLWithTimeout(
+                //     'License ký số HSM hết hạn!',
+                //     '',
+                //     3000
+                //   );
+                // } else if (checkSign.message.includes('Cannot authenticate hsm')) {
+                //   this.toastService.showErrorHTMLWithTimeout(
+                //     'Không thể xác thực hsm',
+                //     '',
+                //     3000
+                //   );
+                // }
+                // else if (checkSign[i].result.message == "false") {
+                //   this.toastService.showErrorHTMLWithTimeout(
+                //     "Lấy thông tin chứng thư số thất bại",
+                //     '',
+                //     3000
+                //   );
+                // } else {
+                //   this.toastService.showErrorHTMLWithTimeout(
+                //     checkSign[i].result.message,
+                //     '',
+                //     3000
+                //   );
+                // }
                 return;
               } else {
                 countSuccess++;
@@ -1993,10 +1999,8 @@ export class ContractSignatureComponent implements OnInit {
             );
             return;
           }
-          let isVnptSmartCa = false;
-          if (resultRS?.type == '1') {
-            isVnptSmartCa = true
-          }
+          let supplierID = resultRS.type;
+        
           this.nameCompany = resultRS.ma_dvcs;
 
           try {
@@ -2028,7 +2032,7 @@ export class ContractSignatureComponent implements OnInit {
             recipientIds,
             null,
             3,
-            isVnptSmartCa
+            supplierID
           ).then(
             (res: any) => {
               this.spinner.hide();
@@ -2076,7 +2080,7 @@ export class ContractSignatureComponent implements OnInit {
 
               if (countSuccess == checkSign.length) {
                 this.spinner.hide();
-                this.remoteDialogSuccessOpen(isVnptSmartCa).then((res) => {
+                this.remoteDialogSuccessOpen(supplierID).then((res) => {
                   if (res.isDismissed) {
                     this.router
                       .navigateByUrl('/', { skipLocationChange: true })
@@ -2097,21 +2101,35 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
-  remoteDialogSuccessOpen(isVnptSmartCa = false) {
-    return Swal.fire({
-      title: "THÔNG BÁO",
-      text: isVnptSmartCa ? "Hệ thống đã thực hiện gửi tài liệu đến hệ thống VNPT SmartCA, vui lòng mở App VNPT SmartCA để ký tài liệu!" :
-        "Hệ thống đã thực hiện gửi tài liệu đến hệ thống CA2 RS, vui lòng mở App CA2 Remote Signing để ký tài liệu!",
-      icon: 'info',
-      showCancelButton: true,
-      showConfirmButton: false,
-      cancelButtonColor: '#b0bec5',
-      cancelButtonText: "Thoát",
-      customClass: {
-        title: 'my-custom-title-class',
-      },
-    });
-  }
+  remoteDialogSuccessOpen(supplierID:any) {
+      let message = "";
+      switch (supplierID) {
+        case "1":
+          message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
+          break;
+        case "2":
+          message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
+          break;
+        case "3":
+          message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
+          break;
+        default:
+          message = "Hệ thống đã thực hiện gửi tài liệu đến hệ thống ký số Remote Signing, vui lòng mở app để ký tài liệu!";
+          break;
+      }
+      return Swal.fire({
+        title: "THÔNG BÁO",
+        text: message,
+        icon: 'info',
+        showCancelButton: true,
+        showConfirmButton: false,
+        cancelButtonColor: '#b0bec5',
+        cancelButtonText: "Thoát",
+        customClass: {
+          title: 'my-custom-title-class',
+        },
+      });
+    }
 
   getValueByKey(inputString: string, key: string) {
     const elements : any = inputString?.split(', ');
