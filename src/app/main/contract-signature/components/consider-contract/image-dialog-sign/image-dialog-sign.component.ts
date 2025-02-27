@@ -9,6 +9,7 @@ import Swal from 'sweetalert2'
 import { ToastService } from 'src/app/service/toast.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { ContractService } from './../../../../../service/contract.service';
+import { ImageCropperComponent } from 'src/app/main/contract/shared/model/image-cropper/image-cropper.component';
 @Component({
   selector: 'app-image-dialog-sign',
   templateUrl: './image-dialog-sign.component.html',
@@ -38,6 +39,10 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     canvasHeight: 380,
     penColor: '#0041C4'
   };
+  @ViewChild('croppedCanvas') croppedCanvas: ElementRef;
+    croppedImage: string | null = null;
+    showCropper: boolean = false;
+    @ViewChild(ImageCropperComponent) imageCropper: ImageCropperComponent;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -127,6 +132,8 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     reader.readAsDataURL(file);
     reader.onload = () => {
       this.imgSignPCSelect = reader.result? reader.result.toString() : '';
+      this.croppedImage = null;
+      this.showCropper = true; // Hiển thị cropper ngay khi có ảnh
     };
   }
 
@@ -219,7 +226,9 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
       if(!this.imgSignPCSelect) {
         this.toastService.showErrorHTMLWithTimeout('not.photo','',3000)
       } else {
-        this.dialogRef.close({value: this.imgSignPCSelect, type: 2});
+          this.imageCropper.cropImage();
+          this.imgSignPCSelect = this.croppedImage;
+          this.dialogRef.close({value:this.imgSignPCSelect, type: 2});
       }
     } else if (this.typeImageSignatureRadio == 3) {
       if(!this.imgSignDrawing) {
@@ -236,5 +245,16 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     this.signaturePad?.clear();
     this.imgSignDrawing = null;
     this.imgSignPCSelect = null;
-  }
+    this.croppedImage = null;
+    this.onCancelCrop();
+}
+
+onCropped(croppedImage: string) {
+    this.croppedImage = croppedImage;
+}
+
+onCancelCrop() {
+    this.showCropper = false;
+    this.imgSignPCSelect = null;
+}
 }

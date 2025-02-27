@@ -5,7 +5,9 @@ import { Router } from '@angular/router';
 import { SelectItemGroup } from 'primeng/api';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
-import {roleList} from "../../../config/variable";
+import {roleList,roleListParent} from "../../../config/variable";
+import { UserService } from 'src/app/service/user.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-detail-role',
@@ -28,9 +30,10 @@ export class DetailRoleComponent implements OnInit {
     public dialogRef: MatDialogRef<DetailRoleComponent>,
     public router: Router,
     public dialog: MatDialog,
+    private userService: UserService,
     private roleService: RoleService) { }
 
-  ngOnInit(): void {
+    async ngOnInit(): Promise<void> {
     this.roleService.getRoleById(this.data.id).subscribe(
       data => {
         
@@ -43,7 +46,17 @@ export class DetailRoleComponent implements OnInit {
       }
     ); 
 
-    this.groupedRole = roleList;
+    // this.groupedRole = roleList;
+    let userId = this.userService.getAuthCurrentUser().id;
+    const infoUser = await this.userService.getUserById(userId).toPromise();
+    
+    //parentid null là thằng cha còn có giá trị là thằng con
+
+    if(infoUser.organization.parent_id === null){
+      this.groupedRole = roleListParent
+    }else if(environment.flag == 'KD'){
+      this.groupedRole = roleList;
+    }
   }
 
   convertRoleArr(roleArr:[]){

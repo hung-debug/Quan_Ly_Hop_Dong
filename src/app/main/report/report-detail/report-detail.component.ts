@@ -13,6 +13,7 @@ import * as moment from 'moment';
 import { ConvertStatusService } from 'src/app/service/convert-status.service';
 
 import { Table } from 'primeng/table';
+import { AppComponent } from 'src/app/app.component';
 
 
 @Component({
@@ -67,6 +68,8 @@ export class ReportDetailComponent implements OnInit {
   numberPage: number;
   selectedOption: string; // Biến để lưu trữ tùy chọn được chọn từ dropdown
   dateOptions: any[]; // Mảng các tùy chọn cho dropdown
+  isExporting: boolean = false; // Thêm biến cờ
+
   constructor(
     
     private appService: AppService,
@@ -295,8 +298,15 @@ export class ReportDetailComponent implements OnInit {
     if(!this.validData()) {
       return;
     }
-
     this.spinner.show();
+    // Vô hiệu hóa nút export
+    this.isExporting = true;
+
+    // Hiển thị thông báo "Báo cáo đang được xuất"
+    //this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+
+    // Ẩn spinner
+    
 
     this.selectedNodeOrganization = !this.selectedNodeOrganization.length ? this.selectedNodeOrganization : this.selectedNodeOrganization[0]
 
@@ -324,27 +334,42 @@ export class ReportDetailComponent implements OnInit {
       to_date = from_date
     if(!completed_to_date)
       completed_to_date=completed_from_date
+    let id: string;
+    if(flag) {
+      this.spinner.hide();
+      this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
+      let now = new Date();
+      let randomFive = Math.floor(10000 + Math.random() * 90000); // 5 số ngẫu nhiên
+      id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
+      const filename = `BaoCaoChiTiet_HĐ_eContract_${new Date().getDate()}-${new Date().getMonth() + 1
+      }-${new Date().getFullYear()}.xlsx`;
+      AppComponent.exportStatuses.push({id: id, filename: filename, status: 'processing', url: ""}); // Thay đổi dòng này
+    } else {this.isExporting = false;}
+
     let payload = ""
     if(this.contractInfo){
        payload ='&textSearch=' + this.contractInfo.trim()
     }
     let params = '?from_date='+from_date+'&to_date='+to_date+'&completed_from_date='+completed_from_date+'&completed_to_date='+completed_to_date+'&status='+contractStatus+'&fetchChildData='+this.fetchChildData + payload + `&pageNumber=`+this.page+`&pageSize=`+this.row;
     this.reportService.export('rp-detail',idOrg,params, flag).subscribe((response: any) => {
-        this.spinner.hide();
-        if(flag) {
-          this.spinner.hide();
-          let url = window.URL.createObjectURL(response);
-          let a = document.createElement('a');
-          document.body.appendChild(a);
-          a.setAttribute('style', 'display: none');
-          a.href = url;
-          a.download = `BaoCaoChiTiet_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
-          a.click();
-          window.URL.revokeObjectURL(url);
-          a.remove();
-  
-          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+      if (flag) {
+          this.spinner.hide(); // Bỏ dòng này
+        // let url = window.URL.createObjectURL(response);
+        // let a = document.createElement('a');
+        // document.body.appendChild(a);
+        // a.setAttribute('style', 'display: none');
+        // a.href = url;
+        // a.download = `BaoCaoChiTiet_${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}.xlsx`;
+        // a.click();
+        // window.URL.revokeObjectURL(url);
+        // a.remove();
+
+        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+          this.isExporting = false;
+          this.updateExportStatus(id, window.URL.createObjectURL(response)); // Lưu URL
         } else {
+          this.spinner.hide();
+          this.isExporting = false;
           this.table.first = 0
           this.list = [];
           this.colsSuggest = [
@@ -386,9 +411,17 @@ export class ReportDetailComponent implements OnInit {
           this.numberPage = response.TotalPages;
         }
       
-    })
+    });
   }
-  
+
+  updateExportStatus(id: string, url: string) {
+    const statusItem = AppComponent.exportStatuses.find(item => item.id === id);
+    if (statusItem) {
+        statusItem.url = url;
+        statusItem.status = 'completed'; // Cập nhật thêm trạng thái nếu cần
+    }
+  }
+
   toRecord() {
     return Math.min((this.page + 1) * this.row, this.totalRecords)
   }
