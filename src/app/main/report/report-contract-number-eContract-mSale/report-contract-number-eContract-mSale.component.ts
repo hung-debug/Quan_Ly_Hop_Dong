@@ -313,6 +313,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
           this.spinner.hide();
           // this.toastService.showSuccessHTMLWithTimeout('Xuất file báo cáo thành công','',3000)
           //this.exportToExcel(response)
+          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
           this.updateExportStatus(id, window.URL.createObjectURL(response)); // Cập nhật trạng thái
         },
         (err: any) => {
@@ -398,6 +399,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
     let id: string = '';
       if (flag) {
         this.spinner.hide();
+        this.toastService.showSuccessHTMLWithTimeout("report.exporting", "", 3000);
         let now = new Date();
         let randomFive = Math.floor(10000 + Math.random() * 90000);
         id = `${randomFive}_${now.getDate()}${now.getMonth() + 1}${now.getFullYear()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
@@ -410,6 +412,7 @@ export class ReportContractNumberEcontractMsaleComponent implements OnInit {
         this.spinner.hide();
         if (flag) {
           //this.exportToExcelDetail(response)
+          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
           this.updateExportStatus(id, window.URL.createObjectURL(response));
         } else {
           this.spinner.hide();
