@@ -67,7 +67,7 @@ export class ContractConnectDialogComponent implements OnInit {
   }
   
   openPdf(item: any) {
-    if(item.path.endsWith('.pdf')){
+    if(item.isParticipant == true){
       this.router.navigate(['/main/form-contract/detail/' + item.contract_id]);
       this.dialog.closeAll();
     }else{
