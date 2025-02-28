@@ -17,17 +17,17 @@
           Nhập OTP <span class="invalid">*</span>
         </span>
         <ng-otp-input class="otp-input-item" id="otp" [config]="{length:6}" formControlName="otp" (onInputChange)="onOtpChange($event)"></ng-otp-input>
-        <div style="display: block;">
+        <div style="display: flex;flex-direction: column-reverse;">
           <div class="label-input-otp-sent" *ngIf="this.count > 0">OTP có hiệu lực trong <span style="color: #0041C4; font-weight: bold;padding: 1px 4px;"> {{counter$ | async }}s.</span>
           </div>
           
           <div class="label-input-otp-sent" *ngIf="this.count == 0">OTP đã hết hiệu lực. <span style="color: #0041C4; cursor: pointer; padding: 1px 4px;" 
             (click)="this.count == 0?sendOtpAgain(this.datasOtp.contract_id, this.datasOtp.recipient_id, this.datasOtp.phone):''" > Gửi lại</span>
           </div>
-        </div>
-        <div *ngIf="submitted && f.otp.errors" class="invalid">
-          <div *ngIf="f.otp.errors.pattern">{{'Mã OTP sai định dạng' | translate}}</div>
-          <div *ngIf="f.otp.errors.required">{{'Mã OTP không được để trống' | translate}}</div>
+          <div *ngIf="submitted && f.otp.errors" class="invalid">
+            <div *ngIf="f.otp.errors.pattern">{{'Mã OTP sai định dạng' | translate}}</div>
+            <div *ngIf="f.otp.errors.required">{{'Mã OTP không được để trống' | translate}}</div>
+          </div>
         </div>
       </div>
 
