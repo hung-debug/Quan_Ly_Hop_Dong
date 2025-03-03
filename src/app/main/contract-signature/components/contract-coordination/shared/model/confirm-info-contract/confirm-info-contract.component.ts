@@ -326,7 +326,7 @@ export class ConfirmInfoContractComponent implements OnInit {
         await this.contractService.coordinationContract(participantId, response_determine_contract.recipients, this.datas.recipient_id_coordition).toPromise().then(async (data) => {
           this.toastService.showSuccessHTMLWithTimeout("Điều phối tài liệu thành công!", "", 3000);
           try {
-            await this.customerAnalysis.getTokenAnalysis().toPromise();
+            await this.customerAnalysis.getTokenAnalysis()?.toPromise();
     
             let data = {
               eventName: "dieuPhoiHĐ",

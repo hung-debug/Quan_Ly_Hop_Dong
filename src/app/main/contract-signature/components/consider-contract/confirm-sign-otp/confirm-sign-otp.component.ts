@@ -453,7 +453,7 @@ export class ConfirmSignOtpComponent implements OnInit {
             }
             setTimeout(async () => {
               try {
-                await this.customerAnalysis.getTokenAnalysis().toPromise();
+                await this.customerAnalysis.getTokenAnalysis()?.toPromise();
 
                 let data = {
                   eventName: "kyOTP", // Thay đổi eventName cho phù hợp

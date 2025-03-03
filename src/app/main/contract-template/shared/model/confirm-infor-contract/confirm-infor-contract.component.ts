@@ -109,7 +109,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   
   async callAPIFinish() {
     try {
-      await this.customerAnalysis.getTokenAnalysis().toPromise();
+      await this.customerAnalysis.getTokenAnalysis()?.toPromise();
 
       // Tạo đối tượng data chứa thông tin sự kiện
       let data = {
@@ -203,7 +203,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   async SaveContract(action: string) {
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
       try {
-        await this.customerAnalysis.getTokenAnalysis().toPromise();
+        await this.customerAnalysis.getTokenAnalysis()?.toPromise();
 
         // Tạo đối tượng data chứa thông tin sự kiện
         let data = {

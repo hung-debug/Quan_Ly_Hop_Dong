@@ -466,7 +466,7 @@ export class ForwardContractComponent implements OnInit {
                 this.toastService.showSuccessHTMLWithTimeout((this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp/Ủy quyền' : 'Ủy quyền/Chuyển tiếp') + ' thành công!'
                   , "", 3000);
                   try {
-                    await this.customerAnalysis.getTokenAnalysis().toPromise();
+                    await this.customerAnalysis.getTokenAnalysis()?.toPromise();
                     let data = {
                       eventName: "uyQuyen/chuyenTiep",
                       params: {

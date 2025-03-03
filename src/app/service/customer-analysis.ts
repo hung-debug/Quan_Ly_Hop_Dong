@@ -29,6 +29,11 @@ export class CustomerAnalysis {
   }
 
   getTokenAnalysis() {
+    // Kiểm tra flag enableCustomerAnalysis
+    if (!environment.enableCustomerAnalysis) {
+      return; // Thoát ra nếu flag là false
+    }
+
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json');
 
@@ -51,16 +56,25 @@ export class CustomerAnalysis {
   }
 
   getCurrentTokenAnalysis() {
+    if (!environment.enableCustomerAnalysis) {
+      return; // Thoát ra nếu flag là false
+    }
     this.tokenAnalysis = JSON.parse(localStorage.getItem('tokenAnalysis') || '');
     this.infoUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
 
   initAnalysis(appId: string) {
+    if (!environment.enableCustomerAnalysis) {
+      return; // Thoát ra nếu flag là false
+    }
     Parse.initialize(appId);
     Parse.serverURL = environment.urlAnalysis;
   }
 
   pushData(data: any) {
+    if (!environment.enableCustomerAnalysis) {
+      return; // Thoát ra nếu flag là false
+    }
     this.getCurrentTokenAnalysis();
     data.appId = this.tokenAnalysis.tenantId;
     data.phone = this.infoUser.phone;
@@ -86,6 +100,9 @@ export class CustomerAnalysis {
   }
 
   async pushEvent(eventName: string, data: any) {
+    if (!environment.enableCustomerAnalysis) {
+      return; // Thoát ra nếu flag là false
+    }
     try {
       await this.getCurrentTokenAnalysis(); // Đảm bảo token đã cập nhật
   

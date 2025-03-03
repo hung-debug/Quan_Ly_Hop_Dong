@@ -1275,7 +1275,7 @@ export class ContractSignatureComponent implements OnInit {
           this.router.navigate(['main/c/receive/processed']);
         });
         try {
-          await this.customerAnalysis.getTokenAnalysis().toPromise();
+          await this.customerAnalysis.getTokenAnalysis()?.toPromise();
 
           let data = {
             eventName: "xemxetLoHĐ",
@@ -1644,7 +1644,7 @@ export class ContractSignatureComponent implements OnInit {
             );
           }
           try {
-            await this.customerAnalysis.getTokenAnalysis().toPromise();
+            await this.customerAnalysis.getTokenAnalysis()?.toPromise();
         
             let data = {
               eventName: this.getSimPKIEventName(result.networkCode), // Sử dụng hàm để lấy eventName
@@ -1753,7 +1753,7 @@ export class ContractSignatureComponent implements OnInit {
       this.signUsbTokenMany(fileC, idContract, recipientId, documentId, taxCode, idSignMany, result.mark);
       // Thêm đoạn code phân tích khách hàng vào đây (sau khi gọi this.signUsbTokenMany())
     try {
-      await this.customerAnalysis.getTokenAnalysis().toPromise();
+      await this.customerAnalysis.getTokenAnalysis()?.toPromise();
 
       let data = {
         eventName: this.getUsbEventName(result.usbTokenType), // Sử dụng hàm getUsbEventName
@@ -1918,7 +1918,7 @@ export class ContractSignatureComponent implements OnInit {
 
             // Thêm đoạn code phân tích khách hàng vào đây
             try {
-              await this.customerAnalysis.getTokenAnalysis().toPromise();
+              await this.customerAnalysis.getTokenAnalysis()?.toPromise();
 
               let data = {
                 eventName: eventName,
@@ -2061,7 +2061,7 @@ export class ContractSignatureComponent implements OnInit {
                 3000
               );
             try {
-                await this.customerAnalysis.getTokenAnalysis().toPromise();
+              await this.customerAnalysis.getTokenAnalysis()?.toPromise();
             
                 let data = {
                   eventName: "kyLoCTS", // Sử dụng eventName phù hợp
@@ -2220,7 +2220,7 @@ export class ContractSignatureComponent implements OnInit {
                 })
                   // Thêm đoạn code phân tích khách hàng vào đây
                 try {
-                  await this.customerAnalysis.getTokenAnalysis().toPromise();
+                  await this.customerAnalysis.getTokenAnalysis()?.toPromise();
 
                   let data = {
                     eventName: this.getRemoteSignEventName(supplierID), // Sử dụng hàm để lấy eventName

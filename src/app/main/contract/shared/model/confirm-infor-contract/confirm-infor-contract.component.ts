@@ -169,7 +169,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         // Hiển thị thông báo thành công
         this.toastService.showSuccessHTMLWithTimeout('create.contract.success', '', 3000);
         try {
-          await this.customerAnalysis.getTokenAnalysis().toPromise();
+          await this.customerAnalysis.getTokenAnalysis()?.toPromise();
   
           // Tạo đối tượng data chứa thông tin sự kiện và thông tin từ this.datas
           let data = {

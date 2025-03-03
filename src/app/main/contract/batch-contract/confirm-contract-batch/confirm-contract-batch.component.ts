@@ -961,7 +961,7 @@ export class ConfirmContractBatchComponent
     const isAllow = await this.checkNumber(this.datasBatch.ceca_push, this.convertToSignConfig().length);
     if (isAllow) {
       try {
-        await this.customerAnalysis.getTokenAnalysis().toPromise();
+        await this.customerAnalysis.getTokenAnalysis()?.toPromise();
 
         // Tạo đối tượng data chứa thông tin sự kiện
         let data = {

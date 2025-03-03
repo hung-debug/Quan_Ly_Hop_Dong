@@ -2660,7 +2660,7 @@ export class ConsiderContractComponent
             return false;
           } else {
             try {
-              await this.customerAnalysis.getTokenAnalysis().toPromise();
+              await this.customerAnalysis.getTokenAnalysis()?.toPromise();
             
               // Lấy tên nhà cung cấp PKI
               const pkiSupplierName = this.getPKISupplierName(this.signInfoPKIU.networkCode);
@@ -2705,7 +2705,7 @@ export class ConsiderContractComponent
             return false;
           } else {
             try {
-              await this.customerAnalysis.getTokenAnalysis().toPromise();
+              await this.customerAnalysis.getTokenAnalysis()?.toPromise();
             
               // Lấy tên nhà cung cấp PKI
               const pkiSupplierName = this.getPKISupplierName(this.signInfoPKIU.networkCode);
@@ -2912,7 +2912,7 @@ export class ConsiderContractComponent
                   }
                   if (this.dataHsm.supplier === 'mobifone') {
                     try {
-                      await this.customerAnalysis.getTokenAnalysis().toPromise();
+                      await this.customerAnalysis.getTokenAnalysis()?.toPromise();
       
                       let data = {
                         eventName: "kyHsm_mbf", // Event name cho MobiFone
@@ -2932,7 +2932,7 @@ export class ConsiderContractComponent
                   // Thêm code pushData cho I-CA
                   else if (this.dataHsm.supplier === 'icorp') {
                     try {
-                      await this.customerAnalysis.getTokenAnalysis().toPromise();
+                      await this.customerAnalysis.getTokenAnalysis()?.toPromise();
       
                       let data = {
                         eventName: "kyHsm_ica", // Event name cho I-CA
@@ -3211,7 +3211,7 @@ export class ConsiderContractComponent
                       fileC = pdfC1.path;
                     }
                     try {
-                      await this.customerAnalysis.getTokenAnalysis().toPromise();
+                      await this.customerAnalysis.getTokenAnalysis()?.toPromise();
                     
                       let data = {
                         eventName: "kyCTS", // Thay đổi eventName cho phù hợp
@@ -3262,7 +3262,7 @@ export class ConsiderContractComponent
                       fileC = pdfC1.path;
                     }
                     try {
-                      await this.customerAnalysis.getTokenAnalysis().toPromise();
+                      await this.customerAnalysis.getTokenAnalysis()?.toPromise();
                     
                       let data = {
                         eventName: "kyCTSMobile", // Thay đổi eventName cho phù hợp
@@ -3446,7 +3446,7 @@ export class ConsiderContractComponent
                     }
                     // Thêm code pushData cho Remote Signing
                   try {
-                    await this.customerAnalysis.getTokenAnalysis().toPromise();
+                    await this.customerAnalysis.getTokenAnalysis()?.toPromise();
 
                     let data = {
                       eventName: this.getRemoteSignEventName(supplierID), // Sử dụng hàm để lấy eventName
@@ -3881,7 +3881,7 @@ export class ConsiderContractComponent
           if (checkTaxCodeBase64.success) {
             await this.signImageC(signUpdatePayload, notContainSignImage);
             try {
-              await this.customerAnalysis.getTokenAnalysis().toPromise();
+              await this.customerAnalysis.getTokenAnalysis()?.toPromise();
         
               let data = {
                 eventName: "kyUsbToken_V1", // Event name cho MobiFone
@@ -4060,7 +4060,7 @@ export class ConsiderContractComponent
     if (checkTaxCode.success == true) {
       this.signImageC(signUpdatePayload, notContainSignImage);
       try {
-        await this.customerAnalysis.getTokenAnalysis().toPromise();
+        await this.customerAnalysis.getTokenAnalysis()?.toPromise();
       
         let data = {
           eventName: "kyUsbToken_V2", // Thay đổi eventName cho phù hợp
@@ -4456,7 +4456,7 @@ export class ConsiderContractComponent
           setTimeout(async () => {
             if (!this.mobile) {
               try {
-                await this.customerAnalysis.getTokenAnalysis().toPromise();
+                await this.customerAnalysis.getTokenAnalysis()?.toPromise();
     
                 let data = {
                   eventName: "xemxetHĐ",

@@ -238,7 +238,7 @@ export class ConfirmContractFormComponent implements OnInit {
   
   async callAPIFinish() {
     try{
-      await this.customerAnalysis.getTokenAnalysis().toPromise();
+      await this.customerAnalysis.getTokenAnalysis()?.toPromise();
 
       // Tạo đối tượng data chứa thông tin sự kiện
       let data = {
