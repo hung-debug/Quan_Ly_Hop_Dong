@@ -28,6 +28,10 @@ export const environment = {
   //KD
   // apiUrl: 'https://mobifone-econtract.vn/service',
   flag: 'KD',
+  urlgetTokenAnalysis: 'https://ottcall.mobifone.vn/pthv_cms_api',
+  urlAnalysis: 'https://ott.mobifone.vn/parse',
+  appNameAnalysis: 'eContract web dev',
+  apiKeyAnalysis: 'XDQPiyOSljfHCJpa37e0NkUbAbCPJnc2',
   urlEpisode: 'https://ottcall.mobifone.vn/pthv_cms_api',
   appNameEpisode: 'eContract web dev',
   apiKeyEpisode: 'XDQPiyOSljfHCJpa37e0NkUbAbCPJnc2',
