@@ -286,26 +286,6 @@ export class ConfirmSignOtpComponent implements OnInit {
         }
         ir++;
       }
-      try {
-        await this.customerAnalysis.getTokenAnalysis().toPromise();
-
-        // Tạo đối tượng data chứa thông tin sự kiện
-        let data = {
-          eventName: "kyOTP", // Thay đổi eventName cho phù hợp
-          params: {
-            tenHĐ: this.datas.is_data_contract.name,
-            maHĐ: this.datasOtp.contract_id,
-            nguoiXuLy: this.datasOtp.phone || this.datasOtp.email, // Hoặc this.datasOtp.email
-            thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date()) // Sử dụng TimeService
-          },
-          // Thêm các thông tin khác nếu cần
-        };
-        // Gọi pushData để gửi dữ liệu lên Parse Server
-        await this.customerAnalysis.pushData(data);
-        console.log('Dữ liệu đã được gửi thành công!');
-      } catch (error) {
-        console.error('Lỗi khi gửi dữ liệu:', error);
-      }
       await this.signContract(false, bucket);
     }, error => {
       this.spinner.hide()
@@ -471,8 +451,24 @@ export class ConfirmSignOtpComponent implements OnInit {
             }
             if (!notContainSignImage) {
             }
-            setTimeout(() => {
+            setTimeout(async () => {
+              try {
+                await this.customerAnalysis.getTokenAnalysis().toPromise();
 
+                let data = {
+                  eventName: "kyOTP", // Thay đổi eventName cho phù hợp
+                  params: {
+                    tenHĐ: this.datas.is_data_contract.name,
+                    maHĐ: this.datas.is_data_contract.id,
+                    nguoiXuLy: this.datasOtp.currentUser.email || this.datasOtp.currentUser.phone,
+                    thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                  },
+                };
+                await this.customerAnalysis.pushData(data);
+                console.log('Dữ liệu ký OTP đã được gửi thành công!');
+              } catch (error) {
+                console.error('Lỗi khi gửi dữ liệu ký OTP:', error);
+              }
               this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
               this.toastService.showSuccessHTMLWithTimeout(
                 [3, 4].includes(this.datas.roleContractReceived) ? 'Bạn vừa thực hiện ký thành công. Tài liệu đã được chuyển tới người tiếp theo!' : 'Xem xét tài liệu thành công'

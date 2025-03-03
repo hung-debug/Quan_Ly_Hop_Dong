@@ -168,6 +168,27 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   
         // Hiển thị thông báo thành công
         this.toastService.showSuccessHTMLWithTimeout('create.contract.success', '', 3000);
+        try {
+          await this.customerAnalysis.getTokenAnalysis().toPromise();
+  
+          // Tạo đối tượng data chứa thông tin sự kiện và thông tin từ this.datas
+          let data = {
+            eventName: "taoHDDonLe",
+            params: {
+              tenHD: this.datas.name,
+              maHD: this.datas.contract_id,
+              thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+            },
+            // Thêm các thông tin khác từ this.datas nếu cần
+          };
+          console.log('Giá trị của this.datas.contract_no:', this.datas);
+          console.log('ngay tao', this.customerAnalysis.convertToVietnamTimeISOString(new Date()))
+          // Gọi pushData để gửi dữ liệu lên Parse Server
+          await this.customerAnalysis.pushData(data); // Chỉ truyền data
+          console.log('Dữ liệu đã được gửi thành công!');
+        } catch (error) {
+          console.error('Lỗi khi gửi dữ liệu:', error);
+        }
       }
     } catch (error) {
       // Xử lý lỗi nếu có
@@ -380,29 +401,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       })
       this.contractService.getContractSample(this.data_sample_contract).subscribe(
           async (data) => {
-            if (action == 'finish_contract') {
-              try {
-                await this.customerAnalysis.getTokenAnalysis().toPromise();
-        
-                // Tạo đối tượng data chứa thông tin sự kiện và thông tin từ this.datas
-                let data = {
-                  eventName: "taoHDDonLe",
-                  params: {
-                    tenHD: this.datas.name,
-                    maHD: this.datas.contract_id,
-                    thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
-                  },
-                  // Thêm các thông tin khác từ this.datas nếu cần
-                };
-                console.log('Giá trị của this.datas.contract_no:', this.datas);
-                console.log('ngay tao', this.customerAnalysis.convertToVietnamTimeISOString(new Date()))
-                // Gọi pushData để gửi dữ liệu lên Parse Server
-                await this.customerAnalysis.pushData(data); // Chỉ truyền data
-                console.log('Dữ liệu đã được gửi thành công!');
-              } catch (error) {
-                console.error('Lỗi khi gửi dữ liệu:', error);
-              }
-        
+            if (action == 'finish_contract') {  
               this.callAPIFinish();
             } else {
               if (
