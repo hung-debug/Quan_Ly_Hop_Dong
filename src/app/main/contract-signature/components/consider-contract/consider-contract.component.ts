@@ -499,9 +499,9 @@ export class ConsiderContractComponent
   }
   getPKISupplierName(networkCode: any) {
     switch (networkCode) {
-      case "mobifone":
+      case "1":
         return "kySimPKI_MobiFone";
-      case "viettel":
+      case "2":
         return "kySimPKI_Viettel";
       case "bcy": // Hoặc mã nhà mạng thực tế của Ban Cơ Yếu
         return "kySimPKI_BCY";
@@ -2661,13 +2661,9 @@ export class ConsiderContractComponent
           } else {
             try {
               await this.customerAnalysis.getTokenAnalysis()?.toPromise();
-            
-              // Lấy tên nhà cung cấp PKI
-              const pkiSupplierName = this.getPKISupplierName(this.signInfoPKIU.networkCode);
-            
               // Tạo đối tượng data chứa thông tin sự kiện
               let data = {
-                eventName: pkiSupplierName, // Sử dụng tên nhà cung cấp PKI
+                eventName:this.getPKISupplierName(this.signInfoPKIU.networkCode), // Sử dụng tên nhà cung cấp PKI
                 params: {
                   tenHĐ: this.datas.is_data_contract.name,
                   maHĐ: this.datas.is_data_contract.id,
@@ -2706,13 +2702,9 @@ export class ConsiderContractComponent
           } else {
             try {
               await this.customerAnalysis.getTokenAnalysis()?.toPromise();
-            
-              // Lấy tên nhà cung cấp PKI
-              const pkiSupplierName = this.getPKISupplierName(this.signInfoPKIU.networkCode);
-            
               // Tạo đối tượng data chứa thông tin sự kiện
               let data = {
-                eventName: pkiSupplierName, // Sử dụng tên nhà cung cấp PKI
+                eventName:this.getPKISupplierName(this.signInfoPKIU.networkCode), // Sử dụng tên nhà cung cấp PKI
                 params: {
                   tenHĐ: this.datas.is_data_contract.name,
                   maHĐ: this.datas.is_data_contract.id,
@@ -2910,7 +2902,7 @@ export class ConsiderContractComponent
                   } else if (pdfC1) {
                     fileC = pdfC1.path;
                   }
-                  if (this.dataHsm.supplier === 'mobifone') {
+                  if (this.typeSignDigital === 4 && this.dataHsm?.supplier === 'mobifone') {
                     try {
                       await this.customerAnalysis.getTokenAnalysis()?.toPromise();
       
@@ -2919,7 +2911,7 @@ export class ConsiderContractComponent
                         params: {
                           tenHĐ: this.datas.is_data_contract.name,
                           maHĐ: this.datas.is_data_contract.id,
-                          nguoiXuLy: this.dataHsm.username || this.dataHsm.ma_dvcs, // Sử dụng username hoặc mã đơn vị từ dataHsm
+                          nguoiXuLy: this.currentUser.email || this.currentUser.phone, // Sử dụng username hoặc mã đơn vị từ dataHsm
                           thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
                         },
                       };
@@ -2930,7 +2922,7 @@ export class ConsiderContractComponent
                     }
                   }
                   // Thêm code pushData cho I-CA
-                  else if (this.dataHsm.supplier === 'icorp') {
+                  else if (this.typeSignDigital === 4 && this.dataHsm.supplier === 'icorp') {
                     try {
                       await this.customerAnalysis.getTokenAnalysis()?.toPromise();
       
@@ -2939,7 +2931,7 @@ export class ConsiderContractComponent
                         params: {
                           tenHĐ: this.datas.is_data_contract.name,
                           maHĐ: this.datas.is_data_contract.id,
-                          nguoiXuLy: this.dataHsm.username || this.dataHsm.ma_dvcs, // Sử dụng username hoặc mã đơn vị từ dataHsm
+                          nguoiXuLy: this.currentUser.email || this.currentUser.phone, // Sử dụng username hoặc mã đơn vị từ dataHsm
                           thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
                         },
                       };
@@ -3444,24 +3436,6 @@ export class ConsiderContractComponent
                     } else if (pdfC1) {
                       fileC = pdfC1.path;
                     }
-                    // Thêm code pushData cho Remote Signing
-                  try {
-                    await this.customerAnalysis.getTokenAnalysis()?.toPromise();
-
-                    let data = {
-                      eventName: this.getRemoteSignEventName(supplierID), // Sử dụng hàm để lấy eventName
-                      params: {
-                        tenHĐ: this.datas.is_data_contract.name,
-                        maHĐ: this.datas.is_data_contract.id,
-                        nguoiXuLy: this.dataCert.cert_id || this.recipientId, // Sử dụng cert_id hoặc recipientId
-                        thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
-                      },
-                    };
-                    await this.customerAnalysis.pushData(data);
-                    console.log('Dữ liệu Remote Signing (' + supplierID + ') đã được gửi thành công!');
-                  } catch (error) {
-                    console.error('Lỗi khi gửi dữ liệu Remote Signing (' + supplierID + '):', error);
-                  }
                   }
                 }
               } catch (error) {
@@ -3656,6 +3630,24 @@ export class ConsiderContractComponent
     );
 
     if (signUploadObs$.length == 0 || eKYC == 1) {
+      if (eKYC === 1) { // Chỉ push data khi là eKYC
+        try {
+          await this.customerAnalysis.getTokenAnalysis()?.toPromise();
+          let data = {
+            eventName: "kyEKYC", // Tên event cho ký eKYC
+            params: {
+              tenHĐ: this.datas.is_data_contract.name,
+              maHĐ: this.datas.is_data_contract.id,
+              nguoiXuLy: this.currentUser.email || this.currentUser.phone,
+              thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+            },
+          };
+          await this.customerAnalysis.pushData(data);
+          console.log("Đã push data kyEKYC");
+        } catch (error) {
+            console.error("Lỗi khi push data kyEKYC", error)
+        }
+    }
       await this.signContract(true, supplierID);
     }
   }
@@ -4357,7 +4349,32 @@ export class ConsiderContractComponent
                 if (!notContainSignImage) {
                   await this.signDigitalDocument(supplierID);
                 }
+                if (this.typeSignDigital === 8) {
+                  const signResult = await this.signDigitalDocument(supplierID); // Gọi hàm ký, CÓ THỂ await hoặc không, tùy vào cách bạn xử lý bất đồng bộ
 
+                  if (signResult) { // CHỈ PUSH DATA KHI KÝ THÀNH CÔNG
+                      try {
+                          await this.customerAnalysis.getTokenAnalysis()?.toPromise();
+                          let data = {
+                              eventName: this.getRemoteSignEventName(supplierID), // Lấy eventName
+                              params: {
+                                  tenHĐ: this.datas.is_data_contract.name,
+                                  maHĐ: this.datas.is_data_contract.id,
+                                  nguoiXuLy: this.dataCert.cert_id || this.recipientId, // Chú ý giá trị này
+                                  thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                              },
+                          };
+                          await this.customerAnalysis.pushData(data);
+                          console.log(`Đã push data cho Remote Signing (supplier ${supplierID})`);
+                      } catch (error) {
+                          console.error(`Lỗi khi push data Remote Signing (supplier ${supplierID}):`, error);
+                      }
+                  } else {
+                    // Xử lý khi ký Remote Signing THẤT BẠI (nếu cần)
+                    console.error("Ký Remote Signing thất bại!");
+                    // Có thể hiển thị thông báo lỗi cho người dùng
+                }
+              }
                 this.router
                   .navigateByUrl('/', { skipLocationChange: true })
                   .then(() => {
@@ -4455,21 +4472,24 @@ export class ConsiderContractComponent
           }
           setTimeout(async () => {
             if (!this.mobile) {
-              try {
-                await this.customerAnalysis.getTokenAnalysis()?.toPromise();
-    
-                let data = {
-                  eventName: "xemxetHĐ",
-                  params: {
-                    tenHĐ: this.datas.is_data_contract.name,
-                    maHĐ: this.datas.is_data_contract.id,
-                    nguoiXuLy: this.currentUser.email || this.currentUser.phone, // Sử dụng email hoặc số điện thoại
-                    thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
-                  },
-                };
-                await this.customerAnalysis.pushData(data);
-              } catch (error) {
-                console.error('Lỗi khi gửi dữ liệu phân tích Xem xét HĐ (Đồng ý):', error);
+              if ((this.datas.roleContractReceived === 2 && this.confirmConsider === 1) ) {
+                try {
+                  await this.customerAnalysis.getTokenAnalysis()?.toPromise();
+
+                  let data = {
+                    eventName: "xemxetHĐ",  // Giữ nguyên eventName
+                    params: {
+                      tenHĐ: this.datas.is_data_contract.name,
+                      maHĐ: this.datas.is_data_contract.id,
+                      nguoiXuLy: this.currentUser.email || this.currentUser.phone,
+                      thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                    },
+                  };
+                  await this.customerAnalysis.pushData(data);
+                  console.log("Đã push data xemxetHĐ"); // Dòng này để debug, có thể xóa sau
+                } catch (error) {
+                  console.error('Lỗi khi gửi dữ liệu phân tích Xem xét HĐ (Đồng ý):', error);
+                }
               }
               this.toastService.showSuccessHTMLWithTimeout(
                 [3, 4].includes(this.datas.roleContractReceived)
@@ -5630,6 +5650,22 @@ export class ConsiderContractComponent
               }, 1000);
             }
           )
+          try {
+            await this.customerAnalysis.getTokenAnalysis()?.toPromise();
+            let analysisData = {
+              eventName: "kyUSBtokenBCY", // Tên event
+              params: {
+                tenHĐ: this.datas.is_data_contract.name,
+                maHĐ: this.datas.is_data_contract.id,
+                nguoiXuLy: this.currentUser.email || this.currentUser.phone,
+                thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+              },
+            };
+            await this.customerAnalysis.pushData(analysisData);
+            console.log("Đã push data kyUSBtokenBCY (signBCY)");
+          } catch (error) {
+            console.error("Lỗi khi push data kyUSBtokenBCY (signBCY):", error);
+          }
           resolve('success')
         } else  {
           reject('false')

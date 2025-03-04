@@ -1651,7 +1651,7 @@ export class ContractSignatureComponent implements OnInit {
               params: {
                 tenHĐ: checkSign.map((item: any) => item.tenHĐ), // Lấy danh sách tên HĐ
                 maHĐ: checkSign.map((item: any) => item.maHĐ), // Lấy danh sách mã HĐ
-                nguoiXuLy: result.phone, // Sử dụng số điện thoại
+                nguoiXuLy: this.currentUser.email || this.currentUser.phone, // Sử dụng số điện thoại
                 thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
               },
             };
@@ -1760,7 +1760,7 @@ export class ContractSignatureComponent implements OnInit {
         params: {
           tenHĐ: contractsSignManyChecked.map((item: any) => item.contractName), // Lấy danh sách tên HĐ
           maHĐ: contractsSignManyChecked.map((item: any) => item.contractNumber), // Lấy danh sách mã HĐ
-          nguoiXuLy: taxCode[0], // Sử dụng mã số thuế
+          nguoiXuLy: this.currentUser.email || this.currentUser.phone, // Sử dụng mã số thuế
           thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
         },
       };
@@ -1790,6 +1790,9 @@ export class ContractSignatureComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(async (resultHsm: any) => {
         if (resultHsm) {
+          let contractsSignManyChecked = this.contractsSignMany.filter(
+            (opt) => opt.checked
+          );
           this.nameCompany = resultHsm.ma_dvcs;
           let imageRender = null;
 
@@ -1902,20 +1905,22 @@ export class ContractSignatureComponent implements OnInit {
                 '',
                 3000
               );
+              
              // Xác định eventName dựa trên nhà cung cấp HSM
             let eventName: string;
             switch (this.dataHsm.supplier) {
               case "mobifone":
                 eventName = "kyLoHsm_mbf";
                 break;
-              case "ica":
+              case "icorp":
                 eventName = "kyLoHsm_ica";
                 break;
               default:
                 eventName = "kyLoHsm_default"; // Hoặc một giá trị mặc định khác
                 break;
             }
-
+            const contractNames = contractsSignManyChecked.map(item => item.contractName);
+            const contractIds = contractsSignManyChecked.map(item => item.contractId)
             // Thêm đoạn code phân tích khách hàng vào đây
             try {
               await this.customerAnalysis.getTokenAnalysis()?.toPromise();
@@ -1923,9 +1928,10 @@ export class ContractSignatureComponent implements OnInit {
               let data = {
                 eventName: eventName,
                 params: {
-                  tenHĐ: checkSign.map((item: any) => item.tenHĐ), // Lấy danh sách tên HĐ
-                  maHĐ: checkSign.map((item: any) => item.maHĐ), // Lấy danh sách mã HĐ
-                  nguoiXuLy: this.dataHsm.username || this.dataHsm.ma_dvcs, // Sử dụng username hoặc mã đơn vị từ dataHsm
+                  tenHĐ: contractNames, // Lấy danh sách tên HĐ
+                  maHĐ: contractIds, // Lấy danh sách mã HĐ
+                  nguoiXuLy: this.currentUser.email || this.currentUser.phone,
+                  //nguoiXuLy: this.dataHsm.username || this.dataHsm.ma_dvcs, // Sử dụng username hoặc mã đơn vị từ dataHsm
                   thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
                 },
               };
@@ -2068,7 +2074,7 @@ export class ContractSignatureComponent implements OnInit {
                   params: {
                     tenHĐ: contractsSignManyChecked.map((item: any) => item.contractName), // Lấy danh sách tên HĐ
                     maHĐ: contractsSignManyChecked.map((item: any) => item.contractNumber), // Lấy danh sách mã HĐ
-                    nguoiXuLy: this.cardId, // Sử dụng thông tin người ký
+                    nguoiXuLy: this.currentUser.email || this.currentUser.phone,
                     thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
                   },
                 };
@@ -2218,6 +2224,9 @@ export class ContractSignatureComponent implements OnInit {
                       });
                   }
                 })
+                // Lấy thông tin từ contractsSignManyChecked
+                const contractNames = contractsSignManyChecked.map((item: any) => item.contractName);
+                const contractIds = contractsSignManyChecked.map((item: any) => item.contractId);
                   // Thêm đoạn code phân tích khách hàng vào đây
                 try {
                   await this.customerAnalysis.getTokenAnalysis()?.toPromise();
@@ -2225,9 +2234,9 @@ export class ContractSignatureComponent implements OnInit {
                   let data = {
                     eventName: this.getRemoteSignEventName(supplierID), // Sử dụng hàm để lấy eventName
                     params: {
-                      tenHĐ: checkSign.map((item: any) => item.tenHĐ), // Lấy danh sách tên HĐ
-                      maHĐ: checkSign.map((item: any) => item.maHĐ), // Lấy danh sách mã HĐ
-                      nguoiXuLy: manyRemoteSignData.cert_id, // Sử dụng cert_id
+                      tenHĐ: contractNames, // Lấy danh sách tên HĐ
+                      maHĐ: contractIds, // Lấy danh sách mã HĐ
+                      nguoiXuLy: this.currentUser.email || this.currentUser.phone, // Sử dụng cert_id
                       thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
                     },
                   };
