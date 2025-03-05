@@ -2,6 +2,7 @@ import { truncate } from "lodash";
 
 export const environment = {
   production: true,
+  enableCustomerAnalysis: true,
   // usedSSO: true,
   //apiUrl: 'https://econtract-demo.mobifone.ai/service',
   apiUrl: 'https://econtractdev.mobifone.ai/service',
