@@ -21,6 +21,7 @@ import { environment } from 'src/environments/environment';
 import { TimeService } from 'src/app/service/time.service';
 import { DialogChangePhoneComponent } from '../dialog-change-phone/dialog-change-phone.component';
 import { TranslateService } from '@ngx-translate/core';
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
 
 @Component({
   selector: 'app-confirm-sign-otp',
@@ -62,6 +63,7 @@ export class ConfirmSignOtpComponent implements OnInit {
     private unitService: UnitService,
     private timeService: TimeService,
     public translate: TranslateService,
+    private customerAnalysis: CustomerAnalysis
   ) { }
 
 
@@ -449,8 +451,24 @@ export class ConfirmSignOtpComponent implements OnInit {
             }
             if (!notContainSignImage) {
             }
-            setTimeout(() => {
+            setTimeout(async () => {
+              try {
+                await this.customerAnalysis.getTokenAnalysis()?.toPromise();
 
+                let data = {
+                  eventName: "kyOTP", // Thay đổi eventName cho phù hợp
+                  params: {
+                    tenHĐ: this.datas.is_data_contract.name,
+                    maHĐ: this.datas.is_data_contract.id,
+                    nguoiXuLy: this.datasOtp.currentUser.email || this.datasOtp.currentUser.phone,
+                    thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+                  },
+                };
+                await this.customerAnalysis.pushData(data);
+                console.log('Dữ liệu ký OTP đã được gửi thành công!');
+              } catch (error) {
+                console.error('Lỗi khi gửi dữ liệu ký OTP:', error);
+              }
               this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
               this.toastService.showSuccessHTMLWithTimeout(
                 [3, 4].includes(this.datas.roleContractReceived) ? 'Bạn vừa thực hiện ký thành công. Tài liệu đã được chuyển tới người tiếp theo!' : 'Xem xét tài liệu thành công'

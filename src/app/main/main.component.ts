@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { KeycloakService } from 'keycloak-angular';
 import { AuthenticationService } from '../service/authentication.service';
+import { CustomerAnalysis } from '../service/customer-analysis';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -54,7 +55,8 @@ export class MainComponent implements OnInit {
               private spinner: NgxSpinnerService,
               private toastService: ToastService,
               private keycloakService: KeycloakService,
-              private authenticationService: AuthenticationService
+              private authenticationService: AuthenticationService,
+              private customerAnalysis: CustomerAnalysis
               ) {
     this.title = 'err';
     translate.addLangs(['en', 'vi']);
@@ -185,6 +187,19 @@ export class MainComponent implements OnInit {
 
   //click logout
   async logout() {
+    try {
+      await this.customerAnalysis.getTokenAnalysis()?.toPromise();
+      let data = {
+        eventName: "Logout", // Đổi eventName thành Logout
+        params: {
+          // Lấy username từ localStorage, nếu không có thì để trống.
+          username: JSON.parse(localStorage.getItem('currentUser') || '{}')?.customer?.info?.username || ''
+        }
+      };
+      this.customerAnalysis.pushData(data);
+    } catch (error) {
+      console.error("Lấy token thất bại:", error);
+    }
     //call api delete token
     if (environment.flag == 'NB' && environment.usedSSO) {
       this.contractService.deleteToken().subscribe((res:any) => {

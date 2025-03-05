@@ -24,7 +24,10 @@
       "dom",
       "ES2021.String",
       "scripthost"
-    ]
+    ],
+    "types": ["parse"],
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

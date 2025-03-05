@@ -25,7 +25,7 @@ import { InforContractBatchComponent } from '../batch-contract/infor-contract-ba
 import { ConfirmContractBatchComponent } from '../batch-contract/confirm-contract-batch/confirm-contract-batch.component';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { environment } from 'src/environments/environment';
-
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
 @Component({
   selector: 'app-add-contract',
   templateUrl: './add-contract.component.html',
@@ -144,7 +144,8 @@ export class AddContractComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
     private userService: UserService,
-    private roleService: RoleService
+    private roleService: RoleService,
+    private customerAnalysis: CustomerAnalysis
   ) { }
 
   isQLHD_01: boolean = true;

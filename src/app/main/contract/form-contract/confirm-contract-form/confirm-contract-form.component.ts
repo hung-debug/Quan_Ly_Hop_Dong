@@ -20,6 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
+import { CustomerAnalysis } from 'src/app/service/customer-analysis';
 
 @Component({
   selector: 'app-confirm-contract-form',
@@ -39,7 +40,8 @@ export class ConfirmContractFormComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
     private dialog: MatDialog,
-    private ContractTemplateService: ContractTemplateService
+    private ContractTemplateService: ContractTemplateService,
+    private customerAnalysis: CustomerAnalysis
   ) {
     this.stepForm = variable.stepSampleContractForm.step4;
   }
@@ -236,6 +238,23 @@ export class ConfirmContractFormComponent implements OnInit {
   
   async callAPIFinish() {
     try{
+      await this.customerAnalysis.getTokenAnalysis()?.toPromise();
+
+      // Tạo đối tượng data chứa thông tin sự kiện
+      let data = {
+        eventName: "taoHDDonLeTheoMau", // Thay đổi eventName cho phù hợp
+        params: {
+          tenHD: this.datasForm.name,
+          maHD: this.datasForm.contract_id,
+          thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(new Date()) // Gọi hàm từ CustomerAnalysis service
+        },
+        name: this.datasForm.name, // Thêm thông tin từ this.datasForm
+        contract_no: this.datasForm.contract_no // Thêm thông tin từ this.datasForm
+        // Thêm các thông tin khác từ this.datasForm nếu cần
+      };
+
+      // Gọi pushData để gửi dữ liệu lên Parse Server
+      await this.customerAnalysis.pushData(data); // Chỉ truyền data
       this.spinner.show();
       // Gọi API addContractStep1 lần đầu    
       const contract: any = await this.contractService.addContractStep1(
