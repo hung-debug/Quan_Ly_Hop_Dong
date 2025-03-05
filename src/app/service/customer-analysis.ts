@@ -98,37 +98,4 @@ export class CustomerAnalysis {
       throw error;
     });
   }
-
-  async pushEvent(eventName: string, data: any) {
-    if (!environment.enableCustomerAnalysis) {
-      return; // Thoát ra nếu flag là false
-    }
-    try {
-      await this.getCurrentTokenAnalysis(); // Đảm bảo token đã cập nhật
-  
-      // Thêm thông tin chung vào data
-      data.appId = this.tokenAnalysis?.tenantId || '';
-      data.phone = this.infoUser?.phone || '';
-      data.mail = this.infoUser?.email || '';
-      data.timestamp = new Date().toISOString(); // Ghi thời gian xảy ra sự kiện
-  
-      // Tạo object dựa trên tên sự kiện
-      const EventObject = Parse.Object.extend(eventName);
-      const eventObject = new EventObject();
-  
-      // Gán dữ liệu tự động
-      Object.keys(data).forEach((field) => {
-        eventObject.set(field, data[field]);
-      });
-  
-      // Lưu sự kiện lên server
-      const response = await eventObject.save();
-      console.log(`Sự kiện ${eventName} đã được lưu thành công:`, response);
-      return response;
-    } catch (error) {
-      console.error(`Lưu sự kiện ${eventName} thất bại:`, error);
-      throw error;
-    }
-  }
-  
 }
