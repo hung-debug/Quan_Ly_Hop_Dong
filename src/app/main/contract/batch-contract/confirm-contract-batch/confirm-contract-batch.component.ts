@@ -958,28 +958,31 @@ export class ConfirmContractBatchComponent
   }
 
   async next(isCeCA: any) {
+    
     const isAllow = await this.checkNumber(this.datasBatch.ceca_push, this.convertToSignConfig().length);
     if (isAllow) {
-      try {
-        await this.customerAnalysis.getTokenAnalysis()?.toPromise();
 
-        // Tạo đối tượng data chứa thông tin sự kiện
-        let data = {
-          eventName: "taoHDTheoLo", // Thay đổi eventName cho phù hợp
-          params: {
-            tenHĐ: this.datasBatch.file_name, // Lấy tên từ datasBatch (nếu có)
-            //maHĐ: this.datasBatch.contract_id, // Lấy mã từ datasBatch (nếu có)
-            thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
-          },
-          // Thêm các thông tin khác từ this.datasBatch nếu cần
-        };
-
-        // Gọi pushData để gửi dữ liệu lên Parse Server
-        await this.customerAnalysis.pushData(data); // Chỉ truyền data
         this.spinner.show();
         const confirmContractBatchCall = await this.contractService.confirmContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,isCeCA).toPromise()
         let response = confirmContractBatchCall
-
+        try {
+          await this.customerAnalysis.getTokenAnalysis()?.toPromise();
+          const tenHDList = response.map((contract: any) => contract.name);
+          const maHDList = response.map((contract: any) => contract.id);
+          // Tạo đối tượng data chứa thông tin sự kiện
+          let data = {
+            eventName: "taoHDTheoLo", // Thay đổi eventName cho phù hợp
+            params: {
+              tenFile: this.datasBatch.contractFile.name,
+              tenHĐ:tenHDList, // Lấy tên từ datasBatch (nếu có)
+              maHĐ: maHDList, // Lấy mã từ datasBatch (nếu có)
+              thoiGianTao: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
+            },
+            // Thêm các thông tin khác từ this.datasBatch nếu cần
+          };
+  
+          // Gọi pushData để gửi dữ liệu lên Parse Server
+          await this.customerAnalysis.pushData(data); // Chỉ truyền data
         if(response.errors?.length > 0) {
           if(response.errors[0].code == 1015) {
             this.toastService.showErrorHTMLWithTimeout('Số lượng tài liệu đã mua không còn đủ để tạo tài liệu','',3000);
