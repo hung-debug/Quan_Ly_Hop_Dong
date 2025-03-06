@@ -192,7 +192,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
               let data = {
                 eventName: "Login",
                 params: {
-                  username: this.loginForm.value.username
+                  username: this.loginForm.value.username,
+                  thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
                 }
               };
               this.customerAnalysis.pushData(data);
@@ -437,7 +438,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
                 let data = {
                   eventName: "Login",
                   params: {
-                    username: res.customer.info.email
+                    username: res.customer.info.email,
+                    thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
                   }
                 };
                 this.customerAnalysis.pushData(data);
