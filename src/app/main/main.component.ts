@@ -193,7 +193,7 @@ export class MainComponent implements OnInit {
         eventName: "Logout", // Đổi eventName thành Logout
         params: {
           // Lấy username từ localStorage, nếu không có thì để trống.
-          username: JSON.parse(localStorage.getItem('currentUser') || '{}')?.customer?.info?.username || ''
+          username: JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email
         }
       };
       this.customerAnalysis.pushData(data);

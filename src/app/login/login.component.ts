@@ -428,6 +428,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
           let accessToken: any = this.keycloakService.getKeycloakInstance().token
           let ssoIdToken: any = this.keycloakService.getKeycloakInstance().idToken
           let res: any = await this.authService.getAuthencationToken(accessToken, ssoIdToken,0)
+          console.log("res", res)
           switch(res.code) {
             case '00':
               this.toastService.showSuccessHTMLWithTimeout('Đăng nhập thành công, mở sang trang chủ hệ thống eContract.','',3000)
@@ -436,7 +437,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
                 let data = {
                   eventName: "Login",
                   params: {
-                    username: this.loginForm.value.username
+                    username: res.customer.info.email
                   }
                 };
                 this.customerAnalysis.pushData(data);
