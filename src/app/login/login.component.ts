@@ -161,6 +161,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   weakPass: boolean = false;
   login(urlLink: any, isContractId: any, isRecipientId: any) {
+    console.log("urlLink", urlLink)
+    console.log("this.type", this.type)
+    console.log("isContractId", isContractId)
     this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type, isContractId).subscribe((data) => {
 
       if(data?.login_fail_num == 5) {
