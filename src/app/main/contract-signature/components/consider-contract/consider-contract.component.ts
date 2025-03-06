@@ -4465,6 +4465,7 @@ export class ConsiderContractComponent
         );
       }
       if (this.currentBoxSignType == 8) {
+        await this.pushCustomerAnalysisData(this.getRemoteSignEventName(supplierID), {});
         this.spinner.hide()
         this.remoteDialogSuccessOpen(supplierID).then(result => {
           if (result.isDismissed) {
@@ -5468,7 +5469,8 @@ export class ConsiderContractComponent
             "processAt": new Date()
           };
           this.contractService.updateInfoContractConsider(data, this.recipientId).subscribe(
-            (res) => {
+            async (res) => {
+              await this.pushCustomerAnalysisData('kyUSBtokenBCY', {});
               this.router
               .navigateByUrl('/', { skipLocationChange: true })
               .then(() => {
@@ -5484,7 +5486,7 @@ export class ConsiderContractComponent
                   }
                 );
               });
-
+              
               setTimeout(() => {
                 if (!this.mobile) {
                   this.toastService.showSuccessHTMLWithTimeout(
