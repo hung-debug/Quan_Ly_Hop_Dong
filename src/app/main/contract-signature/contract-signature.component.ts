@@ -3512,6 +3512,7 @@ export class ContractSignatureComponent implements OnInit {
                     tenHĐ: params.tenHĐ,  // Lấy trực tiếp từ params
                     maHĐ: params.maHĐ,    // Lấy trực tiếp từ params
                     idHĐ: params.idHĐ,
+                    trangThaiHĐ: params.trangThaiHĐ,
                     nguoiXuLy: this.currentUser?.email || this.currentUser?.phone,
                     thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date()),
                     ...params, // Thêm các tham số khác (nếu có)

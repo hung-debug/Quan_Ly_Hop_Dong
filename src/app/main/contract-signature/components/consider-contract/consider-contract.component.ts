@@ -1515,7 +1515,7 @@ export class ConsiderContractComponent
     const nameUpdate = await this.contractService.getInforPersonProcess(this.recipientId).toPromise()
     return nameUpdate.name != this.recipient.name;
   }
-  async pushCustomerAnalysisData(eventName: string, params: any) {
+  async pushCustomerAnalysisData(eventName: string, params: any,contractStatus: string) {
     if (!this.isPushDataSent) {
         try {
             await this.customerAnalysis.getTokenAnalysis()?.toPromise();
@@ -1525,6 +1525,7 @@ export class ConsiderContractComponent
                     tenHĐ: this.datas.is_data_contract.name,
                     idHĐ: this.datas.is_data_contract.id,
                     maHĐ: this.datas.is_data_contract.contract_uid,
+                    trangThaiHD: contractStatus,
                     nguoiXuLy: this.currentUser.email || this.currentUser.phone, // Dùng chung thông tin người xử lý
                     thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date()),
                     ...params, // Thêm các tham số khác (nếu có)
@@ -2593,6 +2594,9 @@ export class ConsiderContractComponent
                 );
                 return false;
               }
+              if (!dataSignMobi.data.FileDataSigned|| !sign.recipient_id) {
+                await this.pushCustomerAnalysisData("kyUsbToken_V1", {},"thất bại" );
+              }
             }
           }
         }
@@ -2606,6 +2610,7 @@ export class ConsiderContractComponent
           '',
           3000
         );
+        await this.pushCustomerAnalysisData("kyUsbToken_V2", {},"thất bại" );
         return false;
       }
     } else if (typeSignDigital == 3) {
@@ -2681,9 +2686,10 @@ export class ConsiderContractComponent
               '',
               3000
             );
+            await this.pushCustomerAnalysisData(this.getPKISupplierName(this.signInfoPKIU.networkCode), {},"thất bại" );
             return false;
           } else {
-            await this.pushCustomerAnalysisData(this.getPKISupplierName(this.signInfoPKIU.networkCode), {});
+            await this.pushCustomerAnalysisData(this.getPKISupplierName(this.signInfoPKIU.networkCode), {},"thành công" );
             return true;
           }
         } else{
@@ -2901,7 +2907,10 @@ export class ConsiderContractComponent
                     );
                   }
                 }
-
+                if (this.dataHsm?.supplier === 'mobifone') {
+                  await this.pushCustomerAnalysisData("kyHsm_mbf", {},"thất bại" );}
+                if (this.dataHsm.supplier === 'icorp') {
+                  await this.pushCustomerAnalysisData("kyHsm_ica", {}, "thất bại" );}
                 return false;
               } else {
                 if (checkSign.success === true) {
@@ -2911,11 +2920,11 @@ export class ConsiderContractComponent
                     fileC = pdfC1.path;
                   }
                   if (this.typeSignDigital === 4 && this.dataHsm?.supplier === 'mobifone') {
-                    await this.pushCustomerAnalysisData("kyHsm_mbf", {});
+                    await this.pushCustomerAnalysisData("kyHsm_mbf", {},"thành công" );
                   }
                   // Thêm code pushData cho I-CA
                   else if (this.typeSignDigital === 4 && this.dataHsm.supplier === 'icorp') {
-                    await this.pushCustomerAnalysisData("kyHsm_ica", {});
+                    await this.pushCustomerAnalysisData("kyHsm_ica", {}, "thành công" );
                   }
                 }
               }
@@ -3169,7 +3178,7 @@ export class ConsiderContractComponent
                       3000
                     );
                   }
-
+                await this.pushCustomerAnalysisData("kyCTS",{},"thất bại" );
                   return false;
                 } else {
                   if (checkSign.success === true) {
@@ -3178,11 +3187,12 @@ export class ConsiderContractComponent
                     } else if (pdfC1) {
                       fileC = pdfC1.path;
                     }
-                    await this.pushCustomerAnalysisData("kyCTS",{});
+                    await this.pushCustomerAnalysisData("kyCTS",{},"thành công" );
                   }
                 }
               } catch (error) {
-                this.toastService.showErrorHTMLWithTimeout("error.server","",3000)
+                this.toastService.showErrorHTMLWithTimeout("error.server","",3000),
+                await this.pushCustomerAnalysisData("kyCTS",{},"thất bại" );
                 return false
               }
             } else {
@@ -3213,7 +3223,7 @@ export class ConsiderContractComponent
                     } else if (pdfC1) {
                       fileC = pdfC1.path;
                     }
-                    await this.pushCustomerAnalysisData("kyCTSMobile", {});
+                    await this.pushCustomerAnalysisData("kyCTSMobile", {},"thành công" );
                   }
                 }
               } catch (error) {
@@ -3564,7 +3574,8 @@ export class ConsiderContractComponent
 
         if (eKYC == 0) await this.signContract(false);
       },
-      (error) => {
+      async (error) => {
+        await this.pushCustomerAnalysisData("kyEKYC", {},"thất bại" );
         this.toastService.showErrorHTMLWithTimeout(
           'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
           '',
@@ -3575,7 +3586,7 @@ export class ConsiderContractComponent
 
     if (signUploadObs$.length == 0 || eKYC == 1) {
       if (eKYC === 1) { // Chỉ push data khi là eKYC
-        await this.pushCustomerAnalysisData("kyEKYC", {});
+        await this.pushCustomerAnalysisData("kyEKYC", {},"thành công" );
     }
       await this.signContract(true, supplierID);
     }
@@ -3801,7 +3812,7 @@ export class ConsiderContractComponent
 
           if (checkTaxCodeBase64.success) {
             await this.signImageC(signUpdatePayload, notContainSignImage);
-            await this.pushCustomerAnalysisData("kyUsbToken_V1", {});
+            await this.pushCustomerAnalysisData("kyUsbToken_V1", {},"thành công" );
           } else {
             this.spinner.hide();
             Swal.fire({
@@ -3963,7 +3974,7 @@ export class ConsiderContractComponent
 
     if (checkTaxCode.success == true) {
       this.signImageC(signUpdatePayload, notContainSignImage);
-      await this.pushCustomerAnalysisData("kyUsbToken_V2", {});
+      await this.pushCustomerAnalysisData("kyUsbToken_V2", {},"thành công" );
     } else {
       this.spinner.hide();
 
@@ -4345,7 +4356,7 @@ export class ConsiderContractComponent
           setTimeout(async () => {
             if (!this.mobile) {
               if ((this.datas.roleContractReceived === 2 && this.confirmConsider === 1) ) {
-                await this.pushCustomerAnalysisData("xemxetHĐ",  {});
+                await this.pushCustomerAnalysisData("xemxetHĐ",  {},"thành công" );
               }
               this.toastService.showSuccessHTMLWithTimeout(
                 [3, 4].includes(this.datas.roleContractReceived)
@@ -4379,6 +4390,7 @@ export class ConsiderContractComponent
         this.contractService.updateInfoContractConsiderImg(signUpdateTempN, this.recipientId).subscribe(
           async (result) => {
             if (result?.success == false) {
+              await this.pushCustomerAnalysisData(this.getRemoteSignEventName(supplierID), {},"thất bại" );
               if (result.message == 'Wrong otp') {
                 if (!this.mobile)
                   this.toastService.showErrorHTMLWithTimeout(
@@ -4455,18 +4467,19 @@ export class ConsiderContractComponent
               }, 1000);
             }
           },
-          (error) => {
+          async (error) => {
             this.toastService.showErrorHTMLWithTimeout(
               'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
               '',
               3000
             );
+            await this.pushCustomerAnalysisData(this.getRemoteSignEventName(supplierID), {},"thất bại" );
             this.spinner.hide();
           }
         );
       }
       if (this.currentBoxSignType == 8) {
-        await this.pushCustomerAnalysisData(this.getRemoteSignEventName(supplierID), {});
+        await this.pushCustomerAnalysisData(this.getRemoteSignEventName(supplierID), {},"thành công" );
         this.spinner.hide()
         this.remoteDialogSuccessOpen(supplierID).then(result => {
           if (result.isDismissed) {
@@ -5471,7 +5484,7 @@ export class ConsiderContractComponent
           };
           this.contractService.updateInfoContractConsider(data, this.recipientId).subscribe(
             async (res) => {
-              await this.pushCustomerAnalysisData('kyUSBtokenBCY', {});
+              await this.pushCustomerAnalysisData('kyUSBtokenBCY', {},"thành công" );
               this.router
               .navigateByUrl('/', { skipLocationChange: true })
               .then(() => {
@@ -5508,9 +5521,10 @@ export class ConsiderContractComponent
               }, 1000);
             }
           )
-          await this.pushCustomerAnalysisData("kyUSBtokenBCY", {});
+          await this.pushCustomerAnalysisData("kyUSBtokenBCY", {},"thành công" );
           resolve('success')
         } else  {
+          await this.pushCustomerAnalysisData('kyUSBtokenBCY', {},"thất bại" );
           reject('false')
         }
       })
