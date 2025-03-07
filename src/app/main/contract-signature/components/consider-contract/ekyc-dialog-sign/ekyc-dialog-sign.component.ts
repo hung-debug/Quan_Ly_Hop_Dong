@@ -136,6 +136,7 @@ export class EkycDialogSignComponent implements OnInit {
         }  
         this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl, this.data.contractId, this.data.recipientId,img,this.deviceSerce).subscribe((response) => {
           this.spinner.hide();
+        if (response.document == "OLD ID" || response.document == "NEW ID") {
           if(response.result_code == 200 && (response.action == 'pass' || (response.action == 'manualReview' && this.checkWarning(response.warning)))) {
             if (response.document && response.id_type == 0 && this.data.id == 0){
               this.ekycDocType = sessionStorage.setItem('ekycDocType',response.document)
@@ -148,7 +149,11 @@ export class EkycDialogSignComponent implements OnInit {
                 this.flagSuccess == true;
                 this.upFileImageToDb(formData);
                 alert(this.translate.instant('confirm.success'));
-                this.dialogRef.close(this.webcamImage.imageAsDataUrl);
+                // this.dialogRef.close(this.webcamImage.imageAsDataUrl);
+                this.dialogRef.close({
+                  base64Img: this.webcamImage.imageAsDataUrl,
+                  docType: response.document
+                });
               } else if(this.cardId != response.id){
                 if (response.id_type == 1){
                   this.flagSuccess == false;
@@ -185,7 +190,11 @@ export class EkycDialogSignComponent implements OnInit {
             } else {
               alert(this.translate.instant('confirm.success'));
               this.upFileImageToDb(formData);
-              this.dialogRef.close(this.webcamImage.imageAsDataUrl);
+              // this.dialogRef.close(this.webcamImage.imageAsDataUrl);
+              this.dialogRef.close({
+                base64Img: this.webcamImage.imageAsDataUrl,
+                docType: response.document
+              });
             }  
           } else if (this.data.id == 1 && response.result_code == 403) {
             this.flagSuccess == false;
@@ -206,7 +215,47 @@ export class EkycDialogSignComponent implements OnInit {
             else
               alert(this.translate.instant('confirm.fail'));
           }
-         
+        } else if (response.document == "PASSPORT") {
+          if(response.result_code == 200 && (response.action == 'pass' || (response.action == 'manualReview'))) {
+            if(this.cardId) {
+              if(this.cardId == response.id && this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") == response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "")) {
+                this.flagSuccess == true;
+                alert(this.translate.instant('confirm.success'));
+                this.dialogRef.close({
+                  base64Img: this.webcamImage.imageAsDataUrl,
+                  docType: response.document
+                });
+              } else if(this.cardId != response.id){
+                this.flagSuccess == false;
+                this.webcamImage = this.initWebcamImage;
+                alert(this.translate.instant('card.id.not.match'));
+                // string.replace(/  +/g, ' ');
+              } else if(this.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "") != response.name.toUpperCase().split(" ").join("").normalize("NFD").replace(/[\u0300-\u036f]/g, "")) {
+                this.flagSuccess == false;
+                this.webcamImage = this.initWebcamImage;
+                alert(this.translate.instant('name.not.match'));
+              }else{
+                this.flagSuccess == false;
+                alert(this.translate.instant('invalid.infor'));
+              }
+            } else {
+              alert(this.translate.instant('confirm.success'));
+              this.dialogRef.close({
+                base64Img: this.webcamImage.imageAsDataUrl,
+                docType: response.document
+              });
+            }
+             
+          } else {
+            this.flagSuccess = false;
+            this.webcamImage = this.initWebcamImage;
+            alert(this.translate.instant('confirm.fail'));
+          }
+        } else {
+          this.flagSuccess == false;
+          this.webcamImage = this.initWebcamImage;
+          alert(this.translate.instant(response.result_message));
+        }
         }, (error: any) => {
           alert(this.translate.instant('card.id.fail'));
         })

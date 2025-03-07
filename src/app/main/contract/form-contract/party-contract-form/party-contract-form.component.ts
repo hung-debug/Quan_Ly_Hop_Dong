@@ -1018,8 +1018,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
             // valid cccd number
             if (isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
             !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
+            !this.pattern.card_id_passport.test(isParterSort[k].card_id.trim()) &&
             isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
-              this.getNotificationValid("CMT/CCCD" + this.getNameObject(3) + "của đối tác cá nhân không hợp lệ!")
+              this.getNotificationValid("CMT/CCCD/ Số hộ chiếu" + this.getNameObject(3) + "của đối tác cá nhân không hợp lệ!")
               count++;
               break;
             }
@@ -1068,7 +1069,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       }
 
       if (this.getCheckDuplicateCardId(allCheckEmail, this.datasForm.is_determine_clone)) {
-        this.getNotificationValid("Mã số thuế/CMT/CCCD không được trùng nhau giữa các bên tham gia!");
+        this.getNotificationValid("Mã số thuế/CMT/CCCD/Hộ chiếu không được trùng nhau giữa các bên tham gia!");
         return false
       }
     }
