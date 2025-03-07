@@ -332,7 +332,8 @@ export class ConfirmInfoContractComponent implements OnInit {
               eventName: "dieuPhoiHĐ",
               params: {
                 tenHĐ: this.datas.is_data_contract.name,
-                maHĐ: this.datas.is_data_contract.id,
+                idHĐ: this.datas.is_data_contract.id,
+                maHĐ: this.datas.is_data_contract.contract_uid,
                 nguoiXuLy: this.currentUser.email || this.currentUser.phone, // Sử dụng email hoặc số điện thoại
                 thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
               },

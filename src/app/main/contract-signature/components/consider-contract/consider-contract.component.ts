@@ -500,9 +500,9 @@ export class ConsiderContractComponent
   }
   getPKISupplierName(networkCode: any) {
     switch (networkCode) {
-      case "1":
+      case 1:
         return "kySimPKI_MobiFone";
-      case "2":
+      case 2:
         return "kySimPKI_Viettel";
       case "bcy": // Hoặc mã nhà mạng thực tế của Ban Cơ Yếu
         return "kySimPKI_BCY";
@@ -1523,7 +1523,8 @@ export class ConsiderContractComponent
                 eventName,
                 params: {
                     tenHĐ: this.datas.is_data_contract.name,
-                    maHĐ: this.datas.is_data_contract.id,
+                    idHĐ: this.datas.is_data_contract.id,
+                    maHĐ: this.datas.is_data_contract.contract_uid,
                     nguoiXuLy: this.currentUser.email || this.currentUser.phone, // Dùng chung thông tin người xử lý
                     thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date()),
                     ...params, // Thêm các tham số khác (nếu có)
@@ -2712,7 +2713,8 @@ export class ConsiderContractComponent
                 eventName:this.getPKISupplierName(this.signInfoPKIU.networkCode), // Sử dụng tên nhà cung cấp PKI
                 params: {
                   tenHĐ: this.datas.is_data_contract.name,
-                  maHĐ: this.datas.is_data_contract.id,
+                  maHĐ: this.datas.is_data_contract.contract_uid,
+                  idHĐ: this.datas.is_data_contract.id,
                   nguoiXuLy: this.currentUser.email || this.currentUser.phone,
                   thoiGianXuly: this.customerAnalysis.convertToVietnamTimeISOString(new Date())
                 },
@@ -4244,7 +4246,6 @@ export class ConsiderContractComponent
                 }
                 if (this.typeSignDigital === 8) {
                   const signResult = await this.signDigitalDocument(supplierID); // Gọi hàm ký, CÓ THỂ await hoặc không, tùy vào cách bạn xử lý bất đồng bộ
-                  await this.pushCustomerAnalysisData(this.getRemoteSignEventName(supplierID), {});
               }
                 this.router
                   .navigateByUrl('/', { skipLocationChange: true })

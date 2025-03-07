@@ -48,7 +48,6 @@ export class CustomerAnalysis {
         if (JSON.parse(JSON.stringify(token)) != null) {
           localStorage.setItem('tokenAnalysis', JSON.stringify(token))
           this.initAnalysis(token.appId);
-          console.log("token", token)
           return token;
         }
       }),         
