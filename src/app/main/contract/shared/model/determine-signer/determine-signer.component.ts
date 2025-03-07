@@ -1085,6 +1085,7 @@ export class DetermineSignerComponent implements OnInit {
             if (isParterSort[k].card_id?.trim() &&
               !this.pattern.card_id9.test(isParterSort[k].card_id?.trim()) &&
               !this.pattern.card_id12.test(isParterSort[k].card_id?.trim()) &&
+              !this.pattern.card_id_passport.test(isParterSort[k].card_id?.trim()) &&
               isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
               this.getNotificationValid("CMT/CCCD" + this.getNameObjectValid(3) + "của đối tác cá nhân không hợp lệ!")
               count++;
